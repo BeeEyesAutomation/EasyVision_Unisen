@@ -1,0 +1,1466 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--This file is necessary for software to run properly-->
+<!--Create By Liang-->
+<Root>
+  <MainForm>
+    <Language SoftwareTitle="合傑讀碼調試工具" />
+    <Language SelectLanguage="簡體中文" />
+    <Language BtnRestartDevice="重啟設備" />
+    <Language BtnSaveCurrentCfg="保存配置到設備" />
+    <Language BtnDecodeCTraining="訓練" />
+    <Language RdbDecodeModeC="C增強模式" />
+    <Language RdbDecodeModeB="B快速模式" />
+    <Language RdbDecodeModeA="A精細模式" />
+    <Language MenuTopMain="MenuStripTop" />
+    <Language TsmTop_File="文件(F)" />
+    <Language TSI_OpenCfg="打開配置(O)" />
+    <Language TSI_SaveCfg="保存配置(S)" />
+    <Language TSI_SaveCurrentImage="圖像另存為(A)" />
+    <Language TsmTop_Disp="顯示(V)" />
+    <Language Tsm_ShowNetGrid="顯示標線" />
+    <Language TsmTop_Tool="工具(L)" />
+    <Language InstallUSBDrvToolStripMenuItem="安裝USB驅動" />
+    <Language Tsm_ComDebugTool="串口調試助手" />
+    <Language Tsm_NetDebugTool="網口調試助手" />
+    <Language Tsm_CmdConfigurationTool="命令配置工具" />
+    <Language TsmTop_Setting="高級設置(S)" />
+    <Language Tsm_Regular_Barcode="規則運算式-條碼匹配" />
+    <Language Tsm_Regular_Output="規則運算式-輸出過濾" />
+    <Language TsmTop_Language="語言" />
+    <Language TsmTop_Sys="系統(M)" />
+    <Language TSM_AboutSoftware="關於軟體" />
+    <Language TSM_FirmwareVersion="查看固件版本資訊" />
+    <Language TSM_SoftwareCloseDo="設置軟體退出時動作" />
+    <Language TSM_UpgradeFirmware="固件升級" />
+    <Language TsmTop_Help="幫助(H)" />
+    <Language TSI_InstallGuide="安裝指南" />
+    <Language ToolStrip_Icon="toolStrip1" />
+    <Language TSB_SearchDevice="搜索設備" />
+    <Language TSB_ConnectDevice="連接設備" />
+    <Language TSB_DisconnectDevice="斷開設備" />
+    <Language TSS_Separator1="" />
+    <Language TSB_OpenCfg="打開配置" />
+    <Language TSB_SaveCfg="保存配置" />
+    <Language TSS_Separator2="" />
+  </MainForm>
+  <DeviceConnectForm>
+    <Language SoftwareTitle="設備清單" />
+    <Language GrbDevicesList="設備清單" />
+    <Language LabDeviceInfo="設備資訊" />
+    <Language GrbDeviceOps="設備操作" />
+    <Language BtnRecoverUserSetting="恢復用戶設置" />
+    <Language BtnSaveUserSetting="保存用戶設置" />
+    <Language BtnCaptrueImageSave="存一張圖" />
+    <Language BtnRecoverFactory="恢復出廠設置" />
+    <Language LabDeviceAddr="設備位置" />
+    <Language CobLocalIPSel="" />
+    <Language LabLocalIPSel="本地IP選擇：" />
+  </DeviceConnectForm>
+  <ReadingForm>
+    <Language SoftwareTitle="ReadingForm" />
+    <Language BtnSelectFocusROI="對焦ROI" />
+    <Language BtnTrigAutoFocus="自動對焦" />
+    <Language GrbImageROI="圖像ROI設置" />
+    <Language BtnImageRoiSet="框選ROI" />
+    <Language BtnImageRoiCancel="關閉ROI" />
+    <Language TxbRoiH="800" />
+    <Language TxbRoiW="1280" />
+    <Language TxbRoiY0="0" />
+    <Language TxbRoiX0="0" />
+    <Language LabRoiH="Height:" />
+    <Language LabRoiW="Width:" />
+    <Language LabRoiY0="Y0:" />
+    <Language LabRoiX0="X0:" />
+    <Language BtnPerformOneTrig="單次觸發" />
+    <Language BtnSetting="基本設置" />
+    <Language LabStateADP="調參中..." />
+    <Language BtnEnterADP="AI調參" />
+    <Language BtnReadContinuous="即時預覽" />
+    <Language BtnSensorLensFocusDec="-" />
+    <Language LabFocusVal="0" />
+    <Language BtnSensorLensFocusAdd="+" />
+    <Language LabFocus="焦距" />
+    <Language LabGainVal="0" />
+    <Language LabExposureVal="0" />
+    <Language LabSensorGain="增益" />
+    <Language LabExposure="曝光" />
+    <Language LabFramePerSec="fps" />
+    <Language LabFrameRate="000" />
+    <Language LabFrameCountDisp="幀率:" />
+    <Language LabImageCount="0" />
+    <Language LabImageCountDips="圖像計數:" />
+    <Language CobImageSize="" />
+    <Language CobImageSize_item_1="原圖" />
+    <Language CobImageSize_item_2="正常" />
+    <Language CobImageSize_item_3="快速" />
+    <Language BtnSensorGainSetDec="-" />
+    <Language BtnExpSetRatioDec="-" />
+    <Language BtnSensorGainSetAdd="+" />
+    <Language BtnExpSetRatioAdd="+" />
+    <Language LabImageSize="圖像顯示清晰度:" />
+    <Language Tp_DecodeTime="解碼耗時" />
+    <Language LabCurrentDecodeTime="解碼耗時：" />
+    <Language LabAveDecodeTime="0ms" />
+    <Language LabAveDecodeTimeDisp="平均解碼時間：" />
+    <Language LabNowDecodeTime="0ms" />
+    <Language ChartDecodeTime="DecodeTimeStatistics" />
+    <Language Tp_DecStatistics="資料統計" />
+    <Language LabTrigCount="0" />
+    <Language ChkRealTimeUpdate="即時" />
+    <Language LabNGCount="0" />
+    <Language LabOKCount="0" />
+    <Language BtnResetStatic="重置數據" />
+    <Language LabTotalDisp="Total" />
+    <Language LabDispNG="NG×" />
+    <Language LabOKDisp="OK√" />
+    <Language LabOKRatio="100.00%" />
+    <Language GrbDecodeData="解碼結果" />
+    <Language LabBarcodeLen="0" />
+    <Language LabBarcodeLenDisp="條碼長度：" />
+    <Language LabBarcodeType="Datamatrix" />
+    <Language LabBarcodeTypeDisp="條碼類型：" />
+  </ReadingForm>
+  <LightingForm>
+    <Language SoftwareTitle="LightingForm" />
+    <Language GdbMainLight="主要照明設置" />
+    <Language BtnMainLightValAll="▶" />
+    <Language BtnMainLightValDec="◀" />
+    <Language TxbMainLightVal="0" />
+    <Language LabMainLight="亮度值:" />
+    <Language RdbMainLightClose="關閉" />
+    <Language RdbMainLightOpen="打開" />
+    <Language GrbOtherLightSetting="其它相關設置" />
+    <Language ChbNearLightRB="下部" />
+    <Language ChbFarLightRB="右下" />
+    <Language ChbNearLightLB="左側" />
+    <Language ChbNearLightRT="上部" />
+    <Language ChbFarLightLB="左下" />
+    <Language ChbNearLightLT="右側" />
+    <Language ChbFarLightRT="右上" />
+    <Language ChbFarLightLT="左上" />
+    <Language LabFarNearLightCtrl="照明分組控制:" />
+    <Language RdbDeafultP="默認" />
+    <Language LabPolarizationSetting="偏振照明設置:" />
+    <Language RdbPolarizationDisable="關閉" />
+    <Language RdbPolarizationEnable="開啟" />
+    <Language GrbSecondLight="輔助照明設置" />
+    <Language BtnSecondLightValAll="▶" />
+    <Language BtnSecondLightValDec="◀" />
+    <Language TxbSecondLightVal="0" />
+    <Language LabSecondLight="亮度值:" />
+    <Language RdbSecondLightClose="關閉" />
+    <Language RdbSecondLightOpen="打開" />
+    <Language GrbFocusLight="瞄準指示設置" />
+    <Language RdbFocusLEDNormal="正常" />
+    <Language RdbFocusLEDClose="關閉" />
+    <Language RdbFocusLEDAlways="常亮" />
+    <Language RdbFocusLEDBlink="閃爍" />
+  </LightingForm>
+  <BarcodeTypeForm>
+    <Language SoftwareTitle="碼制設置" />
+    <Language GrbDPMSetting="DPM相關設置" />
+    <Language ChkDM_Not_ECC200="非ECC-200解碼" />
+    <Language RdbDM_MirrorAny="任意" />
+    <Language RdbDM_MirrorDisable="關閉" />
+    <Language RdbDM_MirrorEnable="鏡像" />
+    <Language LabDM_MirrorSet="DM碼鏡像:" />
+    <Language LabDM_ColorSet="DM碼顏色:" />
+    <Language RdbDM_ColorSetAny="任意" />
+    <Language RdbDM_ColorSetBlack="黑底" />
+    <Language RdbDM_ColorSetWhite="白底" />
+    <Language ChbSmallCodeEnhance="小碼增強" />
+    <Language ChbDM_SlantEnhance="變形增強" />
+    <Language BtnDM_ModuleMax="確認" />
+    <Language LabDM_ModuleMax="塊數最大:" />
+    <Language BtnDM_ModuleMin="確認" />
+    <Language LabDM_ModuleMin="塊數最小:" />
+    <Language BtnModuleSizeMax="確認" />
+    <Language LabDMModuleSizeMax="DM碼最大:" />
+    <Language BtnModuleSizeMin="確認" />
+    <Language LabDMModuleSizeMin="DM碼最小:" />
+    <Language LabDMGapMax="DM模組允許最大空隙:" />
+    <Language RdbDMGapMaxBig="大" />
+    <Language RdbDMGapMaxSmall="小" />
+    <Language RdbDMGapMaxNone="無" />
+    <Language ChkDMDefilementEnhance="汙損增強" />
+    <Language ChkDMFindEnhance="查找增強" />
+    <Language LabDm2dType="DM二維碼類型:" />
+    <Language RdbDMShapeAll="任意類型" />
+    <Language RdbDMShapeRectangle="矩形" />
+    <Language RdbDMShapeSquare="正方形" />
+    <Language ChbDMLowContrast="低對比度增強" />
+    <Language ChbDM_ShortQZ="短靜區" />
+    <Language BtnOpenAllBarcodeType="開啟所有常用碼制" />
+    <Language BtnOpenDefaultBarcodeType="開啟默認常用碼制" />
+    <Language BtnCloseAllBarcodeType="關閉所有碼制" />
+    <Language GrbOtherBarcode="其他條碼" />
+    <Language ChbGridMatrix="GridMatrix" />
+    <Language ChbDotCode="DotCode" />
+    <Language ChbMaxicode="Maxicode" />
+    <Language ChbMicroPDF417="MicroPDF417" />
+    <Language ChbHanxin="Hanxin" />
+    <Language ChbAztec="Aztec" />
+    <Language GrbUsually2D="常用二維碼" />
+    <Language ChbPDF417="PDF417" />
+    <Language ChbDM="DataMatrix" />
+    <Language ChbQRCode="QRCode" />
+    <Language GrbUsually1D="常用一維碼" />
+    <Language ChbCode93="Code93" />
+    <Language ChbDataBar="DataBar" />
+    <Language ChbS25="S25" />
+    <Language ChbM25="M25" />
+    <Language ChbD25="D25" />
+    <Language ChbCode11="Code11" />
+    <Language ChbI25="I25" />
+    <Language ChbCodaBar="CodaBar" />
+    <Language ChbMSI="MSI" />
+    <Language ChbCode39="Code39" />
+    <Language ChbCode128="Code128" />
+    <Language ChbUPC_EAN="UPC/EAN" />
+  </BarcodeTypeForm>
+  <DataEditForm>
+    <Language SoftwareTitle="資料編輯" />
+    <Language GrbExtraDataOutput="額外資料輸出" />
+    <Language CobOutputBarcodeRect="" />
+    <Language CobOutputBarcodeRect_item_1="不輸出座標" />
+    <Language CobOutputBarcodeRect_item_2="輸出四個角點" />
+    <Language CobOutputBarcodeRect_item_3="輸出中心點" />
+    <Language CobOutputBarcodeRect_item_4="輸出四個角點+中心點" />
+    <Language LabOutputBarcodeRect="輸出條碼位置:" />
+    <Language GrbMuiltCodeSplit="多條碼多範本分隔符號" />
+    <Language BtnTemplateIdxSplit="確認" />
+    <Language LabTemplateIdxSplit="範本號分隔符號(十六進位):0x" />
+    <Language RdbTemplateIdxSuffix="在條碼後" />
+    <Language RdbTemplateIdxPrefix="在條碼前" />
+    <Language RdbTemplateIdxNoOut="不輸出" />
+    <Language LabTemplateIdxOut="範本號輸出:" />
+    <Language BtnMuiltCodeSplit="確認" />
+    <Language ChkMuiltCodeSplitSameEof="分隔符號跟隨結束符" />
+    <Language LabMuiltCodeSplit="多條碼分隔符號(十六進位):0x" />
+    <Language GrbBarcodeIDAndEof="條碼ID與結束符" />
+    <Language ChbBarcodeIDOut="允許條碼類型ID輸出" />
+    <Language CobStringEof="" />
+    <Language CobStringEof_item_1="None" />
+    <Language CobStringEof_item_2="CR" />
+    <Language CobStringEof_item_3="TAB" />
+    <Language CobStringEof_item_4="CRLF" />
+    <Language LabStringEof="條碼結束符:" />
+    <Language GrbDataCropSetting="數據裁剪" />
+    <Language RdbOnlyEndOutput="只傳輸資料後段" />
+    <Language RdbOnlyCenterOutput="只傳輸資料中間段" />
+    <Language RdbOnlyFrontOutput="只傳輸資料前段" />
+    <Language RdbAllDataOutput="傳輸整個資料段" />
+    <Language BtnEndSessionSet="確認" />
+    <Language BtnFrontSessionSet="確認" />
+    <Language LabEndSessionSet="後段長度設置:" />
+    <Language LabFrontSessionSet="前段長度設置:" />
+    <Language GrbPrefixAndSuffix="前尾碼設置" />
+    <Language BtnDataSuffix="確認" />
+    <Language BtnDataPrefix="確認" />
+    <Language ChbDataPrefix="條碼首碼:" />
+    <Language ChbDataSuffix="條碼尾碼:" />
+  </DataEditForm>
+  <IOInstructionForm>
+    <Language SoftwareTitle="IOInstructionForm" />
+    <Language GrbOutputPinSetting="輸出引腳設置" />
+    <Language RdbOut2OutputFailed="讀碼失敗動作" />
+    <Language RdbOut2OutputSuccess="讀碼成功動作" />
+    <Language LabOut2OutputWay="輸出IO2條件：" />
+    <Language RdbPolarityOut2Low="動作時極性反相" />
+    <Language RdbPolarityOut2Hight="動作時常規極性" />
+    <Language LabPolarityOut2="輸出IO2極性：" />
+    <Language RdbOut1OutputFailed="讀碼失敗動作" />
+    <Language RdbOut1OutputSuccess="讀碼成功動作" />
+    <Language LabOut1OutputWay="輸出IO1條件：" />
+    <Language RdbPolarityOut1Low="動作時極性反相" />
+    <Language RdbPolarityOut1Hight="動作時常規極性" />
+    <Language LabPolarityOut1="輸出IO1極性：" />
+    <Language BtnOutputPinTimeSet="確認" />
+    <Language TxbOutputPinTimeSet="2000" />
+    <Language LabOutputPinTimeSet="輸出信號持續時長(100ms):" />
+    <Language GrbIuputPinSetting="輸入引腳設置" />
+    <Language ChbExtraTrig="允許外部IO觸發掃碼(修改在設備重啟後生效)" />
+    <Language GrbTrigCMDSet="觸發指令和失敗返回" />
+    <Language CobSelectLength="" />
+    <Language CobSelectLength_item_1="關閉編輯指令功能" />
+    <Language CobSelectLength_item_2="單個位元組" />
+    <Language CobSelectLength_item_3="2個位元組" />
+    <Language CobSelectLength_item_4="3個位元組" />
+    <Language CobSelectLength_item_5="4個位元組" />
+    <Language CobSelectLength_item_6="5個位元組" />
+    <Language CobSelectLength_item_7="6個位元組" />
+    <Language CobSelectLength_item_8="7個位元組" />
+    <Language LabCmdParseResult="指令解析結果:" />
+    <Language LabCodeType="指令類型" />
+    <Language BtnApply="應用配置" />
+    <Language BtnClearCon="清除配置" />
+    <Language CobCodeType="" />
+    <Language CobCodeType_item_1="十六進位" />
+    <Language CobCodeType_item_2="字串" />
+    <Language GrbFindHexTool="查詢工具" />
+    <Language LabDispChar=" " />
+    <Language BtnChar2Hex="字元轉十六進位" />
+    <Language BtnHex2Char="十六進位轉字元" />
+    <Language BtnRfInfo="確認" />
+    <Language LabTriggerCode="設置觸發指令（最多設置7個位元組）" />
+    <Language LabTrigCMD="None" />
+    <Language ChbRfInfo="讀碼失敗返回:" />
+    <Language LabTrigCMDDisp="觸發指令內容:" />
+  </IOInstructionForm>
+  <ImageProcessingForm>
+    <Language SoftwareTitle="ImageProcessingForm" />
+    <Language ChbIsNewVerImgProc="採用新版本影像處理方式" />
+    <Language GrbNewVersionImgProc="新版本影像處理" />
+    <Language CobImgProcContrastEnhance2="" />
+    <Language CobImgProcContrastEnhance2_item_1="0" />
+    <Language CobImgProcContrastEnhance2_item_2="1" />
+    <Language CobImgProcContrastEnhance2_item_3="2" />
+    <Language CobImgProcContrastEnhance2_item_4="3" />
+    <Language CobImgProcContrastEnhance2_item_5="4" />
+    <Language CobImgProcContrastEnhance2_item_6="5" />
+    <Language CobImgProcContrastEnhance2_item_7="6" />
+    <Language CobImgProcContrastEnhance2_item_8="7" />
+    <Language CobImgProcContrastEnhance2_item_9="8" />
+    <Language CobImgProcContrastEnhance2_item_10="9" />
+    <Language CobImgProcContrastEnhance2_item_11="10" />
+    <Language CobImgProcContrastEnhance2_item_12="11" />
+    <Language CobImgProcContrastEnhance2_item_13="12" />
+    <Language CobImgProcContrastEnhance2_item_14="13" />
+    <Language CobImgProcContrastEnhance2_item_15="14" />
+    <Language CobImgProcContrastEnhance2_item_16="15" />
+    <Language LabImgProcContrastEnhance2="對比度增強2:" />
+    <Language CobImgProcContrastEnhance1="" />
+    <Language CobImgProcContrastEnhance1_item_1="0" />
+    <Language CobImgProcContrastEnhance1_item_2="1" />
+    <Language CobImgProcContrastEnhance1_item_3="2" />
+    <Language CobImgProcContrastEnhance1_item_4="3" />
+    <Language CobImgProcContrastEnhance1_item_5="4" />
+    <Language CobImgProcContrastEnhance1_item_6="5" />
+    <Language CobImgProcContrastEnhance1_item_7="6" />
+    <Language CobImgProcContrastEnhance1_item_8="7" />
+    <Language CobImgProcContrastEnhance1_item_9="8" />
+    <Language CobImgProcContrastEnhance1_item_10="9" />
+    <Language CobImgProcContrastEnhance1_item_11="10" />
+    <Language CobImgProcContrastEnhance1_item_12="11" />
+    <Language CobImgProcContrastEnhance1_item_13="12" />
+    <Language CobImgProcContrastEnhance1_item_14="13" />
+    <Language CobImgProcContrastEnhance1_item_15="14" />
+    <Language CobImgProcContrastEnhance1_item_16="15" />
+    <Language LabImgProcContrastEnhance1="對比度增強1:" />
+    <Language CobMorphErode2="" />
+    <Language CobMorphErode2_item_1="0" />
+    <Language CobMorphErode2_item_2="1" />
+    <Language CobMorphErode2_item_3="2" />
+    <Language CobMorphErode2_item_4="3" />
+    <Language CobMorphErode2_item_5="4" />
+    <Language CobMorphErode2_item_6="5" />
+    <Language CobMorphErode2_item_7="6" />
+    <Language CobMorphErode2_item_8="7" />
+    <Language CobMorphErode2_item_9="8" />
+    <Language CobMorphErode2_item_10="9" />
+    <Language CobMorphErode2_item_11="10" />
+    <Language CobMorphErode2_item_12="11" />
+    <Language CobMorphErode2_item_13="12" />
+    <Language CobMorphErode2_item_14="13" />
+    <Language CobMorphErode2_item_15="14" />
+    <Language CobMorphErode2_item_16="15" />
+    <Language LabMorphErode2="形態學腐蝕2:" />
+    <Language CobMorphDilate2="" />
+    <Language CobMorphDilate2_item_1="0" />
+    <Language CobMorphDilate2_item_2="1" />
+    <Language CobMorphDilate2_item_3="2" />
+    <Language CobMorphDilate2_item_4="3" />
+    <Language CobMorphDilate2_item_5="4" />
+    <Language CobMorphDilate2_item_6="5" />
+    <Language CobMorphDilate2_item_7="6" />
+    <Language CobMorphDilate2_item_8="7" />
+    <Language CobMorphDilate2_item_9="8" />
+    <Language CobMorphDilate2_item_10="9" />
+    <Language CobMorphDilate2_item_11="10" />
+    <Language CobMorphDilate2_item_12="11" />
+    <Language CobMorphDilate2_item_13="12" />
+    <Language CobMorphDilate2_item_14="13" />
+    <Language CobMorphDilate2_item_15="14" />
+    <Language CobMorphDilate2_item_16="15" />
+    <Language LabMorphDilate2="形態學膨脹2:" />
+    <Language CobGaussBlur2="" />
+    <Language CobGaussBlur2_item_1="0" />
+    <Language CobGaussBlur2_item_2="1" />
+    <Language CobGaussBlur2_item_3="2" />
+    <Language CobGaussBlur2_item_4="3" />
+    <Language CobGaussBlur2_item_5="4" />
+    <Language CobGaussBlur2_item_6="5" />
+    <Language CobGaussBlur2_item_7="6" />
+    <Language CobGaussBlur2_item_8="7" />
+    <Language CobGaussBlur2_item_9="8" />
+    <Language CobGaussBlur2_item_10="9" />
+    <Language CobGaussBlur2_item_11="10" />
+    <Language CobGaussBlur2_item_12="11" />
+    <Language CobGaussBlur2_item_13="12" />
+    <Language CobGaussBlur2_item_14="13" />
+    <Language CobGaussBlur2_item_15="14" />
+    <Language CobGaussBlur2_item_16="15" />
+    <Language LabGaussBlur2="高斯濾波2:" />
+    <Language CobEqualizeHist2="" />
+    <Language CobEqualizeHist2_item_1="0" />
+    <Language CobEqualizeHist2_item_2="1" />
+    <Language CobEqualizeHist2_item_3="2" />
+    <Language CobEqualizeHist2_item_4="3" />
+    <Language CobEqualizeHist2_item_5="4" />
+    <Language CobEqualizeHist2_item_6="5" />
+    <Language CobEqualizeHist2_item_7="6" />
+    <Language CobEqualizeHist2_item_8="7" />
+    <Language CobEqualizeHist2_item_9="8" />
+    <Language CobEqualizeHist2_item_10="9" />
+    <Language CobEqualizeHist2_item_11="10" />
+    <Language CobEqualizeHist2_item_12="11" />
+    <Language CobEqualizeHist2_item_13="12" />
+    <Language CobEqualizeHist2_item_14="13" />
+    <Language CobEqualizeHist2_item_15="14" />
+    <Language CobEqualizeHist2_item_16="15" />
+    <Language LabEqualizeHist2="圖像均衡2:" />
+    <Language CobMedianFilter2="" />
+    <Language CobMedianFilter2_item_1="0" />
+    <Language CobMedianFilter2_item_2="1" />
+    <Language CobMedianFilter2_item_3="2" />
+    <Language CobMedianFilter2_item_4="3" />
+    <Language CobMedianFilter2_item_5="4" />
+    <Language CobMedianFilter2_item_6="5" />
+    <Language CobMedianFilter2_item_7="6" />
+    <Language CobMedianFilter2_item_8="7" />
+    <Language CobMedianFilter2_item_9="8" />
+    <Language CobMedianFilter2_item_10="9" />
+    <Language CobMedianFilter2_item_11="10" />
+    <Language CobMedianFilter2_item_12="11" />
+    <Language CobMedianFilter2_item_13="12" />
+    <Language CobMedianFilter2_item_14="13" />
+    <Language CobMedianFilter2_item_15="14" />
+    <Language CobMedianFilter2_item_16="15" />
+    <Language LabMedianFilter2="中值濾波2:" />
+    <Language CobMorphErode1="" />
+    <Language CobMorphErode1_item_1="0" />
+    <Language CobMorphErode1_item_2="1" />
+    <Language CobMorphErode1_item_3="2" />
+    <Language CobMorphErode1_item_4="3" />
+    <Language CobMorphErode1_item_5="4" />
+    <Language CobMorphErode1_item_6="5" />
+    <Language CobMorphErode1_item_7="6" />
+    <Language CobMorphErode1_item_8="7" />
+    <Language CobMorphErode1_item_9="8" />
+    <Language CobMorphErode1_item_10="9" />
+    <Language CobMorphErode1_item_11="10" />
+    <Language CobMorphErode1_item_12="11" />
+    <Language CobMorphErode1_item_13="12" />
+    <Language CobMorphErode1_item_14="13" />
+    <Language CobMorphErode1_item_15="14" />
+    <Language CobMorphErode1_item_16="15" />
+    <Language LabMorphErode1="形態學腐蝕1:" />
+    <Language CobMorphDilate1="" />
+    <Language CobMorphDilate1_item_1="0" />
+    <Language CobMorphDilate1_item_2="1" />
+    <Language CobMorphDilate1_item_3="2" />
+    <Language CobMorphDilate1_item_4="3" />
+    <Language CobMorphDilate1_item_5="4" />
+    <Language CobMorphDilate1_item_6="5" />
+    <Language CobMorphDilate1_item_7="6" />
+    <Language CobMorphDilate1_item_8="7" />
+    <Language CobMorphDilate1_item_9="8" />
+    <Language CobMorphDilate1_item_10="9" />
+    <Language CobMorphDilate1_item_11="10" />
+    <Language CobMorphDilate1_item_12="11" />
+    <Language CobMorphDilate1_item_13="12" />
+    <Language CobMorphDilate1_item_14="13" />
+    <Language CobMorphDilate1_item_15="14" />
+    <Language CobMorphDilate1_item_16="15" />
+    <Language LabMorphDilate1="形態學膨脹1:" />
+    <Language CobGaussBlur1="" />
+    <Language CobGaussBlur1_item_1="0" />
+    <Language CobGaussBlur1_item_2="1" />
+    <Language CobGaussBlur1_item_3="2" />
+    <Language CobGaussBlur1_item_4="3" />
+    <Language CobGaussBlur1_item_5="4" />
+    <Language CobGaussBlur1_item_6="5" />
+    <Language CobGaussBlur1_item_7="6" />
+    <Language CobGaussBlur1_item_8="7" />
+    <Language CobGaussBlur1_item_9="8" />
+    <Language CobGaussBlur1_item_10="9" />
+    <Language CobGaussBlur1_item_11="10" />
+    <Language CobGaussBlur1_item_12="11" />
+    <Language CobGaussBlur1_item_13="12" />
+    <Language CobGaussBlur1_item_14="13" />
+    <Language CobGaussBlur1_item_15="14" />
+    <Language CobGaussBlur1_item_16="15" />
+    <Language LabGaussBlur1="高斯濾波1:" />
+    <Language CobEqualizeHist1="" />
+    <Language CobEqualizeHist1_item_1="0" />
+    <Language CobEqualizeHist1_item_2="1" />
+    <Language CobEqualizeHist1_item_3="2" />
+    <Language CobEqualizeHist1_item_4="3" />
+    <Language CobEqualizeHist1_item_5="4" />
+    <Language CobEqualizeHist1_item_6="5" />
+    <Language CobEqualizeHist1_item_7="6" />
+    <Language CobEqualizeHist1_item_8="7" />
+    <Language CobEqualizeHist1_item_9="8" />
+    <Language CobEqualizeHist1_item_10="9" />
+    <Language CobEqualizeHist1_item_11="10" />
+    <Language CobEqualizeHist1_item_12="11" />
+    <Language CobEqualizeHist1_item_13="12" />
+    <Language CobEqualizeHist1_item_14="13" />
+    <Language CobEqualizeHist1_item_15="14" />
+    <Language CobEqualizeHist1_item_16="15" />
+    <Language LabEqualizeHist1="圖像均衡1:" />
+    <Language CobMedianFilter1="" />
+    <Language CobMedianFilter1_item_1="0" />
+    <Language CobMedianFilter1_item_2="1" />
+    <Language CobMedianFilter1_item_3="2" />
+    <Language CobMedianFilter1_item_4="3" />
+    <Language CobMedianFilter1_item_5="4" />
+    <Language CobMedianFilter1_item_6="5" />
+    <Language CobMedianFilter1_item_7="6" />
+    <Language CobMedianFilter1_item_8="7" />
+    <Language CobMedianFilter1_item_9="8" />
+    <Language CobMedianFilter1_item_10="9" />
+    <Language CobMedianFilter1_item_11="10" />
+    <Language CobMedianFilter1_item_12="11" />
+    <Language CobMedianFilter1_item_13="12" />
+    <Language CobMedianFilter1_item_14="13" />
+    <Language CobMedianFilter1_item_15="14" />
+    <Language CobMedianFilter1_item_16="15" />
+    <Language ChbImageInverseNew="黑白反色" />
+    <Language ChbImageMirrorNew="圖像鏡像" />
+    <Language LabMedianFilter1="中值濾波1:" />
+    <Language GrbOldVersionImgProc="舊版本影像處理" />
+    <Language ChbImageInverse="黑白反色" />
+    <Language ChbEqualizeHist="圖像均衡" />
+    <Language ChbImageMirror="圖像鏡像" />
+    <Language ChbContrastEnhance="灰度增強" />
+  </ImageProcessingForm>
+  <AlgorithmProtocolForm>
+    <Language SoftwareTitle="演算法協定" />
+    <Language LabCodeRuleDesc="條碼匹配（頁面載入時添加設置頁面）" />
+    <Language GrbLimitBarcodeLen="限制條碼長度" />
+    <Language ChbAztecCheckDisable="Aztec" />
+    <Language ChbIL25CheckDisable="IL25" />
+    <Language ChbCode93CheckDisable="Code93" />
+    <Language ChbCodabarCheckDisable="CodaBar" />
+    <Language ChbCode39CheckDisable="Code39" />
+    <Language ChbCode128CheckDisable="Code128" />
+    <Language ChbPDF417CheckDisable="PDF417" />
+    <Language ChbDMCheckDisable="DataMatrix" />
+    <Language ChbQRCheckDisable="QRCode" />
+    <Language LabSetLimitException="允許例外的碼制(不受長度限制):" />
+    <Language BtnBarcodeLenLimitMax="確認" />
+    <Language BtnBarcodeLenLimitMin="確認" />
+    <Language LabBarcodeLenLimitMax="最大長度:" />
+    <Language LabBarcodeLenLimitMin="最小長度:" />
+    <Language GrbAlgorithmSetting="演算法相關設置" />
+    <Language BtnSaveAndRestart="保存設置重啟設備" />
+    <Language RdbDecodeModeA="A精細模式" />
+    <Language BtnDecodeCTraining="訓練" />
+    <Language RdbDecodeModeB="B快速模式" />
+    <Language RdbDecodeModeC="C增強模式" />
+    <Language LabSerchLevel="DM搜索精度:" />
+    <Language CobSerchLevel="" />
+    <Language CobSerchLevel_item_1="正常等級" />
+    <Language CobSerchLevel_item_2="一級精度" />
+    <Language CobSerchLevel_item_3="二級精度" />
+    <Language ChkSameCodeDlyInfinite="相同條碼無限延遲" />
+    <Language BtnSameCodeDelay="確認" />
+    <Language LabSameCodeDly="相同條碼延遲(100ms)：" />
+    <Language BtnSigleImageTimeout="確認" />
+    <Language LabSigleDecodeTime="單張圖片解碼超時(10ms)：" />
+  </AlgorithmProtocolForm>
+  <CommunicateSettingForm>
+    <Language SoftwareTitle="通訊協定" />
+    <Language TapModbus="Modbus協議" />
+    <Language LabMB_Tips="注意:協定配置在設備重啟後生效" />
+    <Language BtnMB_TcpPort="確認" />
+    <Language TxbMB_TcpPort="502" />
+    <Language LabMB_TcpPort="ModbusTCP埠:" />
+    <Language BtnMB_DeviceAddr="確認" />
+    <Language TxbMB_DeviceAddr="1" />
+    <Language LabMBAddr="Modbus設備位址:" />
+    <Language LabMB_Protocol="Modbus協議類型:" />
+    <Language CobMB_Protocol="" />
+    <Language CobMB_Protocol_item_1="關閉Modbus協議輸出" />
+    <Language CobMB_Protocol_item_2="Modbus-RTU" />
+    <Language CobMB_Protocol_item_3="Modbus-TCP" />
+    <Language TapEthernetIP="EthernetIP/ProfiNet" />
+    <Language LabEtherNetTips_2="但是有的設備不支援這兩個協定。" />
+    <Language ChbEnableProfiNet="啟用ProfiNet協議" />
+    <Language ChbEthernetIPEnable="啟用EthernetIP協議" />
+    <Language LabEtherNetTips_1="注意:設置後重啟生效," />
+    <Language TapMcPLC="三菱MC" />
+    <Language LabMcPLCTips="注意:協定配置在設備重啟後生效" />
+    <Language BtnMC_Port="確認" />
+    <Language TxbMC_Port="9002" />
+    <Language LabMcPLCPort="三菱MC協議埠:" />
+    <Language ChbEnableMcPLC="啟用三菱MC協議" />
+    <Language GrbOutputUSB="USB介面設置" />
+    <Language RdbOuputByUart="USB不輸出" />
+    <Language RdbOuputByCOM="USB虛擬串口" />
+    <Language RdbOuputByHID="USB鍵盤輸出" />
+    <Language GrbOutputInternet="網路介面設置" />
+    <Language ChbTcpOnlyConnectNew="強制新用戶端" />
+    <Language ChbNetworkLossDetect="網路斷聯檢測" />
+    <Language LabNetWorkSettingTips="注意:網路設備配置在設備重啟後生效" />
+    <Language ChbTcpUseNewVer="支持多用戶端" />
+    <Language BtnTcpIPAddrSet="確認" />
+    <Language BtnNetPortSet="確認" />
+    <Language TxbSIPAddrSeg3="1" />
+    <Language TxbSIPAddrSeg2="0" />
+    <Language TxbSIPAddrSeg1="168" />
+    <Language TxbSIPAddrSeg0="192" />
+    <Language LabTCPServerIP="通信目標IP設置：" />
+    <Language TxbComPort="13242" />
+    <Language LabComPort="通訊埠設置：" />
+    <Language CobComSel="" />
+    <Language LabComSel="網路通信協定：" />
+    <Language BtnMaskAddrSet="確認" />
+    <Language TxbMaskCodeSeg3="0" />
+    <Language TxbMaskCodeSeg2="255" />
+    <Language TxbMaskCodeSeg1="255" />
+    <Language TxbMaskCodeSeg0="255" />
+    <Language LabMaskCode="設備子網路遮罩：" />
+    <Language BtnGWAddrSet="確認" />
+    <Language TxbGwAddrSeg3="1" />
+    <Language TxbGwAddrSeg2="0" />
+    <Language TxbGwAddrSeg1="168" />
+    <Language TxbGwAddrSeg0="192" />
+    <Language LabGatewayAddr="設備閘道IP：" />
+    <Language BtnIPAddrSet="確認" />
+    <Language TxbIpAddrSeg3="135" />
+    <Language TxbIpAddrSeg2="0" />
+    <Language TxbIpAddrSeg1="168" />
+    <Language TxbIpAddrSeg0="192" />
+    <Language LabIPADDR="設備IP位址：" />
+    <Language RdbDhcpDisable="關閉" />
+    <Language RdbDhcpEnable="開啟" />
+    <Language LabDhcpState="DHCP自動獲取IP開關:" />
+    <Language GrbEncoderSetting="編碼設置" />
+    <Language RdbOutputUTF8="UTF-8" />
+    <Language RdbOutputUnicode="Unicode" />
+    <Language RdbOutputGBK="GBK" />
+    <Language GrbOutputRS232="RS232介面設置" />
+    <Language CobUartStopBit="" />
+    <Language CobUartStopBit_item_1="1" />
+    <Language CobUartStopBit_item_2="1.5" />
+    <Language CobUartStopBit_item_3="2" />
+    <Language LabUartStopBit="停止位設置:" />
+    <Language CobUartDataBit="" />
+    <Language CobUartDataBit_item_1="8" />
+    <Language CobUartDataBit_item_2="7" />
+    <Language CobUartDataBit_item_3="6" />
+    <Language CobUartDataBit_item_4="5" />
+    <Language LabUartDataBit="數據位元設置:" />
+    <Language CobUartPolarity="" />
+    <Language CobUartPolarity_item_1="無校驗" />
+    <Language CobUartPolarity_item_2="奇數同位檢查" />
+    <Language CobUartPolarity_item_3="偶校驗" />
+    <Language LabUartCheckPolarity="同位:" />
+    <Language CobBaudrateSet="" />
+    <Language CobBaudrateSet_item_1="2400" />
+    <Language CobBaudrateSet_item_2="4800" />
+    <Language CobBaudrateSet_item_3="9600" />
+    <Language CobBaudrateSet_item_4="19200" />
+    <Language CobBaudrateSet_item_5="38400" />
+    <Language CobBaudrateSet_item_6="57600" />
+    <Language CobBaudrateSet_item_7="115200" />
+    <Language LabBaudrateSet="串列傳輸速率設置:" />
+  </CommunicateSettingForm>
+  <TemplateSettingForm>
+    <Language SoftwareTitle="範本配置" />
+    <Language GrbNewTemplate="範本設置(新)" />
+    <Language BtnDrawMultRoi="製作多ROI" />
+    <Language BtnDrawTemplateRoi="開始繪製ROI" />
+    <Language LabLineSeparator="-" />
+    <Language TxbGroupForderIdx="1" />
+    <Language TxbGroupForderName="Group" />
+    <Language LabGroupForder="創建組:" />
+    <Language BtnGroupTemplateSet="確認" />
+    <Language ChbGroupTemplate="分組範本模式:" />
+    <Language CobTemplateIspFunc2="" />
+    <Language CobTemplateIspFunc2_item_1="高斯濾波" />
+    <Language CobTemplateIspFunc2_item_2="形態學膨脹" />
+    <Language CobTemplateIspFunc2_item_3="形態學腐蝕" />
+    <Language CobTemplateIspFunc2_item_4="對比度增強" />
+    <Language CobTemplateIspFunc2_item_5="圖像反色" />
+    <Language CobTemplateIspFunc2_item_6="圖像鏡像" />
+    <Language CobTemplateIspFunc2_item_7="中值濾波" />
+    <Language CobTemplateIspFunc2_item_8="雙邊濾波" />
+    <Language CobTemplateIndex="" />
+    <Language CobTemplateIndex_item_1="1" />
+    <Language CobTemplateIndex_item_2="2" />
+    <Language CobTemplateIndex_item_3="3" />
+    <Language CobTemplateIndex_item_4="4" />
+    <Language CobTemplateIndex_item_5="5" />
+    <Language CobTemplateIndex_item_6="6" />
+    <Language CobTemplateIndex_item_7="7" />
+    <Language CobTemplateIndex_item_8="8" />
+    <Language CobTemplateIndex_item_9="9" />
+    <Language CobTemplateIndex_item_10="10" />
+    <Language CobTemplateIndex_item_11="11" />
+    <Language CobTemplateIndex_item_12="12" />
+    <Language CobTemplateIndex_item_13="13" />
+    <Language CobTemplateIndex_item_14="14" />
+    <Language CobTemplateIndex_item_15="15" />
+    <Language CobTemplateIndex_item_16="16" />
+    <Language CobTemplateIndex_item_17="17" />
+    <Language CobTemplateIndex_item_18="18" />
+    <Language CobTemplateIndex_item_19="19" />
+    <Language CobTemplateIndex_item_20="20" />
+    <Language ChbTemplateLightGroup="照明分組開關控制" />
+    <Language ChbTemplateEnable="啟用範本" />
+    <Language CobTemplateIspFunc1="" />
+    <Language CobTemplateIspFunc1_item_1="高斯濾波" />
+    <Language CobTemplateIspFunc1_item_2="形態學膨脹" />
+    <Language CobTemplateIspFunc1_item_3="形態學腐蝕" />
+    <Language CobTemplateIspFunc1_item_4="對比度增強" />
+    <Language CobTemplateIspFunc1_item_5="圖像反色" />
+    <Language CobTemplateIspFunc1_item_6="圖像鏡像" />
+    <Language CobTemplateIspFunc1_item_7="中值濾波" />
+    <Language CobTemplateIspFunc1_item_8="維納濾波" />
+    <Language ChbImagePreProc2="圖像演算法處理2：" />
+    <Language ChbImagePreProc1="圖像演算法處理1：" />
+    <Language CobTemplateOutputLogic="" />
+    <Language CobTemplateOutputLogic_item_1="解一個就退(輸出一個)" />
+    <Language CobTemplateOutputLogic_item_2="解至少一個退(NG不輸出)" />
+    <Language CobTemplateOutputLogic_item_3="解至少一個退(NG輸出)" />
+    <Language CobTemplateOutputLogic_item_4="解全部才退出(調試用)" />
+    <Language CobTemplateOutputLogic_item_5="解全部才退出(實際用)" />
+    <Language LabTemplateOutputLogic="範本運行邏輯:" />
+    <Language ChbTemplateLensFocus="攝像頭焦距(當前的焦距)" />
+    <Language TxbTemplateRoiH="800" />
+    <Language TxbTemplateRoiW="1280" />
+    <Language TxbTemplateRoiY="0" />
+    <Language TxbTemplateRoiX="0" />
+    <Language LabTempH="H:" />
+    <Language LabTempW="W:" />
+    <Language LabTempY="Y:" />
+    <Language LabTempX="X:" />
+    <Language ChbTemplateLightConfig="照明亮度控制(照明欄設置)" />
+    <Language ChbTemplateAboutROI="圖像ROI開啟" />
+    <Language ChbTemplateAboutSensor="感測器曝光和增益配置" />
+    <Language LabTemplateIndex="範本號:" />
+    <Language ChbTemplateBarcodeType="解碼配置" />
+    <Language GrbTemplateOp="範本操作(老)" />
+    <Language BtnReadTemplate1="讀取範本1" />
+    <Language BtnReadTemplate2="讀取範本2" />
+    <Language BtnReadTemplate3="讀取範本3" />
+    <Language BtnSaveTemplate3="保存範本3" />
+    <Language BtnSaveTemplate1="保存範本1" />
+    <Language BtnSaveTemplate2="保存範本2" />
+    <Language GrbTemplateFiles="範本檔清單(新)" />
+    <Language ChbTempNameUseIdx="範本號" />
+    <Language ListViewTemplate="" />
+    <Language LabTemplateName="範本名字" />
+    <Language BtnTemplateSave="範本保存" />
+    <Language BtnReadAllTemplate="讀取設備範本" />
+    <Language GrbTemplateSetting="範本參數(老)" />
+    <Language BtnGetTempPara="重新獲取值" />
+    <Language ChbEnableTempFloop="開啟範本迴圈(老)" />
+    <Language CobTempDPMLevel="" />
+    <Language CobTempDPMLevel_item_1="正常模式" />
+    <Language CobTempDPMLevel_item_2="DPM模式1" />
+    <Language CobTempDPMLevel_item_3="DPM模式2" />
+    <Language CobTempDPMLevel_item_4="DPM模式3" />
+    <Language CobTempDPMLevel_item_5="DPM模式4" />
+    <Language CobTempDPMLevel_item_6="DPM模式5" />
+    <Language CobTempDPMLevel_item_7="DPM模式6" />
+    <Language CobTempDPMLevel_item_8="DPM模式7" />
+    <Language CobTempDPMLevel_item_9="DPM模式8" />
+    <Language LabTempDPMLevel="DPM識讀模式:" />
+    <Language LabSensorGainDisp="感測器增益值:" />
+    <Language LabSensorExpDisp="感測器曝光值:" />
+    <Language LabSecondLightDisp="輔助照明亮度:" />
+    <Language LabMainLightDisp="主要照明亮度:" />
+  </TemplateSettingForm>
+  <AdvancedSettingForm>
+    <Language SoftwareTitle="高級功能" />
+    <Language GrbDeviceADSetting="設備高級設置" />
+    <Language CobMuiltCodeSet="" />
+    <Language CobMuiltCodeSet_item_1="關閉多碼識別" />
+    <Language CobMuiltCodeSet_item_2="識別多個條碼" />
+    <Language CobMuiltCodeSet_item_3="只識別2個條碼" />
+    <Language CobMuiltCodeSet_item_4="只識別3個條碼" />
+    <Language CobMuiltCodeSet_item_5="只識別4個條碼" />
+    <Language CobMuiltCodeSet_item_6="只識別5個條碼" />
+    <Language CobMuiltCodeSet_item_7="只識別6個條碼" />
+    <Language CobMuiltCodeSet_item_8="只識別7個條碼" />
+    <Language CobMuiltCodeSet_item_9="只識別8個條碼" />
+    <Language CobMuiltCodeSet_item_10="只識別9個條碼" />
+    <Language LabMuiltCode="多碼識別(設備自動重啟生效):" />
+    <Language LabResolution="解析度(設備自動重啟生效):" />
+    <Language CobResolutionSet="" />
+    <Language CobResolutionSet_item_1="1280x800" />
+    <Language CobResolutionSet_item_2="1280x320" />
+    <Language CobResolutionSet_item_3="960x640" />
+    <Language CobResolutionSet_item_4="752x480" />
+    <Language TpIso="條碼等級" />
+    <Language GrpCodeQuality="條碼列印品質檢測及結果輸出" />
+    <Language CobCauseNG_TH_Set="" />
+    <Language CobCauseNG_TH_Set_item_1="默認不設置" />
+    <Language CobCauseNG_TH_Set_item_2="A級" />
+    <Language CobCauseNG_TH_Set_item_3="B級" />
+    <Language CobCauseNG_TH_Set_item_4="C級" />
+    <Language CobCauseNG_TH_Set_item_5="D級" />
+    <Language LabCauseNG_TH_Set="判斷達標的等級設置:" />
+    <Language CobCauseNGOut="" />
+    <Language CobCauseNGOut_item_1="預設等級達不到也不輸出信號" />
+    <Language CobCauseNGOut_item_2="等級達不到輸出OUT1信號" />
+    <Language CobCauseNGOut_item_3="等級達不到輸出OUT2信號" />
+    <Language LabCauseNGOut="條碼等級不滿足信號輸出:" />
+    <Language ChkSwitchVID="版本資訊損壞" />
+    <Language ChkSwitchDec="可解碼性" />
+    <Language ChkSwitchFID="格式資訊損壞" />
+    <Language ChkSwitchSC="符號對比度" />
+    <Language ChkSwitchPG="列印增長" />
+    <Language ChkSwitchMD="調製" />
+    <Language ChkSwitchUEC="未使用糾錯" />
+    <Language ChkSwitchFPD="固定圖形損壞" />
+    <Language ChkSwitchGN="網格非均勻性" />
+    <Language ChkSwitchAN="軸向非均勻性" />
+    <Language ChkSwitchRM="反射率餘量" />
+    <Language LabBarcodeQualityDisp="條碼列印評價:" />
+    <Language CobBarcodeQualityMode="" />
+    <Language CobBarcodeQualityMode_item_1="Disable" />
+    <Language CobBarcodeQualityMode_item_2="ISO/ICE-15415" />
+    <Language CobBarcodeQualityMode_item_3="ISO/ICE-29158(AIM-DPM-2006)" />
+    <Language CobForceLowerLevel="" />
+    <Language CobForceLowerLevel_item_1="不限制" />
+    <Language CobForceLowerLevel_item_2="限制D級" />
+    <Language CobForceLowerLevel_item_3="限制C級" />
+    <Language CobForceLowerLevel_item_4="限制B級" />
+    <Language CobForceLowerLevel_item_5="限制A級" />
+    <Language LabForceLowerLevel="最低等級限制:" />
+    <Language LabQualityAllSeparator="評價之間間隔符:" />
+    <Language LabQualityBarcodeSeparator="條碼到評價間隔符:" />
+    <Language RdbQualityResultOverall="只輸出綜合評價" />
+    <Language RdbQualityResultOrderAll="順序輸出評價" />
+    <Language LabResultOutputWay="結果輸出方式：" />
+    <Language RdbQualityOutputDescAndData="標記+資料" />
+    <Language TpTheOthers="其他" />
+    <Language CobTryMultCode="" />
+    <Language CobTryMultCode_item_1="關閉" />
+    <Language CobTryMultCode_item_2="開啟" />
+    <Language LabTryMultCode="多碼嘗試模式:" />
+    <Language GrpState="狀態" />
+    <Language CobLogState="" />
+    <Language CobLogState_item_1="致命錯誤才記錄" />
+    <Language CobLogState_item_2="出現錯誤才記錄" />
+    <Language CobLogState_item_3="出現警告才記錄" />
+    <Language CobLogState_item_4="統計解碼記錄" />
+    <Language CobLogState_item_5="一般資訊記錄" />
+    <Language CobLogState_item_6="調試資訊記錄" />
+    <Language LabLogState="Log狀態:" />
+    <Language LabClientCount="0" />
+    <Language LvwClientDisp="" />
+    <Language LabClientCountDisp="已連接的設備個數:" />
+    <Language GrpGroupNet="組網模式配置" />
+    <Language CobHostUploadMode="" />
+    <Language CobHostUploadMode_item_1="主機從機讀完上傳才結束" />
+    <Language CobHostUploadMode_item_2="任意設備讀完上傳就結束" />
+    <Language LabHostUploadMode="主機讀完成後等待時間:" />
+    <Language LabDecodeWaitTimeUnit="0ms" />
+    <Language LabDecodeWaitTime="主機讀完成後等待時間:" />
+    <Language BtnDecodeWaitTimeSet="確認" />
+    <Language TxbDecodeWaitTime="500" />
+    <Language BtnNetWorkingSplitCh="確認" />
+    <Language ChkUseSameTrig="同步觸發全部讀碼器" />
+    <Language ChkNetworkingSplitCh="分隔符號:  0x" />
+    <Language RdbNetWorkingClose="關閉組網功能" />
+    <Language BtnHostSIP_Set="確認" />
+    <Language TxbHostSIP_Seg4="100" />
+    <Language TxbHostSIP_Seg3="0" />
+    <Language TxbHostSIP_Seg2="168" />
+    <Language TxbHostSIP_Seg1="192" />
+    <Language LabNetworkingHostIP="組網主機設備IP：" />
+    <Language RdbNetWorkingServer="主機模式" />
+    <Language RdbClientMode="從機模式" />
+    <Language GrbMuiltCoreAls="演算法加速配置" />
+    <Language CobMuiltCoreMode="" />
+    <Language CobMuiltCoreMode_item_1="關閉加速" />
+    <Language CobMuiltCoreMode_item_2="運動流水線狂掃模式" />
+    <Language CobMuiltCoreMode_item_3="靜態圖像快讀模式" />
+    <Language CobMuiltCoreMode_item_4="解碼瘋狂探索模式" />
+    <Language LabMuiltCoreMode="多核CPU處理加速模式:" />
+    <Language GrbFtpSettomg="設備FTP檔案伺服器" />
+    <Language TxbFTPAccount="root" />
+    <Language TxbFtpIP="192.168.1.91" />
+    <Language LabFtpPassword="Password:" />
+    <Language LabAccount="Account:" />
+    <Language LabFtpIPADDR="IP:" />
+    <Language lvwFiles="" />
+    <Language lvwFiles_columns_1="檔案名字" />
+    <Language lvwFiles_columns_2="類型" />
+    <Language lvwFiles_columns_3="大小" />
+    <Language BtnFreshFtp="刷新列表" />
+    <Language BtnDisconnectFTP="斷開FTP" />
+    <Language BtnConnectFTP="連接FTP" />
+    <Language TxbFtpPassword="hj168" />
+  </AdvancedSettingForm>
+  <ImageSaveSettingForm>
+    <Language SoftwareTitle="圖像保存" />
+    <Language GrbImageDataProcess="圖像資料輸出保存" />
+    <Language BtnChangeFtpPasswd="OK" />
+    <Language BtnChangeFtpName="OK" />
+    <Language TxbFtpPasswd="root" />
+    <Language LabFtpPw="FTP登錄密碼:" />
+    <Language TxbFtpName="root" />
+    <Language LabFtpName="FTP用戶登錄名:" />
+    <Language ChbDecodeNGFtpImg="解碼失敗FTP保存圖片" />
+    <Language ChbDecodeOKFtpImg="解碼成功FTP保存圖片" />
+    <Language ChbDecodeNGSendImg="解碼失敗發送圖片" />
+    <Language ChbDecodeOKSendImg="解碼成功發送圖片" />
+    <Language ChbDecodeNGSaveImg="解碼失敗設備保存圖片" />
+    <Language ChbDecodeOKSaveImg="解碼成功設備保存圖片" />
+  </ImageSaveSettingForm>
+  <OthersSettingForm>
+    <Language SoftwareTitle="OthersSettingForm" />
+    <Language TapForUploadImage="傳圖解碼" />
+    <Language BtnAddCurrentTraining="加入訓練" />
+    <Language BtnSelectUploadImage="選擇圖片" />
+    <Language BtnUploadAndDecode="上傳並解碼" />
+  </OthersSettingForm>
+  <DeviceSettingForm>
+    <Language SoftwareTitle="設置視窗" />
+    <Language TpParaAdjust="調整" />
+    <Language ChbHDR_ModeEnable="HDR開啟" />
+    <Language GrbSoundSetting="讀碼成功聲音提示" />
+    <Language RdbSoundOff="關閉" />
+    <Language RdbSoundOn="開啟" />
+    <Language GrbSensorLensFocus="鏡頭對焦設置" />
+    <Language BtnSensorLensFocusAdd="▶" />
+    <Language BtnSensorLensFocusDec="◀" />
+    <Language TxbSensorLensFocusSet="0" />
+    <Language LabSensorLensFocusSet="焦距:" />
+    <Language RdbAutoFocusEnbale="自動" />
+    <Language RdbAutoFocusDisabale="手動" />
+    <Language GrbWorkMode="工作模式" />
+    <Language GrbTrigTime="觸發讀碼設置" />
+    <Language RdbKeepImage="按圖個數" />
+    <Language RdbKeepTime="按時長" />
+    <Language BtnKeepImage="確認" />
+    <Language LabKeepImage="觸發圖片張數:" />
+    <Language TxbKeepImage="2" />
+    <Language LabKeepImageUnit="張" />
+    <Language BtnTrigKeepTime="確認" />
+    <Language LabTrigKeepTimeName="單次讀碼時長:" />
+    <Language TxbTrigKeepTime="2000" />
+    <Language LabMsSShow="ms" />
+    <Language BtnTrigTest="單次觸發" />
+    <Language RdbTrigExtern="外部觸發/命令觸發" />
+    <Language RdbContinuousTrig="連續觸發" />
+    <Language GrbExpSetting="曝光控制" />
+    <Language BtnExpSetValue="設置曝光" />
+    <Language BtnExpSetRatioAdd="▶" />
+    <Language BtnExpSetRatioDec="◀" />
+    <Language CheckAutoExp="自動曝光" />
+    <Language RdbExpSetValue="數值調節(單位us):" />
+    <Language RdbExpSetRatio="比例調節(1-255):" />
+    <Language GrbSensorGainSetting="增益控制" />
+    <Language LabSensorGainSet="感測器增益(0-255):" />
+    <Language BtnSensorGainSetAdd="▶" />
+    <Language BtnSensorGainSetDec="◀" />
+    <Language TxbSensorGainSet="0" />
+    <Language Tp_Lighting="燈光照明" />
+    <Language Tp_ImageProcess="影像處理" />
+    <Language Tp_BarcodeType="碼制設置" />
+    <Language Tp_Template="範本配置" />
+  </DeviceSettingForm>
+  <CMD_Tool>
+    <Language SoftwareTitle="命令配置工具" />
+    <Language GrbExplain="指令說明" />
+    <Language GrbCrcCalc="CRC計算" />
+    <Language BtnCalcCMD="計 算" />
+    <Language GrbSendCMD="發送指令" />
+    <Language LabTipsState="-&gt;提示可能不準確-&lt;" />
+    <Language LabSendFailed="發送失敗" />
+    <Language LabSendOk="發送成功" />
+    <Language RdbSendHEX="十六進位HEX" />
+    <Language RdbSendString="字元Ascii" />
+    <Language BtnSendCMD="發送命令" />
+    <Language GrbSettingList="命令列表" />
+    <Language BtnAddToRignt="-&gt;&gt;&gt;" />
+    <Language BtnSaveConfigXml="保存配置" />
+    <Language ChkAllowEdit="編輯模式" />
+    <Language LabDispCMD="指令:" />
+    <Language LabSerch="搜索:" />
+  </CMD_Tool>
+  <ComDebugTool>
+    <Language SoftwareTitle="合傑串口調試工具V1.4" />
+    <Language GrpComDebug="串口調試" />
+    <Language CobUartSelect="" />
+    <Language ButOpenUart="打開串口" />
+    <Language ButSendData="發送資料" />
+    <Language GdbDataSend="資料發送區" />
+    <Language numericUpDown="1000" />
+    <Language ChkSendByTime="定時發送" />
+    <Language LabCycleTimeUint="ms" />
+    <Language LabCycleTime="週期：" />
+    <Language ChkDispTime="顯示時間" />
+    <Language RdbSendHex="十六進位" />
+    <Language RdbSendString="字串" />
+    <Language TxtSendCount="傳送的位元組：0" />
+    <Language TxtUartState="狀態：" />
+    <Language GdbDataReceive="資料顯示區" />
+    <Language CobDispEncode="" />
+    <Language CobDispEncode_item_1="Default" />
+    <Language CobDispEncode_item_2="GBK" />
+    <Language CobDispEncode_item_3="UTF-8" />
+    <Language CobDispEncode_item_4="Unicode(big)" />
+    <Language CobDispEncode_item_5="Unicode(little)" />
+    <Language CobDispEncode_item_6="Big5" />
+    <Language LabDispEncode="顯示編碼：" />
+    <Language RdbHexDisplay="十六進位" />
+    <Language TxtReceiveCount="接收位元組：0" />
+    <Language RdbStringDisplay="字串" />
+    <Language CobBaudRateSelect="" />
+    <Language CobBaudRateSelect_item_1="2400" />
+    <Language CobBaudRateSelect_item_2="4800" />
+    <Language CobBaudRateSelect_item_3="9600" />
+    <Language CobBaudRateSelect_item_4="19200" />
+    <Language CobBaudRateSelect_item_5="38400" />
+    <Language CobBaudRateSelect_item_6="57600" />
+    <Language CobBaudRateSelect_item_7="115200" />
+    <Language TxtBaudRateSelect="串列傳輸速率：" />
+    <Language TxtUartSelect="選擇串口：" />
+  </ComDebugTool>
+  <ConfigBarcodeCheck>
+    <Language SoftwareTitle="條碼匹配設置" />
+    <Language GrbExpectCode="預期條碼設置" />
+    <Language LabRuleDescTips="如需清除某組資料，在對應組資料留空並打勾" />
+    <Language LabTips1="說明:萬用字元為'*'星號.前面打勾表明本次要配置的組" />
+    <Language BtnWriteCfg="寫入配置" />
+    <Language BtnReadCfg="回讀配置" />
+    <Language ChbGround8="第八組：" />
+    <Language ChbGround7="第七組：" />
+    <Language ChbGround6="第六組：" />
+    <Language ChbGround5="第五組：" />
+    <Language ChbGround4="第四組：" />
+    <Language ChbGround3="第三組：" />
+    <Language ChbGround2="第二組：" />
+    <Language ChbGround1="第一組：" />
+  </ConfigBarcodeCheck>
+  <DriverInstall>
+    <Language SoftwareTitle="DriverInstall" />
+    <Language BtnClose="Close" />
+  </DriverInstall>
+  <FormNet>
+    <Language SoftwareTitle="合傑網口調試工具v1.0" />
+    <Language GrbNetTool="網口調試" />
+    <Language LabRemotePort="遠端主機埠" />
+    <Language CobRemoteIP="" />
+    <Language LabRemoteIP="遠端主機位址" />
+    <Language BtnSend="發送" />
+    <Language LabState="狀態：" />
+    <Language GpbDataSend="資料發送區" />
+    <Language LabSendByteCount="0" />
+    <Language LabSendCount="傳送的位元組：" />
+    <Language ChkDispTime="顯示時間" />
+    <Language LabCycleTimeUnit="ms" />
+    <Language numericUpDown1="1" />
+    <Language LabCycleTime="週期：" />
+    <Language ChkTimedSend="定時發送" />
+    <Language RdbHexSend="十六進位" />
+    <Language RdbStringSend="字串" />
+    <Language GpbDataReceive="資料顯示區" />
+    <Language LabReceiveByteCount="0" />
+    <Language LabReceiveCount="接收位元組：" />
+    <Language CobEncodeSelect="" />
+    <Language CobEncodeSelect_item_1="Default" />
+    <Language CobEncodeSelect_item_2="GBK" />
+    <Language CobEncodeSelect_item_3="UTF-8" />
+    <Language CobEncodeSelect_item_4="Unicode(big)" />
+    <Language CobEncodeSelect_item_5="Unicode(little)" />
+    <Language CobEncodeSelect_item_6="Big5" />
+    <Language LabDispEncode="顯示編碼" />
+    <Language RdbHexDisplay="十六進位" />
+    <Language RdbStringDisplay="字串" />
+    <Language BtnConnect="監聽" />
+    <Language LabPort="本地主機埠" />
+    <Language CobIPAdress="" />
+    <Language LabIPAdress="本地主機位址" />
+    <Language CobProtocolSelect="" />
+    <Language CobProtocolSelect_item_1="UDP" />
+    <Language CobProtocolSelect_item_2="TCP Client" />
+    <Language CobProtocolSelect_item_3="TCP Server" />
+    <Language LabProtocolSelect="協議類型" />
+  </FormNet>
+  <FormDeviceIP>
+    <Language SoftwareTitle="IP設置" />
+    <Language RdbDhcpDisable="關閉" />
+    <Language RdbDhcpEnable="開啟" />
+    <Language LabDhcpState="DHCP自動獲取IP開關:" />
+    <Language BtnMaskAddrSet="確認" />
+    <Language TxbGwAddrSeg3="1" />
+    <Language TxbGwAddrSeg2="1" />
+    <Language TxbGwAddrSeg1="168" />
+    <Language TxbGwAddrSeg0="192" />
+    <Language LabGatewayAddr="閘道位址設置：" />
+    <Language TxbIpAddrSeg3="100" />
+    <Language TxbIpAddrSeg2="1" />
+    <Language TxbIpAddrSeg1="168" />
+    <Language TxbIpAddrSeg0="192" />
+    <Language LabIPADDR="IP位址設置：" />
+  </FormDeviceIP>
+  <MsgContentList>
+    <MsgContent Id="0" MessageBoxInfoDef="TextUpperLeft">
+      <TitleText>
+      </TitleText>
+      <ContentText>左上</ContentText>
+    </MsgContent>
+    <MsgContent Id="1" MessageBoxInfoDef="TextLowerLeft">
+      <TitleText>
+      </TitleText>
+      <ContentText>左下</ContentText>
+    </MsgContent>
+    <MsgContent Id="2" MessageBoxInfoDef="TextUpperRight">
+      <TitleText>
+      </TitleText>
+      <ContentText>右上</ContentText>
+    </MsgContent>
+    <MsgContent Id="3" MessageBoxInfoDef="TextLowerRight">
+      <TitleText>
+      </TitleText>
+      <ContentText>右下</ContentText>
+    </MsgContent>
+    <MsgContent Id="4" MessageBoxInfoDef="TextUpperPart">
+      <TitleText>
+      </TitleText>
+      <ContentText>上部</ContentText>
+    </MsgContent>
+    <MsgContent Id="5" MessageBoxInfoDef="TextLowerPart">
+      <TitleText>
+      </TitleText>
+      <ContentText>下部</ContentText>
+    </MsgContent>
+    <MsgContent Id="6" MessageBoxInfoDef="TextLeftSide">
+      <TitleText>
+      </TitleText>
+      <ContentText>左側</ContentText>
+    </MsgContent>
+    <MsgContent Id="7" MessageBoxInfoDef="TextRightSide">
+      <TitleText>
+      </TitleText>
+      <ContentText>右側</ContentText>
+    </MsgContent>
+    <MsgContent Id="8" MessageBoxInfoDef="TextRedFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色補光燈</ContentText>
+    </MsgContent>
+    <MsgContent Id="9" MessageBoxInfoDef="TextWhiteFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>白色補光燈</ContentText>
+    </MsgContent>
+    <MsgContent Id="10" MessageBoxInfoDef="TextRedFillLight1">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色補光燈1</ContentText>
+    </MsgContent>
+    <MsgContent Id="11" MessageBoxInfoDef="TextRedFillLight2">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色補光燈2</ContentText>
+    </MsgContent>
+    <MsgContent Id="12" MessageBoxInfoDef="TextRedFillLight3">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色補光燈3</ContentText>
+    </MsgContent>
+    <MsgContent Id="13" MessageBoxInfoDef="TextRedFillLight4">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色補光燈4</ContentText>
+    </MsgContent>
+    <MsgContent Id="14" MessageBoxInfoDef="TextRedshadeLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>紅色燈罩燈</ContentText>
+    </MsgContent>
+    <MsgContent Id="15" MessageBoxInfoDef="TextBlueFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>藍色補光燈</ContentText>
+    </MsgContent>
+    <MsgContent Id="16" MessageBoxInfoDef="TextTemplateNameNullTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請輸入範本名稱</ContentText>
+    </MsgContent>
+    <MsgContent Id="17" MessageBoxInfoDef="TextTemplateNameInvalidTips">
+      <TitleText>錯誤</TitleText>
+      <ContentText>範本名稱含有非法字元,請重新輸入</ContentText>
+    </MsgContent>
+    <MsgContent Id="18" MessageBoxInfoDef="DrawRioTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>框選ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="19" MessageBoxInfoDef="DrawRoiOkTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>框選完成</ContentText>
+    </MsgContent>
+    <MsgContent Id="20" MessageBoxInfoDef="AiTrain">
+      <TitleText>
+      </TitleText>
+      <ContentText>AI調參</ContentText>
+    </MsgContent>
+    <MsgContent Id="21" MessageBoxInfoDef="StopTrain">
+      <TitleText>
+      </TitleText>
+      <ContentText>停止調參</ContentText>
+    </MsgContent>
+    <MsgContent Id="22" MessageBoxInfoDef="SelectComTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先選擇串口，再進行其他操作</ContentText>
+    </MsgContent>
+    <MsgContent Id="23" MessageBoxInfoDef="NetRightIpTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先輸入正確IP</ContentText>
+    </MsgContent>
+    <MsgContent Id="24" MessageBoxInfoDef="NetRightPortTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先輸入正確埠號</ContentText>
+    </MsgContent>
+    <MsgContent Id="25" MessageBoxInfoDef="NetRightRemoteIpTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先輸入正確遠端IP</ContentText>
+    </MsgContent>
+    <MsgContent Id="26" MessageBoxInfoDef="NetRightRemotePortTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先輸入正確遠端埠號</ContentText>
+    </MsgContent>
+    <MsgContent Id="27" MessageBoxInfoDef="NetDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>斷開</ContentText>
+    </MsgContent>
+    <MsgContent Id="28" MessageBoxInfoDef="NetConnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>連接</ContentText>
+    </MsgContent>
+    <MsgContent Id="29" MessageBoxInfoDef="NetOpen">
+      <TitleText>
+      </TitleText>
+      <ContentText>打開</ContentText>
+    </MsgContent>
+    <MsgContent Id="30" MessageBoxInfoDef="UdpCloseTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>UDP通信已關閉</ContentText>
+    </MsgContent>
+    <MsgContent Id="31" MessageBoxInfoDef="StateListening">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：監聽中...</ContentText>
+    </MsgContent>
+    <MsgContent Id="32" MessageBoxInfoDef="StateClientConnected">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：用戶端已連接.</ContentText>
+    </MsgContent>
+    <MsgContent Id="33" MessageBoxInfoDef="StateClientDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：用戶端連接中斷！</ContentText>
+    </MsgContent>
+    <MsgContent Id="34" MessageBoxInfoDef="stateDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：連接中斷</ContentText>
+    </MsgContent>
+    <MsgContent Id="35" MessageBoxInfoDef="DisconnectTips">
+      <TitleText>提示</TitleText>
+      <ContentText>連接已斷開.</ContentText>
+    </MsgContent>
+    <MsgContent Id="36" MessageBoxInfoDef="NetServerNotOpenTips">
+      <TitleText>提示</TitleText>
+      <ContentText>服務端並未啟動!</ContentText>
+    </MsgContent>
+    <MsgContent Id="37" MessageBoxInfoDef="EnterRightHexTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請輸入正確的十六位元字元，如“0A”“0x0a”</ContentText>
+    </MsgContent>
+    <MsgContent Id="38" MessageBoxInfoDef="OpenUdpTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先打開UDP通信</ContentText>
+    </MsgContent>
+    <MsgContent Id="39" MessageBoxInfoDef="StateDisconnectWithServer">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：已與伺服器斷開連接.</ContentText>
+    </MsgContent>
+    <MsgContent Id="40" MessageBoxInfoDef="EnterTextTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先輸入要發送的資料！</ContentText>
+    </MsgContent>
+    <MsgContent Id="41" MessageBoxInfoDef="StateConnectToServer">
+      <TitleText>
+      </TitleText>
+      <ContentText>已連接到伺服器.</ContentText>
+    </MsgContent>
+    <MsgContent Id="42" MessageBoxInfoDef="ClearReceiveDataTips">
+      <TitleText>提示</TitleText>
+      <ContentText>是否清除接收資料？</ContentText>
+    </MsgContent>
+    <MsgContent Id="43" MessageBoxInfoDef="ClearReceiveCountTips">
+      <TitleText>提示</TitleText>
+      <ContentText>是否清零接收位元組計數？</ContentText>
+    </MsgContent>
+    <MsgContent Id="44" MessageBoxInfoDef="ClearSendDataTips">
+      <TitleText>提示</TitleText>
+      <ContentText>是否清除發送資料？</ContentText>
+    </MsgContent>
+    <MsgContent Id="45" MessageBoxInfoDef="ClearSendCountTips">
+      <TitleText>提示</TitleText>
+      <ContentText>是否清零傳送的位元組計數？</ContentText>
+    </MsgContent>
+    <MsgContent Id="46" MessageBoxInfoDef="ConnectThenResendTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請建立連接後再發送</ContentText>
+    </MsgContent>
+    <MsgContent Id="47" MessageBoxInfoDef="StateUdpOpened">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：UDP通信已打開</ContentText>
+    </MsgContent>
+    <MsgContent Id="48" MessageBoxInfoDef="FirmWarePageText">
+      <TitleText>設備固件資訊</TitleText>
+      <ContentText>解碼設備固件版本：</ContentText>
+    </MsgContent>
+    <MsgContent Id="49" MessageBoxInfoDef="SaveTips_1">
+      <TitleText>
+      </TitleText>
+      <ContentText>設備配置正在保存中...</ContentText>
+    </MsgContent>
+    <MsgContent Id="50" MessageBoxInfoDef="SaveTips_2">
+      <TitleText>
+      </TitleText>
+      <ContentText>請勿斷電，以免丟失資料</ContentText>
+    </MsgContent>
+    <MsgContent Id="51" MessageBoxInfoDef="UpOneLevelText">
+      <TitleText>
+      </TitleText>
+      <ContentText>上一級</ContentText>
+    </MsgContent>
+    <MsgContent Id="52" MessageBoxInfoDef="FolderText">
+      <TitleText>
+      </TitleText>
+      <ContentText>資料夾</ContentText>
+    </MsgContent>
+    <MsgContent Id="53" MessageBoxInfoDef="CharConvertError">
+      <TitleText>提示</TitleText>
+      <ContentText>轉換成字串失敗</ContentText>
+    </MsgContent>
+    <MsgContent Id="54" MessageBoxInfoDef="TempState">
+      <TitleText>
+      </TitleText>
+      <ContentText>狀態：</ContentText>
+    </MsgContent>
+    <MsgContent Id="55" MessageBoxInfoDef="TempEnableRoi">
+      <TitleText>
+      </TitleText>
+      <ContentText>圖像ROI是否開啟</ContentText>
+    </MsgContent>
+    <MsgContent Id="56" MessageBoxInfoDef="TempEnable">
+      <TitleText>
+      </TitleText>
+      <ContentText>是否啟用範本</ContentText>
+    </MsgContent>
+    <MsgContent Id="57" MessageBoxInfoDef="TempGroupMode">
+      <TitleText>
+      </TitleText>
+      <ContentText>分組模式</ContentText>
+    </MsgContent>
+    <MsgContent Id="58" MessageBoxInfoDef="TempEnable_Y">
+      <TitleText>
+      </TitleText>
+      <ContentText>是</ContentText>
+    </MsgContent>
+    <MsgContent Id="59" MessageBoxInfoDef="TempEnable_N">
+      <TitleText>
+      </TitleText>
+      <ContentText>否</ContentText>
+    </MsgContent>
+    <MsgContent Id="60" MessageBoxInfoDef="TempRowColErrorTips">
+      <TitleText>提示</TitleText>
+      <ContentText>行個數或者列個數設置有誤，請檢查後重試</ContentText>
+    </MsgContent>
+    <MsgContent Id="61" MessageBoxInfoDef="TempRowColMaxTips">
+      <TitleText>提示</TitleText>
+      <ContentText>ROI個數不能超過20</ContentText>
+    </MsgContent>
+    <MsgContent Id="62" MessageBoxInfoDef="TempSaveRoiTips">
+      <TitleText>提示</TitleText>
+      <ContentText>當前ROI尚未保存，確定要退出嗎？</ContentText>
+    </MsgContent>
+    <MsgContent Id="63" MessageBoxInfoDef="TempRoiStartDraw">
+      <TitleText>
+      </TitleText>
+      <ContentText>開始繪製ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="64" MessageBoxInfoDef="TempRoiEndDraw">
+      <TitleText>
+      </TitleText>
+      <ContentText>ROI繪製完成</ContentText>
+    </MsgContent>
+    <MsgContent Id="65" MessageBoxInfoDef="TempCaptureTips">
+      <TitleText>提示</TitleText>
+      <ContentText>繪製多ROI需要先觸發采圖，請檢查後重試</ContentText>
+    </MsgContent>
+    <MsgContent Id="66" MessageBoxInfoDef="CmdXmlCfgErrorTips">
+      <TitleText>錯誤</TitleText>
+      <ContentText>程式運行需要的設定檔格式不正確，導致程式不能正常運行。</ContentText>
+    </MsgContent>
+    <MsgContent Id="67" MessageBoxInfoDef="CmdCodeTypeKTips">
+      <TitleText>提示</TitleText>
+      <ContentText>此功能無法通過命令設置</ContentText>
+    </MsgContent>
+    <MsgContent Id="68" MessageBoxInfoDef="CmdConnectThenSendTips">
+      <TitleText>提示</TitleText>
+      <ContentText>請先連接上設備再進行發送指令操作</ContentText>
+    </MsgContent>
+    <MsgContent Id="69" MessageBoxInfoDef="CmdRemove7e00">
+      <TitleText>
+      </TitleText>
+      <ContentText>去掉7e 00</ContentText>
+    </MsgContent>
+    <MsgContent Id="70" MessageBoxInfoDef="CmdCalcResult">
+      <TitleText>
+      </TitleText>
+      <ContentText>計算結果：</ContentText>
+    </MsgContent>
+    <MsgContent Id="71" MessageBoxInfoDef="CmdSaveCfgTips">
+      <TitleText>警告</TitleText>
+      <ContentText>確認要保存當前配置？此操作不可撤銷</ContentText>
+    </MsgContent>
+    <MsgContent Id="72" MessageBoxInfoDef="CmdSaveCfgOkTips">
+      <TitleText>提示</TitleText>
+      <ContentText>設置保存成功。</ContentText>
+    </MsgContent>
+    <MsgContent Id="73" MessageBoxInfoDef="CmdSaveErrorTips">
+      <TitleText>錯誤</TitleText>
+      <ContentText>格式錯誤，資料不保存。</ContentText>
+    </MsgContent>
+    <MsgContent Id="74" MessageBoxInfoDef="CmdSaveKeyErrorTips">
+      <TitleText>錯誤</TitleText>
+      <ContentText>指定鍵值已經存在，填寫的資料不保存。</ContentText>
+    </MsgContent>
+    <MsgContent Id="75" MessageBoxInfoDef="CmdContinueModeTips">
+      <TitleText>提示</TitleText>
+      <ContentText>當前屬於連續觸發，配置命令可能會提示失敗，但是命令一般都會配置成功。如需確認發送成功提示準確，可以先切回外部觸發或者獲取原圖暫停資料回傳，再去配置命令。</ContentText>
+    </MsgContent>
+    <MsgContent Id="76" MessageBoxInfoDef="TypeTrigModeTips">
+      <TitleText>提示</TitleText>
+      <ContentText>需要在外部觸發模式下進行配置!</ContentText>
+    </MsgContent>
+    <MsgContent Id="77" MessageBoxInfoDef="DriverInstallExitTips">
+      <TitleText>提示</TitleText>
+      <ContentText>安裝未完成，現在退出則停止安裝。點擊“OK”則退出安裝。</ContentText>
+    </MsgContent>
+  </MsgContentList>
+</Root>

@@ -312,131 +312,17 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackScore_MouseUp(object sender, MouseEventArgs e)
-        {
-           
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-
-        private void trackMaxOverLap_Scroll(object sender, EventArgs e)
-        {
-            lbOverLap.Text = trackMaxOverLap.Value + " %";
-            //Propety.OverLap = (trackMaxOverLap.Value * 1) / 100.0;
-        }
-
-        private void trackMaxOverLap_MouseUp(object sender, MouseEventArgs e)
-        {
-          
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
+      
+     
+       
         
        
-        private void btnSubAngle_Click(object sender, EventArgs e)
-        {
-            //Propety.MinArea -= 10;
-            //if (Propety.MinArea < 0) Propety.MinArea = 0;
-            //   txtAngle.Text = Propety.MinArea+"";
-            //if(Propety.Angle==0)
-            //{
-            //    Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-            //    Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
-            //}
-            //else
-            //{
-            //    Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-            //    Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            //}    
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-
-        private void btnPlusAngle_Click(object sender, EventArgs e)
-        {
-            ////Propety.MinArea += 10;
-            ////if (Propety.MinArea > 1000) Propety.MinArea = 1000;
-            ////txtAngle.Text = Propety.MinArea + "";
-            //if (Propety.Angle == 0)
-            //{
-            //    Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-            //    Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
-            //}
-            //else
-            //{
-            //    Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-            //    Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            //}
-            if (!threadProcess.IsBusy)
-               threadProcess.RunWorkerAsync();
-        }
-
-        private void ckSIMD_Click(object sender, EventArgs e)
-        {
-            //Propety.ckSIMD = !Propety.ckSIMD;
-            //  if(Propety.ckSIMD)
-            //    {
-            //    ckSIMD.BackColor = Color.Goldenrod;
-            //    ckSIMD.BorderColor = Color.DarkGoldenrod;
-            //    }
-            //    else
-            //    { 
-            //    ckSIMD.BackColor = Color.WhiteSmoke;
-            //    ckSIMD.BorderColor = Color.Silver;
-            //    ckSIMD.TextColor = Color.Black;
-            //    }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-
-        private void ckBitwiseNot_Click(object sender, EventArgs e)
-        {
-            //Propety.ckBitwiseNot = !Propety.ckBitwiseNot;
-            //if (Propety.ckBitwiseNot)
-            //{
-            //    ckBitwiseNot.BackColor = Color.Goldenrod;
-            //    ckBitwiseNot.BorderColor = Color.DarkGoldenrod;
-            //}
-            //else
-            //{
-            //    ckBitwiseNot.BackColor = Color.WhiteSmoke;
-            //    ckBitwiseNot.BorderColor = Color.Silver;
-            //    ckBitwiseNot.TextColor = Color.Black;
-            //}
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-
-        private void ckSubPixel_Click(object sender, EventArgs e)
-        {
-            //Propety.ckSubPixel = !Propety.ckSubPixel;
-            //if (Propety.ckSubPixel)
-            //{
-            //    ckSubPixel.BackColor = Color.Goldenrod;
-            //    ckSubPixel.BorderColor = Color.DarkGoldenrod;
-            //}
-            //else
-            //{
-            //    ckSubPixel.BackColor = Color.WhiteSmoke;
-            //    ckSubPixel.BorderColor = Color.Silver;
-            //    ckSubPixel.TextColor = Color.Black;
-            //}
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-     
+      
         public void Loads()
         {
-            Propety.TypeTool = TypeTool.MatchingShape;
+            Propety.TypeTool = TypeTool.BarCode;
      
-           
-          //  Propety.pathRaw = G.EditTool.View.pathRaw;
-            imgTemp.Image = Propety.matTemp;
-
-            //Propety.NumObject = 1;
+          
         }
         private void ToolOutLine_Load(object sender, EventArgs e)
         {
@@ -513,18 +399,7 @@ namespace BeeUi.Tool
             //Propety.NumObject = trackNumObject.Value;
         }
 
-        private void btnLearning_Click(object sender, EventArgs e)
-        {
-
-          //  matTemp = Propety.GetImgTemp();
-            //if (Propety.rotCrop != null)
-            //    if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
-            //    {
-            //        Propety.LearnPattern(indexTool, matTemp);
-
-            //    }
-            imgTemp.Image = matTemp.ToBitmap();
-        }
+      
 
         private void btnTest_Click(object sender, EventArgs e)
         {
@@ -562,18 +437,7 @@ namespace BeeUi.Tool
             G.EditTool.View.Cursor = Cursors.Default;
         }
 
-        private void btnInvert_Click(object sender, EventArgs e)
-        {
-            //Propety.Invert = btnInvert.IsCLick;
-            if(btnInvert.IsCLick)
-            {
-                btnInvert.Text = "Outside";
-            }
-            else
-            {
-                btnInvert.Text = "Inside";
-            }    
-        }
+      
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
@@ -583,6 +447,59 @@ namespace BeeUi.Tool
         private void txtAngle_KeyDown(object sender, KeyEventArgs e)
         {
            
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnCropHalt_Click(object sender, EventArgs e)
+        {
+            G.TypeCrop = BeeCore.TypeCrop.Area;
+            Propety.TypeCrop = G.TypeCrop;
+            IsFullSize = false;
+            Propety.rotArea = Propety.rotAreaTemp.Clone();
+            G.IsCheck = false;
+
+            G.EditTool.View.imgView.Invalidate();
+            G.EditTool.View.Cursor = Cursors.Default;
+        }
+
+        private void btnCropFull_Click(object sender, EventArgs e)
+        {
+            IsFullSize = true;
+            Propety.rotAreaTemp = Propety.rotArea.Clone();
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None);
+
+            G.IsCheck = false;
+            G.TypeCrop = BeeCore.TypeCrop.Area;
+            Propety.TypeCrop = G.TypeCrop;
+
+            G.EditTool.View.imgView.Invalidate();
+            G.EditTool.View.Cursor = Cursors.Default;
+        }
+
+        private void btnTest_Click_1(object sender, EventArgs e)
+        {
+            G.IsCheck = true;
+            if (!threadProcess.IsBusy)
+                threadProcess.RunWorkerAsync();
+            else
+                btnTest.IsCLick = false;
+        }
+
+        private void btnOK_Click_1(object sender, EventArgs e)
+        {
+            G.IsCheck = true;
+            G.EditTool.RefreshGuiEdit(Step.Step3);
+        }
+
+        private void btnCancel_Click_1(object sender, EventArgs e)
+        {
+            G.IsCancel = true;
+
+            G.EditTool.RefreshGuiEdit(Step.Step3);
         }
     }
 }

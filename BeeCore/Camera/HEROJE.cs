@@ -72,7 +72,7 @@ namespace BeeCore
         private static byte[] DataReceiveBufP = new byte[37748736];
         private static byte[] DataReceiveBufN = new byte[37748736];
         private static  byte[] RegionData = new byte[3200];
-        private static Polygon[] BarCodeRegion;
+        public static Polygon[] BarCodeRegion;
         private static uint ParaDataLen = 0u;
         private static uint DeviceTypeRecord = 0u;
         private static int BarcodeLen = 0;
@@ -898,6 +898,7 @@ namespace BeeCore
             // ThreadDataProc.DisableComObjectEagerCleanup();
         }
         public static bool IsNeedToUpdateTree=false;
+        public static string BarcodeStr;
         private static void DataReceiveAndStateUpdate()
         {
             int num = 0;
@@ -1185,6 +1186,33 @@ namespace BeeCore
                                 ToolCfg.CurrentDevice.Node.Text = "USB_Devices(" + ProtocolHeader.DeviceID.ToString("X8") + ")";
                             }
                             // });
+                        }
+                        if (BarcodeLen > 0)
+                        {
+                            //DecodeSuccessCount++;
+                            //Invoke((MethodInvoker)delegate
+                            //{
+                            //    ReadingPagePara.DecodeTime = ProtocolHeader.DecodeTime;
+                            //    ReadingPagePara.BarcodeLen = BarcodeLen;
+                            //    ReadingPage_UpdateCB(ReadingPagePara, ReadingPageActDef.UpdateDecodeTimeInfo);
+                            //});
+                            string barcode_type;
+                            //if (BarcodeType < 5)
+                            //{
+                            //    barcode_type = "UPC/EAN";
+                            //}
+                            //else
+                            //{
+                            //    barcode_type = Enum.GetName(typeof(AllBarcodeType), BarcodeType);
+                            //}
+                            string barcode_str = Encoding.Default.GetString(BarcodeData, 0, BarcodeLen);
+                            BarcodeStr = (string)barcode_str.Clone();
+                          
+                        }
+                        else
+                        {
+                            BarcodeStr = "";
+                           // ReadingPage_UpdateCB(ReadingPagePara, ReadingPageActDef.UpdateBarcodeStr);
                         }
 
                         if ((FrameCount & 7) == 7)

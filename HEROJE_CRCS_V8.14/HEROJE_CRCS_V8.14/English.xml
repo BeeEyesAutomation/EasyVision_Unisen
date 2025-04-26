@@ -1,0 +1,1466 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--This file is necessary for software to run properly-->
+<!--Create By Liang-->
+<Root>
+  <MainForm>
+    <Language SoftwareTitle=" Code Reader Configuration Software " />
+    <Language SelectLanguage="English" />
+    <Language BtnRestartDevice="Reboot" />
+    <Language BtnSaveCurrentCfg="Save to Device" />
+    <Language BtnDecodeCTraining="OK" />
+    <Language RdbDecodeModeC="Mode C" />
+    <Language RdbDecodeModeB="Mode B" />
+    <Language RdbDecodeModeA="Mode A" />
+    <Language MenuTopMain="MenuStripTop" />
+    <Language TsmTop_File="File(F)" />
+    <Language TSI_OpenCfg="Import Configuration File(O)" />
+    <Language TSI_SaveCfg="Export Configuration(S)" />
+    <Language TSI_SaveCurrentImage="Image Save(A)" />
+    <Language TsmTop_Disp="Display(V)" />
+    <Language Tsm_ShowNetGrid="Show Grid" />
+    <Language TsmTop_Tool="Tools(L)" />
+    <Language InstallUSBDrvToolStripMenuItem="Install USB Driver" />
+    <Language Tsm_ComDebugTool="RS232 Debug Tool" />
+    <Language Tsm_NetDebugTool="Network Debug Tool" />
+    <Language Tsm_CmdConfigurationTool="Command Configuration Tool" />
+    <Language TsmTop_Setting="Advanced Settings(S)" />
+    <Language Tsm_Regular_Barcode="Regular Expression - Barcode Matching" />
+    <Language Tsm_Regular_Output="Regular Expressions - Output Filtering" />
+    <Language TsmTop_Language="Language" />
+    <Language TsmTop_Sys="System(M)" />
+    <Language TSM_AboutSoftware="About" />
+    <Language TSM_FirmwareVersion="Version Information" />
+    <Language TSM_SoftwareCloseDo="Action When Software Exits" />
+    <Language TSM_UpgradeFirmware="Firmware Upgrade" />
+    <Language TsmTop_Help="Help(H)" />
+    <Language TSI_InstallGuide="Installation Guide" />
+    <Language ToolStrip_Icon="toolStrip1" />
+    <Language TSB_SearchDevice="Search" />
+    <Language TSB_ConnectDevice="Connect" />
+    <Language TSB_DisconnectDevice="Disconnect" />
+    <Language TSS_Separator1="" />
+    <Language TSB_OpenCfg="Import Cfg File" />
+    <Language TSB_SaveCfg="Export Cfg File" />
+    <Language TSS_Separator2="" />
+  </MainForm>
+  <DeviceConnectForm>
+    <Language SoftwareTitle="Device List" />
+    <Language GrbDevicesList="Device List" />
+    <Language LabDeviceInfo="Device Information" />
+    <Language GrbDeviceOps="Device Operations" />
+    <Language BtnRecoverUserSetting="Recover User Settings" />
+    <Language BtnSaveUserSetting="Save User Settings" />
+    <Language BtnCaptrueImageSave="Save Image" />
+    <Language BtnRecoverFactory="Restore Factory Settings" />
+    <Language LabDeviceAddr="Device Address" />
+    <Language CobLocalIPSel="" />
+    <Language LabLocalIPSel="Local IP:" />
+  </DeviceConnectForm>
+  <ReadingForm>
+    <Language SoftwareTitle="ReadingForm" />
+    <Language BtnSelectFocusROI="Focus ROI" />
+    <Language BtnTrigAutoFocus="Auto Focus" />
+    <Language GrbImageROI="Image ROI Settings" />
+    <Language BtnImageRoiSet="Draw ROI" />
+    <Language BtnImageRoiCancel="Cancel ROI" />
+    <Language TxbRoiH="800" />
+    <Language TxbRoiW="1280" />
+    <Language TxbRoiY0="0" />
+    <Language TxbRoiX0="0" />
+    <Language LabRoiH="Height:" />
+    <Language LabRoiW="Width:" />
+    <Language LabRoiY0="Y:" />
+    <Language LabRoiX0="X:" />
+    <Language BtnPerformOneTrig="TRG" />
+    <Language BtnSetting="Settings" />
+    <Language LabStateADP="Parameters Adjusting..." />
+    <Language BtnEnterADP="Auto Tuning" />
+    <Language BtnReadContinuous="Monitoring" />
+    <Language LabFocus="Focus" />
+    <Language BtnSensorLensFocusDec="-" />
+    <Language LabFocusVal="0" />
+    <Language BtnSensorLensFocusAdd="+" />
+    <Language LabGainVal="0" />
+    <Language LabExposureVal="0" />
+    <Language LabSensorGain="Gain" />
+    <Language LabExposure="Exp" />
+    <Language LabFramePerSec="fps" />
+    <Language LabFrameRate="000" />
+    <Language LabFrameCountDisp="Rate:" />
+    <Language LabImageCount="0" />
+    <Language LabImageCountDips="Images:" />
+    <Language CobImageSize="" />
+    <Language CobImageSize_item_1="Original" />
+    <Language CobImageSize_item_2="Normal" />
+    <Language CobImageSize_item_3="Fast" />
+    <Language BtnSensorGainSetDec="-" />
+    <Language BtnExpSetRatioDec="-" />
+    <Language BtnSensorGainSetAdd="+" />
+    <Language BtnExpSetRatioAdd="+" />
+    <Language LabImageSize="Clarity:" />
+    <Language Tp_DecodeTime="Decode Time" />
+    <Language LabCurrentDecodeTime="Decode :" />
+    <Language LabAveDecodeTime="0ms" />
+    <Language LabAveDecodeTimeDisp="Average Time:" />
+    <Language LabNowDecodeTime="0ms" />
+    <Language ChartDecodeTime="Decode Time Statistics" />
+    <Language Tp_DecStatistics="Data Statistics" />
+    <Language LabTrigCount="0" />
+    <Language ChkRealTimeUpdate="Live" />
+    <Language LabNGCount="0" />
+    <Language LabOKCount="0" />
+    <Language BtnResetStatic="Reset" />
+    <Language LabTotalDisp="Total" />
+    <Language LabDispNG="NG×" />
+    <Language LabOKDisp="OK√" />
+    <Language LabOKRatio="100.00%" />
+    <Language GrbDecodeData="Decode Result" />
+    <Language LabBarcodeLen="0" />
+    <Language LabBarcodeLenDisp="Code Length:" />
+    <Language LabBarcodeType="Datamatrix" />
+    <Language LabBarcodeTypeDisp="Code Type:" />
+  </ReadingForm>
+  <LightingForm>
+    <Language SoftwareTitle="LightingForm" />
+    <Language GdbMainLight="Main Illumination Settings" />
+    <Language BtnMainLightValAll="▶" />
+    <Language BtnMainLightValDec="◀" />
+    <Language TxbMainLightVal="0" />
+    <Language LabMainLight="Brightness:" />
+    <Language RdbMainLightClose="Off" />
+    <Language RdbMainLightOpen="On" />
+    <Language GrbOtherLightSetting="Other Related Settings" />
+    <Language ChbNearLightRB="Bottom" />
+    <Language ChbFarLightRB="Bottom Right" />
+    <Language ChbNearLightLB="Left" />
+    <Language ChbNearLightRT="Top" />
+    <Language ChbFarLightLB="Bottom Left" />
+    <Language ChbNearLightLT="Right" />
+    <Language ChbFarLightRT="Top Right" />
+    <Language ChbFarLightLT="Top Left" />
+    <Language LabFarNearLightCtrl="Illumination Group Control:" />
+    <Language RdbDeafultP="Default" />
+    <Language LabPolarizationSetting="Polarized Light:" />
+    <Language RdbPolarizationDisable="Off" />
+    <Language RdbPolarizationEnable="On" />
+    <Language GrbSecondLight="Auxiliary Illumination Settings" />
+    <Language BtnSecondLightValAll="▶" />
+    <Language BtnSecondLightValDec="◀" />
+    <Language TxbSecondLightVal="0" />
+    <Language LabSecondLight="Brightness:" />
+    <Language RdbSecondLightClose="Off" />
+    <Language RdbSecondLightOpen="On" />
+    <Language GrbFocusLight="Aiming Settings" />
+    <Language RdbFocusLEDNormal="Normal" />
+    <Language RdbFocusLEDClose="Off" />
+    <Language RdbFocusLEDAlways="Always On" />
+    <Language RdbFocusLEDBlink="Blink" />
+  </LightingForm>
+  <BarcodeTypeForm>
+    <Language SoftwareTitle="Code Settings" />
+    <Language GrbDPMSetting="DPM Code Settings" />
+    <Language ChbDM_ShortQZ="QuietZone" />
+    <Language ChkDM_Not_ECC200="Non ECC-200" />
+    <Language RdbDM_MirrorAny="Any" />
+    <Language RdbDM_MirrorDisable="Disable" />
+    <Language RdbDM_MirrorEnable="Enable" />
+    <Language LabDM_MirrorSet="Mirroring:" />
+    <Language LabDM_ColorSet="Color:" />
+    <Language RdbDM_ColorSetAny="Any" />
+    <Language RdbDM_ColorSetBlack="White" />
+    <Language RdbDM_ColorSetWhite="Black" />
+    <Language ChbSmallCodeEnhance="Small Code" />
+    <Language ChbDM_SlantEnhance="Deform" />
+    <Language BtnDM_ModuleMax="Confirm" />
+    <Language LabDM_ModuleMax="MaxModus:" />
+    <Language BtnDM_ModuleMin="Confirm" />
+    <Language LabDM_ModuleMin="MinModus:" />
+    <Language BtnModuleSizeMax="Confirm" />
+    <Language LabDMModuleSizeMax="MaxSize:" />
+    <Language BtnModuleSizeMin="Confirm" />
+    <Language LabDMModuleSizeMin="MinSize:" />
+    <Language LabDMGapMax="Max Gap Allowed:" />
+    <Language RdbDMGapMaxBig="Large" />
+    <Language RdbDMGapMaxSmall="Small" />
+    <Language RdbDMGapMaxNone="None" />
+    <Language ChkDMDefilementEnhance="Dirt Enh" />
+    <Language ChkDMFindEnhance="SearchEnh" />
+    <Language LabDm2dType="Code Shape:" />
+    <Language RdbDMShapeAll="Any" />
+    <Language RdbDMShapeRectangle="Rectangle" />
+    <Language RdbDMShapeSquare="Square" />
+    <Language ChbDMLowContrast="Low Contrast" />
+    <Language BtnOpenAllBarcodeType="Enable All" />
+    <Language BtnOpenDefaultBarcodeType="Enable Default" />
+    <Language BtnCloseAllBarcodeType="Disable All" />
+    <Language GrbOtherBarcode="Other Codes" />
+    <Language ChbGridMatrix="GridMatrix" />
+    <Language ChbDotCode="DotCode" />
+    <Language ChbMaxicode="Maxicode" />
+    <Language ChbMicroPDF417="MicroPDF417" />
+    <Language ChbHanxin="Hanxin" />
+    <Language ChbAztec="Aztec" />
+    <Language GrbUsually2D="2D Codes" />
+    <Language ChbPDF417="PDF417" />
+    <Language ChbDM="DataMatrix" />
+    <Language ChbQRCode="QRCode" />
+    <Language GrbUsually1D="1D Linear Codes" />
+    <Language ChbCode93="Code93" />
+    <Language ChbDataBar="DataBar" />
+    <Language ChbS25="S25" />
+    <Language ChbM25="M25" />
+    <Language ChbD25="D25" />
+    <Language ChbCode11="Code11" />
+    <Language ChbI25="I25" />
+    <Language ChbCodaBar="CodaBar" />
+    <Language ChbMSI="MSI" />
+    <Language ChbCode39="Code39" />
+    <Language ChbCode128="Code128" />
+    <Language ChbUPC_EAN="UPC/EAN" />
+  </BarcodeTypeForm>
+  <DataEditForm>
+    <Language SoftwareTitle="Data Edit" />
+    <Language GrbExtraDataOutput="Extra Data Output" />
+    <Language CobOutputBarcodeRect="" />
+    <Language CobOutputBarcodeRect_item_1="Do Not Output Coordinates" />
+    <Language CobOutputBarcodeRect_item_2="Output Four Corner Points" />
+    <Language CobOutputBarcodeRect_item_3="Output Center Point" />
+    <Language CobOutputBarcodeRect_item_4="Output Four Corner Points + Center Point" />
+    <Language LabOutputBarcodeRect="Output Barcode Position:" />
+    <Language GrbMuiltCodeSplit="Multi-Code and Template Separator Settings" />
+    <Language BtnTemplateIdxSplit="Confirm" />
+    <Language LabTemplateIdxSplit="Temp Separator(Hex):0x" />
+    <Language RdbTemplateIdxSuffix="After Data" />
+    <Language RdbTemplateIdxPrefix="Before" />
+    <Language RdbTemplateIdxNoOut="Not" />
+    <Language LabTemplateIdxOut="Template ID:" />
+    <Language BtnMuiltCodeSplit="Confirm" />
+    <Language ChkMuiltCodeSplitSameEof="Add Separator" />
+    <Language LabMuiltCodeSplit="Separator (Hex): 0x" />
+    <Language GrbBarcodeIDAndEof="Code ID and End of Data" />
+    <Language ChbBarcodeIDOut="Allow Output Code Type ID" />
+    <Language CobStringEof="" />
+    <Language CobStringEof_item_1="None" />
+    <Language CobStringEof_item_2="CR" />
+    <Language CobStringEof_item_3="TAB" />
+    <Language CobStringEof_item_4="CRLF" />
+    <Language LabStringEof="End Output:" />
+    <Language GrbDataCropSetting="Data Cropping" />
+    <Language RdbOnlyEndOutput="Only The End" />
+    <Language RdbOnlyCenterOutput="Only The Middle" />
+    <Language RdbOnlyFrontOutput="Only The Head" />
+    <Language RdbAllDataOutput="Entire Output" />
+    <Language BtnEndSessionSet="Confirm" />
+    <Language BtnFrontSessionSet="Confirm" />
+    <Language LabEndSessionSet="Set End Length:" />
+    <Language LabFrontSessionSet="Set Head Length:" />
+    <Language GrbPrefixAndSuffix="Prefix and Suffix Settings" />
+    <Language BtnDataSuffix="Confirm" />
+    <Language BtnDataPrefix="Confirm" />
+    <Language ChbDataPrefix="Prefix:" />
+    <Language ChbDataSuffix="Suffix:" />
+  </DataEditForm>
+  <IOInstructionForm>
+    <Language SoftwareTitle="IOInstructionForm" />
+    <Language GrbOutputPinSetting="Output Pin Settings" />
+    <Language RdbOut2OutputFailed="Read Failure" />
+    <Language RdbOut2OutputSuccess="Read Success" />
+    <Language LabOut2OutputWay="IO2 Output:" />
+    <Language RdbPolarityOut2Low="Inverted" />
+    <Language RdbPolarityOut2Hight="Normal" />
+    <Language LabPolarityOut2="IO2 Polarity:" />
+    <Language RdbOut1OutputFailed="Read Failure" />
+    <Language RdbOut1OutputSuccess="Read Success" />
+    <Language LabOut1OutputWay="IO1 Output:" />
+    <Language RdbPolarityOut1Low="Inverted" />
+    <Language RdbPolarityOut1Hight="Normal" />
+    <Language LabPolarityOut1="IO1 Polarity:" />
+    <Language BtnOutputPinTimeSet="Confirm" />
+    <Language TxbOutputPinTimeSet="2000" />
+    <Language LabOutputPinTimeSet="Output Duration(x100ms):" />
+    <Language GrbIuputPinSetting="Input Pin Settings" />
+    <Language ChbExtraTrig="Enable External IO Trigger(Reboot to Effect)" />
+    <Language GrbTrigCMDSet="Trigger Commands and Failure Returns" />
+    <Language LabCmdParseResult="Analysis result:" />
+    <Language CobSelectLength="" />
+    <Language CobSelectLength_item_1="Disable CMD Edit" />
+    <Language CobSelectLength_item_2="1 Byte" />
+    <Language CobSelectLength_item_3="2 Bytes" />
+    <Language CobSelectLength_item_4="3 Bytes" />
+    <Language CobSelectLength_item_5="4 Bytes" />
+    <Language CobSelectLength_item_6="5 Bytes" />
+    <Language CobSelectLength_item_7="6 Bytes" />
+    <Language CobSelectLength_item_8="7 Bytes" />
+    <Language LabCodeType="CMD Type" />
+    <Language BtnApply="Apply" />
+    <Language BtnClearCon="Clear" />
+    <Language CobCodeType="" />
+    <Language CobCodeType_item_1="Hex" />
+    <Language CobCodeType_item_2="STR" />
+    <Language GrbFindHexTool="Hex Converter" />
+    <Language LabDispChar=" " />
+    <Language BtnChar2Hex="Char to Hex" />
+    <Language BtnHex2Char="Hex to Char" />
+    <Language BtnRfInfo="Confirm" />
+    <Language LabTriggerCode="Trigger CMD definition(Max. 7 chars)" />
+    <Language LabTrigCMD="None" />
+    <Language ChbRfInfo="Failure Return:" />
+    <Language LabTrigCMDDisp="Trigger CMD:" />
+  </IOInstructionForm>
+  <ImageProcessingForm>
+    <Language SoftwareTitle="ImageProcessingForm" />
+    <Language ChbIsNewVerImgProc="Enable Latest Image Processing Tech" />
+    <Language GrbNewVersionImgProc="Latest Image Processing Tech" />
+    <Language CobImgProcContrastEnhance2="" />
+    <Language CobImgProcContrastEnhance2_item_1="0" />
+    <Language CobImgProcContrastEnhance2_item_2="1" />
+    <Language CobImgProcContrastEnhance2_item_3="2" />
+    <Language CobImgProcContrastEnhance2_item_4="3" />
+    <Language CobImgProcContrastEnhance2_item_5="4" />
+    <Language CobImgProcContrastEnhance2_item_6="5" />
+    <Language CobImgProcContrastEnhance2_item_7="6" />
+    <Language CobImgProcContrastEnhance2_item_8="7" />
+    <Language CobImgProcContrastEnhance2_item_9="8" />
+    <Language CobImgProcContrastEnhance2_item_10="9" />
+    <Language CobImgProcContrastEnhance2_item_11="10" />
+    <Language CobImgProcContrastEnhance2_item_12="11" />
+    <Language CobImgProcContrastEnhance2_item_13="12" />
+    <Language CobImgProcContrastEnhance2_item_14="13" />
+    <Language CobImgProcContrastEnhance2_item_15="14" />
+    <Language CobImgProcContrastEnhance2_item_16="15" />
+    <Language LabImgProcContrastEnhance2="Contrast Enh2:" />
+    <Language CobImgProcContrastEnhance1="" />
+    <Language CobImgProcContrastEnhance1_item_1="0" />
+    <Language CobImgProcContrastEnhance1_item_2="1" />
+    <Language CobImgProcContrastEnhance1_item_3="2" />
+    <Language CobImgProcContrastEnhance1_item_4="3" />
+    <Language CobImgProcContrastEnhance1_item_5="4" />
+    <Language CobImgProcContrastEnhance1_item_6="5" />
+    <Language CobImgProcContrastEnhance1_item_7="6" />
+    <Language CobImgProcContrastEnhance1_item_8="7" />
+    <Language CobImgProcContrastEnhance1_item_9="8" />
+    <Language CobImgProcContrastEnhance1_item_10="9" />
+    <Language CobImgProcContrastEnhance1_item_11="10" />
+    <Language CobImgProcContrastEnhance1_item_12="11" />
+    <Language CobImgProcContrastEnhance1_item_13="12" />
+    <Language CobImgProcContrastEnhance1_item_14="13" />
+    <Language CobImgProcContrastEnhance1_item_15="14" />
+    <Language CobImgProcContrastEnhance1_item_16="15" />
+    <Language LabImgProcContrastEnhance1="Contrast Enh1:" />
+    <Language CobMorphErode2="" />
+    <Language CobMorphErode2_item_1="0" />
+    <Language CobMorphErode2_item_2="1" />
+    <Language CobMorphErode2_item_3="2" />
+    <Language CobMorphErode2_item_4="3" />
+    <Language CobMorphErode2_item_5="4" />
+    <Language CobMorphErode2_item_6="5" />
+    <Language CobMorphErode2_item_7="6" />
+    <Language CobMorphErode2_item_8="7" />
+    <Language CobMorphErode2_item_9="8" />
+    <Language CobMorphErode2_item_10="9" />
+    <Language CobMorphErode2_item_11="10" />
+    <Language CobMorphErode2_item_12="11" />
+    <Language CobMorphErode2_item_13="12" />
+    <Language CobMorphErode2_item_14="13" />
+    <Language CobMorphErode2_item_15="14" />
+    <Language CobMorphErode2_item_16="15" />
+    <Language LabMorphErode2="Erosion 2:" />
+    <Language CobMorphDilate2="" />
+    <Language CobMorphDilate2_item_1="0" />
+    <Language CobMorphDilate2_item_2="1" />
+    <Language CobMorphDilate2_item_3="2" />
+    <Language CobMorphDilate2_item_4="3" />
+    <Language CobMorphDilate2_item_5="4" />
+    <Language CobMorphDilate2_item_6="5" />
+    <Language CobMorphDilate2_item_7="6" />
+    <Language CobMorphDilate2_item_8="7" />
+    <Language CobMorphDilate2_item_9="8" />
+    <Language CobMorphDilate2_item_10="9" />
+    <Language CobMorphDilate2_item_11="10" />
+    <Language CobMorphDilate2_item_12="11" />
+    <Language CobMorphDilate2_item_13="12" />
+    <Language CobMorphDilate2_item_14="13" />
+    <Language CobMorphDilate2_item_15="14" />
+    <Language CobMorphDilate2_item_16="15" />
+    <Language LabMorphDilate2="Dilation 2:" />
+    <Language CobGaussBlur2="" />
+    <Language CobGaussBlur2_item_1="0" />
+    <Language CobGaussBlur2_item_2="1" />
+    <Language CobGaussBlur2_item_3="2" />
+    <Language CobGaussBlur2_item_4="3" />
+    <Language CobGaussBlur2_item_5="4" />
+    <Language CobGaussBlur2_item_6="5" />
+    <Language CobGaussBlur2_item_7="6" />
+    <Language CobGaussBlur2_item_8="7" />
+    <Language CobGaussBlur2_item_9="8" />
+    <Language CobGaussBlur2_item_10="9" />
+    <Language CobGaussBlur2_item_11="10" />
+    <Language CobGaussBlur2_item_12="11" />
+    <Language CobGaussBlur2_item_13="12" />
+    <Language CobGaussBlur2_item_14="13" />
+    <Language CobGaussBlur2_item_15="14" />
+    <Language CobGaussBlur2_item_16="15" />
+    <Language LabGaussBlur2="Gauss Filter2:" />
+    <Language CobEqualizeHist2="" />
+    <Language CobEqualizeHist2_item_1="0" />
+    <Language CobEqualizeHist2_item_2="1" />
+    <Language CobEqualizeHist2_item_3="2" />
+    <Language CobEqualizeHist2_item_4="3" />
+    <Language CobEqualizeHist2_item_5="4" />
+    <Language CobEqualizeHist2_item_6="5" />
+    <Language CobEqualizeHist2_item_7="6" />
+    <Language CobEqualizeHist2_item_8="7" />
+    <Language CobEqualizeHist2_item_9="8" />
+    <Language CobEqualizeHist2_item_10="9" />
+    <Language CobEqualizeHist2_item_11="10" />
+    <Language CobEqualizeHist2_item_12="11" />
+    <Language CobEqualizeHist2_item_13="12" />
+    <Language CobEqualizeHist2_item_14="13" />
+    <Language CobEqualizeHist2_item_15="14" />
+    <Language CobEqualizeHist2_item_16="15" />
+    <Language LabEqualizeHist2="Equalization2:" />
+    <Language CobMedianFilter2="" />
+    <Language CobMedianFilter2_item_1="0" />
+    <Language CobMedianFilter2_item_2="1" />
+    <Language CobMedianFilter2_item_3="2" />
+    <Language CobMedianFilter2_item_4="3" />
+    <Language CobMedianFilter2_item_5="4" />
+    <Language CobMedianFilter2_item_6="5" />
+    <Language CobMedianFilter2_item_7="6" />
+    <Language CobMedianFilter2_item_8="7" />
+    <Language CobMedianFilter2_item_9="8" />
+    <Language CobMedianFilter2_item_10="9" />
+    <Language CobMedianFilter2_item_11="10" />
+    <Language CobMedianFilter2_item_12="11" />
+    <Language CobMedianFilter2_item_13="12" />
+    <Language CobMedianFilter2_item_14="13" />
+    <Language CobMedianFilter2_item_15="14" />
+    <Language CobMedianFilter2_item_16="15" />
+    <Language LabMedianFilter2="Median Filter2:" />
+    <Language CobMorphErode1="" />
+    <Language CobMorphErode1_item_1="0" />
+    <Language CobMorphErode1_item_2="1" />
+    <Language CobMorphErode1_item_3="2" />
+    <Language CobMorphErode1_item_4="3" />
+    <Language CobMorphErode1_item_5="4" />
+    <Language CobMorphErode1_item_6="5" />
+    <Language CobMorphErode1_item_7="6" />
+    <Language CobMorphErode1_item_8="7" />
+    <Language CobMorphErode1_item_9="8" />
+    <Language CobMorphErode1_item_10="9" />
+    <Language CobMorphErode1_item_11="10" />
+    <Language CobMorphErode1_item_12="11" />
+    <Language CobMorphErode1_item_13="12" />
+    <Language CobMorphErode1_item_14="13" />
+    <Language CobMorphErode1_item_15="14" />
+    <Language CobMorphErode1_item_16="15" />
+    <Language LabMorphErode1="Erosion 1:" />
+    <Language CobMorphDilate1="" />
+    <Language CobMorphDilate1_item_1="0" />
+    <Language CobMorphDilate1_item_2="1" />
+    <Language CobMorphDilate1_item_3="2" />
+    <Language CobMorphDilate1_item_4="3" />
+    <Language CobMorphDilate1_item_5="4" />
+    <Language CobMorphDilate1_item_6="5" />
+    <Language CobMorphDilate1_item_7="6" />
+    <Language CobMorphDilate1_item_8="7" />
+    <Language CobMorphDilate1_item_9="8" />
+    <Language CobMorphDilate1_item_10="9" />
+    <Language CobMorphDilate1_item_11="10" />
+    <Language CobMorphDilate1_item_12="11" />
+    <Language CobMorphDilate1_item_13="12" />
+    <Language CobMorphDilate1_item_14="13" />
+    <Language CobMorphDilate1_item_15="14" />
+    <Language CobMorphDilate1_item_16="15" />
+    <Language LabMorphDilate1="Dilation 1:" />
+    <Language CobGaussBlur1="" />
+    <Language CobGaussBlur1_item_1="0" />
+    <Language CobGaussBlur1_item_2="1" />
+    <Language CobGaussBlur1_item_3="2" />
+    <Language CobGaussBlur1_item_4="3" />
+    <Language CobGaussBlur1_item_5="4" />
+    <Language CobGaussBlur1_item_6="5" />
+    <Language CobGaussBlur1_item_7="6" />
+    <Language CobGaussBlur1_item_8="7" />
+    <Language CobGaussBlur1_item_9="8" />
+    <Language CobGaussBlur1_item_10="9" />
+    <Language CobGaussBlur1_item_11="10" />
+    <Language CobGaussBlur1_item_12="11" />
+    <Language CobGaussBlur1_item_13="12" />
+    <Language CobGaussBlur1_item_14="13" />
+    <Language CobGaussBlur1_item_15="14" />
+    <Language CobGaussBlur1_item_16="15" />
+    <Language LabGaussBlur1="Gauss Blur 1:" />
+    <Language CobEqualizeHist1="" />
+    <Language CobEqualizeHist1_item_1="0" />
+    <Language CobEqualizeHist1_item_2="1" />
+    <Language CobEqualizeHist1_item_3="2" />
+    <Language CobEqualizeHist1_item_4="3" />
+    <Language CobEqualizeHist1_item_5="4" />
+    <Language CobEqualizeHist1_item_6="5" />
+    <Language CobEqualizeHist1_item_7="6" />
+    <Language CobEqualizeHist1_item_8="7" />
+    <Language CobEqualizeHist1_item_9="8" />
+    <Language CobEqualizeHist1_item_10="9" />
+    <Language CobEqualizeHist1_item_11="10" />
+    <Language CobEqualizeHist1_item_12="11" />
+    <Language CobEqualizeHist1_item_13="12" />
+    <Language CobEqualizeHist1_item_14="13" />
+    <Language CobEqualizeHist1_item_15="14" />
+    <Language CobEqualizeHist1_item_16="15" />
+    <Language LabEqualizeHist1="Equalization1:" />
+    <Language CobMedianFilter1="" />
+    <Language CobMedianFilter1_item_1="0" />
+    <Language CobMedianFilter1_item_2="1" />
+    <Language CobMedianFilter1_item_3="2" />
+    <Language CobMedianFilter1_item_4="3" />
+    <Language CobMedianFilter1_item_5="4" />
+    <Language CobMedianFilter1_item_6="5" />
+    <Language CobMedianFilter1_item_7="6" />
+    <Language CobMedianFilter1_item_8="7" />
+    <Language CobMedianFilter1_item_9="8" />
+    <Language CobMedianFilter1_item_10="9" />
+    <Language CobMedianFilter1_item_11="10" />
+    <Language CobMedianFilter1_item_12="11" />
+    <Language CobMedianFilter1_item_13="12" />
+    <Language CobMedianFilter1_item_14="13" />
+    <Language CobMedianFilter1_item_15="14" />
+    <Language CobMedianFilter1_item_16="15" />
+    <Language ChbImageInverseNew="Reverse Color" />
+    <Language ChbImageMirrorNew="Image Mirroring" />
+    <Language LabMedianFilter1="Median Filter1:" />
+    <Language GrbOldVersionImgProc="Old Image Processing Tech" />
+    <Language ChbImageInverse="Reverse Color" />
+    <Language ChbEqualizeHist="Histogram Equalization" />
+    <Language ChbImageMirror="Image Mirroring" />
+    <Language ChbContrastEnhance="Grayscale Enhancement" />
+  </ImageProcessingForm>
+  <AlgorithmProtocolForm>
+    <Language SoftwareTitle="Algorithm" />
+    <Language LabCodeRuleDesc="Barcode Matching" />
+    <Language GrbLimitBarcodeLen="Code Length Limited" />
+    <Language ChbAztecCheckDisable="Aztec" />
+    <Language ChbIL25CheckDisable="IL25" />
+    <Language ChbCode93CheckDisable="Code93" />
+    <Language ChbCodabarCheckDisable="CodaBar" />
+    <Language ChbCode39CheckDisable="Code39" />
+    <Language ChbCode128CheckDisable="Code128" />
+    <Language ChbPDF417CheckDisable="PDF417" />
+    <Language ChbDMCheckDisable="DataMatrix" />
+    <Language ChbQRCheckDisable="QRCode" />
+    <Language LabSetLimitException="Exceptional(Not Effacted By Length Limited):" />
+    <Language BtnBarcodeLenLimitMax="Confirm" />
+    <Language BtnBarcodeLenLimitMin="Confirm" />
+    <Language LabBarcodeLenLimitMax="Max.:" />
+    <Language LabBarcodeLenLimitMin="Min.:" />
+    <Language GrbAlgorithmSetting="Decoding Settings" />
+    <Language BtnSaveAndRestart="Save to Reboot" />
+    <Language RdbDecodeModeA="Mode A" />
+    <Language BtnDecodeCTraining="OK" />
+    <Language RdbDecodeModeB="Mode B" />
+    <Language RdbDecodeModeC="Mode C" />
+    <Language LabSerchLevel="Search Accuracy:" />
+    <Language CobSerchLevel="" />
+    <Language CobSerchLevel_item_1="Normal" />
+    <Language CobSerchLevel_item_2="Accuracy 1" />
+    <Language CobSerchLevel_item_3="Accuracy 2" />
+    <Language ChkSameCodeDlyInfinite="Infinite Delay for Same Codes" />
+    <Language BtnSameCodeDelay="Confirm" />
+    <Language LabSameCodeDly="Same Code Delay(x100ms)：" />
+    <Language BtnSigleImageTimeout="Confirm" />
+    <Language LabSigleDecodeTime="Decoding Time(x10ms)：" />
+  </AlgorithmProtocolForm>
+  <CommunicateSettingForm>
+    <Language SoftwareTitle="Communication" />
+    <Language TapModbus="Modbus Protocol" />
+    <Language LabMB_Tips="Note: Take effect after device reboot." />
+    <Language BtnMB_TcpPort="Confirm" />
+    <Language TxbMB_TcpPort="502" />
+    <Language LabMB_TcpPort="ModbusTCP Port:" />
+    <Language BtnMB_DeviceAddr="Confirm" />
+    <Language TxbMB_DeviceAddr="1" />
+    <Language LabMBAddr="Modbus Address:" />
+    <Language LabMB_Protocol="Modbus Type:" />
+    <Language CobMB_Protocol="" />
+    <Language CobMB_Protocol_item_1="Disable Modbus Output" />
+    <Language CobMB_Protocol_item_2="Modbus-RTU" />
+    <Language CobMB_Protocol_item_3="Modbus-TCP" />
+    <Language TapEthernetIP="EthernetIP/ProfiNet" />
+    <Language LabEtherNetTips_2="(Some models may not support these protocols)" />
+    <Language ChbEnableProfiNet="Enable ProfiNet Protocol" />
+    <Language ChbEthernetIPEnable="Enable EthernetIP Protocol" />
+    <Language LabEtherNetTips_1="Note: Take effect after device reboot." />
+    <Language TapMcPLC="Mitsubishi MC" />
+    <Language LabMcPLCTips="Note: Take effect after device reboot" />
+    <Language BtnMC_Port="Confirm" />
+    <Language TxbMC_Port="9002" />
+    <Language LabMcPLCPort="PLC Port:" />
+    <Language ChbEnableMcPLC="Enable Mitsubishi MC Protocol" />
+    <Language GrbOutputUSB="USB Settings" />
+    <Language RdbOuputByUart="USB Not Output" />
+    <Language RdbOuputByCOM="USB-COM" />
+    <Language RdbOuputByHID="USB-HID Output" />
+    <Language GrbOutputInternet="Ethernet Interface Settings" />
+    <Language ChbTcpOnlyConnectNew="Force New Client" />
+    <Language ChbNetworkLossDetect="Network Loss Detection" />
+    <Language LabNetWorkSettingTips="Note: Take effect after device reboot." />
+    <Language ChbTcpUseNewVer="Support Multiple Clients" />
+    <Language BtnTcpIPAddrSet="Confirm" />
+    <Language BtnNetPortSet="Confirm" />
+    <Language TxbSIPAddrSeg3="1" />
+    <Language TxbSIPAddrSeg2="0" />
+    <Language TxbSIPAddrSeg1="168" />
+    <Language TxbSIPAddrSeg0="192" />
+    <Language LabTCPServerIP="Target IP:" />
+    <Language TxbComPort="13242" />
+    <Language LabComPort="Port：" />
+    <Language CobComSel="" />
+    <Language LabComSel="Protocol：" />
+    <Language BtnMaskAddrSet="Confirm" />
+    <Language TxbMaskCodeSeg3="0" />
+    <Language TxbMaskCodeSeg2="255" />
+    <Language TxbMaskCodeSeg1="255" />
+    <Language TxbMaskCodeSeg0="255" />
+    <Language LabMaskCode="Subnet Mask:" />
+    <Language BtnGWAddrSet="Confirm" />
+    <Language TxbGwAddrSeg3="1" />
+    <Language TxbGwAddrSeg2="0" />
+    <Language TxbGwAddrSeg1="168" />
+    <Language TxbGwAddrSeg0="192" />
+    <Language LabGatewayAddr="Gateway IP:" />
+    <Language BtnIPAddrSet="Confirm" />
+    <Language TxbIpAddrSeg3="135" />
+    <Language TxbIpAddrSeg2="0" />
+    <Language TxbIpAddrSeg1="168" />
+    <Language TxbIpAddrSeg0="192" />
+    <Language LabIPADDR="Device IP:" />
+    <Language RdbDhcpDisable="Disable" />
+    <Language RdbDhcpEnable="Enable" />
+    <Language LabDhcpState="DHCP IP Auto-Obtain:" />
+    <Language GrbEncoderSetting="Encoding" />
+    <Language RdbOutputUTF8="UTF-8" />
+    <Language RdbOutputUnicode="Unicode" />
+    <Language RdbOutputGBK="GBK" />
+    <Language GrbOutputRS232="RS232 Interface Settings" />
+    <Language CobUartStopBit="" />
+    <Language CobUartStopBit_item_1="1" />
+    <Language CobUartStopBit_item_2="1.5" />
+    <Language CobUartStopBit_item_3="2" />
+    <Language LabUartStopBit="Stop Bit:" />
+    <Language CobUartDataBit="" />
+    <Language CobUartDataBit_item_1="8" />
+    <Language CobUartDataBit_item_2="7" />
+    <Language CobUartDataBit_item_3="6" />
+    <Language CobUartDataBit_item_4="5" />
+    <Language LabUartDataBit="Data Bit:" />
+    <Language CobUartPolarity="" />
+    <Language CobUartPolarity_item_1="None" />
+    <Language CobUartPolarity_item_2="Odd" />
+    <Language CobUartPolarity_item_3="Even" />
+    <Language LabUartCheckPolarity="Parity:" />
+    <Language CobBaudrateSet="" />
+    <Language CobBaudrateSet_item_1="2400" />
+    <Language CobBaudrateSet_item_2="4800" />
+    <Language CobBaudrateSet_item_3="9600" />
+    <Language CobBaudrateSet_item_4="19200" />
+    <Language CobBaudrateSet_item_5="38400" />
+    <Language CobBaudrateSet_item_6="57600" />
+    <Language CobBaudrateSet_item_7="115200" />
+    <Language LabBaudrateSet="Baud Rate:" />
+  </CommunicateSettingForm>
+  <TemplateSettingForm>
+    <Language SoftwareTitle="Template" />
+    <Language GrbNewTemplate="Template(New)" />
+    <Language BtnDrawMultRoi="Multiple ROI" />
+    <Language BtnDrawTemplateRoi="Start Draw ROI" />
+    <Language LabLineSeparator="-" />
+    <Language TxbGroupForderIdx="1" />
+    <Language TxbGroupForderName="Group" />
+    <Language LabGroupForder="Name:" />
+    <Language BtnGroupTemplateSet="Confirm" />
+    <Language ChbGroupTemplate="Group Mode:" />
+    <Language CobTemplateIspFunc2="" />
+    <Language CobTemplateIspFunc2_item_1="Gaussian Blur" />
+    <Language CobTemplateIspFunc2_item_2="Morphological Dilate" />
+    <Language CobTemplateIspFunc2_item_3="Morphological Erode" />
+    <Language CobTemplateIspFunc2_item_4="Contrast Enhancement" />
+    <Language CobTemplateIspFunc2_item_5="Image Inversion" />
+    <Language CobTemplateIspFunc2_item_6="Image Mirroring" />
+    <Language CobTemplateIspFunc2_item_7="Median Filter" />
+    <Language CobTemplateIspFunc2_item_8="Bilateral Filter" />
+    <Language CobTemplateIndex="" />
+    <Language CobTemplateIndex_item_1="1" />
+    <Language CobTemplateIndex_item_2="2" />
+    <Language CobTemplateIndex_item_3="3" />
+    <Language CobTemplateIndex_item_4="4" />
+    <Language CobTemplateIndex_item_5="5" />
+    <Language CobTemplateIndex_item_6="6" />
+    <Language CobTemplateIndex_item_7="7" />
+    <Language CobTemplateIndex_item_8="8" />
+    <Language CobTemplateIndex_item_9="9" />
+    <Language CobTemplateIndex_item_10="10" />
+    <Language CobTemplateIndex_item_11="11" />
+    <Language CobTemplateIndex_item_12="12" />
+    <Language CobTemplateIndex_item_13="13" />
+    <Language CobTemplateIndex_item_14="14" />
+    <Language CobTemplateIndex_item_15="15" />
+    <Language CobTemplateIndex_item_16="16" />
+    <Language CobTemplateIndex_item_17="17" />
+    <Language CobTemplateIndex_item_18="18" />
+    <Language CobTemplateIndex_item_19="19" />
+    <Language CobTemplateIndex_item_20="20" />
+    <Language ChbTemplateLightGroup="Illumination Control" />
+    <Language ChbTemplateEnable="Enable" />
+    <Language CobTemplateIspFunc1="" />
+    <Language CobTemplateIspFunc1_item_1="Gaussian Blur" />
+    <Language CobTemplateIspFunc1_item_2="Morphological Dilate" />
+    <Language CobTemplateIspFunc1_item_3="Morphological Erode" />
+    <Language CobTemplateIspFunc1_item_4="Contrast Enhancement" />
+    <Language CobTemplateIspFunc1_item_5="Image Inversion" />
+    <Language CobTemplateIspFunc1_item_6="Image Mirroring" />
+    <Language CobTemplateIspFunc1_item_7="Median Filter" />
+    <Language CobTemplateIspFunc1_item_8="Wiener Filter" />
+    <Language ChbImagePreProc2="Img Processing 2:" />
+    <Language ChbImagePreProc1="Img Processing 1:" />
+    <Language CobTemplateOutputLogic="" />
+    <Language CobTemplateOutputLogic_item_1="After One Read" />
+    <Language CobTemplateOutputLogic_item_2="At Least One Read(Non-NG)" />
+    <Language CobTemplateOutputLogic_item_3="At Least One Read(NG-Out)" />
+    <Language CobTemplateOutputLogic_item_4="Read All(For Debud)" />
+    <Language CobTemplateOutputLogic_item_5="Read All(Practical Use)" />
+    <Language LabTemplateOutputLogic="Quit Logic:" />
+    <Language ChbTemplateLensFocus="Current Focus" />
+    <Language TxbTemplateRoiH="800" />
+    <Language TxbTemplateRoiW="1280" />
+    <Language TxbTemplateRoiY="0" />
+    <Language TxbTemplateRoiX="0" />
+    <Language LabTempH="H:" />
+    <Language LabTempW="W:" />
+    <Language LabTempY="Y:" />
+    <Language LabTempX="X:" />
+    <Language ChbTemplateLightConfig="Illumination Brightness" />
+    <Language ChbTemplateAboutROI="Enable ROI" />
+    <Language ChbTemplateAboutSensor="Exposure and Gain" />
+    <Language LabTemplateIndex="Temp No:" />
+    <Language ChbTemplateBarcodeType="Decoding Configuration" />
+    <Language GrbTemplateOp="Template Operation(Old)" />
+    <Language BtnReadTemplate1="Template 1" />
+    <Language BtnReadTemplate2="Template 2" />
+    <Language BtnReadTemplate3="Template 3" />
+    <Language BtnSaveTemplate3="Save Temp 3" />
+    <Language BtnSaveTemplate1="Save Temp 1" />
+    <Language BtnSaveTemplate2="Save Temp 2" />
+    <Language GrbTemplateFiles="Template List(New)" />
+    <Language ChbTempNameUseIdx="Number" />
+    <Language ListViewTemplate="" />
+    <Language LabTemplateName="Template" />
+    <Language BtnTemplateSave="Template Save" />
+    <Language BtnReadAllTemplate="Device Template" />
+    <Language GrbTemplateSetting="Template Parameters(Old)" />
+    <Language BtnGetTempPara="Refresh" />
+    <Language ChbEnableTempFloop="Enable Template Loop" />
+    <Language CobTempDPMLevel="" />
+    <Language CobTempDPMLevel_item_1="Normal" />
+    <Language CobTempDPMLevel_item_2="DPM 1" />
+    <Language CobTempDPMLevel_item_3="DPM 2" />
+    <Language CobTempDPMLevel_item_4="DPM 3" />
+    <Language CobTempDPMLevel_item_5="DPM 4" />
+    <Language CobTempDPMLevel_item_6="DPM 5" />
+    <Language CobTempDPMLevel_item_7="DPM 6" />
+    <Language CobTempDPMLevel_item_8="DPM 7" />
+    <Language CobTempDPMLevel_item_9="DPM 8" />
+    <Language LabTempDPMLevel="DPM Decoding Mode:" />
+    <Language LabSensorGainDisp="Gain Value:" />
+    <Language LabSensorExpDisp="Exp Value:" />
+    <Language LabSecondLightDisp="Aux Lighting:" />
+    <Language LabMainLightDisp="Main Lighting:" />
+  </TemplateSettingForm>
+  <AdvancedSettingForm>
+    <Language SoftwareTitle="Advanced" />
+    <Language GrbDeviceADSetting="Device Advanced Settings(Effect After Reboot)" />
+    <Language CobMuiltCodeSet="" />
+<Language CobMuiltCodeSet_item_1=" Turn Off multi-code Decode "/>
+<Language CobMuiltCodeSet_item_2=" Turn On multi-code Decode "/>
+<Language CobMuiltCodeSet_item_3=" Only 2 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_4=" Only 3 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_5=" Only 4 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_6=" Only 5 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_7=" Only 6 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_8=" Only 7 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_9=" Only 8 barcodes are Decoded "/>
+<Language CobMuiltCodeSet_item_10=" Only 9 barcodes are Decoded "/>
+    <Language LabMuiltCode="Mutiple Code Reading:" />
+    <Language LabResolution="Resolution:" />
+    <Language CobResolutionSet="" />
+    <Language CobResolutionSet_item_1="1280x800" />
+    <Language CobResolutionSet_item_2="1280x320" />
+    <Language CobResolutionSet_item_3="960x640" />
+    <Language CobResolutionSet_item_4="752x480" />
+    <Language TpIso="Barcode Grade" />
+    <Language GrpCodeQuality="Code Printing Quality Verification" />
+    <Language CobCauseNG_TH_Set="" />
+    <Language CobCauseNG_TH_Set_item_1="None" />
+    <Language CobCauseNG_TH_Set_item_2="Grade A" />
+    <Language CobCauseNG_TH_Set_item_3="Grade B" />
+    <Language CobCauseNG_TH_Set_item_4="Grade C" />
+    <Language CobCauseNG_TH_Set_item_5="Grade D" />
+    <Language LabCauseNG_TH_Set="Grade standard:" />
+    <Language CobCauseNGOut="" />
+    <Language CobCauseNGOut_item_1="None Output" />
+    <Language CobCauseNGOut_item_2="Output on OUT 1" />
+    <Language CobCauseNGOut_item_3="Output on OUT 2" />
+    <Language LabCauseNGOut="When Grade Not Reached:" />
+    <Language ChkSwitchVID="版本信息损坏" />
+    <Language ChkSwitchDec="Decode" />
+    <Language ChkSwitchFID="格式信息损坏" />
+    <Language ChkSwitchSC="SC" />
+    <Language ChkSwitchPG="Print Growth" />
+    <Language ChkSwitchMD="Modulation" />
+    <Language ChkSwitchUEC="UEC" />
+    <Language ChkSwitchFPD="FPD" />
+    <Language ChkSwitchGN="GN" />
+    <Language ChkSwitchAN="AN" />
+    <Language ChkSwitchRM="FM" />
+    <Language LabBarcodeQualityDisp="Standard:" />
+    <Language CobBarcodeQualityMode="" />
+    <Language CobBarcodeQualityMode_item_1="Disable" />
+    <Language CobBarcodeQualityMode_item_2="ISO/ICE-15415" />
+    <Language CobBarcodeQualityMode_item_3="ISO/ICE-29158(AIM-DPM-2006)" />
+    <Language CobForceLowerLevel="" />
+    <Language CobForceLowerLevel_item_1="None" />
+    <Language CobForceLowerLevel_item_2="Restrict D" />
+    <Language CobForceLowerLevel_item_3="Restrict C" />
+    <Language CobForceLowerLevel_item_4="Restrict B" />
+    <Language CobForceLowerLevel_item_5="Restrict A" />
+    <Language LabForceLowerLevel="Min Restrict:" />
+    <Language LabQualityAllSeparator="Grade Delimiter:" />
+    <Language LabQualityBarcodeSeparator="Code Delimiter:" />
+    <Language RdbQualityResultOverall="Overall Only" />
+    <Language RdbQualityResultOrderAll="More In Order" />
+    <Language LabResultOutputWay="Output：" />
+    <Language RdbQualityOutputDescAndData="Marking+Data" />
+    <Language TpTheOthers="Other" />
+    <Language CobTryMultCode="" />
+    <Language CobTryMultCode_item_1="Disable" />
+    <Language CobTryMultCode_item_2="Enable" />
+    <Language LabTryMultCode="Mult-code:" />
+    <Language GrpState="State" />
+    <Language CobLogState="" />
+    <Language CobLogState_item_1="Record only Fatal Errors" />
+    <Language CobLogState_item_2="Record Errors Only" />
+    <Language CobLogState_item_3="Record Warnings Only" />
+    <Language CobLogState_item_4="Record Decoding Statistics" />
+    <Language CobLogState_item_5="Record General Information" />
+    <Language CobLogState_item_6="Record Configuration Information" />
+    <Language LabLogState="Log:" />
+    <Language LabClientCount="0" />
+    <Language LvwClientDisp="" />
+    <Language LabClientCountDisp="Connected Device:" />
+    <Language GrpGroupNet="Master/Slave Mode Settings" />
+    <Language CobHostUploadMode="" />
+    <Language CobHostUploadMode_item_1="End After Master-Slave Read" />
+    <Language CobHostUploadMode_item_2="End After Any Reads" />
+    <Language LabHostUploadMode="End Logic:" />
+    <Language LabDecodeWaitTimeUnit="0ms" />
+    <Language LabDecodeWaitTime="Read After Master In:" />
+    <Language BtnDecodeWaitTimeSet="Confirm" />
+    <Language TxbDecodeWaitTime="500" />
+    <Language BtnNetWorkingSplitCh="Confirm" />
+    <Language ChkUseSameTrig="Synchronize Trigger All Devices" />
+    <Language ChkNetworkingSplitCh="Separator:0x" />
+    <Language RdbNetWorkingClose="Disable" />
+    <Language BtnHostSIP_Set="Confirm" />
+    <Language TxbHostSIP_Seg4="100" />
+    <Language TxbHostSIP_Seg3="0" />
+    <Language TxbHostSIP_Seg2="168" />
+    <Language TxbHostSIP_Seg1="192" />
+    <Language LabNetworkingHostIP="Master IP:" />
+    <Language RdbNetWorkingServer="Master Mode" />
+    <Language RdbClientMode="Slave Mode" />
+    <Language GrbMuiltCoreAls="算法加速配置" />
+    <Language CobMuiltCoreMode="" />
+    <Language CobMuiltCoreMode_item_1="关闭加速" />
+    <Language CobMuiltCoreMode_item_2="运动流水线狂扫模式" />
+    <Language CobMuiltCoreMode_item_3="静态图像快读模式" />
+    <Language CobMuiltCoreMode_item_4="解码疯狂探索模式" />
+    <Language LabMuiltCoreMode="多核CPU处理加速模式:" />
+    <Language GrbFtpSettomg="Device FTP Settings" />
+    <Language TxbFTPAccount="root" />
+    <Language TxbFtpIP="192.168.1.91" />
+    <Language LabFtpPassword="Password:" />
+    <Language LabAccount="Account:" />
+    <Language LabFtpIPADDR="IP:" />
+    <Language lvwFiles="" />
+    <Language lvwFiles_columns_1="File Name" />
+    <Language lvwFiles_columns_2="Type" />
+    <Language lvwFiles_columns_3="Size" />
+    <Language BtnFreshFtp="Refresh List" />
+    <Language BtnDisconnectFTP="Disconnect" />
+    <Language BtnConnectFTP="Connect" />
+    <Language TxbFtpPassword="hj168" />
+  </AdvancedSettingForm>
+  <ImageSaveSettingForm>
+    <Language SoftwareTitle="Image Save" />
+    <Language GrbImageDataProcess="Image Saving Settings" />
+    <Language BtnChangeFtpPasswd="OK" />
+    <Language BtnChangeFtpName="OK" />
+    <Language TxbFtpPasswd="root" />
+    <Language LabFtpPw="FTP Password:" />
+    <Language TxbFtpName="root" />
+    <Language LabFtpName="FTP ID:" />
+    <Language ChbDecodeNGFtpImg="Save NG Image on FTP" />
+    <Language ChbDecodeOKFtpImg="Save Read Image on FTP" />
+    <Language ChbDecodeNGSendImg="Send NG Image" />
+    <Language ChbDecodeOKSendImg="Send Read Image" />
+    <Language ChbDecodeNGSaveImg="NG Device Saves Image" />
+    <Language ChbDecodeOKSaveImg="Read Device Saves Image" />
+  </ImageSaveSettingForm>
+  <OthersSettingForm>
+    <Language SoftwareTitle="OthersSettingForm" />
+    <Language TapForUploadImage="Uploaded Image Decoding" />
+    <Language BtnAddCurrentTraining="Training Device" />
+    <Language BtnSelectUploadImage="Select" />
+    <Language BtnUploadAndDecode="Decode" />
+  </OthersSettingForm>
+  <DeviceSettingForm>
+    <Language SoftwareTitle="Settings" />
+    <Language TpParaAdjust="General" />
+    <Language ChbHDR_ModeEnable="Enable HDR" />
+    <Language GrbSoundSetting="Sound Settings" />
+    <Language RdbSoundOff="Disable" />
+    <Language RdbSoundOn="Enable" />
+    <Language GrbSensorLensFocus="Focus Settings" />
+    <Language BtnSensorLensFocusAdd="▶" />
+    <Language BtnSensorLensFocusDec="◀" />
+    <Language TxbSensorLensFocusSet="0" />
+    <Language LabSensorLensFocusSet="Focus:" />
+    <Language RdbAutoFocusEnbale="Auto" />
+    <Language RdbAutoFocusDisabale="Manual" />
+    <Language GrbWorkMode="Reading Mode" />
+    <Language GrbTrigTime="Trigger Settings" />
+    <Language RdbKeepImage="By FPS" />
+    <Language RdbKeepTime="By Time" />
+    <Language BtnKeepImage="Confirm" />
+    <Language LabKeepImage="Number of:" />
+    <Language TxbKeepImage="2" />
+    <Language LabKeepImageUnit="Images" />
+    <Language BtnTrigKeepTime="Confirm" />
+    <Language LabTrigKeepTimeName="Read Duration:" />
+    <Language TxbTrigKeepTime="2000" />
+    <Language LabMsSShow="ms" />
+    <Language BtnTrigTest="Trigger" />
+    <Language RdbTrigExtern="External/CMD Trig" />
+    <Language RdbContinuousTrig="Continuous" />
+    <Language GrbExpSetting="Exposure Control" />
+    <Language BtnExpSetValue="Set" />
+    <Language BtnExpSetRatioAdd="▶" />
+    <Language BtnExpSetRatioDec="◀" />
+    <Language CheckAutoExp="Auto Exposure" />
+    <Language RdbExpSetValue="Value (us):" />
+    <Language RdbExpSetRatio="Ratio (1-255):" />
+    <Language GrbSensorGainSetting="Gain Control" />
+    <Language LabSensorGainSet="Gain (0-255):" />
+    <Language BtnSensorGainSetAdd="▶" />
+    <Language BtnSensorGainSetDec="◀" />
+    <Language TxbSensorGainSet="0" />
+    <Language Tp_Lighting="Illumination" />
+    <Language Tp_ImageProcess="Image Processing" />
+    <Language Tp_BarcodeType="Code Type" />
+    <Language Tp_Template="Template" />
+  </DeviceSettingForm>
+  <CMD_Tool>
+    <Language SoftwareTitle="Command Configuration Tool" />
+    <Language GrbExplain="Command Explanation" />
+    <Language GrbCrcCalc="CRC Calculation" />
+    <Language BtnCalcCMD="CAL" />
+    <Language GrbSendCMD="Command Send" />
+    <Language LabTipsState="-&gt;提示可能不准确-&lt;" />
+    <Language LabSendFailed="Send Failed" />
+    <Language LabSendOk="Sent" />
+    <Language RdbSendHEX="HEX" />
+    <Language RdbSendString="Ascii" />
+    <Language BtnSendCMD="Send" />
+    <Language GrbSettingList="Command List" />
+    <Language BtnAddToRignt="-&gt;&gt;&gt;" />
+    <Language LabDispCMD="CMD:" />
+    <Language BtnSaveConfigXml="Save" />
+    <Language ChkAllowEdit="Edit Mode" />
+    <Language LabSerch="Search:" />
+  </CMD_Tool>
+  <ComDebugTool>
+    <Language SoftwareTitle="Serial Configuration Tool V1.4" />
+    <Language GrpComDebug="Serial Configuration" />
+    <Language CobUartSelect="" />
+    <Language ButOpenUart="Connect" />
+    <Language ButSendData="Send" />
+    <Language GdbDataSend="Data Sending Area" />
+    <Language numericUpDown="1000" />
+    <Language ChkSendByTime="By Time" />
+    <Language LabCycleTimeUint="ms" />
+    <Language LabCycleTime="Cycle:" />
+    <Language ChkDispTime="Date" />
+    <Language RdbSendHex="HEX" />
+    <Language RdbSendString="Ascii" />
+    <Language TxtSendCount="Bytes Sent: 0" />
+    <Language TxtUartState="State:" />
+    <Language GdbDataReceive="Data Display Area" />
+    <Language CobDispEncode="" />
+    <Language CobDispEncode_item_1="Default" />
+    <Language CobDispEncode_item_2="GBK" />
+    <Language CobDispEncode_item_3="UTF-8" />
+    <Language CobDispEncode_item_4="Unicode(big)" />
+    <Language CobDispEncode_item_5="Unicode(little)" />
+    <Language CobDispEncode_item_6="Big5" />
+    <Language LabDispEncode="Encoding:" />
+    <Language RdbHexDisplay="Hex" />
+    <Language TxtReceiveCount="Bytes Received: 0" />
+    <Language RdbStringDisplay="String" />
+    <Language CobBaudRateSelect="" />
+    <Language CobBaudRateSelect_item_1="2400" />
+    <Language CobBaudRateSelect_item_2="4800" />
+    <Language CobBaudRateSelect_item_3="9600" />
+    <Language CobBaudRateSelect_item_4="19200" />
+    <Language CobBaudRateSelect_item_5="38400" />
+    <Language CobBaudRateSelect_item_6="57600" />
+    <Language CobBaudRateSelect_item_7="115200" />
+    <Language TxtBaudRateSelect="Baud Rate:" />
+    <Language TxtUartSelect="Select:" />
+  </ComDebugTool>
+  <ConfigBarcodeCheck>
+    <Language SoftwareTitle="Code Matching Settings" />
+    <Language GrbExpectCode="Code Matching Rule Settings" />
+    <Language LabRuleDescTips="" />
+    <Language LabTips1="Note: Take the box in front indicates the group to activate." />
+    <Language BtnWriteCfg="Write In" />
+    <Language BtnReadCfg="Read" />
+    <Language ChbGround8="Group 8：" />
+    <Language ChbGround7="Group 7：" />
+    <Language ChbGround6="Group 6：" />
+    <Language ChbGround5="Group 5：" />
+    <Language ChbGround4="Group 4：" />
+    <Language ChbGround3="Group 3：" />
+    <Language ChbGround2="Group 2：" />
+    <Language ChbGround1="Group 1：" />
+  </ConfigBarcodeCheck>
+  <DriverInstall>
+    <Language SoftwareTitle="DriverInstall" />
+    <Language BtnClose="Close" />
+  </DriverInstall>
+  <FormNet>
+    <Language SoftwareTitle="Ethernet Configuration Tool V1.0" />
+    <Language GrbNetTool="Ethernet Configuration" />
+    <Language LabRemotePort="Host Port" />
+    <Language CobRemoteIP="" />
+    <Language LabRemoteIP="Host Address" />
+    <Language BtnSend="Send" />
+    <Language LabState="Status：" />
+    <Language GpbDataSend="Data Sending Area" />
+	<Language LabSendByteCount="0" />
+    <Language LabSendCount="Bytes Sent: " />
+    <Language ChkDispTime="Date" />
+    <Language LabCycleTimeUnit="ms" />
+    <Language numericUpDown1="1" />
+    <Language LabCycleTime="Cycle:" />
+    <Language ChkTimedSend="By Time" />
+    <Language RdbHexSend="Hex" />
+    <Language RdbStringSend="String" />
+    <Language GpbDataReceive="Data Display Area" />
+	<Language LabReceiveByteCount="0" />
+    <Language LabReceiveCount="Bytes Received: " />
+    <Language CobEncodeSelect="" />
+    <Language CobEncodeSelect_item_1="Default" />
+    <Language CobEncodeSelect_item_2="GBK" />
+    <Language CobEncodeSelect_item_3="UTF-8" />
+    <Language CobEncodeSelect_item_4="Unicode(big)" />
+    <Language CobEncodeSelect_item_5="Unicode(little)" />
+    <Language CobEncodeSelect_item_6="Big5" />
+    <Language LabDispEncode="Encoding:" />
+    <Language RdbHexDisplay="Hex" />
+    <Language RdbStringDisplay="String" />
+    <Language BtnConnect="Monitor" />
+    <Language LabPort="Host Port" />
+    <Language CobIPAdress="" />
+    <Language LabIPAdress="Host Address" />
+    <Language CobProtocolSelect="" />
+    <Language CobProtocolSelect_item_1="UDP" />
+    <Language CobProtocolSelect_item_2="TCP Client" />
+    <Language CobProtocolSelect_item_3="TCP Server" />
+    <Language LabProtocolSelect="Protocol" />
+  </FormNet>
+  <FormDeviceIP>
+    <Language SoftwareTitle="IP Settings" />
+    <Language RdbDhcpDisable="Disable" />
+    <Language RdbDhcpEnable="Enable" />
+    <Language LabDhcpState="DHCP IP Auto-Obtain:" />
+    <Language BtnMaskAddrSet="Confirm" />
+    <Language TxbGwAddrSeg3="1" />
+    <Language TxbGwAddrSeg2="0" />
+    <Language TxbGwAddrSeg1="168" />
+    <Language TxbGwAddrSeg0="192" />
+    <Language LabGatewayAddr="Gateway IP:" />
+    <Language TxbIpAddrSeg3="135" />
+    <Language TxbIpAddrSeg2="0" />
+    <Language TxbIpAddrSeg1="168" />
+    <Language TxbIpAddrSeg0="192" />
+    <Language LabIPADDR="Device IP:" />
+  </FormDeviceIP>
+  <MsgContentList>
+    <MsgContent Id="0" MessageBoxInfoDef="TextUpperLeft">
+      <TitleText>
+      </TitleText>
+      <ContentText>UpperLeft</ContentText>
+    </MsgContent>
+    <MsgContent Id="1" MessageBoxInfoDef="TextLowerLeft">
+      <TitleText>
+      </TitleText>
+      <ContentText>LowerLeft</ContentText>
+    </MsgContent>
+    <MsgContent Id="2" MessageBoxInfoDef="TextUpperRight">
+      <TitleText>
+      </TitleText>
+      <ContentText>UpperRight</ContentText>
+    </MsgContent>
+    <MsgContent Id="3" MessageBoxInfoDef="TextLowerRight">
+      <TitleText>
+      </TitleText>
+      <ContentText>LowerRight</ContentText>
+    </MsgContent>
+    <MsgContent Id="4" MessageBoxInfoDef="TextUpperPart">
+      <TitleText>
+      </TitleText>
+      <ContentText>Upper</ContentText>
+    </MsgContent>
+    <MsgContent Id="5" MessageBoxInfoDef="TextLowerPart">
+      <TitleText>
+      </TitleText>
+      <ContentText>Bottom</ContentText>
+    </MsgContent>
+    <MsgContent Id="6" MessageBoxInfoDef="TextLeftSide">
+      <TitleText>
+      </TitleText>
+      <ContentText>Left</ContentText>
+    </MsgContent>
+    <MsgContent Id="7" MessageBoxInfoDef="TextRightSide">
+      <TitleText>
+      </TitleText>
+      <ContentText>Right</ContentText>
+    </MsgContent>
+    <MsgContent Id="8" MessageBoxInfoDef="TextRedFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light</ContentText>
+    </MsgContent>
+    <MsgContent Id="9" MessageBoxInfoDef="TextWhiteFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>White Light</ContentText>
+    </MsgContent>
+    <MsgContent Id="10" MessageBoxInfoDef="TextRedFillLight1">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light 1</ContentText>
+    </MsgContent>
+    <MsgContent Id="11" MessageBoxInfoDef="TextRedFillLight2">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light 2</ContentText>
+    </MsgContent>
+    <MsgContent Id="12" MessageBoxInfoDef="TextRedFillLight3">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light 3</ContentText>
+    </MsgContent>
+    <MsgContent Id="13" MessageBoxInfoDef="TextRedFillLight4">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light 4</ContentText>
+    </MsgContent>
+    <MsgContent Id="14" MessageBoxInfoDef="TextRedshadeLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>Red Light</ContentText>
+    </MsgContent>
+    <MsgContent Id="15" MessageBoxInfoDef="TextBlueFillLight">
+      <TitleText>
+      </TitleText>
+      <ContentText>Blue Light</ContentText>
+    </MsgContent>
+    <MsgContent Id="16" MessageBoxInfoDef="TextTemplateNameNullTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please Enter Template Name.</ContentText>
+    </MsgContent>
+    <MsgContent Id="17" MessageBoxInfoDef="TextTemplateNameInvalidTips">
+      <TitleText>Error</TitleText>
+      <ContentText>The Template Name Contains Illegal Characters, Please Re-enter.</ContentText>
+    </MsgContent>
+  <MsgContent Id="18" MessageBoxInfoDef="DrawRioTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>Draw ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="19" MessageBoxInfoDef="DrawRoiOkTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>Apply</ContentText>
+    </MsgContent>
+    <MsgContent Id="20" MessageBoxInfoDef="AiTrain">
+      <TitleText>
+      </TitleText>
+      <ContentText>Auto Tuning</ContentText>
+    </MsgContent>
+    <MsgContent Id="21" MessageBoxInfoDef="StopTrain">
+      <TitleText>
+      </TitleText>
+      <ContentText>Stop</ContentText>
+    </MsgContent>
+	<MsgContent Id="22" MessageBoxInfoDef="SelectComTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please operate after selected com port!</ContentText>
+    </MsgContent>
+    <MsgContent Id="23" MessageBoxInfoDef="NetRightIpTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please enter the correct IP</ContentText>
+    </MsgContent>
+    <MsgContent Id="24" MessageBoxInfoDef="NetRightPortTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please enter the correct com port</ContentText>
+    </MsgContent>
+    <MsgContent Id="25" MessageBoxInfoDef="NetRightRemoteIpTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please enter the correct remote IP</ContentText>
+    </MsgContent>
+    <MsgContent Id="26" MessageBoxInfoDef="NetRightRemotePortTips">
+      <TitleText>Note</TitleText>
+      <ContentText>please enter the correct remote port</ContentText>
+    </MsgContent>
+    <MsgContent Id="27" MessageBoxInfoDef="NetDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>Disconnect</ContentText>
+    </MsgContent>
+    <MsgContent Id="28" MessageBoxInfoDef="NetConnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>Connect</ContentText>
+    </MsgContent>
+    <MsgContent Id="29" MessageBoxInfoDef="NetOpen">
+      <TitleText>
+      </TitleText>
+      <ContentText>Open</ContentText>
+    </MsgContent>
+    <MsgContent Id="30" MessageBoxInfoDef="UdpCloseTips">
+      <TitleText>
+      </TitleText>
+      <ContentText>UDP Communication have closed</ContentText>
+    </MsgContent>
+    <MsgContent Id="31" MessageBoxInfoDef="StateListening">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：Server Listening...</ContentText>
+    </MsgContent>
+    <MsgContent Id="32" MessageBoxInfoDef="StateClientConnected">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：Client connected.</ContentText>
+    </MsgContent>
+    <MsgContent Id="33" MessageBoxInfoDef="StateClientDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：Client Disconnect！</ContentText>
+    </MsgContent>
+    <MsgContent Id="34" MessageBoxInfoDef="stateDisconnect">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：Disconnect.</ContentText>
+    </MsgContent>
+    <MsgContent Id="35" MessageBoxInfoDef="DisconnectTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Disconnect.</ContentText>
+    </MsgContent>
+    <MsgContent Id="36" MessageBoxInfoDef="NetServerNotOpenTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Server is not listen!</ContentText>
+    </MsgContent>
+    <MsgContent Id="37" MessageBoxInfoDef="EnterRightHexTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please enter the correct Hex characters, such as“0A”“0x0a”</ContentText>
+    </MsgContent>
+    <MsgContent Id="38" MessageBoxInfoDef="OpenUdpTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please operate after open UDP</ContentText>
+    </MsgContent>
+    <MsgContent Id="39" MessageBoxInfoDef="StateDisconnectWithServer">
+      <TitleText>
+      </TitleText>
+      <ContentText>state：Disconnect.</ContentText>
+    </MsgContent>
+    <MsgContent Id="40" MessageBoxInfoDef="EnterTextTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please enter the data to be sent first！</ContentText>
+    </MsgContent>
+    <MsgContent Id="41" MessageBoxInfoDef="StateConnectToServer">
+      <TitleText>
+      </TitleText>
+      <ContentText>Connected to the server.</ContentText>
+    </MsgContent>
+    <MsgContent Id="42" MessageBoxInfoDef="ClearReceiveDataTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Do you want to clear received data?</ContentText>
+    </MsgContent>
+    <MsgContent Id="43" MessageBoxInfoDef="ClearReceiveCountTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Do you want to clear received byte count？</ContentText>
+    </MsgContent>
+    <MsgContent Id="44" MessageBoxInfoDef="ClearSendDataTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Do you want to clear sent data?</ContentText>
+    </MsgContent>
+    <MsgContent Id="45" MessageBoxInfoDef="ClearSendCountTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Do you want to clear sent byte count？</ContentText>
+    </MsgContent>
+    <MsgContent Id="46" MessageBoxInfoDef="ConnectThenResendTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please operate after connected!</ContentText>
+    </MsgContent>
+    <MsgContent Id="47" MessageBoxInfoDef="StateUdpOpened">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：UDP is Opened</ContentText>
+    </MsgContent>
+    <MsgContent Id="48" MessageBoxInfoDef="FirmWarePageText">
+      <TitleText>Device Version Information</TitleText>
+      <ContentText>Device Version:</ContentText>
+    </MsgContent>
+    <MsgContent Id="49" MessageBoxInfoDef="SaveTips_1">
+      <TitleText>
+      </TitleText>
+      <ContentText>Values are saving....</ContentText>
+    </MsgContent>
+    <MsgContent Id="50" MessageBoxInfoDef="SaveTips_2">
+      <TitleText>
+      </TitleText>
+      <ContentText>Keep power on in case errors!</ContentText>
+    </MsgContent>
+    <MsgContent Id="51" MessageBoxInfoDef="UpOneLevelText">
+      <TitleText>
+      </TitleText>
+      <ContentText>Up one level</ContentText>
+    </MsgContent>
+    <MsgContent Id="52" MessageBoxInfoDef="FolderText">
+      <TitleText>
+      </TitleText>
+      <ContentText>Folder</ContentText>
+    </MsgContent>
+    <MsgContent Id="53" MessageBoxInfoDef="CharConvertError">
+      <TitleText>Note</TitleText>
+      <ContentText>Failed to convert to a string</ContentText>
+    </MsgContent>
+    <MsgContent Id="54" MessageBoxInfoDef="TempState">
+      <TitleText>
+      </TitleText>
+      <ContentText>State：</ContentText>
+    </MsgContent>
+    <MsgContent Id="55" MessageBoxInfoDef="TempEnableRoi">
+      <TitleText>
+      </TitleText>
+      <ContentText>Enable ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="56" MessageBoxInfoDef="TempEnable">
+      <TitleText>
+      </TitleText>
+      <ContentText>Enable Template</ContentText>
+    </MsgContent>
+    <MsgContent Id="57" MessageBoxInfoDef="TempGroupMode">
+      <TitleText>
+      </TitleText>
+      <ContentText>Group Mode</ContentText>
+    </MsgContent>
+    <MsgContent Id="58" MessageBoxInfoDef="TempEnable_Y">
+      <TitleText>
+      </TitleText>
+      <ContentText>YES</ContentText>
+    </MsgContent>
+    <MsgContent Id="59" MessageBoxInfoDef="TempEnable_N">
+      <TitleText>
+      </TitleText>
+      <ContentText>NO</ContentText>
+    </MsgContent>
+    <MsgContent Id="60" MessageBoxInfoDef="TempRowColErrorTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The number of rows or columns is incorrect. Please check and try again</ContentText>
+    </MsgContent>
+    <MsgContent Id="61" MessageBoxInfoDef="TempRowColMaxTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The number of ROI cannot exceed 20</ContentText>
+    </MsgContent>
+    <MsgContent Id="62" MessageBoxInfoDef="TempSaveRoiTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The current ROI has not been saved, are you sure you want to exit?</ContentText>
+    </MsgContent>
+    <MsgContent Id="63" MessageBoxInfoDef="TempRoiStartDraw">
+      <TitleText>
+      </TitleText>
+      <ContentText>Start Draw ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="64" MessageBoxInfoDef="TempRoiEndDraw">
+      <TitleText>
+      </TitleText>
+      <ContentText>End Draw ROI</ContentText>
+    </MsgContent>
+    <MsgContent Id="65" MessageBoxInfoDef="TempCaptureTips">
+      <TitleText>Note</TitleText>
+      <ContentText>To draw multiple ROI, you need to capture an image first, please check and try again</ContentText>
+    </MsgContent>
+    <MsgContent Id="66" MessageBoxInfoDef="CmdXmlCfgErrorTips">
+      <TitleText>Error</TitleText>
+      <ContentText>The configuration file format required for program running is incorrect, causing the program to fail to run properly.</ContentText>
+    </MsgContent>
+    <MsgContent Id="67" MessageBoxInfoDef="CmdCodeTypeKTips">
+      <TitleText>Note</TitleText>
+      <ContentText>This function cannot be set by command</ContentText>
+    </MsgContent>
+    <MsgContent Id="68" MessageBoxInfoDef="CmdConnectThenSendTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Please connect the device before sending the command</ContentText>
+    </MsgContent>
+    <MsgContent Id="69" MessageBoxInfoDef="CmdRemove7e00">
+      <TitleText>
+      </TitleText>
+      <ContentText>Remove 7e 00</ContentText>
+    </MsgContent>
+    <MsgContent Id="70" MessageBoxInfoDef="CmdCalcResult">
+      <TitleText>
+      </TitleText>
+      <ContentText>Calculation result：</ContentText>
+    </MsgContent>
+    <MsgContent Id="71" MessageBoxInfoDef="CmdSaveCfgTips">
+      <TitleText>Warning</TitleText>
+      <ContentText>Are you sure you want to save the current configuration? This action cannot be undone</ContentText>
+    </MsgContent>
+    <MsgContent Id="72" MessageBoxInfoDef="CmdSaveCfgOkTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The Settings are saved successfully.</ContentText>
+    </MsgContent>
+    <MsgContent Id="73" MessageBoxInfoDef="CmdSaveErrorTips">
+      <TitleText>Error</TitleText>
+      <ContentText>Format error, data is not saved.</ContentText>
+    </MsgContent>
+    <MsgContent Id="74" MessageBoxInfoDef="CmdSaveKeyErrorTips">
+      <TitleText>Error</TitleText>
+      <ContentText>The specified key already exists, and the entered data is not saved.</ContentText>
+    </MsgContent>
+    <MsgContent Id="75" MessageBoxInfoDef="CmdContinueModeTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The command configuration is triggered continuously. The command configuration may fail, but the command configuration is usually successful. To ensure that the message indicating success is correct, switch back to external triggering or obtain the original image to suspend data sending, and then run the configuration command.</ContentText>
+    </MsgContent>
+    <MsgContent Id="76" MessageBoxInfoDef="TypeTrigModeTips">
+      <TitleText>Note</TitleText>
+      <ContentText>Need to be configured in external trigger mode!</ContentText>
+    </MsgContent>
+    <MsgContent Id="77" MessageBoxInfoDef="DriverInstallExitTips">
+      <TitleText>Note</TitleText>
+      <ContentText>The installation is incomplete. Exit now to stop the installation. Click "OK" to exit the installation.</ContentText>
+    </MsgContent>
+  </MsgContentList>
+</Root>

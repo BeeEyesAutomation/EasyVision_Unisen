@@ -25,7 +25,7 @@ namespace BeeCore
         public static string Scan()
         {
           if(G.TypeCCD==TypeCamera.TinyIV)
-            return BeeCore.HEROJE.Scan(192, 168, 1, 1);
+            return BeeCore.HEROJE.Scan(192, 168, 2, 7);
           else
             return G.CCD.ScanCCD();
 

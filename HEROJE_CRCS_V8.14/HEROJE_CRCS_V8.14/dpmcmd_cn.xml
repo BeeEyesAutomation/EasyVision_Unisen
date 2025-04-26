@@ -1,0 +1,562 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--This file is necessary for software to run properly-->
+<!--Create By Liang-->
+<Root>
+  <Node Name="AllSetting" Text="全部设置" Tips="所有设置都集中在这里" Type=" " Mask=" " Data=" ">
+    <Node Name="Tree1ComInterface" Text="通讯接口" Tips="设置扫描引擎与其他设备用何种通讯接口进行通讯" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2USB_HID" Text="USB-HID输出*" Tips="扫描引擎作为模拟键盘输入形式通讯" Type="R" Mask="0D03" Data="01" />
+      <Node Name="Tree2USB_COM" Text="USB-COM输出" Tips="扫描引擎作为虚拟串口进行通讯" Type="R" Mask="0D03" Data="03" />
+      <Node Name="Tree2UartOut" Text="仅串口输出" Tips="设备仅通过TTL实体串口进行通讯" Type="R" Mask="0D03" Data="00" />
+      <Node Name="Tree2UartBaudRate" Text="波特率设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BaudRate1200" Text="1200bps" Tips="" Type="W" Mask="2A0C" Data="00" />
+        <Node Name="Tree3BaudRate4800" Text="4800bps" Tips="" Type="W" Mask="2A30" Data="00" />
+        <Node Name="Tree3BaudRate9600" Text="9600bps*" Tips="" Type="W" Mask="2A60" Data="00" />
+        <Node Name="Tree3BaudRate14400" Text="14400bps" Tips="" Type="W" Mask="2A90" Data="00" />
+        <Node Name="Tree3BaudRate19200" Text="19200bps" Tips="" Type="W" Mask="2AC0" Data="00" />
+        <Node Name="Tree3BaudRate38400" Text="38400bps" Tips="" Type="W" Mask="2A80" Data="01" />
+        <Node Name="Tree3BaudRate57600" Text="57600bps" Tips="" Type="W" Mask="2A40" Data="02" />
+        <Node Name="Tree3BaudRate115200" Text="115200bps" Tips="" Type="W" Mask="2A80" Data="04" />
+        <Node Name="Tree3BaudRateSet" Text="自定义" Tips="" Type="I" Mask="2AFF" Data="FF" />
+      </Node>
+      <Node Name="Tree2UartPolaritySwitch" Text="校验位开关" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartPolarityEnable" Text="开启校验位" Tips="" Type="R" Mask="E901" Data="01" />
+        <Node Name="Tree3UartPolarityDisable" Text="关闭校验位*" Tips="" Type="R" Mask="E901" Data="00" />
+      </Node>
+      <Node Name="Tree2UartPolaritySet" Text="校验位设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartPolarityOdd" Text="奇校验" Tips="" Type="R" Mask="E906" Data="02" />
+        <Node Name="Tree3UartPolarityEven" Text="偶校验*" Tips="" Type="R" Mask="E906" Data="00" />
+      </Node>
+      <Node Name="Tree2UartStopBit" Text="停止位设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartStopBit1_0" Text="停止位为1位*" Tips="" Type="R" Mask="E918" Data="00" />
+        <Node Name="Tree3UartStopBit2_0" Text="停止位为2位" Tips="" Type="R" Mask="E918" Data="10" />
+      </Node>
+      <Node Name="Tree2UartDataBit" Text="数据位设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartDataBitLen5" Text="数据位为5位" Tips="" Type="R" Mask="E960" Data="00" />
+        <Node Name="Tree3UartDataBitLen6" Text="数据位为6位" Tips="" Type="R" Mask="E960" Data="20" />
+        <Node Name="Tree3UartDataBitLen7" Text="数据位为7位" Tips="" Type="R" Mask="E960" Data="40" />
+        <Node Name="Tree3UartDataBitLen8" Text="数据位为8位*" Tips="" Type="R" Mask="E960" Data="60" />
+      </Node>
+      <Node Name="Tree2HidPeriod" Text="HID访问周期" Tips="设置电脑对设备的访问周期(ms)，越小HID上传速度越快" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HidPeriod3ms" Text="3ms" Tips="" Type="R" Mask="021F" Data="03" />
+        <Node Name="Tree3HidPeriod6ms" Text="6ms" Tips="" Type="R" Mask="021F" Data="06" />
+        <Node Name="Tree3HidPeriod10ms" Text="10ms*" Tips="" Type="R" Mask="021F" Data="0A" />
+        <Node Name="Tree3HidPeriod16ms" Text="16ms" Tips="" Type="R" Mask="021F" Data="10" />
+        <Node Name="Tree3HidPeriod20ms" Text="20ms" Tips="" Type="R" Mask="021F" Data="14" />
+        <Node Name="Tree3HidPeriod30ms" Text="30ms" Tips="" Type="R" Mask="021F" Data="1E" />
+        <Node Name="Tree3HidPeriodSet" Text="自定义" Tips="" Type="X" Mask="021F" Data="64" />
+      </Node>
+      <Node Name="Tree2HidSpeed" Text="HID上传速度" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HidSpeedFast" Text="快速上传" Tips="" Type="R" Mask="0C04" Data="04" />
+        <Node Name="Tree3HidSpeedNormal" Text="正常速度" Tips="" Type="R" Mask="0C04" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1RecognizeMode" Text="识读模式" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2ManualMode" Text="手动触发模式#" Tips="" Type="R" Mask="0003" Data="00" />
+      <Node Name="Tree2ContinuityMode" Text="连续触发模式" Tips="" Type="R" Mask="0003" Data="02" />
+      <Node Name="Tree2CMDMode" Text="命令触发模式" Tips="" Type="R" Mask="0003" Data="01" />
+      <Node Name="Tree2SenseMode" Text="感应触发模式" Tips="" Type="R" Mask="0003" Data="03" />
+      <Node Name="Tree2DecodeKeepTime" Text="单次读码时长" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3KeepTime1000ms" Text="1000ms" Tips="" Type="R" Mask="06FF" Data="0A" />
+        <Node Name="Tree3KeepTime3000ms" Text="3000ms" Tips="" Type="R" Mask="06FF" Data="1E" />
+        <Node Name="Tree3KeepTime5000ms" Text="5000ms*" Tips="" Type="R" Mask="06FF" Data="32" />
+        <Node Name="Tree3KeepTimeinfinite" Text="无限长" Tips="" Type="R" Mask="06FF" Data="00" />
+        <Node Name="Tree3KeepTimeSet" Text="自定义" Tips="" Type="Z" Mask="06FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2DecodeIntervalTime" Text="识读间隔时长" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3IntervalTime500ms" Text="500ms" Tips="" Type="R" Mask="05FF" Data="05" />
+        <Node Name="Tree3IntervalTime1000ms" Text="1000ms" Tips="" Type="R" Mask="05FF" Data="0A" />
+        <Node Name="Tree3IntervalTime1500ms" Text="1500ms" Tips="" Type="R" Mask="05FF" Data="0F" />
+        <Node Name="Tree3IntervalTime2000ms" Text="2000ms" Tips="" Type="R" Mask="05FF" Data="14" />
+        <Node Name="Tree3IntervalTimeNone" Text="无间隔" Tips="" Type="R" Mask="05FF" Data="00" />
+        <Node Name="Tree3IntervalTimeSet" Text="自定义" Tips="" Type="Z" Mask="05FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2SameCodeDelay" Text="相同条码延迟" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3SameCodeDelayEnable" Text="开启相同条码延迟" Tips="" Type="R" Mask="1380" Data="80" />
+        <Node Name="Tree3SameCodeDelayDisable" Text="关闭相同条码延迟" Tips="" Type="R" Mask="1380" Data="00" />
+        <Node Name="Tree3SameCodeDelay500ms" Text="500ms" Tips="" Type="R" Mask="137F" Data="05" />
+        <Node Name="Tree3SameCodeDelay700ms" Text="700ms" Tips="" Type="R" Mask="137F" Data="07" />
+        <Node Name="Tree3SameCodeDelay1000ms" Text="1000ms" Tips="" Type="R" Mask="137F" Data="0A" />
+        <Node Name="Tree3SameCodeDelay3000ms" Text="3000ms" Tips="" Type="R" Mask="137F" Data="1E" />
+        <Node Name="Tree3SameCodeDelay5000ms" Text="5000ms" Tips="" Type="R" Mask="137F" Data="32" />
+        <Node Name="Tree3SameCodeDelayInfinite" Text="无限延迟" Tips="" Type="R" Mask="137F" Data="00" />
+        <Node Name="Tree3SameCodeDelaySet" Text="自定义" Tips="" Type="Z" Mask="137F" Data="FF" />
+      </Node>
+      <Node Name="Tree2CMDTrigSetting" Text="命令触发设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TrigACKEnable" Text="命令触发ACK开启*" Tips="" Type="R" Mask="D001" Data="01" />
+        <Node Name="Tree3TrigACKDisable" Text="命令触发ACK关闭" Tips="" Type="R" Mask="D001" Data="00" />
+        <Node Name="Tree3TrigSingleEnable" Text="单字符触发开启" Tips="" Type="R" Mask="D002" Data="02" />
+        <Node Name="Tree3TrigSingleDisable" Text="单字符触发关闭*" Tips="" Type="R" Mask="D002" Data="00" />
+        <Node Name="Tree3TrigSingleCharSet" Text="触发字符设置" Tips="" Type="X" Mask="D1FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2SenseTimeout" Text="感应读码超时设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3SenseTimeout1000ms" Text="感应读码超时1000ms*" Tips="" Type="R" Mask="C2FF" Data="0A" />
+        <Node Name="Tree3SenseTimeout3000ms" Text="感应读码超时3000ms*" Tips="" Type="R" Mask="C2FF" Data="1E" />
+        <Node Name="Tree3SenseTimeout5000ms" Text="感应读码超时5000ms*" Tips="" Type="R" Mask="C2FF" Data="32" />
+        <Node Name="Tree3SenseTimeoutCustom" Text="感应读码超时自定义" Tips="" Type="Z" Mask="C2FF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DataOut" Text="数据输出" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2HIDLayOut" Text="各国键盘设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HIDLayOutUS_EN" Text="英语*" Tips="" Type="R" Mask="611F" Data="00" />
+        <Node Name="Tree3HIDLayOutFR" Text="法语" Tips="" Type="R" Mask="611F" Data="02" />
+        <Node Name="Tree3HIDLayOutGM" Text="德语" Tips="" Type="R" Mask="611F" Data="03" />
+        <Node Name="Tree3HIDLayOutRS" Text="俄语" Tips="" Type="R" Mask="611F" Data="08" />
+        <Node Name="Tree3HIDLayOutJP" Text="日语" Tips="" Type="R" Mask="611F" Data="06" />
+        <Node Name="Tree3HIDLayOutCZ" Text="捷克语" Tips="" Type="R" Mask="611F" Data="01" />
+        <Node Name="Tree3HIDLayOutBZ" Text="巴西语" Tips="" Type="R" Mask="611F" Data="09" />
+        <Node Name="Tree3HIDLayOutNW" Text="挪威语" Tips="" Type="R" Mask="611F" Data="0C" />
+        <Node Name="Tree3HIDLayOutNL" Text="荷兰语" Tips="" Type="R" Mask="611F" Data="0D" />
+        <Node Name="Tree3HIDLayOutSW" Text="瑞典语" Tips="" Type="R" Mask="611F" Data="0F" />
+        <Node Name="Tree3HIDLayOutDM" Text="丹麦语" Tips="" Type="R" Mask="611F" Data="0B" />
+        <Node Name="Tree3HIDLayOutFL" Text="芬兰语" Tips="" Type="R" Mask="611F" Data="12" />
+        <Node Name="Tree3HIDLayOutIT" Text="意大利语" Tips="" Type="R" Mask="611F" Data="05" />
+        <Node Name="Tree3HIDLayOutSP" Text="西班牙语" Tips="" Type="R" Mask="611F" Data="07" />
+        <Node Name="Tree3HIDLayOutHG" Text="匈牙利语" Tips="" Type="R" Mask="611F" Data="04" />
+        <Node Name="Tree3HIDLayOutPT" Text="葡萄牙语" Tips="" Type="R" Mask="611F" Data="0A" />
+        <Node Name="Tree3HIDLayOutBG" Text="比利时语" Tips="" Type="R" Mask="611F" Data="13" />
+        <Node Name="Tree3HIDLayOutCC" Text="捷克语-C" Tips="" Type="R" Mask="611F" Data="10" />
+        <Node Name="Tree3HIDLayOutTK" Text="土耳其语Q" Tips="" Type="R" Mask="611F" Data="0E" />
+        <Node Name="Tree3HIDLayOutTF" Text="土耳其语F" Tips="" Type="R" Mask="611F" Data="11" />
+      </Node>
+      <Node Name="Tree2DataFormat" Text="数据编码格式" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataEncodeGBK" Text="GBK*" Tips="适合用于记事本，输入框等输入包含中文或特殊符号的条码" Type="R" Mask="0D0C" Data="00" />
+        <Node Name="Tree3DataEncodeUnicode" Text="Unicode" Tips="适合用于Office，QQ等软件输入包含中文或特殊符号的条码" Type="R" Mask="0D0C" Data="04" />
+        <Node Name="Tree3DataEncodeUtf8" Text="UTF-8" Tips="" Type="R" Mask="0D0C" Data="0C" />
+        <Node Name="Tree3DataEncodeBig5" Text="Big5" Tips="" Type="R" Mask="0D0C" Data="08" />
+      </Node>
+      <Node Name="Tree2HIDInputEncode" Text="HID输出编码选择" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HIDInputDefault" Text="默认内码*" Tips="" Type="R" Mask="0D30" Data="00" />
+        <Node Name="Tree3HIDInputCP874" Text="泰国CP874" Tips="" Type="R" Mask="0D30" Data="10" />
+        <Node Name="Tree3HIDInputTurkey" Text="土耳其" Tips="" Type="R" Mask="0D30" Data="20" />
+        <Node Name="Tree3HIDInputArab" Text="阿拉伯Windows" Tips="" Type="R" Mask="0D30" Data="30" />
+        <Node Name="Tree3DataExtraAsciiCJK" Text="扩展Ascii区当中文输入*" Tips="" Type="R" Mask="0D40" Data="40" />
+        <Node Name="Tree3DataExtraAsciiOther" Text="扩展Ascii区当西文输入" Tips="" Type="R" Mask="0D40" Data="00" />
+        <Node Name="Tree3DataEncodeWin" Text="编码采用Windows代码页" Tips="" Type="R" Mask="1601" Data="01" />
+        <Node Name="Tree3DataEncodeOem" Text="编码采用OEM代码页" Tips="" Type="R" Mask="1601" Data="00" />
+      </Node>
+      <Node Name="Tree2BarCodeEof" Text="条码结束符" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BarCodeEofCR" Text="CR*" Tips="" Type="R" Mask="6060" Data="00" />
+        <Node Name="Tree3BarCodeEofCRLF" Text="CRLF" Tips="" Type="R" Mask="6060" Data="20" />
+        <Node Name="Tree3BarCodeEofTab" Text="TAB" Tips="" Type="R" Mask="6060" Data="40" />
+        <Node Name="Tree3BarCodeEofNone" Text="无结束符" Tips="" Type="R" Mask="6060" Data="60" />
+      </Node>
+      <Node Name="Tree2ReadFaildOut" Text="识读失败信息输出" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ReadFaildOutEnable" Text="开启识读失败信息@" Tips="" Type="R" Mask="6010" Data="10" />
+        <Node Name="Tree3ReadFaildOutDisable" Text="关闭识读失败信息" Tips="" Type="R" Mask="6010" Data="00" />
+        <Node Name="Tree2ReadFaildInfoSet" Text="编辑识读失败信息" Tips="" Type="T" Mask="82FF" Data="0F" />
+      </Node>
+      <Node Name="Tree2BarcodeCodeID" Text="条码类型信息输出" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BarcodeCodeIDEnable" Text="开启条码类型ID输出" Tips="" Type="R" Mask="6004" Data="04" />
+        <Node Name="Tree3BarcodeCodeIDDisable" Text="关闭条码类型ID输出*" Tips="" Type="R" Mask="6004" Data="00" />
+      </Node>
+      <Node Name="Tree2AddonKey" Text="添加按键输出" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3AddonKeyPrefixEnable" Text="开启添加按键到输出前" Tips="" Type="R" Mask="B310" Data="10" />
+        <Node Name="Tree3AddonKeyPrefixDisable" Text="关闭添加按键到输出前*" Tips="" Type="R" Mask="B310" Data="00" />
+        <Node Name="Tree3AddonKeySuffixEnable" Text="开启添加按键到输出后" Tips="" Type="R" Mask="B320" Data="20" />
+        <Node Name="Tree3AddonKeySuffixDisable" Text="关闭添加按键到输出后*" Tips="" Type="R" Mask="B320" Data="00" />
+        <Node Name="Tree3AddonKeyFlagSet" Text="按住不放的按键选择" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3AddonKeyLCtrl" Text="左边CTRL键" Tips="" Type="R" Mask="B30F" Data="01" />
+          <Node Name="Tree3AddonKeyLShift" Text="左边Shift键" Tips="" Type="R" Mask="B30F" Data="02" />
+          <Node Name="Tree3AddonKeyLAlt" Text="左边Alt键" Tips="" Type="R" Mask="B30F" Data="04" />
+          <Node Name="Tree3AddonKeyLWin" Text="左边Win键" Tips="" Type="R" Mask="B30F" Data="08" />
+          <Node Name="Tree3AddonKeyLCS" Text="Ctrl+Shift组合键" Tips="" Type="R" Mask="B30F" Data="03" />
+          <Node Name="Tree3AddonKeyLCA" Text="Ctrl+Alt组合键" Tips="" Type="R" Mask="B30F" Data="05" />
+          <Node Name="Tree3AddonKeyLSA" Text="Shift+Alt组合键" Tips="" Type="R" Mask="B30F" Data="06" />
+          <Node Name="Tree3AddonKeyLCSA" Text="Ctrl+Shift+Alt组合键" Tips="" Type="R" Mask="B30F" Data="07" />
+          <Node Name="Tree3AddonKeyRCtrl" Text="右边Ctrl键" Tips="" Type="R" Mask="B30F" Data="09" />
+          <Node Name="Tree3AddonKeyRShift" Text="右边Shift键" Tips="" Type="R" Mask="B30F" Data="0A" />
+          <Node Name="Tree3AddonKeyRAlt" Text="右边Alt键" Tips="" Type="R" Mask="B30F" Data="0B" />
+          <Node Name="Tree3AddonKeyCapsLock" Text="CapsLock键" Tips="" Type="R" Mask="B30F" Data="0C" />
+          <Node Name="Tree3AddonKeyNumLock" Text="NumLock键" Tips="" Type="R" Mask="B30F" Data="0D" />
+          <Node Name="Tree3AddonKeyScrollLock" Text="ScrollLock键" Tips="" Type="R" Mask="B30F" Data="0E" />
+        </Node>
+        <Node Name="Tree3AddonKeyCodeSet" Text="添加的普通键值修改" Tips="" Type="C" Mask="B400" Data="00" />
+        <Node Name="Tree3AddonKeyInput" Text="添加的全部按键直接输入" Tips="" Type="K" Mask="B400" Data="00" />
+      </Node>
+      <Node Name="Tree2SoftwareVersionOut" Text="读取版本信息" Tips="" Type="0" Mask="0000" Data="30" />
+    </Node>
+    <Node Name="Tree1SoundsAndLight" Text="声音灯光" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2LightLED" Text="照明LED设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3LightLEDUsual" Text="普通模式*" Tips="" Type="R" Mask="000C" Data="04" />
+        <Node Name="Tree3LightLEDClose" Text="常闭模式" Tips="" Type="R" Mask="000C" Data="00" />
+        <Node Name="Tree3LightLEDOpen" Text="常亮模式" Tips="" Type="R" Mask="000C" Data="0C" />
+        <Node Name="Tree3LightLEDPWM" Text="LED亮度设置" Tips="" Type="X" Mask="04FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2FocuseLED" Text="瞄准LED设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3FocuseLEDUsual" Text="普通模式" Tips="" Type="R" Mask="0030" Data="10" />
+        <Node Name="Tree3FocuseLEDClose" Text="常闭模式" Tips="" Type="R" Mask="0030" Data="00" />
+        <Node Name="Tree3FocuseLEDOpen" Text="常亮模式" Tips="" Type="R" Mask="0030" Data="30" />
+        <Node Name="Tree3FocuseLEDBlink" Text="闪烁模式*" Tips="" Type="R" Mask="0030" Data="20" />
+      </Node>
+      <Node Name="Tree2TipsLED" Text="提示LED设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TipsLEDEnable" Text="提示灯开启*" Tips="" Type="R" Mask="0080" Data="80" />
+        <Node Name="Tree3TipsLEDDisable" Text="提示灯关闭" Tips="" Type="R" Mask="0080" Data="00" />
+        <Node Name="Tree3TipsLEDPolarityHight" Text="极性为高电平*" Tips="" Type="R" Mask="0C02" Data="02" />
+        <Node Name="Tree3TipsLEDPolarityLow" Text="极性为低电平" Tips="" Type="R" Mask="0C02" Data="00" />
+      </Node>
+      <Node Name="Tree2ExternLED" Text="外扩LED设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ExternLEDEnable" Text="外扩灯开启*" Tips="" Type="R" Mask="0E01" Data="01" />
+        <Node Name="Tree3ExternLEDDisable" Text="外扩灯关闭" Tips="" Type="R" Mask="0E01" Data="00" />
+        <Node Name="Tree3ExternLEDPolarityHight" Text="极性为高电平*" Tips="" Type="R" Mask="0C40" Data="40" />
+        <Node Name="Tree3ExternLEDPolarityLow" Text="极性为低电平" Tips="" Type="R" Mask="0C40" Data="00" />
+        <Node Name="Tree3ExternLEDPWM" Text="外扩LED亮度设置" Tips="" Type="X" Mask="15FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2BeepTipsSetting" Text="解码成功声音提示" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepTipsEnable" Text="开启声音提示*" Tips="" Type="R" Mask="0E04" Data="04" />
+        <Node Name="Tree3BeepTipsDisable" Text="关闭声音提示" Tips="" Type="R" Mask="0E04" Data="00" />
+        <Node Name="Tree3BeepTipsTime" Text="提示音持续时长" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree4BeepTipsTime30ms" Text="30ms" Tips="" Type="R" Mask="0BFF" Data="1E" />
+          <Node Name="Tree4BeepTipsTime60ms" Text="60ms*" Tips="" Type="R" Mask="0BFF" Data="3C" />
+          <Node Name="Tree4BeepTipsTime90ms" Text="90ms" Tips="" Type="R" Mask="0BFF" Data="5A" />
+          <Node Name="Tree4BeepTipsTime120ms" Text="120ms" Tips="" Type="R" Mask="0BFF" Data="78" />
+          <Node Name="Tree4BeepTipsTimeSet" Text="自定义" Tips="" Type="X" Mask="0BFF" Data="FF" />
+        </Node>
+      </Node>
+      <Node Name="Tree2BeepMuteMode" Text="静音模式设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepMuteEnable" Text="开启静音模式" Tips="" Type="R" Mask="0040" Data="00" />
+        <Node Name="Tree3BeepMuteDisable" Text="关闭静音模式*" Tips="" Type="R" Mask="0040" Data="40" />
+      </Node>
+      <Node Name="Tree2BeepFreq" Text="蜂鸣器频率设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepFreqLow" Text="无源低频" Tips="" Type="R" Mask="0AFF" Data="64" />
+        <Node Name="Tree3BeepFreqMiddle" Text="无源中频*" Tips="" Type="R" Mask="0AFF" Data="87" />
+        <Node Name="Tree3BeepFreqHight" Text="无源高频" Tips="" Type="R" Mask="0AFF" Data="AF" />
+        <Node Name="Tree3BeepFreqSet" Text="自定义" Tips="" Type="X" Mask="0AFF" Data="FF" />
+      </Node>
+      <Node Name="Tree2MotorTips" Text="震动设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3MotorTipsEnable" Text="开启震动" Tips="" Type="R" Mask="0280" Data="80" />
+        <Node Name="Tree3MotorTipsDisable" Text="关闭震动@" Tips="" Type="R" Mask="0280" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1SpecialMode" Text="特殊模式" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2SenseType" Text="感应模式设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree2SenseTypeIR" Text="红外感应模式" Tips="" Type="R" Mask="0E10" Data="10" />
+        <Node Name="Tree2SenseTypeImage" Text="画面感应模式" Tips="" Type="R" Mask="0E10" Data="00" />
+      </Node>
+      <Node Name="Tree2ScanRecognizeTimeout" Text="解码超时时间" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ScanRecognizeTimeoutNever" Text="关闭超时*" Tips="" Type="R" Mask="C1FF" Data="00" />
+        <Node Name="Tree3ScanRecognizeTimeout100ms" Text="100ms" Tips="" Type="R" Mask="C1FF" Data="0A" />
+        <Node Name="Tree3ScanRecognizeTimeout150ms" Text="150ms" Tips="" Type="R" Mask="C1FF" Data="0F" />
+        <Node Name="Tree3ScanRecognizeTimeout200ms" Text="200ms" Tips="" Type="R" Mask="C1FF" Data="14" />
+        <Node Name="Tree3ScanRecognizeTimeoutUser" Text="自定义" Tips="" Type="M" Mask="C1FF" Data="06" />
+      </Node>
+      <Node Name="Tree2BarcodelenMin" Text="限制条码最小长度" Tips="" Type="L" Mask="BBFF" Data="05" />
+      <Node Name="Tree2BarcodelenMax" Text="限制条码最大长度" Tips="" Type="L" Mask="BDFF" Data="05" />
+      <Node Name="Tree2SensorExpTimeSet" Text="传感器曝光时间" Tips="" Type="X" Mask="11FF" Data="C8" />
+    </Node>
+    <Node Name="Tree1BarCodeType" Text="条码类型" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2BarcodeTypeDefault" Text="打开默认条码类型" Tips="" Type="R" Mask="2C06" Data="04" />
+      <Node Name="Tree2BarcodeTypeOpen" Text="打开所有条码类型" Tips="" Type="R" Mask="2C06" Data="02" />
+      <Node Name="Tree2BarcodeTypeClose" Text="关闭所有条码类型" Tips="" Type="R" Mask="2C06" Data="00" />
+      <Node Name="Tree2BarcodeTypeEAN_UPC" Text="EAN/UPC" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeEAN_UPC_Enable" Text="EAN/UPC开启*" Tips="" Type="R" Mask="2E01" Data="01" />
+        <Node Name="Tree3TypeEAN_UPC_Disable" Text="EAN/UPC关闭" Tips="" Type="R" Mask="2E01" Data="00" />
+        <Node Name="Tree3TypeEAN_UPC_AddonDisable" Text="附加码禁读*" Tips="" Type="R" Mask="2E02" Data="00" />
+        <Node Name="Tree3TypeEAN_UPC_AddonEnable" Text="附加码识读" Tips="" Type="R" Mask="2E02" Data="02" />
+        <Node Name="Tree3EAN_UPC_Short_QZ_Enable" Text="EAN/UPC短静区读码开启*" Tips="" Type="R" Mask="2E04" Data="04" />
+        <Node Name="Tree3EAN_UPC_Short_QZ_Disable" Text="EAN/UPC短静区读码关闭" Tips="" Type="R" Mask="2E04" Data="00" />
+        <Node Name="Tree3UPCA_Expand_EAN_Enable" Text="UPC-A条码前加零开启" Tips="" Type="R" Mask="3002" Data="02" />
+        <Node Name="Tree3UPCA_Expand_EAN_Disable" Text="UPC-A条码前加零关闭*" Tips="" Type="R" Mask="3002" Data="00" />
+        <Node Name="Tree3UPCE_Expand_EAN_Enable" Text="UPC-E扩展成EAN13开启" Tips="" Type="R" Mask="3102" Data="02" />
+        <Node Name="Tree3UPCE_Expand_EAN_Disable" Text="UPC-E扩展成EAN13关闭*" Tips="" Type="R" Mask="3102" Data="00" />
+        <Node Name="Tree3UPCE_Expand_UPCA_Enable" Text="UPC-E扩展成UPC-A开启" Tips="" Type="R" Mask="3104" Data="04" />
+        <Node Name="Tree3UPCE_Expand_UPCA_Disable" Text="UPC-E扩展成UPC-A关闭*" Tips="" Type="R" Mask="3104" Data="00" />
+        <Node Name="Tree3UPCE_LeadZero_Enable" Text="UPCE前导零开启*" Tips="" Type="R" Mask="3110" Data="10" />
+        <Node Name="Tree3UPCE_LeadZero_Disable" Text="UPCE前导零关闭" Tips="" Type="R" Mask="3110" Data="00" />
+        <Node Name="Tree3Ean_Convert_ISBN_Enable" Text="EAN转ISBN开启" Tips="" Type="R" Mask="2E08" Data="08" />
+        <Node Name="Tree3Ean_Convert_ISBN_Disable" Text="EAN转ISBN关闭*" Tips="" Type="R" Mask="2E08" Data="00" />
+        <Node Name="Tree3Ean_DeleteFirst3Char_Enable" Text="EAN删除前三位开启" Tips="" Type="R" Mask="2E10" Data="10" />
+        <Node Name="Tree3Ean_DeleteFirst3Char_Disable" Text="EAN删除前三位关闭*" Tips="" Type="R" Mask="2E10" Data="00" />
+        <Node Name="Tree3TypeForce_AddonDisable" Text="关闭强制附加码识读*" Tips="" Type="R" Mask="2E20" Data="00" />
+        <Node Name="Tree3TypeForce_AddonEnable" Text="开启强制附加码识读" Tips="" Type="R" Mask="2E20" Data="20" />
+        <Node Name="Tree3EAN_DataCrop_Enable" Text="EAN/UPC条码编辑开启*" Tips="" Type="R" Mask="2E40" Data="40" />
+        <Node Name="Tree3EAN_DataCrop_Disable" Text="EAN/UPC条码编辑关闭" Tips="" Type="R" Mask="2E40" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE128" Text="CODE128" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE128_Enable" Text="CODE128开启*" Tips="" Type="R" Mask="3301" Data="01" />
+        <Node Name="Tree3TypeCODE128_Disable" Text="CODE128关闭" Tips="" Type="R" Mask="3301" Data="00" />
+        <Node Name="Tree3CODE128_FirstHexDisable" Text="关闭条码非Ascii首字符输出*" Tips="" Type="R" Mask="0310" Data="00" />
+        <Node Name="Tree3CODE128_FirstHexEnable" Text="打开条码非Ascii首字符输出" Tips="" Type="R" Mask="0310" Data="10" />
+        <Node Name="Tree3CODE128_Short_QZ_Enable" Text="CODE128短静区读码开启" Tips="" Type="R" Mask="3304" Data="04" />
+        <Node Name="Tree3CODE128_Short_QZ_Disable" Text="CODE128短静区读码关闭*" Tips="" Type="R" Mask="3304" Data="00" />
+        <Node Name="Tree3CODE128_DataCrop_Enable" Text="CODE128条码编辑开启*" Tips="" Type="R" Mask="3340" Data="40" />
+        <Node Name="Tree3CODE128_DataCrop_Disable" Text="CODE128条码编辑关闭" Tips="" Type="R" Mask="3340" Data="00" />
+        <Node Name="Tree3CODE128_DataLenCheck_Enable" Text="CODE128条码长度检测开启*" Tips="" Type="R" Mask="3380" Data="80" />
+        <Node Name="Tree3CODE128_DataLenCheck_Disable" Text="CODE128条码长度检测关闭" Tips="" Type="R" Mask="3380" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE39" Text="CODE39" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE39_Enable" Text="CODE39开启*" Tips="" Type="R" Mask="3601" Data="01" />
+        <Node Name="Tree3TypeCODE39_Disable" Text="CODE39关闭" Tips="" Type="R" Mask="3601" Data="00" />
+        <Node Name="Tree3CODE39_NoAsterisk_Enable" Text="星号允许输出关闭" Tips="" Type="R" Mask="3602" Data="02" />
+        <Node Name="Tree3CODE39_NoAsterisk_Disable" Text="星号允许输出开启*" Tips="" Type="R" Mask="3602" Data="00" />
+        <Node Name="Tree3CODE39_Short_QZ_Enable" Text="CODE39短静区读码开启" Tips="" Type="R" Mask="3604" Data="04" />
+        <Node Name="Tree3CODE39_Short_QZ_Disable" Text="CODE39短静区读码关闭*" Tips="" Type="R" Mask="3604" Data="00" />
+        <Node Name="Tree3CODE39_DataCrop_Enable" Text="CODE39条码编辑开启*" Tips="" Type="R" Mask="3640" Data="40" />
+        <Node Name="Tree3CODE39_DataCrop_Disable" Text="CODE39条码编辑关闭" Tips="" Type="R" Mask="3640" Data="00" />
+        <Node Name="Tree3CODE39_DataLenCheck_Enable" Text="CODE39条码长度检测开启*" Tips="" Type="R" Mask="3680" Data="80" />
+        <Node Name="Tree3CODE39_DataLenCheck_Disable" Text="CODE39条码长度检测关闭" Tips="" Type="R" Mask="3680" Data="00" />
+        <Node Name="Tree3CODE39_FullAscii_Enable" Text="FullAscii码模式开启" Tips="" Type="R" Mask="3608" Data="08" />
+        <Node Name="Tree3CODE39_FullAscii_Disable" Text="FullAscii码模式关闭*" Tips="" Type="R" Mask="3608" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE93" Text="CODE93" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE93_Enable" Text="CODE93开启*" Tips="" Type="R" Mask="3901" Data="01" />
+        <Node Name="Tree3TypeCODE93_Disable" Text="CODE93关闭" Tips="" Type="R" Mask="3901" Data="00" />
+        <Node Name="Tree3CODE93_DataCrop_Enable" Text="CODE93条码编辑开启*" Tips="" Type="R" Mask="3940" Data="40" />
+        <Node Name="Tree3CODE93_DataCrop_Disable" Text="CODE93条码编辑关闭" Tips="" Type="R" Mask="3940" Data="00" />
+        <Node Name="Tree3CODE93_DataLenCheck_Enable" Text="CODE93条码长度检测开启*" Tips="" Type="R" Mask="3980" Data="80" />
+        <Node Name="Tree3CODE93_DataLenCheck_Disable" Text="CODE93条码长度检测关闭" Tips="" Type="R" Mask="3980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCodaBAR" Text="CodaBAR" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCodaBAR_Enable" Text="CodaBAR开启*" Tips="" Type="R" Mask="3C01" Data="01" />
+        <Node Name="Tree3TypeCodaBAR_Disable" Text="CodaBAR关闭" Tips="" Type="R" Mask="3C01" Data="00" />
+        <Node Name="Tree3CodaBAR_StaAndEnd_Enable" Text="CodaBAR起止符输出打开*" Tips="" Type="R" Mask="3C02" Data="02" />
+        <Node Name="Tree3CodaBAR_StaAndEnd_Disable" Text="CodaBAR起止符输出关闭" Tips="" Type="R" Mask="3C02" Data="00" />
+        <Node Name="Tree3CodaBAR_DataCrop_Enable" Text="CodaBAR条码编辑开启*" Tips="" Type="R" Mask="3C40" Data="40" />
+        <Node Name="Tree3CodaBAR_DataCrop_Disable" Text="CodaBAR条码编辑关闭" Tips="" Type="R" Mask="3C40" Data="00" />
+        <Node Name="Tree3CodaBAR_DataLenCheck_Enable" Text="CodaBAR条码长度检测开启*" Tips="" Type="R" Mask="3C80" Data="80" />
+        <Node Name="Tree3CodaBAR_DataLenCheck_Disable" Text="CodaBAR条码长度检测关闭" Tips="" Type="R" Mask="3C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE32" Text="CODE32" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE32_Enable" Text="CODE32开启*" Tips="" Type="R" Mask="5E01" Data="01" />
+        <Node Name="Tree3TypeCODE32_Disable" Text="CODE32关闭" Tips="" Type="R" Mask="5E01" Data="00" />
+        <Node Name="Tree3CODE32_DataCrop_Enable" Text="CODE32条码编辑开启*" Tips="" Type="R" Mask="5E40" Data="40" />
+        <Node Name="Tree3CODE32_DataCrop_Disable" Text="CODE32条码编辑关闭" Tips="" Type="R" Mask="5E40" Data="00" />
+        <Node Name="Tree3CODE32_DataLenCheck_Enable" Text="CODE32条码长度检测开启*" Tips="" Type="R" Mask="5E80" Data="80" />
+        <Node Name="Tree3CODE32_DataLenCheck_Disable" Text="CODE32条码长度检测关闭" Tips="" Type="R" Mask="5E80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE11" Text="CODE11" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE11_Enable" Text="CODE11开启*" Tips="" Type="R" Mask="4901" Data="01" />
+        <Node Name="Tree3TypeCODE11_Disable" Text="CODE11关闭" Tips="" Type="R" Mask="4901" Data="00" />
+        <Node Name="Tree3CODE11_DataCrop_Enable" Text="CODE11条码编辑开启*" Tips="" Type="R" Mask="4940" Data="40" />
+        <Node Name="Tree3CODE11_DataCrop_Disable" Text="CODE11条码编辑关闭" Tips="" Type="R" Mask="4940" Data="00" />
+        <Node Name="Tree3CODE11_DataLenCheck_Enable" Text="CODE11条码长度检测开启*" Tips="" Type="R" Mask="4980" Data="80" />
+        <Node Name="Tree3CODE11_DataLenCheck_Disable" Text="CODE11条码长度检测关闭" Tips="" Type="R" Mask="4980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeIL25" Text="Interleaved 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeIL25_Enable" Text="Interleaved 2 of 5开启*" Tips="" Type="R" Mask="4001" Data="01" />
+        <Node Name="Tree3TypeIL25_Disable" Text="Interleaved 2 of 5关闭" Tips="" Type="R" Mask="4001" Data="00" />
+        <Node Name="Tree3IL25_DataCrop_Enable" Text="Interleaved 2 of 5条码编辑开启*" Tips="" Type="R" Mask="4040" Data="40" />
+        <Node Name="Tree3IL25_DataCrop_Disable" Text="Interleaved 2 of 5条码编辑关闭" Tips="" Type="R" Mask="4040" Data="00" />
+        <Node Name="Tree3IL25_DataLenCheck_Enable" Text="Interleaved 2 of 5条码长度检测开启*" Tips="" Type="R" Mask="4080" Data="80" />
+        <Node Name="Tree3IL25_DataLenCheck_Disable" Text="Interleaved 2 of 5条码长度检测关闭" Tips="" Type="R" Mask="4080" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeID25" Text="Industrial 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeID25_Enable" Text="Industrial 2 of 5开启*" Tips="" Type="R" Mask="4301" Data="01" />
+        <Node Name="Tree3TypeID25_Disable" Text="Industrial 2 of 5关闭" Tips="" Type="R" Mask="4301" Data="00" />
+        <Node Name="Tree3ID25_DataCrop_Enable" Text="Industrial 2 of 5条码编辑开启*" Tips="" Type="R" Mask="4340" Data="40" />
+        <Node Name="Tree3ID25_DataCrop_Disable" Text="Industrial 2 of 5条码编辑关闭" Tips="" Type="R" Mask="4340" Data="00" />
+        <Node Name="Tree3ID25_DataLenCheck_Enable" Text="Industrial 2 of 5条码长度检测开启*" Tips="" Type="R" Mask="4380" Data="80" />
+        <Node Name="Tree3ID25_DataLenCheck_Disable" Text="Industrial 2 of 5条码长度检测关闭" Tips="" Type="R" Mask="4380" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMX25" Text="Matrix 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMX25_Enable" Text="Matrix 2 of 5开启*" Tips="" Type="R" Mask="4601" Data="01" />
+        <Node Name="Tree3TypeMX25_Disable" Text="Matrix 2 of 5关闭" Tips="" Type="R" Mask="4601" Data="00" />
+        <Node Name="Tree3MX25_DataCrop_Enable" Text="Matrix 2 of 5条码编辑开启*" Tips="" Type="R" Mask="4640" Data="40" />
+        <Node Name="Tree3MX25_DataCrop_Disable" Text="Matrix 2 of 5条码长度检测关闭" Tips="" Type="R" Mask="4640" Data="00" />
+        <Node Name="Tree3MX25_DataLenCheck_Enable" Text="Matrix 2 of 5条码长度检测开启*" Tips="" Type="R" Mask="4680" Data="80" />
+        <Node Name="Tree3MX25_DataLenCheck_Disable" Text="Matrix 2 of 5条码长度检测关闭" Tips="" Type="R" Mask="4680" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMSI" Text="MSI-Plessey" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMSI_Enable" Text="MSI-Plessey开启*" Tips="" Type="R" Mask="4C01" Data="01" />
+        <Node Name="Tree3TypeMSI_Disable" Text="MSI-Plessey关闭" Tips="" Type="R" Mask="4C01" Data="00" />
+        <Node Name="Tree3TypeMSI_CheckOutEnable" Text="打开校验位输出" Tips="" Type="R" Mask="4C02" Data="00" />
+        <Node Name="Tree3TypeMSI_CheckOutDisable" Text="关闭校验位输出*" Tips="" Type="R" Mask="4C02" Data="02" />
+        <Node Name="Tree3MSI_DataCrop_Enable" Text="MSI-Plessey条码编辑开启*" Tips="" Type="R" Mask="4C40" Data="40" />
+        <Node Name="Tree3MSI_DataCrop_Disable" Text="MSI-Plessey条码长度检测关闭" Tips="" Type="R" Mask="4C40" Data="00" />
+        <Node Name="Tree3MSI_DataLenCheck_Enable" Text="MSI-Plessey条码长度检测开启*" Tips="" Type="R" Mask="4C80" Data="80" />
+        <Node Name="Tree3MSI_DataLenCheck_Disable" Text="MSI-Plessey条码长度检测关闭" Tips="" Type="R" Mask="4C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeDataBar" Text="GS1-DATABAR" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeDataBar_Enable" Text="GS1-DATABAR开启*" Tips="" Type="R" Mask="5F01" Data="01" />
+        <Node Name="Tree3TypeDataBar_Disable" Text="GS1-DATABAR关闭" Tips="" Type="R" Mask="5F01" Data="00" />
+        <Node Name="Tree3DATABAR_DataCrop_Enable" Text="GS1-DATABAR条码编辑开启*" Tips="" Type="R" Mask="5F40" Data="40" />
+        <Node Name="Tree3DATABAR_DataCrop_Disable" Text="GS1-DATABAR条码编辑关闭" Tips="" Type="R" Mask="5F40" Data="00" />
+        <Node Name="Tree3DATABAR_DataLenCheck_Enable" Text="GS1-DATABAR条码长度检测开启*" Tips="" Type="R" Mask="5F80" Data="80" />
+        <Node Name="Tree3DATABAR_DataLenCheck_Disable" Text="GS1-DATABAR条码长度检测关闭" Tips="" Type="R" Mask="5F80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeQRCode" Text="QRCode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeQRCode_Enable" Text="QRCode开启*" Tips="" Type="R" Mask="3F01" Data="01" />
+        <Node Name="Tree3TypeQRCode_Disable" Text="QRCode关闭" Tips="" Type="R" Mask="3F01" Data="00" />
+        <Node Name="Tree3QRCode_DataCrop_Enable" Text="QRCode条码编辑开启*" Tips="" Type="R" Mask="3F40" Data="40" />
+        <Node Name="Tree3QRCode_DataCrop_Disable" Text="QRCode条码编辑关闭" Tips="" Type="R" Mask="3F40" Data="00" />
+        <Node Name="Tree3QRCode_DataLenCheck_Enable" Text="QRCode条码长度检测开启*" Tips="" Type="R" Mask="3F80" Data="80" />
+        <Node Name="Tree3QRCode_DataLenCheck_Disable" Text="QRCode条码长度检测关闭" Tips="" Type="R" Mask="3F80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypePDF417" Text="PDF417" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypePDF417_Enable" Text="PDF417开启*" Tips="" Type="R" Mask="5501" Data="01" />
+        <Node Name="Tree3TypePDF417_Disable" Text="PDF417关闭" Tips="" Type="R" Mask="5501" Data="00" />
+        <Node Name="Tree3PDF417_DataCrop_Enable" Text="PDF417条码编辑开启*" Tips="" Type="R" Mask="5540" Data="40" />
+        <Node Name="Tree3PDF417_DataCrop_Disable" Text="PDF417条码编辑关闭" Tips="" Type="R" Mask="5540" Data="00" />
+        <Node Name="Tree3PDF417_DataLenCheck_Enable" Text="PDF417条码长度检测开启*" Tips="" Type="R" Mask="5580" Data="80" />
+        <Node Name="Tree3PDF417_DataLenCheck_Disable" Text="PDF417条码长度检测关闭" Tips="" Type="R" Mask="5580" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeDM" Text="DataMatrix" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeDataMatrix_Enable" Text="DataMatrix开启*" Tips="" Type="R" Mask="5401" Data="01" />
+        <Node Name="Tree3TypeDataMatrix_Disable" Text="DataMatrix关闭" Tips="" Type="R" Mask="5401" Data="00" />
+        <Node Name="Tree3DataMatrix_DataCrop_Enable" Text="DataMatrix条码编辑开启*" Tips="" Type="R" Mask="5440" Data="40" />
+        <Node Name="Tree3DataMatrix_DataCrop_Disable" Text="DataMatrix条码编辑关闭" Tips="" Type="R" Mask="5440" Data="00" />
+        <Node Name="Tree3DataMatrix_DataLenCheck_Enable" Text="DataMatrix条码长度检测开启*" Tips="" Type="R" Mask="5480" Data="80" />
+        <Node Name="Tree3DataMatrix_DataLenCheck_Disable" Text="DataMatrix条码长度检测关闭" Tips="" Type="R" Mask="5480" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeAztec" Text="Aztec" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeAztec_Enable" Text="Aztec开启*" Tips="" Type="R" Mask="5601" Data="01" />
+        <Node Name="Tree3TypeAztec_Disable" Text="Aztec关闭" Tips="" Type="R" Mask="5601" Data="00" />
+        <Node Name="Tree3Aztec_DataCrop_Enable" Text="Aztec条码编辑开启*" Tips="" Type="R" Mask="5640" Data="40" />
+        <Node Name="Tree3Aztec_DataCrop_Disable" Text="Aztec条码编辑关闭" Tips="" Type="R" Mask="5640" Data="00" />
+        <Node Name="Tree3Aztec_DataLenCheck_Enable" Text="Aztec条码长度检测开启*" Tips="" Type="R" Mask="5680" Data="80" />
+        <Node Name="Tree3Aztec_DataLenCheck_Disable" Text="Aztec条码长度检测关闭" Tips="" Type="R" Mask="5680" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMicroPDF" Text="MicroPDF417" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMicroPDF_Enable" Text="MicroPDF417开启*" Tips="" Type="R" Mask="5801" Data="01" />
+        <Node Name="Tree3TypeMicroPDF_Disable" Text="MicroPDF417关闭" Tips="" Type="R" Mask="5801" Data="00" />
+        <Node Name="Tree3MicroPDF_DataCrop_Enable" Text="MicroPDF417条码编辑开启*" Tips="" Type="R" Mask="5840" Data="40" />
+        <Node Name="Tree3MicroPDF_DataCrop_Disable" Text="MicroPDF417条码编辑关闭" Tips="" Type="R" Mask="5840" Data="00" />
+        <Node Name="Tree3MicroPDF_DataLenCheck_Enable" Text="MicroPDF417条码长度检测开启*" Tips="" Type="R" Mask="5880" Data="80" />
+        <Node Name="Tree3MicroPDF_DataLenCheck_Disable" Text="MicroPDF417条码长度检测关闭" Tips="" Type="R" Mask="5880" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeHaxin" Text="Haxin" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeHaxin_Enable" Text="Haxin开启*" Tips="" Type="R" Mask="5701" Data="01" />
+        <Node Name="Tree3TypeHaxin_Disable" Text="Haxin关闭" Tips="" Type="R" Mask="5701" Data="00" />
+        <Node Name="Tree3Haxin_DataCrop_Enable" Text="Haxin条码编辑开启*" Tips="" Type="R" Mask="5740" Data="40" />
+        <Node Name="Tree3Haxin_DataCrop_Disable" Text="Haxin条码编辑关闭" Tips="" Type="R" Mask="5740" Data="00" />
+        <Node Name="Tree3Haxin_DataLenCheck_Enable" Text="Haxin条码长度检测开启*" Tips="" Type="R" Mask="5780" Data="80" />
+        <Node Name="Tree3Haxin_DataLenCheck_Disable" Text="Haxin条码长度检测关闭" Tips="" Type="R" Mask="5780" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMaxiCode" Text="MaxiCode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMaxiCode_Enable" Text="MaxiCode开启*" Tips="" Type="R" Mask="5D01" Data="01" />
+        <Node Name="Tree3TypeMaxiCode_Disable" Text="MaxiCode关闭" Tips="" Type="R" Mask="5D01" Data="00" />
+        <Node Name="Tree3MaxiCode_DataCrop_Enable" Text="MaxiCode条码编辑开启*" Tips="" Type="R" Mask="5D40" Data="40" />
+        <Node Name="Tree3MaxiCode_DataCrop_Disable" Text="MaxiCode条码编辑关闭" Tips="" Type="R" Mask="5D40" Data="00" />
+        <Node Name="Tree3MaxiCode_DataLenCheck_Enable" Text="MaxiCode条码长度检测开启*" Tips="" Type="R" Mask="5D80" Data="80" />
+        <Node Name="Tree3MaxiCode_DataLenCheck_Disable" Text="MaxiCode条码长度检测关闭" Tips="" Type="R" Mask="5D80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeTrioptic" Text="Trioptic" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeTrioptic_Enable" Text="Trioptic开启*" Tips="" Type="R" Mask="5901" Data="01" />
+        <Node Name="Tree3TypeTrioptic_Disable" Text="Trioptic关闭" Tips="" Type="R" Mask="5901" Data="00" />
+        <Node Name="Tree3Trioptic_DataCrop_Enable" Text="Trioptic条码编辑开启*" Tips="" Type="R" Mask="5940" Data="40" />
+        <Node Name="Tree3Trioptic_DataCrop_Disable" Text="Trioptic条码编辑关闭" Tips="" Type="R" Mask="5940" Data="00" />
+        <Node Name="Tree3Trioptic_DataLenCheck_Enable" Text="Trioptic条码长度检测开启*" Tips="" Type="R" Mask="5980" Data="80" />
+        <Node Name="Tree3Trioptic_DataLenCheck_Disable" Text="Trioptic条码长度检测关闭" Tips="" Type="R" Mask="5980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCodeBlockF" Text="CodeBlockF" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCodeBlockF_Enable" Text="CodeBlockF开启*" Tips="" Type="R" Mask="5A01" Data="01" />
+        <Node Name="Tree3TypeCodeBlockF_Disable" Text="CodeBlockF关闭" Tips="" Type="R" Mask="5A01" Data="00" />
+        <Node Name="Tree3CodeBlockF_DataCrop_Enable" Text="CodeBlockF条码编辑开启*" Tips="" Type="R" Mask="5A40" Data="40" />
+        <Node Name="Tree3CodeBlockF_DataCrop_Disable" Text="CodeBlockF条码编辑关闭" Tips="" Type="R" Mask="5A40" Data="00" />
+        <Node Name="Tree3CodeBlockF_DataLenCheck_Enable" Text="CodeBlockF条码长度检测开启*" Tips="" Type="R" Mask="5A80" Data="80" />
+        <Node Name="Tree3CodeBlockF_DataLenCheck_Disable" Text="CodeBlockF条码长度检测关闭" Tips="" Type="R" Mask="5A80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeStraight" Text="Straight" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeStraight_Enable" Text="Straight开启*" Tips="" Type="R" Mask="5B01" Data="01" />
+        <Node Name="Tree3TypeStraight_Disable" Text="Straight关闭" Tips="" Type="R" Mask="5B01" Data="00" />
+        <Node Name="Tree3Straight_DataCrop_Enable" Text="Straight条码编辑开启*" Tips="" Type="R" Mask="5B40" Data="40" />
+        <Node Name="Tree3Straight_DataCrop_Disable" Text="Straight条码编辑关闭" Tips="" Type="R" Mask="5B40" Data="00" />
+        <Node Name="Tree3Straight_DataLenCheck_Enable" Text="Straight条码长度检测开启*" Tips="" Type="R" Mask="5B80" Data="80" />
+        <Node Name="Tree3Straight_DataLenCheck_Disable" Text="Straight条码长度检测关闭" Tips="" Type="R" Mask="5B80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeTelepen" Text="Telepen" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeTelepen_Enable" Text="Telepen开启*" Tips="" Type="R" Mask="5C01" Data="01" />
+        <Node Name="Tree3TypeTelepen_Disable" Text="Telepen关闭" Tips="" Type="R" Mask="5C01" Data="00" />
+        <Node Name="Tree3Telepen_DataCrop_Enable" Text="Telepen条码编辑开启*" Tips="" Type="R" Mask="5C40" Data="40" />
+        <Node Name="Tree3Telepen_DataCrop_Disable" Text="Telepen条码编辑关闭" Tips="" Type="R" Mask="5C40" Data="00" />
+        <Node Name="Tree3Telepen_DataLenCheck_Enable" Text="Telepen条码长度检测开启*" Tips="" Type="R" Mask="5C80" Data="80" />
+        <Node Name="Tree3Telepen_DataLenCheck_Disable" Text="Telepen条码长度检测关闭" Tips="" Type="R" Mask="5C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeOCR" Text="OCR文字识别" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeOCR_Enable" Text="OCR文字识别开启" Tips="" Type="R" Mask="B601" Data="01" />
+        <Node Name="Tree3TypeOCR_Disable" Text="OCR文字识别关闭@" Tips="" Type="R" Mask="B601" Data="00" />
+        <Node Name="Tree3OCR_MuiltLine_Enable" Text="多行识别开启" Tips="" Type="R" Mask="B602" Data="02" />
+        <Node Name="Tree3OCR_MuiltLine_Disable" Text="多行识别关闭*" Tips="" Type="R" Mask="B602" Data="00" />
+        <Node Name="Tree3OCR_LengthSet" Text="OCR字符长度设置" Tips="" Type="X" Mask="B7FF" Data="FF" />
+        <Node Name="Tree3TypeOCR_MICR_Enable" Text="识读MICR文字开启" Tips="" Type="R" Mask="B604" Data="04" />
+        <Node Name="Tree3TypeOCR_MICR_Disable" Text="识读MICR文字关闭*" Tips="" Type="R" Mask="B604" Data="00" />
+        <Node Name="Tree3TypeOCR_PP_Enable" Text="识读护照文字开启" Tips="" Type="R" Mask="B608" Data="08" />
+        <Node Name="Tree3TypeOCR_PP_Disable" Text="识读护照文字关闭*" Tips="" Type="R" Mask="B608" Data="00" />
+        <Node Name="Tree3MICR_LengthSet" Text="MICR长度设置(0为不限长度)" Tips="" Type="X" Mask="B8FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2BarcodeTypePharma" Text="Pharma" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypePharma_Enable" Text="Pharma开启" Tips="" Type="R" Mask="B501" Data="01" />
+        <Node Name="Tree3TypePharma_Disable" Text="Pharma关闭*" Tips="" Type="R" Mask="B501" Data="00" />
+        <Node Name="Tree3Pharma_DataCrop_Enable" Text="Pharma条码编辑开启*" Tips="" Type="R" Mask="B540" Data="40" />
+        <Node Name="Tree3Pharma_DataCrop_Disable" Text="Pharma条码编辑关闭" Tips="" Type="R" Mask="B540" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DataEdit" Text="数据编辑" Tips="数据编辑可以对扫描到的条码进行编辑后输出" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2DataAddStr" Text="数据前后缀设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataAddPrefix" Text="数据前缀设置" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3DataAddPrefixEnable" Text="允许添加前缀" Tips="" Type="R" Mask="6008" Data="08" />
+          <Node Name="Tree3DataAddPrefixDisable" Text="禁止添加前缀*" Tips="" Type="R" Mask="6008" Data="00" />
+          <Node Name="Tree3DataAddPrefixChange" Text="数据前缀修改" Tips="" Type="C" Mask="6300" Data="00" />
+          <Node Name="Tree3DataAddPrefixInput" Text="数据前缀输入" Tips="" Type="T" Mask="63FF" Data="0F" />
+        </Node>
+        <Node Name="Tree3DataAddSuffix" Text="数据后缀设置" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3DataAddSuffixEnable" Text="允许添加后缀" Tips="" Type="R" Mask="6002" Data="02" />
+          <Node Name="Tree3DataAddSuffixDisable" Text="禁止添加后缀*" Tips="" Type="R" Mask="6002" Data="00" />
+          <Node Name="Tree3DataAddSuffixChange" Text="数据后缀修改" Tips="" Type="C" Mask="7200" Data="00" />
+          <Node Name="Tree3DataAddSuffixInput" Text="数据后缀输入" Tips="" Type="T" Mask="72FF" Data="0F" />
+        </Node>
+      </Node>
+      <Node Name="Tree2DataTranslateSet" Text="数据裁剪传输" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataTranslateAll" Text="传输整个Data断*" Tips="" Type="R" Mask="B003" Data="00" />
+        <Node Name="Tree3DataTranslateStart" Text="仅传输Start段" Tips="" Type="R" Mask="B003" Data="01" />
+        <Node Name="Tree3DataTranslateCenter" Text="仅传输Center段" Tips="" Type="R" Mask="B003" Data="03" />
+        <Node Name="Tree3DataTranslateEnd" Text="仅传输End段" Tips="" Type="R" Mask="B003" Data="02" />
+        <Node Name="Tree3DataTranslateStartLenghChange" Text="修改Start段长度" Tips="" Type="C" Mask="B100" Data="00" />
+        <Node Name="Tree3DataTranslateEndLenghChange" Text="修改End段长度" Tips="" Type="C" Mask="B200" Data="00" />
+        <Node Name="Tree3DataTranslateStartLenghInput" Text="输入Start段长度" Tips="" Type="X" Mask="B1FF" Data="FF" />
+        <Node Name="Tree3DataTranslateEndLenghInput" Text="输入End段长度" Tips="" Type="X" Mask="B2FF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1OtherSetting" Text="其它设置" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2FactorySetting" Text="恢复出厂设置" Tips="" Type="R" Mask="D9FF" Data="50" />
+      <Node Name="Tree2SaveUserSetting" Text="保存用户设置" Tips="" Type="R" Mask="D9FF" Data="56" />
+      <Node Name="Tree2RecoverUserSetting" Text="恢复用户设置" Tips="" Type="R" Mask="D9FF" Data="55" />
+    </Node>
+    <Node Name="Tree2DPMAbout" Text="外部IO设置" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree3ExtraTrigMode" Text="外部IO触发" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree4ExtraTrigModeEnable" Text="开启外部IO触发" Tips="" Type="R" Mask="CA20" Data="20" />
+        <Node Name="Tree4ExtraTrigModeDisable" Text="关闭外部IO触发" Tips="" Type="R" Mask="CA20" Data="00" />
+      </Node>
+      <Node Name="TreeOutputIOTips" Text="输出IO提示设置" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="TreeOutputIOSuccess" Text="输出IO读码成功提示" Tips="" Type="R" Mask="CA40" Data="40" />
+        <Node Name="TreeOutputIOFailed" Text="输出IO读码失败提示" Tips="" Type="R" Mask="CA40" Data="00" />
+        <Node Name="TreeOutputIOKeep60ms" Text="输出IO持续60ms" Tips="" Type="R" Mask="1AFF" Data="06" />
+        <Node Name="Tree3OutputIOKeep100ms" Text="输出IO持续100ms" Tips="" Type="R" Mask="1AFF" Data="0A" />
+        <Node Name="TreeOutputIOKeep200ms" Text="输出IO持续200ms" Tips="" Type="R" Mask="1AFF" Data="14" />
+        <Node Name="TreeOutputIOKeepInput" Text="输出IO持续时间输入" Tips="" Type="Y" Mask="1AFF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DPMSetting" Text="DPM相关设置" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2DPMDecodeSize" Text="DPM搜索精度" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DPMDecodeLow" Text="DPM搜索精度低" Tips="" Type="R" Mask="C930" Data="00" />
+        <Node Name="Tree3DPMDecodeMid" Text="DPM搜索精度中" Tips="" Type="R" Mask="C930" Data="10" />
+        <Node Name="Tree3DPMDecodeHight" Text="DPM搜索精度高" Tips="" Type="R" Mask="C930" Data="20" />
+      </Node>
+      <Node Name="Tree2DPMContrast" Text="DPM码对比度" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DPMContrastLow" Text="DPM码低对比度关闭" Tips="" Type="R" Mask="D080" Data="00" />
+        <Node Name="Tree3DPMContrastEnable" Text="DPM码低对比度开启" Tips="" Type="R" Mask="D080" Data="80" />
+      </Node>
+    </Node>
+    <Node Name="Tree2DPM_OpenDebugMode" Text="打开调试模式" Tips="" Type="R" Mask="CC01" Data="01" />
+  </Node>
+  <Language CobSelectLanguage="dpmcmd" />
+  <Language GrbExplain="指令说明" />
+  <Language TxbShowWriteCMD="按字节(0x08)写命令说明:&#xD;&#xA;{Head}+{Types}+{Lens}+{Addr}+{Datas}+{CRC}&#xD;&#xA;Head:固定0x7E 0x00 (2 bytes)&#xD;&#xA;Type:0x08 表示按字节写(1 bytes)&#xD;&#xA;Len:连续写的字节数0代表256(1 bytes)&#xD;&#xA;Addr:表示写入配置参数的地址 (2 bytes)&#xD;&#xA;Datas:表示写入配置参数值 (n bytes)&#xD;&#xA;CRC:CRC_CCITT 校验值高位在前 (2 bytes)&#xD;&#xA;" />
+  <Language TxbShowReadCMD="按位(0x09)写命令说明:&#xD;&#xA;{Head}+{Types}+{Mask}+{Addr}+{Data}+{CRC}&#xD;&#xA;Head:固定0x7E 0x00 (2 bytes)&#xD;&#xA;Type:0x09 表示按字节写(1 bytes)&#xD;&#xA;Mask:表示要操作写入的位(1 bytes)&#xD;&#xA;Addr:表示写入配置参数的地址 (2 bytes)&#xD;&#xA;Datas:表示写入配置参数值 (1 bytes)&#xD;&#xA;CRC:CRC_CCITT 校验值高位在前 (2 bytes)&#xD;&#xA;" />
+  <Language GrbCrcCalc="CRC计算" />
+  <Language BtnCalcCMD="计 算" />
+  <Language GrbSendCMD="发送指令" />
+  <Language LabTipsState="-&gt;提示可能不准确-&lt;" />
+  <Language LabSendFailed="发送失败" />
+  <Language LabSendOk="发送成功" />
+  <Language RdbSendHEX="十六进制HEX" />
+  <Language RdbSendString="字符Ascii" />
+  <Language LabState="设备已连接" />
+  <Language LabStateDisp="状态:" />
+  <Language BtnSendCMD="发送命令" />
+  <Language GrbSettingList="命令列表" />
+  <Language BtnAddToRignt="-&gt;&gt;&gt;" />
+  <Language LabDispCMD="指令:" />
+  <Language ChkAllowEdit="编辑模式" />
+  <Language BtnSaveConfigXml="保存配置" />
+  <Language LabSerch="搜索:" />
+</Root>

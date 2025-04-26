@@ -111,7 +111,7 @@
             this.txtLabel.Location = new System.Drawing.Point(70, 43);
             this.txtLabel.Multiline = true;
             this.txtLabel.Name = "txtLabel";
-            this.txtLabel.Size = new System.Drawing.Size(148, 62);
+            this.txtLabel.Size = new System.Drawing.Size(147, 62);
             this.txtLabel.TabIndex = 36;
             this.txtLabel.TextChanged += new System.EventHandler(this.txtLabel_TextChanged);
             // 
@@ -132,7 +132,7 @@
             this.txtModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtModel.Location = new System.Drawing.Point(70, 3);
             this.txtModel.Name = "txtModel";
-            this.txtModel.Size = new System.Drawing.Size(148, 29);
+            this.txtModel.Size = new System.Drawing.Size(147, 29);
             this.txtModel.TabIndex = 32;
             // 
             // label7
@@ -926,7 +926,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.36437F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.63563F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 154F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.tableLayoutPanel4.Controls.Add(this.btnSetLabel, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.txtLabel, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
@@ -963,9 +963,9 @@
             this.btnSetLabel.IsNotChange = true;
             this.btnSetLabel.IsRect = false;
             this.btnSetLabel.IsUnGroup = true;
-            this.btnSetLabel.Location = new System.Drawing.Point(224, 43);
+            this.btnSetLabel.Location = new System.Drawing.Point(223, 43);
             this.btnSetLabel.Name = "btnSetLabel";
-            this.btnSetLabel.Size = new System.Drawing.Size(149, 62);
+            this.btnSetLabel.Size = new System.Drawing.Size(150, 62);
             this.btnSetLabel.TabIndex = 37;
             this.btnSetLabel.Text = "SetLabel";
             this.btnSetLabel.TextColor = System.Drawing.Color.Black;
@@ -993,9 +993,9 @@
             this.btnPathModel.IsNotChange = true;
             this.btnPathModel.IsRect = false;
             this.btnPathModel.IsUnGroup = true;
-            this.btnPathModel.Location = new System.Drawing.Point(224, 3);
+            this.btnPathModel.Location = new System.Drawing.Point(223, 3);
             this.btnPathModel.Name = "btnPathModel";
-            this.btnPathModel.Size = new System.Drawing.Size(149, 34);
+            this.btnPathModel.Size = new System.Drawing.Size(150, 34);
             this.btnPathModel.TabIndex = 5;
             this.btnPathModel.Text = "Load Model";
             this.btnPathModel.TextColor = System.Drawing.Color.Black;

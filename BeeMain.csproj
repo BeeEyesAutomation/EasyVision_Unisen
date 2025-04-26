@@ -135,9 +135,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\BID_ICON_EXTRACTION_ADD_E_32BIT.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bee.ico" />
-    <Content Include="LogoAHSo.ico" />
     <Content Include="UNISEN_icon.ico" />
   </ItemGroup>
   <ItemGroup>

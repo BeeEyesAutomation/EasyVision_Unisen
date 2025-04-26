@@ -1,0 +1,551 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--This file is necessary for software to run properly-->
+<!--Create By Liang-->
+<Root>
+  <Node Name="AllSetting" Text="AllSetting" Tips="All settings are centered here" Type=" " Mask=" " Data=" ">
+    <Node Name="Tree1ComInterface" Text="COM Interface" Tips="Sets the communication interface between the scan engine and other devices" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2USB_HID" Text="USB-HID Output*" Tips="The scan engine is used as an analog keyboard input" Type="R" Mask="0D03" Data="01" />
+      <Node Name="Tree2USB_COM" Text="USB-COM Output" Tips="The scan engine communicates as a virtual serial port" Type="R" Mask="0D03" Data="03" />
+      <Node Name="Tree2UartOut" Text="Uart Output" Tips="The device communicates only through the TTL entity serial port" Type="R" Mask="0D03" Data="00" />
+      <Node Name="Tree2UartBaudRate" Text="BaudRateSet" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BaudRate1200" Text="1200bps" Tips="" Type="W" Mask="2AFF" Data="C4" />
+        <Node Name="Tree3BaudRate4800" Text="4800bps" Tips="" Type="W" Mask="2AFF" Data="71" />
+        <Node Name="Tree3BaudRate9600" Text="9600bps*" Tips="" Type="W" Mask="2AFF" Data="39" />
+        <Node Name="Tree3BaudRate14400" Text="14400bps" Tips="" Type="W" Mask="2AFF" Data="D0" />
+        <Node Name="Tree3BaudRate19200" Text="19200bps" Tips="" Type="W" Mask="2AFF" Data="9C" />
+        <Node Name="Tree3BaudRate38400" Text="38400bps" Tips="" Type="W" Mask="2AFF" Data="4E" />
+        <Node Name="Tree3BaudRate57600" Text="57600bps" Tips="" Type="W" Mask="2AFF" Data="34" />
+        <Node Name="Tree3BaudRate115200" Text="115200bps" Tips="" Type="W" Mask="2AFF" Data="1A" />
+        <Node Name="Tree3BaudRateSet" Text="Custom" Tips="" Type="I" Mask="2AFF" Data="02" />
+      </Node>
+      <Node Name="Tree2UartPolaritySwitch" Text="CheckBit" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartPolarityEnable" Text="CheckBitEnable" Tips="" Type="R" Mask="E901" Data="01" />
+        <Node Name="Tree3UartPolarityDisable" Text="CheckBitDisable*" Tips="" Type="R" Mask="E901" Data="00" />
+      </Node>
+      <Node Name="Tree2UartPolaritySet" Text="CheckBitSet" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartPolarityOdd" Text="Odd" Tips="" Type="R" Mask="E906" Data="02" />
+        <Node Name="Tree3UartPolarityEven" Text="Even*" Tips="" Type="R" Mask="E906" Data="00" />
+      </Node>
+      <Node Name="Tree2UartStopBit" Text="StopBit" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartStopBit1_0" Text="StopBit1*" Tips="" Type="R" Mask="E918" Data="00" />
+        <Node Name="Tree3UartStopBit2_0" Text="StopBit2" Tips="" Type="R" Mask="E918" Data="10" />
+      </Node>
+      <Node Name="Tree2UartDataBit" Text="DataBit" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3UartDataBitLen5" Text="DataBit5" Tips="" Type="R" Mask="E960" Data="00" />
+        <Node Name="Tree3UartDataBitLen6" Text="DataBit6" Tips="" Type="R" Mask="E960" Data="20" />
+        <Node Name="Tree3UartDataBitLen7" Text="DataBit7" Tips="" Type="R" Mask="E960" Data="40" />
+        <Node Name="Tree3UartDataBitLen8" Text="DataBit8*" Tips="" Type="R" Mask="E960" Data="60" />
+      </Node>
+      <Node Name="Tree2HidPeriod" Text="HidPeriod" Tips="Set the computer's access cycle to the device(ms)，The smaller the HID uploads, the faster" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HidPeriod3ms" Text="3ms" Tips="" Type="R" Mask="021F" Data="03" />
+        <Node Name="Tree3HidPeriod6ms" Text="6ms" Tips="" Type="R" Mask="021F" Data="06" />
+        <Node Name="Tree3HidPeriod10ms" Text="10ms*" Tips="" Type="R" Mask="021F" Data="0A" />
+        <Node Name="Tree3HidPeriod16ms" Text="16ms" Tips="" Type="R" Mask="021F" Data="10" />
+        <Node Name="Tree3HidPeriod20ms" Text="20ms" Tips="" Type="R" Mask="021F" Data="14" />
+        <Node Name="Tree3HidPeriod30ms" Text="30ms" Tips="" Type="R" Mask="021F" Data="1E" />
+        <Node Name="Tree3HidPeriodSet" Text="Custom" Tips="" Type="X" Mask="021F" Data="64" />
+      </Node>
+      <Node Name="Tree2HidSpeed" Text="HID SpeedMode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HidSpeedFast" Text="Faster" Tips="" Type="R" Mask="0C04" Data="04" />
+        <Node Name="Tree3HidSpeedNormal" Text="Normal" Tips="" Type="R" Mask="0C04" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1RecognizeMode" Text="RecognizeMode" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2ManualMode" Text="Manual#" Tips="" Type="R" Mask="0003" Data="00" />
+      <Node Name="Tree2ContinuityMode" Text="Continuity" Tips="" Type="R" Mask="0003" Data="02" />
+      <Node Name="Tree2CMDMode" Text="CMD Mode" Tips="" Type="R" Mask="0003" Data="01" />
+      <Node Name="Tree2SenseMode" Text="SenseMode" Tips="" Type="R" Mask="0003" Data="03" />
+      <Node Name="Tree2DecodeKeepTime" Text="ScanKeepTime" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3KeepTime1000ms" Text="1000ms" Tips="" Type="R" Mask="06FF" Data="0A" />
+        <Node Name="Tree3KeepTime3000ms" Text="3000ms" Tips="" Type="R" Mask="06FF" Data="1E" />
+        <Node Name="Tree3KeepTime5000ms" Text="5000ms" Tips="" Type="R" Mask="06FF" Data="32" />
+        <Node Name="Tree3KeepTimeinfinite" Text="Infinite" Tips="" Type="R" Mask="06FF" Data="00" />
+        <Node Name="Tree3KeepTimeSet" Text="Custom" Tips="" Type="Z" Mask="06FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2DecodeIntervalTime" Text="IntervalTime(SenseMode)" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3IntervalTime500ms" Text="500ms" Tips="" Type="R" Mask="05FF" Data="05" />
+        <Node Name="Tree3IntervalTime1000ms" Text="1000ms" Tips="" Type="R" Mask="05FF" Data="0A" />
+        <Node Name="Tree3IntervalTime1500ms" Text="1500ms" Tips="" Type="R" Mask="05FF" Data="0F" />
+        <Node Name="Tree3IntervalTime2000ms" Text="2000ms" Tips="" Type="R" Mask="05FF" Data="14" />
+        <Node Name="Tree3IntervalTimeNone" Text="None" Tips="" Type="R" Mask="05FF" Data="00" />
+        <Node Name="Tree3IntervalTimeSet" Text="Custom" Tips="" Type="Z" Mask="05FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2SameCodeDelay" Text="SameCodeDelay" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3SameCodeDelayEnable" Text="Enable" Tips="" Type="R" Mask="1380" Data="80" />
+        <Node Name="Tree3SameCodeDelayDisable" Text="Disable" Tips="" Type="R" Mask="1380" Data="00" />
+        <Node Name="Tree3SameCodeDelay500ms" Text="500ms" Tips="" Type="R" Mask="137F" Data="05" />
+        <Node Name="Tree3SameCodeDelay700ms" Text="700ms" Tips="" Type="R" Mask="137F" Data="07" />
+        <Node Name="Tree3SameCodeDelay1000ms" Text="1000ms" Tips="" Type="R" Mask="137F" Data="0A" />
+        <Node Name="Tree3SameCodeDelay3000ms" Text="3000ms" Tips="" Type="R" Mask="137F" Data="1E" />
+        <Node Name="Tree3SameCodeDelay5000ms" Text="5000ms" Tips="" Type="R" Mask="137F" Data="32" />
+        <Node Name="Tree3SameCodeDelayInfinite" Text="Infinite" Tips="" Type="R" Mask="137F" Data="00" />
+        <Node Name="Tree3SameCodeDelaySet" Text="Custom" Tips="" Type="Z" Mask="137F" Data="FF" />
+      </Node>
+      <Node Name="Tree2CMDTrigSetting" Text="CommandTrig" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TrigACKEnable" Text="CommandTrigACK_Enable*" Tips="" Type="R" Mask="D001" Data="01" />
+        <Node Name="Tree3TrigACKDisable" Text="CommandTrigACK_Disable" Tips="" Type="R" Mask="D001" Data="00" />
+        <Node Name="Tree3TrigSingleEnable" Text="SingleCharTrigEnable" Tips="" Type="R" Mask="D002" Data="02" />
+        <Node Name="Tree3TrigSingleDisable" Text="SingleCharTrigDisable*" Tips="" Type="R" Mask="D002" Data="00" />
+        <Node Name="Tree3TrigSingleCharSet" Text="SingleCharTrigSetting" Tips="" Type="X" Mask="D1FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2SenseTimeout" Text="SenseTimeoutSetting" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3SenseTimeout1000ms" Text="SenseTimeout1000ms*" Tips="" Type="R" Mask="C2FF" Data="0A" />
+        <Node Name="Tree3SenseTimeout3000ms" Text="SenseTimeout3000ms*" Tips="" Type="R" Mask="C2FF" Data="1E" />
+        <Node Name="Tree3SenseTimeout5000ms" Text="SenseTimeout5000ms*" Tips="" Type="R" Mask="C2FF" Data="32" />
+        <Node Name="Tree3SenseTimeoutCustom" Text="SenseTimeoutCustom" Tips="" Type="Z" Mask="C2FF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DataOut" Text="DataOutputSetting" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2HIDLayOut" Text="keyboard-Layout" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HIDLayOutUS_EN" Text="US_EN*" Tips="" Type="R" Mask="611F" Data="00" />
+        <Node Name="Tree3HIDLayOutFR" Text="French" Tips="" Type="R" Mask="611F" Data="02" />
+        <Node Name="Tree3HIDLayOutGM" Text="German" Tips="" Type="R" Mask="611F" Data="03" />
+        <Node Name="Tree3HIDLayOutRS" Text="Russian" Tips="" Type="R" Mask="611F" Data="08" />
+        <Node Name="Tree3HIDLayOutJP" Text="Japanese" Tips="" Type="R" Mask="611F" Data="06" />
+        <Node Name="Tree3HIDLayOutCZ" Text="Czech" Tips="" Type="R" Mask="611F" Data="01" />
+        <Node Name="Tree3HIDLayOutBZ" Text="Brazilian" Tips="" Type="R" Mask="611F" Data="09" />
+        <Node Name="Tree3HIDLayOutNW" Text="Norwegian" Tips="" Type="R" Mask="611F" Data="0C" />
+        <Node Name="Tree3HIDLayOutNL" Text="Dutch" Tips="" Type="R" Mask="611F" Data="0D" />
+        <Node Name="Tree3HIDLayOutSW" Text="Swedish" Tips="" Type="R" Mask="611F" Data="0F" />
+        <Node Name="Tree3HIDLayOutDM" Text="Danish" Tips="" Type="R" Mask="611F" Data="0B" />
+        <Node Name="Tree3HIDLayOutFL" Text="Finnish" Tips="" Type="R" Mask="611F" Data="12" />
+        <Node Name="Tree3HIDLayOutIT" Text="Italian" Tips="" Type="R" Mask="611F" Data="05" />
+        <Node Name="Tree3HIDLayOutSP" Text="Spanish" Tips="" Type="R" Mask="611F" Data="07" />
+        <Node Name="Tree3HIDLayOutHG" Text="Hungarian" Tips="" Type="R" Mask="611F" Data="04" />
+        <Node Name="Tree3HIDLayOutPT" Text="Portuguese" Tips="" Type="R" Mask="611F" Data="0A" />
+        <Node Name="Tree3HIDLayOutBG" Text="Belgian" Tips="" Type="R" Mask="611F" Data="13" />
+        <Node Name="Tree3HIDLayOutCC" Text="Czech-C" Tips="" Type="R" Mask="611F" Data="10" />
+        <Node Name="Tree3HIDLayOutTK" Text="TurkishQ" Tips="" Type="R" Mask="611F" Data="0E" />
+        <Node Name="Tree3HIDLayOutTF" Text="TurkishF" Tips="" Type="R" Mask="611F" Data="11" />
+      </Node>
+      <Node Name="Tree2DataFormat" Text="DataEncode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataEncodeGBK" Text="GBK*" Tips="Suitable for notepad, input box and other input, including Chinese or special symbols of the bar code" Type="R" Mask="0D0C" Data="00" />
+        <Node Name="Tree3DataEncodeUnicode" Text="Unicode" Tips="Suitable for Office, QQ and other software input, including Chinese or special symbols of the bar code" Type="R" Mask="0D0C" Data="04" />
+        <Node Name="Tree3DataEncodeUtf8" Text="UTF-8" Tips="" Type="R" Mask="0D0C" Data="0C" />
+        <Node Name="Tree3DataEncodeBig5" Text="Big5" Tips="" Type="R" Mask="0D0C" Data="08" />
+      </Node>
+      <Node Name="Tree2HIDInputEncode" Text="HID InputEncode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3HIDInputDefault" Text="Default*" Tips="" Type="R" Mask="0D30" Data="00" />
+        <Node Name="Tree3HIDInputCP874" Text="CP874" Tips="" Type="R" Mask="0D30" Data="10" />
+        <Node Name="Tree3HIDInputTurkey" Text="Turkey" Tips="" Type="R" Mask="0D30" Data="20" />
+        <Node Name="Tree3HIDInputArab" Text="Arab" Tips="" Type="R" Mask="0D30" Data="30" />
+        <Node Name="Tree3DataExtraAsciiCJK" Text="ExternAsciiAsCJK*" Tips="" Type="R" Mask="0D40" Data="40" />
+        <Node Name="Tree3DataExtraAsciiOther" Text="ExternAsciiAsNon-CJK" Tips="" Type="R" Mask="0D40" Data="00" />
+        <Node Name="Tree3DataEncodeWin" Text="WindowsCodePage" Tips="" Type="R" Mask="1601" Data="01" />
+        <Node Name="Tree3DataEncodeOem" Text="OemCodePage" Tips="" Type="R" Mask="1601" Data="00" />
+      </Node>
+      <Node Name="Tree2BarCodeEof" Text="BarCodeEof" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BarCodeEofCR" Text="CR*" Tips="" Type="R" Mask="6060" Data="00" />
+        <Node Name="Tree3BarCodeEofCRLF" Text="CRLF" Tips="" Type="R" Mask="6060" Data="20" />
+        <Node Name="Tree3BarCodeEofTab" Text="TAB" Tips="" Type="R" Mask="6060" Data="40" />
+        <Node Name="Tree3BarCodeEofNone" Text="None" Tips="" Type="R" Mask="6060" Data="60" />
+      </Node>
+      <Node Name="Tree2ReadFaildOut" Text="ReadFaildOutput" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ReadFaildOutEnable" Text="Enable@" Tips="" Type="R" Mask="6010" Data="10" />
+        <Node Name="Tree3ReadFaildOutDisable" Text="Disable" Tips="" Type="R" Mask="6010" Data="00" />
+        <Node Name="Tree2ReadFaildInfoSet" Text="InfoStringEdit" Tips="" Type="T" Mask="82FF" Data="0F" />
+      </Node>
+      <Node Name="Tree2BarcodeCodeID" Text="BarcodeCodeTypeID" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BarcodeCodeIDEnable" Text="BarcodeCodeTypeIDEnable" Tips="" Type="R" Mask="6004" Data="04" />
+        <Node Name="Tree3BarcodeCodeIDDisable" Text="BarcodeCodeTypeIDDisable*" Tips="" Type="R" Mask="6004" Data="00" />
+      </Node>
+      <Node Name="Tree2AddonKey" Text="AddonKeyOutput" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3AddonKeyPrefixEnable" Text="AddonKeyPrefixEnable" Tips="" Type="R" Mask="B310" Data="10" />
+        <Node Name="Tree3AddonKeyPrefixDisable" Text="AddonKeyPrefixDisable*" Tips="" Type="R" Mask="B310" Data="00" />
+        <Node Name="Tree3AddonKeySuffixEnable" Text="AddonKeySuffixEnable" Tips="" Type="R" Mask="B320" Data="20" />
+        <Node Name="Tree3AddonKeySuffixDisable" Text="AddonKeySuffixDisable*" Tips="" Type="R" Mask="B320" Data="00" />
+        <Node Name="Tree3AddonKeyFlagSet" Text="AddonKeyFlagSet" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3AddonKeyLCtrl" Text="Left CTRL" Tips="" Type="R" Mask="B30F" Data="01" />
+          <Node Name="Tree3AddonKeyLShift" Text="Left Shift" Tips="" Type="R" Mask="B30F" Data="02" />
+          <Node Name="Tree3AddonKeyLAlt" Text="Left Alt" Tips="" Type="R" Mask="B30F" Data="04" />
+          <Node Name="Tree3AddonKeyLWin" Text="Left Win" Tips="" Type="R" Mask="B30F" Data="08" />
+          <Node Name="Tree3AddonKeyLCS" Text="Ctrl+Shift" Tips="" Type="R" Mask="B30F" Data="03" />
+          <Node Name="Tree3AddonKeyLCA" Text="Ctrl+Alt" Tips="" Type="R" Mask="B30F" Data="05" />
+          <Node Name="Tree3AddonKeyLSA" Text="Shift+Alt" Tips="" Type="R" Mask="B30F" Data="06" />
+          <Node Name="Tree3AddonKeyLCSA" Text="Ctrl+Shift+Alt" Tips="" Type="R" Mask="B30F" Data="07" />
+          <Node Name="Tree3AddonKeyRCtrl" Text="Right Ctrl" Tips="" Type="R" Mask="B30F" Data="09" />
+          <Node Name="Tree3AddonKeyRShift" Text="Right Shift" Tips="" Type="R" Mask="B30F" Data="0A" />
+          <Node Name="Tree3AddonKeyRAlt" Text="Right Alt" Tips="" Type="R" Mask="B30F" Data="0B" />
+          <Node Name="Tree3AddonKeyCapsLock" Text="CapsLock" Tips="" Type="R" Mask="B30F" Data="0C" />
+          <Node Name="Tree3AddonKeyNumLock" Text="NumLock" Tips="" Type="R" Mask="B30F" Data="0D" />
+          <Node Name="Tree3AddonKeyScrollLock" Text="ScrollLock" Tips="" Type="R" Mask="B30F" Data="0E" />
+        </Node>
+        <Node Name="Tree3AddonKeyInput" Text="AddonKeyInputByKeyboard" Tips="" Type="K" Mask="B400" Data="00" />
+      </Node>
+      <Node Name="Tree2SoftwareVersionOut" Text="ReadSoftwareVersion" Tips="" Type="R" Mask="D9FF" Data="06" />
+    </Node>
+    <Node Name="Tree1SoundsAndLight" Text="SoundsAndLight" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2LightLED" Text="LightLED" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3LightLEDUsual" Text="Normal*" Tips="" Type="R" Mask="000C" Data="04" />
+        <Node Name="Tree3LightLEDClose" Text="Close" Tips="" Type="R" Mask="000C" Data="00" />
+        <Node Name="Tree3LightLEDOpen" Text="Always" Tips="" Type="R" Mask="000C" Data="0C" />
+        <Node Name="Tree3LightLEDPWM" Text="LED PWM Set" Tips="" Type="X" Mask="04FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2FocuseLED" Text="AimLED" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3FocuseLEDUsual" Text="Normal" Tips="" Type="R" Mask="0030" Data="10" />
+        <Node Name="Tree3FocuseLEDClose" Text="Close" Tips="" Type="R" Mask="0030" Data="00" />
+        <Node Name="Tree3FocuseLEDOpen" Text="Always" Tips="" Type="R" Mask="0030" Data="30" />
+        <Node Name="Tree3FocuseLEDBlink" Text="Blink*" Tips="" Type="R" Mask="0030" Data="20" />
+      </Node>
+      <Node Name="Tree2TipsLED" Text="TipsLED" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TipsLEDEnable" Text="Enable*" Tips="" Type="R" Mask="0080" Data="80" />
+        <Node Name="Tree3TipsLEDDisable" Text="Disable" Tips="" Type="R" Mask="0080" Data="00" />
+        <Node Name="Tree3TipsLEDPolarityHight" Text="PolarityHight*" Tips="" Type="R" Mask="0C02" Data="02" />
+        <Node Name="Tree3TipsLEDPolarityLow" Text="PolarityLow" Tips="" Type="R" Mask="0C02" Data="00" />
+      </Node>
+      <Node Name="Tree2ExternLED" Text="ExternLED" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ExternLEDEnable" Text="Enable*" Tips="" Type="R" Mask="0E01" Data="01" />
+        <Node Name="Tree3ExternLEDDisable" Text="Disable" Tips="" Type="R" Mask="0E01" Data="00" />
+        <Node Name="Tree3ExternLEDPolarityHight" Text="PolarityHight*" Tips="" Type="R" Mask="0C40" Data="40" />
+        <Node Name="Tree3ExternLEDPolarityLow" Text="PolarityLow" Tips="" Type="R" Mask="0C40" Data="00" />
+        <Node Name="Tree3ExternLEDPWM" Text="ExternLEDPWM" Tips="" Type="X" Mask="15FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2BeepTipsSetting" Text="BeepTips" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepTipsEnable" Text="Enable*" Tips="" Type="R" Mask="0E04" Data="04" />
+        <Node Name="Tree3BeepTipsDisable" Text="Disable" Tips="" Type="R" Mask="0E04" Data="00" />
+        <Node Name="Tree3BeepTipsTime" Text="KeepTime" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree4BeepTipsTime30ms" Text="30ms" Tips="" Type="R" Mask="0BFF" Data="1E" />
+          <Node Name="Tree4BeepTipsTime60ms" Text="60ms*" Tips="" Type="R" Mask="0BFF" Data="3C" />
+          <Node Name="Tree4BeepTipsTime90ms" Text="90ms" Tips="" Type="R" Mask="0BFF" Data="5A" />
+          <Node Name="Tree4BeepTipsTime120ms" Text="120ms" Tips="" Type="R" Mask="0BFF" Data="78" />
+          <Node Name="Tree4BeepTipsTimeSet" Text="Custom" Tips="" Type="X" Mask="0BFF" Data="FF" />
+        </Node>
+      </Node>
+      <Node Name="Tree2BeepMuteMode" Text="MuteMode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepMuteEnable" Text="Enable" Tips="" Type="R" Mask="0040" Data="00" />
+        <Node Name="Tree3BeepMuteDisable" Text="Disable*" Tips="" Type="R" Mask="0040" Data="40" />
+      </Node>
+      <Node Name="Tree2BeepFreq" Text="BeepFrequency" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3BeepFreqLow" Text="Low" Tips="" Type="R" Mask="0AFF" Data="64" />
+        <Node Name="Tree3BeepFreqMiddle" Text="Middle*" Tips="" Type="R" Mask="0AFF" Data="87" />
+        <Node Name="Tree3BeepFreqHight" Text="Hight" Tips="" Type="R" Mask="0AFF" Data="AF" />
+        <Node Name="Tree3BeepFreqSet" Text="Custom" Tips="" Type="X" Mask="0AFF" Data="FF" />
+      </Node>
+      <Node Name="Tree2MotorTips" Text="MotorTips" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3MotorTipsEnable" Text="Enable" Tips="" Type="R" Mask="0280" Data="80" />
+        <Node Name="Tree3MotorTipsDisable" Text="Disable@" Tips="" Type="R" Mask="0280" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1SpecialMode" Text="SpecialMode" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2SenseType" Text="SenseType" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree2SenseTypeIR" Text="IR" Tips="" Type="R" Mask="0E10" Data="10" />
+        <Node Name="Tree2SenseTypeImage" Text="Image" Tips="" Type="R" Mask="0E10" Data="00" />
+      </Node>
+	  <Node Name="Tree2ScanRecognizeTimeout" Text="DecodeTimeOut" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3ScanRecognizeTimeoutNever" Text="never*" Tips="" Type="R" Mask="C1FF" Data="00" />
+        <Node Name="Tree3ScanRecognizeTimeout100ms" Text="100ms" Tips="" Type="R" Mask="C1FF" Data="0A" />
+        <Node Name="Tree3ScanRecognizeTimeout150ms" Text="150ms" Tips="" Type="R" Mask="C1FF" Data="0F" />
+        <Node Name="Tree3ScanRecognizeTimeout200ms" Text="200ms" Tips="" Type="R" Mask="C1FF" Data="14" />
+        <Node Name="Tree3ScanRecognizeTimeoutUser" Text="custom" Tips="" Type="M" Mask="C1FF" Data="06" />
+      </Node>
+      <Node Name="Tree2BarcodelenMin" Text="BarcodeLengthMin" Tips="" Type="L" Mask="BBFF" Data="05" />
+      <Node Name="Tree2BarcodelenMax" Text="BarcodeLengthMax" Tips="" Type="L" Mask="BDFF" Data="05" />
+      <Node Name="Tree2SensorExpTimeSet" Text="SensorExpTimeSet" Tips="" Type="X" Mask="11FF" Data="C8" />
+    </Node>
+    <Node Name="Tree1BarCodeType" Text="BarCodeType" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2BarcodeTypeDefault" Text="OpenDefault" Tips="" Type="R" Mask="2C06" Data="04" />
+      <Node Name="Tree2BarcodeTypeOpen" Text="OpenAll" Tips="" Type="R" Mask="2C06" Data="02" />
+      <Node Name="Tree2BarcodeTypeClose" Text="CloseAll" Tips="" Type="R" Mask="2C06" Data="00" />
+      <Node Name="Tree2BarcodeTypeEAN_UPC" Text="EAN/UPC" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeEAN_UPC_Enable" Text="Enable*" Tips="" Type="R" Mask="2E01" Data="01" />
+        <Node Name="Tree3TypeEAN_UPC_Disable" Text="Disable" Tips="" Type="R" Mask="2E01" Data="00" />
+        <Node Name="Tree3TypeEAN_UPC_AddonDisable" Text="AddonDisable*" Tips="" Type="R" Mask="2E02" Data="00" />
+        <Node Name="Tree3TypeEAN_UPC_AddonEnable" Text="AddonEnable" Tips="" Type="R" Mask="2E02" Data="02" />
+		<Node Name="Tree3EAN_UPC_Short_QZ_Enable" Text="EAN/UPC_ShortQZ_Enable*" Tips="" Type="R" Mask="2E04" Data="04" />
+        <Node Name="Tree3EAN_UPC_Short_QZ_Disable" Text="EAN/UPC_ShortQZ_Disable" Tips="" Type="R" Mask="2E04" Data="00" />
+        <Node Name="Tree3UPCA_Expand_EAN_Enable" Text="UPC-A_Expand_EAN13_Enable" Tips="" Type="R" Mask="3002" Data="02" />
+        <Node Name="Tree3UPCA_Expand_EAN_Disable" Text="UPC-A_Expand_EAN13_Disable*" Tips="" Type="R" Mask="3002" Data="00" />
+        <Node Name="Tree3UPCE_Expand_EAN_Enable" Text="UPC-E_Expand_EAN13_Disable" Tips="" Type="R" Mask="3102" Data="02" />
+        <Node Name="Tree3UPCE_Expand_EAN_Disable" Text="UPC-E_Expand_EAN13_Enable*" Tips="" Type="R" Mask="3102" Data="00" />
+        <Node Name="Tree3UPCE_Expand_UPCA_Enable" Text="UPC-E_Expand_UPC-A_Enable" Tips="" Type="R" Mask="3104" Data="04" />
+        <Node Name="Tree3UPCE_Expand_UPCA_Disable" Text="UPC-E_Expand_UPC-ADisable*" Tips="" Type="R" Mask="3104" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE128" Text="CODE128" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE128_Enable" Text="Enable*" Tips="" Type="R" Mask="3301" Data="01" />
+        <Node Name="Tree3TypeCODE128_Disable" Text="Disable" Tips="" Type="R" Mask="3301" Data="00" />
+        <Node Name="Tree3CODE128_FirstHexDisable" Text="FirstHexDisable*" Tips="" Type="R" Mask="0310" Data="00" />
+        <Node Name="Tree3CODE128_FirstHexEnable" Text="FirstHexEnable" Tips="" Type="R" Mask="0310" Data="10" />
+        <Node Name="Tree3CODE128_Short_QZ_Enable" Text="CODE128_Short_QZ_Enable" Tips="" Type="R" Mask="3304" Data="04" />
+        <Node Name="Tree3CODE128_Short_QZ_Disable" Text="CODE128_Short_QZ_Disable*" Tips="" Type="R" Mask="3304" Data="00" />
+        <Node Name="Tree3CODE128_DataCrop_Enable" Text="CODE128DataCrop_Enable*" Tips="" Type="R" Mask="3340" Data="40" />
+        <Node Name="Tree3CODE128_DataCrop_Disable" Text="CODE128DataCrop_Disable" Tips="" Type="R" Mask="3340" Data="00" />
+        <Node Name="Tree3CODE128_DataLenCheck_Enable" Text="CODE128DataLenCheck_Enable*" Tips="" Type="R" Mask="3380" Data="80" />
+        <Node Name="Tree3CODE128_DataLenCheck_Disable" Text="CODE128DataLenCheck_Disable" Tips="" Type="R" Mask="3380" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE39" Text="CODE39" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE39_Enable" Text="Enable*" Tips="" Type="R" Mask="3601" Data="01" />
+        <Node Name="Tree3TypeCODE39_Disable" Text="Disable" Tips="" Type="R" Mask="3601" Data="00" />
+        <Node Name="Tree3CODE39_NoAsterisk_Enable" Text="Asterisk_Disable" Tips="" Type="R" Mask="3602" Data="02" />
+        <Node Name="Tree3CODE39_NoAsterisk_Disable" Text="Asterisk_Enable*" Tips="" Type="R" Mask="3602" Data="00" />
+        <Node Name="Tree3CODE39_Short_QZ_Enable" Text="CODE39_Short_QZ_Enable" Tips="" Type="R" Mask="3604" Data="04" />
+        <Node Name="Tree3CODE39_Short_QZ_Disable" Text="CODE39_Short_QZ_Disable*" Tips="" Type="R" Mask="3604" Data="00" />
+        <Node Name="Tree3CODE39_DataCrop_Enable" Text="CODE39DataCrop_Enable*" Tips="" Type="R" Mask="3640" Data="40" />
+        <Node Name="Tree3CODE39_DataCrop_Disable" Text="CODE39DataCrop_Disable" Tips="" Type="R" Mask="3640" Data="00" />
+        <Node Name="Tree3CODE39_DataLenCheck_Enable" Text="CODE39DataLenCheck_Enable*" Tips="" Type="R" Mask="3680" Data="80" />
+        <Node Name="Tree3CODE39_DataLenCheck_Disable" Text="CODE39DataLenCheck_Disable" Tips="" Type="R" Mask="3680" Data="00" />
+        <Node Name="Tree3CODE39_FullAscii_Enable" Text="FullAscii_Enable" Tips="" Type="R" Mask="3608" Data="08" />
+        <Node Name="Tree3CODE39_FullAscii_Disable" Text="FullAscii_Disable*" Tips="" Type="R" Mask="3608" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE93" Text="CODE93" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE93_Enable" Text="Enable*" Tips="" Type="R" Mask="3901" Data="01" />
+        <Node Name="Tree3TypeCODE93_Disable" Text="Disable" Tips="" Type="R" Mask="3901" Data="00" />
+        <Node Name="Tree3CODE93_DataCrop_Enable" Text="CODE93DataCrop_Enable*" Tips="" Type="R" Mask="3940" Data="40" />
+        <Node Name="Tree3CODE93_DataCrop_Disable" Text="CODE93DataCrop_Disable" Tips="" Type="R" Mask="3940" Data="00" />
+        <Node Name="Tree3CODE93_DataLenCheck_Enable" Text="CODE93DataLenCheck_Enable*" Tips="" Type="R" Mask="3980" Data="80" />
+        <Node Name="Tree3CODE93_DataLenCheck_Disable" Text="CODE93DataLenCheck_Disable" Tips="" Type="R" Mask="3980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCodaBAR" Text="CodaBAR" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCodaBAR_Enable" Text="Enable*" Tips="" Type="R" Mask="3C01" Data="01" />
+        <Node Name="Tree3TypeCodaBAR_Disable" Text="Disable" Tips="" Type="R" Mask="3C01" Data="00" />
+        <Node Name="Tree3CodaBAR_StaAndEnd_Enable" Text="StartAndEndOutPut_Enable*" Tips="" Type="R" Mask="3C02" Data="02" />
+        <Node Name="Tree3CodaBAR_StaAndEnd_Disable" Text="StartAndEndOutPut_Disable" Tips="" Type="R" Mask="3C02" Data="00" />
+        <Node Name="Tree3CodaBAR_DataCrop_Enable" Text="CodaBARDataCrop_Enable*" Tips="" Type="R" Mask="3C40" Data="40" />
+        <Node Name="Tree3CodaBAR_DataCrop_Disable" Text="CodaBARDataCrop_Disable" Tips="" Type="R" Mask="3C40" Data="00" />
+        <Node Name="Tree3CodaBAR_DataLenCheck_Enable" Text="CodaBARDataLenCheck_Enable*" Tips="" Type="R" Mask="3C80" Data="80" />
+        <Node Name="Tree3CodaBAR_DataLenCheck_Disable" Text="CodaBARDataLenCheck_Disable" Tips="" Type="R" Mask="3C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE32" Text="CODE32" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE32_Enable" Text="Enable*" Tips="" Type="R" Mask="5E01" Data="01" />
+        <Node Name="Tree3TypeCODE32_Disable" Text="Disable" Tips="" Type="R" Mask="5E01" Data="00" />
+        <Node Name="Tree3CODE32_DataCrop_Enable" Text="DataCrop_Enable*" Tips="" Type="R" Mask="5E40" Data="40" />
+        <Node Name="Tree3CODE32_DataCrop_Disable" Text="DataCrop_Disable" Tips="" Type="R" Mask="5E40" Data="00" />
+        <Node Name="Tree3CODE32_DataLenCheck_Enable" Text="DataLenCheck_Enable*" Tips="" Type="R" Mask="5E80" Data="80" />
+        <Node Name="Tree3CODE32_DataLenCheck_Disable" Text="DataLenCheck_Disable" Tips="" Type="R" Mask="5E80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCODE11" Text="CODE11" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCODE11_Enable" Text="Enable*" Tips="" Type="R" Mask="4901" Data="01" />
+        <Node Name="Tree3TypeCODE11_Disable" Text="Disable" Tips="" Type="R" Mask="4901" Data="00" />
+        <Node Name="Tree3CODE11_DataCrop_Enable" Text="CODE11DataCrop_Enable*" Tips="" Type="R" Mask="4940" Data="40" />
+        <Node Name="Tree3CODE11_DataCrop_Disable" Text="CODE11DataCrop_Disable" Tips="" Type="R" Mask="4940" Data="00" />
+        <Node Name="Tree3CODE11_DataLenCheck_Enable" Text="CODE11DataLenCheck_Enable*" Tips="" Type="R" Mask="4980" Data="80" />
+        <Node Name="Tree3CODE11_DataLenCheck_Disable" Text="CODE11DataLenCheck_Disable" Tips="" Type="R" Mask="4980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeIL25" Text="Interleaved 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeIL25_Enable" Text="Enable*" Tips="" Type="R" Mask="4001" Data="01" />
+        <Node Name="Tree3TypeIL25_Disable" Text="Disable" Tips="" Type="R" Mask="4001" Data="00" />
+        <Node Name="Tree3IL25_DataCrop_Enable" Text="DataCrop_Enable*" Tips="" Type="R" Mask="4040" Data="40" />
+        <Node Name="Tree3IL25_DataCrop_Disable" Text="DataCrop_Disable" Tips="" Type="R" Mask="4040" Data="00" />
+        <Node Name="Tree3IL25_DataLenCheck_Enable" Text="DataLenCheck_Enable*" Tips="" Type="R" Mask="4080" Data="80" />
+        <Node Name="Tree3IL25_DataLenCheck_Disable" Text="DataLenCheck_Disable" Tips="" Type="R" Mask="4080" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeID25" Text="Industrial 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeID25_Enable" Text="Enable*" Tips="" Type="R" Mask="4301" Data="01" />
+        <Node Name="Tree3TypeID25_Disable" Text="Disable" Tips="" Type="R" Mask="4301" Data="00" />
+        <Node Name="Tree3ID25_DataCrop_Enable" Text="Industrial 2 of 5DataCrop_Enable*" Tips="" Type="R" Mask="4340" Data="40" />
+        <Node Name="Tree3ID25_DataCrop_Disable" Text="Industrial 2 of 5DataCrop_Disable" Tips="" Type="R" Mask="4340" Data="00" />
+        <Node Name="Tree3ID25_DataLenCheck_Enable" Text="Industrial 2 of 5DataLenCheck_Enable*" Tips="" Type="R" Mask="4380" Data="80" />
+        <Node Name="Tree3ID25_DataLenCheck_Disable" Text="Industrial 2 of 5DataLenCheck_Disable" Tips="" Type="R" Mask="4380" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMX25" Text="Matrix 2 of 5" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMX25_Enable" Text="Enable*" Tips="" Type="R" Mask="4601" Data="01" />
+        <Node Name="Tree3TypeMX25_Disable" Text="Disable" Tips="" Type="R" Mask="4601" Data="00" />
+        <Node Name="Tree3MX25_DataCrop_Enable" Text="Matrix 2 of 5DataCrop_Enable*" Tips="" Type="R" Mask="4640" Data="40" />
+        <Node Name="Tree3MX25_DataCrop_Disable" Text="Matrix 2 of 5DataCrop_Disable" Tips="" Type="R" Mask="4640" Data="00" />
+        <Node Name="Tree3MX25_DataLenCheck_Enable" Text="Matrix 2 of 5DataLenCheck_Enable*" Tips="" Type="R" Mask="4680" Data="80" />
+        <Node Name="Tree3MX25_DataLenCheck_Disable" Text="Matrix 2 of 5DataLenCheck_Disable" Tips="" Type="R" Mask="4680" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMSI" Text="MSI-Plessey" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMSI_Enable" Text="Enable*" Tips="" Type="R" Mask="4C01" Data="01" />
+        <Node Name="Tree3TypeMSI_Disable" Text="Disable" Tips="" Type="R" Mask="4C01" Data="00" />
+        <Node Name="Tree3TypeMSI_CheckOutEnable" Text="CheckOutEnable" Tips="" Type="R" Mask="4C02" Data="00" />
+        <Node Name="Tree3TypeMSI_CheckOutDisable" Text="CheckOutDisable*" Tips="" Type="R" Mask="4C02" Data="02" />
+        <Node Name="Tree3MSI_DataCrop_Enable" Text="MSI-PlesseyDataCrop_Enable*" Tips="" Type="R" Mask="4C40" Data="40" />
+        <Node Name="Tree3MSI_DataCrop_Disable" Text="MSI-PlesseyDataCrop_Disable" Tips="" Type="R" Mask="4C40" Data="00" />
+        <Node Name="Tree3MSI_DataLenCheck_Enable" Text="MSI-PlesseyDataLenCheck_Enable*" Tips="" Type="R" Mask="4C80" Data="80" />
+        <Node Name="Tree3MSI_DataLenCheck_Disable" Text="MSI-PlesseyDataLenCheck_Disable" Tips="" Type="R" Mask="4C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeDataBar" Text="GS1-DATABAR" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeDataBar_Enable" Text="Enable*" Tips="" Type="R" Mask="5F01" Data="01" />
+        <Node Name="Tree3TypeDataBar_Disable" Text="Disable" Tips="" Type="R" Mask="5F01" Data="00" />
+        <Node Name="Tree3DATABAR_DataCrop_Enable" Text="GS1-DATABARDataCrop_Enable*" Tips="" Type="R" Mask="5F40" Data="40" />
+        <Node Name="Tree3DATABAR_DataCrop_Disable" Text="GS1-DATABARDataCrop_Disable" Tips="" Type="R" Mask="5F40" Data="00" />
+        <Node Name="Tree3DATABAR_DataLenCheck_Enable" Text="GS1-DATABARDataLenCheck_Enable*" Tips="" Type="R" Mask="5F80" Data="80" />
+        <Node Name="Tree3DATABAR_DataLenCheck_Disable" Text="GS1-DATABARDataLenCheck_Disable" Tips="" Type="R" Mask="5F80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeQRCode" Text="QRCode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeQRCode_Enable" Text="Enable*" Tips="" Type="R" Mask="3F01" Data="01" />
+        <Node Name="Tree3TypeQRCode_Disable" Text="Disable" Tips="" Type="R" Mask="3F01" Data="00" />
+        <Node Name="Tree3QRCode_DataCrop_Enable" Text="QRCodeDataCrop_Enable*" Tips="" Type="R" Mask="3F40" Data="40" />
+        <Node Name="Tree3QRCode_DataCrop_Disable" Text="QRCodeDataCrop_Disable" Tips="" Type="R" Mask="3F40" Data="00" />
+        <Node Name="Tree3QRCode_DataLenCheck_Enable" Text="QRCodeDataLenCheck_Enable*" Tips="" Type="R" Mask="3F80" Data="80" />
+        <Node Name="Tree3QRCode_DataLenCheck_Disable" Text="QRCodeDataLenCheck_Disable" Tips="" Type="R" Mask="3F80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypePDF417" Text="PDF417" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypePDF417_Enable" Text="PDF417Enable*" Tips="" Type="R" Mask="5501" Data="01" />
+        <Node Name="Tree3TypePDF417_Disable" Text="PDF417Disable" Tips="" Type="R" Mask="5501" Data="00" />
+        <Node Name="Tree3PDF417_DataCrop_Enable" Text="PDF417DataCrop_Enable*" Tips="" Type="R" Mask="5540" Data="40" />
+        <Node Name="Tree3PDF417_DataCrop_Disable" Text="PDF417DataCrop_Disable" Tips="" Type="R" Mask="5540" Data="00" />
+        <Node Name="Tree3PDF417_DataLenCheck_Enable" Text="PDF417DataLenCheck_Enable*" Tips="" Type="R" Mask="5580" Data="80" />
+        <Node Name="Tree3PDF417_DataLenCheck_Disable" Text="PDF417DataLenCheck_Disable" Tips="" Type="R" Mask="5580" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeDM" Text="DataMatrix" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeDataMatrix_Enable" Text="DataMatrixEnable*" Tips="" Type="R" Mask="5401" Data="01" />
+        <Node Name="Tree3TypeDataMatrix_Disable" Text="DataMatrixDisable" Tips="" Type="R" Mask="5401" Data="00" />
+        <Node Name="Tree3DataMatrix_DataCrop_Enable" Text="DataMatrixDataCrop_Enable*" Tips="" Type="R" Mask="5440" Data="40" />
+        <Node Name="Tree3DataMatrix_DataCrop_Disable" Text="DataMatrixDataCrop_Disable" Tips="" Type="R" Mask="5440" Data="00" />
+        <Node Name="Tree3DataMatrix_DataLenCheck_Enable" Text="DataMatrixDataLenCheck_Enable*" Tips="" Type="R" Mask="5480" Data="80" />
+        <Node Name="Tree3DataMatrix_DataLenCheck_Disable" Text="DataMatrixDataLenCheck_Disable" Tips="" Type="R" Mask="5480" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeAztec" Text="Aztec" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeAztec_Enable" Text="AztecEnable*" Tips="" Type="R" Mask="5601" Data="01" />
+        <Node Name="Tree3TypeAztec_Disable" Text="AztecDisable" Tips="" Type="R" Mask="5601" Data="00" />
+        <Node Name="Tree3Aztec_DataCrop_Enable" Text="AztecDataCrop_Enable*" Tips="" Type="R" Mask="5640" Data="40" />
+        <Node Name="Tree3Aztec_DataCrop_Disable" Text="AztecDataCrop_Disable" Tips="" Type="R" Mask="5640" Data="00" />
+        <Node Name="Tree3Aztec_DataLenCheck_Enable" Text="AztecDataLenCheck_Enable*" Tips="" Type="R" Mask="5680" Data="80" />
+        <Node Name="Tree3Aztec_DataLenCheck_Disable" Text="AztecDataLenCheck_Disable" Tips="" Type="R" Mask="5680" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMicroPDF" Text="MicroPDF417" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMicroPDF_Enable" Text="MicroPDF417Enable*" Tips="" Type="R" Mask="5801" Data="01" />
+        <Node Name="Tree3TypeMicroPDF_Disable" Text="MicroPDF417Disable" Tips="" Type="R" Mask="5801" Data="00" />
+        <Node Name="Tree3MicroPDF_DataCrop_Enable" Text="MicroPDF417DataCrop_Enable*" Tips="" Type="R" Mask="5840" Data="40" />
+        <Node Name="Tree3MicroPDF_DataCrop_Disable" Text="MicroPDF417DataCrop_Disable" Tips="" Type="R" Mask="5840" Data="00" />
+        <Node Name="Tree3MicroPDF_DataLenCheck_Enable" Text="MicroPDF417DataLenCheck_Enable*" Tips="" Type="R" Mask="5880" Data="80" />
+        <Node Name="Tree3MicroPDF_DataLenCheck_Disable" Text="MicroPDF417DataLenCheck_Disable" Tips="" Type="R" Mask="5880" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeHaxin" Text="Haxin" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeHaxin_Enable" Text="HaxinEnable*" Tips="" Type="R" Mask="5701" Data="01" />
+        <Node Name="Tree3TypeHaxin_Disable" Text="HaxinDisable" Tips="" Type="R" Mask="5701" Data="00" />
+        <Node Name="Tree3Haxin_DataCrop_Enable" Text="HaxinDataCrop_Enable*" Tips="" Type="R" Mask="5740" Data="40" />
+        <Node Name="Tree3Haxin_DataCrop_Disable" Text="HaxinDataCrop_Disable" Tips="" Type="R" Mask="5740" Data="00" />
+        <Node Name="Tree3Haxin_DataLenCheck_Enable" Text="HaxinDataLenCheck_Enable*" Tips="" Type="R" Mask="5780" Data="80" />
+        <Node Name="Tree3Haxin_DataLenCheck_Disable" Text="HaxinDataLenCheck_Disable" Tips="" Type="R" Mask="5780" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeMaxiCode" Text="MaxiCode" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeMaxiCode_Enable" Text="MaxiCodeEnable*" Tips="" Type="R" Mask="5D01" Data="01" />
+        <Node Name="Tree3TypeMaxiCode_Disable" Text="MaxiCodeDisable" Tips="" Type="R" Mask="5D01" Data="00" />
+        <Node Name="Tree3MaxiCode_DataCrop_Enable" Text="MaxiCodeDataCrop_Enable*" Tips="" Type="R" Mask="5D40" Data="40" />
+        <Node Name="Tree3MaxiCode_DataCrop_Disable" Text="MaxiCodeDataCrop_Disable" Tips="" Type="R" Mask="5D40" Data="00" />
+        <Node Name="Tree3MaxiCode_DataLenCheck_Enable" Text="MaxiCodeDataLenCheck_Enable*" Tips="" Type="R" Mask="5D80" Data="80" />
+        <Node Name="Tree3MaxiCode_DataLenCheck_Disable" Text="MaxiCodeDataLenCheck_Disable" Tips="" Type="R" Mask="5D80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeTrioptic" Text="Trioptic" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeTrioptic_Enable" Text="TriopticEnable*" Tips="" Type="R" Mask="5901" Data="01" />
+        <Node Name="Tree3TypeTrioptic_Disable" Text="TriopticDisable" Tips="" Type="R" Mask="5901" Data="00" />
+        <Node Name="Tree3Trioptic_DataCrop_Enable" Text="TriopticDataCrop_Enable*" Tips="" Type="R" Mask="5940" Data="40" />
+        <Node Name="Tree3Trioptic_DataCrop_Disable" Text="TriopticDataCrop_Disable" Tips="" Type="R" Mask="5940" Data="00" />
+        <Node Name="Tree3Trioptic_DataLenCheck_Enable" Text="TriopticDataLenCheck_Enable*" Tips="" Type="R" Mask="5980" Data="80" />
+        <Node Name="Tree3Trioptic_DataLenCheck_Disable" Text="TriopticDataLenCheck_Disable" Tips="" Type="R" Mask="5980" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeCodeBlockF" Text="CodeBlockF" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeCodeBlockF_Enable" Text="CodeBlockFEnable*" Tips="" Type="R" Mask="5A01" Data="01" />
+        <Node Name="Tree3TypeCodeBlockF_Disable" Text="CodeBlockFDisable" Tips="" Type="R" Mask="5A01" Data="00" />
+        <Node Name="Tree3CodeBlockF_DataCrop_Enable" Text="CodeBlockFDataCrop_Enable*" Tips="" Type="R" Mask="5A40" Data="40" />
+        <Node Name="Tree3CodeBlockF_DataCrop_Disable" Text="CodeBlockFDataCrop_Disable" Tips="" Type="R" Mask="5A40" Data="00" />
+        <Node Name="Tree3CodeBlockF_DataLenCheck_Enable" Text="CodeBlockFDataLenCheck_Enable*" Tips="" Type="R" Mask="5A80" Data="80" />
+        <Node Name="Tree3CodeBlockF_DataLenCheck_Disable" Text="CodeBlockFDataLenCheck_Disable" Tips="" Type="R" Mask="5A80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeStraight" Text="Straight" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeStraight_Enable" Text="StraightEnable*" Tips="" Type="R" Mask="5B01" Data="01" />
+        <Node Name="Tree3TypeStraight_Disable" Text="StraightDisable" Tips="" Type="R" Mask="5B01" Data="00" />
+        <Node Name="Tree3Straight_DataCrop_Enable" Text="StraightDataCrop_Enable*" Tips="" Type="R" Mask="5B40" Data="40" />
+        <Node Name="Tree3Straight_DataCrop_Disable" Text="StraightDataCrop_Disable" Tips="" Type="R" Mask="5B40" Data="00" />
+        <Node Name="Tree3Straight_DataLenCheck_Enable" Text="StraightDataLenCheck_Enable*" Tips="" Type="R" Mask="5B80" Data="80" />
+        <Node Name="Tree3Straight_DataLenCheck_Disable" Text="StraightDataLenCheck_Disable" Tips="" Type="R" Mask="5B80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeTelepen" Text="Telepen" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeTelepen_Enable" Text="TelepenEnable*" Tips="" Type="R" Mask="5C01" Data="01" />
+        <Node Name="Tree3TypeTelepen_Disable" Text="TelepenDisable" Tips="" Type="R" Mask="5C01" Data="00" />
+        <Node Name="Tree3Telepen_DataCrop_Enable" Text="TelepenDataCrop_Enable*" Tips="" Type="R" Mask="5C40" Data="40" />
+        <Node Name="Tree3Telepen_DataCrop_Disable" Text="TelepenDataCrop_Disable" Tips="" Type="R" Mask="5C40" Data="00" />
+        <Node Name="Tree3Telepen_DataLenCheck_Enable" Text="TelepenDataLenCheck_Enable*" Tips="" Type="R" Mask="5C80" Data="80" />
+        <Node Name="Tree3Telepen_DataLenCheck_Disable" Text="TelepenDataLenCheck_Disable" Tips="" Type="R" Mask="5C80" Data="00" />
+      </Node>
+      <Node Name="Tree2BarcodeTypeOCR" Text="OCR" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypeOCR_Enable" Text="OCR_Enable" Tips="" Type="R" Mask="B601" Data="01" />
+        <Node Name="Tree3TypeOCR_Disable" Text="OCR_Disable@" Tips="" Type="R" Mask="B601" Data="00" />
+        <Node Name="Tree3OCR_MuiltLine_Enable" Text="MuiltLineEnable" Tips="" Type="R" Mask="B602" Data="02" />
+        <Node Name="Tree3OCR_MuiltLine_Disable" Text="MuiltLineDisable*" Tips="" Type="R" Mask="B602" Data="00" />
+        <Node Name="Tree3OCR_LengthSet" Text="CharacterLength" Tips="" Type="X" Mask="B7FF" Data="FF" />
+        <Node Name="Tree3TypeOCR_MICR_Enable" Text="MICR_Enable" Tips="" Type="R" Mask="B604" Data="04" />
+        <Node Name="Tree3TypeOCR_MICR_Disable" Text="MICR_Disable*" Tips="" Type="R" Mask="B604" Data="00" />
+        <Node Name="Tree3TypeOCR_PP_Enable" Text="PassportEnable" Tips="" Type="R" Mask="B608" Data="08" />
+        <Node Name="Tree3TypeOCR_PP_Disable" Text="PassportDisable*" Tips="" Type="R" Mask="B608" Data="00" />
+        <Node Name="Tree3MICR_LengthSet" Text="MICR_LengthSet(0 is not check)" Tips="" Type="X" Mask="B8FF" Data="FF" />
+      </Node>
+      <Node Name="Tree2BarcodeTypePharma" Text="Pharma" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3TypePharma_Enable" Text="PharmaEnable" Tips="" Type="R" Mask="B501" Data="01" />
+        <Node Name="Tree3TypePharma_Disable" Text="PharmaDisable*" Tips="" Type="R" Mask="B501" Data="00" />
+        <Node Name="Tree3Pharma_DataCrop_Enable" Text="PharmaDataCrop_Enable*" Tips="" Type="R" Mask="B540" Data="40" />
+        <Node Name="Tree3Pharma_DataCrop_Disable" Text="PharmaDataCrop_Disable" Tips="" Type="R" Mask="B540" Data="00" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DataEdit" Text="DataEditor" Tips="Barcode data can be edited before output" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2DataAddStr" Text="Add character" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataAddPrefix" Text="PrefixString" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3DataAddPrefixEnable" Text="Enable" Tips="" Type="R" Mask="6008" Data="08" />
+          <Node Name="Tree3DataAddPrefixDisable" Text="Disable*" Tips="" Type="R" Mask="6008" Data="00" />
+          <Node Name="Tree3DataAddPrefixChange" Text="PrefixByBarCode" Tips="" Type="C" Mask="6300" Data="00" />
+          <Node Name="Tree3DataAddPrefixInput" Text="PrefixByInput" Tips="" Type="T" Mask="63FF" Data="0F" />
+        </Node>
+        <Node Name="Tree3DataAddSuffix" Text="SuffixString" Tips="" Type=" " Mask=" " Data=" ">
+          <Node Name="Tree3DataAddSuffixEnable" Text="Enable" Tips="" Type="R" Mask="6002" Data="02" />
+          <Node Name="Tree3DataAddSuffixDisable" Text="Disable*" Tips="" Type="R" Mask="6002" Data="00" />
+          <Node Name="Tree3DataAddSuffixChange" Text="SuffixByBarCode" Tips="" Type="C" Mask="7200" Data="00" />
+          <Node Name="Tree3DataAddSuffixInput" Text="SuffixByInput" Tips="" Type="T" Mask="72FF" Data="0F" />
+        </Node>
+      </Node>
+      <Node Name="Tree2DataTranslateSet" Text="DataCropSetting" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DataTranslateAll" Text="AllSegment*" Tips="" Type="R" Mask="B003" Data="00" />
+        <Node Name="Tree3DataTranslateStart" Text="StartSegment" Tips="" Type="R" Mask="B003" Data="01" />
+        <Node Name="Tree3DataTranslateCenter" Text="CenterSegment" Tips="" Type="R" Mask="B003" Data="03" />
+        <Node Name="Tree3DataTranslateEnd" Text="EndSegment" Tips="" Type="R" Mask="B003" Data="02" />
+        <Node Name="Tree3DataTranslateStartLenghChange" Text="StartLenghByBarCode" Tips="" Type="C" Mask="B100" Data="00" />
+        <Node Name="Tree3DataTranslateEndLenghChange" Text="EndLenghByBarCode" Tips="" Type="C" Mask="B200" Data="00" />
+        <Node Name="Tree3DataTranslateStartLenghInput" Text="StartLenghByInput" Tips="" Type="X" Mask="B1FF" Data="FF" />
+        <Node Name="Tree3DataTranslateEndLenghInput" Text="EndLenghByInput" Tips="" Type="X" Mask="B2FF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1OtherSetting" Text="OtherSetting" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2FactorySetting" Text="FactorySetting" Tips="" Type="R" Mask="D9FF" Data="50" />
+      <Node Name="Tree2SaveUserSetting" Text="SaveUserSetting" Tips="" Type="R" Mask="D9FF" Data="56" />
+      <Node Name="Tree2RecoverUserSetting" Text="RecoverUserSetting" Tips="" Type="R" Mask="D9FF" Data="55" />
+    </Node>
+    <Node Name="Tree2DPMAbout" Text="ExternTrigSetting" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree3ExtraTrigMode" Text="ExternTrigIO" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree4ExtraTrigModeEnable" Text="ExternTrigIOEnable" Tips="" Type="R" Mask="CA20" Data="20" />
+        <Node Name="Tree4ExtraTrigModeDisable" Text="ExternTrigIODisable" Tips="" Type="R" Mask="CA20" Data="00" />
+      </Node>
+      <Node Name="TreeOutputIOTips" Text="OutputIO Setting" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="TreeOutputIOSuccess" Text="OutputIO for Success" Tips="" Type="R" Mask="CA40" Data="40" />
+        <Node Name="TreeOutputIOFailed" Text="OutputIO for failed" Tips="" Type="R" Mask="CA40" Data="00" />
+        <Node Name="TreeOutputIOKeep60ms" Text="OutputIO keep 60ms" Tips="" Type="R" Mask="1AFF" Data="06" />
+        <Node Name="Tree3OutputIOKeep100ms" Text="OutputIO keep 100ms" Tips="" Type="R" Mask="1AFF" Data="0A" />
+        <Node Name="TreeOutputIOKeep200ms" Text="OutputIO keep 200ms" Tips="" Type="R" Mask="1AFF" Data="14" />
+        <Node Name="TreeOutputIOKeepInput" Text="OutputIO keep time input" Tips="" Type="Y" Mask="1AFF" Data="FF" />
+      </Node>
+    </Node>
+    <Node Name="Tree1DPMSetting" Text="DPMSetting" Tips="" Type=" " Mask=" " Data=" ">
+      <Node Name="Tree2DPMDecodeSize" Text="DPMSearchAccuracy" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DPMDecodeLow" Text="DPMSearchAccuracyLow" Tips="" Type="R" Mask="C930" Data="00" />
+        <Node Name="Tree3DPMDecodeMid" Text="DPMSearchAccuracyMiddle" Tips="" Type="R" Mask="C930" Data="10" />
+        <Node Name="Tree3DPMDecodeHight" Text="DPMSearchAccuracyHight" Tips="" Type="R" Mask="C930" Data="20" />
+      </Node>
+      <Node Name="Tree2DPMContrast" Text="DPM Contrast" Tips="" Type=" " Mask=" " Data=" ">
+        <Node Name="Tree3DPMContrastLow" Text="DPM ContrastLowEnable" Tips="" Type="R" Mask="D080" Data="00" />
+        <Node Name="Tree3DPMContrastEnable" Text="DPM ContrastLowDisable" Tips="" Type="R" Mask="D080" Data="80" />
+      </Node>
+    </Node>
+    <Node Name="Tree2DPM_OpenDebugMode" Text="OpenDebugMode" Tips="" Type="R" Mask="CC01" Data="01" />
+  </Node>
+  <Language CobSelectLanguage="dpmcmd" />
+  <Language GrbExplain="CommandExplain" />
+  <Language TxbShowWriteCMD=" " />
+  <Language TxbShowReadCMD=" " />
+  <Language GrbCrcCalc="CRC Calculation" />
+  <Language BtnCalcCMD="Calculate" />
+  <Language GrbSendCMD="SendCMD" />
+  <Language LabTipsState="-&gt;Maybe not success-&lt;" />
+  <Language LabSendFailed="SendFailed" />
+  <Language LabSendOk="SendSuccess" />
+  <Language RdbSendHEX="HEX" />
+  <Language RdbSendString="Ascii" />
+  <Language LabState="Device Not Connect" />
+  <Language LabStateDisp="State:" />
+  <Language BtnSendCMD="SendCMD" />
+  <Language GrbSettingList="CommandList" />
+  <Language BtnAddToRignt="-&gt;&gt;&gt;" />
+  <Language LabDispCMD="Command:" />
+  <Language ChkAllowEdit="EditMode" />
+  <Language BtnSaveConfigXml="SaveList" />
+  <Language LabSerch="Search:" />
+</Root>

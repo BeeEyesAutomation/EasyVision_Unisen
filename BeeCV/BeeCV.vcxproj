@@ -427,6 +427,7 @@
     <ClInclude Include="Focus.h" />
     <ClInclude Include="MatchingShape.h" />
     <ClInclude Include="MvCamera.h" />
+    <ClInclude Include="OCR.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="G.h" />
@@ -442,6 +443,7 @@
     <ClCompile Include="Focus.cpp" />
     <ClCompile Include="MatchingShape.cpp" />
     <ClCompile Include="MvCamera.cpp" />
+    <ClCompile Include="OCR.cpp" />
     <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="G.cpp" />
     <ClCompile Include="pch.cpp">
