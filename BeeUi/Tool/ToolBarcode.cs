@@ -73,7 +73,7 @@ namespace BeeUi.Tool
         Mat matClear = new Mat(); Mat matMask = new Mat();
         //public void GetTemp(RectRotate rotateRect, Mat matRegister)
         //{
-           
+
         //        float angle = rotateRect._rectRotation;
         //        if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
         //        Mat matCrop = G.EditTool.View.CropRotatedRect(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
@@ -81,20 +81,15 @@ namespace BeeUi.Tool
         //            Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
         //        if (Propety.IsAreaWhite)
         //            Cv2.BitwiseNot(matTemp, matTemp);
-           
+
         //}
         public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
         {
-           
-
             if (Propety.rotAreaAdjustment == null && G.IsRun) return gc;
             gc.ResetTransform();
             // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
 
             var mat = new Matrix();
-            mat.Translate(pScroll.X, pScroll.Y);
-            mat.Scale(Scale, Scale);
-          
             RectRotate rotA = Propety.rotArea;
             if (G.IsRun) rotA = Propety.rotAreaAdjustment;
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
@@ -103,86 +98,95 @@ namespace BeeUi.Tool
             //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
             gc.DrawString(indexTool + "", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
 
-            gc.DrawRectangle(new Pen(Color.Silver, 4), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+            gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
             gc.ResetTransform();
-            mat = new Matrix();
-            mat.Translate(pScroll.X, pScroll.Y);
-            mat.Scale(Scale, Scale);
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
-            gc.Transform = mat;
-            Bitmap bmTemp = matTemp.ToBitmap();
-            bmTemp.MakeTransparent(Color.Black);
-            bmTemp = ConvertImg.ChangeToColor(bmTemp, Color.Green, 0.8f);
-            gc.DrawImage(bmTemp, rotA._rect);
+            Color cl = Color.Red;
             if (!Propety.IsOK)
             {
-              
-               
-               
-                if (!matRS.Empty())
-                {
-                    Bitmap bmRS = matRS.ToBitmap();
-                   
-                    bmRS.MakeTransparent(Color.Black);
-
-                    bmRS = ConvertImg.ChangeToColor(bmRS, Color.Red, 0.9f);
-                    gc.DrawImage(bmRS, rotA._rect);
-                }
-             
-              
-
-                RectangleF _rect = rotA._rect;
-                gc.DrawRectangle(new Pen(Color.Red, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-
-                gc.ResetTransform();
-                return gc;
+                 cl = Color.Red;
+                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                    G.Config.ConditionOK == ConditionOK.Logic)
+                    cl = Color.LimeGreen;
             }
             else
             {
-             
-                RectangleF _rect = rotA._rect;
-                gc.DrawRectangle(new Pen(Color.Green, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                 
+               
+                     cl = Color.LimeGreen;
+                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                        G.Config.ConditionOK == ConditionOK.Logic)
+                        cl = Color.Red;
+                
+            }
+                if (Propety.rectQRCode.Length > 0)
+                {
+                    int i = 0;
+                    
+                    foreach (Polygon pol in Propety.rectQRCode)
+                    {
+                        mat = new Matrix();
+                        if (!G.IsRun)
+                        {
+                            mat.Translate(pScroll.X, pScroll.Y);
+                            mat.Scale(Scale, Scale);
+                        }
+                        //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                        //mat.Rotate(rotA._rectRotation);
+                        //mat.Translate(rotA._rect.X, rotA._rect.Y);
+                        gc.Transform = mat;
 
+                      
+                           System.Drawing. Point[] array4 = pol.ToPointArray();
+                            
+                            gc.SmoothingMode = SmoothingMode.AntiAlias;
+                            gc.DrawLines(new Pen(cl,4), array4);
+                        
+                
+
+                          
+                            int index = i + 1;
+                            String content = "(" + Propety.Content + ") \n";
+                           
+                            Font font = new Font("Arial", 30, FontStyle.Bold);
+                            SizeF sz = gc.MeasureString(content, font);
+                            gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(array4[0].X  - sz.Width / 2), (int)(array4[0].Y  - sz.Height / 2)));
+                            i++;
+                            //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                            gc.ResetTransform();
+                        
+                    }
+                }
+                else
+                {
+                    mat = new Matrix();
+                    if (!G.IsRun)
+                    {
+                        mat.Translate(pScroll.X, pScroll.Y);
+                        mat.Scale(Scale, Scale);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+
+                    gc.Transform = mat;
+                    RectangleF _rect = Propety.rotArea._rect;
+                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                     G.Config.ConditionOK == ConditionOK.Logic)
+                        gc.DrawRectangle(new Pen(Color.LimeGreen, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+
+                    else
+                        gc.DrawRectangle(new Pen(Color.Red, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    // 
+                }
                 gc.ResetTransform();
-                return gc;
-            }    
-            //else
-            //{
-            //    foreach (RectRotate rot in Propety.rectRotates)
-            //    {
-            //        mat = new Matrix();
-            //        mat.Translate(pScroll.X, pScroll.Y);
-            //        mat.Scale(Scale, Scale);
-            //        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //        mat.Rotate(rotA._rectRotation);
-            //        mat.Translate(rotA._rect.X, rotA._rect.Y);
-            //        gc.Transform = mat;
-            //        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-            //        mat.Rotate(rot._rectRotation);
-            //        gc.Transform = mat;
-            //        Mat matShow = matTemp.Clone();
 
-            //        if (Propety.TypeMode == Mode.OutLine)
-            //        {
-            //            Bitmap myBitmap = matShow.ToBitmap();
-            //            myBitmap.MakeTransparent(Color.Black);
-            //            myBitmap = ConvertImg.ChangeToColor(myBitmap, Color.FromArgb(0, 255, 0), 1f);
+            
+           
+            
 
-
-            //            gc.DrawImage(myBitmap, rot._rect);
-            //        }
-            //        gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
-            //        gc.DrawRectangle(new Pen(Color.LimeGreen, 2), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-            //        gc.ResetTransform();
-            //    }
-            //}
 
 
             return gc;
         }
-
-      
         public Graphics ShowEdit(Graphics gc, RectangleF _rect)
         {
             if (matTemp == null) return gc;
@@ -501,5 +505,22 @@ namespace BeeUi.Tool
 
             G.EditTool.RefreshGuiEdit(Step.Step3);
         }
+<<<<<<< HEAD
+
+        private void txtQRCODE_TextChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void txtQRCODE_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                txtQRCODE.Text = txtQRCODE.Text.Replace("\n", "");
+                Propety.MathQRCODE = txtQRCODE.Text;
+            }
+            }
+=======
+>>>>>>> edca0d23a94938580687a3e9499f230b6b57c2ae
     }
 }
