@@ -505,7 +505,7 @@ namespace BeeUi.Tool
 
             G.EditTool.RefreshGuiEdit(Step.Step3);
         }
-<<<<<<< HEAD
+
 
         private void txtQRCODE_TextChanged(object sender, EventArgs e)
         {
@@ -520,7 +520,6 @@ namespace BeeUi.Tool
                 Propety.MathQRCODE = txtQRCODE.Text;
             }
             }
-=======
->>>>>>> edca0d23a94938580687a3e9499f230b6b57c2ae
+
     }
 }
