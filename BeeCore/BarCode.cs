@@ -10,10 +10,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-<<<<<<< HEAD
+
         public int Index;
-=======
->>>>>>> edca0d23a94938580687a3e9499f230b6b57c2ae
+
         public TypeTool TypeTool;
         public TypeCrop TypeCrop;
         public RectRotate rotArea, rotCrop, rotMask;
@@ -36,18 +35,16 @@ namespace BeeCore
         //    return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         //}
         public Polygon[] rectQRCode;
-<<<<<<< HEAD
+
         public String Content = "";
-=======
->>>>>>> edca0d23a94938580687a3e9499f230b6b57c2ae
+
         public  Mat Read(RectRotate rotateRect)
         {
             if(HEROJE.BarcodeStr!="")
             {
-<<<<<<< HEAD
+
                 Content = HEROJE.BarcodeStr;
-=======
->>>>>>> edca0d23a94938580687a3e9499f230b6b57c2ae
+
                 if (HEROJE.BarCodeRegion.Length>0);
                 {
                     rectQRCode = HEROJE.BarCodeRegion;
