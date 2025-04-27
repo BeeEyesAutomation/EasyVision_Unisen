@@ -42,17 +42,32 @@ namespace BeeCore
             Marshal.Copy(input, 0, (IntPtr)ptr, sizeof(IntPtr));
             return *ptr;
         }
+        public static void IniPython()
+        {
+     
+        String ex= G.CommonPlus.IniPython();
+            if(ex.Trim()!="")
+            {
+                MessageBox.Show(ex);
+            }
 
-      //  [DllImport(@".\BeeCam.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-      //  unsafe public static extern bool ScanCCD(int index);
-      //static  String s;
-      //  public static void Scan()
-      //  {
-           
-      //      bool result = ScanCCD(0);
-        
-      //      //MessageBox.Show(result.ToString());
-      //  }
+        }
+        public static void ClosePython()
+        {
+
+             G.CommonPlus.ClosePython();
+
+        }
+        //  [DllImport(@".\BeeCam.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        //  unsafe public static extern bool ScanCCD(int index);
+        //static  String s;
+        //  public static void Scan()
+        //  {
+
+        //      bool result = ScanCCD(0);
+
+        //      //MessageBox.Show(result.ToString());
+        //  }
 
         public static System.Drawing.Size SizeCCD()
         {

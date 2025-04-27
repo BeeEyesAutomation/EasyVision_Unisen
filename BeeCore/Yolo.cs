@@ -22,12 +22,7 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
 
-        public static void InitializeYolo()
-        {
-           
-         G.InitYolo= G.Yolo.InitializeYolo();
-           
-        }
+      
         public static void SetModel(String nameModel, TypeYolo TypeYolo)
         {
             G.Yolo.LoadModel(nameModel, (int)TypeYolo);

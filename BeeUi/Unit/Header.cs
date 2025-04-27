@@ -85,6 +85,12 @@ namespace BeeUi.Common
                 case BeeCore.TypeTool.Yolo:
                     control = new ToolYolo();
                     break;
+                case BeeCore.TypeTool.OCR:
+                    control = new ToolOCR();
+                    break;
+                case BeeCore.TypeTool.BarCode:
+                    control = new ToolBarcode();
+                    break;
                 default:
                     control = new ToolOutLine();
                     break;

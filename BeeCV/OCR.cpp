@@ -13,50 +13,16 @@ struct gil_scoped_acquire_local {
     ~gil_scoped_acquire_local() { PyGILState_Release(state); }
     const PyGILState_STATE state;
 };
-py::object Obj;
 
-bool OCR::Close()
+
+
+bool OCR::SetModel()
 {
-	if (!Py_IsInitialized()) {
-		std::cerr << "Python initialization failed!" << std::endl;
-		return "Python initialization failed!";
+	bool success = _ocr.attr("initialize_ocr")().cast<bool>();
+	if (!success) {
+		std::cerr << "Failed to initialize OCR" << std::endl;
+		return 1;
 	}
-	//	_yolo.attr("close")();
-		//Py_FinalizeEx();
-
-		//Py_Finalize
-		////py::finalize_interpreter();
-		//return SUCCESS;
-
-		   // 🚀 Giải phóng biến global bằng cách đặt về None
-	Obj = py::none();
-
-	// py::gil_scoped_release release;
-	if (Py_IsInitialized())
-		Py_Finalize();
-	return true;
-}
-bool OCR::Ini()
-{
-	py::scoped_interpreter guard{};  // Bắt đầu Python
-
-	try {
-
-		py::module ocr_module = py::module::import("OCR");  // file là ocr_wrapper.py
-		py::object OCRWrapper = ocr_module.attr("OCRWrapper");
-		Obj = OCRWrapper();
-
-		bool success = Obj.attr("initialize_ocr")().cast<bool>();
-		if (!success) {
-			std::cerr << "Failed to initialize OCR" << std::endl;
-			return 1;
-		}
-	}
-	catch (py::error_already_set& e) {
-		std::cerr << "Python Error: " << e.what() << std::endl;
-	}
-
-	return true;
 }
 
 cv::Mat array_to_cv_mat(const py::array_t<unsigned char>& arr) {
@@ -98,16 +64,24 @@ System::String^ OCR::Find(float Score)
 		std::lock_guard<std::mutex> lock(gilmutex);
 
 		py::gil_scoped_acquire acquire;
-	
+		if (matCrop.type() != CV_8UC3)
+			cv::cvtColor(matCrop, matCrop, COLOR_GRAY2RGB);
+		
+			cv::cvtColor(matCrop, matCrop, COLOR_BGR2RGB);
+		// Xoay 90 độ chiều kim đồng hồ
+		cv::Mat rotated;
+		//cv::rotate(matCrop, rotated, cv::ROTATE_90_CLOCKWISE);
+
+		// Xoay 90 độ ngược chiều kim đồng hồ
+		//cv::rotate(matCrop, rotated, cv::ROTATE_90_COUNTERCLOCKWISE);
+
+		// Xoay 180 độ
+		//cv::rotate(src, rotated, cv::ROTATE_180);
+		//cv::imwrite("crop.png", rotated);
 		py::array_t<uint8_t> image_array = to_numpy(matCrop);
-		py::object result = Obj.attr("find_ocr")(image_array);
-		//if (!result.is_none()) {
-		//	for (auto item : result) {
-		//		std::string text = item[0].cast<std::string>();
-		//		//float conf = item[1].cast<float>();
-		//		std::cout << "Detected: " << text << " (Conf: " << conf << ")" << std::endl;
-		//	}
-		//}
+		py::object result = _ocr.attr("find_ocr")(image_array);
+
+		
 		
 		//auto result = Obj.attr("predict")(image_array, ScoreYolo);
 
@@ -125,20 +99,32 @@ System::String^ OCR::Find(float Score)
 			//	matProc = matRaw.clone();
 
 			for (size_t i = 0; i < boxes.size(); ++i) {
-				auto box = boxes[i].cast<py::tuple>();
-				int x1 = box[0].cast<int>(), y1 = box[1].cast<int>();
-				int x2 = box[2].cast<int>(), y2 = box[3].cast<int>();
+				
+				// 1. Lấy center
+				py::tuple rotated_rect = boxes[i].cast<py::tuple>();
+				auto center = rotated_rect[0].cast<py::tuple>();
+				float x = center[0].cast<float>();
+				float y = center[1].cast<float>();
+
+				// 2. Lấy size
+				auto size = rotated_rect[1].cast<py::tuple>();
+				float h = size[0].cast<float>();
+				float w = size[1].cast<float>();
+
+				// 3. Lấy angle
+				float angle = rotated_rect[2].cast<float>()-90;
 				float score = scores[i].cast<float>();
-				string label = "";
+				string  label = labels[i].cast<string>();
+				//string label = "";
 				/*if (TypeYolo == 1)
 					label = labels[i].cast<string>();
 				else if (TypeYolo == 2)
 					label = labels[i].cast<int>();*/
-				int xCenter = Math::Min(x1, x2) + Math::Abs(x1 - x2) / 2;
+			/*	int xCenter = Math::Min(x1, x2) + Math::Abs(x1 - x2) / 2;
 				int yCenter = Math::Min(y1, y2) + Math::Abs(y1 - y2) / 2;
 				int w = Math::Abs(x1 - x2);
-				int h = Math::Abs(y1 - y2);
-				listRS.append(std::to_string(xCenter)).append(",").append(std::to_string(yCenter)).append(",").append(std::to_string(w)).append(",").append(std::to_string(h)).append(",0,").append(std::to_string(score)).append(",").append(label).append(",\n");
+				int h = Math::Abs(y1 - y2);*/
+				listRS.append(std::to_string(x)).append(",").append(std::to_string(y)).append(",").append(std::to_string(w)).append(",").append(std::to_string(h)).append(",").append(std::to_string(angle)).append(",").append(std::to_string(score)).append(",").append(label).append("\n");
 			}
 
 

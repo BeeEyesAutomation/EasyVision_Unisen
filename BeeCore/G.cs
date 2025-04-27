@@ -49,6 +49,11 @@ namespace BeeCore
         Pitch,
         OCR,BarCode,Yolo
     }
+    public enum TypeOCR
+    {
+        CPU,
+        GPU
+            }
     public enum TypeYolo
     {
         FAST,
@@ -91,7 +96,7 @@ namespace BeeCore
         public static bool IsChecked = false;
         public static TypeCamera TypeCCD=TypeCamera.USB;
         public static Model Model=new Model();
-        public static bool IsSimulation = false,InitYolo=false;
+        public static bool IsSimulation = false,InitYolo=false,IniOCR;
         public static Common Common = new Common();
         public static ParaCam ParaCam = new ParaCam();
         public static CvPlus.ColorArea colorArea = new CvPlus.ColorArea();
@@ -99,6 +104,8 @@ namespace BeeCore
         public static CvPlus.MatchingShape MatchingShape = new CvPlus.MatchingShape();
         public static CvPlus.Pattern pattern = new CvPlus.Pattern();
         public static CvPlus.Yolo Yolo = new CvPlus.Yolo();
+        public static CvPlus.OCR OCR = new CvPlus.OCR();
+
         public static bool IsCheck = false;
         public static CvPlus.Common CommonPlus = new CvPlus.Common();
         public static WindowView WindowView = WindowView.Window;

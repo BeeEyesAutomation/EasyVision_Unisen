@@ -351,7 +351,7 @@ namespace BeeUi
             pMove = e.Location;
                 if (G.IsRun) return;
             if (toolEdit != null)
-                if (toolEdit.TypeTool == TypeTool.Color_Area)
+                if (toolEdit.Propety.TypeTool == TypeTool.Color_Area)
             {
               
                     if (toolEdit.Propety.IsGetColor)
@@ -1182,11 +1182,11 @@ namespace BeeUi
                     var _clY = new Pen(Color.Gray, 1);
                     if (!G.IsCheck)
                     {
-                        if (G.TypeCrop == TypeCrop.Crop || toolEdit.Propety.rotCrop == null)
-                            toolEdit.ShowEdit(gc, _rect);
+                        //if (G.TypeCrop == TypeCrop.Crop || toolEdit.Propety.rotCrop == null)
+                        //    toolEdit.ShowEdit(gc, _rect);
 
-                        else if (G.TypeCrop == TypeCrop.Mask)
-                            gc.FillRectangle(new SolidBrush(Color.FromArgb(90, 111, 211, 213)), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                        //else if (G.TypeCrop == TypeCrop.Mask)
+                        //    gc.FillRectangle(new SolidBrush(Color.FromArgb(90, 111, 211, 213)), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
       
                             BeeCore.Draws.Rectangle(gc, G.TypeCrop , G.TypeCrop == TypeCrop.Crop ? toolEdit.Propety.rotCrop : G.TypeCrop == TypeCrop.Area ? toolEdit.Propety.rotArea :toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint,imgView.AutoScrollPosition,imgView.Zoom,2);
 
@@ -1476,6 +1476,8 @@ namespace BeeUi
                     foreach (Tools tool in G.listAlltool)
                     {
                         if (tool.TypeTool == TypeTool.Yolo)
+                            continue;
+                        if (tool.TypeTool == TypeTool.OCR)
                             continue;
                         if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
                         {
@@ -2071,7 +2073,7 @@ namespace BeeUi
             {
                 foreach (Tools tool in G.listAlltool)
                 {
-                    if (tool.TypeTool == TypeTool.Yolo)
+                    if (tool.TypeTool == TypeTool.Yolo|| tool.TypeTool == TypeTool.OCR)
 
                         tool.tool.Process();
 
@@ -2269,6 +2271,10 @@ namespace BeeUi
             await Task.Run(() => G.PLC.WriteInPut(0, true));
                 G.Header.tmReadPLC.Enabled = true;
                 G.PLC.WriteInPut(0, true);
+            }
+            if(G.IsByPassPLC)
+            {
+                Cap(false);
             }
           
         }

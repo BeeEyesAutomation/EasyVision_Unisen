@@ -196,6 +196,12 @@
     <Compile Include="SettingDevice.Designer.cs">
       <DependentUpon>SettingDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolOCR.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolOCR.Designer.cs">
+      <DependentUpon>ToolOCR.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\SettingCamera.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -461,6 +467,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingDevice.resx">
       <DependentUpon>SettingDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolOCR.resx">
+      <DependentUpon>ToolOCR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingCamera.resx">
       <DependentUpon>SettingCamera.cs</DependentUpon>

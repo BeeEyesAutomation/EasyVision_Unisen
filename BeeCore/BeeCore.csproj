@@ -74,8 +74,7 @@
     <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
     </Reference>
-    <Reference Include="LibUsbDotNet, Version=2.2.8.104, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="LibUsbDotNet">
       <HintPath>C:\Lib\LibUsbDotNet.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
@@ -166,6 +165,7 @@
     <Compile Include="PropetyTool.cs" />
     <Compile Include="BarCode.cs" />
     <Compile Include="RectRotate.cs" />
+    <Compile Include="OCR.cs" />
     <Compile Include="Yolo.cs" />
   </ItemGroup>
   <ItemGroup>

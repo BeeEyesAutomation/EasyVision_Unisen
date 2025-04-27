@@ -1,75 +1,48 @@
 ﻿#include "Yolo.h"
 
-namespace py = pybind11;
 
 
 using namespace CvPlus;
 
-struct gil_scoped_acquire_local {
-    gil_scoped_acquire_local() : state(PyGILState_Ensure()) {}
-    gil_scoped_acquire_local(const gil_scoped_acquire_local&) = delete;
-    gil_scoped_acquire_local& operator=(const gil_scoped_acquire_local&) = delete;
-    ~gil_scoped_acquire_local() { PyGILState_Release(state); }
-    const PyGILState_STATE state;
-};
-py::object _yolo;
-bool Yolo::ClosePython()
-{
-	if (!Py_IsInitialized()) {
-		std::cerr << "Python initialization failed!" << std::endl;
-		return "Python initialization failed!";
-	}
-//	_yolo.attr("close")();
-	//Py_FinalizeEx();
 
-	//Py_Finalize
-	////py::finalize_interpreter();
-	//return SUCCESS;
 
-	   // 🚀 Giải phóng biến global bằng cách đặt về None
-	_yolo = py::none();
 
-   // py::gil_scoped_release release;
-   if (Py_IsInitialized())
-       Py_Finalize();
-    return true;
-}
-bool Yolo::InitializeYolo()
-{
-    try
-    {
-		//std::lock_guard<std::mutex> lock(gilmutex);
-		Py_Initialize();
-		gil_scoped_acquire_local gil_acquire;
-
-		//	std::lock_guard<std::mutex> lock(gilmutex);
-		//std::lock_guard<std::mutex>lock(gilmutex);
-
-			//std::unique_lock<std::mutex> lock(gilmutex);
-			//py::gil_scoped_acquire acquire;
-			//gil_scoped_acquire_local gil_acquire;
-			//	py::gil_scoped_acquire acquire;
-			//	py::gil_scoped_acquire acquire;  // Giành GIL
-			//pybind11::gil_scoped_acquire acquire; // Tự động đăng ký và giữ GIL
-		//_yolo= py::module::import("yolo");
-		py::module processor_module = py::module::import("yolo");
-		_yolo =   processor_module.attr("ObjectDetector")();
-		auto ptr = std::make_unique<int[]>(10);
-		//lock.unlock();
-		//py::gil_scoped_release release;
-		//PyEval_SaveThread
-		//PylonInitialize();
-		return true;
-       
-    
-    }
-    catch (exception ex)
-    {
-        string s = ex.what();
-        return false;
-    }
-    return true;
-}
+//bool Yolo::InitializeYolo()
+//{
+//    try
+//    {
+//		//std::lock_guard<std::mutex> lock(gilmutex);
+//		Py_Initialize();
+//		gil_scoped_acquire_local gil_acquire;
+//
+//		//	std::lock_guard<std::mutex> lock(gilmutex);
+//		//std::lock_guard<std::mutex>lock(gilmutex);
+//
+//			//std::unique_lock<std::mutex> lock(gilmutex);
+//			//py::gil_scoped_acquire acquire;
+//			//gil_scoped_acquire_local gil_acquire;
+//			//	py::gil_scoped_acquire acquire;
+//			//	py::gil_scoped_acquire acquire;  // Giành GIL
+//			//pybind11::gil_scoped_acquire acquire; // Tự động đăng ký và giữ GIL
+//		//_yolo= py::module::import("yolo");
+//		py::module processor_module = py::module::import("Tool/Learning");
+//		_yolo =   processor_module.attr("ObjectDetector")();
+//		auto ptr = std::make_unique<int[]>(10);
+//		//lock.unlock();
+//		//py::gil_scoped_release release;
+//		//PyEval_SaveThread
+//		//PylonInitialize();
+//		return true;
+//       
+//    
+//    }
+//    catch (exception ex)
+//    {
+//        string s = ex.what();
+//        return false;
+//    }
+//    return true;
+//}
 int TypeYolo = 1;
 bool  Yolo::LoadModel (System::String^ nameModel,int Type)
 {

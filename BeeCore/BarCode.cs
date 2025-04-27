@@ -4,6 +4,7 @@ using System.Drawing;
 //using ZXing;
 namespace BeeCore
 {
+    [Serializable()]
     public class BarCode
     {
         public object Clone()
@@ -34,22 +35,30 @@ namespace BeeCore
 
         //    return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         //}
-        public Polygon[] rectQRCode;
+       // public Polygon[] rectQRCode;
 
         public String Content = "";
+        public int ScoreRs = 0;
 
         public  Mat Read(RectRotate rotateRect)
         {
-            if(HEROJE.BarcodeStr!="")
+            IsOK = false; 
+            Content = HEROJE.BarcodeStr;
+            if (Content != "")
             {
 
-                Content = HEROJE.BarcodeStr;
+               
 
                 if (HEROJE.BarCodeRegion.Length>0);
                 {
-                    rectQRCode = HEROJE.BarCodeRegion;
+                   // rectQRCode = HEROJE.BarCodeRegion;
                     if (MathQRCODE == "")
                         IsOK = true;
+                    else
+                        if (MathQRCODE == Content)
+                    {
+                        IsOK = true;
+                    }
                 }
                 //for (int i = 0; i < BarCodeRegion.Length; i++)
                 //{

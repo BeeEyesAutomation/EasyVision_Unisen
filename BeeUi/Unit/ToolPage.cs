@@ -235,55 +235,16 @@ namespace BeeUi.Commons
                     break;
             }    
         }
-        public dynamic LoadEidtGuiTool(TypeTool typeTool)
-        {
-            dynamic control= null;
-            switch (typeTool)
-            {
-                case TypeTool.OutLine:
-                   
-                    control = new ToolOutLine();
-                   
-                    break;
-                case TypeTool.Color_Area:
-                    control = new ToolColorArea();
-                    break;
-                case TypeTool.Pattern:
-                    control = new ToolPattern();
-                    break;
-                case TypeTool.MatchingShape:
-
-                    control = new ToolMatchingShape();
-
-                    break;
-                case TypeTool.Position_Adjustment:
-                    control = new ToolPosition_Adjustment();
-                  
-                    break;
-                case TypeTool.BarCode:
-                    control = new ToolBarcode();
-
-                    break;
-                case TypeTool.Edge_Pixels:
-                    control = new ToolEdgePixels();
-                    break;
-                case TypeTool.Yolo:
-                    control = new ToolYolo();
-                    break;
-                default:
-                    control = new ToolOutLine();
-                    break;
-            }    
-            return control;
-        }
-        private void btnOk_Click(object sender, EventArgs e)
+         private void btnOk_Click(object sender, EventArgs e)
         {
             this.Parent.Hide();
-            dynamic control = LoadEidtGuiTool(TypeTool);
+            dynamic control =G.Header. LoadEidtGuiTool(TypeTool);
             int with = 50, height = 50;
             Size szImg = BeeCore.Common.SizeCCD();
             if (TypeTool != TypeTool.Edge_Pixels&&
                  TypeTool != TypeTool.BarCode&&
+                 TypeTool != TypeTool.Yolo &&
+                 TypeTool != TypeTool.OCR &&
                 TypeTool != TypeTool.Color_Area&&TypeTool != TypeTool.MatchingShape)
                 control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
         

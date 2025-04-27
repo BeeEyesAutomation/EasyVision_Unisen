@@ -32,19 +32,20 @@ namespace BeeUi.Tool
         public void LoadPara(dynamic Content)
         {
             BarCode Para = (BarCode)Content;
-            Bitmap bmTemp = Propety.matTemp;
+           // Bitmap bmTemp = Propety.matTemp;
+            txtQRCODE.Text = Para.MathQRCODE;
             //if (bmTemp != null)
             //{
             //    matTemp = OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp);
             //    Propety.LoadTemp(matTemp);
-              
-               
+
+
             //}
-           // btnInvert.IsCLick = Propety.Invert;
-           // trackScore.Value =Para.Score;
+            // btnInvert.IsCLick = Propety.Invert;
+            // trackScore.Value =Para.Score;
             //trackNumObject.Value = Para.NumObject;
             //trackMaxOverLap.Value = (int)(Para.OverLap * 100);
-         //   txtAngle.Text = (int)Para.MinArea + "";
+            //   txtAngle.Text = (int)Para.MinArea + "";
             //if (Propety.NumObject == 0) Propety.NumObject = 1;
             //Propety.ckBitwiseNot = Para.ckBitwiseNot;
             //Propety.ckSIMD = Para.ckSIMD;
@@ -118,12 +119,13 @@ namespace BeeUi.Tool
                         cl = Color.Red;
                 
             }
-                if (Propety.rectQRCode.Length > 0)
+            if (HEROJE.BarCodeRegion == null) return gc;
+                if (HEROJE.BarCodeRegion.Length > 0)
                 {
                     int i = 0;
                     
-                    foreach (Polygon pol in Propety.rectQRCode)
-                    {
+                    foreach (Polygon pol in HEROJE.BarCodeRegion)
+                {
                         mat = new Matrix();
                         if (!G.IsRun)
                         {
@@ -140,16 +142,22 @@ namespace BeeUi.Tool
                             
                             gc.SmoothingMode = SmoothingMode.AntiAlias;
                             gc.DrawLines(new Pen(cl,4), array4);
-                        
-                
+                    mat = new Matrix();
+                    mat.Translate(array4[0].X, array4[0].Y);
+                    gc.Transform = mat;
 
-                          
-                            int index = i + 1;
-                            String content = "(" + Propety.Content + ") \n";
-                           
-                            Font font = new Font("Arial", 30, FontStyle.Bold);
+                    int index = i + 1;
+                            String content = "" + Propety.Content + " \n";
+                    int widthBox = Math.Max(array4[0].X, array4[1].X);
+                    int xCenter = Math.Min(array4[0].X, array4[1].X) + Math.Abs(array4[0].X - array4[1].X) / 2;
+                    int YCenter = Math.Min(array4[0].Y, array4[1].Y) + Math.Abs(array4[0].Y - array4[1].Y) / 2;
+                   
+                    int w = Math.Abs(array4[0].X - array4[1].X);
+                    int h = Math.Abs(array4[0].Y - array4[1].Y);
+                    Font font = new Font("Arial", 10, FontStyle.Bold);
                             SizeF sz = gc.MeasureString(content, font);
-                            gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(array4[0].X  - sz.Width / 2), (int)(array4[0].Y  - sz.Height / 2)));
+                    gc.FillRectangle(Brushes.White, 0,0, sz.Width + 4, sz.Height + 4);
+                            gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point(0, 0));
                             i++;
                             //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
                             gc.ResetTransform();
@@ -521,5 +529,10 @@ namespace BeeUi.Tool
             }
             }
 
+        private void btnSet_Click(object sender, EventArgs e)
+        {
+            Propety.MathQRCODE = Propety.Content;
+            txtQRCODE.Text = Propety.MathQRCODE;
+        }
     }
 }

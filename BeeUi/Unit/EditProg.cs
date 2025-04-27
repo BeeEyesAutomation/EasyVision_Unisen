@@ -59,6 +59,7 @@ namespace BeeUi.Unit
 
               String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
                 G.Project = Path.GetFileName(saveFile.FileName);
+                G.Project = G.Project.Replace(".prog", "");
                 G.Header.IniProject();
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();

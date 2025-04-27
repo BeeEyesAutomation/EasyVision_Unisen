@@ -2,9 +2,12 @@
 #include "G.h"
 #include "MvCamera.h"
 using  namespace CvPlus;
+
 namespace CvPlus
 {
 	std::mutex gilmutex;
+	py::object _ocr;
+	py::object _yolo;
 	//CDeviceInfo nameBasler;
 	//Camera_t baslerGigE;
 	//CGrabResultPtr ptrGrabResult;
@@ -29,7 +32,114 @@ namespace CvPlus
 		std::string s(cStr);
 		return s;
 	}
-	
+	struct gil_scoped_acquire_local {
+		gil_scoped_acquire_local() : state(PyGILState_Ensure()) {}
+		gil_scoped_acquire_local(const gil_scoped_acquire_local&) = delete;
+		gil_scoped_acquire_local& operator=(const gil_scoped_acquire_local&) = delete;
+		~gil_scoped_acquire_local() { PyGILState_Release(state); }
+		const PyGILState_STATE state;
+	};
+	void import_python_module_from_path(const std::string& full_path, const std::string& module_name) {
+		py::module sys = py::module::import("sys");
+		py::module importlib_util = py::module::import("importlib.util");
+
+		// Lấy spec từ đường dẫn file
+		auto spec = importlib_util.attr("spec_from_file_location")(module_name, full_path);
+
+		// Tạo module từ spec
+		auto module = importlib_util.attr("module_from_spec")(spec);
+
+		// Thực thi loader
+		auto loader = spec.attr("loader");
+		loader.attr("exec_module")(module);
+
+		// Nếu muốn gán vào sys.modules
+		sys.attr("modules")[module_name.c_str()] = module;
+	}string sEX;
+	inline py::object import_from_path(const std::string& module_name, const std::string& file_path) {
+		py::module importlib_util = py::module::import("importlib.util");
+		py::object spec = importlib_util.attr("spec_from_file_location")(module_name, file_path);
+		py::object module = importlib_util.attr("module_from_spec")(spec);
+		spec.attr("loader").attr("exec_module")(module);
+		return module;
+	}
+	System::String^ Common::IniPython()
+	{
+		try
+		{
+			//std::lock_guard<std::mutex> lock(gilmutex);
+			Py_Initialize();
+			gil_scoped_acquire_local gil_acquire;
+
+			//	std::lock_guard<std::mutex> lock(gilmutex);
+			//std::lock_guard<std::mutex>lock(gilmutex);
+
+				//std::unique_lock<std::mutex> lock(gilmutex);
+				//py::gil_scoped_acquire acquire;
+				//gil_scoped_acquire_local gil_acquire;
+				//	py::gil_scoped_acquire acquire;
+				//	py::gil_scoped_acquire acquire;  // Giành GIL
+				//pybind11::gil_scoped_acquire acquire; // Tự động đăng ký và giữ GIL
+			//_yolo= py::module::import("yolo");
+			//import_python_module_from_path("Tool/Learning.py", "Learning");
+			//	import_python_module_from_path("Tool/Ocr.py", "Ocr");
+			auto sys = py::module::import("sys");
+			std::cout << "Python executable: " << std::string(py::str(sys.attr("executable"))) << std::endl;
+			std::cout << "Python version: " << std::string(py::str(sys.attr("version"))) << std::endl;
+			try {
+				auto easyocr = py::module::import("easyocr");
+				std::cout << "easyocr is installed and importable!" << std::endl;
+			}
+			catch (py::error_already_set& e) {
+				std::cout << "easyocr is NOT installed or failed to import." << std::endl;
+				std::cout << e.what() << std::endl;
+			}
+
+			auto module2 = import_from_path("OcrWapper", "Tool/OcrWapper.py");
+			//py::module module2 = py::module::import("Ocr");
+			_ocr = module2.attr("OCRWrapper")();
+			//py::module processor_module = py::module::import("Learning");
+			auto module = import_from_path("Tool_Learning", "Tool/Learning.py");
+			_yolo = module.attr("ObjectDetector")();
+		
+		
+			auto ptr = std::make_unique<int[]>(10);
+			//lock.unlock();
+			//py::gil_scoped_release release;
+			//PyEval_SaveThread
+			//PylonInitialize();
+			return "";
+
+
+		}
+		catch (exception ex)
+		{
+			sEX = ex.what();
+			return gcnew System::String(sEX.c_str()); ;
+		}
+		 	return "true";
+	}
+	bool Common::ClosePython()
+	{
+		if (!Py_IsInitialized()) {
+			std::cerr << "Python initialization failed!" << std::endl;
+			return "Python initialization failed!";
+		}
+		//	_yolo.attr("close")();
+			//Py_FinalizeEx();
+
+			//Py_Finalize
+			////py::finalize_interpreter();
+			//return SUCCESS;
+
+			   // 🚀 Giải phóng biến global bằng cách đặt về None
+		_yolo = py::none();
+		_ocr = py::none();
+		// py::gil_scoped_release release;
+		if (Py_IsInitialized())
+			Py_Finalize();
+		return true;
+	}
 	Mat CropImage(Mat matCrop, Rect rect)
 	{
 		return matCrop(rect);

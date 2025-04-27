@@ -11,8 +11,7 @@ namespace CvPlus
 	public ref   class OCR
 	{
 	public:  float Cycle;
-	public: bool Ini();
-	public: bool Close();
+	public:bool SetModel();
 	public:  System::String^ Find(float Score);
 	};
 }

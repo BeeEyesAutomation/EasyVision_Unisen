@@ -38,8 +38,8 @@ namespace BeeCore
                  HEROJE.Disconnect(); 
                
             }
-            if(G.InitYolo)
-            G.Yolo.ClosePython();
+
+            Common.ClosePython();
             G.CCD.DestroyAll();
             HEROJE.DisConnect();
             Thread.Sleep(500);

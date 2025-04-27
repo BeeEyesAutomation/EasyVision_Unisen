@@ -39,16 +39,19 @@
             this.label9 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOK = new BeeUi.Common.RJButton();
             this.btnCancel = new BeeUi.Common.RJButton();
             this.btnTest = new BeeUi.Common.RJButton();
             this.btnCropFull = new BeeUi.Common.RJButton();
             this.btnCropHalt = new BeeUi.Common.RJButton();
+            this.btnSet = new BeeUi.Common.RJButton();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // threadProcess
@@ -85,13 +88,13 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.txtQRCODE, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label8, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.btnTest, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label9, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
@@ -100,9 +103,9 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 540);
@@ -112,11 +115,12 @@
             // txtQRCODE
             // 
             this.txtQRCODE.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtQRCODE.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtQRCODE.Location = new System.Drawing.Point(20, 107);
-            this.txtQRCODE.Margin = new System.Windows.Forms.Padding(20, 3, 10, 3);
+            this.txtQRCODE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtQRCODE.Location = new System.Drawing.Point(20, 3);
+            this.txtQRCODE.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
+            this.txtQRCODE.Multiline = true;
             this.txtQRCODE.Name = "txtQRCODE";
-            this.txtQRCODE.Size = new System.Drawing.Size(356, 29);
+            this.txtQRCODE.Size = new System.Drawing.Size(257, 39);
             this.txtQRCODE.TabIndex = 47;
             this.txtQRCODE.TextChanged += new System.EventHandler(this.txtQRCODE_TextChanged);
             this.txtQRCODE.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtQRCODE_KeyDown);
@@ -127,7 +131,7 @@
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(5, 144);
+            this.label8.Location = new System.Drawing.Point(5, 160);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 5, 3, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(378, 25);
@@ -205,10 +209,25 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(392, 546);
+            this.tabPage4.Size = new System.Drawing.Size(331, 546);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Chức năng mở rộng";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.btnSet, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.txtQRCODE, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 107);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(380, 45);
+            this.tableLayoutPanel3.TabIndex = 46;
             // 
             // btnOK
             // 
@@ -289,10 +308,10 @@
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
             this.btnTest.IsUnGroup = true;
-            this.btnTest.Location = new System.Drawing.Point(5, 242);
+            this.btnTest.Location = new System.Drawing.Point(5, 214);
             this.btnTest.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(376, 223);
+            this.btnTest.Size = new System.Drawing.Size(376, 251);
             this.btnTest.TabIndex = 37;
             this.btnTest.Text = "Inspect";
             this.btnTest.TextColor = System.Drawing.Color.Black;
@@ -361,6 +380,36 @@
             this.btnCropHalt.UseVisualStyleBackColor = false;
             this.btnCropHalt.Click += new System.EventHandler(this.btnCropHalt_Click);
             // 
+            // btnSet
+            // 
+            this.btnSet.BackColor = System.Drawing.Color.Transparent;
+            this.btnSet.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnSet.BorderColor = System.Drawing.Color.Silver;
+            this.btnSet.BorderRadius = 10;
+            this.btnSet.BorderSize = 1;
+            this.btnSet.ButtonImage = null;
+            this.btnSet.Corner = BeeCore.Corner.Right;
+            this.btnSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSet.FlatAppearance.BorderSize = 0;
+            this.btnSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSet.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSet.ForeColor = System.Drawing.Color.Black;
+            this.btnSet.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSet.IsCLick = false;
+            this.btnSet.IsNotChange = true;
+            this.btnSet.IsRect = false;
+            this.btnSet.IsUnGroup = false;
+            this.btnSet.Location = new System.Drawing.Point(280, 0);
+            this.btnSet.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnSet.Name = "btnSet";
+            this.btnSet.Size = new System.Drawing.Size(97, 45);
+            this.btnSet.TabIndex = 48;
+            this.btnSet.Text = "Set QRCODE";
+            this.btnSet.TextColor = System.Drawing.Color.Black;
+            this.btnSet.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSet.UseVisualStyleBackColor = false;
+            this.btnSet.Click += new System.EventHandler(this.btnSet_Click);
+            // 
             // ToolBarcode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,6 +425,8 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -398,6 +449,7 @@
         private Common.RJButton btnCropHalt;
 
         private System.Windows.Forms.TextBox txtQRCODE;
-
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private Common.RJButton btnSet;
     }
 }

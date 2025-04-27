@@ -187,7 +187,7 @@ namespace BeeUi
             }
             if (G.Config.RoundRad == 0) G.Config.RoundRad = 10;
             tmLoad.Enabled = false;
-            BeeCore.Yolo.InitializeYolo();
+            BeeCore.Common.IniPython();
             listCCD = G.ScanCCD.ScanIDCCD();
             wLoad.RunWorkerAsync();
 
