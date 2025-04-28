@@ -25,7 +25,17 @@ namespace BeeCore
         public static string Scan()
         {
           if(G.TypeCCD==TypeCamera.TinyIV)
-            return BeeCore.HEROJE.Scan(192, 168, 2, 7);
+            {
+                if (G.ParaCam.CardChoosed == null) G.ParaCam.CardChoosed = "";
+                    if ( G.ParaCam.CardChoosed!="")
+                {
+                    int[] IP = G.ParaCam.CardChoosed.Split('.').Select(int.Parse).ToArray();
+                    return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]);
+                }
+               else
+                    return BeeCore.HEROJE.Scan(192, 168, 2,1);
+            }
+           
           else
             return G.CCD.ScanCCD();
 

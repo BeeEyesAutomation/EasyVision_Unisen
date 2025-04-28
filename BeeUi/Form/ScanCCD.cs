@@ -48,17 +48,23 @@ namespace BeeUi
 
         public List<string> ScanIDCCD()
         {
-          //  Disable();
-          //  Enable();
-             String IDCCD = G.Config.IDCamera;
+            cbCCD.Text = "Waiting Scan";
+            //  Disable();
+            //  Enable();
+            String IDCCD = G.Config.IDCamera;
            
             BeeCore.Funtion.Init.CCD(G.Config.TypeCamera);
             
             // G.HEROJE=new DeviceFindAndCom()
             String sRead = BeeCore.Camera.Scan();
+      
             String[] listStringCCD = sRead.Split('\n');
             cbCCD.DataSource = listStringCCD;
-           return listStringCCD.ToList();
+            if (sRead == "No Device")
+                btnConnect.Enabled = false;
+            else
+                btnConnect.Enabled = true;
+            return listStringCCD.ToList();
         }
         private void ScanCCD_Load(object sender, EventArgs e)
         {
@@ -238,6 +244,14 @@ namespace BeeUi
 
         private void cbReSolution_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (G.Config.TypeCamera == TypeCamera.TinyIV)
+            {
+                BeeCore.G.ParaCam.CardChoosed = cbReSolution.Text;
+              
+                ScanIDCCD();
+            }
+             
+            else
             G.Config.Resolution = cbReSolution.Text.Trim();
         }
 
@@ -276,8 +290,10 @@ namespace BeeUi
         private void btnCameraTiny_Click(object sender, EventArgs e)
         {
             label1.Text = "Choose Ehternet Card";
-            cbReSolution.Enabled = false;
+         //   cbReSolution.Enabled = false;
             cbReSolution.DataSource= HEROJE.ScanCard();
+            if (cbReSolution.Items.Count== 1)
+                cbReSolution.SelectedIndex = 0;
             G.Config.TypeCamera=BeeCore.TypeCamera.TinyIV;
             ScanIDCCD();
         }
@@ -285,6 +301,11 @@ namespace BeeUi
         private void btnUSB3_0_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cbReSolution.DroppedDown = true;
         }
     }
 }

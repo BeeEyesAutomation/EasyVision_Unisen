@@ -35,7 +35,7 @@ namespace BeeCore
        
         public LogicOK LogicOK =LogicOK.AND;
         public ConditionOK ConditionOK=ConditionOK.TotalOK;
-    
+        
         public String namePort="",IDPort="";
         public String IDCamera="";
         public String nameUser = "User";

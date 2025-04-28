@@ -1776,6 +1776,8 @@ namespace BeeCore
                 listFind +=(dev.ConnectType.ToString() + "_" + dev.NetName+"_" + dev.IpAddrStr + "_" + dev.MacStr) +"\n";
 
             }
+            if (listFind == "")
+                listFind = "No Device";
             DeviceCfgRead = new ModuleSetting(DeviceParaRead);
             DeviceCfgRead.FactorySetting();
             DevStateCallback = DevStateCB_Func;
@@ -1811,7 +1813,7 @@ namespace BeeCore
         }
         public static bool Disconnect()
         {
-          
+            if (ThreadDataProc == null) return false;
             ToolCfg.is_stop = true;
             ThreadDataProc.Abort();
             if (devChoosed.ConnectType == DeviceFindAndCom.DeviceType.NETWORK)

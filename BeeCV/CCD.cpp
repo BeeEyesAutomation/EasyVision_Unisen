@@ -431,7 +431,7 @@ System::String^ ScanHik()
 	
 	if (0 == m_stDevList.nDeviceNum)
 	{
-		return gcnew  System::String("No device");;
+		return gcnew  System::String("No Device");;
 		//ShowErrorMsg(TEXT("No device"), 0);
 		//return;
 	}
