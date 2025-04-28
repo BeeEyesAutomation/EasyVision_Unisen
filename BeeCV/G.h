@@ -14,16 +14,12 @@
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 #include <opencv2/imgproc/types_c.h>
-
 #include <direct.h>
 #include <iostream>
 #include <fstream>
-
 #include <stdio.h>
-
 #include <process.h>         // needed for _beginthread()
 #include <ctime>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>

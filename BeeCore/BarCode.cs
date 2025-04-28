@@ -47,8 +47,8 @@ namespace BeeCore
             if (Content != "")
             {
 
-               
 
+                if (HEROJE.BarCodeRegion == null) return null;
                 if (HEROJE.BarCodeRegion.Length>0);
                 {
                    // rectQRCode = HEROJE.BarCodeRegion;

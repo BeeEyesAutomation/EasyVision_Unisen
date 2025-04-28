@@ -188,10 +188,9 @@ namespace BeeUi.Tool
                  
                  
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                        mat.Rotate(rot._rectRotation);
-                        gc.Transform = mat;
+                   
                         mat.Translate(rot._rect.X, rot._rect.Y);
-                        mat.Rotate(rot._rectRotation);
+                        mat.Rotate(0);
                         gc.Transform = mat;
                     gc.DrawRectangle(new Pen(cl, 4), new Rectangle(0,0, (int)rot._rect.Width, (int)rot._rect.Height));
                   

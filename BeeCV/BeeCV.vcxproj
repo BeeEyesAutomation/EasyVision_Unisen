@@ -159,8 +159,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\OpenCV4.5\opencv\build\include;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\include;C:\pybind11\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(Python312)\include;C:\pybind11\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(Python312)\libs;$(LibraryPath)</LibraryPath>
     <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_4.X|x64'">
@@ -184,8 +184,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV4.5\opencv\build\include;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\include;C:\pybind11\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(Python312)\include;C:\pybind11\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(Python312)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -278,7 +278,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;OPENCV_4X;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\OpenCV4.5\opencv\build\include;C:\pybind11\include;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\include;$(MVCAM_COMMON_RUNENV)\Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MVCAM_COMMON_RUNENV)\Includes</AdditionalIncludeDirectories>
       <SupportJustMyCode>true</SupportJustMyCode>
       <LanguageStandard>Default</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -286,7 +286,7 @@
     <Link>
       <SubSystem>NotSet</SubSystem>
       <AdditionalDependencies>opencv_world455d.lib;python312.lib;MvCameraControl.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\OpenCV4.5\opencv\build\x64\vc15\lib;C:\Users\TEAM\AppData\Local\Programs\Python\Python312\libs;C:\pybind11\pybind11;$(MVCAM_COMMON_RUNENV)\Libraries\win64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MVCAM_COMMON_RUNENV)\Libraries\win64</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

@@ -165,6 +165,22 @@ namespace BeeCore
         private static bool IsNeedAutoConnect = true;
         public static DateTime dtOld= DateTime.Now;
         private static string LastDeviceIp;
+        public static  List<String> ScanCard()
+        {
+            List < String > listIP= new List< String >();
+            string hostName = Dns.GetHostName();
+            IPAddress[] hostAddresses = Dns.GetHostAddresses(hostName);
+          
+            IPAddress[] array = hostAddresses;
+            foreach (IPAddress iPAddress in array)
+            {
+                if (!iPAddress.IsIPv6LinkLocal && iPAddress.ToString().Length < 20)
+                {
+                    listIP.Add(iPAddress.ToString());
+                }
+            }
+          return listIP;
+        }
         public void SetEnhance(bool Is)
         {
             if (!ToolCfg.UpdateAdjState)

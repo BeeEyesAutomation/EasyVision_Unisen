@@ -78,6 +78,8 @@ System::String^ OCR::Find(float Score)
 		// Xoay 180 độ
 		//cv::rotate(src, rotated, cv::ROTATE_180);
 		//cv::imwrite("crop.png", rotated);
+		int h = matCrop.rows;
+		int w = matCrop.cols;
 		py::array_t<uint8_t> image_array = to_numpy(matCrop);
 		py::object result = _ocr.attr("find_ocr")(image_array);
 
@@ -108,11 +110,11 @@ System::String^ OCR::Find(float Score)
 
 				// 2. Lấy size
 				auto size = rotated_rect[1].cast<py::tuple>();
-				float h = size[0].cast<float>();
-				float w = size[1].cast<float>();
+				float w= size[0].cast<float>();
+				float h = size[1].cast<float>();
 
 				// 3. Lấy angle
-				float angle = rotated_rect[2].cast<float>()-90;
+				float angle = rotated_rect[2].cast<float>();
 				float score = scores[i].cast<float>();
 				string  label = labels[i].cast<string>();
 				//string label = "";

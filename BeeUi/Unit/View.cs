@@ -2308,7 +2308,11 @@ namespace BeeUi
                 }
                 tmContinuous.Enabled = btnRecord.IsCLick;
 
-            }
+            } 
+            else if(G.IsByPassPLC)
+            {
+                tmContinuous.Enabled = btnRecord.IsCLick;
+            }    
             else
             {
                 btnRecord.IsCLick = false;
@@ -2964,17 +2968,23 @@ namespace BeeUi
             }
             if (!btnCap.Enabled)
                 return;
-           
-         X: G.Header.tmReadPLC.Enabled = false;
-            if (G.Header.workPLC.IsBusy)
+            if (G.PLC.IsConnected)
             {
-                await Task.Delay(10);
-                goto X;
-            }
+            X: G.Header.tmReadPLC.Enabled = false;
+                if (G.Header.workPLC.IsBusy)
+                {
+                    await Task.Delay(10);
+                    goto X;
+                }
 
-            await Task.Run(() => G.PLC.WriteInPut(0, true));
-          
-            G.Header.tmReadPLC.Enabled = true;
+                await Task.Run(() => G.PLC.WriteInPut(0, true));
+
+                G.Header.tmReadPLC.Enabled = true;
+            }
+            else if (G.IsByPassPLC)
+            {
+                Cap(false);
+            }
         }
 
         private void workTrig_DoWork(object sender, DoWorkEventArgs e)

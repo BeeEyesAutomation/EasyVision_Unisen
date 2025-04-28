@@ -1,4 +1,5 @@
-﻿using BeeUi.Commons;
+﻿using BeeCore;
+using BeeUi.Commons;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -241,6 +243,7 @@ namespace BeeUi
 
         private void btnGigE_Click(object sender, EventArgs e)
         {
+            label1.Text = "Resolution";
             cbReSolution.Enabled = true;
             // BeeCore.Common. = BeeCore.TypeCamera.BaslerGigE;
             G.Config.TypeCamera = BeeCore.TypeCamera.BaslerGigE;
@@ -249,6 +252,7 @@ namespace BeeUi
 
         private void btnUSB2_0_Click(object sender, EventArgs e)
         {
+            label1.Text = "Resolution";
             cbReSolution.Enabled = true;
             G.Config.TypeCamera = BeeCore.TypeCamera.USB;
             ScanIDCCD();
@@ -271,7 +275,9 @@ namespace BeeUi
 
         private void btnCameraTiny_Click(object sender, EventArgs e)
         {
+            label1.Text = "Choose Ehternet Card";
             cbReSolution.Enabled = false;
+            cbReSolution.DataSource= HEROJE.ScanCard();
             G.Config.TypeCamera=BeeCore.TypeCamera.TinyIV;
             ScanIDCCD();
         }

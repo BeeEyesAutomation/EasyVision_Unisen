@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -56,8 +57,8 @@ namespace BeeUi.Tool
                 G.EditTool.View.matResgiter = BeeCore.Common.matRaw.Clone();
                 btnNextStep.Enabled = true;
                 G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-              //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-
+                //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
+                Shows.Full(G.EditTool.View.imgView);
                 if (File.Exists("Program\\" + G.Project + ".para"))
                     File.Delete("Program\\" + G.Project + ".para");
                 Access.SaveParaCam("Program\\" + G.Project + ".para", BeeCore.G.ParaCam);
