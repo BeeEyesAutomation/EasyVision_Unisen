@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Windows.Forms;
 
 namespace BeeUi.Tool
@@ -452,6 +453,32 @@ namespace BeeUi.Tool
                 G.PLC.WritePara(4160, G.Config.DelayOutput);
             }
             
+        }
+
+        private void trackGain_ValueChanged(int obj)
+        {
+            BeeCore.G.ParaCam.Gain = trackGain.Value;
+        }
+
+        private void btnRevese_Click(object sender, EventArgs e)
+        {
+            BeeCore.G.ParaCam.IsRevese = btnRevese.IsCLick;
+        }
+
+        private void btnEqualization_Click(object sender, EventArgs e)
+        {
+            BeeCore.G.ParaCam.IsEqualization = btnRevese.IsCLick;
+        }
+
+        private void btnMirror_Click(object sender, EventArgs e)
+        {
+            BeeCore.G.ParaCam.IsMirror = btnMirror.IsCLick;
+        }
+
+        private void btnEnhance_Click(object sender, EventArgs e)
+        {
+            BeeCore.G.ParaCam.IsHance = btnEnhance.IsCLick;
+           
         }
     }
 }

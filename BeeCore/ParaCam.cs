@@ -23,9 +23,18 @@ namespace BeeCore
                     BeeCore.Camera.SetExpo(_Exposure);
             }
         }
+        public int Gain
+        {
+            get => _Gain; set
+            {
+                _Gain = value;
+                if (BeeCore.G.ParaCam._Gain > 0)
+                    BeeCore.Camera.SetExpo(_Gain);
+            }
+        }
         public Size SizeCCD;
-        public  int _Exposure = 0, _TypeResolution=1, _TypeLight=1;
-        public bool IsOnLight = false;
+        public  int _Exposure = 0, _Gain=1, _TypeResolution=1, _TypeLight=1;
+        public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
         public int TypeLight 
          {
             get => _TypeLight; set

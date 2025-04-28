@@ -161,6 +161,60 @@ namespace BeeCore
             }
             return -1;
         }
+        public static bool SetGain(int value)
+        {
+            try
+            {
+
+
+                switch (G.TypeCCD)
+                {
+                    case TypeCamera.BaslerGigE:
+                        //if (value > 1000)
+                        //{
+                        //    G.CCD.ga = value; G.CCD.SetPara();
+                        //}
+                        break;
+                    case TypeCamera.TinyIV:
+                        HEROJE.SetExposure(value);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;// ex.Message;
+            }
+            return true;// Result.Success.ToString();
+        }
+        public static int GetGain()
+        {
+            try
+            {
+
+
+                switch (G.TypeCCD)
+                {
+                    case TypeCamera.BaslerGigE:
+                        // trackExposure.Min = (int)BeeCore.Common.MinExposure;
+                        //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
+                        // trackExposure.Step= (int)BeeCore.Common.StepExposure;
+                        return BeeCore.G.ParaCam.Exposure;
+                        //if (value > 1000)
+                        //{
+                        //    G.CCD.Exposure = value; G.CCD.SetPara();
+                        //}
+                        break;
+                    case TypeCamera.TinyIV:
+                        return Convert.ToInt32(HEROJE.GetExposure());
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return -1;
+        }
         public static async void Read()
         {
             int rows = 0, cols = 0, Type = 0;

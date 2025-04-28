@@ -165,6 +165,42 @@ namespace BeeCore
         private static bool IsNeedAutoConnect = true;
         public static DateTime dtOld= DateTime.Now;
         private static string LastDeviceIp;
+        public void SetEnhance(bool Is)
+        {
+            if (!ToolCfg.UpdateAdjState)
+            {
+                if (Is)
+                {
+                    SetCfgCBFuncCB(2312u, 8u);
+                }
+                else
+                {
+                    SetCfgCBFuncCB(2312u, 0u);
+                }
+                SendCfgDataCBFuncCB(0u);
+            }
+        }
+        public bool GetEnhance()
+        {
+         return   GetCfgCBFuncCB(2312u) == 8;
+           
+        }
+        public bool GetMirror()
+        {
+            return GetCfgCBFuncCB(2307u) == 1;
+
+        }
+        public bool GetInverse()
+        {
+            return GetCfgCBFuncCB(2308u) == 4;
+
+        }
+
+        public bool GetEqualizeHist()
+        {
+            return GetCfgCBFuncCB(2336u) == 32;
+
+        }
         private static void DeviceRestartCheck(uint action)
         {
             if ((action & 2) == 0)
@@ -2016,6 +2052,52 @@ namespace BeeCore
                 }
                 //tmSend.Enabled = true;
                
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return Result.Success.ToString();
+        }
+        public static string SetGain(int value)
+        {
+            ushort result = 0;
+            try
+            {
+
+                if (ushort.TryParse(value.ToString(), out result) && result < ushort.MaxValue)
+                {
+                    if (!IsEnSetValueEx)
+                    {
+                        EnaSetEx();
+                        Thread.Sleep(100);
+                    }
+
+
+
+
+                    SetCfgCBFuncCB(7295u, (byte)((result & 0xFF00) >> 8));
+                    SetCfgCBFuncCB(7167u, (byte)(result & 0xFFu));
+                    SendCfgDataCBFuncCB(0u);
+                    Thread.Sleep(5);
+                    SendCfgDataCBFuncCB(128u);
+                    Thread.Sleep(5);
+                    // DisAuto();
+                    //int valueNew = Convert.ToInt32(GetExposure());
+                    //if (valueNew != value)
+                    //{
+                    //    num++;
+                    //    if (num < 10)
+                    //        goto X;
+                    //}
+
+                }
+                else
+                {
+                    return Result.More.ToString();
+                }
+                //tmSend.Enabled = true;
+
             }
             catch (Exception ex)
             {
