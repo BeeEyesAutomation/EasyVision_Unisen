@@ -9,7 +9,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Windows.Forms;
+using UserControl = System.Windows.Forms.UserControl;
 
 namespace BeeUi.Commons
 {
@@ -235,37 +237,46 @@ namespace BeeUi.Commons
                     break;
             }    
         }
-         private void btnOk_Click(object sender, EventArgs e)
+        public void CreateNewTool()
         {
-            this.Parent.Hide();
-            dynamic control =G.Header. LoadEidtGuiTool(TypeTool);
+            dynamic control = G.Header.IniTool(TypeTool);
             int with = 50, height = 50;
             Size szImg = BeeCore.Common.SizeCCD();
-            if (TypeTool != TypeTool.Edge_Pixels&&
-                 TypeTool != TypeTool.BarCode&&
+            if (TypeTool != TypeTool.Edge_Pixels &&
+                 TypeTool != TypeTool.BarCode &&
                  TypeTool != TypeTool.Yolo &&
                  TypeTool != TypeTool.OCR &&
-                TypeTool != TypeTool.Color_Area&&TypeTool != TypeTool.MatchingShape)
+                TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape)
                 control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-        
+
             control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-           
-            ItemTool item =      new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
+
+            ItemTool item = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
             item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
             control.Propety.TypeTool = TypeTool;
-            G.ToolSettings.Y += item.Height + 10; 
+            G.ToolSettings.Y += item.Height + 10;
             item.Parent = G.ToolSettings.pAllTool;
             item.lbCycle.Text = "---";
             item.lbScore.Text = "---";
             item.lbStatus.Text = "---";
-            G.listAlltool.Add(new Tools(item, control, TypeTool));
+            item.lbNumber.Text = G.listAlltool.Count() + "";
+            item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
+            item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());          
+            PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, item.name.Text);
+            G.PropetyTools.Add(propetyTool);
+            G.listAlltool.Add(new Tools(item, control, propetyTool));
             control.indexTool = G.listAlltool.Count - 1;
-            item.lbNumber.Text = G.listAlltool.Count()+"";
-            item.name.Text = TypeTool.ToString() +" "+ G.listAlltool.Count();
-            G.PropetyTools.Add(new PropetyTool(control.Propety, TypeTool, item.name.Text));
-            item.icon.Image= (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-           
-            BeeCore.Common.CreateTemp(TypeTool );
+            if (TypeTool == TypeTool.Position_Adjustment)
+            {
+                // if (control.indexTool != 0)
+            }
+            BeeCore.Common.CreateTemp(TypeTool);
+        }
+         private void btnOk_Click(object sender, EventArgs e)
+        {
+            this.Parent.Hide();
+          
+            CreateNewTool();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

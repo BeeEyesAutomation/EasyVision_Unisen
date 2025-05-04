@@ -723,6 +723,16 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap End {
+            get {
+                object obj = ResourceManager.GetObject("End", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Enlarge {
             get {
                 object obj = ResourceManager.GetObject("Enlarge", resourceCulture);
@@ -1346,6 +1356,16 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Simmulation {
             get {
                 object obj = ResourceManager.GetObject("Simmulation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Stop {
+            get {
+                object obj = ResourceManager.GetObject("Stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

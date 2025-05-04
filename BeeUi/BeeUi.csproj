@@ -777,6 +777,8 @@
   <ItemGroup>
     <Content Include="bee.ico" />
     <Content Include="LogoAHSo.ico" />
+    <None Include="Resources\Stop.png" />
+    <None Include="Resources\End.png" />
     <None Include="Resources\File.png" />
     <None Include="Resources\Shutdown.png" />
     <None Include="Resources\Hand Drag_1.png" />

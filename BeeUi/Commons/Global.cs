@@ -21,12 +21,17 @@ namespace BeeUi
     {
        None, Processing,Trigged,Continue,NotTrig,Complete
     }
+    public enum StatusMode
+    {
+      None,  SimOne, SimContinuous, Once, Continuous
+    }
     public enum Step
     {
         Step1, Step2, Step3, Step4, Run,PLC
     }
     public struct G
     {
+        public static StatusMode StatusMode=StatusMode.None;
         public static bool Initial = false,IsShutDown=false;
         public static bool IsReConnectCCD=false,IsPLCNotAlive=false;
         public static int[] valuesPLCInPut=new int[16];
@@ -52,7 +57,7 @@ namespace BeeUi
         public static Main Main;
       public static ForrmAlarm FormActive;
         public static KeyAcitve keys=new KeyAcitve();
-        public static bool IsCap = false, IsActive;
+        public static bool IsActive;
         public static FormLoad Load;
         public static bool IsCancel;
         public static dynamic PropetyOld;

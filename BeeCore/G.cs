@@ -103,7 +103,7 @@ namespace BeeCore
         public static CvPlus.CCD CCD = new CvPlus.CCD();
         public static CvPlus.MatchingShape MatchingShape = new CvPlus.MatchingShape();
         public static CvPlus.Pattern pattern = new CvPlus.Pattern();
-        public static CvPlus.Yolo Yolo = new CvPlus.Yolo();
+        public static CvPlus.Yolo YoloPlus = new CvPlus.Yolo();
         public static CvPlus.OCR OCR = new CvPlus.OCR();
 
         public static bool IsCheck = false;

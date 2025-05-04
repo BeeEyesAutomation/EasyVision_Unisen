@@ -62,6 +62,7 @@ namespace BeeUi
             this.btnExit = new BeeUi.Common.RJButton();
             this.header1 = new BeeUi.Common.Header();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.lbNamefile = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -83,6 +84,7 @@ namespace BeeUi
             this.lbCam,
             this.lbFrameRate,
             this.toolStripPort,
+            this.lbNamefile,
             this.txtRecept});
             this.statusStrip1.Location = new System.Drawing.Point(458, 0);
             this.statusStrip1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -470,6 +472,12 @@ namespace BeeUi
             this.tmReaPLC.Interval = 1;
             this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
+            // lbNamefile
+            // 
+            this.lbNamefile.Name = "lbNamefile";
+            this.lbNamefile.Size = new System.Drawing.Size(22, 38);
+            this.lbNamefile.Text = "---";
+            // 
             // EditTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -529,5 +537,6 @@ namespace BeeUi
         private Common.RJButton btnShuttdown;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.ToolStripStatusLabel lbNamefile;
     }
 }

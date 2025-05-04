@@ -44,14 +44,15 @@ using namespace CvPlus;
 //    return true;
 //}
 int TypeYolo = 1;
-bool  Yolo::LoadModel (System::String^ nameModel,int Type)
+bool  Yolo::LoadModel (System::String^ nameTool,System::String^ nameModel,int Type)
 {
     try
     {
 		TypeYolo = Type;
         std::string model = msclr::interop::marshal_as<std::string>(nameModel);
+		std::string _nameTool = msclr::interop::marshal_as<std::string>(nameTool);
        // Thay "your_module_name" bằng tên module Python chứa hàm load_model và predict
-        _yolo.attr("load_model")(model, Type);
+        _yolo.attr("load_model")(_nameTool,model, Type);
         // Khởi tạo interpreter Python
         //py::scoped_interpreter guard{};
     }
@@ -90,77 +91,84 @@ py::array_t<unsigned char> mat_to_numpy(const cv::Mat& mat) {
     }
     float ScoreYolo=0;
     string listYolo;
-
-System::String^  Yolo::Check(float Score)
+	string _nameTool;
+	string sResult;
+  float Score;
+	void Checking()
 	{
+		std::string status;
+		sResult = "";
+		try {
+			std::lock_guard<std::mutex> lock(gilmutex);
 
-	ScoreYolo = Score;
-	double startTime = clock();
-	int numDetected = 0;
-	float pixelCable = 0, sumOfAll = 0;
-	int distanceV = 0, cycleTime = 0;
-	std::ostringstream resultStream;
-	std::string status;
-	std::string  listRS = "";
-	try {
-		std::lock_guard<std::mutex> lock(gilmutex);
-
-		py::gil_scoped_acquire acquire;
-		py::array_t<uint8_t> image_array = mat_to_numpy(matCrop);
-		auto result = _yolo.attr("predict")(image_array, ScoreYolo);
-
-		
-
-		if (py::isinstance<py::tuple>(result)) {
-			auto result_tuple = result.cast<py::tuple>();
-			//numDetected = result_tuple[0].cast<int>(); // Số vật thể được phát hiện
-
+			py::gil_scoped_acquire acquire;
+			py::array_t<uint8_t> image_array = mat_to_numpy(matCrop);
 			
+			auto result = _yolo.attr("predict")(image_array, ScoreYolo, _nameTool);
+
+
+
+			if (py::isinstance<py::tuple>(result)) {
+				auto result_tuple = result.cast<py::tuple>();
+				//numDetected = result_tuple[0].cast<int>(); // Số vật thể được phát hiện
+
+
 				py::list boxes = result_tuple[0].cast<py::list>();
 				//std::printf(boxes.str());
-				py::list scores =result_tuple[1].cast<py::list>();
+				py::list scores = result_tuple[1].cast<py::list>();
 				py::list labels = result_tuple[2].cast<py::list>();
-			//	matProc = matRaw.clone();
+				//	matProc = matRaw.clone();
 
 				for (size_t i = 0; i < boxes.size(); ++i) {
 					auto box = boxes[i].cast<py::tuple>();
 					int x1 = box[0].cast<int>(), y1 = box[1].cast<int>();
 					int x2 = box[2].cast<int>(), y2 = box[3].cast<int>();
-					float score =scores[i].cast<float>();
+					float score = scores[i].cast<float>();
 					string label = "";
-					if(TypeYolo==1)
-						label=labels[i].cast<string>();
+					if (TypeYolo == 1)
+						label = labels[i].cast<string>();
 					else if (TypeYolo == 2)
-						label =	labels[i].cast<int>();
-					int xCenter = Math::Min(x1,x2)+ Math::Abs(x1 - x2)/2;
+						label = labels[i].cast<int>();
+					int xCenter = Math::Min(x1, x2) + Math::Abs(x1 - x2) / 2;
 					int yCenter = Math::Min(y1, y2) + Math::Abs(y1 - y2) / 2;
-					int w =  Math::Abs(x1 - x2) ;
-					int h =  Math::Abs(y1 - y2);
-					listRS.append(std::to_string(xCenter)).append(",").append(std::to_string(yCenter)).append(",").append(std::to_string(w)).append(",").append(std::to_string(h)).append(",0,").append(std::to_string(score)).append(",").append(label).append(",\n");
+					int w = Math::Abs(x1 - x2);
+					int h = Math::Abs(y1 - y2);
+					sResult.append(std::to_string(xCenter)).append(",").append(std::to_string(yCenter)).append(",").append(std::to_string(w)).append(",").append(std::to_string(h)).append(",0,").append(std::to_string(score)).append(",").append(label).append(",\n");
 				}
 
-			
+
 			}
 
-		
-	}
-	catch (const py::error_already_set& e) {
 
-		return gcnew System::String(e.what());
+		}
+		catch (const py::error_already_set& e) {
 
-		status = std::string("PYTHON ERROR: ") + e.what();
+			//return gcnew System::String(e.what());
+
+			status = std::string("PYTHON ERROR: ") + e.what();
+		}
+		catch (...) {
+			status = "UNKNOWN EXCEPTION.";
+		}
+		// gcnew System::String(listRS.c_str());
 	}
-	catch (...) {
-		status = "UNKNOWN EXCEPTION.";
-	}
+System::String^  Yolo::Check(System::String^ nameTool, float Score)
+	{
+
+	ScoreYolo = Score;
+	double startTime = clock();
+	 _nameTool = msclr::interop::marshal_as<std::string>(nameTool);
+
+	 Checking();
 
 	Cycle =  clock()- startTime ;
-	return gcnew System::String(listRS.c_str());
+	return gcnew System::String(sResult.c_str());;
 	}
+
 	std::vector<float> scores;
 	PYBIND11_MODULE(example, m) {
 		m.def("numpy_array_to_cv_mat", &numpy_array_to_cv_mat, "Gui hinh Len Python");
-		//m.def("Checing", &Checking, "Checing");
+		m.def("Checking", &Checking, "Checing");
 	}
 
 

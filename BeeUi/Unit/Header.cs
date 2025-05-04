@@ -57,7 +57,7 @@ namespace BeeUi.Common
         }
       
 
-        public dynamic LoadEidtGuiTool(BeeCore.TypeTool typeTool)
+        public dynamic IniTool(BeeCore.TypeTool typeTool)
         {
             dynamic control = null;
             switch (typeTool)
@@ -99,12 +99,12 @@ namespace BeeUi.Common
         }
         public List<ItemTool> itemTools = new List<ItemTool>();
         int indexTool;
-        public void CreateItemTool(BeeCore.PropetyTool propety)
+        public void CreateItemTool(BeeCore.PropetyTool PropetyTool)
         {
-            BeeCore.TypeTool TypeTool = propety.TypeTool;
-            dynamic control = LoadEidtGuiTool(TypeTool);
+            BeeCore.TypeTool TypeTool = PropetyTool.TypeTool;
+            dynamic control = IniTool(TypeTool);
             int with = 50, height = 50;
-            control.Propety = propety.Propety;
+            control.Propety = PropetyTool.Propety;
             control.Propety.Index = indexTool;
             BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
             
@@ -120,8 +120,6 @@ namespace BeeUi.Common
             if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
                 rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
                 control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
-         
-
             ItemTool item = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
             item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
             item.lbCycle.Text = "---";
@@ -131,19 +129,19 @@ namespace BeeUi.Common
             item.lbScore.ForeColor = Color.Gray;
             item.lbStatus.BackColor = Color.Gray;
             G.ToolSettings.Y += item.Height + 10;
-            //itemTools.Add(item);// = G.ToolSettings.pAllTool;
-
-            G.listAlltool.Add(new Tools(item, control, TypeTool));
+            G.listAlltool.Add(new Tools(item, control, PropetyTool));
             control.indexTool = G.listAlltool.Count - 1;
             BeeCore.Common.CreateTemp(TypeTool);
-            control.LoadPara(propety.Propety);
-
-            item.lbNumber.Text = G.listAlltool.Count() + "";
-            if (propety.Name == null) propety.Name = "";
-            if (propety.Name.Trim() == "")
+            if (PropetyTool.Name == null) PropetyTool.Name = "";
+            if (PropetyTool.Name.Trim() == "")
                 item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
             else
-                item.name.Text = propety.Name.Trim();
+                item.name.Text = PropetyTool.Name.Trim();
+            control.Name = PropetyTool.Name;
+            control.LoadPara(PropetyTool.Propety);
+
+            item.lbNumber.Text = G.listAlltool.Count() + "";
+         
             item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
            
            
@@ -375,7 +373,7 @@ namespace BeeUi.Common
         {
             if (G.Config.nameUser != "Admin")
                 return;
-            if (G.IsCap)
+            if (G.StatusMode==StatusMode.Once)
             {
                 MessageBox.Show("Please Stop Mode Continuous");
                 return;

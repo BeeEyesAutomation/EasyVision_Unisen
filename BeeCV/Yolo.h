@@ -10,8 +10,8 @@ namespace CvPlus
 	{
 	public:  float Cycle;
 
-	public: bool LoadModel(System::String^ nameModel, int Type);
-	public:  System::String^ Check(float Score);
+	public: bool LoadModel(System::String^ nameTool, System::String^ nameModel, int Type);
+	public:  System::String^ Check(System::String^ nameTool, float Score);
 	};
 }
 

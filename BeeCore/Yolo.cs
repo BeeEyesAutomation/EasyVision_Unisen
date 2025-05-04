@@ -23,9 +23,9 @@ namespace BeeCore
         }
 
       
-        public static void SetModel(String nameModel, TypeYolo TypeYolo)
+        public  void SetModel(String nameTool, String nameModel, TypeYolo TypeYolo)
         {
-            G.Yolo.LoadModel(nameModel, (int)TypeYolo);
+            G. YoloPlus.LoadModel(nameTool,nameModel, (int)TypeYolo);
 
         }
         public int Index = -1;
@@ -40,6 +40,7 @@ namespace BeeCore
         public List<String> Labels = new List<string>();
         private Mode _TypeMode = Mode.Pattern;
         public Compares Compare = Compares.Equal;
+       
         public Mode TypeMode
         {
             get
@@ -94,7 +95,7 @@ namespace BeeCore
         public Point p1 = new Point();
         public Point p2 = new Point();
         public int yLine = 200;
-        public bool Check(RectRotate rot)
+        public bool Check(String nameTool, RectRotate rot)
         {
             yLine = 710;
             BeeCore.Native.SetImg(BeeCore.Common.matRaw);
@@ -106,12 +107,12 @@ namespace BeeCore
             //if (!BeeCore.Common.matRaw.Empty())
             //    BeeCore.Common.matRaw.Release();
         //    BeeCore.Common.matRaw = BeeCore.Native.GetImg().Clone();
-             listMatch = G.Yolo.Check((float)(Score / 100.0));
+             listMatch = G.YoloPlus.Check( nameTool, (float)(Score / 100.0));
             listOK = new List<bool>();
             listLabel = new List<string>();
             rectRotates = new List<RectRotate>();
             listScore = new List<float>();
-            cycleTime = (int)G.Yolo.Cycle;
+            cycleTime = (int)G.YoloPlus.Cycle;
             IsOK = true;
             if (listMatch != null)
             {
@@ -170,16 +171,7 @@ namespace BeeCore
                            
                        
                     }
-                  
-                   
 
-                    //if (rectF.Contains(new PointF(rt._PosCenter.X, rt._PosCenter.Y))
-                    //       )
-                    //    rectRotates.Add(rt);
-                    //else
-                    //{
-                    //    String sss = "";
-                    //}
                 }
                 ScoreRs = (int)(Score / (rectRotates.Count() * 1.0));
                 if (ScoreRs < 0) ScoreRs = 0;
@@ -193,7 +185,7 @@ namespace BeeCore
                         if (numOK >= NumObject)
                             IsOK = false;
                         break;
-                    case Compares.More:
+                    case Compares.More: 
                         if (numOK <= NumObject)
                             IsOK = false;
                         break;

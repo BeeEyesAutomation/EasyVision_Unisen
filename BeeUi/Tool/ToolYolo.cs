@@ -42,7 +42,7 @@ namespace BeeUi.Tool
                 //String PathProg = "Program\\" + nameModel;
                 if(Propety.PathModel!=null)
                if (File.Exists(Propety.PathModel))
-                    BeeCore.Yolo.SetModel(Propety.PathModel, TypeYolo.YOLO);
+                   Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
                 IsIni = true;
             String slabel = "";
 
@@ -416,10 +416,10 @@ namespace BeeUi.Tool
                     else
                         Propety.rotAreaAdjustment = Propety.rotArea;
                     //  Propety.Matching(G.IsRun, BeeCore.Common.matRaw.ToBitmap(), indexTool, Propety.rotAreaAdjustment);
-                    Propety.Check(Propety.rotAreaAdjustment);
+                    Propety.Check(this.Name, Propety.rotAreaAdjustment);
                 }
                 else
-                    Propety.Check(Propety.rotArea);
+                    Propety.Check(this.Name, Propety.rotArea);
                 
             }
             catch (Exception ex)
@@ -827,7 +827,7 @@ namespace BeeUi.Tool
                 BeeCore.Camera.Read();
                 if (BeeCore.Camera.IsConnected)
                 {
-                    Propety.Check(Propety.rotArea);
+                    Propety.Check(this.Name, Propety.rotArea);
                     tmCheckFist.Enabled = false;
                 }
                     
@@ -849,6 +849,11 @@ namespace BeeUi.Tool
         private void btnCheckArea_Click(object sender, EventArgs e)
         {
             Propety.IsCheckArea = btnCheckArea.IsCLick;
+        }
+
+        private void rjButton6_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

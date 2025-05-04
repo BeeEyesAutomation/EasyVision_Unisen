@@ -1431,17 +1431,7 @@ namespace BeeUi
 
         public String[] listPath;
         public int indexTool = 0; int indexImg = 0;
-        private void btnPlay_Click(object sender, EventArgs e)
-        {
-            G.IsRun = true;
-          
-            if (!workPlay.IsBusy)
-            workPlay.RunWorkerAsync();
-            indexImg++;
-            if (indexImg >= listPath.Count()) indexImg = 0;
-              BeeCore.Camera.Read();
-            BeeCore.Common.matRaw = BeeCore.Native.GetImg();
-        }
+ 
 
         private void tmTool_Tick(object sender, EventArgs e)
         {
@@ -1458,26 +1448,23 @@ namespace BeeUi
         int indexToolPosition = -1;
         bool IsAutoTrig;
         OutLine ParaPosition;
-      public  bool IsSimulation = false;
+        public void Checking()
+        {
+
+        }
         private void workPlay_DoWork(object sender, DoWorkEventArgs e)
         {
             if (!G.Initial)
                 return;
             if (!G.PLC.IsConnected&& !G.IsByPassPLC)
                 return;
-      
-            if (G.IsCap)
-            {
-               // BeeCore.Camera.Read(IsSimulation, G.Config.TypeCamera);
-             
-                if (IsCapOne)
-                {
+
                     int index = 0;
                     foreach (Tools tool in G.listAlltool)
                     {
-                        if (tool.TypeTool == TypeTool.Yolo)
+                        if (tool.PropetyTool.TypeTool == TypeTool.Yolo)
                             continue;
-                        if (tool.TypeTool == TypeTool.OCR)
+                        if (tool.PropetyTool.TypeTool == TypeTool.OCR)
                             continue;
                         if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
                         {
@@ -1490,13 +1477,13 @@ namespace BeeUi
                     }
                     return;
                     
-                }    
+ 
                 
                      
 
                 if (G.StatusTrig == Trig.None)
                 {
-                    indexToolPosition = G.listAlltool.FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
+                    indexToolPosition = G.listAlltool.FindIndex(a => a.PropetyTool.TypeTool == TypeTool.Position_Adjustment);
                     if (indexToolPosition > -1 && G.PropetyTools[indexToolPosition].Propety.IsAutoTrig)
                     {
                         ParaPosition = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
@@ -1552,28 +1539,19 @@ namespace BeeUi
                     return;
 
                 }
-
-
                     else if (G.StatusTrig == Trig.Continue)
                 {
                    
                     foreach (Tools tool in G.listAlltool)
                     {
-                        if (tool.TypeTool != TypeTool.Position_Adjustment)
+                        if (tool.PropetyTool.TypeTool != TypeTool.Position_Adjustment)
                             tool.tool.Process();
 
                     }
                 }
-            }
+            
 
-            else
-            {
-                if (listPath != null)
-                {
-                    BeeCore.Common.matRaw = BeeCore.Common.LoadImage(listPath[indexImg], ImreadModes.AnyColor);
-                    pathRaw = listPath[indexImg];
-                }
-            }
+         
             
              
                  
@@ -2058,6 +2036,44 @@ namespace BeeUi
            // btnCap.Enabled = true;
         }
         public float SumCycle = 0;
+        public void CheckStatusMode()
+        {
+          
+            switch (G.StatusMode)
+            {
+                case StatusMode.SimContinuous:
+                    btnFolder.Enabled = false;
+                    btnRunSim.Enabled = true;
+                    btnPlayStep.Enabled = true;
+                    tmSimulation.Enabled = true;
+                    break;
+                case StatusMode.SimOne:
+                    indexFile++;
+                    btnFile.Enabled = true;
+                    btnPlayStep.Enabled = true;
+                    G.StatusMode = StatusMode.None;
+                    break;
+                case StatusMode.Once:
+                    tmPress.Enabled = true;
+                    btnCap.IsCLick = false;
+                    G.StatusMode = StatusMode.None;
+                    break;
+                case StatusMode.Continuous:
+                    tmContinuous.Enabled = true;
+                    btnCap.Enabled = false;
+                   // btnCap.IsCLick = false;
+                    break;
+                case StatusMode.None:
+
+                    //btnRunSim.Enabled = false;
+                    btnPlayStep.Enabled = false;
+                    btnFile.Enabled = true;
+                    btnFolder.Enabled = true;
+                    break;
+            }
+           
+
+        }
         private async void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!G.Initial)
@@ -2069,148 +2085,148 @@ namespace BeeUi
                 G.Header.ShowErr();
                 return;
             }
-            if (IsCapOne)
-            {
+          int index = 0;
                 foreach (Tools tool in G.listAlltool)
                 {
-                    if (tool.TypeTool == TypeTool.Yolo|| tool.TypeTool == TypeTool.OCR)
+                    if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
+                    if (tool.PropetyTool.TypeTool == TypeTool.Yolo|| tool.PropetyTool.TypeTool == TypeTool.OCR)
 
                         tool.tool.Process();
 
-
+                    index++;
 
 
 
                 }
                 ShowResultTotal();
-                IsCapOne = false;
-                btnCap.IsCLick = false;
-              
-                G.IsCap = false;
-                //if (G.Header.SerialPort1.IsOpen)
-                //{
                 
-                //G.Header.SerialPort1.Write("OffTrig");
-
-                //    //  G.Header.SerialPort.WriteLine("OffTrig");
-                //}
+               
                 if(G.Header.IsWaitingRead )
                 {
                     G.Header.IsWaitingRead = false;
                     G.Header.tmReadPLC.Enabled = true;
                 }
-                tmPress.Enabled = true;
-               if(IsSimulation)
-                    tmSimulation.Enabled = true;
-                return;
-            }
+            CheckStatusMode();
+
+
+
            // if (IsAutoTrig==false)
            // {
            //     ShowResultTotal();
            //       indexTool = 0; G.IsCap = false;
-              
-             
-           //     if (btnRecord.IsCLick)
-           //     {
-                    
-
-           //         G.IsCap = true;
-
-                  
-           //         if (IsAutoTrig)
-           //             workPlay.RunWorkerAsync();
-           //         else
-           //             workReadCCD.RunWorkerAsync();
-           //     }
-           //     else
-           //     {
-           //         G.IsCap = false;
-           //     }
-           //     //if (G.Header.SerialPort1.IsOpen)
-           //     //{
-           //     //    Thread.Sleep(100);
-           //     //    G.Header.SerialPort1.WriteLine("OffTrig");
-           //     //  //  G.Header.SerialPort.WriteLine("OffTrig");
-           //     //}
-           //     return;
-           // }
-           
-           //     if (G.StatusTrig==Trig.Continue)
-           // {
-           //     G.StatusTrig = Trig.NotTrig;
-           //     ShowResultTotal();
 
 
-           //     indexTool = 0; G.IsCap = false;
-              
-           //     if (btnRecord.IsCLick)
-           //     {
-                   
-
-           //         G.IsCap = true;
-
-           //         if (IsAutoTrig)
-                        
-           //             workPlay.RunWorkerAsync();
-           //         else
-           //                 if (!workReadCCD.IsBusy)
-           //                 workReadCCD.RunWorkerAsync();
-           //     }
-           //     else
-           //     {
-           //         G.IsCap = false;
-           //     }
+            //     if (btnRecord.IsCLick)
+            //     {
 
 
+            //         G.IsCap = true;
 
-           // }
 
-           //else if (G.StatusTrig == Trig.NotTrig|| G.StatusTrig==Trig.Processing)
-           // {
-           //    Mat matCCD = BeeCore.Native.GetImg();
+            //         if (IsAutoTrig)
+            //             workPlay.RunWorkerAsync();
+            //         else
+            //             workReadCCD.RunWorkerAsync();
+            //     }
+            //     else
+            //     {
+            //         G.IsCap = false;
+            //     }
+            //     //if (G.Header.SerialPort1.IsOpen)
+            //     //{
+            //     //    Thread.Sleep(100);
+            //     //    G.Header.SerialPort1.WriteLine("OffTrig");
+            //     //  //  G.Header.SerialPort.WriteLine("OffTrig");
+            //     //}
+            //     return;
+            // }
 
-           //     Tools tool = G.listAlltool[indexToolPosition];
-                  
-           //     OutLine Para = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
-           //     RectRotate rot = Para.rotArea;
-           //     float angle = rot._rectRotation;
-           //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
-           //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
+            //     if (G.StatusTrig==Trig.Continue)
+            // {
+            //     G.StatusTrig = Trig.NotTrig;
+            //     ShowResultTotal();
 
-           //     matCrop.CopyTo(new Mat(BeeCore.Common.matRaw, new Rect((int)rot._PosCenter.X + (int)rot._rect.X, (int)rot._PosCenter.Y + (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height)));
-           //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-               
-            
-           //     DelayTrig = Para.DelayTrig;
-           //     tmTrig.Interval = 1;
-           //     tmTrig.Enabled = true;
-           //     return;
-           // }
-           // else if (G.StatusTrig==Trig.Trigged)
-           // {
-              
-           //     BeeCore.Common.matRaw = BeeCore.Native.GetImg();
-           //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-           //     tmTrig.Enabled = true;
-           //     tmTrig.Interval = DelayTrig;
-           //     return;
-           // }
-           // else if (G.StatusTrig == Trig.Complete)
-           // {
 
-           //    // BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
-           //     //imgView.ImageIpl = BeeCore.Common.matRaw;
-           //     tmTrig.Enabled = true;
-           //     tmTrig.Interval = DelayTrig;
-           //     return;
-           // }
+            //     indexTool = 0; G.IsCap = false;
+
+            //     if (btnRecord.IsCLick)
+            //     {
+
+
+            //         G.IsCap = true;
+
+            //         if (IsAutoTrig)
+
+            //             workPlay.RunWorkerAsync();
+            //         else
+            //                 if (!workReadCCD.IsBusy)
+            //                 workReadCCD.RunWorkerAsync();
+            //     }
+            //     else
+            //     {
+            //         G.IsCap = false;
+            //     }
+
+
+
+            // }
+
+            //else if (G.StatusTrig == Trig.NotTrig|| G.StatusTrig==Trig.Processing)
+            // {
+            //    Mat matCCD = BeeCore.Native.GetImg();
+
+            //     Tools tool = G.listAlltool[indexToolPosition];
+
+            //     OutLine Para = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
+            //     RectRotate rot = Para.rotArea;
+            //     float angle = rot._rectRotation;
+            //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
+            //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
+
+            //     matCrop.CopyTo(new Mat(BeeCore.Common.matRaw, new Rect((int)rot._PosCenter.X + (int)rot._rect.X, (int)rot._PosCenter.Y + (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height)));
+            //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+
+
+            //     DelayTrig = Para.DelayTrig;
+            //     tmTrig.Interval = 1;
+            //     tmTrig.Enabled = true;
+            //     return;
+            // }
+            // else if (G.StatusTrig==Trig.Trigged)
+            // {
+
+            //     BeeCore.Common.matRaw = BeeCore.Native.GetImg();
+            //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            //     tmTrig.Enabled = true;
+            //     tmTrig.Interval = DelayTrig;
+            //     return;
+            // }
+            // else if (G.StatusTrig == Trig.Complete)
+            // {
+
+            //    // BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
+            //     //imgView.ImageIpl = BeeCore.Common.matRaw;
+            //     tmTrig.Enabled = true;
+            //     tmTrig.Interval = DelayTrig;
+            //     return;
+            // }
 
 
         }
-        public bool IsCapOne = false;
+     
         Graphics gcResult;
+        public async void Continuous()
+            {
+             G.StatusMode = StatusMode.Continuous;
+            if(workReadCCD.IsBusy)
+            {
+                workReadCCD.RunWorkerAsync();
+            }    
+            
+            }
         public void Cap(bool IsTest)
         {
+
             if (btnLive.IsCLick)
             {
                 btnCap.IsCLick = false;
@@ -2219,21 +2235,10 @@ namespace BeeUi
 
                 btnCap.Enabled = false;
 
-            G.IsCap = true;
-
-            //if(IsTest)
-            //  {
-            //      if (G.Header.SerialPort1.IsOpen)
-            //         G.Header.SerialPort1.WriteLine("Trig");
-            //  }    
-            // Thread.Sleep(G.Config.delayTrigger);
-           
+           G.StatusMode =  StatusMode.Once;
            
             tmCycle = DateTime.Now;
-            IsCapOne = true;
-         
-
-         
+    
             if (!workReadCCD.IsBusy) workReadCCD.RunWorkerAsync();
         }
         public bool  IsBTNCap=false;
@@ -2292,6 +2297,8 @@ namespace BeeUi
                 btnRecord.IsCLick = false;
                 return;
             }
+            G.StatusMode = btnRecord.IsCLick ? StatusMode.Continuous : StatusMode.None;
+
             if (G.PLC.IsConnected)
             {
                 if (G.PLC.IsConnected)
@@ -2306,8 +2313,8 @@ namespace BeeUi
                     G.Header.tmReadPLC.Enabled = true;
                     G.PLC.WriteInPut(0, true);
                 }
-                tmContinuous.Enabled = btnRecord.IsCLick;
 
+                return;
             } 
             else if(G.IsByPassPLC)
             {
@@ -2317,33 +2324,12 @@ namespace BeeUi
             {
                 btnRecord.IsCLick = false;
                 tmContinuous.Enabled = false;
+                return;
             }
             if (!btnRecord.IsCLick) btnCap.Enabled = true;
-
-            // if (btnLive.IsCLick)
-            // {
-            //     btnRecord.IsCLick = false;
-
-            //     MessageBox.Show("Please stop Mode LIVE");
-            //     return;
-            // }    
-            // if (btnRecord.IsCLick)
-            // {
-
-
-            //     G.IsCap = true;
-            //     //gc = imgView.CreateGraphics();
-            //     tmCycle = DateTime.Now;
-            //     if (!workReadCCD.IsBusy) workReadCCD.RunWorkerAsync();
-            //     //if (!workPlay.IsBusy)
-            //     //    workPlay.RunWorkerAsync();
-            // }
-            // else
-            // {
-            //     G.IsCap = false;
-            //     btnCap.IsCLick = false;
-            // }    
-            //// tmPlay.Enabled = btnRecord.IsCLick;
+            if (!workReadCCD.IsBusy)
+                workReadCCD.RunWorkerAsync();
+           
 
         }
 
@@ -2506,7 +2492,7 @@ namespace BeeUi
                 workReadCCD.RunWorkerAsync();
               
             } 
-            else if (G.IsCap)
+            else if (G.StatusMode==StatusMode.Continuous|| G.StatusMode == StatusMode.Once)
             {
                
                 if (!workPlay.IsBusy)
@@ -2735,22 +2721,26 @@ namespace BeeUi
                
         }
       List<  String> Files=new List<string>();
+        List<Mat> listMat = new List<Mat>();
         int indexFile = 0;
         private void btnImg_Click(object sender, EventArgs e)
         {
             if(folderBrowserDialog1.ShowDialog()==DialogResult.OK)
             {
+                indexFile = 0;
                 Files = new List<string>();
                 Files = Directory.GetFiles(folderBrowserDialog1.SelectedPath).ToList(); ;
-                IsCapOne = true; indexFile = 0;
-                IsSimulation = true;
-                BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
-                //if (BeeCore.Common.matRaw.Type() == MatType.CV_8UC3)
-                //    Cv2.CvtColor(BeeCore.Common.matRaw, BeeCore.Common.matRaw, ColorConversionCodes.BGR2GRAY);
-                imgView.Image= BeeCore.Common.matRaw.ToBitmap();
-                G.IsCap = true; btnImg.Enabled = false; 
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
+               
+                if (Files.Count > 0)
+                {
+                    listMat = new List<Mat>();
+                    foreach (string file in Files)
+                    {
+                        listMat.Add(new Mat(file));
+                    }
+                    btnRunSim.Enabled = true; btnPlayStep.Enabled = true;
+                }
+               
             }    
           
         }
@@ -2968,23 +2958,8 @@ namespace BeeUi
             }
             if (!btnCap.Enabled)
                 return;
-            if (G.PLC.IsConnected)
-            {
-            X: G.Header.tmReadPLC.Enabled = false;
-                if (G.Header.workPLC.IsBusy)
-                {
-                    await Task.Delay(10);
-                    goto X;
-                }
-
-                await Task.Run(() => G.PLC.WriteInPut(0, true));
-
-                G.Header.tmReadPLC.Enabled = true;
-            }
-            else if (G.IsByPassPLC)
-            {
-                Cap(false);
-            }
+            Continuous();
+            tmContinuous.Enabled = false;
         }
 
         private void workTrig_DoWork(object sender, DoWorkEventArgs e)
@@ -3021,17 +2996,14 @@ namespace BeeUi
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 Files = new List<string>();
-             
-                IsCapOne = true; indexFile = 0;
-                IsSimulation = true;
+              indexFile = 0;
+              
                 Files .Add( openFile.FileName);
                 BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
                 BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
-                //if (BeeCore.Common.matRaw.Type() == MatType.CV_8UC3)
-                //    Cv2.CvtColor(BeeCore.Common.matRaw, BeeCore.Common.matRaw, ColorConversionCodes.BGR2GRAY);
                 imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-                G.IsCap = true; btnFile.Enabled = false;
-               
+                 btnFile.Enabled = false;
+                G.StatusMode = StatusMode.SimOne;
                 if (!workPlay.IsBusy)
                     workPlay.RunWorkerAsync();
             }
@@ -3040,36 +3012,98 @@ namespace BeeUi
 
         private void tmSimulation_Tick(object sender, EventArgs e)
         {
-          
-            if (IsSimulation)
-            {
-                indexFile++;
+            G.StatusMode = btnRunSim.IsCLick ? StatusMode.SimContinuous : StatusMode.None;
+
+            tmSimulation.Enabled = false;
+
+            indexFile++;
                 if (indexFile < Files.Count())
                 {
-                    IsCapOne = true;
-                    G.IsCap = true;
+                   
                     if (!BeeCore.Common.matRaw.Empty())
                         BeeCore.Common.matRaw.Release();
                     BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
-                    BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
+                G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+                BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
                     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                if (!workPlay.IsBusy)
                     workPlay.RunWorkerAsync();
                 }
                 else
                 {
                    
-                 
-                    IsSimulation = false;
-                    btnFile.Enabled = true;
-                    btnImg.Enabled = true;
+                G.StatusMode = StatusMode.None;
+             
                 }
 
-            }
-            tmSimulation.Enabled = false;
+         
         }
 
         private void btnTypeTrig_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void btnRunSim_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnPlayStep_Click(object sender, EventArgs e)
+        {
+            if(indexFile>=Files.Count())
+            {
+                indexFile = 0;
+
+            }
+            BeeCore.Common.matRaw = BeeCore.Common.matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
+            BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
+            imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+           
+            G.StatusMode = StatusMode.SimOne;
+            if (!workPlay.IsBusy)
+                workPlay.RunWorkerAsync();
+
+            G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+            btnPlayStep.Enabled = false;
+           
+        }
+
+        private void btnDeleteFile_Click(object sender, EventArgs e)
+        {
+            File.Delete(Files[indexFile - 1]);
+            Files.RemoveAt(indexFile - 1);
+            listMat.RemoveAt(indexFile - 1);
+
+            indexFile--;
+            if (indexFile < 0)
+                indexFile = 0;
+            btnPlayStep.PerformClick();
+        }
+
+        private void btnRunSim_Click_1(object sender, EventArgs e)
+        {
+            if (Files == null) return;
+            if (Files.Count == 0) return;
+            
+            G.StatusMode = btnRunSim.IsCLick  ? StatusMode.SimContinuous : StatusMode.None;
+            if (btnRunSim.IsCLick)
+            {
+                
+                btnRunSim.Image = Properties.Resources.Stop;
+
+                btnFolder.Enabled = false;
+                BeeCore.Common.matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
+                imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                if (!workPlay.IsBusy)
+                    workPlay.RunWorkerAsync();
+            }
+            else
+            {
+                btnRunSim.Image = Properties.Resources.Play_2;
+                btnFolder.Enabled = true; G.StatusMode=StatusMode.SimContinuous;
+
+            } G.EditTool.lbNamefile.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
 
         }
 
@@ -3091,23 +3125,7 @@ namespace BeeUi
 
         }
 
-        private void btnImage_Click(object sender, EventArgs e)
-        {
-           
-           
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Multiselect = true;
-           if ( fileDialog.ShowDialog()==DialogResult.OK)
-            {
-                listPath = fileDialog.FileNames;
-                G.IsCheck = true;
-                imgView.Invalidate();
-
-             
-
-            }
-
-        }
+       
 
         private void imgView_MouseUp(object sender, MouseEventArgs e)
         {
