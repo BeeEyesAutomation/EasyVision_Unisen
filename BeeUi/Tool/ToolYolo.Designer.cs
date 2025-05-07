@@ -111,7 +111,7 @@
             this.txtLabel.Location = new System.Drawing.Point(67, 43);
             this.txtLabel.Multiline = true;
             this.txtLabel.Name = "txtLabel";
-            this.txtLabel.Size = new System.Drawing.Size(143, 62);
+            this.txtLabel.Size = new System.Drawing.Size(142, 62);
             this.txtLabel.TabIndex = 36;
             this.txtLabel.TextChanged += new System.EventHandler(this.txtLabel_TextChanged);
             // 
@@ -132,7 +132,7 @@
             this.txtModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtModel.Location = new System.Drawing.Point(67, 3);
             this.txtModel.Name = "txtModel";
-            this.txtModel.Size = new System.Drawing.Size(143, 29);
+            this.txtModel.Size = new System.Drawing.Size(142, 29);
             this.txtModel.TabIndex = 32;
             // 
             // label7
@@ -674,7 +674,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 34);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(392, 799);
+            this.tabPage4.Size = new System.Drawing.Size(392, 575);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Extension";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -703,7 +703,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(386, 793);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(386, 569);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // tableLayoutPanel10
@@ -897,7 +897,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.36437F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.63563F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163F));
             this.tableLayoutPanel4.Controls.Add(this.btnSetLabel, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.txtLabel, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
@@ -934,9 +934,9 @@
             this.btnSetLabel.IsNotChange = true;
             this.btnSetLabel.IsRect = false;
             this.btnSetLabel.IsUnGroup = true;
-            this.btnSetLabel.Location = new System.Drawing.Point(216, 43);
+            this.btnSetLabel.Location = new System.Drawing.Point(215, 43);
             this.btnSetLabel.Name = "btnSetLabel";
-            this.btnSetLabel.Size = new System.Drawing.Size(157, 62);
+            this.btnSetLabel.Size = new System.Drawing.Size(158, 62);
             this.btnSetLabel.TabIndex = 37;
             this.btnSetLabel.Text = "SetLabel";
             this.btnSetLabel.TextColor = System.Drawing.Color.Black;
@@ -964,9 +964,9 @@
             this.btnPathModel.IsNotChange = true;
             this.btnPathModel.IsRect = false;
             this.btnPathModel.IsUnGroup = true;
-            this.btnPathModel.Location = new System.Drawing.Point(216, 3);
+            this.btnPathModel.Location = new System.Drawing.Point(215, 3);
             this.btnPathModel.Name = "btnPathModel";
-            this.btnPathModel.Size = new System.Drawing.Size(157, 34);
+            this.btnPathModel.Size = new System.Drawing.Size(158, 34);
             this.btnPathModel.TabIndex = 5;
             this.btnPathModel.Text = "Load Model";
             this.btnPathModel.TextColor = System.Drawing.Color.Black;

@@ -802,7 +802,24 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
 		break;
 	case PixelType_Gvsp_BayerRG8:
+		break;
 	case PixelType_Gvsp_BayerBG8:
+	{
+		if (pBufAddr == nullptr || width <= 0 || height <= 0)
+			return false;
+
+		cv::Mat rawImage2(height, width, CV_8UC1);
+		memcpy(rawImage2.data, pBufAddr, height * width);  // Sao chép bộ nhớ để tránh lỗi
+
+		if (rawImage2.empty())
+			return false;
+
+		
+		cv::cvtColor(rawImage2, image, cv::COLOR_BayerRG2BGR);  // hoặc COLOR_BayerBG2BGR tùy loại
+		
+		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+		break;
+	}
 	case PixelType_Gvsp_BayerGR8:
 	case PixelType_Gvsp_BayerGB8:
 	{
@@ -843,6 +860,8 @@ void CCD::ReadCCD()
 	switch (typeCCD)
 	{
 	case 1: 
+		if (!matRaw.empty())
+			matRaw.release();
 		ReadHik();
 		//baslerGigE.StartGrabbing();
 		//baslerGigE.RetrieveResult(-1, ptrGrabResult, TimeoutHandling_ThrowException);//Lay Data Camera SAU KHOẢNG THỜI GIAN SẼ THOÁT RA ,(NẾU GIÁ TRỊ BẰNG -1 KHÔNG THOÁT RA)

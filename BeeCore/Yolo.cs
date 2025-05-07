@@ -94,10 +94,10 @@ namespace BeeCore
         public bool IsCheckArea = false;
         public Point p1 = new Point();
         public Point p2 = new Point();
-        public int yLine = 200;
+        public int yLine = 100;
         public bool Check(String nameTool, RectRotate rot)
         {
-            yLine = 710;
+            yLine = 300;
             BeeCore.Native.SetImg(BeeCore.Common.matRaw);
             BeeCore.G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle);
             //{
@@ -141,24 +141,26 @@ namespace BeeCore
                     if (Labels.Contains(label))
                     {
                         if (IsCheckArea )
-                        {
-                            if(rt._PosCenter.Y-height/2<yLine)
+                        {if (height < 300)
                             {
-                                listOK.Add(false);
-                                rectRotates.Add(rt);
-                                listLabel.Add(label);
-                                Score += score;
-                                listScore.Add(score);
-                                numOK++;
-                            }
-                            else
-                            {
-                                listOK.Add(true);
-                                rectRotates.Add(rt);
-                                listLabel.Add(label);
-                                Score += score;
-                                listScore.Add(score);
+                                if (rt._PosCenter.Y - height / 2 < yLine)
+                                {
+                                    listOK.Add(false);
+                                    rectRotates.Add(rt);
+                                    listLabel.Add(label);
+                                    Score += score;
+                                    listScore.Add(score);
+                                    numOK++;
+                                }
+                                else
+                                {
+                                    listOK.Add(true);
+                                    rectRotates.Add(rt);
+                                    listLabel.Add(label);
+                                    Score += score;
+                                    listScore.Add(score);
 
+                                }
                             }
                         }
                         else

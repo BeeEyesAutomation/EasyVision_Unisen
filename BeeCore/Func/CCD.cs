@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static EasyModbus.ModbusServer;
 using Size = OpenCvSharp.Size;
 
 namespace BeeCore
@@ -29,8 +31,16 @@ namespace BeeCore
                 if (G.ParaCam.CardChoosed == null) G.ParaCam.CardChoosed = "";
                     if ( G.ParaCam.CardChoosed!="")
                 {
-                    int[] IP = G.ParaCam.CardChoosed.Split('.').Select(int.Parse).ToArray();
-                    return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]);
+                    try
+                    {
+                        int[] IP = G.ParaCam.CardChoosed.Split('.').Select(int.Parse).ToArray();
+                        return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]);
+
+                    }
+                   catch(Exception)
+                    {
+                        return BeeCore.HEROJE.Scan(192, 168, 2, 1);
+                    }
                 }
                else
                     return BeeCore.HEROJE.Scan(192, 168, 2,1);
@@ -73,11 +83,43 @@ namespace BeeCore
 
             BeeCore.G.CCD.colCCD = Convert.ToInt32(sp2[0]);
             BeeCore.G.CCD.rowCCD = Convert.ToInt32(sp2[1]);
-
+            Mat raw = new Mat();
             if (G.CCD.Connect(Convert.ToInt32(sp2[1]), Convert.ToInt32(sp2[0]), indexCCD))
             {
+                if (Common.matRaw != null)
+                    if (!Common.matRaw.Empty())
+                        Common.matRaw.Release();
+                //if (IsHist)
+                //    G.CCD.ReadRaw(true);
+                //else
                 G.CCD.ReadCCD();
-                G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.G.CCD.colCCD, BeeCore.G.CCD.rowCCD);
+                int rows=0, cols=0;int Type = 0;
+                IntPtr intPtr = new IntPtr();
+                raw = new Mat();
+                try
+                {
+
+                    unsafe
+                    {
+                        intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
+                        raw = new Mat(rows, cols, Type, intPtr);
+
+                        FrameRate = G.CCD.FPS;
+                        BeeCore.Common.Cycle = G.CCD.cycle;
+                        BeeCore.Common.matRaw = raw.Clone();
+                        G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+                    }
+                    //    return new Mat();
+
+
+                }
+                finally
+                {
+                    raw.Release();
+                    // Giải phóng bộ nhớ sau khi sử dụng
+                    //Marshal.FreeHGlobal(intPtr);
+                }
+                
                 //StepExposure = G.CCD.StepExposure;
                 //MinExposure = G.CCD.MinExposure;
                 //MaxExposure = G.CCD.MaxExposure;
@@ -225,6 +267,11 @@ namespace BeeCore
             }
             return -1;
         }
+        public static System.Drawing.Size GetSzCCD()
+        {
+          return new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+
+        }
         public static async void Read()
         {
             int rows = 0, cols = 0, Type = 0;
@@ -299,7 +346,7 @@ namespace BeeCore
                         }
                         finally
                         {
-                            raw.Release();
+                           // raw.Release();
                             // Giải phóng bộ nhớ sau khi sử dụng
                             //Marshal.FreeHGlobal(intPtr);
                         }

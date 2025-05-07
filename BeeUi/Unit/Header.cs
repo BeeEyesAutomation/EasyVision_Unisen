@@ -154,7 +154,7 @@ namespace BeeUi.Common
                 BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + NameProject + ".para");
             else
                 BeeCore.G.ParaCam = new BeeCore.ParaCam();
-            BeeCore.G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.G.CCD.colCCD, BeeCore.G.CCD.rowCCD);
+
 
 
 
@@ -166,6 +166,7 @@ namespace BeeUi.Common
 
             // BeeCore.Camera.Read(G.Config.IsHist, G.Config.TypeCamera);
             //  BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
+            BeeCore.G.ParaCam.SizeCCD = Camera.GetSzCCD();
             if (BeeCore.G.ParaCam.matRegister != null)
                 BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
             else if (G.IsCCD)
@@ -174,7 +175,7 @@ namespace BeeUi.Common
             {
                 G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
                 BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-                BeeCore.G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+              //  BeeCore.G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
             }
 
             if (pathOld== NameProject)
@@ -182,6 +183,7 @@ namespace BeeUi.Common
                 return;
 
             }
+            
             pathOld = NameProject;
             G.listAlltool = new List<Tools>();
             G.PropetyTools = new List<BeeCore.PropetyTool>();
