@@ -34,25 +34,43 @@ namespace BeeUi.Tool
         
         public BeeCore.ColorArea Propety=new ColorArea();
         public Mat matTemp = new Mat();
-        Mat bmRs =null;
+       
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public bool IsClear;
-        public void LoadPara( dynamic Content)
+        public BackgroundWorker worker = new BackgroundWorker();
+        public void LoadPara( )
         {
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                if (!G.IsRun)
+                    Propety.rotAreaAdjustment = Propety.rotArea;
+                Propety.DoWork(Propety.rotAreaAdjustment);
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+
+            };
           
-            ColorArea Para = (ColorArea)Content;
-            if(Para.listCLShow==null)
-            Para.listCLShow = new List<Color>();
+            if(Propety.listCLShow==null)
+                Propety.listCLShow = new List<Color>();
             if(G.Config.TypeCamera==TypeCamera.USB)
             Propety.LoadTemp(G.IsCCD,G.Config.IsHist);
-            trackScore.Value =Para.Score ;
-            trackPixel.Value = (int)Para.AreaPixel;
-            if (!Convert.ToBoolean(Para.StyleColor))
+            trackScore.Value = Propety.Score ;
+            trackPixel.Value = (int)Propety.AreaPixel;
+            if (!Convert.ToBoolean(Propety.StyleColor))
                 btnColor.IsCLick = true;
             else
                 btnClWhite.IsCLick = true;
 
-            trackScore.Value = Para.Score;
+            trackScore.Value = Propety.Score;
            
         }
         public Mat RotateMat(Mat raw, RotatedRect rot)
@@ -121,7 +139,7 @@ namespace BeeUi.Tool
                 if (G.IsDrawProcess)
                 {    // mat.Translate(rotA._rect.X, rotA._rect.Y);
                       //gc.Transform = mat;
-                    Bitmap bmTemp = bmRs.ToBitmap();
+                    Bitmap bmTemp = Propety.bmRS;
                     bmTemp.MakeTransparent(Color.Black);
                     bmTemp = ConvertImg.ChangeToColor(bmTemp, cl, 0.7f);
                     gc.DrawImage(bmTemp, rotA._rect);
@@ -147,12 +165,12 @@ namespace BeeUi.Tool
                 //mat.Rotate(rotA._rectRotation);
                 //gc.Transform = mat;
                 gc.DrawRectangle(new Pen(cl, 2), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-
+                if (Propety.bmRS == null) return gc;
                 if (G.IsDrawProcess)
                 {
                   //  mat.Translate(rotA._rect.X, rotA._rect.Y);
                   //  gc.Transform = mat;
-                    Bitmap myBitmap = bmRs.ToBitmap();
+                    Bitmap myBitmap = Propety.bmRS;
                     myBitmap.MakeTransparent(Color.Black);
                     myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
                     gc.DrawImage(myBitmap, rotA._rect);
@@ -161,7 +179,7 @@ namespace BeeUi.Tool
                 
                
             }
-            String s= (int)(  indexTool+1)+"."+ G.PropetyTools[indexTool].Name;
+            String s= (int)(  Propety.Index+1)+"."+ G.PropetyTools[Propety.Index].Name;
          SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
             gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));
             gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
@@ -217,9 +235,9 @@ namespace BeeUi.Tool
 
         private void rjButton8_Click(object sender, EventArgs e)
         {
+           
             G.IsCheck = true;
-            this.Parent.Controls.Remove(this);
-            G.ToolSettings.Visible = true;
+            G.EditTool.RefreshGuiEdit(Step.Step3);
             btnGetColor.IsCLick = false;
             Propety.IsGetColor = btnGetColor.IsCLick;
         }
@@ -227,32 +245,9 @@ namespace BeeUi.Tool
       
      
       
-        public void Process()
-        {
-            
-            if (G.IsRun)
-            {
-                if (G.rotPositionAdjustment != null)
-                    Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotPositionAdjustment);
-                else
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                //  Propety.Matching(G.IsRun, BeeCore.Common.matRaw.ToBitmap(), indexTool, Propety.rotAreaAdjustment);
-                bmRs = Propety.CheckColor(G.IsRun, BeeCore.Common.matRaw, Propety.rotAreaAdjustment);
-            }
-            else
-                bmRs = Propety.CheckColor(G.IsRun, BeeCore.Common.matRaw, Propety.rotArea);
-
-         
-
-        }
+       
     
-        private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Process();
-
-
-
-        }
+       
 
         private void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -389,8 +384,8 @@ namespace BeeUi.Tool
         private void btnCancel_Click(object sender, EventArgs e)
         {
             G.IsCancel = true;
-            this.Parent.Controls.Remove(this);
-            G.ToolSettings.Visible = true;
+           
+            G.EditTool.RefreshGuiEdit(Step.Step3);
             btnGetColor.IsCLick = false;
             Propety.IsGetColor = btnGetColor.IsCLick;
         }
@@ -490,6 +485,15 @@ namespace BeeUi.Tool
         private void btnMask_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            G.IsCheck = true;
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
+            else
+                btnTest.IsCLick = false;
         }
     }
 }

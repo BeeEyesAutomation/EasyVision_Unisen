@@ -777,6 +777,8 @@
   <ItemGroup>
     <Content Include="bee.ico" />
     <Content Include="LogoAHSo.ico" />
+    <Content Include="Python\Learning.py" />
+    <Content Include="Python\OcrWapper.py" />
     <None Include="Resources\Stop.png" />
     <None Include="Resources\End.png" />
     <None Include="Resources\File.png" />

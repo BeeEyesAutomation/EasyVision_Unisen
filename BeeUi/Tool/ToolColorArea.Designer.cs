@@ -36,31 +36,32 @@ namespace BeeUi.Tool
             this.label5 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.trackScore = new BeeUi.TrackBar2();
             this.label1 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnClWhite = new BeeUi.Common.RJButton();
+            this.btnColor = new BeeUi.Common.RJButton();
             this.label6 = new System.Windows.Forms.Label();
             this.pArea = new System.Windows.Forms.Panel();
+            this.btnCropArea = new BeeUi.Common.RJButton();
+            this.btnCropRect = new BeeUi.Common.RJButton();
             this.pMode = new System.Windows.Forms.Panel();
+            this.trackPixel = new BeeUi.TrackBar2();
             this.label7 = new System.Windows.Forms.Label();
             this.btnDeleteAll = new System.Windows.Forms.Button();
             this.btnRedo = new System.Windows.Forms.Button();
             this.btnUndo = new System.Windows.Forms.Button();
             this.picColor = new System.Windows.Forms.PictureBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label10 = new System.Windows.Forms.Label();
-            this.trackScore = new BeeUi.TrackBar2();
-            this.btnClWhite = new BeeUi.Common.RJButton();
-            this.btnColor = new BeeUi.Common.RJButton();
-            this.btnCropArea = new BeeUi.Common.RJButton();
-            this.btnCropRect = new BeeUi.Common.RJButton();
-            this.trackPixel = new BeeUi.TrackBar2();
             this.btnGetColor = new BeeUi.Common.RJButton();
             this.rjButton3 = new BeeUi.Common.RJButton();
             this.rjButton1 = new BeeUi.Common.RJButton();
             this.btnCancel = new BeeUi.Common.RJButton();
             this.rjButton5 = new BeeUi.Common.RJButton();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
             this.btnMask = new BeeUi.Common.RJButton();
+            this.btnTest = new BeeUi.Common.RJButton();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -81,11 +82,6 @@ namespace BeeUi.Tool
             this.label4.TabIndex = 15;
             this.label4.Text = "Score";
             // 
-            // threadProcess
-            // 
-            this.threadProcess.DoWork += new System.ComponentModel.DoWorkEventHandler(this.threadProcess_DoWork);
-            this.threadProcess.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.threadProcess_RunWorkerCompleted);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -105,12 +101,13 @@ namespace BeeUi.Tool
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(400, 525);
+            this.tabControl2.Size = new System.Drawing.Size(400, 646);
             this.tabControl2.TabIndex = 17;
             this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnTest);
             this.tabPage3.Controls.Add(this.trackScore);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.panel4);
@@ -126,11 +123,27 @@ namespace BeeUi.Tool
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(392, 492);
+            this.tabPage3.Size = new System.Drawing.Size(392, 613);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Căn bản";
             this.tabPage3.UseVisualStyleBackColor = true;
             this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
+            // 
+            // trackScore
+            // 
+            this.trackScore.ColorTrack = System.Drawing.Color.Gray;
+            this.trackScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackScore.Location = new System.Drawing.Point(16, 393);
+            this.trackScore.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.trackScore.Max = 100;
+            this.trackScore.Min = 0;
+            this.trackScore.Name = "trackScore";
+            this.trackScore.Size = new System.Drawing.Size(360, 45);
+            this.trackScore.Step = 1;
+            this.trackScore.TabIndex = 30;
+            this.trackScore.Value = 0;
+            this.trackScore.ValueScore = 0;
+            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
             // 
             // label1
             // 
@@ -150,6 +163,66 @@ namespace BeeUi.Tool
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(364, 48);
             this.panel4.TabIndex = 28;
+            // 
+            // btnClWhite
+            // 
+            this.btnClWhite.BackColor = System.Drawing.Color.Transparent;
+            this.btnClWhite.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnClWhite.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClWhite.BackgroundImage")));
+            this.btnClWhite.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnClWhite.BorderColor = System.Drawing.Color.Transparent;
+            this.btnClWhite.BorderRadius = 5;
+            this.btnClWhite.BorderSize = 1;
+            this.btnClWhite.ButtonImage = null;
+            this.btnClWhite.Corner = BeeCore.Corner.Both;
+            this.btnClWhite.FlatAppearance.BorderSize = 0;
+            this.btnClWhite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClWhite.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClWhite.ForeColor = System.Drawing.Color.Black;
+            this.btnClWhite.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClWhite.IsCLick = false;
+            this.btnClWhite.IsNotChange = false;
+            this.btnClWhite.IsRect = false;
+            this.btnClWhite.IsUnGroup = false;
+            this.btnClWhite.Location = new System.Drawing.Point(179, 3);
+            this.btnClWhite.Name = "btnClWhite";
+            this.btnClWhite.Size = new System.Drawing.Size(176, 40);
+            this.btnClWhite.TabIndex = 4;
+            this.btnClWhite.Text = "RGB";
+            this.btnClWhite.TextColor = System.Drawing.Color.Black;
+            this.btnClWhite.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnClWhite.UseVisualStyleBackColor = false;
+            this.btnClWhite.Click += new System.EventHandler(this.btnClWhite_Click);
+            // 
+            // btnColor
+            // 
+            this.btnColor.BackColor = System.Drawing.Color.Transparent;
+            this.btnColor.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnColor.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnColor.BackgroundImage")));
+            this.btnColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnColor.BorderColor = System.Drawing.Color.Transparent;
+            this.btnColor.BorderRadius = 5;
+            this.btnColor.BorderSize = 1;
+            this.btnColor.ButtonImage = null;
+            this.btnColor.Corner = BeeCore.Corner.Both;
+            this.btnColor.FlatAppearance.BorderSize = 0;
+            this.btnColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnColor.ForeColor = System.Drawing.Color.Black;
+            this.btnColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnColor.IsCLick = true;
+            this.btnColor.IsNotChange = false;
+            this.btnColor.IsRect = false;
+            this.btnColor.IsUnGroup = false;
+            this.btnColor.Location = new System.Drawing.Point(2, 3);
+            this.btnColor.Name = "btnColor";
+            this.btnColor.Size = new System.Drawing.Size(177, 40);
+            this.btnColor.TabIndex = 2;
+            this.btnColor.Text = "HSV";
+            this.btnColor.TextColor = System.Drawing.Color.Black;
+            this.btnColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnColor.UseVisualStyleBackColor = false;
+            this.btnColor.Click += new System.EventHandler(this.btnColor_Click);
             // 
             // label6
             // 
@@ -171,6 +244,65 @@ namespace BeeUi.Tool
             this.pArea.Size = new System.Drawing.Size(364, 48);
             this.pArea.TabIndex = 26;
             // 
+            // btnCropArea
+            // 
+            this.btnCropArea.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnCropArea.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnCropArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCropArea.BackgroundImage")));
+            this.btnCropArea.BorderColor = System.Drawing.Color.Silver;
+            this.btnCropArea.BorderRadius = 5;
+            this.btnCropArea.BorderSize = 1;
+            this.btnCropArea.ButtonImage = null;
+            this.btnCropArea.Corner = BeeCore.Corner.Both;
+            this.btnCropArea.FlatAppearance.BorderSize = 0;
+            this.btnCropArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCropArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCropArea.ForeColor = System.Drawing.Color.Black;
+            this.btnCropArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCropArea.IsCLick = false;
+            this.btnCropArea.IsNotChange = false;
+            this.btnCropArea.IsRect = false;
+            this.btnCropArea.IsUnGroup = false;
+            this.btnCropArea.Location = new System.Drawing.Point(179, 3);
+            this.btnCropArea.Name = "btnCropArea";
+            this.btnCropArea.Size = new System.Drawing.Size(175, 40);
+            this.btnCropArea.TabIndex = 3;
+            this.btnCropArea.Text = "Partial";
+            this.btnCropArea.TextColor = System.Drawing.Color.Black;
+            this.btnCropArea.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCropArea.UseVisualStyleBackColor = false;
+            this.btnCropArea.Click += new System.EventHandler(this.btnCropArea_Click_1);
+            // 
+            // btnCropRect
+            // 
+            this.btnCropRect.BackColor = System.Drawing.Color.Transparent;
+            this.btnCropRect.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCropRect.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCropRect.BackgroundImage")));
+            this.btnCropRect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCropRect.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCropRect.BorderRadius = 5;
+            this.btnCropRect.BorderSize = 1;
+            this.btnCropRect.ButtonImage = null;
+            this.btnCropRect.Corner = BeeCore.Corner.Both;
+            this.btnCropRect.FlatAppearance.BorderSize = 0;
+            this.btnCropRect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCropRect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCropRect.ForeColor = System.Drawing.Color.Black;
+            this.btnCropRect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCropRect.IsCLick = true;
+            this.btnCropRect.IsNotChange = false;
+            this.btnCropRect.IsRect = false;
+            this.btnCropRect.IsUnGroup = false;
+            this.btnCropRect.Location = new System.Drawing.Point(2, 3);
+            this.btnCropRect.Name = "btnCropRect";
+            this.btnCropRect.Size = new System.Drawing.Size(176, 40);
+            this.btnCropRect.TabIndex = 2;
+            this.btnCropRect.Text = "Entire";
+            this.btnCropRect.TextColor = System.Drawing.Color.Black;
+            this.btnCropRect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCropRect.UseVisualStyleBackColor = false;
+            this.btnCropRect.Click += new System.EventHandler(this.btnCropRect_Click_1);
+            // 
             // pMode
             // 
             this.pMode.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -187,6 +319,23 @@ namespace BeeUi.Tool
             this.pMode.Size = new System.Drawing.Size(364, 101);
             this.pMode.TabIndex = 18;
             this.pMode.Paint += new System.Windows.Forms.PaintEventHandler(this.pMode_Paint);
+            // 
+            // trackPixel
+            // 
+            this.trackPixel.ColorTrack = System.Drawing.Color.Gray;
+            this.trackPixel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackPixel.Location = new System.Drawing.Point(64, 55);
+            this.trackPixel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.trackPixel.Max = 50;
+            this.trackPixel.Min = 1;
+            this.trackPixel.Name = "trackPixel";
+            this.trackPixel.Size = new System.Drawing.Size(293, 45);
+            this.trackPixel.Step = 1;
+            this.trackPixel.TabIndex = 32;
+            this.trackPixel.Value = 1;
+            this.trackPixel.ValueScore = 0;
+            this.trackPixel.ValueChanged += new System.Action<int>(this.trackPixel_ValueChanged);
+            this.trackPixel.Validating += new System.ComponentModel.CancelEventHandler(this.trackPixel_Validating);
             // 
             // label7
             // 
@@ -247,6 +396,155 @@ namespace BeeUi.Tool
             this.picColor.Click += new System.EventHandler(this.picColor_Click);
             this.picColor.Paint += new System.Windows.Forms.PaintEventHandler(this.picColor_Paint);
             // 
+            // btnGetColor
+            // 
+            this.btnGetColor.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnGetColor.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnGetColor.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGetColor.BackgroundImage")));
+            this.btnGetColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnGetColor.BorderColor = System.Drawing.Color.Silver;
+            this.btnGetColor.BorderRadius = 5;
+            this.btnGetColor.BorderSize = 1;
+            this.btnGetColor.ButtonImage = null;
+            this.btnGetColor.Corner = BeeCore.Corner.Both;
+            this.btnGetColor.FlatAppearance.BorderSize = 0;
+            this.btnGetColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGetColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGetColor.ForeColor = System.Drawing.Color.Black;
+            this.btnGetColor.Image = global::BeeUi.Properties.Resources.BID_ICON_EXTRACTION_ADD_E_32BIT;
+            this.btnGetColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGetColor.IsCLick = false;
+            this.btnGetColor.IsNotChange = false;
+            this.btnGetColor.IsRect = false;
+            this.btnGetColor.IsUnGroup = false;
+            this.btnGetColor.Location = new System.Drawing.Point(4, 4);
+            this.btnGetColor.Name = "btnGetColor";
+            this.btnGetColor.Size = new System.Drawing.Size(54, 36);
+            this.btnGetColor.TabIndex = 4;
+            this.btnGetColor.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnGetColor.TextColor = System.Drawing.Color.Black;
+            this.btnGetColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnGetColor.UseVisualStyleBackColor = false;
+            this.btnGetColor.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // rjButton3
+            // 
+            this.rjButton3.BackColor = System.Drawing.SystemColors.Control;
+            this.rjButton3.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.rjButton3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton3.BackgroundImage")));
+            this.rjButton3.BorderColor = System.Drawing.Color.Silver;
+            this.rjButton3.BorderRadius = 5;
+            this.rjButton3.BorderSize = 1;
+            this.rjButton3.ButtonImage = null;
+            this.rjButton3.Corner = BeeCore.Corner.Both;
+            this.rjButton3.Enabled = false;
+            this.rjButton3.FlatAppearance.BorderSize = 0;
+            this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton3.ForeColor = System.Drawing.Color.Black;
+            this.rjButton3.Image = global::BeeUi.Properties.Resources.Circle_1;
+            this.rjButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton3.IsCLick = false;
+            this.rjButton3.IsNotChange = false;
+            this.rjButton3.IsRect = false;
+            this.rjButton3.IsUnGroup = false;
+            this.rjButton3.Location = new System.Drawing.Point(192, 36);
+            this.rjButton3.Name = "rjButton3";
+            this.rjButton3.Size = new System.Drawing.Size(175, 40);
+            this.rjButton3.TabIndex = 1;
+            this.rjButton3.Text = "Hình tròn";
+            this.rjButton3.TextColor = System.Drawing.Color.Black;
+            this.rjButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rjButton3.UseVisualStyleBackColor = false;
+            // 
+            // rjButton1
+            // 
+            this.rjButton1.BackColor = System.Drawing.Color.Transparent;
+            this.rjButton1.BackgroundColor = System.Drawing.Color.Transparent;
+            this.rjButton1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton1.BackgroundImage")));
+            this.rjButton1.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton1.BorderRadius = 5;
+            this.rjButton1.BorderSize = 0;
+            this.rjButton1.ButtonImage = null;
+            this.rjButton1.Corner = BeeCore.Corner.Both;
+            this.rjButton1.FlatAppearance.BorderSize = 0;
+            this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton1.ForeColor = System.Drawing.Color.Black;
+            this.rjButton1.Image = global::BeeUi.Properties.Resources.Rectangle;
+            this.rjButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton1.IsCLick = true;
+            this.rjButton1.IsNotChange = false;
+            this.rjButton1.IsRect = false;
+            this.rjButton1.IsUnGroup = false;
+            this.rjButton1.Location = new System.Drawing.Point(15, 36);
+            this.rjButton1.Name = "rjButton1";
+            this.rjButton1.Size = new System.Drawing.Size(176, 40);
+            this.rjButton1.TabIndex = 0;
+            this.rjButton1.Text = "Hình Vuông";
+            this.rjButton1.TextColor = System.Drawing.Color.Black;
+            this.rjButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rjButton1.UseVisualStyleBackColor = false;
+            this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCancel.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.btnCancel.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
+            this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCancel.BorderRadius = 5;
+            this.btnCancel.BorderSize = 1;
+            this.btnCancel.ButtonImage = null;
+            this.btnCancel.Corner = BeeCore.Corner.Both;
+            this.btnCancel.FlatAppearance.BorderSize = 0;
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.ForeColor = System.Drawing.Color.Black;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.IsCLick = false;
+            this.btnCancel.IsNotChange = true;
+            this.btnCancel.IsRect = false;
+            this.btnCancel.IsUnGroup = false;
+            this.btnCancel.Location = new System.Drawing.Point(196, 567);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(175, 40);
+            this.btnCancel.TabIndex = 11;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextColor = System.Drawing.Color.Black;
+            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // rjButton5
+            // 
+            this.rjButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.rjButton5.BackColor = System.Drawing.Color.Transparent;
+            this.rjButton5.BackgroundColor = System.Drawing.Color.Transparent;
+            this.rjButton5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton5.BackgroundImage")));
+            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton5.BorderRadius = 5;
+            this.rjButton5.BorderSize = 1;
+            this.rjButton5.ButtonImage = null;
+            this.rjButton5.Corner = BeeCore.Corner.Both;
+            this.rjButton5.FlatAppearance.BorderSize = 0;
+            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjButton5.ForeColor = System.Drawing.Color.Black;
+            this.rjButton5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton5.IsCLick = true;
+            this.rjButton5.IsNotChange = true;
+            this.rjButton5.IsRect = false;
+            this.rjButton5.IsUnGroup = true;
+            this.rjButton5.Location = new System.Drawing.Point(8, 567);
+            this.rjButton5.Name = "rjButton5";
+            this.rjButton5.Size = new System.Drawing.Size(178, 40);
+            this.rjButton5.TabIndex = 10;
+            this.rjButton5.Text = "OK";
+            this.rjButton5.TextColor = System.Drawing.Color.Black;
+            this.rjButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rjButton5.UseVisualStyleBackColor = false;
+            this.rjButton5.Click += new System.EventHandler(this.rjButton8_Click);
+            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.panel6);
@@ -277,307 +575,6 @@ namespace BeeUi.Tool
             this.label10.TabIndex = 25;
             this.label10.Text = "Add Area Mask";
             // 
-            // trackScore
-            // 
-            this.trackScore.ColorTrack = System.Drawing.Color.Gray;
-            this.trackScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackScore.Location = new System.Drawing.Point(16, 393);
-            this.trackScore.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.trackScore.Max = 100;
-            this.trackScore.Min = 0;
-            this.trackScore.Name = "trackScore";
-            this.trackScore.Size = new System.Drawing.Size(360, 45);
-            this.trackScore.Step = 1;
-            this.trackScore.TabIndex = 30;
-            this.trackScore.Value = 0;
-            this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
-            // 
-            // btnClWhite
-            // 
-            this.btnClWhite.BackColor = System.Drawing.Color.Transparent;
-            this.btnClWhite.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnClWhite.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnClWhite.BackgroundImage")));
-            this.btnClWhite.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnClWhite.BorderColor = System.Drawing.Color.Transparent;
-            this.btnClWhite.BorderRadius = 5;
-            this.btnClWhite.BorderSize = 1;
-            this.btnClWhite.ButtonImage = null;
-            this.btnClWhite.Corner =Corner.Both;
-            this.btnClWhite.FlatAppearance.BorderSize = 0;
-            this.btnClWhite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClWhite.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClWhite.ForeColor = System.Drawing.Color.Black;
-            this.btnClWhite.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClWhite.IsCLick = false;
-            this.btnClWhite.IsNotChange = false;
-            this.btnClWhite.IsRect = false;
-            this.btnClWhite.IsUnGroup = false;
-            this.btnClWhite.Location = new System.Drawing.Point(179, 3);
-            this.btnClWhite.Name = "btnClWhite";
-            this.btnClWhite.Size = new System.Drawing.Size(176, 40);
-            this.btnClWhite.TabIndex = 4;
-            this.btnClWhite.Text = "RGB";
-            this.btnClWhite.TextColor = System.Drawing.Color.Black;
-            this.btnClWhite.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnClWhite.UseVisualStyleBackColor = false;
-            this.btnClWhite.Click += new System.EventHandler(this.btnClWhite_Click);
-            // 
-            // btnColor
-            // 
-            this.btnColor.BackColor = System.Drawing.Color.Transparent;
-            this.btnColor.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnColor.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnColor.BackgroundImage")));
-            this.btnColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnColor.BorderColor = System.Drawing.Color.Transparent;
-            this.btnColor.BorderRadius = 5;
-            this.btnColor.BorderSize = 1;
-            this.btnColor.ButtonImage = null;
-            this.btnColor.Corner =Corner.Both;
-            this.btnColor.FlatAppearance.BorderSize = 0;
-            this.btnColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnColor.ForeColor = System.Drawing.Color.Black;
-            this.btnColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnColor.IsCLick = true;
-            this.btnColor.IsNotChange = false;
-            this.btnColor.IsRect = false;
-            this.btnColor.IsUnGroup = false;
-            this.btnColor.Location = new System.Drawing.Point(2, 3);
-            this.btnColor.Name = "btnColor";
-            this.btnColor.Size = new System.Drawing.Size(177, 40);
-            this.btnColor.TabIndex = 2;
-            this.btnColor.Text = "HSV";
-            this.btnColor.TextColor = System.Drawing.Color.Black;
-            this.btnColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnColor.UseVisualStyleBackColor = false;
-            this.btnColor.Click += new System.EventHandler(this.btnColor_Click);
-            // 
-            // btnCropArea
-            // 
-            this.btnCropArea.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnCropArea.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnCropArea.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCropArea.BackgroundImage")));
-            this.btnCropArea.BorderColor = System.Drawing.Color.Silver;
-            this.btnCropArea.BorderRadius = 5;
-            this.btnCropArea.BorderSize = 1;
-            this.btnCropArea.ButtonImage = null;
-            this.btnCropArea.Corner =Corner.Both;
-            this.btnCropArea.FlatAppearance.BorderSize = 0;
-            this.btnCropArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCropArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCropArea.ForeColor = System.Drawing.Color.Black;
-            this.btnCropArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCropArea.IsCLick = false;
-            this.btnCropArea.IsNotChange = false;
-            this.btnCropArea.IsRect = false;
-            this.btnCropArea.IsUnGroup = false;
-            this.btnCropArea.Location = new System.Drawing.Point(179, 3);
-            this.btnCropArea.Name = "btnCropArea";
-            this.btnCropArea.Size = new System.Drawing.Size(175, 40);
-            this.btnCropArea.TabIndex = 3;
-            this.btnCropArea.Text = "Partial";
-            this.btnCropArea.TextColor = System.Drawing.Color.Black;
-            this.btnCropArea.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCropArea.UseVisualStyleBackColor = false;
-            this.btnCropArea.Click += new System.EventHandler(this.btnCropArea_Click_1);
-            // 
-            // btnCropRect
-            // 
-            this.btnCropRect.BackColor = System.Drawing.Color.Transparent;
-            this.btnCropRect.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnCropRect.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCropRect.BackgroundImage")));
-            this.btnCropRect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnCropRect.BorderColor = System.Drawing.Color.Transparent;
-            this.btnCropRect.BorderRadius = 5;
-            this.btnCropRect.BorderSize = 1;
-            this.btnCropRect.ButtonImage = null;
-            this.btnCropRect.Corner =Corner.Both;
-            this.btnCropRect.FlatAppearance.BorderSize = 0;
-            this.btnCropRect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCropRect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCropRect.ForeColor = System.Drawing.Color.Black;
-            this.btnCropRect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCropRect.IsCLick = true;
-            this.btnCropRect.IsNotChange = false;
-            this.btnCropRect.IsRect = false;
-            this.btnCropRect.IsUnGroup = false;
-            this.btnCropRect.Location = new System.Drawing.Point(2, 3);
-            this.btnCropRect.Name = "btnCropRect";
-            this.btnCropRect.Size = new System.Drawing.Size(176, 40);
-            this.btnCropRect.TabIndex = 2;
-            this.btnCropRect.Text = "Entire";
-            this.btnCropRect.TextColor = System.Drawing.Color.Black;
-            this.btnCropRect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCropRect.UseVisualStyleBackColor = false;
-            this.btnCropRect.Click += new System.EventHandler(this.btnCropRect_Click_1);
-            // 
-            // trackPixel
-            // 
-            this.trackPixel.ColorTrack = System.Drawing.Color.Gray;
-            this.trackPixel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackPixel.Location = new System.Drawing.Point(64, 55);
-            this.trackPixel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.trackPixel.Max = 50;
-            this.trackPixel.Min = 1;
-            this.trackPixel.Name = "trackPixel";
-            this.trackPixel.Size = new System.Drawing.Size(293, 45);
-            this.trackPixel.Step = 1;
-            this.trackPixel.TabIndex = 32;
-            this.trackPixel.Value = 1;
-            this.trackPixel.ValueScore = 0;
-            this.trackPixel.ValueChanged += new System.Action<int>(this.trackPixel_ValueChanged);
-            this.trackPixel.Validating += new System.ComponentModel.CancelEventHandler(this.trackPixel_Validating);
-            // 
-            // btnGetColor
-            // 
-            this.btnGetColor.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnGetColor.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnGetColor.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGetColor.BackgroundImage")));
-            this.btnGetColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGetColor.BorderColor = System.Drawing.Color.Silver;
-            this.btnGetColor.BorderRadius = 5;
-            this.btnGetColor.BorderSize = 1;
-            this.btnGetColor.ButtonImage = null;
-            this.btnGetColor.Corner =Corner.Both;
-            this.btnGetColor.FlatAppearance.BorderSize = 0;
-            this.btnGetColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGetColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGetColor.ForeColor = System.Drawing.Color.Black;
-            this.btnGetColor.Image = global::BeeUi.Properties.Resources.BID_ICON_EXTRACTION_ADD_E_32BIT;
-            this.btnGetColor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGetColor.IsCLick = false;
-            this.btnGetColor.IsNotChange = false;
-            this.btnGetColor.IsRect = false;
-            this.btnGetColor.IsUnGroup = false;
-            this.btnGetColor.Location = new System.Drawing.Point(4, 4);
-            this.btnGetColor.Name = "btnGetColor";
-            this.btnGetColor.Size = new System.Drawing.Size(54, 36);
-            this.btnGetColor.TabIndex = 4;
-            this.btnGetColor.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnGetColor.TextColor = System.Drawing.Color.Black;
-            this.btnGetColor.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnGetColor.UseVisualStyleBackColor = false;
-            this.btnGetColor.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // rjButton3
-            // 
-            this.rjButton3.BackColor = System.Drawing.SystemColors.Control;
-            this.rjButton3.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.rjButton3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton3.BackgroundImage")));
-            this.rjButton3.BorderColor = System.Drawing.Color.Silver;
-            this.rjButton3.BorderRadius = 5;
-            this.rjButton3.BorderSize = 1;
-            this.rjButton3.ButtonImage = null;
-            this.rjButton3.Corner =Corner.Both;
-            this.rjButton3.Enabled = false;
-            this.rjButton3.FlatAppearance.BorderSize = 0;
-            this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton3.ForeColor = System.Drawing.Color.Black;
-            this.rjButton3.Image = global::BeeUi.Properties.Resources.Circle_1;
-            this.rjButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton3.IsCLick = false;
-            this.rjButton3.IsNotChange = false;
-            this.rjButton3.IsRect = false;
-            this.rjButton3.IsUnGroup = false;
-            this.rjButton3.Location = new System.Drawing.Point(192, 36);
-            this.rjButton3.Name = "rjButton3";
-            this.rjButton3.Size = new System.Drawing.Size(175, 40);
-            this.rjButton3.TabIndex = 1;
-            this.rjButton3.Text = "Hình tròn";
-            this.rjButton3.TextColor = System.Drawing.Color.Black;
-            this.rjButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton3.UseVisualStyleBackColor = false;
-            // 
-            // rjButton1
-            // 
-            this.rjButton1.BackColor = System.Drawing.Color.Transparent;
-            this.rjButton1.BackgroundColor = System.Drawing.Color.Transparent;
-            this.rjButton1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton1.BackgroundImage")));
-            this.rjButton1.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton1.BorderRadius = 5;
-            this.rjButton1.BorderSize = 0;
-            this.rjButton1.ButtonImage = null;
-            this.rjButton1.Corner =Corner.Both;
-            this.rjButton1.FlatAppearance.BorderSize = 0;
-            this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton1.ForeColor = System.Drawing.Color.Black;
-            this.rjButton1.Image = global::BeeUi.Properties.Resources.Rectangle;
-            this.rjButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton1.IsCLick = true;
-            this.rjButton1.IsNotChange = false;
-            this.rjButton1.IsRect = false;
-            this.rjButton1.IsUnGroup = false;
-            this.rjButton1.Location = new System.Drawing.Point(15, 36);
-            this.rjButton1.Name = "rjButton1";
-            this.rjButton1.Size = new System.Drawing.Size(176, 40);
-            this.rjButton1.TabIndex = 0;
-            this.rjButton1.Text = "Hình Vuông";
-            this.rjButton1.TextColor = System.Drawing.Color.Black;
-            this.rjButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton1.UseVisualStyleBackColor = false;
-            this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCancel.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.btnCancel.BackgroundColor = System.Drawing.SystemColors.ControlDark;
-            this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
-            this.btnCancel.BorderRadius = 5;
-            this.btnCancel.BorderSize = 1;
-            this.btnCancel.ButtonImage = null;
-            this.btnCancel.Corner =Corner.Both;
-            this.btnCancel.FlatAppearance.BorderSize = 0;
-            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.ForeColor = System.Drawing.Color.Black;
-            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.IsCLick = false;
-            this.btnCancel.IsNotChange = true;
-            this.btnCancel.IsRect = false;
-            this.btnCancel.IsUnGroup = false;
-            this.btnCancel.Location = new System.Drawing.Point(196, 446);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(175, 40);
-            this.btnCancel.TabIndex = 11;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextColor = System.Drawing.Color.Black;
-            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // rjButton5
-            // 
-            this.rjButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.rjButton5.BackColor = System.Drawing.Color.Transparent;
-            this.rjButton5.BackgroundColor = System.Drawing.Color.Transparent;
-            this.rjButton5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton5.BackgroundImage")));
-            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton5.BorderRadius = 5;
-            this.rjButton5.BorderSize = 1;
-            this.rjButton5.ButtonImage = null;
-            this.rjButton5.Corner =Corner.Both;
-            this.rjButton5.FlatAppearance.BorderSize = 0;
-            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton5.ForeColor = System.Drawing.Color.Black;
-            this.rjButton5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton5.IsCLick = true;
-            this.rjButton5.IsNotChange = true;
-            this.rjButton5.IsRect = false;
-            this.rjButton5.IsUnGroup = true;
-            this.rjButton5.Location = new System.Drawing.Point(8, 446);
-            this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(178, 40);
-            this.rjButton5.TabIndex = 10;
-            this.rjButton5.Text = "OK";
-            this.rjButton5.TextColor = System.Drawing.Color.Black;
-            this.rjButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton5.UseVisualStyleBackColor = false;
-            this.rjButton5.Click += new System.EventHandler(this.rjButton8_Click);
-            // 
             // btnMask
             // 
             this.btnMask.BackColor = System.Drawing.Color.Transparent;
@@ -588,7 +585,7 @@ namespace BeeUi.Tool
             this.btnMask.BorderRadius = 5;
             this.btnMask.BorderSize = 1;
             this.btnMask.ButtonImage = null;
-            this.btnMask.Corner =Corner.Both;
+            this.btnMask.Corner = BeeCore.Corner.Both;
             this.btnMask.FlatAppearance.BorderSize = 0;
             this.btnMask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMask.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -608,13 +605,42 @@ namespace BeeUi.Tool
             this.btnMask.UseVisualStyleBackColor = false;
             this.btnMask.Click += new System.EventHandler(this.btnMask_Click);
             // 
+            // btnTest
+            // 
+            this.btnTest.BackColor = System.Drawing.Color.Transparent;
+            this.btnTest.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnTest.BorderColor = System.Drawing.Color.Transparent;
+            this.btnTest.BorderRadius = 1;
+            this.btnTest.BorderSize = 1;
+            this.btnTest.ButtonImage = null;
+            this.btnTest.Corner = BeeCore.Corner.Both;
+            this.btnTest.FlatAppearance.BorderSize = 0;
+            this.btnTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTest.ForeColor = System.Drawing.Color.Black;
+            this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTest.IsCLick = false;
+            this.btnTest.IsNotChange = true;
+            this.btnTest.IsRect = false;
+            this.btnTest.IsUnGroup = true;
+            this.btnTest.Location = new System.Drawing.Point(8, 453);
+            this.btnTest.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(376, 71);
+            this.btnTest.TabIndex = 38;
+            this.btnTest.Text = "Inspect";
+            this.btnTest.TextColor = System.Drawing.Color.Black;
+            this.btnTest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnTest.UseVisualStyleBackColor = false;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // ToolColorArea
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl2);
             this.Name = "ToolColorArea";
-            this.Size = new System.Drawing.Size(400, 525);
+            this.Size = new System.Drawing.Size(400, 646);
             this.Load += new System.EventHandler(this.ToolOutLine_Load);
             this.VisibleChanged += new System.EventHandler(this.ToolOutLine_VisibleChanged);
             this.tabControl2.ResumeLayout(false);
@@ -663,5 +689,6 @@ namespace BeeUi.Tool
         private System.Windows.Forms.Button btnRedo;
         private System.Windows.Forms.Label label7;
         public TrackBar2 trackScore;
+        private Common.RJButton btnTest;
     }
 }

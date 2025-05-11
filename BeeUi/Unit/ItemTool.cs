@@ -266,7 +266,7 @@ namespace BeeUi.Commons
             txtEdit.Visible = false;
             G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
             G.PropetyOld = G.PropetyTools[G.indexToolSelected].Propety.Clone();
-            if (Score.Enabled||G.IsRun) return;
+         //   if (Score.Enabled||G.IsRun) return;
             G.IsEdit = true;
             G.EditTool.pEditTool.Controls.Clear();
             control = G.listAlltool[G.indexToolSelected].tool;
@@ -286,7 +286,7 @@ namespace BeeUi.Commons
             G.EditTool.lbTool.Text = TypeTool.ToString();
            
             G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-            G.listAlltool[G.indexToolSelected].tool.LoadPara(G.PropetyTools[G.indexToolSelected].Propety) ;
+            G.listAlltool[G.indexToolSelected].tool.LoadPara() ;
             G.EditTool.View.imgView.Invalidate();
             G.EditTool.View.imgView.Update();
         }

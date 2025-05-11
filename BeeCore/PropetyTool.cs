@@ -21,6 +21,7 @@ namespace BeeCore
             this.Propety = Propety;
 
         }
+
         public object Clone()
         {
             PropetyTool propety = new PropetyTool(this.Propety.Clone(), this.TypeTool, this.Name);

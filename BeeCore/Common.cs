@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using BeeCore.Funtion;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 namespace BeeCore
 {
   public   class Common
@@ -42,13 +43,57 @@ namespace BeeCore
             Marshal.Copy(input, 0, (IntPtr)ptr, sizeof(IntPtr));
             return *ptr;
         }
+        public static Mat CropRotatedRectSharp(Mat src, RotatedRect rotatedRect)
+        {
+            // Tính ma trận xoay để đưa rotatedRect về thẳng
+            Mat rotationMatrix = Cv2.GetRotationMatrix2D(rotatedRect.Center, rotatedRect.Angle, 1.0);
+
+            // Xoay toàn bộ ảnh
+            Mat rotatedImage = new Mat();
+            Cv2.WarpAffine(src, rotatedImage, rotationMatrix, src.Size(), InterpolationFlags.Linear, BorderTypes.Replicate);
+
+            // Tính toạ độ vùng crop (đã xoay thẳng)
+            Size2f rectSize = rotatedRect.Size;
+            Point2f topLeft = new Point2f(
+                rotatedRect.Center.X - rectSize.Width / 2,
+                rotatedRect.Center.Y - rectSize.Height / 2
+            );
+
+            // Crop vùng ảnh từ ảnh đã xoay
+            Rect roi = new Rect(
+                (int)topLeft.X,
+                (int)topLeft.Y,
+                (int)rectSize.Width,
+                (int)rectSize.Height
+            );
+
+            // Đảm bảo ROI nằm trong giới hạn ảnh
+            roi = roi.Intersect(new Rect(0, 0, rotatedImage.Width, rotatedImage.Height));
+
+            if (roi.Width <= 0 || roi.Height <= 0)
+                return new Mat(); // Trả về ảnh rỗng nếu vùng crop không hợp lệ
+
+            return new Mat(rotatedImage, roi);
+        }
         public static void IniPython()
         {
-     
-        String ex= G.CommonPlus.IniPython();
-            if(ex.Trim()!="")
+
+            PythonEngine.Initialize();
+            PythonEngine.BeginAllowThreads();
+          
+            
+           // G.np = Py.Import("numpy");
+            using (Py.GIL())
             {
-                MessageBox.Show(ex);
+
+                G.np = Py.Import("numpy");
+                //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
+                dynamic mod = Py.Import("Tool.Learning");
+                dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                G.objYolo = cls.Invoke();              // khởi tạo instance
+                dynamic mod2 = Py.Import("Tool.OcrWapper");
+                dynamic cls2 = mod2.GetAttr("OCRWrapper"); // class
+                G.objOCR = cls2.Invoke();              // khởi tạo instance                               
             }
 
         }

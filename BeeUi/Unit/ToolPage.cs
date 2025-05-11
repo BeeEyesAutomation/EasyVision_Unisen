@@ -263,6 +263,7 @@ namespace BeeUi.Commons
             item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
             item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());          
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, item.name.Text);
+            
             G.PropetyTools.Add(propetyTool);
             G.listAlltool.Add(new Tools(item, control, propetyTool));
             control.indexTool = G.listAlltool.Count - 1;

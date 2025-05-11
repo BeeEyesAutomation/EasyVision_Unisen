@@ -26,6 +26,7 @@ using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
 using BeeCore.Funtion;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 namespace BeeUi
 {
     [Serializable()]
@@ -998,7 +999,7 @@ namespace BeeUi
                 if (toolEdit != null)
                     foreach (Tools tool in G.listAlltool)
                     {
-                        if (index != toolEdit.indexTool || !G.IsEdit)
+                        if (index != toolEdit.Propety.Index || !G.IsEdit)
                         {
                             RectRotate rot = tool.tool.Propety.rotArea;
                             mat = new Matrix();
@@ -1452,29 +1453,24 @@ namespace BeeUi
         {
 
         }
+        bool IsCompleteAll = false;
         private void workPlay_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (!G.Initial)
-                return;
-            if (!G.PLC.IsConnected&& !G.IsByPassPLC)
-                return;
 
-                    int index = 0;
-                    foreach (Tools tool in G.listAlltool)
-                    {
-                        if (tool.PropetyTool.TypeTool == TypeTool.Yolo)
-                            continue;
-                        if (tool.PropetyTool.TypeTool == TypeTool.OCR)
-                            continue;
-                        if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
-                        {
-                            tool.tool.Process();
-
-                        }
-
-                        index++;
-
-                    }
+           
+            //int index = 0;
+            //        foreach (Tools tool in G.listAlltool)
+            //        {
+            //            if (tool.PropetyTool.TypeTool == TypeTool.Yolo)
+            //                continue;
+            //            if (tool.PropetyTool.TypeTool == TypeTool.OCR)
+            //                continue;
+            //            if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
+            //            {
+            //                tool.tool.Process();
+            //            }
+            //            index++;
+            //        }
                     return;
                     
  
@@ -2076,37 +2072,54 @@ namespace BeeUi
         }
         private async void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!G.Initial)
-                return;
-            if (!G.PLC.IsConnected && !G.IsByPassPLC)
-                return;
-            if (!BeeCore.Camera.IsConnected)
+            ProcessingAll();
+            //if (!G.Initial)
+            //    return;
+            //if (!G.PLC.IsConnected && !G.IsByPassPLC)
+            //    return;
+            //if (!BeeCore.Camera.IsConnected)
+            //{
+            //    G.Header.ShowErr();
+            //    return;
+            //}
+            //int index = 0;
+            //      foreach (Tools tool in G.listAlltool)
+            //      {
+            //          if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
+            //          if (tool.PropetyTool.TypeTool == TypeTool.Yolo|| tool.PropetyTool.TypeTool == TypeTool.OCR)
+
+            //              tool.tool.Process();
+
+            //          index++;
+
+
+
+            //      }
+            //  await Task.Delay(1000);
+            if (G.StatusProcessing==StatusProcessing.Done)
             {
-                G.Header.ShowErr();
-                return;
-            }
-          int index = 0;
-                foreach (Tools tool in G.listAlltool)
-                {
-                    if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
-                    if (tool.PropetyTool.TypeTool == TypeTool.Yolo|| tool.PropetyTool.TypeTool == TypeTool.OCR)
-
-                        tool.tool.Process();
-
-                    index++;
-
-
-
-                }
                 ShowResultTotal();
-                
-               
-                if(G.Header.IsWaitingRead )
+                if (G.Header.IsWaitingRead)
                 {
                     G.Header.IsWaitingRead = false;
                     G.Header.tmReadPLC.Enabled = true;
                 }
-            CheckStatusMode();
+
+                CheckStatusMode();
+                IsCompleteAll = false;
+                foreach (PropetyTool propetyTool in G.PropetyTools)
+                {
+
+                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                }
+                G.StatusProcessing = StatusProcessing.None;
+            }    
+              
+            else
+                workPlay.RunWorkerAsync();
+                
+               
+             
 
 
 
@@ -2178,7 +2191,7 @@ namespace BeeUi
             //     Tools tool = G.listAlltool[indexToolPosition];
 
             //     OutLine Para = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
-            //     RectRotate rot = Para.rotArea;
+            //     RectRotate rot = Propety.rotArea;
             //     float angle = rot._rectRotation;
             //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
             //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
@@ -2187,7 +2200,7 @@ namespace BeeUi
             //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
 
 
-            //     DelayTrig = Para.DelayTrig;
+            //     DelayTrig = Propety.DelayTrig;
             //     tmTrig.Interval = 1;
             //     tmTrig.Enabled = true;
             //     return;
@@ -2453,11 +2466,94 @@ namespace BeeUi
         }
        public Bitmap bmResult;
         int numLive = 500;
-     
+        public  void ProcessingAll()
+        {
+            if (!G.Initial)
+                return;
+            if (!G.PLC.IsConnected && !G.IsByPassPLC)
+                return;
+            switch (G.StatusProcessing)
+            {
+                case StatusProcessing.None:
+                    if (G.PropetyTools[0].TypeTool == TypeTool.Position_Adjustment)
+                    {
+                       
+                       if(! G.listAlltool[0].tool.worker.IsBusy)
+                            G.listAlltool[0].tool.worker.RunWorkerAsync();
+
+                        G.StatusProcessing = StatusProcessing.Adjusting;
+                    }
+                    else
+                    {
+                        foreach (PropetyTool propetyTool in G.PropetyTools)
+                        {
+
+                            dynamic Propety = propetyTool.Propety;
+                            Propety.rotAreaAdjustment = Propety.rotArea;
+
+
+                        }
+                        G.StatusProcessing = StatusProcessing.Processing;
+                    }    
+                   
+                    break;
+                case StatusProcessing.Adjusting:
+                    if (G.PropetyTools[0].Propety.StatusTool ==BeeCore.StatusTool.Done )
+                    {
+                        dynamic Propety = G.PropetyTools[0].Propety;
+
+                        G.StatusProcessing = StatusProcessing.Processing;
+
+                        if (Propety.IsOK)
+                        {
+                            if (G.rotOriginAdj == null) return;
+                            G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotOriginAdj._PosCenter.X;
+                            G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
+                            G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
+                        }
+                        foreach (PropetyTool propetyTool in G.PropetyTools)
+                        {
+                            if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
+                                continue;
+                                if (G.rotOriginAdj != null)
+                                propetyTool.Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
+                            else
+                                propetyTool. Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
+
+
+                        }
+                    }
+                    break;
+                case StatusProcessing.Processing:
+                    foreach (Tools Tools in G.listAlltool)
+                    {
+                        if (Tools.PropetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
+                        Tools.PropetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                        if (!Tools.tool.worker.IsBusy)
+                            Tools.tool.worker.RunWorkerAsync();
+                    }
+                    G.StatusProcessing = StatusProcessing.WaitingDone;
+                    break;
+                case StatusProcessing.WaitingDone:
+                    G.StatusProcessing = StatusProcessing.Done;
+                    foreach (PropetyTool propetyTool in G.PropetyTools)
+                    {
+                        if (propetyTool.Propety.StatusTool != BeeCore.StatusTool.Done)
+                        {
+                            G.StatusProcessing = StatusProcessing.WaitingDone;
+                            break;
+                        }
+                    }
+                    break;
+            }    
+          
+        
+            
+        }
         private void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-          
+
             //    BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
             ////  Cv2.ImShow("Result",BeeCore.Common.matRaw);
 
@@ -2484,29 +2580,23 @@ namespace BeeUi
                 //}    
                 //else
                 if(G.Config.TypeCamera==TypeCamera.TinyIV)
-                if (!G.Header.CheckLan())
-                {
-                    G.Header.ShowErr();
-                    return;
-                }
+                    if (!G.Header.CheckLan())
+                    {
+                        G.Header.ShowErr();
+                        return;
+                    }
                 workReadCCD.RunWorkerAsync();
-              
-            } 
+            }
             else if (G.StatusMode==StatusMode.Continuous|| G.StatusMode == StatusMode.Once)
             {
-               
                 if (!workPlay.IsBusy)
                     workPlay.RunWorkerAsync();
-              
+               
             }
-                
         }
-
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
         {
-           
         }
-      
         private void tmTrig_Tick(object sender, EventArgs e)
         {
             if (!btnRecord.IsCLick)
@@ -2516,16 +2606,14 @@ namespace BeeUi
             }
             if (G.StatusTrig==Trig.Trigged)
             {
-              
                 G.StatusTrig = Trig.Continue;
                 tmTrig.Enabled = false;
                 tmCycle = DateTime.Now;
-                 G.listAlltool[indexToolPosition].tool.ShowResult(gc);
+                G.listAlltool[indexToolPosition].tool.ShowResult(gc);
                 tmTrig.Enabled = false;
                 if (!workReadCCD.IsBusy)
                     workReadCCD.RunWorkerAsync();
             }
-
             else if (G.StatusTrig == Trig.Complete)
             {
 
@@ -2534,8 +2622,8 @@ namespace BeeUi
                 tmCycle = DateTime.Now;
                 G.listAlltool[indexToolPosition].tool.ShowResult(gc);
                 tmTrig.Enabled = false;
-                if(!workPlay.IsBusy)
-                workPlay.RunWorkerAsync();
+                if (!workPlay.IsBusy)
+                    workPlay.RunWorkerAsync();
             }
           
             else
@@ -3028,7 +3116,7 @@ namespace BeeUi
                     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
                 if (!workPlay.IsBusy)
                     workPlay.RunWorkerAsync();
-                }
+            }
                 else
                 {
                    

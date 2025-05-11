@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -90,7 +91,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 180;
             Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern(Propety.indexTool, matTemp);
 
         }
 
@@ -98,7 +99,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 100;
             Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern(Propety.indexTool, matTemp);
 
         }
 
@@ -117,48 +118,47 @@ namespace BeeUi.Tool
            
            
         }
-      public void Process()
-        {
-            Propety.rectRotates = new List<RectRotate>();
-            if (BeeCore.Common.matRaw == null) return;
-            //Mat raw = BeeCore.Common.matRaw.Clone();
-            //if (BeeCore.Common.matRaw.Type() == MatType.CV_8UC3)
-            //{
-            //    raw = raw.CvtColor(ColorConversionCodes.BGR2GRAY);
-            //}
-            Propety.rectArea = new RectangleF(Propety. rotArea._PosCenter.X + Propety. rotArea._rect.Left, Propety. rotArea._PosCenter.Y + Propety. rotArea._rect.Top, Propety. rotArea._rect.Width, Propety. rotArea._rect.Height);
+      //public void Process()
+      //  {
+      //   //   Propety.rectRotates = new List<RectRotate>();
+      //      if (BeeCore.Common.matRaw == null) return;
+      //      //Mat raw = BeeCore.Common.matRaw.Clone();
+      //      //if (BeeCore.Common.matRaw.Type() == MatType.CV_8UC3)
+      //      //{
+      //      //    raw = raw.CvtColor(ColorConversionCodes.BGR2GRAY);
+      //      //}
+      //  //    Propety.rectArea = new RectangleF(Propety. rotArea._PosCenter.X + Propety. rotArea._rect.Left, Propety. rotArea._PosCenter.Y + Propety. rotArea._rect.Top, Propety. rotArea._rect.Width, Propety. rotArea._rect.Height);
 
-            Propety.Matching(G.IsRun,BeeCore.Common.matRaw, indexTool, Propety. rotArea);
-            if (G.IsRun)
-            {
-                if (Propety.IsOK) 
-                {
-                    if (G.rotPositionAdjustment == null) return;
-                    G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotPositionAdjustment._PosCenter.X;
-                    G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotPositionAdjustment._PosCenter.Y;
-                    G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotPositionAdjustment._rectRotation;
-                }
-            }
-            else
-            {
-                if(Propety.IsOK)
-                {
+      //      //Propety.Matching(G.IsRun,BeeCore.Common.matRaw, Propety.indexTool, Propety. rotArea);
+      //      if (G.IsRun)
+      //      {
+      //          if (Propety.IsOK) 
+      //          {
+      //              if (G.rotOriginAdj == null) return;
+      //              G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotOriginAdj._PosCenter.X;
+      //              G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
+      //              G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
+      //          }
+      //      }
+      //      else
+      //      {
+      //          if(Propety.IsOK)
+      //          {
 
-                    if (!Propety.IsOK) return;
-                    Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
-                    G.rotPositionAdjustment =new RectRotate(Propety. rotCrop._rect,new PointF (Propety. rotArea._PosCenter.X - Propety. rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety. rotArea._PosCenter.Y - Propety. rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation,AnchorPoint.None);
+      //              if (!Propety.IsOK) return;
+      //              Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
+      //              G.rotOriginAdj =new RectRotate(Propety. rotCrop._rect,new PointF (Propety. rotArea._PosCenter.X - Propety. rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety. rotArea._PosCenter.Y - Propety. rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation,AnchorPoint.None);
                    
-                }    
+      //          }    
                 
-            }    
+      //      }    
 
-        }
-        Bitmap bmResult; public int indexTool = 0;
-        private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
-        {
-            if(G.IsLoad)
-            Process();
-        }
+      //  }
+        Bitmap bmResult;
+        //private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
+        //{
+           
+        //}
         public Mat matTemp=new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public Mat matTrig;
@@ -167,8 +167,8 @@ namespace BeeUi.Tool
         {
           
                 gc.ResetTransform();
-            if (G.rotPositionAdjustment!=null)
-            gc.FillEllipse(Brushes.Gold, G.rotPositionAdjustment._PosCenter.X+ pScroll.X, G.rotPositionAdjustment._PosCenter.Y+ pScroll.Y, 6, 6);
+            if (G.rotOriginAdj!=null)
+            gc.FillEllipse(Brushes.Gold, G.rotOriginAdj._PosCenter.X+ pScroll.X, G.rotOriginAdj._PosCenter.Y+ pScroll.Y, 6, 6);
             var mat = new Matrix();
             RectRotate rotA = Propety. rotArea;
             if (!G.IsRun)
@@ -180,7 +180,7 @@ namespace BeeUi.Tool
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
 
-            gc.DrawString(indexTool+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+            gc.DrawString(Propety.indexTool+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
             Color clRect = Color.Silver;
             switch ( G.StatusTrig )
             {
@@ -409,28 +409,65 @@ namespace BeeUi.Tool
             Propety.pathRaw = G.EditTool.View.pathRaw;
             imgTemp.Image = Propety.matTemp;
         }
-        public  void LoadPara(dynamic Content)
+        Stopwatch timer = new Stopwatch();
+        public BackgroundWorker worker = new BackgroundWorker();
+        public  void LoadPara()
         {
-            OutLine Para=(OutLine)Content;
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                timer = new Stopwatch();
+                timer.Restart();
+                Propety.DoWork();
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+                timer.Stop();
+
+                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+                
+              
+             
+                if (!G.IsRun)
+                {
+                    if (Propety.IsOK)
+                    {
+
+                        if (!Propety.IsOK) return;
+                        Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
+                        G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+
+                    }
+                    G.EditTool.View.imgView.Invalidate();
+                }
+                  
+            };
             Bitmap bmTemp = Propety.matTemp;
             if (bmTemp != null)
             {
-                Propety.LearnPattern(indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
+                Propety.LearnPattern(Propety.indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
              
-                    G.rotPositionAdjustment = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+                    G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
             }
-            trackScore.Value = Para.Score ;
-            trackAngle.Value =(int) Para.Angle;
-            trackMaxOverLap.Value = (int)(Para.OverLap * 100);
-            //txtAngle.Text = (int)Para.Angle + "";
+            trackScore.Value = Propety.Score ;
+            trackAngle.Value =(int)Propety.Angle;
+            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
+            //txtAngle.Text = (int)Propety.Angle + "";
             
-            Propety.ckBitwiseNot = Para.ckBitwiseNot;
-            Propety.ckSIMD = Para.ckSIMD;
-            Propety.ckSubPixel = Para.ckSubPixel;
-            ckBitwiseNot.IsCLick = Para.ckBitwiseNot;
-            ckSIMD.IsCLick = Para.ckSIMD;
-            ckSubPixel.IsCLick = Para.ckSubPixel;
-            Propety.TypeMode = Para.TypeMode;
+            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
+            Propety.ckSIMD = Propety.ckSIMD;
+            Propety.ckSubPixel = Propety.ckSubPixel;
+            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
+            ckSIMD.IsCLick = Propety.ckSIMD;
+            ckSubPixel.IsCLick = Propety.ckSubPixel;
+            Propety.TypeMode = Propety.TypeMode;
             //if (Propety.IsAutoTrig)
             //    btnAutoTrigger.IsCLick = true;
             //else
@@ -605,7 +642,7 @@ namespace BeeUi.Tool
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                        Propety.LearnPattern(indexTool, matTemp);
+                        Propety.LearnPattern(Propety.indexTool, matTemp);
 
                     }
                 imgTemp.Image = matTemp.ToBitmap();
@@ -616,8 +653,9 @@ namespace BeeUi.Tool
         {
             G.IsCheck = true;
 
-           
-            threadProcess.RunWorkerAsync();
+
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
            
         }
 

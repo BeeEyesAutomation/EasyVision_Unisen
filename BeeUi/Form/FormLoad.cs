@@ -134,8 +134,8 @@ namespace BeeUi
             try
             {
 
-               
-                    addMac = Decompile.GetMacAddress();
+                //8521-0A34-5A8B-B41E-19E6-B375-48FF-92F1 -Pro1
+                addMac = Decompile.GetMacAddress();
               
 
 
@@ -187,6 +187,7 @@ namespace BeeUi
             }
             if (G.Config.RoundRad == 0) G.Config.RoundRad = 10;
             tmLoad.Enabled = false;
+            
             BeeCore.Common.IniPython();
             listCCD = G.ScanCCD.ScanIDCCD();
             wLoad.RunWorkerAsync();

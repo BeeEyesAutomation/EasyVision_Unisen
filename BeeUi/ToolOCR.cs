@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -34,16 +35,40 @@ namespace BeeUi.Tool
             
         }
         bool IsIni = false;
-      
-        public void LoadPara(dynamic Content)
+        public BackgroundWorker worker = new BackgroundWorker();
+        Stopwatch timer = new Stopwatch();
+        public void LoadPara()
         {
-            OCR Para = (OCR)Content;
-         
-                //String nameModel = G.Project + ".pt";
-                //String PathProg = "Program\\" + nameModel;
-               // if(Propety.PathModel!=null)
-               //if (File.Exists(Propety.PathModel))
-               if(!IsIni)
+            
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                timer = new Stopwatch();
+                timer.Restart();
+                if (!G.IsRun)
+                    Propety.rotAreaAdjustment = Propety.rotArea;
+                Propety.DoWork(Propety.rotAreaAdjustment);
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+                if(!G.IsRun)
+                    G.EditTool.View.imgView.Invalidate();
+                timer.Stop();
+
+              Propety. cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+            };
+            //String nameModel = G.Project + ".pt";
+            //String PathProg = "Program\\" + nameModel;
+            // if(Propety.PathModel!=null)
+            //if (File.Exists(Propety.PathModel))
+            if (!IsIni)
                     BeeCore.OCR.SetModel();
                 IsIni = true;
             String slabel = "";
@@ -61,10 +86,10 @@ namespace BeeUi.Tool
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
             txtModel.Text = Propety.PathModel;
-            trackScore.Value =Para.Score;
+            trackScore.Value =Propety.Score;
            btnCheckArea.IsCLick = Propety.IsCheckArea ;
-            numScore.Value = Para.Score;
-            trackNumObject.Value= Para.NumObject;
+            numScore.Value = Propety.Score;
+            trackNumObject.Value= Propety.NumObject;
           switch(Propety.Compare)
             {
                 case Compares.Equal:
@@ -78,7 +103,7 @@ namespace BeeUi.Tool
                     break;
             }
           
-            Propety.TypeOCR = Para.TypeOCR;
+            Propety.TypeOCR = Propety.TypeOCR;
             if (!IsIni)
             {
                 IsIni = true;
@@ -115,7 +140,8 @@ namespace BeeUi.Tool
         {
             int numChars = textArray.Length;
             if (numChars == 0) return;
-            box.X = 0;box.Y = 0;
+          //  (int)rot._rect.X, (int)rot._rect.Y
+            //box.X = 0;box.Y = 0;
             // Chiều rộng mỗi ký tự
             float charBoxWidth = (float)box.Width / numChars;
 
@@ -174,33 +200,32 @@ namespace BeeUi.Tool
                 int i = 0;
                     foreach (RectRotate rot in Propety.rectRotates)
                 {
-                    mat = new Matrix();
-                    if (!G.IsRun)
-                    {
-                        mat.Translate(pScroll.X, pScroll.Y);
-                        mat.Scale(Scale, Scale);
-                    }
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-                    mat.Translate(rotA._rect.X, rotA._rect.Y);
-                    gc.Transform = mat;
-                    
-                 
-                 
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                   
-                        mat.Translate(rot._rect.X, rot._rect.Y);
-                        mat.Rotate(0);
-                        gc.Transform = mat;
-                    gc.DrawRectangle(new Pen(cl, 4), new Rectangle(0,0, (int)rot._rect.Width, (int)rot._rect.Height));
+                mat = new Matrix();
+                if (!G.IsRun)
+                {
+                    mat.Translate(pScroll.X, pScroll.Y);
+                    mat.Scale(Scale, Scale);
+                }
+                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                mat.Rotate(rotA._rectRotation);
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                gc.Transform = mat;
+
+                mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                mat.Rotate(rot._rectRotation);
+                gc.Transform = mat;
+                gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
                   
                     int index = i + 1;
                     String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
-                        if (Propety.IsCheckArea)
-                            content = rot._rect.Height + " px";
+                        //if (Propety.IsCheckArea)
+                        //    content = rot._rect.Height + " px";
                         Font font = new Font("Arial", 12, FontStyle.Bold);
-                        SizeF sz = gc.MeasureString(content, font);
+                        //SizeF sz1 = gc.MeasureString(content, font);
+
                 DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
+
+
                      //   gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point(0, 0));
                         i++;
                         //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
@@ -208,7 +233,11 @@ namespace BeeUi.Tool
                     
                    
                 }
-            
+            String s = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
+            gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width, (int)sz.Height));
+            gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+            gc.ResetTransform();
             //if (Propety.rectRotates != null)
             //{
             //    gc.ResetTransform();
@@ -312,30 +341,7 @@ namespace BeeUi.Tool
     
         
       
-        public void Process()
-        {
-            try
-            {
-                Propety.rectRotates = new List<RectRotate>();
-                if (G.IsRun)
-                {
-                    if (G.rotPositionAdjustment != null)
-                        Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotPositionAdjustment);
-                    else
-                        Propety.rotAreaAdjustment = Propety.rotArea;
-                    //  Propety.Matching(G.IsRun, BeeCore.Common.matRaw.ToBitmap(), indexTool, Propety.rotAreaAdjustment);
-                    Propety.Check(Propety.rotAreaAdjustment);
-                }
-                else
-                    Propety.Check(Propety.rotArea);
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-
-            }
-        }
+   
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -344,9 +350,7 @@ namespace BeeUi.Tool
         public int indexTool = 0;
         private void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (G.IsLoad)
-                Process();
-
+          
             G.EditTool.View.imgView.Invalidate();
 
             G.ResultBar.lbCycleTrigger.Text = "[" + Propety.cycleTime + "ms]";
@@ -505,7 +509,7 @@ namespace BeeUi.Tool
             {
                 Propety.PathModel = OpenFileDialog.FileName;
                 txtModel.Text = Propety.PathModel;
-                LoadPara(Propety);
+                LoadPara();
             }
           
         }
@@ -650,8 +654,8 @@ namespace BeeUi.Tool
         private void btnTest_Click_1(object sender, EventArgs e)
         {
             G.IsCheck = true;
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -734,7 +738,7 @@ namespace BeeUi.Tool
                 BeeCore.Camera.Read();
                 if (BeeCore.Camera.IsConnected)
                 {
-                    Propety.Check(Propety.rotArea);
+                    Propety.Check1(Propety.rotArea);
                     tmCheckFist.Enabled = false;
                 }
                     

@@ -44,8 +44,8 @@ namespace BeeUi.Common
         public void Save()
         {
             G.Project = G.Project.Replace(".prog", "");
-            if (File.Exists("Program\\" + G.Project+".prog"))
-                File.Delete("Program\\" + G.Project + ".prog");
+            //if (File.Exists("Program\\" + G.Project+".prog"))
+            //    File.Delete("Program\\" + G.Project + ".prog");
             
             Access.SaveProg("Program\\"  + G.Project+".prog", G.PropetyTools);
             if (File.Exists("Default.config"))
@@ -106,20 +106,21 @@ namespace BeeUi.Common
             int with = 50, height = 50;
             control.Propety = PropetyTool.Propety;
             control.Propety.Index = indexTool;
-            BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
-            
-           System.Drawing.Size szCCd= BeeCore.G.ParaCam.SizeCCD;
-                if (rotCrop != null)
-            {
-                if (rotCrop._PosCenter.X + rotCrop._rect.X + rotCrop._rect.Width > szCCd.Width ||
-                    rotCrop._PosCenter.Y + rotCrop._rect.Y + rotCrop._rect.Height > szCCd.Height)
-                    control.Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
+        //    BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
+            if (PropetyTool.TypeTool == TypeTool.Yolo || PropetyTool.TypeTool == TypeTool.OCR || PropetyTool.TypeTool == TypeTool.BarCode || PropetyTool.TypeTool == TypeTool.Color_Area)
+                control.Propety.rotCrop = null;
+                System.Drawing.Size szCCd= BeeCore.G.ParaCam.SizeCCD;
+            //    if (rotCrop != null)
+            //{
+            //    if (rotCrop._PosCenter.X + rotCrop._rect.X + rotCrop._rect.Width > szCCd.Width ||
+            //        rotCrop._PosCenter.Y + rotCrop._rect.Y + rotCrop._rect.Height > szCCd.Height)
+            //        control.Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
 
-            }
-            BeeCore.RectRotate rotArea = control.Propety.rotArea;
-            if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
-                rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
-                control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
+            //}
+          //  BeeCore.RectRotate rotArea = control.Propety.rotArea;
+            //if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
+            //    rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
+            //    control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
             ItemTool item = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
             item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
             item.lbCycle.Text = "---";
@@ -130,7 +131,8 @@ namespace BeeUi.Common
             item.lbStatus.BackColor = Color.Gray;
             G.ToolSettings.Y += item.Height + 10;
             G.listAlltool.Add(new Tools(item, control, PropetyTool));
-            control.indexTool = G.listAlltool.Count - 1;
+
+            //control.pro.indexTool = G.listAlltool.Count - 1;
             BeeCore.Common.CreateTemp(TypeTool);
             if (PropetyTool.Name == null) PropetyTool.Name = "";
             if (PropetyTool.Name.Trim() == "")
@@ -138,7 +140,9 @@ namespace BeeUi.Common
             else
                 item.name.Text = PropetyTool.Name.Trim();
             control.Name = PropetyTool.Name;
-            control.LoadPara(PropetyTool.Propety);
+            PropetyTool.Propety.nameTool= PropetyTool.Name;
+            
+            control.LoadPara();
 
             item.lbNumber.Text = G.listAlltool.Count() + "";
          
@@ -813,11 +817,13 @@ txtQrCode.Focus();
 
         private void workSaveProject_DoWork(object sender, DoWorkEventArgs e)
         {
-            Save();
+       
         }
 
         private void workSaveProject_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            Save();
+
             G.EditProg.btnSave.Enabled = true;
         }
 

@@ -91,8 +91,13 @@ namespace BeeCore
     {
         LoadImage, LearnPattern
     }
+    public enum StatusTool
+    {
+        None, Edit, Processing, Done
+    }
     public struct G
     {
+        public static dynamic objYolo,np,objOCR;
         public static bool IsChecked = false;
         public static TypeCamera TypeCCD=TypeCamera.USB;
         public static Model Model=new Model();

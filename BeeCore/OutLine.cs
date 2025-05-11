@@ -2,6 +2,7 @@
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -332,8 +333,24 @@ namespace BeeCore
 
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
+    
+        public String nameTool = "";
+        public StatusTool StatusTool = StatusTool.None;
+        public int indexTool = 0;
+        public void DoWork()
+        {
+            StatusTool = StatusTool.Processing;
+            Matching(indexTool);
 
-        public void Matching(bool IsRun, Mat bm,int indexTool,RectRotate rot)
+        }
+        public void Complete()
+        {
+            StatusTool = StatusTool.Done;
+
+        }
+    
+       
+        public void Matching( int indexTool)
         {
 
 
@@ -345,9 +362,9 @@ namespace BeeCore
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
             if (BeeCore.Common.matRaw.Empty()) return;
-            if(!IsRun)
+            //if(!IsRun)
             BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-            IsOK = G.pattern.Match((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int) rot._rect.Width, (int)rot._rect.Height,rot._angle, indexTool,
+            IsOK = G.pattern.Match((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle, indexTool,
                 Convert.ToBoolean((int)TypeMode),IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
             ScoreRs = G.pattern.ScoreRS;
             if (IsOK)

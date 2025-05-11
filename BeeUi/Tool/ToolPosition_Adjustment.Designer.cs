@@ -125,8 +125,6 @@
             // 
             this.threadProcess.WorkerReportsProgress = true;
             this.threadProcess.WorkerSupportsCancellation = true;
-            this.threadProcess.DoWork += new System.ComponentModel.DoWorkEventHandler(this.threadProcess_DoWork);
-            this.threadProcess.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.threadProcess_RunWorkerCompleted);
             // 
             // tmClear
             // 

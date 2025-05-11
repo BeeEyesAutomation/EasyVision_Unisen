@@ -1,14 +1,19 @@
 ﻿using BeeCore.Funtion;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using static OpenCvSharp.ML.DTrees;
+using static System.Net.Mime.MediaTypeNames;
 using Point = System.Drawing.Point;
 
 
@@ -84,7 +89,179 @@ namespace BeeCore
         public String Content = "";
         public String[] listContent ;
         public String[] listMatching;
-        string[] CompareStrings(string[] original, string[] detected)
+      
+        public String nameTool = "";
+        public StatusTool StatusTool = StatusTool.None;
+       int scoreRS = 0;
+        public void DoWork(RectRotate rotCrop)
+        {
+            using (Py.GIL())
+            {
+                try
+                {
+                    var boxList = new List<RectRotate>();
+                    var scoreList = new List<float>();
+                    var labelList = new List<string>();
+                    int numOK = 0, numNG = 0;
+                    scoreRS = 0;
+                    Content = "";
+                    scoreRS = 0;
+                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                    if (matCrop.Type() != MatType.CV_8UC3)
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
+                    if (matCrop.Channels() == 1)
+                    {
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
+                    }
+                    //   Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2RGB);
+
+                    //   cv::cvtColor(matCrop, matCrop, COLOR_BGR2RGB);
+                    //  Cv2.ImWrite("crop.png", matCrop);
+                    // Đảm bảo dữ liệu liên tục
+                    if (!matCrop.IsContinuous())
+                    {
+                        matCrop = matCrop.Clone();
+                    }
+
+                    // Copy dữ liệu sang byte[]
+                    int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                    byte[] buffer = new byte[size];
+                    Marshal.Copy(matCrop.Data, buffer, 0, size);
+
+                    int height1 = matCrop.Height;
+                    int width1 = matCrop.Width;
+                    //dynamic np = Py.Import("numpy");
+                    ////    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
+                    //dynamic mod = Py.Import("Tool.Learning");
+                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+
+                    //dynamic objYolo = cls.Invoke();              // khởi tạo instance
+                    //G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
+                    //_ocr.attr("find_ocr")(image_array);
+                    IsOK = false;
+                    listOK = new List<bool>();
+                    listLabel = new List<string>();
+                    rectRotates = new List<RectRotate>();
+                    listScore = new List<float>();
+
+                    var npArray = G.np.array(buffer).reshape(height1, width1, 3);
+                    dynamic result = G.objOCR.find_ocr(npArray);//, (float)(Score / 100.0), nameTool
+                    if (result == null) return;
+
+                    PyObject boxes = result[0];
+                    PyObject scores = result[1];
+                    PyObject labels = result[2];
+
+                    int counts = (int)boxes.Length(); int i = 0;
+
+                    for (int j = 0; j < counts; j++)
+                    {
+                        // Lấy box: (x1, y1, x2, y2)
+                        PyObject box = boxes[j];
+                        float centerX = (float)box[0][0].AsManagedObject(typeof(float));
+                        float centerY = (float)box[0][1].AsManagedObject(typeof(float));
+
+                        float width = (float)box[1][0].AsManagedObject(typeof(float));
+                        float height = (float)box[1][1].AsManagedObject(typeof(float));
+
+                        float angle = (float)box[2].AsManagedObject(typeof(float));
+                        // Tạo RotatedRect trong C#
+
+                        if (angle == 180) angle = 0;
+                        //RotatedRect rotatedRect = new RotatedRect(new Point2f(centerX, centerY), new Size2f(width, height), angle);
+
+                        //// Lấy 4 đỉnh của hình chữ nhật xoay
+                        //Point2f[] vertices = rotatedRect.Points();
+
+                        //// Chuyển sang Point để vẽ
+                        //OpenCvSharp.Point[] points = Array.ConvertAll(vertices, pt => new OpenCvSharp.Point((int)pt.X, (int)pt.Y));
+
+                        //// Vẽ các cạnh hình chữ nhật xoay
+                        //for (int k = 0; k < 4; k++)
+                        //{
+                        //    Cv2.Line(matCrop, points[k], points[(k + 1) % 4], Scalar.Red, 2);
+                        //}
+                    //    Cv2.ImWrite("cropRS.png", matCrop);
+                        RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
+                        RectRotate rt = new RectRotate(rect, new PointF(centerX, centerY), angle, AnchorPoint.None);
+
+                        //// Gán Rect quay góc 0 (vì YOLO box không có góc)
+                        //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);
+                        boxList.Add(rt);
+
+                        // Score
+                        float score = (float)scores[j].As<double>();
+                        scoreList.Add(score * 100);
+
+                        // Label
+                        string label = labels[j].ToString();
+                        label = label.Replace("\n", "");
+                        Content += label.Trim();
+                        listLabel.Add(label);
+                        listOK.Add(false);
+                        rectRotates.Add(rt);
+
+                        scoreRS += (int)score;
+                        listScore.Add(score);
+
+                    }
+
+
+                    // result: tuple (boxes, scores, labels) từ Python
+                    // e.Result = result;
+                }
+                catch (PythonException pyEx)
+                {
+                    //   MessageBox.Show("Python Error: " + pyEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    //  MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+        }
+        public void Complete()
+        {
+            try
+            {
+
+
+                IsOK = true;
+
+
+                ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
+                listContent = Content.Select(c => c.ToString()).ToArray();
+                listMatching = Matching.Select(c => c.ToString()).ToArray();
+                if (ScoreRs < 0) ScoreRs = 0;
+                if (Content != "")
+                {
+                    if (Matching == "")
+                        IsOK = true;
+                    else
+                        if (Matching == Content)
+                    {
+
+                        IsOK = true;
+                    }
+                    listContent = CompareStrings(listMatching, listContent);
+
+                }
+                else
+                {
+                    IsOK = false;
+                }
+              
+                StatusTool = StatusTool.Done;
+                // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
+            }
+        }
+      
+            string[] CompareStrings(string[] original, string[] detected)
         {
             int maxLength = Math.Max(original.Length, detected.Length);
             string[] result = new string[maxLength];
@@ -112,9 +289,9 @@ namespace BeeCore
             return result;
         }
 
-        public bool Check(RectRotate rot)
+        public bool Check1(RectRotate rot)
         {
-            yLine = 710;
+           
             BeeCore.Native.SetImg(BeeCore.Common.matRaw);
             BeeCore.G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle);
 
@@ -157,49 +334,7 @@ namespace BeeCore
                     Score += score;
                     listScore.Add(score);
                     numOK++;
-                    //if (Labels.Contains(label))
-                    //{
-                    //    if (IsCheckArea )
-                    //    {
-                    //        if(rt._PosCenter.Y-height/2<yLine)
-                    //        {
-                    //            listOK.Add(false);
-                    //            rectRotates.Add(rt);
-                    //            listLabel.Add(label);
-                    //            Score += score;
-                    //            listScore.Add(score);
-                    //            numOK++;
-                    //        }
-                    //        else
-                    //        {
-                    //            listOK.Add(true);
-                    //            rectRotates.Add(rt);
-                    //            listLabel.Add(label);
-                    //            Score += score;
-                    //            listScore.Add(score);
-
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        rectRotates.Add(rt);
-                    //        listLabel.Add(label);
-                    //        Score += score;
-                    //        listScore.Add(score); numOK++;
-                    //    }
-                           
-                       
-                    //}
-                  
                    
-
-                    //if (rectF.Contains(new PointF(rt._PosCenter.X, rt._PosCenter.Y))
-                    //       )
-                    //    rectRotates.Add(rt);
-                    //else
-                    //{
-                    //    String sss = "";
-                    //}
                 }
                 ScoreRs = (int)(Score / (rectRotates.Count() * 1.0));
                 listContent= Content.Select(c => c.ToString()).ToArray();
@@ -244,7 +379,15 @@ namespace BeeCore
         }
         public static bool SetModel()
         {
-           return G.OCR.SetModel();
+            using (Py.GIL())
+            {
+
+
+                      // khởi tạo instance
+
+                G.objOCR.initialize_ocr();
+            }
+            return true;
         }
 
     }

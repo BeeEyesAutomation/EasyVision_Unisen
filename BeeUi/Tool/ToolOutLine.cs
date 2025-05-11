@@ -33,25 +33,41 @@ namespace BeeUi.Tool
                 threadProcess.RunWorkerAsync();
 
         }
-        public void LoadPara(dynamic Content)
+        public BackgroundWorker worker = new BackgroundWorker();
+        public void LoadPara()
         {
-            OutLine Para = (OutLine)Content;
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                Propety.DoWork();
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+
+            };
             Bitmap bmTemp = Propety.matTemp;
               if (bmTemp != null)
             {
                 Propety.LearnPattern(indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
                 }
-            trackScore.Value = (int)(Para.Score * 100);
-            trackMaxOverLap.Value = (int)(Para.OverLap * 100);
-            txtAngle.Text = (int)Para.Angle + "";
+            trackScore.Value = (int)(Propety.Score * 100);
+            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
+            txtAngle.Text = (int)Propety.Angle + "";
 
-            Propety.ckBitwiseNot = Para.ckBitwiseNot;
-            Propety.ckSIMD = Para.ckSIMD;
-            Propety.ckSubPixel = Para.ckSubPixel;
-            ckBitwiseNot.IsCLick = Para.ckBitwiseNot;
-            ckSIMD.IsCLick = Para.ckSIMD;
-            ckSubPixel.IsCLick = Para.ckSubPixel;
-            Propety.TypeMode = Para.TypeMode;
+            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
+            Propety.ckSIMD = Propety.ckSIMD;
+            Propety.ckSubPixel = Propety.ckSubPixel;
+            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
+            ckSIMD.IsCLick = Propety.ckSIMD;
+            ckSubPixel.IsCLick = Propety.ckSubPixel;
+            Propety.TypeMode = Propety.TypeMode;
             
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
@@ -159,26 +175,20 @@ namespace BeeUi.Tool
         }
 
        
-      public void Process()
+      public void Testing()
         {
-            Propety.rotAreaAdjustment = new RectRotate();
-            Propety.rotAreaAdjustment._rect = Propety.rotArea._rect;
-            Propety.rotAreaAdjustment._PosCenter = new PointF(Propety.rotArea._PosCenter.X + G.X_Adjustment, Propety.rotArea._PosCenter.Y + G.Y_Adjustment);
-            Propety.rotAreaAdjustment._angle = Propety.rotArea._rectRotation + G.angle_Adjustment;
-           
-
-
-                if(G.IsRun)
-               Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
-            else
-               Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
+      
+            if (BeeCore.Common.matRaw.Empty()) return;
+            BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
+            if (worker.IsBusy)
+                worker.RunWorkerAsync();
         }
         Bitmap bmResult ;
         public int indexTool;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
         {
 
-            Process();
+         
 
         }
         public Mat matTemp=new Mat();

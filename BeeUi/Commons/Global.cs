@@ -21,6 +21,10 @@ namespace BeeUi
     {
        None, Processing,Trigged,Continue,NotTrig,Complete
     }
+    public enum StatusProcessing
+    {
+        None, Adjusting,WaitingDone, Processing, Done
+    }
     public enum StatusMode
     {
       None,  SimOne, SimContinuous, Once, Continuous
@@ -32,6 +36,7 @@ namespace BeeUi
     public struct G
     {
         public static StatusMode StatusMode=StatusMode.None;
+        public static StatusProcessing StatusProcessing = StatusProcessing.None;
         public static bool Initial = false,IsShutDown=false;
         public static bool IsReConnectCCD=false,IsPLCNotAlive=false;
         public static int[] valuesPLCInPut=new int[16];
@@ -70,7 +75,7 @@ namespace BeeUi
           public static Config Config;
          public static VideoCapture camera;
        public static bool IsRun = true,IsCCD,IsEdit;
-        public static RectRotate rotPositionAdjustment;
+        public static RectRotate rotOriginAdj;
         public static bool IsCheck=false;
         public static StepEdit StepEdit=new StepEdit();
         public static float angle_Adjustment=0, X_Adjustment=0, Y_Adjustment=0;

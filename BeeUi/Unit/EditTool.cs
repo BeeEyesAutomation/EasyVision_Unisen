@@ -111,6 +111,10 @@ namespace BeeUi
 
 
                         }
+                        foreach (Commons.Tools tool in G.listAlltool)
+                        {
+                            tool.ItemTool.Score.Enabled = false;
+                        }
                         G.StepEdit.Dock = DockStyle.None;
                         G.StepEdit.Parent = G.EditTool.View.pHeader;
                         G.StepEdit.Location = new Point(0, 0);

@@ -30,10 +30,26 @@ namespace BeeUi.Tool
             InitializeComponent();
             
         }
-       public TypeTool TypeTool=TypeTool.Pattern;
-        public void LoadPara(dynamic Content)
+        private BackgroundWorker worker = new BackgroundWorker();
+        public void LoadPara()
         {
-            OutLine Para = (OutLine)Content;
+
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                Propety.DoWork();
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+
+            };
             Bitmap bmTemp = Propety.matTemp;
             if (bmTemp != null)
             {
@@ -43,18 +59,18 @@ namespace BeeUi.Tool
             }
             trackAngle.Value =(int) Propety.Angle;
             numAngle.Value = (int)Propety.Angle;
-            trackScore.Value =Para.Score; 
-            trackNumObject.Value= Para.NumObject;
-            trackMaxOverLap.Value = (int)(Para.OverLap * 100);
-            //txtAngle.Text = (int)Para.Angle + "";
+            trackScore.Value =Propety.Score; 
+            trackNumObject.Value= Propety.NumObject;
+            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
+            //txtAngle.Text = (int)Propety.Angle + "";
             if (Propety.NumObject == 0) Propety.NumObject = 1;
-            Propety.ckBitwiseNot = Para.ckBitwiseNot;
-            Propety.ckSIMD = Para.ckSIMD;
-            Propety.ckSubPixel = Para.ckSubPixel;
-            ckBitwiseNot.IsCLick = Para.ckBitwiseNot;
-            ckSIMD.IsCLick = Para.ckSIMD;
-            ckSubPixel.IsCLick = Para.ckSubPixel;
-            Propety.TypeMode = Para.TypeMode;
+            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
+            Propety.ckSIMD = Propety.ckSIMD;
+            Propety.ckSubPixel = Propety.ckSubPixel;
+            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
+            ckSIMD.IsCLick = Propety.ckSIMD;
+            ckSubPixel.IsCLick = Propety.ckSubPixel;
+            Propety.TypeMode = Propety.TypeMode;
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
             else
@@ -389,19 +405,19 @@ namespace BeeUi.Tool
       
         public void Process()
         {
-            Propety.rectRotates = new List<RectRotate>();
-            if (G.IsRun)
-            {
-                if (G.rotPositionAdjustment != null)
-                    Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotPositionAdjustment);
-                else
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.rotAreaAdjustment._angle = 0;
-                Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
+            //Propety.rectRotates = new List<RectRotate>();
+            //if (G.IsRun)
+            //{
+            //    if (G.rotOriginAdj != null)
+            //        Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotOriginAdj);
+            //    else
+            //        Propety.rotAreaAdjustment = Propety.rotArea;
+            //    Propety.rotAreaAdjustment._angle = 0;
+            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
 
-            }
-            else
-                Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
+            //}
+            //else
+            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
         }
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)

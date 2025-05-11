@@ -33,7 +33,19 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern IntPtr SetTemp(IntPtr data, int image_rows, int image_cols, MatType matType);
         public  int Threshold=100,  MinArea=100;
+        public StatusTool StatusTool = StatusTool.None;
         public  bool Invert=false;
+        public void DoWork()
+        {
+            StatusTool = StatusTool.Processing;
+          //  Matching(indexTool);
+
+        }
+        public void Complete()
+        {
+            StatusTool = StatusTool.Done;
+
+        }
         public  Mat GetImgTemp()
         {
             G.CommonPlus.BitmapSrc(BeeCore.Common.matRaw.Clone().ToBitmap());

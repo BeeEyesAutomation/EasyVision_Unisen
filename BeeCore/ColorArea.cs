@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 using System.Collections;
 using OpenCvSharp.Extensions;
+using System.ComponentModel;
+using Python.Runtime;
+using System.Windows.Forms;
 
 namespace BeeCore
 {
@@ -182,22 +185,31 @@ namespace BeeCore
             return BeeCore.Native.GetImg(TypeImg.Result).ToBitmap();
         
         }
+      
+        public String nameTool = "";
+        public Bitmap bmRS = null;
+        public StatusTool StatusTool = StatusTool.None;
+        public void DoWork(RectRotate rotCrop)
+        {
+            StatusTool = StatusTool.Processing;
+            bmRS = CheckColor(rotCrop).ToBitmap();
+
+        }
+        public void Complete()
+        {
+            StatusTool = StatusTool.Done;
+
+        }
+       
         public int ScoreRs;
-        public Mat CheckColor(bool IsRun, Mat raw,RectRotate rot)
+        public Mat CheckColor(RectRotate rotCrop)
         {
             G.colorArea.StyleColor = styleColor;
-            if (!IsRun)
-            
-            {
-                Bitmap btmRaw = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw);
-                G.CommonPlus.BitmapSrc(btmRaw);
-            }
            
-                if (BeeCore.Common.matRaw.Empty())return null;
-                    BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-            
+           
+              
             G.colorArea.LoadTemp(listColor);
-            IsOK = G.colorArea.CheckColor(true,(int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle, AreaPixel, Score, pxTemp);
+            IsOK = G.colorArea.CheckColor(true,(int)rotCrop._PosCenter.X, (int)rotCrop._PosCenter.Y, (int)rotCrop._rect.Width, (int)rotCrop._rect.Height, rotCrop._angle, AreaPixel, Score, pxTemp);
             ScoreRs = G.colorArea.ScoreRS;
             int rows = 0, cols = 0 ,Type = 0;
             cycleTime =(int) G.colorArea.cycle;
@@ -208,7 +220,7 @@ namespace BeeCore
                 Mat raws = new Mat(rows, cols, Type, intPtr);
                 return raws;
             }
-            return null;
+        
 
         }
     }

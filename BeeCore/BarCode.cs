@@ -1,5 +1,7 @@
 ﻿using OpenCvSharp;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 //using ZXing;
 namespace BeeCore
@@ -39,7 +41,36 @@ namespace BeeCore
 
         public String Content = "";
         public int ScoreRs = 0;
+        public void DoWork()
+        {
+            StatusTool = StatusTool.Processing;
+          //  Matching(indexTool);
 
+        }
+        public void Complete()
+        {
+            StatusTool = StatusTool.Done;
+
+        }
+        //public void Ini()
+        //{
+        //    var boxList = new List<RectRotate>();
+        //    var scoreList = new List<float>();
+        //    var labelList = new List<string>();
+        //    int numOK = 0, numNG = 0;
+        //    int scoreRS = 0;
+        //    worker = new BackgroundWorker();
+        //    worker.DoWork += (sender, e) =>
+        //    {
+        //    };
+        //    worker.RunWorkerCompleted += (sender, e) =>
+        //    {
+        //        StatusTool = StatusTool.Done;
+        //    };
+        //}
+    
+        public String nameTool = "";
+        public StatusTool StatusTool = StatusTool.None;
         public  Mat Read(RectRotate rotateRect)
         {
             IsOK = false; 

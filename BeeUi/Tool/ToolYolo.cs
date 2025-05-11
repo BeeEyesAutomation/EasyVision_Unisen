@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -33,14 +34,38 @@ namespace BeeUi.Tool
             
         }
         bool IsIni = false;
-       public TypeTool TypeTool=TypeTool.Yolo;
-        public void LoadPara(dynamic Content)
+        public BackgroundWorker worker = new BackgroundWorker();
+        Stopwatch timer = new Stopwatch();
+        public void LoadPara()
         {
-            Yolo Para = (Yolo)Content;
-         
-                //String nameModel = G.Project + ".pt";
-                //String PathProg = "Program\\" + nameModel;
-                if(Propety.PathModel!=null)
+            worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+               
+                timer.Restart();
+                if (!G.IsRun)
+                    Propety.rotAreaAdjustment = Propety.rotArea;
+                Propety.DoWork(Propety.rotAreaAdjustment);
+            };
+
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
+                {
+                    //  MessageBox.Show("Worker error: " + e.Error.Message);
+                    return;
+                }
+                Propety.Complete();
+                if (!G.IsRun)
+                    G.EditTool.View.imgView.Invalidate();
+                timer.Stop();
+
+                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+
+            };
+            //String nameModel = G.Project + ".pt";
+            //String PathProg = "Program\\" + nameModel;
+            if (Propety.PathModel!=null)
                if (File.Exists(Propety.PathModel))
                    Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
                 IsIni = true;
@@ -59,12 +84,24 @@ namespace BeeUi.Tool
             G.TypeCrop = TypeCrop.Area;
             //picTemp1.Image = Propety.matTemp;
             //picTemp2.Image = Propety.matTemp2;
+            
             txtModel.Text = Propety.PathModel;
-            trackScore.Value =Para.Score;
+            trackScore.Value = Propety.Score;
            btnCheckArea.IsCLick = Propety.IsCheckArea ;
-            numScore.Value = Para.Score;
-            trackNumObject.Value= Para.NumObject;
-          switch(Propety.Compare)
+            numScore.Value = Propety.Score;
+            trackNumObject.Value= Propety.NumObject;
+            numLine.Value = Propety.yLine;
+            switch (Propety.CompareLine)
+            {
+              
+                case Compares.Less:
+                    btnLessArea.IsCLick = true;
+                    break;
+                case Compares.More:
+                    btnMoreArea.IsCLick = true;
+                    break;
+            }
+            switch (Propety.Compare)
             {
                 case Compares.Equal:
                     btnEqual.IsCLick = true;
@@ -77,7 +114,7 @@ namespace BeeUi.Tool
                     break;
             }
           
-            Propety.TypeMode = Para.TypeMode;
+            //Propety.TypeMode = Propety.TypeMode;
             if (!IsIni)
             {
                 IsIni = true;
@@ -114,11 +151,16 @@ namespace BeeUi.Tool
         {
             if (Propety.rotAreaAdjustment == null&& G.IsRun) return gc;
             gc.ResetTransform();
-           // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
-
+            // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
+           
             var mat = new Matrix();
             RectRotate rotA = Propety.rotArea;
             if (G.IsRun) rotA = Propety.rotAreaAdjustment;
+            if (!G.IsRun)
+            {
+                mat.Translate(pScroll.X, pScroll.Y);
+                mat.Scale(Scale, Scale);
+            }
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
@@ -127,179 +169,89 @@ namespace BeeUi.Tool
            
             gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
             gc.ResetTransform();
-
+            Color cl = Color.LimeGreen;
             if (!Propety.IsOK)
             {
-                Color cl = Color.Red;
+                cl = Color.Red;
                 if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
-                if (Propety.rectRotates.Count > 0)
-                {
-                    int i = 0;
-                    foreach (RectRotate rot in Propety.rectRotates)
-                    {
-                        mat = new Matrix();
-                        if (!G.IsRun)
-                        {
-                            mat.Translate(pScroll.X, pScroll.Y);
-                            mat.Scale(Scale, Scale);
-                        }
-                        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                        mat.Rotate(rotA._rectRotation);
-                        mat.Translate(rotA._rect.X, rotA._rect.Y);
-                        gc.Transform = mat;
 
-                        if (Propety.IsCheckArea)
-                        {
-                            mat.Rotate(rot._rectRotation);
-                            gc.Transform = mat;
-                            gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, Propety.yLine), new Point((int)rotA._rect.Width, Propety.yLine));
 
-                            System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                            System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                            System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                            System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                            System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                            System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                           Color clLine=Color.Red;
-                            if (Propety.listOK[i])
-                                clLine = Color.Green;
-                                gc.DrawLine(new Pen(clLine, 8), point1, point2);
-                            gc.DrawLine(new Pen(clLine, 8), point3, point4);
-                            gc.DrawLine(new Pen(clLine, 8), point5, point6);
-                            mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-
-                            gc.Transform = mat;
-                            int index = i + 1;
-                            String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-                            if (Propety.IsCheckArea)
-                                content = rot._rect.Height + " px";
-                            Font font = new Font("Arial", 30, FontStyle.Bold);
-                            SizeF sz = gc.MeasureString(content, font);
-                            gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 ), (int)(rot._rect.Y + rot._rect.Height / 2 - sz.Height / 2)));
-                            i++;
-                            //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                            gc.ResetTransform();
-                        }
-                        else
-                        {
-                            mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                            mat.Rotate(rot._rectRotation);
-                            gc.Transform = mat;
-                           
-                            gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-
-                            int index = i + 1;
-                            String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-                            if (Propety.IsCheckArea)
-                                content = rot._rect.Height + " px";
-                            Font font = new Font("Arial", 30, FontStyle.Bold);
-                            SizeF sz = gc.MeasureString(content, font);
-                            gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz.Height / 2)));
-                            i++;
-                            //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                            gc.ResetTransform();
-                        }
-                    }
-                }
-                else
-                {
-                    mat = new Matrix();
-                    if (!G.IsRun)
-                    {
-                        mat.Translate(pScroll.X, pScroll.Y);
-                        mat.Scale(Scale, Scale);
-                    }
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-                  
-                    gc.Transform = mat;
-                    RectangleF _rect = Propety.rotArea._rect;
-                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
-                     G.Config.ConditionOK == ConditionOK.Logic)
-                        gc.DrawRectangle(new Pen(Color.LimeGreen, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-
-                    else
-                        gc.DrawRectangle(new Pen(Color.Red, 4), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                    // 
-                }
-                gc.ResetTransform();
-               
             }
             else
             {
-                Color cl = Color.LimeGreen;
+                cl = Color.LimeGreen;
                 if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
-                int i = 0;
-                    foreach (RectRotate rot in Propety.rectRotates)
+            }
+            int i = 0;
+            foreach (RectRotate rot in Propety.rectRotates)
+            {
+                mat = new Matrix();
+                if (!G.IsRun)
                 {
-                    mat = new Matrix();
-                    if (!G.IsRun)
-                    {
-                        mat.Translate(pScroll.X, pScroll.Y);
-                        mat.Scale(Scale, Scale);
-                    }
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-                    mat.Translate(rotA._rect.X, rotA._rect.Y);
-                    gc.Transform = mat;
-                    
-                 
-                    if (Propety.IsCheckArea)
-                    {
-                        mat.Rotate(rot._rectRotation);
-                        gc.Transform = mat;
-                        gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, Propety.yLine), new Point((int)rotA._rect.Width, Propety.yLine));
-
-                        System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                        System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                        System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                        Color clLine = Color.Red;
-                        if (Propety.listOK[i])
-                            clLine = Color.Green;
-                        gc.DrawLine(new Pen(clLine, 8), point1, point2);
-                        gc.DrawLine(new Pen(clLine, 8), point3, point4);
-                        gc.DrawLine(new Pen(clLine, 8), point5, point6);
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                        
-                        gc.Transform = mat;
-                        int index = i + 1;
-                        String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-                        if (Propety.IsCheckArea)
-                            content = rot._rect.Height + " px";
-                        Font font = new Font("Arial", 30, FontStyle.Bold);
-                        SizeF sz = gc.MeasureString(content, font);
-                        gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 ), (int)(rot._rect.Y + rot._rect.Height / 2 - sz.Height / 2)));
-                        i++;
-                        //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                        gc.ResetTransform();
-                    }
-                    else
-                    {
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                        mat.Rotate(rot._rectRotation);
-                        gc.Transform = mat;
-                       
-                            gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-                        int index = i + 1;
-                        String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-                        if (Propety.IsCheckArea)
-                            content = rot._rect.Height + " px";
-                        Font font = new Font("Arial", 30, FontStyle.Bold);
-                        SizeF sz = gc.MeasureString(content, font);
-                        gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz.Height / 2)));
-                        i++;
-                        //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                        gc.ResetTransform();
-                    }
-                   
+                    mat.Translate(pScroll.X, pScroll.Y);
+                    mat.Scale(Scale, Scale);
                 }
+                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                mat.Rotate(rotA._rectRotation);
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                gc.Transform = mat;
+
+
+                if (Propety.IsCheckArea)
+                {
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+                    gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, Propety.yLine), new Point((int)rotA._rect.Width, Propety.yLine));
+
+                    System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    Color clLine = Color.Red;
+                    if (Propety.listOK[i])
+                        clLine = Color.Green;
+                    gc.DrawLine(new Pen(clLine, 8), point1, point2);
+                    gc.DrawLine(new Pen(clLine, 8), point3, point4);
+                    gc.DrawLine(new Pen(clLine, 8), point5, point6);
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+
+                    gc.Transform = mat;
+                    int index = i + 1;
+                    String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
+                    if (Propety.IsCheckArea)
+                        content = rot._rect.Height + " px";
+                    Font font = new Font("Arial", 30, FontStyle.Bold);
+                    SizeF sz1 = gc.MeasureString(content, font);
+                    gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
+                    i++;
+                    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                    gc.ResetTransform();
+                }
+                else
+                {
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+
+                    gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
+                    int index = i + 1;
+                    String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
+                    if (Propety.IsCheckArea)
+                        content = rot._rect.Height + " px";
+                    Font font = new Font("Arial", 30, FontStyle.Bold);
+                    SizeF sz2 = gc.MeasureString(content, font);
+                    gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
+                    i++;
+                    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                    gc.ResetTransform();
+                }
+
             }
             if (Propety.rectRotates != null)
             {
@@ -316,7 +268,11 @@ namespace BeeUi.Tool
                 gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
 
             }
-
+            String s = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
+            gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width, (int)sz.Height));
+            gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+            gc.ResetTransform();
 
 
             return gc;
@@ -408,18 +364,18 @@ namespace BeeUi.Tool
         {
             try
             {
-                Propety.rectRotates = new List<RectRotate>();
-                if (G.IsRun)
-                {
-                    if (G.rotPositionAdjustment != null)
-                        Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotPositionAdjustment);
-                    else
-                        Propety.rotAreaAdjustment = Propety.rotArea;
-                    //  Propety.Matching(G.IsRun, BeeCore.Common.matRaw.ToBitmap(), indexTool, Propety.rotAreaAdjustment);
-                    Propety.Check(this.Name, Propety.rotAreaAdjustment);
-                }
-                else
-                    Propety.Check(this.Name, Propety.rotArea);
+               // Propety.rectRotates = new List<RectRotate>();
+               // if (G.IsRun)
+               // {
+               //     if (G.rotOriginAdj != null)
+               //         Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotOriginAdj);
+               //     else
+               //         Propety.rotAreaAdjustment = Propety.rotArea;
+               //     //  Propety.Matching(G.IsRun, BeeCore.Common.matRaw.ToBitmap(), indexTool, Propety.rotAreaAdjustment);
+               // //    Propety.Check(this.Name, Propety.rotAreaAdjustment);
+               // }
+               //// else
+               //   //  Propety.Check(this.Name, Propety.rotArea);
                 
             }
             catch (Exception ex)
@@ -434,11 +390,11 @@ namespace BeeUi.Tool
           
         }
         public int indexTool = 0;
-        private void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (G.IsLoad)
                 Process();
-
+            await Task.Delay(1000);
             G.EditTool.View.imgView.Invalidate();
 
             G.ResultBar.lbCycleTrigger.Text = "[" + Propety.cycleTime + "ms]";
@@ -598,7 +554,7 @@ namespace BeeUi.Tool
             {
                 Propety.PathModel = OpenFileDialog.FileName;
                 txtModel.Text = Propety.PathModel;
-                LoadPara(Propety);
+                LoadPara();
             }
           
         }
@@ -743,8 +699,8 @@ namespace BeeUi.Tool
         private void btnTest_Click_1(object sender, EventArgs e)
         {
             G.IsCheck = true;
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -827,7 +783,7 @@ namespace BeeUi.Tool
                 BeeCore.Camera.Read();
                 if (BeeCore.Camera.IsConnected)
                 {
-                    Propety.Check(this.Name, Propety.rotArea);
+                    Propety.Check();
                     tmCheckFist.Enabled = false;
                 }
                     
@@ -854,6 +810,24 @@ namespace BeeUi.Tool
         private void rjButton6_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnMoreArea_Click(object sender, EventArgs e)
+        {
+            Propety.CompareLine=Compares.More;
+        }
+
+        private void btnLessArea_Click(object sender, EventArgs e)
+        {
+            Propety.CompareLine = Compares.Less;
+        }
+
+        private void numLine_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.yLine = numLine.Value;
+            G.IsCheck = true;
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
         }
     }
 }

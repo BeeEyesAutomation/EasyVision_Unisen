@@ -153,7 +153,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
            
                 this.LayIntput.Enabled = G.PLC.IsConnected;
-            this.LayOutput.Enabled = G.PLC.IsConnected;
+           this.LayOutput.Enabled = G.PLC.IsConnected;
 
         }
     }
