@@ -1786,7 +1786,7 @@ namespace BeeUi
                     continue;
                 }
                     // G.PropetyTools[indexTool]
-                    SumCycle += tool.tool.Propety.cycleTime;
+                  //  SumCycle += tool.tool.Propety.cycleTime;
                 tool.tool.ShowResult(gc, (float)(imgView.Zoom / 100.0), new Point(0,0));
                 tool.ItemTool.lbCycle.Text = tool.tool.Propety.cycleTime + " ms";
                 tool.ItemTool.lbScore.Text = tool.tool.Propety.ScoreRs + "";
@@ -2018,7 +2018,7 @@ namespace BeeUi
                 }
             }
             G.Config.SumTime =  G.Config.SumOK + G.Config.SumNG;
-            SumCycle += BeeCore.Common.Cycle;
+           
             G.ResultBar.lbTimes.Text = G.Config.SumTime.ToString();
             G.ResultBar.lbSumOK.Text =  G.Config.SumOK + ""; G.ResultBar.lbSumNG.Text= G.Config.SumNG + "";
             G.Config.TotalTime += Convert.ToSingle(SumCycle / (60000.0));
@@ -2098,6 +2098,9 @@ namespace BeeUi
             //  await Task.Delay(1000);
             if (G.StatusProcessing==StatusProcessing.Done)
             {
+                timer.Stop();
+
+                SumCycle = (int)timer.Elapsed.TotalMilliseconds;
                 ShowResultTotal();
                 if (G.Header.IsWaitingRead)
                 {
@@ -2466,6 +2469,7 @@ namespace BeeUi
         }
        public Bitmap bmResult;
         int numLive = 500;
+        Stopwatch timer = new Stopwatch();
         public  void ProcessingAll()
         {
             if (!G.Initial)
@@ -2475,6 +2479,7 @@ namespace BeeUi
             switch (G.StatusProcessing)
             {
                 case StatusProcessing.None:
+                    timer.Restart();
                     if (G.PropetyTools[0].TypeTool == TypeTool.Position_Adjustment)
                     {
                        
