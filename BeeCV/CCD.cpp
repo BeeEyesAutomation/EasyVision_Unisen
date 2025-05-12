@@ -73,6 +73,11 @@ extern "C" __declspec(dllexport) void SetRaw(uchar* uc, int image_rows, int imag
 	matRaw = BytesToMat(uc, image_rows, image_cols, image_type);
 
 }
+extern "C" __declspec(dllexport) void SetImgTemp(uchar* uc, int image_rows, int image_cols, int image_type)
+{
+	matSetTemp = BytesToMat(uc, image_rows, image_cols, image_type);
+
+}
 extern "C" __declspec(dllexport) uchar* GetRaw(int* rows, int* cols, int* Type)
 {
 	int rows_ = matRaw.rows;

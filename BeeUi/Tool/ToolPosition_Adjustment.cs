@@ -718,16 +718,16 @@ namespace BeeUi.Tool
         private void trackMaxOverLap_ValueChanged(int obj)
         {
 
-            Propety.OverLap = trackMaxOverLap.Value;
-            numOverLap.Value = (int)Propety.OverLap;
+            Propety.OverLap = (trackMaxOverLap.Value*1.0)/100.0;
+            numOverLap.Value = (int)(Propety.OverLap*100.0);
             //if (!threadProcess.IsBusy)
             //    threadProcess.RunWorkerAsync();
         }
 
         private void numOverLap_ValueChanged(object sender, EventArgs e)
         {
-            Propety.OverLap = numOverLap.Value;
-            trackMaxOverLap.Value = (int)Propety.OverLap;
+            Propety.OverLap = (numOverLap.Value * 1.0)/ 100.0;
+            trackMaxOverLap.Value = (int)(Propety.OverLap*100.0);
         }
     }
 }

@@ -21,8 +21,8 @@ namespace CvPlus
 	MV_CC_DEVICE_INFO_LIST  m_stDevList;
 	cv::Mat matCrop;
 	cv::VideoCapture camUSB;
-	 cv::Mat matTemp, matRaw, matResult, matRsTemp;
-	 cv::Mat m_matSrc;
+	cv::Mat matTemp, matRaw, matResult, matRsTemp;
+	cv::Mat matSetTemp, m_matSrc;
 	vector< cv::Mat> m_matDst;
 	 uchar* ucRaw; uchar* ucCrop;
 	string _toString(System::String^ STR)
@@ -148,10 +148,7 @@ namespace CvPlus
 	{
 		matRaw = BitmapToMat(bm);
 	}
-	void Common::BitmapEdit(Bitmap^ bm)
-	{
-		m_matSrc= BitmapToMat(bm);
-	}
+	
 	void Common::BitmapDst(Bitmap^ bm,int ix)
 	{
 		m_matDst[ix]  = BitmapToMat(bm);

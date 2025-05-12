@@ -74,7 +74,7 @@ namespace CvPlus {
 	extern cv::VideoCapture camUSB;
 	extern uchar* ucRaw;
 	extern cv::Mat matTemp, matRaw, matResult, matRsTemp,matCrop;
-	extern cv::Mat m_matSrc;
+	extern cv::Mat matSetTemp, m_matSrc;
 	extern vector<cv::Mat> m_matDst;
 	Mat CropImage(Mat matCrop, Rect rect);
 	
@@ -89,7 +89,7 @@ namespace CvPlus {
 
 	public:void	BitmapSrc(Bitmap^ bm);
 	public:void	BitmapDst(Bitmap^ bm, int ix);
-	public:void  BitmapEdit(Bitmap^ bm);
+	
 	public:  void LoadSrc(System::String^ path);
 	public:  void LoadDst(System::String^ path);
 		 

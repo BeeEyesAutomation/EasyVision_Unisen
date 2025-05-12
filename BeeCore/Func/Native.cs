@@ -21,6 +21,8 @@ namespace BeeCore
         unsafe public static extern IntPtr GetResult(ref int rows, ref int cols, ref int Type);
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetRaw(IntPtr data, int image_rows, int image_cols, MatType matType);
+        [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        unsafe public static extern void SetImgTemp(IntPtr data, int image_rows, int image_cols, MatType matType);
         public static IntPtr intPtr;
         public static Mat GetImg( TypeImg typeImg=TypeImg.Raw)
         {
@@ -71,7 +73,10 @@ namespace BeeCore
                     {
                         case TypeImg.Raw:
                             SetRaw(raw.Data, raw.Rows, raw.Cols, raw.Type());
-                            break;                      
+                            break;
+                        case TypeImg.Crop:
+                            SetImgTemp(raw.Data, raw.Rows, raw.Cols, raw.Type());
+                            break;
                     }                  
                     return true;
                 }

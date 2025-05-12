@@ -951,26 +951,28 @@ namespace BeeUi
             gc = e.Graphics;
             gc.SmoothingMode= SmoothingMode.AntiAlias;
              var mat = new Matrix();
-           
-            
-            //gc.Transform = mat;
-          
-                int index = 0;
+
+            mat = new Matrix();
+            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+            gc.Transform = mat;
+
+            int index = 0;
                 if (G.Config.IsShowCenter)
                 {
-                    e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), imgView.Width / 2, 0, imgView.Width / 2, imgView.Height);
-                    e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), 0, imgView.Height / 2, imgView.Width, imgView.Height / 2);
+                    e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), BeeCore.G.ParaCam.SizeCCD.Width / 2, 0, BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height);
+                    e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), 0, BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height / 2);
                 }
                 if (G.Config.IsShowGird)
                 {
-                    int W = imgView.Width, H = imgView.Height;
+                    int W =BeeCore.G.ParaCam.SizeCCD.Width, H = BeeCore.G.ParaCam.SizeCCD.Height;
                     int step = Math.Min(W, H) / 15;
                     for (int x = step; x < W; x += step)
-                        e.Graphics.DrawLine(new Pen(Brushes.Gray, 1), x, 0, x, imgView.Height);
-                    for (int y = step; y < W; y += step)
-                        e.Graphics.DrawLine(new Pen(Brushes.Gray, 1), 0, y, imgView.Width, y);
+                        e.Graphics.DrawLine(new Pen(Brushes.Gray, 1), x, 0, x, H);
+                    for (int y = step; y < H; y += step)
+                        e.Graphics.DrawLine(new Pen(Brushes.Gray, 1), 0, y, W, y);
                 }
-            
+            gc.ResetTransform();
             if (G.Config.IsShowArea)
                 {
                     int indexTool = 0;
@@ -986,7 +988,7 @@ namespace BeeUi
                         gc.DrawRectangle(new Pen(Color.Blue, 1), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
                         String s = (int)(indexTool + 1) + "." + G.PropetyTools[indexTool].Name;
                         SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
-                        gc.FillRectangle(Brushes.White, new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)sz.Width, (int)sz.Height));
+                        gc.FillRectangle(Brushes.Red, new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)sz.Width, (int)sz.Height));
                         gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y));
                         indexTool++;
                         gc.ResetTransform();
@@ -3029,8 +3031,7 @@ namespace BeeUi
 
         private void btnGird_Click(object sender, EventArgs e)
         {
-            G.Config.IsShowGird = !G.Config.IsShowGird;
-        imgView.Invalidate();
+        
         }
        
 
@@ -3172,6 +3173,17 @@ namespace BeeUi
             if (indexFile < 0)
                 indexFile = 0;
             btnPlayStep.PerformClick();
+        }
+
+        private void btnGird_Click_1(object sender, EventArgs e)
+        {
+            G.Config.IsShowGird = !G.Config.IsShowGird;
+            imgView.Invalidate();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnRunSim_Click_1(object sender, EventArgs e)

@@ -139,7 +139,9 @@ namespace BeeCore
         {if(BeeCore.Common.matRaw.Empty())return;
             BeeCore.Native.SetImg(BeeCore.Common.matRaw);
             G.colorArea.StyleColor = styleColor;
-            BeeCore.G.CommonPlus.CropRotate((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle);
+       Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotArea._PosCenter.X, rotArea._PosCenter.Y), new Size2f(rotArea._rect.Size.Width, rotArea._rect.Size.Height), rotArea._angle));
+            Native.SetImg(matCrop, TypeImg.Crop);
+        //    BeeCore.G.CommonPlus.CropRotate((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle);
 
             //  BeeCore.Camera.Read();
             G.colorArea.LoadTemp(listColor);
@@ -158,7 +160,7 @@ namespace BeeCore
         public Mat SetColor(bool IsCCD, Mat raw)
         {
             G.colorArea.StyleColor = styleColor;
-            G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw));
+            Native.SetImg(raw,TypeImg.Crop);
              pxTemp = G.colorArea.SetColorArea(AreaPixel);
            
          

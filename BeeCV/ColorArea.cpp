@@ -213,7 +213,7 @@ bool ColorArea::CheckColor(bool IsCCD, int x, int y, int w, int h, float angle, 
     Mat matCrop = Mat();
     Mat matBilate = Mat();
     matCrop = RotateImge(matRaw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
-    //cv::imwrite("colorCrop.png", matCrop);
+   // cv::imwrite("colorCrop.png", matRaw);
    // cv::bilateralFilter(matCrop, matBilate, 9, 75, 75);
     cv::medianBlur(matCrop, matBilate, 5);
     matResult = matCrop.clone();
@@ -221,7 +221,7 @@ bool ColorArea::CheckColor(bool IsCCD, int x, int y, int w, int h, float angle, 
   
         GetMask(matBilate, iAreaPixel);
     Mat matRS = matMask.clone();
-       
+   // cv::imwrite("color.png", matRS);
     pxMathching = countNonZero(matRS);
     cvtColor(matRS, matRS, COLOR_GRAY2BGR);
     Mat mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(0, 255, 0));
@@ -303,12 +303,12 @@ int  ColorArea::SetColorArea(int iAreaPixel)
    
     if (listColor.size() == 0)
     {
-        matRsTemp = Mat(matRaw.rows,matRaw.cols, CV_8UC1 ,Scalar(0,0,0));// matRaw.clone();
+        matRsTemp = Mat(matSetTemp.rows, matSetTemp.cols, CV_8UC1 ,Scalar(0,0,0));// matRaw.clone();
         return false;
     }
     Mat matResult = Mat();
    // cv::GaussianBlur(matRaw.clone(), matResult, cv::Size(5, 5), 0);
-      cv::medianBlur(matCrop.clone(), matResult, 5);
+      cv::medianBlur(matSetTemp.clone(), matResult, 5);
    // cv::bilateralFilter(matRaw.clone(), matResult, 9, 75, 75);
    // cv::imshow("mat", matResult);
     GetMask(matResult, iAreaPixel);
