@@ -44,7 +44,43 @@ namespace BeeCore
         public void DoWork()
         {
             StatusTool = StatusTool.Processing;
-          //  Matching(indexTool);
+            IsOK = false;
+            Content = HEROJE.BarcodeStr;
+            if (Content != "")
+            {
+
+
+                if (HEROJE.BarCodeRegion == null) IsOK = false;
+                if (HEROJE.BarCodeRegion.Length > 0) ;
+                {
+                    // rectQRCode = HEROJE.BarCodeRegion;
+                    if (MathQRCODE == "")
+                        IsOK = true;
+                    else
+                        if (MathQRCODE == Content)
+                    {
+                        IsOK = true;
+                    }
+                }
+                //for (int i = 0; i < BarCodeRegion.Length; i++)
+                //{
+                //    Point[] array4 = BarCodeRegion[i].ToPointArray();
+                //    for (int j = 0; j < array4.Length; j++)
+                //    {
+                //        array4[j].X += num7;
+                //        array4[j].Y += num9;
+                //    }
+                //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                //    graphics.DrawLines(BarcodePen, array4);
+                //}
+                //HEROJE.BarCodeRegion.
+            }
+            else
+            {
+                IsOK = false;
+            }
+
+            
 
         }
         public void Complete()
