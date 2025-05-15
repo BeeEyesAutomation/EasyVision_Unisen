@@ -456,8 +456,8 @@ namespace BeeUi.Common
         bool IsLoad = false;
         public void IniProject()
         {
-            string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);
-
+            string[] files =  Directory.GetDirectories("Program");
+          
             PathFile = files.Select(a => Path.GetFileNameWithoutExtension(a)).ToArray();
             items = PathFile.ToList();
             IsLoad = true;

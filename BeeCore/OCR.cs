@@ -227,7 +227,7 @@ namespace BeeCore
             {
 
 
-                IsOK = true;
+                IsOK = false;
 
 
                 ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
