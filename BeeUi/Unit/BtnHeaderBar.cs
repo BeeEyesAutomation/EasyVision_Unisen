@@ -63,7 +63,7 @@ namespace BeeUi.Unit
             else
                 G.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
             await Task.Delay(1000);
-            Shows.Full(G.EditTool.View.imgView);
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
         }
     }
 }

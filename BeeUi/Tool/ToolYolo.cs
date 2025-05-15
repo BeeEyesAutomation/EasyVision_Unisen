@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,23 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using BeeCore;
+using BeeCore.Parameter;
 using BeeUi.Common;
 using BeeUi.Commons;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Label = System.Windows.Forms.Label;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace BeeUi.Tool
 {
+ public   enum StepSetModel
+    {
+        SetModel, SetLabels, Retrain
+    }
     [Serializable()]
     public partial class ToolYolo : UserControl
     {
@@ -34,7 +41,10 @@ namespace BeeUi.Tool
             
         }
         bool IsIni = false;
+      
+        public StepSetModel StepEdit = StepSetModel.SetModel;
         public BackgroundWorker worker = new BackgroundWorker();
+     
         Stopwatch timer = new Stopwatch();
         public void LoadPara()
         {
@@ -63,34 +73,32 @@ namespace BeeUi.Tool
                 Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
 
             };
-            //String nameModel = G.Project + ".pt";
-            //String PathProg = "Program\\" + nameModel;
-            if (Propety.PathModel!=null)
-               if (File.Exists(Propety.PathModel))
-                   Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
+        
+            if (Propety.listModels == null) Propety.listModels = new List<string>();
+            cbListModel.DataSource = Propety.listModels;
+            workLoadModel.RunWorkerAsync();  
+             
+            //if (Propety.PathModel!=null)
+            //   if (File.Exists(Propety.PathModel))
+            //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
                 IsIni = true;
             String slabel = "";
 
-            if (Propety.Labels != null)
-            {
-
-                foreach (String item in Propety.Labels)
-                {
-                    slabel += item + ",";//.Split(',');
-                }
-                txtLabel.Text = slabel;
+         //   txtLabel.Text = Propety.PathLabels; ;
                 RefreshLabels();
-            }
+            
             G.TypeCrop = TypeCrop.Area;
+             CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
             //picTemp1.Image = Propety.matTemp;
             //picTemp2.Image = Propety.matTemp2;
             
-            txtModel.Text = Propety.PathModel;
+          //  txtModel.Text = Propety.PathModel;
             trackScore.Value = Propety.Score;
-           btnCheckArea.IsCLick = Propety.IsCheckArea ;
+           btnEnLineLimit.IsCLick = Propety.IsCheckArea ;
             numScore.Value = Propety.Score;
             trackNumObject.Value= Propety.NumObject;
             numLine.Value = Propety.yLine;
+            SetLabels();
             switch (Propety.CompareLine)
             {
               
@@ -170,6 +178,7 @@ namespace BeeUi.Tool
             gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
             gc.ResetTransform();
             Color cl = Color.LimeGreen;
+            Brush brushText = Brushes.White;
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
@@ -235,46 +244,56 @@ namespace BeeUi.Tool
                 }
                 else
                 {
+                 
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    gc.Transform = mat;
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
 
-                    gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
                     int index = i + 1;
-                    String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-                    if (Propety.IsCheckArea)
-                        content = rot._rect.Height + " px";
-                    Font font = new Font("Arial", 30, FontStyle.Bold);
-                    SizeF sz2 = gc.MeasureString(content, font);
-                    gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
+                    //String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
+                    //if (Propety.IsCheckArea)
+                    //    content = rot._rect.Height + " px";
+                  //  Font font = new Font("Arial", 30, FontStyle.Bold);
+                  //  SizeF sz2 = gc.MeasureString(content, font);
+
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabel[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS,cl, brushText,30,3);
+                  //  Draws.Box1Label(gc, rot._rect, Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, brushText, Brushes.Transparent, true);
+                    //  gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
                     i++;
                     //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
                     gc.ResetTransform();
                 }
 
             }
-            if (Propety.rectRotates != null)
-            {
-                gc.ResetTransform();
-                var mat2 = new Matrix();
-                if (!G.IsRun)
-                {
-                    mat2.Translate(pScroll.X, pScroll.Y);
-                    mat2.Scale(Scale, Scale);
-                }
-                mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                mat2.Rotate(rotA._rectRotation);
-                gc.Transform = mat2;
-                gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
+            //if (Propety.rectRotates != null)
+            //{
+            //    gc.ResetTransform();
+            //    var mat2 = new Matrix();
+            //    if (!G.IsRun)
+            //    {
+            //        mat2.Translate(pScroll.X, pScroll.Y);
+            //        mat2.Scale(Scale, Scale);
+            //    }
+            //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            //    mat2.Rotate(rotA._rectRotation);
+            //    gc.Transform = mat2;
+            //    gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
 
-            }
-            String s = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
-            SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
-            gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width, (int)sz.Height));
-            gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+            //}
             gc.ResetTransform();
-
-
+            mat= new Matrix();
+            if (!G.IsRun)
+            {
+                mat.Translate(pScroll.X, pScroll.Y);
+                mat.Scale(Scale, Scale);
+            }
+            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            mat.Rotate(rotA._rectRotation);
+            gc.Transform = mat;
+            String sContent = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            Draws.Box1Label(gc, rotA._rect, sContent,G.fontTool, Brushes.Black, Brushes.White);
+            
             return gc;
         }
         public Graphics ShowEdit(Graphics gc, RectangleF _rect)
@@ -553,7 +572,7 @@ namespace BeeUi.Tool
             if (OpenFileDialog.ShowDialog()==DialogResult.OK)
             {
                 Propety.PathModel = OpenFileDialog.FileName;
-                txtModel.Text = Propety.PathModel;
+                //txtModel.Text = Propety.PathModel;
                 LoadPara();
             }
           
@@ -577,7 +596,7 @@ namespace BeeUi.Tool
         private void txtLabel_TextChanged(object sender, EventArgs e)
         {
            
-          Propety.Labels =txtLabel.Text.Trim().Split(',').ToList();
+        //  Propety.Labels =txtLabel.Text.Trim().Split(',').ToList();
         }
 
         private void numScore_ValueChanged(object sender, EventArgs e)
@@ -715,40 +734,78 @@ namespace BeeUi.Tool
         }
         public void RefreshLabels()
         {
-            String[] labels = txtLabel.Text.Trim().Split(',');
+            if (Propety.listLabelCompare == null)
+                return;
             int index = 0;
-            List<String> listLabel = new List<String>();
-            foreach (String label in labels)
-            {
-                if (label == "") continue;
-                listLabel.Add(label);
-
-            }
+            tabLbs.Height = 0;
             tabLbs.Controls.Clear();
             for (int row = 0; row < 4; row++)
             {
-                for (int col = 0; col < 4; col++)
+                for (int col = 0; col < 5; col++)
                 {
-                    if (index >= listLabel.Count)
+                   
+                    if (index >= Propety.listLabelCompare.Count)
                         break;
-                    Label lbl = new Label();
-                    lbl.Text = listLabel[index++];
-                    lbl.Font = new Font("Arial", 11);
-                    lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                    lbl.BackColor = Color.FromArgb(200, 200, 200);
-                    lbl.Dock = DockStyle.Fill;
-                    lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-                    lbl.Margin = new Padding(3);
-                    // lbl.BorderStyle = BorderStyle.FixedSingle;
-
-                    tabLbs.Controls.Add(lbl, col, row);
+                    if (col == 0)
+                        tabLbs.Height += 40;
+                    RJButton btn = new RJButton();
+                    btn.Text = Propety.listLabelCompare[index].label;
+                    btn.Font = new Font("Arial", 11);
+                    btn.IsUnGroup = true;
+                    btn.ForeColor = Color.Black;
+                    btn.BorderRadius = 10; 
+                    btn.Height = 30;
+                    btn.IsCLick = Propety.listLabelCompare[index].IsEn;
+                    btn.Click += Btn_Click;
+                    btn.Corner = Corner.Both;
+                    btn.BackColor = Color.FromArgb(200, 200, 200);
+                    btn.Dock = DockStyle.Fill;
+                    btn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                    btn.Margin = new Padding(3);
+                 
+                    tabLbs.Controls.Add(btn, col, row);
+                    index++;
                 }
+              
             }
-            Propety.listLabel = listLabel;
+          
         }
+
+        private void Btn_Click(object sender, EventArgs e)
+        {
+            RJButton btn = sender as RJButton;
+          int index=  Propety.listLabelCompare.FindIndex(a => a.label == btn.Text);
+            Propety.listLabelCompare[index].IsEn = btn.IsCLick;
+        }
+
         private void btnSetLabel_Click(object sender, EventArgs e)
         {
-            RefreshLabels();
+          
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Propety.PathLabels = OpenFileDialog.FileName;
+                //txtLabel.Text = Propety.PathLabels;
+                String[] Content = File.ReadAllLines(Propety.PathLabels);
+                if (Content != null && Content.Length > 0)
+                {
+                    Propety.listLabelCompare = new List<Labels>();
+                    foreach (String label in Content)
+                    {
+                        if (label == "") continue;
+                        Propety.listLabelCompare.Add(new Labels(label, true));
+
+                    }
+                    RefreshLabels();
+                }
+                else
+                {
+                    MessageBox.Show("Check File Class Again", "Error");
+                }
+            }
+           
+          
 
 
         }
@@ -804,7 +861,8 @@ namespace BeeUi.Tool
 
         private void btnCheckArea_Click(object sender, EventArgs e)
         {
-            Propety.IsCheckArea = btnCheckArea.IsCLick;
+            Propety.IsCheckArea = btnEnLineLimit.IsCLick;
+            layoutLineLimit.Enabled = btnEnLineLimit.IsCLick;
         }
 
         private void rjButton6_Click_1(object sender, EventArgs e)
@@ -828,6 +886,326 @@ namespace BeeUi.Tool
             G.IsCheck = true;
             if (!worker.IsBusy)
                 worker.RunWorkerAsync();
+        }
+
+        private void btnAddModel_Click(object sender, EventArgs e)
+        {
+            switch(StepEdit)
+            {
+                case StepSetModel.SetModel:
+                    OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+                    if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        String pathModel = OpenFileDialog.FileName;
+
+                        String NameModel = Path.GetFileName(pathModel);
+                        pathModel = "Program\\" + G.Project + "\\" + NameModel;
+                        if (Propety.listModels == null) Propety.listModels = new List<string>();
+                        if (File.Exists(OpenFileDialog.FileName))
+                        {
+                            File.Copy(OpenFileDialog.FileName, pathModel, true);
+                            Propety.listModels.Add(NameModel);
+                            cbListModel.DataSource = null;
+                            cbListModel.DataSource = Propety.listModels.ToArray();
+
+                            //cbListModel.SelectedIndex = Propety.listModels.Count-1;
+
+
+                        }
+                    }
+
+                    break;
+                case StepSetModel.SetLabels:
+
+                   
+                    String[] Content = Propety.LoadNameModel(Propety.nameTool);
+                    if (Content != null && Content.Length > 0)
+                    {
+                        Propety.listLabelCompare = new List<Labels>();
+                        foreach (String label in Content)
+                        {
+                            if (label == "") continue;
+                            Propety.listLabelCompare.Add(new Labels(label, true));
+
+                        }
+                        RefreshLabels();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Check File Class Again", "Error");
+                    }
+
+                    break;
+            }    
+           
+        }
+
+        private void cbListModel_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (cbListModel.SelectedIndex == -1) return;
+            Propety.PathModel = cbListModel.Text;
+            String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
+
+
+            if (File.Exists(pathModel))
+            {
+              
+                Propety.SetModel(Propety.nameTool, pathModel, TypeYolo.YOLO);
+              //  Propety.listLabelCompare = new List<Labels>();
+                //RefreshLabels();
+
+            }
+        }
+
+        private void btnSetModel_Click(object sender, EventArgs e)
+        {
+            StepEdit = StepSetModel.SetModel;
+            tabLbs.Enabled = false;
+            btnAddModel.Text = "Add";
+            btnRemoveModel.Text = "Remove";
+            btnRemoveModel.Visible = true;
+            cbListModel.Enabled = true;
+        }
+        public void SetLabels()
+        {
+            cbListModel.SelectionStart = cbListModel.Text.Length;
+            cbListModel.SelectionLength = 0;
+            StepEdit = StepSetModel.SetLabels;
+            tabLbs.Enabled = true;
+            cbListModel.Enabled = false;
+            btnAddModel.Text = "Re.Load";
+            btnRemoveModel.Visible = true;
+            btnRemoveModel.Text = "Import";
+
+
+        }
+        private void btnSetLabels_Click(object sender, EventArgs e)
+        {
+            SetLabels();
+        }
+
+        private void btnRemoveModel_Click(object sender, EventArgs e)
+        {
+            switch (StepEdit)
+            {
+                case StepSetModel.SetModel:
+                    break;
+                case StepSetModel.SetLabels:
+                    OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+                    if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        Propety.PathLabels = OpenFileDialog.FileName;
+
+                        String[] Content = File.ReadAllLines(Propety.PathLabels);
+                        if (Content != null && Content.Length > 0)
+                        {
+                            Propety.listLabelCompare = new List<Labels>();
+                            foreach (String label in Content)
+                            {
+                                if (label == "") continue;
+                                Propety.listLabelCompare.Add(new Labels(label, true));
+
+                            }
+                            RefreshLabels();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Check File Class Again", "Error");
+                        }
+                    }
+
+                    break;
+            }
+            }
+
+        private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (Propety.PathModel != null)
+            {
+                String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
+                if (File.Exists(pathModel))
+                {
+                    Propety.SetModel(Propety.nameTool, pathModel, TypeYolo.YOLO);
+                }
+            }
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+        {
+            // Lấy thông tin thư mục nguồn
+            var dir = new DirectoryInfo(sourceDir);
+
+            // Kiểm tra thư mục có tồn tại không
+            if (!dir.Exists)
+                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+            // Nếu thư mục đích chưa tồn tại, tạo nó
+            Directory.CreateDirectory(destinationDir);
+
+            // Copy tất cả file
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath, true); // Ghi đè nếu đã tồn tại
+            }
+
+            // Nếu recursive là true, copy các thư mục con
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dir.GetDirectories())
+                {
+                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+                }
+            }
+        }
+        private void btnPathDataSet_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog OpenFileDialog = new FolderBrowserDialog();
+
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Propety.PathDataSet = OpenFileDialog.SelectedPath;
+                CopyDirectory(Propety.PathDataSet, "Program\\" + G.Project + "\\DataSet",true);
+             
+              }
+        }
+        public String sClass = "";
+        public bool IsUpdateImgCrop = false;
+        private void btnDraw_Click(object sender, EventArgs e)
+        {  // Thông tin ảnh
+            float imageWidth = BeeCore.Common.matRaw.Width;
+            float imageHeight = BeeCore.Common.matRaw.Height;
+            RotatedRect rrect = new RotatedRect(
+           new Point2f( Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),    // center
+            new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),       // width, height
+            Propety.rotCrop._rectRotation                        // angle in degrees
+           );
+            // Tính 4 điểm
+            Point2f[] points = rrect.Points();
+            // Normalize
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i].X /= imageWidth;
+                points[i].Y /= imageHeight;
+            }
+            int classId = cbLabels.SelectedIndex;
+           
+            // Tạo nội dung dòng annotation
+            sClass += classId.ToString();
+            foreach (var p in points)
+            {
+                sClass += $" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}";
+            }
+            sClass += "\n";
+            RotatedRect rt = new RotatedRect(new Point2f(Propety.rotCrop._PosCenter.X + (Propety.rotCrop._rect.Width / 2 + Propety.rotCrop._rect.X), Propety.rotCrop._PosCenter.Y + (Propety.rotCrop._rect.Height / 2 + Propety.rotCrop._rect.Y)), new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height), Propety.rotCrop._rectRotation);
+         Mat matCrop=   BeeCore.Common.CropRotatedRect(BeeCore.Common.matRaw, rt);
+            G.listImgTrainYolo.Add(matCrop.ToBitmap());
+            G.listLabelTrainYolo.Add(cbLabels.Text);
+            IsUpdateImgCrop = true;
+            imgCrop.Invalidate();
+
+        }
+
+        private void tabYolo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabYolo.SelectedIndex ==2)
+            {
+                cbLabels.DataSource = new List<string>();
+                List<string> list = new List<string>();
+                foreach (Labels labels in Propety.listLabelCompare)
+                    list.Add(labels.label);
+                cbLabels.DataSource = list.ToArray();
+                G.TypeCrop = BeeCore.TypeCrop.Crop;
+                Propety.TypeCrop = G.TypeCrop;
+                if (Propety.rotCrop == null)
+                {
+                    int with = 50, height = 50;
+                    Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, BeeCore.AnchorPoint.None);
+
+                }
+                G.EditTool.View.imgView.Invalidate();
+                G.EditTool.View.imgView.Cursor = Cursors.Default;
+            }
+            else
+            {
+                Propety.rotCrop = null;
+                G.TypeCrop = BeeCore.TypeCrop.Area;
+                Propety.TypeCrop = G.TypeCrop;
+
+                G.EditTool.View.imgView.Invalidate();
+                G.EditTool.View.imgView.Cursor = Cursors.Default;
+
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            String nameFile = Path.GetFileName(G.EditTool.View.pathFileSeleted);
+            String nameFileWithOut = Path.GetFileNameWithoutExtension(G.EditTool.View.pathFileSeleted);
+            File.Copy(G.EditTool.View.pathFileSeleted, "Program\\" + G.Project + "\\DataSet\\images\\train\\" + nameFile, true);
+            File.Copy(G.EditTool.View.pathFileSeleted, "Program\\" + G.Project + "\\DataSet\\images\\val\\" + nameFile, true);
+            string outputPath = "Program\\" + G.Project + "\\DataSet\\labels\\train\\" + nameFileWithOut + ".txt";
+            File.WriteAllText("Program\\" + G.Project + "\\DataSet\\labels\\train\\" + nameFileWithOut + ".txt", sClass);
+            File.WriteAllText("Program\\" + G.Project + "\\DataSet\\labels\\val\\" + nameFileWithOut + ".txt", sClass);
+            sClass = "";
+            G.listImgTrainYolo = new List<Bitmap>();
+            G.listLabelTrainYolo = new List<string>();
+            imgCrop.Invalidate();
+            MessageBox.Show("Complete");
+            //using (StreamWriter sw = new StreamWriter(outputPath, false, Encoding.UTF8))
+            //{
+            //    sw.Write($"{classId}");
+            //    foreach (var p in points)
+            //    {
+            //        sw.Write($" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}");
+            //    }
+            //    sw.WriteLine();
+            //}
+            //string outputPath2 = "Program\\" + G.Project + "\\DataSet\\labels\\val\\" + nameFileWithOut + ".txt";
+            //using (StreamWriter sw = new StreamWriter(outputPath2, false, Encoding.UTF8))
+            //{
+            //    sw.Write($"{classId}");
+            //    foreach (var p in points)
+            //    {
+            //        sw.Write($" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}");
+            //    }
+            //    sw.WriteLine();
+            //}
+        }
+        int xImgCrop = 10;
+        private void imgCrop_Paint(object sender, PaintEventArgs e)
+        {
+            xImgCrop = 10;
+            for (int i = G.listImgTrainYolo.Count - 1; i >= 0; i--)
+            {
+
+                int W = G.listImgTrainYolo[i].Width;
+                int H = G.listImgTrainYolo[i].Height;
+                double Scale = (imgCrop.Height - 20) / (H * 1.0);
+                W = (int)(W * Scale);
+                e.Graphics.DrawImage(G.listImgTrainYolo[i], new Rectangle(xImgCrop, 5, W, imgCrop.Height - 20));
+                e.Graphics.DrawString(G.listLabelTrainYolo[i], new Font("Arial", 12), Brushes.Black, xImgCrop, imgCrop.Height - 25);
+                xImgCrop += W + 20;
+            }
+            if(IsUpdateImgCrop)
+            {
+                IsUpdateImgCrop = false;
+                imgCrop.Size = new Size(xImgCrop, imgCrop.Height);
+            }
+            
         }
     }
 }

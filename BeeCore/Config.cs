@@ -16,6 +16,8 @@ namespace BeeCore
         public  float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;
         public  Color colorGui = Color.FromArgb(100, 114, 114, 114);
+    
+        public double Scalefont = 1;
         public int AlphaMenu = 100;
         public int AlphaBar = 80;
         public int AlphaBackground = 40;

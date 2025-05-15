@@ -346,7 +346,7 @@ namespace BeeUi.Tool
         private void btnFull_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 1;
-            Shows.Full(G.EditTool.View.imgView);
+            Shows.Full(G.EditTool.View.imgView,BeeCore.Common.matRaw.Size());
             G.Config.imgZoom =G.EditTool.View. imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
@@ -355,7 +355,7 @@ namespace BeeUi.Tool
         private void btnHD_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 2;
-            Shows.Full(G.EditTool.View.imgView);
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
             G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
@@ -364,7 +364,7 @@ namespace BeeUi.Tool
         private void btn480_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 3;
-            Shows.Full(G.EditTool.View.imgView);
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
             G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;

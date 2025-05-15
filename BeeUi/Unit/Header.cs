@@ -47,13 +47,13 @@ namespace BeeUi.Common
             //if (File.Exists("Program\\" + G.Project+".prog"))
             //    File.Delete("Program\\" + G.Project + ".prog");
             
-            Access.SaveProg("Program\\"  + G.Project+".prog", G.PropetyTools);
+            Access.SaveProg("Program\\" + G.Project + "\\" + G.Project+".prog", G.PropetyTools);
             if (File.Exists("Default.config"))
                 File.Delete("Default.config");
             Access.SaveConfig("Default.config", G.Config);
-            if (File.Exists("Program\\" + G.Project + ".para"))
-                File.Delete("Program\\" + G.Project + ".para");
-            Access.SaveParaCam("Program\\" + G.Project + ".para", BeeCore.G.ParaCam);
+            //if (File.Exists("Program\\" + G.Project + ".para"))
+            //    File.Delete("Program\\" + G.Project + "\\"+ G.Project + ".para");
+            Access.SaveParaCam("Program\\" + G.Project + "\\"  + G.Project + ".para", BeeCore.G.ParaCam);
         }
       
 
@@ -154,8 +154,8 @@ namespace BeeUi.Common
         public void LoadProject(String NameProject)
         {
             NameProject = NameProject.Replace(".prog", "");
-            if (File.Exists("Program\\" + NameProject + ".para"))
-                BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + NameProject + ".para");
+            if (File.Exists("Program\\"+ NameProject+"\\"+ NameProject + ".para"))
+                BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + NameProject + "\\" + NameProject + ".para");
             else
                 BeeCore.G.ParaCam = new BeeCore.ParaCam();
 
@@ -191,8 +191,8 @@ namespace BeeUi.Common
             pathOld = NameProject;
             G.listAlltool = new List<Tools>();
             G.PropetyTools = new List<BeeCore.PropetyTool>();
-            if (File.Exists("Program\\" + NameProject + ".prog"))
-                G.PropetyTools = Access.LoadProg("Program\\" + NameProject + ".prog");
+            if (File.Exists("Program\\" + NameProject + "\\" + NameProject + ".prog"))
+                G.PropetyTools = Access.LoadProg("Program\\" + NameProject + "\\" + NameProject + ".prog");
             else
                 G.PropetyTools = new List<BeeCore.PropetyTool>();
             if (G.ToolSettings == null)

@@ -53,19 +53,19 @@ namespace BeeUi.Common
             this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.workSaveProject = new System.ComponentModel.BackgroundWorker();
             this.Layout = new System.Windows.Forms.TableLayoutPanel();
+            this.btnMode = new BeeUi.Common.RJButton();
             this.pModel = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowList = new System.Windows.Forms.Button();
+            this.btnEnQrCode = new BeeUi.Common.RJButton();
+            this.editProg1 = new BeeUi.Unit.EditProg();
             this.label1 = new System.Windows.Forms.Label();
+            this.cameras1 = new BeeUi.Unit.Cameras();
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.workPLC = new System.ComponentModel.BackgroundWorker();
             this.tmReadPLC = new System.Windows.Forms.Timer(this.components);
             this.tmReConnectPLC = new System.Windows.Forms.Timer(this.components);
             this.workReConnect = new System.ComponentModel.BackgroundWorker();
             this.tmOutAlive = new System.Windows.Forms.Timer(this.components);
-            this.btnMode = new BeeUi.Common.RJButton();
-            this.btnEnQrCode = new BeeUi.Common.RJButton();
-            this.editProg1 = new BeeUi.Unit.EditProg();
-            this.cameras1 = new BeeUi.Unit.Cameras();
             this.tmIninitial = new System.Windows.Forms.Timer(this.components);
             this.pPO.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -304,6 +304,37 @@ namespace BeeUi.Common
             this.Layout.Size = new System.Drawing.Size(1900, 82);
             this.Layout.TabIndex = 31;
             // 
+            // btnMode
+            // 
+            this.btnMode.BackColor = System.Drawing.Color.Transparent;
+            this.btnMode.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnMode.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMode.BackgroundImage")));
+            this.btnMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnMode.BorderColor = System.Drawing.Color.Transparent;
+            this.btnMode.BorderRadius = 5;
+            this.btnMode.BorderSize = 1;
+            this.btnMode.ButtonImage = null;
+            this.btnMode.Corner = BeeCore.Corner.Both;
+            this.btnMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMode.FlatAppearance.BorderSize = 0;
+            this.btnMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMode.Font = new System.Drawing.Font("Arial Rounded MT Bold", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMode.ForeColor = System.Drawing.Color.Black;
+            this.btnMode.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMode.IsCLick = false;
+            this.btnMode.IsNotChange = false;
+            this.btnMode.IsRect = false;
+            this.btnMode.IsUnGroup = true;
+            this.btnMode.Location = new System.Drawing.Point(4, 7);
+            this.btnMode.Margin = new System.Windows.Forms.Padding(2, 5, 8, 5);
+            this.btnMode.Name = "btnMode";
+            this.btnMode.Size = new System.Drawing.Size(240, 68);
+            this.btnMode.TabIndex = 27;
+            this.btnMode.Text = "RUN";
+            this.btnMode.TextColor = System.Drawing.Color.Black;
+            this.btnMode.UseVisualStyleBackColor = false;
+            this.btnMode.Click += new System.EventHandler(this.btnMode_Click);
+            // 
             // pModel
             // 
             this.pModel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -340,80 +371,6 @@ namespace BeeUi.Common
             this.btnShowList.TabIndex = 24;
             this.btnShowList.UseVisualStyleBackColor = true;
             this.btnShowList.Click += new System.EventHandler(this.btnShowList_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 72);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Prog No";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tmShow
-            // 
-            this.tmShow.Interval = 200;
-            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
-            // 
-            // workPLC
-            // 
-            this.workPLC.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPLC_DoWork);
-            this.workPLC.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workPLC_RunWorkerCompleted);
-            // 
-            // tmReadPLC
-            // 
-            this.tmReadPLC.Interval = 15;
-            this.tmReadPLC.Tick += new System.EventHandler(this.tmReadPLC_Tick);
-            // 
-            // tmReConnectPLC
-            // 
-            this.tmReConnectPLC.Interval = 300;
-            this.tmReConnectPLC.Tick += new System.EventHandler(this.tmReConnectPLC_Tick);
-            // 
-            // workReConnect
-            // 
-            this.workReConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReConnect_DoWork);
-            this.workReConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReConnect_RunWorkerCompleted);
-            // 
-            // tmOutAlive
-            // 
-            this.tmOutAlive.Interval = 500;
-            this.tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
-            // 
-            // btnMode
-            // 
-            this.btnMode.BackColor = System.Drawing.Color.Transparent;
-            this.btnMode.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnMode.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMode.BackgroundImage")));
-            this.btnMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnMode.BorderColor = System.Drawing.Color.Transparent;
-            this.btnMode.BorderRadius = 5;
-            this.btnMode.BorderSize = 1;
-            this.btnMode.ButtonImage = null;
-            this.btnMode.Corner = BeeCore.Corner.Both;
-            this.btnMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMode.FlatAppearance.BorderSize = 0;
-            this.btnMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMode.Font = new System.Drawing.Font("Arial Rounded MT Bold", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMode.ForeColor = System.Drawing.Color.Black;
-            this.btnMode.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMode.IsCLick = false;
-            this.btnMode.IsNotChange = false;
-            this.btnMode.IsRect = false;
-            this.btnMode.IsUnGroup = true;
-            this.btnMode.Location = new System.Drawing.Point(4, 7);
-            this.btnMode.Margin = new System.Windows.Forms.Padding(2, 5, 8, 5);
-            this.btnMode.Name = "btnMode";
-            this.btnMode.Size = new System.Drawing.Size(240, 68);
-            this.btnMode.TabIndex = 27;
-            this.btnMode.Text = "RUN";
-            this.btnMode.TextColor = System.Drawing.Color.Black;
-            this.btnMode.UseVisualStyleBackColor = false;
-            this.btnMode.Click += new System.EventHandler(this.btnMode_Click);
             // 
             // btnEnQrCode
             // 
@@ -457,6 +414,19 @@ namespace BeeUi.Common
             this.editProg1.TabIndex = 25;
             this.editProg1.Load += new System.EventHandler(this.editProg1_Load);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 72);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Prog No";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // cameras1
             // 
             this.cameras1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -466,6 +436,36 @@ namespace BeeUi.Common
             this.cameras1.Name = "cameras1";
             this.cameras1.Size = new System.Drawing.Size(394, 72);
             this.cameras1.TabIndex = 30;
+            // 
+            // tmShow
+            // 
+            this.tmShow.Interval = 200;
+            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
+            // 
+            // workPLC
+            // 
+            this.workPLC.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPLC_DoWork);
+            this.workPLC.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workPLC_RunWorkerCompleted);
+            // 
+            // tmReadPLC
+            // 
+            this.tmReadPLC.Interval = 15;
+            this.tmReadPLC.Tick += new System.EventHandler(this.tmReadPLC_Tick);
+            // 
+            // tmReConnectPLC
+            // 
+            this.tmReConnectPLC.Interval = 300;
+            this.tmReConnectPLC.Tick += new System.EventHandler(this.tmReConnectPLC_Tick);
+            // 
+            // workReConnect
+            // 
+            this.workReConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReConnect_DoWork);
+            this.workReConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReConnect_RunWorkerCompleted);
+            // 
+            // tmOutAlive
+            // 
+            this.tmOutAlive.Interval = 500;
+            this.tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // tmIninitial
             // 

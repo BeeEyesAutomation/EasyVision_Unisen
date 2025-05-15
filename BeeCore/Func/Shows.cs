@@ -70,22 +70,36 @@ namespace BeeCore.Funtion
                 }));
             }
         public static Cyotek.Windows.Forms.ImageBox imgTemp;
-            public static void Full(Cyotek.Windows.Forms.ImageBox image)
+            public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg)
             {
             if (image == null) return;
             imgTemp= image;
-                int wRaw = BeeCore.G.ParaCam.SizeCCD.Width;
-                int hRaw = BeeCore.G.ParaCam.SizeCCD.Height;
+               
                 int withBox = image.Width;
                 int heightBox = image.Height;
-                float ScaleW = (float)(withBox * 1.0 / wRaw);
-                float ScaleH = (float)(heightBox * 1.0 / hRaw);
+                float ScaleW = (float)(withBox * 1.0 / szImg.Width);
+                float ScaleH = (float)(heightBox * 1.0 / szImg.Height);
                 float Scale = Math.Min(ScaleW, ScaleH);
             
                 image.Zoom = (int)(Scale * 100.0);
 
                 image.Invalidate();
             }
+        public static void Full(Cyotek.Windows.Forms.ImageBox image, OpenCvSharp.Size szImg)
+        {
+            if (image == null) return;
+            imgTemp = image;
+
+            int withBox = image.Width;
+            int heightBox = image.Height;
+            float ScaleW = (float)(withBox * 1.0 / szImg.Width);
+            float ScaleH = (float)(heightBox * 1.0 / szImg.Height);
+            float Scale = Math.Min(ScaleW, ScaleH);
+
+            image.Zoom = (int)(Scale * 100.0);
+
+            image.Invalidate();
         }
+    }
     }
 

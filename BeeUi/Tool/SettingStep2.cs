@@ -58,7 +58,7 @@ namespace BeeUi.Tool
                 btnNextStep.Enabled = true;
                 G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
                 //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-                Shows.Full(G.EditTool.View.imgView);
+                Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
                 if (File.Exists("Program\\" + G.Project + ".para"))
                     File.Delete("Program\\" + G.Project + ".para");
                 Access.SaveParaCam("Program\\" + G.Project + ".para", BeeCore.G.ParaCam);

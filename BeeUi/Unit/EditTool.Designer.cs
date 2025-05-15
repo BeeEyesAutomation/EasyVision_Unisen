@@ -36,6 +36,7 @@ namespace BeeUi
             this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbFrameRate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbNamefile = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtRecept = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbLicence = new System.Windows.Forms.Label();
             this.pView = new System.Windows.Forms.Panel();
@@ -62,7 +63,6 @@ namespace BeeUi
             this.btnExit = new BeeUi.Common.RJButton();
             this.header1 = new BeeUi.Common.Header();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
-            this.lbNamefile = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -116,6 +116,12 @@ namespace BeeUi
             this.toolStripPort.Text = "PLC Ready";
             this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
             this.toolStripPort.DoubleClick += new System.EventHandler(this.toolStripPort_DoubleClick);
+            // 
+            // lbNamefile
+            // 
+            this.lbNamefile.Name = "lbNamefile";
+            this.lbNamefile.Size = new System.Drawing.Size(22, 38);
+            this.lbNamefile.Text = "---";
             // 
             // txtRecept
             // 
@@ -471,12 +477,6 @@ namespace BeeUi
             // 
             this.tmReaPLC.Interval = 1;
             this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
-            // 
-            // lbNamefile
-            // 
-            this.lbNamefile.Name = "lbNamefile";
-            this.lbNamefile.Size = new System.Drawing.Size(22, 38);
-            this.lbNamefile.Text = "---";
             // 
             // EditTool
             // 

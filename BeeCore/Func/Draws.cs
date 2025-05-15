@@ -20,6 +20,91 @@ namespace BeeCore
             gc.DrawLine(pen, centerX - lineLength / 2, centerY, centerX + lineLength / 2, centerY);
             gc.DrawLine(pen, centerX, centerY - lineLength / 2, centerX, centerY + lineLength / 2);
         }
+        public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Brush backgroundBrush, bool alignRight = false)
+        {
+            // Đo kích thước vùng text
+            SizeF textSize = graphics.MeasureString(text, font);
+
+            // Tính vị trí của rectangle chứa text nằm phía trên baseRect
+            int padding =1; // padding giữa text và viền rectangle
+
+            // Tính width/height vùng nền có padding
+            int labelWidth = (int)textSize.Width + padding * 2;
+            int labelHeight = (int)textSize.Height + padding * 2;
+
+            // Tính toạ độ top-left của labelRect
+            int labelX = alignRight
+                ? (int)baseRect.Right - labelWidth   // Bám góc phải
+                : (int)baseRect.Left;                // Bám góc trái
+
+            int labelY = (int)baseRect.Top - labelHeight; // Nằm phía trên rectangle
+
+            // Nếu vượt ra trên ảnh, bạn có thể kiểm tra và điều chỉnh labelY >= 0 nếu muốn
+
+            Rectangle labelRect = new Rectangle(labelX, labelY, labelWidth, labelHeight);
+
+            // Vẽ nền rectangle
+            graphics.FillRectangle(backgroundBrush, labelRect);
+
+            // Vẽ text (trong rectangle, có padding)
+            graphics.DrawString(text, font, textBrush, labelX + padding, labelY + padding);
+        }
+        public static void Box2Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128,int thiness=4, int minFontSize = 10, int padding = 1)
+        {
+            graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+
+            float fontSize = baseFont.Size;
+       
+            Font currentFont;
+            SizeF leftSize, rightSize;
+            int totalTextWidth;
+
+            // Tìm font size phù hợp
+            do
+            {
+                currentFont = new Font(baseFont.FontFamily, fontSize, baseFont.Style);
+                leftSize = graphics.MeasureString(leftText, currentFont);
+                rightSize = graphics.MeasureString(rightText, currentFont);
+                totalTextWidth = (int)(leftSize.Width + rightSize.Width + 3 * padding);
+                fontSize--;
+            }
+            while (totalTextWidth > baseRect.Width && fontSize >= minFontSize);
+
+            // Tính kích thước label
+            int labelHeight = (int)Math.Max(leftSize.Height, rightSize.Height) + 2 * padding;
+            int labelY = (int)baseRect.Top - labelHeight;
+
+            // LEFT LABEL
+            int leftWidth = (int)leftSize.Width + 2 * padding;
+            Rectangle leftRect = new Rectangle((int)baseRect.Left, labelY, leftWidth, labelHeight);
+
+            using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))
+            {
+                graphics.FillRectangle(leftBgBrush, leftRect);
+                graphics.DrawString(leftText, currentFont, textBrush, leftRect.Left + padding, leftRect.Top + padding);
+            }
+
+            // RIGHT LABEL background: kéo từ sau left đến hết box, nhưng text phải căn phải
+            int rightStartX = leftRect.Right;
+            int rightEndX = (int)baseRect.Right;
+            int rightWidth = rightEndX - rightStartX;
+
+            Rectangle rightRect = new Rectangle(rightStartX, labelY, rightWidth, labelHeight);
+
+            Color transparentColor = Color.FromArgb(opacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            using (SolidBrush rightBgBrush = new SolidBrush(transparentColor))
+            {
+                graphics.FillRectangle(rightBgBrush, rightRect);
+
+                // Vị trí chữ: căn phải bên trong rightRect
+                float textX = rightRect.Right - rightSize.Width - padding;
+                float textY = rightRect.Top + padding;
+
+                graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
+            }
+        }
+
+       
         public static void Rectangle(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint,Point posAutoScroll,float zoom, int Thiness=2)
         {
             RectangleF _rect = new RectangleF(); ;

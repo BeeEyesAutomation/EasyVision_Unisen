@@ -15,6 +15,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Web.UI.WebControls;
+using BeeCore.Parameter;
 
 namespace BeeCore
 {
@@ -43,10 +44,35 @@ namespace BeeCore
 
                 G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
             }
-           // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
+            // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
+        public String[] LoadNameModel(String nameTool)
+        {
+            using (Py.GIL())
+            {
+
+
+
+                dynamic result = G.objYolo.loadNames(nameTool );
+
+                                                              // Dùng list() để ép dict_values về list
+                PyObject obj = Py.Import("builtins").GetAttr("list").Invoke(result.InvokeMethod("values"));
+                var labels = new List<string>();
+                int counts = (int)obj.Length();
+                for (int j = 0; j < counts; j++)
+                {
+
+                    labels.Add(obj[j].ToString());  // hoặc item.As<string>() nếu bạn chắc chắn là string
+                }
+                
+              
+                return labels.ToArray();
+
+            }
+        }
+        public List<Labels> listLabelCompare = new List<Labels>();
         public int Index = -1;
-        public String PathModel = "";
+        public String PathModel = "",PathLabels="",PathDataSet;
         public TypeYolo TypeYolo = TypeYolo.YOLO;
         public TypeTool TypeTool=TypeTool.Yolo;
         public RectRotate rotArea, rotCrop, rotMask;
@@ -107,6 +133,7 @@ namespace BeeCore
         public List<float> listScore = new List<float>();
         public List<bool> listOK = new List<bool>();
         public List<string> listLabel = new List<string>();
+        public List<string> listModels = new List<string>();
         String listMatch;
         public bool IsCheckArea = false;
         public Point p1 = new Point();
@@ -216,9 +243,22 @@ namespace BeeCore
                     int i = 0;
                     int numOK = 0, numNG = 0;
                     int scoreRS = 0;
+                    List<String> _listLabelCompare = new List<String>();
+                    if (listLabelCompare == null)
+                    {
+                        IsOK = false;
+                        return;
+                    }
+                      
+                    foreach(Labels label in listLabelCompare)
+                    {
+                        if (label == null) continue;
+                        if(!label.IsEn) continue;
+                        _listLabelCompare.Add(label.label);
+                    }
                     foreach (String label in labelList)
                     {
-                        if (Labels.Contains(label))
+                        if (_listLabelCompare.Contains(label))
                         {
                             if (IsCheckArea)
                             {

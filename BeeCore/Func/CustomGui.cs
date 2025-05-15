@@ -71,10 +71,28 @@ namespace BeeCore
                     path.AddLine(rect.Right - curveSize, rect.Bottom, rect.X, rect.Bottom); // Bottom
                     path.AddLine(rect.X, rect.Bottom, rect.X, rect.Y); // Left
                     break;
+                case Corner.Top:
+                    // Bo 2 góc trên
+                    path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90); // Top-left
+                    path.AddLine(rect.X + curveSize, rect.Y, rect.Right - curveSize, rect.Y);
+                    path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90); // Top-right
+                    path.AddLine(rect.Right, rect.Y + curveSize, rect.Right, rect.Bottom); // Right
+                    path.AddLine(rect.Right, rect.Bottom, rect.X, rect.Bottom); // Bottom
+                    path.AddLine(rect.X, rect.Bottom, rect.X, rect.Y + curveSize); // Left
+                    break;
+
+                case Corner.Bottom:
+                    // Bo 2 góc dưới
+                    path.AddLine(rect.X, rect.Y, rect.Right, rect.Y); // Top
+                    path.AddLine(rect.Right, rect.Y, rect.Right, rect.Bottom - curveSize); // Right
+                    path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90); // Bottom-right
+                    path.AddLine(rect.Right - curveSize, rect.Bottom, rect.X + curveSize, rect.Bottom);
+                    path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90); // Bottom-left
+                    path.AddLine(rect.X, rect.Bottom - curveSize, rect.X, rect.Y); // Left
+                    break;
+
                 case Corner.None:
-
-                    path.AddRectangle(rect); // Top
-
+                    path.AddRectangle(rect);
                     break;
             }
 

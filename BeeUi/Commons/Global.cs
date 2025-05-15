@@ -35,6 +35,8 @@ namespace BeeUi
     }
     public struct G
     {
+        public static Font fontTool = new Font("Arial", 22, FontStyle.Regular);
+        public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
         public static StatusMode StatusMode=StatusMode.None;
         public static StatusProcessing StatusProcessing = StatusProcessing.None;
         public static bool Initial = false,IsShutDown=false;
@@ -96,6 +98,8 @@ namespace BeeUi
         public static Color clTrack = (Color)new ColorConverter().ConvertFromString("#444444");
         public static Account account = new Account();
         public static InforBar InforBar = new InforBar();
+        public static List<Bitmap>listImgTrainYolo=new List<Bitmap>();
+        public static List<String> listLabelTrainYolo = new List<String>();
         public static List<HistoryCheck> listHis= new List<HistoryCheck>();
     }
     internal class Global

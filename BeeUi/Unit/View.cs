@@ -2837,7 +2837,14 @@ namespace BeeUi
                 }
                
             }    
-          
+          if(!G.IsRun)
+            {
+                indexFile = 0;
+                pathFileSeleted = Files[indexFile];
+                BeeCore.Common.matRaw = BeeCore.Common.matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
+                BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
+                imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            }
         }
         // The Bitmap we display.
         private Bitmap Bm = null;
@@ -2872,7 +2879,8 @@ namespace BeeUi
 
         private void btnFull_Click(object sender, EventArgs e)
         {
-            Shows.Full(imgView);
+            Size sz = new Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+            Shows.Full(imgView,sz);
             G.Config.imgZoom = imgView.Zoom;
             G.Config.imgOffSetX = imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY= imgView.AutoScrollPosition.Y;
@@ -3142,24 +3150,32 @@ namespace BeeUi
         {
            
         }
-
+        public String pathFileSeleted = "";
         private void btnPlayStep_Click(object sender, EventArgs e)
         {
+            if(!G.IsRun)
+            {
+                indexFile++;
+            }
             if(indexFile>=Files.Count())
             {
                 indexFile = 0;
 
             }
+            pathFileSeleted=Files[indexFile];
             BeeCore.Common.matRaw = BeeCore.Common.matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
             BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
             imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-           
-            G.StatusMode = StatusMode.SimOne;
-            if (!workPlay.IsBusy)
-                workPlay.RunWorkerAsync();
+            if (G.IsRun)
+            {
+                G.StatusMode = StatusMode.SimOne;
+                if (!workPlay.IsBusy)
+                    workPlay.RunWorkerAsync();
+                btnPlayStep.Enabled = false;
+            }
 
             G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
-            btnPlayStep.Enabled = false;
+          
            
         }
 

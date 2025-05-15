@@ -13,7 +13,7 @@ namespace BeeCore
     {
         Both,
         Left,
-        Right, None
+        Right, None, Bottom,Top
     }
     public enum AnchorPoint
     {

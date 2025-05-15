@@ -1996,7 +1996,7 @@ namespace BeeCore
           //  OpenCvSharp.Size sz = Read();
         
             G.ParaCam.SizeCCD=new System.Drawing.Size(sz.Width, sz.Height);
-            Shows.Full(Shows.imgTemp);
+            Shows.Full(Shows.imgTemp, G.ParaCam.SizeCCD);
         }
 
         private static void TmSend_Elapsed(object sender, ElapsedEventArgs e)

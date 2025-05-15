@@ -79,7 +79,7 @@ namespace BeeUi
                                     G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView);
+                                    Shows.Full(View.imgView, BeeCore.Common.matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -150,7 +150,7 @@ namespace BeeUi
                                     G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView);
+                                    Shows.Full(View.imgView, BeeCore.Common.matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
