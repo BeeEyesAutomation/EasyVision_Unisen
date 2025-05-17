@@ -91,6 +91,7 @@ namespace BeeUi.Tool
             propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools.Count + 1);
             G.PropetyTools.Add(propety);
             G.Header.CreateItemTool(propety);
+            G.listAlltool[G.listAlltool.Count() - 1].tool.LoadPara();
             RefreshTool();
 
 

@@ -500,6 +500,17 @@ namespace BeeUi
             }
         }
 
+        private void lbLicence_DoubleClick(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                BeeCore.Common.IniPython();
+                foreach (Tools tool in G.listAlltool)
+                    tool.tool.LoadPara();
+              //  G.Header.workLoadProgram.RunWorkerAsync();
+            }
+        }
+
         private void tmReaPLC_Tick(object sender, EventArgs e)
         {
             //value= G.Header.Modbus.ReadHolding(4096);

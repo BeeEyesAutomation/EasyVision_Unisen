@@ -20,12 +20,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Image = System.Drawing.Image;
 using Point = System.Drawing.Point;
 using Timer = System.Windows.Forms.Timer;
+using UserControl = System.Windows.Forms.UserControl;
 
 namespace BeeUi.Common
 {
@@ -142,7 +144,7 @@ namespace BeeUi.Common
             control.Name = PropetyTool.Name;
             PropetyTool.Propety.nameTool= PropetyTool.Name;
             
-            control.LoadPara();
+           
 
             item.lbNumber.Text = G.listAlltool.Count() + "";
          
@@ -153,6 +155,7 @@ namespace BeeUi.Common
         String pathOld = "";
         public void LoadProject(String NameProject)
         {
+            G.IsIniOCR = false;
             NameProject = NameProject.Replace(".prog", "");
             if (File.Exists("Program\\"+ NameProject+"\\"+ NameProject + ".para"))
                 BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + NameProject + "\\" + NameProject + ".para");
@@ -761,12 +764,12 @@ txtQrCode.Focus();
 
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
-        
+            LoadProject(G.Project);
         }
 
         private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            LoadProject(G.Project);
+           
             if (G.ToolSettings == null)
             {
                 G.ToolSettings = new ToolSettings();
@@ -923,6 +926,7 @@ txtQrCode.Focus();
                     if (indexToolShow < G.listAlltool.Count)
                     {
                         tmShow.Interval = 50;
+                        G.listAlltool[indexToolShow].tool.LoadPara();
                         G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[indexToolShow].ItemTool);
                         indexToolShow++;
                         G.ToolSettings.ResumeLayout(true);
