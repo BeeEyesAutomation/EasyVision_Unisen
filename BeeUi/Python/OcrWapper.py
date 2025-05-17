@@ -160,20 +160,25 @@ class OCRWrapper:
             # Khởi tạo EasyOCR Reader
             #cv2.imwrite("rs.png",)
             gray = cv2.cvtColor(roi_image, cv2.COLOR_BGR2GRAY)
-            enhanced = cv2.equalizeHist(gray)
+            #enhanced = cv2.equalizeHist(gray)
             #cv2.imwrite("rs.png",enhanced)
-            imgCheck = cv2.cvtColor(enhanced, cv2.COLOR_GRAY2BGR)
+            #imgCheck = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
             # Nhận diện
+                                
+            #adjust_contrast=0.85,       # tăng contrast thu cong
             results = ocr_reader.readtext(
-                    imgCheck,
+                    gray,
                     detail=1,
                     allowlist="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
                     paragraph=False,
-                    text_threshold=0.4,        # thấp hơn để bắt cả text mờ
-                    low_text=0.4,              # cho phép bắt các chữ rất mờ
-                    link_threshold=0.4,
-                    adjust_contrast=0.7,       # tăng contrast hơn
+                    text_threshold=0.3,        # thấp hơn để bắt cả text mờ,Bạn đang để thấp (0.4) → Dễ bắt chữ mờ hơn.
+                    low_text=0.3,              # cho phép bắt các chữ rất mờ,Giá trị thấp → dễ bắt chữ hơn → có thể bắt nhầm noise.
+                    link_threshold=0.9,       #: Ngưỡng để xác định ký tự nào nên ghép lại thành từ.
+                    contrast_ths=0.5,            #contrat tu dong
+                    mag_ratio=1.0,           #phong to
+                    min_size=20,              #min size chu
                     rotation_info=[0],
+                    decoder='greedy'  #greedy beamsearch nhanh hon
                     
                     
             )

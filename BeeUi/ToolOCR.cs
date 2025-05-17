@@ -204,17 +204,23 @@ namespace BeeUi.Tool
 
                 mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                 mat.Rotate(rot._rectRotation);
-                gc.Transform = mat;
-                gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-                  
-                    int index = i + 1;
-                    String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
-                        //if (Propety.IsCheckArea)
-                        //    content = rot._rect.Height + " px";
-                        Font font = new Font("Arial", 50, FontStyle.Bold);
-                        //SizeF sz1 = gc.MeasureString(content, font);
+                gc.Transform = mat; 
+                Brush brushText = Brushes.White;
+                String sDraw = "";
+                foreach (String ss in Propety.listContent)
+                    sDraw += ss;
+                Draws.Box2Label(gc, rot._rect, sDraw, Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 3,20);
 
-                DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
+                //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
+                  
+                //    int index = i + 1;
+                //    String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
+                //        //if (Propety.IsCheckArea)
+                //        //    content = rot._rect.Height + " px";
+                //        Font font = new Font("Arial", 50, FontStyle.Bold);
+                //        //SizeF sz1 = gc.MeasureString(content, font);
+
+                //DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
 
 
                      //   gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point(0, 0));
