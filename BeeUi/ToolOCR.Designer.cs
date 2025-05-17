@@ -81,6 +81,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tmCheckFist = new System.Windows.Forms.Timer(this.components);
+            this.workLoadModel = new System.ComponentModel.BackgroundWorker();
             this.tabControl1.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -110,7 +111,7 @@
             this.txtLabel.Location = new System.Drawing.Point(68, 43);
             this.txtLabel.Multiline = true;
             this.txtLabel.Name = "txtLabel";
-            this.txtLabel.Size = new System.Drawing.Size(144, 62);
+            this.txtLabel.Size = new System.Drawing.Size(143, 62);
             this.txtLabel.TabIndex = 36;
             this.txtLabel.TextChanged += new System.EventHandler(this.txtLabel_TextChanged);
             // 
@@ -131,7 +132,7 @@
             this.txtModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtModel.Location = new System.Drawing.Point(68, 3);
             this.txtModel.Name = "txtModel";
-            this.txtModel.Size = new System.Drawing.Size(144, 29);
+            this.txtModel.Size = new System.Drawing.Size(143, 29);
             this.txtModel.TabIndex = 32;
             // 
             // label7
@@ -870,7 +871,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.36437F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.63563F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
             this.tableLayoutPanel4.Controls.Add(this.btnSetLabel, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.txtLabel, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
@@ -907,9 +908,9 @@
             this.btnSetLabel.IsNotChange = true;
             this.btnSetLabel.IsRect = false;
             this.btnSetLabel.IsUnGroup = true;
-            this.btnSetLabel.Location = new System.Drawing.Point(218, 43);
+            this.btnSetLabel.Location = new System.Drawing.Point(217, 43);
             this.btnSetLabel.Name = "btnSetLabel";
-            this.btnSetLabel.Size = new System.Drawing.Size(155, 62);
+            this.btnSetLabel.Size = new System.Drawing.Size(156, 62);
             this.btnSetLabel.TabIndex = 37;
             this.btnSetLabel.Text = "SetLabel";
             this.btnSetLabel.TextColor = System.Drawing.Color.Black;
@@ -937,9 +938,9 @@
             this.btnPathModel.IsNotChange = true;
             this.btnPathModel.IsRect = false;
             this.btnPathModel.IsUnGroup = true;
-            this.btnPathModel.Location = new System.Drawing.Point(218, 3);
+            this.btnPathModel.Location = new System.Drawing.Point(217, 3);
             this.btnPathModel.Name = "btnPathModel";
-            this.btnPathModel.Size = new System.Drawing.Size(155, 34);
+            this.btnPathModel.Size = new System.Drawing.Size(156, 34);
             this.btnPathModel.TabIndex = 5;
             this.btnPathModel.Text = "Load Model";
             this.btnPathModel.TextColor = System.Drawing.Color.Black;
@@ -1154,6 +1155,10 @@
             // 
             this.tmCheckFist.Tick += new System.EventHandler(this.tmCheckFist_Tick);
             // 
+            // workLoadModel
+            // 
+            this.workLoadModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadModel_DoWork);
+            // 
             // ToolOCR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1237,5 +1242,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private Common.RJButton btnSet;
         private System.Windows.Forms.TextBox txtContent;
+        private System.ComponentModel.BackgroundWorker workLoadModel;
     }
 }

@@ -8,7 +8,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Windows.Forms;
+using UserControl = System.Windows.Forms.UserControl;
 
 namespace BeeUi.Tool
 {
@@ -33,6 +35,20 @@ namespace BeeUi.Tool
               
             G.AddTool.Show();
         }
+        public void RefreshTool()
+        {
+            G.ToolSettings.pAllTool.Controls.Clear();
+            Y = 10;
+            X = 10;
+            foreach (Tools c in G.listAlltool)
+            {
+                c.ItemTool.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
+
+                G.ToolSettings.Y += c.ItemTool.Height + 10;
+                G.ToolSettings.pAllTool.Controls.Add(c.ItemTool);
+                G.ToolSettings.ResumeLayout(true);
+            }
+        }
 
         private void btnDelect_Click(object sender, EventArgs e)
         {
@@ -43,19 +59,7 @@ namespace BeeUi.Tool
                     G.ToolSettings.pAllTool.Controls.RemoveAt(G.indexToolSelected);
                     G.PropetyTools.RemoveAt(G.indexToolSelected);
                     G.listAlltool.RemoveAt(G.indexToolSelected);
-                    if (G.indexToolSelected != G.listAlltool.Count() - 1)
-                    {
-                        for (int i = G.indexToolSelected; i < G.listAlltool.Count(); i++)
-                        {
-                            G.listAlltool[i].ItemTool.lbNumber.Text = Convert.ToString(i + 1);
-                            G.listAlltool[i].ItemTool.Location = new Point(G.listAlltool[i].ItemTool.Location.X, G.listAlltool[i].ItemTool.Location.Y - (G.listAlltool[i].ItemTool.Height + 10));
-                        }
-                    }
-                    else
-                        {
-                        G.ToolSettings.Y -= (79 + 10);
-
-                    }
+                    RefreshTool();
                 }    
             }    
         }
@@ -87,9 +91,9 @@ namespace BeeUi.Tool
             propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools.Count + 1);
             G.PropetyTools.Add(propety);
             G.Header.CreateItemTool(propety);
-          
+            RefreshTool();
 
-         
+
 
         }
 

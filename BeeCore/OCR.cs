@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
+using System.Windows.Forms;
 using static OpenCvSharp.ML.DTrees;
 using static System.Net.Mime.MediaTypeNames;
 using Point = System.Drawing.Point;
@@ -79,7 +80,7 @@ namespace BeeCore
         String[] sSplit;
         public List<float> listScore = new List<float>();
         public List<bool> listOK = new List<bool>();
-        public List<string> listLabel = new List<string>();
+        public List<List<string>> listLabel = new List<List<string>>();
         String listMatch;
         public bool IsCheckArea = false;
         public Point p1 = new Point();
@@ -140,7 +141,7 @@ namespace BeeCore
                     //_ocr.attr("find_ocr")(image_array);
                     IsOK = false;
                     listOK = new List<bool>();
-                    listLabel = new List<string>();
+                    listLabel = new List<List<string>>();
                     rectRotates = new List<RectRotate>();
                     listScore = new List<float>();
 
@@ -156,6 +157,7 @@ namespace BeeCore
 
                     for (int j = 0; j < counts; j++)
                     {
+                        listLabel.Add(new List<string>());
                         // Lấy box: (x1, y1, x2, y2)
                         PyObject box = boxes[j];
                         float centerX = (float)box[0][0].AsManagedObject(typeof(float));
@@ -197,7 +199,7 @@ namespace BeeCore
                         string label = labels[j].ToString();
                         label = label.Replace("\n", "");
                         Content += label.Trim();
-                        listLabel.Add(label);
+                        listLabel[listLabel.Count()-1].Add(label);
                         listOK.Add(false);
                         rectRotates.Add(rt);
 
@@ -206,7 +208,7 @@ namespace BeeCore
 
                     }
 
-
+                    Content += "\n";
                     // result: tuple (boxes, scores, labels) từ Python
                     // e.Result = result;
                 }
@@ -297,7 +299,7 @@ namespace BeeCore
 
              listMatch = G.OCR.Find((float)(Score / 100.0));
             listOK = new List<bool>();
-            listLabel = new List<string>();
+            listLabel = new List<List<string>>();
             rectRotates = new List<RectRotate>();
             listScore = new List<float>();
             cycleTime = (int)G.OCR.Cycle;
@@ -330,7 +332,7 @@ namespace BeeCore
 
                     listOK.Add(false);
                     rectRotates.Add(rt);
-                    listLabel.Add(label);
+                  //  listLabel.Add(label);
                     Score += score;
                     listScore.Add(score);
                     numOK++;

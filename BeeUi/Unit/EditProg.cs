@@ -25,8 +25,10 @@ namespace BeeUi.Unit
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                Access.SaveProg(saveFile.FileName, G.PropetyTools);
                 G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                Directory.CreateDirectory("Program\\" + G.Project);
+                Access.SaveProg("Program\\" + G.Project + "\\" + G.Project + ".prog", G.PropetyTools);
+              //  G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
                G.Header. IniProject();
 
@@ -54,12 +56,9 @@ namespace BeeUi.Unit
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                Access.SaveProg(saveFile.FileName, G.PropetyTools);
-                string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);
-
-              String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
-                G.Project = Path.GetFileName(saveFile.FileName);
-                G.Project = G.Project.Replace(".prog", "");
+                G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+               Directory.CreateDirectory("Program\\"+G.Project);
+                Access.SaveProg("Program\\" + G.Project+"\\"+ G.Project+ ".prog", G.PropetyTools);
                 G.Header.IniProject();
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();

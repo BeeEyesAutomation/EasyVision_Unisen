@@ -68,21 +68,12 @@ namespace BeeUi.Tool
             //String PathProg = "Program\\" + nameModel;
             // if(Propety.PathModel!=null)
             //if (File.Exists(Propety.PathModel))
-            if (!IsIni)
-                    BeeCore.OCR.SetModel();
-                IsIni = true;
-            String slabel = "";
-
-            if (Propety.Labels != null)
+            if (!G.IsIniOCR && !workLoadModel.IsBusy)
             {
-
-                foreach (String item in Propety.Labels)
-                {
-                    slabel += item + ",";//.Split(',');
-                }
-                txtLabel.Text = slabel;
-                RefreshLabels();
+                workLoadModel.RunWorkerAsync();
+                G.IsIniOCR = true;
             }
+         
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
             txtModel.Text = Propety.PathModel;
@@ -220,7 +211,7 @@ namespace BeeUi.Tool
                     String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
                         //if (Propety.IsCheckArea)
                         //    content = rot._rect.Height + " px";
-                        Font font = new Font("Arial", 12, FontStyle.Bold);
+                        Font font = new Font("Arial", 50, FontStyle.Bold);
                         //SizeF sz1 = gc.MeasureString(content, font);
 
                 DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
@@ -668,42 +659,42 @@ namespace BeeUi.Tool
         {
 
         }
-        public void RefreshLabels()
-        {
-            String[] labels = txtLabel.Text.Trim().Split(',');
-            int index = 0;
-            List<String> listLabel = new List<String>();
-            foreach (String label in labels)
-            {
-                if (label == "") continue;
-                listLabel.Add(label);
+        //public void RefreshLabels()
+        //{
+        //    String[] labels = txtLabel.Text.Trim().Split(',');
+        //    int index = 0;
+        //    List<String> listLabel = new List<String>();
+        //    foreach (String label in labels)
+        //    {
+        //        if (label == "") continue;
+        //        listLabel.Add(label);
 
-            }
-            tabLbs.Controls.Clear();
-            for (int row = 0; row < 4; row++)
-            {
-                for (int col = 0; col < 4; col++)
-                {
-                    if (index >= listLabel.Count)
-                        break;
-                    Label lbl = new Label();
-                    lbl.Text = listLabel[index++];
-                    lbl.Font = new Font("Arial", 11);
-                    lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                    lbl.BackColor = Color.FromArgb(200, 200, 200);
-                    lbl.Dock = DockStyle.Fill;
-                    lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-                    lbl.Margin = new Padding(3);
-                    // lbl.BorderStyle = BorderStyle.FixedSingle;
+        //    }
+        //    tabLbs.Controls.Clear();
+        //    for (int row = 0; row < 4; row++)
+        //    {
+        //        for (int col = 0; col < 4; col++)
+        //        {
+        //            if (index >= listLabel.Count)
+        //                break;
+        //            Label lbl = new Label();
+        //            lbl.Text = listLabel[index++];
+        //            lbl.Font = new Font("Arial", 11);
+        //            lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        //            lbl.BackColor = Color.FromArgb(200, 200, 200);
+        //            lbl.Dock = DockStyle.Fill;
+        //            lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        //            lbl.Margin = new Padding(3);
+        //            // lbl.BorderStyle = BorderStyle.FixedSingle;
 
-                    tabLbs.Controls.Add(lbl, col, row);
-                }
-            }
-            Propety.listLabel = listLabel;
-        }
+        //            tabLbs.Controls.Add(lbl, col, row);
+        //        }
+        //    }
+        //    Propety.listLabel = listLabel;
+        //}
         private void btnSetLabel_Click(object sender, EventArgs e)
         {
-            RefreshLabels();
+         //   RefreshLabels();
 
 
         }
@@ -776,6 +767,12 @@ namespace BeeUi.Tool
         private void txtQRCODE_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BeeCore.OCR.SetModel();
+          
         }
     }
 }

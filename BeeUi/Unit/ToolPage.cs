@@ -260,13 +260,16 @@ namespace BeeUi.Commons
             item.lbScore.Text = "---";
             item.lbStatus.Text = "---";
             item.lbNumber.Text = G.listAlltool.Count() + "";
-            item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
+            int indexName = G.listAlltool.Count() + 1;
+            control.Propety.Index = G.listAlltool.Count();
+           item.name.Text = TypeTool.ToString() + " " + indexName;
             item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());          
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, item.name.Text);
             
             G.PropetyTools.Add(propetyTool);
             G.listAlltool.Add(new Tools(item, control, propetyTool));
             control.indexTool = G.listAlltool.Count - 1;
+            control.LoadPara();
             if (TypeTool == TypeTool.Position_Adjustment)
             {
                 // if (control.indexTool != 0)
