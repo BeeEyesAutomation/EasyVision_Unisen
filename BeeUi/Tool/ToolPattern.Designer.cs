@@ -433,7 +433,7 @@ namespace BeeUi.Tool
             this.btnTest.ForeColor = System.Drawing.Color.Black;
             this.btnTest.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnTest.IsCLick = false;
-            this.btnTest.IsNotChange = false;
+            this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
             this.btnTest.IsUnGroup = true;
             this.btnTest.Location = new System.Drawing.Point(20, 646);
@@ -1352,7 +1352,7 @@ namespace BeeUi.Tool
             this.numAngle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numAngle.Location = new System.Drawing.Point(295, 0);
             this.numAngle.Margin = new System.Windows.Forms.Padding(0);
-            this.numAngle.Maxnimum = 100;
+            this.numAngle.Maxnimum = 180;
             this.numAngle.Minimum = 0;
             this.numAngle.Name = "numAngle";
             this.numAngle.Size = new System.Drawing.Size(140, 65);
@@ -1415,7 +1415,7 @@ namespace BeeUi.Tool
             this.trackAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackAngle.Location = new System.Drawing.Point(3, 16);
             this.trackAngle.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackAngle.Max = 100;
+            this.trackAngle.Max = 180;
             this.trackAngle.Min = 0;
             this.trackAngle.Name = "trackAngle";
             this.trackAngle.Size = new System.Drawing.Size(279, 49);

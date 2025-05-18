@@ -91,7 +91,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 180;
             Propety.threshMax = 255;
-            Propety.LearnPattern(Propety.indexTool, matTemp);
+            Propety.LearnPattern( matTemp);
 
         }
 
@@ -99,7 +99,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 100;
             Propety.threshMax = 255;
-            Propety.LearnPattern(Propety.indexTool, matTemp);
+            Propety.LearnPattern( matTemp);
 
         }
 
@@ -180,7 +180,7 @@ namespace BeeUi.Tool
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
 
-            gc.DrawString(Propety.indexTool+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+            gc.DrawString(Propety.Index+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
             Color clRect = Color.Silver;
             switch ( G.StatusTrig )
             {
@@ -419,6 +419,22 @@ namespace BeeUi.Tool
                 timer = new Stopwatch();
                 timer.Restart();
                 Propety.DoWork();
+
+                Matrix mat = new Matrix();
+                System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
+                PointF[] pMatrix = { pZero };
+                mat.Translate(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y);
+                mat.Rotate(Propety.rotArea._rectRotation);
+                mat.Translate(Propety.rotArea._rect.X, Propety.rotArea._rect.Y);
+
+                mat.Translate(Propety.rectRotates[0]._PosCenter.X, Propety.rectRotates[0]._PosCenter.Y);
+                mat.Rotate(Propety.rectRotates[0]._rectRotation);
+                mat.TransformPoints(pMatrix);
+
+                int x = (int)pMatrix[0].X;// (int)Propety.rotArea._PosCenter.X -(int) Propety.rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
+                int y = (int)pMatrix[0].Y; ;// (int)Propety.rotArea._PosCenter.Y - (int)Propety.rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
+                G.AngleOrigin = Propety.rectRotates[0]._angle;
+                G.pOrigin = new OpenCvSharp.Point(x, y);
             };
 
             worker.RunWorkerCompleted += (sender, e) =>
@@ -452,7 +468,7 @@ namespace BeeUi.Tool
             Bitmap bmTemp = Propety.matTemp;
             if (bmTemp != null)
             {
-                Propety.LearnPattern(Propety.indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
+                Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
              
                     G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
             }
@@ -642,7 +658,7 @@ namespace BeeUi.Tool
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                        Propety.LearnPattern(Propety.indexTool, matTemp);
+                        Propety.LearnPattern( matTemp);
 
                     }
                 imgTemp.Image = matTemp.ToBitmap();

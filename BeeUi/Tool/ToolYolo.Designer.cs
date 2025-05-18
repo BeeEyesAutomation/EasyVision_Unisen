@@ -102,7 +102,7 @@
             this.rjButton14 = new BeeUi.Common.RJButton();
             this.rjButton15 = new BeeUi.Common.RJButton();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
-            this.customNumeric2 = new BeeUi.Commons.CustomNumeric();
+            this.numEpoch = new BeeUi.Commons.CustomNumeric();
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
@@ -120,6 +120,7 @@
             this.imgCrop = new Cyotek.Windows.Forms.ImageBox();
             this.tmCheckFist = new System.Windows.Forms.Timer(this.components);
             this.workLoadModel = new System.ComponentModel.BackgroundWorker();
+            this.workTrain = new System.ComponentModel.BackgroundWorker();
             this.tabYolo.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1569,6 +1570,7 @@
             this.btnTraining.TextColor = System.Drawing.Color.Black;
             this.btnTraining.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnTraining.UseVisualStyleBackColor = false;
+            this.btnTraining.Click += new System.EventHandler(this.btnTraining_Click);
             // 
             // tableLayoutPanel14
             // 
@@ -1733,7 +1735,7 @@
             this.tableLayoutPanel15.ColumnCount = 2;
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.4F));
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.6F));
-            this.tableLayoutPanel15.Controls.Add(this.customNumeric2, 1, 0);
+            this.tableLayoutPanel15.Controls.Add(this.numEpoch, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel15.Location = new System.Drawing.Point(8, 471);
@@ -1744,19 +1746,22 @@
             this.tableLayoutPanel15.Size = new System.Drawing.Size(375, 58);
             this.tableLayoutPanel15.TabIndex = 48;
             // 
-            // customNumeric2
+            // numEpoch
             // 
-            this.customNumeric2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.customNumeric2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.customNumeric2.Location = new System.Drawing.Point(114, 0);
-            this.customNumeric2.Margin = new System.Windows.Forms.Padding(0);
-            this.customNumeric2.Maxnimum = 1000;
-            this.customNumeric2.Minimum = 0;
-            this.customNumeric2.Name = "customNumeric2";
-            this.customNumeric2.Size = new System.Drawing.Size(261, 58);
-            this.customNumeric2.Step = 1;
-            this.customNumeric2.TabIndex = 46;
-            this.customNumeric2.Value = 100;
+            this.numEpoch.AutoScroll = true;
+            this.numEpoch.AutoSize = true;
+            this.numEpoch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.numEpoch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numEpoch.Location = new System.Drawing.Point(114, 0);
+            this.numEpoch.Margin = new System.Windows.Forms.Padding(0);
+            this.numEpoch.Maxnimum = 1000;
+            this.numEpoch.Minimum = 0;
+            this.numEpoch.Name = "numEpoch";
+            this.numEpoch.Size = new System.Drawing.Size(261, 58);
+            this.numEpoch.Step = 1;
+            this.numEpoch.TabIndex = 46;
+            this.numEpoch.Value = 100;
+            this.numEpoch.ValueChanged += new System.EventHandler(this.numTourch_ValueChanged);
             // 
             // label4
             // 
@@ -1920,7 +1925,7 @@
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 94F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 72F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 78F));
             this.tableLayoutPanel20.Controls.Add(this.btnSave, 3, 0);
             this.tableLayoutPanel20.Controls.Add(this.btnCropTemp, 2, 0);
             this.tableLayoutPanel20.Controls.Add(this.cbLabels, 1, 0);
@@ -1954,9 +1959,9 @@
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(299, 3);
+            this.btnSave.Location = new System.Drawing.Point(293, 3);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(67, 30);
+            this.btnSave.Size = new System.Drawing.Size(73, 30);
             this.btnSave.TabIndex = 48;
             this.btnSave.Text = "Save";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -1984,7 +1989,7 @@
             this.btnCropTemp.IsNotChange = false;
             this.btnCropTemp.IsRect = false;
             this.btnCropTemp.IsUnGroup = true;
-            this.btnCropTemp.Location = new System.Drawing.Point(205, 3);
+            this.btnCropTemp.Location = new System.Drawing.Point(199, 3);
             this.btnCropTemp.Name = "btnCropTemp";
             this.btnCropTemp.Size = new System.Drawing.Size(88, 30);
             this.btnCropTemp.TabIndex = 47;
@@ -1997,9 +2002,9 @@
             // cbLabels
             // 
             this.cbLabels.FormattingEnabled = true;
-            this.cbLabels.Location = new System.Drawing.Point(75, 3);
+            this.cbLabels.Location = new System.Drawing.Point(73, 3);
             this.cbLabels.Name = "cbLabels";
-            this.cbLabels.Size = new System.Drawing.Size(124, 33);
+            this.cbLabels.Size = new System.Drawing.Size(120, 33);
             this.cbLabels.TabIndex = 46;
             // 
             // label13
@@ -2010,7 +2015,7 @@
             this.label13.Location = new System.Drawing.Point(0, 0);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 36);
+            this.label13.Size = new System.Drawing.Size(70, 36);
             this.label13.TabIndex = 45;
             this.label13.Text = "Draw Label";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2033,6 +2038,13 @@
             // workLoadModel
             // 
             this.workLoadModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadModel_DoWork);
+            this.workLoadModel.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLoadModel_RunWorkerCompleted);
+            // 
+            // workTrain
+            // 
+            this.workTrain.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workTrain_DoWork);
+            this.workTrain.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.workTrain_ProgressChanged);
+            this.workTrain.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workTrain_RunWorkerCompleted);
             // 
             // ToolYolo
             // 
@@ -2071,6 +2083,7 @@
             this.tableLayoutPanel14.PerformLayout();
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel15.ResumeLayout(false);
+            this.tableLayoutPanel15.PerformLayout();
             this.tableLayoutPanel18.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
             this.tableLayoutPanel17.PerformLayout();
@@ -2157,7 +2170,7 @@
         private Common.RJButton rjButton15;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
         private System.Windows.Forms.Label label10;
-        private Commons.CustomNumeric customNumeric2;
+        private Commons.CustomNumeric numEpoch;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label12;
@@ -2171,5 +2184,6 @@
         private Common.RJButton rjButton9;
         private Cyotek.Windows.Forms.ImageBox imgCrop;
         private Common.RJButton btnSave;
+        private System.ComponentModel.BackgroundWorker workTrain;
     }
 }

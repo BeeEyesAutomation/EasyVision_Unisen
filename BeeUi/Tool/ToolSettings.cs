@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeUi.Commons;
+using BeeUi.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -90,8 +91,8 @@ namespace BeeUi.Tool
        
             propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools.Count + 1);
             G.PropetyTools.Add(propety);
-            G.Header.CreateItemTool(propety);
-            G.listAlltool[G.listAlltool.Count() - 1].tool.LoadPara();
+            G.listAlltool.Add( DataTool.SetPropety(propety, G.listAlltool.Count() ));
+            DataTool.LoadPropety(G.listAlltool[G.listAlltool.Count()-1].tool);
             RefreshTool();
 
 

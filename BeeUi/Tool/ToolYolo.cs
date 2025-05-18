@@ -49,39 +49,20 @@ namespace BeeUi.Tool
         public void LoadPara()
         {
             worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
-            {
-               
-                timer.Restart();
-                if (!G.IsRun)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.DoWork(Propety.rotAreaAdjustment);
-            };
+            worker.DoWork += Worker_DoWork;
 
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    //  MessageBox.Show("Worker error: " + e.Error.Message);
-                    return;
-                }
-                Propety.Complete();
-                if (!G.IsRun)
-                    G.EditTool.View.imgView.Invalidate();
-                timer.Stop();
-
-                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-
-            };
+            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         
             if (Propety.listModels == null) Propety.listModels = new List<string>();
+       
+            if(!workLoadModel.IsBusy)
+            workLoadModel.RunWorkerAsync();
+            IsReload = true;
             cbListModel.DataSource = Propety.listModels;
-            workLoadModel.RunWorkerAsync();  
-             
             //if (Propety.PathModel!=null)
             //   if (File.Exists(Propety.PathModel))
             //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
-                IsIni = true;
+            IsIni = true;
             String slabel = "";
 
          //   txtLabel.Text = Propety.PathLabels; ;
@@ -123,14 +104,34 @@ namespace BeeUi.Tool
             }
           
             //Propety.TypeMode = Propety.TypeMode;
-            if (!IsIni)
-            {
-                IsIni = true;
-                tmCheckFist.Enabled = false;
-               
-
-            }
+          
         }
+
+        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                //  MessageBox.Show("Worker error: " + e.Error.Message);
+                return;
+            }
+            Propety.Complete();
+            if (!G.IsRun)
+                G.EditTool.View.imgView.Invalidate();
+            timer.Stop();
+
+            Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (G.IsIniPython == false)
+                return;
+            timer.Restart();
+            if (!G.IsRun)
+                Propety.rotAreaAdjustment = Propety.rotArea;
+            Propety.DoWork(Propety.rotAreaAdjustment);
+        }
+
         private void trackScore_ValueChanged(int obj)
         {
            
@@ -292,7 +293,8 @@ namespace BeeUi.Tool
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
             String sContent = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
-            Draws.Box1Label(gc, rotA._rect, sContent,G.fontTool, Brushes.Black, Brushes.White);
+            Draws.Box1Label(gc, rotA._rect, sContent, G.fontTool, brushText, cl);
+          //  Draws.Box1Label(gc, rotA._rect, sContent,G.fontTool, Brushes.Black, Brushes.White);
             
             return gc;
         }
@@ -884,7 +886,7 @@ namespace BeeUi.Tool
         {
             Propety.yLine = numLine.Value;
             G.IsCheck = true;
-            if (!worker.IsBusy)
+            if (!worker.IsBusy&&!G.IsRun)
                 worker.RunWorkerAsync();
         }
 
@@ -907,6 +909,7 @@ namespace BeeUi.Tool
                             File.Copy(OpenFileDialog.FileName, pathModel, true);
                             Propety.listModels.Add(NameModel);
                             cbListModel.DataSource = null;
+                            IsReload = true;
                             cbListModel.DataSource = Propety.listModels.ToArray();
 
                             //cbListModel.SelectedIndex = Propety.listModels.Count-1;
@@ -940,13 +943,19 @@ namespace BeeUi.Tool
             }    
            
         }
-
+        bool IsReload = false;
         private void cbListModel_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (IsReload)
+            {
+                IsReload = false;
+                return;
+            }    
+               
             if (cbListModel.SelectedIndex == -1) return;
             Propety.PathModel = cbListModel.Text;
             String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
-
+           
 
             if (File.Exists(pathModel))
             {
@@ -1022,6 +1031,8 @@ namespace BeeUi.Tool
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
+           
+                
             if (Propety.PathModel != null)
             {
                 String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
@@ -1030,6 +1041,7 @@ namespace BeeUi.Tool
                     Propety.SetModel(Propety.nameTool, pathModel, TypeYolo.YOLO);
                 }
             }
+
 
         }
 
@@ -1206,6 +1218,46 @@ namespace BeeUi.Tool
                 imgCrop.Size = new Size(xImgCrop, imgCrop.Height);
             }
             
+        }
+
+        private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!IsIni)
+            {
+                IsIni = true;
+                tmCheckFist.Enabled = true;
+
+
+            }
+        }
+
+        private void numTourch_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Epoch = numEpoch.Value;
+        }
+
+        private void btnTraining_Click(object sender, EventArgs e)
+        {
+            workTrain.RunWorkerAsync();
+        }
+
+        private void workTrain_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Propety.Training(Propety.nameTool, "Program\\NIDEC_MH_DEMO2\\DataSet\\data.yaml");
+
+            workTrain.ReportProgress(Propety.Percent);
+        }
+
+        private void workTrain_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = e.ProgressPercentage;
+
+
+        }
+
+        private void workTrain_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
         }
     }
 }

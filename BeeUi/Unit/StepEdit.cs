@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeUi.Commons;
+using BeeUi.Data;
 using BeeUi.Tool;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -149,8 +150,7 @@ namespace BeeUi.Common
 
         private void btnSaveProgram_Click(object sender, EventArgs e)
         {
-
-            G.Header.Save();
+            SaveData.Project(G.Project,BeeCore.G.ParaCam);
             G.Header.Mode();
         }
 

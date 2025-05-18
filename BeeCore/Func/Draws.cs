@@ -20,8 +20,10 @@ namespace BeeCore
             gc.DrawLine(pen, centerX - lineLength / 2, centerY, centerX + lineLength / 2, centerY);
             gc.DrawLine(pen, centerX, centerY - lineLength / 2, centerX, centerY + lineLength / 2);
         }
-        public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Brush backgroundBrush, bool alignRight = false)
+        public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Color backgroundBrush,int thiness=4, bool alignRight = false)
         {
+            graphics.DrawRectangle(new Pen(backgroundBrush, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+
             // Đo kích thước vùng text
             SizeF textSize = graphics.MeasureString(text, font);
 
@@ -44,7 +46,7 @@ namespace BeeCore
             Rectangle labelRect = new Rectangle(labelX, labelY, labelWidth, labelHeight);
 
             // Vẽ nền rectangle
-            graphics.FillRectangle(backgroundBrush, labelRect);
+            graphics.FillRectangle(new SolidBrush( backgroundBrush), labelRect);
 
             // Vẽ text (trong rectangle, có padding)
             graphics.DrawString(text, font, textBrush, labelX + padding, labelY + padding);

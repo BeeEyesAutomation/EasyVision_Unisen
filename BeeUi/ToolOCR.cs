@@ -70,6 +70,7 @@ namespace BeeUi.Tool
             //if (File.Exists(Propety.PathModel))
             if (!G.IsIniOCR && !workLoadModel.IsBusy)
             {
+            
                 workLoadModel.RunWorkerAsync();
                 G.IsIniOCR = true;
             }
@@ -94,14 +95,8 @@ namespace BeeUi.Tool
                     break;
             }
           
-            Propety.TypeOCR = Propety.TypeOCR;
-            if (!IsIni)
-            {
-                IsIni = true;
-                tmCheckFist.Enabled = false;
-               
-
-            }
+     
+          
         }
         private void trackScore_ValueChanged(int obj)
         {
@@ -777,8 +772,20 @@ namespace BeeUi.Tool
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
+          
             BeeCore.OCR.SetModel();
           
+        }
+
+        private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!IsIni)
+            {
+                IsIni = true;
+                tmCheckFist.Enabled = false;
+
+
+            }
         }
     }
 }

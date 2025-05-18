@@ -806,6 +806,9 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 	case PixelType_Gvsp_Mono8:
 		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
 		break;
+	case PixelType_Gvsp_Mono12:
+		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
+		break;
 	case PixelType_Gvsp_BayerRG8:
 		break;
 	case PixelType_Gvsp_BayerBG8:
@@ -833,7 +836,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 	}
 	break;
 	default:
-		std::cerr << "Unsupported pixel format: " << pixelType << std::endl;
+		image =Mat();
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
+using BeeUi.Data;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -32,13 +33,8 @@ namespace BeeUi.Tool
 
         private void btnNextStep_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config", G.Config);
-
-            if (File.Exists("Program\\" + G.Project+".para"))
-                File.Delete("Program\\" + G.Project + ".para");
-            Access.SaveParaCam("Program\\" + G.Project + ".para", BeeCore.G.ParaCam);
+           
+            SaveData.Project(G.Project, BeeCore.G.ParaCam);
             btnNextStep.Enabled = false;
             this.Parent.Controls.Remove(this);
             if (btnLive.IsCLick)

@@ -2,6 +2,7 @@
 using BeeCore;
 using BeeCore.Funtion;
 using BeeUi.Commons;
+using BeeUi.Data;
 using BeeUi.Tool;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -43,147 +44,85 @@ namespace BeeUi.Common
            
         }
         bool IsLoaded;
-        public void Save()
+        public void SaveProject()
         {
-            G.Project = G.Project.Replace(".prog", "");
-            //if (File.Exists("Program\\" + G.Project+".prog"))
-            //    File.Delete("Program\\" + G.Project + ".prog");
-            
-            Access.SaveProg("Program\\" + G.Project + "\\" + G.Project+".prog", G.PropetyTools);
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config", G.Config);
-            //if (File.Exists("Program\\" + G.Project + ".para"))
-            //    File.Delete("Program\\" + G.Project + "\\"+ G.Project + ".para");
-            Access.SaveParaCam("Program\\" + G.Project + "\\"  + G.Project + ".para", BeeCore.G.ParaCam);
+          
         }
       
 
-        public dynamic IniTool(BeeCore.TypeTool typeTool)
-        {
-            dynamic control = null;
-            switch (typeTool)
-            {
-                case BeeCore. TypeTool.OutLine:
+      
+        public List<Commons.ItemTool> itemTools = new List<Commons.ItemTool>();
+        //int indexTool;
+        //public void CreateItemTool(BeeCore.PropetyTool PropetyTool)
+        //{
+        //    BeeCore.TypeTool TypeTool = PropetyTool.TypeTool;
+        //    dynamic control = IniTool(TypeTool);
+        //    int with = 50, height = 50;
+        //    control.Propety = PropetyTool.Propety;
+        //    control.Propety.Index = indexTool;
+        ////    BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
+        //    if (PropetyTool.TypeTool == TypeTool.Yolo || PropetyTool.TypeTool == TypeTool.OCR || PropetyTool.TypeTool == TypeTool.BarCode || PropetyTool.TypeTool == TypeTool.Color_Area)
+        //        control.Propety.rotCrop = null;
+        //        System.Drawing.Size szCCd= BeeCore.G.ParaCam.SizeCCD;
+        //    //    if (rotCrop != null)
+        //    //{
+        //    //    if (rotCrop._PosCenter.X + rotCrop._rect.X + rotCrop._rect.Width > szCCd.Width ||
+        //    //        rotCrop._PosCenter.Y + rotCrop._rect.Y + rotCrop._rect.Height > szCCd.Height)
+        //    //        control.Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
 
-                    control = new ToolOutLine();
+        //    //}
+        //    //  BeeCore.RectRotate rotArea = control.Propety.rotArea;
+        //    //if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
+        //    //    rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
+        //    //    control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
+        //    Commons.ItemTool item = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
+        //    item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
+        //    item.lbCycle.Text = "---";
+        //    item.lbScore.Text = "---";
+        //    item.lbStatus.Text = "---";
+        //    item.Score.Value = Convert.ToInt32((double)control.Propety.Score);
+        //    item.lbScore.ForeColor = Color.Gray;
+        //    item.lbStatus.BackColor = Color.Gray;
+        //    G.ToolSettings.Y += item.Height + 10;
+        //    G.listAlltool.Add(new Tools(item, control, PropetyTool));
 
-                    break;
-                case BeeCore.TypeTool.Color_Area:
-                    control = new ToolColorArea();
-                    break;
-                case BeeCore.TypeTool.Pattern:
-                    control = new ToolPattern();
-                    break;
-                case BeeCore.TypeTool.Position_Adjustment:
-                    control = new ToolPosition_Adjustment();
-                    break;
-                case BeeCore.TypeTool.Edge_Pixels:
-                    control = new ToolEdgePixels();
-                    break;
-                case BeeCore.TypeTool.MatchingShape:
-                    control = new ToolMatchingShape();
-                    break;
-                case BeeCore.TypeTool.Yolo:
-                    control = new ToolYolo();
-                    break;
-                case BeeCore.TypeTool.OCR:
-                    control = new ToolOCR();
-                    break;
-                case BeeCore.TypeTool.BarCode:
-                    control = new ToolBarcode();
-                    break;
-                default:
-                    control = new ToolOutLine();
-                    break;
-            }
-            return control;
-        }
-        public List<ItemTool> itemTools = new List<ItemTool>();
-        int indexTool;
-        public void CreateItemTool(BeeCore.PropetyTool PropetyTool)
-        {
-            BeeCore.TypeTool TypeTool = PropetyTool.TypeTool;
-            dynamic control = IniTool(TypeTool);
-            int with = 50, height = 50;
-            control.Propety = PropetyTool.Propety;
-            control.Propety.Index = indexTool;
-        //    BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
-            if (PropetyTool.TypeTool == TypeTool.Yolo || PropetyTool.TypeTool == TypeTool.OCR || PropetyTool.TypeTool == TypeTool.BarCode || PropetyTool.TypeTool == TypeTool.Color_Area)
-                control.Propety.rotCrop = null;
-                System.Drawing.Size szCCd= BeeCore.G.ParaCam.SizeCCD;
-            //    if (rotCrop != null)
-            //{
-            //    if (rotCrop._PosCenter.X + rotCrop._rect.X + rotCrop._rect.Width > szCCd.Width ||
-            //        rotCrop._PosCenter.Y + rotCrop._rect.Y + rotCrop._rect.Height > szCCd.Height)
-            //        control.Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
-
-            //}
-          //  BeeCore.RectRotate rotArea = control.Propety.rotArea;
-            //if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
-            //    rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
-            //    control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
-            ItemTool item = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
-            item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
-            item.lbCycle.Text = "---";
-            item.lbScore.Text = "---";
-            item.lbStatus.Text = "---";
-            item.Score.Value = Convert.ToInt32((double)control.Propety.Score);
-            item.lbScore.ForeColor = Color.Gray;
-            item.lbStatus.BackColor = Color.Gray;
-            G.ToolSettings.Y += item.Height + 10;
-            G.listAlltool.Add(new Tools(item, control, PropetyTool));
-
-            //control.pro.indexTool = G.listAlltool.Count - 1;
-            BeeCore.Common.CreateTemp(TypeTool);
-            if (PropetyTool.Name == null) PropetyTool.Name = "";
-            if (PropetyTool.Name.Trim() == "")
-                item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
-            else
-                item.name.Text = PropetyTool.Name.Trim();
-            control.Name = PropetyTool.Name;
-            PropetyTool.Propety.nameTool= PropetyTool.Name;
+        //    //control.pro.indexTool = G.listAlltool.Count - 1;
+        //    BeeCore.Common.CreateTemp(TypeTool);
+        //    if (PropetyTool.Name == null) PropetyTool.Name = "";
+        //    if (PropetyTool.Name.Trim() == "")
+        //        item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
+        //    else
+        //        item.name.Text = PropetyTool.Name.Trim();
+        //    control.Name = PropetyTool.Name;
+        //    PropetyTool.Propety.nameTool= PropetyTool.Name;
             
            
 
-            item.lbNumber.Text = G.listAlltool.Count() + "";
+        //    item.lbNumber.Text = G.listAlltool.Count() + "";
          
-            item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+        //    item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
            
            
-        }
+        //}
         String pathOld = "";
         public void LoadProject(String NameProject)
         {
             G.IsIniOCR = false;
-            NameProject = NameProject.Replace(".prog", "");
-            if (File.Exists("Program\\"+ NameProject+"\\"+ NameProject + ".para"))
-                BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + NameProject + "\\" + NameProject + ".para");
-            else
-                BeeCore.G.ParaCam = new BeeCore.ParaCam();
+            BeeCore.G.ParaCam = LoadData.Para(NameProject);
 
-
-
-
-            //if (G.ToolSettings == null)
-            //{
-            //    G.ToolSettings = new ToolSettings();
-
-            //}
-
-            // BeeCore.Camera.Read(G.Config.IsHist, G.Config.TypeCamera);
-            //  BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
-            BeeCore.G.ParaCam.SizeCCD = Camera.GetSzCCD();
             if (BeeCore.G.ParaCam.matRegister != null)
                 BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
             else if (G.IsCCD)
-               BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
-            if (BeeCore.Common.matRaw!=null)
+                BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
+            if (BeeCore.Common.matRaw != null)
             {
                 G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
                 BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-              //  BeeCore.G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
             }
+            NameProject = NameProject.Replace(".prog", "");
+            BeeCore.G.ParaCam.SizeCCD = Camera.GetSzCCD();
+            G.PropetyTools =LoadData.Project(NameProject);
+          
 
             if (pathOld== NameProject)
             {
@@ -193,24 +132,20 @@ namespace BeeUi.Common
             
             pathOld = NameProject;
             G.listAlltool = new List<Tools>();
-            G.PropetyTools = new List<BeeCore.PropetyTool>();
-            if (File.Exists("Program\\" + NameProject + "\\" + NameProject + ".prog"))
-                G.PropetyTools = Access.LoadProg("Program\\" + NameProject + "\\" + NameProject + ".prog");
-            else
-                G.PropetyTools = new List<BeeCore.PropetyTool>();
+        
+           
             if (G.ToolSettings == null)
             {
                 G.ToolSettings = new ToolSettings();
 
             }
             G.ToolSettings.Y = 10; G.ToolSettings.X = 5;
-            indexTool = 0;
+          int  index = 0;
             foreach (BeeCore.PropetyTool propety in G.PropetyTools)
             {
-
-              
-        CreateItemTool(propety);
-                indexTool++;
+               
+                G.listAlltool.Add( DataTool.SetPropety(propety,index));
+                index++;
 
             }
             G.IsLoad = true;
@@ -219,11 +154,6 @@ namespace BeeUi.Common
             BeeCore.G.ParaCam.Exposure =BeeCore.G.ParaCam._Exposure;
             BeeCore.G.ParaCam.TypeLight = BeeCore.G.ParaCam._TypeLight;
             BeeCore.G.ParaCam.TypeResolution = BeeCore.G.ParaCam._TypeResolution;
-            //listPorts = SerialPort.GetPortNames();
-            //ConnectCom();
-           
-           
-
         }
         string[] listPorts;
        bool IsWaitPort = false;
@@ -245,9 +175,7 @@ namespace BeeUi.Common
 
                     }
                 }
-                if (File.Exists("Default.config"))
-                    File.Delete("Default.config");
-                Access.SaveConfig("Default.config", G.Config);
+                SaveData.Config(G.Config);
                 G.Main.Hide();
                 ForrmAlarm ForrmAlarm = new ForrmAlarm();
                 ForrmAlarm.lbHeader.Text = "Camera Disconnect !!";
@@ -620,9 +548,7 @@ namespace BeeUi.Common
              
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
                 G.EditTool.toolStripPort.Text = "Port Connected";
-                if (File.Exists("Default.config"))
-                    File.Delete("Default.config");
-                Access.SaveConfig("Default.config", G.Config);
+                SaveData.Config(G.Config);
                 G.EditTool.View.tmCheckPort.Enabled = true;
             }
            else if  (sRecept.Contains("Trig"))
@@ -776,26 +702,13 @@ txtQrCode.Focus();
 
             }
             G.ToolSettings.pAllTool.Controls.Clear();
-       
-          
-            //if (G.StepEdit.SettingStep2 != null && G.StepEdit.SettingStep2.Parent != null)
-            //    G.StepEdit.SettingStep2.Parent.Controls.Remove(G.StepEdit.SettingStep2);
-            //if (G.StepEdit.SettingStep1 != null && G.StepEdit.SettingStep1.Parent != null)
-            //    G.StepEdit.SettingStep1.Parent.Controls.Remove(G.StepEdit.SettingStep1);
-            //if (G.StepEdit.SettingStep4 != null && G.StepEdit.SettingStep4.Parent != null)
-            //    G.StepEdit.SettingStep4.Parent.Controls.Remove(G.StepEdit.SettingStep4);
+
             Properties.Settings.Default.programCurrent = G.Project;
             Properties.Settings.Default.Save();
             G.listProgram.Visible = false;
-            //if (BeeCore.Common.matRaw == null)
-            //    G.EditTool.View.imgView.Image = null;
-            //else
-            //    G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
 
             txtQrCode.Text = G.Project;
-            //G.EditTool.View.imgView.Invalidate();
-            //G.EditTool.View.imgView.Update();
-            //G.PLC.Connect();
+
            
             if (G.PLC.IsConnected)
             {
@@ -825,8 +738,7 @@ txtQrCode.Focus();
 
         private void workSaveProject_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Save();
-
+            SaveData.Project(G.Project, BeeCore.G.ParaCam);
             G.EditProg.btnSave.Enabled = true;
         }
 
@@ -837,28 +749,7 @@ txtQrCode.Focus();
         }
         private Timer fadeTimer;
         private float opacity = 0.0f; // Bắt đầu từ 0
-        //private async Task FadePanel()
-        //{
-        //    pCamera.Visible = !pCamera.Visible;
-        //    if (!G.EditTool.pEdit.Visible)
-        //    {
-        //        G.EditTool.pEdit.Visible = true;
-        //        for (double i = 0; i <= 1; i += 0.1)
-        //        {
-        //            G.EditTool.pEdit.BeginInvoke((MethodInvoker)(() => G.EditTool.pEdit.BackColor = System.Drawing.Color.FromArgb((int)(i * 255), G.EditTool.pEdit.BackColor)));
-        //            await Task.Delay(30);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        for (double i = 1; i >= 0; i -= 0.1)
-        //        {
-        //            G.EditTool.pEdit.BeginInvoke((MethodInvoker)(() => G.EditTool.pEdit.BackColor = System.Drawing.Color.FromArgb((int)(i * 255), G.EditTool.pEdit.BackColor)));
-        //            await Task.Delay(30);
-        //        }
-        //        G.EditTool.pEdit.Visible = false;
-        //    }
-        //}
+      
         private void AnimateColumn(TableLayoutPanel tableLayoutPanel, int columnIndex, bool show)
         {
             Timer timer = new Timer();
@@ -926,7 +817,8 @@ txtQrCode.Focus();
                     if (indexToolShow < G.listAlltool.Count)
                     {
                         tmShow.Interval = 50;
-                        G.listAlltool[indexToolShow].tool.LoadPara();
+                        DataTool.LoadPropety(G.listAlltool[indexToolShow].tool);
+                     
                         G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[indexToolShow].ItemTool);
                         indexToolShow++;
                         G.ToolSettings.ResumeLayout(true);

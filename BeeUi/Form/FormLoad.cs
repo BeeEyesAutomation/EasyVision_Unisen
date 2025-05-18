@@ -1,6 +1,7 @@
 ﻿
 using BeeCore;
 using BeeUi.Commons;
+using BeeUi.Data;
 using BeeUi.Unit;
 using Microsoft.Win32;
 using System;
@@ -12,7 +13,7 @@ using System.Drawing;
 using System.IO;
 
 using System.Net;
-
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BeeUi
@@ -55,7 +56,7 @@ namespace BeeUi
             G.Load = this;
            
             tmActive.Interval = 1000;
-            tmLoad.Interval = 5000;
+            tmLoad.Interval = 1000;
             tmActive.Tick += TmActive_Tick;
             tmLoad.Tick += TmLoad_Tick;
             wLoad.DoWork += WLoad_DoWork;
@@ -115,7 +116,7 @@ namespace BeeUi
            
             if (G.IsActive)
             {
-
+                lb.Text = "Scan Camera Complete";
                 G.ScanCCD.ConnectCCD();
              
 
@@ -172,26 +173,17 @@ namespace BeeUi
         private void TmLoad_Tick(object sender, EventArgs e)
         {
             G.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
+           
             if (File.Exists("Default.config"))
                 G.Config = Access.LoadConfig("Default.config");
             else
                 G.Config = new Config();
-            try
-            {
-                if (File.Exists("Program\\" + G.Project + ".para"))
-                    BeeCore.G.ParaCam = Access.LoadParaCam("Program\\" + G.Project + ".para");
-            }
-            catch (Exception ex)
-            {
-
-            }
+            BeeCore.G.ParaCam = LoadData.Para(G.Project);
             if (G.Config.RoundRad == 0) G.Config.RoundRad = 10;
             tmLoad.Enabled = false;
-            
-            BeeCore.Common.IniPython();
-            listCCD = G.ScanCCD.ScanIDCCD();
-            wLoad.RunWorkerAsync();
-
+            lb.Text = "Waiting Initial Learning AI";
+            workIniModel.RunWorkerAsync();
+          
         }
 
         private void TmActive_Tick(object sender, EventArgs e)
@@ -216,12 +208,25 @@ namespace BeeUi
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
          
-            tmLoad.Interval =5000;
+            tmLoad.Interval =500;
             tmLoad.Enabled = true;
 
 
         }
 
-      
+        private void workIniModel_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BeeCore.Common.IniPython();
+        }
+
+        private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            G.IsIniPython = true;
+            lb.Text = "Initial Learning AI Complete";
+            Task.Delay(200);
+            listCCD = G.ScanCCD.ScanIDCCD();
+            wLoad.RunWorkerAsync();
+
+        }
     }
 }

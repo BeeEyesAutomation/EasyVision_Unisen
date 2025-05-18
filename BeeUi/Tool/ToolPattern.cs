@@ -30,7 +30,7 @@ namespace BeeUi.Tool
             InitializeComponent();
             
         }
-        private BackgroundWorker worker = new BackgroundWorker();
+        public BackgroundWorker worker = new BackgroundWorker();
         public void LoadPara()
         {
 
@@ -53,7 +53,7 @@ namespace BeeUi.Tool
             Bitmap bmTemp = Propety.matTemp;
             if (bmTemp != null)
             {
-                Propety.LearnPattern(indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
+                Propety.LearnPattern( OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
                
                    
             }
@@ -380,7 +380,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 180;
             Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern(matTemp);
 
         }
 
@@ -388,7 +388,7 @@ namespace BeeUi.Tool
         {
             Propety.threshMin = 100;
             Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern( matTemp);
         }
 
         private void btnCannyMax_Click(object sender, EventArgs e)
@@ -600,7 +600,7 @@ namespace BeeUi.Tool
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                        Propety.LearnPattern(indexTool,matTemp);
+                        Propety.LearnPattern(matTemp);
 
                     }
                 imgTemp.Image = matTemp.ToBitmap();
@@ -611,8 +611,8 @@ namespace BeeUi.Tool
         private void btnTest_Click(object sender, EventArgs e)
         {
             G.IsCheck = true;
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
+            if (!worker.IsBusy)
+                worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

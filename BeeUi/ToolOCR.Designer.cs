@@ -108,7 +108,7 @@
             // 
             this.txtLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLabel.Location = new System.Drawing.Point(68, 43);
+            this.txtLabel.Location = new System.Drawing.Point(67, 43);
             this.txtLabel.Multiline = true;
             this.txtLabel.Name = "txtLabel";
             this.txtLabel.Size = new System.Drawing.Size(143, 62);
@@ -121,7 +121,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 40);
+            this.label1.Size = new System.Drawing.Size(58, 40);
             this.label1.TabIndex = 34;
             this.label1.Text = "Path";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -130,7 +130,7 @@
             // 
             this.txtModel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtModel.Location = new System.Drawing.Point(68, 3);
+            this.txtModel.Location = new System.Drawing.Point(67, 3);
             this.txtModel.Name = "txtModel";
             this.txtModel.Size = new System.Drawing.Size(143, 29);
             this.txtModel.TabIndex = 32;
@@ -141,7 +141,7 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(3, 40);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 68);
+            this.label7.Size = new System.Drawing.Size(58, 68);
             this.label7.TabIndex = 30;
             this.label7.Text = "Labels";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -871,7 +871,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.36437F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.63563F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
             this.tableLayoutPanel4.Controls.Add(this.btnSetLabel, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.txtLabel, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
@@ -908,9 +908,9 @@
             this.btnSetLabel.IsNotChange = true;
             this.btnSetLabel.IsRect = false;
             this.btnSetLabel.IsUnGroup = true;
-            this.btnSetLabel.Location = new System.Drawing.Point(217, 43);
+            this.btnSetLabel.Location = new System.Drawing.Point(216, 43);
             this.btnSetLabel.Name = "btnSetLabel";
-            this.btnSetLabel.Size = new System.Drawing.Size(156, 62);
+            this.btnSetLabel.Size = new System.Drawing.Size(157, 62);
             this.btnSetLabel.TabIndex = 37;
             this.btnSetLabel.Text = "SetLabel";
             this.btnSetLabel.TextColor = System.Drawing.Color.Black;
@@ -938,9 +938,9 @@
             this.btnPathModel.IsNotChange = true;
             this.btnPathModel.IsRect = false;
             this.btnPathModel.IsUnGroup = true;
-            this.btnPathModel.Location = new System.Drawing.Point(217, 3);
+            this.btnPathModel.Location = new System.Drawing.Point(216, 3);
             this.btnPathModel.Name = "btnPathModel";
-            this.btnPathModel.Size = new System.Drawing.Size(156, 34);
+            this.btnPathModel.Size = new System.Drawing.Size(157, 34);
             this.btnPathModel.TabIndex = 5;
             this.btnPathModel.Text = "Load Model";
             this.btnPathModel.TextColor = System.Drawing.Color.Black;
@@ -1158,6 +1158,7 @@
             // workLoadModel
             // 
             this.workLoadModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadModel_DoWork);
+            this.workLoadModel.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLoadModel_RunWorkerCompleted);
             // 
             // ToolOCR
             // 

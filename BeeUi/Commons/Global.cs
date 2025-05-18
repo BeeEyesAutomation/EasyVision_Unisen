@@ -56,7 +56,7 @@ namespace BeeUi
         public static String Project = "";
         public static ScanCCD ScanCCD=new ScanCCD();
       public static bool IsModeTest = false,IsSendRS=false;
-        public static bool IsDone = false,IsIniOCR;
+        public static bool IsDone = false,IsIniOCR,IsIniPython;
         public static ucReport ucReport=new ucReport();
         public static bool TotalOK = false;
 

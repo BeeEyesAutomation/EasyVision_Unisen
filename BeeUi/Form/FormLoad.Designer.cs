@@ -37,6 +37,7 @@ namespace BeeUi
             this.workCCD = new System.ComponentModel.BackgroundWorker();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.workIniModel = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,9 +71,9 @@ namespace BeeUi
             this.lb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb.ForeColor = System.Drawing.Color.Black;
-            this.lb.Location = new System.Drawing.Point(176, 156);
+            this.lb.Location = new System.Drawing.Point(84, 153);
             this.lb.Name = "lb";
-            this.lb.Size = new System.Drawing.Size(149, 24);
+            this.lb.Size = new System.Drawing.Size(343, 24);
             this.lb.TabIndex = 5;
             this.lb.Text = "Waitting Settup...";
             this.lb.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -115,6 +116,11 @@ namespace BeeUi
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 
+            // workIniModel
+            // 
+            this.workIniModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workIniModel_DoWork);
+            this.workIniModel.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workIniModel_RunWorkerCompleted);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,5 +152,6 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workCCD;
         public System.Windows.Forms.Label label3;
         public System.Windows.Forms.PictureBox pictureBox1;
+        private System.ComponentModel.BackgroundWorker workIniModel;
     }
 }

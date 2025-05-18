@@ -155,6 +155,9 @@
     </Compile>
     <Compile Include="Commons\RsDirPermissions.cs" />
     <Compile Include="Commons\SqlServer.cs" />
+    <Compile Include="Data\DataTool.cs" />
+    <Compile Include="Data\LoadData.cs" />
+    <Compile Include="Data\SaveData.cs" />
     <Compile Include="ForrmAlarm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -201,6 +204,12 @@
     </Compile>
     <Compile Include="ToolOCR.Designer.cs">
       <DependentUpon>ToolOCR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolPositions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolPositions.Designer.cs">
+      <DependentUpon>ToolPositions.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\SettingCamera.cs">
       <SubType>UserControl</SubType>
@@ -470,6 +479,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolOCR.resx">
       <DependentUpon>ToolOCR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolPositions.resx">
+      <DependentUpon>ToolPositions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingCamera.resx">
       <DependentUpon>SettingCamera.cs</DependentUpon>
@@ -779,6 +791,8 @@
     <Content Include="LogoAHSo.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Track Order1.png" />
+    <None Include="Resources\Track Order.png" />
     <None Include="Resources\Stop.png" />
     <None Include="Resources\End.png" />
     <None Include="Resources\File.png" />

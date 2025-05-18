@@ -504,7 +504,7 @@ namespace BeeUi
         {
             if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                BeeCore.Common.IniPython();
+              
                 foreach (Tools tool in G.listAlltool)
                     tool.tool.LoadPara();
               //  G.Header.workLoadProgram.RunWorkerAsync();

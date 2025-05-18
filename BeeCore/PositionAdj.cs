@@ -20,6 +20,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public bool IsIni = false;
         public TypeTool TypeTool;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();

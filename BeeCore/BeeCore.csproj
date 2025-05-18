@@ -155,6 +155,7 @@
     <Compile Include="ColorArea.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Positions.cs" />
     <Compile Include="Parameter\Labels.cs" />
     <Compile Include="PositionAdj.cs" />
     <Compile Include="ParaCam.cs" />

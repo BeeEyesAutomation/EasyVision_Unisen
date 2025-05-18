@@ -573,6 +573,16 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contentPositions {
+            get {
+                object obj = ResourceManager.GetObject("contentPositions", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap contentWidth {
             get {
                 object obj = ResourceManager.GetObject("contentWidth", resourceCulture);
@@ -1186,6 +1196,16 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Position_Adjustment {
             get {
                 object obj = ResourceManager.GetObject("Position_Adjustment", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Positions {
+            get {
+                object obj = ResourceManager.GetObject("Positions", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

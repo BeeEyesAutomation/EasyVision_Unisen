@@ -90,7 +90,7 @@ namespace BeeCore
         public String Content = "";
         public String[] listContent ;
         public String[] listMatching;
-      
+        public bool IsIni = false;
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
        int scoreRS = 0;
@@ -384,7 +384,7 @@ namespace BeeCore
             using (Py.GIL())
             {
 
-
+                
                       // khởi tạo instance
 
                 G.objOCR.initialize_ocr();

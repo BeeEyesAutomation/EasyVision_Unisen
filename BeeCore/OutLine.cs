@@ -21,6 +21,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public bool IsIni = false;
         public int Index = -1;
         public TypeTool TypeTool;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
@@ -240,18 +241,18 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetDst(int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
 
-        public void LearnPattern(  int indexTool, Mat temp)
+        public void LearnPattern(   Mat temp)
         {
            ////Cv2.ImShow("A"+ indexTool, temp);
             if (temp == null) return;
             if (temp.Empty()) return;
            
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
-            SetDst(indexTool, temp.Data, temp.Rows, temp.Cols, temp.Type());
+            SetDst(Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           G.pattern.LearnPattern(minArea, indexTool);
+           G.pattern.LearnPattern(minArea, Index);
 
         }
     
@@ -336,11 +337,11 @@ namespace BeeCore
     
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
-        public int indexTool = 0;
+     
         public void DoWork()
         {
             StatusTool = StatusTool.Processing;
-            Matching(indexTool);
+            Matching(Index);
 
         }
         public void Complete()

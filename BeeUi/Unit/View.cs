@@ -2523,7 +2523,16 @@ namespace BeeUi
                             if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
                                 continue;
                                 if (G.rotOriginAdj != null)
+                            {
                                 propetyTool.Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
+                                if (propetyTool.TypeTool == TypeTool.Positions)
+                                {
+                                    propetyTool.Propety.pOrigin =new System.Drawing.Point( G.pOrigin.X,G.pOrigin.Y);
+                                    propetyTool.Propety.AngleOrigin = G.AngleOrigin;
+                                }    
+                                   
+
+                            }
                             else
                                 propetyTool. Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
 

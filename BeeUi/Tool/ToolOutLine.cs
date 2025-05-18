@@ -55,7 +55,7 @@ namespace BeeUi.Tool
             Bitmap bmTemp = Propety.matTemp;
               if (bmTemp != null)
             {
-                Propety.LearnPattern(indexTool, OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
+                Propety.LearnPattern( OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
                 }
             trackScore.Value = (int)(Propety.Score * 100);
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
@@ -154,14 +154,14 @@ namespace BeeUi.Tool
         {
            Propety.threshMin = 180;
            Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern( matTemp);
         }
 
         private void btnCannyMedium_Click(object sender, EventArgs e)
         {
            Propety.threshMin = 100;
            Propety.threshMax = 255;
-            Propety.LearnPattern(indexTool, matTemp);
+            Propety.LearnPattern( matTemp);
 
         }
 

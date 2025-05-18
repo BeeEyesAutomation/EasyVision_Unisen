@@ -38,6 +38,10 @@ namespace BeeUi.Tool
           
 
         }
+        public void SaveParaPJ()
+        {
+          
+        }
        
         private void btnLoadImge_Click(object sender, EventArgs e)
         {
@@ -59,9 +63,8 @@ namespace BeeUi.Tool
                 G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
                 //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
                 Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
-                if (File.Exists("Program\\" + G.Project + ".para"))
-                    File.Delete("Program\\" + G.Project + ".para");
-                Access.SaveParaCam("Program\\" + G.Project + ".para", BeeCore.G.ParaCam);
+
+                SaveParaPJ();
 
             }
         }

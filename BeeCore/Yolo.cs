@@ -46,6 +46,27 @@ namespace BeeCore
             }
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
+        public int Percent = 0;
+        
+        public void Training(String nameTool,String pathYaml)
+        {
+            using (Py.GIL())
+            {
+              
+                Action<int> onProgress = percent =>
+                {
+                    Percent = percent;
+                    Console.WriteLine($"Training progress: {percent}%");
+                };
+                using (PyObject pyCallback = onProgress.ToPython())
+                {
+                    var result = G.objYolo.train(nameTool, pathYaml, Epoch, callback: pyCallback);
+                    Console.WriteLine(result.ToString());
+                }
+            }
+
+          
+        }
         public String[] LoadNameModel(String nameTool)
         {
             using (Py.GIL())
@@ -84,6 +105,7 @@ namespace BeeCore
         private Mode _TypeMode = Mode.Pattern;
         public Compares Compare = Compares.Equal;
         public Compares CompareLine = Compares.More;
+        public int Epoch = 100;
         public Mode TypeMode
         {
             get
@@ -102,6 +124,7 @@ namespace BeeCore
         public bool IsAreaWhite = false;
         public int ScoreRs = 0, cycleTime;
         private int _score = 70;
+        public bool IsIni = false;
         public int Score
         {
             get
