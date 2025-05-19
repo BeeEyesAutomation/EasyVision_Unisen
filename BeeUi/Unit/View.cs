@@ -2233,10 +2233,10 @@ namespace BeeUi
         }
      
         Graphics gcResult;
-        public async void Continuous()
+        public  void Continuous()
             {
              G.StatusMode = StatusMode.Continuous;
-            if(workReadCCD.IsBusy)
+            if(!workReadCCD.IsBusy)
             {
                 workReadCCD.RunWorkerAsync();
             }    
@@ -2331,7 +2331,8 @@ namespace BeeUi
                     G.Header.tmReadPLC.Enabled = true;
                     G.PLC.WriteInPut(0, true);
                 }
-
+                //if (!workReadCCD.IsBusy)
+                //    workReadCCD.RunWorkerAsync();
                 return;
             } 
             else if(G.IsByPassPLC)
@@ -2345,8 +2346,7 @@ namespace BeeUi
                 return;
             }
             if (!btnRecord.IsCLick) btnCap.Enabled = true;
-            if (!workReadCCD.IsBusy)
-                workReadCCD.RunWorkerAsync();
+          
            
 
         }
@@ -3058,7 +3058,7 @@ namespace BeeUi
          imgView.Invalidate();
         }
        
-        private async void tmContinuous_Tick(object sender, EventArgs e)
+        private  void tmContinuous_Tick(object sender, EventArgs e)
         {
             if(!BeeCore.Camera.IsConnected)
             {
@@ -3067,7 +3067,7 @@ namespace BeeUi
                 btnRecord.IsCLick = false;
                 return;
             }
-            if (!btnCap.Enabled)
+            if (!btnCap.Enabled&&!G.IsByPassPLC)
                 return;
             Continuous();
             tmContinuous.Enabled = false;

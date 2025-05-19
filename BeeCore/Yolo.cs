@@ -183,7 +183,6 @@ namespace BeeCore
                     {
                         matCrop = matCrop.Clone();
                     }
-
                     // Copy dữ liệu sang byte[]
                     int size = (int)(matCrop.Total() * matCrop.ElemSize());
                     byte[] buffer = new byte[size];
@@ -194,10 +193,8 @@ namespace BeeCore
                     ////    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
                     //dynamic mod = Py.Import("Tool.Learning");
                     //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-
                     //dynamic objYolo = cls.Invoke();              // khởi tạo instance
                     //G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
-                  
                     var npArray = G.np.array(buffer).reshape(height1, width1, 3);
                     dynamic result = G.objYolo.predict(npArray, (float)(Score / 100.0), nameTool);
                     PyObject boxes = result[0];
