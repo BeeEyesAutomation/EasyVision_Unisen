@@ -59,7 +59,10 @@ namespace BeeUi.Tool
             workLoadModel.RunWorkerAsync();
             IsReload = true;
             cbListModel.DataSource = Propety.listModels;
+            if(Propety.PathModel!="")
+            cbListModel.Text =Path.GetFileNameWithoutExtension( Propety.PathModel);
             txtMatching.Text = Propety.Matching;
+            btnEnbleContent.IsCLick = Propety.IsEnContent;
             //if (Propety.PathModel!=null)
             //   if (File.Exists(Propety.PathModel))
             //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
@@ -276,9 +279,12 @@ namespace BeeUi.Tool
                     //    content = rot._rect.Height + " px";
                   //  Font font = new Font("Arial", 30, FontStyle.Bold);
                   //  SizeF sz2 = gc.MeasureString(content, font);
+                  if(Propety.IsEnContent)
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabel[i],"", G.fontRS,cl, brushText,30,3);
+                 else
+                        Draws.Box2Label(gc, rot._rect, Propety.listLabel[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 30, 3);
 
-                    Draws.Box2Label(gc, rot._rect, Propety.listLabel[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS,cl, brushText,30,3);
-                  //  Draws.Box1Label(gc, rot._rect, Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, brushText, Brushes.Transparent, true);
+                    //  Draws.Box1Label(gc, rot._rect, Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, brushText, Brushes.Transparent, true);
                     //  gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
                     i++;
                     //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);

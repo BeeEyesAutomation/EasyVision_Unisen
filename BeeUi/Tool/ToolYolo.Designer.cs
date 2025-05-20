@@ -1129,7 +1129,6 @@
             this.btnX_L_R.ButtonImage = null;
             this.btnX_L_R.Corner = BeeCore.Corner.Left;
             this.btnX_L_R.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnX_L_R.Enabled = false;
             this.btnX_L_R.FlatAppearance.BorderSize = 0;
             this.btnX_L_R.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnX_L_R.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2079,7 +2078,7 @@
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 94F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 94F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
             this.tableLayoutPanel20.Controls.Add(this.btnSave, 3, 0);
             this.tableLayoutPanel20.Controls.Add(this.btnCropTemp, 2, 0);
             this.tableLayoutPanel20.Controls.Add(this.cbLabels, 1, 0);
@@ -2113,9 +2112,9 @@
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(277, 3);
+            this.btnSave.Location = new System.Drawing.Point(276, 3);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(89, 30);
+            this.btnSave.Size = new System.Drawing.Size(90, 30);
             this.btnSave.TabIndex = 48;
             this.btnSave.Text = "Save";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -2143,7 +2142,7 @@
             this.btnCropTemp.IsNotChange = false;
             this.btnCropTemp.IsRect = false;
             this.btnCropTemp.IsUnGroup = true;
-            this.btnCropTemp.Location = new System.Drawing.Point(183, 3);
+            this.btnCropTemp.Location = new System.Drawing.Point(182, 3);
             this.btnCropTemp.Name = "btnCropTemp";
             this.btnCropTemp.Size = new System.Drawing.Size(88, 30);
             this.btnCropTemp.TabIndex = 47;
@@ -2158,7 +2157,7 @@
             this.cbLabels.FormattingEnabled = true;
             this.cbLabels.Location = new System.Drawing.Point(67, 3);
             this.cbLabels.Name = "cbLabels";
-            this.cbLabels.Size = new System.Drawing.Size(110, 33);
+            this.cbLabels.Size = new System.Drawing.Size(109, 33);
             this.cbLabels.TabIndex = 46;
             // 
             // label13

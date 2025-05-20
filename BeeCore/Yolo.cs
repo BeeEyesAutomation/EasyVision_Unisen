@@ -354,9 +354,9 @@ namespace BeeCore
                         {
                             combined.Add(new RotatedBoxInfo
                             {
-                                Box = rectRotates[i],
-                                Label = listLabel[i],
-                                Score = listScore[i]
+                                Box = rectRotates[j],
+                                Label = listLabel[j],
+                                Score = listScore[j]
                             });
                         }
                         switch(ArrangeBox)
@@ -381,6 +381,9 @@ namespace BeeCore
                         rectRotates = combined.Select(b => b.Box).ToList();
                         listLabel = combined.Select(b => b.Label).ToList();
                         listScore = combined.Select(b => b.Score).ToList();
+                        Content = "";
+                        foreach (string s in listLabel)
+                            Content += s;
                     }
                     ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
                     if (ScoreRs < 0) ScoreRs = 0;
