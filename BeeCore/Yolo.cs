@@ -163,6 +163,9 @@ namespace BeeCore
         public Point p2 = new Point();
         public int yLine = 100;
         public String nameTool = "";
+        public String Content = "";
+        public String Matching = "";
+        public bool IsEnContent = false;
         public StatusTool StatusTool =StatusTool.None;
         List<RectRotate> boxList = new List<RectRotate>();
         List<float> scoreList = new List<float>();
@@ -246,6 +249,8 @@ namespace BeeCore
             }
 
         }
+        public ArrangeBox ArrangeBox=new ArrangeBox();
+        public bool IsArrangeBox = false;
         public void Complete()
         {
             try
@@ -269,8 +274,8 @@ namespace BeeCore
                         IsOK = false;
                         return;
                     }
-                      
-                    foreach(Labels label in listLabelCompare)
+                    Content = "";
+                    foreach (Labels label in listLabelCompare)
                     {
                         if (label == null) continue;
                         if(!label.IsEn) continue;
@@ -330,6 +335,7 @@ namespace BeeCore
                             }
                             else
                             {
+                                Content += label;
                                 rectRotates.Add(boxList[i]);
                                 listLabel.Add(label);
                                 scoreRS += (int)scoreList[i];
@@ -340,8 +346,45 @@ namespace BeeCore
                         }
                         i++;
                     }
+                    if (IsArrangeBox)
+                    {
+                        List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+
+                        for (int j = 0; j < rectRotates.Count; j++)
+                        {
+                            combined.Add(new RotatedBoxInfo
+                            {
+                                Box = rectRotates[i],
+                                Label = listLabel[i],
+                                Score = listScore[i]
+                            });
+                        }
+                        switch(ArrangeBox)
+                        {
+                            case ArrangeBox.X_Left_Rigth:
+                                // Sort theo X tăng dần (trái → phải)
+                                combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+                                break;
+                            case ArrangeBox.X_Right_Left:
+                                // Sort theo X giảm dần (phải → trái)
+                                 combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
+
+                                break;
+                            case ArrangeBox.Y_Left_Rigth:
+                                // Sort theo Y tăng dần (trên → dưới)
+                                 combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
+                                break;
+                            case ArrangeBox.Y_Right_Left:
+                                combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
+                                break;
+                        }
+                        rectRotates = combined.Select(b => b.Box).ToList();
+                        listLabel = combined.Select(b => b.Label).ToList();
+                        listScore = combined.Select(b => b.Score).ToList();
+                    }
                     ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
                     if (ScoreRs < 0) ScoreRs = 0;
+                    IsOK = true;
                     switch (Compare)
                     {
                         case Compares.Equal:
@@ -356,6 +399,13 @@ namespace BeeCore
                             if (numOK <= NumObject)
                                 IsOK = false;
                             break;
+                    }
+                    if(IsEnContent)
+                    {
+                        if(Matching!=Content)
+                        {
+                            IsOK = false;
+                        }
                     }
                     StatusTool = StatusTool.Done;
                     G.IsChecked = true;

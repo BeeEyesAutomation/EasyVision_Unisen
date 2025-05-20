@@ -19,6 +19,13 @@ namespace BeeCore
         AnyOK,
         Logic
     }
+    public enum ArrangeBox
+    {
+        X_Left_Rigth,
+        X_Right_Left,
+        Y_Left_Rigth,
+        Y_Right_Left,
+    }
     public enum LogicOK
     {
         AND,

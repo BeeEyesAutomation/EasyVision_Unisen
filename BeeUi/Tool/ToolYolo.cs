@@ -54,11 +54,12 @@ namespace BeeUi.Tool
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         
             if (Propety.listModels == null) Propety.listModels = new List<string>();
-       
-            if(!workLoadModel.IsBusy)
+            Propety.listModels = Propety.listModels.Distinct().ToList();
+            if (!workLoadModel.IsBusy)
             workLoadModel.RunWorkerAsync();
             IsReload = true;
             cbListModel.DataSource = Propety.listModels;
+            txtMatching.Text = Propety.Matching;
             //if (Propety.PathModel!=null)
             //   if (File.Exists(Propety.PathModel))
             //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
@@ -79,6 +80,7 @@ namespace BeeUi.Tool
             numScore.Value = Propety.Score;
             trackNumObject.Value= Propety.NumObject;
             numLine.Value = Propety.yLine;
+
             SetLabels();
             switch (Propety.CompareLine)
             {
@@ -102,9 +104,26 @@ namespace BeeUi.Tool
                     btnMore.IsCLick = true;
                     break;
             }
-          
+            btnArrangeBox.IsCLick = Propety.IsArrangeBox;
+            switch (Propety.ArrangeBox)
+            {
+                case ArrangeBox.X_Left_Rigth:
+                    btnX_L_R.IsCLick = true;
+                    break;
+                case ArrangeBox.X_Right_Left:
+                    btnX_L_R.IsCLick = true;
+                    break;
+                case ArrangeBox.Y_Left_Rigth:
+                    btnX_L_R.IsCLick = true;
+                    break;
+                case ArrangeBox.Y_Right_Left:
+                    btnX_L_R.IsCLick = true;
+                    break;
+
+            }
+
             //Propety.TypeMode = Propety.TypeMode;
-          
+
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -908,8 +927,12 @@ namespace BeeUi.Tool
                         {
                             File.Copy(OpenFileDialog.FileName, pathModel, true);
                             Propety.listModels.Add(NameModel);
+                            Propety.listModels= Propety.listModels.Distinct().ToList();
                             cbListModel.DataSource = null;
+                            Propety.PathModel = pathModel;
                             IsReload = true;
+                            if(!workLoadModel.IsBusy)
+                            workLoadModel.RunWorkerAsync();
                             cbListModel.DataSource = Propety.listModels.ToArray();
 
                             //cbListModel.SelectedIndex = Propety.listModels.Count-1;
@@ -1258,6 +1281,52 @@ namespace BeeUi.Tool
         private void workTrain_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
+        }
+
+        private void btnEnbleContent_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnContent = btnEnbleContent.IsCLick;
+            layContent.Enabled = btnEnbleContent.IsCLick;
+        }
+
+        private void txtMatching_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                txtMatching.Text = txtMatching.Text.Trim().Replace("\n", "") ;
+                Propety.Matching = txtMatching.Text;
+            }
+        }
+
+        private void btnSetContent_Click(object sender, EventArgs e)
+        {
+            Propety.Matching = Propety.Content;
+            txtMatching.Text = Propety.Matching;
+        }
+
+        private void btnX_L_R_Click(object sender, EventArgs e)
+        {
+            Propety.ArrangeBox = ArrangeBox.X_Left_Rigth;
+        }
+
+        private void btnArrangeBox_Click(object sender, EventArgs e)
+        {
+            Propety.IsArrangeBox = btnArrangeBox.IsCLick;
+        }
+
+        private void btnX_R_L_Click(object sender, EventArgs e)
+        {
+            Propety.ArrangeBox = ArrangeBox.X_Right_Left;
+        }
+
+        private void btnY_L_R_Click(object sender, EventArgs e)
+        {
+            Propety.ArrangeBox = ArrangeBox.Y_Left_Rigth;
+        }
+
+        private void btnY_R_L_Click(object sender, EventArgs e)
+        {
+            Propety.ArrangeBox = ArrangeBox.Y_Right_Left;
         }
     }
 }
