@@ -60,7 +60,7 @@ namespace BeeUi.Tool
             IsReload = true;
             cbListModel.DataSource = Propety.listModels;
             if(Propety.PathModel!="")
-            cbListModel.Text =Path.GetFileNameWithoutExtension( Propety.PathModel);
+            cbListModel.Text =Propety.PathModel;
             txtMatching.Text = Propety.Matching;
             btnEnbleContent.IsCLick = Propety.IsEnContent;
             //if (Propety.PathModel!=null)
@@ -935,7 +935,7 @@ namespace BeeUi.Tool
                             Propety.listModels.Add(NameModel);
                             Propety.listModels= Propety.listModels.Distinct().ToList();
                             cbListModel.DataSource = null;
-                            Propety.PathModel = pathModel;
+                            Propety.PathModel =Path.GetFileName( pathModel);
                             IsReload = true;
                             if(!workLoadModel.IsBusy)
                             workLoadModel.RunWorkerAsync();
