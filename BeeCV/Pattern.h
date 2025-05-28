@@ -275,13 +275,11 @@ namespace CvPlus {
 	public:	double m_dToleranceAngle ;
 	public:int m_iMinReduceArea =256;
 	public:	 int m_iMessageCount=1 ;
-	public: System::String^ listMatch;
+	public:System::Collections::Generic::List<System::String^>^ listMatch = gcnew System::Collections::Generic::List<System::String^>();
 	public: void CreateTemp();
 	public: int ScoreRS=0;
 	public : bool Match(
-		int x, int y, int w, int h, float angle
-		, int ixTemp,
-		bool IsOutLine,
+		 int ixTemp,
 		bool m_bStopLayer1,
 		double m_dTolerance1 ,
 		double m_dTolerance2 ,
@@ -314,7 +312,7 @@ namespace CvPlus {
 		  LRESULT OnShowMSG(WPARAM wMSGPointer, LPARAM lIsShowTime,int m_iMessageCount);
 
 		 
-		  Mat RefreshSrcView(Mat matDraw, Mat raw, cv::Rect myROI,int ixTemp);
+		///  Mat RefreshSrcView(Mat matDraw, Mat raw, cv::Rect myROI,int ixTemp);
 	};
 	
 }

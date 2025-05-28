@@ -71,17 +71,7 @@ bool compareMatchResultByPosX(const s_SingleTargetMatch& lhs, const s_SingleTarg
 
 
 
-const Scalar colorWaterBlue(230, 255, 102);
-const Scalar colorBlue(255, 0, 0);
-const Scalar colorYellow(0, 255, 255);
-const Scalar colorRed(0, 0, 255);
-const Scalar colorBlack(0, 0, 0);
-const Scalar colorGray(200, 200, 200);
-const Scalar colorSystem(240, 240, 240);
-const Scalar colorGreen(0, 255, 0);
-const Scalar colorWhite(255, 255, 255);
-const Scalar colorPurple(214, 112, 218);
-const Scalar colorGoldenrod(15, 185, 255);
+
 
 BOOL Pattern::SubPixEsimation(vector<s_MatchParameter>* vec, double* dNewX, double* dNewY, double* dNewAngle, double dAngleStep, int iMaxScoreIndex)
 {
@@ -616,73 +606,10 @@ void Pattern::DrawMarkCross(Mat& matDraw, int iX, int iY, int iLength, Scalar co
 	line(matDraw, ptC - cv::Point(0, iLength), ptC + cv::Point(0, iLength), color, iThickness);
 }
 
-Mat Pattern::RefreshSrcView(Mat matDraw,Mat raw,cv::Rect myROI,int ixTemp)
-{
-	
-	if(matDraw.type()!= CV_8UC3)
-	cvtColor(matDraw, matDraw, COLOR_GRAY2BGR);
 
-	int iSize = (int)m_vecSingleTargetData.size();
-
-
-
-	if (m_bShowResult)
-	{
-		for (int i = 0; i < iSize; i++)
-		{
-			
-			cv::Point ptLT(m_vecSingleTargetData[i].ptLT * m_dNewScale);
-			cv::Point ptLB(m_vecSingleTargetData[i].ptLB * m_dNewScale);
-			cv::Point ptRB(m_vecSingleTargetData[i].ptRB * m_dNewScale);
-			cv::Point ptRT(m_vecSingleTargetData[i].ptRT * m_dNewScale);
-			cv::Point ptC(m_vecSingleTargetData[i].ptCenter * m_dNewScale);
-			DrawDashLine(matDraw, ptLT, ptLB, Scalar(0, 0, 255) , Scalar::all(255));
-			DrawDashLine(matDraw, ptLB, ptRB, Scalar(0, 0, 255), Scalar::all(255));
-			DrawDashLine(matDraw, ptRB, ptRT, Scalar(0, 0, 255), Scalar::all(255));
-			DrawDashLine(matDraw, ptRT, ptLT, Scalar(0, 0, 255), Scalar::all(255));
-
-			//左上及角落邊框
-			cv::Point ptDis1, ptDis2;
-			if (m_matDst[ixTemp].cols > m_matDst[ixTemp].rows)
-			{
-				ptDis1 = (ptLB - ptLT) / 3;
-				ptDis2 = (ptRT - ptLT) / 3 * (m_matDst[ixTemp].rows / (float)m_matDst[ixTemp].cols);
-			}
-			else
-			{
-				ptDis1 = (ptLB - ptLT) / 3 * (m_matDst[ixTemp].cols / (float)m_matDst[ixTemp].rows);
-				ptDis2 = (ptRT - ptLT) / 3;
-			}
-		cv::line(matDraw, ptLT, ptLT + ptDis1 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptLT, ptLT + ptDis2 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptRT, ptRT + ptDis1 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptRT, ptRT - ptDis2 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptRB, ptRB - ptDis1 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptRB, ptRB - ptDis2 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptLB, ptLB - ptDis1 / 2, colorGreen, 1, CV_AA);
-		cv::line(matDraw, ptLB, ptLB + ptDis2 / 2, colorGreen, 1, CV_AA);
-			//
-
-			DrawDashLine(matDraw, ptLT + ptDis1, ptLT + ptDis2, Scalar(0, 0, 255), Scalar::all(255));
-			DrawMarkCross(matDraw, ptC.x, ptC.y, 5, colorGreen, 1);
-			//string str = format("%d", i);
-			//cv::putText(matDraw, str, (ptLT + ptRT) / 2, FONT_HERSHEY_PLAIN, 1, colorGreen);
-		}
-	}
-	
-	
-	if(raw.type()==CV_8UC1)
-		cvtColor(raw, raw, COLOR_GRAY2BGR);
-	matDraw.copyTo(raw(myROI));
-	//matDraw.copyTo(raw(cv::Rect(myROI.x, myROI.y,myROI.width,myROI.height)));
-	
-	return raw;
-	
-
-}
 void Pattern::CreateTemp()
 {m_TemplData.push_back(s_TemplData());
-
+listMatch->Add("");
 m_matDst.push_back(Mat());
 }
 void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp)
@@ -741,13 +668,24 @@ Mat RotateMat(Mat raw, RotatedRect rot)
 	warpAffine(raw, matRs, matR, rot.size, INTER_LINEAR, BORDER_CONSTANT);
 	return matRs;
 }
+cv::Mat autoCanny(const cv::Mat& grayImg, double sigma = 0.33) {
+	// Tính trung vị
+	cv::Mat flat;
+	grayImg.reshape(1, 1).copyTo(flat); // flatten ảnh
+	std::vector<uchar> vec = grayImg.isContinuous() ? flat : flat.clone();
+	std::nth_element(vec.begin(), vec.begin() + vec.size() / 2, vec.end());
+	double median = vec[vec.size() / 2];
 
+	// Tính ngưỡng dưới & trên
+	int lower = std::max(0.0, (1.0 - sigma) * median);
+	int upper = std::min(255.0, (1.0 + sigma) * median);
+
+	cv::Mat edges;
+	cv::Canny(grayImg, edges, lower, upper);
+	return edges;
+}
 bool Pattern::Match(
-
-	
-	int x,int y,int w,int h,float angle
-	, int ixTemp,
-	bool IsOutLine,
+ int ixTemp,
 		bool m_bStopLayer1,
 		double m_dTolerance1 ,
 		double m_dTolerance2 ,
@@ -761,7 +699,7 @@ bool Pattern::Match(
 		double m_dMaxOverlap 
 )
 {
-	listMatch = "";
+	listMatch[ixTemp] = "";
 	
 	bool m_bToleranceRange = true;
 	
@@ -773,35 +711,31 @@ bool Pattern::Match(
 
 	if (raw.type() == CV_8UC3)
 		cvtColor(raw, raw, COLOR_BGR2GRAY);
-//	cv::GaussianBlur(raw, raw, cv::Size(3, 3),1,1);
-	 //cv::imread(_toString(path), ImreadModes::IMREAD_GRAYSCALE);
-	Mat matCanny = Mat();
-	if (IsOutLine)
-		Canny(raw.clone(), matCanny, threshMin, threshMax);
-	else
-		matCanny =raw.clone();
 
+	//cv::imwrite("crop.png", matCanny);
 	Mat matDraw = Mat();
-	Mat matCrop  =  RotateMat(matCanny, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+	Mat matCrop = raw;//  RotateMat(matCanny, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+	//cv::imwrite("crop.png", matCrop);
 	// matCrop= Process(matCrop);
 	if (matCrop.type() == CV_8UC3)
 	{
 		cvtColor(matCrop, matCrop, COLOR_BGR2GRAY);
 	}
-	if (IsProcess)
+	/*if (IsProcess)
 		matDraw = matCrop.clone();
 	else
 	{
 	
 		matDraw = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
-	}
+	}*/
 	
 	m_matSrc = matCrop.clone();
 	
-	if (matDraw.type() != CV_8UC3)
+	/*if (matDraw.type() != CV_8UC3)
 	{
 		cvtColor(matDraw, matDraw, COLOR_GRAY2BGR);
 	}
+	*/
 	if (m_matSrc.empty() || m_matDst[ixTemp].empty())
 		return false;
 	if ((m_matDst[ixTemp].cols < m_matSrc.cols && m_matDst[ixTemp].rows > m_matSrc.rows) || (m_matDst[ixTemp].cols > m_matSrc.cols && m_matDst[ixTemp].rows < m_matSrc.rows))
@@ -1136,7 +1070,7 @@ bool Pattern::Match(
 			sstm.dMatchedAngle -= 360;
 		m_vecSingleTargetData.push_back(sstm);
 		Rect rect= vecAllResult[i].rectBounding;
-		listMatch += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() + "\n";
+		listMatch[ixTemp] += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() +","+ vecAllResult[i].dMatchScore * 100 + "\n";
 		double score = vecAllResult[i].dMatchScore * 100;
 		ScoreRS = score;
 		if (i + 1 == m_iMaxPos)

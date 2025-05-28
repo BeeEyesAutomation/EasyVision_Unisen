@@ -24,6 +24,7 @@ namespace CvPlus
 	cv::Mat matTemp, matRaw, matResult, matRsTemp;
 	cv::Mat matSetTemp, m_matSrc;
 	vector< cv::Mat> m_matDst;
+	vector< cv::Mat> listmatTemp;
 	 uchar* ucRaw; uchar* ucCrop;
 	string _toString(System::String^ STR)
 	{

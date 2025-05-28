@@ -26,9 +26,9 @@ namespace BeeUi.Tool
             InitializeComponent();
             
         }
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             if (!threadProcess.IsBusy)
                 threadProcess.RunWorkerAsync();
 
@@ -115,7 +115,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2 , -BeeCore.Common.matRaw.Height / 2 , BeeCore.Common.matRaw.Width , BeeCore.Common.matRaw.Height ), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2 , -BeeCore.Common.matRaw.Height / 2 , BeeCore.Common.matRaw.Width , BeeCore.Common.matRaw.Height ), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;

@@ -12,6 +12,9 @@ using System.ComponentModel;
 using BeeCore.Funtion;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
+using Point = OpenCvSharp.Point;
+using System.Linq;
+using Size = OpenCvSharp.Size;
 namespace BeeCore
 {
   public   class Common
@@ -93,7 +96,17 @@ namespace BeeCore
                 G.objYolo = cls.Invoke();              // khởi tạo instance
                 dynamic mod2 = Py.Import("Tool.OcrWapper");
                 dynamic cls2 = mod2.GetAttr("OCRWrapper"); // class
-                G.objOCR = cls2.Invoke();              // khởi tạo instance                               
+                G.objOCR = cls2.Invoke();              // khởi tạo instance
+                                                       // 
+                dynamic mod3 = Py.Import("Tool.Classic");
+                dynamic cls3 = mod3.GetAttr("Filter"); // class
+                G.Classic = cls3.Invoke();              // khởi tạo instance
+           
+
+                    G.IniEdge = true;
+                    // khởi tạo instance
+                    G.Classic.LoadEdge();
+                
             }
 
         }
@@ -102,6 +115,34 @@ namespace BeeCore
 
              G.CommonPlus.ClosePython();
 
+        }
+        public static Mat AutoCanny(Mat grayImage, double sigma = 0.33)
+        {
+            // Lấy toàn bộ byte ảnh ra mảng 1 chiều
+            byte[] pixels = new byte[grayImage.Rows * grayImage.Cols * grayImage.ElemSize()];
+            Marshal.Copy(grayImage.Data, pixels, 0, pixels.Length);
+
+            // Tính trung vị
+            byte[] sorted = pixels.OrderBy(p => p).ToArray();
+            byte median = sorted[sorted.Length / 2];
+
+            // Tính ngưỡng dưới và ngưỡng trên
+            int lower = Math.Max(0, (int)((1.0 - sigma) * median));
+            int upper = Math.Min(255, (int)((1.0 + sigma) * median));
+
+            // Áp dụng Canny
+            Mat edges = new Mat();
+            Cv2.Canny(grayImage, edges, lower, upper);
+            return edges;
+        }
+        // Canny + Morph gradient
+        public static Mat CannyWithMorph(Mat gray)
+        {
+            Mat canny = AutoCanny(gray);
+            Mat morph = new Mat();
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.MorphologyEx(canny, morph, MorphTypes.Gradient, kernel);
+            return morph;
         }
         //  [DllImport(@".\BeeCam.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         //  unsafe public static extern bool ScanCCD(int index);
@@ -273,14 +314,15 @@ namespace BeeCore
             lhs = rhs;
             rhs = temp;
         }
-        public static Mat CropRotatedRect(Mat source, RotatedRect rect)
+        public static Mat CropRotatedRect(Mat source, RectRotate rot, RectRotate rotMask)
         {
+            MatType TypeMat = source.Type();
             Mat matResult = new Mat();
-            RotatedRect rot = rect;
-            Point2f pCenter = new Point2f(rot.Center.X, rot.Center.Y);
-            Size2f rect_size = new Size2f(rot.Size.Width, rot.Size.Height);
-            RotatedRect rot2 = new RotatedRect(pCenter, rect_size, rot.Angle);
-            double angle = rot.Angle;
+          
+            Point2f pCenter = new Point2f(rot._PosCenter.X, rot._PosCenter.Y);
+            Size2f rect_size = new Size2f(rot._rect.Size.Width, rot._rect.Size.Height);
+            RotatedRect rot2 = new RotatedRect(pCenter, rect_size, rot._rectRotation);
+            double angle = rot._rectRotation;
             if (angle < -45)
             {
                 angle += 90.0;
@@ -295,23 +337,75 @@ namespace BeeCore
             Mat crop1 = new Mat();
             try
             {
+                Mat mCrop = new Mat();
                 Cv2.WarpAffine(source, crop1, M, source.Size(), InterpolationFlags.Cubic);
 
-                Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, matResult);
+                Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, mCrop);
+                if (TypeMat == MatType.CV_8UC3)
+                {
+                    Cv2.CvtColor(mCrop, mCrop, ColorConversionCodes.BGR2GRAY);
+                }
+
+                if (rot.IsElip)
+                {
+                    Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, MatType.CV_8UC1, new Scalar(0));
+                    int deltaX = (int)rot._rect.Width / 2;
+                    int deltaY = (int)rot._rect.Height / 2;
+                    RotatedRect rectElip = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rot._rect.Width, rot._rect.Height), rot._rectRotation);
+                    Cv2.Ellipse(matMask, rectElip, new Scalar(255), -1);
+                    Cv2.BitwiseAnd(mCrop, matMask, matResult);
+                }
+                else
+                    matResult = mCrop;
+              //  return matResult;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+              //  MessageBox.Show(ex.Message);
             }
+            if(rotMask != null)
+            {
+               Mat matMask=new Mat((int)rot._rect.Height, (int)rot._rect.Width,MatType.CV_8UC1, new Scalar(255));
+                int deltaX = (int)rot._rect.Width / 2 - (int)(rot._PosCenter.X - rotMask._PosCenter.X);
+                int deltaY = (int)rot._rect.Height / 2 - (int)(rot._PosCenter.Y - rotMask._PosCenter.Y);
+                RotatedRect retMask = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rotMask._rect.Width, rotMask._rect.Height), rotMask._rectRotation);
 
+                if (rotMask.IsElip)
+                {
+                    Cv2.Ellipse(matMask, retMask,new Scalar(0), -1);  
+                }
+                else
+                {
+                    // Lấy ra các điểm góc sau khi xoay
+                    Point2f[] vertices = new Point2f[4];
+                    vertices= retMask.Points( );
+
+                    // Chuyển Point2f sang Point để vẽ
+                    Point[] pts = Array.ConvertAll(vertices, v => new Point((int)v.X, (int)v.Y));
+
+                    // Tô hình chữ nhật xoay (dùng fillPoly)
+                    Cv2.FillPoly(matMask, new[] { pts }, new Scalar(0)); // Đỏ
+
+                }
+                if (matResult.Type() == MatType.CV_8UC3)
+                {
+                    Cv2.CvtColor(matResult, matResult, ColorConversionCodes.BGR2GRAY);
+
+                }
+                Mat matAnd = new Mat();
+                    Cv2.BitwiseAnd(matResult, matMask, matAnd);
+               
+                    return matAnd;
+                
+            }
             return matResult;
         }
 
         public static void  CreateTemp(TypeTool TypeTool)
         {
           
-                CvPlus.Pattern pattern = new CvPlus.Pattern();
-                pattern.CreateTemp();
+                //CvPlus.Pattern pattern = new CvPlus.Pattern();
+                G.pattern.CreateTemp();
             
          
         }

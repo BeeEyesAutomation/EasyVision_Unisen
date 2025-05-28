@@ -60,9 +60,9 @@ namespace BeeUi
             G.Config.IsSaveNG = btnSaveNG.IsCLick;
         }
 
-        private void trackLimitDay_ValueChanged(int obj)
+        private void trackLimitDay_ValueChanged(float obj)
         {
-            G.Config.LimitDateSave = trackLimitDay.Value;
+            G.Config.LimitDateSave = (int)trackLimitDay.Value;
         }
 
         private void btnSmall_Click(object sender, EventArgs e)

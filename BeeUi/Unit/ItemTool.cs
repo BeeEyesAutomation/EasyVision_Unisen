@@ -20,12 +20,13 @@ namespace BeeUi.Commons
     public partial class ItemTool : UserControl
     {
         public TypeTool TypeTool;
-       
+        
         public ItemTool(TypeTool typeTool,string names)
         {
           
             InitializeComponent();
-          
+
+        
             this.Name = names;
             this.TypeTool = typeTool;
             this.MouseMove += ItemTool_MouseMove;
@@ -48,6 +49,11 @@ namespace BeeUi.Commons
          
 
 
+        }
+
+        private void Measure_ResultChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void Parent_VisibleChanged1(object sender, EventArgs e)
@@ -291,7 +297,7 @@ namespace BeeUi.Commons
             G.EditTool.View.imgView.Update();
         }
 
-        private void Score_ValueChanged(int obj)
+        private void Score_ValueChanged(float obj)
         {
             G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
             G.PropetyTools[G.indexToolSelected].Propety.Score = Score.Value;

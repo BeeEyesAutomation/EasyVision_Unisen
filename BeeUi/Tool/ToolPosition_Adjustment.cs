@@ -53,7 +53,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety. rotAreaTemp = Propety. rotArea.Clone();
-            Propety. rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2 , -BeeCore.Common.matRaw.Height / 2 , BeeCore.Common.matRaw.Width , BeeCore.Common.matRaw.Height ), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None);
+            Propety. rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2 , -BeeCore.Common.matRaw.Height / 2 , BeeCore.Common.matRaw.Width , BeeCore.Common.matRaw.Height ), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -458,7 +458,7 @@ namespace BeeUi.Tool
 
                         if (!Propety.IsOK) return;
                         Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
-                        G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+                        G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
 
                     }
                     G.EditTool.View.imgView.Invalidate();
@@ -470,7 +470,7 @@ namespace BeeUi.Tool
             {
                 Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
              
-                    G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+                    G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
             }
             trackScore.Value = Propety.Score ;
             trackAngle.Value =(int)Propety.Angle;
@@ -629,7 +629,7 @@ namespace BeeUi.Tool
 
         private void trackScore_MouseMove(object sender, MouseEventArgs e)
         {
-            Propety.Score = trackScore.Value ;
+            Propety.Score = (int)trackScore.Value ;
         }
 
         private void trackScore_Load(object sender, EventArgs e)
@@ -637,9 +637,9 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             numScore.Value = Propety.Score;
 
         }
@@ -654,7 +654,7 @@ namespace BeeUi.Tool
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
-                matTemp = Propety.GetTemp(Propety.rotCrop, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
+                matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
@@ -688,10 +688,10 @@ namespace BeeUi.Tool
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             numScore.Value = Propety.Score;
         }
-        private void trackAngle_ValueChanged(int obj)
+        private void trackAngle_ValueChanged(float obj)
         {
             Propety.Angle = trackAngle.Value;
             numAngle.Value = (int)Propety.Angle;
@@ -731,7 +731,7 @@ namespace BeeUi.Tool
                 threadProcess.RunWorkerAsync();
         }
 
-        private void trackMaxOverLap_ValueChanged(int obj)
+        private void trackMaxOverLap_ValueChanged(float obj)
         {
 
             Propety.OverLap = (trackMaxOverLap.Value*1.0)/100.0;

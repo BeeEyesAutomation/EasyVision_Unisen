@@ -107,8 +107,9 @@ namespace BeeCore
         }
 
        
-        public static void Rectangle(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint,Point posAutoScroll,float zoom, int Thiness=2)
+        public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint,Point posAutoScroll,float zoom, int Thiness=2)
         {
+            if (RectDraw == null) return;
             RectangleF _rect = new RectangleF(); ;
             PointF _rectPos = new PointF(); ;
             Single _rectRotation = 0;
@@ -116,6 +117,7 @@ namespace BeeCore
             _rect = RectDraw._rect;
             _rectPos = RectDraw._PosCenter;
             _rectRotation = RectDraw._rectRotation;
+            if (_rectRotation == float.NaN) return;
             var rectTopLeft = new RectangleF(_rect.Left - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
             var rectTopRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
             var rectBottomLeft = new RectangleF(_rect.Left - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
@@ -140,16 +142,19 @@ namespace BeeCore
             switch (TypeCrop)
             {
                 case TypeCrop.Area:
-                        penRect = new Pen(Color.DeepSkyBlue, 2);
+                        penRect = new Pen(Color.DeepSkyBlue, Thiness);
                     break;
                 case TypeCrop.Crop:
-                       penRect = new Pen(Color.Orange, 2);
+                       penRect = new Pen(Color.Goldenrod, Thiness);
                     break;
                 case TypeCrop.Mask:
-                       penRect = new Pen(Color.FromArgb(100, 111, 211, 213), 2);
+                       penRect = new Pen(Color.DarkRed, Thiness);
                     break;
             }
-            gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+            if (RectDraw.IsElip)
+                gc.DrawEllipse(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+            else
+              gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
             switch (AnchorPoint)
             {
                 case AnchorPoint.None:
@@ -223,6 +228,70 @@ namespace BeeCore
             }
           
             gc.ResetTransform();
+        }
+        public static void FillRect(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,  Point posAutoScroll, float zoom, int Opacity =10)
+        {
+            if (RectDraw == null) return;
+            RectangleF _rect = new RectangleF(); ;
+           
+
+            _rect = RectDraw._rect;
+             Brush backcolor = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
+            Matrix mat = new Matrix();
+            mat.Translate(posAutoScroll.X, posAutoScroll.Y);
+            mat.Scale((float)(zoom / 100.0), (float)(zoom / 100.0));
+            mat.Translate(RectDraw._PosCenter.X, RectDraw._PosCenter.Y);
+            mat.Rotate(RectDraw._rectRotation);
+            gc.Transform = mat;
+            switch (TypeCrop)
+            {
+                case TypeCrop.Area:
+                    backcolor = new SolidBrush(Color.FromArgb(Opacity, 0, 191, 255));
+                    break;
+                case TypeCrop.Crop:
+                    backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 165, 0));
+                    break;
+                case TypeCrop.Mask:
+                    backcolor = new SolidBrush(Color.FromArgb(Opacity, 91, 91, 91));
+                    break;
+            }
+            if (RectDraw.IsElip)
+                gc.FillEllipse(backcolor, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+            else
+                gc.FillRectangle(backcolor, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+
+            gc.ResetTransform();
+        }
+        public static void DrawInfiniteLine(Graphics g, PointF p1, PointF p2, Rectangle bounds, Pen pen)
+        {
+            if (p1 == p2) return; // Không thể xác định được nếu 2 điểm trùng nhau
+
+            float dx = p2.X - p1.X;
+            float dy = p2.Y - p1.Y;
+
+            // Tránh chia cho 0 nếu là đường thẳng đứng
+            if (dx == 0)
+            {
+                // Vẽ đường thẳng đứng đi qua p1.X
+                g.DrawLine(pen, new PointF(p1.X, bounds.Top), new PointF(p1.X, bounds.Bottom));
+                return;
+            }
+
+            float slope = dy / dx;
+            float intercept = p1.Y - slope * p1.X;
+
+            // Tính giao điểm với 2 cạnh trái - phải của bounds
+            float xLeft = bounds.Left;
+            float yLeft = slope * xLeft + intercept;
+
+            float xRight = bounds.Right;
+            float yRight = slope * xRight + intercept;
+
+            // Cắt với phần hiển thị nếu cần
+            PointF start = new PointF(xLeft, yLeft);
+            PointF end = new PointF(xRight, yRight);
+
+            g.DrawLine(pen, start, end);
         }
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         public static extern IntPtr CreateRoundRectRgn

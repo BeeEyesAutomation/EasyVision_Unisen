@@ -49,7 +49,7 @@ namespace BeeCore
         Pitch,
         OCR,BarCode
         ,Yolo,
-        Positions
+        Positions, Measure
     }
     public enum TypeOCR
     {
@@ -83,7 +83,7 @@ namespace BeeCore
     }
     public enum Mode
     {
-        Pattern, OutLine
+        Pattern, OutLine,Edge
     }
     public enum Compares
     {
@@ -97,10 +97,14 @@ namespace BeeCore
     {
         None, Edit, Processing, Done
     }
+    public enum Results
+    {
+        None, OK, NG
+    }
     public struct G
     {
-        public static dynamic objYolo,np,objOCR;
-        public static bool IsChecked = false;
+        public static dynamic objYolo,np,objOCR,Classic;
+        public static bool IsChecked = false, IniEdge;
         public static TypeCamera TypeCCD=TypeCamera.USB;
         public static Model Model=new Model();
         public static bool IsSimulation = false,InitYolo=false,IniOCR;

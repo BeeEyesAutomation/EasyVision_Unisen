@@ -570,7 +570,7 @@
             this.trackScore.TabIndex = 28;
             this.trackScore.Value = 100;
             this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
+            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             this.trackScore.Load += new System.EventHandler(this.trackScore_Load_1);
             // 
             // label8

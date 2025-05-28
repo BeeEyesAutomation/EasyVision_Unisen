@@ -400,7 +400,7 @@ namespace BeeUi
                             // if(toolEdit.Propety.rotCrop._rectRotation.Contains(toolEdit.Propety.rotArea._rectRotation))
                             if (toolEdit.Propety.rotArea == null)
                                 return;
-                            rotateRect = new RectRotate(toolEdit.Propety.rotArea._rect, toolEdit.Propety.rotArea._PosCenter, toolEdit.Propety.rotArea._rectRotation, toolEdit.Propety.rotArea._dragAnchor);
+                            rotateRect = new RectRotate(toolEdit.Propety.rotArea._rect, toolEdit.Propety.rotArea._PosCenter, toolEdit.Propety.rotArea._rectRotation, toolEdit.Propety.rotArea._dragAnchor, toolEdit.Propety.rotArea.IsElip);
                         }
                         else if (G.TypeCrop == TypeCrop.Mask)
                         {
@@ -408,13 +408,13 @@ namespace BeeUi
                             // if(toolEdit.Propety.rotCrop._rectRotation.Contains(toolEdit.Propety.rotArea._rectRotation))
                             if (toolEdit.Propety.rotMask == null)
                                 return;
-                            rotateRect = new RectRotate(toolEdit.Propety.rotMask._rect, toolEdit.Propety.rotMask._PosCenter, toolEdit.Propety.rotMask._rectRotation, toolEdit.Propety.rotMask._dragAnchor);
+                            rotateRect = new RectRotate(toolEdit.Propety.rotMask._rect, toolEdit.Propety.rotMask._PosCenter, toolEdit.Propety.rotMask._rectRotation, toolEdit.Propety.rotMask._dragAnchor, toolEdit.Propety.rotMask.IsElip);
                         }
                         else
                         {
                             if (toolEdit.Propety.rotCrop == null)
                                 return;
-                            rotateRect = new RectRotate(toolEdit.Propety.rotCrop._rect, toolEdit.Propety.rotCrop._PosCenter, toolEdit.Propety.rotCrop._rectRotation, toolEdit.Propety.rotCrop._dragAnchor);
+                            rotateRect = new RectRotate(toolEdit.Propety.rotCrop._rect, toolEdit.Propety.rotCrop._PosCenter, toolEdit.Propety.rotCrop._rectRotation, toolEdit.Propety.rotCrop._dragAnchor,toolEdit.Propety.rotCrop.IsElip);
                         }
                         var mat = new Matrix();
                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
@@ -570,7 +570,7 @@ namespace BeeUi
                                         return;
                                      }
                             if (rotateRect == null) return;
-                            toolEdit.Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor);
+                            toolEdit.Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor,false);
 
                         }
                         else if (G.TypeCrop == TypeCrop.Crop)
@@ -587,7 +587,7 @@ namespace BeeUi
                              //       return;
 
                                 if (rotateRect == null) return;
-                                toolEdit.Propety.rotCrop = new RectRotate(new RectangleF( rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height),new PointF( rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor);
+                                toolEdit.Propety.rotCrop = new RectRotate(new RectangleF( rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height),new PointF( rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
                             }
 
                              else
@@ -604,7 +604,7 @@ namespace BeeUi
                                     return;
 
                                 if (rotateRect == null) return;
-                                toolEdit.Propety.rotMask = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor);
+                                toolEdit.Propety.rotMask = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
                             }
                         }
                         if (G.TypeCrop == TypeCrop.Crop||toolEdit.Propety.rotCrop==null)
@@ -629,27 +629,27 @@ namespace BeeUi
                         int IsCheck = 0 ;
                         if (!toolEdit.IsClear)
                         {
-                            G.TypeCrop = TypeCrop.Crop;
+                          //  G.TypeCrop = TypeCrop.Crop;
                           
-                            X:
-                            if (toolEdit.Propety.rotCrop == null)
-                                G.TypeCrop = TypeCrop.Area;
+                            //X:
+                            //if (toolEdit.Propety.rotCrop == null)
+                            //    G.TypeCrop = TypeCrop.Area;
                             if (G.TypeCrop == TypeCrop.Area)
                             {
 
                                 if (toolEdit.Propety.rotArea == null) return;
-                                rotateRect = new RectRotate(toolEdit.Propety.rotArea._rect, toolEdit.Propety.rotArea._PosCenter, toolEdit.Propety.rotArea._rectRotation, toolEdit.Propety.rotArea._dragAnchor);
+                                rotateRect = new RectRotate(toolEdit.Propety.rotArea._rect, toolEdit.Propety.rotArea._PosCenter, toolEdit.Propety.rotArea._rectRotation, toolEdit.Propety.rotArea._dragAnchor,toolEdit.Propety.rotArea.IsElip);
                             }
                             else if (G.TypeCrop == TypeCrop.Mask)
                             {
 
                                 if (toolEdit.Propety.rotMask == null) return;
-                                rotateRect = new RectRotate(toolEdit.Propety.rotMask._rect, toolEdit.Propety.rotMask._PosCenter, toolEdit.Propety.rotMask._rectRotation, toolEdit.Propety.rotMask._dragAnchor);
+                                rotateRect = new RectRotate(toolEdit.Propety.rotMask._rect, toolEdit.Propety.rotMask._PosCenter, toolEdit.Propety.rotMask._rectRotation, toolEdit.Propety.rotMask._dragAnchor, toolEdit.Propety.rotMask.IsElip);
                             }
                             else
                             {
                                 if (toolEdit.Propety.rotCrop == null) return;
-                                rotateRect = new RectRotate(toolEdit.Propety.rotCrop._rect, toolEdit.Propety.rotCrop._PosCenter, toolEdit.Propety.rotCrop._rectRotation, toolEdit.Propety.rotCrop._dragAnchor);
+                                rotateRect = new RectRotate(toolEdit.Propety.rotCrop._rect, toolEdit.Propety.rotCrop._PosCenter, toolEdit.Propety.rotCrop._rectRotation, toolEdit.Propety.rotCrop._dragAnchor, toolEdit.Propety.rotCrop.IsElip);
                             }
                             var mat = new Matrix();
                         mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
@@ -724,54 +724,54 @@ namespace BeeUi
                                 rotateRect._dragAnchor = AnchorPoint.None;
                                 var rectNone = new RectangleF(rotateRect._rect.X + rotateRect._rect.Width / 4, rotateRect._rect.Y + rotateRect._rect.Height / 4, rotateRect._rect.Width + rotateRect._rect.Width / 2, rotateRect._rect.Height + rotateRect._rect.Height / 2);
 
-                                if (IsCheck == 0)
-                                {
+                                //if (IsCheck == 0)
+                                //{
                                   
                                   
-                                    if (!rectNone.Contains(point))
-                                    {
-                                         if (toolEdit.Propety.rotMask == null|| toolEdit.Propety.rotCrop == null)
-                                        {
-                                            IsCheck+=2;
-                                            G.IsCheck = false;
-                                            G.TypeCrop = TypeCrop.Area;
-                                            goto X;
-                                        }
-                                        else
-                                        {
-                                            IsCheck++; G.IsCheck = false;
-                                            G.TypeCrop = TypeCrop.Mask;
-                                            goto X;
-                                        }
-                                    }
-                                    else
-                                    {
+                                //    if (!rectNone.Contains(point))
+                                //    {
+                                //         if (toolEdit.Propety.rotMask == null|| toolEdit.Propety.rotCrop == null)
+                                //        {
+                                //            IsCheck+=2;
+                                //            G.IsCheck = false;
+                                //          //  G.TypeCrop = TypeCrop.Area;
+                                //            goto X;
+                                //        }
+                                //        else
+                                //        {
+                                //            IsCheck++; G.IsCheck = false;
+                                //         //   G.TypeCrop = TypeCrop.Mask;
+                                //            goto X;
+                                //        }
+                                //    }
+                                //    else
+                                //    {
 
-                                    }
+                                //    }
 
                                     
-                                }
-                                else   if (IsCheck == 1)
-                                {
+                                //}
+                                //else   if (IsCheck == 1)
+                                //{
 
-                                    if (!rectNone.Contains(point))
-                                    {
-                                        IsCheck++; G.IsCheck = false;
-                                        G.TypeCrop = TypeCrop.Area;
-                                        goto X;
-                                    }
-                                }
-                                else
-                                {
+                                //    if (!rectNone.Contains(point))
+                                //    {
+                                //        IsCheck++; G.IsCheck = false;
+                                //     //   G.TypeCrop = TypeCrop.Area;
+                                //        goto X;
+                                //    }
+                                //}
+                                //else
+                                //{
 
-                                    ////G.IsCheck = true;
-                                    //if (!toolEdit.threadProcess.IsBusy)
-                                    //    toolEdit.threadProcess.RunWorkerAsync();
-                                    if (toolEdit.Propety.rotCrop == null)
-                                        G.TypeCrop = TypeCrop.Area;
-                                    else
-                                    G.TypeCrop = TypeCrop.Crop;
-                                }
+                                //    ////G.IsCheck = true;
+                                //    //if (!toolEdit.threadProcess.IsBusy)
+                                //    //    toolEdit.threadProcess.RunWorkerAsync();
+                                //    //if (toolEdit.Propety.rotCrop == null)
+                                //    //    G.TypeCrop = TypeCrop.Area;
+                                //    //else
+                                //    //G.TypeCrop = TypeCrop.Crop;
+                                //}
                                 
                             }
 
@@ -1033,142 +1033,181 @@ namespace BeeUi
                 AnchorPoint _dragAnchor = AnchorPoint.None;
                 Pen penRect = new Pen(Color.Orange, 2);
 
-                //switch (IsTypeArea())
-                //{
-                //    case TypeCrop.Area:
-                //        if (toolEdit.Propety.rotArea != null)
-                //        {
-                //            _rect = toolEdit.Propety.rotArea._rect;
-                //            _rectPos = toolEdit.Propety.rotArea._PosCenter;
-                //            _rectRotation = toolEdit.Propety.rotArea._rectRotation;
-                //            _dragAnchor = toolEdit.Propety.rotArea._dragAnchor;
-                //            penRect = new Pen(Color.DeepSkyBlue, 2);
-                //        }
-                //        else return;
-                //        break;
-                //    case TypeCrop.Crop:
-                //        {
-                //            if (toolEdit.Propety.rotCrop != null)
-                //            {
-                //                _rect = toolEdit.Propety.rotCrop._rect;
-                //                _rectPos = toolEdit.Propety.rotCrop._PosCenter;
-                //                _rectRotation = toolEdit.Propety.rotCrop._rectRotation;
-                //                _dragAnchor = toolEdit.Propety.rotCrop._dragAnchor;
-                //                penRect = new Pen(Color.Orange, 2);
-                //            }
+            //switch (IsTypeArea())
+            //{
+            //    case TypeCrop.Area:
+            //        if (toolEdit.Propety.rotArea != null)
+            //        {
+            //            _rect = toolEdit.Propety.rotArea._rect;
+            //            _rectPos = toolEdit.Propety.rotArea._PosCenter;
+            //            _rectRotation = toolEdit.Propety.rotArea._rectRotation;
+            //            _dragAnchor = toolEdit.Propety.rotArea._dragAnchor;
+            //            penRect = new Pen(Color.DeepSkyBlue, 2);
+            //        }
+            //        else return;
+            //        break;
+            //    case TypeCrop.Crop:
+            //        {
+            //            if (toolEdit.Propety.rotCrop != null)
+            //            {
+            //                _rect = toolEdit.Propety.rotCrop._rect;
+            //                _rectPos = toolEdit.Propety.rotCrop._PosCenter;
+            //                _rectRotation = toolEdit.Propety.rotCrop._rectRotation;
+            //                _dragAnchor = toolEdit.Propety.rotCrop._dragAnchor;
+            //                penRect = new Pen(Color.Orange, 2);
+            //            }
 
-                //        }
-                //        break;
-                //    case TypeCrop.Mask:
-                //        {
-                //            if (toolEdit.Propety.rotMask != null)
-                //            {
-                //                _rect = toolEdit.Propety.rotMask._rect;
-                //                _rectPos = toolEdit.Propety.rotMask._PosCenter;
-                //                _rectRotation = toolEdit.Propety.rotMask._rectRotation;
-                //                _dragAnchor = toolEdit.Propety.rotMask._dragAnchor;
-                //                penRect = new Pen(Color.FromArgb(100, 111, 211, 213), 2);
-                //            }
-                //            else return;
-                //        }
-                //        break;
-                //}
-
-                if (G.TypeCrop == TypeCrop.Area)
-                {
-                    //Crop
-                    if (toolEdit.Propety.rotCrop != null)
-                    {
-                        mat = new Matrix();
-                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-                    mat.Translate(toolEdit.Propety.rotCrop._PosCenter.X, toolEdit.Propety.rotCrop._PosCenter.Y);
-                        mat.Rotate(toolEdit.Propety.rotCrop._rectRotation);
-                        RectangleF _rect2 = toolEdit.Propety.rotCrop._rect;
-                        gc.Transform = mat;
-                        gc.DrawRectangle(new Pen(Color.Silver, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
-                        gc.ResetTransform();
-                    }
-                    //Mask
-                    if (toolEdit.Propety.rotMask != null)
-                    {
-                        mat = new Matrix();
-                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-                    mat.Translate(toolEdit.Propety.rotMask._PosCenter.X, toolEdit.Propety.rotMask._PosCenter.Y);
-                        mat.Rotate(toolEdit.Propety.rotMask._rectRotation);
-                        RectangleF _rect2 = toolEdit.Propety.rotMask._rect;
-                        gc.Transform = mat;
-                        gc.FillRectangle(new SolidBrush(Color.FromArgb(70, 111, 211, 213)), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
-                        gc.ResetTransform();
-                    }
-
-                }
-                else if (G.TypeCrop == TypeCrop.Crop)
-                {
-                    //Area
-                    mat = new Matrix();
-                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-
-                mat.Translate(toolEdit.Propety.rotArea._PosCenter.X, toolEdit.Propety.rotArea._PosCenter.Y);
-                    mat.Rotate(toolEdit.Propety.rotArea._rectRotation);
-                    RectangleF _rect2 = toolEdit.Propety.rotArea._rect;
-                    gc.Transform = mat;
-                    gc.DrawRectangle(new Pen(Color.LightGray, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
-                    gc.ResetTransform();
-                    //Mask
-                    if (toolEdit.Propety.rotMask != null)
-                    {
-                        mat = new Matrix();
-                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-                    mat.Translate(toolEdit.Propety.rotMask._PosCenter.X, toolEdit.Propety.rotMask._PosCenter.Y);
-                        mat.Rotate(toolEdit.Propety.rotMask._rectRotation);
-                        _rect2 = toolEdit.Propety.rotMask._rect;
-                        gc.Transform = mat;
-                        gc.FillRectangle(new SolidBrush(Color.FromArgb(70, 111, 211, 213)), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
-                        gc.ResetTransform();
-                    }
-                }
-                else
-                { //Crop
-                    if (toolEdit.Propety.rotCrop != null)
-                    {
-                        mat = new Matrix();
-                        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-                        mat.Translate(toolEdit.Propety.rotCrop._PosCenter.X, toolEdit.Propety.rotCrop._PosCenter.Y);
-                        mat.Rotate(toolEdit.Propety.rotCrop._rectRotation);
-                        RectangleF _rect3 = toolEdit.Propety.rotCrop._rect;
-                        gc.Transform = mat;
-                        gc.DrawRectangle(new Pen(Color.Silver, 2), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
-                        gc.ResetTransform();
-                    }
-                    //Area
-                    mat = new Matrix();
-                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-                mat.Translate(toolEdit.Propety.rotArea._PosCenter.X, toolEdit.Propety.rotArea._PosCenter.Y);
-                    mat.Rotate(toolEdit.Propety.rotArea._rectRotation);
-                    RectangleF _rect2 = toolEdit.Propety.rotArea._rect;
-                    gc.Transform = mat;
-                    gc.DrawRectangle(new Pen(Color.Red, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
-                    gc.ResetTransform();
-
-
-                }
-                var backNone = new SolidBrush(Color.FromArgb(10, 220, 220, 220));
+            //        }
+            //        break;
+            //    case TypeCrop.Mask:
+            //        {
+            //            if (toolEdit.Propety.rotMask != null)
+            //            {
+            //                _rect = toolEdit.Propety.rotMask._rect;
+            //                _rectPos = toolEdit.Propety.rotMask._PosCenter;
+            //                _rectRotation = toolEdit.Propety.rotMask._rectRotation;
+            //                _dragAnchor = toolEdit.Propety.rotMask._dragAnchor;
+            //                penRect = new Pen(Color.FromArgb(100, 111, 211, 213), 2);
+            //            }
+            //            else return;
+            //        }
+            //        break;
+            //}
+            //  if (_rectRotation == float.NaN) return;
+            if (G.IsCheck)
+            {
+                gc.ResetTransform();
                 mat = new Matrix();
+                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+                gc.Transform = mat;
+                toolEdit.ShowResult(gc, (float)(imgView.Zoom / 100.0), new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y));
+
+                G.IsCheck = false;
+                return;
+            }
+            else
+            {
+                switch (G.TypeCrop)
+                {
+                    case TypeCrop.Crop:
+                        Draws.FillRect(gc, TypeCrop.Area, toolEdit.Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                        Draws.FillRect(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                        Draws.RectEdit(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+
+                        break;
+                    case TypeCrop.Area:
+
+                        Draws.FillRect(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                        Draws.FillRect(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                        Draws.RectEdit(gc, TypeCrop.Area, toolEdit.Propety.rotArea, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        break;
+                    case TypeCrop.Mask:
+                        Draws.FillRect(gc, TypeCrop.Area, toolEdit.Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
+                        Draws.FillRect(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
+                        Draws.RectEdit(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+
+                        break;
+
+                }
+
+                gc.ResetTransform();
+            }
+            //if (G.TypeCrop == TypeCrop.Area)
+            //    {
+            //        //Crop
+            //        if (toolEdit.Propety.rotCrop != null)
+            //        {
+            //            mat = new Matrix();
+            //        mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            //        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+
+            //        mat.Translate(toolEdit.Propety.rotCrop._PosCenter.X, toolEdit.Propety.rotCrop._PosCenter.Y);
+            //            mat.Rotate(toolEdit.Propety.rotCrop._rectRotation);
+            //            RectangleF _rect2 = toolEdit.Propety.rotCrop._rect;
+            //            gc.Transform = mat;
+            //            gc.DrawRectangle(new Pen(Color.Silver, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
+            //            gc.ResetTransform();
+            //        }
+            //        //Mask
+            //        if (toolEdit.Propety.rotMask != null)
+            //        {
+            //            mat = new Matrix();
+            //        mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            //        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+
+            //        mat.Translate(toolEdit.Propety.rotMask._PosCenter.X, toolEdit.Propety.rotMask._PosCenter.Y);
+            //            mat.Rotate(toolEdit.Propety.rotMask._rectRotation);
+            //            RectangleF _rect2 = toolEdit.Propety.rotMask._rect;
+            //            gc.Transform = mat;
+            //            gc.FillRectangle(new SolidBrush(Color.FromArgb(70, 111, 211, 213)), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
+            //            gc.ResetTransform();
+            //        }
+
+            //    }
+            //    else if (G.TypeCrop == TypeCrop.Crop)
+            //    {
+            //        //Area
+            //        mat = new Matrix();
+            //    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            //    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+
+
+            //    mat.Translate(toolEdit.Propety.rotArea._PosCenter.X, toolEdit.Propety.rotArea._PosCenter.Y);
+            //        mat.Rotate(toolEdit.Propety.rotArea._rectRotation);
+            //        RectangleF _rect2 = toolEdit.Propety.rotArea._rect;
+            //        gc.Transform = mat;
+            //        gc.DrawRectangle(new Pen(Color.LightGray, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
+            //        gc.ResetTransform();
+            //        //Mask
+            //        if (toolEdit.Propety.rotMask != null)
+            //        {
+            //            mat = new Matrix();
+            //        mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            //        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+
+            //        mat.Translate(toolEdit.Propety.rotMask._PosCenter.X, toolEdit.Propety.rotMask._PosCenter.Y);
+            //            mat.Rotate(toolEdit.Propety.rotMask._rectRotation);
+            //            _rect2 = toolEdit.Propety.rotMask._rect;
+            //            gc.Transform = mat;
+            //            gc.FillRectangle(new SolidBrush(Color.FromArgb(70, 111, 211, 213)), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
+            //            gc.ResetTransform();
+            //        }
+            //    }
+            //    else
+            //    { //Crop
+            //        if (toolEdit.Propety.rotCrop != null)
+            //        {
+            //            mat = new Matrix();
+            //            mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+            //            mat.Translate(toolEdit.Propety.rotCrop._PosCenter.X, toolEdit.Propety.rotCrop._PosCenter.Y);
+            //            mat.Rotate(toolEdit.Propety.rotCrop._rectRotation);
+            //            RectangleF _rect3 = toolEdit.Propety.rotCrop._rect;
+            //            gc.Transform = mat;
+            //            gc.DrawRectangle(new Pen(Color.Silver, 2), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
+            //            gc.ResetTransform();
+            //        }
+            //        //Area
+            //        mat = new Matrix();
+            //    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            //    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+
+            //    mat.Translate(toolEdit.Propety.rotArea._PosCenter.X, toolEdit.Propety.rotArea._PosCenter.Y);
+            //        mat.Rotate(toolEdit.Propety.rotArea._rectRotation);
+            //        RectangleF _rect2 = toolEdit.Propety.rotArea._rect;
+            //        gc.Transform = mat;
+            //        gc.DrawRectangle(new Pen(Color.Red, 2), new Rectangle((int)_rect2.X, (int)_rect2.Y, (int)_rect2.Width, (int)_rect2.Height));
+            //        gc.ResetTransform();
+
+
+            //    }
+            //    var backNone = new SolidBrush(Color.FromArgb(10, 220, 220, 220));
+            //    mat = new Matrix();
 
 
                 try
                 {
-                    if (_rectRotation == float.NaN) return;
+                   
                 
                     //var rectTopLeft = new RectangleF(_rect.Left - WidthPoint/2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
                     //var rectTopRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
@@ -1177,115 +1216,105 @@ namespace BeeUi
                     //var rectRotate = new RectangleF(-WidthPoint / 2, _rect.Top + -WidthPoint * 3, WidthPoint*2, WidthPoint*2);
                     //var rectCenter = new RectangleF(-WidthPoint / 2, -WidthPoint / 2, WidthPoint, WidthPoint);
 
-                    var backNG = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
-                    //var backChoose = new SolidBrush(Color.FromArgb(60, 255, 205, 35));
-                    //var cornerNone = new SolidBrush(Color.OrangeRed);
-                    //var cornerChoose = new SolidBrush(Color.Blue);
-                    var _clX = new Pen(Color.LightGray, 1);
-                    var _clY = new Pen(Color.Gray, 1);
-                    if (!G.IsCheck)
-                    {
-                        //if (G.TypeCrop == TypeCrop.Crop || toolEdit.Propety.rotCrop == null)
-                        //    toolEdit.ShowEdit(gc, _rect);
+                    //var backNG = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
+                    ////var backChoose = new SolidBrush(Color.FromArgb(60, 255, 205, 35));
+                    ////var cornerNone = new SolidBrush(Color.OrangeRed);
+                    ////var cornerChoose = new SolidBrush(Color.Blue);
+                    //var _clX = new Pen(Color.LightGray, 1);
+                    //var _clY = new Pen(Color.Gray, 1);
+                    //if (!G.IsCheck)
+                    //{
+                    //    //if (G.TypeCrop == TypeCrop.Crop || toolEdit.Propety.rotCrop == null)
+                    //    //    toolEdit.ShowEdit(gc, _rect);
 
-                        //else if (G.TypeCrop == TypeCrop.Mask)
-                        //    gc.FillRectangle(new SolidBrush(Color.FromArgb(90, 111, 211, 213)), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //else if (G.TypeCrop == TypeCrop.Mask)
+                    //    //    gc.FillRectangle(new SolidBrush(Color.FromArgb(90, 111, 211, 213)), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
       
-                            BeeCore.Draws.Rectangle(gc, G.TypeCrop , G.TypeCrop == TypeCrop.Crop ? toolEdit.Propety.rotCrop : G.TypeCrop == TypeCrop.Area ? toolEdit.Propety.rotArea :toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint,imgView.AutoScrollPosition,imgView.Zoom,2);
+                    //      //  BeeCore.Draws.RectEdit(gc, G.TypeCrop , G.TypeCrop == TypeCrop.Crop ? toolEdit.Propety.rotCrop : G.TypeCrop == TypeCrop.Area ? toolEdit.Propety.rotArea :toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint,imgView.AutoScrollPosition,imgView.Zoom,2);
 
                         
-                         //switch (_dragAnchor)
-                        //{
-                        //    case AnchorPoint.None:
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        //gc.FillRectangle(cornerNone, rectCenter);
-                        //        break;
+                    //     //switch (_dragAnchor)
+                    //    //{
+                    //    //    case AnchorPoint.None:
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        //gc.FillRectangle(cornerNone, rectCenter);
+                    //    //        break;
 
-                        //    case AnchorPoint.TopLeft:
-                        //        rectTopLeft.Width += rectTopLeft.Width; rectTopLeft.Height += rectTopLeft.Height;
-                        //        rectTopLeft.X -= rectTopLeft.Width/4; rectTopLeft.Y -= rectTopLeft.Height/4;
-                        //    gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillRectangle(cornerChoose, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        // gc.FillRectangle(cornerNone, rectCenter);
-                        //        break;
-                        //    case AnchorPoint.TopRight:
-                        //        //  gc.FillRectangle(backNone, _rect);
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerChoose, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        break;
-                        //    case AnchorPoint.BottomLeft:
-                        //        //  gc.FillRectangle(backNone, _rect);
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerChoose, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        break;
-                        //    case AnchorPoint.BottomRight:
-                        //        //gc.FillRectangle(backNone, _rect);
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerChoose, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        break;
-                        //    case AnchorPoint.Center:
-                        //        // gc.FillRectangle(backChoose, _rect);
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
-                        //        break;
-                        //    case AnchorPoint.Rotation:
-                        //        // gc.FillRectangle(backNone, _rect);
-                        //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                        //        gc.FillEllipse(cornerNone, rectTopLeft);
-                        //        gc.FillEllipse(cornerNone, rectTopRight);
-                        //        gc.FillEllipse(cornerNone, rectBottomLeft);
-                        //        gc.FillEllipse(cornerNone, rectBottomRight);
-                        //        gc.DrawImage(Properties.Resources.Rotate2, rectRotate);
-                        //        break;
+                    //    //    case AnchorPoint.TopLeft:
+                    //    //        rectTopLeft.Width += rectTopLeft.Width; rectTopLeft.Height += rectTopLeft.Height;
+                    //    //        rectTopLeft.X -= rectTopLeft.Width/4; rectTopLeft.Y -= rectTopLeft.Height/4;
+                    //    //    gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillRectangle(cornerChoose, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        // gc.FillRectangle(cornerNone, rectCenter);
+                    //    //        break;
+                    //    //    case AnchorPoint.TopRight:
+                    //    //        //  gc.FillRectangle(backNone, _rect);
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerChoose, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        break;
+                    //    //    case AnchorPoint.BottomLeft:
+                    //    //        //  gc.FillRectangle(backNone, _rect);
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerChoose, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        break;
+                    //    //    case AnchorPoint.BottomRight:
+                    //    //        //gc.FillRectangle(backNone, _rect);
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerChoose, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        break;
+                    //    //    case AnchorPoint.Center:
+                    //    //        // gc.FillRectangle(backChoose, _rect);
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate, rectRotate);
+                    //    //        break;
+                    //    //    case AnchorPoint.Rotation:
+                    //    //        // gc.FillRectangle(backNone, _rect);
+                    //    //        gc.DrawRectangle(penRect, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+                    //    //        gc.FillEllipse(cornerNone, rectTopLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectTopRight);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomLeft);
+                    //    //        gc.FillEllipse(cornerNone, rectBottomRight);
+                    //    //        gc.DrawImage(Properties.Resources.Rotate2, rectRotate);
+                    //    //        break;
 
 
-                        //}
-                        if (toolEdit.IsClear && _drag)
-                        {
-                            gc.ResetTransform();
-                            gc.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 255, 255)), new Rectangle(rectClear.X, rectClear.Y, widthClear, widthClear));
-                            gc.DrawRectangle(new Pen(Color.Black, 2), new Rectangle(rectClear.X, rectClear.Y, widthClear, widthClear));
+                    //    //}
+                    //    if (toolEdit.IsClear && _drag)
+                    //    {
+                    //        gc.ResetTransform();
+                    //        gc.FillRectangle(new SolidBrush(Color.FromArgb(100, 255, 255, 255)), new Rectangle(rectClear.X, rectClear.Y, widthClear, widthClear));
+                    //        gc.DrawRectangle(new Pen(Color.Black, 2), new Rectangle(rectClear.X, rectClear.Y, widthClear, widthClear));
 
-                        }
+                    //    }
 
-                    }
-                       gc.ResetTransform();
-                    if (G.IsCheck)
-                {
-                    gc.ResetTransform();
-                    mat = new Matrix();
-                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-                    gc.Transform = mat;
-                   toolEdit.ShowResult(gc, (float)(imgView.Zoom / 100.0), new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y));
-
-                    G.IsCheck = false;
-                }    
+                    //}
+                      
+                
                         
 
                     if (toolEdit.Propety.IsGetColor)
@@ -1681,108 +1710,17 @@ namespace BeeUi
             mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
             gc.Transform=mat;
             indexTool = 0;
-            // gc.Transform(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-            //  gc.ScaleTransform((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-            
-            //    switch(indexNG)
-            //    {
-            //        case 1:
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 90;
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = false;
-            //        G.listAlltool[2].tool.IsOK = true;
-            //        G.listAlltool[3].tool.IsOK = true;
-            //        G.listAlltool[4].tool.IsOK = true;
-            //        G.listAlltool[5].tool.IsOK = true;
-            //        break;
-            //    case 2:
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 90;
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = true;
-            //        G.listAlltool[2].tool.IsOK = false;
-            //        G.listAlltool[3].tool.IsOK = true;
-            //        G.listAlltool[4].tool.IsOK = true;
-            //        G.listAlltool[5].tool.IsOK = true;
-            //        break;
-            //    case 3:
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 90;
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = true;
-            //        G.listAlltool[2].tool.IsOK = true;
-            //        G.listAlltool[3].tool.IsOK = false;
-            //        G.listAlltool[4].tool.IsOK = true;
-            //        G.listAlltool[5].tool.IsOK = true;
-            //        break;
-            //    case 4:
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 90;
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = true;
-            //        G.listAlltool[2].tool.IsOK = true;
-            //        G.listAlltool[3].tool.IsOK = true;
-            //        G.listAlltool[4].tool.IsOK = false;
-            //        G.listAlltool[5].tool.IsOK = true;
-            //        break;
-            //    case 5:
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 90;
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 0;
-                   
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = true;
-            //        G.listAlltool[2].tool.IsOK = true;
-            //        G.listAlltool[3].tool.IsOK = true;
-            //        G.listAlltool[4].tool.IsOK = true;
-            //        G.listAlltool[5].tool.IsOK = false;
-            //        break;
-            //    case 6:
-            //        G.listAlltool[0].tool.Propety.ScoreRs = 80;
-            //        G.listAlltool[1].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[2].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[3].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[4].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[5].tool.Propety.ScoreRs = 0;
-            //        G.listAlltool[0].tool.IsOK = true;
-            //        G.listAlltool[1].tool.IsOK = true;
-            //        G.listAlltool[2].tool.IsOK = true;
-            //        G.listAlltool[3].tool.IsOK = true;
-            //        G.listAlltool[4].tool.IsOK = true;
-            //        G.listAlltool[5].tool.IsOK = true;
-            //        break;
-            //}
-               
+         
                 foreach (Tools tool in G.listAlltool)
             {
                // tool.tool.Propety.ScoreRs = 80;
                 //tool.tool.Propety.IsOK = true;
                 if (G.PropetyTools[indexTool].UsedTool == UsedTool.NotUsed)
                 {
-                    tool.ItemTool.lbStatus.Text = "NC";
-                    tool.ItemTool.Score.ColorTrack = Color.Gray;
-                    tool.ItemTool.lbScore.ForeColor = Color.Gray;
-                    tool.ItemTool.lbStatus.BackColor = Color.Gray;
+                    //tool.ItemTool.lbStatus.Text = "NC";
+                    //tool.ItemTool.Score.ColorTrack = Color.Gray;
+                    //tool.ItemTool.lbScore.ForeColor = Color.Gray;
+                    //tool.ItemTool.lbStatus.BackColor = Color.Gray;
 
                     indexTool++;
                     continue;
@@ -1810,30 +1748,7 @@ namespace BeeUi
                             }
                             break;
                     }
-                    if (G.Config.ConditionOK == ConditionOK.Logic)
-                    {
-                        if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
-                        {
-                            tool.ItemTool.lbStatus.Text = "OK";
-                            tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                        }
-                        else
-                        {
-                            tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            tool.ItemTool.lbStatus.Text = "NG";
-                            tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                        }
-                    }
-                    else
-                    {
-                        tool.ItemTool.lbStatus.Text = "OK";
-                        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                    }
+                  
                 }
 
                 else
@@ -1849,30 +1764,7 @@ namespace BeeUi
                             }
                             break;
                     }
-                    if (G.Config.ConditionOK == ConditionOK.Logic)
-                    {
-                        if (G.PropetyTools[indexTool].UsedTool != UsedTool.Used)
-                        {
-                            tool.ItemTool.lbStatus.Text = "OK";
-                            tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                        }
-                        else
-                        {
-                            tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            tool.ItemTool.lbStatus.Text = "NG";
-                            tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                        }
-                    }
-                    else
-                    {
-                        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                        tool.ItemTool.lbStatus.Text = "NG";
-                        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                    }
+                   
 
                 }
 
@@ -2543,6 +2435,11 @@ namespace BeeUi
                 case StatusProcessing.Processing:
                     foreach (Tools Tools in G.listAlltool)
                     {
+                        Tools.ItemTool.lbStatus.Text = "---";
+                        Tools.ItemTool.Score.ColorTrack = Color.Gray;
+                        Tools.ItemTool.lbScore.ForeColor = Color.Gray;
+                        Tools.ItemTool.lbStatus.BackColor = Color.Gray;
+                        Tools.ItemTool.Refresh();
                         if (Tools.PropetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
                         Tools.PropetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
                         if (!Tools.tool.worker.IsBusy)
@@ -2552,14 +2449,80 @@ namespace BeeUi
                     break;
                 case StatusProcessing.WaitingDone:
                     G.StatusProcessing = StatusProcessing.Done;
-                    foreach (PropetyTool propetyTool in G.PropetyTools)
+                    foreach (Tools Tools in G.listAlltool)
                     {
-                        if (propetyTool.Propety.StatusTool != BeeCore.StatusTool.Done)
+                       
+
+                        if (Tools.PropetyTool.Propety.StatusTool != BeeCore.StatusTool.Done)
                         {
                             G.StatusProcessing = StatusProcessing.WaitingDone;
-                            break;
+                           
                         }
+                        else
+                        {
+                            if (Tools.tool.Propety.IsOK)
+                            {
+                                
+                                if (G.Config.ConditionOK == ConditionOK.Logic)
+                                {
+                                    if (Tools.PropetyTool.UsedTool == UsedTool.Used)
+                                    {
+                                        Tools.ItemTool.lbStatus.Text = "OK";
+                                        Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                                        Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                                        Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                                    }
+                                    else
+                                    {
+                                        Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
+                                        Tools.ItemTool.lbStatus.Text = "NG";
+                                        Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                                        Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                                    }
+                                }
+                                else
+                                {
+                                    Tools.ItemTool.lbStatus.Text = "OK";
+                                    Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                                    Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                                    Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                                }
+                            }
+
+                            else
+                            {
+                               
+                                if (G.Config.ConditionOK == ConditionOK.Logic)
+                                {
+                                    if (Tools.PropetyTool.UsedTool != UsedTool.Used)
+                                    {
+                                        Tools.ItemTool.lbStatus.Text = "OK";
+                                        Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                                        Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                                        Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                                    }
+                                    else
+                                    {
+                                        Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
+                                        Tools.ItemTool.lbStatus.Text = "NG";
+                                        Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                                        Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                                    }
+                                }
+                                else
+                                {
+                                    Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
+                                    Tools.ItemTool.lbStatus.Text = "NG";
+                                    Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                                    Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                                }
+
+                            }
+                            Tools.ItemTool.Refresh();
+                        }
+                       
                     }
+                 
                     break;
             }    
           

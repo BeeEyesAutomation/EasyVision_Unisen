@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Web.UI.WebControls;
 using BeeCore.Parameter;
+using BeeCore.Funtion;
 
 namespace BeeCore
 {
@@ -192,6 +193,7 @@ namespace BeeCore
                     Marshal.Copy(matCrop.Data, buffer, 0, size);
                     int height1 = matCrop.Height;
                     int width1 = matCrop.Width;
+                    int channels = matCrop.Channels();
                     //dynamic np = Py.Import("numpy");
                     ////    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
                     //dynamic mod = Py.Import("Tool.Learning");
@@ -219,7 +221,7 @@ namespace BeeCore
                         float h = y2 - y1;
                         float cx = x1 + w / 2;
                         float cy = y1 + h / 2;
-                        RectRotate rt = new RectRotate(new RectangleF(-w / 2, -h / 2, w, h), new PointF(cx, cy), 0, AnchorPoint.None);
+                        RectRotate rt = new RectRotate(new RectangleF(-w / 2, -h / 2, w, h), new PointF(cx, cy), 0, AnchorPoint.None,false);
 
                         //// Gán Rect quay góc 0 (vì YOLO box không có góc)
                         //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);

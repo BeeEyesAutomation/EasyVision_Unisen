@@ -260,10 +260,10 @@ namespace BeeUi.Tool
             //}    
         }
 
-        private void trackExposure_ValueChanged(int obj)
+        private void trackExposure_ValueChanged(float obj)
         {
           //  trackExposure.Value= trackExposure.Value - (trackExposure.Value % trackExposure.Step);
-            BeeCore.G.ParaCam.Exposure = trackExposure.Value;
+            BeeCore.G.ParaCam.Exposure = (int)trackExposure.Value;
           //  numExposure.Value = BeeCore.G.ParaCam.Exposure;
 
         }
@@ -451,9 +451,9 @@ namespace BeeUi.Tool
             
         }
 
-        private void trackGain_ValueChanged(int obj)
+        private void trackGain_ValueChanged(float obj)
         {
-            BeeCore.G.ParaCam.Gain = trackGain.Value;
+            BeeCore.G.ParaCam.Gain = (int)trackGain.Value;
         }
 
         private void btnRevese_Click(object sender, EventArgs e)

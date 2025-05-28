@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
@@ -49,11 +50,33 @@ namespace BeeUi.Data
                 case BeeCore.TypeTool.Positions:
                     control = new ToolPositions();
                     break;
+                case BeeCore.TypeTool.Measure:
+                    control = new ToolMeasure();
+                    break;
                 default:
                     return null;
                     break;
             }
             return control;
+        }
+        public static RectRotate NewRotRect(TypeCrop TypeCrop)
+        {
+            int with = 50, height = 50;
+            System.Drawing.Size szImg = BeeCore.G.ParaCam.SizeCCD;
+            switch (TypeCrop)
+            {
+                case TypeCrop.Crop:
+                 return  new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    break;
+                case TypeCrop.Area:
+                 return   new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    break;
+                case TypeCrop.Mask:
+                    return new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    break;
+
+            }
+            return new RectRotate();
         }
         public static Tools SetPropety(BeeCore.PropetyTool PropetyTool,int Inndex)
         {
@@ -74,12 +97,14 @@ namespace BeeUi.Data
                    TypeTool != TypeTool.BarCode &&
                    TypeTool != TypeTool.Yolo &&
                    TypeTool != TypeTool.OCR &&
-                  TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape)
-                    control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
+                  TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
+                    control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None,false);
                 else
                     control.Propety.rotCrop = null;
                 if (PropetyTool.Propety.rotArea == null)
-                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
+                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                if (PropetyTool.Propety.rotMask== null)
+                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
                 itemTool = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
                 itemTool.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
                 itemTool.lbCycle.Text = "---";
@@ -101,8 +126,10 @@ namespace BeeUi.Data
                 itemTool.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 tools = new Tools(itemTool, control, PropetyTool);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                G.PropetyTools.Remove(PropetyTool);
                 return null;
             }
             return tools;

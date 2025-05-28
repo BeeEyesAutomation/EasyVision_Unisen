@@ -21,12 +21,12 @@ namespace BeeUi
             
             //btnTick.Parent = this.pT;
         }
-        private int valueScore;
+        private float valueScore;
         [Category("Min")]
-        private int min;
-        private int max=100;
-        private int value;
-        private int step=1;
+        private float min;
+        private float max=100;
+        private float value;
+        private float step=1;
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -54,9 +54,9 @@ namespace BeeUi
       
        
 
-        public int Min { get => min; set => min = value; }
-        public int Max { get => max; set => max = value; }
-        public int Value { get => value;
+        public float Min { get => min; set => min = value; }
+        public float Max { get => max; set => max = value; }
+        public float Value { get => value;
             set {
                 if (value > Max) value = Max;
                 if (value < Min) value = Min;
@@ -67,10 +67,10 @@ namespace BeeUi
                 pT.Invalidate();
 
             } }
-        public event Action<int> ValueChanged;
+        public event Action<float> ValueChanged;
         
-        public int Step { get => step; set => step = value; }
-        public int ValueScore
+        public float Step { get => step; set => step = value; }
+        public float ValueScore
         {
             get => valueScore; set
             {

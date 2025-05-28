@@ -866,7 +866,7 @@ namespace BeeUi.Tool
             this.trackGain.TabIndex = 44;
             this.trackGain.Value = 100;
             this.trackGain.ValueScore = 0;
-            this.trackGain.ValueChanged += new System.Action<int>(this.trackGain_ValueChanged);
+            this.trackGain.ValueChanged +=  new System.Action<float>(this.trackGain_ValueChanged);
             // 
             // tableLayoutPanel5
             // 
@@ -1502,7 +1502,7 @@ namespace BeeUi.Tool
             this.trackExposure.TabIndex = 44;
             this.trackExposure.Value = 100;
             this.trackExposure.ValueScore = 0;
-            this.trackExposure.ValueChanged += new System.Action<int>(this.trackExposure_ValueChanged);
+            this.trackExposure.ValueChanged +=  new System.Action<float>(this.trackExposure_ValueChanged);
             this.trackExposure.Load += new System.EventHandler(this.trackExposure_Load);
             // 
             // tabPage4

@@ -245,7 +245,7 @@ namespace BeeUi
             this.trackGain.TabIndex = 3;
             this.trackGain.Value = 1;
             this.trackGain.ValueScore = 0;
-            this.trackGain.ValueChanged += new System.Action<int>(this.trackGain_ValueChanged);
+            this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
             // 
             // trackExpo
             // 
@@ -259,7 +259,7 @@ namespace BeeUi
             this.trackExpo.TabIndex = 2;
             this.trackExpo.Value = 1;
             this.trackExpo.ValueScore = 0;
-            this.trackExpo.ValueChanged += new System.Action<int>(this.trackExpo_ValueChanged);
+            this.trackExpo.ValueChanged += new System.Action<float>(this.trackExpo_ValueChanged);
             // 
             // btnAutoExposure
             // 

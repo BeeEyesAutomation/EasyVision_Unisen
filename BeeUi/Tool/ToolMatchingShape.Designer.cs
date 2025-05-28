@@ -481,7 +481,7 @@
             this.trackScore.TabIndex = 28;
             this.trackScore.Value = 0;
             this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
+            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             // 
             // rjButton3
             // 

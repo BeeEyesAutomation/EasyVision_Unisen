@@ -26,9 +26,9 @@ namespace BeeUi.Tool
             InitializeComponent();
             
         }
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             if (!threadProcess.IsBusy)
                 threadProcess.RunWorkerAsync();
 
@@ -342,7 +342,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             rotAreaTemp = rotArea.Clone();
-            rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2, -BeeCore.Common.matRaw.Height / 2, BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None);
+            rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2, -BeeCore.Common.matRaw.Height / 2, BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -374,7 +374,7 @@ namespace BeeUi.Tool
             {
                 int with = 50, height = 50;
                 if (rotMask == null)
-                    rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None);
+                    rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
                 G.TypeCrop = TypeCrop.Mask;
                 G.EditTool.View.imgView.Invalidate();
             }

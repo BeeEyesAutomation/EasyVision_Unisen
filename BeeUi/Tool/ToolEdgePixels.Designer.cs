@@ -513,7 +513,7 @@
             this.trackScore.Step = 1;
             this.trackScore.TabIndex = 29;
             this.trackScore.Value = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
+            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             // 
             // ToolEdgePixels
             // 

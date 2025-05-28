@@ -130,7 +130,7 @@ namespace BeeUi.Commons
             this.Score.TabIndex = 11;
             this.Score.Value = 0;
             this.Score.ValueScore = 0;
-            this.Score.ValueChanged += new System.Action<int>(this.Score_ValueChanged);
+            this.Score.ValueChanged +=  new System.Action<float>(this.Score_ValueChanged);
             this.Score.Load += new System.EventHandler(this.Score_Load);
             // 
             // ItemTool

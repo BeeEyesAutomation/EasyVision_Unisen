@@ -143,8 +143,9 @@ namespace BeeUi.Common
           int  index = 0;
             foreach (BeeCore.PropetyTool propety in G.PropetyTools)
             {
-               
-                G.listAlltool.Add( DataTool.SetPropety(propety,index));
+                Tools tool = DataTool.SetPropety(propety, index);
+                if (tool != null)
+                G.listAlltool.Add(tool);
                 index++;
 
             }

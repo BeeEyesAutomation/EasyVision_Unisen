@@ -143,7 +143,7 @@ namespace BeeUi.Tool
             this.trackScore.TabIndex = 30;
             this.trackScore.Value = 0;
             this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
+            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             // 
             // label1
             // 
@@ -334,7 +334,7 @@ namespace BeeUi.Tool
             this.trackPixel.TabIndex = 32;
             this.trackPixel.Value = 1;
             this.trackPixel.ValueScore = 0;
-            this.trackPixel.ValueChanged += new System.Action<int>(this.trackPixel_ValueChanged);
+            this.trackPixel.ValueChanged +=  new System.Action<float>(this.trackPixel_ValueChanged);
             this.trackPixel.Validating += new System.ComponentModel.CancelEventHandler(this.trackPixel_Validating);
             // 
             // label7

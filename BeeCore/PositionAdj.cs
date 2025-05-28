@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -255,43 +256,55 @@ namespace BeeCore
 
       
     
-        public Mat GetTemp(RectRotate rotateRect, Mat matRaw, Mat bmMask)
+        public Mat GetTemp(RectRotate rotCrop, RectRotate rotMask, Mat matRaw, Mat bmMask)
         {
            
             Mat matClear = new Mat();
             Mat matTemp = new Mat();
-            if (TypeMode == Mode.Pattern)
+            Mat matOut = new Mat();
+            Mat matCrop = new Mat();
+            Mat matMask1 = new Mat();
+            switch (TypeMode)
             {
-                
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop = Common.CropRotatedRect(matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-                else
-                    matTemp = matCrop.Clone();
-                if (IsAreaWhite)
-                    Cv2.BitwiseNot(matTemp, matTemp);
-               // matTemp = Processing(matTemp);
-            }
-            else
-            {
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop = Common.CropRotatedRect(matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                Mat matOut = new Mat();
-                Cv2.Canny(matCrop, matOut,threshMin, threshMax);
+                case Mode.Pattern:
+                    if (matCrop.Type() == MatType.CV_8UC3)
+                        Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
+                    else
+                        matTemp = matCrop.Clone();
+                    break;
+                case Mode.OutLine:
+                    matTemp = Common.CannyWithMorph(matCrop);
+                    break;
+                case Mode.Edge:
+                    using (Py.GIL())
+                    {
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                        int height = matCrop.Rows;
+                        int width = matCrop.Cols;
+                        int channels = matCrop.Channels();
+                        if (!matCrop.IsContinuous())
+                        {
+                            matCrop = matCrop.Clone();
+                        }
+                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                        byte[] buffer = new byte[size];
+                        Marshal.Copy(matCrop.Data, buffer, 0, size);
+                        // Tạo ndarray từ byte[]
+                        var npImage = G.np.array(buffer).reshape(height, width, channels);
+                        // Gọi hàm Python
+                        dynamic result = G.Classic.EdgeDetection(npImage);
+                        if (result == null)
+                            return null;
 
-                Mat crop = Common.CropRotatedRect(bmMask, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-             
-                Cv2.BitwiseNot(crop, matClear);
-                Mat rs = new Mat();
-                Cv2.BitwiseAnd(matClear, matOut, matTemp);
-                Mat matMask1 = new Mat();
-                Cv2.BitwiseAnd(crop, matOut, matMask1);
-                matMask=  OpenCvSharp.Extensions.BitmapConverter.ToBitmap(matMask1);
-                // control.matMask = matMask1;
+                        // Chuyển kết quả ngược về byte[] rồi sang Mat
+                        byte[] edgeBytes = result.As<byte[]>();
+                        matTemp = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                    }
+                 
+                    break;
+
             }
+
             return matTemp;
         }
 
@@ -323,16 +336,18 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            IsOK = G.pattern.Match((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int) rot._rect.Width, (int)rot._rect.Height,rot._angle, indexTool,
-                Convert.ToBoolean((int)TypeMode),IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
+            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rot, rotMask);
+            BeeCore.Native.SetImg(matCrop);
+          
+            IsOK = G.pattern.Match( indexTool,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
             ScoreRs = G.pattern.ScoreRS;
             if (IsOK)
             {
                 cycleTime = (int)G.pattern.cycleOutLine;
                 rectRotates = new List<RectRotate>();
-                if (G.pattern.listMatch != null)
+                if (G.pattern.listMatch[indexTool] != null)
                 {
-                    String[] sSplit = G.pattern.listMatch.Split('\n');
+                    String[] sSplit = G.pattern.listMatch[indexTool].Split('\n');
                     foreach (String s in sSplit)
                     {
                         if (s.Trim() == "") break;
@@ -341,7 +356,7 @@ namespace BeeCore
                         float angle = Convert.ToSingle(sSp[2]);
                         float width = Convert.ToSingle(sSp[3]);
                         float height =Convert.ToSingle(sSp[4]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
+                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
                     }
                     if (rectRotates.Count != NumObject)
                         IsOK = false;

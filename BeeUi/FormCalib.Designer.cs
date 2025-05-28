@@ -161,7 +161,7 @@ namespace BeeUi
             this.trackScoreErr.TabIndex = 41;
             this.trackScoreErr.Value = 1;
             this.trackScoreErr.ValueScore = 1;
-            this.trackScoreErr.ValueChanged += new System.Action<int>(this.trackScoreErr_ValueChanged);
+            this.trackScoreErr.ValueChanged += new System.Action<float>(this.trackScoreErr_ValueChanged);
             // 
             // workerCalib
             // 

@@ -154,10 +154,10 @@ namespace BeeUi.Tool
             Propety.DoWork(Propety.rotAreaAdjustment);
         }
 
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
            
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             numScore.Value = Propety.Score;
 
         }
@@ -553,7 +553,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackNumObject_ValueChanged(int obj)
+        private void trackNumObject_ValueChanged(float obj)
         {
           
         }
@@ -681,7 +681,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackMaxOverLap_ValueChanged(int obj)
+        private void trackMaxOverLap_ValueChanged(float obj)
         {
 
         }
@@ -691,7 +691,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackAngle_ValueChanged(int obj)
+        private void trackAngle_ValueChanged(float obj)
         {
 
         }
@@ -720,7 +720,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None,false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -1151,8 +1151,7 @@ namespace BeeUi.Tool
                 sClass += $" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}";
             }
             sClass += "\n";
-            RotatedRect rt = new RotatedRect(new Point2f(Propety.rotCrop._PosCenter.X + (Propety.rotCrop._rect.Width / 2 + Propety.rotCrop._rect.X), Propety.rotCrop._PosCenter.Y + (Propety.rotCrop._rect.Height / 2 + Propety.rotCrop._rect.Y)), new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height), Propety.rotCrop._rectRotation);
-         Mat matCrop=   BeeCore.Common.CropRotatedRect(BeeCore.Common.matRaw, rt);
+             Mat matCrop=   BeeCore.Common.CropRotatedRect(BeeCore.Common.matRaw, Propety.rotCrop,Propety.rotMask);
             G.listImgTrainYolo.Add(matCrop.ToBitmap());
             G.listLabelTrainYolo.Add(cbLabels.Text);
             IsUpdateImgCrop = true;
@@ -1174,7 +1173,7 @@ namespace BeeUi.Tool
                 if (Propety.rotCrop == null)
                 {
                     int with = 50, height = 50;
-                    Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, BeeCore.AnchorPoint.None);
+                    Propety.rotCrop = new BeeCore.RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, BeeCore.AnchorPoint.None,false);
 
                 }
                 G.EditTool.View.imgView.Invalidate();

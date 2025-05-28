@@ -73,5 +73,10 @@ namespace BeeUi.Commons
             Value += 10;
            
         }
+
+        private void txt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

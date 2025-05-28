@@ -98,10 +98,10 @@ namespace BeeUi.Tool
      
           
         }
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
            
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             numScore.Value = Propety.Score;
 
         }
@@ -454,7 +454,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackNumObject_ValueChanged(int obj)
+        private void trackNumObject_ValueChanged(float obj)
         {
           
         }
@@ -582,7 +582,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackMaxOverLap_ValueChanged(int obj)
+        private void trackMaxOverLap_ValueChanged(float obj)
         {
 
         }
@@ -592,7 +592,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackAngle_ValueChanged(int obj)
+        private void trackAngle_ValueChanged(float obj)
         {
 
         }
@@ -621,7 +621,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None,false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;

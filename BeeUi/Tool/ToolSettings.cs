@@ -60,6 +60,7 @@ namespace BeeUi.Tool
                     G.ToolSettings.pAllTool.Controls.RemoveAt(G.indexToolSelected);
                     G.PropetyTools.RemoveAt(G.indexToolSelected);
                     G.listAlltool.RemoveAt(G.indexToolSelected);
+                    G.indexToolSelected = G.listAlltool.Count() - 1;
                     RefreshTool();
                 }    
             }    

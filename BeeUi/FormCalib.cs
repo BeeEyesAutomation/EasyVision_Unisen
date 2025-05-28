@@ -69,9 +69,9 @@ namespace BeeUi
             if (btnCheck.IsCLick)
                 workerCalib.RunWorkerAsync();
         }
-        private void trackScoreErr_ValueChanged(int obj)
+        private void trackScoreErr_ValueChanged(float obj)
         {
-            G.Config.ScoreCalib = trackScoreErr.Value;
+            G.Config.ScoreCalib = (int)trackScoreErr.Value;
             if (trackScoreErr.ValueScore <= trackScoreErr.Value)
             {
 

@@ -45,13 +45,13 @@ namespace BeeUi
            // G.DeviceConnectForm.ReadingPage.DeviceSettingPage.Init(false);
         }
 
-        private void trackExpo_ValueChanged(int obj)
+        private void trackExpo_ValueChanged(float obj)
         {
            /// G.DeviceConnectForm.ReadingPage.DeviceSettingPage.SetValueExpo(trackExpo.Value);
 
         }
         
-        private void trackGain_ValueChanged(int obj)
+        private void trackGain_ValueChanged(float obj)
         {
            // G.DeviceConnectForm.ReadingPage.DeviceSettingPage.SetGain(trackGain.Value);
         }

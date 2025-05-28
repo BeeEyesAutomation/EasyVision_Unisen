@@ -110,14 +110,15 @@ namespace BeeUi.Commons
         "Pitch",
         "OCR",
         "QRCODE",
-         "Learning"
+         "Learning",
+         "Measure"
         };
         public static List<GroupTool> groupTools = new List<GroupTool>
         {
             GroupTool.Basic_Tool,
             GroupTool.Basic_Tool,
             GroupTool.Basic_Tool,
-            GroupTool.Basic_Tool,
+            GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_1,
             GroupTool.Extra_Tool_1,
             GroupTool.Extra_Tool_1,
@@ -127,7 +128,8 @@ namespace BeeUi.Commons
             GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_2,
              GroupTool.Extra_Tool_2,
-             GroupTool.Basic_Tool
+             GroupTool.Basic_Tool,
+              GroupTool.Basic_Tool,
 
         };
         int lenMax = 0;

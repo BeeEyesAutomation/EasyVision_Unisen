@@ -205,7 +205,7 @@ namespace BeeUi
             this.trackLimitDay.TabIndex = 28;
             this.trackLimitDay.Value = 1;
             this.trackLimitDay.ValueScore = 0;
-            this.trackLimitDay.ValueChanged += new System.Action<int>(this.trackLimitDay_ValueChanged);
+            this.trackLimitDay.ValueChanged +=  new System.Action<float>(this.trackLimitDay_ValueChanged);
             // 
             // label3
             // 

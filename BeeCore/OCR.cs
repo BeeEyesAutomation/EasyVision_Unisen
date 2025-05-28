@@ -185,7 +185,7 @@ namespace BeeCore
                         //}
                     //    Cv2.ImWrite("cropRS.png", matCrop);
                         RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
-                        RectRotate rt = new RectRotate(rect, new PointF(centerX, centerY), angle, AnchorPoint.None);
+                        RectRotate rt = new RectRotate(rect, new PointF(centerX, centerY), angle, AnchorPoint.None,false);
 
                         //// Gán Rect quay góc 0 (vì YOLO box không có góc)
                         //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);
@@ -328,7 +328,7 @@ namespace BeeCore
                     int Area = (int)(width * height);
                     double Per = (Math.Min(width, height) * 1.0) / Math.Max(width, height);
                  
-                    RectRotate rt = new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None);
+                    RectRotate rt = new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false);
 
                     listOK.Add(false);
                     rectRotates.Add(rt);

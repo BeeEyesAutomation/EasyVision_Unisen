@@ -10,6 +10,10 @@ namespace BeeCore
     [Serializable()]
     public  class PropetyTool : ICloneable
     {
+        public PropetyTool()
+        {
+
+        }
         public String Name = "";
         public dynamic Propety;
         public TypeTool TypeTool;

@@ -87,9 +87,9 @@ namespace BeeUi.Tool
             else
                 btnNormal.IsCLick = true;
         }
-        private void trackScore_ValueChanged(int obj)
+        private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = trackScore.Value;
+            Propety.Score = (int)trackScore.Value;
             numScore.Value = Propety.Score;
             G.IsCheck = true;
             //if (!threadProcess.IsBusy)
@@ -568,7 +568,7 @@ namespace BeeUi.Tool
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
-                      matTemp = Propety.GetTemp(Propety.rotCrop, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
+                      matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
@@ -607,7 +607,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.G.ParaCam.SizeCCD.Width / 2, -BeeCore.G.ParaCam.SizeCCD.Height / 2, BeeCore.G.ParaCam.SizeCCD.Width, BeeCore.G.ParaCam.SizeCCD.Height), new PointF(BeeCore.G.ParaCam.SizeCCD.Width / 2, BeeCore.G.ParaCam.SizeCCD.Height / 2), 0, AnchorPoint.None,false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -635,8 +635,8 @@ namespace BeeUi.Tool
 
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
-            numScore.Maxnimum = trackScore.Max;
-            numScore.Minimum = trackScore.Min;
+            numScore.Maxnimum = (int)trackScore.Max;
+            numScore.Minimum = (int)trackScore.Min;
             Propety.Score = numScore.Value;
             trackScore.Value = Propety.Score;
         }
@@ -646,7 +646,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackAngle_ValueChanged(int obj)
+        private void trackAngle_ValueChanged(float obj)
         {
             Propety.Angle = trackAngle.Value;
             numAngle.Value =(int) Propety.Angle;
@@ -686,7 +686,7 @@ namespace BeeUi.Tool
             //    threadProcess.RunWorkerAsync();
         }
 
-        private void trackMaxOverLap_ValueChanged(int obj)
+        private void trackMaxOverLap_ValueChanged(float obj)
         {
 
            Propety.OverLap= trackMaxOverLap.Value ;

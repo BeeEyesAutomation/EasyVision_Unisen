@@ -30,7 +30,7 @@ namespace BeeUi.Tool
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolPositions));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolMeasure));
             this.threadProcess = new System.ComponentModel.BackgroundWorker();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabP1 = new System.Windows.Forms.TabPage();
@@ -311,7 +311,7 @@ namespace BeeUi.Tool
             this.trackScore.TabIndex = 28;
             this.trackScore.Value = 100;
             this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged += new System.Action<int>(this.trackScore_ValueChanged);
+            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             // 
             // label8
             // 
@@ -1279,7 +1279,7 @@ namespace BeeUi.Tool
             this.trackMaxOverLap.TabIndex = 28;
             this.trackMaxOverLap.Value = 100;
             this.trackMaxOverLap.ValueScore = 0;
-            this.trackMaxOverLap.ValueChanged += new System.Action<int>(this.trackMaxOverLap_ValueChanged);
+            this.trackMaxOverLap.ValueChanged +=  new System.Action<float>(this.trackMaxOverLap_ValueChanged);
             // 
             // label6
             // 
@@ -1422,7 +1422,7 @@ namespace BeeUi.Tool
             this.trackAngle.TabIndex = 28;
             this.trackAngle.Value = 100;
             this.trackAngle.ValueScore = 0;
-            this.trackAngle.ValueChanged += new System.Action<int>(this.trackAngle_ValueChanged);
+            this.trackAngle.ValueChanged +=  new System.Action<float>(this.trackAngle_ValueChanged);
             // 
             // label4
             // 

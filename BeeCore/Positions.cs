@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.ModelBinding;
 using System.Windows.Forms;
 using Point = OpenCvSharp.Point;
 
@@ -235,24 +237,68 @@ namespace BeeCore
             return maxAreaContourId;
         }
     
-        public Mat GetTemp(RectRotate rotateRect, Mat matRaw, Mat bmMask)
+        public Mat GetTemp(RectRotate rotCrop, RectRotate rotMask, Mat matRaw, Mat bmMask)
         {
            
             Mat matClear = new Mat();
             Mat matTemp = new Mat();
-         
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop = Common.CropRotatedRect(matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-                else
-                    matTemp = matCrop.Clone();
-                if (IsAreaWhite)
-                    Cv2.BitwiseNot(matTemp, matTemp);
-               // matTemp = Processing(matTemp);
-            
-           
+            Mat matOut = new Mat();
+            Mat matCrop = new Mat();
+            Mat matMask1 = new Mat();
+            switch (TypeMode)
+            {
+                case Mode.Pattern:
+                    if (matCrop.Type() == MatType.CV_8UC3)
+                        Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
+                    else
+                        matTemp = matCrop.Clone();
+                    break;
+                case Mode.OutLine:
+                    matTemp = Common.CannyWithMorph(matCrop);
+                    //crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+                    //Cv2.BitwiseNot(crop, matClear);
+                    //Cv2.BitwiseAnd(matClear, matOut, matTemp);
+                    //Cv2.BitwiseAnd(crop, matOut, matMask1);
+                    //matMask = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(matMask1);
+                    break;
+                case Mode.Edge:
+                    using (Py.GIL())
+                    {
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                        int height = matCrop.Rows;
+                        int width = matCrop.Cols;
+                        int channels = matCrop.Channels();
+                        if (!matCrop.IsContinuous())
+                        {
+                            matCrop = matCrop.Clone();
+                        }
+                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                        byte[] buffer = new byte[size];
+                        Marshal.Copy(matCrop.Data, buffer, 0, size);
+                        // Tạo ndarray từ byte[]
+                        var npImage = G.np.array(buffer).reshape(height, width, channels);
+                        // Gọi hàm Python
+                        dynamic result = G.Classic.EdgeDetection(npImage);
+                        if (result == null)
+                            return null;
+
+                        // Chuyển kết quả ngược về byte[] rồi sang Mat
+                        byte[] edgeBytes = result.As<byte[]>();
+                        matTemp = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                    }
+                    // crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+
+                    //Cv2.BitwiseNot(crop, matClear);
+
+                    //Cv2.BitwiseAnd(matClear, matOut, matTemp);
+
+                    //Cv2.BitwiseAnd(crop, matOut, matMask1);
+                    //matMask = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(matMask1);
+                    break;
+
+            }
+
+
             return matTemp;
         }
 
@@ -302,6 +348,7 @@ namespace BeeCore
             return (Math.Round(xAInB), Math.Round(yAInB));
             // return ( xRotated, yRotated);
         }
+        public Mode TypeMode = Mode.Pattern;
         public void Matching( int indexTol)
         {
 
@@ -313,18 +360,57 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            if (BeeCore.Common.matRaw.Empty()) return;
-            //if(!IsRun)
-            BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-            IsOK = G.pattern.Match((int)rotAreaAdjustment._PosCenter.X, (int)rotAreaAdjustment._PosCenter.Y, (int)rotAreaAdjustment._rect.Width, (int)rotAreaAdjustment._rect.Height, rotAreaAdjustment._angle, indexTol, false,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,1,OverLap);
-            ScoreRs = G.pattern.ScoreRS;
+            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rotAreaAdjustment, rotMask);
+            Mat matProcess = new Mat();
+            switch (TypeMode)
+            {
+                case Mode.Pattern:
+                    if (matCrop.Type() == MatType.CV_8UC3)
+                        Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
+
+                    break;
+                case Mode.OutLine:
+                    matProcess = Common.CannyWithMorph(matCrop);
+                    break;
+                case Mode.Edge:
+                    using (Py.GIL())
+                    {
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                        int height = matCrop.Rows;
+                        int width = matCrop.Cols;
+                        int channels = matCrop.Channels();
+                        if (!matCrop.IsContinuous())
+                        {
+                            matCrop = matCrop.Clone();
+                        }
+                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                        byte[] buffer = new byte[size];
+                        Marshal.Copy(matCrop.Data, buffer, 0, size);
+                        // Tạo ndarray từ byte[]
+                        var npImage = G.np.array(buffer).reshape(height, width, channels);
+                        // Gọi hàm Python
+                        dynamic result = G.Classic.EdgeDetection(npImage);
+                        if (result == null)
+                            return;
+
+                        // Chuyển kết quả ngược về byte[] rồi sang Mat
+                        byte[] edgeBytes = result.As<byte[]>();
+                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                    }
+
+                    break;
+            }
+            BeeCore.Native.SetImg(matProcess);
+            IsOK = G.pattern.Match(indexTol, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, threshMin, threshMax, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
+
+             ScoreRs = G.pattern.ScoreRS;
             if (IsOK)
             {
                 cycleTime = (int)G.pattern.cycleOutLine;
                 rectRotates = new List<RectRotate>();
                 if (G.pattern.listMatch != null)
                 {
-                    String[] sSplit = G.pattern.listMatch.Split('\n');
+                    String[] sSplit = G.pattern.listMatch[indexTol].Split('\n');
                     System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
                     PointF[] pMatrix = { pZero };
                     foreach (String s in sSplit)
@@ -335,7 +421,7 @@ namespace BeeCore
                         float angle = Convert.ToSingle(sSp[2]);
                         float width = Convert.ToSingle(sSp[3]);
                         float height =Convert.ToSingle(sSp[4]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
+                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
                     }
                     if (rectRotates.Count == 0) return;
                     RectRotate rot = rectRotates[0];
@@ -354,7 +440,7 @@ namespace BeeCore
                     int y = (int)pMatrix[0].Y;
                     // Điểm B và C
                     double x2 = 10, y2 = 0;
-                    double x3 = 0, y3 = 1;
+                   
                     (deltaX, deltaY) = ConvertToB(x, y, pOrigin.X, pOrigin.Y, AngleOrigin);
                     deltaY = -deltaY;
                     double angleAB = Math.Atan2(y2 - 0, x2 - 0) * 180 / Math.PI;
