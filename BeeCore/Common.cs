@@ -83,11 +83,11 @@ namespace BeeCore
 
             PythonEngine.Initialize();
             PythonEngine.BeginAllowThreads();
-          
-            
-           // G.np = Py.Import("numpy");
+
+            // G.np = Py.Import("numpy");
             using (Py.GIL())
-            {
+            { 
+          
 
                 G.np = Py.Import("numpy");
                 //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp

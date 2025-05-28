@@ -2341,7 +2341,7 @@ namespace BeeUi
 
         }
 
-        private async void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
+        private  void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
 
 
@@ -2565,6 +2565,7 @@ namespace BeeUi
                         return;
                     }
                 workReadCCD.RunWorkerAsync();
+                return;
             }
             else if (G.StatusMode==StatusMode.Continuous|| G.StatusMode == StatusMode.Once)
             {

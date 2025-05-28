@@ -58,9 +58,9 @@ namespace BeeCore
                  HEROJE.Disconnect(); 
                
             }
-
-            Common.ClosePython();
             G.CCD.DestroyAll();
+            Common.ClosePython();
+            
             HEROJE.DisConnect();
             Thread.Sleep(500);
             Application.ExitThread();
@@ -78,13 +78,13 @@ namespace BeeCore
                     IsConnected = HEROJE.Connect(indexCCD);
                 return IsConnected;
             }    
-            String[] sp = Resolution.Split(' ');
-            String[] sp2 = sp[0].Split('x');
+            //String[] sp = Resolution.Split(' ');
+            //String[] sp2 = sp[0].Split('x');
 
-            BeeCore.G.CCD.colCCD = Convert.ToInt32(sp2[0]);
-            BeeCore.G.CCD.rowCCD = Convert.ToInt32(sp2[1]);
+            //BeeCore.G.CCD.colCCD = Convert.ToInt32(sp2[0]);
+            //BeeCore.G.CCD.rowCCD = Convert.ToInt32(sp2[1]);
             Mat raw = new Mat();
-            if (G.CCD.Connect(Convert.ToInt32(sp2[1]), Convert.ToInt32(sp2[0]), indexCCD))
+            if (G.CCD.Connect(0,0, indexCCD))
             {
                 if (Common.matRaw != null)
                     if (!Common.matRaw.Empty())
@@ -304,7 +304,7 @@ namespace BeeCore
 
                                 FrameRate = G.CCD.FPS;
                                 BeeCore.Common.Cycle = G.CCD.cycle;
-                                BeeCore.Common.matRaw = raw.Clone();
+                                BeeCore.Common.matRaw = raw;
                             }
                             //    return new Mat();
 
@@ -338,17 +338,16 @@ namespace BeeCore
 
                                 FrameRate = G.CCD.FPS;
                                 BeeCore.Common.Cycle = G.CCD.cycle;
-                                BeeCore.Common.matRaw = raw.Clone();
+                                BeeCore.Common.matRaw = raw;
                             }
-                            //    return new Mat();
-
+                           
 
                         }
                         finally
                         {
-                           // raw.Release();
+                          //  raw.Release();
                             // Giải phóng bộ nhớ sau khi sử dụng
-                            //Marshal.FreeHGlobal(intPtr);
+                           // Marshal.FreeHGlobal(intPtr);
                         }
                         break;
                        case TypeCamera.TinyIV:

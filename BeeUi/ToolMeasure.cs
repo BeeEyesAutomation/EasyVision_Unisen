@@ -48,6 +48,7 @@ namespace BeeUi.Tool
             worker.DoWork += (sender, e) =>
             {
                 timer.Restart();
+                Propety.IsOK = true;
                 Propety. StatusTool = StatusTool.Processing;
                 OutLine outLine1 = G.PropetyTools[G.PropetyTools.FindIndex(a=>a.Name== Propety.listPointChoose[0].Item1 )].Propety as OutLine;
                 OutLine outLine2 = G.PropetyTools[G.PropetyTools.FindIndex(a => a.Name == Propety.listPointChoose[1].Item1)].Propety as OutLine;
@@ -56,25 +57,73 @@ namespace BeeUi.Tool
                 if (outLine1.StatusTool == StatusTool.Done && !IsDone1)
                 {
                     IsDone1 = true;
-                    Propety.listLine1Point[0] = outLine1.listP_Center[Propety.listPointChoose[0].Item2];
+                    if(outLine1.IsOK)
+                    {
+                        int index = Propety.listPointChoose[0].Item2;
+                        if(index< outLine1.listP_Center.Count())
+                        Propety.listLine1Point[0] = outLine1.listP_Center[index];
+                        else
+                            Propety.IsOK = false;
+                    }
+                    else
+                    {
+                        Propety.IsOK = false;
+                    }
+                    
+                        
                 }
 
                 if (outLine2.StatusTool == StatusTool.Done && !IsDone2)
                 {
                     IsDone2 = true;
-                    Propety.listLine1Point[1] = outLine2.listP_Center[Propety.listPointChoose[1].Item2];
+                    if (outLine2.IsOK)
+                    {
+                        int index = Propety.listPointChoose[1].Item2;
+                        if (index < outLine2.listP_Center.Count())
+                            Propety.listLine1Point[1] = outLine2.listP_Center[index];
+                        else
+                            Propety.IsOK = false;
+                    }
+                    else
+                    {
+                        Propety.IsOK = false;
+                    }
                 }
 
                 if (outLine3.StatusTool == StatusTool.Done && !IsDone3)
                 {
                     IsDone3 = true;
-                    Propety.listLine2Point[0] = outLine3.listP_Center[Propety.listPointChoose[2].Item2];
+                    if (outLine3.IsOK)
+                    {
+                        int index = Propety.listPointChoose[2].Item2;
+                        if (index < outLine3.listP_Center.Count())
+                            Propety.listLine2Point[0] = outLine3.listP_Center[index];
+                        else
+                            Propety.IsOK = false;
+                    }
+                    else
+                    {
+                        Propety.IsOK = false;
+                    }
+                   
                 }
 
                 if (outLine4.StatusTool == StatusTool.Done && !IsDone4)
                 {
                     IsDone4 = true;
-                    Propety.listLine2Point[1] = outLine4.listP_Center[Propety.listPointChoose[3].Item2];
+                    if (outLine4.IsOK)
+                    {
+                        int index = Propety.listPointChoose[3].Item2;
+                        if (index < outLine4.listP_Center.Count())
+                            Propety.listLine2Point[1] = outLine4.listP_Center[index];
+                        else
+                            Propety.IsOK = false;
+                    }
+                    else
+                    {
+                        Propety.IsOK = false;
+                    }
+                   
                 }
             };
           
@@ -88,18 +137,21 @@ namespace BeeUi.Tool
 
                 try
                 {
-                    if (IsDone1 && IsDone2 && IsDone3 && IsDone4)
+                    if (IsDone1 && IsDone2 && IsDone3 && IsDone4||!Propety.IsOK)
                     { 
                         IsDone1 = false;
                         IsDone2 = false;
                         IsDone3 = false;
                         IsDone4 = false;
-                        Cal.FindIntersection(Propety.listLine1Point[0], Propety.listLine1Point[1], Propety.listLine2Point[0], Propety.listLine2Point[1],out pIntersection);
-                       Propety. AngleDetect = Cal.GetAngleBetweenSegments(Propety.listLine1Point[0], Propety.listLine1Point[1], Propety.listLine2Point[0], Propety.listLine2Point[1]);
-                        Propety.ScoreRs =(float) Propety.AngleDetect;
-                        if (Propety.ScoreRs <= Propety.Score)
-                            Propety.IsOK = true;
-                        else Propety.IsOK = false;
+                        if (Propety.IsOK)
+                        {
+                            Cal.FindIntersection(Propety.listLine1Point[0], Propety.listLine1Point[1], Propety.listLine2Point[0], Propety.listLine2Point[1], out pIntersection);
+                            Propety.AngleDetect = Cal.GetAngleBetweenSegments(Propety.listLine1Point[0], Propety.listLine1Point[1], Propety.listLine2Point[0], Propety.listLine2Point[1]);
+                            Propety.ScoreRs = (float)Propety.AngleDetect;
+                            if (Propety.ScoreRs <= Propety.Score)
+                                Propety.IsOK = true;
+                            else Propety.IsOK = false;
+                        }
                         Propety.StatusTool = StatusTool.Done;
                     }
                     else
@@ -121,40 +173,10 @@ namespace BeeUi.Tool
                 timer.Stop();
 
                 Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-                Propety.ResultChanged += Propety_ResultChanged;
+               
             };
         }
-        private void Propety_ResultChanged(object sender, EventArgs e)
-        {
-            ItemTool item = G.listAlltool[Propety.Index].ItemTool;
-            switch (Propety.Results)
-            { case Results.None:
-                    item.lbStatus.Text = "---";
-                    item.Score.ColorTrack = Color.Gray;
-                    item.Score.Value = 0;
-                    item.lbScore.ForeColor = Color.Gray;
-                    item.lbStatus.BackColor = Color.Gray;
-                    break;
-                case Results.OK:
-                    item.lbStatus.Text = "OK";
-                    item.Score.Value = Propety.ScoreRs ;
-                    item.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                    item.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                    item.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                   
-                    break;
-                case Results.NG:
-                    item.lbStatus.Text = "NG";
-                    item.Score.Value = Propety.ScoreRs;
-                    item.Score.ColorTrack = Color.DarkRed;
-                    item.lbScore.ForeColor = Color.DarkRed;
-                    item.lbStatus.BackColor = Color.DarkRed;
-                    
-
-                    break;
-            }
-        }
-
+   
         private void trackScore_ValueChanged(float obj)
         {
             Propety.Score = trackScore.Value;

@@ -28,26 +28,8 @@ namespace BeeCore
         public String nameTool = "";
         public int Index = 0;
         public double AngleDetect = 0;
-        private Results _Results=Results.None;
-        public Results Results 
-        {
-            get
-            {
-                return _Results;
-            }
-            set
-            {
-                _Results = value;
-                OnValueChanged(EventArgs.Empty);
-            }
-        }
-        // Sự kiện ValueChanged
-        [Category("ResultsChanged")]
-        public event EventHandler ResultChanged;
-        protected virtual void OnValueChanged(EventArgs e)
-        {
-            ResultChanged?.Invoke(this, e);
-        }
+      
+      
         public TypeTool TypeTool = TypeTool.Measure;
         public StatusTool StatusTool = StatusTool.None;
         public int cycleTime;

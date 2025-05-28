@@ -31,7 +31,7 @@ namespace BeeCore.Funtion
                                 //if (G.Config.TypeCamera == TypeCamera.TinyIV)
                                 //    bmShow = BeeCore.Common.bmRaw;
                                 //else
-                                bmShow = BeeCore.Common.matRaw.Clone().ToBitmap();
+                                bmShow = BeeCore.Common.matRaw.ToBitmap();
                                 break;
                                 //case TypeImg.Result:
                                 //    bmShow = BeeCore.Common.mat.ToBitmap();

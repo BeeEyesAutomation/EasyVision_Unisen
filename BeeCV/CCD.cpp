@@ -801,13 +801,13 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 	// Xử lý định dạng ảnh
 	switch (pixelType) {
 	case PixelType_Gvsp_BGR8_Packed:
-		image = cv::Mat(height, width, CV_8UC3, pBufAddr).clone();
+		image = cv::Mat(height, width, CV_8UC3, pBufAddr);
 		break;
 	case PixelType_Gvsp_Mono8:
-		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
+		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
 		break;
 	case PixelType_Gvsp_Mono12:
-		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
+		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
 		break;
 	case PixelType_Gvsp_BayerRG8:
 		break;
@@ -849,9 +849,7 @@ void ReadHik()
 	
 	//cv::Mat frame;
 	if (CaptureFrame(m_pcMyCamera, matRaw)) {
-	//	cv::imshow("Captured Image", frame);
-	//	cv::imwrite("captured_image.jpg", frame);
-		//matRaw =fram
+
 	}
 	else {
 		std::cerr << "Failed to capture frame!" << std::endl;
@@ -871,17 +869,7 @@ void CCD::ReadCCD()
 		if (!matRaw.empty())
 			matRaw.release();
 		ReadHik();
-		//baslerGigE.StartGrabbing();
-		//baslerGigE.RetrieveResult(-1, ptrGrabResult, TimeoutHandling_ThrowException);//Lay Data Camera SAU KHOẢNG THỜI GIAN SẼ THOÁT RA ,(NẾU GIÁ TRỊ BẰNG -1 KHÔNG THOÁT RA)
-		//
-		//if (ptrGrabResult->GrabSucceeded())
-		//{
-		//	fc.Convert(image, ptrGrabResult);///Chuyen gia tri ma camera qua anh thu viện Pylon Balser
-		//	matRaw = cv::Mat(ptrGrabResult->GetHeight(), ptrGrabResult->GetWidth(), CV_8UC1, (uint8_t*)image.GetBuffer(), Mat::AUTO_STEP);///convert anh thu vien pylon thanh Mat			
-		//
-		//}
-		//ptrGrabResult.Release();
-		//baslerGigE.StopGrabbing();
+
 		break;
 	default:
 		Mat raw = Mat();
@@ -892,11 +880,6 @@ void CCD::ReadCCD()
 		//camUSB >> raw;
 		camUSB.grab(); // Chỉ lấy frame nhưng không xử lý
 		camUSB.retrieve(matRaw); // Xử lý frame gần nhất
-		//camUSB >> raw;
-		//camUSB >> matRaw;
-	//	matRaw = raw;
-	//	if (!IsRead)
-		//	IsErrCCD = true;
 
 		
 		break;
