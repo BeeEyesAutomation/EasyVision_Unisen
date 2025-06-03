@@ -93,8 +93,8 @@ namespace BeeUi.Tool
                     break; 
             }
             btnONLight.IsCLick = BeeCore.G.ParaCam.IsOnLight;
-  
-            
+
+            numTrigger.Value = G.Config.delayTrigger;
             btnShowGrid.IsCLick = G.Config.IsShowGird ;
             btnShowCenter.IsCLick = G.Config.IsShowCenter;
             btnShowArea.IsCLick = G.Config.IsShowArea;
