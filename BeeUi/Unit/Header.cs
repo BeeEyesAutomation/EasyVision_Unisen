@@ -4,6 +4,7 @@ using BeeCore.Funtion;
 using BeeUi.Commons;
 using BeeUi.Data;
 using BeeUi.Tool;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -924,31 +925,56 @@ txtQrCode.Focus();
                 {
                     if (G.TotalOK)
                     {
-                       
-                            if (G.PLC.IsConnected)
-                            {
-                              //  G.PLC.WriteOutPut(0, true);
 
-                            }
+
+                        G.PLC.SetOutPut(G.PLC.valueOutput[0], false); //OK
+                        G.PLC.SetOutPut(G.PLC.valueOutput[5], false); //Light
+                        G.PLC.SetOutPut(G.PLC.valueOutput[6], false); //Busy
+                        G.PLC.WriteOutPut();
+                        await Task.Delay(G.Config.DelayOutput);
+                        G.PLC.SetOutPut(G.PLC.valueOutput[4], true);//Ready false
+                        G.PLC.SetOutPut(G.PLC.valueOutput[0], false); //OK
+                       
+                        G.PLC.WriteOutPut();
+
+
 
 
                     }
                     else
                     {
 
-                        if (G.PLC.valueInput[1] == 1)
+                        if (G.PLC.valueInput[3] == 1)
                         {
-                           // G.PLC.WriteOutPut(1, false);
-                           // G.PLC.WriteOutPut(0, true);
-
+                            G.PLC.SetOutPut(G.PLC.valueOutput[0], false); //OK
+                            G.PLC.SetOutPut(G.PLC.valueOutput[5], false); //Light
+                            G.PLC.SetOutPut(G.PLC.valueOutput[6], false); //Busy
+                            G.PLC.WriteOutPut();
+                            await Task.Delay(G.Config.DelayOutput);
+                            G.PLC.SetOutPut(G.PLC.valueOutput[4], true);//Ready false
+                            G.PLC.SetOutPut(G.PLC.valueOutput[0], false); //OK
+                          
+                            G.PLC.WriteOutPut();
                         }
-                        //else
-                          //  G.PLC.WriteOutPut(1, true);
-
-
-
+                        else
+                        {
+                            G.PLC.SetOutPut(G.PLC.valueOutput[0], true); //NG
+                            G.PLC.SetOutPut(G.PLC.valueOutput[5], false); //Light
+                            G.PLC.SetOutPut(G.PLC.valueOutput[6], false); //Busy
+                            G.PLC.WriteOutPut();
+                            await Task.Delay(G.Config.DelayOutput);
+                            G.PLC.SetOutPut(G.PLC.valueOutput[4], true);//Ready false
+                            G.PLC.SetOutPut(G.PLC.valueOutput[0], false); //False
+         
+                            G.PLC.WriteOutPut();
+                        }
                     }
                     G.IsSendRS = false;
+                }
+                if (BeeCore. G.ParaCam.IsOnLight!=Convert.ToBoolean( G.PLC.valueOutput[6]))
+                {
+                    G.PLC.SetOutPut(G.PLC.valueOutput[6], BeeCore.G.ParaCam.IsOnLight); //Busy
+                    G.PLC.WriteOutPut();
                 }
                 ////Alive
                 //if (G.PLC.valueInput[3] == 0)
@@ -962,37 +988,47 @@ txtQrCode.Focus();
                 //}
                 if (!G.IsRun)
                 {
+                    G.PLC.SetOutPut(G.PLC.valueOutput[6], true); //Busy
+                    G.PLC.WriteOutPut();
                     //if (G.PLC.valueOutput[2] == 0)
                     //    G.PLC.WriteOutPut(2, true);
                 }
                 else
                 {
+                    G.PLC.SetOutPut(G.PLC.valueOutput[6], false); //Not Busy
+                    G.PLC.WriteOutPut();
                     //if (G.PLC.valueOutput[2] == 1)
                     //    G.PLC.WriteOutPut(2, false);
 
                 }
                 if (!BeeCore.Camera.IsConnected)
                 {
-                    //if (G.PLC.valueOutput[4] == 0)
-                    //{
-                    
-                    //    G.PLC.WriteOutPut(4, true);
-
-                    //}
-                    ShowErr();
-                    return;
+                    if (G.PLC.valueOutput[7] == 0)
+                    {
+                        G.PLC.SetOutPut(G.PLC.valueOutput[7], true);//CCD Err
+                        G.PLC.WriteOutPut();
+                        ShowErr();
+                        return;
+                    }
                 }     
                 else
                 {
-                  //  if (G.PLC.valueOutput[4] == 1)
-                      //  G.PLC.WriteOutPut(4, false);
+                    if (G.PLC.valueOutput[7] == 1)
+                    {
+                        G.PLC.SetOutPut(G.PLC.valueOutput[7], false);//CCD Err
+                        G.PLC.WriteOutPut();
+                    }
                 }
 
-
-              
-                    if (G.EditTool.View.btnCap.Enabled&& G.PLC.valueInput[0] == 1 || G.Config.IsExternal && G.IsRun)
+                if(G.IsRun&& G.Config.IsExternal)
+                {
+                    if (G.PLC.valueInput[0] == 1 && G.PLC.valueOutput[6] == 0)
                     {
-                        //  G.PLC.WriteInPut(0, false);
+                        G.PLC.SetOutPut(G.PLC.valueOutput[4], false);//Ready false
+                        G.PLC.SetOutPut(G.PLC.valueOutput[5], true); //Busy
+                        G.PLC.SetOutPut(G.PLC.valueOutput[6],true); //Busy
+                        G.PLC.WriteOutPut();
+                        await Task.Delay(G.Config.delayTrigger);
                         if (G.Config.IsExternal)
                             G.EditTool.View.btnTypeTrig.IsCLick = true;
                         if (G.IsRun)
@@ -1001,13 +1037,39 @@ txtQrCode.Focus();
                             tmReadPLC.Enabled = true;
                         IsWaitingRead = true;
                     }
-                
-                else
-                {
-                    tmReadPLC.Enabled = true;
-
+                    else
+                    {
+                        tmReadPLC.Enabled = true;
+                    }
                 }
-                tmReadPLC.Enabled = true;
+                else
+                 tmReadPLC.Enabled = true;
+                if (btnEnQrCode.IsCLick)
+                {
+                    if (G.PLC.valueOutput[6] == 0)
+                    {
+                        int[] bits = new int[] { G.PLC.valueOutput[4], G.PLC.valueOutput[5], G.PLC.valueOutput[6], G.PLC.valueOutput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+
+                        int value = 0;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
+                        }
+                        int id = listFilter.FindIndex(a => a == G.Project);
+                        if (id != value)
+                        {
+                           
+                            G.PLC.SetOutPut(G.PLC.valueOutput[6], true); //Busy
+                            G.PLC.WriteOutPut();
+                            tmReadPLC.Enabled = false;
+                            G.Project = listFilter[value];
+                            txtQrCode.Text = G.Project.ToString();
+                            workLoadProgram.RunWorkerAsync();
+                        }
+                    }
+                }
+              
+                 
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
             }
           
@@ -1072,7 +1134,7 @@ txtQrCode.Focus();
         private void tmOutAlive_Tick(object sender, EventArgs e)
         {
            
-            tmOutAlive.Enabled = false;
+          //  tmOutAlive.Enabled = false;
             if (!G.IsRun) return;
             if (G.PLC.valueInput[3] == 1 )
             {

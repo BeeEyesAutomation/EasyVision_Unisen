@@ -378,6 +378,9 @@ namespace BeeCore
                 case TypeCamera.TinyIV:
                     HEROJE.Light(TypeLight, IsOn);
                     break;
+                case TypeCamera.BaslerGigE:
+                   
+                    break;
                 default:
                     break;
 

@@ -78,27 +78,32 @@ namespace BeeCore
             IsWriting = false;
             return IsConnected;
         }
-        public bool WriteOutPut(int Add, bool Value)
+        public void SetOutPut(int Add, bool Value)
         {
-            valueOutput[Add] =Convert.ToInt32( Value);
-            IsWriting = true;
+            valueOutput[Add] = Convert.ToInt32(Value);
+           
             // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
+           
+        }
+        public bool WriteOutPut()
+        {
             int[] bitArray = new int[16] {
                 0, 0, 0, 0, 0, 0, 0, 0,   // Bit 15 đến 8
                 0, 0, 0, 0, 0, 0, 0, 0   // Bit 7 đến 0
             };
             for (int i = 0; i < 16; i++)
             {
-                bitArray[15-i] = valueOutput[i]; // bit 15 là MSB
+                bitArray[15 - i] = valueOutput[i]; // bit 15 là MSB
 
             }
             int Val = 0;
-           
+
             for (int i = 0; i < 16; i++)
             {
-                Val|= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
-               
+                Val |= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
+
             }
+            IsWriting = true;
             IsConnected = Modbus.WriteBit(Val);
 
             IsWriting = false;

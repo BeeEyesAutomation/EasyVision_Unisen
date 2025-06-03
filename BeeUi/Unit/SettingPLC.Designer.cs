@@ -448,7 +448,7 @@
             this.Ou8.Name = "Ou8";
             this.Ou8.Size = new System.Drawing.Size(91, 38);
             this.Ou8.TabIndex = 11;
-            this.Ou8.Text = ".";
+            this.Ou8.Text = "Y7 Err";
             this.Ou8.TextColor = System.Drawing.Color.Black;
             this.Ou8.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou8.UseVisualStyleBackColor = false;
@@ -477,7 +477,7 @@
             this.Ou7.Name = "Ou7";
             this.Ou7.Size = new System.Drawing.Size(91, 38);
             this.Ou7.TabIndex = 10;
-            this.Ou7.Text = ".";
+            this.Ou7.Text = "Y6 Busy";
             this.Ou7.TextColor = System.Drawing.Color.Black;
             this.Ou7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou7.UseVisualStyleBackColor = false;
@@ -506,7 +506,7 @@
             this.Ou6.Name = "Ou6";
             this.Ou6.Size = new System.Drawing.Size(91, 38);
             this.Ou6.TabIndex = 9;
-            this.Ou6.Text = "-";
+            this.Ou6.Text = "Y5 Light";
             this.Ou6.TextColor = System.Drawing.Color.Black;
             this.Ou6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou6.UseVisualStyleBackColor = false;
@@ -535,7 +535,7 @@
             this.Ou5.Name = "Ou5";
             this.Ou5.Size = new System.Drawing.Size(91, 38);
             this.Ou5.TabIndex = 8;
-            this.Ou5.Text = "CCD Err";
+            this.Ou5.Text = "Y4 Ready";
             this.Ou5.TextColor = System.Drawing.Color.Black;
             this.Ou5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou5.UseVisualStyleBackColor = false;
@@ -583,7 +583,7 @@
             this.Ou4.Name = "Ou4";
             this.Ou4.Size = new System.Drawing.Size(91, 38);
             this.Ou4.TabIndex = 11;
-            this.Ou4.Text = "Ready";
+            this.Ou4.Text = "Y3 Logic 3";
             this.Ou4.TextColor = System.Drawing.Color.Black;
             this.Ou4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou4.UseVisualStyleBackColor = false;
@@ -612,7 +612,7 @@
             this.Ou3.Name = "Ou3";
             this.Ou3.Size = new System.Drawing.Size(91, 38);
             this.Ou3.TabIndex = 10;
-            this.Ou3.Text = "CCD Busy";
+            this.Ou3.Text = "Y2 Logic 2";
             this.Ou3.TextColor = System.Drawing.Color.Black;
             this.Ou3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou3.UseVisualStyleBackColor = false;
@@ -641,7 +641,7 @@
             this.Ou2.Name = "Ou2";
             this.Ou2.Size = new System.Drawing.Size(91, 38);
             this.Ou2.TabIndex = 9;
-            this.Ou2.Text = "NG";
+            this.Ou2.Text = "Y1 Logic 1";
             this.Ou2.TextColor = System.Drawing.Color.Black;
             this.Ou2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou2.UseVisualStyleBackColor = false;
@@ -670,7 +670,7 @@
             this.Ou1.Name = "Ou1";
             this.Ou1.Size = new System.Drawing.Size(91, 38);
             this.Ou1.TabIndex = 8;
-            this.Ou1.Text = "OK ";
+            this.Ou1.Text = "Y0 Total";
             this.Ou1.TextColor = System.Drawing.Color.Black;
             this.Ou1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou1.UseVisualStyleBackColor = false;
@@ -1030,7 +1030,7 @@
             this.In8.Name = "In8";
             this.In8.Size = new System.Drawing.Size(91, 38);
             this.In8.TabIndex = 11;
-            this.In8.Text = ".";
+            this.In8.Text = "X7 Bit 4";
             this.In8.TextColor = System.Drawing.Color.Black;
             this.In8.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In8.UseVisualStyleBackColor = false;
@@ -1059,7 +1059,7 @@
             this.In7.Name = "In7";
             this.In7.Size = new System.Drawing.Size(91, 38);
             this.In7.TabIndex = 10;
-            this.In7.Text = ".";
+            this.In7.Text = "X6 Bit 3";
             this.In7.TextColor = System.Drawing.Color.Black;
             this.In7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In7.UseVisualStyleBackColor = false;
@@ -1088,7 +1088,7 @@
             this.In6.Name = "In6";
             this.In6.Size = new System.Drawing.Size(91, 38);
             this.In6.TabIndex = 9;
-            this.In6.Text = "-";
+            this.In6.Text = "X5 Bit 2";
             this.In6.TextColor = System.Drawing.Color.Black;
             this.In6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In6.UseVisualStyleBackColor = false;
@@ -1117,7 +1117,7 @@
             this.In5.Name = "In5";
             this.In5.Size = new System.Drawing.Size(91, 38);
             this.In5.TabIndex = 8;
-            this.In5.Text = "-";
+            this.In5.Text = "X4 Bit 1";
             this.In5.TextColor = System.Drawing.Color.Black;
             this.In5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In5.UseVisualStyleBackColor = false;
@@ -1165,7 +1165,7 @@
             this.In4.Name = "In4";
             this.In4.Size = new System.Drawing.Size(91, 38);
             this.In4.TabIndex = 11;
-            this.In4.Text = "PLC Alive";
+            this.In4.Text = "X3 Bypass";
             this.In4.TextColor = System.Drawing.Color.Black;
             this.In4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In4.UseVisualStyleBackColor = false;
@@ -1194,7 +1194,7 @@
             this.In3.Name = "In3";
             this.In3.Size = new System.Drawing.Size(91, 38);
             this.In3.TabIndex = 10;
-            this.In3.Text = "-";
+            this.In3.Text = "X2 Pause";
             this.In3.TextColor = System.Drawing.Color.Black;
             this.In3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In3.UseVisualStyleBackColor = false;
@@ -1223,7 +1223,7 @@
             this.In2.Name = "In2";
             this.In2.Size = new System.Drawing.Size(91, 38);
             this.In2.TabIndex = 9;
-            this.In2.Text = "PLC ByPass";
+            this.In2.Text = "X1 Ready";
             this.In2.TextColor = System.Drawing.Color.Black;
             this.In2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In2.UseVisualStyleBackColor = false;
@@ -1252,7 +1252,7 @@
             this.In1.Name = "In1";
             this.In1.Size = new System.Drawing.Size(91, 38);
             this.In1.TabIndex = 8;
-            this.In1.Text = "Trigger";
+            this.In1.Text = "X0 Trigger";
             this.In1.TextColor = System.Drawing.Color.Black;
             this.In1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In1.UseVisualStyleBackColor = false;

@@ -227,7 +227,10 @@ namespace BeeUi
           
             if (G.PLC.IsConnected)
             {
-                G.PLC.WriteOutPut(2, true);
+                G.PLC.SetOutPut(G.PLC.valueOutput[4], false); //Ready
+                G.PLC.SetOutPut(G.PLC.valueOutput[6], true); //Busy
+                G.PLC.WriteOutPut();
+               
                 Modbus.DisconnectPLC();
             }
             await Task.Delay(1000);
@@ -244,7 +247,7 @@ namespace BeeUi
             G.Header.workPLC.CancelAsync();
             if (G.PLC.IsConnected)
             {
-                G.PLC.WriteOutPut(2, true);
+                //G.PLC.WriteOutPut(2, true);
                 Modbus.DisconnectPLC();
             }
         }

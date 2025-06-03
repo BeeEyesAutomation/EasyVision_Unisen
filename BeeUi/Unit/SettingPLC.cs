@@ -107,8 +107,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 goto X;
             }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
-
-            await Task.Run(() => G.PLC.WriteOutPut(numAdd, btn.IsCLick));
+            G.PLC.SetOutPut(numAdd, btn.IsCLick);
+            await Task.Run(() => G.PLC.WriteOutPut());
            
             G.Header.tmReadPLC.Enabled = true;
             IsPress = false;

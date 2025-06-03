@@ -32,6 +32,7 @@ namespace BeeUi.Common
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
+            System.Windows.Forms.Timer tmOutAlive;
             this.workConnect = new System.ComponentModel.BackgroundWorker();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
             this.txtQrCode = new System.Windows.Forms.TextBox();
@@ -65,8 +66,8 @@ namespace BeeUi.Common
             this.tmReadPLC = new System.Windows.Forms.Timer(this.components);
             this.tmReConnectPLC = new System.Windows.Forms.Timer(this.components);
             this.workReConnect = new System.ComponentModel.BackgroundWorker();
-            this.tmOutAlive = new System.Windows.Forms.Timer(this.components);
             this.tmIninitial = new System.Windows.Forms.Timer(this.components);
+            tmOutAlive = new System.Windows.Forms.Timer(this.components);
             this.pPO.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel13.SuspendLayout();
@@ -464,8 +465,8 @@ namespace BeeUi.Common
             // 
             // tmOutAlive
             // 
-            this.tmOutAlive.Interval = 500;
-            this.tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
+            tmOutAlive.Interval = 500;
+            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // tmIninitial
             // 
@@ -529,7 +530,6 @@ namespace BeeUi.Common
         public System.ComponentModel.BackgroundWorker workPLC;
         public System.Windows.Forms.Timer tmReConnectPLC;
         public System.ComponentModel.BackgroundWorker workReConnect;
-        private System.Windows.Forms.Timer tmOutAlive;
         private System.Windows.Forms.Timer tmIninitial;
     }
 }

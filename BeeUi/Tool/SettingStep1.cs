@@ -393,8 +393,9 @@ namespace BeeUi.Tool
 
         private void numDelay_ValueChanged_1(object sender, EventArgs e)
         {
-            tmDelaySend.Enabled = false;
-            tmDelaySend.Enabled = true;
+            G.Config.DelayOutput = numDelay.Value;
+            //tmDelaySend.Enabled = false;
+            //tmDelaySend.Enabled = true;
 
         }
 
@@ -442,12 +443,12 @@ namespace BeeUi.Tool
         int valueDelyaOld = 0;
         private void tmDelaySend_Tick(object sender, EventArgs e)
         {
-            tmDelaySend.Enabled = false;
-            G.Config.DelayOutput = numDelay.Value;
-            if (G.PLC.IsConnected)
-            {
-                G.PLC.WritePara(4160, G.Config.DelayOutput);
-            }
+            //tmDelaySend.Enabled = false;
+            //G.Config.DelayOutput = numDelay.Value;
+            //if (G.PLC.IsConnected)
+            //{
+            //    G.PLC.WritePara(4160, G.Config.DelayOutput);
+            //}
             
         }
 
@@ -475,6 +476,11 @@ namespace BeeUi.Tool
         {
             BeeCore.G.ParaCam.IsHance = btnEnhance.IsCLick;
            
+        }
+
+        private void numTrigger_ValueChanged(object sender, EventArgs e)
+        {
+            G.Config.delayTrigger = (int)numTrigger.Value;
         }
     }
 }

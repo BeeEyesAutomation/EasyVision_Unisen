@@ -1475,7 +1475,7 @@ namespace BeeUi
                 indexTool++;
         }
        
-      public  DateTime tmCycle;
+    
       
         int indexToolPosition = -1;
         bool IsAutoTrig;
@@ -2147,12 +2147,12 @@ namespace BeeUi
 
            G.StatusMode =  StatusMode.Once;
            
-            tmCycle = DateTime.Now;
-    
+           
+            timer.Restart();
             if (!workReadCCD.IsBusy) workReadCCD.RunWorkerAsync();
         }
         public bool  IsBTNCap=false;
-        private async void btnCap_Click(object sender, EventArgs e)
+        private  void btnCap_Click(object sender, EventArgs e)
         {
 
             if (!G.PLC.IsConnected&&!G.IsByPassPLC )
@@ -2175,23 +2175,7 @@ namespace BeeUi
                // MessageBox.Show("Please stop Mode Live");
                 return;
             }
-            if (G.PLC.IsConnected)
-            {
-            X: G.Header.tmReadPLC.Enabled = false;
-            if (G.Header.workPLC.IsBusy)
-            {
-                await Task.Delay(10);
-                goto X;
-            }
-            await Task.Run(() => G.PLC.WriteInPut(0, true));
-                G.Header.tmReadPLC.Enabled = true;
-                G.PLC.WriteInPut(0, true);
-            }
-            if(G.IsByPassPLC)
-            {
-                Cap(false);
-            }
-          
+            Cap(false);
         }
 
         private async void btnRecord_Click(object sender, EventArgs e)
@@ -2373,7 +2357,7 @@ namespace BeeUi
             switch (G.StatusProcessing)
             {
                 case StatusProcessing.None:
-                    timer.Restart();
+                   // timer.Restart();
                     if (G.PropetyTools[0].TypeTool == TypeTool.Position_Adjustment)
                     {
                        
@@ -2588,7 +2572,7 @@ namespace BeeUi
             {
                 G.StatusTrig = Trig.Continue;
                 tmTrig.Enabled = false;
-                tmCycle = DateTime.Now;
+              //  tmCycle = DateTime.Now;
                 G.listAlltool[indexToolPosition].tool.ShowResult(gc);
                 tmTrig.Enabled = false;
                 if (!workReadCCD.IsBusy)
@@ -2599,7 +2583,7 @@ namespace BeeUi
 
                 G.StatusTrig = Trig.Processing;
                 tmTrig.Enabled = false;
-                tmCycle = DateTime.Now;
+               // tmCycle = DateTime.Now;
                 G.listAlltool[indexToolPosition].tool.ShowResult(gc);
                 tmTrig.Enabled = false;
                 if (!workPlay.IsBusy)
