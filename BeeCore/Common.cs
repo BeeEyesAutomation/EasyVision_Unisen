@@ -84,8 +84,16 @@ namespace BeeCore
 
             try
             {
-                var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
-                Runtime.PythonDLL = pythonDll;
+                string pythonHome = Environment.GetEnvironmentVariable("Python312");
+                if (!string.IsNullOrEmpty(pythonHome))
+                {
+                    string pythonDll = Path.Combine(pythonHome, "python312.dll");
+                    if (File.Exists(pythonDll))
+                    {
+                        Python.Runtime.Runtime.PythonDLL = pythonDll;
+                   
+               //// var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
+               // Runtime.PythonDLL = pythonDll;
                 PythonEngine.Initialize();
                 PythonEngine.BeginAllowThreads();
 
@@ -112,6 +120,16 @@ namespace BeeCore
                     // khởi tạo instance
                     G.Classic.LoadEdge();
 
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Không tìm thấy python312.dll trong PYTHONHOME.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Biến môi trường PYTHONHOME không được đặt.");
                 }
             }
             catch (PythonException ex)
@@ -121,7 +139,8 @@ namespace BeeCore
         }
         public static void ClosePython()
         {
-            PythonEngine.Shutdown();       }
+            PythonEngine.Shutdown();   
+        }
 
         public static Mat AutoCanny(Mat grayImage, double sigma = 0.33)
         {
