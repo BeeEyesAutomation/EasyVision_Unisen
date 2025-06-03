@@ -22,7 +22,7 @@ namespace BeeCore
         public int[] AddressStarts;
         public int[] LenReads;
         public String Port = "COM4";
-        public int Baurate = 115200;
+        public int Baurate = 9600;
         public byte SlaveID=2;
         public PLC() { }
         public bool IsConnected = false,IsWriting=false;
@@ -37,7 +37,7 @@ namespace BeeCore
             nameOutput = stringLine[3].Split(',');
             if (IdPort.Trim() == "") return false;
             IsConnected= Modbus.ConnectPLC(IdPort, Baurate, SlaveID);
-
+          //  Modbus.ReadHolding(0, 10);
             return IsConnected;
         }
         public  bool Read(bool IsReadOut = false)
@@ -45,11 +45,15 @@ namespace BeeCore
             if(IsWriting)
             {
                return false;
-            }    
-          valueInput=  Modbus.ReadHolding(AddressStarts[0]);
-            if(IsReadOut)
-          valueOutput = Modbus.ReadHolding(AddressStarts[1]);
-          if (valueInput.Count()==1||valueOutput.Count()==1) IsConnected = false;
+            }
+            valueInput= Modbus.ReadBit(1);
+            valueOutput = Modbus.ReadBit(2);
+            //  valueInput = new int[dataBytes.Length / 2];
+
+            // valueInput =  Modbus.ReadHolding(AddressStarts[0]);
+            //  if(IsReadOut)
+            //valueOutput = Modbus.ReadHolding(AddressStarts[1]);
+            //if (valueInput.Count()==1||valueOutput.Count()==1) IsConnected = false;
             return IsConnected;
         }
         public int ReadPara(int Add )
@@ -76,8 +80,26 @@ namespace BeeCore
         }
         public bool WriteOutPut(int Add, bool Value)
         {
+            valueOutput[Add] =Convert.ToInt32( Value);
             IsWriting = true;
-            IsConnected = Modbus.WritePLC(AddressStarts[1]+Add, Convert.ToInt16(Value));
+            // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
+            int[] bitArray = new int[16] {
+                0, 0, 0, 0, 0, 0, 0, 0,   // Bit 15 đến 8
+                0, 0, 0, 0, 0, 0, 0, 0   // Bit 7 đến 0
+            };
+            for (int i = 0; i < 16; i++)
+            {
+                bitArray[15-i] = valueOutput[i]; // bit 15 là MSB
+
+            }
+            int Val = 0;
+           
+            for (int i = 0; i < 16; i++)
+            {
+                Val|= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
+               
+            }
+            IsConnected = Modbus.WriteBit(Val);
 
             IsWriting = false;
             return IsConnected;

@@ -73,6 +73,7 @@ namespace BeeCore.Func
             double angleDeg = angleRad * 180.0 / Math.PI;
 
             // Luôn trả về góc nhỏ nhất (0–180 độ)
+            if (angleDeg > 90) angleDeg = 180 - angleDeg;
             return angleDeg;
         }
     }

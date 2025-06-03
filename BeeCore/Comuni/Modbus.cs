@@ -215,7 +215,45 @@ namespace BeeUi.Commons
                     return -1;
                 }
             }
-            public static int[] ReadHolding(int startAddress,int lennght=16)
+        public static int[] ReadBit(int startAddress)
+        {
+            int[] values = new int[16];
+            try
+            {
+               int[] val = modbusClient.ReadHoldingRegisters(startAddress, 1);
+                ushort registerValue = (ushort)val[0];
+                // Lấy từng bit
+                for (int i = 15; i >= 0; i--)  // bit 15 là MSB, bit 0 là LSB
+                {
+                    values[i] = (registerValue >> i) & 1;
+                  
+                }
+             
+            }
+            catch (Exception ex)
+            {
+
+                // return i;
+            }
+            return values;
+        }
+        public static bool  WriteBit(int value)
+        {
+           // int[] values = new int[16];
+            try
+            {
+                modbusClient.WriteSingleRegister(2, value);
+               
+
+            }
+            catch (Exception ex)
+            {
+
+                // return i;
+            }
+            return true;
+        }
+        public static int[] ReadHolding(int startAddress,int lennght=16)
             {
             int[] values=new int[1];
                 try

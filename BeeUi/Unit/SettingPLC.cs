@@ -107,6 +107,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 goto X;
             }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
+
             await Task.Run(() => G.PLC.WriteOutPut(numAdd, btn.IsCLick));
            
             G.Header.tmReadPLC.Enabled = true;
@@ -126,7 +127,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbSerialPort.Text.Trim()=="COM3")
+          //  if (cbSerialPort.Text.Trim()=="COM3")
             G.Config.IDPort = cbSerialPort.Text;
           
         }

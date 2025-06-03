@@ -172,7 +172,7 @@ namespace BeeUi.Common
                     if (G.PLC.valueOutput[4] == 0)
                     {
 
-                        G.PLC.WriteOutPut(4, true);
+                       // G.PLC.WriteOutPut(4, true);
 
                     }
                 }
@@ -713,10 +713,10 @@ txtQrCode.Focus();
            
             if (G.PLC.IsConnected)
             {
-                G.PLC.WriteInPut(3, true);
-                G.Config.DelayOutput = G.PLC.ReadPara(4160);
+                //G.PLC.WriteInPut(3, true);
+                //G.Config.DelayOutput = G.PLC.ReadPara(4160);
 
-                G.PLC.WritePara(4160, G.Config.DelayOutput);
+                //G.PLC.WritePara(4160, G.Config.DelayOutput);
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
                 tmReadPLC.Enabled = true;
             }
@@ -882,17 +882,17 @@ txtQrCode.Focus();
                 ShowErr();
                 return;
             }
-        if(G.IsPLCNotAlive)
-            {
-                if (G.PLC.valueInput[3] == 0)
-                {
-                    G.IsPLCNotAlive = false;
-                    numAlive = 0;
+        //if(G.IsPLCNotAlive)
+        //    {
+        //        if (G.PLC.valueInput[3] == 0)
+        //        {
+        //            G.IsPLCNotAlive = false;
+        //            numAlive = 0;
                
 
-                }
-                return;
-            }
+        //        }
+        //        return;
+        //    }
                 if (!BeeCore.Camera.IsConnected)
             {
                 G.EditTool.lbCam.Text = "Camera Disconnected";
@@ -927,7 +927,7 @@ txtQrCode.Focus();
                        
                             if (G.PLC.IsConnected)
                             {
-                                G.PLC.WriteOutPut(0, true);
+                              //  G.PLC.WriteOutPut(0, true);
 
                             }
 
@@ -938,76 +938,76 @@ txtQrCode.Focus();
 
                         if (G.PLC.valueInput[1] == 1)
                         {
-                            G.PLC.WriteOutPut(1, false);
-                            G.PLC.WriteOutPut(0, true);
+                           // G.PLC.WriteOutPut(1, false);
+                           // G.PLC.WriteOutPut(0, true);
 
                         }
-                        else
-                            G.PLC.WriteOutPut(1, true);
+                        //else
+                          //  G.PLC.WriteOutPut(1, true);
 
 
 
                     }
                     G.IsSendRS = false;
                 }
-                //Alive
-                if (G.PLC.valueInput[3] == 0)
-                {
-                    G.PLC.WriteInPut(3, true); tmOutAlive.Enabled = false;
-                    numAlive = 0;
-                }
-                else
-                {
-                    tmOutAlive.Enabled = true;
-                }
+                ////Alive
+                //if (G.PLC.valueInput[3] == 0)
+                //{
+                //    G.PLC.WriteInPut(3, true); tmOutAlive.Enabled = false;
+                //    numAlive = 0;
+                //}
+                //else
+                //{
+                //    tmOutAlive.Enabled = true;
+                //}
                 if (!G.IsRun)
                 {
-                    if (G.PLC.valueOutput[2] == 0)
-                        G.PLC.WriteOutPut(2, true);
+                    //if (G.PLC.valueOutput[2] == 0)
+                    //    G.PLC.WriteOutPut(2, true);
                 }
                 else
                 {
-                    if (G.PLC.valueOutput[2] == 1)
-                        G.PLC.WriteOutPut(2, false);
+                    //if (G.PLC.valueOutput[2] == 1)
+                    //    G.PLC.WriteOutPut(2, false);
 
                 }
                 if (!BeeCore.Camera.IsConnected)
                 {
-                    if (G.PLC.valueOutput[4] == 0)
-                    {
+                    //if (G.PLC.valueOutput[4] == 0)
+                    //{
                     
-                        G.PLC.WriteOutPut(4, true);
+                    //    G.PLC.WriteOutPut(4, true);
 
-                    }
+                    //}
                     ShowErr();
                     return;
                 }     
                 else
                 {
-                    if (G.PLC.valueOutput[4] == 1)
-                        G.PLC.WriteOutPut(4, false);
+                  //  if (G.PLC.valueOutput[4] == 1)
+                      //  G.PLC.WriteOutPut(4, false);
                 }
-               
+
+
               
-                if (G.PLC.valueInput[0]==1)
-                {
-                    if (G.EditTool.View.btnCap.Enabled || G.Config.IsExternal && G.IsRun)
+                    if (G.EditTool.View.btnCap.Enabled&& G.PLC.valueInput[0] == 1 || G.Config.IsExternal && G.IsRun)
                     {
-                        G.PLC.WriteInPut(0, false);
-                        if ( G.Config.IsExternal)
-                         G.EditTool.View.btnTypeTrig.IsCLick = true;
+                        //  G.PLC.WriteInPut(0, false);
+                        if (G.Config.IsExternal)
+                            G.EditTool.View.btnTypeTrig.IsCLick = true;
                         if (G.IsRun)
                             G.EditTool.View.Cap(false);
                         else
                             tmReadPLC.Enabled = true;
                         IsWaitingRead = true;
                     }
-                }
+                
                 else
                 {
                     tmReadPLC.Enabled = true;
-                   
+
                 }
+                tmReadPLC.Enabled = true;
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
             }
           
