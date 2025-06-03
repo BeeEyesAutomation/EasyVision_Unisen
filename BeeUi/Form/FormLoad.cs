@@ -217,10 +217,12 @@ namespace BeeUi
         private void workIniModel_DoWork(object sender, DoWorkEventArgs e)
         {
             BeeCore.Common.IniPython();
+
         }
 
         private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            
             G.IsIniPython = true;
             lb.Text = "Initial Learning AI Complete";
             Task.Delay(200);

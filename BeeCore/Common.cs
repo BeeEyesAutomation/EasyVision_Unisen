@@ -15,6 +15,7 @@ using Python.Runtime;
 using Point = OpenCvSharp.Point;
 using System.Linq;
 using Size = OpenCvSharp.Size;
+using System.IO;
 namespace BeeCore
 {
   public   class Common
@@ -81,41 +82,47 @@ namespace BeeCore
         public static void IniPython()
         {
 
-            PythonEngine.Initialize();
-            PythonEngine.BeginAllowThreads();
+            try
+            {
+                var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
+                Runtime.PythonDLL = pythonDll;
+                PythonEngine.Initialize();
+                PythonEngine.BeginAllowThreads();
 
-            // G.np = Py.Import("numpy");
-            using (Py.GIL())
-            { 
-          
+                // G.np = Py.Import("numpy");
+                using (Py.GIL())
+                {
 
-                G.np = Py.Import("numpy");
-                //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
-                dynamic mod = Py.Import("Tool.Learning");
-                dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                G.objYolo = cls.Invoke();              // khởi tạo instance
-                dynamic mod2 = Py.Import("Tool.OcrWapper");
-                dynamic cls2 = mod2.GetAttr("OCRWrapper"); // class
-                G.objOCR = cls2.Invoke();              // khởi tạo instance
-                                                       // 
-                dynamic mod3 = Py.Import("Tool.Classic");
-                dynamic cls3 = mod3.GetAttr("Filter"); // class
-                G.Classic = cls3.Invoke();              // khởi tạo instance
-           
+
+                    G.np = Py.Import("numpy");
+                    //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
+                    dynamic mod = Py.Import("Tool.Learning");
+                    dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                    G.objYolo = cls.Invoke();              // khởi tạo instance
+                    dynamic mod2 = Py.Import("Tool.OcrWapper");
+                    dynamic cls2 = mod2.GetAttr("OCRWrapper"); // class
+                    G.objOCR = cls2.Invoke();              // khởi tạo instance
+                                                           // 
+                    dynamic mod3 = Py.Import("Tool.Classic");
+                    dynamic cls3 = mod3.GetAttr("Filter"); // class
+                    G.Classic = cls3.Invoke();              // khởi tạo instance
+
 
                     G.IniEdge = true;
                     // khởi tạo instance
                     G.Classic.LoadEdge();
-                
-            }
 
+                }
+            }
+            catch (PythonException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         public static void ClosePython()
         {
+            PythonEngine.Shutdown();       }
 
-             G.CommonPlus.ClosePython();
-
-        }
         public static Mat AutoCanny(Mat grayImage, double sigma = 0.33)
         {
             // Lấy toàn bộ byte ảnh ra mảng 1 chiều

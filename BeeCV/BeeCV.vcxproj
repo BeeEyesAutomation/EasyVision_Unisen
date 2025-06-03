@@ -159,8 +159,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(Python312)\include;C:\pybind11\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(Python312)\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
     <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_4.X|x64'">
@@ -184,8 +184,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(Python312)\include;C:\pybind11\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(Python312)\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\OpenCV4.5\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenCV4.5\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -285,7 +285,7 @@
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
-      <AdditionalDependencies>opencv_world455d.lib;python312.lib;MvCameraControl.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world455d.lib;MvCameraControl.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(MVCAM_COMMON_RUNENV)\Libraries\win64</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -405,7 +405,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opencv_world455.lib;MvCameraControl.lib;python312.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world455.lib;MvCameraControl.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(MVCAM_COMMON_RUNENV)\Libraries\win64</AdditionalLibraryDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -427,14 +427,12 @@
     <ClInclude Include="Focus.h" />
     <ClInclude Include="MatchingShape.h" />
     <ClInclude Include="MvCamera.h" />
-    <ClInclude Include="OCR.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="G.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Yolo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarCode.cpp" />
@@ -443,7 +441,6 @@
     <ClCompile Include="Focus.cpp" />
     <ClCompile Include="MatchingShape.cpp" />
     <ClCompile Include="MvCamera.cpp" />
-    <ClCompile Include="OCR.cpp" />
     <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="G.cpp" />
     <ClCompile Include="pch.cpp">
@@ -456,7 +453,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Yolo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

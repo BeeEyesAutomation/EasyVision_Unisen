@@ -34,9 +34,6 @@
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
-#include <pybind11/embed.h>
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
 #include <msclr/marshal_cppstd.h>
 using namespace cv;
 using namespace std;
@@ -44,7 +41,6 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Drawing;
 using namespace System::Drawing::Imaging;
-namespace py = pybind11;
 // Include files to use the pylon API.
 //#include <pylon/PylonIncludes.h>
 #ifdef PYLON_WIN_BUILD
@@ -61,14 +57,7 @@ namespace CvPlus {
 	extern cv::Mat BytesToMat(uchar* uc, int image_rows, int image_cols, int image_type);
 	extern int getMaxAreaContourId(vector <vector<cv::Point>> contours);
 	extern Mat RotateMat(Mat raw, RotatedRect rot);
-	extern py::object _yolo;
-	extern py::object _ocr;
-	//extern CDeviceInfo nameBasler;
-	//extern Camera_t baslerGigE;
-	//extern CGrabResultPtr ptrGrabResult;
-	//extern CPylonImage image;/////anh output
-	//extern CImageFormatConverter fc;///anh convert
-
+	
 	Mat BitmapToMat(System::Drawing::Bitmap^ bitmap);
 	Bitmap^ MatToBitmap(Mat img);
 	extern cv::VideoCapture camUSB;
@@ -81,9 +70,6 @@ namespace CvPlus {
 	public ref  class Common
 	{
 	public:void CropRotate(int x, int y, int w, int  h, float angle);
-	public:	System::String^ IniPython();
-	public:bool  ClosePython();
-	//public:Byte* ReturnRaw();
 	public:	Bitmap^	GetImageRaw();
 	public:	Bitmap^ GetImageRsTemp();
 

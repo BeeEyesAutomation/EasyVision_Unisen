@@ -19,7 +19,7 @@ namespace BeeUi.Commons
         }
         public dynamic tool;
         public ItemTool ItemTool;
-       public PropetyTool PropetyTool;
+        public PropetyTool PropetyTool;
         public Tools (ItemTool ItemTool,dynamic tool, PropetyTool PropetyTool)
         {
             this.ItemTool = ItemTool;

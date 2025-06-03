@@ -267,7 +267,6 @@ namespace BeeUi.Commons
             //    return;
             //}
             if (G.IsRun) return;
-
             this.Parent.Visible = false;
             txtEdit.Visible = false;
             G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
@@ -287,10 +286,9 @@ namespace BeeUi.Commons
             }
             control.Parent = G.EditTool.pEditTool;
             control.MouseMove +=new System.Windows.Forms.MouseEventHandler( G.EditTool.View.tool_MouseMove);
-           G.ToolSettings.Visible = false;
+            G.ToolSettings.Visible = false;
             G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
             G.EditTool.lbTool.Text = TypeTool.ToString();
-           
             G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
             G.listAlltool[G.indexToolSelected].tool.LoadPara() ;
             G.EditTool.View.imgView.Invalidate();
