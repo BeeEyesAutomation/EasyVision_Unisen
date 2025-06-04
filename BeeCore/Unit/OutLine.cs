@@ -414,6 +414,7 @@ namespace BeeCore
 
 
             if (BeeCore.Common.matRaw.Empty()) return;
+            if (rotAreaAdjustment == null) rotAreaAdjustment = rotArea;
             Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rotAreaAdjustment, rotMask);
             Mat matProcess = new Mat();
             switch (TypeMode)

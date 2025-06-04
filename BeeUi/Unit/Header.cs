@@ -971,6 +971,7 @@ txtQrCode.Focus();
                     }
                     G.IsSendRS = false;
                 }
+                if(!G.IsRun)
                 if (BeeCore. G.ParaCam.IsOnLight!=Convert.ToBoolean( G.PLC.valueOutput[5]))
                 {
                     G.PLC.SetOutPut(5, BeeCore.G.ParaCam.IsOnLight); //Busy

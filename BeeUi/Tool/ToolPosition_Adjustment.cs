@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using BeeCore;
 using BeeUi.Common;
 using BeeUi.Commons;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 
@@ -469,14 +470,14 @@ namespace BeeUi.Tool
             if (bmTemp != null)
             {
                 Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
-             
+             if(Propety.rotPositionAdjustment != null)
                     G.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
             }
             trackScore.Value = Propety.Score ;
             trackAngle.Value =(int)Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             //txtAngle.Text = (int)Propety.Angle + "";
-            
+            Propety.LimitCounter = 1;
             Propety.ckBitwiseNot = Propety.ckBitwiseNot;
             Propety.ckSIMD = Propety.ckSIMD;
             Propety.ckSubPixel = Propety.ckSubPixel;
