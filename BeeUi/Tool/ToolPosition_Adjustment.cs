@@ -467,6 +467,7 @@ namespace BeeUi.Tool
                   
             };
             Bitmap bmTemp = Propety.matTemp;
+            //Herlo
             if (bmTemp != null)
             {
                 Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
