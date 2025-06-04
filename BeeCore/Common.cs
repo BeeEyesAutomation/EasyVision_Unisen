@@ -79,6 +79,7 @@ namespace BeeCore
 
             return new Mat(rotatedImage, roi);
         }
+       static String er;
         public static void IniPython()
         {
 
@@ -108,7 +109,7 @@ namespace BeeCore
                     dynamic cls = mod.GetAttr("ObjectDetector"); // class
                     G.objYolo = cls.Invoke();              // khởi tạo instance
                     dynamic mod2 = Py.Import("Tool.OcrWapper");
-                    dynamic cls2 = mod2.GetAttr("OCRWrapper"); // class
+                    dynamic cls2 = mod2.GetAttr("OCR"); // class
                     G.objOCR = cls2.Invoke();              // khởi tạo instance
                                                            // 
                     dynamic mod3 = Py.Import("Tool.Classic");
@@ -134,7 +135,9 @@ namespace BeeCore
             }
             catch (PythonException ex)
             {
-                Console.WriteLine(ex.Message);
+                 er=ex.Message;
+                String a = "b";
+                MessageBox.Show(ex.Message);
             }
         }
         public static void ClosePython()

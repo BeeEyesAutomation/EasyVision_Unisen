@@ -13,9 +13,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using static LibUsbDotNet.Main.UsbTransferQueue;
 using static OpenCvSharp.ML.DTrees;
 using static System.Net.Mime.MediaTypeNames;
 using Point = System.Drawing.Point;
+using Size = OpenCvSharp.Size;
 
 
 
@@ -94,6 +96,66 @@ namespace BeeCore
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
        int scoreRS = 0;
+        String exMess = "";
+        public static OpenCvSharp.Point[] ConvertBoxToPoints(PyObject box)
+        {
+            OpenCvSharp.Point[] points = new OpenCvSharp.Point[4];
+            for (int i = 0; i < 4; i++)
+            {
+                PyObject point = box[i];
+                float x = (float)point[0].As<double>();
+                float y = (float)point[1].As<double>();
+                points[i] = new OpenCvSharp.Point(x, y);
+            }
+            
+            return points;
+        }
+        public static Mat EnhanceImage(Mat input, double contrastFactor = 4.0, double sharpenFactor = 4.0)
+        {
+            // Tăng độ tương phản
+            Mat contrastImg = new Mat();
+            input.ConvertTo(contrastImg, MatType.CV_8UC3, contrastFactor, 0); // beta=0 không thay đổi độ sáng
+
+            // Làm mờ để chuẩn bị sharpen
+            Mat blurred = new Mat();
+            Cv2.GaussianBlur(contrastImg, blurred, new Size(0, 0), 3);
+
+            // Làm nét bằng unsharp masking
+            Mat sharpened = new Mat();
+            Cv2.AddWeighted(contrastImg, 1.0 + sharpenFactor, blurred, -sharpenFactor, 0, sharpened);
+            Cv2.ImWrite("EnhanceImage.png", sharpened);
+            return sharpened;
+        }
+        public static Mat PreprocessForOCR(Mat input,int clipLimit=2 ,int sigma=3,int blur=3)
+        {
+            // 1. Chuyển sang grayscale nếu cần
+            Mat gray = new Mat();
+            if (input.Channels() == 3)
+                Cv2.CvtColor(input, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = input.Clone();
+
+            // 2. Tăng tương phản bằng CLAHE
+            CLAHE clahe = Cv2.CreateCLAHE(clipLimit, new Size(8, 8));
+            Mat contrast = new Mat();
+            clahe.Apply(gray, contrast);
+
+            // 3. Làm sắc nét bằng Unsharp Mask
+            Mat blurred = new Mat();
+            Cv2.GaussianBlur(contrast, blurred, new Size(0, 0), sigma);
+            Mat sharp = new Mat();
+            Cv2.AddWeighted(contrast, 1.5, blurred, -0.5, 0, sharp);
+
+            // 4. Chuyển sang đen trắng rõ ràng bằng Otsu threshold
+            Mat binary = new Mat();
+          //  Cv2.Threshold(sharp, binary, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+
+            // 5. Lọc nhiễu bằng MedianBlur
+            Mat clean = new Mat();
+            Cv2.MedianBlur(sharp, clean, blur);
+            Cv2.ImWrite("CropOCR.png", clean);
+            return clean;
+        }
         public void DoWork(RectRotate rotCrop)
         {
             using (Py.GIL())
@@ -107,7 +169,8 @@ namespace BeeCore
                     scoreRS = 0;
                     Content = "";
                     scoreRS = 0;
-                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw.Clone(), new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                    matCrop = EnhanceImage(matCrop);
                     if (matCrop.Type() != MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     if (matCrop.Channels() == 1)
@@ -159,17 +222,37 @@ namespace BeeCore
                     {
                         listLabel.Add(new List<string>());
                         // Lấy box: (x1, y1, x2, y2)
+                       // PyObject box = boxes[j];
+                        //float centerX = (float)box[0][0].AsManagedObject(typeof(float));
+                        //float centerY = (float)box[0][1].AsManagedObject(typeof(float));
+
+                        //float width = (float)box[1][0].AsManagedObject(typeof(float));
+                        //float height = (float)box[1][1].AsManagedObject(typeof(float));
+
+                        //float angle = (float)box[2].AsManagedObject(typeof(float));
+                        //// Tạo RotatedRect trong C#
+                        //// Tạo rotated rectangle từ polygon
                         PyObject box = boxes[j];
-                        float centerX = (float)box[0][0].AsManagedObject(typeof(float));
-                        float centerY = (float)box[0][1].AsManagedObject(typeof(float));
+                      OpenCvSharp . Point[] polygonPoints = ConvertBoxToPoints(box);
+                       
+                        //float x1 = (float)box[0].As<double>();
+                        //float y1 = (float)box[1].As<double>();
+                        //float x2 = (float)box[2].As<double>();
+                        //float y2 = (float)box[3].As<double>();
+                        //Point2f[] polygonPoints = new Point2f[]
+                        //{
+                        //    new Point2f(10, 10),
+                        //    new Point2f(100, 20),
+                        //    new Point2f(90, 80),
+                        //    new Point2f(20, 90)
+                        //};
+                        RotatedRect rotatedRect = Cv2.MinAreaRect(polygonPoints);
 
-                        float width = (float)box[1][0].AsManagedObject(typeof(float));
-                        float height = (float)box[1][1].AsManagedObject(typeof(float));
-
-                        float angle = (float)box[2].AsManagedObject(typeof(float));
-                        // Tạo RotatedRect trong C#
-
-                        if (angle == 180) angle = 0;
+                        // Lấy thông tin
+                        // Point2f center = rotatedRect.Center;
+                        //Size2f size = rotatedRect.Size;
+                        //   float angle = rotatedRect.Angle;
+                        //  if (angle == 180) angle = 0;
                         //RotatedRect rotatedRect = new RotatedRect(new Point2f(centerX, centerY), new Size2f(width, height), angle);
 
                         //// Lấy 4 đỉnh của hình chữ nhật xoay
@@ -183,9 +266,20 @@ namespace BeeCore
                         //{
                         //    Cv2.Line(matCrop, points[k], points[(k + 1) % 4], Scalar.Red, 2);
                         //}
-                    //    Cv2.ImWrite("cropRS.png", matCrop);
+                        //    Cv2.ImWrite("cropRS.png", matCrop);
+                        int width =(int) rotatedRect.Size.Width;
+                        int height = (int)rotatedRect.Size.Height;
+                        if (width < height)
+                            {
+                            int h = width, w = height;
+                            width = w;
+                            height = h;
+                            rotatedRect.Angle = rotatedRect.Angle + 90;
+                        }
+                        if (rotatedRect.Angle == 180) rotatedRect.Angle = 0;
+
                         RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
-                        RectRotate rt = new RectRotate(rect, new PointF(centerX, centerY), angle, AnchorPoint.None,false);
+                        RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None,false);
 
                         //// Gán Rect quay góc 0 (vì YOLO box không có góc)
                         //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);
@@ -214,11 +308,11 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                 {
-                    //   MessageBox.Show("Python Error: " + pyEx.Message);
+                    exMess=pyEx.Message;
                 }
                 catch (Exception ex)
                 {
-                    //  MessageBox.Show("Error: " + ex.Message);
+                    exMess = ex.Message;
                 }
             }
 

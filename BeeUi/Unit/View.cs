@@ -1701,8 +1701,7 @@ namespace BeeUi
             //gc.Clear(Color.White);
             if (BeeCore.Common.matRaw == null) return;
             Bitmap bm = BeeCore.Common.matRaw.Clone().ToBitmap();
-            bmResult = new Bitmap(bm,
-                                 (int)bm.Width, (int)bm.Height);
+            bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
             gc = Graphics.FromImage(bmResult);
             gc.ResetTransform();
             var mat = new Matrix();

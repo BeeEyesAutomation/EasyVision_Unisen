@@ -94,7 +94,7 @@ namespace BeeUi
        public static Tools tool ;
         public static EditTool EditTool ;
         public static bool IsDrawProcess = true;
-        public static bool IsByPassPLC = false;
+        public static bool IsByPassPLC = true;
         public static Color clTrack = (Color)new ColorConverter().ConvertFromString("#444444");
         public static Account account = new Account();
         public static InforBar InforBar = new InforBar();
