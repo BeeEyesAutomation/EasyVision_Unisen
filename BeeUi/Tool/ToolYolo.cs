@@ -1253,7 +1253,7 @@ namespace BeeUi.Tool
             if (!IsIni)
             {
                 IsIni = true;
-                tmCheckFist.Enabled = true;
+             //   tmCheckFist.Enabled = true;
 
 
             }

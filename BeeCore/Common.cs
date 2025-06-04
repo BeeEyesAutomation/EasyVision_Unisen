@@ -108,11 +108,12 @@ namespace BeeCore
                     dynamic mod = Py.Import("Tool.Learning");
                     dynamic cls = mod.GetAttr("ObjectDetector"); // class
                     G.objYolo = cls.Invoke();              // khởi tạo instance
-                    dynamic mod2 = Py.Import("Tool.OcrWapper");
+                    dynamic mod2 = Py.Import("Tool.OCR");
                     dynamic cls2 = mod2.GetAttr("OCR"); // class
                     G.objOCR = cls2.Invoke();              // khởi tạo instance
-                                                           // 
-                    dynamic mod3 = Py.Import("Tool.Classic");
+                    OCR.SetModel();
+                
+                      dynamic mod3 = Py.Import("Tool.Classic");
                     dynamic cls3 = mod3.GetAttr("Filter"); // class
                     G.Classic = cls3.Invoke();              // khởi tạo instance
 

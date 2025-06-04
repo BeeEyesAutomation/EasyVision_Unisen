@@ -201,10 +201,10 @@ namespace BeeUi.Tool
                 mat.Rotate(rot._rectRotation);
                 gc.Transform = mat; 
                 Brush brushText = Brushes.White;
-                String sDraw = "";
-                foreach (String ss in Propety.listContent)
-                    sDraw += ss;
-                Draws.Box2Label(gc, rot._rect, sDraw, Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 3,20);
+                //String sDraw = "";
+                //foreach (String ss in Propety.listContent)
+                //    sDraw += ss;
+                Draws.Box2Label(gc, rot._rect,Propety. listLabelResult[i], "", G.fontRS, cl, brushText, 50, 3,20);
 
                 //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
                   
@@ -772,8 +772,9 @@ namespace BeeUi.Tool
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-          
-            BeeCore.OCR.SetModel();
+         
+           
+           
           
         }
 
@@ -786,6 +787,11 @@ namespace BeeUi.Tool
 
 
             }
+        }
+
+        private void numEnhance_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Enhance =(int) numEnhance.Value;
         }
     }
 }

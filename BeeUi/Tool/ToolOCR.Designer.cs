@@ -61,10 +61,8 @@
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton1 = new BeeUi.Common.RJButton();
-            this.rjButton2 = new BeeUi.Common.RJButton();
-            this.rjButton3 = new BeeUi.Common.RJButton();
             this.rjButton6 = new BeeUi.Common.RJButton();
-            this.customNumeric1 = new BeeUi.Commons.CustomNumeric();
+            this.numEnhance = new BeeUi.Commons.CustomNumeric();
             this.btnCheckArea = new BeeUi.Common.RJButton();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
@@ -111,7 +109,7 @@
             this.txtLabel.Location = new System.Drawing.Point(67, 43);
             this.txtLabel.Multiline = true;
             this.txtLabel.Name = "txtLabel";
-            this.txtLabel.Size = new System.Drawing.Size(143, 62);
+            this.txtLabel.Size = new System.Drawing.Size(141, 62);
             this.txtLabel.TabIndex = 36;
             this.txtLabel.TextChanged += new System.EventHandler(this.txtLabel_TextChanged);
             // 
@@ -132,7 +130,7 @@
             this.txtModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtModel.Location = new System.Drawing.Point(67, 3);
             this.txtModel.Name = "txtModel";
-            this.txtModel.Size = new System.Drawing.Size(143, 29);
+            this.txtModel.Size = new System.Drawing.Size(141, 29);
             this.txtModel.TabIndex = 32;
             // 
             // label7
@@ -377,15 +375,15 @@
             this.trackScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackScore.Location = new System.Drawing.Point(3, 16);
             this.trackScore.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackScore.Max = 100;
-            this.trackScore.Min = 0;
+            this.trackScore.Max = 100F;
+            this.trackScore.Min = 0F;
             this.trackScore.Name = "trackScore";
             this.trackScore.Size = new System.Drawing.Size(160, 47);
-            this.trackScore.Step = 1;
+            this.trackScore.Step = 1F;
             this.trackScore.TabIndex = 28;
-            this.trackScore.Value = 100;
-            this.trackScore.ValueScore = 0;
-            this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
+            this.trackScore.Value = 100F;
+            this.trackScore.ValueScore = 0F;
+            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
             this.trackScore.Load += new System.EventHandler(this.trackScore_Load_1);
             // 
             // label8
@@ -660,10 +658,8 @@
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel10.Controls.Add(this.rjButton1, 4, 0);
-            this.tableLayoutPanel10.Controls.Add(this.rjButton2, 2, 0);
-            this.tableLayoutPanel10.Controls.Add(this.rjButton3, 1, 0);
             this.tableLayoutPanel10.Controls.Add(this.rjButton6, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.customNumeric1, 3, 0);
+            this.tableLayoutPanel10.Controls.Add(this.numEnhance, 3, 0);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(5, 547);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
@@ -703,64 +699,6 @@
             this.rjButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.rjButton1.UseVisualStyleBackColor = false;
             // 
-            // rjButton2
-            // 
-            this.rjButton2.BackColor = System.Drawing.Color.LightGray;
-            this.rjButton2.BackgroundColor = System.Drawing.Color.LightGray;
-            this.rjButton2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.rjButton2.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton2.BorderRadius = 5;
-            this.rjButton2.BorderSize = 1;
-            this.rjButton2.ButtonImage = null;
-            this.rjButton2.Corner = BeeCore.Corner.None;
-            this.rjButton2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rjButton2.FlatAppearance.BorderSize = 0;
-            this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton2.ForeColor = System.Drawing.Color.Black;
-            this.rjButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton2.IsCLick = false;
-            this.rjButton2.IsNotChange = false;
-            this.rjButton2.IsRect = false;
-            this.rjButton2.IsUnGroup = false;
-            this.rjButton2.Location = new System.Drawing.Point(150, 0);
-            this.rjButton2.Margin = new System.Windows.Forms.Padding(0);
-            this.rjButton2.Name = "rjButton2";
-            this.rjButton2.Size = new System.Drawing.Size(75, 52);
-            this.rjButton2.TabIndex = 33;
-            this.rjButton2.Text = "More";
-            this.rjButton2.TextColor = System.Drawing.Color.Black;
-            this.rjButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton2.UseVisualStyleBackColor = false;
-            // 
-            // rjButton3
-            // 
-            this.rjButton3.BackColor = System.Drawing.Color.Gray;
-            this.rjButton3.BackgroundColor = System.Drawing.Color.Gray;
-            this.rjButton3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.rjButton3.BorderColor = System.Drawing.Color.LightGray;
-            this.rjButton3.BorderRadius = 5;
-            this.rjButton3.BorderSize = 1;
-            this.rjButton3.ButtonImage = null;
-            this.rjButton3.Corner = BeeCore.Corner.None;
-            this.rjButton3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rjButton3.FlatAppearance.BorderSize = 0;
-            this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton3.ForeColor = System.Drawing.Color.Black;
-            this.rjButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton3.IsCLick = true;
-            this.rjButton3.IsNotChange = false;
-            this.rjButton3.IsRect = false;
-            this.rjButton3.IsUnGroup = false;
-            this.rjButton3.Location = new System.Drawing.Point(75, 0);
-            this.rjButton3.Margin = new System.Windows.Forms.Padding(0);
-            this.rjButton3.Name = "rjButton3";
-            this.rjButton3.Size = new System.Drawing.Size(75, 52);
-            this.rjButton3.TabIndex = 32;
-            this.rjButton3.Text = "Equal";
-            this.rjButton3.TextColor = System.Drawing.Color.Black;
-            this.rjButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton3.UseVisualStyleBackColor = false;
-            // 
             // rjButton6
             // 
             this.rjButton6.BackColor = System.Drawing.Color.LightGray;
@@ -785,24 +723,25 @@
             this.rjButton6.Name = "rjButton6";
             this.rjButton6.Size = new System.Drawing.Size(75, 52);
             this.rjButton6.TabIndex = 31;
-            this.rjButton6.Text = "Less";
+            this.rjButton6.Text = "Enhace";
             this.rjButton6.TextColor = System.Drawing.Color.Black;
             this.rjButton6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.rjButton6.UseVisualStyleBackColor = false;
             // 
-            // customNumeric1
+            // numEnhance
             // 
-            this.customNumeric1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.customNumeric1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.customNumeric1.Location = new System.Drawing.Point(225, 0);
-            this.customNumeric1.Margin = new System.Windows.Forms.Padding(0);
-            this.customNumeric1.Maxnimum = 100;
-            this.customNumeric1.Minimum = 0;
-            this.customNumeric1.Name = "customNumeric1";
-            this.customNumeric1.Size = new System.Drawing.Size(146, 52);
-            this.customNumeric1.Step = 1;
-            this.customNumeric1.TabIndex = 34;
-            this.customNumeric1.Value = 0;
+            this.numEnhance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.numEnhance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numEnhance.Location = new System.Drawing.Point(225, 0);
+            this.numEnhance.Margin = new System.Windows.Forms.Padding(0);
+            this.numEnhance.Maxnimum = 100;
+            this.numEnhance.Minimum = 0;
+            this.numEnhance.Name = "numEnhance";
+            this.numEnhance.Size = new System.Drawing.Size(146, 52);
+            this.numEnhance.Step = 1;
+            this.numEnhance.TabIndex = 34;
+            this.numEnhance.Value = 4;
+            this.numEnhance.ValueChanged += new System.EventHandler(this.numEnhance_ValueChanged);
             // 
             // btnCheckArea
             // 
@@ -871,7 +810,7 @@
             this.tableLayoutPanel4.ColumnCount = 3;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.36437F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.63563F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 164F));
             this.tableLayoutPanel4.Controls.Add(this.btnSetLabel, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.txtLabel, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label7, 0, 1);
@@ -908,9 +847,9 @@
             this.btnSetLabel.IsNotChange = true;
             this.btnSetLabel.IsRect = false;
             this.btnSetLabel.IsUnGroup = true;
-            this.btnSetLabel.Location = new System.Drawing.Point(216, 43);
+            this.btnSetLabel.Location = new System.Drawing.Point(214, 43);
             this.btnSetLabel.Name = "btnSetLabel";
-            this.btnSetLabel.Size = new System.Drawing.Size(157, 62);
+            this.btnSetLabel.Size = new System.Drawing.Size(159, 62);
             this.btnSetLabel.TabIndex = 37;
             this.btnSetLabel.Text = "SetLabel";
             this.btnSetLabel.TextColor = System.Drawing.Color.Black;
@@ -938,9 +877,9 @@
             this.btnPathModel.IsNotChange = true;
             this.btnPathModel.IsRect = false;
             this.btnPathModel.IsUnGroup = true;
-            this.btnPathModel.Location = new System.Drawing.Point(216, 3);
+            this.btnPathModel.Location = new System.Drawing.Point(214, 3);
             this.btnPathModel.Name = "btnPathModel";
-            this.btnPathModel.Size = new System.Drawing.Size(157, 34);
+            this.btnPathModel.Size = new System.Drawing.Size(159, 34);
             this.btnPathModel.TabIndex = 5;
             this.btnPathModel.Text = "Load Model";
             this.btnPathModel.TextColor = System.Drawing.Color.Black;
@@ -1233,16 +1172,14 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer tmCheckFist;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
-        private Common.RJButton btnCheckArea;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private Common.RJButton rjButton1;
-        private Common.RJButton rjButton2;
-        private Common.RJButton rjButton3;
         private Common.RJButton rjButton6;
-        private Commons.CustomNumeric customNumeric1;
+        private Commons.CustomNumeric numEnhance;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private Common.RJButton btnSet;
         private System.Windows.Forms.TextBox txtContent;
         private System.ComponentModel.BackgroundWorker workLoadModel;
+        private Common.RJButton btnCheckArea;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BeeCore.Funtion;
+using BeeCore.Parameter;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
@@ -81,6 +82,7 @@ namespace BeeCore
         public List<RectRotate> rectRotates = new List<RectRotate>();
         String[] sSplit;
         public List<float> listScore = new List<float>();
+        public List<String> listLabelResult= new List<String>();
         public List<bool> listOK = new List<bool>();
         public List<List<string>> listLabel = new List<List<string>>();
         String listMatch;
@@ -126,7 +128,8 @@ namespace BeeCore
             Cv2.ImWrite("EnhanceImage.png", sharpened);
             return sharpened;
         }
-        public static Mat PreprocessForOCR(Mat input,int clipLimit=2 ,int sigma=3,int blur=3)
+        public int Enhance = 4;
+        public static Mat PreprocessForOCR(Mat input,int clipLimit=3 ,int sigma=3,int blur=3)
         {
             // 1. Chuyển sang grayscale nếu cần
             Mat gray = new Mat();
@@ -169,8 +172,9 @@ namespace BeeCore
                     scoreRS = 0;
                     Content = "";
                     scoreRS = 0;
+                    listLabelResult = new List<String>();
                     Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw.Clone(), new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
-                    matCrop = EnhanceImage(matCrop);
+                   // matCrop = EnhanceImage(matCrop,Enhance);
                     if (matCrop.Type() != MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     if (matCrop.Channels() == 1)
@@ -209,7 +213,7 @@ namespace BeeCore
                     listScore = new List<float>();
 
                     var npArray = G.np.array(buffer).reshape(height1, width1, 3);
-                    dynamic result = G.objOCR.find_ocr(npArray);//, (float)(Score / 100.0), nameTool
+                    dynamic result = G.objOCR.find_ocr(npArray,Enhance);//, (float)(Score / 100.0), nameTool
                     if (result == null) return;
 
                     PyObject boxes = result[0];
@@ -276,8 +280,8 @@ namespace BeeCore
                             height = h;
                             rotatedRect.Angle = rotatedRect.Angle + 90;
                         }
-                        if (rotatedRect.Angle == 180) rotatedRect.Angle = 0;
-
+                        if (rotatedRect.Angle > 145) rotatedRect.Angle =-(180- rotatedRect.Angle);
+                      
                         RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
                         RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None,false);
 
@@ -293,6 +297,7 @@ namespace BeeCore
                         string label = labels[j].ToString();
                         label = label.Replace("\n", "");
                         Content += label.Trim();
+                        listLabelResult.Add(label);
                         listLabel[listLabel.Count()-1].Add(label);
                         listOK.Add(false);
                         rectRotates.Add(rt);
@@ -301,7 +306,21 @@ namespace BeeCore
                         listScore.Add(score);
 
                     }
+                    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
 
+                    for (int j = 0; j < rectRotates.Count; j++)
+                    {
+                        combined.Add(new RotatedBoxInfo
+                        {
+                            Box = rectRotates[j],
+                            Label = listLabelResult[j],
+                            Score = listScore[j]
+                        });
+                    }
+                    combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+                    rectRotates = combined.Select(b => b.Box).ToList();
+                    listLabelResult = combined.Select(b => b.Label).ToList();
+                    listScore = combined.Select(b => b.Score).ToList();
                     Content += "\n";
                     // result: tuple (boxes, scores, labels) từ Python
                     // e.Result = result;
@@ -327,8 +346,11 @@ namespace BeeCore
 
 
                 ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
-                listContent = Content.Select(c => c.ToString()).ToArray();
-                listMatching = Matching.Select(c => c.ToString()).ToArray();
+                //   listContent = Content.Select(c => c.ToString()).ToArray();
+                //  listMatching = Matching.Select(c => c.ToString()).ToArray();
+                Content = "";
+                foreach (String label in listLabelResult)
+                    Content += label;
                 if (ScoreRs < 0) ScoreRs = 0;
                 if (Content != "")
                 {
@@ -340,7 +362,7 @@ namespace BeeCore
 
                         IsOK = true;
                     }
-                    listContent = CompareStrings(listMatching, listContent);
+                  //  listContent = CompareStrings(listMatching, listContent);
 
                 }
                 else
