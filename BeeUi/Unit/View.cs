@@ -2197,19 +2197,21 @@ namespace BeeUi
             {
                 if (G.PLC.IsConnected)
                 {
-                X: G.Header.tmReadPLC.Enabled = false;
-                    if (G.Header.workPLC.IsBusy)
-                    {
-                        await Task.Delay(10);
-                        goto X;
-                    }
-                    await Task.Run(() => G.PLC.WriteInPut(0, true));
-                    G.Header.tmReadPLC.Enabled = true;
-                    G.PLC.WriteInPut(0, true);
+                    tmContinuous.Enabled = btnRecord.IsCLick;
+                    //X: G.Header.tmReadPLC.Enabled = false;
+                    //    if (G.Header.workPLC.IsBusy)
+                    //    {
+                    //        await Task.Delay(10);
+                    //        goto X;
+                    //    }
+                    //    await Task.Run(() => G.PLC.WriteInPut(0, true));
+                    //    G.Header.tmReadPLC.Enabled = true;
+                    //    G.PLC.WriteInPut(0, true);
+                    //}
+                    //if (!workReadCCD.IsBusy)
+                    //    workReadCCD.RunWorkerAsync();
+                    return;
                 }
-                //if (!workReadCCD.IsBusy)
-                //    workReadCCD.RunWorkerAsync();
-                return;
             } 
             else if(G.IsByPassPLC)
             {
