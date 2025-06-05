@@ -1685,10 +1685,10 @@ namespace BeeUi
         {
 
 
-            if (bmResult != null)
+            if (BeeCore.Common.bmResult != null)
             {
                
-                bmResult.Dispose();
+                BeeCore.Common.bmResult.Dispose();
             }
 
 
@@ -1701,8 +1701,8 @@ namespace BeeUi
             //gc.Clear(Color.White);
             if (BeeCore.Common.matRaw == null) return;
             Bitmap bm = BeeCore.Common.matRaw.Clone().ToBitmap();
-            bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
-            gc = Graphics.FromImage(bmResult);
+            BeeCore.Common.bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
+            gc = Graphics.FromImage(BeeCore.Common.bmResult);
             gc.ResetTransform();
             var mat = new Matrix();
             mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
@@ -1769,47 +1769,48 @@ namespace BeeUi
 
                 indexTool++;
             }
-            if (bmResult == null) return;
-            if (bmResult.Width == 0) return;
-            if (bmResult.Height == 0) return;
+            if (BeeCore.Common.bmResult == null) return;
+            if (BeeCore.Common.bmResult.Width == 0) return;
+            if (BeeCore.Common.bmResult.Height == 0) return;
             if(G.listHis.Count >20){
                 G.listHis[0].bm.Dispose();
                 G.listHis.RemoveAt(0);
             }
-            G.listHis.Add(new HistoryCheck( (Bitmap) bmResult.Clone(),G.TotalOK,DateTime.Now));
-            imgView.Invoke((Action)(() =>
-            {
-                if (imgView.Image != null)
-                {
-                    imgView.Image.Dispose(); // Giải phóng ảnh cũ
-                }
-                try
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        bmResult.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
+            // G.listHis.Add(new HistoryCheck( (Bitmap) BeeCore.Common.bmResult.Clone(),G.TotalOK,DateTime.Now));
+            Shows.RefreshImg(imgView,TypeImg.Result);
+            //imgView.Invoke((Action)(() =>
+            //{
+            //    if (imgView.Image != null)
+            //    {
+            //        imgView.Image.Dispose(); // Giải phóng ảnh cũ
+            //    }
+            //    try
+            //    {
+            //        using (MemoryStream ms = new MemoryStream())
+            //        {
+            //            BeeCore.Common.bmResult.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //            ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
 
-                        // Load hình ảnh từ MemoryStream vào PictureBox
-                        imgView.Image = Image.FromStream(ms);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message.Contains("GDI"))
-                    {
-                        imgView = new Cyotek.Windows.Forms.ImageBox();
+            //            // Load hình ảnh từ MemoryStream vào PictureBox
+            //            imgView.Image = Image.FromStream(ms);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (ex.Message.Contains("GDI"))
+            //        {
+            //            imgView = new Cyotek.Windows.Forms.ImageBox();
 
-                        imgView.Size = new System.Drawing.Size(pView.Width, pView.Height);
-                     
-                        imgView.Parent = pView;
-                        imgView.Location = new Point(pView.Width / 2 - 1280 / 2, Height / 2 - 720 / 2);
+            //            imgView.Size = new System.Drawing.Size(pView.Width, pView.Height);
 
-                    }
-                  
-                }
+            //            imgView.Parent = pView;
+            //            imgView.Location = new Point(pView.Width / 2 - 1280 / 2, Height / 2 - 720 / 2);
 
-            }));
+            //        }
+
+            //    }
+
+            //}));
             //imgView.Refresh();
             //imgView.Update();
             //if (!IsInvert)
@@ -1994,6 +1995,7 @@ namespace BeeUi
                 timer.Stop();
 
                 SumCycle = (int)timer.Elapsed.TotalMilliseconds;
+              
                 ShowResultTotal();
                 if (G.Header.IsWaitingRead)
                 {
@@ -2300,7 +2302,7 @@ namespace BeeUi
             //        //G.EditTool.View.imgView.Location = new Point(G.EditTool.View.pView.Width / 2 - BeeCore.Common.matRaw.Width / 2, G.EditTool.View.pView.Height / 2 - BeeCore.Common.matRaw.Height / 2);
             if (btnLive.IsCLick)
             {
-                tmRefresh.Enabled = true;
+              //  tmRefresh.Enabled = true;
 
                 //if (G.Header.SerialPort1.IsOpen)
                 //    G.Header.SerialPort1.WriteLine("Live");
@@ -2329,7 +2331,7 @@ namespace BeeUi
         private  void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
 
-
+            
 
             BeeCore.Camera.Read(); 
           
@@ -2346,7 +2348,7 @@ namespace BeeUi
             //    //        BeeCore.Common.matRaw = BeeCore.Common.matLive.Clone();
             //}    
         }
-       public Bitmap bmResult;
+    
         int numLive = 500;
         Stopwatch timer = new Stopwatch();
         public  void ProcessingAll()
@@ -2517,12 +2519,12 @@ namespace BeeUi
         private void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-
+            Shows.RefreshImg(imgView);
             //    BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
             ////  Cv2.ImShow("Result",BeeCore.Common.matRaw);
 
-            ////  bmResult = new Bitmap(OpenCvSharp.Extensions.BitmapConverter.ToBitmap( imgView.ImageIpl));
-            ////gc= Graphics.FromImage(bmResult);
+            ////  BeeCore.Common.bmResult = new Bitmap(OpenCvSharp.Extensions.BitmapConverter.ToBitmap( imgView.ImageIpl));
+            ////gc= Graphics.FromImage(BeeCore.Common.bmResult);
             //// imgView.Invalidate();
             if (btnLive.IsCLick)
             {
@@ -2669,9 +2671,9 @@ namespace BeeUi
             if (G.cnn.State == ConnectionState.Closed)
                 G.ucReport.Connect_SQL();
             if (G.TotalOK)
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "OK", BeeCore.Common.matRaw.Clone(), bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "OK", BeeCore.Common.matRaw.Clone(), BeeCore.Common.bmResult);
             else
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "NG", BeeCore.Common.matRaw.Clone(), bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "NG", BeeCore.Common.matRaw.Clone(), BeeCore.Common.bmResult);
 
         }
         int numErrPort = 0;
@@ -3057,7 +3059,9 @@ namespace BeeUi
             {
                 Files = new List<string>();
               indexFile = 0;
-              
+                if (BeeCore.Common.matRaw != null)
+                    if (!BeeCore.Common.matRaw.Empty())
+                        BeeCore.Common.matRaw.Release();
                 Files .Add( openFile.FileName);
                 BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
                 BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());

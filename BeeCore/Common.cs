@@ -29,6 +29,7 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
 
         unsafe public static extern IntPtr GetImageResult(ref int rows, ref int cols, ref int Type);
+        public static Bitmap bmResult;
 
         public int numError = 0;
         public  bool IsErrorCCD = false;
@@ -85,10 +86,10 @@ namespace BeeCore
 
             try
             {
-                string pythonHome = Environment.GetEnvironmentVariable("Python312");
+                string pythonHome = Environment.GetEnvironmentVariable("Python39");
                 if (!string.IsNullOrEmpty(pythonHome))
                 {
-                    string pythonDll = Path.Combine(pythonHome, "python312.dll");
+                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
                     if (File.Exists(pythonDll))
                     {
                         Python.Runtime.Runtime.PythonDLL = pythonDll;
@@ -105,22 +106,22 @@ namespace BeeCore
 
                     G.np = Py.Import("numpy");
                     //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
-                    dynamic mod = Py.Import("Tool.Learning");
-                    dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                    G.objYolo = cls.Invoke();              // khởi tạo instance
+                   // dynamic mod = Py.Import("Tool.Learning");
+                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                    //G.objYolo = cls.Invoke();              // khởi tạo instance
                     dynamic mod2 = Py.Import("Tool.OCR");
                     dynamic cls2 = mod2.GetAttr("OCR"); // class
                     G.objOCR = cls2.Invoke();              // khởi tạo instance
                     OCR.SetModel();
                 
-                      dynamic mod3 = Py.Import("Tool.Classic");
-                    dynamic cls3 = mod3.GetAttr("Filter"); // class
-                    G.Classic = cls3.Invoke();              // khởi tạo instance
+                      //dynamic mod3 = Py.Import("Tool.Classic");
+                    //dynamic cls3 = mod3.GetAttr("Filter"); // class
+                   // G.Classic = cls3.Invoke();              // khởi tạo instance
 
 
                     G.IniEdge = true;
                     // khởi tạo instance
-                    G.Classic.LoadEdge();
+                  //  G.Classic.LoadEdge();
 
                         }
                     }

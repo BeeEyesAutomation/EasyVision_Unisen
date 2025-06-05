@@ -277,9 +277,8 @@ namespace BeeCore
             int rows = 0, cols = 0, Type = 0;
             IntPtr intPtr = new IntPtr(); 
             Mat raw = new Mat();
-            //if (Common.matRaw != null)
-            //    if (!Common.matRaw.Empty())
-            //        Common.matRaw.Release();
+          
+             
             try
             {
                 switch (G.TypeCCD)
@@ -312,7 +311,7 @@ namespace BeeCore
                         }
                         finally
                         {
-                            raw.Release();
+                            //raw.Release();
                             // Giải phóng bộ nhớ sau khi sử dụng
                         //    Marshal.FreeHGlobal(intPtr);
                         }

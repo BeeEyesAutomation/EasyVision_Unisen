@@ -13,63 +13,90 @@ namespace BeeCore.Funtion
         public class Shows
         {
             public static Bitmap bmShow;
-            public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, TypeImg typeImg = TypeImg.Raw)
+          public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, TypeImg typeImg = TypeImg.Raw)
+{
+    image.Invoke((Action)(() =>
+    {
+        Bitmap bmShow = null;
+        Bitmap bmpFinal = null;
+
+        try
+        {
+            // Giải phóng ảnh cũ nếu có
+            if (image.Image != null)
             {
-                image.Invoke((Action)(() =>
-                {
-                    Bitmap bmShow = null;
-
-                    if (image.Image != null)
-                    {
-                        image.Image.Dispose(); // Giải phóng ảnh cũ
-                    }
-                    try
-                    {
-                        switch (typeImg)
-                        {
-                            case TypeImg.Raw:
-                                //if (G.Config.TypeCamera == TypeCamera.TinyIV)
-                                //    bmShow = BeeCore.Common.bmRaw;
-                                //else
-                                bmShow = BeeCore.Common.matRaw.ToBitmap();
-                                break;
-                                //case TypeImg.Result:
-                                //    bmShow = BeeCore.Common.mat.ToBitmap();
-                                //    break;
-                                //case TypeImg.Crop:
-                                //    GetCrop(ref rows, ref cols, ref Type);
-                                //    break;
-                        }
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            bmShow.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
-
-                            // Load hình ảnh từ MemoryStream vào PictureBox
-                            image.Image = Image.FromStream(ms);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.Message.Contains("GDI"))
-                        {
-                            image = new Cyotek.Windows.Forms.ImageBox();
-
-                            image.Size = new System.Drawing.Size(image.Parent.Width, image.Parent.Height);
-
-                            image.Parent = image.Parent;
-
-                        }
-
-                    }
-                    finally
-                    {
-
-                    }
-
-                }));
+                image.Image.Dispose();
+                image.Image = null;
             }
-        public static Cyotek.Windows.Forms.ImageBox imgTemp;
+
+            // Chọn ảnh để hiển thị
+            switch (typeImg)
+            {
+                case TypeImg.Raw:
+                    bmShow = BeeCore.Common.matRaw.ToBitmap();
+                    break;
+                case TypeImg.Result:
+                    bmShow = BeeCore.Common.bmResult;
+                    break;
+            }
+
+            // Tạo bản sao của ảnh thông qua MemoryStream an toàn
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bmShow.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                using (var tempImage = Image.FromStream(ms))
+                {
+                    // Clone để ảnh không giữ tham chiếu tới stream
+                    bmpFinal = new Bitmap(tempImage);
+                }
+            }
+
+            image.Image = bmpFinal;
+            bmpFinal = null;
+             // GC định kỳ sau mỗi 60 frame (nếu fps cao)
+             frameCounter++;
+            if (frameCounter % 60 == 0)
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Lỗi: " + ex.Message);
+
+            if (ex.Message.Contains("GDI"))
+            {
+                var newImageBox = new Cyotek.Windows.Forms.ImageBox
+                {
+                    Size = new System.Drawing.Size(image.Parent.Width, image.Parent.Height),
+                    Parent = image.Parent
+                };
+
+                image = newImageBox;
+            }
+
+
+        }
+        finally
+        {
+            // Giải phóng bmShow nếu là ảnh tạm
+            if (bmShow != null )
+            {
+                bmShow.Dispose();
+            }
+
+            // Nếu bmpFinal không được gán vào image → giải phóng
+            if (bmpFinal != null)
+            {
+                bmpFinal.Dispose();
+            }
+        }
+    }));        }
+        private static int frameCounter=0;
+ public static Cyotek.Windows.Forms.ImageBox imgTemp;
             public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg)
             {
             if (image == null) return;
