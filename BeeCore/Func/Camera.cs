@@ -272,7 +272,7 @@ namespace BeeCore
           return new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
 
         }
-        public static async void Read()
+        public static  void Read()
         {
             int rows = 0, cols = 0, Type = 0;
             IntPtr intPtr = new IntPtr(); 
@@ -319,7 +319,7 @@ namespace BeeCore
                     case TypeCamera.BaslerGigE:
                         if (Common.matRaw != null)
                             if (!Common.matRaw.Empty())
-                                Common.matRaw.Release();
+                                Common.matRaw.Dispose();
                         //if (IsHist)
                         //    G.CCD.ReadRaw(true);
                         //else
@@ -337,7 +337,7 @@ namespace BeeCore
 
                                 FrameRate = G.CCD.FPS;
                                 BeeCore.Common.Cycle = G.CCD.cycle;
-                                BeeCore.Common.matRaw = raw;
+                                BeeCore.Common.matRaw = raw.Clone();
                             }
                            
 
@@ -346,7 +346,7 @@ namespace BeeCore
                         {
                           //  raw.Release();
                             // Giải phóng bộ nhớ sau khi sử dụng
-                           // Marshal.FreeHGlobal(intPtr);
+                          Marshal.FreeHGlobal(intPtr);
                         }
                         break;
                        case TypeCamera.TinyIV:

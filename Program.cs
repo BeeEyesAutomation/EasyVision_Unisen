@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -32,9 +34,15 @@ namespace BeeIV2
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        static string logPath = @"\Logs\ErrMain.log";
         [STAThread]
         static void Main()
         {
+            // Bắt lỗi ở AppDomain
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            // Bắt lỗi từ thread
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -44,6 +52,22 @@ namespace BeeIV2
             }
            
            
+        }
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            LogError("Thread Exception", e.Exception);
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception;
+            LogError("Unhandled Exception", ex);
+        }
+
+        static void LogError(string title, Exception ex)
+        {
+            string log = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {title}: {ex?.Message}\n{ex?.StackTrace}\n";
+            File.AppendAllText(logPath, log);
         }
     }
 }

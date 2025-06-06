@@ -98,7 +98,14 @@ namespace BeeCore
         public bool IsIni = false;
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
-       int scoreRS = 0;
+        public int Enhance = 4;
+        public int Clahe = 2;
+        public int Sigma = 2;
+        public int Blur = 1;
+        public bool IsEnLimitArea = false;
+        public int LimitArea = 100;
+        public Compares CompareArea = Compares.More;
+      
         String exMess = "";
         public static OpenCvSharp.Point[] ConvertBoxToPoints(PyObject box)
         {
@@ -130,13 +137,7 @@ namespace BeeCore
                 Cv2.ImWrite(nameTool+".png", sharpened);
             return sharpened;
         }
-        public int Enhance = 4;
-        public int Clahe= 2;
-        public int Sigma = 2;
-        public int Blur = 1;
-        public bool IsEnLimitArea = false;
-        public int LimitArea = 100;
-        public Compares CompareArea = Compares.More;
+       
         public  Mat PreprocessForOCR(Mat input,int clipLimit=2 ,int sigma=3,int blur=3)
         {
             // 1. Chuyển sang grayscale nếu cần
@@ -174,150 +175,154 @@ namespace BeeCore
         {
             using (Py.GIL())
             {
+               
                 try
                 {
                     var boxList = new List<RectRotate>();
-                    var scoreList = new List<float>();
+                
                     var labelList = new List<string>();
                     IsOK = false;
                     listOK = new List<bool>();
                     listLabel = new List<List<string>>();
                     rectRotates = new List<RectRotate>();
                     listScore = new List<float>();
-                    scoreRS = 0;
-                    Content = "";
-                    scoreRS = 0;
-                    listLabelResult = new List<String>();
-
-                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw.Clone(), new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
-                    if (Clahe == 0) Clahe = 2;
-                    if (Sigma == 0) Sigma = 3;
-                    if (Blur == 0) Blur = 3;
-              
-                    matCrop = PreprocessForOCR(matCrop,Clahe,Sigma,Blur);
-                    if (matCrop.Type() != MatType.CV_8UC3)
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
-                    if (matCrop.Channels() == 1)
-                    {
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
-                    }
-                    if (!matCrop.IsContinuous())
-                    {
-                        matCrop = matCrop.Clone();
-                    }
-
-                    // Copy dữ liệu sang byte[]
-                    int size = (int)(matCrop.Total() * matCrop.ElemSize());
-                    byte[] buffer = new byte[size];
-                    Marshal.Copy(matCrop.Data, buffer, 0, size);
-
-                    int height1 = matCrop.Height;
-                    int width1 = matCrop.Width;
                   
-
-                    var npArray = G.np.array(buffer).reshape(height1, width1, 3);
-                    int limit = LimitArea * 100;
-                    //if (!IsEnLimitArea)
-                       limit = 0;
-                    dynamic result = G.objOCR.find_ocr(npArray,nameTool, limit);//, (float)(Score / 100.0), nameTool
-                   
-                    if (result == null) return;
-                   // File.WriteAllText("ErC.txt", pyEx.Message);
-                    PyObject boxes = result[0];
-                    PyObject scores = result[1];
-                    PyObject labels = result[2];
-                    if (boxes == null || scores == null || labels == null)
-                        return;
-                    if ((int)boxes.Length() == 0 || (int)scores.Length() == 0 || (int)labels.Length() == 0)
-                        return;
-                    if ((int)boxes.Length() != (int)labels.Length())
-                        return;
-
-                    int i = 0;
-
-                    for (int j = 0; j < boxes.Length(); j++)
+                    Content = "";
+                    ScoreRs = 0;
+                    listLabelResult = new List<String>();
+                    using (Mat raw = BeeCore.Common.matRaw.Clone())
                     {
-                        listLabel.Add(new List<string>());
+                        if (raw.Empty()) return;
+                        Mat matCrop = new Mat();
+                        matCrop = Common.CropRotatedRectSharp(raw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                        if (Clahe == 0) Clahe = 2;
+                        if (Sigma == 0) Sigma = 3;
+                        if (Blur == 0) Blur = 3;
 
-                        PyObject box = boxes[j];
-                      OpenCvSharp . Point[] polygonPoints = ConvertBoxToPoints(box);
-                       
-
-                        RotatedRect rotatedRect = Cv2.MinAreaRect(polygonPoints);
-
-                      
-                        int width =(int) rotatedRect.Size.Width;
-                        int height = (int)rotatedRect.Size.Height;
-                        if (width < height)
-                            {
-                            int h = width, w = height;
-                            width = w;
-                            height = h;
-                            rotatedRect.Angle = rotatedRect.Angle + 90;
-                        }
-                        if (rotatedRect.Angle > 145) rotatedRect.Angle =-(180- rotatedRect.Angle);
-                       if(IsEnLimitArea)
+                        //   matCrop = PreprocessForOCR(matCrop,Clahe,Sigma,Blur);
+                        if (matCrop.Type() != MatType.CV_8UC3)
+                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
+                        if (matCrop.Channels() == 1)
                         {
-                            switch(CompareArea)
+                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
+                        }
+                        if (!matCrop.IsContinuous())
+                        {
+                            matCrop = matCrop.Clone();
+                        }
+
+                        // Copy dữ liệu sang byte[]
+                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                        byte[] buffer = new byte[size];
+                        Marshal.Copy(matCrop.Data, buffer, 0, size);
+
+                        int height1 = matCrop.Height;
+                        int width1 = matCrop.Width;
+
+
+                        var npArray = G.np.array(buffer).reshape(height1, width1, 3);
+                        int limit = LimitArea * 100;
+                        //if (!IsEnLimitArea)
+                        limit = 0;
+                        dynamic result = G.objOCR.find_ocr(npArray, nameTool, limit);//, (float)(Score / 100.0), nameTool
+
+                        if (result == null) return;
+                        // File.WriteAllText("ErC.txt", pyEx.Message);
+                        PyObject boxes = result[0];
+                        PyObject scores = result[1];
+                        PyObject labels = result[2];
+                        if (boxes == null || scores == null || labels == null)
+                            return;
+                        if ((int)boxes.Length() == 0 || (int)scores.Length() == 0 || (int)labels.Length() == 0)
+                            return;
+                        if ((int)boxes.Length() != (int)labels.Length())
+                            return;
+
+                        int i = 0;
+
+                        for (int j = 0; j < boxes.Length(); j++)
+                        {
+                            listLabel.Add(new List<string>());
+
+                            PyObject box = boxes[j];
+                            OpenCvSharp.Point[] polygonPoints = ConvertBoxToPoints(box);
+
+
+                            RotatedRect rotatedRect = Cv2.MinAreaRect(polygonPoints);
+
+
+                            int width = (int)rotatedRect.Size.Width;
+                            int height = (int)rotatedRect.Size.Height;
+                            if (width < height)
                             {
-                                case Compares.Less:
-                                    if (width * height > LimitArea)
-                                    {
-                                        i++;
-                                        continue;
-                                    }
-                                    break;
-                                case Compares.More:
-                                    if (width * height < LimitArea)
-                                    {
-                                        i++;
-                                        continue;
-                                    }
-                                    break;
+                                int h = width, w = height;
+                                width = w;
+                                height = h;
+                                rotatedRect.Angle = rotatedRect.Angle + 90;
+                            }
+                            if (rotatedRect.Angle > 145) rotatedRect.Angle = -(180 - rotatedRect.Angle);
+                            if (IsEnLimitArea)
+                            {
+                                switch (CompareArea)
+                                {
+                                    case Compares.Less:
+                                        if (width * height > LimitArea)
+                                        {
+                                            i++;
+                                            continue;
+                                        }
+                                        break;
+                                    case Compares.More:
+                                        if (width * height < LimitArea)
+                                        {
+                                            i++;
+                                            continue;
+                                        }
+                                        break;
+
+                                }
+
 
                             }
-                            
 
-                        }    
-                       
-                        RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
-                        RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None,false);
-                        boxList.Add(rt);
+                            RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
+                            RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None, false);
+                            boxList.Add(rt);
 
-                        // Score
-                        float score = (float)scores[j].As<double>();
-                        scoreList.Add(score * 100);
+                            // Score
+                            float score = (float)scores[j].As<double>();
 
-                        // Label
-                        string label = labels[j].ToString();
-                        label = label.Replace("\n", "");
-                        label = label.Replace(" ","");
-                        Content += label.Trim();
-                        listLabelResult.Add(label);
-                        listLabel[listLabel.Count()-1].Add(label);
-                        listOK.Add(false);
-                        rectRotates.Add(rt);
 
-                        scoreRS += (int)score;
-                        listScore.Add(score);
+                            // Label
+                            string label = labels[j].ToString();
+                            label = label.Replace("\n", "");
+                            label = label.Replace(" ", "");
+                            Content += label.Trim();
+                            listLabelResult.Add(label);
+                            listLabel[listLabel.Count() - 1].Add(label);
+                            listOK.Add(false);
+                            rectRotates.Add(rt);
+                            listScore.Add(score * 100);
+                            ScoreRs += (int)(score * 100);
 
-                    }
-                    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
 
-                    for (int j = 0; j < rectRotates.Count; j++)
-                    {
-                        combined.Add(new RotatedBoxInfo
+                        }
+                        List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+
+                        for (int j = 0; j < rectRotates.Count; j++)
                         {
-                            Box = rectRotates[j],
-                            Label = listLabelResult[j],
-                            Score = listScore[j]
-                        });
+                            combined.Add(new RotatedBoxInfo
+                            {
+                                Box = rectRotates[j],
+                                Label = listLabelResult[j],
+                                Score = listScore[j]
+                            });
+                        }
+                        combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+                        rectRotates = combined.Select(b => b.Box).ToList();
+                        listLabelResult = combined.Select(b => b.Label).ToList();
+                        matCrop.Dispose();
                     }
-                    combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-                    rectRotates = combined.Select(b => b.Box).ToList();
-                    listLabelResult = combined.Select(b => b.Label).ToList();
-                    listScore = combined.Select(b => b.Score).ToList();
-                    Content += "\n";
                     // result: tuple (boxes, scores, labels) từ Python
                     // e.Result = result;
                 }
@@ -331,6 +336,10 @@ namespace BeeCore
                     File.WriteAllText("ErCharp.txt", ex.Message);
                     exMess = ex.Message;
                 }
+                finally
+                {
+                  
+                }
             }
 
         }
@@ -340,10 +349,10 @@ namespace BeeCore
             {
 
 
-                IsOK = false;
+                IsOK = true;
 
 
-                ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
+                ScoreRs = (int)(ScoreRs / (rectRotates.Count() * 1.0));
                 //   listContent = Content.Select(c => c.ToString()).ToArray();
                 //  listMatching = Matching.Select(c => c.ToString()).ToArray();
                 Content = "";
@@ -360,7 +369,9 @@ namespace BeeCore
 
                         IsOK = true;
                     }
-                  //  listContent = CompareStrings(listMatching, listContent);
+                    else
+                        IsOK = false;
+                    //  listContent = CompareStrings(listMatching, listContent);
 
                 }
                 else

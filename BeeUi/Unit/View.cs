@@ -2338,7 +2338,8 @@ namespace BeeUi
 
         private  void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-
+            if (G.IsByPassPLC)
+                timer.Restart();
             
 
             BeeCore.Camera.Read(); 
@@ -2368,12 +2369,14 @@ namespace BeeUi
             switch (G.StatusProcessing)
             {
                 case StatusProcessing.None:
-                   // timer.Restart();
-                    if (G.PropetyTools[0].TypeTool == TypeTool.Position_Adjustment)
+                    // timer.Restart();
+                    indexToolPosition = G.PropetyTools.FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
+
+                    if (G.PropetyTools[indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
                     {
                        
-                       if(! G.listAlltool[0].tool.worker.IsBusy)
-                            G.listAlltool[0].tool.worker.RunWorkerAsync();
+                       if(! G.listAlltool[indexToolPosition].tool.worker.IsBusy)
+                            G.listAlltool[indexToolPosition].tool.worker.RunWorkerAsync();
 
                         G.StatusProcessing = StatusProcessing.Adjusting;
                     }
@@ -2392,9 +2395,9 @@ namespace BeeUi
                    
                     break;
                 case StatusProcessing.Adjusting:
-                    if (G.PropetyTools[0].Propety.StatusTool ==BeeCore.StatusTool.Done )
+                    if (G.PropetyTools[indexToolPosition].Propety.StatusTool ==BeeCore.StatusTool.Done )
                     {
-                        dynamic Propety = G.PropetyTools[0].Propety;
+                        dynamic Propety = G.PropetyTools[indexToolPosition].Propety;
 
                         G.StatusProcessing = StatusProcessing.Processing;
 

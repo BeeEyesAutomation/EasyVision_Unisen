@@ -118,12 +118,14 @@ namespace BeeUi.Tool
             //String PathProg = "Program\\" + nameModel;
             // if(Propety.PathModel!=null)
             //if (File.Exists(Propety.PathModel))
-            if (!workLoadModel.IsBusy)
+            if (!workLoadModel.IsBusy)//&& !G.IsIniOCR
             {
-            
+               // G.IsIniOCR = true;
                 workLoadModel.RunWorkerAsync();
-               
+
             }
+            else
+                Propety.StatusTool = StatusTool.Initialed;
          
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
@@ -260,7 +262,7 @@ namespace BeeUi.Tool
                     //String sDraw = "";
                     //foreach (String ss in Propety.listContent)
                     //    sDraw += ss;
-                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 8, 30);
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i],Propety.Matching+" "+ Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 8, 50);
 
                     //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
 

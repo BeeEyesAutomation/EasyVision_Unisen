@@ -503,11 +503,7 @@ namespace BeeUi.Tool
 
             worker.RunWorkerCompleted += (sender, e) =>
             {
-                if (e.Error != null)
-                {
-                    //  MessageBox.Show("Worker error: " + e.Error.Message);
-                    return;
-                }
+                
                 Propety.Complete();
                 timer.Stop();
 

@@ -411,85 +411,87 @@ namespace BeeCore
        
         public void Matching( RectRotate rectRotate)
         {
-
-
-            if (BeeCore.Common.matRaw.Empty()) return;
-           
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rectRotate, rotMask);
-            Mat matProcess = new Mat();
-            
-            switch (TypeMode)
+            using (Mat raw = BeeCore.Common.matRaw.Clone())
             {
-                case Mode.Pattern:
-                    if (matCrop.Type() == MatType.CV_8UC3)
-                        Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
-                    else
-                        matProcess = matCrop;
-                    break;
-                case Mode.OutLine:
-                    matProcess = Common.CannyWithMorph(matCrop);
-                    break;
-                case Mode.Edge:
-                    using (Py.GIL())
-                    {
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                        int height = matCrop.Rows;
-                        int width = matCrop.Cols;
-                        int channels = matCrop.Channels();
-                        if (!matCrop.IsContinuous())
-                        {
-                            matCrop = matCrop.Clone();
-                        }
-                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
-                        byte[] buffer = new byte[size];
-                        Marshal.Copy(matCrop.Data, buffer, 0, size);
-                        // Tạo ndarray từ byte[]
-                        var npImage = G.np.array(buffer).reshape(height, width, channels);
-                        // Gọi hàm Python
-                        dynamic result = G.Classic.EdgeDetection(npImage);
-                        if (result == null)
-                            return ;
 
-                        // Chuyển kết quả ngược về byte[] rồi sang Mat
-                        byte[] edgeBytes = result.As<byte[]>();
-                        matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
-                    }
-                   
-                    break;
-            }
-          //  Cv2.ImWrite("Processing.png", matCrop);
-            BeeCore.Native.SetImg(matProcess);
-            IsOK = G.pattern.Match( Index,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
-            ScoreRs = G.pattern.ScoreRS;
-            rectRotates = new List<RectRotate>();
-            listScore = new List<double>();
-            listP_Center = new List<System.Drawing.Point>();
-            if (IsOK)
-            {
-                cycleTime = (int)G.pattern.cycleOutLine;
-              
-                if (G.pattern.listMatch[Index] != null)
+                if (raw.Empty()) return;
+
+                Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
+                Mat matProcess = new Mat();
+
+                switch (TypeMode)
                 {
-                    String[] sSplit = G.pattern.listMatch[Index].Split('\n');
-                    foreach (String s in sSplit)
-                    {
-                        if (s.Trim() == "") break;
-                        String[] sSp = s.Split(',');
-                        PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
-                        float angle = Convert.ToSingle(sSp[2]);
-                        float width = Convert.ToSingle(sSp[3]);
-                        float height =Convert.ToSingle(sSp[4]);
-                        float Score = Convert.ToSingle(sSp[5]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
-                        listScore.Add(Math.Round(Score,1));
-                       listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
-                    }
-                  
+                    case Mode.Pattern:
+                        if (matCrop.Type() == MatType.CV_8UC3)
+                            Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
+                        else
+                            matProcess = matCrop;
+                        break;
+                    case Mode.OutLine:
+                        matProcess = Common.CannyWithMorph(matCrop);
+                        break;
+                    case Mode.Edge:
+                        using (Py.GIL())
+                        {
+                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            int height = matCrop.Rows;
+                            int width = matCrop.Cols;
+                            int channels = matCrop.Channels();
+                            if (!matCrop.IsContinuous())
+                            {
+                                matCrop = matCrop.Clone();
+                            }
+                            int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                            byte[] buffer = new byte[size];
+                            Marshal.Copy(matCrop.Data, buffer, 0, size);
+                            // Tạo ndarray từ byte[]
+                            var npImage = G.np.array(buffer).reshape(height, width, channels);
+                            // Gọi hàm Python
+                            dynamic result = G.Classic.EdgeDetection(npImage);
+                            if (result == null)
+                                return;
+
+                            // Chuyển kết quả ngược về byte[] rồi sang Mat
+                            byte[] edgeBytes = result.As<byte[]>();
+                            matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        }
+
+                        break;
                 }
+                //  Cv2.ImWrite("Processing.png", matCrop);
+                BeeCore.Native.SetImg(matProcess);
+                IsOK = G.pattern.Match(Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, threshMin, threshMax, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
+                ScoreRs = G.pattern.ScoreRS;
+                rectRotates = new List<RectRotate>();
+                listScore = new List<double>();
+                listP_Center = new List<System.Drawing.Point>();
+                if (IsOK)
+                {
+                    cycleTime = (int)G.pattern.cycleOutLine;
+
+                    if (G.pattern.listMatch[Index] != null)
+                    {
+                        String[] sSplit = G.pattern.listMatch[Index].Split('\n');
+                        foreach (String s in sSplit)
+                        {
+                            if (s.Trim() == "") break;
+                            String[] sSp = s.Split(',');
+                            PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
+                            float angle = Convert.ToSingle(sSp[2]);
+                            float width = Convert.ToSingle(sSp[3]);
+                            float height = Convert.ToSingle(sSp[4]);
+                            float Score = Convert.ToSingle(sSp[5]);
+                            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+                            listScore.Add(Math.Round(Score, 1));
+                            listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
+                        }
+
+                    }
+                }
+                matProcess.Dispose();
+                matCrop.Dispose();
+
             }
-            
-
-
 
         }
     }

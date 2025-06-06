@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="AddTool.cs" />
     <Compile Include="Func\Cal.cs" />
+    <Compile Include="Func\Logs.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">
       <SubType>Form</SubType>

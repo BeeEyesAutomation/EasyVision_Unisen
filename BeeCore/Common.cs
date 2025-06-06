@@ -29,6 +29,7 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
 
         unsafe public static extern IntPtr GetImageResult(ref int rows, ref int cols, ref int Type);
+
         public static Bitmap bmResult;
 
         public int numError = 0;
