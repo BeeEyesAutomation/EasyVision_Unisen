@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -96,7 +96,7 @@ namespace BeeCore
     }
     public enum StatusTool
     {
-        None, Edit, Processing, Done
+        None, Edit, Processing, Done,Initialed
     }
     public enum Results
     {
@@ -104,6 +104,7 @@ namespace BeeCore
     }
     public struct G
     {
+      
         public static dynamic objYolo,np,objOCR,Classic;
         public static bool IsChecked = false, IniEdge;
         public static TypeCamera TypeCCD=TypeCamera.USB;

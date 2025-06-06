@@ -19,6 +19,7 @@ using BeeUi.Commons;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using Label = System.Windows.Forms.Label;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -37,9 +38,53 @@ namespace BeeUi.Tool
         bool IsIni = false;
         public BackgroundWorker worker = new BackgroundWorker();
         Stopwatch timer = new Stopwatch();
+        public void RefreshLabels()
+        {
+            if (Propety.listLabelResult == null)
+                return;
+            int index = 0;
+            tabLabelResult.Height = 0;
+            tabLabelResult.Controls.Clear();
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 2; col++)
+                {
+
+                    if (index >= Propety.listLabelResult.Count)
+                        break;
+                    if (col == 0)
+                        tabLabelResult.Height += 40;
+                    RJButton btn = new RJButton();
+                    btn.Text = Propety.listLabelResult[index];
+                    btn.Font = new Font("Arial", 11);
+                    btn.IsUnGroup = true;
+                    btn.ForeColor = Color.Black;
+                    btn.BorderRadius = 10;
+                    btn.Height = 30;
+                    if (Propety.listScore[index] > Propety.Score)
+                        btn.IsCLick = true;
+                    else
+                        btn.IsCLick = false;
+
+                  
+                    btn.Corner = Corner.Both;
+                    btn.BackColor = Color.FromArgb(200, 200, 200);
+                    btn.Dock = DockStyle.Fill;
+                    btn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                    btn.Margin = new Padding(3);
+
+                    tabLabelResult.Controls.Add(btn, col, row);
+                    index++;
+                }
+
+            }
+
+        }
+       
         public void LoadPara()
         {
-            
+           
+           
             worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
@@ -57,9 +102,14 @@ namespace BeeUi.Tool
                     //  MessageBox.Show("Worker error: " + e.Error.Message);
                     return;
                 }
+              
                 Propety.Complete();
                 if(!G.IsRun)
+                {
+                    RefreshLabels();
                     G.EditTool.View.imgView.Invalidate();
+                }
+                   
                 timer.Stop();
 
               Propety. cycleTime = (int)timer.Elapsed.TotalMilliseconds;
@@ -68,30 +118,32 @@ namespace BeeUi.Tool
             //String PathProg = "Program\\" + nameModel;
             // if(Propety.PathModel!=null)
             //if (File.Exists(Propety.PathModel))
-            if (!G.IsIniOCR && !workLoadModel.IsBusy)
+            if (!workLoadModel.IsBusy)
             {
             
                 workLoadModel.RunWorkerAsync();
-                G.IsIniOCR = true;
+               
             }
          
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
-            txtModel.Text = Propety.PathModel;
+           
             trackScore.Value =Propety.Score;
-           btnCheckArea.IsCLick = Propety.IsCheckArea ;
             numScore.Value = Propety.Score;
-            trackNumObject.Value= Propety.NumObject;
-          switch(Propety.Compare)
+            btnEnLimitArea.IsCLick = Propety.IsEnLimitArea ;
+            layoutLineLimit.Enabled = Propety.IsEnLimitArea;
+            numCLAHE.Value = Propety.Clahe;
+            numUnsharp.Value = Propety.Sigma;
+            numBlur.Value = Propety.Blur;
+            Propety.rotMask = null;
+            switch (Propety.Compare)
             {
-                case Compares.Equal:
-                    btnEqual.IsCLick = true;
-                    break;
+             
                 case Compares.Less:
-                    btnLess.IsCLick = true;
+                    btnLessArea.IsCLick = true;
                     break;
                 case Compares.More:
-                    btnMore.IsCLick = true;
+                    btnMoreArea.IsCLick = true;
                     break;
             }
           
@@ -151,103 +203,111 @@ namespace BeeUi.Tool
         }
         public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
         {
-            if (Propety.rotAreaAdjustment == null&& G.IsRun) return gc;
-            gc.ResetTransform();
-           // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
-
-            var mat = new Matrix();
-            RectRotate rotA = Propety.rotArea;
-            if (G.IsRun) rotA = Propety.rotAreaAdjustment;
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
-            gc.Transform = mat;
-            //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
-            gc.DrawString(indexTool + "", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
-           
-            gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-            gc.ResetTransform();
-            Color cl = Color.LimeGreen;
-            if (!Propety.IsOK)
+            try
             {
-                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
-                    G.Config.ConditionOK == ConditionOK.Logic)
-                    cl = Color.LimeGreen;
-       
+                if (Propety.rotAreaAdjustment == null && G.IsRun) return gc;
+                gc.ResetTransform();
+                // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
 
-            }
-            else
-            {
-                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
-                    G.Config.ConditionOK == ConditionOK.Logic)
-                    cl = Color.Red;
-            }
-                int i = 0;
-                    foreach (RectRotate rot in Propety.rectRotates)
-                {
-                mat = new Matrix();
-                if (!G.IsRun)
-                {
-                    mat.Translate(pScroll.X, pScroll.Y);
-                    mat.Scale(Scale, Scale);
-                }
+                var mat = new Matrix();
+                RectRotate rotA = Propety.rotArea;
+                if (G.IsRun) rotA = Propety.rotAreaAdjustment;
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
-                mat.Translate(rotA._rect.X, rotA._rect.Y);
                 gc.Transform = mat;
+                //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
+                gc.DrawString(indexTool + "", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
 
-                mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                mat.Rotate(rot._rectRotation);
-                gc.Transform = mat; 
-                Brush brushText = Brushes.White;
-                //String sDraw = "";
-                //foreach (String ss in Propety.listContent)
-                //    sDraw += ss;
-                Draws.Box2Label(gc, rot._rect,Propety. listLabelResult[i], "", G.fontRS, cl, brushText, 50, 3,20);
-
-                //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-                  
-                //    int index = i + 1;
-                //    String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
-                //        //if (Propety.IsCheckArea)
-                //        //    content = rot._rect.Height + " px";
-                //        Font font = new Font("Arial", 50, FontStyle.Bold);
-                //        //SizeF sz1 = gc.MeasureString(content, font);
-
-                //DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
+                gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+                gc.ResetTransform();
+                Color cl = Color.LimeGreen;
+                if (!Propety.IsOK)
+                {
+                    cl = Color.Red;
+                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                        G.Config.ConditionOK == ConditionOK.Logic)
+                        cl = Color.LimeGreen;
 
 
-                     //   gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point(0, 0));
-                        i++;
-                        //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                        gc.ResetTransform();
-                    
-                   
                 }
-            String s = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
-            SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
-            gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width, (int)sz.Height));
-            gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
-            gc.ResetTransform();
-            //if (Propety.rectRotates != null)
-            //{
-            //    gc.ResetTransform();
-            //    var mat2 = new Matrix();
-            //    if (!G.IsRun)
-            //    {
-            //        mat2.Translate(pScroll.X, pScroll.Y);
-            //        mat2.Scale(Scale, Scale);
-            //    }
-            //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //    mat2.Rotate(rotA._rectRotation);
-            //    gc.Transform = mat2;
-            //    gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
+                else
+                {
+                    cl = Color.LimeGreen;
+                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                        G.Config.ConditionOK == ConditionOK.Logic)
+                        cl = Color.Red;
+                }
+                int i = 0;
+                if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
+                    return gc;
+                foreach (RectRotate rot in Propety.rectRotates)
+                {
+                    mat = new Matrix();
+                    if (!G.IsRun)
+                    {
+                        mat.Translate(pScroll.X, pScroll.Y);
+                        mat.Scale(Scale, Scale);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                    gc.Transform = mat;
 
-            //}
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+                    Brush brushText = Brushes.White;
+                    //String sDraw = "";
+                    //foreach (String ss in Propety.listContent)
+                    //    sDraw += ss;
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 8, 30);
+
+                    //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
+
+                    //    int index = i + 1;
+                    //    String content =   Propety.listLabel[i] + "";// + Math.Round(Propety.listScore[i], 1) + "%";
+                    //        //if (Propety.IsCheckArea)
+                    //        //    content = rot._rect.Height + " px";
+                    //        Font font = new Font("Arial", 50, FontStyle.Bold);
+                    //        //SizeF sz1 = gc.MeasureString(content, font);
+
+                    //DrawCharactersEvenly(gc, Propety.listContent, rot._rect, font, new SolidBrush(cl));
 
 
+                    //   gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point(0, 0));
+                    i++;
+                    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                    gc.ResetTransform();
 
+
+                }
+                //String s = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+                //SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
+                //gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width, (int)sz.Height));
+                //gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+                gc.ResetTransform();
+                //if (Propety.rectRotates != null)
+                //{
+                //    gc.ResetTransform();
+                //    var mat2 = new Matrix();
+                //    if (!G.IsRun)
+                //    {
+                //        mat2.Translate(pScroll.X, pScroll.Y);
+                //        mat2.Scale(Scale, Scale);
+                //    }
+                //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                //    mat2.Rotate(rotA._rectRotation);
+                //    gc.Transform = mat2;
+                //    gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
+
+                //}
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             return gc;
         }
         //public Graphics ShowEdit(Graphics gc, RectangleF _rect)
@@ -493,18 +553,7 @@ namespace BeeUi.Tool
            // Propety.TypeYolo = (BeeCore.TypeYolo)cbTypes.SelectedIndex;
         }
 
-        private void btnPathModel_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog OpenFileDialog=new OpenFileDialog();
-
-            if (OpenFileDialog.ShowDialog()==DialogResult.OK)
-            {
-                Propety.PathModel = OpenFileDialog.FileName;
-                txtModel.Text = Propety.PathModel;
-                LoadPara();
-            }
-          
-        }
+ 
 
         private void label4_Click(object sender, EventArgs e)
         {
@@ -521,11 +570,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void txtLabel_TextChanged(object sender, EventArgs e)
-        {
-           
-          Propety.Labels =txtLabel.Text.Trim().Split(',').ToList();
-        }
+   
 
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
@@ -552,10 +597,7 @@ namespace BeeUi.Tool
 
         }
 
-        private void trackNumObject_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.NumObject = trackNumObject.Value;
-        }
+    
 
         private void btnCropFull_Click(object sender, EventArgs e)
         {
@@ -740,19 +782,16 @@ namespace BeeUi.Tool
 
         private void rjButton3_Click_2(object sender, EventArgs e)
         {
-            Propety.Compare = Compares.More;
+            Propety.CompareArea = Compares.More;
         }
 
         private void rjButton7_Click(object sender, EventArgs e)
         {
-            Propety.Compare = Compares.Less;
+            Propety.CompareArea = Compares.Less;
             //   Propety.
         }
 
-        private void btnCheckArea_Click(object sender, EventArgs e)
-        {
-            Propety.IsCheckArea = btnCheckArea.IsCLick;
-        }
+    
 
         private void btnCropMask_Click(object sender, EventArgs e)
         {
@@ -761,37 +800,97 @@ namespace BeeUi.Tool
 
         private void btnSet_Click(object sender, EventArgs e)
         {
-            Propety.Matching = Propety.Content;
-            txtContent.Text = Propety.Matching;
+            if (Propety.Content.Trim() == "")
+                txtContent.Text = "No Data";
+            else
+            {
+                Propety.Matching = Propety.Content;
+                txtContent.Text = Propety.Matching;
+            }
+         
         }
 
         private void txtQRCODE_TextChanged(object sender, EventArgs e)
         {
 
         }
-
+        
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-         
-           
-           
+            if (!IsIni)
+            {
+                Propety.SetModel();
+               
+                IsIni = true;
+            }
+                
+
           
+
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (!IsIni)
-            {
-                IsIni = true;
-                tmCheckFist.Enabled = false;
+            //if (!IsIni)
+            //{
+            //    IsIni = true;
+            //    tmCheckFist.Enabled = false;
 
 
-            }
+            //}
         }
 
         private void numEnhance_ValueChanged(object sender, EventArgs e)
         {
-            Propety.Enhance =(int) numEnhance.Value;
+           
+        }
+
+        private void numCLAHE_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void numUnsharp_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void numBlur_Load(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void numCLAHE_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Clahe = (int)numCLAHE.Value;
+        }
+
+        private void numUnsharp_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Sigma = (int)numUnsharp.Value;
+
+        }
+
+        private void numBlur_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Blur = (int)numBlur.Value;
+
+        }
+
+        private void btnEnLimitArea_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnLimitArea = btnEnLimitArea.IsCLick;
+            layoutLineLimit.Enabled = Propety.IsEnLimitArea;
+        }
+
+        private void numLimtArea_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numLimtArea_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.LimitArea = numLimtArea.Value;
         }
     }
 }

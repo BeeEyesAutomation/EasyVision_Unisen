@@ -380,10 +380,10 @@ namespace BeeCore
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
         public bool IsLimitCouter = true;
-        public void DoWork()
+        public void DoWork(RectRotate rectRotate)
         {
             StatusTool = StatusTool.Processing;
-            Matching(Index);
+            Matching(rectRotate);
 
         }
         public void Complete()
@@ -409,14 +409,15 @@ namespace BeeCore
         }
     
        
-        public void Matching( int indexTool)
+        public void Matching( RectRotate rectRotate)
         {
 
 
             if (BeeCore.Common.matRaw.Empty()) return;
-            if (rotAreaAdjustment == null) rotAreaAdjustment = rotArea;
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rotAreaAdjustment, rotMask);
+           
+            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rectRotate, rotMask);
             Mat matProcess = new Mat();
+            
             switch (TypeMode)
             {
                 case Mode.Pattern:
@@ -456,8 +457,9 @@ namespace BeeCore
                    
                     break;
             }
+          //  Cv2.ImWrite("Processing.png", matCrop);
             BeeCore.Native.SetImg(matProcess);
-            IsOK = G.pattern.Match( indexTool,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
+            IsOK = G.pattern.Match( Index,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
             ScoreRs = G.pattern.ScoreRS;
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -466,9 +468,9 @@ namespace BeeCore
             {
                 cycleTime = (int)G.pattern.cycleOutLine;
               
-                if (G.pattern.listMatch[indexTool] != null)
+                if (G.pattern.listMatch[Index] != null)
                 {
-                    String[] sSplit = G.pattern.listMatch[indexTool].Split('\n');
+                    String[] sSplit = G.pattern.listMatch[Index].Split('\n');
                     foreach (String s in sSplit)
                     {
                         if (s.Trim() == "") break;

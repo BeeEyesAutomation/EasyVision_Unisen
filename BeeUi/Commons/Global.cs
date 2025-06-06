@@ -46,7 +46,7 @@ namespace BeeUi
         public static SettingPLC SettingPLC = new SettingPLC();
        public static PLC PLC = new PLC();
         public static Step Step = Step.Run;
-        public static DeviceFindAndCom HEROJE =null;
+        
         public static System.Windows.Forms.ListBox listProgram = new System.Windows.Forms.ListBox ();
        public static float Scale=1,AngleOrigin;
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point ();

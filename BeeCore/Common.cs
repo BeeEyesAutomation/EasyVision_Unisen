@@ -41,7 +41,7 @@ namespace BeeCore
         public static IntPtr intPtrRaw;
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetSrc( IntPtr data, int image_rows, int image_cols, MatType matType);
-
+        public static bool IsDebug = false;
         public unsafe static IntPtr ArrayToIntPtr(byte[] input)
         {
             IntPtr* ptr = stackalloc IntPtr[1];
@@ -112,7 +112,7 @@ namespace BeeCore
                     dynamic mod2 = Py.Import("Tool.OCR");
                     dynamic cls2 = mod2.GetAttr("OCR"); // class
                     G.objOCR = cls2.Invoke();              // khởi tạo instance
-                    OCR.SetModel();
+                   
                 
                       //dynamic mod3 = Py.Import("Tool.Classic");
                     //dynamic cls3 = mod3.GetAttr("Filter"); // class

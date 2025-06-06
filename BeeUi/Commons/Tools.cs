@@ -19,12 +19,10 @@ namespace BeeUi.Commons
         }
         public dynamic tool;
         public ItemTool ItemTool;
-        public PropetyTool PropetyTool;
-        public Tools (ItemTool ItemTool,dynamic tool, PropetyTool PropetyTool)
+        public Tools (ItemTool ItemTool,dynamic tool)
         {
             this.ItemTool = ItemTool;
             this.tool = tool;
-            this.PropetyTool = PropetyTool;
            
         }
         public Tools Clone()

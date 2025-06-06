@@ -128,9 +128,8 @@ namespace BeeUi
             this.ckProcess.Name = "ckProcess";
             this.ckProcess.Size = new System.Drawing.Size(271, 48);
             this.ckProcess.TabIndex = 13;
-            this.ckProcess.Text = "Show Process";
+            this.ckProcess.Text = "Debug";
             this.ckProcess.UseVisualStyleBackColor = true;
-            this.ckProcess.Visible = false;
             this.ckProcess.CheckedChanged += new System.EventHandler(this.ckProcess_CheckedChanged);
             // 
             // pMenu
@@ -768,7 +767,7 @@ namespace BeeUi
             // 
             // tmContinuous
             // 
-            this.tmContinuous.Interval = 300;
+            this.tmContinuous.Interval = 5000;
             this.tmContinuous.Tick += new System.EventHandler(this.tmContinuous_Tick);
             // 
             // workTrig
@@ -781,7 +780,7 @@ namespace BeeUi
             // 
             // tmSimulation
             // 
-            this.tmSimulation.Interval = 200;
+            this.tmSimulation.Interval = 1000;
             this.tmSimulation.Tick += new System.EventHandler(this.tmSimulation_Tick);
             // 
             // View

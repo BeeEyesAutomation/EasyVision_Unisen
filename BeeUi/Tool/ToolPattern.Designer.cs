@@ -1008,7 +1008,7 @@ namespace BeeUi.Tool
             this.btnCropRect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCropRect.ForeColor = System.Drawing.Color.Black;
             this.btnCropRect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCropRect.IsCLick = true;
+            this.btnCropRect.IsCLick = false;
             this.btnCropRect.IsNotChange = false;
             this.btnCropRect.IsRect = false;
             this.btnCropRect.IsUnGroup = false;
@@ -1039,7 +1039,7 @@ namespace BeeUi.Tool
             this.btnCropArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCropArea.ForeColor = System.Drawing.Color.Black;
             this.btnCropArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCropArea.IsCLick = false;
+            this.btnCropArea.IsCLick = true;
             this.btnCropArea.IsNotChange = false;
             this.btnCropArea.IsRect = false;
             this.btnCropArea.IsUnGroup = false;

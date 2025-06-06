@@ -124,7 +124,7 @@ namespace BeeUi.Data
                 PropetyTool.Propety.nameTool = PropetyTool.Name;
                 itemTool.lbNumber.Text = G.listAlltool.Count() + "";
                 itemTool.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-                tools = new Tools(itemTool, control, PropetyTool);
+                tools = new Tools(itemTool, control);
             }
             catch(Exception ex)
             {

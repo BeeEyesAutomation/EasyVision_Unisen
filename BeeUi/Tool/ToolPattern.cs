@@ -47,7 +47,7 @@ namespace BeeUi.Tool
                 timer.Restart();
                 if (!G.IsRun)
                     Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.DoWork();
+                Propety.DoWork(Propety.rotAreaAdjustment);
             };
 
             worker.RunWorkerCompleted += (sender, e) =>

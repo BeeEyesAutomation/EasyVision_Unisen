@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -112,7 +113,7 @@ namespace BeeCore
             
             return points;
         }
-        public static Mat EnhanceImage(Mat input, double contrastFactor = 4.0, double sharpenFactor = 4.0)
+        public  Mat EnhanceImage(Mat input, double contrastFactor = 4.0, double sharpenFactor = 4.0)
         {
             // Tăng độ tương phản
             Mat contrastImg = new Mat();
@@ -125,11 +126,18 @@ namespace BeeCore
             // Làm nét bằng unsharp masking
             Mat sharpened = new Mat();
             Cv2.AddWeighted(contrastImg, 1.0 + sharpenFactor, blurred, -sharpenFactor, 0, sharpened);
-            Cv2.ImWrite("EnhanceImage.png", sharpened);
+            if (Common.IsDebug)
+                Cv2.ImWrite(nameTool+".png", sharpened);
             return sharpened;
         }
         public int Enhance = 4;
-        public static Mat PreprocessForOCR(Mat input,int clipLimit=3 ,int sigma=3,int blur=3)
+        public int Clahe= 2;
+        public int Sigma = 2;
+        public int Blur = 1;
+        public bool IsEnLimitArea = false;
+        public int LimitArea = 100;
+        public Compares CompareArea = Compares.More;
+        public  Mat PreprocessForOCR(Mat input,int clipLimit=2 ,int sigma=3,int blur=3)
         {
             // 1. Chuyển sang grayscale nếu cần
             Mat gray = new Mat();
@@ -155,8 +163,11 @@ namespace BeeCore
 
             // 5. Lọc nhiễu bằng MedianBlur
             Mat clean = new Mat();
+            if (blur % 2 == 0) blur += 1;  // Chuyển thành số lẻ nếu chẵn
+            if (blur < 3) blur = 3;        // Tối thiểu là 3
             Cv2.MedianBlur(sharp, clean, blur);
-            Cv2.ImWrite("CropOCR.png", clean);
+            if(Common.IsDebug)
+            Cv2.ImWrite(nameTool +".png", clean);
             return clean;
         }
         public void DoWork(RectRotate rotCrop)
@@ -168,24 +179,28 @@ namespace BeeCore
                     var boxList = new List<RectRotate>();
                     var scoreList = new List<float>();
                     var labelList = new List<string>();
-                    int numOK = 0, numNG = 0;
+                    IsOK = false;
+                    listOK = new List<bool>();
+                    listLabel = new List<List<string>>();
+                    rectRotates = new List<RectRotate>();
+                    listScore = new List<float>();
                     scoreRS = 0;
                     Content = "";
                     scoreRS = 0;
                     listLabelResult = new List<String>();
+
                     Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw.Clone(), new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
-                   // matCrop = EnhanceImage(matCrop,Enhance);
+                    if (Clahe == 0) Clahe = 2;
+                    if (Sigma == 0) Sigma = 3;
+                    if (Blur == 0) Blur = 3;
+              
+                    matCrop = PreprocessForOCR(matCrop,Clahe,Sigma,Blur);
                     if (matCrop.Type() != MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     if (matCrop.Channels() == 1)
                     {
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     }
-                    //   Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2RGB);
-
-                    //   cv::cvtColor(matCrop, matCrop, COLOR_BGR2RGB);
-                    //  Cv2.ImWrite("crop.png", matCrop);
-                    // Đảm bảo dữ liệu liên tục
                     if (!matCrop.IsContinuous())
                     {
                         matCrop = matCrop.Clone();
@@ -198,79 +213,39 @@ namespace BeeCore
 
                     int height1 = matCrop.Height;
                     int width1 = matCrop.Width;
-                    //dynamic np = Py.Import("numpy");
-                    ////    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
-                    //dynamic mod = Py.Import("Tool.Learning");
-                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-
-                    //dynamic objYolo = cls.Invoke();              // khởi tạo instance
-                    //G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
-                    //_ocr.attr("find_ocr")(image_array);
-                    IsOK = false;
-                    listOK = new List<bool>();
-                    listLabel = new List<List<string>>();
-                    rectRotates = new List<RectRotate>();
-                    listScore = new List<float>();
+                  
 
                     var npArray = G.np.array(buffer).reshape(height1, width1, 3);
-                    dynamic result = G.objOCR.find_ocr(npArray,Enhance);//, (float)(Score / 100.0), nameTool
+                    int limit = LimitArea * 100;
+                    //if (!IsEnLimitArea)
+                       limit = 0;
+                    dynamic result = G.objOCR.find_ocr(npArray,nameTool, limit);//, (float)(Score / 100.0), nameTool
+                   
                     if (result == null) return;
-
+                   // File.WriteAllText("ErC.txt", pyEx.Message);
                     PyObject boxes = result[0];
                     PyObject scores = result[1];
                     PyObject labels = result[2];
+                    if (boxes == null || scores == null || labels == null)
+                        return;
+                    if ((int)boxes.Length() == 0 || (int)scores.Length() == 0 || (int)labels.Length() == 0)
+                        return;
+                    if ((int)boxes.Length() != (int)labels.Length())
+                        return;
 
-                    int counts = (int)boxes.Length(); int i = 0;
+                    int i = 0;
 
-                    for (int j = 0; j < counts; j++)
+                    for (int j = 0; j < boxes.Length(); j++)
                     {
                         listLabel.Add(new List<string>());
-                        // Lấy box: (x1, y1, x2, y2)
-                       // PyObject box = boxes[j];
-                        //float centerX = (float)box[0][0].AsManagedObject(typeof(float));
-                        //float centerY = (float)box[0][1].AsManagedObject(typeof(float));
 
-                        //float width = (float)box[1][0].AsManagedObject(typeof(float));
-                        //float height = (float)box[1][1].AsManagedObject(typeof(float));
-
-                        //float angle = (float)box[2].AsManagedObject(typeof(float));
-                        //// Tạo RotatedRect trong C#
-                        //// Tạo rotated rectangle từ polygon
                         PyObject box = boxes[j];
                       OpenCvSharp . Point[] polygonPoints = ConvertBoxToPoints(box);
                        
-                        //float x1 = (float)box[0].As<double>();
-                        //float y1 = (float)box[1].As<double>();
-                        //float x2 = (float)box[2].As<double>();
-                        //float y2 = (float)box[3].As<double>();
-                        //Point2f[] polygonPoints = new Point2f[]
-                        //{
-                        //    new Point2f(10, 10),
-                        //    new Point2f(100, 20),
-                        //    new Point2f(90, 80),
-                        //    new Point2f(20, 90)
-                        //};
+
                         RotatedRect rotatedRect = Cv2.MinAreaRect(polygonPoints);
 
-                        // Lấy thông tin
-                        // Point2f center = rotatedRect.Center;
-                        //Size2f size = rotatedRect.Size;
-                        //   float angle = rotatedRect.Angle;
-                        //  if (angle == 180) angle = 0;
-                        //RotatedRect rotatedRect = new RotatedRect(new Point2f(centerX, centerY), new Size2f(width, height), angle);
-
-                        //// Lấy 4 đỉnh của hình chữ nhật xoay
-                        //Point2f[] vertices = rotatedRect.Points();
-
-                        //// Chuyển sang Point để vẽ
-                        //OpenCvSharp.Point[] points = Array.ConvertAll(vertices, pt => new OpenCvSharp.Point((int)pt.X, (int)pt.Y));
-
-                        //// Vẽ các cạnh hình chữ nhật xoay
-                        //for (int k = 0; k < 4; k++)
-                        //{
-                        //    Cv2.Line(matCrop, points[k], points[(k + 1) % 4], Scalar.Red, 2);
-                        //}
-                        //    Cv2.ImWrite("cropRS.png", matCrop);
+                      
                         int width =(int) rotatedRect.Size.Width;
                         int height = (int)rotatedRect.Size.Height;
                         if (width < height)
@@ -281,12 +256,32 @@ namespace BeeCore
                             rotatedRect.Angle = rotatedRect.Angle + 90;
                         }
                         if (rotatedRect.Angle > 145) rotatedRect.Angle =-(180- rotatedRect.Angle);
-                      
+                       if(IsEnLimitArea)
+                        {
+                            switch(CompareArea)
+                            {
+                                case Compares.Less:
+                                    if (width * height > LimitArea)
+                                    {
+                                        i++;
+                                        continue;
+                                    }
+                                    break;
+                                case Compares.More:
+                                    if (width * height < LimitArea)
+                                    {
+                                        i++;
+                                        continue;
+                                    }
+                                    break;
+
+                            }
+                            
+
+                        }    
+                       
                         RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
                         RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None,false);
-
-                        //// Gán Rect quay góc 0 (vì YOLO box không có góc)
-                        //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);
                         boxList.Add(rt);
 
                         // Score
@@ -296,6 +291,7 @@ namespace BeeCore
                         // Label
                         string label = labels[j].ToString();
                         label = label.Replace("\n", "");
+                        label = label.Replace(" ","");
                         Content += label.Trim();
                         listLabelResult.Add(label);
                         listLabel[listLabel.Count()-1].Add(label);
@@ -327,10 +323,12 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                 {
+                    File.WriteAllText("PythonException.txt", pyEx.Message);
                     exMess=pyEx.Message;
                 }
                 catch (Exception ex)
                 {
+                    File.WriteAllText("ErCharp.txt", ex.Message);
                     exMess = ex.Message;
                 }
             }
@@ -495,15 +493,17 @@ namespace BeeCore
             //G.IsChecked = true;
             return true;
         }
-        public static bool SetModel()
+
+        public  bool SetModel()
         {
             using (Py.GIL())
             {
 
-                
-                      // khởi tạo instance
 
-                G.objOCR.initialize_ocr();
+                // khởi tạo instance
+                StatusTool = StatusTool.None;
+         G.objOCR.initialize_ocr(nameTool);
+                StatusTool = StatusTool.Initialed;
             }
             return true;
         }

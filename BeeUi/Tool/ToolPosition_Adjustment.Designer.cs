@@ -73,7 +73,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.layScore = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton4 = new BeeUi.Common.RJButton();
-            this.numScore = new BeeUi.Commons.CustomNumeric();
             this.rjButton6 = new BeeUi.Common.RJButton();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.trackScore = new BeeUi.TrackBar2();
@@ -941,7 +940,6 @@
             this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.layScore.Controls.Add(this.rjButton4, 3, 0);
-            this.layScore.Controls.Add(this.numScore, 2, 0);
             this.layScore.Controls.Add(this.rjButton6, 0, 0);
             this.layScore.Controls.Add(this.tableLayoutPanel7, 1, 0);
             this.layScore.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -982,21 +980,6 @@
             this.rjButton4.TextColor = System.Drawing.Color.Black;
             this.rjButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.rjButton4.UseVisualStyleBackColor = false;
-            // 
-            // numScore
-            // 
-            this.numScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numScore.Location = new System.Drawing.Point(330, 0);
-            this.numScore.Margin = new System.Windows.Forms.Padding(0);
-            this.numScore.Maxnimum = 100;
-            this.numScore.Minimum = 0;
-            this.numScore.Name = "numScore";
-            this.numScore.Size = new System.Drawing.Size(140, 58);
-            this.numScore.Step = 1;
-            this.numScore.TabIndex = 35;
-            this.numScore.Value = 100;
-            this.numScore.ValueChanged += new System.EventHandler(this.numScore_ValueChanged);
             // 
             // rjButton6
             // 
@@ -1276,10 +1259,10 @@
             // 
             // rjButton15
             // 
-            this.rjButton15.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.rjButton15.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.rjButton15.BackColor = System.Drawing.Color.Transparent;
+            this.rjButton15.BackgroundColor = System.Drawing.Color.Transparent;
             this.rjButton15.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("rjButton15.BackgroundImage")));
-            this.rjButton15.BorderColor = System.Drawing.Color.Silver;
+            this.rjButton15.BorderColor = System.Drawing.Color.Transparent;
             this.rjButton15.BorderRadius = 10;
             this.rjButton15.BorderSize = 1;
             this.rjButton15.ButtonImage = null;
@@ -1322,7 +1305,7 @@
             this.btnCrop.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrop.ForeColor = System.Drawing.Color.Black;
             this.btnCrop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCrop.IsCLick = true;
+            this.btnCrop.IsCLick = false;
             this.btnCrop.IsNotChange = false;
             this.btnCrop.IsRect = false;
             this.btnCrop.IsUnGroup = false;
@@ -1353,7 +1336,7 @@
             this.btnCropArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCropArea.ForeColor = System.Drawing.Color.Black;
             this.btnCropArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCropArea.IsCLick = false;
+            this.btnCropArea.IsCLick = true;
             this.btnCropArea.IsNotChange = false;
             this.btnCropArea.IsRect = false;
             this.btnCropArea.IsUnGroup = false;
@@ -1439,7 +1422,7 @@
             this.btnCropFull.TextColor = System.Drawing.Color.Black;
             this.btnCropFull.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCropFull.UseVisualStyleBackColor = false;
-            this.btnCropFull.Click += new System.EventHandler(this.btnCropArea_Click);
+            this.btnCropFull.Click += new System.EventHandler(this.btnCropFull_Click);
             // 
             // btnCropHalt
             // 
@@ -1470,7 +1453,7 @@
             this.btnCropHalt.TextColor = System.Drawing.Color.Black;
             this.btnCropHalt.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCropHalt.UseVisualStyleBackColor = false;
-            this.btnCropHalt.Click += new System.EventHandler(this.btnCropRect_Click);
+            this.btnCropHalt.Click += new System.EventHandler(this.btnCropHalt_Click);
             // 
             // rjButton2
             // 
@@ -1607,7 +1590,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel layScore;
         private Common.RJButton rjButton4;
-        private Commons.CustomNumeric numScore;
         private Common.RJButton rjButton6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         public TrackBar2 trackScore;

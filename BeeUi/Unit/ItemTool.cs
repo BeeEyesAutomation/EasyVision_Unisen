@@ -298,8 +298,8 @@ namespace BeeUi.Commons
         private void Score_ValueChanged(float obj)
         {
             G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
-            G.PropetyTools[G.indexToolSelected].Propety.Score = Score.Value;
-            G.listAlltool[G.indexToolSelected].tool.trackScore.Value = Score.Value;
+            G.PropetyTools[G.indexToolSelected].Propety.Score =(int) Score.Value;
+            G.listAlltool[G.indexToolSelected].tool.trackScore.Value = (int)Score.Value;
         }
         TextBox txtEdit = new TextBox();
         private void name_DoubleClick(object sender, EventArgs e)

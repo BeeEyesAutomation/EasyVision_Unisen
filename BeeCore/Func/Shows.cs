@@ -18,8 +18,7 @@ namespace BeeCore.Funtion
     image.Invoke((Action)(() =>
     {
         Bitmap bmShow = null;
-        Bitmap bmpFinal = null;
-
+        
         try
         {
             // Giải phóng ảnh cũ nếu có
@@ -39,25 +38,29 @@ namespace BeeCore.Funtion
                     bmShow = BeeCore.Common.bmResult;
                     break;
             }
-
-            // Tạo bản sao của ảnh thông qua MemoryStream an toàn
-            using (MemoryStream ms = new MemoryStream())
+            using (Bitmap bm = new Bitmap(bmShow))
             {
-                bmShow.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                ms.Seek(0, SeekOrigin.Begin);
+                image.Image = new Bitmap(bm);
 
-                using (var tempImage = Image.FromStream(ms))
-                {
-                    // Clone để ảnh không giữ tham chiếu tới stream
-                    bmpFinal = new Bitmap(tempImage);
-                }
             }
+                // Tạo bản sao của ảnh thông qua MemoryStream an toàn
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    bmShow.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                //    ms.Seek(0, SeekOrigin.Begin);
 
-            image.Image = bmpFinal;
-            bmpFinal = null;
+                //    using (var tempImage = Image.FromStream(ms))
+                //    {
+                //        // Clone để ảnh không giữ tham chiếu tới stream
+                //        bmpFinal = new Bitmap(tempImage);
+                //    }
+                //}
+
+             
+           
              // GC định kỳ sau mỗi 60 frame (nếu fps cao)
              frameCounter++;
-            if (frameCounter % 60 == 0)
+            if (frameCounter % 2== 0)
             {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -89,10 +92,7 @@ namespace BeeCore.Funtion
             }
 
             // Nếu bmpFinal không được gán vào image → giải phóng
-            if (bmpFinal != null)
-            {
-                bmpFinal.Dispose();
-            }
+          
         }
     }));        }
         private static int frameCounter=0;

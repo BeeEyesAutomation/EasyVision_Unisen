@@ -106,57 +106,7 @@ namespace BeeUi.Common
            
         //}
         String pathOld = "";
-        public void LoadProject(String NameProject)
-        {
-            G.IsIniOCR = false;
-            BeeCore.G.ParaCam = LoadData.Para(NameProject);
-
-            if (BeeCore.G.ParaCam.matRegister != null)
-                BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
-            else if (G.IsCCD)
-                BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
-            if (BeeCore.Common.matRaw != null)
-            {
-                G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-            }
-            NameProject = NameProject.Replace(".prog", "");
-            BeeCore.G.ParaCam.SizeCCD = Camera.GetSzCCD();
-            G.PropetyTools =LoadData.Project(NameProject);
-          
-
-            if (pathOld== NameProject)
-            {
-                return;
-
-            }
-            
-            pathOld = NameProject;
-            G.listAlltool = new List<Tools>();
-        
-           
-            if (G.ToolSettings == null)
-            {
-                G.ToolSettings = new ToolSettings();
-
-            }
-            G.ToolSettings.Y = 10; G.ToolSettings.X = 5;
-          int  index = 0;
-            foreach (BeeCore.PropetyTool propety in G.PropetyTools)
-            {
-                Tools tool = DataTool.SetPropety(propety, index);
-                if (tool != null)
-                G.listAlltool.Add(tool);
-                index++;
-
-            }
-            G.IsLoad = true;
-            IsLoaded = true;
-           
-            BeeCore.G.ParaCam.Exposure =BeeCore.G.ParaCam._Exposure;
-            BeeCore.G.ParaCam.TypeLight = BeeCore.G.ParaCam._TypeLight;
-            BeeCore.G.ParaCam.TypeResolution = BeeCore.G.ParaCam._TypeResolution;
-        }
+     
         string[] listPorts;
        bool IsWaitPort = false;
         public String IdPort = "";
@@ -434,7 +384,7 @@ namespace BeeUi.Common
 
                 G.EditTool.View.Parent = G.EditTool.pView;
             }
-            if (G.IsLoad) return;
+            //if (G.IsLoad) return;
           //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu, G.Config.RoundRad);
            BeeCore.CustomGui.RoundRg(pModel, G.Config.RoundRad);
         
@@ -511,6 +461,7 @@ namespace BeeUi.Common
             //    IsSaveAs = false;
 
         }
+        
         private void ListProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(IsKeyPress)
@@ -689,15 +640,25 @@ txtQrCode.Focus();
             txtQrCode.Focus();
             txtQrCode.SelectAll();
         }
-
+        bool IsIntialProgram = false;
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
-            LoadProject(G.Project);
+            if(IsIntialProgram)
+            ClassProject.Load(G.Project);
         }
 
         private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-           
+            IsIntialProgram = true;
+            if (BeeCore.G.ParaCam.matRegister != null)
+                BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
+            else if (G.IsCCD)
+                BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
+            if (BeeCore.Common.matRaw != null)
+            {
+                G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
+                BeeCore.Native.SetImg(BeeCore.Common.matRaw);
+            }
             if (G.ToolSettings == null)
             {
                 G.ToolSettings = new ToolSettings();
@@ -819,8 +780,7 @@ txtQrCode.Focus();
                     if (indexToolShow < G.listAlltool.Count)
                     {
                         tmShow.Interval = 50;
-                        DataTool.LoadPropety(G.listAlltool[indexToolShow].tool);
-                     
+                       
                         G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[indexToolShow].ItemTool);
                         indexToolShow++;
                         G.ToolSettings.ResumeLayout(true);

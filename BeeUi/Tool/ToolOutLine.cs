@@ -39,7 +39,7 @@ namespace BeeUi.Tool
             worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
-                Propety.DoWork();
+                Propety.DoWork(Propety.rotAreaAdjustment);
             };
 
             worker.RunWorkerCompleted += (sender, e) =>
