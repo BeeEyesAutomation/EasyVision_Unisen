@@ -20,8 +20,15 @@ namespace BeeUi.Commons
         {
 
             InitializeComponent();
+            this.FontChanged += CustomNumeric_FontChanged;
             //InitUI();
         }
+
+        private void CustomNumeric_FontChanged(object sender, EventArgs e)
+        {
+           txt.Font = Font;
+        }
+
         public int maxnimum = 100,  minimum = 0,step=1;
         private TextBox txt;
         private int _value = 0;

@@ -45,9 +45,9 @@ namespace BeeUi.Tool
             int index = 0;
             tabLabelResult.Height = 0;
             tabLabelResult.Controls.Clear();
-            for (int row = 0; row < 3; row++)
+            for (int row = 0; row < 20; row++)
             {
-                for (int col = 0; col < 2; col++)
+                for (int col = 0; col < 5; col++)
                 {
 
                     if (index >= Propety.listLabelResult.Count)
@@ -262,7 +262,7 @@ namespace BeeUi.Tool
                     //String sDraw = "";
                     //foreach (String ss in Propety.listContent)
                     //    sDraw += ss;
-                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i],Propety.Matching+" "+ Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 8, 50);
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i], Math.Round(Propety.listScore[i], 1) + "%", G.fontRS, cl, brushText, 50, 8, 50);
 
                     //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
 
@@ -893,6 +893,11 @@ namespace BeeUi.Tool
         private void numLimtArea_ValueChanged(object sender, EventArgs e)
         {
             Propety.LimitArea = numLimtArea.Value;
+        }
+
+        private void label7_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

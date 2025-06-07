@@ -20,6 +20,22 @@ namespace BeeCore
 {
   public   class Common
     {
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+
+        public static void HideConsole()
+        {
+            var handle = GetConsoleWindow();
+            if (handle != IntPtr.Zero)
+            {
+                ShowWindow(handle, SW_HIDE);
+            }
+        }
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern IntPtr GetImage(ref int rows, ref int cols, ref int Type);
 
@@ -87,16 +103,17 @@ namespace BeeCore
 
             try
             {
-                string pythonHome = Environment.GetEnvironmentVariable("Python39");
+                string pythonHome = Environment.GetEnvironmentVariable("Python312");
                 if (!string.IsNullOrEmpty(pythonHome))
                 {
-                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
+                    string pythonDll = Path.Combine(pythonHome, "python312.dll");
                     if (File.Exists(pythonDll))
                     {
                         Python.Runtime.Runtime.PythonDLL = pythonDll;
-                   
-               //// var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
-               // Runtime.PythonDLL = pythonDll;
+
+                        //// var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
+                        // Runtime.PythonDLL = pythonDll;
+                HideConsole();
                 PythonEngine.Initialize();
                 PythonEngine.BeginAllowThreads();
 
