@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC6E4007-F2A0-49F3-B777-DDE4C58C5ADC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BeeCore</RootNamespace>
+    <AssemblyName>BeeCore</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
+    </Reference>
+    <Reference Include="LibUsbDotNet">
+      <HintPath>C:\Lib\LibUsbDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.UserInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="Python.Runtime">
+      <HintPath>..\packages\pythonnet.3.0.5\lib\netstandard2.0\Python.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.8.0.11\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddTool.cs" />
+    <Compile Include="Algorithm\FilterItem.cs" />
+    <Compile Include="Algorithm\Filters.cs" />
+    <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
+    <Compile Include="Algorithm\LineDetector.cs" />
+    <Compile Include="Func\Cal.cs" />
+    <Compile Include="Func\Logs.cs" />
+    <Compile Include="Unit\Measure.cs" />
+    <Compile Include="Camera\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Camera\DeviceFindAndCom.cs" />
+    <Compile Include="Camera\DevStateCB.cs" />
+    <Compile Include="Camera\DevStateDef.cs" />
+    <Compile Include="Camera\GetCfgCB.cs" />
+    <Compile Include="Camera\HardwareEnum.cs" />
+    <Compile Include="Camera\HEROJE.cs" />
+    <Compile Include="Camera\HJ_CRC32.cs" />
+    <Compile Include="Camera\KEY_Send.cs" />
+    <Compile Include="Camera\LogRecord.cs" />
+    <Compile Include="Camera\ModuleSetting.cs" />
+    <Compile Include="Camera\PnPEntityInfo.cs" />
+    <Compile Include="Camera\ProtocolExtraDataStu.cs" />
+    <Compile Include="Camera\ProtocolHeaderStu.cs" />
+    <Compile Include="Camera\SendCfgDataCB.cs" />
+    <Compile Include="Camera\SetCfgCB.cs" />
+    <Compile Include="Camera\ToolCfg.cs" />
+    <Compile Include="Camera\USB.cs" />
+    <Compile Include="CCD.cs" />
+    <Compile Include="Comuni\Modbus.cs" />
+    <Compile Include="Func\Camera.cs" />
+    <Compile Include="Parameter\Enums.cs" />
+    <Compile Include="Func\CustomGui.cs" />
+    <Compile Include="Func\Draws.cs" />
+    <Compile Include="Func\Init.cs" />
+    <Compile Include="Func\Native.cs" />
+    <Compile Include="Func\Shows.cs" />
+    <Compile Include="Unit\MatchingShape.cs" />
+    <Compile Include="Unit\ColorArea.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="Parameter\Model.cs" />
+    <Compile Include="Parameter\RotatedBoxInfo.cs" />
+    <Compile Include="Unit\Circle.cs" />
+    <Compile Include="Unit\Positions.cs" />
+    <Compile Include="Parameter\Labels.cs" />
+    <Compile Include="Unit\PositionAdj.cs" />
+    <Compile Include="ParaCam.cs" />
+    <Compile Include="Parameter\Config.cs" />
+    <Compile Include="dataMat.cs" />
+    <Compile Include="Parameter\G.cs" />
+    <Compile Include="Unit\EdgePixel.cs" />
+    <Compile Include="LocalTool.cs" />
+    <Compile Include="Unit\OutLine.cs" />
+    <Compile Include="PLC.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropetyTool.cs" />
+    <Compile Include="BarCode.cs" />
+    <Compile Include="Parameter\RectRotate.cs" />
+    <Compile Include="Unit\OCR.cs" />
+    <Compile Include="Unit\Yolo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bee.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Propeties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
+      <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
+      <Name>BeeCV</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+  </Target>
+</Project>

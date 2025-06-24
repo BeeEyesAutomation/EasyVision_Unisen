@@ -1,0 +1,1021 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1ADACEB7-CB42-4600-ADAB-D5223651FE9A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BeeUi</RootNamespace>
+    <AssemblyName>BeeUi</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <PreferNativeArm64>false</PreferNativeArm64>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>bee.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.UserInterface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Lib\OpenCvSharp.UserInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="Python.Runtime, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\pythonnet.3.0.5\lib\netstandard2.0\Python.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.8.0.11\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Account.Designer.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\Access.cs" />
+    <Compile Include="Commons\ConvertImg.cs" />
+    <Compile Include="Commons\Cryto.cs" />
+    <Compile Include="Commons\Custom3DButton .cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commons\CustomNumeric .cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Commons\Decompile.cs" />
+    <Compile Include="Commons\Func.cs" />
+    <Compile Include="Commons\HistoryCheck.cs" />
+    <Compile Include="Commons\KeyAcitve.cs" />
+    <Compile Include="Commons\Gui.cs" />
+    <Compile Include="Commons\RoundedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commons\RsDirPermissions.cs" />
+    <Compile Include="Commons\SqlServer.cs" />
+    <Compile Include="Data\ClassProject.cs" />
+    <Compile Include="Data\DataTool.cs" />
+    <Compile Include="Data\LoadData.cs" />
+    <Compile Include="Data\SaveData.cs" />
+    <Compile Include="ForrmAlarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ForrmAlarm.Designer.cs">
+      <DependentUpon>ForrmAlarm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCalib.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCalib.Designer.cs">
+      <DependentUpon>FormCalib.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReport.Designer.cs">
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormActive.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormActive.Designer.cs">
+      <DependentUpon>FormActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IOSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IOSetting.Designer.cs">
+      <DependentUpon>IOSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SettingDevice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingDevice.Designer.cs">
+      <DependentUpon>SettingDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolCircle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolCircle.Designer.cs">
+      <DependentUpon>ToolCircle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\AddFilters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\AddFilters.Designer.cs">
+      <DependentUpon>AddFilters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ToolMeasure.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ToolMeasure.Designer.cs">
+      <DependentUpon>ToolMeasure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolOCR.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolOCR.Designer.cs">
+      <DependentUpon>ToolOCR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolPositions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolPositions.Designer.cs">
+      <DependentUpon>ToolPositions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\SettingCamera.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\SettingCamera.designer.cs">
+      <DependentUpon>SettingCamera.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\SettingStep1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\SettingStep1.Designer.cs">
+      <DependentUpon>SettingStep1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\SettingStep4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\SettingStep4.Designer.cs">
+      <DependentUpon>SettingStep4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolBarcode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolBarcode.Designer.cs">
+      <DependentUpon>ToolBarcode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolMatchingShape.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolMatchingShape.Designer.cs">
+      <DependentUpon>ToolMatchingShape.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolYolo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolYolo.Designer.cs">
+      <DependentUpon>ToolYolo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ucReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ucReport.Designer.cs">
+      <DependentUpon>ucReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\BtnHeaderBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\BtnHeaderBar.Designer.cs">
+      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\Cameras.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\Cameras.Designer.cs">
+      <DependentUpon>Cameras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\EditBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\EditBar.Designer.cs">
+      <DependentUpon>EditBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\EditProg.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\EditProg.Designer.cs">
+      <DependentUpon>EditProg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\Eraser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\Eraser.Designer.cs">
+      <DependentUpon>Eraser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ExtractColor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ExtractColor.Designer.cs">
+      <DependentUpon>ExtractColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\InforBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\InforBar.Designer.cs">
+      <DependentUpon>InforBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ItemLogic.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ItemLogic.Designer.cs">
+      <DependentUpon>ItemLogic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ItemTool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ItemTool.Designer.cs">
+      <DependentUpon>ItemTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\iTool.cs" />
+    <Compile Include="Commons\Global.cs" />
+    <Compile Include="Commons\GradientTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commons\KbdListener.cs" />
+    <Compile Include="Commons\MatrixExtension.cs" />
+    <Compile Include="Commons\Numeric2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Commons\Numeric2.Designer.cs">
+      <DependentUpon>Numeric2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\RJButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Form\ShowEraser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\ShowEraser.Designer.cs">
+      <DependentUpon>ShowEraser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\Header.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\Header.Designer.cs">
+      <DependentUpon>Header.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ResultBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ResultBar.Designer.cs">
+      <DependentUpon>ResultBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\SettingPLC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\SettingPLC.Designer.cs">
+      <DependentUpon>SettingPLC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\StepEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\StepEdit.Designer.cs">
+      <DependentUpon>StepEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\ToolPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\ToolPage.Designer.cs">
+      <DependentUpon>ToolPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\Tools.cs" />
+    <Compile Include="Unit\EditTool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\EditTool.Designer.cs">
+      <DependentUpon>EditTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\FormLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FormLoad.Designer.cs">
+      <DependentUpon>FormLoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Form\ScanCCD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\ScanCCD.Designer.cs">
+      <DependentUpon>ScanCCD.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\AddTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\AddTool.Designer.cs">
+      <DependentUpon>AddTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\DataContractAttribute.cs" />
+    <Compile Include="Tool\SettingStep2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\SettingStep2.Designer.cs">
+      <DependentUpon>SettingStep2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolColorArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolColorArea.Designer.cs">
+      <DependentUpon>ToolColorArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolEdgePixels.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolEdgePixels.Designer.cs">
+      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolPosition_Adjustment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolPosition_Adjustment.Designer.cs">
+      <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolPattern.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolPattern.Designer.cs">
+      <DependentUpon>ToolPattern.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolOutLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolOutLine.Designer.cs">
+      <DependentUpon>ToolOutLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolSettings.Designer.cs">
+      <DependentUpon>ToolSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\TrackBar2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Commons\TrackBar2.Designer.cs">
+      <DependentUpon>TrackBar2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\View.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\View.Designer.cs">
+      <DependentUpon>View.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Account.resx">
+      <DependentUpon>Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commons\CustomNumeric .resx">
+      <DependentUpon>CustomNumeric .cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForrmAlarm.resx">
+      <DependentUpon>ForrmAlarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCalib.resx">
+      <DependentUpon>FormCalib.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReport.resx">
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormActive.resx">
+      <DependentUpon>FormActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IOSetting.resx">
+      <DependentUpon>IOSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingDevice.resx">
+      <DependentUpon>SettingDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolCircle.resx">
+      <DependentUpon>ToolCircle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\AddFilters.resx">
+      <DependentUpon>AddFilters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ToolMeasure.resx">
+      <DependentUpon>ToolMeasure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolOCR.resx">
+      <DependentUpon>ToolOCR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolPositions.resx">
+      <DependentUpon>ToolPositions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\SettingCamera.resx">
+      <DependentUpon>SettingCamera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\SettingStep1.resx">
+      <DependentUpon>SettingStep1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\SettingStep4.resx">
+      <DependentUpon>SettingStep4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolBarcode.resx">
+      <DependentUpon>ToolBarcode.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
+      <DependentUpon>ToolMatchingShape.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolYolo.resx">
+      <DependentUpon>ToolYolo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ucReport.resx">
+      <DependentUpon>ucReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\BtnHeaderBar.resx">
+      <DependentUpon>BtnHeaderBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\Cameras.resx">
+      <DependentUpon>Cameras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\EditBar.resx">
+      <DependentUpon>EditBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\EditProg.resx">
+      <DependentUpon>EditProg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\Eraser.resx">
+      <DependentUpon>Eraser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ExtractColor.resx">
+      <DependentUpon>ExtractColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\InforBar.resx">
+      <DependentUpon>InforBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ItemLogic.resx">
+      <DependentUpon>ItemLogic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ItemTool.resx">
+      <DependentUpon>ItemTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commons\Numeric2.resx">
+      <DependentUpon>Numeric2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\ShowEraser.resx">
+      <DependentUpon>ShowEraser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\Header.resx">
+      <DependentUpon>Header.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ResultBar.resx">
+      <DependentUpon>ResultBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\SettingPLC.resx">
+      <DependentUpon>SettingPLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\StepEdit.resx">
+      <DependentUpon>StepEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\ToolPage.resx">
+      <DependentUpon>ToolPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\EditTool.resx">
+      <DependentUpon>EditTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormLoad.resx">
+      <DependentUpon>FormLoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\ScanCCD.resx">
+      <DependentUpon>ScanCCD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\AddTool.resx">
+      <DependentUpon>AddTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\SettingStep2.resx">
+      <DependentUpon>SettingStep2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolColorArea.resx">
+      <DependentUpon>ToolColorArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolEdgePixels.resx">
+      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolPosition_Adjustment.resx">
+      <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolPattern.resx">
+      <DependentUpon>ToolPattern.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolOutLine.resx">
+      <DependentUpon>ToolOutLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolSettings.resx">
+      <DependentUpon>ToolSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commons\TrackBar2.resx">
+      <DependentUpon>TrackBar2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\View.resx">
+      <DependentUpon>View.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Menu\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circled 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circled 3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circled 4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom In_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zoom Out_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Enlarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Circle_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeeCore\BeeCore.csproj">
+      <Project>{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
+      <Name>BeeCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
+      <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
+      <Name>BeeCV</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plus_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minus_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Erase_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color Dropper_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color Dropper.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_EXCLUSION_D.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_EXCLUSION_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_ADD_D.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EXTRACTION_ADD_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_AREA_EXTRACTION_COLOR_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_COLOR_AREA.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PIXElCOUNT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EDGE_PIXEL_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_POSITION_AJUST_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_POSITION.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_WIDTH_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_DIAMETER_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_EDGE_PRESENCE_W_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_PITCH_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PITCH.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_OCR_TOOL_LARGE_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_OCR.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bee.ico" />
+    <Content Include="Python\Learning.py" />
+    <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Ruler.png" />
+    <None Include="Resources\Track Order1.png" />
+    <None Include="Resources\Track Order.png" />
+    <None Include="Resources\Stop.png" />
+    <None Include="Resources\End.png" />
+    <None Include="Resources\File.png" />
+    <None Include="Resources\Shutdown.png" />
+    <None Include="Resources\Hand Drag_1.png" />
+    <None Include="Resources\Hand Drag.png" />
+    <None Include="Resources\Warning_1.png" />
+    <None Include="Resources\Warning.ico" />
+    <None Include="Resources\plc.png" />
+    <None Include="Resources\Programming Logic Controller_1.png" />
+    <None Include="Resources\Programming Logic Controller.png" />
+    <None Include="Resources\Sort Right_2.png" />
+    <None Include="Resources\Sort Left_1.png" />
+    <None Include="Resources\Sort Left.png" />
+    <None Include="Resources\Sort Right_1.png" />
+    <None Include="Resources\Forward.png" />
+    <None Include="Resources\Back.png" />
+    <None Include="Resources\1.png" />
+    <None Include="Resources\4.png" />
+    <None Include="Resources\2.png" />
+    <None Include="Resources\3.png" />
+    <None Include="Resources\Number 1.png" />
+    <None Include="Resources\Fantasy_1.png" />
+    <None Include="Resources\Fantasy.png" />
+    <None Include="Resources\Collapse.png" />
+    <None Include="Resources\Chart2.png" />
+    <None Include="Resources\Chart.png" />
+    <None Include="Resources\UNISEN_icon1.png" />
+    <None Include="Resources\UNISEN_icon.png" />
+    <None Include="Resources\UniSenBackground1.png" />
+    <None Include="Resources\UniSenBackground.png" />
+    <None Include="Resources\UNISEN_21.png" />
+    <None Include="Resources\UNISEN_2.png" />
+    <None Include="Resources\UNISENLogo1.jpg" />
+    <None Include="Resources\UNISEN LOGO %281%291.jpg" />
+    <None Include="Resources\UNISEN LOGO %281%29.jpg" />
+    <None Include="Resources\UNISEN LOGO.jpg" />
+    <None Include="Resources\UNISENLogo.jpg" />
+    <None Include="Resources\LogoTeamRound1.png" />
+    <None Include="Resources\Image_20231201092021.png" />
+    <None Include="Resources\LogoTeamRound.png" />
+    <None Include="Resources\LogoTrans.png" />
+    <None Include="Resources\contentYolo.png" />
+    <None Include="Resources\Sparkling.png" />
+    <None Include="Resources\Statistic Document.png" />
+    <None Include="Resources\Support.png" />
+    <None Include="Resources\Language Skill_3.png" />
+    <None Include="Resources\User.png" />
+    <None Include="Resources\Show Property_2.png" />
+    <None Include="Resources\Show Property_1.png" />
+    <None Include="Resources\Show Property.png" />
+    <None Include="Resources\Sort Right.png" />
+    <None Include="Resources\Logout_3.png" />
+    <None Include="Resources\Chevron Down.png" />
+    <None Include="Resources\Logout_2.png" />
+    <None Include="Resources\Language Skill_2.png" />
+    <None Include="Resources\Language Skill_1.png" />
+    <None Include="Resources\Language Skill.png" />
+    <None Include="Resources\Chevron Right_1.png" />
+    <None Include="Resources\Chevron Right.png" />
+    <None Include="Resources\Menu.png" />
+    <None Include="Resources\Qr Code_1.png" />
+    <None Include="Resources\Qr Code.png" />
+    <None Include="Resources\BeauNho1.png" />
+    <None Include="Resources\Shape_2.png" />
+    <None Include="Resources\Shape_1.png" />
+    <None Include="Resources\Shape.png" />
+    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT11.jpg" />
+    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE111.jpg" />
+    <None Include="Resources\Full Screen.png" />
+    <None Include="Resources\Zoom Out.png" />
+    <None Include="Resources\Zoom In.png" />
+    <None Include="Resources\baslerGigE1.jpg" />
+    <None Include="Resources\baslerGigE.jpg" />
+    <None Include="Resources\image-ace-2-bas-gige-color.jpg" />
+    <None Include="Resources\LogoAHSo1.png" />
+    <None Include="Resources\LogoAHSo.png" />
+    <None Include="Resources\Flip Vertical.png" />
+    <None Include="Resources\Invert Colors.png" />
+    <None Include="Resources\Exposure.png" />
+    <None Include="Resources\Aperture.png" />
+    <None Include="Resources\HD 1080p.png" />
+    <None Include="Resources\output-onlinepngtools.png" />
+    <None Include="Resources\AS_68876_L2.jpg" />
+    <None Include="Resources\AS_68876_L1.jpg" />
+    <None Include="Resources\AS_68876_L.jpg" />
+    <None Include="Resources\Download.png" />
+    <None Include="Resources\Key_1.png" />
+    <None Include="Resources\Test Passed.png" />
+    <None Include="Resources\Brightness_1.png" />
+    <None Include="Resources\Delete.png" />
+    <None Include="Resources\Export.png" />
+    <None Include="Resources\Example.png" />
+    <None Include="Resources\Prison_1.png" />
+    <None Include="Resources\Center of Gravity_1.png" />
+    <None Include="Resources\Center of Gravity.png" />
+    <None Include="Resources\Prison.png" />
+    <None Include="Resources\Live Video On.png" />
+    <None Include="Resources\Brightness.png" />
+    <None Include="Resources\Image.png" />
+    <None Include="Resources\Refresh.png" />
+    <None Include="Resources\Down Button.png" />
+    <None Include="Resources\Camera_3.png" />
+    <None Include="Resources\RS-232 Female_1.png" />
+    <None Include="Resources\RS-232 Female.png" />
+    <None Include="Resources\Camera_2.png" />
+    <None Include="Resources\Camera_1.png" />
+    <None Include="Resources\RS-232 Male_1.png" />
+    <None Include="Resources\RS-232 Male.png" />
+    <None Include="Resources\PrepareDlgProgress.gif" />
+    <None Include="Resources\BeauNho.png" />
+    <None Include="Resources\Natural User Interface 2.png" />
+    <None Include="Resources\Cursor.png" />
+    <None Include="Resources\Customer.png" />
+    <None Include="Resources\Edit Property_2.png" />
+    <None Include="Resources\Edit Property_1.png" />
+    <None Include="Resources\Save_1.png" />
+    <None Include="Resources\Copy.png" />
+    <None Include="Resources\BtnGreen1.png" />
+    <None Include="Resources\BtnBlue2.png" />
+    <None Include="Resources\BtnBlue1.png" />
+    <None Include="Resources\BtnGreen2.png" />
+    <None Include="Resources\Play_2.png" />
+    <None Include="Resources\Play_1.png" />
+    <None Include="Resources\Record_3.png" />
+    <None Include="Resources\Record_2.png" />
+    <None Include="Resources\Record.png" />
+    <None Include="Resources\Automatic_2.png" />
+    <None Include="Resources\BID_ICON_OPERATION_SIMULATION_PC_E_32BIT.jpg" />
+    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE11.jpg" />
+    <None Include="Resources\Redo.png" />
+    <None Include="Resources\Undo_3.png" />
+    <None Include="Resources\Undo_2.png" />
+    <None Include="Resources\Rectangular_1.png" />
+    <None Include="Resources\Rectangular.png" />
+    <None Include="Resources\Rectangular.ico" />
+    <None Include="Resources\Eraser.ico" />
+    <None Include="Resources\Erase_2.ico" />
+    <None Include="Resources\Erase_2.png" />
+    <None Include="Resources\Undo_1.png" />
+    <None Include="Resources\Undo.png" />
+    <None Include="Resources\Play.png" />
+    <None Include="Resources\Add Image.png" />
+    <None Include="Resources\Camera.png" />
+    <None Include="Resources\BID_SLIDER_SCALE_8PIX_WHITE.jpg" />
+    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W303.jpg" />
+    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W202.jpg" />
+    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W101.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_ON_ROLLOVER.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_ON_NORMAL.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_ON_DOWN.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_ON_DISABLE.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_OFF_ROLLOVER.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_OFF_NORMAL.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_OFF_DOWN.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_OFF_DISABLE.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_NON_THRESHOLD.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_NON_ROLLOVER.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_NON_NORMAL.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_NON_ACTIVE.jpg" />
+    <None Include="Resources\BID_ICON_DELETE_E_32BIT.jpg" />
+    <None Include="Resources\BID_ICON_TOOL_ADD_E_32BIT.jpg" />
+    <None Include="Resources\Eraser.jpg" />
+    <None Include="Resources\BID_ICON_COPY_D_32BIT.jpg" />
+    <None Include="Resources\BID_ICON_TOOL_EDIT_E_32BIT.jpg" />
+    <None Include="Resources\DeleteUndo.jpg" />
+    <None Include="Resources\Dropper.jpg" />
+    <None Include="Resources\Delete.jpg" />
+    <None Include="Resources\Circled 4_3.png" />
+    <None Include="Resources\Circled 2_4.png" />
+    <None Include="Resources\Circled 3_3.png" />
+    <None Include="Resources\Circled 4_2.png" />
+    <None Include="Resources\Circled 2_3.png" />
+    <None Include="Resources\Circled 3_2.png" />
+    <None Include="Resources\Circled 2_2.png" />
+    <None Include="Resources\Level 1.png" />
+    <None Include="Resources\Circled 4_1.png" />
+    <None Include="Resources\Circled 3_1.png" />
+    <None Include="Resources\Circled 2_1.png" />
+    <None Include="Resources\Number 1_1.png" />
+    <None Include="Resources\Number 1.ico" />
+    <None Include="Resources\Thumbnail_180x174_MountArea_Active.jpg" />
+    <None Include="Resources\Thumbnail_180x174_MountArea_Normal.jpg" />
+    <None Include="Resources\Thumbnail_180x174_MountArea_Down.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+  </Target>
+</Project>
