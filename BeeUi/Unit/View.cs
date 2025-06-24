@@ -39,7 +39,7 @@ namespace BeeUi
         public static bool IsKeyDown(Keys Key)
         {
             return (Control.ModifierKeys & Key) == Key;
-        }
+        } //test
         Keys KeysOld;
         bool IsKeyPress = false;
         Timer tmKey = new Timer();
