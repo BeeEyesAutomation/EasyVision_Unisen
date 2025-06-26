@@ -47,16 +47,19 @@ namespace BeeCore
         unsafe public static extern IntPtr GetImageResult(ref int rows, ref int cols, ref int Type);
 
         public static Bitmap bmResult;
-
+       
+        public static List<Camera> listCamera = new List<Camera> { null, null, null, null };
+        public static List<ParaCamera> listParaCamera = new List<ParaCamera> { null, null, null, null };
+       
         public int numError = 0;
         public  bool IsErrorCCD = false;
         public bool Check2Image = false;
         private static int frameRate = 0;
         public static Image ImageShow = new Bitmap(376, 240);
-        public static Mat matRaw=new Mat(),matLive=new Mat();
-        public static int numReadCCD = 1;
+      
+      
         public static int currentTrig = 0;
-        public static Mat matRaw2 = new Mat();
+       
         public static  List <Bitmap> listRaw = new List<Bitmap>();
       public static Bitmap bmRaw = null;
         public static IntPtr intPtrRaw;
@@ -108,28 +111,28 @@ namespace BeeCore
             try
             {  //// Khởi động môi trường Python
                // Environment.SetEnvironmentVariable("PYTHONHOME", @"D:\YourApp\python39");
-              //  Environment.SetEnvironmentVariable("PYTHONPATH", @"D:\YourApp\python39\Lib;D:\YourApp\python39\site-packages");
+               //  Environment.SetEnvironmentVariable("PYTHONPATH", @"D:\YourApp\python39\Lib;D:\YourApp\python39\site-packages");
 
-                string pythonHome = Environment.GetEnvironmentVariable("Python39");
-                if (!string.IsNullOrEmpty(pythonHome))
-                {
-                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
-                    if (File.Exists(pythonDll))
-                    {
-                        Python.Runtime.Runtime.PythonDLL = pythonDll;
+                //string pythonHome = Environment.GetEnvironmentVariable("Python39");
+                //if (!string.IsNullOrEmpty(pythonHome))
+                //{
+                //    string pythonDll = Path.Combine(pythonHome, "python39.dll");
+                //    if (File.Exists(pythonDll))
+                //    {
+                //        Python.Runtime.Runtime.PythonDLL = pythonDll;
 
-                        //// var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
-                        // Runtime.PythonDLL = pythonDll;
-                        //    HideConsole();
-                        //        string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
-                        //Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
-                        //Environment.SetEnvironmentVariable("PYTHONPATH",
-                        //    $"{pyHome}\\Lib;{pyHome}\\site-packages");
+                // var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
+               // Runtime.PythonDLL = pythonDll;
+               // HideConsole();
+                string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
+                Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
+                Environment.SetEnvironmentVariable("PYTHONPATH",
+                    $"{pyHome}\\Lib;{pyHome}\\site-packages");
 
 
-                        //string pythonDll = Path.Combine(pyHome, "python39.dll");
+                string pythonDll = Path.Combine(pyHome, "python39.dll");
 
-                        Runtime.PythonDLL = pythonDll;
+                Runtime.PythonDLL = pythonDll;
                         PythonEngine.Initialize();
                         PythonEngine.BeginAllowThreads();
 
@@ -139,27 +142,27 @@ namespace BeeCore
 
                             G.np = Py.Import("numpy");
 
-                            //dynamic mod = Py.Import("Tool.Learning");
-                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                            //G.objYolo = cls.Invoke();              // khởi tạo instance
-                            dynamic mod2 = Py.Import("Tool.OCR");
-                            dynamic cls2 = mod2.GetAttr("OCR"); // class
-                            G.objOCR = cls2.Invoke();              // khởi tạo instance
+                    dynamic mod = Py.Import("Tool.Learning");
+                    dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                    G.objYolo = cls.Invoke();              // khởi tạo instance
+                    //dynamic mod2 = Py.Import("Tool.OCR");
+                    //        dynamic cls2 = mod2.GetAttr("OCR"); // class
+                    //        G.objOCR = cls2.Invoke();              // khởi tạo instance
 
 
-                            //dynamic mod3 = Py.Import("Tool.Classic");
-                            // dynamic cls3 = mod3.GetAttr("Filter"); // class
-                            //  G.Classic = cls3.Invoke();              // khởi tạo instance
+                    dynamic mod3 = Py.Import("Tool.Classic");
+                    dynamic cls3 = mod3.GetAttr("Filter"); // class
+                    G.Classic = cls3.Invoke();              // khởi tạo instance
 
 
-                            //     G.IniEdge = true;
-                            //// khởi tạo instance
-                            //    G.Classic.LoadEdge();
+                    G.IniEdge = true;
+                    // khởi tạo instance
+                    G.Classic.LoadEdge();
 
 
-                        }
-                    }
                 }
+                    
+                
             }
             catch (PythonException ex)
             {
@@ -212,24 +215,12 @@ namespace BeeCore
         //      //MessageBox.Show(result.ToString());
         //  }
 
-        public static System.Drawing.Size SizeCCD()
-        {
-            return new System.Drawing.Size(BeeCore.G.CCD.colCCD, BeeCore.G.CCD.rowCCD);
-
-        }
+       
         public static void CropRotate( RectRotate rot)
         {
             G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle);
         }
-        public static void SetRaw()
-        {if (matRaw == null) matRaw = new Mat();
-            if (matLive.Type() == MatType.CV_8UC4)
-                Cv2.CvtColor(matLive.Clone(), matRaw, ColorConversionCodes.BGRA2BGR);
-        else
-            matRaw = matLive.Clone();
-           // G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw));
-            SetSrc(matRaw.Data, matRaw.Rows, matRaw.Cols, matRaw.Type());
-        }
+       
         public static Mat GetCrop()
         {
 
@@ -252,13 +243,10 @@ namespace BeeCore
             }
 
 
-            return null;
+           
         }
       
-        public static void CalHist()
-        {
-            G.CCD.CalHist();
-        }
+     
         public static event PropertyChangedEventHandler FrameChanged;
         public static event PropertyChangedEventHandler PropertyChanged;
         public static void NotifyPropertyChanged(string propertyName)
@@ -269,29 +257,29 @@ namespace BeeCore
             }
         }
         public static bool IsLive = false;
-        public static void GetImgeTinyCam(Bitmap bmp)
-        {
-            try
-            {
-                if (bmp != null)
-                {
+        //public static void GetImgeTinyCam(Bitmap bmp)
+        //{
+        //    try
+        //    {
+        //        if (bmp != null)
+        //        {
                   
                        
-                            matRaw = BitmapConverter.ToMat(bmp).Clone();
-                            //matRaw = raw.Clone();
-                            //Cv2.CvtColor(raw.Clone(), matRaw, ColorConversionCodes.BGRA2BGR);
-                            NotifyPropertyChanged("Image");
+        //                    matRaw = BitmapConverter.ToMat(bmp).Clone();
+        //                    //matRaw = raw.Clone();
+        //                    //Cv2.CvtColor(raw.Clone(), matRaw, ColorConversionCodes.BGRA2BGR);
+        //                    NotifyPropertyChanged("Image");
                         
                     
                     
-                }
+        //        }
 
-            }
-            catch (Exception)
-            {
+        //    }
+        //    catch (Exception)
+        //    {
 
-            }
-               }
+        //    }
+        //       }
         public static float Cycle = 0;
        
         public static double StepExposure=1,MinExposure=1,MaxExposure=100;

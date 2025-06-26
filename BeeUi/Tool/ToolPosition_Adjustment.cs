@@ -112,15 +112,15 @@ namespace BeeUi.Tool
       //public void Process()
       //  {
       //   //   Propety.rectRotates = new List<RectRotate>();
-      //      if (BeeCore.Common.matRaw == null) return;
-      //      //Mat raw = BeeCore.Common.matRaw.Clone();
-      //      //if (BeeCore.Common.matRaw.Type() == MatType.CV_8UC3)
+      //      if (BeeCore.Common.listCamera[G.indexChoose].matRaw == null) return;
+      //      //Mat raw = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone();
+      //      //if (BeeCore.Common.listCamera[G.indexChoose].matRaw.Type() == MatType.CV_8UC3)
       //      //{
       //      //    raw = raw.CvtColor(ColorConversionCodes.BGR2GRAY);
       //      //}
       //  //    Propety.rectArea = new RectangleF(Propety. rotArea._PosCenter.X + Propety. rotArea._rect.Left, Propety. rotArea._PosCenter.Y + Propety. rotArea._rect.Top, Propety. rotArea._rect.Width, Propety. rotArea._rect.Height);
 
-      //      //Propety.Matching(G.IsRun,BeeCore.Common.matRaw, Propety.indexTool, Propety. rotArea);
+      //      //Propety.Matching(G.IsRun,BeeCore.Common.listCamera[G.indexChoose].matRaw, Propety.indexTool, Propety. rotArea);
       //      if (G.IsRun)
       //      {
       //          if (Propety.IsOK) 
@@ -179,7 +179,7 @@ namespace BeeUi.Tool
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
 
@@ -188,11 +188,11 @@ namespace BeeUi.Tool
             else
             {
                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
             }
-            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.IndexThread][Propety.Index].Name;
             Draws.Box1Label(gc, rotA._rect, nameTool, G.fontTool, brushText, cl, 1);
             gc.ResetTransform();
             if (Propety.listScore == null) return gc;
@@ -616,7 +616,7 @@ namespace BeeUi.Tool
 
         //private void btnUndo_Click(object sender, EventArgs e)
         //{
-        //    G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
+        //    G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
 
         //}
 
@@ -717,7 +717,7 @@ namespace BeeUi.Tool
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
-                matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
+                matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.listCamera[Propety.IndexThread].matRaw, G.EditTool.View.bmMask);
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {

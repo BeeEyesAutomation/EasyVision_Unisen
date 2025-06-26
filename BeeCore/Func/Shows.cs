@@ -1,19 +1,22 @@
-﻿using OpenCvSharp.Extensions;
+﻿using OpenCvSharp;
+using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Size = System.Drawing.Size;
 
 namespace BeeCore.Funtion
 {
   
         public class Shows
         {
-            public static Bitmap bmShow;
-          public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, TypeImg typeImg = TypeImg.Raw)
+        public static Bitmap bmShow;
+          public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, Mat matRaw, TypeImg typeImg = TypeImg.Raw)
 {
     image.Invoke((Action)(() =>
     {
@@ -32,7 +35,7 @@ namespace BeeCore.Funtion
             switch (typeImg)
             {
                 case TypeImg.Raw:
-                    bmShow = BeeCore.Common.matRaw.ToBitmap();
+                    bmShow =matRaw.ToBitmap();
                     break;
                 case TypeImg.Result:
                     bmShow = BeeCore.Common.bmResult;

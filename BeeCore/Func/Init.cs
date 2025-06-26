@@ -8,10 +8,6 @@ namespace BeeCore.Funtion
 {
     public class Init
     {
-        public static void CCD(TypeCamera Type=TypeCamera.USB)
-        {
-            G.TypeCCD = Type;
-            G.CCD.typeCCD =(int) G.TypeCCD;
-        }
+       
     }
 }

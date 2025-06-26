@@ -12,6 +12,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
 using static EasyModbus.ModbusServer;
 using Size = OpenCvSharp.Size;
@@ -20,15 +21,21 @@ namespace BeeCore
 {
     public class Camera
     {
-        public static void Setting()
+        public Camera( ParaCamera paraCamera)
         {
-            G.CCD.ShowSetting();
+            this.Para = paraCamera;
+        }
+        public   Mat matRaw = new Mat();
+        public CvPlus.CCD CCDPlus = new CvPlus.CCD();
+        public  void Setting()
+        {
+            CCDPlus.ShowSetting();
 
 
         }
-        public static string Scan()
+        public  string Scan()
         {
-          if(G.TypeCCD==TypeCamera.TinyIV)
+          if(Para.TypeCamera==TypeCamera.TinyIV)
             {
                 if (G.ParaCam.CardChoosed == null) G.ParaCam.CardChoosed = "";
                     if ( G.ParaCam.CardChoosed!="")
@@ -49,52 +56,52 @@ namespace BeeCore
             }
            
           else
-            return G.CCD.ScanCCD();
+                return CCDPlus.ScanCCD();
 
 
         }
-        public static void DestroyAll()
+        public  void DestroyAll()
         {
-            if (G.TypeCCD == TypeCamera.TinyIV)
+            if (Para.TypeCamera == TypeCamera.TinyIV)
             {
                  HEROJE.Disconnect(); 
                
             }
-            G.CCD.DestroyAll();
+            CCDPlus.DestroyAll();
             Common.ClosePython();
             
             HEROJE.DisConnect();
             Thread.Sleep(500);
             Application.ExitThread();
         }
-        public static bool Status()
+        public  bool Status()
         {
 
-            return G.CCD.IsErrCCD;
+            return CCDPlus.IsErrCCD;
         }
-        public static bool Connect(int indexCCD, String Resolution)
+        public  bool Connect(String NameCCD )
         {
-            if(G.TypeCCD == TypeCamera.TinyIV)
+            if(Para.TypeCamera == TypeCamera.TinyIV)
             {
                
-                    IsConnected = HEROJE.Connect(indexCCD);
+                    IsConnected = HEROJE.Connect(0);
                 return IsConnected;
             }    
             //String[] sp = Resolution.Split(' ');
             //String[] sp2 = sp[0].Split('x');
 
-            //BeeCore.G.CCD.colCCD = Convert.ToInt32(sp2[0]);
-            //BeeCore.G.CCD.rowCCD = Convert.ToInt32(sp2[1]);
+            //BeeCore.CCDPlus.colCCD = Convert.ToInt32(sp2[0]);
+            //BeeCore.CCDPlus.rowCCD = Convert.ToInt32(sp2[1]);
             Mat raw = new Mat();
-            if (G.CCD.Connect(0,0, indexCCD))
+            if (CCDPlus.Connect(0,0, NameCCD))
             {
-                if (Common.matRaw != null)
-                    if (!Common.matRaw.Empty())
-                        Common.matRaw.Release();
+                if (matRaw != null)
+                    if (!matRaw.Empty())
+                        matRaw.Release();
                 //if (IsHist)
-                //    G.CCD.ReadRaw(true);
+                //    CCDPlus.ReadRaw(true);
                 //else
-                G.CCD.ReadCCD();
+                CCDPlus.ReadCCD();
                 int rows=0, cols=0;int Type = 0;
                 IntPtr intPtr = new IntPtr();
                 raw = new Mat();
@@ -106,10 +113,10 @@ namespace BeeCore
                         intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
                         raw = new Mat(rows, cols, Type, intPtr);
 
-                        FrameRate = G.CCD.FPS;
-                        BeeCore.Common.Cycle = G.CCD.cycle;
-                        BeeCore.Common.matRaw = raw.Clone();
-                        G.ParaCam.SizeCCD = new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+                        FrameRate = CCDPlus.FPS;
+                        BeeCore.Common.Cycle = CCDPlus.cycle;
+                       matRaw = raw.Clone();
+                        G.ParaCam.SizeCCD = new System.Drawing.Size(matRaw.Width,matRaw.Height);
                     }
                     //    return new Mat();
 
@@ -122,23 +129,32 @@ namespace BeeCore
                     //Marshal.FreeHGlobal(intPtr);
                 }
                 
-                //StepExposure = G.CCD.StepExposure;
-                //MinExposure = G.CCD.MinExposure;
-                //MaxExposure = G.CCD.MaxExposure;
+                //StepExposure = CCDPlus.StepExposure;
+                //MinExposure = CCDPlus.MinExposure;
+                //MaxExposure = CCDPlus.MaxExposure;
                 if (G.ParaCam._Exposure != 0)
-                    G.CCD.Exposure = G.ParaCam._Exposure;
-               // Cycle = G.CCD.cycle;
-                G.CCD.SetPara();
+                    CCDPlus.Exposure = G.ParaCam._Exposure;
+               // Cycle = CCDPlus.cycle;
+                CCDPlus.SetPara();
                 ///G.CommonPlus.GetImageRaw();
                 return true;
             }
             return false;
 
         }
-
-        public static bool IsConnected = false;
-        private static int frameRate = 0;
-        public static int FrameRate
+        //public static void SetRaw()
+        //{
+        //    //{if (matRaw == null) matRaw = new Mat();
+        //    //    if (matLive.Type() == MatType.CV_8UC4)
+        //    //        Cv2.CvtColor(matLive.Clone(), matRaw, ColorConversionCodes.BGRA2BGR);
+        //    //else
+        //    //    matRaw = matLive.Clone();
+        //    // G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw));
+        //    SetSrc(matRaw.Data, matRaw.Rows, matRaw.Cols, matRaw.Type());
+        //}
+        public  bool IsConnected = false;
+        private  int frameRate = 0;
+        public  int FrameRate
         {
             get => frameRate; set
             {
@@ -149,9 +165,9 @@ namespace BeeCore
                 }
             }
         }
-        public static event PropertyChangedEventHandler FrameChanged;
-        public static event PropertyChangedEventHandler PropertyChanged;
-        public static void NotifyPropertyChanged(string propertyName)
+        public  event PropertyChangedEventHandler FrameChanged;
+        public  event PropertyChangedEventHandler PropertyChanged;
+        public  void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
@@ -161,18 +177,18 @@ namespace BeeCore
 
 
 
-        public static bool SetExpo(int value)
+        public  bool SetExpo(int value)
         {
             try
             {
 
 
-                switch (G.TypeCCD)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
                         if (value > 1000)
                         {
-                            G.CCD.Exposure = value; G.CCD.SetPara();
+                            CCDPlus.Exposure = value; CCDPlus.SetPara();
                         }
                         break;
                     case TypeCamera.TinyIV:
@@ -186,22 +202,22 @@ namespace BeeCore
             }
             return true;// Result.Success.ToString();
         }
-        public static int GetExpo()
+        public  float GetExpo()
         {
             try
             {
 
 
-                switch (G.TypeCCD)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
                         // trackExposure.Min = (int)BeeCore.Common.MinExposure;
                         //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
                         // trackExposure.Step= (int)BeeCore.Common.StepExposure;
-                       return BeeCore.G.ParaCam.Exposure;
+                       return Para.Exposure;
                         //if (value > 1000)
                         //{
-                        //    G.CCD.Exposure = value; G.CCD.SetPara();
+                        //    CCDPlus.Exposure = value; CCDPlus.SetPara();
                         //}
                         break;
                     case TypeCamera.TinyIV:
@@ -215,18 +231,18 @@ namespace BeeCore
             }
             return -1;
         }
-        public static bool SetGain(int value)
+        public  bool SetGain(int value)
         {
             try
             {
 
 
-                switch (G.TypeCCD)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
                         //if (value > 1000)
                         //{
-                        //    G.CCD.ga = value; G.CCD.SetPara();
+                        //    CCDPlus.ga = value; CCDPlus.SetPara();
                         //}
                         break;
                     case TypeCamera.TinyIV:
@@ -240,22 +256,23 @@ namespace BeeCore
             }
             return true;// Result.Success.ToString();
         }
-        public static int GetGain()
+        public ParaCamera Para = new ParaCamera();
+        public  float GetGain()
         {
             try
             {
 
 
-                switch (G.TypeCCD)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
                         // trackExposure.Min = (int)BeeCore.Common.MinExposure;
                         //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
                         // trackExposure.Step= (int)BeeCore.Common.StepExposure;
-                        return BeeCore.G.ParaCam.Exposure;
+                        return Para.Exposure;
                         //if (value > 1000)
                         //{
-                        //    G.CCD.Exposure = value; G.CCD.SetPara();
+                        //    CCDPlus.Exposure = value; CCDPlus.SetPara();
                         //}
                         break;
                     case TypeCamera.TinyIV:
@@ -269,12 +286,18 @@ namespace BeeCore
             }
             return -1;
         }
-        public static System.Drawing.Size GetSzCCD()
+        public  System.Drawing.Size GetSzCCD()
         {
-          return new System.Drawing.Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+          return new System.Drawing.Size(matRaw.Width,matRaw.Height);
 
         }
-        public static  void Read()
+        public  void Init()
+        {
+           
+            CCDPlus.typeCCD = (int)Para.TypeCamera;
+        }
+       
+        public   void Read()
         {
             int rows = 0, cols = 0, Type = 0;
             
@@ -283,16 +306,16 @@ namespace BeeCore
 
             try
             {
-                switch (G.TypeCCD)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.USB:
-                        if (Common.matRaw != null)
-                            if (!Common.matRaw.Empty())
-                                Common.matRaw.Release();
+                        if (matRaw != null)
+                            if (!matRaw.Empty())
+                                matRaw.Release();
                         //if (IsHist)
-                        //    G.CCD.ReadRaw(true);
+                        //    CCDPlus.ReadRaw(true);
                         //else
-                        G.CCD.ReadCCD();
+                        CCDPlus.ReadCCD();
                         
                         
                         try
@@ -303,9 +326,9 @@ namespace BeeCore
                                  intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
                                 raw = new Mat(rows, cols, Type, intPtr);
 
-                                FrameRate = G.CCD.FPS;
-                                BeeCore.Common.Cycle = G.CCD.cycle;
-                                BeeCore.Common.matRaw = raw;
+                                FrameRate = CCDPlus.FPS;
+                                BeeCore.Common.Cycle = CCDPlus.cycle;
+                               matRaw = raw;
                             }
                             //    return new Mat();
 
@@ -320,15 +343,15 @@ namespace BeeCore
                         }
                         break;
                     case TypeCamera.BaslerGigE:
-                        if (Common.matRaw != null)
-                            if (!Common.matRaw.Empty())
-                                Common.matRaw.Dispose();
+                        if (matRaw != null)
+                            if (!matRaw.Empty())
+                                matRaw.Dispose();
                         //if (IsHist)
-                        //    G.CCD.ReadRaw(true);
+                        //    CCDPlus.ReadRaw(true);
                         //else
                         Stopwatch stopwatch = new Stopwatch(); 
                         stopwatch.Start();
-                        G.CCD.ReadCCD();
+                        CCDPlus.ReadCCD();
 
                         
                          raw = new Mat();
@@ -342,9 +365,9 @@ namespace BeeCore
                                     intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
                                 raw = new Mat(rows, cols, Type, intPtr);
 
-                                FrameRate = G.CCD.FPS;
+                                FrameRate = CCDPlus.FPS;
                             
-                                    BeeCore.Common.matRaw = raw.Clone();
+                                   matRaw = raw.Clone();
                                 stopwatch.Stop();
                                 BeeCore.Common.Cycle =(int)stopwatch.Elapsed.TotalMilliseconds;
 
@@ -359,12 +382,12 @@ namespace BeeCore
                         }
                         break;
                        case TypeCamera.TinyIV:
-
-                   Size SZ=  HEROJE.Read();
+                        Mat raw2= HEROJE.Read();
+                        Size SZ = raw2.Size(); 
                     if(SZ.Width==0&&SZ.Height==0)
                             IsConnected = false;
                         BeeCore.Common.Cycle =Convert.ToInt32(1000.0 / HEROJE.FrameTime);
-                                                                                                                                                                                                                                                                                                                                                                            Native.SetImg(BeeCore.Common.matRaw);
+                         Native.SetImg(matRaw);
                         break;
                 }
               
@@ -379,9 +402,9 @@ namespace BeeCore
           
            // return new Mat();
         }
-        public static void Light(int TypeLight, bool IsOn)
+        public  void Light(int TypeLight, bool IsOn)
         {
-            switch (G.TypeCCD)
+            switch (Para.TypeCamera)
             {
                 case TypeCamera.TinyIV:
                     HEROJE.Light(TypeLight, IsOn);
@@ -394,9 +417,9 @@ namespace BeeCore
 
             }
         }
-        public static void SetReSolution(int TypeReSolution)
+        public  void SetReSolution(int TypeReSolution)
         {
-            switch (G.TypeCCD)
+            switch (Para.TypeCamera)
             {
                 case TypeCamera.TinyIV:
                     HEROJE.SetReSolution(TypeReSolution);

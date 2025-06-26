@@ -50,10 +50,10 @@ namespace BeeUi.Tool
                 timer.Restart();
                 Propety.IsOK = true;
                 Propety. StatusTool = StatusTool.Processing;
-                dynamic outLine1 = G.PropetyTools[G.PropetyTools.FindIndex(a=>a.Name== Propety.listPointChoose[0].Item1 )].Propety ;
-                dynamic outLine2 = G.PropetyTools[G.PropetyTools.FindIndex(a => a.Name == Propety.listPointChoose[1].Item1)].Propety ;
-                dynamic outLine3 = G.PropetyTools[G.PropetyTools.FindIndex(a => a.Name == Propety.listPointChoose[2].Item1)].Propety ;
-                dynamic outLine4 = G.PropetyTools[G.PropetyTools.FindIndex(a => a.Name == Propety.listPointChoose[3].Item1)].Propety ;
+                dynamic outLine1 = G.PropetyTools[Propety.IndexThread][G.PropetyTools[Propety.IndexThread].FindIndex(a=>a.Name== Propety.listPointChoose[0].Item1 )].Propety ;
+                dynamic outLine2 = G.PropetyTools[Propety.IndexThread][G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1)].Propety ;
+                dynamic outLine3 = G.PropetyTools[Propety.IndexThread][G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1)].Propety ;
+                dynamic outLine4 = G.PropetyTools[Propety.IndexThread][G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1)].Propety ;
                 if (outLine1.StatusTool == StatusTool.Done && !IsDone1)
                 {
                     IsDone1 = true;
@@ -214,7 +214,7 @@ namespace BeeUi.Tool
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
 
@@ -223,7 +223,7 @@ namespace BeeUi.Tool
             else
             {
                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
             }
@@ -389,11 +389,11 @@ namespace BeeUi.Tool
             //    else
             //        Propety.rotAreaAdjustment = Propety.rotArea;
             //    Propety.rotAreaAdjustment._angle = 0;
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotAreaAdjustment);
 
             //}
             //else
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotArea);
         }
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
@@ -553,13 +553,13 @@ namespace BeeUi.Tool
         private void ToolCalculator_Load(object sender, EventArgs e)
         {
             IsLoad1 = true;
-            cb1.DataSource=  G.PropetyTools.Select(p => p.Name).ToList();
+            cb1.DataSource=  G.PropetyTools[Propety.IndexThread].Select(p => p.Name).ToList();
             IsLoad2 = true;
-            cb3.DataSource = G.PropetyTools.Select(p => p.Name).ToList();
+            cb3.DataSource = G.PropetyTools[Propety.IndexThread].Select(p => p.Name).ToList();
             IsLoad3 = true;
-            cb5.DataSource = G.PropetyTools.Select(p => p.Name).ToList();
+            cb5.DataSource = G.PropetyTools[Propety.IndexThread].Select(p => p.Name).ToList();
             IsLoad4 = true;
-            cb7.DataSource = G.PropetyTools.Select(p => p.Name).ToList();
+            cb7.DataSource = G.PropetyTools[Propety.IndexThread].Select(p => p.Name).ToList();
         }
 
         int indexTool1 = -1, indexTool2= -1, indexTool3 = -1, indexTool4 = -1;
@@ -572,8 +572,8 @@ namespace BeeUi.Tool
             }
             if (cb1.SelectedIndex == -1) return;
             String nameTool=cb1.Text;
-            indexTool1 = G.PropetyTools.FindIndex(a=>a.Name==nameTool);
-            PropetyTool propetyTool = G.PropetyTools[indexTool1];
+            indexTool1 = G.PropetyTools[Propety.IndexThread].FindIndex(a=>a.Name==nameTool);
+            PropetyTool propetyTool = G.PropetyTools[Propety.IndexThread][indexTool1];
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle) return;
 
@@ -603,8 +603,8 @@ namespace BeeUi.Tool
             }
             if (cb3.SelectedIndex == -1) return;
             String nameTool = cb3.Text;
-            indexTool2 = G.PropetyTools.FindIndex(a => a.Name == nameTool);
-            PropetyTool propetyTool = G.PropetyTools[indexTool2];
+            indexTool2 = G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
+            PropetyTool propetyTool = G.PropetyTools[Propety.IndexThread][indexTool2];
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern&&propetyTool.TypeTool != TypeTool.Circle) return;
            
@@ -630,16 +630,16 @@ namespace BeeUi.Tool
         private void cb4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb4.SelectedIndex == -1) return;
-            switch (G.PropetyTools[indexTool2].TypeTool)
+            switch (G.PropetyTools[Propety.IndexThread][indexTool2].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = G.PropetyTools[indexTool2].Propety as OutLine;
+                    OutLine outLine = G.PropetyTools[Propety.IndexThread][indexTool2].Propety as OutLine;
                     Propety.listLine1Point[1] = outLine.listP_Center[cb4.SelectedIndex];
                     Propety.listPointChoose[1] = new Tuple<String, int>(outLine.nameTool, cb4.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
-                    Circle circle = G.PropetyTools[indexTool2].Propety as Circle;
+                    Circle circle = G.PropetyTools[Propety.IndexThread][indexTool2].Propety as Circle;
                     Propety.listLine1Point[1] = circle.listP_Center[cb4.SelectedIndex];
                     Propety.listPointChoose[1] = new Tuple<String, int>(circle.nameTool, cb4.SelectedIndex);
 
@@ -659,8 +659,8 @@ namespace BeeUi.Tool
             }
             if (cb5.SelectedIndex == -1) return;
             String nameTool = cb5.Text;
-            indexTool3 = G.PropetyTools.FindIndex(a => a.Name == nameTool);
-            PropetyTool propetyTool = G.PropetyTools[indexTool3];
+            indexTool3 = G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
+            PropetyTool propetyTool = G.PropetyTools[Propety.IndexThread][indexTool3];
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle) return;
 
@@ -691,8 +691,8 @@ namespace BeeUi.Tool
             }
             if (cb7.SelectedIndex == -1) return;
             String nameTool = cb7.Text;
-            indexTool4 = G.PropetyTools.FindIndex(a => a.Name == nameTool);
-            PropetyTool propetyTool = G.PropetyTools[indexTool4];
+            indexTool4 = G.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
+            PropetyTool propetyTool = G.PropetyTools[Propety.IndexThread][indexTool4];
             if (propetyTool == null) return;
             if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle) return;
 
@@ -718,16 +718,16 @@ namespace BeeUi.Tool
         {
             if (cb6.SelectedIndex == -1) return;
          
-            switch (G.PropetyTools[indexTool3].TypeTool)
+            switch (G.PropetyTools[Propety.IndexThread][indexTool3].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = G.PropetyTools[indexTool3].Propety as OutLine;
+                    OutLine outLine = G.PropetyTools[Propety.IndexThread][indexTool3].Propety as OutLine;
                     Propety.listLine2Point[0] = outLine.listP_Center[cb6.SelectedIndex];
                     Propety.listPointChoose[2] = new Tuple<String, int>(outLine.nameTool, cb6.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
-                    Circle circle = G.PropetyTools[indexTool3].Propety as Circle;
+                    Circle circle = G.PropetyTools[Propety.IndexThread][indexTool3].Propety as Circle;
                     Propety.listLine2Point[0] = circle.listP_Center[cb6.SelectedIndex];
                     Propety.listPointChoose[2] = new Tuple<String, int>(circle.nameTool, cb6.SelectedIndex);
 
@@ -741,16 +741,16 @@ namespace BeeUi.Tool
         private void cb8_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb8.SelectedIndex == -1) return;
-            switch (G.PropetyTools[indexTool4].TypeTool)
+            switch (G.PropetyTools[Propety.IndexThread][indexTool4].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = G.PropetyTools[indexTool4].Propety as OutLine;
+                    OutLine outLine = G.PropetyTools[Propety.IndexThread][indexTool4].Propety as OutLine;
                     Propety.listLine2Point[1] = outLine.listP_Center[cb8.SelectedIndex];
                     Propety.listPointChoose[3] = new Tuple<String, int>(outLine.nameTool, cb8.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
-                    Circle circle = G.PropetyTools[indexTool4].Propety as Circle;
+                    Circle circle = G.PropetyTools[Propety.IndexThread][indexTool4].Propety as Circle;
                     Propety.listLine2Point[1] = circle.listP_Center[cb8.SelectedIndex];
                     Propety.listPointChoose[3] = new Tuple<String, int>(circle.nameTool, cb8.SelectedIndex);
 
@@ -774,16 +774,16 @@ namespace BeeUi.Tool
         private void cb2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb2.SelectedIndex == -1) return;
-            switch (G.PropetyTools[indexTool1].TypeTool)
+            switch (G.PropetyTools[Propety.IndexThread][indexTool1].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = G.PropetyTools[indexTool1].Propety as OutLine;
+                    OutLine outLine = G.PropetyTools[Propety.IndexThread][indexTool1].Propety as OutLine;
                     Propety.listLine1Point[0] = outLine.listP_Center[cb2.SelectedIndex];
                     Propety.listPointChoose[0] = new Tuple<String, int>(outLine.nameTool, cb2.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
-                    Circle circle = G.PropetyTools[indexTool1].Propety as Circle;
+                    Circle circle = G.PropetyTools[Propety.IndexThread][indexTool1].Propety as Circle;
                     Propety.listLine1Point[0] = circle.listP_Center[cb2.SelectedIndex];
                     Propety.listPointChoose[0] = new Tuple<String, int>(circle.nameTool, cb2.SelectedIndex);
 

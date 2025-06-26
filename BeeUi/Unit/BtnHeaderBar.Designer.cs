@@ -32,7 +32,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnUser = new BeeUi.Common.RJButton();
             this.btnSettingPLC = new BeeUi.Common.RJButton();
-            this.btnLang = new BeeUi.Common.RJButton();
+            this.btnCamera = new BeeUi.Common.RJButton();
             this.btnfull = new BeeUi.Common.RJButton();
             this.btnSetting = new BeeUi.Common.RJButton();
             this.btnReport = new BeeUi.Common.RJButton();
@@ -51,7 +51,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.btnUser, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSettingPLC, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnLang, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnCamera, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnfull, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSetting, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnReport, 2, 0);
@@ -129,38 +129,39 @@
             this.btnSettingPLC.UseVisualStyleBackColor = false;
             this.btnSettingPLC.Click += new System.EventHandler(this.btnSettingPLC_Click);
             // 
-            // btnLang
+            // btnCamera
             // 
-            this.btnLang.BackColor = System.Drawing.Color.Transparent;
-            this.btnLang.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnLang.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnLang.BackgroundImage")));
-            this.btnLang.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnLang.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(108)))), ((int)(((byte)(182)))));
-            this.btnLang.BorderRadius = 5;
-            this.btnLang.BorderSize = 1;
-            this.btnLang.ButtonImage = null;
-            this.btnLang.Corner = BeeCore.Corner.Both;
-            this.btnLang.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnLang.Enabled = false;
-            this.btnLang.FlatAppearance.BorderSize = 0;
-            this.btnLang.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLang.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLang.ForeColor = System.Drawing.Color.Black;
-            this.btnLang.Image = global::BeeUi.Properties.Resources.Language_Skill_3;
-            this.btnLang.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnLang.IsCLick = false;
-            this.btnLang.IsNotChange = true;
-            this.btnLang.IsRect = true;
-            this.btnLang.IsUnGroup = true;
-            this.btnLang.Location = new System.Drawing.Point(284, 3);
-            this.btnLang.Name = "btnLang";
-            this.btnLang.Size = new System.Drawing.Size(64, 49);
-            this.btnLang.TabIndex = 33;
-            this.btnLang.Text = "ENG";
-            this.btnLang.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnLang.TextColor = System.Drawing.Color.Black;
-            this.btnLang.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnLang.UseVisualStyleBackColor = false;
+            this.btnCamera.BackColor = System.Drawing.Color.Transparent;
+            this.btnCamera.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCamera.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCamera.BackgroundImage")));
+            this.btnCamera.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCamera.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(108)))), ((int)(((byte)(182)))));
+            this.btnCamera.BorderRadius = 5;
+            this.btnCamera.BorderSize = 1;
+            this.btnCamera.ButtonImage = null;
+            this.btnCamera.Corner = BeeCore.Corner.Both;
+            this.btnCamera.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCamera.Enabled = false;
+            this.btnCamera.FlatAppearance.BorderSize = 0;
+            this.btnCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCamera.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCamera.ForeColor = System.Drawing.Color.Black;
+            this.btnCamera.Image = global::BeeUi.Properties.Resources.Camera;
+            this.btnCamera.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCamera.IsCLick = false;
+            this.btnCamera.IsNotChange = true;
+            this.btnCamera.IsRect = true;
+            this.btnCamera.IsUnGroup = true;
+            this.btnCamera.Location = new System.Drawing.Point(284, 3);
+            this.btnCamera.Name = "btnCamera";
+            this.btnCamera.Size = new System.Drawing.Size(64, 49);
+            this.btnCamera.TabIndex = 33;
+            this.btnCamera.Text = "Camera";
+            this.btnCamera.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCamera.TextColor = System.Drawing.Color.Black;
+            this.btnCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCamera.UseVisualStyleBackColor = false;
+            this.btnCamera.Click += new System.EventHandler(this.btnCamera_Click);
             // 
             // btnfull
             // 
@@ -276,7 +277,7 @@
 
         private Common.RJButton btnSetting;
         private Common.RJButton btnReport;
-        public Common.RJButton btnLang;
+        public Common.RJButton btnCamera;
         public Common.RJButton btnUser;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public Common.RJButton btnSettingPLC;

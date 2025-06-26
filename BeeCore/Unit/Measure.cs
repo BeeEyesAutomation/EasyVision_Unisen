@@ -28,8 +28,8 @@ namespace BeeCore
         public String nameTool = "";
         public int Index = 0;
         public double AngleDetect = 0;
-      
-      
+        public int IndexThread = 0;
+
         public TypeTool TypeTool = TypeTool.Measure;
         public StatusTool StatusTool = StatusTool.None;
         public int cycleTime;

@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeUi.Commons;
+using BeeUi.Data;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -52,11 +53,15 @@ namespace BeeUi
             //  Disable();
             //  Enable();
             String IDCCD = G.Config.IDCamera;
-           
-            BeeCore.Funtion.Init.CCD(G.Config.TypeCamera);
-            
-            // G.HEROJE=new DeviceFindAndCom()
-            String sRead = BeeCore.Camera.Scan();
+            // BeeCore.Common.listCamera.Add(new Camera());
+            String sRead = "";
+            if (BeeCore.Common.listCamera.Count() > G.indexChoose)
+                if (BeeCore.Common.listCamera[G.indexChoose] != null)
+            {
+                BeeCore.Common.listCamera[G.indexChoose].Init();
+                 sRead = BeeCore.Common.listCamera[G.indexChoose].Scan();
+            }    
+          
       
             String[] listStringCCD = sRead.Split('\n');
             cbCCD.DataSource = listStringCCD;
@@ -71,15 +76,16 @@ namespace BeeUi
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
 
           
-            cbCCD.DataSource = ScanIDCCD();
-            if (G.Config.Resolution == null) G.Config.Resolution = "1280x720 (1.3 MP)";
-            cbReSolution.SelectedIndex = cbReSolution.FindStringExact(G.Config.Resolution);
+         //   cbCCD.DataSource = ScanIDCCD();
+            //if (G.Config.Resolution == null) G.Config.Resolution = "1280x720 (1.3 MP)";
+            //cbReSolution.SelectedIndex = cbReSolution.FindStringExact(G.Config.Resolution);
         }
      public   int indexCCD;
         
         public void ConnectCCD()
         {
             indexCCD = cbCCD.SelectedIndex;
+           BeeCore.Common.listCamera[G.indexChoose].Para.Name = cbCCD.Text;
             G.Config.IDCamera = cbCCD.Text.Trim();
             G.Load.FormActive.CheckActive(G.Load.addMac);
             if(G.IsActive)
@@ -105,6 +111,33 @@ namespace BeeUi
 
             }    
         }
+        public void ConnectAll()
+        {
+           
+            G.Load.FormActive.CheckActive(G.Load.addMac);
+            if (G.IsActive)
+            {
+                if (!workConAll.IsBusy)
+                    workConAll.RunWorkerAsync();
+            }
+            else
+            {
+                G.Load.addMac = Decompile.GetMacAddress();
+
+                if (G.Load.IsLockTrial)
+                {
+                    G.Load.IsLockTrial = false;
+
+
+                    G.Load.FormActive.txtLicence.Text = "Locked Trial";
+
+                }
+                String ID = G.Load.addMac + "*" + G.Config.IDCamera;
+                G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
+                G.Load.FormActive.Show();
+
+            }
+        }
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             if(G.EditTool!=null)
@@ -122,7 +155,9 @@ namespace BeeUi
 
         private void work_DoWork(object sender, DoWorkEventArgs e)
         {
-            BeeCore.Camera.IsConnected= BeeCore.Camera.Connect(indexCCD, G.Config.Resolution);
+            if (BeeCore.Common.listCamera.Count() > G.indexChoose)
+                if (BeeCore.Common.listCamera[G.indexChoose] != null)
+                    BeeCore.Common.listCamera[G.indexChoose].IsConnected= BeeCore.Common.listCamera[G.indexChoose].Connect(BeeCore.Common.listCamera[G.indexChoose].Para.Name);
             //if (G.Config.TypeCamera == BeeCore.TypeCamera.USB|| G.Config.TypeCamera == BeeCore.TypeCamera.BaslerGigE)
             //    BeeUi.G.IsCCD = BeeCore.Common.ConnectCCD(indexCCD, G.Config.Resolution);
 
@@ -135,92 +170,42 @@ namespace BeeUi
         Crypto Crypto = new Crypto();
         private void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            String[] sp = G.Config.Resolution.Split(' ');
-            String[] sp2 = sp[0].Split('x');
+            //String[] sp = G.Config.Resolution.Split(' ');
+            //String[] sp2 = sp[0].Split('x');
         
             //G.MainForm.Show();
             btnConnect.Enabled = true;
-            if (BeeCore.Camera.IsConnected)
-            {
-                if (File.Exists("Default.config"))
-                    File.Delete("Default.config");
-                Access.SaveConfig("Default.config", G.Config);
-                G.PLC.Connect(G.Config.IDPort);
-                G.Config.IDCamera = cbCCD.Text.Trim();
-               // G.Load.FormActive.CheckActive(G.Load.addMac);
-                if (G.Main == null)
+            if ( BeeCore.Common.listCamera.Count() > G.indexChoose)
+                if (BeeCore.Common.listCamera[G.indexChoose] != null)
                 {
-                    G.Load.FormActive.CheckActive(G.Load.addMac);
-                    if (G.IsActive)
+                    if (BeeCore.Common.listCamera[G.indexChoose].IsConnected)
                     {
-                        Main Main = new Main();
-                        G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-                        G.EditTool.lbCam.Text = "Camera Connected";
 
-                        String sProgram = Properties.Settings.Default.programCurrent;
-                        G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
-
-                        G.Load.Hide();
-
-                        Main.Show();
-                      //  Main.WindowState = FormWindowState.Minimized;
-
+                        this.Hide();
+                        // 
 
                     }
                     else
                     {
-                        if (G.Load.IsLockTrial)
-                        {
-                            G.Load.IsLockTrial = false;
-                         
-                               
-                                G.Load.FormActive.txtLicence.Text = "Locked Trial";
 
-                        }
-                        String ID=    G.Load.FormActive.KeyActive + "*"+G.Config.IDCamera;
-                        G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
-                        G.Load.FormActive.Show();
-
-                    }    
+                        MessageBox.Show("Fail Connect");
+                    }
                 }
-                else
-                {
-                    this.Hide();
-                    G.Main.Show();
-
-                    if (G.IsReConnectCCD)
-                    {
-                        G.IsReConnectCCD = false;
-                          G.Header.tmReadPLC.Enabled = true;
-                    }    
-                      
-                        BeeCore.Camera.Read();
-                    
-                   
-                }
-              
-              
-                    this.Hide();
-                // 
-
-            }
             else
-            {
-              
-                if (G.Load!=null)
-                G.Load.Hide();
-                this.Show();
-            }    
+                {
+                    MessageBox.Show("Fail Connect");
+                }
+               
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-                if (G.Load != null)
-                    G.Load.Close();
-                if (G.Main != null)
-                    G.Main.Close();
+                //if (G.Load != null)
+                //    G.Load.Close();
+                //if (G.Main != null)
+                //    G.Main.Close();
                 this.Close();
-                Process.GetCurrentProcess().Kill();
+               // Process.GetCurrentProcess().Kill();
                
                 
            
@@ -244,23 +229,25 @@ namespace BeeUi
 
         private void cbReSolution_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (G.Config.TypeCamera == TypeCamera.TinyIV)
-            {
-                BeeCore.G.ParaCam.CardChoosed = cbReSolution.Text;
+            //if (G.TypeCamera == TypeCamera.TinyIV)
+            //{
               
-                ScanIDCCD();
-            }
-             
-            else
-            G.Config.Resolution = cbReSolution.Text.Trim();
+            //}
+            BeeCore.G.ParaCam.CardChoosed = cbReSolution.Text;
+
+            ScanIDCCD();
+            //  else
+            //  G.Config.Resolution = cbReSolution.Text.Trim();
         }
 
         private void btnGigE_Click(object sender, EventArgs e)
         {
             label1.Text = "Resolution";
             cbReSolution.Enabled = true;
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
             // BeeCore.Common. = BeeCore.TypeCamera.BaslerGigE;
-            G.Config.TypeCamera = BeeCore.TypeCamera.BaslerGigE;
+            BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.BaslerGigE;
             ScanIDCCD();
         }
 
@@ -268,7 +255,9 @@ namespace BeeUi
         {
             label1.Text = "Resolution";
             cbReSolution.Enabled = true;
-            G.Config.TypeCamera = BeeCore.TypeCamera.USB;
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+            BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.USB;
             ScanIDCCD();
         }
 
@@ -294,7 +283,9 @@ namespace BeeUi
             cbReSolution.DataSource= HEROJE.ScanCard();
             if (cbReSolution.Items.Count== 1)
                 cbReSolution.SelectedIndex = 0;
-            G.Config.TypeCamera=BeeCore.TypeCamera.TinyIV;
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+            BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.TinyIV;
             ScanIDCCD();
         }
 
@@ -306,6 +297,134 @@ namespace BeeUi
         private void button1_Click(object sender, EventArgs e)
         {
             cbReSolution.DroppedDown = true;
+        }
+
+        private void btnCamera1_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 0;
+            if (BeeCore.Common.listParaCamera[0]==null)
+            BeeCore.Common.listParaCamera[0] = new ParaCamera();
+            BeeCore.Common.listCamera[0] = new Camera(BeeCore.Common.listParaCamera[0]);
+        }
+
+        private void btnCamera2_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 1;
+            if (BeeCore.Common.listParaCamera[1] == null)
+                BeeCore.Common.listParaCamera[1] = new ParaCamera();
+            BeeCore.Common.listCamera[1] = new Camera(BeeCore.Common.listParaCamera[1]);
+        }
+
+        private void btnCamera3_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 2;
+            if (BeeCore.Common.listParaCamera[2] == null)
+                BeeCore.Common.listParaCamera[2] = new ParaCamera();
+            BeeCore.Common.listCamera[2] = new Camera(BeeCore.Common.listParaCamera[2]);
+        }
+
+        private void btnCamera4_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 3;
+            if (BeeCore.Common.listParaCamera[3] == null)
+                BeeCore.Common.listParaCamera[3] = new ParaCamera();
+            BeeCore.Common.listCamera[3] = new Camera(BeeCore.Common.listParaCamera[3]);
+        }
+
+        private void workConAll_DoWork(object sender, DoWorkEventArgs e)
+        {
+         foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    camera.Init();
+                    camera.Scan();
+                    camera.IsConnected = camera.Connect(camera.Para.Name);
+                }
+                    
+            }
+        }
+
+        private void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            bool IsConnect = true;
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                    if (!camera.IsConnected)
+                    IsConnect = false;
+               
+                   
+
+            }
+            if (IsConnect)
+            {
+
+                SaveData.Camera(G.Project, BeeCore.Common.listParaCamera);
+                G.PLC.Connect(G.Config.IDPort);
+                G.Config.IDCamera = cbCCD.Text.Trim();
+                // G.Load.FormActive.CheckActive(G.Load.addMac);
+                if (G.Main == null)
+                {
+                    G.Load.FormActive.CheckActive(G.Load.addMac);
+                    if (G.IsActive)
+                    {
+                        Main Main = new Main();
+                        G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                        G.EditTool.lbCam.Text = "Camera Connected";
+
+                        String sProgram = Properties.Settings.Default.programCurrent;
+                        G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
+
+                        G.Load.Hide();
+
+                        Main.Show();
+                        //  Main.WindowState = FormWindowState.Minimized;
+
+
+                    }
+                    else
+                    {
+                        if (G.Load.IsLockTrial)
+                        {
+                            G.Load.IsLockTrial = false;
+
+
+                            G.Load.FormActive.txtLicence.Text = "Locked Trial";
+
+                        }
+                        String ID = G.Load.FormActive.KeyActive + "*" + G.Config.IDCamera;
+                        G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
+                        G.Load.FormActive.Show();
+
+                    }
+                }
+                else
+                {
+                    this.Hide();
+                    G.Main.Show();
+
+                    if (G.IsReConnectCCD)
+                    {
+                        G.IsReConnectCCD = false;
+                        G.Header.tmReadPLC.Enabled = true;
+                    }
+
+                    BeeCore.Common.listCamera[G.indexChoose].Read();
+
+
+                }
+            }
+            else
+            {
+
+                if (G.Load != null)
+                    G.Load.Hide();
+                this.Show();
+            }
+
+
+
         }
     }
 }

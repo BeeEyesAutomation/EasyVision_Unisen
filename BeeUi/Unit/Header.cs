@@ -76,7 +76,7 @@ namespace BeeUi.Common
         //    //if (rotArea._PosCenter.X + rotArea._rect.X + rotArea._rect.Width > szCCd.Width ||
         //    //    rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
         //    //    control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
-        //    Commons.ItemTool item = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
+        //    Commons.ItemTool item = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool[G.indexChoose].Count - 1));
         //    item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
         //    item.lbCycle.Text = "---";
         //    item.lbScore.Text = "---";
@@ -87,11 +87,11 @@ namespace BeeUi.Common
         //    G.ToolSettings.Y += item.Height + 10;
         //    G.listAlltool.Add(new Tools(item, control, PropetyTool));
 
-        //    //control.pro.indexTool = G.listAlltool.Count - 1;
+        //    //control.pro.indexTool = G.listAlltool[G.indexChoose].Count - 1;
         //    BeeCore.Common.CreateTemp(TypeTool);
         //    if (PropetyTool.Name == null) PropetyTool.Name = "";
         //    if (PropetyTool.Name.Trim() == "")
-        //        item.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
+        //        item.name.Text = TypeTool.ToString() + " " + G.listAlltool[G.indexChoose].Count();
         //    else
         //        item.name.Text = PropetyTool.Name.Trim();
         //    control.Name = PropetyTool.Name;
@@ -99,7 +99,7 @@ namespace BeeUi.Common
             
            
 
-        //    item.lbNumber.Text = G.listAlltool.Count() + "";
+        //    item.lbNumber.Text = G.listAlltool[G.indexChoose].Count() + "";
          
         //    item.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
            
@@ -267,7 +267,7 @@ namespace BeeUi.Common
                 MessageBox.Show("Please Stop Mode Continuous");
                 return;
             }
-            foreach (Tools tool in G.listAlltool)
+            foreach (Tools tool in G.listAlltool[G.indexChoose])
             {
                 tool.ItemTool.IsCLick = false;
             }
@@ -653,21 +653,20 @@ txtQrCode.Focus();
         {
             IsIntialProgram = true;
             if (BeeCore.G.ParaCam.matRegister != null)
-                BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
+                BeeCore.Common.listCamera[G.indexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
             else if (G.IsCCD)
-                BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
-            if (BeeCore.Common.matRaw != null)
+                BeeCore.Common.listCamera[G.indexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
+            if (BeeCore.Common.listCamera[G.indexChoose].matRaw != null)
             {
-                G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                //BeeCore.Native.SetImg(BeeCore.Common.matRaw);
+                G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+                //BeeCore.Native.SetImg(BeeCore.Common.listCamera[G.indexChoose].matRaw);
             }
             if (G.ToolSettings == null)
             {
                 G.ToolSettings = new ToolSettings();
 
             }
-            G.ToolSettings.pAllTool.Controls.Clear();
-
+          
             Properties.Settings.Default.programCurrent = G.Project;
             Properties.Settings.Default.Save();
             G.listProgram.Visible = false;
@@ -694,7 +693,17 @@ txtQrCode.Focus();
             Acccess(G.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
+            G.ToolSettings.pAllTool.Controls.Clear();
+
             tmShow.Enabled = true;
+            if(BeeCore.Common.listParaCamera[0]!=null)
+                CameraBar.btnCamera1.Text = BeeCore.Common.listParaCamera[0].Name.Substring(0, 8) + "..";
+            if (BeeCore.Common.listParaCamera[1] != null)
+                CameraBar.btnCamera2.Text = BeeCore.Common.listParaCamera[1].Name.Substring(0, 8) + "..";
+            if (BeeCore.Common.listParaCamera[2] != null)
+                CameraBar.btnCamera3.Text = BeeCore.Common.listParaCamera[2].Name.Substring(0, 8) + "..";
+            if (BeeCore.Common.listParaCamera[3] != null)
+                CameraBar.btnCamera4.Text = BeeCore.Common.listParaCamera[3].Name.Substring(0, 8) + "..";
         }
 
         private void workSaveProject_DoWork(object sender, DoWorkEventArgs e)
@@ -762,11 +771,12 @@ txtQrCode.Focus();
       
 
         int percent = 0;
-      
-        int indexToolShow = 0;
-        int stepShow = 0;
+
+        public int indexToolShow = 0;
+      public  int stepShow = 0;
         private void tmShow_Tick(object sender, EventArgs e)
         {
+            
             switch (stepShow)
             {
                 case 0:
@@ -780,11 +790,11 @@ txtQrCode.Focus();
                     stepShow++;
                     break;
                 case 2:
-                    if (indexToolShow < G.listAlltool.Count)
+                    if (indexToolShow < G.listAlltool[G.indexChoose].Count)
                     {
                         tmShow.Interval = 50;
                        
-                        G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[indexToolShow].ItemTool);
+                        G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[G.indexChoose][indexToolShow].ItemTool);
                         indexToolShow++;
                         G.ToolSettings.ResumeLayout(true);
                     }
@@ -857,7 +867,7 @@ txtQrCode.Focus();
         //        }
         //        return;
         //    }
-                if (!BeeCore.Camera.IsConnected)
+                if (!BeeCore.Common.listCamera[G.indexChoose].IsConnected)
             {
                 G.EditTool.lbCam.Text = "Camera Disconnected";
                 G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
@@ -965,7 +975,7 @@ txtQrCode.Focus();
                     //    G.PLC.WriteOutPut(2, false);
 
                 }
-                if (!BeeCore.Camera.IsConnected)
+                if (!BeeCore.Common.listCamera[G.indexChoose].IsConnected)
                 {
                     if (G.PLC.valueOutput[7] == 0)
                     {

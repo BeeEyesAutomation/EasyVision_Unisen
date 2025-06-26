@@ -59,7 +59,7 @@ namespace BeeUi.Commons
 
         private void btnUndo_Click(object sender, EventArgs e)
         {
-          G.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.matRaw);
+          G.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.listCamera[G.indexChoose].matRaw);
             G.EditTool.View.RefreshMask();
         }
 

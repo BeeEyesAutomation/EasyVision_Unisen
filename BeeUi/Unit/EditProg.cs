@@ -52,7 +52,7 @@ namespace BeeUi.Unit
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            G.PropetyTools = new List<BeeCore.PropetyTool>();
+            G.PropetyTools[G.indexChoose] = new List<BeeCore.PropetyTool>();
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {

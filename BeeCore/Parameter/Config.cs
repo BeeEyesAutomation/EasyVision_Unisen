@@ -27,8 +27,7 @@ namespace BeeCore
         public int DelayOutput = 100;
         public  int delayTrigger = 100;
         public int imgOffSetX = 0, imgOffSetY = 0, imgZoom = 0;
-        public TypeCamera TypeCamera = TypeCamera.USB;
-        public String Resolution = "1280x720 (1.3 MP)";
+        
         public int LimitDateSave = 15;
         public bool IsSaveOK = true, IsSaveNG = false;
         public bool IsSaveRaw = true, IsSaveRS = false;

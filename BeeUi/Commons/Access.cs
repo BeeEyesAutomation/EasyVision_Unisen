@@ -24,7 +24,7 @@ namespace BeeUi
             }
         }
 
-        public static void SaveProg(String path,List<PropetyTool> list)
+        public static void SaveProg(String path, List<List<PropetyTool>> list)
         {
             
             using (MemoryStream ms = new MemoryStream())
@@ -41,14 +41,14 @@ namespace BeeUi
               
             }
         }
-        public static List<PropetyTool> LoadProg(string Path)
+        public static List<List<PropetyTool>> LoadProg(string Path)
         {
-            List<PropetyTool> list = new List<PropetyTool>();
+            List<List<PropetyTool>> list = new List<List<PropetyTool>>();
           
             using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
             {
                 BinaryFormatter bf = new BinaryFormatter();
-                list = (List<PropetyTool>)bf.Deserialize(ms);
+                list = (List < List<PropetyTool>>)bf.Deserialize(ms);
             }
             return list;
         }
@@ -80,7 +80,7 @@ namespace BeeUi
             }
             return Config;
         }
-        public static void SaveParaCam(String path, ParaCam ParaCam)
+        public static void SaveParaComon(String path, ParaCommon ParaCam)
         {
 
             using (MemoryStream ms = new MemoryStream())
@@ -97,14 +97,42 @@ namespace BeeUi
 
             }
         }
-        public static ParaCam LoadParaCam(string Path)
+        public static ParaCommon LoadParaComon(string Path)
         {
-            ParaCam Config;
+            ParaCommon Config;
 
             using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
             {
                 BinaryFormatter bf = new BinaryFormatter();
-                Config = (ParaCam)bf.Deserialize(ms);
+                Config = (ParaCommon)bf.Deserialize(ms);
+            }
+            return Config;
+        }
+        public static void SaveParaCamera(String path, List< ParaCamera> ParaCam)
+        {
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(ms, ParaCam);
+                ms.Position = 0;
+                byte[] buffer = new byte[(int)ms.Length];
+                ms.Read(buffer, 0, buffer.Length);
+                File.WriteAllText(path, Convert.ToBase64String(buffer));
+                File.Exists(path);
+
+
+            }
+        }
+        public static List<ParaCamera> LoadParaCamera(string Path)
+        {
+            List< ParaCamera> Config;
+
+            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                Config = (List<ParaCamera>)bf.Deserialize(ms);
             }
             return Config;
         }

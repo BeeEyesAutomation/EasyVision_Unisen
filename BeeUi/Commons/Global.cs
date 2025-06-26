@@ -39,6 +39,7 @@ namespace BeeUi
         public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
         public static StatusMode StatusMode=StatusMode.None;
         public static StatusProcessing StatusProcessing = StatusProcessing.None;
+
         public static bool Initial = false,IsShutDown=false;
         public static bool IsReConnectCCD=false,IsPLCNotAlive=false;
         public static int[] valuesPLCInPut=new int[16];
@@ -74,24 +75,27 @@ namespace BeeUi
         public static EditProg EditProg;
         public static Trig StatusTrig=Trig.None;
         public static int indexToolSelected;
-          public static Config Config;
-         public static VideoCapture camera;
-       public static bool IsRun = true,IsCCD,IsEdit;
+         public static Config Config;
+        public static VideoCapture camera;
+        public static bool IsRun = true,IsCCD,IsEdit;
         public static RectRotate rotOriginAdj;
         public static bool IsCheck=false;
         public static StepEdit StepEdit=new StepEdit();
         public static float angle_Adjustment=0, X_Adjustment=0, Y_Adjustment=0;
-        public static List<PropetyTool> PropetyTools = new List<PropetyTool>();
-        public static List<Tools> listAlltool = new List<Tools>();
+        public static List<List<PropetyTool>> PropetyTools = new List<List<PropetyTool>>();
+        public static List<List<Tools>> listAlltool = new List<List<Tools>>();
+       
         public static List<iTool> listItool = new List<iTool>();
+        public static int indexChoose = 0;
         public static bool IsCalib, isTop;
         public static string _pathSqlMaster;
         public static SqlConnection cnn=new SqlConnection();
         public static ToolSettings ToolSettings=new ToolSettings();
         public static bool IsLoad= false;
-     public static TypeCrop TypeCrop = TypeCrop.Crop;
-       public static TypeTool TypeTool = TypeTool.OutLine;
-       public static Tools tool ;
+        public static TypeCrop TypeCrop = TypeCrop.Crop;
+        public static TypeCamera TypeCamera;
+        public static TypeTool TypeTool = TypeTool.OutLine;
+        public static Tools tool ;
         public static EditTool EditTool ;
         public static bool IsDrawProcess = true;
         public static bool IsByPassPLC = true;

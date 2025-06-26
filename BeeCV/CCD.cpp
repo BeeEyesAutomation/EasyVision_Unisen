@@ -314,7 +314,6 @@ System::String^ ScanHik()
 		return gcnew  System::String("Unknown");;
 	
 	}
-
 	// ch:将值加入到信息列表框中并显示出来 | en:Add value to the information list box and display
 	for (unsigned int i = 0; i < m_stDevList.nDeviceNum; i++)
 	{
@@ -351,7 +350,7 @@ System::String^ ScanHik()
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
 			}
-			strMsg.Format(_T("[%d]GigE:    %s  (%d.%d.%d.%d)"), i, pUserName, nIp1, nIp2, nIp3, nIp4);
+			strMsg.Format(_T("%s"),pUserName);
 		}
 		else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
 		{
@@ -467,9 +466,10 @@ System::String^ ScanHik()
 	return gcnew  System::String(list1.c_str());;
 	//m_ctrlDeviceCombo.SetCurSel(0);
 }
+vector<string> listCCCD;
 System::String^ ScanUsb()
 {
-
+	listCCCD = vector<string>();
 	System::String^ ListCCD = "";
 	DeviceEnumerator de;
 	// Audio Devices
@@ -477,7 +477,9 @@ System::String^ ScanUsb()
 	std::string list1 = "";
 	devices = de.getVideoDevicesMap();
 	for (auto const& device : devices) {
+		
 		list1.append(device.second.deviceName).append("$").append(device.second.devicePath).append("\n");
+		listCCCD.push_back(list1);
 		//.append(std::to_string(device.first)).append("$").
 	}
 	//ListCCD=System::String(list1.c_str()); //Marshal::PtrToStringAnsi(&list1, NULL);
@@ -629,11 +631,11 @@ bool	CCD::SetPara()
 	
 	return false;
 }
-bool ConnectUsb(int rowCCD, int colCCD, int index)
+bool ConnectUsb( int index)
 {
 	camUSB.open(index);
-	camUSB.set(CAP_PROP_FRAME_WIDTH, colCCD);
-	camUSB.set(CAP_PROP_FRAME_HEIGHT, rowCCD);
+	//camUSB.set(CAP_PROP_FRAME_WIDTH, colCCD);
+	///camUSB.set(CAP_PROP_FRAME_HEIGHT, rowCCD);
 	camUSB.set(CAP_PROP_AUTOFOCUS, 0);
 	//camUSB.set(CAP_PROP_FOCUS, 12);
 	camUSB.set(CAP_PROP_AUTO_EXPOSURE, 0);
@@ -716,7 +718,82 @@ int main() {
 
 	return 0;
 }
-bool ConnectHik(int rowCCD, int colCCD, int index)
+int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string& targetUserName)
+{
+	for (unsigned int i = 0; i < devList.nDeviceNum; ++i)
+	{
+		MV_CC_DEVICE_INFO* pDeviceInfo = devList.pDeviceInfo[i];
+		if (pDeviceInfo == nullptr)
+			continue;
+
+		if (pDeviceInfo->nTLayerType == MV_GIGE_DEVICE)
+		{
+		//	const char* userName = (const char*)pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName;
+			char strUserName[256] = { 0 };
+			wchar_t* pUserName = NULL;
+			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}
+			else
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
+
+			if (pUserName && wcscmp(pUserName, targetWStr.c_str()) == 0)
+			{
+				return i;
+			}
+			
+		}
+		else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
+		{
+			//const char* userName = (const char*)pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName;
+			//if (userName && strcmp(userName, targetUserName.c_str()) == 0)
+			//{
+			//	return i; // tìm thấy index
+			//}
+			char strUserName[256] = { 0 };
+			wchar_t* pUserName = NULL;
+			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName)) != 0)
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}
+			else
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
+
+			if (pUserName && wcscmp(pUserName, targetWStr.c_str()) == 0)
+			{
+				return i;
+			}
+		}
+	}
+
+	return -1; // Không tìm thấy
+}
+bool ConnectHik(int index)
 {
 
 	
@@ -771,19 +848,21 @@ bool ConnectHik(int rowCCD, int colCCD, int index)
 	m_pcMyCamera->StartGrabbing();
 	return true;
 }
-bool CCD::Connect( int rowCCD, int colCCD, int index)
+bool CCD::Connect( int rowCCD, int colCCD, System::String^ NameCamera)
 {
-	
+	std::string nameCCD = marshal_as<std::string>(NameCamera);
 	numERR = 0;
 	IsErrCCD = false;
 	bool IsConnect = false;
 	switch (typeCCD)
 	{
 	case 1:
-		IsConnect =ConnectHik(rowCCD, colCCD, index);
+	{
+		int indexCCD = FindCameraIndexByUserName(m_stDevList, nameCCD);
+		IsConnect = ConnectHik(indexCCD);
 		/*try
 		{
-		
+
 			StepExposure = (int)baslerGigE.ExposureTimeRaw.GetInc();
 			MinExposure = (int)baslerGigE.ExposureTimeRaw.GetMin();
 			MaxExposure = (int)baslerGigE.ExposureTimeRaw.GetMax();
@@ -794,11 +873,22 @@ bool CCD::Connect( int rowCCD, int colCCD, int index)
 
 		}*/
 		break;
-	default:
-		CCD::colCCD = colCCD;
-		CCD::rowCCD = rowCCD;
-		IsConnect = ConnectUsb(rowCCD, colCCD, index);
+	}
+		
+	case 0:
+	{
+		auto it = std::find(listCCCD.begin(), listCCCD.end(), nameCCD);
+
+		if (it != listCCCD.end()) {
+			int index = std::distance(listCCCD.begin(), it);
+			IsConnect = ConnectUsb(index);
+		}
+		else {
+			IsConnect = false;
+		}
+	
 		break;
+		}
 	}
 	
 	return IsConnect;

@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace BeeCore
 {
-    public class CCD
+    [Serializable()]
+    public class ParaCamera
     {
         public int Width,Height,OffSetX,OffSetY;
         public float Exposure,Gain,Briness;
         public bool IsConnect;
         public String Ex;
         public float Fps;
+        public TypeCamera TypeCamera = TypeCamera.USB;
+        public String Name = "";
 
-        public CCD()
+        public ParaCamera()
         {
 
         }

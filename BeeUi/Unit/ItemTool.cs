@@ -61,21 +61,21 @@ namespace BeeUi.Commons
 
         private void Parent_VisibleChanged1(object sender, EventArgs e)
         {
-            if (Parent != null && G.indexToolSelected != -1 && G.indexToolSelected < G.listAlltool.Count)
+            if (Parent != null && G.indexToolSelected != -1 && G.indexToolSelected < G.listAlltool[G.indexChoose].Count)
             {
                 if (this.Parent.Visible)
                 {
                     G.IsEdit = false;
-                    if (G.listAlltool.FindIndex(a => a.ItemTool == this) != G.indexToolSelected) return;
+                    if (G.listAlltool[G.indexChoose].FindIndex(a => a.ItemTool == this) != G.indexToolSelected) return;
                     if (G.PropetyOld != null && G.IsCancel)
                     {
                         G.IsCancel = false;
-                        G.listAlltool[G.indexToolSelected].tool.Propety = G.PropetyOld.Clone();
-                        G.PropetyTools[G.indexToolSelected].Propety = G.listAlltool[G.indexToolSelected].tool.Propety;
+                        G.listAlltool[G.indexChoose][G.indexToolSelected].tool.Propety = G.PropetyOld.Clone();
+                        G.PropetyTools[G.indexChoose][G.indexToolSelected].Propety = G.listAlltool[G.indexChoose][G.indexToolSelected].tool.Propety;
 
                         G.EditTool.View.imgView.Invalidate();
                     }
-                    Score.Value = G.PropetyTools[G.indexToolSelected].Propety.Score;
+                    Score.Value = G.PropetyTools[G.indexChoose][G.indexToolSelected].Propety.Score;
                 }
             }
             
@@ -91,7 +91,7 @@ namespace BeeUi.Commons
             if (G.IsRun) return;
            // this.BackgroundImage = imgChoose;
             this.IsCLick = true;
-            G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
+            G.indexToolSelected = G.listAlltool[G.indexChoose].FindIndex(a => a.ItemTool == this);
             foreach (Control c in this.Parent.Controls)
             {
 
@@ -261,10 +261,10 @@ namespace BeeUi.Commons
        private void ItemTool_DoubleClick(object sender, EventArgs e)
         {
             //if (BeeCore.G.ParaCam.matRegister != null)
-            //    BeeCore.Common.matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
+            //    BeeCore.Common.listCamera[G.indexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(BeeCore.G.ParaCam.matRegister);
             //else if (G.IsCCD)
-            //    BeeCore.Common.matRaw = null;// BeeCore.Common.GetImageRaw();
-            //if (BeeCore.Common.matRaw == null)
+            //    BeeCore.Common.listCamera[G.indexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
+            //if (BeeCore.Common.listCamera[G.indexChoose].matRaw == null)
             //{
             //    MessageBox.Show("Vui long dang ky Anh");
             //    return;
@@ -272,12 +272,12 @@ namespace BeeUi.Commons
             if (G.IsRun) return;
             this.Parent.Visible = false;
             txtEdit.Visible = false;
-            G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
-            G.PropetyOld = G.PropetyTools[G.indexToolSelected].Propety.Clone();
+            G.indexToolSelected = G.listAlltool[G.indexChoose].FindIndex(a => a.ItemTool == this);
+            G.PropetyOld = G.PropetyTools[G.indexChoose][G.indexToolSelected].Propety.Clone();
          //   if (Score.Enabled||G.IsRun) return;
             G.IsEdit = true;
             G.EditTool.pEditTool.Controls.Clear();
-            control = G.listAlltool[G.indexToolSelected].tool;
+            control = G.listAlltool[G.indexChoose][G.indexToolSelected].tool;
             control.Dock = DockStyle.Fill;
             G.EditTool.View.toolEdit = control;
            // control.BringToFront();
@@ -292,22 +292,22 @@ namespace BeeUi.Commons
             G.ToolSettings.Visible = false;
             G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
             G.EditTool.lbTool.Text = TypeTool.ToString();
-            G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-            G.listAlltool[G.indexToolSelected].tool.LoadPara() ;
+            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+            G.listAlltool[G.indexChoose][G.indexToolSelected].tool.LoadPara() ;
             G.EditTool.View.imgView.Invalidate();
             G.EditTool.View.imgView.Update();
         }
 
         private void Score_ValueChanged(float obj)
         {
-            G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
-            G.PropetyTools[G.indexToolSelected].Propety.Score =(float) Score.Value;
-            G.listAlltool[G.indexToolSelected].tool.trackScore.Value = (float)Score.Value;
+            G.indexToolSelected = G.listAlltool[G.indexChoose].FindIndex(a => a.ItemTool == this);
+            G.PropetyTools[G.indexChoose][G.indexToolSelected].Propety.Score =(float) Score.Value;
+            G.listAlltool[G.indexChoose][G.indexToolSelected].tool.trackScore.Value = (float)Score.Value;
         }
         TextBox txtEdit = new TextBox();
         private void name_DoubleClick(object sender, EventArgs e)
         {
-            G.indexToolSelected = G.listAlltool.FindIndex(a => a.ItemTool == this);
+            G.indexToolSelected = G.listAlltool[G.indexChoose].FindIndex(a => a.ItemTool == this);
 
             if (G.IsRun) return;
             txtEdit.Visible = true;
@@ -326,7 +326,7 @@ namespace BeeUi.Commons
         {
             if(e.KeyCode==Keys.Enter)
             {
-                G.PropetyTools[G.indexToolSelected].Name = txtEdit.Text.Trim();
+                G.PropetyTools[G.indexChoose][G.indexToolSelected].Name = txtEdit.Text.Trim();
                 name.Text= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
             }    

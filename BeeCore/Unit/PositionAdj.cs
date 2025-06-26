@@ -327,6 +327,7 @@ namespace BeeCore
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
         public List<RectRotate> rectRotates = new List<RectRotate>();
         public int indexTool = 0;
+        public int IndexThread = 0;
         public void Matching( RectRotate rot)
         {
             //if (!IsRun)
@@ -336,7 +337,7 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rot, rotMask);
+            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rot, rotMask);
             BeeCore.Native.SetImg(matCrop);
           
             IsOK = G.pattern.Match( indexTool,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);

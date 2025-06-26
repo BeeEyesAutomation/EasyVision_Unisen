@@ -37,10 +37,10 @@ namespace BeeUi
                 G.EditTool.View.btnRecord.PerformClick();
 
             }
-            BeeCore.Camera.Read();
+           BeeCore.Common.listCamera[G.indexChoose].Read();
           
-            BeeCore.G.ParaCam.matSample = BeeCore.Common.matRaw.ToBitmap();
-            G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            BeeCore.G.ParaCam.matSample = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
 
         }
 
@@ -84,7 +84,7 @@ namespace BeeUi
         float valueMedium = 0;
         private void workerCalib_DoWork(object sender, DoWorkEventArgs e)
         {
-            BeeCore.Camera.Read();
+           BeeCore.Common.listCamera[G.indexChoose].Read();
             Mat matRaw = BeeCore.Native.GetImg();;
             Mat matProcess = new Mat(matRaw.Size(), MatType.CV_8UC1);
             Mat matSample = BeeCore.G.ParaCam.matSample.ToMat();

@@ -349,6 +349,7 @@ namespace BeeCore
             // return ( xRotated, yRotated);
         }
         public Mode TypeMode = Mode.Pattern;
+        public int IndexThread = 0;
         public void Matching( int indexTol)
         {
 
@@ -360,7 +361,7 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.matRaw, rotAreaAdjustment, rotMask);
+            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAreaAdjustment, rotMask);
             Mat matProcess = new Mat();
             switch (TypeMode)
             {

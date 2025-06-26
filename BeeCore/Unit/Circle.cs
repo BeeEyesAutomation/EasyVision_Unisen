@@ -227,10 +227,10 @@ namespace BeeCore
         public String nameTool = "";
         public StatusTool StatusTool = StatusTool.None;
         public bool IsLimitCouter = true;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork( RectRotate rectRotate)
         {
             StatusTool = StatusTool.Processing;
-            Matching(rectRotate);
+            Matching( rectRotate);
 
         }
         public void Complete()
@@ -415,10 +415,10 @@ namespace BeeCore
             r = Math.Sqrt((cx - x1) * (cx - x1) + (cy - y1) * (cy - y1));
             return true;
         }
-    
+        public int IndexThread = 0;
         public void Matching( RectRotate rectRotate)
         {
-            using (Mat raw = BeeCore.Common.matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;
@@ -431,13 +431,13 @@ namespace BeeCore
                     matProcess = matCrop;
           
                  ScoreRs =100;
-                 var pipeline = new ImagePreprocessPipeline()
-           .Add(Filters.Clahe(2.0, new Size(8, 8)))            // làm phẳng sáng cục bộ
-           .Add(Filters.GaussianBlur(new Size(5, 5), 0))        // giảm nhiễu
-           .Add(Filters.Canny(50, 150))                         // trích biên
-           .Add(Filters.Morph(MorphTypes.Close, new Size(3, 3))); // nối nét đứt
+           //      var pipeline = new ImagePreprocessPipeline()
+           //.Add(Filters.Clahe(2.0, new Size(8, 8)))            // làm phẳng sáng cục bộ
+           //.Add(Filters.GaussianBlur(new Size(5, 5), 0))        // giảm nhiễu
+           //.Add(Filters.Canny(50, 150))                         // trích biên
+           //.Add(Filters.Morph(MorphTypes.Close, new Size(3, 3))); // nối nét đứt
 
-                Mat pre = pipeline.Apply(matProcess);
+           //     Mat pre = pipeline.Apply(matProcess);
 
                 //Cv2.WaitKey();
                 matProcess = EdgeBySobel(matProcess);

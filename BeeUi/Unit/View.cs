@@ -29,6 +29,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Timers;
 using System.Windows.Markup;
+using BeeUi.Data;
+using System.Web;
 namespace BeeUi
 {
     [Serializable()]
@@ -295,9 +297,9 @@ namespace BeeUi
         }
         public void RefreshMask()
         {
-          bmMask = new Mat(BeeCore.Common.matRaw.Rows,BeeCore.Common.matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
+          bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows,BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
 
-            Mat matGroup= new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
+            Mat matGroup= new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
             foreach (Mat mat in listMask)
             {
                
@@ -542,10 +544,10 @@ namespace BeeUi
 
                                     rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
                                 }
-                                else if (x + w > BeeCore.Common.matRaw.Width)
+                                else if (x + w > BeeCore.Common.listCamera[G.indexChoose].matRaw.Width)
                                 {
 
-                                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - BeeCore.Common.matRaw.Width), rotateRect._PosCenter.Y);
+                                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - BeeCore.Common.listCamera[G.indexChoose].matRaw.Width), rotateRect._PosCenter.Y);
                                 }
                                   if (y < 0)
                                 {
@@ -553,10 +555,10 @@ namespace BeeUi
                                     rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y- y);
                                 }
                                
-                                else if (y + h > BeeCore.Common.matRaw.Height)
+                                else if (y + h > BeeCore.Common.listCamera[G.indexChoose].matRaw.Height)
                                 {
 
-                                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X , rotateRect._PosCenter.Y -(y+h - BeeCore.Common.matRaw.Height));
+                                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X , rotateRect._PosCenter.Y -(y+h - BeeCore.Common.listCamera[G.indexChoose].matRaw.Height));
                                 }
                                 if (toolEdit.Propety.rotCrop != null)
                                 {
@@ -616,11 +618,11 @@ namespace BeeUi
                         if (toolEdit.Propety.TypeTool != TypeTool.Color_Area)
                             if (rotateRect != null)
                             {
-                              //  toolEdit.matTemp = toolEdit.Propety.Processing(BeeCore.Common.matRaw);
+                              //  toolEdit.matTemp = toolEdit.Propety.Processing(BeeCore.Common.listCamera[G.indexChoose].matRaw);
 
-                               // toolEdit.matTemp = toolEdit.Propety.GetTemp(rotateRect, BeeCore.Common.matRaw, bmMask);
+                               // toolEdit.matTemp = toolEdit.Propety.GetTemp(rotateRect, BeeCore.Common.listCamera[G.indexChoose].matRaw, bmMask);
                             }
-                        //GetTemp(RectRotate rotateRect, Mat BeeCore.Common.matRaw, Mat bmMask,  Mat matClear, ref Mat matMask, ref Mat matTemp)
+                        //GetTemp(RectRotate rotateRect, Mat BeeCore.Common.listCamera[G.indexChoose].matRaw, Mat bmMask,  Mat matClear, ref Mat matMask, ref Mat matTemp)
 
                     }
 
@@ -889,7 +891,7 @@ namespace BeeUi
 
         public RectRotate GetPositionAdjustment(RectRotate rotOrigin, RectRotate rotTemp)
         {
-            System.Drawing.Size sz = BeeCore.Common.SizeCCD();
+            System.Drawing.Size sz = BeeCore.Common.listCamera[G.indexChoose].GetSzCCD();
             RectRotate rot = new RectRotate();
 
             rot._rect = rotOrigin._rect;
@@ -979,7 +981,7 @@ namespace BeeUi
             if (G.Config.IsShowArea)
                 {
                     int indexTool = 0;
-                    foreach (Tools tool in G.listAlltool)
+                    foreach (Tools tool in G.listAlltool[G.indexChoose])
                     {
                         RectRotate rot = tool.tool.Propety.rotArea;
                         mat = new Matrix();
@@ -989,7 +991,7 @@ namespace BeeUi
                         RectangleF _rect3 = rot._rect;
                         gc.Transform = mat;
                         gc.DrawRectangle(new Pen(Color.Blue, 1), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
-                        String s = (int)(indexTool + 1) + "." + G.PropetyTools[indexTool].Name;
+                        String s = (int)(indexTool + 1) + "." + G.PropetyTools[G.indexChoose][indexTool].Name;
                         SizeF sz = gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
                         gc.FillRectangle(Brushes.Red, new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)sz.Width, (int)sz.Height));
                         gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y));
@@ -1002,7 +1004,7 @@ namespace BeeUi
 
             }
                 if (toolEdit != null)
-                    foreach (Tools tool in G.listAlltool)
+                    foreach (Tools tool in G.listAlltool[G.indexChoose])
                     {
                         if (index != toolEdit.Propety.Index || !G.IsEdit)
                         {
@@ -1362,12 +1364,12 @@ namespace BeeUi
             KeyboardListener.s_KeyEventHandler += KeyboardListener_s_KeyEventHandler1;
 
             // toolEdit.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tool_MouseMove);
-            //BeeCore.Common.matRaw= BeeCore.Common.GetImageRaw();
-            //if (BeeCore.Common.matRaw!=null)
-            //    if (!BeeCore.Common.matRaw.Empty())
-            //        imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            //BeeCore.Common.listCamera[G.indexChoose].matRaw= BeeCore.Common.GetImageRaw();
+            //if (BeeCore.Common.listCamera[G.indexChoose].matRaw!=null)
+            //    if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
+            //        imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
             btnMenu.PerformClick();
-          BeeCore.Camera.FrameChanged += Common_FrameChanged;
+          BeeCore.Common.listCamera[G.indexChoose].FrameChanged += Common_FrameChanged;
            
            
         }
@@ -1386,7 +1388,7 @@ namespace BeeUi
 
         private void Common_FrameChanged(object sender, PropertyChangedEventArgs e)
         {
-            G.EditTool.lbFrameRate.Text = BeeCore.G.ParaCam.SizeCCD.ToString()+"-"+ BeeCore.Camera.FrameRate+" img/s ";
+            G.EditTool.lbFrameRate.Text = BeeCore.G.ParaCam.SizeCCD.ToString()+"-"+ BeeCore.Common.listCamera[G.indexChoose].FrameRate+" img/s ";
         }
 
         public dynamic toolEdit;
@@ -1417,7 +1419,7 @@ namespace BeeUi
             {
                 if (listMask == null) listMask = new List<Mat>();
                 listMask.Add(matMaskAdd.Clone());
-                matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
+                matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
                
             }
           
@@ -1470,10 +1472,10 @@ namespace BeeUi
 
         private void tmTool_Tick(object sender, EventArgs e)
         {
-            if (indexTool < G.listAlltool.Count)
+            if (indexTool < G.listAlltool[G.indexChoose].Count)
             {
-                if (!G.listAlltool[indexTool].tool.threadProcess.IsBusy)
-                    G.listAlltool[indexTool].tool.threadProcess.RunWorkerAsync();
+                if (!G.listAlltool[G.indexChoose][indexTool].tool.threadProcess.IsBusy)
+                    G.listAlltool[G.indexChoose][indexTool].tool.threadProcess.RunWorkerAsync();
             }    
                 indexTool++;
         }
@@ -1704,15 +1706,15 @@ namespace BeeUi
             }
 
 
-            // BeeCore.Common.matRaw= BeeCore.Common.GetImageRaw();
-            //imgView.ImageIpl = BeeCore.Common.matRaw;
-            // Cv2.ImShow("A", BeeCore.Common.matRaw);
+            // BeeCore.Common.listCamera[G.indexChoose].matRaw= BeeCore.Common.GetImageRaw();
+            //imgView.ImageIpl = BeeCore.Common.listCamera[G.indexChoose].matRaw;
+            // Cv2.ImShow("A", BeeCore.Common.listCamera[G.indexChoose].matRaw);
             // Set the scale.
             //imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y
 
             //gc.Clear(Color.White);
-            //if (BeeCore.Common.matRaw == null) return;
-            BeeCore.Common.bmResult = BeeCore.Common.matRaw.ToBitmap();
+            //if (BeeCore.Common.listCamera[G.indexChoose].matRaw == null) return;
+            BeeCore.Common.bmResult = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
 
             // Convert nếu cần
             if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
@@ -1735,11 +1737,11 @@ namespace BeeUi
                 //gc.Transform=mat;
                 indexTool = 0;
 
-                foreach (Tools tool in G.listAlltool)
+                foreach (Tools tool in G.listAlltool[G.indexChoose])
                 {
                     // tool.tool.Propety.ScoreRs = 80;
                     //tool.tool.Propety.IsOK = true;
-                    if (G.PropetyTools[indexTool].UsedTool == UsedTool.NotUsed)
+                    if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.NotUsed)
                     {
                         //tool.ItemTool.lbStatus.Text = "NC";
                         //tool.ItemTool.Score.ColorTrack = Color.Gray;
@@ -1766,7 +1768,7 @@ namespace BeeUi
                                 numToolOK++;
                                 break;
                             case ConditionOK.Logic:
-                                if (G.PropetyTools[indexTool].UsedTool == UsedTool.Invertse)
+                                if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Invertse)
                                 {
                                     G.TotalOK = false;
                                 }
@@ -1774,7 +1776,7 @@ namespace BeeUi
                         }
                         if (G.Config.ConditionOK == ConditionOK.Logic)
                         {
-                            if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
+                            if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Used)
                             {
                                 tool.ItemTool.lbStatus.Text = "OK";
                                 tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
@@ -1805,7 +1807,7 @@ namespace BeeUi
 
 
                             case ConditionOK.Logic:
-                                if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
+                                if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Used)
                                 {
                                     G.TotalOK = false;
                                 }
@@ -1813,7 +1815,7 @@ namespace BeeUi
                         }
                         if (G.Config.ConditionOK == ConditionOK.Logic)
                         {
-                            if (G.PropetyTools[indexTool].UsedTool != UsedTool.Used)
+                            if (G.PropetyTools[G.indexChoose][indexTool].UsedTool != UsedTool.Used)
                             {
                                 tool.ItemTool.lbStatus.Text = "OK";
                                 tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
@@ -1954,7 +1956,7 @@ namespace BeeUi
             switch (G.Config.ConditionOK)
             {
                 case ConditionOK.TotalOK:
-                    if (numToolOK < G.listAlltool.Count)
+                    if (numToolOK < G.listAlltool[G.indexChoose].Count)
                         G.TotalOK = false;
                     else
                         G.TotalOK = true;
@@ -2045,185 +2047,6 @@ namespace BeeUi
                     break;
             }
            
-
-        }
-        private async void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            ProcessingAll();
-            //if (!G.Initial)
-            //    return;
-            //if (!G.PLC.IsConnected && !G.IsByPassPLC)
-            //    return;
-            //if (!BeeCore.Camera.IsConnected)
-            //{
-            //    G.Header.ShowErr();
-            //    return;
-            //}
-            //int index = 0;
-            //      foreach (Tools tool in G.listAlltool)
-            //      {
-            //          if (G.PropetyTools[index].UsedTool != UsedTool.NotUsed)
-            //          if (tool.PropetyTool.TypeTool == TypeTool.Yolo|| tool.PropetyTool.TypeTool == TypeTool.OCR)
-
-            //              tool.tool.Process();
-
-            //          index++;
-
-
-
-            //      }
-            //  await Task.Delay(1000);
-            if (G.StatusProcessing==StatusProcessing.Done)
-            {
-              
-
-                //if (BeeCore.Common.currentTrig < BeeCore.Common.numReadCCD)
-                //{
-                //    BeeCore.Common.currentTrig++;
-                //    //ShowResultTotal();
-                //    //Thread.Sleep(5000);
-                //    BeeCore.Common.matRaw = BeeCore.Common.matRaw2.Clone();
-                //    foreach (PropetyTool propetyTool in G.PropetyTools)
-                //    {
-
-                //        propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
-                //    }
-                //    G.StatusProcessing = StatusProcessing.None;
-                //    workPlay.RunWorkerAsync();
-                //    return;
-                //}
-                //BeeCore.Common.currentTrig = 0;
-                timer.Stop();
-              //  btnCap.Text = "Trigger";
-                ShowResultTotal();
-               
-
-                SumCycle = (int)timer.Elapsed.TotalMilliseconds+Cyclyle1;
-                if (G.Header.IsWaitingRead)
-                {
-                    G.Header.IsWaitingRead = false;
-                    G.Header.tmReadPLC.Enabled = true;
-                }
-
-                CheckStatusMode();
-                IsCompleteAll = false;
-                foreach (PropetyTool propetyTool in G.PropetyTools)
-                {
-
-                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
-                }
-                G.StatusProcessing = StatusProcessing.None;
-            }    
-              
-            else
-                workPlay.RunWorkerAsync();
-                
-               
-             
-
-
-
-           // if (IsAutoTrig==false)
-           // {
-           //     ShowResultTotal();
-           //       indexTool = 0; G.IsCap = false;
-
-
-            //     if (btnRecord.IsCLick)
-            //     {
-
-
-            //         G.IsCap = true;
-
-
-            //         if (IsAutoTrig)
-            //             workPlay.RunWorkerAsync();
-            //         else
-            //             workReadCCD.RunWorkerAsync();
-            //     }
-            //     else
-            //     {
-            //         G.IsCap = false;
-            //     }
-            //     //if (G.Header.SerialPort1.IsOpen)
-            //     //{
-            //     //    Thread.Sleep(100);
-            //     //    G.Header.SerialPort1.WriteLine("OffTrig");
-            //     //  //  G.Header.SerialPort.WriteLine("OffTrig");
-            //     //}
-            //     return;
-            // }
-
-            //     if (G.StatusTrig==Trig.Continue)
-            // {
-            //     G.StatusTrig = Trig.NotTrig;
-            //     ShowResultTotal();
-
-
-            //     indexTool = 0; G.IsCap = false;
-
-            //     if (btnRecord.IsCLick)
-            //     {
-
-
-            //         G.IsCap = true;
-
-            //         if (IsAutoTrig)
-
-            //             workPlay.RunWorkerAsync();
-            //         else
-            //                 if (!workReadCCD.IsBusy)
-            //                 workReadCCD.RunWorkerAsync();
-            //     }
-            //     else
-            //     {
-            //         G.IsCap = false;
-            //     }
-
-
-
-            // }
-
-            //else if (G.StatusTrig == Trig.NotTrig|| G.StatusTrig==Trig.Processing)
-            // {
-            //    Mat matCCD = BeeCore.Native.GetImg();
-
-            //     Tools tool = G.listAlltool[indexToolPosition];
-
-            //     OutLine Para = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
-            //     RectRotate rot = Propety.rotArea;
-            //     float angle = rot._rectRotation;
-            //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
-            //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
-
-            //     matCrop.CopyTo(new Mat(BeeCore.Common.matRaw, new Rect((int)rot._PosCenter.X + (int)rot._rect.X, (int)rot._PosCenter.Y + (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height)));
-            //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-
-
-            //     DelayTrig = Propety.DelayTrig;
-            //     tmTrig.Interval = 1;
-            //     tmTrig.Enabled = true;
-            //     return;
-            // }
-            // else if (G.StatusTrig==Trig.Trigged)
-            // {
-
-            //     BeeCore.Common.matRaw = BeeCore.Native.GetImg();
-            //     imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-            //     tmTrig.Enabled = true;
-            //     tmTrig.Interval = DelayTrig;
-            //     return;
-            // }
-            // else if (G.StatusTrig == Trig.Complete)
-            // {
-
-            //    // BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
-            //     //imgView.ImageIpl = BeeCore.Common.matRaw;
-            //     tmTrig.Enabled = true;
-            //     tmTrig.Interval = DelayTrig;
-            //     return;
-            // }
-
 
         }
      
@@ -2339,11 +2162,12 @@ namespace BeeUi
            
             tmPlay.Enabled = false;
         }
+        private Thread displayThread;
         public void Live()
         {
             if (G.PLC.IsConnected)
                 G.Header.tmReadPLC.Enabled = !btnLive.IsCLick;
-          
+            tmLive.Enabled = btnLive.IsCLick;
             if (btnLive.IsCLick)
             {
                 if (G.SettingPLC != null)
@@ -2367,6 +2191,46 @@ namespace BeeUi
             gc = imgView.CreateGraphics();
             if (!workReadCCD.IsBusy)
                 workReadCCD.RunWorkerAsync();
+            if (btnLive.IsCLick)
+            {
+
+
+                displayThread = new Thread(() =>
+            {
+                while (btnLive.IsCLick)
+                {
+                    Bitmap frameToDisplay;
+                    lock (frameLock)
+                    {
+                        frameToDisplay = sharedFrame?.Clone() as Bitmap;
+                    }
+
+                    var old = imgView.Image;
+                    if (frameToDisplay != null)
+                    {
+                        try
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+
+                                imgView.Image = frameToDisplay;
+                            }));
+                        }
+                        catch
+                        {
+                            frameToDisplay.Dispose(); // UI đã dispose rồi
+                        }
+                    }
+
+                    old?.Dispose(); // Dispose ảnh cũ sau khi gán xong
+
+                   
+                }
+            });
+                displayThread.IsBackground = true;
+
+                displayThread.Start();
+            }
 
         }
         private void btnSer_Click(object sender, EventArgs e)
@@ -2394,16 +2258,16 @@ namespace BeeUi
           
             //else if (G.Config.TypeCamera == TypeCamera.TinyIV)
             //{
-            //    BeeCore.Camera.Read();
+            //    BeeCore.Common.listCamera[G.indexChoose].Read();
             //    BeeCore.Common.IsLive = btnLive.IsCLick;
             //    if (btnLive.IsCLick)
             //        BeeCore.Common.PropertyChanged += Common_PropertyChanged;
             //    else
             //        BeeCore.Common.PropertyChanged -= Common_PropertyChanged;
             //}
-            //if (BeeCore.Common.matRaw != null)
-            //    if (!BeeCore.Common.matRaw.Empty())
-            //        //G.EditTool.View.imgView.Location = new Point(G.EditTool.View.pView.Width / 2 - BeeCore.Common.matRaw.Width / 2, G.EditTool.View.pView.Height / 2 - BeeCore.Common.matRaw.Height / 2);
+            //if (BeeCore.Common.listCamera[G.indexChoose].matRaw != null)
+            //    if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
+            //        //G.EditTool.View.imgView.Location = new Point(G.EditTool.View.pView.Width / 2 - BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, G.EditTool.View.pView.Height / 2 - BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2);
             if (btnLive.IsCLick)
             {
               //  tmRefresh.Enabled = true;
@@ -2431,267 +2295,46 @@ namespace BeeUi
            // GC.WaitForPendingFinalizers();
 
         }
-
-        private  void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
-        {
-          
-            
-
-            BeeCore.Camera.Read(); 
-          
-            //if (G.Config.TypeCamera == TypeCamera.USB|| G.Config.TypeCamera == TypeCamera.BaslerGigE)
-            //{
-            //    BeeCore.Camera.Read(G.Config.IsHist, G.Config.TypeCamera);
-
-
-            //}
-            //else
-            //{
-            //    //if (BeeCore.Common.matLive != null)
-            //    //    if (!BeeCore.Common.matLive.Empty())
-            //    //        BeeCore.Common.matRaw = BeeCore.Common.matLive.Clone();
-            //}    
-        }
+      
     
         int numLive = 500;
         Stopwatch timer = new Stopwatch();
-        public  void ProcessingAll()
+    
+        private Bitmap sharedFrame = null;
+        private object frameLock = new object();
+        private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (!G.Initial)
-                return;
-            if (!G.PLC.IsConnected && !G.IsByPassPLC)
-                return;
-            switch (G.StatusProcessing)
+            Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
             {
-                case StatusProcessing.None:
-                    // timer.Restart();
-                    indexToolPosition = G.PropetyTools.FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
-                    if(indexToolPosition == -1)
-                    {
-                        G.StatusProcessing = StatusProcessing.Processing;
-                        return;
-                    }    
-                    if (G.PropetyTools[indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
-                    {
-                       
-                       if(! G.listAlltool[indexToolPosition].tool.worker.IsBusy)
-                            G.listAlltool[indexToolPosition].tool.worker.RunWorkerAsync();
-
-                        G.StatusProcessing = StatusProcessing.Adjusting;
-                    }
-                    else
-                    {
-                        foreach (PropetyTool propetyTool in G.PropetyTools)
-                        {
-
-                            dynamic Propety = propetyTool.Propety;
-                            Propety.rotAreaAdjustment = Propety.rotArea;
+                if (camera != null)
+                    camera.Read();
+            });
 
 
-                        }
-                        G.StatusProcessing = StatusProcessing.Processing;
-                    }    
-                   
-                    break;
-                case StatusProcessing.Adjusting:
-                    if (G.PropetyTools[indexToolPosition].Propety.StatusTool ==BeeCore.StatusTool.Done )
-                    {
-                        dynamic Propety = G.PropetyTools[indexToolPosition].Propety;
 
-                        G.StatusProcessing = StatusProcessing.Processing;
-
-                        if (Propety.IsOK)
-                        {
-                            if (G.rotOriginAdj == null) return;
-                            G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotOriginAdj._PosCenter.X;
-                            G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
-                            G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
-                        }
-                        foreach (PropetyTool propetyTool in G.PropetyTools)
-                        {
-                            if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
-                                continue;
-                                if (G.rotOriginAdj != null)
-                            {
-                                propetyTool.Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
-                                if (propetyTool.TypeTool == TypeTool.Positions)
-                                {
-                                    propetyTool.Propety.pOrigin =new System.Drawing.Point( G.pOrigin.X,G.pOrigin.Y);
-                                    propetyTool.Propety.AngleOrigin = G.AngleOrigin;
-                                }    
-                                   
-
-                            }
-                            else
-                                propetyTool. Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
-
-
-                        }
-                    }
-                    break;
-                case StatusProcessing.Processing:
-                    G.ResultBar.lbStatus.Text = "---";
-                    G.ResultBar.lbStatus.BackColor = Color.Gray;
-                    foreach (Tools Tools in G.listAlltool)
-                    {
-                        Tools.ItemTool.lbStatus.Text = "---";
-                        Tools.ItemTool.Score.ColorTrack = Color.Gray;
-                        Tools.ItemTool.lbScore.ForeColor = Color.Gray;
-                        Tools.ItemTool.lbStatus.BackColor = Color.Gray;
-                        Tools.ItemTool.Refresh();
-                        PropetyTool propetyTool = G.PropetyTools[G.PropetyTools.FindIndex(a=>a.Name== Tools.tool.Name)];
-                        if (propetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
-                        propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
-                        if (!Tools.tool.worker.IsBusy)
-                            Tools.tool.worker.RunWorkerAsync();
-                    }
-                    G.StatusProcessing = StatusProcessing.WaitingDone;
-                    break;
-                case StatusProcessing.WaitingDone:
-                    G.StatusProcessing = StatusProcessing.Done;
-                    Parallel.For(0, G.listAlltool.Count, i =>
-                    {
-                        Tools Tools = G.listAlltool[i];
-                   
-
-                        PropetyTool propetyTool = G.PropetyTools[G.PropetyTools.FindIndex(a => a.Name == Tools.tool.Name)];
-
-                        if (propetyTool.Propety.StatusTool != BeeCore.StatusTool.Done)
-                        {
-                            G.StatusProcessing = StatusProcessing.WaitingDone;
-                           
-                        }
-                        else
-                        {
-                            //if (Tools.tool.Propety.IsOK)
-                            //{
-                                
-                            //    if (G.Config.ConditionOK == ConditionOK.Logic)
-                            //    {
-                            //        if (propetyTool.UsedTool == UsedTool.Used)
-                            //        {
-                            //            Tools.ItemTool.lbStatus.Text = "OK";
-                            //            Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //        }
-                            //        else
-                            //        {
-                            //            Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.Text = "NG";
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        Tools.ItemTool.lbStatus.Text = "OK";
-                            //        Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //        Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //        Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //    }
-                            //}
-
-                            //else
-                            //{
-                               
-                            //    if (G.Config.ConditionOK == ConditionOK.Logic)
-                            //    {
-                            //        if (propetyTool.UsedTool != UsedTool.Used)
-                            //        {
-                            //            Tools.ItemTool.lbStatus.Text = "OK";
-                            //            Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //        }
-                            //        else
-                            //        {
-                            //            Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.Text = "NG";
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //        Tools.ItemTool.lbStatus.Text = "NG";
-                            //        Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //        Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //    }
-
-                            //}
-                            //Tools.ItemTool.Refresh();
-                        }
-
-                    }
-                    );
-
-                    break;
-            }    
-          
-        
-            
         }
         private void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
-          //  Shows.RefreshImg(imgView);
-            //    BeeCore.Common.matRaw = BeeCore.Common.GetImageRaw();
-            ////  Cv2.ImShow("Result",BeeCore.Common.matRaw);
-
-            ////  BeeCore.Common.bmResult = new Bitmap(OpenCvSharp.Extensions.BitmapConverter.ToBitmap( imgView.ImageIpl));
-            ////gc= Graphics.FromImage(BeeCore.Common.bmResult);
-            //// imgView.Invalidate();
+         
             if (btnLive.IsCLick)
             {
-               // imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-               Shows.RefreshImg(imgView);
-                // numLive++;
-                //if (numLive>100)
-                //{
-                //    numLive = 0;
-                //    //GC.Collect();
-                //    //GC.WaitForPendingFinalizers();
-                //    //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                //    //{
-
-                //    //    SetProcessWorkingSetSize32Bit(System.Diagnostics
-                //    //       .Process.GetCurrentProcess().Handle, -1, -1);
-
-                //    //}
-                //    tmOut.Enabled = true;
-                //}    
-                //else
-                if(G.Config.TypeCamera==TypeCamera.TinyIV)
-                    if (!G.Header.CheckLan())
+                using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[G.indexChoose].matRaw))
+                {
+                    lock (frameLock)
                     {
-                        G.Header.ShowErr();
-                        return;
+                        sharedFrame?.Dispose();
+                        sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
                     }
+                }
+                  
+           
                 workReadCCD.RunWorkerAsync();
                 return;
             }
             else if (G.StatusMode==StatusMode.Continuous|| G.StatusMode == StatusMode.Once)
             {
-                //if (BeeCore.Common.currentTrig <BeeCore.Common.numReadCCD)
-                //{
-                //    timer.Stop();
-                //    Cyclyle1 = (int)timer.Elapsed.TotalMilliseconds;
-                 
-                //  BeeCore.Common.currentTrig++;
-                //    btnCap.Text = "Wait Trig 2";
-                //    btnCap.Enabled = true;
-                //}    
-                //else
-                //{
-                //    BeeCore.Common.currentTrig = 1;
-                    if (!workPlay.IsBusy)
-                        workPlay.RunWorkerAsync();
-
-              //  }
-              
-               
+                RunProcessing();
             }
         }
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
@@ -2699,49 +2342,49 @@ namespace BeeUi
         }
         private void tmTrig_Tick(object sender, EventArgs e)
         {
-            if (!btnRecord.IsCLick)
-            {
-                tmTrig.Enabled = false;
-                return;
-            }
-            if (G.StatusTrig==Trig.Trigged)
-            {
-                G.StatusTrig = Trig.Continue;
-                tmTrig.Enabled = false;
-              //  tmCycle = DateTime.Now;
-                G.listAlltool[indexToolPosition].tool.ShowResult(gc);
-                tmTrig.Enabled = false;
-                if (!workReadCCD.IsBusy)
-                    workReadCCD.RunWorkerAsync();
-            }
-            else if (G.StatusTrig == Trig.Complete)
-            {
+            //if (!btnRecord.IsCLick)
+            //{
+            //    tmTrig.Enabled = false;
+            //    return;
+            //}
+            //if (G.StatusTrig==Trig.Trigged)
+            //{
+            //    G.StatusTrig = Trig.Continue;
+            //    tmTrig.Enabled = false;
+            //  //  tmCycle = DateTime.Now;
+            //    G.listAlltool[indexToolPosition].tool.ShowResult(gc);
+            //    tmTrig.Enabled = false;
+            //    if (!workReadCCD.IsBusy)
+            //        workReadCCD.RunWorkerAsync();
+            //}
+            //else if (G.StatusTrig == Trig.Complete)
+            //{
 
-                G.StatusTrig = Trig.Processing;
-                tmTrig.Enabled = false;
-               // tmCycle = DateTime.Now;
-                G.listAlltool[indexToolPosition].tool.ShowResult(gc);
-                tmTrig.Enabled = false;
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
-            }
+            //    G.StatusTrig = Trig.Processing;
+            //    tmTrig.Enabled = false;
+            //   // tmCycle = DateTime.Now;
+            //    G.listAlltool[indexToolPosition].tool.ShowResult(gc);
+            //    tmTrig.Enabled = false;
+            //    if (!workPlay.IsBusy)
+            //        workPlay.RunWorkerAsync();
+            //}
           
-            else
-            {
+            //else
+            //{
 
-                foreach (Tools tool in G.listAlltool)
-                {
+            //    foreach (Tools tool in G.listAlltool)
+            //    {
                   
                   
-                      toolEdit.ShowResult(gc,(float)(imgView.Zoom/100.0),new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y));
+            //          toolEdit.ShowResult(gc,(float)(imgView.Zoom/100.0),new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y));
 
-                }
-               // G.listAlltool[indexToolPosition].tool.ShowResult(gc);
-                //  BeeCore.Camera.Read(G.Config.IsHist );
-                tmTrig.Enabled = false;
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
-            }
+            //    }
+            //   // G.listAlltool[indexToolPosition].tool.ShowResult(gc);
+            //    //  BeeCore.Common.listCamera[G.indexChoose].Read(G.Config.IsHist );
+            //    tmTrig.Enabled = false;
+            //    if (!workPlay.IsBusy)
+            //        workPlay.RunWorkerAsync();
+            //}
           
            
          
@@ -2754,9 +2397,9 @@ namespace BeeUi
 
         private void btnShowSetting_Click(object sender, EventArgs e)
         {
-            if (G.Config.TypeCamera == TypeCamera.USB)
-                BeeCore.Camera.Setting();
-            else if (G.Config.TypeCamera == TypeCamera.TinyIV)
+            if (G.TypeCamera == TypeCamera.USB)
+                BeeCore.Common.listCamera[G.indexChoose].Setting();
+            else if (G.TypeCamera == TypeCamera.TinyIV)
             {
                 SettingDevice settingDevice = new SettingDevice();
             
@@ -2772,7 +2415,7 @@ namespace BeeUi
 
             int X =Convert.ToInt32( (pMove.X-10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetX ;
             int Y= Convert.ToInt32((pMove.Y+10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetY ;
-            clChoose = toolEdit.Propety.GetColor(BeeCore.Common.matRaw,X,Y);
+            clChoose = toolEdit.Propety.GetColor(BeeCore.Common.listCamera[G.indexChoose].matRaw,X,Y);
                       
                  
         }
@@ -2796,8 +2439,8 @@ namespace BeeUi
         private void rjButton1_Click(object sender, EventArgs e)
         {
            
-              BeeCore.Camera.Read();
-            BeeCore.Common.CalHist();
+              BeeCore.Common.listCamera[G.indexChoose].Read();
+           // BeeCore.Common.CalHist();
         }
 
         private void workInsert_DoWork(object sender, DoWorkEventArgs e)
@@ -2805,9 +2448,9 @@ namespace BeeUi
             if (G.cnn.State == ConnectionState.Closed)
                 G.ucReport.Connect_SQL();
             if (G.TotalOK)
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "OK", BeeCore.Common.matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "OK", BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
             else
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "NG", BeeCore.Common.matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "NG", BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
 
         }
         int numErrPort = 0;
@@ -2847,8 +2490,8 @@ namespace BeeUi
             //if (G.Config.TypeCamera == TypeCamera.USB)
             //{
             //    if (!btnCap.IsCLick && !btnRecord.IsCLick && !workPlay.IsBusy && !workReadCCD.IsBusy)
-            //        BeeCore.Camera.Read();
-            //    if (BeeCore.Camera.Status())
+            //        BeeCore.Common.listCamera[G.indexChoose].Read();
+            //    if (BeeCore.Common.listCamera[G.indexChoose].Status())
             //    {
 
             //        if (G.ScanCCD.ScanIDCCD().FindIndex(a => a.Contains(G.Config.IDCamera)) > -1)
@@ -2935,9 +2578,9 @@ namespace BeeUi
             {
                 indexFile = 0;
                 pathFileSeleted = Files[indexFile];
-                BeeCore.Common.matRaw = BeeCore.Common.matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-                BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
-                imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Common.listCamera[G.indexChoose].matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
+                BeeCore.Native.SetImg(BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone());
+                imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
             }
         }
         // The Bitmap we display.
@@ -2951,7 +2594,7 @@ namespace BeeUi
        
         private void DrawImage(Graphics gr)
         {
-            gr.DrawImage(BeeCore.Common.matRaw.ToBitmap(),new PointF(0,0));
+            gr.DrawImage(BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap(),new PointF(0,0));
            
         }
         private void btnZoomIn_Click(object sender, EventArgs e)
@@ -2973,7 +2616,7 @@ namespace BeeUi
 
         private void btnFull_Click(object sender, EventArgs e)
         {
-            Size sz = new Size(BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height);
+            Size sz = new Size(BeeCore.Common.listCamera[G.indexChoose].matRaw.Width, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height);
             Shows.Full(imgView,sz);
             G.Config.imgZoom = imgView.Zoom;
             G.Config.imgOffSetX = imgView.AutoScrollPosition.X;
@@ -3023,11 +2666,11 @@ namespace BeeUi
         SaveFileDialog saveFileDialog = new SaveFileDialog();
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (BeeCore.Common.matRaw == null) return;
+            if (BeeCore.Common.listCamera[G.indexChoose].matRaw == null) return;
             saveFileDialog.Filter = " PNG|*.png";
           if (  saveFileDialog.ShowDialog()==DialogResult.OK)
             {
-                Cv2.ImWrite(saveFileDialog.FileName, BeeCore.Common.matRaw);
+                Cv2.ImWrite(saveFileDialog.FileName, BeeCore.Common.listCamera[G.indexChoose].matRaw);
             }
         }
 
@@ -3145,7 +2788,7 @@ namespace BeeUi
        
         private  void tmContinuous_Tick(object sender, EventArgs e)
         {
-            if(!BeeCore.Camera.IsConnected)
+            if(!BeeCore.Common.listCamera[G.indexChoose].IsConnected)
             {
                 G.Header.ShowErr();
                 tmContinuous.Enabled = false;
@@ -3193,20 +2836,19 @@ namespace BeeUi
             {
                 Files = new List<string>();
               indexFile = 0;
-                if (BeeCore.Common.matRaw != null)
-                    if (!BeeCore.Common.matRaw.Empty())
-                        BeeCore.Common.matRaw.Release();
+                if (BeeCore.Common.listCamera[G.indexChoose].matRaw != null)
+                    if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
+                        BeeCore.Common.listCamera[G.indexChoose].matRaw.Release();
                 Files .Add( openFile.FileName);
-                BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
+                BeeCore.Common.listCamera[G.indexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
                 listMat = new List<Mat>();
 
-                listMat.Add(BeeCore.Common.matRaw.Clone());
-                BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
-                imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                listMat.Add(BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone());
+                BeeCore.Native.SetImg(BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone());
+                imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
                  btnFile.Enabled = false;
                 G.StatusMode = StatusMode.SimOne;
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
+                RunProcessing();
                 btnRunSim.Enabled = true;
             }
 
@@ -3222,14 +2864,13 @@ namespace BeeUi
                 if (indexFile < Files.Count())
                 {
                    
-                    if (!BeeCore.Common.matRaw.Empty())
-                        BeeCore.Common.matRaw.Release();
-                    BeeCore.Common.matRaw = Cv2.ImRead(Files[indexFile]);
+                    if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
+                        BeeCore.Common.listCamera[G.indexChoose].matRaw.Release();
+                    BeeCore.Common.listCamera[G.indexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
                 G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
-                BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
-                    imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
+                BeeCore.Native.SetImg(BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone());
+                    imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                RunProcessing();
             }
                 else
                 {
@@ -3263,14 +2904,13 @@ namespace BeeUi
 
             }
             pathFileSeleted=Files[indexFile];
-            BeeCore.Common.matRaw = BeeCore.Common.matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-            BeeCore.Native.SetImg(BeeCore.Common.matRaw.Clone());
-            imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Common.listCamera[G.indexChoose].matRaw = listMat[indexFile]; ;// Cv2.ImRead(Files[indexFile]);
+            BeeCore.Native.SetImg(BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone());
+            imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
             if (G.IsRun)
             {
                 G.StatusMode = StatusMode.SimOne;
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
+                RunProcessing();
                 btnPlayStep.Enabled = false;
             }
 
@@ -3302,6 +2942,261 @@ namespace BeeUi
 
         }
 
+        private void tmLive_Tick(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void workCheck1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+        bool wIsWork1 = false;
+        bool wIsWork2= false;
+        bool wIsWork3 = false;
+        bool wIsWork4 = false;
+        StatusProcessing Processing1 = StatusProcessing.None;
+        StatusProcessing Processing2 = StatusProcessing.None;
+        StatusProcessing Processing3 = StatusProcessing.None;
+        StatusProcessing Processing4 = StatusProcessing.None;
+        ClassProject classProcessing1 = new ClassProject();
+        ClassProject classProcessing2 = new ClassProject();
+        ClassProject classProcessing3 = new ClassProject();
+        ClassProject classProcessing4 = new ClassProject();
+
+        private void workCheck1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+            Processing1= classProcessing1.ProcessingAll( Processing1,0);
+            if (Processing1 != StatusProcessing.Done) workCheck1.RunWorkerAsync();
+            else
+                foreach (PropetyTool propetyTool in G.PropetyTools[0])
+                {
+
+                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                }
+
+        }
+
+        private void workCheck2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Processing2 = classProcessing2.ProcessingAll(Processing2,1);
+            if (Processing2 != StatusProcessing.Done) workCheck2.RunWorkerAsync();
+            else
+                foreach (PropetyTool propetyTool in G.PropetyTools[1])
+                {
+
+                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                }
+        }
+
+        private void workCheck3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Processing3 = classProcessing3.ProcessingAll(Processing3,2);
+            if (Processing3 != StatusProcessing.Done) workCheck3.RunWorkerAsync();
+            else
+                foreach (PropetyTool propetyTool in G.PropetyTools[2])
+                {
+
+                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                }
+        }
+        private void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // ClassProject.  ProcessingAll();
+
+            if (Processing1 == StatusProcessing.Done && Processing2 == StatusProcessing.Done && Processing3 == StatusProcessing.Done && Processing4 == StatusProcessing.Done)
+            {
+
+
+
+                timer.Stop();
+
+                ShowResultTotal();
+
+
+                SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
+                if (G.Header.IsWaitingRead)
+                {
+                    G.Header.IsWaitingRead = false;
+                    G.Header.tmReadPLC.Enabled = true;
+                }
+
+                CheckStatusMode();
+                IsCompleteAll = false;
+                
+                Processing1 = StatusProcessing.None;
+                Processing2 = StatusProcessing.None;
+                Processing3 = StatusProcessing.None;
+                Processing4 = StatusProcessing.None;
+            }
+
+            else
+                workPlay.RunWorkerAsync();
+
+
+
+
+
+
+            // if (IsAutoTrig==false)
+            // {
+            //     ShowResultTotal();
+            //       indexTool = 0; G.IsCap = false;
+
+
+            //     if (btnRecord.IsCLick)
+            //     {
+
+
+            //         G.IsCap = true;
+
+
+            //         if (IsAutoTrig)
+            //             workPlay.RunWorkerAsync();
+            //         else
+            //             workReadCCD.RunWorkerAsync();
+            //     }
+            //     else
+            //     {
+            //         G.IsCap = false;
+            //     }
+            //     //if (G.Header.SerialPort1.IsOpen)
+            //     //{
+            //     //    Thread.Sleep(100);
+            //     //    G.Header.SerialPort1.WriteLine("OffTrig");
+            //     //  //  G.Header.SerialPort.WriteLine("OffTrig");
+            //     //}
+            //     return;
+            // }
+
+            //     if (G.StatusTrig==Trig.Continue)
+            // {
+            //     G.StatusTrig = Trig.NotTrig;
+            //     ShowResultTotal();
+
+
+            //     indexTool = 0; G.IsCap = false;
+
+            //     if (btnRecord.IsCLick)
+            //     {
+
+
+            //         G.IsCap = true;
+
+            //         if (IsAutoTrig)
+
+            //             workPlay.RunWorkerAsync();
+            //         else
+            //                 if (!workReadCCD.IsBusy)
+            //                 workReadCCD.RunWorkerAsync();
+            //     }
+            //     else
+            //     {
+            //         G.IsCap = false;
+            //     }
+
+
+
+            // }
+
+            //else if (G.StatusTrig == Trig.NotTrig|| G.StatusTrig==Trig.Processing)
+            // {
+            //    Mat matCCD = BeeCore.Native.GetImg();
+
+            //     Tools tool = G.listAlltool[indexToolPosition];
+
+            //     OutLine Para = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
+            //     RectRotate rot = Propety.rotArea;
+            //     float angle = rot._rectRotation;
+            //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
+            //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
+
+            //     matCrop.CopyTo(new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new Rect((int)rot._PosCenter.X + (int)rot._rect.X, (int)rot._PosCenter.Y + (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height)));
+            //     imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+
+
+            //     DelayTrig = Propety.DelayTrig;
+            //     tmTrig.Interval = 1;
+            //     tmTrig.Enabled = true;
+            //     return;
+            // }
+            // else if (G.StatusTrig==Trig.Trigged)
+            // {
+
+            //     BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Native.GetImg();
+            //     imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+            //     tmTrig.Enabled = true;
+            //     tmTrig.Interval = DelayTrig;
+            //     return;
+            // }
+            // else if (G.StatusTrig == Trig.Complete)
+            // {
+
+            //    // BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Common.GetImageRaw();
+            //     //imgView.ImageIpl = BeeCore.Common.listCamera[G.indexChoose].matRaw;
+            //     tmTrig.Enabled = true;
+            //     tmTrig.Interval = DelayTrig;
+            //     return;
+            // }
+
+
+        }
+
+        private void workCheck4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Processing4 = classProcessing4.ProcessingAll(Processing4,3);
+            if (Processing4 != StatusProcessing.Done) workCheck4.RunWorkerAsync();
+            else
+                foreach (PropetyTool propetyTool in G.PropetyTools[3])
+                {
+
+                    propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                }
+        }
+        public void RunProcessing()
+        {
+            if (BeeCore.Common.listCamera[0] != null)
+            {
+                if (!workCheck1.IsBusy)
+                    workCheck1.RunWorkerAsync();
+                else
+                    Processing1 = StatusProcessing.Done;
+            }
+            else
+                Processing1 = StatusProcessing.Done;
+            if (BeeCore.Common.listCamera[1] != null)
+            {
+                if (!workCheck2.IsBusy)
+                    workCheck2.RunWorkerAsync();
+                else
+                    Processing2 = StatusProcessing.Done;
+            }
+            else
+                Processing2 = StatusProcessing.Done;
+
+            if (BeeCore.Common.listCamera[2] != null)
+            {
+                if (!workCheck3.IsBusy)
+                    workCheck3.RunWorkerAsync();
+                else
+                    Processing3 = StatusProcessing.Done;
+            }
+            else
+                Processing3 = StatusProcessing.Done;
+
+            if (BeeCore.Common.listCamera[3] != null)
+            {
+                if (!workCheck4.IsBusy)
+                    workCheck4.RunWorkerAsync();
+                else
+                    Processing4 = StatusProcessing.Done;
+            }
+            else
+                Processing4 = StatusProcessing.Done;
+            if (!workPlay.IsBusy)
+                    workPlay.RunWorkerAsync();
+        }
         private void btnRunSim_Click_1(object sender, EventArgs e)
         {
             if (Files == null) return;
@@ -3315,10 +3210,9 @@ namespace BeeUi
 
                 btnFolder.Enabled = false;
                 if (indexFile >= listMat.Count) indexFile = 0;
-                BeeCore.Common.matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
-                imgView.Image = BeeCore.Common.matRaw.ToBitmap();
-                if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
+                BeeCore.Common.listCamera[G.indexChoose].matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
+                imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                RunProcessing();
             }
             else
             {

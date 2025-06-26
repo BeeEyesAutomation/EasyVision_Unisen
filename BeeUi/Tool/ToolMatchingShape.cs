@@ -489,7 +489,7 @@ namespace BeeUi.Tool
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             //Propety.IsAreaWhite = false;
-            // GetTemp(Propety.rotCrop,BeeCore.Common.matRaw );
+            // GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[G.indexChoose].matRaw );
             //G.EditTool.View.imgView.Invalidate();
         }
 
@@ -506,7 +506,7 @@ namespace BeeUi.Tool
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             //Propety.IsAreaWhite = true;
-            //GetTemp(Propety.rotCrop, BeeCore.Common.matRaw);
+            //GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[G.indexChoose].matRaw);
             //G.EditTool.View.imgView.Invalidate();
         }
 
@@ -566,7 +566,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2, -BeeCore.Common.matRaw.Height / 2, BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Width, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;

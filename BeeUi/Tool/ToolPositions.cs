@@ -197,7 +197,7 @@ namespace BeeUi.Tool
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
 
@@ -206,7 +206,7 @@ namespace BeeUi.Tool
             else
             {
                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
             }
@@ -283,7 +283,7 @@ namespace BeeUi.Tool
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.IndexThread][Propety.Index].Name;
            
             String Content = "X,Y,A,R : " + Propety.deltaX + "," + Propety.deltaY + "," + Propety.AngleDetect + "°," + Propety.DistanceDetect;
             Draws.Box2Label(gc, rotA._rect, nameTool, Content, G.fontRS, cl, brushText, 40, 3);
@@ -390,11 +390,11 @@ namespace BeeUi.Tool
             //    else
             //        Propety.rotAreaAdjustment = Propety.rotArea;
             //    Propety.rotAreaAdjustment._angle = 0;
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotAreaAdjustment);
 
             //}
             //else
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotArea);
         }
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
@@ -531,7 +531,7 @@ namespace BeeUi.Tool
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             Propety.IsAreaWhite = false;
-             GetTemp(Propety.rotCrop,BeeCore.Common.matRaw );
+             GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[G.indexChoose].matRaw );
             G.EditTool.View.imgView.Invalidate();
         }
 
@@ -548,7 +548,7 @@ namespace BeeUi.Tool
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             Propety.IsAreaWhite = true;
-            GetTemp(Propety.rotCrop, BeeCore.Common.matRaw);
+            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[G.indexChoose].matRaw);
             G.EditTool.View.imgView.Invalidate();
         }
 
@@ -568,7 +568,7 @@ namespace BeeUi.Tool
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
-                      matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.matRaw, G.EditTool.View.bmMask);
+                      matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.listCamera[G.indexChoose].matRaw, G.EditTool.View.bmMask);
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {

@@ -48,7 +48,7 @@ namespace BeeCore
         }
         public  Mat GetImgTemp()
         {
-            G.CommonPlus.BitmapSrc(BeeCore.Common.matRaw.Clone().ToBitmap());
+            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexThread].matRaw.Clone().ToBitmap());
             Common.CropRotate(rotArea);
             int rows = 0, cols = 0, Type = 0;
             IntPtr intPtr = GetTemp(ref rows , ref cols, ref Type , Threshold, MinArea,(int)Methord, Invert);
@@ -71,13 +71,14 @@ namespace BeeCore
          
 
             SetTemp( temp.Data, temp.Rows, temp.Cols, temp.Type());
-          
+
 
         }
+        public int IndexThread = 0;
         public void Check(bool IsRun, RectRotate rot)
         {
             if(!IsRun)
-            G.CommonPlus.BitmapSrc(BeeCore.Common.matRaw.Clone().ToBitmap());
+            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexThread].matRaw.Clone().ToBitmap());
             Common.CropRotate(rot);
             float numNG = G.MatchingShape.CheckShape(Threshold, MinArea, (int)Methord, Invert);
             cycleTime =(int) G.MatchingShape.cycleTool;

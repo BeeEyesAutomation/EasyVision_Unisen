@@ -50,19 +50,19 @@ namespace BeeUi.Tool
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 G.EditTool.View. pathRaw = fileDialog.FileName;
-              BeeCore.Common.matRaw = BeeCore.Common.LoadImage(G.EditTool.View.pathRaw, ImreadModes.AnyColor);
+              BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Common.LoadImage(G.EditTool.View.pathRaw, ImreadModes.AnyColor);
                
-              //  Cv2.CvtColor(BeeCore.Common.matRaw, BeeCore.Common.matRaw, ColorConversionCodes.GRAY2BGR);
-                BeeCore.G.ParaCam.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.matRaw);
-                BeeCore.G.ParaCam.SizeCCD =new System.Drawing.Size( BeeCore.Common.matRaw.Size().Width, BeeCore.Common.matRaw.Size().Height);
-                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                G.EditTool.View.matResgiter = BeeCore.Common.matRaw.Clone();
+              //  Cv2.CvtColor(BeeCore.Common.listCamera[G.indexChoose].matRaw, BeeCore.Common.listCamera[G.indexChoose].matRaw, ColorConversionCodes.GRAY2BGR);
+                BeeCore.G.ParaCam.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[G.indexChoose].matRaw);
+                BeeCore.G.ParaCam.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[G.indexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size().Height);
+                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+                G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+                G.EditTool.View.matResgiter = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone();
                 btnNextStep.Enabled = true;
-                G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
                 //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-                Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
+                Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
 
                 SaveParaPJ();
 
@@ -80,7 +80,7 @@ namespace BeeUi.Tool
 
         private void workRead_DoWork(object sender, DoWorkEventArgs e)
         {
-            BeeCore.Camera.Read();
+            BeeCore.Common.listCamera[G.indexChoose].Read();
          
 
 
@@ -88,16 +88,16 @@ namespace BeeUi.Tool
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-          //  BeeCore.Common.matRaw = BeeCore.Native.GetImg();
-            if (BeeCore.Common.matRaw != null)
-                if (!BeeCore.Common.matRaw.Empty())
-                    BeeCore.G.ParaCam.matRegister = BeeCore.Common.matRaw.Clone().ToBitmap(); ;
+          //  BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Native.GetImg();
+            if (BeeCore.Common.listCamera[G.indexChoose].matRaw != null)
+                if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
+                    BeeCore.G.ParaCam.matRegister = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone().ToBitmap(); ;
             if (BeeCore.G.ParaCam.matRegister == null)
                 return;
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matResgiter = BeeCore.Common.matRaw.Clone();
+            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.matResgiter = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone();
             btnNextStep.Enabled = true;
             G.EditTool.View.imgView.Image = BeeCore.G.ParaCam.matRegister;
           //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;

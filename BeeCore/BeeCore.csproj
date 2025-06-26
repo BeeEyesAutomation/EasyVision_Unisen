@@ -154,7 +154,7 @@
     <Compile Include="Camera\SetCfgCB.cs" />
     <Compile Include="Camera\ToolCfg.cs" />
     <Compile Include="Camera\USB.cs" />
-    <Compile Include="CCD.cs" />
+    <Compile Include="ParaCamera.cs" />
     <Compile Include="Comuni\Modbus.cs" />
     <Compile Include="Func\Camera.cs" />
     <Compile Include="Parameter\Enums.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="Unit\Positions.cs" />
     <Compile Include="Parameter\Labels.cs" />
     <Compile Include="Unit\PositionAdj.cs" />
-    <Compile Include="ParaCam.cs" />
+    <Compile Include="ParaCommon.cs" />
     <Compile Include="Parameter\Config.cs" />
     <Compile Include="dataMat.cs" />
     <Compile Include="Parameter\G.cs" />

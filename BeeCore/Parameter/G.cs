@@ -107,13 +107,13 @@ namespace BeeCore
       
         public static dynamic objYolo,np,objOCR,Classic;
         public static bool IsChecked = false, IniEdge;
-        public static TypeCamera TypeCCD=TypeCamera.USB;
+   
         public static Model Model=new Model();
         public static bool IsSimulation = false,InitYolo=false,IniOCR;
         public static Common Common = new Common();
-        public static ParaCam ParaCam = new ParaCam();
+        public static ParaCommon ParaCam = new ParaCommon();
         public static CvPlus.ColorArea colorArea = new CvPlus.ColorArea();
-        public static CvPlus.CCD CCD = new CvPlus.CCD();
+        
         public static CvPlus.MatchingShape MatchingShape = new CvPlus.MatchingShape();
         public static CvPlus.Pattern pattern = new CvPlus.Pattern();
       

@@ -94,7 +94,7 @@ namespace BeeUi
             if (G.ScanCCD.cbCCD.SelectedIndex == -1)
 
             {
-                String NameCamera = G.Config.IDCamera.Split('$')[0];
+                String NameCamera = BeeCore.Common.listCamera[G.indexChoose].Para.Name.Split('$')[0];
                 MessageBox.Show("Connect Failed Camera" + NameCamera + "!");
                 G.ScanCCD.Show();
                 return;
@@ -117,7 +117,7 @@ namespace BeeUi
             if (G.IsActive)
             {
                 lb.Text = "Scan Camera Complete";
-                G.ScanCCD.ConnectCCD();
+                G.ScanCCD.ConnectAll();
              
 
             }
@@ -141,25 +141,28 @@ namespace BeeUi
 
 
                 FormActive.CheckActive(addMac);
-
-                if (G.Config.IDCamera != null)
-                    if (G.Config.IDCamera != "")
-                {if (G.ScanCCD == null) G.ScanCCD = new ScanCCD();
-                        if (G.Config.Resolution == null) G.Config.Resolution = "1280x720 (1.3 MP)";
-                        int indexCCD = listCCD.FindIndex(a => a.Contains(G.Config.IDCamera));
-                        G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(G.Config.Resolution);
-                       
-                        if (indexCCD != -1&& G.Config.Resolution.Trim() != "")
-                            G.ScanCCD.cbCCD.SelectedIndex = indexCCD;
-                        else
+                if (G.IsActive)
+                {
+                    if (BeeCore.Common.listCamera[G.indexChoose].Para.Name != null)
+                        if (BeeCore.Common.listCamera[G.indexChoose].Para.Name != "")
                         {
-                            G.ScanCCD.cbCCD.SelectedIndex = -1;
-                        }    
-                          
+                            if (G.ScanCCD == null) G.ScanCCD = new ScanCCD();
+
+                            int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[G.indexChoose].Para.Name));
+                            // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(G.Config.Resolution);
+
+                            if (indexCCD != -1)
+                                G.ScanCCD.cbCCD.SelectedIndex = indexCCD;
+                            else
+                            {
+                                G.ScanCCD.cbCCD.SelectedIndex = -1;
+                            }
 
 
 
-                    }
+
+                        }
+                }
               
 
             }
@@ -225,17 +228,21 @@ namespace BeeUi
             G.Project = Properties.Settings.Default.programCurrent;
 
             ClassProject.Load(G.Project);
-            Parallel.For(0, G.PropetyTools.Count, i =>
+            foreach (List<PropetyTool> ListTool in G.PropetyTools)
             {
-                PropetyTool propety = G.PropetyTools[i];
-             
+                if (ListTool == null) continue;
+                Parallel.For(0, ListTool.Count, i =>
+            {
+                PropetyTool propety = ListTool[i];
+
             X: if (propety.Propety.StatusTool != StatusTool.Initialed)
                 {
-                  
+
                     goto X;
                 }
-               
+
             });
+            }
 
                 G.IsIniPython = true;
             lb.Text = "Initial Learning AI Complete";

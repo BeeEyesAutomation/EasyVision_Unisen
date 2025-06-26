@@ -112,8 +112,8 @@ namespace BeeCore
         public Color clShow;
         public System.Drawing.Color GetColor( Mat raw, int x,int y)
         {
-            if(BeeCore.Common.matRaw.Empty())return Color.Empty;
-            if (BeeCore.Common.matRaw.Type()==MatType.CV_8UC1) return Color.Empty;
+            if(raw.Empty())return Color.Empty;
+            if (raw.Type()==MatType.CV_8UC1) return Color.Empty;
             G.colorArea.StyleColor = styleColor;
             G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw));
            
@@ -135,11 +135,12 @@ namespace BeeCore
 
         public int pxTemp=0;
         public String listColor="";
+        public int IndexThread = 0;
         public void LoadTemp(bool IsCCD,bool IsHist)
-        {if(BeeCore.Common.matRaw.Empty())return;
-            BeeCore.Native.SetImg(BeeCore.Common.matRaw);
+        {if(BeeCore.Common.listCamera[IndexThread].matRaw.Empty())return;
+            BeeCore.Native.SetImg(BeeCore.Common.listCamera[IndexThread].matRaw);
             G.colorArea.StyleColor = styleColor;
-       Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.matRaw, rotArea,rotMask);
+       Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotArea,rotMask);
             Native.SetImg(matCrop, TypeImg.Crop);
         //    BeeCore.G.CommonPlus.CropRotate((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle);
 

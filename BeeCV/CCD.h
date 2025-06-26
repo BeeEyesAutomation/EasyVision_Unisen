@@ -2,7 +2,8 @@
 #include <Windows.h>
 #include <dshow.h>
 #pragma comment(lib, "strmiids")
-
+#include <msclr/marshal_cppstd.h>
+using namespace msclr::interop;
 #include <map>
 #include <string>
 namespace CvPlus {
@@ -41,7 +42,7 @@ namespace CvPlus {
 	public:void  ReadCCD();
 	//public:void  ReadRaw(bool IsHist);
 	public:System::String^ ScanCCD();
-	public:bool	Connect( int rowCCD, int colCCD, int index);
+	public:bool	Connect( int rowCCD, int colCCD, System::String^ NameCCD);
 	public:bool	SetPara();
 	public:void	DestroyAll();
 	public:void	ShowSetting();

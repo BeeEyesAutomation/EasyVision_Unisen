@@ -68,7 +68,7 @@ namespace BeeUi.Tool
           
             if(Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
-            if(G.Config.TypeCamera==TypeCamera.USB)
+            //if(G.Config.TypeCamera==TypeCamera.USB)
             Propety.LoadTemp(G.IsCCD,G.Config.IsHist);
             trackScore.Value = Propety.Score ;
             trackPixel.Value = (int)Propety.AreaPixel;
@@ -97,7 +97,7 @@ namespace BeeUi.Tool
           
             float angle = rotateRect._rectRotation;
             if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-             matCrop =  RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
+             matCrop =  RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
             //Cv2.ImWrite("cropColor.png", matCrop);
             
             picColor.Invalidate();
@@ -131,7 +131,7 @@ namespace BeeUi.Tool
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[G.indexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
 
@@ -140,7 +140,7 @@ namespace BeeUi.Tool
             else
             {
                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[G.indexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
             }
@@ -175,7 +175,7 @@ namespace BeeUi.Tool
                 
                
             
-            String s= (int)(  Propety.Index+1)+"."+ G.PropetyTools[Propety.Index].Name;
+            String s= (int)(  Propety.Index+1)+"."+ G.PropetyTools[Propety.IndexThread][Propety.Index].Name;
          SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
             gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));
             gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
@@ -190,7 +190,7 @@ namespace BeeUi.Tool
             {
                 float angle = Propety.rotArea._rectRotation;
                 if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
-                 matCrop = RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
+                 matCrop = RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
 
                 matTemp = Propety.SetColor(false, matCrop);
                
@@ -298,7 +298,7 @@ namespace BeeUi.Tool
        
         private void btnClear_Click(object sender, EventArgs e)
         {
-           // Propety.SetRaw(BeeCore.Common.matRaw);
+           // Propety.SetRaw(BeeCore.Common.listCamera[G.indexChoose].matRaw);
             
             //if (ExtractColor == null)
             //{
@@ -362,7 +362,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2, -BeeCore.Common.matRaw.Height / 2, BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Width, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -444,7 +444,7 @@ namespace BeeUi.Tool
             {
                 float angle = Propety.rotArea._rectRotation;
                 if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
-                matCrop = RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
+                matCrop = RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
 
 
             }

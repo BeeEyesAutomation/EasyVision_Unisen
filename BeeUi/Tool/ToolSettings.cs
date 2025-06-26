@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeUi.Commons;
 using BeeUi.Data;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,10 +43,10 @@ namespace BeeUi.Tool
             Y = 10;
             X = 10;
             int i = 0;
-            foreach (Tools c in G.listAlltool)
+            foreach (Tools c in G.listAlltool[G.indexChoose])
             {
                 c.ItemTool.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
-                G.PropetyTools[i].Propety.Index = i;
+                G.PropetyTools[G.indexChoose][i].Propety.Index = i;
                 G.ToolSettings.Y += c.ItemTool.Height + 10;
                 G.ToolSettings.pAllTool.Controls.Add(c.ItemTool);
                 G.ToolSettings.ResumeLayout(true);
@@ -60,9 +61,9 @@ namespace BeeUi.Tool
                 if (G.indexToolSelected>-1)
                 {
                     G.ToolSettings.pAllTool.Controls.RemoveAt(G.indexToolSelected);
-                    G.PropetyTools.RemoveAt(G.indexToolSelected);
-                    G.listAlltool.RemoveAt(G.indexToolSelected);
-                    G.indexToolSelected = G.listAlltool.Count() - 1;
+                    G.PropetyTools[G.indexChoose].RemoveAt(G.indexToolSelected);
+                    G.listAlltool[G.indexChoose].RemoveAt(G.indexToolSelected);
+                    G.indexToolSelected = G.listAlltool[G.indexChoose].Count() - 1;
                     RefreshTool();
                 }    
             }    
@@ -72,14 +73,14 @@ namespace BeeUi.Tool
         {
             if(btnEnEdit.IsCLick)
             {
-            foreach(Commons.Tools tool in G.listAlltool)
+            foreach(Commons.Tools tool in G.listAlltool[G.indexChoose])
                 {
                     tool.ItemTool.Score.Enabled = true;
                 }    
             } 
             else
             {
-                foreach (Commons.Tools tool in G.listAlltool)
+                foreach (Commons.Tools tool in G.listAlltool[G.indexChoose])
                 {
                     tool.ItemTool.Score.Enabled = false;
                 }
@@ -90,12 +91,12 @@ namespace BeeUi.Tool
         {
 
        
-          PropetyTool propety = (PropetyTool)G.PropetyTools[G.indexToolSelected].Clone();
+          PropetyTool propety = (PropetyTool)G.PropetyTools[G.indexChoose][G.indexToolSelected].Clone();
        
-            propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools.Count + 1);
-            G.PropetyTools.Add(propety);
-            G.listAlltool.Add( DataTool.SetPropety(propety, G.listAlltool.Count() ));
-            DataTool.LoadPropety(G.listAlltool[G.listAlltool.Count()-1].tool);
+            propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools[G.indexChoose].Count + 1);
+            G.PropetyTools[G.indexChoose].Add(propety);
+            G.listAlltool[G.indexChoose].Add( DataTool.SetPropety(propety, G.listAlltool[G.indexChoose].Count() ));
+            DataTool.LoadPropety(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].tool);
             RefreshTool();
 
 

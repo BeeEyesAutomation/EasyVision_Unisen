@@ -55,7 +55,7 @@ namespace BeeUi.Tool
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public void GetTemp(RectRotate rotateRect)
         {
-             Mat matCrop = RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X  , rotateRect._PosCenter.Y ), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
+             Mat matCrop = RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X  , rotateRect._PosCenter.Y ), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
             Mat matOut = new Mat();
             if (Propety.IsBitNot)
                 Cv2.BitwiseNot(matCrop, matCrop);
@@ -278,12 +278,12 @@ namespace BeeUi.Tool
             Mat matCrop = new Mat(); 
                 if(G.IsRun)
             {
-                matCrop= RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(Propety.rotAreaAdjustment._PosCenter.X, Propety.rotAreaAdjustment._PosCenter.Y), new Size2f(Propety.rotAreaAdjustment._rect.Width, Propety.rotAreaAdjustment._rect.Height), Propety.rotAreaAdjustment._angle));
+                matCrop= RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotAreaAdjustment._PosCenter.X, Propety.rotAreaAdjustment._PosCenter.Y), new Size2f(Propety.rotAreaAdjustment._rect.Width, Propety.rotAreaAdjustment._rect.Height), Propety.rotAreaAdjustment._angle));
 
             }
                 else
             {
-                matCrop= RotateMat(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotArea._PosCenter.X, rotArea._PosCenter.Y), new Size2f(rotArea._rect.Width, rotArea._rect.Height), rotArea._angle));
+                matCrop= RotateMat(BeeCore.Common.listCamera[G.indexChoose].matRaw, new RotatedRect(new Point2f(rotArea._PosCenter.X, rotArea._PosCenter.Y), new Size2f(rotArea._rect.Width, rotArea._rect.Height), rotArea._angle));
 
             }
             Compare(matCrop, Propety.IsBitNot);
@@ -342,7 +342,7 @@ namespace BeeUi.Tool
         {
             IsFullSize = true;
             rotAreaTemp = rotArea.Clone();
-            rotArea = new RectRotate(new RectangleF(-BeeCore.Common.matRaw.Width / 2, -BeeCore.Common.matRaw.Height / 2, BeeCore.Common.matRaw.Width, BeeCore.Common.matRaw.Height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
+            rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Width, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2), 0, AnchorPoint.None, false);
 
             G.IsCheck = false;
             G.TypeCrop = BeeCore.TypeCrop.Area;
@@ -374,7 +374,7 @@ namespace BeeUi.Tool
             {
                 int with = 50, height = 50;
                 if (rotMask == null)
-                    rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.matRaw.Width / 2, BeeCore.Common.matRaw.Height / 2), 0, AnchorPoint.None, false);
+                    rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[G.indexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[G.indexChoose].matRaw.Height / 2), 0, AnchorPoint.None, false);
                 G.TypeCrop = TypeCrop.Mask;
                 G.EditTool.View.imgView.Invalidate();
             }

@@ -15,7 +15,7 @@ namespace BeeCore
         }
 
         public int Index;
-
+        public int IndexThread = 0;
         public TypeTool TypeTool;
         public TypeCrop TypeCrop;
         public RectRotate rotArea, rotCrop, rotMask;

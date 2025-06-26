@@ -257,10 +257,11 @@ namespace BeeCore
         public void LearnPattern(   Mat temp)
         {
            ////Cv2.ImShow("A"+ indexTool, temp);
-            if (temp == null) return;
-            if (temp.Empty()) return;
+            //if (temp == null) return;
+            //if (temp.Empty()) return;
            
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
+           // Cv2.ImWrite("matTemp.png", temp);
             SetDst(Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
@@ -410,11 +411,11 @@ namespace BeeCore
             StatusTool = StatusTool.Done;
 
         }
-    
-       
+
+        public int IndexThread;
         public void Matching( RectRotate rectRotate)
         {
-            using (Mat raw = BeeCore.Common.matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;
@@ -461,7 +462,7 @@ namespace BeeCore
 
                         break;
                 }
-                //  Cv2.ImWrite("Processing.png", matCrop);
+                 // Cv2.ImWrite("Processing.png", matProcess);
                 BeeCore.Native.SetImg(matProcess);
                 IsOK = G.pattern.Match(Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, threshMin, threshMax, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
                 ScoreRs = G.pattern.ScoreRS;
@@ -486,7 +487,7 @@ namespace BeeCore
                             float Score = Convert.ToSingle(sSp[5]);
                             rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
                             listScore.Add(Math.Round(Score, 1));
-                            listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
+                            listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
                         }
 
                     }

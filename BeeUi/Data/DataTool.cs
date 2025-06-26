@@ -109,7 +109,7 @@ namespace BeeUi.Data
                     control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
                 if (PropetyTool.Propety.rotMask== null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
-                itemTool = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool.Count - 1));
+                itemTool = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool[G.indexChoose].Count - 1));
                 itemTool.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
                 itemTool.lbCycle.Text = "---";
                 itemTool.lbScore.Text = "---";
@@ -121,19 +121,19 @@ namespace BeeUi.Data
                 BeeCore.Common.CreateTemp(TypeTool);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")
-                    itemTool.name.Text = TypeTool.ToString() + " " + G.listAlltool.Count();
+                    itemTool.name.Text = TypeTool.ToString() + " " + G.listAlltool[G.indexChoose].Count();
                 else
                     itemTool.name.Text = PropetyTool.Name.Trim();
                 control.Name = PropetyTool.Name;
                 PropetyTool.Propety.nameTool = PropetyTool.Name;
-                itemTool.lbNumber.Text = G.listAlltool.Count() + "";
+                itemTool.lbNumber.Text = G.listAlltool[G.indexChoose].Count() + "";
                 itemTool.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 tools = new Tools(itemTool, control);
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                G.PropetyTools.Remove(PropetyTool);
+                G.PropetyTools[G.indexChoose].Remove(PropetyTool);
                 return null;
             }
             return tools;

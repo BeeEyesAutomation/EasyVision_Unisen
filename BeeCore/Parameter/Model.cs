@@ -10,7 +10,7 @@ namespace BeeCore
     public  class Model
     {
        
-       public  CCD CCD = new CCD();
+       public  ParaCamera CCD = new ParaCamera();
        // public  Modbus PLC = new Modbus();
        
         public  Model( )

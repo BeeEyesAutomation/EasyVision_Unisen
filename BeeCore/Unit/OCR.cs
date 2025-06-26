@@ -172,6 +172,7 @@ namespace BeeCore
             return clean;
         }
         public  String sAllow = "";
+        public int IndexThread = 0;
         public void DoWork(RectRotate rotCrop)
         {
             using (Py.GIL())
@@ -191,7 +192,7 @@ namespace BeeCore
                     Content = "";
                     ScoreRs = 0;
                     listLabelResult = new List<String>();
-                    using (Mat raw = BeeCore.Common.matRaw.Clone())
+                    using (Mat raw =BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                     {
                         if (raw.Empty()) return;
                         Mat matCrop = new Mat();

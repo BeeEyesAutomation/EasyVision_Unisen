@@ -31,8 +31,8 @@ namespace BeeUi.Common
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             System.Windows.Forms.Timer tmOutAlive;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
             this.txtQrCode = new System.Windows.Forms.TextBox();
@@ -60,7 +60,7 @@ namespace BeeUi.Common
             this.btnEnQrCode = new BeeUi.Common.RJButton();
             this.editProg1 = new BeeUi.Unit.EditProg();
             this.label1 = new System.Windows.Forms.Label();
-            this.cameras1 = new BeeUi.Unit.Cameras();
+            this.CameraBar = new BeeUi.Unit.Cameras();
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.workPLC = new System.ComponentModel.BackgroundWorker();
             this.tmReadPLC = new System.Windows.Forms.Timer(this.components);
@@ -74,6 +74,11 @@ namespace BeeUi.Common
             this.Layout.SuspendLayout();
             this.pModel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tmOutAlive
+            // 
+            tmOutAlive.Interval = 500;
+            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // workConnect
             // 
@@ -294,7 +299,7 @@ namespace BeeUi.Common
             this.Layout.Controls.Add(this.btnMode, 0, 0);
             this.Layout.Controls.Add(this.pPO, 1, 0);
             this.Layout.Controls.Add(this.pModel, 2, 0);
-            this.Layout.Controls.Add(this.cameras1, 3, 0);
+            this.Layout.Controls.Add(this.CameraBar, 3, 0);
             this.Layout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Layout.Location = new System.Drawing.Point(0, 0);
             this.Layout.Margin = new System.Windows.Forms.Padding(0);
@@ -319,7 +324,7 @@ namespace BeeUi.Common
             this.btnMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMode.FlatAppearance.BorderSize = 0;
             this.btnMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMode.Font = new System.Drawing.Font("Arial Rounded MT Bold", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMode.ForeColor = System.Drawing.Color.Black;
             this.btnMode.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMode.IsCLick = false;
@@ -428,19 +433,18 @@ namespace BeeUi.Common
             this.label1.Text = "Prog No";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cameras1
+            // CameraBar
             // 
-            this.cameras1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.CameraBar.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cameras1.Location = new System.Drawing.Point(1501, 5);
-            this.cameras1.Name = "cameras1";
-            this.cameras1.Size = new System.Drawing.Size(394, 72);
-            this.cameras1.TabIndex = 30;
+            this.CameraBar.Location = new System.Drawing.Point(1501, 5);
+            this.CameraBar.Name = "CameraBar";
+            this.CameraBar.Size = new System.Drawing.Size(394, 72);
+            this.CameraBar.TabIndex = 30;
             // 
             // tmShow
             // 
-            this.tmShow.Interval = 200;
             this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
             // 
             // workPLC
@@ -462,11 +466,6 @@ namespace BeeUi.Common
             // 
             this.workReConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReConnect_DoWork);
             this.workReConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReConnect_RunWorkerCompleted);
-            // 
-            // tmOutAlive
-            // 
-            tmOutAlive.Interval = 500;
-            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // tmIninitial
             // 
@@ -521,15 +520,15 @@ namespace BeeUi.Common
         public System.Windows.Forms.Panel pPO;
         private System.Windows.Forms.Panel panel4;
         public System.Windows.Forms.TableLayoutPanel pModel;
-        private System.Windows.Forms.Timer tmShow;
         private Unit.EditProg editProg1;
         public System.Windows.Forms.TableLayoutPanel Layout;
-        private Unit.Cameras cameras1;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.Timer tmReadPLC;
         public System.ComponentModel.BackgroundWorker workPLC;
         public System.Windows.Forms.Timer tmReConnectPLC;
         public System.ComponentModel.BackgroundWorker workReConnect;
         private System.Windows.Forms.Timer tmIninitial;
+        public System.Windows.Forms.Timer tmShow;
+        public Unit.Cameras CameraBar;
     }
 }

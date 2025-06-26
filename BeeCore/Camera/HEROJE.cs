@@ -27,6 +27,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -414,7 +415,7 @@ namespace BeeCore
                             //tmp.Node = null;
                             if (listDev.DeviceFoudList[j] == ToolCfg.CurrentDevice)
                         {
-                            BeeCore.Camera.IsConnected = false;
+                           // BeeCore.Camera.IsConnected = false;
                             //Invoke((MethodInvoker)delegate
                             //{
                         //    DevStateCallback(DevStateDef.DevDisConnnected);
@@ -452,7 +453,7 @@ namespace BeeCore
             return mat;
         }
      static   int numErr = 0;
-        public static Size Read()
+        public static Mat  Read()
         {
           
             dtOld = DateTime.Now;
@@ -462,13 +463,13 @@ namespace BeeCore
             if (Common.listRaw.Count > 0)
             {
                 numErr = 0;
-                Common.matRaw = Common.listRaw[0].ToMat().Clone();// ByteToMat(ImageData, ImageWidth, ImageHeight, ImageType);
+                Mat raw= Common.listRaw[0].ToMat().Clone();// ByteToMat(ImageData, ImageWidth, ImageHeight, ImageType);
                 Common.listRaw[0].Dispose();
-                
+                return raw;
                    
             }
-           
-               
+
+            return new Mat();
             //uint num2 = 0u;
             //    byte[] array = null;
             //    SemDataOk.WaitOne();
@@ -943,10 +944,10 @@ namespace BeeCore
             //    {
             //        IsReadyDataN = false;
             //    }
-              TimeSpan sp = DateTime.Now - dtOld;
+            TimeSpan sp = DateTime.Now - dtOld;
             CycleTime = Convert.ToInt32(sp.TotalMilliseconds);
 
-       return new Size(ImageWidth, ImageHeight);
+     //  return new Size(ImageWidth, ImageHeight);
             // ThreadDataProc.DisableComObjectEagerCleanup();
         }
         public static bool IsNeedToUpdateTree=false;
@@ -1277,7 +1278,7 @@ namespace BeeCore
                                 //Invoke((MethodInvoker)delegate
                                 //{
                                 // ReadingPagePara.FrameRate = ((long)FrameTime).ToString();
-                                BeeCore.Camera.FrameRate = Convert.ToInt32(FrameTime);
+                                //BeeCore.Camera.FrameRate = Convert.ToInt32(FrameTime);
 
                                 //});
                             }
@@ -1990,7 +1991,8 @@ namespace BeeCore
         private static void TmDelayRead_Elapsed(object sender, ElapsedEventArgs e)
         {
             tmDelayRead.Enabled = false;
-            OpenCvSharp.Size sz = Read();
+            Mat raw= Read();
+            OpenCvSharp.Size sz = raw.Size();
            // Read();
           
           //  OpenCvSharp.Size sz = Read();

@@ -1,4 +1,5 @@
-﻿using BeeCore.Funtion;
+﻿using BeeCore;
+using BeeCore.Funtion;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,7 +64,45 @@ namespace BeeUi.Unit
             else
                 G.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
             await Task.Delay(1000);
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
+        }
+
+        private void btnCamera_Click(object sender, EventArgs e)
+        {
+            
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+            BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose]);
+            G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[G.indexChoose].Para.Name;
+          
+            switch (BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera)
+            {
+                case TypeCamera.USB:
+                    G.ScanCCD.btnUSB2_0.IsCLick = true;
+                    break;
+                case TypeCamera.BaslerGigE:
+                    G.ScanCCD.btnGigE.IsCLick = true;
+                    break;
+                case TypeCamera.TinyIV:
+                    G.ScanCCD.btnCameraTiny.IsCLick = true;
+                    break;
+            }
+            switch (G.indexChoose)
+            {
+                case 0:
+                    G.ScanCCD.btnCamera1.IsCLick = true;
+                    break;
+                case 1:
+                    G.ScanCCD.btnCamera2.IsCLick = true;
+                    break;
+                case 2:
+                    G.ScanCCD.btnCamera3.IsCLick = true;
+                    break;
+                case 3:
+                    G.ScanCCD.btnCamera4.IsCLick = true;
+                    break;
+            }
+            G.ScanCCD.ShowDialog();
         }
     }
 }

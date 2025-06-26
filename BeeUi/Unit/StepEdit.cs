@@ -101,9 +101,9 @@ namespace BeeUi.Common
         private void workConnect_DoWork(object sender, DoWorkEventArgs e)
         {
            if( G.IsCCD ==true)
-                if(BeeCore.Common.matRaw==null)
+                if(BeeCore.Common.listCamera[G.indexChoose].matRaw==null)
                 {
-                    BeeCore.Camera.Read();
+                    BeeCore.Common.listCamera[G.indexChoose].Read();
                    
                 }
                
@@ -115,7 +115,7 @@ namespace BeeUi.Common
             if (G.IsCCD)
             {
 
-                Shows.RefreshImg(G.EditTool.View.imgView);
+                Shows.RefreshImg(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw);
 
                
             }

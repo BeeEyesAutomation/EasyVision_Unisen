@@ -248,12 +248,12 @@ namespace BeeUi.Commons
         public void CreateNewTool()
         {
             dynamic control = DataTool.New(TypeTool); 
-            int indexName = G.listAlltool.Count() + 1;
+            int indexName = G.listAlltool[G.indexChoose].Count() + 1;
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
-            G.PropetyTools.Add(propetyTool);
-            G.listAlltool.Add(DataTool.SetPropety(propetyTool, indexName-1));
+            G.PropetyTools[G.indexChoose].Add(propetyTool);
+            G.listAlltool[G.indexChoose].Add(DataTool.SetPropety(propetyTool, indexName-1));
             DataTool.LoadPropety(control);
-            G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[G.listAlltool.Count()-1].ItemTool);
+            G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].ItemTool);
         }
          private void btnOk_Click(object sender, EventArgs e)
         {

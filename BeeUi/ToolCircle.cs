@@ -119,7 +119,7 @@ namespace BeeUi.Tool
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[G.indexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.LimeGreen;
 
@@ -128,11 +128,11 @@ namespace BeeUi.Tool
             else
             {
                 cl = Color.LimeGreen;
-                if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                if (G.PropetyTools[G.indexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
                     G.Config.ConditionOK == ConditionOK.Logic)
                     cl = Color.Red;
             }
-            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+            String nameTool = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.IndexThread][Propety.Index].Name;
             Draws.Box1Label(gc, rotA._rect, nameTool, G.fontTool, brushText, cl,1);
             gc.ResetTransform();
             if (Propety.listScore == null) return gc;
@@ -242,11 +242,11 @@ namespace BeeUi.Tool
             //    else
             //        Propety.rotAreaAdjustment = Propety.rotArea;
             //    Propety.rotAreaAdjustment._angle = 0;
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotAreaAdjustment);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotAreaAdjustment);
 
             //}
             //else
-            //    Propety.Matching(G.IsRun, BeeCore.Common.matRaw, indexTool, Propety.rotArea);
+            //    Propety.Matching(G.IsRun, BeeCore.Common.listCamera[G.indexChoose].matRaw, indexTool, Propety.rotArea);
         }
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)

@@ -74,12 +74,12 @@ namespace BeeUi
                             if (BeeCore.G.ParaCam.matRegister != null)
                                 if (BeeCore.G.ParaCam.matRegister.Width != 0)
                                 {
-                                    BeeCore.Common.matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
+                                    BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.matRaw.Size());
+                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -111,7 +111,7 @@ namespace BeeUi
 
 
                         }
-                        foreach (Commons.Tools tool in G.listAlltool)
+                        foreach (Commons.Tools tool in G.listAlltool[G.indexChoose])
                         {
                             tool.ItemTool.Score.Enabled = false;
                         }
@@ -145,12 +145,12 @@ namespace BeeUi
                             if (BeeCore.G.ParaCam.matRegister != null)
                                 if (BeeCore.G.ParaCam.matRegister.Width != 0)
                                 {
-                                    BeeCore.Common.matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
+                                    BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.matRaw.Size());
+                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -221,7 +221,7 @@ namespace BeeUi
             G.Header.tmReConnectPLC.Enabled = false;
             G.Header.tmReadPLC.Enabled = false;
            
-            BeeCore.Camera.DestroyAll();
+            BeeCore.Common.listCamera[G.indexChoose].DestroyAll();
           
             
           
@@ -239,7 +239,7 @@ namespace BeeUi
         {
           
            
-            BeeCore.Camera.DestroyAll();
+            BeeCore.Common.listCamera[G.indexChoose].DestroyAll();
             View.tmContinuous.Enabled = false;
             G.Header.tmReConnectPLC.Enabled = false;
             G.Header.tmReadPLC.Enabled = false;
@@ -508,7 +508,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
               
-                foreach (Tools tool in G.listAlltool)
+                foreach (Tools tool in G.listAlltool[G.indexChoose])
                     tool.tool.LoadPara();
               //  G.Header.workLoadProgram.RunWorkerAsync();
             }

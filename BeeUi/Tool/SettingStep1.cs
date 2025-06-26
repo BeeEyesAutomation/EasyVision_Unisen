@@ -54,7 +54,7 @@ namespace BeeUi.Tool
        );
         private void SettingStep2_Load(object sender, EventArgs e)
         {
-            BeeCore.G.ParaCam.Exposure = BeeCore.Camera.GetExpo();
+            BeeCore.Common.listCamera[G.indexChoose].Para.Exposure= BeeCore.Common.listCamera[G.indexChoose].GetExpo();
             // trackExposure.Min = (int)BeeCore.Common.MinExposure;
             //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
             // trackExposure.Step= (int)BeeCore.Common.StepExposure;
@@ -74,12 +74,12 @@ namespace BeeUi.Tool
                     break;
             }
           
-            if (BeeCore.G.ParaCam.Exposure>trackExposure.Max)
+            if (BeeCore.Common.listCamera[G.indexChoose].Para.Exposure>trackExposure.Max)
                 trackExposure.Value =trackExposure.Max ;
-            if (BeeCore.G.ParaCam.Exposure < trackExposure.Min)
+            if (BeeCore.Common.listCamera[G.indexChoose].Para.Exposure < trackExposure.Min)
                 trackExposure.Value = trackExposure.Min;
             else
-                trackExposure.Value = BeeCore.G.ParaCam.Exposure;
+                trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure;
             switch (BeeCore.G.ParaCam.TypeLight)
             {
                 case 1:
@@ -114,13 +114,13 @@ namespace BeeUi.Tool
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 G.EditTool.View. pathRaw = fileDialog.FileName;
-              BeeCore.Common.matRaw = BeeCore.Common.LoadImage(G.EditTool.View.pathRaw, ImreadModes.AnyColor);
-                G.EditTool.View.matRes = BeeCore.Common.matRaw.Clone();
+              BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Common.LoadImage(G.EditTool.View.pathRaw, ImreadModes.AnyColor);
+                G.EditTool.View.matRes = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone();
               
-                G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
+                G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+                G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
 
-                G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+                G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
 
                 G.EditTool.View.imgView.Invalidate();
                 btnNextStep.Enabled = true;
@@ -142,7 +142,7 @@ namespace BeeUi.Tool
 
         private void workRead_DoWork(object sender, DoWorkEventArgs e)
         {
-            BeeCore.Camera.Read();
+            BeeCore.Common.listCamera[G.indexChoose].Read();
          
 
 
@@ -150,15 +150,15 @@ namespace BeeUi.Tool
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            BeeCore.Common.matRaw = BeeCore.Native.GetImg();
-            BeeCore.G.ParaCam.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.matRaw);
+            BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.Native.GetImg();
+            BeeCore.G.ParaCam.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[G.indexChoose].matRaw);
          
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matResgiter = BeeCore.Common.matRaw.Clone();
+            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[G.indexChoose].matRaw.Rows, BeeCore.Common.listCamera[G.indexChoose].matRaw.Cols, MatType.CV_8UC1);
+            G.EditTool.View.matResgiter = BeeCore.Common.listCamera[G.indexChoose].matRaw.Clone();
             btnNextStep.Enabled = true;
-            G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
           //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
 
         }
@@ -178,8 +178,8 @@ namespace BeeUi.Tool
             //    File.Delete("Default.config");
             //Access.SaveConfig("Default.config", G.Config);
             //BeeCore.Common.ReadCCD(G.Config.IsHist, G.Config.TypeCamera);
-            //BeeCore.Common.matRaw= BeeCore.Common.GetImageRaw();
-            //G.EditTool.View.imgView.ImageIpl= BeeCore.Common.matRaw;
+            //BeeCore.Common.listCamera[G.indexChoose].matRaw= BeeCore.Common.GetImageRaw();
+            //G.EditTool.View.imgView.ImageIpl= BeeCore.Common.listCamera[G.indexChoose].matRaw;
         }
         public void PressLive()
         {
@@ -262,8 +262,8 @@ namespace BeeUi.Tool
 
         private void trackExposure_ValueChanged(float obj)
         {
-          //  trackExposure.Value= trackExposure.Value - (trackExposure.Value % trackExposure.Step);
-            BeeCore.G.ParaCam.Exposure = (int)trackExposure.Value;
+            //  trackExposure.Value= trackExposure.Value - (trackExposure.Value % trackExposure.Step);
+            BeeCore.Common.listCamera[G.indexChoose].Para.Exposure = (int)trackExposure.Value;
           //  numExposure.Value = BeeCore.G.ParaCam.Exposure;
 
         }
@@ -289,9 +289,9 @@ namespace BeeUi.Tool
                 btnBackLight.Enabled = true;
                 btnBackLight.Enabled = true;
                 BeeCore.G.ParaCam.TypeLight = 1;
-            BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
+            BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
 
-            //  BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, btnBackLight.IsCLick);
+            //  BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, btnBackLight.IsCLick);
         }
 
         private void btnTopLight_Click(object sender, EventArgs e)
@@ -303,8 +303,8 @@ namespace BeeUi.Tool
                 btnTopLight.Enabled = true;
                 btnTopLight.Enabled = true;
                 BeeCore.G.ParaCam.TypeLight = 2;
-            //  BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, btnTopLight.IsCLick);
-            BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
+            //  BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, btnTopLight.IsCLick);
+            BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
 
         }
 
@@ -316,14 +316,14 @@ namespace BeeUi.Tool
             //else
             //    MessageBox.Show("Port Close");
             BeeCore.G.ParaCam.TypeLight = 3;
-            BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
+            BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
 
         }
         bool _isLight;
         private void btnONLight_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.IsOnLight = btnONLight.IsCLick;
-            BeeCore.Camera.Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
+            BeeCore.Common.listCamera[G.indexChoose].Light(BeeCore.G.ParaCam.TypeLight, BeeCore.G.ParaCam.IsOnLight);
 
         }
 
@@ -331,7 +331,7 @@ namespace BeeUi.Tool
         {
          //   BeeCore.G.ParaCam.Exposure =(int) numExposure.Value;
           
-            trackExposure.Value = BeeCore.G.ParaCam.Exposure;
+            trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure;
         }
 
         private void panel10_Paint(object sender, PaintEventArgs e)
@@ -342,7 +342,7 @@ namespace BeeUi.Tool
         private void btnFull_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 1;
-            Shows.Full(G.EditTool.View.imgView,BeeCore.Common.matRaw.Size());
+            Shows.Full(G.EditTool.View.imgView,BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
             G.Config.imgZoom =G.EditTool.View. imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
@@ -351,7 +351,7 @@ namespace BeeUi.Tool
         private void btnHD_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 2;
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
             G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
@@ -360,7 +360,7 @@ namespace BeeUi.Tool
         private void btn480_Click(object sender, EventArgs e)
         {
             BeeCore.G.ParaCam.TypeResolution = 3;
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.matRaw.Size());
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
             G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
             G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
             G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
@@ -454,7 +454,7 @@ namespace BeeUi.Tool
 
         private void trackGain_ValueChanged(float obj)
         {
-            BeeCore.G.ParaCam.Gain = (int)trackGain.Value;
+            BeeCore.Common.listCamera[G.indexChoose].Para.Gain = (int)trackGain.Value;
         }
 
         private void btnRevese_Click(object sender, EventArgs e)

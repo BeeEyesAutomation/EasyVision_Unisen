@@ -172,6 +172,7 @@ namespace BeeCore
         List<RectRotate> boxList = new List<RectRotate>();
         List<float> scoreList = new List<float>();
         List<string> labelList = new List<string>();
+        public int IndexThread = 0;
         public void DoWork(RectRotate rotCrop)
         {
             using (Py.GIL())
@@ -183,7 +184,7 @@ namespace BeeCore
                     boxList = new List<RectRotate>();
                      scoreList = new List<float>();
                      labelList = new List<string>();
-                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.matRaw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.listCamera[IndexThread].matRaw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
                     if (matCrop.Type() != MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     if (matCrop.Channels() == 1)

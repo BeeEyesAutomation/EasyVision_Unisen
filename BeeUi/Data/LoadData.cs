@@ -10,22 +10,31 @@ namespace BeeUi.Data
 {
     public  class LoadData
     {
-        public static List<BeeCore.PropetyTool> Project(String Project)
+        public static List<List<BeeCore.PropetyTool>> Project(String Project)
         {
-            List < BeeCore.PropetyTool > listPropetyTool= new List <BeeCore.PropetyTool>();
+            List<List < BeeCore.PropetyTool >> listPropetyTool= new List<List <BeeCore.PropetyTool>>();
             if (File.Exists("Program\\" + Project + "\\" + Project + ".prog"))
                 listPropetyTool = Access.LoadProg("Program\\" + Project + "\\" + Project + ".prog");
             else
-                listPropetyTool = new List<BeeCore.PropetyTool>();
+                listPropetyTool = new List<List<BeeCore.PropetyTool>>();
             return listPropetyTool;
         }
-        public static ParaCam Para(String Project)
+        public static ParaCommon Para(String Project)
         {
-            ParaCam ParaCam = new ParaCam();
+            ParaCommon ParaCam = new ParaCommon();
             if (File.Exists("Program\\" + Project + "\\" + Project + ".para"))
-                ParaCam = Access.LoadParaCam("Program\\" + Project + "\\" + Project + ".para");
+                ParaCam = Access.LoadParaComon("Program\\" + Project + "\\" + Project + ".para");
             else
-                ParaCam=new ParaCam();
+                ParaCam=new ParaCommon();
+            return ParaCam;
+        }
+        public static List<ParaCamera> ParaCamera(String Project)
+        {
+           List<  ParaCamera> ParaCam = new List<ParaCamera>();
+            if (File.Exists("Program\\" + Project + "\\" + Project + ".cam"))
+                ParaCam = Access.LoadParaCamera("Program\\" + Project + "\\" + Project + ".cam");
+            else
+                ParaCam = new List<ParaCamera>();
             return ParaCam;
         }
     }

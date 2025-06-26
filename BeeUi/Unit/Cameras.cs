@@ -66,7 +66,45 @@ namespace BeeUi.Unit
 
         private void btnIO_Click(object sender, EventArgs e)
         {
-            G.ScanCCD.Show();
+           
+          
+        }
+        ScanCCD scanCCD = new ScanCCD();
+        private void btnCamera1_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 0;
+            G.ToolSettings.pAllTool.Controls.Clear();
+            G.Header.stepShow = 0;
+            G.Header.indexToolShow = 0;
+            G.Header.  tmShow.Enabled = true;
+           
+        }
+
+        private void btnCamera2_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 1;
+            G.ToolSettings.pAllTool.Controls.Clear();
+            G.Header.stepShow = 0;
+            G.Header.indexToolShow = 0;
+            G.Header.tmShow.Enabled = true;
+        }
+
+        private void btnCamera3_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 2;
+            G.ToolSettings.pAllTool.Controls.Clear();
+            G.Header.stepShow = 0;
+            G.Header.indexToolShow = 0;
+            G.Header.tmShow.Enabled = true;
+        }
+
+        private void btnCamera4_Click(object sender, EventArgs e)
+        {
+            G.indexChoose = 3;
+            G.ToolSettings.pAllTool.Controls.Clear();
+            G.Header.stepShow = 0;
+            G.Header.indexToolShow = 0;
+            G.Header.tmShow.Enabled = true;
         }
     }
 }

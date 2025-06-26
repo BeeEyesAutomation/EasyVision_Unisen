@@ -37,9 +37,7 @@ namespace BeeUi.Tool
         {
             G.Header.btnMode.PerformClick();
             G.Config.ConditionOK = ConditionOK.TotalOK;
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config", G.Config);
+            Data.SaveData.Config(G.Config);
         }
         public void RefreshLogic()
         {
@@ -70,7 +68,7 @@ namespace BeeUi.Tool
 
             //}
             pLogic1.Controls.Clear();
-            foreach (PropetyTool propetyTool in G.PropetyTools)
+            foreach (PropetyTool propetyTool in G.PropetyTools[G.indexChoose])
             {
                 ItemLogic itemLogic = new ItemLogic();
                 itemLogic.Parent = pLogic1;

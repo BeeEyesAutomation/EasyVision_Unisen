@@ -83,8 +83,7 @@ namespace BeeUi.Tool
        
         public void LoadPara()
         {
-           
-           
+
             worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
@@ -230,7 +229,7 @@ namespace BeeUi.Tool
                 if (!Propety.IsOK)
                 {
                     cl = Color.Red;
-                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                    if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                         G.Config.ConditionOK == ConditionOK.Logic)
                         cl = Color.LimeGreen;
 
@@ -239,7 +238,7 @@ namespace BeeUi.Tool
                 else
                 {
                     cl = Color.LimeGreen;
-                    if (G.PropetyTools[Propety.Index].UsedTool == UsedTool.Invertse &&
+                    if (G.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
                         G.Config.ConditionOK == ConditionOK.Logic)
                         cl = Color.Red;
                 }
@@ -254,7 +253,7 @@ namespace BeeUi.Tool
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
                 gc.Transform = mat;
-                String sContent = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
+                String sContent = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.IndexThread][Propety.Index].Name;
                 Draws.Box1Label(gc, rotA._rect, sContent, G.fontTool, brushText, cl);
                 int i = 0;
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
@@ -501,7 +500,7 @@ namespace BeeUi.Tool
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
             Propety.IsAreaWhite = false;
-             GetTemp(Propety.rotCrop,BeeCore.Common.matRaw );
+             GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[G.indexChoose].matRaw );
             G.EditTool.View.imgView.Invalidate();
         }
 
@@ -518,7 +517,7 @@ namespace BeeUi.Tool
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
             Propety.IsAreaWhite = true;
-            GetTemp(Propety.rotCrop, BeeCore.Common.matRaw);
+            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[G.indexChoose].matRaw);
             G.EditTool.View.imgView.Invalidate();
         }
 
@@ -558,7 +557,7 @@ namespace BeeUi.Tool
 
         private void trackNumObject_ValueChanged_1(int obj)
         {
-            //G.EditTool.View.imgView.Image = BeeCore.Common.matRaw.ToBitmap();
+            //G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
             //G.EditTool.View.imgView.Invalidate();
             //Propety.NumObject = trackNumObject.Value;
             //G.IsCheck = true;
@@ -790,10 +789,10 @@ namespace BeeUi.Tool
 
         private void tmCheckFist_Tick(object sender, EventArgs e)
         {
-            if (BeeCore.Camera.IsConnected&&G.PLC.IsConnected)
+            if (BeeCore.Common.listCamera[G.indexChoose].IsConnected&&G.PLC.IsConnected)
             {
-                BeeCore.Camera.Read();
-                if (BeeCore.Camera.IsConnected)
+                BeeCore.Common.listCamera[G.indexChoose].Read();
+                if (BeeCore.Common.listCamera[G.indexChoose].IsConnected)
                 {
                     //Propety.Check1(Propety.rotArea);
                     tmCheckFist.Enabled = false;
