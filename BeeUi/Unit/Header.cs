@@ -416,7 +416,8 @@ namespace BeeUi.Common
 
                 
                     txtQrCode.Text = G.Project;
-
+                txtQrCode.Enabled = false;
+                btnShowList.Enabled = false;
                 if (!workLoadProgram.IsBusy)
                     workLoadProgram.RunWorkerAsync();
 
@@ -437,7 +438,8 @@ namespace BeeUi.Common
             //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
             }
-
+            txtQrCode.Enabled = false;
+            btnShowList.Enabled = false;
             if (!workLoadProgram.IsBusy)
                 workLoadProgram.RunWorkerAsync();
 
@@ -657,7 +659,7 @@ txtQrCode.Focus();
             if (BeeCore.Common.matRaw != null)
             {
                 G.EditTool.View.bmMask = new Mat(BeeCore.Common.matRaw.Rows, BeeCore.Common.matRaw.Cols, MatType.CV_8UC1);
-                BeeCore.Native.SetImg(BeeCore.Common.matRaw);
+                //BeeCore.Native.SetImg(BeeCore.Common.matRaw);
             }
             if (G.ToolSettings == null)
             {
@@ -669,7 +671,8 @@ txtQrCode.Focus();
             Properties.Settings.Default.programCurrent = G.Project;
             Properties.Settings.Default.Save();
             G.listProgram.Visible = false;
-
+            txtQrCode.Enabled = true;
+            btnShowList.Enabled = true;
             txtQrCode.Text = G.Project;
 
            
@@ -689,7 +692,7 @@ txtQrCode.Focus();
                 tmReConnectPLC.Enabled = true;
             }
             Acccess(G.IsRun);
-         
+            G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
             tmShow.Enabled = true;
         }
@@ -1025,6 +1028,9 @@ txtQrCode.Focus();
                             tmReadPLC.Enabled = false;
                             G.Project = listFilter[value];
                             txtQrCode.Text = G.Project.ToString();
+                            txtQrCode.Enabled = false;
+                            btnShowList.Enabled = false;
+
                             workLoadProgram.RunWorkerAsync();
                         }
                     }

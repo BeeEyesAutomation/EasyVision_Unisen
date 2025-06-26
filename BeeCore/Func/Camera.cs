@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -276,10 +277,10 @@ namespace BeeCore
         public static  void Read()
         {
             int rows = 0, cols = 0, Type = 0;
-            IntPtr intPtr = new IntPtr(); 
+            
             Mat raw = new Mat();
-          
-             
+            IntPtr intPtr = IntPtr.Zero;
+
             try
             {
                 switch (G.TypeCCD)
@@ -299,7 +300,7 @@ namespace BeeCore
 
                             unsafe
                             {
-                                intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
+                                 intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
                                 raw = new Mat(rows, cols, Type, intPtr);
 
                                 FrameRate = G.CCD.FPS;
@@ -328,15 +329,17 @@ namespace BeeCore
                         Stopwatch stopwatch = new Stopwatch(); 
                         stopwatch.Start();
                         G.CCD.ReadCCD();
-                       
-                         intPtr = new IntPtr();
+
+                        
                          raw = new Mat();
+                      
                         try
                         {
 
                             unsafe
                             {
-                                intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
+                              
+                                    intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
                                 raw = new Mat(rows, cols, Type, intPtr);
 
                                 FrameRate = G.CCD.FPS;
@@ -352,8 +355,7 @@ namespace BeeCore
                         finally
                         {
                            raw.Release();
-                            // Giải phóng bộ nhớ sau khi sử dụng
-                          Marshal.FreeHGlobal(intPtr);
+                           Native. FreeBuffer(intPtr);
                         }
                         break;
                        case TypeCamera.TinyIV:

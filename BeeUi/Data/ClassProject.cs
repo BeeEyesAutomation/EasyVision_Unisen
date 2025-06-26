@@ -41,19 +41,29 @@ namespace BeeUi.Data
                 index++;
 
             }
-            foreach (Tools tool in G.listAlltool)
+            Parallel.ForEach(G.listAlltool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, tool =>
             {
                 DataTool.LoadPropety(tool.tool);
-               X: if(tool.tool.Propety.StatusTool != StatusTool.Initialed)
-                {
-                    Task.Delay(10);
-                    goto X;
-                }
-               else
-                {
-                    continue;
-                }
-            }
+            });
+            //foreach (Tools tool in G.listAlltool)
+            //{
+            //    DataTool.LoadPropety(tool.tool);
+            //   //X: if(tool.tool.Propety.StatusTool != StatusTool.Initialed)
+            //   // {
+            //   //     Task.Delay(10);
+            //   //     goto X;
+            //   // }
+            //   //else
+            //   // {
+            //   //     continue;
+            //   // }
+            //}
+            // Dùng Parallel để tận dụng nhiều CPU core
+            Parallel.ForEach(G.PropetyTools, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, propety =>
+            {
+                propety.Propety.SetModel();
+            });
+             
 
 
             G.IsLoad = true;

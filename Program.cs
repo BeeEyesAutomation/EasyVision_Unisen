@@ -39,11 +39,15 @@ namespace BeeIV2
         static void Main()
         {
             // Bắt lỗi ở AppDomain
-           // AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            // AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             // Bắt lỗi từ thread
-           // Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
-
+            // Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            ThreadPool.SetMaxThreads(100, 100);
+            int cores = Environment.ProcessorCount;
+            Console.WriteLine($"Số lõi CPU: {cores}");
+            //var options = new ParallelOptions { MaxDegreeOfParallelism = cores };
+            //Parallel.For(0, 1000, options, i => { ... });
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             if (PriorProcess() == null)

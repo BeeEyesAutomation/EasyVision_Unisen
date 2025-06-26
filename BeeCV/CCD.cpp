@@ -32,6 +32,11 @@ extern "C" __declspec(dllexport) uchar * GetImage(int* rows, int* cols, int* Typ
 	
 	return  MatToBytes(matRaw);
 }
+extern "C" __declspec(dllexport)
+void FreeBuffer(uchar* buffer)
+{
+	delete[] buffer;
+}
 extern "C" __declspec(dllexport) uchar * GetImageCrop(  int* rows, int* cols,int* Type)
 {
 	
@@ -70,7 +75,26 @@ extern "C" __declspec(dllexport) void SetSrc(uchar * uc, int image_rows, int ima
 }
 extern "C" __declspec(dllexport) void SetRaw(uchar* uc, int image_rows, int image_cols, int image_type)
 {
-	matRaw = BytesToMat(uc, image_rows, image_cols, image_type);
+	if (!uc || image_rows <= 0 || image_cols <= 0)
+	{
+		std::cerr << "Invalid input to SetRaw\n";
+		return;
+	}
+
+	try
+	{
+		
+		matRaw = BytesToMat(uc, image_rows, image_cols, image_type);
+	}
+	catch (cv::Exception& e)
+	{
+		std::cerr << "OpenCV error: " << e.what() << std::endl;
+	}
+	//// PHẢI clone nếu uc là vùng nhớ cấp từ C#
+	//cv::Mat temp(image_rows, image_cols, image_type, uc);
+	//if (temp.empty())return;
+	//matRaw = temp.clone();  // ✅ an toàn
+	////matRaw = BytesToMat(uc, image_rows, image_cols, image_type);
 
 }
 extern "C" __declspec(dllexport) void SetImgTemp(uchar* uc, int image_rows, int image_cols, int image_type)

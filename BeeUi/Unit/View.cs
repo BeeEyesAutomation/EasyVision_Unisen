@@ -934,7 +934,7 @@ namespace BeeUi
             return rot;
         }
         Graphics gc;
-        int WidthPoint = 40;
+        int WidthPoint = 10;
         
         private void imgView_Paint(object sender, PaintEventArgs e)
         {
@@ -1684,6 +1684,15 @@ namespace BeeUi
         }
         int indexNG = 0;
         int numToolOK = 0;
+        public static Bitmap ConvertToNonIndexed(Bitmap original)
+        {
+            Bitmap newBmp = new Bitmap(original.Width, original.Height, PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(newBmp))
+            {
+                g.DrawImage(original, 0, 0);
+            }
+            return newBmp;
+        }
         public void DrawTotalResult()
         {
 
@@ -1702,101 +1711,122 @@ namespace BeeUi
             //imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y
 
             //gc.Clear(Color.White);
-            if (BeeCore.Common.matRaw == null) return;
-            Bitmap bm = BeeCore.Common.matRaw.Clone().ToBitmap();
-            BeeCore.Common.bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
-            gc = Graphics.FromImage(BeeCore.Common.bmResult);
-            gc.ResetTransform();
-            var mat = new Matrix();
-            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-            mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-            gc.Transform=mat;
-            indexTool = 0;
-         
-                foreach (Tools tool in G.listAlltool)
+            //if (BeeCore.Common.matRaw == null) return;
+            BeeCore.Common.bmResult = BeeCore.Common.matRaw.ToBitmap();
+
+            // Convert nếu cần
+            if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
             {
-               // tool.tool.Propety.ScoreRs = 80;
-                //tool.tool.Propety.IsOK = true;
-                if (G.PropetyTools[indexTool].UsedTool == UsedTool.NotUsed)
-                {
-                    //tool.ItemTool.lbStatus.Text = "NC";
-                    //tool.ItemTool.Score.ColorTrack = Color.Gray;
-                    //tool.ItemTool.lbScore.ForeColor = Color.Gray;
-                    //tool.ItemTool.lbStatus.BackColor = Color.Gray;
+                BeeCore.Common.bmResult = ConvertToNonIndexed(BeeCore.Common.bmResult);
+            }
 
-                    indexTool++;
-                    continue;
-                }
+                using (Graphics gc = Graphics.FromImage(BeeCore.Common.bmResult))
+            {
+              
+             //   BeeCore.Common.bmResult = new Bitmap(bm, (int)bm.Width, (int)bm.Height);
+                // Convert nếu cần
+               
+                // BeeCore.Common.bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
+                //Graphics gc = Graphics.FromImage(BeeCore.Common.bmResult);
+                gc.ResetTransform();
+                var mat = new Matrix();
+                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+                //gc.Transform=mat;
+                indexTool = 0;
+
+                foreach (Tools tool in G.listAlltool)
+                {
+                    // tool.tool.Propety.ScoreRs = 80;
+                    //tool.tool.Propety.IsOK = true;
+                    if (G.PropetyTools[indexTool].UsedTool == UsedTool.NotUsed)
+                    {
+                        //tool.ItemTool.lbStatus.Text = "NC";
+                        //tool.ItemTool.Score.ColorTrack = Color.Gray;
+                        //tool.ItemTool.lbScore.ForeColor = Color.Gray;
+                        //tool.ItemTool.lbStatus.BackColor = Color.Gray;
+
+                        indexTool++;
+                        continue;
+                    }
                     // G.PropetyTools[indexTool]
-                  //  SumCycle += tool.tool.Propety.cycleTime;
-                tool.tool.ShowResult(gc, (float)(imgView.Zoom / 100.0), new Point(0,0));
-                tool.ItemTool.lbCycle.Text = tool.tool.Propety.cycleTime + " ms";
-                tool.ItemTool.lbScore.Text = tool.tool.Propety.ScoreRs + "";
-                tool.ItemTool.Score.ValueScore = tool.tool.Propety.ScoreRs;
-                if (tool.tool.Propety.IsOK)
-                {
-                    switch (G.Config.ConditionOK)
+                    //  SumCycle += tool.tool.Propety.cycleTime;
+                      tool.tool.ShowResult(gc, (float)(imgView.Zoom / 100.0), new Point(0,0));
+                    tool.ItemTool.lbCycle.Text = tool.tool.Propety.cycleTime + " ms";
+                    tool.ItemTool.lbScore.Text = tool.tool.Propety.ScoreRs + "";
+                    tool.ItemTool.Score.ValueScore = tool.tool.Propety.ScoreRs;
+                    if (tool.tool.Propety.IsOK)
                     {
-                        case ConditionOK.TotalOK:
-                            numToolOK++;
-                            break;
-                        case ConditionOK.AnyOK:
-                            numToolOK++;
-                            break;
-                        case ConditionOK.Logic:
-                            if (G.PropetyTools[indexTool].UsedTool == UsedTool.Invertse)
-                            {
-                                G.TotalOK = false;
-                            }
-                            break;
-                    }
-                    if (G.Config.ConditionOK == ConditionOK.Logic)
-                    {
-                        if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
+                        switch (G.Config.ConditionOK)
                         {
-                            tool.ItemTool.lbStatus.Text = "OK";
-                            tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                            case ConditionOK.TotalOK:
+                                numToolOK++;
+                                break;
+                            case ConditionOK.AnyOK:
+                                numToolOK++;
+                                break;
+                            case ConditionOK.Logic:
+                                if (G.PropetyTools[indexTool].UsedTool == UsedTool.Invertse)
+                                {
+                                    G.TotalOK = false;
+                                }
+                                break;
                         }
-                        else
+                        if (G.Config.ConditionOK == ConditionOK.Logic)
                         {
-                            tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            tool.ItemTool.lbStatus.Text = "NG";
-                            tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                        }
-                    }
-                    else
-                    {
-                        tool.ItemTool.lbStatus.Text = "OK";
-                        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                    }
-                }
-
-                else
-                {
-                    switch (G.Config.ConditionOK)
-                    {
-
-
-                        case ConditionOK.Logic:
                             if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
                             {
-                                G.TotalOK = false;
+                                tool.ItemTool.lbStatus.Text = "OK";
+                                tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                                tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                                tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
                             }
-                            break;
-                    }
-                    if (G.Config.ConditionOK == ConditionOK.Logic)
-                    {
-                        if (G.PropetyTools[indexTool].UsedTool != UsedTool.Used)
+                            else
+                            {
+                                tool.ItemTool.Score.ColorTrack = Color.DarkRed;
+                                tool.ItemTool.lbStatus.Text = "NG";
+                                tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                                tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                            }
+                        }
+                        else
                         {
                             tool.ItemTool.lbStatus.Text = "OK";
                             tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
                             tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
                             tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                        }
+                    }
+
+                    else
+                    {
+                        switch (G.Config.ConditionOK)
+                        {
+
+
+                            case ConditionOK.Logic:
+                                if (G.PropetyTools[indexTool].UsedTool == UsedTool.Used)
+                                {
+                                    G.TotalOK = false;
+                                }
+                                break;
+                        }
+                        if (G.Config.ConditionOK == ConditionOK.Logic)
+                        {
+                            if (G.PropetyTools[indexTool].UsedTool != UsedTool.Used)
+                            {
+                                tool.ItemTool.lbStatus.Text = "OK";
+                                tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                                tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                                tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                            }
+                            else
+                            {
+                                tool.ItemTool.Score.ColorTrack = Color.DarkRed;
+                                tool.ItemTool.lbStatus.Text = "NG";
+                                tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                                tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                            }
                         }
                         else
                         {
@@ -1805,71 +1835,65 @@ namespace BeeUi
                             tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
                             tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
                         }
-                    }
-                    else
-                    {
-                        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                        tool.ItemTool.lbStatus.Text = "NG";
-                        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
+
+
                     }
 
 
+                    indexTool++;
                 }
-              
-
-                indexTool++;
+                imgView.Image = BeeCore.Common.bmResult; ;
+                //if (BeeCore.Common.bmResult == null) return;
+                //if (BeeCore.Common.bmResult.Width == 0) return;
+                //if (BeeCore.Common.bmResult.Height == 0) return;
             }
-            if (BeeCore.Common.bmResult == null) return;
-            if (BeeCore.Common.bmResult.Width == 0) return;
-            if (BeeCore.Common.bmResult.Height == 0) return;
             //if(G.listHis.Count >20){
             //    G.listHis[0].bm.Dispose();
             //    G.listHis.RemoveAt(0);
             //}
             // G.listHis.Add(new HistoryCheck( (Bitmap) BeeCore.Common.bmResult.Clone(),G.TotalOK,DateTime.Now));
             //  Shows.RefreshImg(imgView,TypeImg.Result);
-            imgView.Invoke((Action)(() =>
-            {
-                if (imgView.Image != null)
-                {
-                    imgView.Image.Dispose(); // Giải phóng ảnh cũ
-                }
-                Bitmap copy = null;
-                try
-                {
-                     //copy = new Bitmap(BeeCore.Common.bmResult);  // tạo bản sao mới
-                    imgView.Image = BeeCore.Common.bmResult;
-                    //using (MemoryStream ms = new MemoryStream())
-                    //{
-                    //    BeeCore.Common.bmResult.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    //    ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
+            //imgView.Invoke((Action)(() =>
+            //{
+            //    if (imgView.Image != null)
+            //    {
+            //        imgView.Image.Dispose(); // Giải phóng ảnh cũ
+            //    }
+            //    Bitmap copy = null;
+            //    try
+            //    {
+            //         //copy = new Bitmap(BeeCore.Common.bmResult);  // tạo bản sao mới
+            //        imgView.Image = BeeCore.Common.bmResult;
+            //        //using (MemoryStream ms = new MemoryStream())
+            //        //{
+            //        //    BeeCore.Common.bmResult.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            //        //    ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
 
-                    //    // Load hình ảnh từ MemoryStream vào PictureBox
-                    //    imgView.Image = Image.FromStream(ms);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message.Contains("GDI"))
-                    {
-                        imgView = new Cyotek.Windows.Forms.ImageBox();
+            //        //    // Load hình ảnh từ MemoryStream vào PictureBox
+            //        //    imgView.Image = Image.FromStream(ms);
+            //        //}
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        if (ex.Message.Contains("GDI"))
+            //        {
+            //            imgView = new Cyotek.Windows.Forms.ImageBox();
 
-                        imgView.Size = new System.Drawing.Size(pView.Width, pView.Height);
+            //            imgView.Size = new System.Drawing.Size(pView.Width, pView.Height);
 
-                        imgView.Parent = pView;
-                        imgView.Location = new Point(pView.Width / 2 - 1280 / 2, Height / 2 - 720 / 2);
+            //            imgView.Parent = pView;
+            //            imgView.Location = new Point(pView.Width / 2 - 1280 / 2, Height / 2 - 720 / 2);
 
-                    }
+            //        }
 
-                }
-                finally
-                {
-                  //  copy.Dispose();
-                  //  BeeCore.Common.bmResult.Dispose();
-                }
+            //    }
+            //    finally
+            //    {
+            //      //  copy.Dispose();
+            //      //  BeeCore.Common.bmResult.Dispose();
+            //    }
 
-            }));
+            //}));
             //imgView.Refresh();
             //imgView.Update();
             //if (!IsInvert)

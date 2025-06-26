@@ -767,7 +767,7 @@ namespace BeeUi
             // 
             // tmContinuous
             // 
-            this.tmContinuous.Interval = 3000;
+            this.tmContinuous.Interval = 1000;
             this.tmContinuous.Tick += new System.EventHandler(this.tmContinuous_Tick);
             // 
             // workTrig

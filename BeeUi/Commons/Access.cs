@@ -15,10 +15,13 @@ namespace BeeUi
     {
         public static Stream serialize<T>(T objectToSerialize)
         {
-            MemoryStream mem = new MemoryStream();
-            BinaryFormatter b = new BinaryFormatter();
-            b.Serialize(mem, objectToSerialize);
-            return mem;
+            using (MemoryStream mem = new MemoryStream())
+            {
+
+                BinaryFormatter b = new BinaryFormatter();
+                b.Serialize(mem, objectToSerialize);
+                return mem;
+            }
         }
 
         public static void SaveProg(String path,List<PropetyTool> list)

@@ -106,7 +106,10 @@ namespace BeeCore
         {
 
             try
-            {
+            {  //// Khởi động môi trường Python
+               // Environment.SetEnvironmentVariable("PYTHONHOME", @"D:\YourApp\python39");
+              //  Environment.SetEnvironmentVariable("PYTHONPATH", @"D:\YourApp\python39\Lib;D:\YourApp\python39\site-packages");
+
                 string pythonHome = Environment.GetEnvironmentVariable("Python39");
                 if (!string.IsNullOrEmpty(pythonHome))
                 {
@@ -117,42 +120,45 @@ namespace BeeCore
 
                         //// var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
                         // Runtime.PythonDLL = pythonDll;
-                HideConsole();
-                PythonEngine.Initialize();
-                PythonEngine.BeginAllowThreads();
-                using (Py.GIL())
-                {
+                        //    HideConsole();
+                        //        string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
+                        //Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
+                        //Environment.SetEnvironmentVariable("PYTHONPATH",
+                        //    $"{pyHome}\\Lib;{pyHome}\\site-packages");
 
 
-                    G.np = Py.Import("numpy");
-                    //    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
-                   //dynamic mod = Py.Import("Tool.Learning");
-                  //  dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                //    G.objYolo = cls.Invoke();              // khởi tạo instance
-                    dynamic mod2 = Py.Import("Tool.OCR");
-                    dynamic cls2 = mod2.GetAttr("OCR"); // class
-                    G.objOCR = cls2.Invoke();              // khởi tạo instance
-                   
-                
-                     //dynamic mod3 = Py.Import("Tool.Classic");
-                   // dynamic cls3 = mod3.GetAttr("Filter"); // class
-                 //  G.Classic = cls3.Invoke();              // khởi tạo instance
+                        //string pythonDll = Path.Combine(pyHome, "python39.dll");
+
+                        Runtime.PythonDLL = pythonDll;
+                        PythonEngine.Initialize();
+                        PythonEngine.BeginAllowThreads();
+
+                        using (Py.GIL())
+                        {
 
 
-               //     G.IniEdge = true;
-                    // khởi tạo instance
-                //    G.Classic.LoadEdge();
+                            G.np = Py.Import("numpy");
+
+                            //dynamic mod = Py.Import("Tool.Learning");
+                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                            //G.objYolo = cls.Invoke();              // khởi tạo instance
+                            dynamic mod2 = Py.Import("Tool.OCR");
+                            dynamic cls2 = mod2.GetAttr("OCR"); // class
+                            G.objOCR = cls2.Invoke();              // khởi tạo instance
+
+
+                            //dynamic mod3 = Py.Import("Tool.Classic");
+                            // dynamic cls3 = mod3.GetAttr("Filter"); // class
+                            //  G.Classic = cls3.Invoke();              // khởi tạo instance
+
+
+                            //     G.IniEdge = true;
+                            //// khởi tạo instance
+                            //    G.Classic.LoadEdge();
+
 
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("Không tìm thấy python312.dll trong PYTHONHOME.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Biến môi trường PYTHONHOME không được đặt.");
                 }
             }
             catch (PythonException ex)

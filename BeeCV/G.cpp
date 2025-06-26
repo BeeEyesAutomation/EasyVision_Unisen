@@ -54,6 +54,14 @@ namespace CvPlus
 			cv::cvtColor(matCrop, matCrop, COLOR_GRAY2RGB);
 	}
 	}
+	//uchar* MatToBytes(cv::Mat image, int* out_size)
+	//{
+	//	int image_size = image.total() * image.elemSize();
+	//	uchar* image_uchar = new uchar[image_size];
+	//	std::memcpy(image_uchar, image.data, image_size);
+	//	*out_size = image_size;
+	//	return image_uchar;
+	//}
 	uchar* MatToBytes(cv::Mat image)
 	{
 		int image_size = image.total() * image.elemSize();

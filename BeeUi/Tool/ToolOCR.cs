@@ -119,14 +119,14 @@ namespace BeeUi.Tool
             //String PathProg = "Program\\" + nameModel;
             // if(Propety.PathModel!=null)
             //if (File.Exists(Propety.PathModel))
-            if (!workLoadModel.IsBusy)//&& !G.IsIniOCR
-            {
-               // G.IsIniOCR = true;
-                workLoadModel.RunWorkerAsync();
+            //if (!workLoadModel.IsBusy)//&& !G.IsIniOCR
+            //{
+            //   // G.IsIniOCR = true;
+            //    workLoadModel.RunWorkerAsync();
 
-            }
-            else
-                Propety.StatusTool = StatusTool.Initialed;
+            //}
+            //else
+            //    Propety.StatusTool = StatusTool.Initialed;
          
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
@@ -795,7 +795,7 @@ namespace BeeUi.Tool
                 BeeCore.Camera.Read();
                 if (BeeCore.Camera.IsConnected)
                 {
-                    Propety.Check1(Propety.rotArea);
+                    //Propety.Check1(Propety.rotArea);
                     tmCheckFist.Enabled = false;
                 }
                     

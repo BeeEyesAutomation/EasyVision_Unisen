@@ -124,18 +124,18 @@
   <data name="btnExit.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAALQAAACuCAYAAACfgCfPAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
-        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ8SURBVHhe7dYxbttAFEVRVfYivEYry1SRws4uBizY
-        OEVcJfhC3AhcgHlxitPM43QXxFzWtl/+e1rbfl3bflvb/rG2/S98Y9PotDrNTrv3jr9iflnb/nZwCc5g
-        2p2G70FP3WLm7N7Xtj9P0K8HI5zR6wQ975DHAc7oNkF/HgxwRn8m6MdDOC1BkyJoUgRNiqBJETQpgiZF
+        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJvSURBVHhe7daxTStBGEZRR7gIasSvTAcEQBfoBSQQ
+        QATzI1lC1hbgvTrBSb7Zya5Wc3j9/3Zxt5yW8/K+fMMNm0an1Wl22v3t+BLz/fK0bF2EWzftTsO/QU/d
+        YmbvnpfjBP3wZ4Q9e5ig5x2ydQh7c56gv65G2KvPCXrrAHZJ0KQImhRBkyJoUgRNiqBJETQpgiZF0KQI
+        mhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF
         0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQp
         giZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJ
         ETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRN
         iqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJo
         UgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRB
-        kyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQI
-        mhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkzJBfz4ewkl9TNC3gwHO
-        6DZBXw8GOKPrBP28tv39YIQz+TUtT9DjZW3728FHcAbzQ56GL19Bj6e17T/Wtv9c2/774BJ8J9PotDrN
-        Trv3jv8BgARLLtlvMk0AAAAASUVORK5CYII=
+        kyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KRM0F/XI+zU+wR9vhphr84T9OlqhL06
+        TdDH5fnPCHv0shwn6HG/PC1bH8Ktmx/yNHy4BD3uln/L4/KxbF2EWzGNTqvT7LS7Gn47/ACABEsuVNqA
+        BAAAAABJRU5ErkJggg==
 </value>
   </data>
   <metadata name="tmReaPLC.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

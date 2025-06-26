@@ -355,8 +355,8 @@ namespace BeeCore
             return matTemp;
         }
 
-        private int _score = 70;
-        public int Score
+        private float _score = 70;
+        public float Score
         {
             get
             {
@@ -372,7 +372,10 @@ namespace BeeCore
         public bool IsAutoTrig { get => isAutoTrig; set => isAutoTrig = value; }
         public int NumOK { get => numOK; set => numOK = value; }
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
-
+        public void SetModel()
+        {
+            StatusTool = StatusTool.Initialed;
+        }
 
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();

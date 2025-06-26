@@ -225,7 +225,19 @@ namespace BeeUi
             G.Project = Properties.Settings.Default.programCurrent;
 
             ClassProject.Load(G.Project);
-            G.IsIniPython = true;
+            Parallel.For(0, G.PropetyTools.Count, i =>
+            {
+                PropetyTool propety = G.PropetyTools[i];
+             
+            X: if (propety.Propety.StatusTool != StatusTool.Initialed)
+                {
+                  
+                    goto X;
+                }
+               
+            });
+
+                G.IsIniPython = true;
             lb.Text = "Initial Learning AI Complete";
             Task.Delay(200);
             listCCD = G.ScanCCD.ScanIDCCD();

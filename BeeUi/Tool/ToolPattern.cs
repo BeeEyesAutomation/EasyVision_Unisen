@@ -86,8 +86,8 @@ namespace BeeUi.Tool
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
-            numScore.Value = Propety.Score;
+            Propety.Score = (float)trackScore.Value;
+            numScore.Value =(int) Propety.Score;
             G.IsCheck = true;
             //if (!threadProcess.IsBusy)
             //    threadProcess.RunWorkerAsync();
