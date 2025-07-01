@@ -216,16 +216,10 @@ namespace CvPlus {
 		double m_dSrcScale;
 		double m_dDstScale;
 		CPoint m_ptMouseMove;
-		vector< s_TemplData> m_TemplData;
-	
-
+		vector<vector<s_TemplData>>  m_TemplData(4);
 		
-			vector<s_SingleTargetMatch> m_vecSingleTargetData;
-			CString m_strExecureTime;
-		
+		CString m_strExecureTime;
 		BOOL m_bShowResult;
-	
-
 		CListCtrl m_listMsg;
 		BOOL m_bDebugMode;
 	
@@ -266,32 +260,25 @@ namespace CvPlus {
 	
 	public: float cycleOutLine = 0;
 	public:int GetTopLayer(Mat* matTempl, int iMinDstLength);
-	public:void LearnPattern( int m_iMinReduceArea,int ixTemp);
-
-	
+	public:void LearnPattern( int m_iMinReduceArea,int ixTemp, int ixThread);
 	public:	 bool IsProcess;
-
-
 	public:	double m_dToleranceAngle ;
 	public:int m_iMinReduceArea =256;
 	public:	 int m_iMessageCount=1 ;
-	public:System::Collections::Generic::List<System::String^>^ listMatch = gcnew System::Collections::Generic::List<System::String^>();
-	public: void CreateTemp();
+	public: void CreateTemp(int ixThread);
 	public: int ScoreRS=0;
-	public : bool Match(
-		 int ixTemp,
+		  //System::Collections::Generic::List<System::String^>^ listMatch = gcnew System::Collections::Generic::List<System::String^>();
+	public : System::String^ Match(System::IntPtr buffer, int width, int height, int Step, int image_type,
+		int ixThread, int ixTemp,
 		bool m_bStopLayer1,
-		double m_dTolerance1 ,
-		double m_dTolerance2 ,
+		double m_dTolerance1,
+		double m_dTolerance2,
 		double m_dScore,
-		int threshMin ,
-		int threshMax,
-		bool m_ckSIMD ,
+		bool m_ckSIMD,
 		bool m_ckBitwiseNot,
-		bool m_bSubPixel ,
-		int m_iMaxPos ,
-		double m_dMaxOverlap 
-
+		bool m_bSubPixel,
+		int m_iMaxPos,
+		double m_dMaxOverlap
 	);
 	
 		

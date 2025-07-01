@@ -688,6 +688,7 @@ txtQrCode.Focus();
             else
             {
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                if(!G.IsByPassPLC)
                 tmReConnectPLC.Enabled = true;
             }
             Acccess(G.IsRun);
@@ -713,7 +714,7 @@ txtQrCode.Focus();
 
         private void workSaveProject_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            SaveData.Project(G.Project, BeeCore.G.ParaCam);
+            SaveData.Project(G.Project);
             G.EditProg.btnSave.Enabled = true;
         }
 

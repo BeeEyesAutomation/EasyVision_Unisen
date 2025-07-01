@@ -29,7 +29,7 @@ namespace BeeUi.Data
             Access.SaveParaCamera(path + "\\" + G.Project + ".cam", ParaCamera);
            
         }
-        public static void Project(String Project, ParaCommon ParaCam)
+        public static void Project(String Project)
         {
             String path = "Program\\" + Project;
             if (!Directory.Exists(path))
@@ -37,6 +37,7 @@ namespace BeeUi.Data
             Access.SaveProg(path + "\\" + G.Project + ".prog", G.PropetyTools);
             Access.SaveConfig("Default.config", G.Config);
             Access.SaveParaComon(path + "\\" + G.Project + ".para", BeeCore.G.ParaCam);
+            Access.SaveParaCamera(path + "\\" + G.Project + ".cam", BeeCore.Common.listParaCamera);
         }
     }
 }

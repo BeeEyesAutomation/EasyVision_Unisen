@@ -72,7 +72,14 @@ namespace BeeUi.Unit
         ScanCCD scanCCD = new ScanCCD();
         private void btnCamera1_Click(object sender, EventArgs e)
         {
+            
             G.indexChoose = 0;
+            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            {
+                btnCamera1.IsCLick = false;
+                return;
+            }    
+              
             G.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -83,6 +90,11 @@ namespace BeeUi.Unit
         private void btnCamera2_Click(object sender, EventArgs e)
         {
             G.indexChoose = 1;
+            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            {
+                btnCamera2.IsCLick = false;
+                return;
+            }
             G.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -92,6 +104,11 @@ namespace BeeUi.Unit
         private void btnCamera3_Click(object sender, EventArgs e)
         {
             G.indexChoose = 2;
+            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            {
+                btnCamera2.IsCLick = false;
+                return;
+            }
             G.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -101,6 +118,11 @@ namespace BeeUi.Unit
         private void btnCamera4_Click(object sender, EventArgs e)
         {
             G.indexChoose = 3;
+            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            {
+                btnCamera4.IsCLick = false;
+                return;
+            }
             G.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;

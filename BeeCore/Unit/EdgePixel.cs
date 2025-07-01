@@ -92,13 +92,13 @@ namespace BeeCore
         {
 
         }
- 
+        int IndexThead;
         public  void LearnPattern(String path,int indexTool)
         {
 
            
             G.CommonPlus.LoadDst(path);
-            pattern.LearnPattern(minArea, indexTool);
+            pattern.LearnPattern(minArea, indexTool, IndexThead);
 
         }
         CvPlus.Pattern pattern = new CvPlus.Pattern();

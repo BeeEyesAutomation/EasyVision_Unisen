@@ -99,7 +99,7 @@ namespace BeeUi.Commons
 
         "Position_Adjustment",
        "Pattern" ,
-        "Position",
+       
           "Matching Shape" ,
        "OutLine" ,
        "Edge_Pixels" ,
@@ -111,6 +111,7 @@ namespace BeeUi.Commons
         "OCR",
         "QRCODE",
          "Learning",
+          "Position",
          "Measure",
           "Circle"
         };
@@ -118,19 +119,19 @@ namespace BeeUi.Commons
         {
             GroupTool.Basic_Tool,
             GroupTool.Basic_Tool,
+            GroupTool.Extra_Tool_2,
+            GroupTool.Extra_Tool_2,
+            GroupTool.Extra_Tool_1,
+            GroupTool.Extra_Tool_1,
+            GroupTool.Extra_Tool_1,
+            GroupTool.Extra_Tool_1,
+             GroupTool.Extra_Tool_2,
+            GroupTool.Extra_Tool_2,
             GroupTool.Basic_Tool,
             GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_1,
-             GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_2,
-             GroupTool.Extra_Tool_2,
              GroupTool.Basic_Tool,
-              GroupTool.Basic_Tool,
+             GroupTool.Extra_Tool_2,
+              GroupTool.Extra_Tool_2,
                GroupTool.Extra_Tool_1,
 
         };
@@ -251,7 +252,7 @@ namespace BeeUi.Commons
             int indexName = G.listAlltool[G.indexChoose].Count() + 1;
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             G.PropetyTools[G.indexChoose].Add(propetyTool);
-            G.listAlltool[G.indexChoose].Add(DataTool.SetPropety(propetyTool, indexName-1));
+            G.listAlltool[G.indexChoose].Add(DataTool.SetPropety(propetyTool, indexName-1, G.indexChoose));
             DataTool.LoadPropety(control);
             G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].ItemTool);
         }

@@ -38,7 +38,7 @@ namespace BeeCore
         public int Index = -1;
         public String PathModel = "";
         public TypeOCR TypeOCR = TypeOCR.CPU;
-        public TypeTool TypeTool=TypeTool.Yolo;
+        public TypeTool TypeTool=TypeTool.Learning;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;

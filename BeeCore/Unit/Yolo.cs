@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Web.UI.WebControls;
 using BeeCore.Parameter;
 using BeeCore.Funtion;
+using System.Windows.Forms;
 
 namespace BeeCore
 {
@@ -32,20 +33,31 @@ namespace BeeCore
         {
            
         }
-      
-        public  void SetModel(String nameTool, String nameModel, TypeYolo TypeYolo)
+        public String pathFullModel = "";
+        public  void SetModel()
         {
+            try
+            { 
             using (Py.GIL())
             {
 
-               
+
                 dynamic mod = Py.Import("Tool.Learning");
                 dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                dynamic obj= cls.Invoke();              // khởi tạo instance
+                dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
+                G.objYolo.load_model(nameTool, pathFullModel, (int)TypeYolo.YOLO);
                 StatusTool = StatusTool.Initialed;
             }
+        }
+                catch (PythonException pyEx)
+                {
+                       MessageBox.Show("Python Error: " + pyEx.Message);
+                }
+                catch (Exception ex)
+                {
+                      MessageBox.Show("Error: " + ex.Message);
+                }
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
         public int Percent = 0;
@@ -69,6 +81,7 @@ namespace BeeCore
 
           
         }
+      
         public String[] LoadNameModel(String nameTool)
         {
             using (Py.GIL())
@@ -97,7 +110,7 @@ namespace BeeCore
         public int Index = -1;
         public String PathModel = "",PathLabels="",PathDataSet;
         public TypeYolo TypeYolo = TypeYolo.YOLO;
-        public TypeTool TypeTool=TypeTool.Yolo;
+        public TypeTool TypeTool=TypeTool.Learning;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
@@ -125,9 +138,9 @@ namespace BeeCore
         public bool IsOK = false;
         public bool IsAreaWhite = false;
         public int ScoreRs = 0, cycleTime;
-        private int _score = 70;
+        private float _score = 70;
         public bool IsIni = false;
-        public int Score
+        public float Score
         {
             get
             {
@@ -250,11 +263,11 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                 {
-                    //   MessageBox.Show("Python Error: " + pyEx.Message);
+                       MessageBox.Show("Python Error: " + pyEx.Message);
                 }
                 catch (Exception ex)
                 {
-                    //  MessageBox.Show("Error: " + ex.Message);
+                      MessageBox.Show("Error: " + ex.Message);
                 }
             }
 

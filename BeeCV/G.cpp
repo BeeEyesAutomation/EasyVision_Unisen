@@ -15,16 +15,26 @@ namespace CvPlus
 	
 
 	//HIK
-	CMvCamera* m_pcMyCamera;               
+	CMvCamera* m_pcMyCamera1;   
+	CMvCamera* m_pcMyCamera2;
+	CMvCamera* m_pcMyCamera3;
+	CMvCamera* m_pcMyCamera4;
 	HWND                    m_hwndDisplay;                       
 	MV_CC_DEVICE_INFO_LIST  m_stDevList;
 	cv::Mat matCrop;
 	cv::VideoCapture camUSB;
 	cv::Mat matTemp, matRaw, matResult, matRsTemp;
-	cv::Mat matSetTemp, m_matSrc;
-	vector< cv::Mat> m_matDst;
+	cv::Mat matSetTemp;
+	vector<vector< cv::Mat>> m_matDst(4);
 	vector< cv::Mat> listmatTemp;
 	 uchar* ucRaw; uchar* ucCrop;
+
+	 void LogError(const std::string& message) {
+		 std::ofstream logFile("log.txt", std::ios::app); // mở ở chế độ append
+		 if (logFile.is_open()) {
+			 logFile << "[ERROR] " << message << std::endl;
+		 }
+	 }
 	string _toString(System::String^ STR)
 	{
 		char cStr[1000] = { 0 };

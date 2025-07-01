@@ -49,8 +49,10 @@ namespace BeeCore
         Edge,
         Pitch,
         OCR,BarCode
-        ,Yolo,
-        Positions, Measure,Circle
+        ,Learning,
+        Positions, 
+        Measure,
+        Circle
     }
     public enum TypeOCR
     {

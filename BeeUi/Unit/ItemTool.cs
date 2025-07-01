@@ -38,16 +38,7 @@ namespace BeeUi.Commons
             {
                 Score.Max = 10;
             }
-            lbNumber.MouseMove += ItemTool_MouseMove;
-            lbNumber.MouseLeave += ItemTool_MouseLeave;
-            lbNumber.Click += ItemTool_Click;
-            name.MouseMove += ItemTool_MouseMove;
-            name.MouseLeave += ItemTool_MouseLeave;
-            name.Click += ItemTool_Click;
-            icon.MouseMove += ItemTool_MouseMove;
-            icon.MouseLeave += ItemTool_MouseLeave;
-            icon.Click += ItemTool_Click;
-            this.DoubleClick += ItemTool_DoubleClick;
+         
           
          
 
@@ -255,6 +246,16 @@ namespace BeeUi.Commons
         //Image imgUnChoose = Properties.Resources.btnUnChoose;
         private void ItemTool_Load(object sender, EventArgs e)
         {
+            lbNumber.MouseMove += ItemTool_MouseMove;
+            lbNumber.MouseLeave += ItemTool_MouseLeave;
+            lbNumber.Click += ItemTool_Click;
+            name.MouseMove += ItemTool_MouseMove;
+            name.MouseLeave += ItemTool_MouseLeave;
+            name.Click += ItemTool_Click;
+            icon.MouseMove += ItemTool_MouseMove;
+            icon.MouseLeave += ItemTool_MouseLeave;
+            icon.Click += ItemTool_Click;
+            this.DoubleClick += ItemTool_DoubleClick;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
         }
         Control control=new Control();
@@ -287,15 +288,35 @@ namespace BeeUi.Commons
                 ToolColorArea colorArea = (ToolColorArea)control;
                 colorArea.Propety.LoadTemp(G.IsCCD, G.Config.IsHist);
             }
-            control.Parent = G.EditTool.pEditTool;
-            control.MouseMove +=new System.Windows.Forms.MouseEventHandler( G.EditTool.View.tool_MouseMove);
-            G.ToolSettings.Visible = false;
-            G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-            G.EditTool.lbTool.Text = TypeTool.ToString();
-            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
-            G.listAlltool[G.indexChoose][G.indexToolSelected].tool.LoadPara() ;
-            G.EditTool.View.imgView.Invalidate();
-            G.EditTool.View.imgView.Update();
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new Action(() =>
+                {
+                    control.Parent = G.EditTool.pEditTool;
+                    control.MouseMove += new System.Windows.Forms.MouseEventHandler(G.EditTool.View.tool_MouseMove);
+                    G.ToolSettings.Visible = false;
+                    G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+                    G.EditTool.lbTool.Text = TypeTool.ToString();
+                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                    G.listAlltool[G.indexChoose][G.indexToolSelected].tool.LoadPara();
+                    G.EditTool.View.imgView.Invalidate();
+                    G.EditTool.View.imgView.Update();
+                }));
+            }
+            else
+            {
+                control.Parent = G.EditTool.pEditTool;
+                control.MouseMove += new System.Windows.Forms.MouseEventHandler(G.EditTool.View.tool_MouseMove);
+                G.ToolSettings.Visible = false;
+                G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+                G.EditTool.lbTool.Text = TypeTool.ToString();
+                G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                G.listAlltool[G.indexChoose][G.indexToolSelected].tool.LoadPara();
+                G.EditTool.View.imgView.Invalidate();
+                G.EditTool.View.imgView.Update();
+            }
+           // control.Parent = G.EditTool.pEditTool;
+          
         }
 
         private void Score_ValueChanged(float obj)

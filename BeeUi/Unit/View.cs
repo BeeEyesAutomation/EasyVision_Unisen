@@ -1369,7 +1369,8 @@ namespace BeeUi
             //    if (!BeeCore.Common.listCamera[G.indexChoose].matRaw.Empty())
             //        imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
             btnMenu.PerformClick();
-          BeeCore.Common.listCamera[G.indexChoose].FrameChanged += Common_FrameChanged;
+
+          //BeeCore.Common.listCamera[G.indexChoose].FrameChanged += Common_FrameChanged;
            
            
         }
@@ -1695,7 +1696,7 @@ namespace BeeUi
             }
             return newBmp;
         }
-        public void DrawTotalResult()
+        public void DrawTotalResult(int IndexThread )
         {
 
 
@@ -1714,7 +1715,7 @@ namespace BeeUi
 
             //gc.Clear(Color.White);
             //if (BeeCore.Common.listCamera[G.indexChoose].matRaw == null) return;
-            BeeCore.Common.bmResult = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+            BeeCore.Common.bmResult = BeeCore.Common.listCamera[IndexThread].matRaw.ToBitmap();
 
             // Convert nếu cần
             if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
@@ -1737,11 +1738,11 @@ namespace BeeUi
                 //gc.Transform=mat;
                 indexTool = 0;
 
-                foreach (Tools tool in G.listAlltool[G.indexChoose])
+                foreach (Tools tool in G.listAlltool[IndexThread])
                 {
                     // tool.tool.Propety.ScoreRs = 80;
                     //tool.tool.Propety.IsOK = true;
-                    if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.NotUsed)
+                    if (G.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.NotUsed)
                     {
                         //tool.ItemTool.lbStatus.Text = "NC";
                         //tool.ItemTool.Score.ColorTrack = Color.Gray;
@@ -1768,7 +1769,7 @@ namespace BeeUi
                                 numToolOK++;
                                 break;
                             case ConditionOK.Logic:
-                                if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Invertse)
+                                if (G.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Invertse)
                                 {
                                     G.TotalOK = false;
                                 }
@@ -1776,7 +1777,7 @@ namespace BeeUi
                         }
                         if (G.Config.ConditionOK == ConditionOK.Logic)
                         {
-                            if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Used)
+                            if (G.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
                             {
                                 tool.ItemTool.lbStatus.Text = "OK";
                                 tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
@@ -1807,7 +1808,7 @@ namespace BeeUi
 
 
                             case ConditionOK.Logic:
-                                if (G.PropetyTools[G.indexChoose][indexTool].UsedTool == UsedTool.Used)
+                                if (G.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
                                 {
                                     G.TotalOK = false;
                                 }
@@ -1815,7 +1816,7 @@ namespace BeeUi
                         }
                         if (G.Config.ConditionOK == ConditionOK.Logic)
                         {
-                            if (G.PropetyTools[G.indexChoose][indexTool].UsedTool != UsedTool.Used)
+                            if (G.PropetyTools[IndexThread][indexTool].UsedTool != UsedTool.Used)
                             {
                                 tool.ItemTool.lbStatus.Text = "OK";
                                 tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
@@ -1950,13 +1951,13 @@ namespace BeeUi
             numToolOK = 0;
             G.TotalOK = true;
 
-            DrawTotalResult();
+            DrawTotalResult(0);
 
            
             switch (G.Config.ConditionOK)
             {
                 case ConditionOK.TotalOK:
-                    if (numToolOK < G.listAlltool[G.indexChoose].Count)
+                    if (numToolOK < G.listAlltool[0].Count)
                         G.TotalOK = false;
                     else
                         G.TotalOK = true;
@@ -2199,6 +2200,7 @@ namespace BeeUi
             {
                 while (btnLive.IsCLick)
                 {
+                   
                     Bitmap frameToDisplay;
                     lock (frameLock)
                     {
@@ -2304,11 +2306,18 @@ namespace BeeUi
         private object frameLock = new object();
         private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-            Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+            if(!G.IsRun)
             {
-                if (camera != null)
-                    camera.Read();
-            });
+                BeeCore.Common.listCamera[G.indexChoose].Read();
+
+            }
+            else
+                
+                Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                {
+                    if (camera != null)
+                        camera.Read();
+                });
 
 
 
@@ -2319,7 +2328,8 @@ namespace BeeUi
          
             if (btnLive.IsCLick)
             {
-                using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[G.indexChoose].matRaw))
+                if (BeeCore.Common.listCamera[G.indexChoose].matRaw != null && !BeeCore.Common.listCamera[G.indexChoose].matRaw.IsDisposed)
+                    using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[G.indexChoose].matRaw))
                 {
                     lock (frameLock)
                     {

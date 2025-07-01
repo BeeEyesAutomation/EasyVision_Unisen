@@ -22,11 +22,13 @@ namespace BeeUi.Data
             {
                 BeeCore.Common.listParaCamera = paraCameras;
                 BeeCore.Common.listCamera = new List<Camera>();
+                int indexCCD = 0;
                 foreach (ParaCamera paraCamera in paraCameras)
                 {if (paraCamera != null)
-                        BeeCore.Common.listCamera.Add(new Camera(paraCamera));
+                        BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
                     else
                         BeeCore.Common.listCamera.Add(null);
+                    indexCCD++;
                 }
                 if (BeeCore.Common.listCamera.Count() > G.indexChoose)
                     if (BeeCore.Common.listCamera[G.indexChoose] != null)
@@ -52,22 +54,24 @@ namespace BeeUi.Data
 
             }
             G.ToolSettings.Y = 10; G.ToolSettings.X = 5;
-            int index = 0;
+            int indexThread = 0;
 
             foreach (List< BeeCore.PropetyTool>ListTool in G.PropetyTools)
             {
-                if (BeeCore.Common.listCamera[index]!=null)
+                if (ListTool != null)
                 {
                     G.listAlltool.Add(new List<Tools>());
+                    int indexTool = 0;
                     foreach (BeeCore.PropetyTool tool in ListTool)
                     {
-                        Tools tool2 = DataTool.SetPropety(tool, index);
+                        Tools tool2 = DataTool.SetPropety(tool, indexTool, indexThread);
+                        indexTool++;
                         if (tool2 != null)
                         {
-                            tool2.tool.Propety.IndexThread = index;
-                            G.listAlltool[index].Add(tool2);
+                            tool2.tool.Propety.IndexThread = indexThread;
+                            G.listAlltool[indexThread].Add(tool2);
                         }
-                           
+                     
                     }
                       
                 }
@@ -77,17 +81,16 @@ namespace BeeUi.Data
                 }
 
 
-                    index++;
+                indexThread++;
 
             }
             foreach (List<Tools> ListTool in G.listAlltool)
             {
                 if (ListTool == null) continue;
-                Parallel.ForEach(ListTool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, tool =>
-            {
-               if(tool!=null)
-                DataTool.LoadPropety(tool.tool);
-            });
+                foreach (Tools Tool in ListTool)
+                DataTool.LoadPropety(Tool.tool);
+            
+         
             }
             //foreach (Tools tool in G.listAlltool)
             //{
@@ -123,6 +126,8 @@ namespace BeeUi.Data
                 return StatusProcessing;
             if (!G.PLC.IsConnected && !G.IsByPassPLC)
                 return StatusProcessing;
+            if (G.PropetyTools[indexThread].Count == 0)
+                return StatusProcessing.Done;
             switch (StatusProcessing)
             {
                 case StatusProcessing.None:

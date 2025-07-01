@@ -55,10 +55,22 @@ namespace BeeUi.Tool
         
             if (Propety.listModels == null) Propety.listModels = new List<string>();
             Propety.listModels = Propety.listModels.Distinct().ToList();
-            if (!workLoadModel.IsBusy)
-            workLoadModel.RunWorkerAsync();
+            Propety.pathFullModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
+            //if (!workLoadModel.IsBusy)
+            //workLoadModel.RunWorkerAsync();
             IsReload = true;
-            cbListModel.DataSource = Propety.listModels;
+            if (cbListModel.InvokeRequired)
+            {
+                cbListModel.Invoke(new Action(() =>
+                {
+                        cbListModel.DataSource = Propety.listModels;
+                }));
+            }
+            else
+            {
+                cbListModel.DataSource = Propety.listModels;
+            }
+           
             if(Propety.PathModel!="")
             cbListModel.Text =Propety.PathModel;
             txtMatching.Text = Propety.Matching;
@@ -80,7 +92,7 @@ namespace BeeUi.Tool
           //  txtModel.Text = Propety.PathModel;
             trackScore.Value = Propety.Score;
            btnEnLineLimit.IsCLick = Propety.IsCheckArea ;
-            numScore.Value = Propety.Score;
+            numScore.Value = (int)Propety.Score;
             trackNumObject.Value= Propety.NumObject;
             numLine.Value = Propety.yLine;
 
@@ -158,7 +170,7 @@ namespace BeeUi.Tool
         {
            
             Propety.Score = (int)trackScore.Value;
-            numScore.Value = Propety.Score;
+            numScore.Value = (int)Propety.Score;
 
         }
 
@@ -438,12 +450,7 @@ namespace BeeUi.Tool
         public int indexTool = 0;
         private async void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (G.IsLoad)
-                Process();
-            await Task.Delay(1000);
-            G.EditTool.View.imgView.Invalidate();
-
-            G.ResultBar.lbCycleTrigger.Text = "[" + Propety.cycleTime + "ms]";
+           
         }
 
         private void trackScore_ValueChanged(object sender, EventArgs e)
@@ -455,8 +462,7 @@ namespace BeeUi.Tool
         {
            
 
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
+          
         }
 
        
@@ -465,8 +471,6 @@ namespace BeeUi.Tool
         {
           
 
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
         }
         
        
@@ -480,7 +484,7 @@ namespace BeeUi.Tool
      
         public void Loads()
         {
-            Propety.TypeTool = TypeTool.Yolo;
+            Propety.TypeTool = TypeTool.Learning;
      
             Propety.TypeMode = Mode.Pattern;
             Propety.pathRaw = G.EditTool.View.pathRaw;
@@ -983,13 +987,13 @@ namespace BeeUi.Tool
                
             if (cbListModel.SelectedIndex == -1) return;
             Propety.PathModel = cbListModel.Text;
-            String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
+           Propety.pathFullModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
            
 
-            if (File.Exists(pathModel))
+            if (File.Exists(Propety.pathFullModel))
             {
               
-                Propety.SetModel(Propety.nameTool, pathModel, TypeYolo.YOLO);
+                Propety.SetModel();
               //  Propety.listLabelCompare = new List<Labels>();
                 //RefreshLabels();
 
@@ -1064,10 +1068,11 @@ namespace BeeUi.Tool
                 
             if (Propety.PathModel != null)
             {
-                String pathModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
-                if (File.Exists(pathModel))
+                Propety.pathFullModel = "Program\\" + G.Project + "\\" + Propety.PathModel;
+
+                if (File.Exists(Propety.pathFullModel))
                 {
-                    Propety.SetModel(Propety.nameTool, pathModel, TypeYolo.YOLO);
+                    Propety.SetModel();
                 }
             }
 

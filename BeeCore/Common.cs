@@ -446,11 +446,11 @@ namespace BeeCore
             return matResult;
         }
 
-        public static void  CreateTemp(TypeTool TypeTool)
+        public static void  CreateTemp(TypeTool TypeTool,int IndexThread)
         {
           
                 //CvPlus.Pattern pattern = new CvPlus.Pattern();
-                G.pattern.CreateTemp();
+                G.pattern.CreateTemp(IndexThread);
             
          
         }

@@ -180,8 +180,22 @@ namespace BeeUi
                 {
                     if (BeeCore.Common.listCamera[G.indexChoose].IsConnected)
                     {
+                        if(G.Main==null)
+                        {
+                            Main Main = new Main();
+                            G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                            G.EditTool.lbCam.Text = "Camera Connected";
 
-                        this.Hide();
+                            String sProgram = Properties.Settings.Default.programCurrent;
+                            G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
+                            this.Hide();
+                            G.Load.Hide();
+
+                            Main.Show();
+                        }
+                        else
+                            this.Hide();
+
                         // 
 
                     }
@@ -245,7 +259,12 @@ namespace BeeUi
             label1.Text = "Resolution";
             cbReSolution.Enabled = true;
             if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
                 BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }    
+               
             // BeeCore.Common. = BeeCore.TypeCamera.BaslerGigE;
             BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.BaslerGigE;
             ScanIDCCD();
@@ -256,7 +275,11 @@ namespace BeeUi
             label1.Text = "Resolution";
             cbReSolution.Enabled = true;
             if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
                 BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
             BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.USB;
             ScanIDCCD();
         }
@@ -284,7 +307,11 @@ namespace BeeUi
             if (cbReSolution.Items.Count== 1)
                 cbReSolution.SelectedIndex = 0;
             if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
                 BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
             BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera = BeeCore.TypeCamera.TinyIV;
             ScanIDCCD();
         }
@@ -302,37 +329,54 @@ namespace BeeUi
         private void btnCamera1_Click(object sender, EventArgs e)
         {
             G.indexChoose = 0;
-            if (BeeCore.Common.listParaCamera[0]==null)
-            BeeCore.Common.listParaCamera[0] = new ParaCamera();
-            BeeCore.Common.listCamera[0] = new Camera(BeeCore.Common.listParaCamera[0]);
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
+            //BeeCore.Common.listCamera[0] = new Camera(BeeCore.Common.listParaCamera[0],0);
         }
 
         private void btnCamera2_Click(object sender, EventArgs e)
         {
             G.indexChoose = 1;
-            if (BeeCore.Common.listParaCamera[1] == null)
-                BeeCore.Common.listParaCamera[1] = new ParaCamera();
-            BeeCore.Common.listCamera[1] = new Camera(BeeCore.Common.listParaCamera[1]);
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
+           // BeeCore.Common.listCamera[1] = new Camera(BeeCore.Common.listParaCamera[1], 1);
         }
 
         private void btnCamera3_Click(object sender, EventArgs e)
         {
             G.indexChoose = 2;
-            if (BeeCore.Common.listParaCamera[2] == null)
-                BeeCore.Common.listParaCamera[2] = new ParaCamera();
-            BeeCore.Common.listCamera[2] = new Camera(BeeCore.Common.listParaCamera[2]);
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
+        //    BeeCore.Common.listCamera[2] = new Camera(BeeCore.Common.listParaCamera[2], G.indexChoose);
         }
 
         private void btnCamera4_Click(object sender, EventArgs e)
         {
             G.indexChoose = 3;
-            if (BeeCore.Common.listParaCamera[3] == null)
-                BeeCore.Common.listParaCamera[3] = new ParaCamera();
-            BeeCore.Common.listCamera[3] = new Camera(BeeCore.Common.listParaCamera[3]);
+            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
+            {
+                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
+                BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
+
+            }
+            //BeeCore.Common.listCamera[3] = new Camera(BeeCore.Common.listParaCamera[3],3);
         }
 
         private void workConAll_DoWork(object sender, DoWorkEventArgs e)
         {
+            int indexCCD = 0;
          foreach (Camera camera in BeeCore.Common.listCamera)
             {
                 if (camera != null)
@@ -340,6 +384,7 @@ namespace BeeUi
                     camera.Init();
                     camera.Scan();
                     camera.IsConnected = camera.Connect(camera.Para.Name);
+                    indexCCD++;
                 }
                     
             }
@@ -347,12 +392,12 @@ namespace BeeUi
 
         private void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            bool IsConnect = true;
+            bool IsConnect = false;
             foreach (Camera camera in BeeCore.Common.listCamera)
             {
                 if (camera != null)
-                    if (!camera.IsConnected)
-                    IsConnect = false;
+                    if (camera.IsConnected)
+                    IsConnect = true;
                
                    
 
@@ -361,7 +406,7 @@ namespace BeeUi
             {
 
                 SaveData.Camera(G.Project, BeeCore.Common.listParaCamera);
-                G.PLC.Connect(G.Config.IDPort);
+               // G.PLC.Connect(G.Config.IDPort);
                 G.Config.IDCamera = cbCCD.Text.Trim();
                 // G.Load.FormActive.CheckActive(G.Load.addMac);
                 if (G.Main == null)
@@ -425,6 +470,32 @@ namespace BeeUi
 
 
 
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnDisConnect_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[G.indexChoose].DisConnect();
+            BeeCore.Common.listCamera[G.indexChoose] = null;
+            BeeCore.Common.listParaCamera[G.indexChoose] = null;
+            G.indexChoose--;
+            Data.SaveData.Camera(G.Project, BeeCore.Common.listParaCamera);
+
+            if (G.indexChoose < 0) G.indexChoose = 0;
+            G.ToolSettings.pAllTool.Controls.Clear();
+            if (G.Header == null)
+            {
+                return;
+                this.Close();
+            }
+            G.Header.stepShow = 0;
+            G.Header.indexToolShow = 0;
+            G.Header.tmShow.Enabled = true;
+            
         }
     }
 }

@@ -248,7 +248,12 @@ namespace BeeUi
             lb.Text = "Initial Learning AI Complete";
             Task.Delay(200);
             listCCD = G.ScanCCD.ScanIDCCD();
-            wLoad.RunWorkerAsync();
+            addMac = Decompile.GetMacAddress();
+
+
+
+            FormActive.CheckActive(addMac);
+            G.ScanCCD.workConAll.RunWorkerAsync();
 
         }
     }

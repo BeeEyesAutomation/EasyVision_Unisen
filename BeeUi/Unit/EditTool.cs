@@ -220,8 +220,9 @@ namespace BeeUi
             View.tmContinuous.Enabled = false;
             G.Header.tmReConnectPLC.Enabled = false;
             G.Header.tmReadPLC.Enabled = false;
-           
-            BeeCore.Common.listCamera[G.indexChoose].DestroyAll();
+           foreach(Camera camera in BeeCore.Common.listCamera)
+                if(camera!=null)
+				camera.DestroyAll();
           
             
           
@@ -239,7 +240,7 @@ namespace BeeUi
         {
           
            
-            BeeCore.Common.listCamera[G.indexChoose].DestroyAll();
+          
             View.tmContinuous.Enabled = false;
             G.Header.tmReConnectPLC.Enabled = false;
             G.Header.tmReadPLC.Enabled = false;

@@ -203,7 +203,7 @@ namespace BeeCore
 
         }
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        unsafe public static extern void SetDst(int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
+        unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
 
         public void LearnPattern(  Mat temp)
         {
@@ -212,11 +212,11 @@ namespace BeeCore
             if (temp.Empty()) return;
            
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
-            SetDst(Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
+            SetDst(IndexThread, Index , temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           G.pattern.LearnPattern(minArea, Index);
+           G.pattern.LearnPattern(minArea, Index, IndexThread);
 
         }
     
@@ -401,17 +401,17 @@ namespace BeeCore
 
                     break;
             }
-            BeeCore.Native.SetImg(matProcess);
-            IsOK = G.pattern.Match(indexTol, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, threshMin, threshMax, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
+            //BeeCore.Native.SetImg(matProcess);
+            String sResult = G.pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(),IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
 
-             ScoreRs = G.pattern.ScoreRS;
-            if (IsOK)
+            ScoreRs = G.pattern.ScoreRS;
+            if (sResult!="")
             {
                 cycleTime = (int)G.pattern.cycleOutLine;
                 rectRotates = new List<RectRotate>();
-                if (G.pattern.listMatch != null)
+                if (sResult != null)
                 {
-                    String[] sSplit = G.pattern.listMatch[indexTol].Split('\n');
+                    String[] sSplit = sResult.Split('\n');
                     System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
                     PointF[] pMatrix = { pZero };
                     foreach (String s in sSplit)

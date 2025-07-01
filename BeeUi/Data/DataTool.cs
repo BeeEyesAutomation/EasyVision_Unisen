@@ -38,7 +38,7 @@ namespace BeeUi.Data
                 case BeeCore.TypeTool.MatchingShape:
                     control = new ToolMatchingShape();
                     break;
-                case BeeCore.TypeTool.Yolo:
+                case BeeCore.TypeTool.Learning:
                     control = new ToolYolo();
                     break;
                 case BeeCore.TypeTool.OCR:
@@ -81,7 +81,7 @@ namespace BeeUi.Data
             }
             return new RectRotate();
         }
-        public static Tools SetPropety(BeeCore.PropetyTool PropetyTool,int Inndex)
+        public static Tools SetPropety(BeeCore.PropetyTool PropetyTool,int Inndex,int IndexThread)
         {
             Tools tools = new Tools();
             try
@@ -98,7 +98,7 @@ namespace BeeUi.Data
                 if(PropetyTool.Propety.rotCrop==null)
                 if (TypeTool != TypeTool.Edge_Pixels &&
                    TypeTool != TypeTool.BarCode &&
-                   TypeTool != TypeTool.Yolo &&
+                   TypeTool != TypeTool.Learning &&
                    TypeTool != TypeTool.OCR &&
                     TypeTool != TypeTool.Circle &&
                   TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
@@ -118,7 +118,7 @@ namespace BeeUi.Data
                 itemTool.lbScore.ForeColor = Color.Gray;
                 itemTool.lbStatus.BackColor = Color.Gray;
                 G.ToolSettings.Y += itemTool.Height + 10;
-                BeeCore.Common.CreateTemp(TypeTool);
+                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")
                     itemTool.name.Text = TypeTool.ToString() + " " + G.listAlltool[G.indexChoose].Count();

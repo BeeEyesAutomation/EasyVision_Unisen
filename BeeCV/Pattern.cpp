@@ -607,21 +607,21 @@ void Pattern::DrawMarkCross(Mat& matDraw, int iX, int iY, int iLength, Scalar co
 }
 
 
-void Pattern::CreateTemp()
-{m_TemplData.push_back(s_TemplData());
-listMatch->Add("");
-m_matDst.push_back(Mat());
+void Pattern::CreateTemp(int ixThread)
+{m_TemplData[ixThread].push_back(s_TemplData());
+//listMatch[indexThread]->Add("");
+m_matDst[ixThread].push_back(Mat());
 }
-void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp)
+void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp,int ixThread)
 {
 	
 
 	//imshow("a", m_matDst[ixTemp].clone());
 	//m_TemplData[0].clear();
-	Mat raw = m_matDst[ixTemp].clone();// cv::imread("B.bmp");
+	Mat raw = m_matDst[ixThread][ixTemp].clone();// cv::imread("B.bmp");
 	int iTopLayer = GetTopLayer(&raw, (int)sqrt((double)m_iMinReduceArea));
-	buildPyramid(raw, m_TemplData[ixTemp].vecPyramid, iTopLayer);
-	s_TemplData* templData = &m_TemplData[ixTemp];
+	buildPyramid(raw, m_TemplData[ixThread][ixTemp].vecPyramid, iTopLayer);
+	s_TemplData* templData = &m_TemplData[ixThread][ixTemp];
 	templData->iBorderColor = mean(raw).val[0] < 128 ? 255 : 0;
 	int iSize = templData->vecPyramid.size();
 	templData->resize(iSize);
@@ -684,37 +684,42 @@ cv::Mat autoCanny(const cv::Mat& grayImg, double sigma = 0.33) {
 	cv::Canny(grayImg, edges, lower, upper);
 	return edges;
 }
-bool Pattern::Match(
- int ixTemp,
-		bool m_bStopLayer1,
-		double m_dTolerance1 ,
-		double m_dTolerance2 ,
+System::String^ Pattern::Match(System::IntPtr buffer, int width, int height,int Step, int image_type,
+	int ixThread, int ixTemp,
+	bool m_bStopLayer1,
+	double m_dTolerance1,
+	double m_dTolerance2,
 	double m_dScore,
-	 int threshMin ,
-		int threshMax,
-		 bool m_ckSIMD ,
-		 bool m_ckBitwiseNot,
-	 bool m_bSubPixel ,
-		int m_iMaxPos ,
-		double m_dMaxOverlap 
+	bool m_ckSIMD,
+	bool m_ckBitwiseNot,
+	bool m_bSubPixel,
+	int m_iMaxPos,
+	double m_dMaxOverlap
 )
 {
-	listMatch[ixTemp] = "";
-	
+	try
+	{  // Chuyển IntPtr → uchar*
+		uchar* uc = static_cast<uchar*>(buffer.ToPointer());
+
+		// Tạo cv::Mat từ dữ liệu đó
+		cv::Mat raw(height, width, image_type, uc, Step);
+		
+	System::String^ listMatch = "";
+
 	bool m_bToleranceRange = true;
-	
+
 	double m_dTolerance3 = 0;
 	double m_dTolerance4 = 0;
-	if (matRaw.empty())return "";
-	Mat raw = matRaw.clone();
+	if (raw.empty())return "";
+	
 	//.append(std::to_string(device.first)).append("$").
 
 	if (raw.type() == CV_8UC3)
 		cvtColor(raw, raw, COLOR_BGR2GRAY);
 
-	//cv::imwrite("crop.png", matCanny);
+	//cv::imwrite("crop.png", raw);
 	Mat matDraw = Mat();
-	Mat matCrop = raw;//  RotateMat(matCanny, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+	Mat matCrop = raw.clone();//  RotateMat(matCanny, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
 	//cv::imwrite("crop.png", matCrop);
 	// matCrop= Process(matCrop);
 	if (matCrop.type() == CV_8UC3)
@@ -725,48 +730,48 @@ bool Pattern::Match(
 		matDraw = matCrop.clone();
 	else
 	{
-	
+
 		matDraw = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
 	}*/
-	
-	m_matSrc = matCrop.clone();
-	
+
+
+
 	/*if (matDraw.type() != CV_8UC3)
 	{
 		cvtColor(matDraw, matDraw, COLOR_GRAY2BGR);
 	}
 	*/
-	if (m_matSrc.empty() || m_matDst[ixTemp].empty())
-		return false;
-	if ((m_matDst[ixTemp].cols < m_matSrc.cols && m_matDst[ixTemp].rows > m_matSrc.rows) || (m_matDst[ixTemp].cols > m_matSrc.cols && m_matDst[ixTemp].rows < m_matSrc.rows))
-		return  false;
-	if (m_matDst[ixTemp].size().area() > m_matSrc.size().area())
-		return false;
-	if (!m_TemplData[ixTemp].bIsPatternLearned)
-		return false;
+	if ( m_matDst[ixThread][ixTemp].empty())
+		return "";
+	if ((m_matDst[ixThread][ixTemp].cols < matCrop.cols && m_matDst[ixThread][ixTemp].rows > matCrop.rows) || (m_matDst[ixThread][ixTemp].cols > matCrop.cols && m_matDst[ixThread][ixTemp].rows < matCrop.rows))
+		return  "";
+	if (m_matDst[ixThread][ixTemp].size().area() > matCrop.size().area())
+		return "";
+	if (!m_TemplData[ixThread][ixTemp].bIsPatternLearned)
+		return "";
 	//UpdateData (1);
 	double d1 = clock();
 	//決定金字塔層數 總共為1 + iLayer層
-	int iTopLayer = GetTopLayer(&m_matDst[ixTemp], (int)sqrt((double)m_iMinReduceArea));
+	int iTopLayer = GetTopLayer(&m_matDst[ixThread][ixTemp], (int)sqrt((double)m_iMinReduceArea));
 	//建立金字塔
 	vector<Mat> vecMatSrcPyr;
 	if (m_ckBitwiseNot)//m_ckBitwiseNot
 	{
-		Mat matNewSrc = 255 - m_matSrc;
+		Mat matNewSrc = 255 - matCrop;
 		buildPyramid(matNewSrc, vecMatSrcPyr, iTopLayer);
 
 	}
 	else
-		buildPyramid(m_matSrc, vecMatSrcPyr, iTopLayer);
+		buildPyramid(matCrop, vecMatSrcPyr, iTopLayer);
 
-	s_TemplData* pTemplData = &m_TemplData[ixTemp];
+	s_TemplData* pTemplData = &m_TemplData[ixThread][ixTemp];
 	double dAngleStep = atan(2.0 / max(pTemplData->vecPyramid[iTopLayer].cols, pTemplData->vecPyramid[iTopLayer].rows)) * R2D;
 
 	vector<double> vecAngles;
 
 	if (m_bToleranceRange)
 	{
-		
+
 		for (double dAngle = m_dTolerance1; dAngle < m_dTolerance2 + dAngleStep; dAngle += dAngleStep)
 			vecAngles.push_back(dAngle);
 		/*for (double dAngle = m_dTolerance3; dAngle < m_dTolerance4 + dAngleStep; dAngle += dAngleStep)
@@ -792,7 +797,7 @@ bool Pattern::Match(
 	//vector<s_MatchParameter> vecMatchParameter (iSize * (m_iMaxPos + MATCH_CANDIDATE_NUM));
 	vector<s_MatchParameter> vecMatchParameter;
 	//Caculate lowest score at every layer
-	vector<double> vecLayerScore( iTopLayer + 1, m_dScore);
+	vector<double> vecLayerScore(iTopLayer + 1, m_dScore);
 	for (int iLayer = 1; iLayer <= iTopLayer; iLayer++)
 		vecLayerScore[iLayer] = vecLayerScore[iLayer - 1] * 0.9;
 
@@ -948,7 +953,7 @@ bool Pattern::Match(
 					cv::Point ptMaxLoc;
 					GetRotatedROI(vecMatSrcPyr[iLayer], pTemplData->vecPyramid[iLayer].size(), ptLT * 2, vecAngles[j], matRotatedSrc);
 
-					MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, TRUE,m_ckSIMD);
+					MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, TRUE, m_ckSIMD);
 					//matchTemplate (matRotatedSrc, pTemplData->vecPyramid[iLayer], matResult, CV_TM_CCOEFF_NORMED);
 					minMaxLoc(matResult, 0, &dMaxValue, 0, &ptMaxLoc);
 					vecNewMatchParameter[j] = s_MatchParameter(ptMaxLoc, dMaxValue, vecAngles[j]);
@@ -1030,57 +1035,64 @@ bool Pattern::Match(
 	FilterWithRotatedRect(&vecAllResult, CV_TM_CCOEFF_NORMED, m_dMaxOverlap);
 	std::sort(vecAllResult.begin(), vecAllResult.end(), compareScoreBig2Small);
 
-	m_vecSingleTargetData.clear();
+	//m_vecSingleTargetData.clear();
 	iMatchSize = (int)vecAllResult.size();
 	if (vecAllResult.size() == 0)
 	{
-	/*	Mat mRS = raw;
-		if (IsProcess)
-			mRS = matCanny;
-		if (mRS.type() == CV_8UC1)
-			cvtColor(mRS, mRS, COLOR_GRAY2BGR);
-		
-		matDraw.copyTo(mRS(myROI));*/
-		
-		return false;
+		/*	Mat mRS = raw;
+			if (IsProcess)
+				mRS = matCanny;
+			if (mRS.type() == CV_8UC1)
+				cvtColor(mRS, mRS, COLOR_GRAY2BGR);
+
+			matDraw.copyTo(mRS(myROI));*/
+
+		return listMatch;
 	}
-		
+
 	int iW = pTemplData->vecPyramid[0].cols, iH = pTemplData->vecPyramid[0].rows;
-	
+
 	for (int i = 0; i < iMatchSize; i++)
 	{
-		float angle= vecAllResult[i].dMatchAngle;
-		
-	
+		float angle = vecAllResult[i].dMatchAngle;
+
+
 		s_SingleTargetMatch sstm;
 		double dRAngle = -vecAllResult[i].dMatchAngle * D2R;
 
 		sstm.ptLT = vecAllResult[i].pt;
-		
+
 		sstm.ptRT = Point2d(sstm.ptLT.x + iW * cos(dRAngle), sstm.ptLT.y - iW * sin(dRAngle));
 		sstm.ptLB = Point2d(sstm.ptLT.x + iH * sin(dRAngle), sstm.ptLT.y + iH * cos(dRAngle));
 		sstm.ptRB = Point2d(sstm.ptRT.x + iH * sin(dRAngle), sstm.ptRT.y + iH * cos(dRAngle));
 		sstm.ptCenter = Point2d((sstm.ptLT.x + sstm.ptRT.x + sstm.ptRB.x + sstm.ptLB.x) / 4, (sstm.ptLT.y + sstm.ptRT.y + sstm.ptRB.y + sstm.ptLB.y) / 4);
 		sstm.dMatchedAngle = -vecAllResult[i].dMatchAngle;
 		sstm.dMatchScore = vecAllResult[i].dMatchScore;
-		
+
 		if (sstm.dMatchedAngle < -180)
 			sstm.dMatchedAngle += 360;
 		if (sstm.dMatchedAngle > 180)
 			sstm.dMatchedAngle -= 360;
-		m_vecSingleTargetData.push_back(sstm);
-		Rect rect= vecAllResult[i].rectBounding;
-		listMatch[ixTemp] += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() +","+ vecAllResult[i].dMatchScore * 100 + "\n";
+		//m_vecSingleTargetData.push_back(sstm);
+		Rect rect = vecAllResult[i].rectBounding;
+		listMatch += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() + "," + vecAllResult[i].dMatchScore * 100 + "\n";
 		double score = vecAllResult[i].dMatchScore * 100;
 		ScoreRS = score;
 		if (i + 1 == m_iMaxPos)
 			break;
 	}
 
-	
+
 	m_bShowResult = TRUE;
-	Bitmap^ bp ;
+	Bitmap^ bp;
 	cycleOutLine = int(clock() - d1);
-	return	true;
+	return	listMatch;
+}
+catch (exception ex)
+{
+	LogError(ex.what());  // Ghi nội dung lỗi
+	std::cerr << "Lỗi xảy ra: " << ex.what() << std::endl;
+}
 	
+return "";
 }

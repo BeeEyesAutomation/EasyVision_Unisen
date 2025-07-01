@@ -150,7 +150,7 @@ namespace BeeUi.Common
 
         private void btnSaveProgram_Click(object sender, EventArgs e)
         {
-            SaveData.Project(G.Project,BeeCore.G.ParaCam);
+            SaveData.Project(G.Project);
             G.Header.Mode();
         }
 

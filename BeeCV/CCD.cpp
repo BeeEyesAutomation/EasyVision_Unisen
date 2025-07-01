@@ -14,12 +14,12 @@ void ReadImage()
 
 	ucRaw = MatToBytes(matRaw);
 }
-void 	SetImage(int indexTool, uchar* uc, int image_rows, int image_cols, int image_type)
+void 	SetImage(int ixThread, int indexTool, uchar* uc, int image_rows, int image_cols, int image_type)
 {
-	m_matDst[indexTool] = Mat();
-	m_matDst[indexTool] = BytesToMat(uc, image_rows, image_cols, image_type).clone();
-	if (m_matDst[indexTool].type() == CV_8UC3)
-		cvtColor(m_matDst[indexTool], m_matDst[indexTool], COLOR_BGR2GRAY);
+	m_matDst[ixThread][indexTool] = Mat();
+	m_matDst[ixThread][indexTool] = BytesToMat(uc, image_rows, image_cols, image_type).clone();
+	if (m_matDst[ixThread][indexTool].type() == CV_8UC3)
+		cvtColor(m_matDst[ixThread][indexTool], m_matDst[ixThread][indexTool], COLOR_BGR2GRAY);
 }
 extern "C" __declspec(dllexport) uchar * GetImage(int* rows, int* cols, int* Type)
 {
@@ -62,10 +62,10 @@ extern "C" __declspec(dllexport) uchar * GetImageResult(int* rows, int* cols, in
 
 	return  MatToBytes(matResult);
 }
-extern "C" __declspec(dllexport) void SetDst(int indexTool, uchar * uc ,int image_rows, int image_cols,int image_type)
+extern "C" __declspec(dllexport) void SetDst(int ixThread,int indexTool, uchar * uc ,int image_rows, int image_cols,int image_type)
 {
 	
-	SetImage( indexTool,  uc,  image_rows,  image_cols,  image_type);
+	SetImage(ixThread, indexTool,  uc,  image_rows,  image_cols,  image_type);
 	
 }
 extern "C" __declspec(dllexport) void SetSrc(uchar * uc, int image_rows, int image_cols, int image_type)
@@ -793,10 +793,10 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 
 	return -1; // Không tìm thấy
 }
-bool ConnectHik(int index)
+bool ConnectHik( int index,int indexCCD)
 {
 
-	
+	int nRet = 0;
 	if ((index < 0) | (index >= MV_MAX_DEVICE_NUM))
 	{
 		
@@ -809,46 +809,164 @@ bool ConnectHik(int index)
 		//ShowErrorMsg(TEXT("Device does not exist"), 0);
 		return false;
 	}
-
-	m_pcMyCamera = new CMvCamera;
-	if (NULL == m_pcMyCamera)
+	switch ((indexCCD))
 	{
-		return false;
-	}
-
-	int nRet = m_pcMyCamera->Open(m_stDevList.pDeviceInfo[index]);
-	if (MV_OK != nRet)
-	{
-		delete m_pcMyCamera;
-		m_pcMyCamera = NULL;
-		//ShowErrorMsg(TEXT("Open Fail"), nRet);
-		return false;
-	}
-
-	// ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
-	if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
-	{
-		unsigned int nPacketSize = 0;
-		nRet = m_pcMyCamera->GetOptimalPacketSize(&nPacketSize);
-		if (nRet == MV_OK)
-		{
-			nRet = m_pcMyCamera->SetIntValue("GevSCPSPacketSize", nPacketSize);
-			if (nRet != MV_OK)
-			{
-				return false;
-				//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
-			}
-		}
-		else
+	case 0://cv::Mat frame;
+		m_pcMyCamera1 = new CMvCamera;
+		if (NULL == m_pcMyCamera1)
 		{
 			return false;
-			//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
 		}
+
+		 nRet = m_pcMyCamera1->Open(m_stDevList.pDeviceInfo[index]);
+		if (MV_OK != nRet)
+		{
+			delete m_pcMyCamera1;
+			m_pcMyCamera1 = NULL;
+			//ShowErrorMsg(TEXT("Open Fail"), nRet);
+			return false;
+		}
+
+		// ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
+		if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
+		{
+			unsigned int nPacketSize = 0;
+			nRet = m_pcMyCamera1->GetOptimalPacketSize(&nPacketSize);
+			if (nRet == MV_OK)
+			{
+				nRet = m_pcMyCamera1->SetIntValue("GevSCPSPacketSize", nPacketSize);
+				if (nRet != MV_OK)
+				{
+					return false;
+					//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
+				}
+			}
+			else
+			{
+				return false;
+				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
+			}
+		}
+		m_pcMyCamera1->StartGrabbing();
+		break;
+	case 1://cv::Mat frame;
+		m_pcMyCamera2 = new CMvCamera;
+		if (NULL == m_pcMyCamera2)
+		{
+			return false;
+		}
+
+		 nRet = m_pcMyCamera2->Open(m_stDevList.pDeviceInfo[index]);
+		if (MV_OK != nRet)
+		{
+			delete m_pcMyCamera2;
+			m_pcMyCamera2 = NULL;
+			//ShowErrorMsg(TEXT("Open Fail"), nRet);
+			return false;
+		}
+
+		// ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
+		if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
+		{
+			unsigned int nPacketSize = 0;
+			nRet = m_pcMyCamera2->GetOptimalPacketSize(&nPacketSize);
+			if (nRet == MV_OK)
+			{
+				nRet = m_pcMyCamera2->SetIntValue("GevSCPSPacketSize", nPacketSize);
+				if (nRet != MV_OK)
+				{
+					return false;
+					//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
+				}
+			}
+			else
+			{
+				return false;
+				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
+			}
+		}
+		m_pcMyCamera2->StartGrabbing();
+		break;
+	case 2://cv::Mat frame;
+		m_pcMyCamera3 = new CMvCamera;
+		if (NULL == m_pcMyCamera3)
+		{
+			return false;
+		}
+
+		 nRet = m_pcMyCamera3->Open(m_stDevList.pDeviceInfo[index]);
+		if (MV_OK != nRet)
+		{
+			delete m_pcMyCamera3;
+			m_pcMyCamera3 = NULL;
+			//ShowErrorMsg(TEXT("Open Fail"), nRet);
+			return false;
+		}
+
+		// ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
+		if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
+		{
+			unsigned int nPacketSize = 0;
+			nRet = m_pcMyCamera3->GetOptimalPacketSize(&nPacketSize);
+			if (nRet == MV_OK)
+			{
+				nRet = m_pcMyCamera3->SetIntValue("GevSCPSPacketSize", nPacketSize);
+				if (nRet != MV_OK)
+				{
+					return false;
+					//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
+				}
+			}
+			else
+			{
+				return false;
+				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
+			}
+		}
+		m_pcMyCamera3->StartGrabbing();
+		break;
+	case 3://cv::Mat frame;
+		m_pcMyCamera4 = new CMvCamera;
+		if (NULL == m_pcMyCamera4)
+		{
+			return false;
+		}
+
+		 nRet = m_pcMyCamera4->Open(m_stDevList.pDeviceInfo[index]);
+		if (MV_OK != nRet)
+		{
+			delete m_pcMyCamera4;
+			m_pcMyCamera4 = NULL;
+			//ShowErrorMsg(TEXT("Open Fail"), nRet);
+			return false;
+		}
+
+		// ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
+		if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
+		{
+			unsigned int nPacketSize = 0;
+			nRet = m_pcMyCamera4->GetOptimalPacketSize(&nPacketSize);
+			if (nRet == MV_OK)
+			{
+				nRet = m_pcMyCamera4->SetIntValue("GevSCPSPacketSize", nPacketSize);
+				if (nRet != MV_OK)
+				{
+					return false;
+					//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
+				}
+			}
+			else
+			{
+				return false;
+				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
+			}
+		}
+		m_pcMyCamera4->StartGrabbing();
+		break;
 	}
-	m_pcMyCamera->StartGrabbing();
 	return true;
 }
-bool CCD::Connect( int rowCCD, int colCCD, System::String^ NameCamera)
+bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 {
 	std::string nameCCD = marshal_as<std::string>(NameCamera);
 	numERR = 0;
@@ -858,8 +976,8 @@ bool CCD::Connect( int rowCCD, int colCCD, System::String^ NameCamera)
 	{
 	case 1:
 	{
-		int indexCCD = FindCameraIndexByUserName(m_stDevList, nameCCD);
-		IsConnect = ConnectHik(indexCCD);
+		int index = FindCameraIndexByUserName(m_stDevList, nameCCD);
+		IsConnect = ConnectHik(index, indexCCD);
 		/*try
 		{
 
@@ -874,7 +992,7 @@ bool CCD::Connect( int rowCCD, int colCCD, System::String^ NameCamera)
 		}*/
 		break;
 	}
-		
+
 	case 0:
 	{
 		auto it = std::find(listCCCD.begin(), listCCCD.end(), nameCCD);
@@ -886,11 +1004,11 @@ bool CCD::Connect( int rowCCD, int colCCD, System::String^ NameCamera)
 		else {
 			IsConnect = false;
 		}
-	
+
 		break;
-		}
 	}
-	
+	}
+
 	return IsConnect;
 }
 auto lastTime = std::chrono::high_resolution_clock::now();
@@ -958,21 +1076,51 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 	camera->FreeImageBuffer(&stImageOut);
 	return true;
 }
-void ReadHik()
+void ReadHik(int indexCCD)
 {
-	
-	//cv::Mat frame;
-	if (CaptureFrame(m_pcMyCamera, matRaw)) {
+	switch ((indexCCD))
+	{
+	case 0://cv::Mat frame;
+		if (CaptureFrame(m_pcMyCamera1, matRaw)) {
 
+		}
+		else {
+			std::cerr << "Failed to capture frame 1!" << std::endl;
+		}
+		break;
+	case 1://cv::Mat frame;
+		if (CaptureFrame(m_pcMyCamera2, matRaw)) {
+
+		}
+		else {
+			std::cerr << "Failed to capture frame 2!" << std::endl;
+		}
+		break;
+	case 2://cv::Mat frame;
+		if (CaptureFrame(m_pcMyCamera3, matRaw)) {
+
+		}
+		else {
+			std::cerr << "Failed to capture frame 3!" << std::endl;
+		}
+		break;
+	case 3://cv::Mat frame;
+		if (CaptureFrame(m_pcMyCamera4, matRaw)) {
+
+		}
+		else {
+			std::cerr << "Failed to capture frame 4!" << std::endl;
+		}
+		break;
+	default:
+		break;
 	}
-	else {
-		std::cerr << "Failed to capture frame!" << std::endl;
-	}
+	
 
 	// Dừng camera và giải phóng tài nguyên
 
 }
-void CCD::ReadCCD()
+void CCD::ReadCCD(int indexCCD)
 {
 	double d1 = clock();
 	frameCount++;
@@ -982,7 +1130,7 @@ void CCD::ReadCCD()
 	case 1: 
 		if (!matRaw.empty())
 			matRaw.release();
-		ReadHik();
+		ReadHik(indexCCD);
 
 		break;
 	default:
@@ -1139,7 +1287,7 @@ void CCD::CalHist()
 
 
 }
-void CCD::DestroyAll()
+void CCD::DestroyAll(int indexCCD)
 {
 	switch (typeCCD)
 	{
@@ -1148,14 +1296,61 @@ void CCD::DestroyAll()
 		destroyAllWindows();
 		break;
 	case 1:
-		m_pcMyCamera->StopGrabbing();
-		m_pcMyCamera->Close();
-		m_pcMyCamera->FinalizeSDK();
-		/*baslerGigE.StopGrabbing();
-		baslerGigE.Close();
-		baslerGigE.DetachDevice();*/
-		
-		cvDestroyAllWindows();
+		switch ((indexCCD))
+		{
+		case 0://cv::Mat frame;
+			if (m_pcMyCamera1 != NULL)
+			{
+				m_pcMyCamera1->StopGrabbing();
+				m_pcMyCamera1->Close();
+				m_pcMyCamera1->FinalizeSDK();
+				/*baslerGigE.StopGrabbing();
+				baslerGigE.Close();
+				baslerGigE.DetachDevice();*/
+
+				cvDestroyAllWindows();
+			}
+			break;
+		case 1://cv::Mat frame;
+			if (m_pcMyCamera2 != NULL)
+			{
+				m_pcMyCamera2->StopGrabbing();
+				m_pcMyCamera2->Close();
+				m_pcMyCamera2->FinalizeSDK();
+				/*baslerGigE.StopGrabbing();
+				baslerGigE.Close();
+				baslerGigE.DetachDevice();*/
+
+				cvDestroyAllWindows();
+			}
+			break;
+		case 2://cv::Mat frame;
+			if (m_pcMyCamera3 != NULL)
+			{
+				m_pcMyCamera3->StopGrabbing();
+				m_pcMyCamera3->Close();
+				m_pcMyCamera3->FinalizeSDK();
+				/*baslerGigE.StopGrabbing();
+				baslerGigE.Close();
+				baslerGigE.DetachDevice();*/
+
+				cvDestroyAllWindows();
+			}
+			break;
+		case 3://cv::Mat frame;
+			if (m_pcMyCamera4 != NULL)
+			{
+				m_pcMyCamera4->StopGrabbing();
+				m_pcMyCamera4->Close();
+				m_pcMyCamera4->FinalizeSDK();
+				/*baslerGigE.StopGrabbing();
+				baslerGigE.Close();
+				baslerGigE.DetachDevice();*/
+
+				cvDestroyAllWindows();
+			}
+			break;
+		}
 		break;
 	default:
 		break;

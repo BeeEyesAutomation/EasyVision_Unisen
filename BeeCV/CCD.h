@@ -39,12 +39,12 @@ namespace CvPlus {
 	public: bool  IsErrCCD = false;
 	public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
-	public:void  ReadCCD();
+	public:void  ReadCCD(int indeCCD);
 	//public:void  ReadRaw(bool IsHist);
 	public:System::String^ ScanCCD();
-	public:bool	Connect( int rowCCD, int colCCD, System::String^ NameCCD);
+	public:bool	Connect( int indeCCD, System::String^ NameCCD);
 	public:bool	SetPara();
-	public:void	DestroyAll();
+	public:void	DestroyAll(int indexCCD);
 	public:void	ShowSetting();
 	public:void CalHist();
 	

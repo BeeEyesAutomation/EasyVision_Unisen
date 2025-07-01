@@ -181,9 +181,7 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-        [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        unsafe public static extern void SetDst(int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
-
+       
         
         int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
         {

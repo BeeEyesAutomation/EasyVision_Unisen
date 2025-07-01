@@ -35,6 +35,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <msclr/marshal_cppstd.h>
+
 using namespace cv;
 using namespace std;
 using namespace System;
@@ -49,7 +50,10 @@ using namespace System::Drawing::Imaging;
 
 namespace CvPlus {
 	//HIK
-	extern CMvCamera* m_pcMyCamera;               
+	extern CMvCamera* m_pcMyCamera1;
+	extern CMvCamera* m_pcMyCamera2;
+	extern CMvCamera* m_pcMyCamera3;
+	extern CMvCamera* m_pcMyCamera4;
 	extern HWND                    m_hwndDisplay;                      
 	extern MV_CC_DEVICE_INFO_LIST  m_stDevList;
 	extern std::mutex gilmutex;
@@ -57,14 +61,14 @@ namespace CvPlus {
 	extern cv::Mat BytesToMat(uchar* uc, int image_rows, int image_cols, int image_type);
 	extern int getMaxAreaContourId(vector <vector<cv::Point>> contours);
 	extern Mat RotateMat(Mat raw, RotatedRect rot);
-	
+	void LogError(const std::string& message);
 	Mat BitmapToMat(System::Drawing::Bitmap^ bitmap);
 	Bitmap^ MatToBitmap(Mat img);
 	extern cv::VideoCapture camUSB;
 	extern uchar* ucRaw;
 	extern cv::Mat matTemp, matRaw, matResult, matRsTemp,matCrop;
-	extern cv::Mat matSetTemp, m_matSrc;
-	extern vector<cv::Mat> m_matDst;
+	extern cv::Mat matSetTemp;
+	extern vector < vector<cv::Mat>> m_matDst;
 	Mat CropImage(Mat matCrop, Rect rect);
 	
 	public ref  class Common

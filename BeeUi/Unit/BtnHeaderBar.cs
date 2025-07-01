@@ -72,7 +72,7 @@ namespace BeeUi.Unit
             
             if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
                 BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
-            BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose]);
+            BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
             G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[G.indexChoose].Para.Name;
           
             switch (BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera)

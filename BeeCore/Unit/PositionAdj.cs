@@ -1,5 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -238,7 +239,7 @@ namespace BeeCore
 
         }
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        unsafe public static extern void SetDst(int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
+        unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
 
         public void LearnPattern(  int indexTool, Mat temp)
         {
@@ -247,9 +248,9 @@ namespace BeeCore
             if (temp.Empty()) return;
            
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
-            SetDst(indexTool, temp.Data, temp.Rows, temp.Cols, temp.Type());
+            SetDst(IndexThread, indexTool, temp.Data, temp.Rows, temp.Cols, temp.Type());
 
-           G.pattern.LearnPattern(minArea, indexTool);
+           G.pattern.LearnPattern(minArea, indexTool, IndexThread);
 
         }
     
@@ -326,7 +327,7 @@ namespace BeeCore
         public int NumOK { get => numOK; set => numOK = value; }
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
         public List<RectRotate> rectRotates = new List<RectRotate>();
-        public int indexTool = 0;
+        public int Index = 0;
         public int IndexThread = 0;
         public void Matching( RectRotate rot)
         {
@@ -338,17 +339,20 @@ namespace BeeCore
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
             Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rot, rotMask);
-            BeeCore.Native.SetImg(matCrop);
-          
-            IsOK = G.pattern.Match( indexTool,IsHighSpeed,AngleLower,AngleUper,Score/100.0,threshMin,threshMax,ckSIMD,ckBitwiseNot,ckSubPixel,NumObject,OverLap);
+         //   BeeCore.Native.SetImg(matCrop);
+
+            String sResult = G.pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(), IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
             ScoreRs = G.pattern.ScoreRS;
-            if (IsOK)
+            rectRotates = new List<RectRotate>();
+           
+            IsOK = false;
+            if (sResult != "")
             {
                 cycleTime = (int)G.pattern.cycleOutLine;
-                rectRotates = new List<RectRotate>();
-                if (G.pattern.listMatch[indexTool] != null)
+
+                if (sResult != "")
                 {
-                    String[] sSplit = G.pattern.listMatch[indexTool].Split('\n');
+                    String[] sSplit = sResult.Split('\n');
                     foreach (String s in sSplit)
                     {
                         if (s.Trim() == "") break;
@@ -356,14 +360,15 @@ namespace BeeCore
                         PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
                         float angle = Convert.ToSingle(sSp[2]);
                         float width = Convert.ToSingle(sSp[3]);
-                        float height =Convert.ToSingle(sSp[4]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
-                    }
-                    if (rectRotates.Count != NumObject)
-                        IsOK = false;
+                        float height = Convert.ToSingle(sSp[4]);
+                        float Score = Convert.ToSingle(sSp[5]);
+                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+                     
+                   }
+
                 }
             }
-            
+
 
 
 

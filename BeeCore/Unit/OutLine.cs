@@ -252,7 +252,7 @@ namespace BeeCore
            
         }
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        unsafe public static extern void SetDst(int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
+        unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
 
         public void LearnPattern(   Mat temp)
         {
@@ -262,11 +262,11 @@ namespace BeeCore
            
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
            // Cv2.ImWrite("matTemp.png", temp);
-            SetDst(Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
+            SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           G.pattern.LearnPattern(minArea, Index);
+           G.pattern.LearnPattern( minArea, Index, IndexThread);
 
         }
     
@@ -462,20 +462,28 @@ namespace BeeCore
 
                         break;
                 }
-                 // Cv2.ImWrite("Processing.png", matProcess);
-                BeeCore.Native.SetImg(matProcess);
-                IsOK = G.pattern.Match(Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, threshMin, threshMax, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
+
+                // Cv2.ImWrite("Processing.png", matProcess);
+                //   BeeCore.Native.SetImg(matProcess);
+                if (!matCrop.IsContinuous())
+                {
+                    matCrop = matCrop.Clone();
+                }
+                // Cv2.ImWrite("Crop.png", matCrop);
+
+                String sResult = G.pattern.Match(matCrop.Data, matCrop.Cols, matCrop.Rows,  (int)matCrop.Step(), matCrop.Type(),IndexThread,Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0,ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
                 ScoreRs = G.pattern.ScoreRS;
                 rectRotates = new List<RectRotate>();
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>();
-                if (IsOK)
+                IsOK = false;
+                if (sResult != "")
                 {
                     cycleTime = (int)G.pattern.cycleOutLine;
 
-                    if (G.pattern.listMatch[Index] != null)
+                    if (sResult != "")
                     {
-                        String[] sSplit = G.pattern.listMatch[Index].Split('\n');
+                        String[] sSplit = sResult.Split('\n');
                         foreach (String s in sSplit)
                         {
                             if (s.Trim() == "") break;

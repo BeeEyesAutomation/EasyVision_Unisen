@@ -95,7 +95,7 @@ namespace BeeUi.Tool
        
             propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools[G.indexChoose].Count + 1);
             G.PropetyTools[G.indexChoose].Add(propety);
-            G.listAlltool[G.indexChoose].Add( DataTool.SetPropety(propety, G.listAlltool[G.indexChoose].Count() ));
+            G.listAlltool[G.indexChoose].Add( DataTool.SetPropety(propety, G.listAlltool[G.indexChoose].Count(), G.indexChoose));
             DataTool.LoadPropety(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].tool);
             RefreshTool();
 

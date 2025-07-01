@@ -12,6 +12,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
 using static EasyModbus.ModbusServer;
@@ -21,9 +22,11 @@ namespace BeeCore
 {
     public class Camera
     {
-        public Camera( ParaCamera paraCamera)
+        public int IndexCCD=0;
+        public Camera( ParaCamera paraCamera,int index)
         {
             this.Para = paraCamera;
+            this.IndexCCD = index;
         }
         public   Mat matRaw = new Mat();
         public CvPlus.CCD CCDPlus = new CvPlus.CCD();
@@ -60,6 +63,7 @@ namespace BeeCore
 
 
         }
+        
         public  void DestroyAll()
         {
             if (Para.TypeCamera == TypeCamera.TinyIV)
@@ -67,7 +71,8 @@ namespace BeeCore
                  HEROJE.Disconnect(); 
                
             }
-            CCDPlus.DestroyAll();
+           
+            CCDPlus.DestroyAll(IndexCCD);
             Common.ClosePython();
             
             HEROJE.DisConnect();
@@ -78,6 +83,10 @@ namespace BeeCore
         {
 
             return CCDPlus.IsErrCCD;
+        }
+        public void DisConnect()
+        {
+            CCDPlus.DestroyAll(IndexCCD);
         }
         public  bool Connect(String NameCCD )
         {
@@ -93,7 +102,7 @@ namespace BeeCore
             //BeeCore.CCDPlus.colCCD = Convert.ToInt32(sp2[0]);
             //BeeCore.CCDPlus.rowCCD = Convert.ToInt32(sp2[1]);
             Mat raw = new Mat();
-            if (CCDPlus.Connect(0,0, NameCCD))
+            if (CCDPlus.Connect(IndexCCD, NameCCD))
             {
                 if (matRaw != null)
                     if (!matRaw.Empty())
@@ -101,7 +110,7 @@ namespace BeeCore
                 //if (IsHist)
                 //    CCDPlus.ReadRaw(true);
                 //else
-                CCDPlus.ReadCCD();
+                CCDPlus.ReadCCD(IndexCCD);
                 int rows=0, cols=0;int Type = 0;
                 IntPtr intPtr = new IntPtr();
                 raw = new Mat();
@@ -315,7 +324,8 @@ namespace BeeCore
                         //if (IsHist)
                         //    CCDPlus.ReadRaw(true);
                         //else
-                        CCDPlus.ReadCCD();
+                        CCDPlus.ReadCCD(IndexCCD);
+                        CCDPlus.ReadCCD(IndexCCD);
                         
                         
                         try
@@ -351,7 +361,7 @@ namespace BeeCore
                         //else
                         Stopwatch stopwatch = new Stopwatch(); 
                         stopwatch.Start();
-                        CCDPlus.ReadCCD();
+                        CCDPlus.ReadCCD(IndexCCD);
 
                         
                          raw = new Mat();
