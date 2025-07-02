@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeCore.Parameter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,8 @@ namespace BeeCore
     [Serializable()]
     public class ParaCamera
     {
-        public int Width,Height,OffSetX,OffSetY;
-        public float Exposure,Gain,Briness;
+        public ValuePara Width,Height,OffSetX,OffSetY;
+        public ValuePara Exposure,Gain,Briness,Shift;
         public bool IsConnect;
         public String Ex;
         public float Fps;
@@ -19,6 +20,12 @@ namespace BeeCore
 
         public ParaCamera()
         {
+            if (Exposure == null)
+                Exposure = new ValuePara();
+            if (Gain == null)
+                Gain = new ValuePara();
+            if (Shift == null)
+                Shift = new ValuePara();
 
         }
     }

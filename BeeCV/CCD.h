@@ -3,6 +3,7 @@
 #include <dshow.h>
 #pragma comment(lib, "strmiids")
 #include <msclr/marshal_cppstd.h>
+using namespace System;
 using namespace msclr::interop;
 #include <map>
 #include <string>
@@ -30,12 +31,14 @@ namespace CvPlus {
 	};
 	public ref class CCD
 	{
+	
 	public: float Exposure = 0;
 	public: double StepExposure = 0,MinExposure=1,MaxExposure=1000;
-	public: 	int typeCCD = 0;
+	public: 	int TypeCCD = 0;
 	public: 	int FPS = 0;
 	public: float cycle = 0;
 	public: int numERR = 0;
+	public: int TypeCamera = 0;
 	public: bool  IsErrCCD = false;
 	public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
@@ -43,7 +46,9 @@ namespace CvPlus {
 	//public:void  ReadRaw(bool IsHist);
 	public:System::String^ ScanCCD();
 	public:bool	Connect( int indeCCD, System::String^ NameCCD);
-	public:bool	SetPara();
+	public:float SetPara(int indexCCD, System::String^ Namepara, float Value);
+	public:bool GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step,  float% current);
+	
 	public:void	DestroyAll(int indexCCD);
 	public:void	ShowSetting();
 	public:void CalHist();

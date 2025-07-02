@@ -58,8 +58,10 @@ namespace BeeUi
         public float Max { get => max; set => max = value; }
         public float Value { get => value;
             set {
+                if (Max == Min) Max++;
                 if (value > Max) value = Max;
                 if (value < Min) value = Min;
+
                 this.value = value;
                 pTick = new Point((int)((value *1.0/ (Max-Min))*(this.pT.Width- imgTick.Width-4)), 5);
                 // lbValue.Location = new Point(pTick.X + imgTick.Width / 2 - lbValue.Width / 2, lbValue.Location.Y);
@@ -77,7 +79,8 @@ namespace BeeUi
                 
              if(value!=valueScore)
                 {
-                    valueScore = value;
+
+                    valueScore = value- value%step;
                     pT.Invalidate();
                 }
             }
@@ -111,7 +114,7 @@ namespace BeeUi
                 if (pointPanel.X >= imgTick.Width/2 +2&& pointPanel.X <= pT.Width- imgTick.Width/2-2 )
                 {
                    Value = (float)Math.Round( (float)((pointPanel.X- imgTick.Width / 2-2) / ((pT.Width - imgTick.Width-4) * 1.0) * (Max-Min)),1);
-
+                    Value = Value- Value % Step;
                 }
                 
             }
@@ -160,7 +163,7 @@ namespace BeeUi
         private void pT_Paint(object sender, PaintEventArgs e)
         {
 
-
+            if (max == min) max++;
             int LocalValue = (int)((valueScore / ((max - min) * 1.0)) * (pT.Width -2));
             // int w = imgTick.Width;
             Image imgBar = Properties.Resources.BID_SLIDER_SCALE_8PIX_W303;

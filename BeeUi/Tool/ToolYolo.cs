@@ -244,6 +244,8 @@ namespace BeeUi.Tool
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
                 gc.Transform = mat;
 
+                mat.Translate(Propety.CropOffSetX, Propety.CropOffSetY);
+                gc.Transform = mat;
 
                 if (Propety.IsCheckArea)
                 {
@@ -279,7 +281,6 @@ namespace BeeUi.Tool
                 }
                 else
                 {
-                 
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                     gc.Transform = mat;
                     mat.Rotate(rot._rectRotation);

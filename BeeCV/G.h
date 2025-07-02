@@ -2,6 +2,7 @@
 #include "pch.h"
 #include <MvCameraControl.h>
 #include "MvCamera.h"
+
 //#include <pylon/PylonIncludes.h>
 //#include <pylon/gige/BaslerGigEInstantCamera.h>
 //typedef Pylon::CBaslerGigEInstantCamera Camera_t;
@@ -42,6 +43,7 @@ using namespace System;
 using namespace System::Threading;
 using namespace System::Drawing;
 using namespace System::Drawing::Imaging;
+
 // Include files to use the pylon API.
 //#include <pylon/PylonIncludes.h>
 #ifdef PYLON_WIN_BUILD
@@ -50,10 +52,9 @@ using namespace System::Drawing::Imaging;
 
 namespace CvPlus {
 	//HIK
-	extern CMvCamera* m_pcMyCamera1;
-	extern CMvCamera* m_pcMyCamera2;
-	extern CMvCamera* m_pcMyCamera3;
-	extern CMvCamera* m_pcMyCamera4;
+	extern vector < CMvCamera*> m_pcMyCamera;
+	extern vector< int > listTypeCCD;
+
 	extern HWND                    m_hwndDisplay;                      
 	extern MV_CC_DEVICE_INFO_LIST  m_stDevList;
 	extern std::mutex gilmutex;

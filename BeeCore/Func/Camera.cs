@@ -144,7 +144,7 @@ namespace BeeCore
                 if (G.ParaCam._Exposure != 0)
                     CCDPlus.Exposure = G.ParaCam._Exposure;
                // Cycle = CCDPlus.cycle;
-                CCDPlus.SetPara();
+               // CCDPlus.SetPara();
                 ///G.CommonPlus.GetImageRaw();
                 return true;
             }
@@ -186,7 +186,7 @@ namespace BeeCore
 
 
 
-        public  bool SetExpo(int value)
+        public  bool SetExpo()
         {
             try
             {
@@ -195,13 +195,57 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        if (value > 1000)
-                        {
-                            CCDPlus.Exposure = value; CCDPlus.SetPara();
-                        }
+                        Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
+                            return true;
+                        break;
+                    //case TypeCamera.TinyIV:
+                    //    HEROJE.SetExposure((int)Para.Exposure);
+                    //    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;// ex.Message;
+            }
+            return false;// Result.Success.ToString();
+        }
+        public  bool GetExpo()
+        {
+            try
+            {
+
+
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.BaslerGigE:
+                        return CCDPlus.GetPara(IndexCCD, "ExposureTimeRaw",ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value);
+                     
+                        break;
+                    //case TypeCamera.TinyIV:
+
+                    //   return Convert.ToInt32( HEROJE.GetExposure());
+                    //    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return false;
+        }
+        public  bool SetGain()
+        {
+            try
+            {
+
+
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.BaslerGigE:
+                        Para.Gain.Value= CCDPlus.SetPara(IndexCCD, "GainRaw", Para.Gain.Value);
                         break;
                     case TypeCamera.TinyIV:
-                        HEROJE.SetExposure(value);
+                       // HEROJE.SetExposure(value);
                         break;
                 }
             }
@@ -211,7 +255,7 @@ namespace BeeCore
             }
             return true;// Result.Success.ToString();
         }
-        public  float GetExpo()
+        public bool SetShift()
         {
             try
             {
@@ -220,53 +264,49 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        // trackExposure.Min = (int)BeeCore.Common.MinExposure;
-                        //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
-                        // trackExposure.Step= (int)BeeCore.Common.StepExposure;
-                       return Para.Exposure;
+                        Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
+                        break;
+                    case TypeCamera.TinyIV:
+                        // HEROJE.SetExposure(value);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;// ex.Message;
+            }
+            return true;// Result.Success.ToString();
+        }
+        public bool GetShift()
+        {
+            try
+            {
+
+
+                switch (Para.TypeCamera)
+                {
+                    case TypeCamera.BaslerGigE:
+                        return CCDPlus.GetPara(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value);
+
+                        return true;
                         //if (value > 1000)
                         //{
                         //    CCDPlus.Exposure = value; CCDPlus.SetPara();
                         //}
                         break;
-                    case TypeCamera.TinyIV:
-                       return Convert.ToInt32( HEROJE.GetExposure());
-                        break;
+                        //case TypeCamera.TinyIV:
+                        //    return Convert.ToInt32(HEROJE.GetExposure());
+                        //    break;
                 }
             }
             catch (Exception ex)
             {
-                return -1;
+                return false;
             }
-            return -1;
-        }
-        public  bool SetGain(int value)
-        {
-            try
-            {
-
-
-                switch (Para.TypeCamera)
-                {
-                    case TypeCamera.BaslerGigE:
-                        //if (value > 1000)
-                        //{
-                        //    CCDPlus.ga = value; CCDPlus.SetPara();
-                        //}
-                        break;
-                    case TypeCamera.TinyIV:
-                        HEROJE.SetExposure(value);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;// ex.Message;
-            }
-            return true;// Result.Success.ToString();
+            return false;
         }
         public ParaCamera Para = new ParaCamera();
-        public  float GetGain()
+        public  bool GetGain()
         {
             try
             {
@@ -275,25 +315,24 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        // trackExposure.Min = (int)BeeCore.Common.MinExposure;
-                        //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
-                        // trackExposure.Step= (int)BeeCore.Common.StepExposure;
-                        return Para.Exposure;
+                        return CCDPlus.GetPara(IndexCCD, "GainRaw", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value);
+
+                        return true;
                         //if (value > 1000)
                         //{
                         //    CCDPlus.Exposure = value; CCDPlus.SetPara();
                         //}
                         break;
-                    case TypeCamera.TinyIV:
-                        return Convert.ToInt32(HEROJE.GetExposure());
-                        break;
+                    //case TypeCamera.TinyIV:
+                    //    return Convert.ToInt32(HEROJE.GetExposure());
+                    //    break;
                 }
             }
             catch (Exception ex)
             {
-                return -1;
+                return false;
             }
-            return -1;
+            return false;
         }
         public  System.Drawing.Size GetSzCCD()
         {
@@ -303,7 +342,7 @@ namespace BeeCore
         public  void Init()
         {
            
-            CCDPlus.typeCCD = (int)Para.TypeCamera;
+            CCDPlus.TypeCamera = (int)Para.TypeCamera;
         }
        
         public   void Read()

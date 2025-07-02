@@ -46,6 +46,14 @@ namespace BeeCore
 
         None
     }
+    public enum TypePara
+    {
+        ExposureTime,
+        Gain,
+         Shift,
+
+        None
+    }
     public  class Enums
     {
     }

@@ -133,6 +133,7 @@
     <Compile Include="Algorithm\LineDetector.cs" />
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\Logs.cs" />
+    <Compile Include="Parameter\ValuePara.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">
       <SubType>Form</SubType>

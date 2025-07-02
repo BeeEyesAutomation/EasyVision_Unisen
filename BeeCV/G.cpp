@@ -3,6 +3,7 @@
 #include "MvCamera.h"
 using  namespace CvPlus;
 
+
 namespace CvPlus
 {
 	std::mutex gilmutex;
@@ -15,10 +16,10 @@ namespace CvPlus
 	
 
 	//HIK
-	CMvCamera* m_pcMyCamera1;   
-	CMvCamera* m_pcMyCamera2;
-	CMvCamera* m_pcMyCamera3;
-	CMvCamera* m_pcMyCamera4;
+	vector < CMvCamera*> m_pcMyCamera(4);
+	
+	vector< int > listTypeCCD(4);
+	
 	HWND                    m_hwndDisplay;                       
 	MV_CC_DEVICE_INFO_LIST  m_stDevList;
 	cv::Mat matCrop;

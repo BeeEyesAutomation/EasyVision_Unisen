@@ -186,13 +186,18 @@ namespace BeeCore
         List<float> scoreList = new List<float>();
         List<string> labelList = new List<string>();
         public int IndexThread = 0;
+        public float CropOffSetX, CropOffSetY=0;
         public void DoWork(RectRotate rotCrop)
         {
             using (Py.GIL())
             {
                 try
                 {
-                    if(yLine==0)
+                    CropOffSetX = rotCrop._PosCenter.X + rotCrop._rect.X;
+                    CropOffSetY = rotCrop._PosCenter.Y + rotCrop._rect.Y;
+                    if (CropOffSetX > 0) CropOffSetX = 0; else CropOffSetX = -CropOffSetX;
+                    if (CropOffSetY > 0) CropOffSetY = 0; else CropOffSetY = -CropOffSetY;
+                    if (yLine==0)
                     yLine = 300;
                     boxList = new List<RectRotate>();
                      scoreList = new List<float>();

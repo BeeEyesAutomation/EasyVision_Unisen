@@ -27,7 +27,7 @@ namespace BeeUi.Tool
         {
             InitializeComponent();
             //p.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p.Width, p.Height, 5, 5));
-            p2.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p2.Width, p2.Height, 5, 5));
+          //  p2.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p2.Width, p2.Height, 5, 5));
 
         }
 
@@ -37,8 +37,7 @@ namespace BeeUi.Tool
             SaveData.Project(G.Project);
             btnNextStep.Enabled = false;
             this.Parent.Controls.Remove(this);
-            if (btnLive.IsCLick)
-                btnLive.PerformClick();
+          
             G.StepEdit.btnStep2.PerformClick();
 
         }
@@ -54,59 +53,9 @@ namespace BeeUi.Tool
        );
         private void SettingStep2_Load(object sender, EventArgs e)
         {
-            BeeCore.Common.listCamera[G.indexChoose].Para.Exposure= BeeCore.Common.listCamera[G.indexChoose].GetExpo();
-            // trackExposure.Min = (int)BeeCore.Common.MinExposure;
-            //trackExposure.Max = (int)BeeCore.Common.MaxExposure;
-            // trackExposure.Step= (int)BeeCore.Common.StepExposure;
-            btnInternal.IsCLick=!G.Config.IsExternal ;
-            btnExternal.IsCLick = G.Config.IsExternal;
 
-            switch (BeeCore.G.ParaCam.TypeResolution)
-            {
-                case 1:
-                    btnFull.IsCLick = true;
-                    break;
-                case 2:
-                    btnHD.IsCLick = true;
-                    break;
-                case 3:
-                    btn480.IsCLick = true;
-                    break;
-            }
-          
-            if (BeeCore.Common.listCamera[G.indexChoose].Para.Exposure>trackExposure.Max)
-                trackExposure.Value =trackExposure.Max ;
-            if (BeeCore.Common.listCamera[G.indexChoose].Para.Exposure < trackExposure.Min)
-                trackExposure.Value = trackExposure.Min;
-            else
-                trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure;
-            switch (BeeCore.G.ParaCam.TypeLight)
-            {
-                case 1:
-                    btnBackLight.IsCLick = true;
-                    break;
-                case 2:
-                    btnTopLight.IsCLick = true; 
-                    break;
-                case 3:
-                    btnBoth.IsCLick = true;
-                    break; 
-            }
-            btnONLight.IsCLick = BeeCore.G.ParaCam.IsOnLight;
-
-            numTrigger.Value = G.Config.delayTrigger;
-            btnShowGrid.IsCLick = G.Config.IsShowGird ;
-            btnShowCenter.IsCLick = G.Config.IsShowCenter;
-            btnShowArea.IsCLick = G.Config.IsShowArea;
-            if(G.Config.DelayOutput<numDelay.Minimum) G.Config.DelayOutput=numDelay.Minimum;
-            if (G.Config.DelayOutput > numDelay.Maxnimum) G.Config.DelayOutput = numDelay.Maxnimum;
-
-            numDelay.Value = G.Config.DelayOutput;
-            valueDelyaOld= G.Config.DelayOutput;
-            //numDelay.Value = G.Config.delayTrigger;
-            //btnEqubtnalize.IsCLick = G.Config.IsHist ;
         }
-       
+
         private void btnLoadImge_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -187,10 +136,7 @@ namespace BeeUi.Tool
             G.EditTool.View.btnLive.Enabled = true;
 
             G.EditTool.View.btnLive.PerformClick();
-            if (btnLive.IsCLick)
-                G.EditTool.View.btnLive.Enabled = false;
-            else
-                G.EditTool.View.btnLive.Enabled = true;
+           
         }
         private void btnLive_Click(object sender, EventArgs e)
         {
@@ -216,11 +162,7 @@ namespace BeeUi.Tool
           
         }
 
-        private void btnShowCenter_Click(object sender, EventArgs e)
-        {
-            G.Config.IsShowCenter = btnShowCenter.IsCLick;
-            G.EditTool.View.imgView.Invalidate();
-        }
+       
 
         private void btnShowArea_Click(object sender, EventArgs e)
         {
@@ -235,10 +177,7 @@ namespace BeeUi.Tool
                 G.Config.IsShowArea = false;
                 G.Config.IsShowGird = false;
                 G.EditTool.View.imgView.Invalidate();
-                if (btnLive.IsCLick)
-                {
-                    btnLive.IsCLick = false; PressLive();
-                }
+                
             }
                    
         }
@@ -263,8 +202,10 @@ namespace BeeUi.Tool
         private void trackExposure_ValueChanged(float obj)
         {
             //  trackExposure.Value= trackExposure.Value - (trackExposure.Value % trackExposure.Step);
-            BeeCore.Common.listCamera[G.indexChoose].Para.Exposure = (int)trackExposure.Value;
-          //  numExposure.Value = BeeCore.G.ParaCam.Exposure;
+            BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Value = (int)trackExposure.Value;
+           BeeCore.Common.listCamera[G.indexChoose].SetExpo();
+            trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Value;
+            //  numExposure.Value = BeeCore.G.ParaCam.Exposure;
 
         }
 
@@ -329,9 +270,9 @@ namespace BeeUi.Tool
 
         private void numExposure_ValueChanged(object sender, EventArgs e)
         {
-         //   BeeCore.G.ParaCam.Exposure =(int) numExposure.Value;
-          
-            trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure;
+            //   BeeCore.G.ParaCam.Exposure =(int) numExposure.Value;
+            //BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Value= (int)numExposure.Value;
+           // trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Value;
         }
 
         private void panel10_Paint(object sender, PaintEventArgs e)
@@ -454,7 +395,9 @@ namespace BeeUi.Tool
 
         private void trackGain_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[G.indexChoose].Para.Gain = (int)trackGain.Value;
+            BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Value = (int)trackGain.Value;
+            BeeCore.Common.listCamera[G.indexChoose].SetGain();
+            trackGain.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Value;
         }
 
         private void btnRevese_Click(object sender, EventArgs e)
@@ -481,6 +424,48 @@ namespace BeeUi.Tool
         private void numTrigger_ValueChanged(object sender, EventArgs e)
         {
             G.Config.delayTrigger = (int)numTrigger.Value;
+        }
+
+        private void SettingStep1_Load(object sender, EventArgs e)
+        {
+            if (BeeCore.Common.listCamera[G.indexChoose].Para.Exposure == null) BeeCore.Common.listCamera[G.indexChoose].Para.Exposure = new BeeCore.Parameter.ValuePara();
+            if (BeeCore.Common.listCamera[G.indexChoose].Para.Gain == null) BeeCore.Common.listCamera[G.indexChoose].Para.Gain = new BeeCore.Parameter.ValuePara();
+            if (BeeCore.Common.listCamera[G.indexChoose].Para.Shift == null) BeeCore.Common.listCamera[G.indexChoose].Para.Shift = new BeeCore.Parameter.ValuePara();
+
+
+            BeeCore.Common.listCamera[G.indexChoose].GetExpo();
+            BeeCore.Common.listCamera[G.indexChoose].GetGain();
+            BeeCore.Common.listCamera[G.indexChoose].GetShift();
+            trackExposure.Min = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Min;
+            trackExposure.Max = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Max;
+            if (trackExposure.Max > 20000) 
+                trackExposure.Max = 20000;
+            trackExposure.Step = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Step;
+            trackExposure.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Exposure.Value;
+
+          
+            trackGain.Min = BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Min;
+            trackGain.Max = BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Max;
+            trackGain.Step = BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Step;
+            trackGain.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Gain.Value;
+
+            trackShift.Min = BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Min;
+            trackShift.Max = BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Max;
+            trackShift.Step = BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Step;
+            trackShift.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Value;
+        }
+
+        private void trackBar21_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackShift_ValueChanged(float obj)
+        {
+            BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Value = (int)trackShift.Value;
+            BeeCore.Common.listCamera[G.indexChoose].SetShift();
+            trackShift.Value = BeeCore.Common.listCamera[G.indexChoose].Para.Shift.Value;
+
         }
     }
 }
