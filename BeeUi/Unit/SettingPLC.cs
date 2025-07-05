@@ -127,9 +127,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-          //  if (cbSerialPort.Text.Trim()=="COM3")
-            G.Config.IDPort = cbSerialPort.Text;
-          
+        
+          BeeCore.Common.Comunication.Com= cbSerialPort.Text;
         }
 
         private void SettingPLC_Load(object sender, EventArgs e)
@@ -156,6 +155,31 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 this.LayIntput.Enabled = G.PLC.IsConnected;
            this.LayOutput.Enabled = G.PLC.IsConnected;
 
+        }
+
+        private void btnModeEhternetIP_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.Comunication.TypeComunication = TypeComunication.EthernetIP;
+        }
+
+        private void btnModeMobusTCP_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.Comunication.TypeComunication = TypeComunication.ModbusTCP;
+        }
+
+        private void btnModeRS485_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.Comunication.TypeComunication = TypeComunication.MobusRS485;
+        }
+
+        private void comBaurate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BeeCore.Common.Comunication.Baurate =Convert.ToInt32( comBaurate.Text);
+        }
+
+        private void numIDSlave_ValueChanged(object sender, EventArgs e)
+        {
+            BeeCore.Common.Comunication.SlaveID =(byte) numIDSlave.Value;
         }
     }
 }

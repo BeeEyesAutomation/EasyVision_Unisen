@@ -69,6 +69,7 @@ namespace BeeUi.Tool
             if(Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
             //if(G.Config.TypeCamera==TypeCamera.USB)
+            Propety.TypeTool = TypeTool.Color_Area;
             Propety.LoadTemp(G.IsCCD,G.Config.IsHist);
             trackScore.Value = Propety.Score ;
             trackPixel.Value = (int)Propety.AreaPixel;

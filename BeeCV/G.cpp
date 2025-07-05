@@ -51,6 +51,7 @@ namespace CvPlus
 	void Common::BitmapSrc(Bitmap^ bm)
 	{
 		matRaw = BitmapToMat(bm);
+		cv::imwrite("clPlus.png", matRaw);
 	}
 	
 	void Common::BitmapDst(Bitmap^ bm,int ix)

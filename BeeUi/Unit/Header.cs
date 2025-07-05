@@ -1,5 +1,6 @@
 ﻿
 using BeeCore;
+using BeeCore.EtherNetIP;
 using BeeCore.Funtion;
 using BeeUi.Commons;
 using BeeUi.Data;
@@ -366,7 +367,7 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
-          
+           
             //    this.Controls.Add(btnHide);
 
             //fadeTimer = new Timer { Interval = 20 };

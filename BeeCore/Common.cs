@@ -105,6 +105,7 @@ namespace BeeCore
             return new Mat(rotatedImage, roi);
         }
        static String er;
+        public static Comunication Comunication=new Comunication();
         public static void IniPython()
         {
 
@@ -113,26 +114,26 @@ namespace BeeCore
                // Environment.SetEnvironmentVariable("PYTHONHOME", @"D:\YourApp\python39");
                //  Environment.SetEnvironmentVariable("PYTHONPATH", @"D:\YourApp\python39\Lib;D:\YourApp\python39\site-packages");
 
-                //string pythonHome = Environment.GetEnvironmentVariable("Python39");
-                //if (!string.IsNullOrEmpty(pythonHome))
-                //{
-                //    string pythonDll = Path.Combine(pythonHome, "python39.dll");
-                //    if (File.Exists(pythonDll))
-                //    {
-                //        Python.Runtime.Runtime.PythonDLL = pythonDll;
+                string pythonHome = Environment.GetEnvironmentVariable("Python39");
+                if (!string.IsNullOrEmpty(pythonHome))
+                {
+                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
+                    if (File.Exists(pythonDll))
+                    {
+                        Python.Runtime.Runtime.PythonDLL = pythonDll;
 
-                // var pythonDll = Path.Combine("C:\\Program Files\\Python312","python312.dll");
-               // Runtime.PythonDLL = pythonDll;
-               // HideConsole();
-                string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
-                Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
-                Environment.SetEnvironmentVariable("PYTHONPATH",
-                    $"{pyHome}\\Lib;{pyHome}\\site-packages");
+                        //var pythonDll = Path.Combine("C:\\Program Files\\Python312", "python312.dll");
+                        //Runtime.PythonDLL = pythonDll;
+                        //HideConsole();
+                        //        string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
+                        //Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
+                        //Environment.SetEnvironmentVariable("PYTHONPATH",
+                        //    $"{pyHome}\\Lib;{pyHome}\\site-packages");
 
 
-                string pythonDll = Path.Combine(pyHome, "python39.dll");
+                        //string pythonDll = Path.Combine(pyHome, "python39.dll");
 
-                Runtime.PythonDLL = pythonDll;
+                        Runtime.PythonDLL = pythonDll;
                         PythonEngine.Initialize();
                         PythonEngine.BeginAllowThreads();
 
@@ -142,27 +143,28 @@ namespace BeeCore
 
                             G.np = Py.Import("numpy");
 
-                    dynamic mod = Py.Import("Tool.Learning");
-                    dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                    G.objYolo = cls.Invoke();              // khởi tạo instance
-                    //dynamic mod2 = Py.Import("Tool.OCR");
-                    //        dynamic cls2 = mod2.GetAttr("OCR"); // class
-                    //        G.objOCR = cls2.Invoke();              // khởi tạo instance
+                            //dynamic mod = Py.Import("Tool.Learning");
+                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                            //G.objYolo = cls.Invoke();              // khởi tạo instance
+                            dynamic mod2 = Py.Import("Tool.OCR");
+                            dynamic cls2 = mod2.GetAttr("OCR"); // class
+                            G.objOCR = cls2.Invoke();              // khởi tạo instance
 
 
-                    dynamic mod3 = Py.Import("Tool.Classic");
-                    dynamic cls3 = mod3.GetAttr("Filter"); // class
-                    G.Classic = cls3.Invoke();              // khởi tạo instance
+                            //dynamic mod3 = Py.Import("Tool.Classic");
+                            //dynamic cls3 = mod3.GetAttr("Filter"); // class
+                            //G.Classic = cls3.Invoke();              // khởi tạo instance
 
 
-                    G.IniEdge = true;
-                    // khởi tạo instance
-                    G.Classic.LoadEdge();
+                            //G.IniEdge = true;
+                            //// khởi tạo instance
+                            //G.Classic.LoadEdge();
 
 
+                        }
+
+                    }
                 }
-                    
-                
             }
             catch (PythonException ex)
             {

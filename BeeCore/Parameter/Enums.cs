@@ -13,6 +13,30 @@ namespace BeeCore
         Crop,
         Process
     }
+    public enum ModeComunication
+    {
+        Server,
+        Client
+    }
+    public enum MethordComunication
+    {
+        Params,
+        Instance
+    }
+    public enum StatusComunication
+    {
+        Disconnect,
+        ReConnect,
+        Connected,
+        Writing,
+        Reading
+    }
+    public enum TypeComunication
+    {
+        MobusRS485,
+        ModbusTCP,
+        EthernetIP
+    }
     public enum ConditionOK
     {
         TotalOK,

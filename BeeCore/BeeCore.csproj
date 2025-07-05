@@ -131,6 +131,11 @@
     <Compile Include="Algorithm\Filters.cs" />
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
+    <Compile Include="Comunication.cs" />
+    <Compile Include="EtherNetIP\AssemblyHelper.cs" />
+    <Compile Include="EtherNetIP\EDS.cs" />
+    <Compile Include="EtherNetIP\EIPAdapter.cs" />
+    <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Parameter\ValuePara.cs" />

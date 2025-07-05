@@ -1,5 +1,6 @@
 ﻿
 using BeeCore;
+using BeeCore.EtherNetIP;
 using BeeUi.Commons;
 using BeeUi.Data;
 using BeeUi.Unit;
@@ -45,7 +46,7 @@ namespace BeeUi
         {
             InitializeComponent();
            this.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, this.Width, this.Height, 20, 20));
-
+            EDS.GenerateEDS("Visionsensor.eds");
             //  Disable();
             //  Enable();
 

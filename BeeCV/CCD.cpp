@@ -498,7 +498,7 @@ System::String^ ScanUsb()
 	devices = de.getVideoDevicesMap();
 	for (auto const& device : devices) {
 		
-		list1.append(device.second.deviceName).append("$").append(device.second.devicePath).append("\n");
+		list1.append(device.second.deviceName).append("$").append(device.second.devicePath);//.append("\n")
 		listCCCD.push_back(list1);
 		//.append(std::to_string(device.first)).append("$").
 	}
@@ -931,15 +931,15 @@ bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 
 	case 0:
 	{
-		auto it = std::find(listCCCD.begin(), listCCCD.end(), nameCCD);
+		int it = 0;// std::find(listCCCD.begin(), listCCCD.end(), nameCCD);
 
-		if (it != listCCCD.end()) {
-			int index = std::distance(listCCCD.begin(), it);
-			IsConnect = ConnectUsb(index);
-		}
+		/*if (it != listCCCD.end()) {
+			int index = std::distance(listCCCD.begin(), it);*/
+			IsConnect = ConnectUsb(0);
+	/*	}
 		else {
-			IsConnect = false;
-		}
+			IsConnect = true;
+		}*/
 
 		break;
 	}

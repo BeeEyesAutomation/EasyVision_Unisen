@@ -212,7 +212,7 @@ bool ColorArea::CheckColor(bool IsCCD, int x, int y, int w, int h, float angle, 
     double d1 = clock();
     Mat matCrop = Mat();
     Mat matBilate = Mat();
-    matCrop = RotateImge(matRaw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+    matCrop = RotateImge(matRaw.clone(), RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
    // cv::imwrite("colorCrop.png", matRaw);
    // cv::bilateralFilter(matCrop, matBilate, 9, 75, 75);
     cv::medianBlur(matCrop, matBilate, 5);
@@ -228,6 +228,8 @@ bool ColorArea::CheckColor(bool IsCCD, int x, int y, int w, int h, float angle, 
     ScoreRS =( pxMathching /( pxTemp*1.0))*100;
     if (ScoreRS > 100)
         ScoreRS = 100;
+    if (ScoreRS < 0)
+        ScoreRS = 0;
     if (pxMathching>(pxTemp* Score) / 100)
     {
         mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(0, 255, 0));
