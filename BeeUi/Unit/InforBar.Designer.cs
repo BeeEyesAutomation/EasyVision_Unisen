@@ -1,4 +1,7 @@
-﻿namespace BeeUi.Unit
+﻿using BeeGlobal;
+using BeeInterface;
+
+namespace BeeUi.Unit
 {
     partial class InforBar
     {
@@ -37,7 +40,7 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tmShowHis = new System.Windows.Forms.Timer(this.components);
-            this.btnHide = new BeeUi.Common.RJButton();
+            this.btnHide = new RJButton();
             this.tab.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.pView.SuspendLayout();
@@ -142,7 +145,7 @@
             this.btnHide.BorderRadius = 5;
             this.btnHide.BorderSize = 0;
             this.btnHide.ButtonImage = null;
-            this.btnHide.Corner = BeeCore.Corner.Both;
+            this.btnHide.Corner =Corner.Both;
             this.btnHide.FlatAppearance.BorderSize = 0;
             this.btnHide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHide.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -181,7 +184,7 @@
 
         #endregion
 
-        public Common.RJButton btnHide;
+        public RJButton btnHide;
         private System.Windows.Forms.TabControl tab;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;

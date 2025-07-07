@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi.Tool
 {
     partial class SettingStep4
@@ -33,11 +35,11 @@ namespace BeeUi.Tool
             this.workRead = new System.ComponentModel.BackgroundWorker();
             this.pLogic1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnLogin = new BeeUi.Common.RJButton();
-            this.btnTotalOK = new BeeUi.Common.RJButton();
-            this.btnAnyOK = new BeeUi.Common.RJButton();
-            this.btnCancel = new BeeUi.Common.RJButton();
-            this.btnComplete = new BeeUi.Common.RJButton();
+            this.btnLogin = new RJButton();
+            this.btnTotalOK = new RJButton();
+            this.btnAnyOK = new RJButton();
+            this.btnCancel = new RJButton();
+            this.btnComplete = new RJButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -284,12 +286,12 @@ namespace BeeUi.Tool
         }
 
         #endregion
-        private Common.RJButton btnCancel;
-        private Common.RJButton btnComplete;
+        private RJButton btnCancel;
+        private RJButton btnComplete;
         private System.ComponentModel.BackgroundWorker workRead;
-        private Common.RJButton btnLogin;
-        private Common.RJButton btnTotalOK;
-        private Common.RJButton btnAnyOK;
+        private RJButton btnLogin;
+        private RJButton btnTotalOK;
+        private RJButton btnAnyOK;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pLogic1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

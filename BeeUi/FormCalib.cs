@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -37,10 +38,10 @@ namespace BeeUi
                 G.EditTool.View.btnRecord.PerformClick();
 
             }
-           BeeCore.Common.listCamera[G.indexChoose].Read();
+           BeeCore.Common.listCamera[Global.IndexChoose].Read();
           
-            BeeCore.G.ParaCam.matSample = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
-            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+            Global.ParaCommon.matSample = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
 
         }
 
@@ -84,10 +85,10 @@ namespace BeeUi
         float valueMedium = 0;
         private void workerCalib_DoWork(object sender, DoWorkEventArgs e)
         {
-           BeeCore.Common.listCamera[G.indexChoose].Read();
+           BeeCore.Common.listCamera[Global.IndexChoose].Read();
             Mat matRaw = BeeCore.Native.GetImg();;
             Mat matProcess = new Mat(matRaw.Size(), MatType.CV_8UC1);
-            Mat matSample = BeeCore.G.ParaCam.matSample.ToMat();
+            Mat matSample = Global.ParaCommon.matSample.ToMat();
             Mat mask = new Mat(), matOr = new Mat();
             Cv2.CvtColor(matSample.Clone(), matSample, ColorConversionCodes.BGR2GRAY);
             Cv2.CvtColor(matRaw.Clone(), mask, ColorConversionCodes.BGR2GRAY);

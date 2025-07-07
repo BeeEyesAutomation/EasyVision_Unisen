@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,6 +28,7 @@ namespace BeeCore
         public String MathQRCODE ="";
         public int Score = 0;
         public double cycleTime;
+        public UsedTool UsedTool = UsedTool.Used;
         // Hàm tạo khung bao quanh mã QR từ tọa độ các điểm
         //static Rectangle GetBoundingBox(ResultPoint[] points)
         //{
@@ -37,7 +39,7 @@ namespace BeeCore
 
         //    return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         //}
-       // public Polygon[] rectQRCode;
+        // public Polygon[] rectQRCode;
 
         public String Content = "";
         public int ScoreRs = 0;
@@ -90,6 +92,9 @@ namespace BeeCore
         public void Complete()
         {
             StatusTool = StatusTool.Done;
+
+            if (UsedTool == UsedTool.Invertse)
+                IsOK = !IsOK;
 
         }
         //public void Ini()

@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi.Common
 {
@@ -35,11 +37,11 @@ namespace BeeUi.Common
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.workConnect = new System.ComponentModel.BackgroundWorker();
-            this.btnSaveProgram = new BeeUi.Common.RJButton();
-            this.btnStep4 = new BeeUi.Common.RJButton();
-            this.btnStep3 = new BeeUi.Common.RJButton();
-            this.btnStep2 = new BeeUi.Common.RJButton();
-            this.btnStep1 = new BeeUi.Common.RJButton();
+            this.btnSaveProgram = new RJButton();
+            this.btnStep4 = new RJButton();
+            this.btnStep3 = new RJButton();
+            this.btnStep2 = new RJButton();
+            this.btnStep1 = new RJButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -93,7 +95,7 @@ namespace BeeUi.Common
             this.btnSaveProgram.BorderRadius = 20;
             this.btnSaveProgram.BorderSize = 2;
             this.btnSaveProgram.ButtonImage = null;
-            this.btnSaveProgram.Corner = BeeCore.Corner.Both;
+            this.btnSaveProgram.Corner =Corner.Both;
             this.btnSaveProgram.FlatAppearance.BorderSize = 0;
             this.btnSaveProgram.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveProgram.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,7 +129,7 @@ namespace BeeUi.Common
             this.btnStep4.BorderRadius = 20;
             this.btnStep4.BorderSize = 2;
             this.btnStep4.ButtonImage = null;
-            this.btnStep4.Corner = BeeCore.Corner.Both;
+            this.btnStep4.Corner =Corner.Both;
             this.btnStep4.FlatAppearance.BorderSize = 0;
             this.btnStep4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStep4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
@@ -158,7 +160,7 @@ namespace BeeUi.Common
             this.btnStep3.BorderRadius = 20;
             this.btnStep3.BorderSize = 2;
             this.btnStep3.ButtonImage = null;
-            this.btnStep3.Corner = BeeCore.Corner.Both;
+            this.btnStep3.Corner =Corner.Both;
             this.btnStep3.FlatAppearance.BorderSize = 0;
             this.btnStep3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStep3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
@@ -189,7 +191,7 @@ namespace BeeUi.Common
             this.btnStep2.BorderRadius = 20;
             this.btnStep2.BorderSize = 2;
             this.btnStep2.ButtonImage = null;
-            this.btnStep2.Corner = BeeCore.Corner.Both;
+            this.btnStep2.Corner =Corner.Both;
             this.btnStep2.FlatAppearance.BorderSize = 0;
             this.btnStep2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStep2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
@@ -220,7 +222,7 @@ namespace BeeUi.Common
             this.btnStep1.BorderRadius = 20;
             this.btnStep1.BorderSize = 2;
             this.btnStep1.ButtonImage = null;
-            this.btnStep1.Corner = BeeCore.Corner.Both;
+            this.btnStep1.Corner =Corner.Both;
             this.btnStep1.FlatAppearance.BorderSize = 0;
             this.btnStep1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStep1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);

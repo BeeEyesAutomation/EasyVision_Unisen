@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi.Unit
 {
@@ -47,7 +49,7 @@ namespace BeeUi.Unit
             this.lbSumNG = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.picChart = new System.Windows.Forms.PictureBox();
-            this.btnResetQty = new BeeUi.Common.RJButton();
+            this.btnResetQty = new RJButton();
             this.pStatus.SuspendLayout();
             this.pInforTotal.SuspendLayout();
             this.pInfor.SuspendLayout();
@@ -340,7 +342,7 @@ namespace BeeUi.Unit
             this.btnResetQty.BorderRadius = 10;
             this.btnResetQty.BorderSize = 1;
             this.btnResetQty.ButtonImage = null;
-            this.btnResetQty.Corner = BeeCore.Corner.Both;
+            this.btnResetQty.Corner =Corner.Both;
             this.btnResetQty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnResetQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnResetQty.ForeColor = System.Drawing.Color.Black;
@@ -391,7 +393,7 @@ namespace BeeUi.Unit
         public System.Windows.Forms.Label lbTimes;
         public System.Windows.Forms.Label lbSumNG;
         private System.Windows.Forms.Label label3;
-        public Common.RJButton btnResetQty;
+        public RJButton btnResetQty;
         public System.Windows.Forms.PictureBox picChart;
         private Common.StepEdit stepEdit1;
         public System.Windows.Forms.TableLayoutPanel pInforTotal;

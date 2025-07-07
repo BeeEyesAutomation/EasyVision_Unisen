@@ -1,4 +1,5 @@
 ﻿using BeeCore.Funtion;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;

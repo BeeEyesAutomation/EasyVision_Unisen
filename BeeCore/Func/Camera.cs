@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
 using System;
@@ -40,12 +41,12 @@ namespace BeeCore
         {
           if(Para.TypeCamera==TypeCamera.TinyIV)
             {
-                if (G.ParaCam.CardChoosed == null) G.ParaCam.CardChoosed = "";
-                    if ( G.ParaCam.CardChoosed!="")
+                if (Global.ParaCommon.CardChoosed == null) Global.ParaCommon.CardChoosed = "";
+                    if ( Global.ParaCommon.CardChoosed!="")
                 {
                     try
                     {
-                        int[] IP = G.ParaCam.CardChoosed.Split('.').Select(int.Parse).ToArray();
+                        int[] IP = Global.ParaCommon.CardChoosed.Split('.').Select(int.Parse).ToArray();
                         return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]);
 
                     }
@@ -110,42 +111,11 @@ namespace BeeCore
                 //if (IsHist)
                 //    CCDPlus.ReadRaw(true);
                 //else
-                CCDPlus.ReadCCD(IndexCCD);
-                int rows=0, cols=0;int Type = 0;
-                IntPtr intPtr = new IntPtr();
-                raw = new Mat();
-                try
-                {
-
-                    unsafe
-                    {
-                        intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
-                        raw = new Mat(rows, cols, Type, intPtr);
-
-                        FrameRate = CCDPlus.FPS;
-                        BeeCore.Common.Cycle = CCDPlus.cycle;
-                       matRaw = raw.Clone();
-                        G.ParaCam.SizeCCD = new System.Drawing.Size(matRaw.Width,matRaw.Height);
-                    }
-                    //    return new Mat();
-
-
-                }
-                finally
-                {
-                    raw.Release();
-                    // Giải phóng bộ nhớ sau khi sử dụng
-                    //Marshal.FreeHGlobal(intPtr);
-                }
-                
-                //StepExposure = CCDPlus.StepExposure;
-                //MinExposure = CCDPlus.MinExposure;
-                //MaxExposure = CCDPlus.MaxExposure;
-                if (G.ParaCam._Exposure != 0)
-                    CCDPlus.Exposure = G.ParaCam._Exposure;
-               // Cycle = CCDPlus.cycle;
-               // CCDPlus.SetPara();
-                ///G.CommonPlus.GetImageRaw();
+                Read();
+            
+                if (Global.ParaCommon._Exposure != 0)
+                    CCDPlus.Exposure = Global.ParaCommon._Exposure;
+        
                 return true;
             }
             return false;

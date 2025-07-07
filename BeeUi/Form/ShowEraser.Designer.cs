@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi.Commons
 {
     partial class ShowEraser
@@ -33,12 +35,12 @@ namespace BeeUi.Commons
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.btnUndo = new BeeUi.Common.RJButton();
-            this.btnClear = new BeeUi.Common.RJButton();
-            this.btnCancel = new BeeUi.Common.RJButton();
-            this.rjButton5 = new BeeUi.Common.RJButton();
-            this.btnHide = new BeeUi.Common.RJButton();
-            this.rjButton2 = new BeeUi.Common.RJButton();
+            this.btnUndo = new RJButton();
+            this.btnClear = new RJButton();
+            this.btnCancel = new RJButton();
+            this.rjButton5 = new RJButton();
+            this.btnHide = new RJButton();
+            this.rjButton2 = new RJButton();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -268,11 +270,11 @@ namespace BeeUi.Commons
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private Common.RJButton btnUndo;
-        private Common.RJButton btnClear;
-        private Common.RJButton btnCancel;
-        private Common.RJButton rjButton5;
-        private Common.RJButton btnHide;
-        private Common.RJButton rjButton2;
+        private RJButton btnUndo;
+        private RJButton btnClear;
+        private RJButton btnCancel;
+        private RJButton rjButton5;
+        private RJButton btnHide;
+        private RJButton rjButton2;
     }
 }

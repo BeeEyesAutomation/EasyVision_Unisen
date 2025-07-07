@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi
 {
     partial class FormCalib
@@ -32,13 +34,13 @@ namespace BeeUi
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCalib));
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbStatus = new System.Windows.Forms.Label();
-            this.btnSetSample = new BeeUi.Common.RJButton();
+            this.btnSetSample = new RJButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCheck = new BeeUi.Common.RJButton();
+            this.btnCheck = new RJButton();
             this.lbScoreError = new System.Windows.Forms.Label();
-            this.trackScoreErr = new BeeUi.TrackBar2();
+            this.trackScoreErr = new TrackBar2();
             this.workerCalib = new System.ComponentModel.BackgroundWorker();
-            this.btnLive = new BeeUi.Common.RJButton();
+            this.btnLive = new RJButton();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -217,13 +219,13 @@ namespace BeeUi
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        public Common.RJButton btnSetSample;
+        public RJButton btnSetSample;
         private System.Windows.Forms.Label label1;
-        public Common.RJButton btnCheck;
+        public RJButton btnCheck;
         private System.Windows.Forms.Label lbScoreError;
         private TrackBar2 trackScoreErr;
         private System.ComponentModel.BackgroundWorker workerCalib;
         public System.Windows.Forms.Label lbStatus;
-        public Common.RJButton btnLive;
+        public RJButton btnLive;
     }
 }

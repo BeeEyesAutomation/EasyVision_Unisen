@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,10 +27,10 @@ namespace BeeUi.Unit
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
-                Directory.CreateDirectory("Program\\" + G.Project);
-                Access.SaveProg("Program\\" + G.Project + "\\" + G.Project + ".prog", G.PropetyTools);
-              //  G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                Directory.CreateDirectory("Program\\" + Global.Project);
+                Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
+              //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
                G.Header. IniProject();
 
@@ -52,13 +54,13 @@ namespace BeeUi.Unit
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            G.PropetyTools[G.indexChoose] = new List<BeeCore.PropetyTool>();
+            BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                G.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
-               Directory.CreateDirectory("Program\\"+G.Project);
-                Access.SaveProg("Program\\" + G.Project+"\\"+ G.Project+ ".prog", G.PropetyTools);
+                Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+               Directory.CreateDirectory("Program\\"+Global.Project);
+                Access.SaveProg("Program\\" + Global.Project+"\\"+ Global.Project+ ".prog", BeeCore.Common.PropetyTools);
                 G.Header.IniProject();
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
@@ -77,8 +79,8 @@ namespace BeeUi.Unit
               String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
                 G.listProgram.DataSource = PathFile; IsSaveAs = true;
                 if (G.listProgram.Items.Count == 0) return;
-                G.Project = G.listProgram.Items[0].ToString();
-                Properties.Settings.Default.programCurrent = G.Project;
+                Global.Project = G.listProgram.Items[0].ToString();
+                Properties.Settings.Default.programCurrent = Global.Project;
                 Properties.Settings.Default.Save();
                 G.Header.IniProject();
                 if (!G.Header.workLoadProgram.IsBusy)
@@ -119,12 +121,12 @@ namespace BeeUi.Unit
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProg));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnMenu = new BeeUi.Common.RJButton();
+            this.btnMenu = new RJButton();
             this.pMenu = new System.Windows.Forms.TableLayoutPanel();
-            this.btnDelect = new BeeUi.Common.RJButton();
-            this.btnSave = new BeeUi.Common.RJButton();
-            this.btnSaveAs = new BeeUi.Common.RJButton();
-            this.btnAdd = new BeeUi.Common.RJButton();
+            this.btnDelect = new RJButton();
+            this.btnSave = new RJButton();
+            this.btnSaveAs = new RJButton();
+            this.btnAdd = new RJButton();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.pMenu.SuspendLayout();
@@ -157,7 +159,7 @@ namespace BeeUi.Unit
             this.btnMenu.BorderRadius = 12;
             this.btnMenu.BorderSize = 0;
             this.btnMenu.ButtonImage = null;
-            this.btnMenu.Corner = BeeCore.Corner.Right;
+            this.btnMenu.Corner =Corner.Right;
             this.btnMenu.FlatAppearance.BorderSize = 0;
             this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -212,7 +214,7 @@ namespace BeeUi.Unit
             this.btnDelect.BorderRadius = 8;
             this.btnDelect.BorderSize = 1;
             this.btnDelect.ButtonImage = null;
-            this.btnDelect.Corner = BeeCore.Corner.Both;
+            this.btnDelect.Corner =Corner.Both;
             this.btnDelect.FlatAppearance.BorderSize = 0;
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -247,7 +249,7 @@ namespace BeeUi.Unit
             this.btnSave.BorderRadius = 8;
             this.btnSave.BorderSize = 1;
             this.btnSave.ButtonImage = null;
-            this.btnSave.Corner = BeeCore.Corner.Both;
+            this.btnSave.Corner =Corner.Both;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -281,7 +283,7 @@ namespace BeeUi.Unit
             this.btnSaveAs.BorderRadius = 8;
             this.btnSaveAs.BorderSize = 1;
             this.btnSaveAs.ButtonImage = null;
-            this.btnSaveAs.Corner = BeeCore.Corner.Both;
+            this.btnSaveAs.Corner =Corner.Both;
             this.btnSaveAs.FlatAppearance.BorderSize = 0;
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -315,7 +317,7 @@ namespace BeeUi.Unit
             this.btnAdd.BorderRadius = 8;
             this.btnAdd.BorderSize = 1;
             this.btnAdd.ButtonImage = null;
-            this.btnAdd.Corner = BeeCore.Corner.Both;
+            this.btnAdd.Corner =Corner.Both;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

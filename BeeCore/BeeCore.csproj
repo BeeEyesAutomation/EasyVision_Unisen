@@ -131,14 +131,12 @@
     <Compile Include="Algorithm\Filters.cs" />
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
-    <Compile Include="Comunication.cs" />
     <Compile Include="EtherNetIP\AssemblyHelper.cs" />
     <Compile Include="EtherNetIP\EDS.cs" />
     <Compile Include="EtherNetIP\EIPAdapter.cs" />
     <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\Logs.cs" />
-    <Compile Include="Parameter\ValuePara.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">
       <SubType>Form</SubType>
@@ -160,10 +158,7 @@
     <Compile Include="Camera\SetCfgCB.cs" />
     <Compile Include="Camera\ToolCfg.cs" />
     <Compile Include="Camera\USB.cs" />
-    <Compile Include="ParaCamera.cs" />
-    <Compile Include="Comuni\Modbus.cs" />
     <Compile Include="Func\Camera.cs" />
-    <Compile Include="Parameter\Enums.cs" />
     <Compile Include="Func\CustomGui.cs" />
     <Compile Include="Func\Draws.cs" />
     <Compile Include="Func\Init.cs" />
@@ -172,24 +167,18 @@
     <Compile Include="Unit\MatchingShape.cs" />
     <Compile Include="Unit\ColorArea.cs" />
     <Compile Include="Common.cs" />
-    <Compile Include="Parameter\Model.cs" />
-    <Compile Include="Parameter\RotatedBoxInfo.cs" />
     <Compile Include="Unit\Circle.cs" />
     <Compile Include="Unit\Positions.cs" />
-    <Compile Include="Parameter\Labels.cs" />
     <Compile Include="Unit\PositionAdj.cs" />
-    <Compile Include="ParaCommon.cs" />
     <Compile Include="Parameter\Config.cs" />
     <Compile Include="dataMat.cs" />
     <Compile Include="Parameter\G.cs" />
     <Compile Include="Unit\EdgePixel.cs" />
     <Compile Include="LocalTool.cs" />
     <Compile Include="Unit\OutLine.cs" />
-    <Compile Include="PLC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropetyTool.cs" />
     <Compile Include="BarCode.cs" />
-    <Compile Include="Parameter\RectRotate.cs" />
     <Compile Include="Unit\OCR.cs" />
     <Compile Include="Unit\Yolo.cs" />
   </ItemGroup>
@@ -201,12 +190,17 @@
     <Content Include="bee.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Comuni\" />
     <Folder Include="Propeties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
       <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
       <Name>BeeCV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
+      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Name>BeeGlobal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

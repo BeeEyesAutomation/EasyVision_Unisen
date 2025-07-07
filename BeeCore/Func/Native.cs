@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

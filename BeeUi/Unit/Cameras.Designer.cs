@@ -1,4 +1,7 @@
-﻿namespace BeeUi.Unit
+﻿using BeeGlobal;
+using BeeInterface;
+
+namespace BeeUi.Unit
 {
     partial class Cameras
     {
@@ -31,11 +34,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cameras));
             this.pCamera = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnHide = new BeeUi.Common.RJButton();
-            this.btnCamera4 = new BeeUi.Common.RJButton();
-            this.btnCamera1 = new BeeUi.Common.RJButton();
-            this.btnCamera2 = new BeeUi.Common.RJButton();
-            this.btnCamera3 = new BeeUi.Common.RJButton();
+            this.btnHide = new RJButton();
+            this.btnCamera4 = new RJButton();
+            this.btnCamera1 = new RJButton();
+            this.btnCamera2 = new RJButton();
+            this.btnCamera3 = new RJButton();
             this.pCamera.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -87,7 +90,7 @@
             this.btnHide.BorderRadius = 8;
             this.btnHide.BorderSize = 1;
             this.btnHide.ButtonImage = null;
-            this.btnHide.Corner = BeeCore.Corner.Right;
+            this.btnHide.Corner =Corner.Right;
             this.btnHide.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnHide.FlatAppearance.BorderSize = 0;
             this.btnHide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -118,7 +121,7 @@
             this.btnCamera4.BorderRadius = 8;
             this.btnCamera4.BorderSize = 0;
             this.btnCamera4.ButtonImage = null;
-            this.btnCamera4.Corner = BeeCore.Corner.Right;
+            this.btnCamera4.Corner =Corner.Right;
             this.btnCamera4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera4.FlatAppearance.BorderSize = 0;
             this.btnCamera4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -150,7 +153,7 @@
             this.btnCamera1.BorderRadius = 8;
             this.btnCamera1.BorderSize = 0;
             this.btnCamera1.ButtonImage = null;
-            this.btnCamera1.Corner = BeeCore.Corner.Left;
+            this.btnCamera1.Corner =Corner.Left;
             this.btnCamera1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera1.FlatAppearance.BorderSize = 0;
             this.btnCamera1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -182,7 +185,7 @@
             this.btnCamera2.BorderRadius = 5;
             this.btnCamera2.BorderSize = 1;
             this.btnCamera2.ButtonImage = null;
-            this.btnCamera2.Corner = BeeCore.Corner.None;
+            this.btnCamera2.Corner =Corner.None;
             this.btnCamera2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera2.FlatAppearance.BorderSize = 0;
             this.btnCamera2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -214,7 +217,7 @@
             this.btnCamera3.BorderRadius = 5;
             this.btnCamera3.BorderSize = 1;
             this.btnCamera3.ButtonImage = null;
-            this.btnCamera3.Corner = BeeCore.Corner.None;
+            this.btnCamera3.Corner =Corner.None;
             this.btnCamera3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera3.FlatAppearance.BorderSize = 0;
             this.btnCamera3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -253,11 +256,11 @@
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public Common.RJButton btnHide;
+        public RJButton btnHide;
         private System.Windows.Forms.TableLayoutPanel pCamera;
-        public Common.RJButton btnCamera4;
-        public Common.RJButton btnCamera1;
-        public Common.RJButton btnCamera2;
-        public Common.RJButton btnCamera3;
+        public RJButton btnCamera4;
+        public RJButton btnCamera1;
+        public RJButton btnCamera2;
+        public RJButton btnCamera3;
     }
 }

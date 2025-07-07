@@ -6,6 +6,7 @@
 //using KEY_Send_n;
 //using ModuleSetting_n;
 using BeeCore.Funtion;
+using BeeGlobal;
 using Heroje_Debug_Tool.SubForm;
 using HJ_CRC32_n;
 using KEY_Send_n;
@@ -1997,8 +1998,8 @@ namespace BeeCore
           
           //  OpenCvSharp.Size sz = Read();
         
-            G.ParaCam.SizeCCD=new System.Drawing.Size(sz.Width, sz.Height);
-            Shows.Full(Shows.imgTemp, G.ParaCam.SizeCCD);
+            Global.ParaCommon.SizeCCD=new System.Drawing.Size(sz.Width, sz.Height);
+            Shows.Full(Shows.imgTemp, Global.ParaCommon.SizeCCD);
         }
 
         private static void TmSend_Elapsed(object sender, ElapsedEventArgs e)

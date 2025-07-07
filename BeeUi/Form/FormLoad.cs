@@ -1,6 +1,7 @@
 ﻿
 using BeeCore;
 using BeeCore.EtherNetIP;
+using BeeGlobal;
 using BeeUi.Commons;
 using BeeUi.Data;
 using BeeUi.Unit;
@@ -95,7 +96,7 @@ namespace BeeUi
             if (G.ScanCCD.cbCCD.SelectedIndex == -1)
 
             {
-                String NameCamera = BeeCore.Common.listCamera[G.indexChoose].Para.Name.Split('$')[0];
+                String NameCamera = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name.Split('$')[0];
                 MessageBox.Show("Connect Failed Camera" + NameCamera + "!");
                 G.ScanCCD.Show();
                 return;
@@ -144,12 +145,12 @@ namespace BeeUi
                 FormActive.CheckActive(addMac);
                 if (G.IsActive)
                 {
-                    if (BeeCore.Common.listCamera[G.indexChoose].Para.Name != null)
-                        if (BeeCore.Common.listCamera[G.indexChoose].Para.Name != "")
+                    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != null)
+                        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != "")
                         {
                             if (G.ScanCCD == null) G.ScanCCD = new ScanCCD();
 
-                            int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[G.indexChoose].Para.Name));
+                            int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
                             // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(G.Config.Resolution);
 
                             if (indexCCD != -1)
@@ -176,13 +177,13 @@ namespace BeeUi
 
         private void TmLoad_Tick(object sender, EventArgs e)
         {
-            G.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
+            Global.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
            
             if (File.Exists("Default.config"))
                 G.Config = Access.LoadConfig("Default.config");
             else
                 G.Config = new Config();
-            BeeCore.G.ParaCam = LoadData.Para(G.Project);
+            Global.ParaCommon = LoadData.Para(Global.Project);
             if (G.Config.RoundRad == 0) G.Config.RoundRad = 10;
             tmLoad.Enabled = false;
             lb.Text = "Waiting Initial Learning AI";
@@ -226,10 +227,10 @@ namespace BeeUi
 
         private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            G.Project = Properties.Settings.Default.programCurrent;
+            Global.Project = Properties.Settings.Default.programCurrent;
 
-            ClassProject.Load(G.Project);
-            foreach (List<PropetyTool> ListTool in G.PropetyTools)
+            ClassProject.Load(Global.Project);
+            foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
                 if (ListTool == null) continue;
                 Parallel.For(0, ListTool.Count, i =>

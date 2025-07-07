@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using BeeUi.Commons;
 using BeeUi.Unit;
 using OpenCvSharp;
@@ -68,7 +69,7 @@ namespace BeeUi.Tool
 
             //}
             pLogic1.Controls.Clear();
-            foreach (PropetyTool propetyTool in G.PropetyTools[G.indexChoose])
+            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
             {
                 ItemLogic itemLogic = new ItemLogic();
                 itemLogic.Parent = pLogic1;
@@ -99,9 +100,9 @@ namespace BeeUi.Tool
         private void SettingStep4_Load(object sender, EventArgs e)
         {
             RefreshLogic();
-            //numToolOK.Maximum = G.PropetyTools.Count;
-            //  if (BeeCore.G.ParaCam.numToolOK > numToolOK.Maximum) BeeCore.G.ParaCam.numToolOK =(int) numToolOK.Maximum;
-            //  numToolOK.Value = BeeCore.G.ParaCam.numToolOK;
+            //numToolOK.Maximum = BeeCore.Common.PropetyTools.Count;
+            //  if (Global.ParaCommon.numToolOK > numToolOK.Maximum) Global.ParaCommon.numToolOK =(int) numToolOK.Maximum;
+            //  numToolOK.Value = Global.ParaCommon.numToolOK;
 
         }
 
@@ -138,7 +139,7 @@ namespace BeeUi.Tool
 
         private void numToolOK_ValueChanged(object sender, EventArgs e)
         {
-         //   BeeCore.G.ParaCam.numToolOK =(int) numToolOK.Value;
+         //   Global.ParaCommon.numToolOK =(int) numToolOK.Value;
 
         }
 

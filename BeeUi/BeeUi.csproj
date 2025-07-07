@@ -141,26 +141,15 @@
       <DependentUpon>Account.cs</DependentUpon>
     </Compile>
     <Compile Include="Commons\Access.cs" />
-    <Compile Include="Commons\ConvertImg.cs" />
     <Compile Include="Commons\Cryto.cs" />
-    <Compile Include="Commons\Custom3DButton .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Commons\CustomNumeric .cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Commons\Decompile.cs" />
     <Compile Include="Commons\Func.cs" />
     <Compile Include="Commons\HistoryCheck.cs" />
     <Compile Include="Commons\KeyAcitve.cs" />
     <Compile Include="Commons\Gui.cs" />
-    <Compile Include="Commons\RoundedPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Commons\RsDirPermissions.cs" />
     <Compile Include="Commons\SqlServer.cs" />
     <Compile Include="Data\ClassProject.cs" />
-    <Compile Include="Data\DataTool.cs" />
     <Compile Include="Data\LoadData.cs" />
     <Compile Include="Data\SaveData.cs" />
     <Compile Include="ForrmAlarm.cs">
@@ -204,35 +193,11 @@
     <Compile Include="SettingDevice.Designer.cs">
       <DependentUpon>SettingDevice.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolCircle.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ToolCircle.Designer.cs">
-      <DependentUpon>ToolCircle.cs</DependentUpon>
-    </Compile>
     <Compile Include="Unit\AddFilters.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Unit\AddFilters.Designer.cs">
       <DependentUpon>AddFilters.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\ToolMeasure.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ToolMeasure.Designer.cs">
-      <DependentUpon>ToolMeasure.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolOCR.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolOCR.Designer.cs">
-      <DependentUpon>ToolOCR.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolPositions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolPositions.Designer.cs">
-      <DependentUpon>ToolPositions.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\SettingCamera.cs">
       <SubType>UserControl</SubType>
@@ -251,24 +216,6 @@
     </Compile>
     <Compile Include="Tool\SettingStep4.Designer.cs">
       <DependentUpon>SettingStep4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolBarcode.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolBarcode.Designer.cs">
-      <DependentUpon>ToolBarcode.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolMatchingShape.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolMatchingShape.Designer.cs">
-      <DependentUpon>ToolMatchingShape.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolYolo.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolYolo.Designer.cs">
-      <DependentUpon>ToolYolo.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ucReport.cs">
       <SubType>UserControl</SubType>
@@ -324,28 +271,10 @@
     <Compile Include="Unit\ItemLogic.Designer.cs">
       <DependentUpon>ItemLogic.cs</DependentUpon>
     </Compile>
-    <Compile Include="Unit\ItemTool.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ItemTool.Designer.cs">
-      <DependentUpon>ItemTool.cs</DependentUpon>
-    </Compile>
     <Compile Include="Commons\iTool.cs" />
     <Compile Include="Commons\Global.cs" />
-    <Compile Include="Commons\GradientTabControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Commons\KbdListener.cs" />
     <Compile Include="Commons\MatrixExtension.cs" />
-    <Compile Include="Commons\Numeric2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Commons\Numeric2.Designer.cs">
-      <DependentUpon>Numeric2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Commons\RJButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Form\ShowEraser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -382,7 +311,6 @@
     <Compile Include="Unit\ToolPage.Designer.cs">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Commons\Tools.cs" />
     <Compile Include="Unit\EditTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -426,47 +354,11 @@
     <Compile Include="Tool\SettingStep2.Designer.cs">
       <DependentUpon>SettingStep2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tool\ToolColorArea.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolColorArea.Designer.cs">
-      <DependentUpon>ToolColorArea.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolEdgePixels.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolEdgePixels.Designer.cs">
-      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolPosition_Adjustment.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolPosition_Adjustment.Designer.cs">
-      <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolPattern.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolPattern.Designer.cs">
-      <DependentUpon>ToolPattern.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\ToolOutLine.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolOutLine.Designer.cs">
-      <DependentUpon>ToolOutLine.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tool\ToolSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tool\ToolSettings.Designer.cs">
       <DependentUpon>ToolSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Commons\TrackBar2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Commons\TrackBar2.Designer.cs">
-      <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
     <Compile Include="Unit\View.cs">
       <SubType>UserControl</SubType>
@@ -478,9 +370,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Commons\CustomNumeric .resx">
-      <DependentUpon>CustomNumeric .cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForrmAlarm.resx">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>
@@ -500,20 +389,8 @@
     <EmbeddedResource Include="SettingDevice.resx">
       <DependentUpon>SettingDevice.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolCircle.resx">
-      <DependentUpon>ToolCircle.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Unit\AddFilters.resx">
       <DependentUpon>AddFilters.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ToolMeasure.resx">
-      <DependentUpon>ToolMeasure.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolOCR.resx">
-      <DependentUpon>ToolOCR.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolPositions.resx">
-      <DependentUpon>ToolPositions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingCamera.resx">
       <DependentUpon>SettingCamera.cs</DependentUpon>
@@ -523,16 +400,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingStep4.resx">
       <DependentUpon>SettingStep4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolBarcode.resx">
-      <DependentUpon>ToolBarcode.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
-      <DependentUpon>ToolMatchingShape.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolYolo.resx">
-      <DependentUpon>ToolYolo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ucReport.resx">
       <DependentUpon>ucReport.cs</DependentUpon>
@@ -560,12 +427,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\ItemLogic.resx">
       <DependentUpon>ItemLogic.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ItemTool.resx">
-      <DependentUpon>ItemTool.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Commons\Numeric2.resx">
-      <DependentUpon>Numeric2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\ShowEraser.resx">
       <DependentUpon>ShowEraser.cs</DependentUpon>
@@ -609,26 +470,8 @@
     <EmbeddedResource Include="Tool\SettingStep2.resx">
       <DependentUpon>SettingStep2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolColorArea.resx">
-      <DependentUpon>ToolColorArea.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolEdgePixels.resx">
-      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolPosition_Adjustment.resx">
-      <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolPattern.resx">
-      <DependentUpon>ToolPattern.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolOutLine.resx">
-      <DependentUpon>ToolOutLine.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolSettings.resx">
       <DependentUpon>ToolSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Commons\TrackBar2.resx">
-      <DependentUpon>TrackBar2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\View.resx">
       <DependentUpon>View.cs</DependentUpon>
@@ -702,6 +545,14 @@
     <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
       <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
       <Name>BeeCV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
+      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Name>BeeGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeeTools\BeeInterface.csproj">
+      <Project>{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
+      <Name>BeeInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

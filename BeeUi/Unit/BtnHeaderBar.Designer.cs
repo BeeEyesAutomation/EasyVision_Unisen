@@ -1,4 +1,7 @@
-﻿namespace BeeUi.Unit
+﻿using BeeGlobal;
+using BeeInterface;
+
+namespace BeeUi.Unit
 {
     partial class BtnHeaderBar
     {
@@ -30,12 +33,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BtnHeaderBar));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnUser = new BeeUi.Common.RJButton();
-            this.btnSettingPLC = new BeeUi.Common.RJButton();
-            this.btnCamera = new BeeUi.Common.RJButton();
-            this.btnfull = new BeeUi.Common.RJButton();
-            this.btnSetting = new BeeUi.Common.RJButton();
-            this.btnReport = new BeeUi.Common.RJButton();
+            this.btnUser = new RJButton();
+            this.btnSettingPLC = new RJButton();
+            this.btnCamera = new RJButton();
+            this.btnfull = new RJButton();
+            this.btnSetting = new RJButton();
+            this.btnReport = new RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,7 +77,7 @@
             this.btnUser.BorderRadius = 5;
             this.btnUser.BorderSize = 1;
             this.btnUser.ButtonImage = null;
-            this.btnUser.Corner = BeeCore.Corner.Both;
+            this.btnUser.Corner =Corner.Both;
             this.btnUser.Dock = System.Windows.Forms.DockStyle.Left;
             this.btnUser.FlatAppearance.BorderSize = 0;
             this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -107,7 +110,7 @@
             this.btnSettingPLC.BorderRadius = 5;
             this.btnSettingPLC.BorderSize = 1;
             this.btnSettingPLC.ButtonImage = null;
-            this.btnSettingPLC.Corner = BeeCore.Corner.Both;
+            this.btnSettingPLC.Corner =Corner.Both;
             this.btnSettingPLC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSettingPLC.FlatAppearance.BorderSize = 0;
             this.btnSettingPLC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -139,7 +142,7 @@
             this.btnCamera.BorderRadius = 5;
             this.btnCamera.BorderSize = 1;
             this.btnCamera.ButtonImage = null;
-            this.btnCamera.Corner = BeeCore.Corner.Both;
+            this.btnCamera.Corner =Corner.Both;
             this.btnCamera.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera.FlatAppearance.BorderSize = 0;
             this.btnCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -171,7 +174,7 @@
             this.btnfull.BorderRadius = 5;
             this.btnfull.BorderSize = 1;
             this.btnfull.ButtonImage = null;
-            this.btnfull.Corner = BeeCore.Corner.Both;
+            this.btnfull.Corner =Corner.Both;
             this.btnfull.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnfull.FlatAppearance.BorderSize = 0;
             this.btnfull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -204,7 +207,7 @@
             this.btnSetting.BorderRadius = 5;
             this.btnSetting.BorderSize = 1;
             this.btnSetting.ButtonImage = null;
-            this.btnSetting.Corner = BeeCore.Corner.Both;
+            this.btnSetting.Corner =Corner.Both;
             this.btnSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSetting.FlatAppearance.BorderSize = 0;
             this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -237,7 +240,7 @@
             this.btnReport.BorderRadius = 5;
             this.btnReport.BorderSize = 1;
             this.btnReport.ButtonImage = null;
-            this.btnReport.Corner = BeeCore.Corner.Both;
+            this.btnReport.Corner =Corner.Both;
             this.btnReport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReport.FlatAppearance.BorderSize = 0;
             this.btnReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -274,12 +277,12 @@
 
         #endregion
 
-        private Common.RJButton btnSetting;
-        private Common.RJButton btnReport;
-        public Common.RJButton btnCamera;
-        public Common.RJButton btnUser;
+        private RJButton btnSetting;
+        private RJButton btnReport;
+        public RJButton btnCamera;
+        public RJButton btnUser;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public Common.RJButton btnSettingPLC;
-        public Common.RJButton btnfull;
+        public RJButton btnSettingPLC;
+        public RJButton btnfull;
     }
 }

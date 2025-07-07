@@ -16,18 +16,17 @@ using Point = OpenCvSharp.Point;
 using System.Linq;
 using Size = OpenCvSharp.Size;
 using System.IO;
+using BeeGlobal;
+using static EasyModbus.ModbusServer;
 namespace BeeCore
 {
   public   class Common
     {
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
-
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
         const int SW_HIDE = 0;
-
         public static void HideConsole()
         {
             var handle = GetConsoleWindow();
@@ -47,17 +46,15 @@ namespace BeeCore
         unsafe public static extern IntPtr GetImageResult(ref int rows, ref int cols, ref int Type);
 
         public static Bitmap bmResult;
-       
         public static List<Camera> listCamera = new List<Camera> { null, null, null, null };
-        public static List<ParaCamera> listParaCamera = new List<ParaCamera> { null, null, null, null };
-       
         public int numError = 0;
         public  bool IsErrorCCD = false;
         public bool Check2Image = false;
         private static int frameRate = 0;
         public static Image ImageShow = new Bitmap(376, 240);
+        public static List<List<PropetyTool>> PropetyTools = new List<List<PropetyTool>>();
       
-      
+
         public static int currentTrig = 0;
        
         public static  List <Bitmap> listRaw = new List<Bitmap>();
@@ -105,66 +102,124 @@ namespace BeeCore
             return new Mat(rotatedImage, roi);
         }
        static String er;
+        public static bool IsRun=false;
+       
+        public static TypeCrop TypeCrop = TypeCrop.Area;
+        private static double GetDistance(double x1, double y1, double x2, double y2)
+        {
+            return Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+        }
+        public static RectRotate GetPositionAdjustment(RectRotate rotOrigin, RectRotate rotTemp)
+        {
+            System.Drawing.Size sz = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+            RectRotate rot = new RectRotate();
+
+            rot._rect = rotOrigin._rect;
+            rot._rectRotation = rotOrigin._rectRotation + Global.angle_Adjustment;
+            PointF pPos = new PointF(rotTemp._PosCenter.X + Global.X_Adjustment, rotTemp._PosCenter.Y + Global.Y_Adjustment);
+            double DeltaX = rotOrigin._PosCenter.X - rotTemp._PosCenter.X;
+            double DeltaY = rotOrigin._PosCenter.Y - rotTemp._PosCenter.Y;
+            int dauX = 1; int dauY = 1;
+            if (DeltaX != 0)
+                dauX = DeltaX > 0 ? 1 : -1;
+            if (DeltaY != 0)
+                dauY = DeltaY > 0 ? 1 : -1;
+
+            double angle1 = Math.Atan(Math.Abs(DeltaY / DeltaX)) * 180 / Math.PI;
+
+
+            //    angle1 = 180 - angle1;
+            //else if (DeltaX < 0 && DeltaY > 0)
+            //    angle1 = - angle1;
+            //if(angle1<0) angle1 = 360 + angle1;
+            double distance = GetDistance(rotOrigin._PosCenter.X, rotOrigin._PosCenter.Y, rotTemp._PosCenter.X, rotTemp._PosCenter.Y);
+            double angle2 = angle1 - Global.angle_Adjustment;
+            if (DeltaX > 0 && DeltaY < 0)
+                angle2 = angle1 - Global.angle_Adjustment;
+            else if (DeltaX > 0 && DeltaY > 0)
+                angle2 = -angle1 - Global.angle_Adjustment;
+            else if (DeltaX < 0 && DeltaY < 0)
+                angle2 = angle1 + Global.angle_Adjustment;
+            // else if (DeltaX < 0 && DeltaY > 0)
+            //     angle2 = -angle1- G.angle_Adjustment;
+            double cos1 = Math.Cos((angle2) * Math.PI / 180);
+            double sin1 = Math.Sin((angle2) * Math.PI / 180);
+            double DeltaX1 = distance * cos1;
+            double DeltaY1 = distance * sin1;
+
+            if (DeltaX > 0 && DeltaY > 0)
+                DeltaY1 = -DeltaY1;
+            // else if (DeltaX < 0 && DeltaY < 0)
+            //DeltaY1 = -DeltaY1;
+            rot._PosCenter = new PointF(pPos.X + (float)DeltaX1 * dauX, pPos.Y + (float)DeltaY1 * dauY);
+
+            return rot;
+        }
         public static Comunication Comunication=new Comunication();
         public static void IniPython()
         {
 
             try
-            {  //// Khởi động môi trường Python
-               // Environment.SetEnvironmentVariable("PYTHONHOME", @"D:\YourApp\python39");
-               //  Environment.SetEnvironmentVariable("PYTHONPATH", @"D:\YourApp\python39\Lib;D:\YourApp\python39\site-packages");
-
-                string pythonHome = Environment.GetEnvironmentVariable("Python39");
-                if (!string.IsNullOrEmpty(pythonHome))
-                {
-                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
-                    if (File.Exists(pythonDll))
-                    {
-                        Python.Runtime.Runtime.PythonDLL = pythonDll;
-
-                        //var pythonDll = Path.Combine("C:\\Program Files\\Python312", "python312.dll");
-                        //Runtime.PythonDLL = pythonDll;
-                        //HideConsole();
-                        //        string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
-                        //Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
-                        //Environment.SetEnvironmentVariable("PYTHONPATH",
-                        //    $"{pyHome}\\Lib;{pyHome}\\site-packages");
+            {
+                string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
+                Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
+                Environment.SetEnvironmentVariable("PYTHONPATH",
+                    $"{pyHome}\\Lib;{pyHome}\\site-packages");
 
 
-                        //string pythonDll = Path.Combine(pyHome, "python39.dll");
+                string pythonDll = Path.Combine(pyHome, "python39.dll");
 
-                        Runtime.PythonDLL = pythonDll;
-                        PythonEngine.Initialize();
-                        PythonEngine.BeginAllowThreads();
+                //string pythonHome = Environment.GetEnvironmentVariable("Python39");
+                //if (!string.IsNullOrEmpty(pythonHome))
+                //{
+                //    string pythonDll = Path.Combine(pythonHome, "python39.dll");
+                //    if (File.Exists(pythonDll))
+                //    {
+                //        Python.Runtime.Runtime.PythonDLL = pythonDll;
 
-                        using (Py.GIL())
-                        {
-
-
-                            G.np = Py.Import("numpy");
-
-                            //dynamic mod = Py.Import("Tool.Learning");
-                            //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                            //G.objYolo = cls.Invoke();              // khởi tạo instance
-                            dynamic mod2 = Py.Import("Tool.OCR");
-                            dynamic cls2 = mod2.GetAttr("OCR"); // class
-                            G.objOCR = cls2.Invoke();              // khởi tạo instance
-
-
-                            //dynamic mod3 = Py.Import("Tool.Classic");
-                            //dynamic cls3 = mod3.GetAttr("Filter"); // class
-                            //G.Classic = cls3.Invoke();              // khởi tạo instance
+                //var pythonDll = Path.Combine("C:\\Program Files\\Python312", "python312.dll");
+                Runtime.PythonDLL = pythonDll;
+                HideConsole();
+                //string pyHome = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lib");
+                //Environment.SetEnvironmentVariable("PYTHONHOME", pyHome);
+                //Environment.SetEnvironmentVariable("PYTHONPATH",
+                //    $"{pyHome}\\Lib;{pyHome}\\site-packages");
 
 
-                            //G.IniEdge = true;
-                            //// khởi tạo instance
-                            //G.Classic.LoadEdge();
+             //   string pythonDll = Path.Combine(pyHome, "python39.dll");
+
+                //Runtime.PythonDLL = pythonDll;
+                //        PythonEngine.Initialize();
+                //        PythonEngine.BeginAllowThreads();
+
+                //        using (Py.GIL())
+                //        {
 
 
-                        }
+                //            G.np = Py.Import("numpy");
 
-                    }
-                }
+                //        dynamic mod = Py.Import("Tool.Learning");
+                //        dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                //        G.objYolo = cls.Invoke();              // khởi tạo instance
+                //        dynamic mod2 = Py.Import("Tool.OCR");
+                //         dynamic cls2 = mod2.GetAttr("OCR"); // class
+                //         G.objOCR = cls2.Invoke();              // khởi tạo instance
+
+
+                //    dynamic mod3 = Py.Import("Tool.Classic");
+                //    dynamic cls3 = mod3.GetAttr("Filter"); // class
+                //    G.Classic = cls3.Invoke();              // khởi tạo instance
+
+
+                //    G.IniEdge = true;
+                //    // khởi tạo instance
+                //    G.Classic.LoadEdge();
+
+
+                //}
+
+               //     }
+                //}
             }
             catch (PythonException ex)
             {
@@ -299,8 +354,8 @@ namespace BeeCore
         //        StepExposure = G.CCD.StepExposure;
         //        MinExposure = G.CCD.MinExposure;
         //        MaxExposure=G.CCD.MaxExposure;
-        //        if(G.ParaCam._Exposure != 0)
-        //     G.CCD.Exposure =  G.ParaCam._Exposure;
+        //        if(Global.ParaCommon._Exposure != 0)
+        //     G.CCD.Exposure =  Global.ParaCommon._Exposure;
         //        Cycle = G.CCD.cycle;
         //        G.CCD.SetPara();
         //        ///G.CommonPlus.GetImageRaw();

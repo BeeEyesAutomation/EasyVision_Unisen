@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Common;
 using BeeUi.Data;
 using BeeUi.Tool;
@@ -13,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows.Forms;
+
 using UserControl = System.Windows.Forms.UserControl;
 
 namespace BeeUi.Commons
@@ -249,12 +252,15 @@ namespace BeeUi.Commons
         public void CreateNewTool()
         {
             dynamic control = DataTool.New(TypeTool); 
-            int indexName = G.listAlltool[G.indexChoose].Count() + 1;
+            int indexName = G.listAlltool[Global.IndexChoose].Count() + 1;
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
-            G.PropetyTools[G.indexChoose].Add(propetyTool);
-            G.listAlltool[G.indexChoose].Add(DataTool.SetPropety(propetyTool, indexName-1, G.indexChoose));
+            BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propetyTool);
+            G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(G.ToolSettings.X,G.ToolSettings.Y)));
             DataTool.LoadPropety(control);
-            G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].ItemTool);
+            ItemTool itemTool = G.listAlltool[Global.IndexChoose][G.listAlltool[Global.IndexChoose].Count() - 1].ItemTool;
+            G.ToolSettings.Y += itemTool.Height + 10;
+            G.ToolSettings.pAllTool.Controls.Add(itemTool);
+
         }
          private void btnOk_Click(object sender, EventArgs e)
         {

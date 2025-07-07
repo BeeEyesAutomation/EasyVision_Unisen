@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BeeCore;
-
+using BeeGlobal;
 namespace BeeUi.Data
 {
     public class SaveData
@@ -26,7 +26,7 @@ namespace BeeUi.Data
             String path = "Program\\" + Project;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            Access.SaveParaCamera(path + "\\" + G.Project + ".cam", ParaCamera);
+            Access.SaveParaCamera(path + "\\" + Global.Project + ".cam", ParaCamera);
            
         }
         public static void Project(String Project)
@@ -34,10 +34,10 @@ namespace BeeUi.Data
             String path = "Program\\" + Project;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            Access.SaveProg(path + "\\" + G.Project + ".prog", G.PropetyTools);
+            Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
             Access.SaveConfig("Default.config", G.Config);
-            Access.SaveParaComon(path + "\\" + G.Project + ".para", BeeCore.G.ParaCam);
-            Access.SaveParaCamera(path + "\\" + G.Project + ".cam", BeeCore.Common.listParaCamera);
+            Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
+            Access.SaveParaCamera(path + "\\" + Global.Project + ".cam",Global.listParaCamera);
         }
     }
 }

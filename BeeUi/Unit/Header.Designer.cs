@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi.Common
 {
@@ -54,10 +56,10 @@ namespace BeeUi.Common
             this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.workSaveProject = new System.ComponentModel.BackgroundWorker();
             this.Layout = new System.Windows.Forms.TableLayoutPanel();
-            this.btnMode = new BeeUi.Common.RJButton();
+            this.btnMode = new RJButton();
             this.pModel = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowList = new System.Windows.Forms.Button();
-            this.btnEnQrCode = new BeeUi.Common.RJButton();
+            this.btnEnQrCode = new RJButton();
             this.editProg1 = new BeeUi.Unit.EditProg();
             this.label1 = new System.Windows.Forms.Label();
             this.CameraBar = new BeeUi.Unit.Cameras();
@@ -320,7 +322,7 @@ namespace BeeUi.Common
             this.btnMode.BorderRadius = 5;
             this.btnMode.BorderSize = 1;
             this.btnMode.ButtonImage = null;
-            this.btnMode.Corner = BeeCore.Corner.Both;
+            this.btnMode.Corner =Corner.Both;
             this.btnMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMode.FlatAppearance.BorderSize = 0;
             this.btnMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -388,7 +390,7 @@ namespace BeeUi.Common
             this.btnEnQrCode.BorderRadius = 10;
             this.btnEnQrCode.BorderSize = 1;
             this.btnEnQrCode.ButtonImage = null;
-            this.btnEnQrCode.Corner = BeeCore.Corner.Both;
+            this.btnEnQrCode.Corner =Corner.Both;
             this.btnEnQrCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEnQrCode.FlatAppearance.BorderSize = 0;
             this.btnEnQrCode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

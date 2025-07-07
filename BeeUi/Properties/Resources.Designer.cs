@@ -283,69 +283,9 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_HANDLE_ON_DOWN {
+        internal static System.Drawing.Bitmap BID_ICON_WIDTH_TOOL_LARGE_E_32BIT {
             get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_HANDLE_ON_DOWN", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_HANDLE_ON_NORMAL {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_HANDLE_ON_NORMAL", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_HANDLE_ON_ROLLOVER {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_HANDLE_ON_ROLLOVER", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_SCALE_8PIX_W101 {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_SCALE_8PIX_W101", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_SCALE_8PIX_W202 {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_SCALE_8PIX_W202", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_SCALE_8PIX_W303 {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_SCALE_8PIX_W303", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_SLIDER_SCALE_8PIX_WHITE {
-            get {
-                object obj = ResourceManager.GetObject("BID_SLIDER_SCALE_8PIX_WHITE", resourceCulture);
+                object obj = ResourceManager.GetObject("BID_ICON_WIDTH_TOOL_LARGE_E_32BIT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -441,16 +381,6 @@ namespace BeeUi.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Color_Area {
-            get {
-                object obj = ResourceManager.GetObject("Color_Area", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Color_Dropper {
@@ -466,136 +396,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Color_Dropper_2 {
             get {
                 object obj = ResourceManager.GetObject("Color_Dropper_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentColor_Area {
-            get {
-                object obj = ResourceManager.GetObject("contentColor_Area", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentDiameter {
-            get {
-                object obj = ResourceManager.GetObject("contentDiameter", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentEdge {
-            get {
-                object obj = ResourceManager.GetObject("contentEdge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentEdge_Pixels {
-            get {
-                object obj = ResourceManager.GetObject("contentEdge_Pixels", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentMatchingShape {
-            get {
-                object obj = ResourceManager.GetObject("contentMatchingShape", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentOCR {
-            get {
-                object obj = ResourceManager.GetObject("contentOCR", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentOutLine {
-            get {
-                object obj = ResourceManager.GetObject("contentOutLine", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentPattern {
-            get {
-                object obj = ResourceManager.GetObject("contentPattern", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentPitch {
-            get {
-                object obj = ResourceManager.GetObject("contentPitch", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentPosition_Adjustment {
-            get {
-                object obj = ResourceManager.GetObject("contentPosition_Adjustment", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentPositions {
-            get {
-                object obj = ResourceManager.GetObject("contentPositions", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentWidth {
-            get {
-                object obj = ResourceManager.GetObject("contentWidth", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentYolo {
-            get {
-                object obj = ResourceManager.GetObject("contentYolo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -663,16 +463,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Diameter {
-            get {
-                object obj = ResourceManager.GetObject("Diameter", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Down {
             get {
                 object obj = ResourceManager.GetObject("Down", resourceCulture);
@@ -696,26 +486,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Download {
             get {
                 object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Edge {
-            get {
-                object obj = ResourceManager.GetObject("Edge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Edge_Pixels {
-            get {
-                object obj = ResourceManager.GetObject("Edge_Pixels", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1033,26 +803,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap MatchingShape {
-            get {
-                object obj = ResourceManager.GetObject("MatchingShape", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Measure {
-            get {
-                object obj = ResourceManager.GetObject("Measure", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
@@ -1083,49 +833,9 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap OCR {
-            get {
-                object obj = ResourceManager.GetObject("OCR", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap OutLine {
-            get {
-                object obj = ResourceManager.GetObject("OutLine", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap output_onlinepngtools {
             get {
                 object obj = ResourceManager.GetObject("output-onlinepngtools", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Pattern {
-            get {
-                object obj = ResourceManager.GetObject("Pattern", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Pitch {
-            get {
-                object obj = ResourceManager.GetObject("Pitch", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1196,26 +906,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap PortNotConnect {
             get {
                 object obj = ResourceManager.GetObject("PortNotConnect", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Position_Adjustment {
-            get {
-                object obj = ResourceManager.GetObject("Position_Adjustment", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Positions {
-            get {
-                object obj = ResourceManager.GetObject("Positions", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1576,26 +1266,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Warning_1 {
             get {
                 object obj = ResourceManager.GetObject("Warning_1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Width {
-            get {
-                object obj = ResourceManager.GetObject("Width", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Yolo {
-            get {
-                object obj = ResourceManager.GetObject("Yolo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

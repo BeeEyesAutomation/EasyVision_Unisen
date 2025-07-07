@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Common;
 using BeeUi.Commons;
 using System;
@@ -21,11 +23,11 @@ namespace BeeUi.Unit
         {
             InitializeComponent();
         }
-        public PLC PLC = new PLC();
+      
         public void RefreshValuePLC()
         {if (IsPress) return;
             if (!this.Visible) return;
-            if (G.PLC.valueInput.Count() < 16) return;
+            if (Global.Comunication.IO.valueInput.Count() < 16) return;
             foreach (Control c1 in G.SettingPLC.LayIntput.Controls)
             {
                 foreach (Control c in c1.Controls)
@@ -35,12 +37,12 @@ namespace BeeUi.Unit
                         RJButton btn = c as RJButton;
                         int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-                        btn.IsCLick = Convert.ToBoolean(G.PLC.valueInput[numAdd]);
+                        btn.IsCLick = Convert.ToBoolean(Global.Comunication.IO.valueInput[numAdd]);
                     }
                }
             }
-            if (G.PLC.valueOutput == null) return;
-            if (G.PLC.valueOutput.Count() < 16) return;
+            if (Global.Comunication.IO.valueOutput == null) return;
+            if (Global.Comunication.IO.valueOutput.Count() < 16) return;
             foreach (Control c1 in G.SettingPLC.LayOutput.Controls)
             {
                 foreach (Control c in c1.Controls)
@@ -50,7 +52,7 @@ namespace BeeUi.Unit
                         RJButton btn = c as RJButton;
                         int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-                        btn.IsCLick = Convert.ToBoolean(G.PLC.valueOutput[numAdd]);
+                        btn.IsCLick = Convert.ToBoolean(Global.Comunication.IO.valueOutput[numAdd]);
                     }
                 }
             }
@@ -90,7 +92,7 @@ namespace BeeUi.Unit
             }
 int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
-            await Task.Run(() => G.PLC.WriteInPut(numAdd, btn.IsCLick));
+            await Task.Run(() => Global.Comunication.IO.WriteInPut(numAdd, btn.IsCLick));
             
             G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -107,8 +109,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 goto X;
             }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
-            G.PLC.SetOutPut(numAdd, btn.IsCLick);
-            await Task.Run(() => G.PLC.WriteOutPut());
+            Global.Comunication.IO.SetOutPut(numAdd, btn.IsCLick);
+            await Task.Run(() => Global.Comunication.IO.WriteOutPut());
            
             G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -140,8 +142,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-           G.PLC.Connect(G.Config.IDPort);
-            if (G.PLC.IsConnected)
+           Global.Comunication.IO.Connect(G.Config.IDPort);
+            if (Global.Comunication.IO.IsConnected)
             {
                 if (File.Exists("Default.config"))
                     File.Delete("Default.config");
@@ -152,8 +154,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
         {
            
-                this.LayIntput.Enabled = G.PLC.IsConnected;
-           this.LayOutput.Enabled = G.PLC.IsConnected;
+                this.LayIntput.Enabled = Global.Comunication.IO.IsConnected;
+           this.LayOutput.Enabled = Global.Comunication.IO.IsConnected;
 
         }
 

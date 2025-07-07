@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi.Commons
 {
     partial class ToolPage
@@ -33,8 +35,8 @@ namespace BeeUi.Commons
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnCancel = new BeeUi.Common.RJButton();
-            this.btnOk = new BeeUi.Common.RJButton();
+            this.btnCancel = new RJButton();
+            this.btnOk = new RJButton();
             this.tabTool = new System.Windows.Forms.TabControl();
             this.Basic_Tool = new System.Windows.Forms.TabPage();
             this.Extra_Tool_1 = new System.Windows.Forms.TabPage();
@@ -205,7 +207,7 @@ namespace BeeUi.Commons
             this.img.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.img.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.img.Dock = System.Windows.Forms.DockStyle.Top;
-            this.img.Image = global::BeeUi.Properties.Resources.contentOutLine;
+            this.img.Image = global::BeeUi.Properties.Resources.BID_ICON_COPY_D_32BIT;
             this.img.Location = new System.Drawing.Point(0, 38);
             this.img.Name = "img";
             this.img.Size = new System.Drawing.Size(334, 198);
@@ -252,8 +254,8 @@ namespace BeeUi.Commons
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private Common.RJButton btnCancel;
-        private Common.RJButton btnOk;
+        private RJButton btnCancel;
+        private RJButton btnOk;
         private System.Windows.Forms.TabControl tabTool;
         private System.Windows.Forms.TabPage Basic_Tool;
         private System.Windows.Forms.TabPage Extra_Tool_1;

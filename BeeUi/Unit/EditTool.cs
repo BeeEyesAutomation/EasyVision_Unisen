@@ -1,5 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Commons;
 using BeeUi.Tool;
 using BeeUi.Unit;
@@ -32,6 +34,7 @@ namespace BeeUi
         {
             try
             {
+                Global.IndexToolSelected = -1;
             X: switch (Step)
                 {
                     case Step.PLC:
@@ -55,8 +58,12 @@ namespace BeeUi
                         G.SettingPLC.Visible = false;
                         //pEditTool.Visible = true;
                         G.ToolSettings.Parent = pEditTool;
+                        G.ToolSettings.Size = pEditTool.Size;
+                        G.ToolSettings.Location = new Point(0, 0);
+                        G.ToolSettings.BringToFront();
+                        G.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         G.ToolSettings.pAllTool.Visible = true;
-                        G.ToolSettings.Dock = DockStyle.Fill;
+                        G.ToolSettings.Dock = DockStyle.None;
                         G.EditTool.View.pHeader.Controls.Clear();
                         if (G.ResultBar == null)
                         {
@@ -71,15 +78,15 @@ namespace BeeUi
                         G.ResultBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         try
                         {
-                            if (BeeCore.G.ParaCam.matRegister != null)
-                                if (BeeCore.G.ParaCam.matRegister.Width != 0)
+                            if (Global.ParaCommon.matRegister != null)
+                                if (Global.ParaCommon.matRegister.Width != 0)
                                 {
-                                    BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
+                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
+                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -111,7 +118,7 @@ namespace BeeUi
 
 
                         }
-                        foreach (Commons.Tools tool in G.listAlltool[G.indexChoose])
+                        foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                         {
                             tool.ItemTool.Score.Enabled = false;
                         }
@@ -142,15 +149,15 @@ namespace BeeUi
                         lbTool.Text = "Register Image";
                         try
                         {
-                            if (BeeCore.G.ParaCam.matRegister != null)
-                                if (BeeCore.G.ParaCam.matRegister.Width != 0)
+                            if (Global.ParaCommon.matRegister != null)
+                                if (Global.ParaCommon.matRegister.Width != 0)
                                 {
-                                    BeeCore.Common.listCamera[G.indexChoose].matRaw = BeeCore.G.ParaCam.matRegister.ToMat().Clone();
+                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[G.indexChoose].matRaw.ToBitmap();
+                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
+                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                     G.Config.imgZoom = View.imgView.Zoom;
                                     G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -160,7 +167,7 @@ namespace BeeUi
                         {
 
                         }
-                        //G.EditTool.View.imgView.Image = BeeCore.G.ParaCam.matRegister;
+                        //G.EditTool.View.imgView.Image = Global.ParaCommon.matRegister;
                         //G.EditTool.View.imgView.Invalidate();
                         //G.EditTool.View.imgView.Update();
                         break;
@@ -169,11 +176,15 @@ namespace BeeUi
                         if (G.ToolSettings == null)
                             G.ToolSettings = new ToolSettings();
                         pEditTool.Controls.Clear();
-                        G.ToolSettings.Visible = true;
                         G.ToolSettings.Parent = pEditTool;
+                        G.ToolSettings.Size = pEditTool.Size;
+                        G.ToolSettings.Location = new Point(0, 0);
                         G.ToolSettings.pAllTool.Visible = true;
-                        G.ToolSettings.Dock = DockStyle.Fill;
-                        if (BeeCore.G.ParaCam.matRegister != null)
+                        G.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                      
+                     
+                        G.ToolSettings.BringToFront();
+                        if (Global.ParaCommon.matRegister != null)
                         {
                             G.IsCalib = false;
                             pEditTool.Visible = true;
@@ -226,11 +237,11 @@ namespace BeeUi
           
             
           
-            if (G.PLC.IsConnected)
+            if (Global.Comunication.IO.IsConnected)
             {
-                G.PLC.SetOutPut(G.PLC.valueOutput[4], false); //Ready
-                G.PLC.SetOutPut(G.PLC.valueOutput[6], true); //Busy
-                G.PLC.WriteOutPut();
+                Global.Comunication.IO.SetOutPut(Global.Comunication.IO.valueOutput[4], false); //Ready
+                Global.Comunication.IO.SetOutPut(Global.Comunication.IO.valueOutput[6], true); //Busy
+                Global.Comunication.IO.WriteOutPut();
                
                 Modbus.DisconnectPLC();
             }
@@ -246,9 +257,9 @@ namespace BeeUi
             G.Header.tmReadPLC.Enabled = false;
             if(G.Header.workPLC.IsBusy)
             G.Header.workPLC.CancelAsync();
-            if (G.PLC.IsConnected)
+            if (Global.Comunication.IO.IsConnected)
             {
-                //G.PLC.WriteOutPut(2, true);
+                //Global.Comunication.IO.WriteOutPut(2, true);
                 Modbus.DisconnectPLC();
             }
         }
@@ -500,7 +511,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "byPass PLC",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 toolStripPort.Text = "ByPass PLC";
-                G.IsByPassPLC = true;
+                Global.Comunication.IO.IsBypass = true;
             }
         }
 
@@ -509,7 +520,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
               
-                foreach (Tools tool in G.listAlltool[G.indexChoose])
+                foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                     tool.tool.LoadPara();
               //  G.Header.workLoadProgram.RunWorkerAsync();
             }

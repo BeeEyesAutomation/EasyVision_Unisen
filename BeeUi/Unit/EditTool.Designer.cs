@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi
 {
@@ -55,12 +57,12 @@ namespace BeeUi
             this.lbTool = new System.Windows.Forms.Label();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.LayoutEnd = new System.Windows.Forms.TableLayoutPanel();
-            this.btnShuttdown = new BeeUi.Common.RJButton();
+            this.btnShuttdown = new RJButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnExit = new BeeUi.Common.RJButton();
+            this.btnExit = new RJButton();
             this.header1 = new BeeUi.Common.Header();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
@@ -360,7 +362,7 @@ namespace BeeUi
             this.btnShuttdown.BorderRadius = 5;
             this.btnShuttdown.BorderSize = 2;
             this.btnShuttdown.ButtonImage = null;
-            this.btnShuttdown.Corner = BeeCore.Corner.Both;
+            this.btnShuttdown.Corner =Corner.Both;
             this.btnShuttdown.FlatAppearance.BorderSize = 0;
             this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -440,7 +442,7 @@ namespace BeeUi
             this.btnExit.BorderRadius = 5;
             this.btnExit.BorderSize = 2;
             this.btnExit.ButtonImage = null;
-            this.btnExit.Corner = BeeCore.Corner.Both;
+            this.btnExit.Corner =Corner.Both;
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -514,7 +516,7 @@ namespace BeeUi
         public System.Windows.Forms.ToolStripStatusLabel toolStripPort;
         public System.Windows.Forms.ToolStripStatusLabel txtRecept;
         public System.Windows.Forms.ToolStripStatusLabel lbFrameRate;
-        private Common.RJButton btnExit;
+        private RJButton btnExit;
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label label2;
         public Unit.InforBar inforBar1;
@@ -535,7 +537,7 @@ namespace BeeUi
         public System.Windows.Forms.Timer tmReaPLC;
         private Common.Header header1;
         public Unit.BtnHeaderBar btnHeaderBar1;
-        private Common.RJButton btnShuttdown;
+        private RJButton btnShuttdown;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.ToolStripStatusLabel lbNamefile;

@@ -1,4 +1,7 @@
 ﻿
+using BeeGlobal;
+using BeeInterface;
+
 namespace BeeUi
 {
     partial class IOSetting
@@ -32,22 +35,22 @@ namespace BeeUi
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IOSetting));
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.pCany = new System.Windows.Forms.Panel();
-            this.btnSmall = new BeeUi.Common.RJButton();
-            this.btnNormal = new BeeUi.Common.RJButton();
-            this.btnbig = new BeeUi.Common.RJButton();
+            this.btnSmall = new RJButton();
+            this.btnNormal = new RJButton();
+            this.btnbig = new RJButton();
             this.pArea = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
-            this.trackLimitDay = new BeeUi.TrackBar2();
+            this.trackLimitDay = new TrackBar2();
             this.label3 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnSaveNG = new BeeUi.Common.RJButton();
-            this.btnSaveOK = new BeeUi.Common.RJButton();
+            this.btnSaveNG = new RJButton();
+            this.btnSaveOK = new RJButton();
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.btnSaveRS = new BeeUi.Common.RJButton();
-            this.btnSaveRaw = new BeeUi.Common.RJButton();
+            this.btnSaveRS = new RJButton();
+            this.btnSaveRaw = new RJButton();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3.SuspendLayout();
             this.pCany.SuspendLayout();
@@ -94,7 +97,7 @@ namespace BeeUi
             this.btnSmall.BorderRadius = 5;
             this.btnSmall.BorderSize = 1;
             this.btnSmall.ButtonImage = null;
-            this.btnSmall.Corner = BeeCore.Corner.Both;
+            this.btnSmall.Corner =Corner.Both;
             this.btnSmall.FlatAppearance.BorderSize = 0;
             this.btnSmall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSmall.ForeColor = System.Drawing.Color.Black;
@@ -123,7 +126,7 @@ namespace BeeUi
             this.btnNormal.BorderRadius = 5;
             this.btnNormal.BorderSize = 1;
             this.btnNormal.ButtonImage = null;
-            this.btnNormal.Corner = BeeCore.Corner.Both;
+            this.btnNormal.Corner =Corner.Both;
             this.btnNormal.FlatAppearance.BorderSize = 0;
             this.btnNormal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNormal.ForeColor = System.Drawing.Color.Black;
@@ -152,7 +155,7 @@ namespace BeeUi
             this.btnbig.BorderRadius = 5;
             this.btnbig.BorderSize = 1;
             this.btnbig.ButtonImage = null;
-            this.btnbig.Corner = BeeCore.Corner.Both;
+            this.btnbig.Corner =Corner.Both;
             this.btnbig.FlatAppearance.BorderSize = 0;
             this.btnbig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnbig.ForeColor = System.Drawing.Color.Black;
@@ -255,7 +258,7 @@ namespace BeeUi
             this.btnSaveNG.BorderRadius = 5;
             this.btnSaveNG.BorderSize = 1;
             this.btnSaveNG.ButtonImage = null;
-            this.btnSaveNG.Corner = BeeCore.Corner.Both;
+            this.btnSaveNG.Corner =Corner.Both;
             this.btnSaveNG.FlatAppearance.BorderSize = 0;
             this.btnSaveNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveNG.ForeColor = System.Drawing.Color.Black;
@@ -284,7 +287,7 @@ namespace BeeUi
             this.btnSaveOK.BorderRadius = 5;
             this.btnSaveOK.BorderSize = 1;
             this.btnSaveOK.ButtonImage = null;
-            this.btnSaveOK.Corner = BeeCore.Corner.Both;
+            this.btnSaveOK.Corner =Corner.Both;
             this.btnSaveOK.FlatAppearance.BorderSize = 0;
             this.btnSaveOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveOK.ForeColor = System.Drawing.Color.Black;
@@ -331,7 +334,7 @@ namespace BeeUi
             this.btnSaveRS.BorderRadius = 5;
             this.btnSaveRS.BorderSize = 1;
             this.btnSaveRS.ButtonImage = null;
-            this.btnSaveRS.Corner = BeeCore.Corner.Both;
+            this.btnSaveRS.Corner =Corner.Both;
             this.btnSaveRS.FlatAppearance.BorderSize = 0;
             this.btnSaveRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveRS.ForeColor = System.Drawing.Color.Black;
@@ -360,7 +363,7 @@ namespace BeeUi
             this.btnSaveRaw.BorderRadius = 5;
             this.btnSaveRaw.BorderSize = 1;
             this.btnSaveRaw.ButtonImage = null;
-            this.btnSaveRaw.Corner = BeeCore.Corner.Both;
+            this.btnSaveRaw.Corner =Corner.Both;
             this.btnSaveRaw.FlatAppearance.BorderSize = 0;
             this.btnSaveRaw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveRaw.ForeColor = System.Drawing.Color.Black;
@@ -418,12 +421,12 @@ namespace BeeUi
         #endregion
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Panel panel4;
-        private Common.RJButton btnSaveRaw;
-        private Common.RJButton btnSaveRS;
+        private RJButton btnSaveRaw;
+        private RJButton btnSaveRS;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
-        private Common.RJButton btnSaveOK;
-        private Common.RJButton btnSaveNG;
+        private RJButton btnSaveOK;
+        private RJButton btnSaveNG;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel pArea;
@@ -431,9 +434,9 @@ namespace BeeUi
         public TrackBar2 trackLimitDay;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel pCany;
-        private Common.RJButton btnbig;
-        private Common.RJButton btnNormal;
-        private Common.RJButton btnSmall;
+        private RJButton btnbig;
+        private RJButton btnNormal;
+        private RJButton btnSmall;
         private System.Windows.Forms.TabControl tabControl2;
     }
 }

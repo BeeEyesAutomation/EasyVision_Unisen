@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeGlobal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -30,7 +31,7 @@ namespace BeeUi
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
                     Access.SaveConfig("Default.config", G.Config);
-                    G.Header.Acccess(G.IsRun);
+                    G.Header.Acccess(Global.IsRun);
                 }
                 else
                 {
@@ -48,7 +49,7 @@ namespace BeeUi
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
                     Access.SaveConfig("Default.config", G.Config);
-                    G.Header.Acccess(G.IsRun);
+                    G.Header.Acccess(Global.IsRun);
                 }
                 else
                 {
@@ -65,7 +66,7 @@ namespace BeeUi
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
                     Access.SaveConfig("Default.config", G.Config);
-                    G.Header.Acccess(G.IsRun);
+                    G.Header.Acccess(Global.IsRun);
                 }
                 else
                 {
@@ -80,7 +81,7 @@ namespace BeeUi
                  if (File.Exists("Default.config"))
                     File.Delete("Default.config");
                 Access.SaveConfig("Default.config", G.Config);
-                G.Header.Acccess(G.IsRun);
+                G.Header.Acccess(Global.IsRun);
             }    
 
 

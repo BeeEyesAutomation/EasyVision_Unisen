@@ -15,9 +15,10 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Web.UI.WebControls;
-using BeeCore.Parameter;
+
 using BeeCore.Funtion;
 using System.Windows.Forms;
+using BeeGlobal;
 
 namespace BeeCore
 {

@@ -1,4 +1,7 @@
 ﻿
+using BeeGlobal;
+using BeeInterface;
+
 namespace BeeUi
 {
     partial class ScanCCD
@@ -37,6 +40,10 @@ namespace BeeUi
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.work = new System.ComponentModel.BackgroundWorker();
             this.pCamera = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCamera4 = new BeeInterface.RJButton();
+            this.btnCamera1 = new BeeInterface.RJButton();
+            this.btnCamera2 = new BeeInterface.RJButton();
+            this.btnCamera3 = new BeeInterface.RJButton();
             this.workConAll = new System.ComponentModel.BackgroundWorker();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -50,16 +57,12 @@ namespace BeeUi
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnDisConnect = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnUSB2_0 = new BeeInterface.RJButton();
+            this.btnCameraTiny = new BeeInterface.RJButton();
+            this.btnGigE = new BeeInterface.RJButton();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCamera4 = new BeeUi.Common.RJButton();
-            this.btnCamera1 = new BeeUi.Common.RJButton();
-            this.btnCamera2 = new BeeUi.Common.RJButton();
-            this.btnCamera3 = new BeeUi.Common.RJButton();
-            this.btnUSB2_0 = new BeeUi.Common.RJButton();
-            this.btnCameraTiny = new BeeUi.Common.RJButton();
-            this.btnGigE = new BeeUi.Common.RJButton();
             this.pCamera.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -147,6 +150,134 @@ namespace BeeUi
             this.pCamera.Size = new System.Drawing.Size(460, 53);
             this.pCamera.TabIndex = 32;
             // 
+            // btnCamera4
+            // 
+            this.btnCamera4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCamera4.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnCamera4.BorderRadius = 10;
+            this.btnCamera4.BorderSize = 0;
+            this.btnCamera4.ButtonImage = null;
+            this.btnCamera4.Corner = BeeGlobal.Corner.Right;
+            this.btnCamera4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCamera4.FlatAppearance.BorderSize = 0;
+            this.btnCamera4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCamera4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCamera4.ForeColor = System.Drawing.Color.Black;
+            this.btnCamera4.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera4.Image")));
+            this.btnCamera4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCamera4.IsCLick = false;
+            this.btnCamera4.IsNotChange = false;
+            this.btnCamera4.IsRect = true;
+            this.btnCamera4.IsUnGroup = false;
+            this.btnCamera4.Location = new System.Drawing.Point(371, 0);
+            this.btnCamera4.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCamera4.Name = "btnCamera4";
+            this.btnCamera4.Size = new System.Drawing.Size(89, 53);
+            this.btnCamera4.TabIndex = 31;
+            this.btnCamera4.Text = "Camera 4";
+            this.btnCamera4.TextColor = System.Drawing.Color.Black;
+            this.btnCamera4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCamera4.UseVisualStyleBackColor = false;
+            this.btnCamera4.Click += new System.EventHandler(this.btnCamera4_Click);
+            // 
+            // btnCamera1
+            // 
+            this.btnCamera1.BackColor = System.Drawing.Color.Transparent;
+            this.btnCamera1.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCamera1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCamera1.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnCamera1.BorderRadius = 10;
+            this.btnCamera1.BorderSize = 0;
+            this.btnCamera1.ButtonImage = null;
+            this.btnCamera1.Corner = BeeGlobal.Corner.Left;
+            this.btnCamera1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCamera1.FlatAppearance.BorderSize = 0;
+            this.btnCamera1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCamera1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCamera1.ForeColor = System.Drawing.Color.Black;
+            this.btnCamera1.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera1.Image")));
+            this.btnCamera1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCamera1.IsCLick = true;
+            this.btnCamera1.IsNotChange = false;
+            this.btnCamera1.IsRect = true;
+            this.btnCamera1.IsUnGroup = false;
+            this.btnCamera1.Location = new System.Drawing.Point(110, 0);
+            this.btnCamera1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCamera1.Name = "btnCamera1";
+            this.btnCamera1.Size = new System.Drawing.Size(87, 53);
+            this.btnCamera1.TabIndex = 20;
+            this.btnCamera1.Text = "Camera 1";
+            this.btnCamera1.TextColor = System.Drawing.Color.Black;
+            this.btnCamera1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCamera1.UseVisualStyleBackColor = false;
+            this.btnCamera1.Click += new System.EventHandler(this.btnCamera1_Click);
+            // 
+            // btnCamera2
+            // 
+            this.btnCamera2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCamera2.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCamera2.BorderRadius = 5;
+            this.btnCamera2.BorderSize = 0;
+            this.btnCamera2.ButtonImage = null;
+            this.btnCamera2.Corner = BeeGlobal.Corner.None;
+            this.btnCamera2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCamera2.FlatAppearance.BorderSize = 0;
+            this.btnCamera2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCamera2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCamera2.ForeColor = System.Drawing.Color.Black;
+            this.btnCamera2.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera2.Image")));
+            this.btnCamera2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCamera2.IsCLick = false;
+            this.btnCamera2.IsNotChange = false;
+            this.btnCamera2.IsRect = true;
+            this.btnCamera2.IsUnGroup = false;
+            this.btnCamera2.Location = new System.Drawing.Point(197, 0);
+            this.btnCamera2.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCamera2.Name = "btnCamera2";
+            this.btnCamera2.Size = new System.Drawing.Size(87, 53);
+            this.btnCamera2.TabIndex = 19;
+            this.btnCamera2.Text = "Camera 2";
+            this.btnCamera2.TextColor = System.Drawing.Color.Black;
+            this.btnCamera2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCamera2.UseVisualStyleBackColor = false;
+            this.btnCamera2.Click += new System.EventHandler(this.btnCamera2_Click);
+            // 
+            // btnCamera3
+            // 
+            this.btnCamera3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera3.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnCamera3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCamera3.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCamera3.BorderRadius = 5;
+            this.btnCamera3.BorderSize = 0;
+            this.btnCamera3.ButtonImage = null;
+            this.btnCamera3.Corner = BeeGlobal.Corner.None;
+            this.btnCamera3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCamera3.FlatAppearance.BorderSize = 0;
+            this.btnCamera3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCamera3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCamera3.ForeColor = System.Drawing.Color.Black;
+            this.btnCamera3.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera3.Image")));
+            this.btnCamera3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCamera3.IsCLick = false;
+            this.btnCamera3.IsNotChange = false;
+            this.btnCamera3.IsRect = true;
+            this.btnCamera3.IsUnGroup = false;
+            this.btnCamera3.Location = new System.Drawing.Point(284, 0);
+            this.btnCamera3.Margin = new System.Windows.Forms.Padding(0);
+            this.btnCamera3.Name = "btnCamera3";
+            this.btnCamera3.Size = new System.Drawing.Size(87, 53);
+            this.btnCamera3.TabIndex = 29;
+            this.btnCamera3.Text = "Camera 3";
+            this.btnCamera3.TextColor = System.Drawing.Color.Black;
+            this.btnCamera3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCamera3.UseVisualStyleBackColor = false;
+            this.btnCamera3.Click += new System.EventHandler(this.btnCamera3_Click);
+            // 
             // workConAll
             // 
             this.workConAll.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workConAll_DoWork);
@@ -177,6 +308,7 @@ namespace BeeUi
             this.panel5.Padding = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.panel5.Size = new System.Drawing.Size(342, 48);
             this.panel5.TabIndex = 49;
+            this.panel5.Visible = false;
             // 
             // button1
             // 
@@ -224,6 +356,7 @@ namespace BeeUi
             this.label1.Size = new System.Drawing.Size(342, 25);
             this.label1.TabIndex = 41;
             this.label1.Text = "Card";
+            this.label1.Visible = false;
             // 
             // panel3
             // 
@@ -319,6 +452,105 @@ namespace BeeUi
             this.tableLayoutPanel2.Size = new System.Drawing.Size(105, 195);
             this.tableLayoutPanel2.TabIndex = 50;
             // 
+            // btnUSB2_0
+            // 
+            this.btnUSB2_0.BackColor = System.Drawing.Color.Transparent;
+            this.btnUSB2_0.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnUSB2_0.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUSB2_0.BackgroundImage")));
+            this.btnUSB2_0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnUSB2_0.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnUSB2_0.BorderRadius = 5;
+            this.btnUSB2_0.BorderSize = 0;
+            this.btnUSB2_0.ButtonImage = null;
+            this.btnUSB2_0.Corner = BeeGlobal.Corner.Both;
+            this.btnUSB2_0.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnUSB2_0.FlatAppearance.BorderSize = 0;
+            this.btnUSB2_0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUSB2_0.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUSB2_0.ForeColor = System.Drawing.Color.Black;
+            this.btnUSB2_0.Image = global::BeeUi.Properties.Resources.CameraNotConnect;
+            this.btnUSB2_0.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnUSB2_0.IsCLick = true;
+            this.btnUSB2_0.IsNotChange = false;
+            this.btnUSB2_0.IsRect = true;
+            this.btnUSB2_0.IsUnGroup = false;
+            this.btnUSB2_0.Location = new System.Drawing.Point(5, 5);
+            this.btnUSB2_0.Margin = new System.Windows.Forms.Padding(5);
+            this.btnUSB2_0.Name = "btnUSB2_0";
+            this.btnUSB2_0.Size = new System.Drawing.Size(95, 55);
+            this.btnUSB2_0.TabIndex = 47;
+            this.btnUSB2_0.Text = "USB 2.0";
+            this.btnUSB2_0.TextColor = System.Drawing.Color.Black;
+            this.btnUSB2_0.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnUSB2_0.UseVisualStyleBackColor = false;
+            this.btnUSB2_0.Click += new System.EventHandler(this.btnUSB2_0_Click);
+            // 
+            // btnCameraTiny
+            // 
+            this.btnCameraTiny.BackColor = System.Drawing.Color.Transparent;
+            this.btnCameraTiny.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCameraTiny.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCameraTiny.BackgroundImage")));
+            this.btnCameraTiny.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCameraTiny.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnCameraTiny.BorderRadius = 5;
+            this.btnCameraTiny.BorderSize = 0;
+            this.btnCameraTiny.ButtonImage = null;
+            this.btnCameraTiny.Corner = BeeGlobal.Corner.Both;
+            this.btnCameraTiny.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCameraTiny.FlatAppearance.BorderSize = 0;
+            this.btnCameraTiny.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCameraTiny.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCameraTiny.ForeColor = System.Drawing.Color.Black;
+            this.btnCameraTiny.Image = global::BeeUi.Properties.Resources.CameraConnected;
+            this.btnCameraTiny.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCameraTiny.IsCLick = false;
+            this.btnCameraTiny.IsNotChange = false;
+            this.btnCameraTiny.IsRect = true;
+            this.btnCameraTiny.IsUnGroup = false;
+            this.btnCameraTiny.Location = new System.Drawing.Point(5, 135);
+            this.btnCameraTiny.Margin = new System.Windows.Forms.Padding(5);
+            this.btnCameraTiny.Name = "btnCameraTiny";
+            this.btnCameraTiny.Size = new System.Drawing.Size(95, 55);
+            this.btnCameraTiny.TabIndex = 49;
+            this.btnCameraTiny.Text = "Tiny";
+            this.btnCameraTiny.TextColor = System.Drawing.Color.Black;
+            this.btnCameraTiny.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnCameraTiny.UseVisualStyleBackColor = false;
+            this.btnCameraTiny.Click += new System.EventHandler(this.btnCameraTiny_Click);
+            // 
+            // btnGigE
+            // 
+            this.btnGigE.BackColor = System.Drawing.Color.Transparent;
+            this.btnGigE.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnGigE.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGigE.BackgroundImage")));
+            this.btnGigE.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnGigE.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnGigE.BorderRadius = 5;
+            this.btnGigE.BorderSize = 0;
+            this.btnGigE.ButtonImage = null;
+            this.btnGigE.Corner = BeeGlobal.Corner.Both;
+            this.btnGigE.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnGigE.FlatAppearance.BorderSize = 0;
+            this.btnGigE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGigE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGigE.ForeColor = System.Drawing.Color.Black;
+            this.btnGigE.Image = global::BeeUi.Properties.Resources.Camera;
+            this.btnGigE.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGigE.IsCLick = false;
+            this.btnGigE.IsNotChange = false;
+            this.btnGigE.IsRect = true;
+            this.btnGigE.IsUnGroup = false;
+            this.btnGigE.Location = new System.Drawing.Point(5, 70);
+            this.btnGigE.Margin = new System.Windows.Forms.Padding(5);
+            this.btnGigE.Name = "btnGigE";
+            this.btnGigE.Size = new System.Drawing.Size(95, 55);
+            this.btnGigE.TabIndex = 48;
+            this.btnGigE.Text = "GigE|3.0";
+            this.btnGigE.TextColor = System.Drawing.Color.Black;
+            this.btnGigE.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnGigE.UseVisualStyleBackColor = false;
+            this.btnGigE.Click += new System.EventHandler(this.btnGigE_Click);
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
@@ -366,233 +598,6 @@ namespace BeeUi
             this.tableLayoutPanel5.Size = new System.Drawing.Size(459, 201);
             this.tableLayoutPanel5.TabIndex = 33;
             // 
-            // btnCamera4
-            // 
-            this.btnCamera4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCamera4.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnCamera4.BorderRadius = 10;
-            this.btnCamera4.BorderSize = 0;
-            this.btnCamera4.ButtonImage = null;
-            this.btnCamera4.Corner = BeeCore.Corner.Right;
-            this.btnCamera4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera4.FlatAppearance.BorderSize = 0;
-            this.btnCamera4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCamera4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCamera4.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera4.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera4.Image")));
-            this.btnCamera4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCamera4.IsCLick = false;
-            this.btnCamera4.IsNotChange = false;
-            this.btnCamera4.IsRect = true;
-            this.btnCamera4.IsUnGroup = false;
-            this.btnCamera4.Location = new System.Drawing.Point(371, 0);
-            this.btnCamera4.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCamera4.Name = "btnCamera4";
-            this.btnCamera4.Size = new System.Drawing.Size(89, 53);
-            this.btnCamera4.TabIndex = 31;
-            this.btnCamera4.Text = "Camera 4";
-            this.btnCamera4.TextColor = System.Drawing.Color.Black;
-            this.btnCamera4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCamera4.UseVisualStyleBackColor = false;
-            this.btnCamera4.Click += new System.EventHandler(this.btnCamera4_Click);
-            // 
-            // btnCamera1
-            // 
-            this.btnCamera1.BackColor = System.Drawing.Color.Transparent;
-            this.btnCamera1.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnCamera1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCamera1.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnCamera1.BorderRadius = 10;
-            this.btnCamera1.BorderSize = 0;
-            this.btnCamera1.ButtonImage = null;
-            this.btnCamera1.Corner = BeeCore.Corner.Left;
-            this.btnCamera1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera1.FlatAppearance.BorderSize = 0;
-            this.btnCamera1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCamera1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCamera1.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera1.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera1.Image")));
-            this.btnCamera1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCamera1.IsCLick = false;
-            this.btnCamera1.IsNotChange = false;
-            this.btnCamera1.IsRect = true;
-            this.btnCamera1.IsUnGroup = false;
-            this.btnCamera1.Location = new System.Drawing.Point(110, 0);
-            this.btnCamera1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCamera1.Name = "btnCamera1";
-            this.btnCamera1.Size = new System.Drawing.Size(87, 53);
-            this.btnCamera1.TabIndex = 20;
-            this.btnCamera1.Text = "Camera 1";
-            this.btnCamera1.TextColor = System.Drawing.Color.Black;
-            this.btnCamera1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCamera1.UseVisualStyleBackColor = false;
-            this.btnCamera1.Click += new System.EventHandler(this.btnCamera1_Click);
-            // 
-            // btnCamera2
-            // 
-            this.btnCamera2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCamera2.BorderColor = System.Drawing.Color.Transparent;
-            this.btnCamera2.BorderRadius = 5;
-            this.btnCamera2.BorderSize = 0;
-            this.btnCamera2.ButtonImage = null;
-            this.btnCamera2.Corner = BeeCore.Corner.None;
-            this.btnCamera2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera2.FlatAppearance.BorderSize = 0;
-            this.btnCamera2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCamera2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCamera2.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera2.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera2.Image")));
-            this.btnCamera2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCamera2.IsCLick = false;
-            this.btnCamera2.IsNotChange = false;
-            this.btnCamera2.IsRect = true;
-            this.btnCamera2.IsUnGroup = false;
-            this.btnCamera2.Location = new System.Drawing.Point(197, 0);
-            this.btnCamera2.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCamera2.Name = "btnCamera2";
-            this.btnCamera2.Size = new System.Drawing.Size(87, 53);
-            this.btnCamera2.TabIndex = 19;
-            this.btnCamera2.Text = "Camera 2";
-            this.btnCamera2.TextColor = System.Drawing.Color.Black;
-            this.btnCamera2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCamera2.UseVisualStyleBackColor = false;
-            this.btnCamera2.Click += new System.EventHandler(this.btnCamera2_Click);
-            // 
-            // btnCamera3
-            // 
-            this.btnCamera3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera3.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCamera3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCamera3.BorderColor = System.Drawing.Color.Transparent;
-            this.btnCamera3.BorderRadius = 5;
-            this.btnCamera3.BorderSize = 0;
-            this.btnCamera3.ButtonImage = null;
-            this.btnCamera3.Corner = BeeCore.Corner.None;
-            this.btnCamera3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera3.FlatAppearance.BorderSize = 0;
-            this.btnCamera3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCamera3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCamera3.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera3.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera3.Image")));
-            this.btnCamera3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCamera3.IsCLick = false;
-            this.btnCamera3.IsNotChange = false;
-            this.btnCamera3.IsRect = true;
-            this.btnCamera3.IsUnGroup = false;
-            this.btnCamera3.Location = new System.Drawing.Point(284, 0);
-            this.btnCamera3.Margin = new System.Windows.Forms.Padding(0);
-            this.btnCamera3.Name = "btnCamera3";
-            this.btnCamera3.Size = new System.Drawing.Size(87, 53);
-            this.btnCamera3.TabIndex = 29;
-            this.btnCamera3.Text = "Camera 3";
-            this.btnCamera3.TextColor = System.Drawing.Color.Black;
-            this.btnCamera3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCamera3.UseVisualStyleBackColor = false;
-            this.btnCamera3.Click += new System.EventHandler(this.btnCamera3_Click);
-            // 
-            // btnUSB2_0
-            // 
-            this.btnUSB2_0.BackColor = System.Drawing.Color.Transparent;
-            this.btnUSB2_0.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnUSB2_0.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUSB2_0.BackgroundImage")));
-            this.btnUSB2_0.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnUSB2_0.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnUSB2_0.BorderRadius = 5;
-            this.btnUSB2_0.BorderSize = 0;
-            this.btnUSB2_0.ButtonImage = null;
-            this.btnUSB2_0.Corner = BeeCore.Corner.Both;
-            this.btnUSB2_0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnUSB2_0.FlatAppearance.BorderSize = 0;
-            this.btnUSB2_0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUSB2_0.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUSB2_0.ForeColor = System.Drawing.Color.Black;
-            this.btnUSB2_0.Image = global::BeeUi.Properties.Resources.CameraNotConnect;
-            this.btnUSB2_0.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUSB2_0.IsCLick = true;
-            this.btnUSB2_0.IsNotChange = false;
-            this.btnUSB2_0.IsRect = true;
-            this.btnUSB2_0.IsUnGroup = false;
-            this.btnUSB2_0.Location = new System.Drawing.Point(5, 5);
-            this.btnUSB2_0.Margin = new System.Windows.Forms.Padding(5);
-            this.btnUSB2_0.Name = "btnUSB2_0";
-            this.btnUSB2_0.Size = new System.Drawing.Size(95, 55);
-            this.btnUSB2_0.TabIndex = 47;
-            this.btnUSB2_0.Text = "USB 2.0";
-            this.btnUSB2_0.TextColor = System.Drawing.Color.Black;
-            this.btnUSB2_0.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnUSB2_0.UseVisualStyleBackColor = false;
-            this.btnUSB2_0.Click += new System.EventHandler(this.btnUSB2_0_Click);
-            // 
-            // btnCameraTiny
-            // 
-            this.btnCameraTiny.BackColor = System.Drawing.Color.Transparent;
-            this.btnCameraTiny.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnCameraTiny.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCameraTiny.BackgroundImage")));
-            this.btnCameraTiny.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCameraTiny.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnCameraTiny.BorderRadius = 5;
-            this.btnCameraTiny.BorderSize = 0;
-            this.btnCameraTiny.ButtonImage = null;
-            this.btnCameraTiny.Corner = BeeCore.Corner.Both;
-            this.btnCameraTiny.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCameraTiny.FlatAppearance.BorderSize = 0;
-            this.btnCameraTiny.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCameraTiny.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCameraTiny.ForeColor = System.Drawing.Color.Black;
-            this.btnCameraTiny.Image = global::BeeUi.Properties.Resources.CameraConnected;
-            this.btnCameraTiny.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCameraTiny.IsCLick = false;
-            this.btnCameraTiny.IsNotChange = false;
-            this.btnCameraTiny.IsRect = true;
-            this.btnCameraTiny.IsUnGroup = false;
-            this.btnCameraTiny.Location = new System.Drawing.Point(5, 135);
-            this.btnCameraTiny.Margin = new System.Windows.Forms.Padding(5);
-            this.btnCameraTiny.Name = "btnCameraTiny";
-            this.btnCameraTiny.Size = new System.Drawing.Size(95, 55);
-            this.btnCameraTiny.TabIndex = 49;
-            this.btnCameraTiny.Text = "Tiny";
-            this.btnCameraTiny.TextColor = System.Drawing.Color.Black;
-            this.btnCameraTiny.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnCameraTiny.UseVisualStyleBackColor = false;
-            this.btnCameraTiny.Click += new System.EventHandler(this.btnCameraTiny_Click);
-            // 
-            // btnGigE
-            // 
-            this.btnGigE.BackColor = System.Drawing.Color.Transparent;
-            this.btnGigE.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnGigE.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGigE.BackgroundImage")));
-            this.btnGigE.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnGigE.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnGigE.BorderRadius = 5;
-            this.btnGigE.BorderSize = 0;
-            this.btnGigE.ButtonImage = null;
-            this.btnGigE.Corner = BeeCore.Corner.Both;
-            this.btnGigE.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGigE.FlatAppearance.BorderSize = 0;
-            this.btnGigE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGigE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGigE.ForeColor = System.Drawing.Color.Black;
-            this.btnGigE.Image = global::BeeUi.Properties.Resources.Camera;
-            this.btnGigE.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGigE.IsCLick = false;
-            this.btnGigE.IsNotChange = false;
-            this.btnGigE.IsRect = true;
-            this.btnGigE.IsUnGroup = false;
-            this.btnGigE.Location = new System.Drawing.Point(5, 70);
-            this.btnGigE.Margin = new System.Windows.Forms.Padding(5);
-            this.btnGigE.Name = "btnGigE";
-            this.btnGigE.Size = new System.Drawing.Size(95, 55);
-            this.btnGigE.TabIndex = 48;
-            this.btnGigE.Text = "GigE|3.0";
-            this.btnGigE.TextColor = System.Drawing.Color.Black;
-            this.btnGigE.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnGigE.UseVisualStyleBackColor = false;
-            this.btnGigE.Click += new System.EventHandler(this.btnGigE_Click);
-            // 
             // ScanCCD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -626,19 +631,19 @@ namespace BeeUi
             private System.Windows.Forms.Button btnClose;
             private System.Windows.Forms.OpenFileDialog openFile;
         private System.ComponentModel.BackgroundWorker work;
-        private Common.RJButton btnSimulation;
+        private RJButton btnSimulation;
         public System.Windows.Forms.ComboBox cbCCD;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button btnShowList;
         private System.Windows.Forms.TableLayoutPanel pCamera;
-        public Common.RJButton btnGigE;
-        public Common.RJButton btnUSB2_0;
-        public Common.RJButton btnCameraTiny;
-        public Common.RJButton btnCamera4;
-        public Common.RJButton btnCamera1;
-        public Common.RJButton btnCamera2;
-        public Common.RJButton btnCamera3;
+        public RJButton btnGigE;
+        public RJButton btnUSB2_0;
+        public RJButton btnCameraTiny;
+        public RJButton btnCamera4;
+        public RJButton btnCamera1;
+        public RJButton btnCamera2;
+        public RJButton btnCamera3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btnDisConnect;
         private System.Windows.Forms.Label label1;

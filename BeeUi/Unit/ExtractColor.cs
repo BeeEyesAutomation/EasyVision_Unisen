@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +31,7 @@ namespace BeeUi.Commons
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.toolEdit.Propety.ClearTemp(G.IsRun);
+            G.EditTool.View.toolEdit.Propety.ClearTemp(Global.IsRun);
             G.EditTool.View.imgView.Invalidate();
         }
 
@@ -59,7 +60,7 @@ namespace BeeUi.Commons
 
         private void btnUndo_Click(object sender, EventArgs e)
         {
-          G.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.listCamera[G.indexChoose].matRaw);
+          G.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
             G.EditTool.View.RefreshMask();
         }
 

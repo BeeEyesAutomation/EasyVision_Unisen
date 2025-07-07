@@ -761,7 +761,7 @@ bool GetFrame(cv::Mat& image, void* handle) {
 	case PixelType_Gvsp_BayerGR8:
 	case PixelType_Gvsp_BayerGB8:
 	{
-		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
+		cv::Mat rawImage(height, width, CV_8UC3, pBufAddr);
 		cv::cvtColor(rawImage, image, cv::COLOR_BayerBG2BGR);  // Chỉnh lại COLOR_BayerXX2BGR theo format camera
 	}
 	break;
@@ -997,10 +997,12 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 		break;
 	}
 	case PixelType_Gvsp_BayerGR8:
+		break;
 	case PixelType_Gvsp_BayerGB8:
 	{
+		//image = cv::Mat(height, width, CV_8UC3, pBufAddr);
 		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
-		cv::cvtColor(rawImage, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
 	}
 	break;
 	default:
@@ -1195,7 +1197,7 @@ void CCD::CalHist()
 void CCD::DestroyAll(int indexCCD)
 {
 	
-	switch (TypeCCD)
+	switch (TypeCamera)
 	{
 	case 0 :
 		camUSB.release();

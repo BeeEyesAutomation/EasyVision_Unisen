@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Commons;
 using BeeUi.Tool;
 using System;
@@ -16,11 +18,11 @@ namespace BeeUi.Data
         public static void Load(String NameProject)
         {
             NameProject = NameProject.Replace(".prog", "");
-            BeeCore.G.ParaCam = LoadData.Para(NameProject);
+            Global.ParaCommon = LoadData.Para(NameProject);
             List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
             if (paraCameras.Count() > 0)
             {
-                BeeCore.Common.listParaCamera = paraCameras;
+               Global.listParaCamera = paraCameras;
                 BeeCore.Common.listCamera = new List<Camera>();
                 int indexCCD = 0;
                 foreach (ParaCamera paraCamera in paraCameras)
@@ -30,17 +32,17 @@ namespace BeeUi.Data
                         BeeCore.Common.listCamera.Add(null);
                     indexCCD++;
                 }
-                if (BeeCore.Common.listCamera.Count() > G.indexChoose)
-                    if (BeeCore.Common.listCamera[G.indexChoose] != null)
-                        BeeCore.G.ParaCam.SizeCCD = BeeCore.Common.listCamera[G.indexChoose].GetSzCCD();
+                if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
+                    if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                        Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
             }
-            //BeeCore.G.ParaCam.SizeCCD = Camera.GetSzCCD();
-            G.PropetyTools = LoadData.Project(NameProject);
+            //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
+            BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
 
 
-            if(G.PropetyTools.Count==0)
+            if(BeeCore.Common.PropetyTools.Count==0)
             {
-                G.PropetyTools = new List<List<PropetyTool>> { new List<PropetyTool>(), new List<PropetyTool>(),  new List<PropetyTool>(), new List<PropetyTool>() };
+                BeeCore.Common.PropetyTools = new List<List<PropetyTool>> { new List<PropetyTool>(), new List<PropetyTool>(),  new List<PropetyTool>(), new List<PropetyTool>() };
                 G.listAlltool = new List<List<Tools>> { new List<Tools>(), new List<Tools>(), new List<Tools>(), new List<Tools>() };
 
             }
@@ -56,7 +58,7 @@ namespace BeeUi.Data
             G.ToolSettings.Y = 10; G.ToolSettings.X = 5;
             int indexThread = 0;
 
-            foreach (List< BeeCore.PropetyTool>ListTool in G.PropetyTools)
+            foreach (List< BeeCore.PropetyTool>ListTool in BeeCore.Common.PropetyTools)
             {
                 if (ListTool != null)
                 {
@@ -64,7 +66,9 @@ namespace BeeUi.Data
                     int indexTool = 0;
                     foreach (BeeCore.PropetyTool tool in ListTool)
                     {
-                        Tools tool2 = DataTool.SetPropety(tool, indexTool, indexThread);
+                        BeeInterface.Tools tool2 = DataTool.CreateControl(tool, indexTool, indexThread, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+                       
+                        G.ToolSettings.Y += tool2.ItemTool.Height + 10;
                         indexTool++;
                         if (tool2 != null)
                         {
@@ -105,7 +109,7 @@ namespace BeeUi.Data
             //   //     continue;
             //   // }
             //}
-            foreach (List<PropetyTool> ListTool in G.PropetyTools)
+            foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
 
                 Parallel.ForEach(ListTool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, propety =>
@@ -124,21 +128,21 @@ namespace BeeUi.Data
         {
             if (!G.Initial)
                 return StatusProcessing;
-            if (!G.PLC.IsConnected && !G.IsByPassPLC)
+            if (!Global.Comunication.IO.IsConnected && !Global.Comunication.IO.IsBypass)
                 return StatusProcessing;
-            if (G.PropetyTools[indexThread].Count == 0)
+            if (BeeCore.Common.PropetyTools[indexThread].Count == 0)
                 return StatusProcessing.Done;
             switch (StatusProcessing)
             {
                 case StatusProcessing.None:
                     // timer.Restart();
-                //int    indexToolPosition = G.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
+                //int    indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
                     if (indexToolPosition == -1)
                     {
                         StatusProcessing = StatusProcessing.Processing;
                         return StatusProcessing;
                     }
-                    if (G.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
+                    if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
                     {
 
                         if (!G.listAlltool[indexThread][indexToolPosition].tool.worker.IsBusy)
@@ -148,7 +152,7 @@ namespace BeeUi.Data
                     }
                     else
                     {
-                        foreach (PropetyTool propetyTool in G.PropetyTools[indexThread])
+                        foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
                         {
 
                             dynamic Propety = propetyTool.Propety;
@@ -161,9 +165,9 @@ namespace BeeUi.Data
 
                     break;
                 case StatusProcessing.Adjusting:
-                    if (G.PropetyTools[indexThread][indexToolPosition].Propety.StatusTool == BeeCore.StatusTool.Done)
+                    if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.StatusTool == StatusTool.Done)
                     {
-                        dynamic Propety = G.PropetyTools[indexThread][indexToolPosition].Propety;
+                        dynamic Propety = BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety;
 
                         StatusProcessing = StatusProcessing.Processing;
 
@@ -174,17 +178,17 @@ namespace BeeUi.Data
                             G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
                             G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
                         }
-                        foreach (PropetyTool propetyTool in G.PropetyTools[indexThread])
+                        foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
                         {
                             if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
                                 continue;
                             if (G.rotOriginAdj != null)
                             {
-                                propetyTool.Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
+                                propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
                                 if (propetyTool.TypeTool == TypeTool.Positions)
                                 {
-                                    propetyTool.Propety.pOrigin = new System.Drawing.Point(G.pOrigin.X, G.pOrigin.Y);
-                                    propetyTool.Propety.AngleOrigin = G.AngleOrigin;
+                                    propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
+                                    propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
                                 }
 
 
@@ -206,9 +210,9 @@ namespace BeeUi.Data
                         Tools.ItemTool.lbScore.ForeColor = Color.Gray;
                         Tools.ItemTool.lbStatus.BackColor = Color.Gray;
                         Tools.ItemTool.Refresh();
-                        PropetyTool propetyTool = G.PropetyTools[indexThread][G.PropetyTools[indexThread].FindIndex(a => a.Name == Tools.tool.Name)];
+                        PropetyTool propetyTool = BeeCore.Common.PropetyTools[indexThread][BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.Name == Tools.tool.Name)];
                         if (propetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
-                        propetyTool.Propety.StatusTool = BeeCore.StatusTool.None;
+                        propetyTool.Propety.StatusTool = StatusTool.None;
                         if (!Tools.tool.worker.IsBusy)
                             Tools.tool.worker.RunWorkerAsync();
                     }
@@ -221,9 +225,9 @@ namespace BeeUi.Data
                         Tools Tools = G.listAlltool[indexThread][i];
 
 
-                        PropetyTool propetyTool = G.PropetyTools[indexThread][G.PropetyTools[indexThread].FindIndex(a => a.Name == Tools.tool.Name)];
+                        PropetyTool propetyTool = BeeCore.Common.PropetyTools[indexThread][BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.Name == Tools.tool.Name)];
 
-                        if (propetyTool.Propety.StatusTool != BeeCore.StatusTool.Done)
+                        if (propetyTool.Propety.StatusTool != StatusTool.Done)
                         {
                             StatusProcessing = StatusProcessing.WaitingDone;
 

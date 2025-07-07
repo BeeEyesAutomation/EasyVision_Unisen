@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi
 {
@@ -68,18 +70,18 @@ namespace BeeUi
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tmSimulation = new System.Windows.Forms.Timer(this.components);
             this.tmLive = new System.Windows.Forms.Timer(this.components);
-            this.btnTypeTrig = new BeeUi.Common.RJButton();
-            this.btnCap = new BeeUi.Common.RJButton();
-            this.btnRecord = new BeeUi.Common.RJButton();
-            this.btnLive = new BeeUi.Common.RJButton();
-            this.btnRunSim = new BeeUi.Common.RJButton();
-            this.btnDropColor = new BeeUi.Common.RJButton();
-            this.btnShowCenter = new BeeUi.Common.RJButton();
-            this.btnZoomOut = new BeeUi.Common.RJButton();
-            this.btnZoomIn = new BeeUi.Common.RJButton();
-            this.btnFull = new BeeUi.Common.RJButton();
-            this.btnGird = new BeeUi.Common.RJButton();
-            this.btnShowArea = new BeeUi.Common.RJButton();
+            this.btnTypeTrig = new RJButton();
+            this.btnCap = new RJButton();
+            this.btnRecord = new RJButton();
+            this.btnLive = new RJButton();
+            this.btnRunSim = new RJButton();
+            this.btnDropColor = new RJButton();
+            this.btnShowCenter = new RJButton();
+            this.btnZoomOut = new RJButton();
+            this.btnZoomIn = new RJButton();
+            this.btnFull = new RJButton();
+            this.btnGird = new RJButton();
+            this.btnShowArea = new RJButton();
             this.workCheck1 = new System.ComponentModel.BackgroundWorker();
             this.workCheck2 = new System.ComponentModel.BackgroundWorker();
             this.workCheck3 = new System.ComponentModel.BackgroundWorker();
@@ -460,7 +462,7 @@ namespace BeeUi
             this.btnTypeTrig.BorderRadius = 5;
             this.btnTypeTrig.BorderSize = 1;
             this.btnTypeTrig.ButtonImage = null;
-            this.btnTypeTrig.Corner = BeeCore.Corner.Both;
+            this.btnTypeTrig.Corner =Corner.Both;
             this.btnTypeTrig.FlatAppearance.BorderSize = 0;
             this.btnTypeTrig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTypeTrig.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -491,7 +493,7 @@ namespace BeeUi
             this.btnCap.BorderRadius = 5;
             this.btnCap.BorderSize = 1;
             this.btnCap.ButtonImage = null;
-            this.btnCap.Corner = BeeCore.Corner.Both;
+            this.btnCap.Corner =Corner.Both;
             this.btnCap.FlatAppearance.BorderSize = 0;
             this.btnCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -524,7 +526,7 @@ namespace BeeUi
             this.btnRecord.BorderRadius = 5;
             this.btnRecord.BorderSize = 1;
             this.btnRecord.ButtonImage = null;
-            this.btnRecord.Corner = BeeCore.Corner.Both;
+            this.btnRecord.Corner =Corner.Both;
             this.btnRecord.FlatAppearance.BorderSize = 0;
             this.btnRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
@@ -558,7 +560,7 @@ namespace BeeUi
             this.btnLive.BorderRadius = 5;
             this.btnLive.BorderSize = 1;
             this.btnLive.ButtonImage = null;
-            this.btnLive.Corner = BeeCore.Corner.Both;
+            this.btnLive.Corner =Corner.Both;
             this.btnLive.Enabled = false;
             this.btnLive.FlatAppearance.BorderSize = 0;
             this.btnLive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -590,7 +592,7 @@ namespace BeeUi
             this.btnRunSim.BorderRadius = 0;
             this.btnRunSim.BorderSize = 0;
             this.btnRunSim.ButtonImage = null;
-            this.btnRunSim.Corner = BeeCore.Corner.Both;
+            this.btnRunSim.Corner =Corner.Both;
             this.btnRunSim.Enabled = false;
             this.btnRunSim.FlatAppearance.BorderSize = 0;
             this.btnRunSim.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -617,7 +619,7 @@ namespace BeeUi
             this.btnDropColor.BorderRadius = 0;
             this.btnDropColor.BorderSize = 0;
             this.btnDropColor.ButtonImage = null;
-            this.btnDropColor.Corner = BeeCore.Corner.Both;
+            this.btnDropColor.Corner =Corner.Both;
             this.btnDropColor.FlatAppearance.BorderSize = 0;
             this.btnDropColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDropColor.ForeColor = System.Drawing.Color.White;
@@ -643,7 +645,7 @@ namespace BeeUi
             this.btnShowCenter.BorderRadius = 0;
             this.btnShowCenter.BorderSize = 0;
             this.btnShowCenter.ButtonImage = null;
-            this.btnShowCenter.Corner = BeeCore.Corner.Both;
+            this.btnShowCenter.Corner =Corner.Both;
             this.btnShowCenter.FlatAppearance.BorderSize = 0;
             this.btnShowCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowCenter.ForeColor = System.Drawing.Color.White;
@@ -669,7 +671,7 @@ namespace BeeUi
             this.btnZoomOut.BorderRadius = 0;
             this.btnZoomOut.BorderSize = 0;
             this.btnZoomOut.ButtonImage = null;
-            this.btnZoomOut.Corner = BeeCore.Corner.Both;
+            this.btnZoomOut.Corner =Corner.Both;
             this.btnZoomOut.FlatAppearance.BorderSize = 0;
             this.btnZoomOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnZoomOut.ForeColor = System.Drawing.Color.White;
@@ -695,7 +697,7 @@ namespace BeeUi
             this.btnZoomIn.BorderRadius = 0;
             this.btnZoomIn.BorderSize = 0;
             this.btnZoomIn.ButtonImage = null;
-            this.btnZoomIn.Corner = BeeCore.Corner.Both;
+            this.btnZoomIn.Corner =Corner.Both;
             this.btnZoomIn.FlatAppearance.BorderSize = 0;
             this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnZoomIn.ForeColor = System.Drawing.Color.White;
@@ -721,7 +723,7 @@ namespace BeeUi
             this.btnFull.BorderRadius = 0;
             this.btnFull.BorderSize = 0;
             this.btnFull.ButtonImage = null;
-            this.btnFull.Corner = BeeCore.Corner.Both;
+            this.btnFull.Corner =Corner.Both;
             this.btnFull.FlatAppearance.BorderSize = 0;
             this.btnFull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFull.ForeColor = System.Drawing.Color.White;
@@ -747,7 +749,7 @@ namespace BeeUi
             this.btnGird.BorderRadius = 0;
             this.btnGird.BorderSize = 0;
             this.btnGird.ButtonImage = null;
-            this.btnGird.Corner = BeeCore.Corner.Both;
+            this.btnGird.Corner =Corner.Both;
             this.btnGird.FlatAppearance.BorderSize = 0;
             this.btnGird.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGird.ForeColor = System.Drawing.Color.White;
@@ -773,7 +775,7 @@ namespace BeeUi
             this.btnShowArea.BorderRadius = 0;
             this.btnShowArea.BorderSize = 0;
             this.btnShowArea.ButtonImage = null;
-            this.btnShowArea.Corner = BeeCore.Corner.Both;
+            this.btnShowArea.Corner =Corner.Both;
             this.btnShowArea.FlatAppearance.BorderSize = 0;
             this.btnShowArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowArea.ForeColor = System.Drawing.Color.White;
@@ -836,10 +838,10 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workShow;
         private System.Windows.Forms.Timer tmTrig;
         private System.ComponentModel.BackgroundWorker workGetColor;
-        public Common.RJButton btnCap;
-        public Common.RJButton btnRecord;
+        public RJButton btnCap;
+        public RJButton btnRecord;
         private System.Windows.Forms.CheckBox ckProcess;
-        public Common.RJButton btnLive;
+        public RJButton btnLive;
         private System.ComponentModel.BackgroundWorker workInsert;
         public System.Windows.Forms.Timer tmCheckPort;
         public System.Windows.Forms.Timer tmCheckCCD;
@@ -862,21 +864,21 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workTrig;
         public System.Windows.Forms.Timer tmPress;
         public System.ComponentModel.BackgroundWorker workPlay;
-        public Common.RJButton btnTypeTrig;
+        public RJButton btnTypeTrig;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         public System.Windows.Forms.Button btnFile;
         public System.Windows.Forms.Timer tmSimulation;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private Common.RJButton btnGird;
-        public Common.RJButton btnFull;
-        public Common.RJButton btnZoomIn;
-        public Common.RJButton btnZoomOut;
-        public Common.RJButton btnShowCenter;
+        private RJButton btnGird;
+        public RJButton btnFull;
+        public RJButton btnZoomIn;
+        public RJButton btnZoomOut;
+        public RJButton btnShowCenter;
         public System.Windows.Forms.Button btnDeleteFile;
         public System.Windows.Forms.Button btnPlayStep;
-        private Common.RJButton btnRunSim;
-        private Common.RJButton btnShowArea;
-        private Common.RJButton btnDropColor;
+        private RJButton btnRunSim;
+        private RJButton btnShowArea;
+        private RJButton btnDropColor;
         public System.Windows.Forms.Timer tmLive;
         public System.ComponentModel.BackgroundWorker workCheck1;
         public System.ComponentModel.BackgroundWorker workCheck2;

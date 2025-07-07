@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi
 {
     partial class SettingDevice
@@ -31,15 +33,15 @@ namespace BeeUi
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingDevice));
             this.cbReSolution = new System.Windows.Forms.ComboBox();
-            this.btnSave = new BeeUi.Common.RJButton();
-            this.rjButton2 = new BeeUi.Common.RJButton();
-            this.btnEqualize = new BeeUi.Common.RJButton();
-            this.btnInverse = new BeeUi.Common.RJButton();
-            this.btnIamgeImgMirror = new BeeUi.Common.RJButton();
-            this.rjButton1 = new BeeUi.Common.RJButton();
-            this.trackGain = new BeeUi.TrackBar2();
-            this.trackExpo = new BeeUi.TrackBar2();
-            this.btnAutoExposure = new BeeUi.Common.RJButton();
+            this.btnSave = new RJButton();
+            this.rjButton2 = new RJButton();
+            this.btnEqualize = new RJButton();
+            this.btnInverse = new RJButton();
+            this.btnIamgeImgMirror = new RJButton();
+            this.rjButton1 = new RJButton();
+            this.trackGain = new TrackBar2();
+            this.trackExpo = new TrackBar2();
+            this.btnAutoExposure = new RJButton();
             this.SuspendLayout();
             // 
             // cbReSolution
@@ -314,15 +316,15 @@ namespace BeeUi
 
         #endregion
 
-        private Common.RJButton btnAutoExposure;
+        private RJButton btnAutoExposure;
         private TrackBar2 trackExpo;
         private TrackBar2 trackGain;
-        private Common.RJButton rjButton1;
-        private Common.RJButton btnIamgeImgMirror;
-        private Common.RJButton btnInverse;
-        public Common.RJButton btnEqualize;
+        private RJButton rjButton1;
+        private RJButton btnIamgeImgMirror;
+        private RJButton btnInverse;
+        public RJButton btnEqualize;
         public System.Windows.Forms.ComboBox cbReSolution;
-        private Common.RJButton rjButton2;
-        public Common.RJButton btnSave;
+        private RJButton rjButton2;
+        public RJButton btnSave;
     }
 }

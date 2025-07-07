@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi.Commons
 {
     partial class Eraser
@@ -30,11 +32,11 @@ namespace BeeUi.Commons
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Eraser));
-            this.btnRedo = new BeeUi.Common.RJButton();
-            this.btnHide = new BeeUi.Common.RJButton();
-            this.rjButton5 = new BeeUi.Common.RJButton();
-            this.btnUndo = new BeeUi.Common.RJButton();
-            this.btnClear = new BeeUi.Common.RJButton();
+            this.btnRedo = new RJButton();
+            this.btnHide = new RJButton();
+            this.rjButton5 = new RJButton();
+            this.btnUndo = new RJButton();
+            this.btnClear = new RJButton();
             this.btnPlus = new System.Windows.Forms.Button();
             this.btnSub = new System.Windows.Forms.Button();
             this.trackClear = new System.Windows.Forms.TrackBar();
@@ -242,11 +244,11 @@ namespace BeeUi.Commons
 
         #endregion
 
-        private Common.RJButton btnRedo;
-        private Common.RJButton btnHide;
-        private Common.RJButton rjButton5;
-        private Common.RJButton btnUndo;
-        private Common.RJButton btnClear;
+        private RJButton btnRedo;
+        private RJButton btnHide;
+        private RJButton rjButton5;
+        private RJButton btnUndo;
+        private RJButton btnClear;
         private System.Windows.Forms.Button btnPlus;
         private System.Windows.Forms.Button btnSub;
         private System.Windows.Forms.TrackBar trackClear;

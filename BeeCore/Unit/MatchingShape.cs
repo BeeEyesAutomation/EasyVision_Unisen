@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using System.Collections;
 using OpenCvSharp.Extensions;
+using BeeGlobal;
 
 namespace BeeCore
 {

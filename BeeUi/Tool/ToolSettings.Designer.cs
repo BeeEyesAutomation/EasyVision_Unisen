@@ -1,5 +1,7 @@
 ﻿
 using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 
 namespace BeeUi.Tool
 {
@@ -33,10 +35,10 @@ namespace BeeUi.Tool
         {
             this.pAllTool = new System.Windows.Forms.Panel();
             this.pBtn = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCopy = new BeeUi.Common.RJButton();
-            this.btnEnEdit = new BeeUi.Common.RJButton();
-            this.btnAdd = new BeeUi.Common.RJButton();
-            this.btnDelect = new BeeUi.Common.RJButton();
+            this.btnCopy = new RJButton();
+            this.btnEnEdit = new RJButton();
+            this.btnAdd = new RJButton();
+            this.btnDelect = new RJButton();
             this.pBtn.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,7 +86,7 @@ namespace BeeUi.Tool
             this.btnCopy.BorderRadius = 10;
             this.btnCopy.BorderSize = 1;
             this.btnCopy.ButtonImage = null;
-            this.btnCopy.Corner = BeeCore.Corner.Both;
+            this.btnCopy.Corner =Corner.Both;
             this.btnCopy.Enabled = false;
             this.btnCopy.FlatAppearance.BorderSize = 0;
             this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -119,7 +121,7 @@ namespace BeeUi.Tool
             this.btnEnEdit.BorderRadius = 10;
             this.btnEnEdit.BorderSize = 1;
             this.btnEnEdit.ButtonImage = null;
-            this.btnEnEdit.Corner = BeeCore.Corner.Both;
+            this.btnEnEdit.Corner =Corner.Both;
             this.btnEnEdit.FlatAppearance.BorderSize = 0;
             this.btnEnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -153,7 +155,7 @@ namespace BeeUi.Tool
             this.btnAdd.BorderRadius = 10;
             this.btnAdd.BorderSize = 1;
             this.btnAdd.ButtonImage = null;
-            this.btnAdd.Corner = BeeCore.Corner.Both;
+            this.btnAdd.Corner =Corner.Both;
             this.btnAdd.Enabled = false;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -188,7 +190,7 @@ namespace BeeUi.Tool
             this.btnDelect.BorderRadius = 10;
             this.btnDelect.BorderSize = 1;
             this.btnDelect.ButtonImage = null;
-            this.btnDelect.Corner = BeeCore.Corner.Both;
+            this.btnDelect.Corner =Corner.Both;
             this.btnDelect.Enabled = false;
             this.btnDelect.FlatAppearance.BorderSize = 0;
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -231,10 +233,10 @@ namespace BeeUi.Tool
 
         #endregion
         public System.Windows.Forms.Panel pAllTool;
-        public Common.RJButton btnAdd;
-        public Common.RJButton btnDelect;
-        public Common.RJButton btnCopy;
-        public Common.RJButton btnEnEdit;
+        public RJButton btnAdd;
+        public RJButton btnDelect;
+        public RJButton btnCopy;
+        public RJButton btnEnEdit;
         public System.Windows.Forms.TableLayoutPanel pBtn;
     }
 }

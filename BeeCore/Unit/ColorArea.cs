@@ -13,6 +13,7 @@ using System.ComponentModel;
 using Python.Runtime;
 using System.Windows.Forms;
 using BeeCore.Funtion;
+using BeeGlobal;
 
 namespace BeeCore
 {
@@ -148,7 +149,7 @@ namespace BeeCore
         public int pxTemp=0;
         public String listColor="";
         public int IndexThread = 0;
-        public void LoadTemp(bool IsCCD,bool IsHist)
+        public void LoadTemp()
         {if (BeeCore.Common.listCamera[IndexThread] == null) return;
             if(BeeCore.Common.listCamera[IndexThread].matRaw.Empty())return;
             BeeCore.Native.SetImg(BeeCore.Common.listCamera[IndexThread].matRaw);

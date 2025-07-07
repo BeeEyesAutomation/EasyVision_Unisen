@@ -1,5 +1,6 @@
 ﻿using BeeCore.Funtion;
-using BeeCore.Parameter;
+
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
@@ -427,8 +428,6 @@ namespace BeeCore
         {
             using (Py.GIL())
             {
-
-
                 // khởi tạo instance
                 StatusTool = StatusTool.None;
          G.objOCR.initialize_ocr(nameTool);

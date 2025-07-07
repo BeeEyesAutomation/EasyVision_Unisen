@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,18 +65,18 @@ namespace BeeUi.Unit
             else
                 G.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
             await Task.Delay(1000);
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw.Size());
+            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
 
         private void btnCamera_Click(object sender, EventArgs e)
         {
             
-            if (BeeCore.Common.listParaCamera[G.indexChoose] == null)
-                BeeCore.Common.listParaCamera[G.indexChoose] = new ParaCamera();
-            BeeCore.Common.listCamera[G.indexChoose] = new Camera(BeeCore.Common.listParaCamera[G.indexChoose], G.indexChoose);
-            G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[G.indexChoose].Para.Name;
+            if (Global.listParaCamera[Global.IndexChoose] == null)
+                Global.listParaCamera[Global.IndexChoose] = new ParaCamera();
+            BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(Global.listParaCamera[Global.IndexChoose], Global.IndexChoose);
+            G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
           
-            switch (BeeCore.Common.listCamera[G.indexChoose].Para.TypeCamera)
+            switch (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
             {
                 case TypeCamera.USB:
                     G.ScanCCD.btnUSB2_0.IsCLick = true;
@@ -87,7 +88,7 @@ namespace BeeUi.Unit
                     G.ScanCCD.btnCameraTiny.IsCLick = true;
                     break;
             }
-            switch (G.indexChoose)
+            switch (Global.IndexChoose)
             {
                 case 0:
                     G.ScanCCD.btnCamera1.IsCLick = true;

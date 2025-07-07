@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,8 +74,8 @@ namespace BeeUi.Unit
         private void btnCamera1_Click(object sender, EventArgs e)
         {
             
-            G.indexChoose = 0;
-            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            Global.IndexChoose = 0;
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
                 btnCamera1.IsCLick = false;
                 return;
@@ -89,8 +90,8 @@ namespace BeeUi.Unit
 
         private void btnCamera2_Click(object sender, EventArgs e)
         {
-            G.indexChoose = 1;
-            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            Global.IndexChoose = 1;
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
                 btnCamera2.IsCLick = false;
                 return;
@@ -103,8 +104,8 @@ namespace BeeUi.Unit
 
         private void btnCamera3_Click(object sender, EventArgs e)
         {
-            G.indexChoose = 2;
-            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            Global.IndexChoose = 2;
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
                 btnCamera2.IsCLick = false;
                 return;
@@ -117,8 +118,8 @@ namespace BeeUi.Unit
 
         private void btnCamera4_Click(object sender, EventArgs e)
         {
-            G.indexChoose = 3;
-            if (BeeCore.Common.listCamera[G.indexChoose] == null)
+            Global.IndexChoose = 3;
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
                 btnCamera4.IsCLick = false;
                 return;

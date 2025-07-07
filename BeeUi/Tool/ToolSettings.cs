@@ -1,4 +1,6 @@
 ﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Commons;
 using BeeUi.Data;
 using Newtonsoft.Json.Linq;
@@ -43,10 +45,10 @@ namespace BeeUi.Tool
             Y = 10;
             X = 10;
             int i = 0;
-            foreach (Tools c in G.listAlltool[G.indexChoose])
+            foreach (Tools c in G.listAlltool[Global.IndexChoose])
             {
                 c.ItemTool.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
-                G.PropetyTools[G.indexChoose][i].Propety.Index = i;
+                BeeCore.Common.PropetyTools[Global.IndexChoose][i].Propety.Index = i;
                 G.ToolSettings.Y += c.ItemTool.Height + 10;
                 G.ToolSettings.pAllTool.Controls.Add(c.ItemTool);
                 G.ToolSettings.ResumeLayout(true);
@@ -58,12 +60,12 @@ namespace BeeUi.Tool
         {
             if(MessageBox.Show("Xóa","Bạn chắc chứ",MessageBoxButtons.YesNo)==DialogResult.Yes)
             {
-                if (G.indexToolSelected>-1)
+                if (Global.IndexToolSelected>-1)
                 {
-                    G.ToolSettings.pAllTool.Controls.RemoveAt(G.indexToolSelected);
-                    G.PropetyTools[G.indexChoose].RemoveAt(G.indexToolSelected);
-                    G.listAlltool[G.indexChoose].RemoveAt(G.indexToolSelected);
-                    G.indexToolSelected = G.listAlltool[G.indexChoose].Count() - 1;
+                    G.ToolSettings.pAllTool.Controls.RemoveAt(Global.IndexToolSelected);
+                    BeeCore.Common.PropetyTools[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
+                    G.listAlltool[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
+                    Global.IndexToolSelected = G.listAlltool[Global.IndexChoose].Count() - 1;
                     RefreshTool();
                 }    
             }    
@@ -73,14 +75,14 @@ namespace BeeUi.Tool
         {
             if(btnEnEdit.IsCLick)
             {
-            foreach(Commons.Tools tool in G.listAlltool[G.indexChoose])
+            foreach(Tools tool in G.listAlltool[Global.IndexChoose])
                 {
                     tool.ItemTool.Score.Enabled = true;
                 }    
             } 
             else
             {
-                foreach (Commons.Tools tool in G.listAlltool[G.indexChoose])
+                foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                 {
                     tool.ItemTool.Score.Enabled = false;
                 }
@@ -91,12 +93,14 @@ namespace BeeUi.Tool
         {
 
        
-          PropetyTool propety = (PropetyTool)G.PropetyTools[G.indexChoose][G.indexToolSelected].Clone();
+          PropetyTool propety = (PropetyTool)BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Clone();
        
-            propety.Name = propety.TypeTool.ToString() + " " + (int)(G.PropetyTools[G.indexChoose].Count + 1);
-            G.PropetyTools[G.indexChoose].Add(propety);
-            G.listAlltool[G.indexChoose].Add( DataTool.SetPropety(propety, G.listAlltool[G.indexChoose].Count(), G.indexChoose));
-            DataTool.LoadPropety(G.listAlltool[G.indexChoose][G.listAlltool[G.indexChoose].Count()-1].tool);
+            propety.Name = propety.TypeTool.ToString() + " " + (int)(BeeCore.Common.PropetyTools[Global.IndexChoose].Count + 1);
+            BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propety);
+            Tools tool = DataTool.CreateControl(propety, G.listAlltool[Global.IndexChoose].Count(), Global.IndexChoose, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+            G.listAlltool[Global.IndexChoose].Add(tool);
+            G.ToolSettings.Y += tool.ItemTool.Height + 10;
+            DataTool.LoadPropety(G.listAlltool[Global.IndexChoose][G.listAlltool[Global.IndexChoose].Count()-1].tool);
             RefreshTool();
 
 

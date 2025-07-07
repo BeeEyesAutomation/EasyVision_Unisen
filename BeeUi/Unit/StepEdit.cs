@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
+using BeeGlobal;
 using BeeUi.Commons;
 using BeeUi.Data;
 using BeeUi.Tool;
@@ -71,7 +72,8 @@ namespace BeeUi.Common
             if(G.EditTool.View.btnLive.IsCLick)
             {
                 G.EditTool.View.btnLive.PerformClick();
-            }    
+            }
+            Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
             G.EditTool.View.btnLive.Enabled = false;
             G.EditTool.RefreshGuiEdit(Step.Step3);
           
@@ -101,9 +103,9 @@ namespace BeeUi.Common
         private void workConnect_DoWork(object sender, DoWorkEventArgs e)
         {
            if( G.IsCCD ==true)
-                if(BeeCore.Common.listCamera[G.indexChoose].matRaw==null)
+                if(BeeCore.Common.listCamera[Global.IndexChoose].matRaw==null)
                 {
-                    BeeCore.Common.listCamera[G.indexChoose].Read();
+                    BeeCore.Common.listCamera[Global.IndexChoose].Read();
                    
                 }
                
@@ -115,7 +117,7 @@ namespace BeeUi.Common
             if (G.IsCCD)
             {
 
-                Shows.RefreshImg(G.EditTool.View.imgView, BeeCore.Common.listCamera[G.indexChoose].matRaw);
+                Shows.RefreshImg(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
 
                
             }
@@ -150,7 +152,7 @@ namespace BeeUi.Common
 
         private void btnSaveProgram_Click(object sender, EventArgs e)
         {
-            SaveData.Project(G.Project);
+            SaveData.Project(Global.Project);
             G.Header.Mode();
         }
 
