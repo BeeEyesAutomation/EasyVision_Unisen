@@ -420,7 +420,7 @@ namespace BeeUi.Unit
             this.Ou16.Name = "Ou16";
             this.Ou16.Size = new System.Drawing.Size(89, 38);
             this.Ou16.TabIndex = 11;
-            this.Ou16.Text = "Error";
+            this.Ou16.Text = "-";
             this.Ou16.TextColor = System.Drawing.Color.Black;
             this.Ou16.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou16.UseVisualStyleBackColor = false;
@@ -449,7 +449,7 @@ namespace BeeUi.Unit
             this.Ou15.Name = "Ou15";
             this.Ou15.Size = new System.Drawing.Size(87, 38);
             this.Ou15.TabIndex = 10;
-            this.Ou15.Text = "Busy";
+            this.Ou15.Text = "-";
             this.Ou15.TextColor = System.Drawing.Color.Black;
             this.Ou15.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou15.UseVisualStyleBackColor = false;
@@ -478,7 +478,7 @@ namespace BeeUi.Unit
             this.Ou14.Name = "Ou14";
             this.Ou14.Size = new System.Drawing.Size(87, 38);
             this.Ou14.TabIndex = 9;
-            this.Ou14.Text = "Logic8";
+            this.Ou14.Text = "-";
             this.Ou14.TextColor = System.Drawing.Color.Black;
             this.Ou14.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou14.UseVisualStyleBackColor = false;
@@ -507,7 +507,7 @@ namespace BeeUi.Unit
             this.Ou13.Name = "Ou13";
             this.Ou13.Size = new System.Drawing.Size(87, 38);
             this.Ou13.TabIndex = 8;
-            this.Ou13.Text = "Logic7";
+            this.Ou13.Text = "-";
             this.Ou13.TextColor = System.Drawing.Color.Black;
             this.Ou13.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou13.UseVisualStyleBackColor = false;
@@ -555,7 +555,7 @@ namespace BeeUi.Unit
             this.Ou12.Name = "Ou12";
             this.Ou12.Size = new System.Drawing.Size(89, 38);
             this.Ou12.TabIndex = 11;
-            this.Ou12.Text = "Logic6";
+            this.Ou12.Text = "-";
             this.Ou12.TextColor = System.Drawing.Color.Black;
             this.Ou12.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou12.UseVisualStyleBackColor = false;
@@ -584,7 +584,7 @@ namespace BeeUi.Unit
             this.Ou11.Name = "Ou11";
             this.Ou11.Size = new System.Drawing.Size(87, 38);
             this.Ou11.TabIndex = 10;
-            this.Ou11.Text = "Logic5";
+            this.Ou11.Text = "-";
             this.Ou11.TextColor = System.Drawing.Color.Black;
             this.Ou11.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou11.UseVisualStyleBackColor = false;
@@ -613,7 +613,7 @@ namespace BeeUi.Unit
             this.Ou10.Name = "Ou10";
             this.Ou10.Size = new System.Drawing.Size(87, 38);
             this.Ou10.TabIndex = 9;
-            this.Ou10.Text = "Logic4";
+            this.Ou10.Text = "-";
             this.Ou10.TextColor = System.Drawing.Color.Black;
             this.Ou10.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou10.UseVisualStyleBackColor = false;
@@ -642,7 +642,7 @@ namespace BeeUi.Unit
             this.Ou9.Name = "Ou9";
             this.Ou9.Size = new System.Drawing.Size(87, 38);
             this.Ou9.TabIndex = 8;
-            this.Ou9.Text = "Logic3";
+            this.Ou9.Text = "-";
             this.Ou9.TextColor = System.Drawing.Color.Black;
             this.Ou9.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou9.UseVisualStyleBackColor = false;
@@ -690,7 +690,7 @@ namespace BeeUi.Unit
             this.Ou8.Name = "Ou8";
             this.Ou8.Size = new System.Drawing.Size(89, 38);
             this.Ou8.TabIndex = 11;
-            this.Ou8.Text = "Logic2";
+            this.Ou8.Text = "Light";
             this.Ou8.TextColor = System.Drawing.Color.Black;
             this.Ou8.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou8.UseVisualStyleBackColor = false;
@@ -719,7 +719,7 @@ namespace BeeUi.Unit
             this.Ou7.Name = "Ou7";
             this.Ou7.Size = new System.Drawing.Size(87, 38);
             this.Ou7.TabIndex = 10;
-            this.Ou7.Text = "Logic1";
+            this.Ou7.Text = "Logic3";
             this.Ou7.TextColor = System.Drawing.Color.Black;
             this.Ou7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou7.UseVisualStyleBackColor = false;
@@ -748,7 +748,7 @@ namespace BeeUi.Unit
             this.Ou6.Name = "Ou6";
             this.Ou6.Size = new System.Drawing.Size(87, 38);
             this.Ou6.TabIndex = 9;
-            this.Ou6.Text = "Ready";
+            this.Ou6.Text = "Logic2";
             this.Ou6.TextColor = System.Drawing.Color.Black;
             this.Ou6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou6.UseVisualStyleBackColor = false;
@@ -777,7 +777,7 @@ namespace BeeUi.Unit
             this.Ou5.Name = "Ou5";
             this.Ou5.Size = new System.Drawing.Size(87, 38);
             this.Ou5.TabIndex = 8;
-            this.Ou5.Text = "T.Result";
+            this.Ou5.Text = "Logic1";
             this.Ou5.TextColor = System.Drawing.Color.Black;
             this.Ou5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou5.UseVisualStyleBackColor = false;
@@ -825,7 +825,7 @@ namespace BeeUi.Unit
             this.Ou4.Name = "Ou4";
             this.Ou4.Size = new System.Drawing.Size(89, 38);
             this.Ou4.TabIndex = 11;
-            this.Ou4.Text = "Result4";
+            this.Ou4.Text = "Error";
             this.Ou4.TextColor = System.Drawing.Color.Black;
             this.Ou4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou4.UseVisualStyleBackColor = false;
@@ -854,7 +854,7 @@ namespace BeeUi.Unit
             this.Ou3.Name = "Ou3";
             this.Ou3.Size = new System.Drawing.Size(87, 38);
             this.Ou3.TabIndex = 10;
-            this.Ou3.Text = "Result3";
+            this.Ou3.Text = "Busy";
             this.Ou3.TextColor = System.Drawing.Color.Black;
             this.Ou3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou3.UseVisualStyleBackColor = false;
@@ -883,7 +883,7 @@ namespace BeeUi.Unit
             this.Ou2.Name = "Ou2";
             this.Ou2.Size = new System.Drawing.Size(87, 38);
             this.Ou2.TabIndex = 9;
-            this.Ou2.Text = "Result2";
+            this.Ou2.Text = "Ready";
             this.Ou2.TextColor = System.Drawing.Color.Black;
             this.Ou2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou2.UseVisualStyleBackColor = false;
@@ -912,7 +912,7 @@ namespace BeeUi.Unit
             this.Ou1.Name = "Ou1";
             this.Ou1.Size = new System.Drawing.Size(87, 38);
             this.Ou1.TabIndex = 8;
-            this.Ou1.Text = "Result1";
+            this.Ou1.Text = "T.Result";
             this.Ou1.TextColor = System.Drawing.Color.Black;
             this.Ou1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.Ou1.UseVisualStyleBackColor = false;
@@ -1272,7 +1272,7 @@ namespace BeeUi.Unit
             this.In8.Name = "In8";
             this.In8.Size = new System.Drawing.Size(89, 38);
             this.In8.TabIndex = 11;
-            this.In8.Text = "DL.Out";
+            this.In8.Text = "Prog4";
             this.In8.TextColor = System.Drawing.Color.Black;
             this.In8.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In8.UseVisualStyleBackColor = false;
@@ -1301,7 +1301,7 @@ namespace BeeUi.Unit
             this.In7.Name = "In7";
             this.In7.Size = new System.Drawing.Size(87, 38);
             this.In7.TabIndex = 10;
-            this.In7.Text = "DL.Trig";
+            this.In7.Text = "Prog3";
             this.In7.TextColor = System.Drawing.Color.Black;
             this.In7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In7.UseVisualStyleBackColor = false;
@@ -1330,7 +1330,7 @@ namespace BeeUi.Unit
             this.In6.Name = "In6";
             this.In6.Size = new System.Drawing.Size(87, 38);
             this.In6.TabIndex = 9;
-            this.In6.Text = "Live";
+            this.In6.Text = "Prog2";
             this.In6.TextColor = System.Drawing.Color.Black;
             this.In6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In6.UseVisualStyleBackColor = false;
@@ -1359,7 +1359,7 @@ namespace BeeUi.Unit
             this.In5.Name = "In5";
             this.In5.Size = new System.Drawing.Size(87, 38);
             this.In5.TabIndex = 8;
-            this.In5.Text = "M.Vision";
+            this.In5.Text = "Prog1";
             this.In5.TextColor = System.Drawing.Color.Black;
             this.In5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In5.UseVisualStyleBackColor = false;
@@ -1407,7 +1407,7 @@ namespace BeeUi.Unit
             this.In4.Name = "In4";
             this.In4.Size = new System.Drawing.Size(89, 38);
             this.In4.TabIndex = 11;
-            this.In4.Text = "Prog";
+            this.In4.Text = "ByPass";
             this.In4.TextColor = System.Drawing.Color.Black;
             this.In4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In4.UseVisualStyleBackColor = false;
@@ -1436,7 +1436,7 @@ namespace BeeUi.Unit
             this.In3.Name = "In3";
             this.In3.Size = new System.Drawing.Size(87, 38);
             this.In3.TabIndex = 10;
-            this.In3.Text = "ByPass";
+            this.In3.Text = "Mode";
             this.In3.TextColor = System.Drawing.Color.Black;
             this.In3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.In3.UseVisualStyleBackColor = false;

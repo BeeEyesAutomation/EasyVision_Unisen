@@ -25,7 +25,7 @@ namespace BeeGlobal
 
         bool IsServerStarted = false;
 
-        public static bool ConnectPLC(string Port, int Baurate = 9600, byte SlaveId = 2)
+        public static bool ConnectPLC(string Port, int Baurate = 9600, byte SlaveId = 1)
         {
             string PortConnect = Port.ToString().Trim();
             try
@@ -41,7 +41,7 @@ namespace BeeGlobal
                 {
                     ///  MessageBox.Show($"Lỗi khi ngắt kết nối: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                //modbusClient = new ModbusClient(modbusIpAddress, modbusPort);
+              //  modbusClient = new ModbusClient(modbusIpAddress, modbusPort);
                 modbusClient = new ModbusClient(PortConnect);//modbusIpAddress, modbusPort
                 modbusClient.Baudrate = Baurate;
                 modbusClient.UnitIdentifier = SlaveId;

@@ -257,6 +257,7 @@ namespace BeeInterface
             icon.Click += ItemTool_Click;
             this.DoubleClick += ItemTool_DoubleClick;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
+           
         }
         Control control=new Control();
         public int IndexTool = -1;

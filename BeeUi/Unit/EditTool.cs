@@ -234,34 +234,26 @@ namespace BeeUi
            foreach(Camera camera in BeeCore.Common.listCamera)
                 if(camera!=null)
 				camera.DestroyAll();
-          
-            
-          
+
+            View.tmContinuous.Enabled = false;
+            G.Header.tmReConnectPLC.Enabled = false;
+            G.Header.tmReadPLC.Enabled = false;
+            if (G.Header.workPLC.IsBusy)
+                G.Header.workPLC.CancelAsync();
             if (Global.Comunication.IO.IsConnected)
             {
-                Global.Comunication.IO.SetOutPut(Global.Comunication.IO.valueOutput[4], false); //Ready
-                Global.Comunication.IO.SetOutPut(Global.Comunication.IO.valueOutput[6], true); //Busy
-                Global.Comunication.IO.WriteOutPut();
-               
-                Modbus.DisconnectPLC();
+                Global.Comunication.IO.WriteIO(IO_Processing.Close);
             }
-            await Task.Delay(1000);
+
+          
+            await Task.Delay(100);
         }
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
           
            
           
-            View.tmContinuous.Enabled = false;
-            G.Header.tmReConnectPLC.Enabled = false;
-            G.Header.tmReadPLC.Enabled = false;
-            if(G.Header.workPLC.IsBusy)
-            G.Header.workPLC.CancelAsync();
-            if (Global.Comunication.IO.IsConnected)
-            {
-                //Global.Comunication.IO.WriteOutPut(2, true);
-                Modbus.DisconnectPLC();
-            }
+           
         }
 
         public View View;

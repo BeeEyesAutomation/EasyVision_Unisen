@@ -92,11 +92,14 @@ namespace BeeUi
                         break;
 
                 }
-            if (Global.IndexChoose>=0)
-          switch (  BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
+            if (Global.IndexChoose >= 0)
             {
+                if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
+                    BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), 0);
+                switch (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
+                {
                     case TypeCamera.USB:
-                        btnUSB2_0.IsCLick=true;
+                        btnUSB2_0.IsCLick = true;
                         break;
                     case TypeCamera.BaslerGigE:
                         btnGigE.IsCLick = true;
@@ -106,6 +109,7 @@ namespace BeeUi
                         break;
 
                 }
+            }
          
             //   cbCCD.DataSource = ScanIDCCD();
             //if (G.Config.Resolution == null) G.Config.Resolution = "1280x720 (1.3 MP)";
@@ -245,16 +249,24 @@ namespace BeeUi
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-                //if (G.Load != null)
-                //    G.Load.Close();
-                //if (G.Main != null)
-                //    G.Main.Close();
+             
+                if (G.Main != null)
+            {
                 this.Close();
-               // Process.GetCurrentProcess().Kill();
-               
-                
-           
-         
+            }
+            else
+            {  if (G.Load != null)
+                G.Load.Close();
+                //G.Main.Close();
+               Process.GetCurrentProcess().Kill();
+            }
+
+
+
+
+
+
+
         }
 
         private void ScanCCD_Load_1(object sender, EventArgs e)

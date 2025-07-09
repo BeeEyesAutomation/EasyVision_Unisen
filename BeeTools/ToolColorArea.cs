@@ -294,7 +294,7 @@ namespace BeeInterface
        
         private void btnClear_Click(object sender, EventArgs e)
         {
-           // Propety.SetRaw(BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+           //Propety.SetRaw(BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
             
             //if (ExtractColor == null)
             //{

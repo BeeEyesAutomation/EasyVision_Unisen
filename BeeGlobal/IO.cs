@@ -21,9 +21,9 @@ namespace BeeGlobal
         public int[] valueOutput = new int[16];
         public int[] AddressStarts;
         public int[] LenReads;
-        public String Port = "COM4";
-        public int Baurate = 9600;
-        public byte SlaveID=2;
+        public String Port = "COM8";
+        public int Baurate = 115200;
+        public byte SlaveID=1;
         public bool IsBypass=false;
         public IO() { }
         public bool IsConnected = false,IsWriting=false;
@@ -37,14 +37,15 @@ namespace BeeGlobal
             nameInput = stringLine[2].Split(',');
             nameOutput = stringLine[3].Split(',');
             if (IdPort.Trim() == "") return false;
-            IsConnected= Modbus.ConnectPLC(IdPort, Baurate, SlaveID);
-          //  Modbus.ReadHolding(0, 10);
+            IsConnected= Modbus.ConnectPLC(Port, Baurate, SlaveID);
+            if(IsConnected) valueOutput = Modbus.ReadBit(2);
+            //  Modbus.ReadHolding(0, 10);
             return IsConnected;
         }
         public void Disconnect()
         {
              Modbus.DisconnectPLC();
-          
+            IsConnected = false;
         }
         public  bool Read()
         {
@@ -54,7 +55,7 @@ namespace BeeGlobal
                return false;
             }
              valueInput= Modbus.ReadBit(1);
-            valueOutput = Modbus.ReadBit(2);
+         //   valueOutput = Modbus.ReadBit(2);
             //  valueInput = new int[dataBytes.Length / 2];
 
             // valueInput =  Modbus.ReadHolding(AddressStarts[0]);
@@ -76,8 +77,15 @@ namespace BeeGlobal
                     WriteOutPut();
                     break;
                 case IO_Processing.Close:
-                    SetOutPut(Global.Comunication.IO.valueOutput[1], false); //Ready
-                    SetOutPut(Global.Comunication.IO.valueOutput[2], true); //Busy
+                    SetOutPut(0, false); //T.Result
+                    SetOutPut(1, false); //Ready
+                    SetOutPut(3, false); //Busy
+                    SetOutPut(4, false); //Busy
+                    SetOutPut(5, false); //Busy
+                    SetOutPut(6, false); //Busy
+                    SetOutPut(7, false); //Busy
+                    SetOutPut(2, true); //Busy
+                  
                     WriteOutPut();
                     Disconnect();
                     break;
@@ -131,12 +139,12 @@ namespace BeeGlobal
                 case IO_Processing.ChangeMode:
                     if(Is)
                    {
-                        Global.Comunication.IO.SetOutPut(2, true); //Busy
+                        Global.Comunication.IO.SetOutPut(2, false); //Busy
                         Global.Comunication.IO.WriteOutPut();
                     }
                     else
                     {
-                        Global.Comunication.IO.SetOutPut(2, false); //Not Busy
+                        Global.Comunication.IO.SetOutPut(2, true); //Not Busy
                         Global.Comunication.IO.WriteOutPut();
                     }
                         break;
@@ -158,6 +166,19 @@ namespace BeeGlobal
             }
             IsWriting = false;
         }
+        public bool CheckReady()
+        {
+        if (valueInput[0] == 1&& valueOutput[2] == 0)
+            {
+                return true;
+            }
+            else
+            {
+              
+                return false;
+            }
+            return false;
+        }
         public bool CheckErr(bool IsCameraConnected)
         {
             if (!IsCameraConnected)
@@ -168,6 +189,7 @@ namespace BeeGlobal
                     Global.Comunication.IO.WriteOutPut();
                     return false;
                 }
+                return true;
             }
             else
             {
@@ -178,6 +200,7 @@ namespace BeeGlobal
                     Global.Comunication.IO.WriteOutPut();
                     return true;
                 }
+                return true;
             }
             return false;
         }

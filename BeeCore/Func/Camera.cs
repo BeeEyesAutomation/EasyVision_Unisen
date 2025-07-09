@@ -69,14 +69,14 @@ namespace BeeCore
         {
             if (Para.TypeCamera == TypeCamera.TinyIV)
             {
-                 HEROJE.Disconnect(); 
-               
+                 HEROJE.Disconnect();
+                HEROJE.DisConnect();
             }
            
             CCDPlus.DestroyAll(IndexCCD);
             Common.ClosePython();
             
-            HEROJE.DisConnect();
+    
             Thread.Sleep(500);
             Application.ExitThread();
         }

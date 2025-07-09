@@ -73,6 +73,7 @@ namespace BeeUi.Common
             {
                 G.EditTool.View.btnLive.PerformClick();
             }
+            if(Global.ParaCommon.matRegister!=null)
             Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
             G.EditTool.View.btnLive.Enabled = false;
             G.EditTool.RefreshGuiEdit(Step.Step3);

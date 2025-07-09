@@ -129,8 +129,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-        
-          BeeCore.Common.Comunication.Com= cbSerialPort.Text;
+            G.Config.IDPort = cbSerialPort.Text;
+            BeeCore.Common.Comunication.IO.Port= cbSerialPort.Text;
         }
 
         private void SettingPLC_Load(object sender, EventArgs e)

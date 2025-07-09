@@ -505,6 +505,7 @@ namespace BeeInterface
              
                 if (!Global.IsRun)
                 {
+                    Global.StatusDraw = StatusDraw.Check;
                     if (Propety.IsOK)
                     {
 
@@ -512,11 +513,24 @@ namespace BeeInterface
                         Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
                         Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
 
-                    }
-                  //  G.EditTool.View.imgView.Invalidate();
+                    }    //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
+                         //    {
+                         //        tool.ItemTool.lbStatus.Text = "OK";
+                         //        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                         //        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                         //        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                         //    }
+                         //    else
+                         //    {
+                         //        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
+                         //        tool.ItemTool.lbStatus.Text = "NG";
+                         //        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                         //        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                         //  G.EditTool.View.imgView.Invalidate();
                 }
-                  
-            };
+
+            }
+                ;
             Bitmap bmTemp = Propety.matTemp;
             //Herlo
             if (bmTemp != null)
@@ -720,7 +734,7 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            Global.StatusDraw=StatusDraw.Check;
+           
 
 
             if (!worker.IsBusy)

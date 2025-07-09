@@ -1336,6 +1336,7 @@ namespace BeeUi
 
         private void Global_StatusDrawChanged(StatusDraw obj)
         {
+            if (Global.StatusDraw != StatusDraw.None)
             imgView.Invalidate();
         }
 
@@ -1696,7 +1697,7 @@ namespace BeeUi
         public void DrawTotalResult(int IndexThread )
         {
 
-
+        
             if (BeeCore.Common.bmResult != null)
             {
                
@@ -1711,8 +1712,10 @@ namespace BeeUi
             //imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y
 
             //gc.Clear(Color.White);
-            //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null) return;
-            BeeCore.Common.bmResult = BeeCore.Common.listCamera[IndexThread].matRaw.ToBitmap();
+            Mat rs = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
+            if (rs.Empty()) return;
+            if (rs.Width==0|| rs.Height == 0) return;
+            BeeCore.Common.bmResult = rs.ToBitmap();
 
             // Convert nếu cần
             if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
@@ -1734,7 +1737,7 @@ namespace BeeUi
                 mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
                 //gc.Transform=mat;
                 indexTool = 0;
-
+               
                 foreach (Tools tool in G.listAlltool[IndexThread])
                 {
                     // tool.tool.Propety.ScoreRs = 80;
@@ -1758,10 +1761,10 @@ namespace BeeUi
                     if (tool.tool.Propety.IsOK)
                     {
                         numToolOK++;
-                        //tool.ItemTool.lbStatus.Text = "OK";
-                        //tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        //tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        //tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
+                        tool.ItemTool.lbStatus.Text = "OK";
+                        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
+                        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
+                        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
                         //switch (G.Config.ConditionOK)
                         //{
                         //    case ConditionOK.TotalOK:
@@ -1836,10 +1839,10 @@ namespace BeeUi
                         //}
                         //else
                         //{
-                        //    tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                        //    tool.ItemTool.lbStatus.Text = "NG";
-                        //    tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                        //    tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
+                        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
+                        tool.ItemTool.lbStatus.Text = "NG";
+                        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
+                        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
                         //}
 
 
@@ -1847,8 +1850,13 @@ namespace BeeUi
 
 
                     indexTool++;
-                }
+                } 
+                if (imgView.Image != null)
+                {
+                    imgView.Image.Dispose(); // Giải phóng ảnh cũ
+                }   
                 imgView.Image = BeeCore.Common.bmResult; ;
+                rs.Dispose();
                 //if (BeeCore.Common.bmResult == null) return;
                 //if (BeeCore.Common.bmResult.Width == 0) return;
                 //if (BeeCore.Common.bmResult.Height == 0) return;
@@ -1953,7 +1961,22 @@ namespace BeeUi
 
             numToolOK = 0;
             G.TotalOK = true;
+            foreach (Tools tool in G.listAlltool[0])
+            {
+                if (BeeCore.Common.PropetyTools[0][indexTool].UsedTool == UsedTool.NotUsed)
+                {
 
+                    indexTool++;
+                    continue;
+                }
+                if (!tool.tool.Propety.IsOK)
+                {
+                    G.TotalOK = false;
+                    break;
+                }
+                    
+            }
+            G.IsSendRS = true;
             DrawTotalResult(0);
 
            
@@ -1991,7 +2014,7 @@ namespace BeeUi
 
               
             }
-            G.IsSendRS = true;
+           
             if (!G.IsModeTest)
             if (G.Config.IsSaveOK || G.Config.IsSaveNG)
             {
