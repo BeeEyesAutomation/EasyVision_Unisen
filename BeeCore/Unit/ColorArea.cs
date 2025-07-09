@@ -127,7 +127,7 @@ namespace BeeCore
             Cv2.EqualizeHist(contrastImg, contrastImg);
             Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
             G.colorArea.StyleColor = styleColor;
-          //  Cv2.ImWrite("Color.png", raw);
+            Cv2.ImWrite("Color.png", raw);
             G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(contrastImg));
            
             String S = G.colorArea.GetColor(x, y);
