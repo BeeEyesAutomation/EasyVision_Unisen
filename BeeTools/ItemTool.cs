@@ -82,7 +82,7 @@ namespace BeeInterface
             if (Global.IsRun) return;
            // this.BackgroundImage = imgChoose;
             this.IsCLick = true;
-            //Global.indexToolSelected = G.listAlltool[Global.IndexChoose].FindIndex(a => a.ItemTool == this);
+            Global.IndexToolSelected = IndexTool;
             foreach (Control c in this.Parent.Controls)
             {
 
@@ -273,6 +273,7 @@ namespace BeeInterface
             //    MessageBox.Show("Vui long dang ky Anh");
             //    return;
             //}
+            Global.IndexToolSelected = -1;
             if (Global.IsRun) return;
             //this.Parent.Visible = false;
             txtEdit.Visible = false;
@@ -310,7 +311,9 @@ namespace BeeInterface
         {
             if(e.KeyCode==Keys.Enter)
             {
+                Global.IndexToolSelected = IndexTool;
                 BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Name = txtEdit.Text.Trim();
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.SetModel();
                 name.Text= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
             }    

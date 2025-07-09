@@ -24,7 +24,7 @@ namespace BeeGlobal
         public String Port = "COM8";
         public int Baurate = 115200;
         public byte SlaveID=1;
-        public bool IsBypass=false;
+        public bool IsBypass=true;
         public IO() { }
         public bool IsConnected = false,IsWriting=false;
         public bool Connect( String IdPort )

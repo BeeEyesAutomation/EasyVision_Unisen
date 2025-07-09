@@ -158,19 +158,19 @@ namespace BeeInterface
             //gc.Transform = mat;
             gc.DrawRectangle(new Pen(cl, 2), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
                 if (Propety.bmRS == null) return gc;
-                //if (G.IsDrawProcess)
-                //{
-                //  //  mat.Translate(rotA._rect.X, rotA._rect.Y);
-                //  //  gc.Transform = mat;
-                //    Bitmap myBitmap = Propety.bmRS;
-                //    myBitmap.MakeTransparent(Color.Black);
-                //    myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
-                //    gc.DrawImage(myBitmap, rotA._rect);
-                //}
+            //if (G.IsDrawProcess)
+            //{
+            //  mat.Translate(rotA._rect.X, rotA._rect.Y);
+            //  gc.Transform = mat;
+            Bitmap myBitmap = Propety.bmRS;
+            myBitmap.MakeTransparent(Color.Black);
+            myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
+            gc.DrawImage(myBitmap, rotA._rect);
+            //}
 
-                
-               
-            
+
+
+
             String s= (int)(  Propety.Index+1)+"."+ Propety.nameTool;
          SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
             gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));

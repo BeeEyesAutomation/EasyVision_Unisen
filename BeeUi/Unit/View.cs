@@ -1356,7 +1356,7 @@ namespace BeeUi
                 control.Location = new Point(0, 0);
                 control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                 control.BringToFront();
-                DataTool.LoadPropety(control);
+               // DataTool.LoadPropety(control);
                 TypeTool TypeTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool;
 
                 G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
@@ -2897,7 +2897,7 @@ namespace BeeUi
 
             tmSimulation.Enabled = false;
 
-            indexFile++;
+        X: indexFile++;
                 if (indexFile < Files.Count())
                 {
                    
@@ -2905,6 +2905,7 @@ namespace BeeUi
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
                 G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
                 BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 RunProcessing();

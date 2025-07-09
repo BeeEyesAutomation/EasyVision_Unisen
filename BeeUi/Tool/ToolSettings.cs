@@ -91,7 +91,7 @@ namespace BeeUi.Tool
      
         private void btnCopy_Click(object sender, EventArgs e)
         {
-
+            if (Global.IndexToolSelected == -1) return;
        
           PropetyTool propety = (PropetyTool)BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Clone();
        

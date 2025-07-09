@@ -54,7 +54,8 @@ Mat matMask;
 
      matMask = Mat(mat.rows, mat.cols, CV_8UC1, Scalar(0, 0, 0));
     Mat matHSV = Mat();
-   
+    if (mat.type() != CV_8UC3)
+        return;
     int i = 0;
     if(StyleColor!=0)
         cvtColor(mat.clone(), matHSV, COLOR_BGR2RGB);

@@ -122,13 +122,13 @@ namespace BeeCore
             if (raw.Type()==MatType.CV_8UC1){
                 Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
             }
-            Mat contrastImg = new Mat();
-            Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
-            Cv2.EqualizeHist(contrastImg, contrastImg);
-            Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+          //  Mat contrastImg = new Mat();
+            //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
+            //Cv2.EqualizeHist(contrastImg, contrastImg);
+            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
             G.colorArea.StyleColor = styleColor;
-            Cv2.ImWrite("Color.png", raw);
-            G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(contrastImg));
+          //  Cv2.ImWrite("Color.png", raw);
+            G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw));
            
             String S = G.colorArea.GetColor(x, y);
             clShow = System.Drawing.Color.Black;
@@ -155,6 +155,8 @@ namespace BeeCore
             BeeCore.Native.SetImg(BeeCore.Common.listCamera[IndexThread].matRaw);
             G.colorArea.StyleColor = styleColor;
        Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotArea,rotMask);
+            if (matCrop.Empty()) return;
+
             Native.SetImg(matCrop, TypeImg.Crop);
         //    BeeCore.G.CommonPlus.CropRotate((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle);
 
@@ -174,12 +176,16 @@ namespace BeeCore
         }
         public Mat SetColor(bool IsCCD, Mat raw)
         {
-            Mat contrastImg = new Mat();
-            Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
-            Cv2.EqualizeHist(contrastImg, contrastImg);
-            Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+           // Mat contrastImg = new Mat(); 
+            if (raw.Type() == MatType.CV_8UC1)
+            {
+                Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+            }
+            //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
+            //Cv2.EqualizeHist(contrastImg, contrastImg);
+            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
             G.colorArea.StyleColor = styleColor;
-            Native.SetImg(contrastImg, TypeImg.Crop);
+            Native.SetImg(raw, TypeImg.Crop);
              pxTemp = G.colorArea.SetColorArea(AreaPixel);
            
          
@@ -196,13 +202,17 @@ namespace BeeCore
       
         public Bitmap CheckColor( Mat raw)
         {
-            Mat contrastImg = new Mat();
-            Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
-            Cv2.EqualizeHist(contrastImg, contrastImg);
-            Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+            //Mat contrastImg = new Mat();
+            if (raw.Type() == MatType.CV_8UC1)
+            {
+                Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+            }
+            //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
+            //Cv2.EqualizeHist(contrastImg, contrastImg);
+            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
             G.colorArea.StyleColor = styleColor;
 
-            Bitmap btmRaw = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(contrastImg);
+            Bitmap btmRaw = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw);
 
                 G.CommonPlus.BitmapSrc(btmRaw);
             
@@ -238,22 +248,26 @@ namespace BeeCore
 
 
           
-            Mat input = BeeCore.Common.listCamera[IndexThread].matRaw;
+            Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw;
             // Tăng độ tương phản
             int clipLimit = 2;
-            Mat contrastImg = new Mat();
-            Cv2.CvtColor(input, contrastImg,ColorConversionCodes.BGR2GRAY);
-            Cv2.EqualizeHist(contrastImg, contrastImg);
-            Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+           // Mat contrastImg = new Mat();
+            if (raw.Type() == MatType.CV_8UC1)
+            {
+                Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+            }
+            //Cv2.CvtColor(input, contrastImg,ColorConversionCodes.BGR2GRAY);
+            //Cv2.EqualizeHist(contrastImg, contrastImg);
+            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
             //// 2. Tăng tương phản bằng CLAHE
             //CLAHE clahe = Cv2.CreateCLAHE(clipLimit, new OpenCvSharp.Size(8, 8));
             //Mat contrast = new Mat();
             //clahe.Apply(contrastImg, contrast);
 
-          //  Cv2.ImWrite(nameTool + ".png", contrastImg);
+            //  Cv2.ImWrite(nameTool + ".png", contrastImg);
 
             G.colorArea.LoadTemp(listColor);
-            BeeCore.Native.SetImg(contrastImg);
+            BeeCore.Native.SetImg(raw);
             IsOK = G.colorArea.CheckColor(true,(int)rotCrop._PosCenter.X, (int)rotCrop._PosCenter.Y, (int)rotCrop._rect.Width, (int)rotCrop._rect.Height, rotCrop._angle, AreaPixel, (int)Score, pxTemp);
             ScoreRs = G.colorArea.ScoreRS;
             int rows = 0, cols = 0 ,Type = 0;
