@@ -12,6 +12,18 @@ namespace BeeGlobal
         Check,
         Color,None
     }
+    public enum TypeMeasure
+    {
+        Angle,Distance
+    }
+    public enum DirectMeasure
+    {
+       X,Y,XY
+    }
+    public enum MethordMeasure
+    {
+       Min,Max,Medium
+    }
     public enum Corner
     {
         Both,

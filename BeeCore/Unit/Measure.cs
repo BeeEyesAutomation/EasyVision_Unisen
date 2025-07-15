@@ -28,6 +28,10 @@ namespace BeeCore
             StatusTool = StatusTool.Initialed;
         }
         public float Scale = 1;
+        public TypeMeasure TypeMeasure = TypeMeasure.Angle;
+        public DirectMeasure DirectMeasure = DirectMeasure.X;
+        public MethordMeasure MethordMeasure = MethordMeasure.Min;
+      
         public Measure() { }
         public bool IsCheckArea = false;
         public String nameTool = "";
@@ -39,6 +43,7 @@ namespace BeeCore
         public StatusTool StatusTool = StatusTool.None;
         public int cycleTime;
         public bool IsOK = false;
+        public List<RectRotate> listRot = new List<RectRotate> { new RectRotate(), new RectRotate(), new RectRotate(), new RectRotate() };
         public List<Point> listLine1Point = new List<Point>();
         public List<Point> listLine2Point = new List<Point>();
         public List<Tuple<String, int>> listPointChoose = new List<Tuple<String, int>>();
@@ -49,6 +54,10 @@ namespace BeeCore
         public float Score, ScoreRs;
         public void IniTool()
         {
+            if(listRot==null)
+            {
+                listRot = new List<RectRotate> { new RectRotate(), new RectRotate(), new RectRotate(), new RectRotate() };
+            }
             if(listPointChoose==null)
             {
                 listPointChoose = new List<Tuple<String, int>>();

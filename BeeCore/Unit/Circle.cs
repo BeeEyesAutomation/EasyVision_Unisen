@@ -471,7 +471,7 @@ namespace BeeCore
                 //    Cv2.Circle(matProcess, (Point)c.Center, (int)c.Radius, Scalar.Red, 3);
                 //    Cv2.Circle(matProcess, (Point)c.Center, 2, Scalar.Blue, -1);
                 //}
-                Cv2.ImWrite("Circle.png", matProcess);
+               // Cv2.ImWrite("Circle.png", matProcess);
                 foreach (var c in circles)
                 {
                     PointF pCenter = new PointF(Convert.ToSingle(c.Center.X), Convert.ToSingle(c.Center.Y));
