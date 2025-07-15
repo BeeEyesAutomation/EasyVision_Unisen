@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.ML;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace BeeInterface
 {
@@ -51,13 +52,10 @@ namespace BeeInterface
 
             worker.RunWorkerCompleted += (sender, e) =>
             {
-                if (e.Error != null)
-                {
-                    //  MessageBox.Show("Worker error: " + e.Error.Message);
-                    return;
-                }
+                
                 Propety.Complete();
-              
+              if(!Global.IsRun)
+                    Global.StatusDraw = StatusDraw.Check;
                 timer.Stop();
 
                 Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
@@ -68,8 +66,8 @@ namespace BeeInterface
             trackCany.Value =(int) Propety.Cany;
             trackDp.Value =(float) Propety.Dp;
           //  numAngle.Value = (int)Propety.Angle;
-            trackScore.Value =Propety.Score; 
-            trackNumObject.Value= Propety.NumObject;
+            trackScore.Value =Propety.Score;
+            numScale.Value= (decimal) Propety.Scale;
       
             trackDistance.Value =Propety.Distance;
             numMinRadius.Value = Propety.MinRadius;
@@ -148,7 +146,9 @@ namespace BeeInterface
                     gc.Transform = mat;
                     Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 6, cl, 2);
                     gc.DrawEllipse(new Pen(cl, 2), rot._rect);
-                    gc.DrawString("R:"+rot._rect.Width/2,new Font("Arial",16,FontStyle.Bold),new SolidBrush(cl),rot._PosCenter);
+                  float radius= (float)( (rot._rect.Width )/ Propety.Scale );
+                    radius =(float) Math.Round(radius, 1);
+                    gc.DrawString("D:"+ radius, new Font("Arial",24,FontStyle.Bold),new SolidBrush(cl),new PointF(0,0));
                   //  Draws.Box2Label(gc, rot._rect, i+"", Math.Round(Propety.listScore[i-1], 1) + "%", Global.fontRS, cl, brushText, 16, 2);
 
                     gc.ResetTransform();
@@ -325,14 +325,14 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(float obj)
         {
-            Propety.NumObject = trackNumObject.Value;
+          //  Propety.NumObject = trackNumObject.Value;
         }
 
     
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            Global.StatusDraw = StatusDraw.Check;
+           
             if (!worker.IsBusy)
                 worker.RunWorkerAsync();
             else
@@ -373,7 +373,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(object sender, EventArgs e)
         {
-            Propety.NumObject = trackNumObject.Value;
+           // Propety.NumObject = trackNumObject.Value;
         }
 
         private void rjButton3_Click_1(object sender, EventArgs e)
@@ -535,6 +535,21 @@ namespace BeeInterface
         private void trackDistance_ValueChanged(float obj)
         {
             Propety.Distance= (int)trackDistance.Value;
+        }
+
+        private void trackBar21_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar21_ValueChanged(float obj)
+        {
+          
+        }
+
+        private void numScale_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Scale =(float) numScale.Value;
         }
     }
 }

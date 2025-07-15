@@ -23,7 +23,11 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-
+        public void SetModel()
+        {
+            StatusTool = StatusTool.Initialed;
+        }
+        public float Scale = 1;
         public Measure() { }
         public bool IsCheckArea = false;
         public String nameTool = "";

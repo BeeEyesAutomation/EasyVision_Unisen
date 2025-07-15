@@ -9,6 +9,14 @@ namespace BeeCore.Func
 {
     public class Cal
     {
+        public static float Finddistasnce( PointF A, PointF B)
+        {
+            float deX = A.X - B.X;
+            float deY = A.Y - B.Y;
+
+            return (float)( Math.Sqrt(deX*deX+deY*deY));
+
+        }
         public static bool FindIntersection(
   PointF A, PointF B,
     PointF C, PointF D,

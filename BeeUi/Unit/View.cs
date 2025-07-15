@@ -2448,10 +2448,13 @@ namespace BeeUi
 
         private void workGetColor_DoWork(object sender, DoWorkEventArgs e)
         {
-
-            int X =Convert.ToInt32( (pMove.X-10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetX ;
-            int Y= Convert.ToInt32((pMove.Y+10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetY ;
-            clChoose = toolEdit.Propety.GetColor(BeeCore.Common.listCamera[Global.IndexChoose].matRaw,X,Y);
+            using (Mat raw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone())
+            {
+                int X = Convert.ToInt32((pMove.X - 10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetX;
+                int Y = Convert.ToInt32((pMove.Y + 10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetY;
+                clChoose = toolEdit.Propety.GetColor(raw, X, Y);
+            }    
+           
                       
                  
         }

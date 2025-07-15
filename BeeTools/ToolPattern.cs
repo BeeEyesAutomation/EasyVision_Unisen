@@ -197,7 +197,7 @@ namespace BeeInterface
                 //    cl = Color.Red;
             }
             String nameTool = (int)(Propety.Index + 1) + "." + BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].Name;
-            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl,1);
+            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl,4);
             gc.ResetTransform();
             if (Propety.listScore == null) return gc;
             if (Propety.rectRotates.Count > 0)
@@ -218,8 +218,8 @@ namespace BeeInterface
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
-                    Draws.Box2Label(gc, rot._rect, i+"", Math.Round(Propety.listScore[i-1], 1) + "%", Global.fontRS, cl, brushText, 16, 2);
+                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 6);
+                    Draws.Box2Label(gc, rot._rect, i+"", Math.Round(Propety.listScore[i-1], 1) + "%", Global.fontRS, cl, brushText, 16, 7);
 
                     gc.ResetTransform();
                     i++;

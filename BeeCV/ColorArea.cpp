@@ -94,6 +94,7 @@ Mat matMask;
 {
      try
      {
+         if (matRaw.empty()) return "";
          System::String^ sWrite = "";
          Mat raw = matRaw.clone();
          Mat matProccess=Mat();

@@ -134,7 +134,7 @@ namespace BeeUi.Commons
             GroupTool.Extra_Tool_2,
              GroupTool.Basic_Tool,
              GroupTool.Extra_Tool_2,
-              GroupTool.Extra_Tool_2,
+              GroupTool.Basic_Tool,
                GroupTool.Extra_Tool_1,
 
         };

@@ -235,21 +235,21 @@ namespace BeeCore
         public void Complete()
         {
             IsOK = true;
-            switch (Compare)
-            {
-                case Compares.Equal:
-                    if (rectRotates.Count() != LimitCounter)
-                        IsOK = false;
-                    break;
-                case Compares.Less:
-                    if (rectRotates.Count() >= LimitCounter)
-                        IsOK = false;
-                    break;
-                case Compares.More:
-                    if (rectRotates.Count() <= LimitCounter)
-                        IsOK = false;
-                    break;
-            }
+            //switch (Compare)
+            //{
+            //    case Compares.Equal:
+            //        if (rectRotates.Count() != LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //    case Compares.Less:
+            //        if (rectRotates.Count() >= LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //    case Compares.More:
+            //        if (rectRotates.Count() <= LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //}
             StatusTool = StatusTool.Done;
 
         }
@@ -414,6 +414,11 @@ namespace BeeCore
             r = Math.Sqrt((cx - x1) * (cx - x1) + (cy - y1) * (cy - y1));
             return true;
         }
+        public void SetModel()
+        {
+            StatusTool = StatusTool.Initialed;
+        }
+        public float Scale = 1;
         public int IndexThread = 0;
         public void Matching( RectRotate rectRotate)
         {
@@ -439,7 +444,7 @@ namespace BeeCore
            //     Mat pre = pipeline.Apply(matProcess);
 
                 //Cv2.WaitKey();
-                matProcess = EdgeBySobel(matProcess);
+               // matProcess = EdgeBySobel(matProcess);
                 //matProcess = Preprocess(matProcess,5,5,3);
                 rectRotates = new List<RectRotate>();
                 // BƯỚC 2 – HoughCircles

@@ -991,7 +991,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 			return false;
 
 		
-		cv::cvtColor(rawImage2, image, cv::COLOR_BayerRG2BGR);  // hoặc COLOR_BayerBG2BGR tùy loại
+		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR);  // hoặc COLOR_BayerBG2BGR tùy loại
 		
 		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
 		break;
@@ -1002,7 +1002,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 	{
 		//image = cv::Mat(height, width, CV_8UC3, pBufAddr);
 		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
-		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2RGB); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
 	}
 	break;
 	default:

@@ -173,18 +173,18 @@ namespace BeeUi.Data
 
                         if (Propety.IsOK)
                         {
-                            if (G.rotOriginAdj == null) return StatusProcessing;
-                            G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotOriginAdj._PosCenter.X;
-                            G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
-                            G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
+                            if (Global.rotOriginAdj == null) return StatusProcessing;
+                            Global.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X -Global.rotOriginAdj ._PosCenter.X;
+                            Global.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y -Global.rotOriginAdj ._PosCenter.Y;
+                            Global.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation -Global.rotOriginAdj ._rectRotation;
                         }
                         foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
                         {
                             if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
                                 continue;
-                            if (G.rotOriginAdj != null)
+                            if (Global.rotOriginAdj  != null)
                             {
-                                propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, G.rotOriginAdj);
+                                propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea,Global.rotOriginAdj );
                                 if (propetyTool.TypeTool == TypeTool.Positions)
                                 {
                                     propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
