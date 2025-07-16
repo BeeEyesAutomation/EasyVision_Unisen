@@ -129,6 +129,7 @@
     <Compile Include="AddTool.cs" />
     <Compile Include="Algorithm\FilterItem.cs" />
     <Compile Include="Algorithm\Filters.cs" />
+    <Compile Include="Algorithm\Gap.cs" />
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
     <Compile Include="EtherNetIP\AssemblyHelper.cs" />

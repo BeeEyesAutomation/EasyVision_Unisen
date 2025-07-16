@@ -214,10 +214,10 @@ namespace BeeInterface
                                         float Ymax1 = Math.Max(Propety.listLine1Point[0].Y+ Propety.listRot[0]._rect.Height / 2, Propety.listLine1Point[1].Y+ -Propety.listRot[1]._rect.Height / 2);
                                         float Xmin1 = Math.Min(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
                                         float Xmax1 = Math.Max(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
-                                        pCenter1 = new PointF(Xmin1 + width / 2,Ymin1);
-                                        pCenter2 = new PointF(Xmin1 + width / 2,Ymax1);
-                                        pCenter3 = new PointF(Xmax1 - width2 / 2,Ymin1);
-                                        pCenter4 = new PointF(Xmax1 - width2 / 2,Ymax1);
+                                        pCenter1 = new PointF(Xmin1 ,Ymin1);
+                                        pCenter2 = new PointF(Xmin1 ,Ymax1);
+                                        pCenter3 = new PointF(Xmax1 ,Ymin1);
+                                        pCenter4 = new PointF(Xmax1 ,Ymax1);
                                         Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Propety.Scale;
                                         break;
                                     case DirectMeasure.Y:
@@ -384,10 +384,11 @@ namespace BeeInterface
                             gc.DrawString("D=" + Propety.AngleDetect, new Font("Arial", 22, FontStyle.Bold), new SolidBrush(cl), new System.Drawing.PointF(x, y + 5));
                             break;
                         case DirectMeasure.X:
-                            Draws.Plus(gc,(int) pCenter2.X, (int)pCenter2.Y,10, cl, 4);
-                            Draws.Plus(gc, (int)pCenter4.X, (int)pCenter4.Y, 10, cl, 4);
+                          //  Draws.Plus(gc,(int) pCenter2.X, (int)pCenter2.Y,10, cl, 4);
+                          //  Draws.Plus(gc, (int)pCenter4.X, (int)pCenter4.Y, 10, cl, 4);
+                            gc.DrawLine(new Pen(cl, 4), pCenter1, pCenter2);
+                            gc.DrawLine(new Pen(cl, 4), pCenter3, pCenter4);
                             gc.DrawLine(new Pen(cl, 4), pCenter2, pCenter4);
-                          
                             gc.DrawString("D=" + Propety.AngleDetect, new Font("Arial", 22, FontStyle.Bold), new SolidBrush(cl), new System.Drawing.PointF(pCenter2.X, pCenter2.Y +10));
                             break;
 

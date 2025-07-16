@@ -219,7 +219,7 @@ namespace BeeInterface
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
                     Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
-                  //  Draws.Box2Label(gc, rot._rect, i+"", Math.Round(Propety.listScore[i-1], 1) + "%", Global.fontRS, cl, brushText, 16, 2);
+                    Draws.Box2Label(gc, rot._rect, i+"", Math.Round(Propety.listScore[i-1], 1) + "%", Global.fontRS, cl, brushText, 16, 2);
 
                     gc.ResetTransform();
                     i++;
