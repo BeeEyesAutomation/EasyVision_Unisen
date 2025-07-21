@@ -97,10 +97,14 @@ namespace BeeUi.Tool
        
             propety.Name = propety.TypeTool.ToString() + " " + (int)(BeeCore.Common.PropetyTools[Global.IndexChoose].Count + 1);
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propety);
+            int Index = BeeCore.Common.PropetyTools[Global.IndexChoose].Count - 1;
+            PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexChoose][Index];
+            propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexChoose,Global.pShowTool);
+            propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexChoose, Global.pShowTool);
             //Tools tool = DataTool.CreateControl(propety, G.listAlltool[Global.IndexChoose].Count(), Global.IndexChoose, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
             //G.listAlltool[Global.IndexChoose].Add(tool);
-             Global.pShowTool.Y += BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools.Count-1].ItemTool.Height + 10;
-            DataTool.LoadPropety(BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools.Count - 1].Control);
+            Global.pShowTool.Y += propetyTools.ItemTool.Height + 10;
+            DataTool.LoadPropety(propetyTools.Control);
             RefreshTool();
 
 

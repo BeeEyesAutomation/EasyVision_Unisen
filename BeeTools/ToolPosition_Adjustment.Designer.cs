@@ -88,12 +88,12 @@ namespace BeeInterface
             this.btnCropFull = new BeeInterface.RJButton();
             this.btnCropHalt = new BeeInterface.RJButton();
             this.label13 = new System.Windows.Forms.Label();
+            this.trackScore = new BeeInterface.TrackBar2();
             this.rjButton2 = new BeeInterface.RJButton();
             this.rjButton5 = new BeeInterface.RJButton();
             this.trackBar21 = new BeeInterface.TrackBar2();
             this.label4 = new System.Windows.Forms.Label();
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
-            this.adjustBar1 = new BeeInterface.AdjustBar();
             this.tabPage4.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
@@ -904,7 +904,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.Controls.Add(this.label17, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label13, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.adjustBar1, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.trackScore, 0, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
@@ -916,8 +916,8 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(485, 848);
@@ -942,10 +942,10 @@ namespace BeeInterface
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
             this.btnTest.IsUnGroup = true;
-            this.btnTest.Location = new System.Drawing.Point(20, 510);
+            this.btnTest.Location = new System.Drawing.Point(20, 503);
             this.btnTest.Margin = new System.Windows.Forms.Padding(20);
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(445, 318);
+            this.btnTest.Size = new System.Drawing.Size(445, 325);
             this.btnTest.TabIndex = 37;
             this.btnTest.Text = "Inspect";
             this.btnTest.TextColor = System.Drawing.Color.Black;
@@ -1255,6 +1255,22 @@ namespace BeeInterface
             this.label13.Text = "Score";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // trackScore
+            // 
+            this.trackScore.ColorTrack = System.Drawing.Color.Gray;
+            this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackScore.Location = new System.Drawing.Point(20, 428);
+            this.trackScore.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
+            this.trackScore.Max = 100F;
+            this.trackScore.Min = 0F;
+            this.trackScore.Name = "trackScore";
+            this.trackScore.Size = new System.Drawing.Size(460, 50);
+            this.trackScore.Step = 1F;
+            this.trackScore.TabIndex = 46;
+            this.trackScore.Value = 0F;
+            this.trackScore.ValueScore = 0F;
+            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
+            // 
             // rjButton2
             // 
             this.rjButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1343,18 +1359,6 @@ namespace BeeInterface
             this.oK_Cancel1.Name = "oK_Cancel1";
             this.oK_Cancel1.Size = new System.Drawing.Size(499, 57);
             this.oK_Cancel1.TabIndex = 18;
-            // 
-            // adjustBar1
-            // 
-            this.adjustBar1.Location = new System.Drawing.Point(6, 426);
-            this.adjustBar1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
-            this.adjustBar1.Max = 100F;
-            this.adjustBar1.Min = 0F;
-            this.adjustBar1.Name = "adjustBar1";
-            this.adjustBar1.Size = new System.Drawing.Size(404, 58);
-            this.adjustBar1.Step = 1F;
-            this.adjustBar1.TabIndex = 46;
-            this.adjustBar1.Value = 0F;
             // 
             // ToolPosition_Adjustment
             // 
@@ -1455,6 +1459,6 @@ namespace BeeInterface
         public TrackBar2 trackAngle;
         private System.Windows.Forms.Label label7;
         private GroupControl.OK_Cancel oK_Cancel1;
-        private AdjustBar adjustBar1;
+        private TrackBar2 trackScore;
     }
 }
