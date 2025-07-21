@@ -76,14 +76,14 @@ namespace BeeUi.Common
         //    //    rotArea._PosCenter.Y + rotArea._rect.Y + rotArea._rect.Height > szCCd.Height)
         //    //    control.Propety.rotArea = new BeeCore.RectRotate(new RectangleF(-szCCd.Width / 2 + szCCd.Width / 10, -szCCd.Height / 2 + szCCd.Width / 10, szCCd.Width - szCCd.Width / 5, szCCd.Height - szCCd.Width / 5), new PointF(szCCd.Width / 2, szCCd.Height / 2), 0, BeeCore.AnchorPoint.None);
         //    Commons.ItemTool item = new Commons.ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(G.listAlltool[Global.IndexChoose].Count - 1));
-        //    item.Location = new Point(G.ToolSettings.X, G.ToolSettings.Y);
+        //    item.Location = new Point( Global.pShowTool.X,  Global.pShowTool.Y);
         //    item.lbCycle.Text = "---";
         //    item.lbScore.Text = "---";
         //    item.lbStatus.Text = "---";
         //    item.Score.Value = Convert.ToInt32((double)control.Propety.Score);
         //    item.lbScore.ForeColor = Color.Gray;
         //    item.lbStatus.BackColor = Color.Gray;
-        //    G.ToolSettings.Y += item.Height + 10;
+        //     Global.pShowTool.Y += item.Height + 10;
         //    G.listAlltool.Add(new Tools(item, control, PropetyTool));
 
         //    //control.pro.indexTool = G.listAlltool[Global.IndexChoose].Count - 1;
@@ -279,10 +279,10 @@ namespace BeeUi.Common
                 G.EditTool.View.btnRecord.Enabled = true;
 
                
-                G.ToolSettings.btnAdd.Enabled = false;
-                G.ToolSettings.btnCopy.Enabled = false;
-                G.ToolSettings.btnDelect.Enabled = false;
-                G.ToolSettings.btnEnEdit.Enabled = true;
+                Global.ToolSettings.btnAdd.Enabled = false;
+                Global.ToolSettings.btnCopy.Enabled = false;
+                Global.ToolSettings.btnDelect.Enabled = false;
+                Global.ToolSettings.btnEnEdit.Enabled = true;
                 btnMode.Text = "RUN";
                 btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
                 G.EditTool.RefreshGuiEdit(Step.Run);
@@ -297,10 +297,10 @@ namespace BeeUi.Common
                 G.EditTool.View.btnCap.Enabled = false;
                 G.EditTool.View.btnRecord.Enabled = false;
                 G.EditTool.RefreshGuiEdit(Step.Step1);
-                G.ToolSettings.btnAdd.Enabled = true;
-                G.ToolSettings.btnCopy.Enabled = true;
-                G.ToolSettings.btnDelect.Enabled = true;
-                G.ToolSettings.btnEnEdit.Enabled = false;
+                Global.ToolSettings.btnAdd.Enabled = true;
+                Global.ToolSettings.btnCopy.Enabled = true;
+                Global.ToolSettings.btnDelect.Enabled = true;
+                Global.ToolSettings.btnEnEdit.Enabled = false;
                 btnMode.Text = "EDIT";
                 btnMode.ForeColor = Color.DarkSlateGray;
               
@@ -645,9 +645,9 @@ txtQrCode.Focus();
                 G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
                 //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
             }
-            if (G.ToolSettings == null)
+            if (Global.ToolSettings == null)
             {
-                G.ToolSettings = new ToolSettings();
+                Global.ToolSettings = new ToolSettings();
 
             }
           
@@ -675,7 +675,7 @@ txtQrCode.Focus();
             Acccess(Global.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
 
             tmShow.Enabled = true;
             if(Global.listParaCamera[0]!=null)
@@ -776,9 +776,9 @@ txtQrCode.Focus();
                     {
                         tmShow.Interval = 50;
                        
-                        G.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
+                        Global.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
                         indexToolShow++;
-                        G.ToolSettings.ResumeLayout(true);
+                        Global.ToolSettings.ResumeLayout(true);
                     }
                     else
                     {
@@ -786,7 +786,7 @@ txtQrCode.Focus();
                         indexToolShow = 0;
                         G.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
-                        G.ToolSettings.ResumeLayout(true);
+                        Global.ToolSettings.ResumeLayout(true);
                     }
                     break;
             } 

@@ -81,7 +81,7 @@ namespace BeeUi.Unit
                 return;
             }    
               
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
             G.Header.  tmShow.Enabled = true;
@@ -96,7 +96,7 @@ namespace BeeUi.Unit
                 btnCamera2.IsCLick = false;
                 return;
             }
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
             G.Header.tmShow.Enabled = true;
@@ -110,7 +110,7 @@ namespace BeeUi.Unit
                 btnCamera2.IsCLick = false;
                 return;
             }
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
             G.Header.tmShow.Enabled = true;
@@ -124,7 +124,7 @@ namespace BeeUi.Unit
                 btnCamera4.IsCLick = false;
                 return;
             }
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
             G.Header.tmShow.Enabled = true;

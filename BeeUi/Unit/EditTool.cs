@@ -49,21 +49,21 @@ namespace BeeUi
                         break;
                     case Step.Run:
                         pName.Visible = false;
-                        if (G.ToolSettings == null)
-                            G.ToolSettings = new ToolSettings();
+                        if (Global.ToolSettings == null)
+                            Global.ToolSettings = new ToolSettings();
                         pEditTool.Controls.Clear();
                       
-                        G.ToolSettings.Visible = true;
+                        Global.ToolSettings.Visible = true;
                       
                         G.SettingPLC.Visible = false;
                         //pEditTool.Visible = true;
-                        G.ToolSettings.Parent = pEditTool;
-                        G.ToolSettings.Size = pEditTool.Size;
-                        G.ToolSettings.Location = new Point(0, 0);
-                        G.ToolSettings.BringToFront();
-                        G.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                        G.ToolSettings.pAllTool.Visible = true;
-                        G.ToolSettings.Dock = DockStyle.None;
+                        Global.ToolSettings.Parent = pEditTool;
+                        Global.ToolSettings.Size = pEditTool.Size;
+                        Global.ToolSettings.Location = new Point(0, 0);
+                        Global.ToolSettings.BringToFront();
+                        Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                        Global.ToolSettings.pAllTool.Visible = true;
+                        Global.ToolSettings.Dock = DockStyle.None;
                         G.EditTool.View.pHeader.Controls.Clear();
                         if ( G.StatusDashboard == null)
                         {
@@ -176,17 +176,17 @@ namespace BeeUi
                         break;
                     case Step.Step3:
                         pName.Visible = true;
-                        if (G.ToolSettings == null)
-                            G.ToolSettings = new ToolSettings();
+                        if (Global.ToolSettings == null)
+                            Global.ToolSettings = new ToolSettings();
                         pEditTool.Controls.Clear();
-                        G.ToolSettings.Parent = pEditTool;
-                        G.ToolSettings.Size = pEditTool.Size;
-                        G.ToolSettings.Location = new Point(0, 0);
-                        G.ToolSettings.pAllTool.Visible = true;
-                        G.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                        Global.ToolSettings.Parent = pEditTool;
+                        Global.ToolSettings.Size = pEditTool.Size;
+                        Global.ToolSettings.Location = new Point(0, 0);
+                        Global.ToolSettings.pAllTool.Visible = true;
+                        Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                       
                      
-                        G.ToolSettings.BringToFront();
+                        Global.ToolSettings.BringToFront();
                         if (Global.ParaCommon.matRegister != null)
                         {
                             G.IsCalib = false;
@@ -202,8 +202,8 @@ namespace BeeUi
                             Step = Step.Step2;
                             goto X;
                         }
-                        if (G.ToolSettings.btnEnEdit.IsCLick)
-                            G.ToolSettings.btnEnEdit.PerformClick();
+                        if (Global.ToolSettings.btnEnEdit.IsCLick)
+                            Global.ToolSettings.btnEnEdit.PerformClick();
 
                         break;
                     case Step.Step4:

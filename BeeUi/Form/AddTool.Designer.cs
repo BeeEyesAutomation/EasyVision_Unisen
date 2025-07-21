@@ -1,4 +1,6 @@
 ﻿
+using BeeInterface;
+
 namespace BeeUi.Tool
 {
     partial class AddTool
@@ -30,7 +32,7 @@ namespace BeeUi.Tool
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddTool));
-            this.toolPage1 = new BeeUi.Commons.ToolPage();
+            this.toolPage1 = new ToolPage();
             this.SuspendLayout();
             // 
             // toolPage1
@@ -59,6 +61,6 @@ namespace BeeUi.Tool
 
         #endregion
 
-        private Commons.ToolPage toolPage1;
+        private ToolPage toolPage1;
     }
 }

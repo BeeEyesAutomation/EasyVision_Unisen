@@ -210,44 +210,44 @@ Mat equalize(const Mat& img)
 
 	return res;
 }
-bool ColorArea::CheckColor(bool IsCCD, int x, int y, int w, int h, float angle, int iAreaPixel, int Score, int pxTemp) {
+float ColorArea::CheckColor(int iAreaPixel) {
     double d1 = clock();
-    Mat matCrop = Mat();
+  
     Mat matBilate = Mat();
-    matCrop = RotateImge(matRaw.clone(), RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+   // matCrop = RotateImge(matRaw.clone(), RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
    // cv::imwrite("colorCrop.png", matRaw);
    // cv::bilateralFilter(matCrop, matBilate, 9, 75, 75);
-    cv::medianBlur(matCrop, matBilate, 5);
-    matResult = matCrop.clone();
+    cv::medianBlur(matRaw, matBilate, 5);
+    matResult = matRaw.clone();
 
-  
+    cv::imwrite("color1.png", matRaw);
         GetMask(matBilate, iAreaPixel);
     Mat matRS = matMask.clone();
-   // cv::imwrite("color.png", matRS);
+    cv::imwrite("color2.png", matRS);
     pxMathching = countNonZero(matRS);
-    cvtColor(matRS, matRS, COLOR_GRAY2BGR);
-    Mat mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(0, 255, 0));
-    ScoreRS =( pxMathching /( pxTemp*1.0))*100;
-    if (ScoreRS > 100)
-        ScoreRS = 100;
-    if (ScoreRS < 0)
-        ScoreRS = 0;
-    if (pxMathching>(pxTemp* Score) / 100)
-    {
-        mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(0, 255, 0));
-        bitwise_and(mask, matRS, matResult);
-        cycle = int(clock() - d1);
-        return true;
-    }
-    else
-    {
-        mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(0, 0, 255));
-        bitwise_and(mask, matRS, matResult);
-        cycle = int(clock() - d1);
-     
-        return false;
-    }
-        return false;
+    if(matRS.type()==CV_8UC3)
+        cvtColor(matRS, matRS, COLOR_BGR2GRAY);
+    Mat mask = Mat(matRS.rows, matRS.cols, CV_8UC1, Scalar(255,255,255));
+   
+    bitwise_and(mask, matRS, matResult);
+ //   cycle = int(clock() - d1);
+    return pxMathching;
+    //if (pxMathching>(pxTemp* Score) / 100)
+    //{
+    //  //  mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(255, 255,255));
+    //    bitwise_and(mask, matRS, matResult);
+    //    cycle = int(clock() - d1);
+    //    return true;
+    //}
+    //else
+    //{
+    //    //mask = Mat(matRS.rows, matRS.cols, CV_8UC3, Scalar(255, 0, 255));
+    //    bitwise_and(mask, matRS, matResult);
+    //    cycle = int(clock() - d1);
+    // 
+    //    return false;
+    //}
+    //    return false;
 }
 bool ColorArea::GetLimitColor(Scalar color,int iAreaPixel)
 {

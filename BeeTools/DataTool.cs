@@ -104,7 +104,7 @@ namespace BeeInterface
                 itemTool.IndexTool = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
 
-                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
+               
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")
                     itemTool.Name = TypeTool.ToString() + " " + Index;
@@ -150,7 +150,7 @@ namespace BeeInterface
                 if (control.Propety.rotMask == null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
 
-                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
+             
                
                 control.Name =Nametool;
              
@@ -196,9 +196,10 @@ namespace BeeInterface
                 if (PropetyTool.Propety.rotMask== null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
               
-                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
+               // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 control.Name = PropetyTool.Name;
+                PropetyTool.Propety.SetModel();
                 PropetyTool.worker = new System.ComponentModel.BackgroundWorker();
                 PropetyTool.timer = new System.Diagnostics.Stopwatch();
                 PropetyTool.worker.DoWork += (sender, e) =>

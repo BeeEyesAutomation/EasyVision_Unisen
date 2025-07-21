@@ -35,11 +35,10 @@ namespace BeeInterface
        
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public bool IsClear;
-        public BackgroundWorker worker = new BackgroundWorker();
-        Stopwatch timer = new Stopwatch();
+       
         public void LoadPara( )
         {
-            worker = new BackgroundWorker();
+           
             //worker.DoWork += (sender, e) =>
             //{
             //    timer.Restart();
@@ -102,77 +101,77 @@ namespace BeeInterface
            
         }
         
-        public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
-        {
-            if (Propety.rotAreaAdjustment == null && Global.IsRun) return gc;
-            gc.ResetTransform();
-            var mat = new Matrix();
+        //public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
+        //{
+        // //   if (Propety.rotAreaAdjustment == null && Global.IsRun) return gc;
+        // //   gc.ResetTransform();
+        // //   var mat = new Matrix();
           
-            RectRotate rotA = Propety.rotArea;
-            if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
-            if (!Global.IsRun)
-            {
-                mat.Translate(pScroll.X, pScroll.Y);
-                mat.Scale(Scale, Scale);
-            }
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
+        // //   RectRotate rotA = Propety.rotArea;
+        // //   if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
+        // //   if (!Global.IsRun)
+        // //   {
+        // //       mat.Translate(pScroll.X, pScroll.Y);
+        // //       mat.Scale(Scale, Scale);
+        // //   }
+        // //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        // //   mat.Rotate(rotA._rectRotation);
            
-            gc.Transform = mat;
+        // //   gc.Transform = mat;
 
-            gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+        // //   gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
        
-              gc.ResetTransform();
+        // //     gc.ResetTransform();
 
-            Color cl = Color.LimeGreen;
-            if (!Propety.IsOK)
-            {
-                cl = Color.Red;
+        // //   Color cl = Color.LimeGreen;
+        // //   if (!Propety.IsOK)
+        // //   {
+        // //       cl = Color.Red;
              
-            }
-            else
-            {
-                cl = Color.LimeGreen;
-            }
-            int i = 0;
+        // //   }
+        // //   else
+        // //   {
+        // //       cl = Color.LimeGreen;
+        // //   }
+        // //   int i = 0;
 
-            mat = new Matrix();
-            if (!Global.IsRun)
-            {
-                mat.Translate(pScroll.X, pScroll.Y);
-                mat.Scale(Scale, Scale);
-            }
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
-           // mat.Translate(rotA._rect.X, rotA._rect.Y);
-            gc.Transform = mat;
+        // //   mat = new Matrix();
+        // //   if (!Global.IsRun)
+        // //   {
+        // //       mat.Translate(pScroll.X, pScroll.Y);
+        // //       mat.Scale(Scale, Scale);
+        // //   }
+        // //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        // //   mat.Rotate(rotA._rectRotation);
+        // //  // mat.Translate(rotA._rect.X, rotA._rect.Y);
+        // //   gc.Transform = mat;
 
-            //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //mat.Rotate(rotA._rectRotation);
-            //gc.Transform = mat;
-            gc.DrawRectangle(new Pen(cl, 2), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-                if (Propety.bmRS == null) return gc;
-            //if (G.IsDrawProcess)
-            //{
-            //  mat.Translate(rotA._rect.X, rotA._rect.Y);
-            //  gc.Transform = mat;
-            Bitmap myBitmap = Propety.bmRS;
-            myBitmap.MakeTransparent(Color.Black);
-            myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
-            gc.DrawImage(myBitmap, rotA._rect);
-            //}
-
-
+        // //   //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        // //   //mat.Rotate(rotA._rectRotation);
+        // //   //gc.Transform = mat;
+        // //   gc.DrawRectangle(new Pen(cl, 2), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+        // //       if (Propety.bmRS == null) return gc;
+        // //   //if (G.IsDrawProcess)
+        // //   //{
+        // //   //  mat.Translate(rotA._rect.X, rotA._rect.Y);
+        // //   //  gc.Transform = mat;
+        // //   Bitmap myBitmap = Propety.bmRS;
+        // //   myBitmap.MakeTransparent(Color.Black);
+        // //   myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
+        // //   gc.DrawImage(myBitmap, rotA._rect);
+        // //   //}
 
 
-            String s= (int)(  Propety.Index+1)+"."+ Propety.nameTool;
-         SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
-            gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));
-            gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
 
-            gc.ResetTransform();
-            return gc;
-        }
+
+        // //   String s= (int)(  Propety.Index+1)+"."+ Propety.nameTool;
+        // //SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
+        // //   gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));
+        // //   gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+
+        // //   gc.ResetTransform();
+        // //   return gc;
+        //}
 
         public Graphics ShowEdit(Graphics gc, RectangleF _rect)
         {
@@ -396,8 +395,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value ;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            
           
 
         }
@@ -472,9 +471,9 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-          
-            if (!worker.IsBusy)
-                worker.RunWorkerAsync();
+
+            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

@@ -529,7 +529,7 @@ namespace BeeUi
             Data.SaveData.Camera(Global.Project,Global.listParaCamera);
 
             if (Global.IndexChoose < 0) Global.IndexChoose = 0;
-            G.ToolSettings.pAllTool.Controls.Clear();
+            Global.ToolSettings.pAllTool.Controls.Clear();
             if (G.Header == null)
             {
                 return;

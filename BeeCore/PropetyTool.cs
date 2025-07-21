@@ -46,6 +46,7 @@ namespace BeeCore
         public float ScoreResult = 0;
         public float MinValue = 0;
         public float MaxValue = 0;
+        public float StepValue = 0;
         private  StatusTool _StatusTool = StatusTool.WaitCheck;
         [field: NonSerialized]
         public  event Action<StatusTool> StatusToolChanged;

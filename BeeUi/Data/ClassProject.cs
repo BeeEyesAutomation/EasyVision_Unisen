@@ -51,12 +51,12 @@ namespace BeeUi.Data
             //    G.listAlltool = new List<List<Tools>>();
 
 
-            if (G.ToolSettings == null)
+            if (Global.ToolSettings == null)
             {
-                G.ToolSettings = new ToolSettings();
+                Global.ToolSettings = new ToolSettings();
 
             }
-            G.ToolSettings.Y = 10; G.ToolSettings.X = 5;
+            Global.pShowTool.Y = 10;  Global.pShowTool.X = 5;
             int indexThread = 0;
 
             foreach (List< BeeCore.PropetyTool> ListTool in BeeCore.Common.PropetyTools)
@@ -68,10 +68,10 @@ namespace BeeUi.Data
                     {
                         try
                         {
-                            dynamic control = DataTool.CreateControls(PropTool, i, indexThread, new Point(G.ToolSettings.X, G.ToolSettings.Y));
-                            ItemTool Itemtool = DataTool.CreateItemTool(PropTool, i, indexThread, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+                            dynamic control = DataTool.CreateControls(PropTool, i, indexThread, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
+                            ItemTool Itemtool = DataTool.CreateItemTool(PropTool, i, indexThread, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
 
-                            G.ToolSettings.Y += Itemtool.Height + 10;
+                             Global.pShowTool.Y += Itemtool.Height + 10;
                             PropTool.ItemTool = Itemtool;
                             PropTool.Control = control;
                             DataTool.LoadPropety(PropTool.Control);

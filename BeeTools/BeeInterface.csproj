@@ -154,6 +154,12 @@
     <Compile Include="ToolOutLine.Designer.cs">
       <DependentUpon>ToolOutLine.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolPage.Designer.cs">
+      <DependentUpon>ToolPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -231,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolOutLine.resx">
       <DependentUpon>ToolOutLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolPage.resx">
+      <DependentUpon>ToolPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>

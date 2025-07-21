@@ -69,7 +69,7 @@ namespace BeeInterface
 
         }
 
-        public OutLine Propety=new OutLine();
+        public Patterns Propety=new Patterns();
         public Mat matTemp = new Mat();
         public Mat matTemp2 = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
@@ -657,7 +657,6 @@ namespace BeeInterface
         {
             Propety.TypeMode = Mode.Edge;
         }
-
         private void btnModeCany_Click(object sender, EventArgs e)
         {
             Propety.TypeMode = Mode.OutLine;
@@ -670,7 +669,7 @@ namespace BeeInterface
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-            OutLine.LoadEdge();
+            Patterns.LoadEdge();
           
         }
 

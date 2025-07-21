@@ -16,7 +16,7 @@ namespace BeeCore
         public TypeCrop TypeCrop;
         public TypeTool TypeTool;
         public RectRotate rotArea, rotCrop;
-        public OutLine OutLine;
+        public Patterns OutLine;
         public bool IsFullSize = true;
         public bool IsClear = false;
        

@@ -19,10 +19,9 @@ namespace BeeCore
         public static bool IsSimulation = false,InitYolo=false,IniOCR;
         public static Common Common = new Common();
        
-        public static  List< CvPlus.ColorArea> colorArea = new List<CvPlus.ColorArea>();
+      
         
         public static CvPlus.MatchingShape MatchingShape = new CvPlus.MatchingShape();
-        public static CvPlus.Pattern pattern = new CvPlus.Pattern();
       
       
         public static CvPlus.Common CommonPlus = new CvPlus.Common();

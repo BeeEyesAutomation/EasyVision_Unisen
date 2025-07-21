@@ -28,7 +28,7 @@ namespace BeeInterface
             
         }
   
-        public OutLine Propety=new OutLine();
+        public PositionAdj Propety=new PositionAdj();
         private void rjButton3_Click(object sender, EventArgs e)
         {
 
@@ -463,28 +463,7 @@ namespace BeeInterface
         public BackgroundWorker worker = new BackgroundWorker();
         public  void LoadPara()
         {
-            worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
-            {
-                timer = new Stopwatch();
-                timer.Restart();
-                Propety.DoWork(Propety.rotArea);
-               
-            };
-
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                
-                Propety.Complete();
-                timer.Stop();
-
-                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-                
-              
-             
-                
-
-            }
+           
                 ;
             Bitmap bmTemp = Propety.matTemp;
             //Herlo
@@ -689,12 +668,10 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-           
-
-
-            if (!worker.IsBusy)
-                worker.RunWorkerAsync();
-           
+            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
+            else
+                btnTest.IsCLick = false;
         }
 
         private void btnOnTrig_Click(object sender, EventArgs e)

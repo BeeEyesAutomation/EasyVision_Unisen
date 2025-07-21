@@ -83,7 +83,7 @@ namespace BeeInterface
         }
         public TypeTool TypeTool;
  
-        public OutLine Propety=new OutLine();
+        public Patterns Propety=new Patterns();
         private void rjButton3_Click(object sender, EventArgs e)
         {
 
@@ -553,7 +553,7 @@ namespace BeeInterface
         {
           //  G.IsCancel = true;
             this.Parent.Controls.Remove(this);
-           // G.ToolSettings.Visible = true;
+           // Global.pShowTool.Visible = true;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -561,7 +561,7 @@ namespace BeeInterface
            
             this.Parent.Controls.Remove(this);
            
-            //G.ToolSettings.Visible = true;
+            //Global.pShowTool.Visible = true;
         }
     }
 }

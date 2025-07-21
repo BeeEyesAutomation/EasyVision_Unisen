@@ -468,7 +468,7 @@ namespace BeeInterface
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-            OutLine.LoadEdge();
+          //  OutLine.LoadEdge();
           
         }
 

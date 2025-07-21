@@ -706,10 +706,10 @@ namespace BeeInterface
             switch (propetyTool.Propety.TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = propetyTool.Propety as OutLine;
-                    if (outLine == null) return;
+                    Patterns Patterns = propetyTool.Propety as Patterns;
+                    if (Patterns == null) return;
                     cb2.DataSource = null;
-                    cb2.DataSource = outLine.listP_Center.ToList();
+                    cb2.DataSource = Patterns.listP_Center.ToList();
                     break;
                 case TypeTool.Circle:
                     Circle circle = propetyTool.Propety as Circle;
@@ -758,10 +758,10 @@ namespace BeeInterface
             switch (propetyTool.Propety.TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = propetyTool.Propety as OutLine;
-                    if (outLine == null) return;
+                    Patterns Patterns = propetyTool.Propety as Patterns;
+                    if (Patterns == null) return;
                     cb4.DataSource = null;
-                    cb4.DataSource = outLine.listP_Center.ToList();
+                    cb4.DataSource = Patterns.listP_Center.ToList();
                     break;
                 case TypeTool.Circle:
                     Circle circle = propetyTool.Propety as Circle;
@@ -779,9 +779,9 @@ namespace BeeInterface
             switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety as OutLine;
-                    Propety.listLine1Point[1] = outLine.listP_Center[cb4.SelectedIndex];
-                    Propety.listRot[1] = outLine.rectRotates[cb4.SelectedIndex];
+                    Patterns Patterns = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety as Patterns;
+                    Propety.listLine1Point[1] = Patterns.listP_Center[cb4.SelectedIndex];
+                    Propety.listRot[1] = Patterns.rectRotates[cb4.SelectedIndex];
                     Propety.listPointChoose[1] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Name, cb4.SelectedIndex);
 
                     break;
@@ -815,10 +815,10 @@ namespace BeeInterface
             switch (propetyTool.Propety.TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = propetyTool.Propety as OutLine;
-                    if (outLine == null) return;
+                    Patterns Patterns = propetyTool.Propety as Patterns;
+                    if (Patterns == null) return;
                     cb6.DataSource = null;
-                    cb6.DataSource = outLine.listP_Center.ToList();
+                    cb6.DataSource = Patterns.listP_Center.ToList();
                     break;
                 case TypeTool.Circle:
                     Circle circle = propetyTool.Propety as Circle;
@@ -847,10 +847,10 @@ namespace BeeInterface
             switch (propetyTool.Propety.TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = propetyTool.Propety as OutLine;
-                    if (outLine == null) return;
+                    Patterns Patterns = propetyTool.Propety as Patterns;
+                    if (Patterns == null) return;
                     cb8.DataSource = null;
-                    cb8.DataSource = outLine.listP_Center.ToList();
+                    cb8.DataSource = Patterns.listP_Center.ToList();
                     break;
                 case TypeTool.Circle:
                     Circle circle = propetyTool.Propety as Circle;
@@ -869,9 +869,9 @@ namespace BeeInterface
             switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety as OutLine;
-                    Propety.listLine2Point[0] = outLine.listP_Center[cb6.SelectedIndex];
-                    Propety.listRot[2] = outLine.rectRotates[cb6.SelectedIndex];
+                    Patterns Patterns = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety as Patterns;
+                    Propety.listLine2Point[0] = Patterns.listP_Center[cb6.SelectedIndex];
+                    Propety.listRot[2] = Patterns.rectRotates[cb6.SelectedIndex];
                     Propety.listPointChoose[2] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Name, cb6.SelectedIndex);
 
                     break;
@@ -893,9 +893,9 @@ namespace BeeInterface
             switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety as OutLine;
-                    Propety.listLine2Point[1] = outLine.listP_Center[cb8.SelectedIndex];
-                    Propety.listRot[3] = outLine.rectRotates[cb8.SelectedIndex];
+                    Patterns Patterns = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety as Patterns;
+                    Propety.listLine2Point[1] = Patterns.listP_Center[cb8.SelectedIndex];
+                    Propety.listRot[3] = Patterns.rectRotates[cb8.SelectedIndex];
                     Propety.listPointChoose[3] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Name, cb8.SelectedIndex);
 
                     break;
@@ -926,9 +926,9 @@ namespace BeeInterface
             switch (BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].TypeTool)
             {
                 case TypeTool.Pattern:
-                    OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety as OutLine;
-                    Propety.listLine1Point[0] = outLine.listP_Center[cb2.SelectedIndex];
-                    Propety.listRot[0] = outLine.rectRotates[cb2.SelectedIndex];
+                    Patterns Patterns = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety as Patterns;
+                    Propety.listLine1Point[0] = Patterns.listP_Center[cb2.SelectedIndex];
+                    Propety.listRot[0] = Patterns.rectRotates[cb2.SelectedIndex];
                     Propety.listPointChoose[0] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Name, cb2.SelectedIndex);
 
                     break;

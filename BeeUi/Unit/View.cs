@@ -1484,7 +1484,7 @@ namespace BeeUi
       
         int indexToolPosition = -1;
         bool IsAutoTrig;
-        OutLine ParaPosition;
+    //    OutLine ParaPosition;
         public void Checking()
         {
 

@@ -21,6 +21,8 @@ namespace BeeCore
     [Serializable()]
     public class Positions
     {
+        [NonSerialized]
+        public CvPlus.Pattern Pattern = new CvPlus.Pattern();
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -128,7 +130,7 @@ namespace BeeCore
             set
             {
                 _minArea = value;
-                G.pattern.m_iMinReduceArea = _minArea;
+                Pattern.m_iMinReduceArea = _minArea;
             }
         }
         double _OverLap;
@@ -145,17 +147,7 @@ namespace BeeCore
             }
         }
 
-        public bool IsProcess
-        {
-            get
-            {
-                return G.pattern.IsProcess;
-            }
-            set
-            {
-                G.pattern.IsProcess = value;
-            }
-        }
+       
         bool _ckSIMD=true;
         public bool ckSIMD
         {
@@ -201,7 +193,8 @@ namespace BeeCore
         public double deltaX, deltaY, AngleOrigin;
         public Positions()
         {
-
+             Pattern = new CvPlus.Pattern();
+            Pattern.CreateTemp(IndexThread);
         }
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
@@ -217,7 +210,7 @@ namespace BeeCore
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           G.pattern.LearnPattern(minArea, Index, IndexThread);
+           Pattern.LearnPattern(minArea, Index, IndexThread);
 
         }
     
@@ -402,12 +395,12 @@ namespace BeeCore
                     break;
             }
             //BeeCore.Native.SetImg(matProcess);
-            String sResult = G.pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(),IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
+            String sResult = Pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(),IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
 
-            ScoreRs = G.pattern.ScoreRS;
+            ScoreRs = Pattern.ScoreRS;
             if (sResult!="")
             {
-                cycleTime = (int)G.pattern.cycleOutLine;
+                cycleTime = (int)Pattern.cycleOutLine;
                 rectRotates = new List<RectRotate>();
                 if (sResult != null)
                 {

@@ -59,6 +59,7 @@
     <Compile Include="Comunication.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="iTool.cs" />
     <Compile Include="Labels.cs" />
     <Compile Include="Modbus.cs" />
     <Compile Include="Model.cs" />

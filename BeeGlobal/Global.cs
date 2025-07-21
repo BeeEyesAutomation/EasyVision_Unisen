@@ -10,8 +10,11 @@ namespace BeeGlobal
     public class Global
     {
         //Gui
+        public static List<iTool> listItool = new List<iTool>();
+        public static System.Drawing.Point pShowTool=new Point(10,10);
         public static float ScaleZoom;
         public static Point pScroll;
+        public static dynamic ToolSettings;
         public static Font fontTool = new Font("Arial", 22, FontStyle.Regular);
         public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
         public static StatusDraw _StatusDraw = StatusDraw.None;

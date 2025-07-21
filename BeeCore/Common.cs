@@ -503,14 +503,7 @@ namespace BeeCore
             return matResult;
         }
 
-        public static void  CreateTemp(TypeTool TypeTool,int IndexThread)
-        {
-          
-                //CvPlus.Pattern pattern = new CvPlus.Pattern();
-                G.pattern.CreateTemp(IndexThread);
-            
-         
-        }
+      
         public static Mat LoadImage(string path, ImreadModes mode)
         { Mat raw = OpenCvSharp.Cv2.ImRead(path, mode);
 

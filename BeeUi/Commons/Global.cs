@@ -65,15 +65,14 @@ namespace BeeUi
       
         public static StepEdit StepEdit=new StepEdit();
         public static float angle_Adjustment=0, X_Adjustment=0, Y_Adjustment=0;
+
+
+
        
-        
-       
-        public static List<iTool> listItool = new List<iTool>();
-   
         public static bool IsCalib, isTop;
         public static string _pathSqlMaster;
         public static SqlConnection cnn=new SqlConnection();
-        public static ToolSettings ToolSettings=new ToolSettings();
+      
         public static bool IsLoad= false;
        
        // public static TypeTool TypeTool = TypeTool.OutLine;

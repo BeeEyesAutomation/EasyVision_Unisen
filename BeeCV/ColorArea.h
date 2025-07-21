@@ -21,7 +21,7 @@ namespace CvPlus {
 	 bool GetLimitColor(Scalar color, int iAreaPixel);
 	public: int SetColorArea(int iAreaPixel);
 	public:bool Undo(int iAreaPixel);
-	public:bool	CheckColor(bool IsCCD,int x, int y, int w, int h, float angle, int iAreaPixel, int Score, int pxTemp );
+	public:float	CheckColor( int iAreaPixel);
 	
 	};
 }

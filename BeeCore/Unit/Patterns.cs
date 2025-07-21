@@ -1,6 +1,7 @@
 ﻿using BeeCore.Func;
 using BeeCore.Funtion;
 using BeeGlobal;
+using CvPlus;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
@@ -22,8 +23,8 @@ using Size = OpenCvSharp.Size;
 namespace BeeCore
 {
     [Serializable()]
-    public class OutLine
-    {
+    public class Patterns
+	{
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -173,7 +174,7 @@ namespace BeeCore
             set
             {
                 _minArea = value;
-                G.pattern.m_iMinReduceArea = _minArea;
+               Pattern. m_iMinReduceArea = _minArea;
             }
         }
         double _OverLap;
@@ -190,17 +191,7 @@ namespace BeeCore
             }
         }
 
-        public bool IsProcess
-        {
-            get
-            {
-                return G.pattern.IsProcess;
-            }
-            set
-            {
-                G.pattern.IsProcess = value;
-            }
-        }
+       
         bool _ckSIMD=true;
         public bool ckSIMD
         {
@@ -244,9 +235,12 @@ namespace BeeCore
         private int numOK;
         private int delayTrig;
         public List< System.Drawing.Point > listP_Center=new List<System.Drawing.Point>();
-        public OutLine()
+        [NonSerialized]
+        public Pattern Pattern = new CvPlus.Pattern();
+        public Patterns()
         {
-
+			Pattern = new CvPlus.Pattern();
+            Pattern.CreateTemp(IndexThread);
         }
         public static void LoadEdge()
         {
@@ -258,17 +252,21 @@ namespace BeeCore
 
         public void LearnPattern(   Mat temp)
         {
-           ////Cv2.ImShow("A"+ indexTool, temp);
-            //if (temp == null) return;
-            //if (temp.Empty()) return;
-           
-            matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
+			////Cv2.ImShow("A"+ indexTool, temp);
+			//if (temp == null) return;
+			//if (temp.Empty()) return;
+			if (Pattern == null)
+			{
+				Pattern = new CvPlus.Pattern();
+				Pattern.CreateTemp(IndexThread);
+			}
+			matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
            // Cv2.ImWrite("matTemp.png", temp);
             SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           G.pattern.LearnPattern( minArea, Index, IndexThread);
+           Pattern.LearnPattern( minArea, Index, IndexThread);
 
         }
     
@@ -363,9 +361,13 @@ namespace BeeCore
         public bool IsAutoTrig { get => isAutoTrig; set => isAutoTrig = value; }
         public int NumOK { get => numOK; set => numOK = value; }
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
+      
         public void SetModel()
         {
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+			
+			Common.PropetyTools[IndexThread][Index].StepValue = 1;
+			Common.PropetyTools[IndexThread][Index].MinValue = 0;
+
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
@@ -448,7 +450,7 @@ namespace BeeCore
             if (!Global.IsRun)
             {
                 mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                mat.Scale(Global.Scale, Global.Scale);
+                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
             }
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
@@ -486,7 +488,7 @@ namespace BeeCore
                     if (!Global.IsRun)
                     {
                         mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                        mat.Scale(Global.Scale, Global.Scale);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
                     }
                     mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                     mat.Rotate(rotA._rectRotation);
@@ -570,15 +572,15 @@ namespace BeeCore
                 }
                 // Cv2.ImWrite("Crop.png", matCrop);
 
-                String sResult = G.pattern.Match(matCrop.Data, matCrop.Cols, matCrop.Rows,  (int)matCrop.Step(), matCrop.Type(),IndexThread,Index, IsHighSpeed, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0,ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
-                Common.PropetyTools[IndexThread][Index].ScoreResult = G.pattern.ScoreRS;
+                String sResult = Pattern.Match(matCrop.Data, matCrop.Cols, matCrop.Rows,  (int)matCrop.Step(), matCrop.Type(),IndexThread,Index, IsHighSpeed, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0,ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
+                Common.PropetyTools[IndexThread][Index].ScoreResult = Pattern.ScoreRS;
                 rectRotates = new List<RectRotate>();
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>();
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 if (sResult != "")
                 {
-                    cycleTime = (int)G.pattern.cycleOutLine;
+                    cycleTime = (int)Pattern.cycleOutLine;
 
                     if (sResult != "")
                     {

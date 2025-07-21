@@ -53,6 +53,14 @@ namespace BeeCore
         public Circle()
         {
 
+
+        }
+        public void SetModel()
+        {
+            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
+            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         public static void LoadEdge()
         {
@@ -261,12 +269,7 @@ namespace BeeCore
       
         public int MinRadius = 0;
         public int MaxRadius = 0;
-        public void SetModel()
-        {
-            Common.PropetyTools[IndexThread][Index].MinValue = 0;
-            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-        }
+       
         public float Scale = 1;
         public int IndexThread = 0;
      

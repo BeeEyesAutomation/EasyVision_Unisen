@@ -1,9 +1,6 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeInterface;
-using BeeUi.Common;
-using BeeUi.Data;
-using BeeUi.Tool;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -18,7 +15,7 @@ using System.Windows.Forms;
 
 using UserControl = System.Windows.Forms.UserControl;
 
-namespace BeeUi.Commons
+namespace BeeInterface
 {
     public partial class ToolPage : UserControl
     {
@@ -82,11 +79,11 @@ namespace BeeUi.Commons
             String nameBtn = btn.Name.Replace("btn", "");
 
             TypeTool = (TypeTool)Enum.Parse(typeof(TypeTool), nameBtn, true);
-         int index=   G.listItool.FindIndex(a => a.TypeTool == TypeTool);
+         int index=   Global.listItool.FindIndex(a => a.TypeTool == TypeTool);
             if(index>-1)
             { String name = nameBtn.Replace("_", " ");
                 lbName.Text = name;
-                lbContent.Text = G.listItool[index].Content;
+                lbContent.Text = Global.listItool[index].Content;
                 img.Image= (Image)Properties.Resources.ResourceManager.GetObject("content"+ nameBtn);
             }
         }
@@ -100,23 +97,22 @@ namespace BeeUi.Commons
         public static List<string> listContent = new List<string>
         {
 
-        "Position_Adjustment",
-       "Pattern" ,
-       
-          "Matching Shape" ,
-       "OutLine" ,
-       "Edge_Pixels" ,
-        "Color_Area",
-       "Width" ,
-       "Diameter" ,
-       "Edge" ,
-        "Pitch",
-        "OCR",
-        "QRCODE",
-         "Learning",
-          "Position",
-         "Measure",
-          "Circle"
+       "Position_Adjustment",//1
+       "Pattern" ,//2
+       "Matching Shape" ,//3
+       "OutLine" ,//4
+       "Edge_Pixels" ,//5
+       "Color_Area",//6
+       "Width" ,//7
+       "Diameter" ,//8
+       "Edge" ,//9
+        "Pitch",//10
+        "OCR",//11
+        "QRCODE",//12
+         "Learning",//13
+         "Position",//14
+         "Measure",//15
+         "Circle"//16
         };
         public static List<GroupTool> groupTools = new List<GroupTool>
         {
@@ -124,17 +120,17 @@ namespace BeeUi.Commons
             GroupTool.Basic_Tool,
             GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_2,
+            GroupTool.Extra_Tool_2,
+            GroupTool.Basic_Tool,
             GroupTool.Extra_Tool_1,
+            GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_1,
-             GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_2,
             GroupTool.Basic_Tool,
             GroupTool.Extra_Tool_2,
              GroupTool.Basic_Tool,
-             GroupTool.Extra_Tool_2,
-              GroupTool.Basic_Tool,
+             GroupTool.Extra_Tool_1,
+              GroupTool.Extra_Tool_1,
                GroupTool.Extra_Tool_1,
 
         };
@@ -142,7 +138,7 @@ namespace BeeUi.Commons
         public void LoadAllInforTool()
         {
             IsRect = true;
-            G.listItool = new List<iTool>();
+            Global.listItool = new List<iTool>();
             int ix = 0;
             Basic_Tool.Controls.Clear();
             Extra_Tool_1.Controls.Clear();
@@ -152,7 +148,7 @@ namespace BeeUi.Commons
                 if(lenMax< nameTool.Length)
                 lenMax = nameTool.Length;
                 TypeTool type = (TypeTool)Enum.Parse(typeof(TypeTool), nameTool, true);
-                G.listItool.Add(new iTool(type,null, listContent[ix], groupTools[ix]));
+                Global.listItool.Add(new iTool(type,null, listContent[ix], groupTools[ix]));
                 ix++;
             }
           }
@@ -160,7 +156,7 @@ namespace BeeUi.Commons
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
-             foreach (iTool tool in G.listItool)
+             foreach (iTool tool in Global.listItool)
             {
                
                  String name = tool.TypeTool.ToString();
@@ -218,10 +214,10 @@ namespace BeeUi.Commons
             TabPage tab= tabTool.SelectedTab;
           
                 GroupTool group = (GroupTool)Enum.Parse(typeof(GroupTool), tab.Name, true);
-            int index = G.listItool.FindIndex(a => a.GroupTool == group);
+            int index = Global.listItool.FindIndex(a => a.GroupTool == group);
             if(index>-1)
             {
-                RJButton rJButton = G.listItool[index].Control;
+                RJButton rJButton = Global.listItool[index].Control;
                 
                 rJButton.PerformClick();
                 //foreach (Control c in tab.Controls)
@@ -252,15 +248,14 @@ namespace BeeUi.Commons
         public void CreateNewTool()
         {
             int indexName = BeeCore.Common.PropetyTools[Global.IndexChoose].Count() + 1;
-            dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexChoose, TypeTool.ToString() + " " + indexName, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+            dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexChoose, TypeTool.ToString() + " " + indexName, new Point(Global.pShowTool.X, Global.pShowTool.Y));
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propetyTool);
-            ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexChoose, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+            ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
          
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].ItemTool = Itemtool;
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].Control = control;
-            if (propetyTool.worker == null)
-            {
+            
                 propetyTool.worker = new System.ComponentModel.BackgroundWorker();
                 propetyTool.timer = new System.Diagnostics.Stopwatch();
                 propetyTool.worker.DoWork += (sender, e) =>
@@ -280,12 +275,12 @@ namespace BeeUi.Commons
                     propetyTool.timer.Stop();
                     propetyTool.CycleTime = (int)propetyTool.timer.Elapsed.TotalMilliseconds;
                 };
-                //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(G.ToolSettings.X,G.ToolSettings.Y)));
+                //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(Global.pShowTool.X,Global.pShowTool.Y)));
                 DataTool.LoadPropety(control);
 
-                G.ToolSettings.Y += Itemtool.Height + 10;
-                G.ToolSettings.pAllTool.Controls.Add(Itemtool);
-            }
+                Global.pShowTool.Y += Itemtool.Height + 10;
+                Global.ToolSettings.pAllTool.Controls.Add(Itemtool);
+            
 
         }
          private void btnOk_Click(object sender, EventArgs e)

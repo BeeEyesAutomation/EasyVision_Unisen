@@ -271,7 +271,6 @@
     <Compile Include="Unit\ItemLogic.Designer.cs">
       <DependentUpon>ItemLogic.cs</DependentUpon>
     </Compile>
-    <Compile Include="Commons\iTool.cs" />
     <Compile Include="Commons\Global.cs" />
     <Compile Include="Commons\KbdListener.cs" />
     <Compile Include="Commons\MatrixExtension.cs" />
@@ -298,12 +297,6 @@
     </Compile>
     <Compile Include="Unit\StepEdit.Designer.cs">
       <DependentUpon>StepEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\ToolPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ToolPage.Designer.cs">
-      <DependentUpon>ToolPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Unit\EditTool.cs">
       <SubType>UserControl</SubType>
@@ -434,9 +427,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\StepEdit.resx">
       <DependentUpon>StepEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ToolPage.resx">
-      <DependentUpon>ToolPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\EditTool.resx">
       <DependentUpon>EditTool.cs</DependentUpon>

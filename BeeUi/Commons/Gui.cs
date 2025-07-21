@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using BeeInterface;
 using BeeUi.Common;
 using System;
@@ -34,7 +35,7 @@ namespace BeeUi.Commons
             //G.StepEdit.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
           //   G.StatusDashboard.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
            // G.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
-            G.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
+            Global.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             foreach (Control c in G.Header.Controls)
             {
                 if (c is RJButton)
@@ -89,7 +90,7 @@ namespace BeeUi.Commons
            // G.Header.pCamera.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.Header.pCamera.Width, G.Header.pCamera.Height, radius, radius));
          //   G.EditTool.View.pTool.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.EditTool.View.pTool.Width, G.EditTool.View.pTool.Height, radius, radius));
         
-            G.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.ToolSettings.pBtn.Width, G.ToolSettings.pBtn.Height, radius, radius));
+            Global.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.ToolSettings.pBtn.Width, Global.ToolSettings.pBtn.Height, radius, radius));
         }
     }
 }

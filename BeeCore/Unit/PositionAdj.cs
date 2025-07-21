@@ -1,37 +1,62 @@
-﻿using BeeGlobal;
+﻿using BeeCore.Func;
+using BeeCore.Funtion;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using OpenCvSharp.Flann;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using Point = OpenCvSharp.Point;
+using Size = OpenCvSharp.Size;
 
 namespace BeeCore
 {
     [Serializable()]
     public class PositionAdj
     {
+        [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
+        [NonSerialized]
+        public CvPlus.Pattern Pattern = new CvPlus.Pattern();
+        public PositionAdj()
+        {
+            Pattern = new CvPlus.Pattern();
+            Pattern.CreateTemp(IndexThread);
+           
+        }
+        public void SetModel()
+        {
+            Common.PropetyTools[IndexThread][Index].StepValue = 1;
+            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+        }
         public object Clone()
         {
             return this.MemberwiseClone();
         }
         public bool IsIni = false;
-        public TypeTool TypeTool;
-        public RectRotate rotArea, rotCrop, rotMask;
+        public int Index = -1;
+
+        public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
-        public Bitmap matTemp,matMask;
-        public List<Point> Postion=new List<Point>();
-       private Mode _TypeMode=Mode.Pattern;
+        public Bitmap matTemp, matMask;
+        public List<Point> Postion = new List<Point>();
+        private Mode _TypeMode = Mode.Pattern;
+        public List<double> listScore = new List<double>();
         public Mode TypeMode
         {
             get
@@ -41,7 +66,7 @@ namespace BeeCore
             set
             {
                 _TypeMode = value;
-                
+
             }
         }
         int _NumObject = 0;
@@ -54,11 +79,12 @@ namespace BeeCore
             set
             {
                 _NumObject = value;
-               
+
             }
         }
-         bool isHighSpeed=false;
-        public bool IsHighSpeed {
+        bool isHighSpeed = false;
+        public bool IsHighSpeed
+        {
             get
             {
                 return isHighSpeed;
@@ -66,7 +92,7 @@ namespace BeeCore
             set
             {
                 isHighSpeed = value;
-              
+
             }
         }
 
@@ -74,10 +100,11 @@ namespace BeeCore
         public string pathRaw = "";
         public int cycleTime = 0;
         public RectangleF rectArea;
-      
-        public bool IsOK = false;
-        public bool IsAreaWhite=false;
-        public int ScoreRs = 0;
+        public Compares Compare = Compares.Equal;
+        public int LimitCounter = 0;
+
+        public bool IsAreaWhite = false;
+
         int _threshMin;
         public int threshMin
         {
@@ -88,7 +115,7 @@ namespace BeeCore
             set
             {
                 _threshMin = value;
-                
+
             }
         }
         int _threshMax;
@@ -101,10 +128,10 @@ namespace BeeCore
             set
             {
                 _threshMax = value;
-              
+
             }
         }
-        private double _angle=10;
+        private double _angle = 10;
         public double Angle
         {
             get
@@ -126,7 +153,7 @@ namespace BeeCore
             set
             {
                 _AngleLower = value;
-                
+
             }
         }
         double _AngleUper;
@@ -139,10 +166,10 @@ namespace BeeCore
             set
             {
                 _AngleUper = value;
-                
+
             }
         }
-        int _maxCount=9;
+        int _maxCount = 9;
         public int MaxCount
         {
             get
@@ -152,7 +179,7 @@ namespace BeeCore
             set
             {
                 _maxCount = value;
-            
+
             }
         }
         int _minArea;
@@ -165,7 +192,7 @@ namespace BeeCore
             set
             {
                 _minArea = value;
-                G.pattern.m_iMinReduceArea = _minArea;
+                Pattern.m_iMinReduceArea = _minArea;
             }
         }
         double _OverLap;
@@ -178,7 +205,7 @@ namespace BeeCore
             set
             {
                 _OverLap = value;
-             
+
             }
         }
 
@@ -186,14 +213,14 @@ namespace BeeCore
         {
             get
             {
-                return G.pattern.IsProcess;
+                return Pattern.IsProcess;
             }
             set
             {
-                G.pattern.IsProcess = value;
+                Pattern.IsProcess = value;
             }
         }
-        bool _ckSIMD=true;
+        bool _ckSIMD = true;
         public bool ckSIMD
         {
             get
@@ -203,7 +230,7 @@ namespace BeeCore
             set
             {
                 _ckSIMD = value;
-                
+
             }
         }
         bool _ckBitwiseNot;
@@ -216,7 +243,7 @@ namespace BeeCore
             set
             {
                 _ckBitwiseNot = value;
-              
+
             }
         }
         bool _ckSubPixel = true;
@@ -229,42 +256,71 @@ namespace BeeCore
             set
             {
                 _ckSubPixel = value;
-              
+
             }
         }
         private bool isAutoTrig;
         private int numOK;
         private int delayTrig;
-        public PositionAdj()
+        public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
+       
+        public static void LoadEdge()
         {
+            if (G.IniEdge) return;
 
         }
-        [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
-
-        public void LearnPattern(  int indexTool, Mat temp)
-        {
-           ////Cv2.ImShow("A"+ indexTool, temp);
-            if (temp == null) return;
-            if (temp.Empty()) return;
-           
-            matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
-            SetDst(IndexThread, indexTool, temp.Data, temp.Rows, temp.Cols, temp.Type());
-
-           G.pattern.LearnPattern(minArea, indexTool, IndexThread);
-
-        }
-    
-
       
-    
+
+        public void LearnPattern(Mat temp)
+        {
+            ////Cv2.ImShow("A"+ indexTool, temp);
+            //if (temp == null) return;
+            //if (temp.Empty()) return;
+
+            matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
+            // Cv2.ImWrite("matTemp.png", temp);
+            SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
+            //  G.CommonPlus.LoadDst(path);
+            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
+            if(Pattern==null)
+            {
+                Pattern = new CvPlus.Pattern();
+                Pattern.CreateTemp(IndexThread);
+            }
+               
+            Pattern.LearnPattern(minArea, Index, IndexThread);
+
+        }
+
+
+        int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
+        {
+            double maxArea = 0;
+            int maxAreaContourId = -1;
+            for (int j = 0; j < contours.Count(); j++)
+            {
+                double newArea = Cv2.ContourArea(contours[j]);
+                if (newArea > maxArea)
+                {
+                    maxArea = newArea;
+                    maxAreaContourId = j;
+                } // End if
+            } // End for
+            return maxAreaContourId;
+        }
+
         public Mat GetTemp(RectRotate rotCrop, RectRotate rotMask, Mat matRaw, Mat bmMask)
         {
-           
+
             Mat matClear = new Mat();
             Mat matTemp = new Mat();
+            if (rotCrop._rectRotation < 0) rotCrop._rectRotation = 360 + rotCrop._rectRotation;
+            if (rotMask != null)
+                if (rotMask._rectRotation < 0) rotMask._rectRotation = 360 + rotMask._rectRotation;
+            Mat matCrop = Common.CropRotatedRect(matRaw, rotCrop, rotMask);
+
             Mat matOut = new Mat();
-            Mat matCrop = new Mat();
+            Mat crop = new Mat();
             Mat matMask1 = new Mat();
             switch (TypeMode)
             {
@@ -276,6 +332,11 @@ namespace BeeCore
                     break;
                 case Mode.OutLine:
                     matTemp = Common.CannyWithMorph(matCrop);
+                    //crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+                    //Cv2.BitwiseNot(crop, matClear);
+                    //Cv2.BitwiseAnd(matClear, matOut, matTemp);
+                    //Cv2.BitwiseAnd(crop, matOut, matMask1);
+                    //matMask = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(matMask1);
                     break;
                 case Mode.Edge:
                     using (Py.GIL())
@@ -302,7 +363,14 @@ namespace BeeCore
                         byte[] edgeBytes = result.As<byte[]>();
                         matTemp = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
                     }
-                 
+                    // crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+
+                    //Cv2.BitwiseNot(crop, matClear);
+
+                    //Cv2.BitwiseAnd(matClear, matOut, matTemp);
+
+                    //Cv2.BitwiseAnd(crop, matOut, matMask1);
+                    //matMask = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(matMask1);
                     break;
 
             }
@@ -310,69 +378,235 @@ namespace BeeCore
             return matTemp;
         }
 
-        private int _score = 70;
-        public int Score
-        {
-            get
-            {
-                return _score;
-            }
-            set
-            {
-                _score = value;
-              
-            }
-        }
+
         public int numTempOK;
         public bool IsAutoTrig { get => isAutoTrig; set => isAutoTrig = value; }
         public int NumOK { get => numOK; set => numOK = value; }
         public int DelayTrig { get => delayTrig; set => delayTrig = value; }
+      
+
+        //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
-        public int Index = 0;
-        public int IndexThread = 0;
-        public void Matching( RectRotate rot)
+
+
+        public bool IsLimitCouter = true;
+        public void DoWork(RectRotate rectRotate)
         {
-            //if (!IsRun)
-            //{
-            //   // Mat matRS = Processing2(BeeCore.Common.matRaw.Clone());
-            //    G.CommonPlus.BitmapSrc(BeeCore.Common.matRaw.Clone().ToBitmap());
-            //}
-            //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
-            //    BeeCore.Common.SetRaw();
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rot, rotMask);
-         //   BeeCore.Native.SetImg(matCrop);
+          
+            rotAreaAdjustment = rotArea;
+            rectRotate = rotAreaAdjustment;
+            Matching(rectRotate);
 
-            String sResult = G.pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(), IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
-            ScoreRs = G.pattern.ScoreRS;
-            rectRotates = new List<RectRotate>();
-           
-            IsOK = false;
-            if (sResult != "")
+        }
+        public void Complete()
+        {
+            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            switch (Compare)
             {
-                cycleTime = (int)G.pattern.cycleOutLine;
+                case Compares.Equal:
+                    if (rectRotates.Count() != LimitCounter)
+                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    break;
+                case Compares.Less:
+                    if (rectRotates.Count() >= LimitCounter)
+                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    break;
+                case Compares.More:
+                    if (rectRotates.Count() <= LimitCounter)
+                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                    break;
+            }
+            if (Common.PropetyTools[IndexThread][Index].Results == Results.OK)
+            {
+                Matrix mat = new Matrix();
+                System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
+                PointF[] pMatrix = { pZero };
+                mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
+                mat.Rotate(rotArea._rectRotation);
+                mat.Translate(rotArea._rect.X, rotArea._rect.Y);
 
-                if (sResult != "")
+                mat.Translate(rectRotates[0]._PosCenter.X, rectRotates[0]._PosCenter.Y);
+                mat.Rotate(rectRotates[0]._rectRotation);
+                mat.TransformPoints(pMatrix);
+
+                int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
+                int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
+                Global.AngleOrigin = rectRotates[0]._angle;
+                Global.pOrigin = new OpenCvSharp.Point(x, y);
+            }
+            if (Common.PropetyTools[IndexThread][Index].TypeTool == TypeTool.Position_Adjustment)
+                if (!Global.IsRun)
                 {
-                    String[] sSplit = sResult.Split('\n');
-                    foreach (String s in sSplit)
+                    Global.StatusDraw = StatusDraw.Check;
+                    if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
                     {
-                        if (s.Trim() == "") break;
-                        String[] sSp = s.Split(',');
-                        PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
-                        float angle = Convert.ToSingle(sSp[2]);
-                        float width = Convert.ToSingle(sSp[3]);
-                        float height = Convert.ToSingle(sSp[4]);
-                        float Score = Convert.ToSingle(sSp[5]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
-                     
-                   }
+                        rotPositionAdjustment = rectRotates[0].Clone();
+                        Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X - rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X, rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
+                    }
+                }
 
+        }
+        public Graphics DrawResult(Graphics gc)
+        {
+
+            if (rotAreaAdjustment == null && Global.IsRun) return gc;
+            if (Global.IsRun)
+                gc.ResetTransform();
+
+            RectRotate rotA = rotArea;
+            if (Global.IsRun) rotA = rotAreaAdjustment;
+            var mat = new Matrix();
+            if (!Global.IsRun)
+            {
+                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            }
+            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            mat.Rotate(rotA._rectRotation);
+            gc.Transform = mat;
+            Brush brushText = Brushes.White;
+            Color cl = Color.LimeGreen;
+
+            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            {
+                cl = Global.ColorNG;
+            }
+            else
+            {
+                cl = Global.ColorOK;
+            }
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            gc.ResetTransform();
+            if (listScore == null) return gc;
+            if (rectRotates.Count > 0)
+            {
+                int i = 1;
+                foreach (RectRotate rot in rectRotates)
+                {
+                    mat = new Matrix();
+                    if (!Global.IsRun)
+                    {
+                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                    gc.Transform = mat;
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+                    //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    //mat.Rotate(rot._rectRotation);
+                    //gc.Transform = mat;
+                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
+                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) + "%", Global.fontRS, cl, brushText, 16, 2);
+
+                    gc.ResetTransform();
+                    i++;
                 }
             }
 
 
 
+            return gc;
+        }
+
+        public int IndexThread;
+        public void Matching(RectRotate rectRotate)
+        {
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            {
+
+                if (raw.Empty()) return;
+
+                Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
+                Mat matProcess = new Mat();
+
+                switch (TypeMode)
+                {
+                    case Mode.Pattern:
+                        if (matCrop.Type() == MatType.CV_8UC3)
+                            Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
+                        else
+                            matProcess = matCrop;
+                        break;
+                    case Mode.OutLine:
+                        matProcess = Common.CannyWithMorph(matCrop);
+                        break;
+                    case Mode.Edge:
+                        using (Py.GIL())
+                        {
+                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            int height = matCrop.Rows;
+                            int width = matCrop.Cols;
+                            int channels = matCrop.Channels();
+                            if (!matCrop.IsContinuous())
+                            {
+                                matCrop = matCrop.Clone();
+                            }
+                            int size = (int)(matCrop.Total() * matCrop.ElemSize());
+                            byte[] buffer = new byte[size];
+                            Marshal.Copy(matCrop.Data, buffer, 0, size);
+                            // Tạo ndarray từ byte[]
+                            var npImage = G.np.array(buffer).reshape(height, width, channels);
+                            // Gọi hàm Python
+                            dynamic result = G.Classic.EdgeDetection(npImage);
+                            if (result == null)
+                                return;
+
+                            // Chuyển kết quả ngược về byte[] rồi sang Mat
+                            byte[] edgeBytes = result.As<byte[]>();
+                            matProcess = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
+                        }
+
+                        break;
+                }
+
+                // Cv2.ImWrite("Processing.png", matProcess);
+                //   BeeCore.Native.SetImg(matProcess);
+                if (!matCrop.IsContinuous())
+                {
+                    matCrop = matCrop.Clone();
+                }
+                // Cv2.ImWrite("Crop.png", matCrop);
+
+                String sResult = Pattern.Match(matCrop.Data, matCrop.Cols, matCrop.Rows, (int)matCrop.Step(), matCrop.Type(), IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap);
+                Common.PropetyTools[IndexThread][Index].ScoreResult = Pattern.ScoreRS;
+                rectRotates = new List<RectRotate>();
+                listScore = new List<double>();
+                listP_Center = new List<System.Drawing.Point>();
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                if (sResult != "")
+                {
+                    cycleTime = (int)Pattern.cycleOutLine;
+
+                    if (sResult != "")
+                    {
+                        String[] sSplit = sResult.Split('\n');
+                        foreach (String s in sSplit)
+                        {
+                            if (s.Trim() == "") break;
+                            String[] sSp = s.Split(',');
+                            PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
+                            float angle = Convert.ToSingle(sSp[2]);
+                            float width = Convert.ToSingle(sSp[3]);
+                            float height = Convert.ToSingle(sSp[4]);
+                            float Score = Convert.ToSingle(sSp[5]);
+                            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+                            listScore.Add(Math.Round(Score, 1));
+                            listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
+                        }
+
+                    }
+                }
+                matProcess.Dispose();
+                matCrop.Dispose();
+
+            }
 
         }
+
     }
 }

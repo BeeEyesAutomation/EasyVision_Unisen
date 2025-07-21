@@ -195,7 +195,7 @@
     <Compile Include="Parameter\G.cs" />
     <Compile Include="Unit\EdgePixel.cs" />
     <Compile Include="LocalTool.cs" />
-    <Compile Include="Unit\OutLine.cs" />
+    <Compile Include="Unit\Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropetyTool.cs" />
     <Compile Include="Unit\BarCode.cs" />

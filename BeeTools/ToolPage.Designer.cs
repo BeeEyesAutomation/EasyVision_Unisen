@@ -1,7 +1,7 @@
 ﻿
 using BeeInterface;
 
-namespace BeeUi.Commons
+namespace BeeInterface
 {
     partial class ToolPage
     {
@@ -207,7 +207,7 @@ namespace BeeUi.Commons
             this.img.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.img.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.img.Dock = System.Windows.Forms.DockStyle.Top;
-            this.img.Image = global::BeeUi.Properties.Resources.BID_ICON_COPY_D_32BIT;
+            this.img.Image =Properties.Resources.OutLine;
             this.img.Location = new System.Drawing.Point(0, 38);
             this.img.Name = "img";
             this.img.Size = new System.Drawing.Size(334, 198);
