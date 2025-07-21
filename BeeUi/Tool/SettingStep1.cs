@@ -335,7 +335,7 @@ namespace BeeUi.Tool
 
         private void numDelay_ValueChanged_1(object sender, EventArgs e)
         {
-            G.Config.DelayOutput = numDelay.Value;
+            G.Config.DelayOutput = (int)numDelay.Value;
             //tmDelaySend.Enabled = false;
             //tmDelaySend.Enabled = true;
 

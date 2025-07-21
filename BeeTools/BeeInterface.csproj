@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdjustBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AdjustBar.Designer.cs">
+      <DependentUpon>AdjustBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="Custom\Custom3DButton .cs">
       <SubType>Component</SubType>
@@ -195,6 +201,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AdjustBar.resx">
+      <DependentUpon>AdjustBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Custom\CustomNumeric .resx">
       <DependentUpon>CustomNumeric .cs</DependentUpon>
     </EmbeddedResource>

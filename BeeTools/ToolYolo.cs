@@ -647,7 +647,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(object sender, EventArgs e)
         {
-            Propety.NumObject = trackNumObject.Value;
+            Propety.NumObject = (int)trackNumObject.Value;
         }
 
         private void btnCropFull_Click(object sender, EventArgs e)
@@ -898,7 +898,7 @@ namespace BeeInterface
 
         private void numLine_ValueChanged(object sender, EventArgs e)
         {
-            Propety.yLine = numLine.Value;
+            Propety.yLine = (int)numLine.Value;
             
             if (!worker.IsBusy&&!Global.IsRun)
                 worker.RunWorkerAsync();
@@ -1251,7 +1251,7 @@ namespace BeeInterface
 
         private void numTourch_ValueChanged(object sender, EventArgs e)
         {
-            Propety.Epoch = numEpoch.Value;
+            Propety.Epoch = (int)numEpoch.Value;
         }
 
         private void btnTraining_Click(object sender, EventArgs e)

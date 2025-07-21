@@ -473,7 +473,7 @@ namespace BeeInterface
              if(Propety.rotPositionAdjustment != null)
                     Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
             }
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
+            //trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
             trackAngle.Value =(int)Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             //txtAngle.Text = (int)Propety.Angle + "";
@@ -630,7 +630,7 @@ namespace BeeInterface
 
         private void trackScore_MouseMove(object sender, MouseEventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety. Index].Score = (int)trackScore.Value ;
+         //   Common.PropetyTools[Global.IndexChoose][Propety. Index].Score = (int)trackScore.Value ;
         }
 
         private void trackScore_Load(object sender, EventArgs e)
@@ -640,7 +640,7 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+           // Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
             //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
 
         }
@@ -687,7 +687,7 @@ namespace BeeInterface
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+          //  Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
             //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
         private void trackAngle_ValueChanged(float obj)

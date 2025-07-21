@@ -871,7 +871,7 @@ namespace BeeInterface
 
         private void numLimtArea_ValueChanged(object sender, EventArgs e)
         {
-            Propety.LimitArea = numLimtArea.Value;
+            Propety.LimitArea =(int) numLimtArea.Value;
         }
 
         private void label7_Click_1(object sender, EventArgs e)

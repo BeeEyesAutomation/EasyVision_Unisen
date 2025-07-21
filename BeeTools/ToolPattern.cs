@@ -439,7 +439,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(float obj)
         {
-            Propety.NumObject = trackNumObject.Value;
+            Propety.NumObject = (int)trackNumObject.Value;
         }
 
         private void btnLearning_Click(object sender, EventArgs e)
@@ -500,7 +500,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(object sender, EventArgs e)
         {
-            Propety.NumObject = trackNumObject.Value;
+            Propety.NumObject = (int)trackNumObject.Value;
         }
 
         private void rjButton3_Click_1(object sender, EventArgs e)
@@ -599,7 +599,7 @@ namespace BeeInterface
    
         private void numLimitCounter_ValueChanged(object sender, EventArgs e)
         {
-            Propety.LimitCounter = numLimitCounter.Value;
+            Propety.LimitCounter = (int)numLimitCounter.Value;
         }
 
         private void btnLimitCounter_Click(object sender, EventArgs e)
