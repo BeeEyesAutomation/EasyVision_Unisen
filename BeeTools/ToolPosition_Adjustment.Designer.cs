@@ -65,10 +65,10 @@ namespace BeeInterface
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton1 = new BeeInterface.RJButton();
-            this.numAngle = new BeeInterface.CustomNumeric();
             this.rjButton7 = new BeeInterface.RJButton();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.trackAngle = new BeeInterface.TrackBar2();
+            this.numAngle = new BeeInterface.CustomNumeric();
             this.label7 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -581,7 +581,7 @@ namespace BeeInterface
             // 
             // tableLayoutPanel11
             // 
-            this.tableLayoutPanel11.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.tableLayoutPanel11.ColumnCount = 4;
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -632,14 +632,13 @@ namespace BeeInterface
             // 
             // numOverLap
             // 
-            this.numOverLap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.numOverLap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numOverLap.Location = new System.Drawing.Point(332, 0);
-            this.numOverLap.Margin = new System.Windows.Forms.Padding(0);
+            this.numOverLap.BackColor = System.Drawing.Color.Transparent;
+            this.numOverLap.Location = new System.Drawing.Point(332, 10);
+            this.numOverLap.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.numOverLap.Maxnimum = 100F;
             this.numOverLap.Minimum = 0F;
             this.numOverLap.Name = "numOverLap";
-            this.numOverLap.Size = new System.Drawing.Size(140, 65);
+            this.numOverLap.Size = new System.Drawing.Size(140, 49);
             this.numOverLap.Step = 1F;
             this.numOverLap.TabIndex = 35;
             this.numOverLap.Value = 100F;
@@ -677,7 +676,7 @@ namespace BeeInterface
             // 
             // tableLayoutPanel12
             // 
-            this.tableLayoutPanel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel12.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel12.ColumnCount = 1;
             this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel12.Controls.Add(this.trackMaxOverLap, 0, 1);
@@ -724,16 +723,16 @@ namespace BeeInterface
             // 
             // tableLayoutPanel10
             // 
-            this.tableLayoutPanel10.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.tableLayoutPanel10.ColumnCount = 4;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel10.Controls.Add(this.rjButton1, 3, 0);
-            this.tableLayoutPanel10.Controls.Add(this.numAngle, 2, 0);
             this.tableLayoutPanel10.Controls.Add(this.rjButton7, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel15, 1, 0);
+            this.tableLayoutPanel10.Controls.Add(this.numAngle, 2, 0);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(5, 40);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(5, 5, 3, 0);
@@ -773,21 +772,6 @@ namespace BeeInterface
             this.rjButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.rjButton1.UseVisualStyleBackColor = false;
             // 
-            // numAngle
-            // 
-            this.numAngle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.numAngle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numAngle.Location = new System.Drawing.Point(332, 0);
-            this.numAngle.Margin = new System.Windows.Forms.Padding(0);
-            this.numAngle.Maxnimum = 100F;
-            this.numAngle.Minimum = 0F;
-            this.numAngle.Name = "numAngle";
-            this.numAngle.Size = new System.Drawing.Size(140, 65);
-            this.numAngle.Step = 1F;
-            this.numAngle.TabIndex = 35;
-            this.numAngle.Value = 100F;
-            this.numAngle.ValueChanged += new System.EventHandler(this.numAngle_ValueChanged);
-            // 
             // rjButton7
             // 
             this.rjButton7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -820,7 +804,7 @@ namespace BeeInterface
             // 
             // tableLayoutPanel15
             // 
-            this.tableLayoutPanel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel15.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel15.ColumnCount = 1;
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel15.Controls.Add(this.trackAngle, 0, 1);
@@ -851,6 +835,20 @@ namespace BeeInterface
             this.trackAngle.Value = 100F;
             this.trackAngle.ValueScore = 0F;
             this.trackAngle.ValueChanged += new System.Action<float>(this.trackAngle_ValueChanged);
+            // 
+            // numAngle
+            // 
+            this.numAngle.BackColor = System.Drawing.Color.Transparent;
+            this.numAngle.Location = new System.Drawing.Point(332, 10);
+            this.numAngle.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.numAngle.Maxnimum = 100F;
+            this.numAngle.Minimum = 0F;
+            this.numAngle.Name = "numAngle";
+            this.numAngle.Size = new System.Drawing.Size(140, 49);
+            this.numAngle.Step = 1F;
+            this.numAngle.TabIndex = 35;
+            this.numAngle.Value = 100F;
+            this.numAngle.ValueChanged += new System.EventHandler(this.numAngle_ValueChanged);
             // 
             // label7
             // 

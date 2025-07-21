@@ -104,7 +104,27 @@ namespace BeeCore.Algorithm
             var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
             Cv2.Dilate(edges, edges, kernel, iterations: 1);
             Cv2.Erode(edges, edges, kernel, iterations: 1);
-            Cv2.ImWrite("Edge.png", edges);
+          //  Cv2.ImWrite("Edge.png", edges);
+            return edges;
+        }
+        public static Mat Threshold(Mat raw)
+        {
+            Mat edges = new Mat();
+            Mat gray = new Mat();
+            if (raw.Type() == MatType.CV_8UC3)
+                Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = raw.Clone();
+            Cv2.Threshold(gray, gray, 50, 245, ThresholdTypes.BinaryInv);
+            // 3. Làm mượt bằng Gaussian Blur
+            Mat smooth = new Mat();
+            Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
+
+            // 4. Tự động tính threshold Canny dựa trên histogram
+            var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
+            // 1. Histogram truncation để giảm vùng trắng chói
+           
+            Cv2.Canny(smooth, edges, lower, upper);
             return edges;
         }
         public static ImageFilter GaussianBlur(Size ksize, double sigmaX, double sigmaY = 0) =>

@@ -88,15 +88,16 @@ namespace BeeCore
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                switch (MethordEdge)
-                {
-                    case MethordEdge.CloseEdges:
-                        matProcess = Filters.Edge(matCrop);
-                        break;
-                    case MethordEdge.StrongEdges:
-                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                        break;
-                }
+                //switch (MethordEdge)
+                //{
+                //    case MethordEdge.CloseEdges:
+                //        matProcess = Filters.Edge(matCrop);
+                //        break;
+                //    case MethordEdge.StrongEdges:
+                //        matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                //        break;
+                //}
+                matProcess = Filters.Threshold(matCrop);
                 GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
 
             }

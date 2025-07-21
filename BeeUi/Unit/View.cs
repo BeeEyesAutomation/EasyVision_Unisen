@@ -709,7 +709,7 @@ namespace BeeUi
                                 rotateRect._dragAnchor = AnchorPoint.BottomRight;
                                 _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
                             }
-                            else if (rectRotate.Contains(point) && toolEdit.Propety.TypeTool != TypeTool.Position_Adjustment || rectRotate.Contains(point) && Global.TypeCrop != TypeCrop.Area )
+                            else if (rectRotate.Contains(point) )
                             {
 
                                 _dragStart = new PointF(point.X, point.Y);
