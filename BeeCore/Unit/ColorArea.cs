@@ -30,21 +30,15 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
         public int Index = -1;
-        public TypeTool TypeTool;
+       
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public bool IsGetColor;
         public Mode TypeMode = Mode.Pattern;
         public TypeCrop TypeCrop;
-        public string pathRaw = "";
-        public int cycleTime = 0;
-        public RectangleF rectArea=new RectangleF();
 
         private int _areaPixel=1;
-        private float _score;
-
-
         private int styleColor;
         public int AreaPixel
         {
@@ -59,18 +53,6 @@ namespace BeeCore
             }
         }
 
-        public float Score
-        {
-            get
-            {
-                return _score;
-            }
-            set
-            {
-
-                _score = value;
-            }
-        }
 
         public int StyleColor { get => styleColor; 
             set { styleColor = value;
@@ -115,7 +97,7 @@ namespace BeeCore
         public void SetModel()
         {
             if (Index > G.colorArea.Count - 1) G.colorArea.Add(new CvPlus.ColorArea());
-            StatusTool = StatusTool.Initialed;
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         public System.Drawing.Color GetColor( Mat raw, int x,int y)
         {
@@ -222,23 +204,22 @@ namespace BeeCore
             
 
                 G.colorArea[Index].LoadTemp(listColor);
-            IsOK =   G.colorArea[Index].CheckColor(false,0,0,0,0,0,AreaPixel,(int)Score, pxTemp);
+            IsOK =   G.colorArea[Index].CheckColor(false,0,0,0,0,0,AreaPixel,(int)Common.PropetyTools[IndexThread][Index].Score, pxTemp);
             return BeeCore.Native.GetImg(TypeImg.Result).ToBitmap();
         
         }
       
         public String nameTool = "";
         public Bitmap bmRS = null;
-        public StatusTool StatusTool = StatusTool.None;
+      
         public void DoWork(RectRotate rotCrop)
         {
-            StatusTool = StatusTool.Processing;
+           
             bmRS = CheckColor(rotCrop).ToBitmap();
 
         }
         public void Complete()
         {
-            StatusTool = StatusTool.Done;
 
         }
        
@@ -272,10 +253,10 @@ namespace BeeCore
 
               G.colorArea[Index].LoadTemp(listColor);
             BeeCore.Native.SetImg(raw);
-            IsOK =   G.colorArea[Index].CheckColor(true,(int)rotCrop._PosCenter.X, (int)rotCrop._PosCenter.Y, (int)rotCrop._rect.Width, (int)rotCrop._rect.Height, rotCrop._angle, AreaPixel, (int)Score, pxTemp);
+            IsOK =   G.colorArea[Index].CheckColor(true,(int)rotCrop._PosCenter.X, (int)rotCrop._PosCenter.Y, (int)rotCrop._rect.Width, (int)rotCrop._rect.Height, rotCrop._angle, AreaPixel, (int)Common.PropetyTools[IndexThread][Index].Score, pxTemp);
             ScoreRs =   G.colorArea[Index].ScoreRS;
             int rows = 0, cols = 0 ,Type = 0;
-            cycleTime =(int)   G.colorArea[Index].cycle;
+           
             IntPtr intPtr= GetImageResult( ref rows, ref cols, ref Type);
             unsafe
             {

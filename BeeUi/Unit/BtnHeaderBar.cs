@@ -59,7 +59,7 @@ namespace BeeUi.Unit
           //  await Task.Delay(500);
           //  G.InforBar.Visible =! btnfull.IsCLick;
             await Task.Delay(500);
-            //G.ResultBar.Parent.Visible = !btnfull.IsCLick;
+            // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
             if (btnfull.IsCLick)
                 G.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
             else

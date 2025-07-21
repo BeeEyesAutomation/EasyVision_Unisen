@@ -15,26 +15,15 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-        public TypeTool TypeTool;
+        public int Index = -1;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public int NumPixelTemp, NumPixelComPare;
         public bool IsOK = false;
-        private int score;
-        public int ScoreRs = 0;
+       
         public Mode TypeMode;
-        //{
-        //    get
-        //    {
-        //        return (Mode)(Convert.ToInt32( pattern.IsOutLine));
-        //    }
-        //    set
-        //    {
-               
-        //        pattern.IsOutLine =Convert.ToBoolean( (int)value);
-        //    }
-        //}
+      
      
         public TypeCrop TypeCrop;
         public string pathRaw = "";
@@ -76,17 +65,7 @@ namespace BeeCore
             }
         }
       
-        public bool IsProcess
-        {
-            get
-            {
-                return pattern.IsProcess;
-            }
-            set
-            {
-                pattern.IsProcess = value;
-            }
-        }
+      
        
       
         public EdgePixel()
@@ -106,8 +85,7 @@ namespace BeeCore
 
     
         public bool IsBitNot { get => isBitNot; set => isBitNot = value; }
-        public int Score { get => score; set => score = value; }
-
+       
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
  

@@ -28,11 +28,11 @@ namespace BeeUi.Commons
             // G.Header.pPO.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             //G.Header.pModel.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             //G.Header.pCamera.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            G.ResultBar.pInfor.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            G.ResultBar.lbOK.BackColor = Color.FromArgb(AlphaBar-50, color.R, color.G, color.B);
-            G.ResultBar.lbStatus.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+            G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+            G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(AlphaBar-50, color.R, color.G, color.B);
+            G.StatusDashboard.MidHeaderBackColor= Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             //G.StepEdit.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            G.ResultBar.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
+          //   G.StatusDashboard.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
            // G.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             G.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             foreach (Control c in G.Header.Controls)

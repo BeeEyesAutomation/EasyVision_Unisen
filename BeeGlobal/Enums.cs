@@ -6,11 +6,38 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum ShaftMeasureType
+    {
+        /// <summary>Khoảng cách giữa hai đường tâm</summary>
+        CenterLine,
+        /// <summary>Khe nhỏ nhất giữa hai biên</summary>
+        MinEdge,
+        /// <summary>Khoảng cách mép lớn nhất (max span)</summary>
+        MaxEdge
+    }
+    public enum LineOrientation
+    {
+        Any, Horizontal, Vertical
+    }
+    public enum GapExtremum
+    {
+        Nearest,
+        Farthest,
+        Outermost,
+        Middle
+    }
+    public enum SegmentStatType { Shortest, Longest, Average }
     public enum StatusDraw
     {
         Edit,
         Check,
         Color,None
+    }
+    public enum MethordEdge
+    {
+        StrongEdges,
+        CloseEdges,
+        Binary,None
     }
     public enum TypeMeasure
     {
@@ -116,11 +143,12 @@ namespace BeeGlobal
     }
     public enum StatusTool
     {
-        None, Edit, Processing, Done, Initialed
+        NotInitial,  WaitCheck, Edit, Processing, Done
     }
+   
     public enum Results
     {
-        None, OK, NG
+        None, OK, NG,ERR, REVERSE,
     }
     public enum Trig
     {

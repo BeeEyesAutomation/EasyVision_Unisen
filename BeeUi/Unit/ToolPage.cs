@@ -251,15 +251,41 @@ namespace BeeUi.Commons
         }
         public void CreateNewTool()
         {
-            dynamic control = DataTool.New(TypeTool); 
-            int indexName = G.listAlltool[Global.IndexChoose].Count() + 1;
+            int indexName = BeeCore.Common.PropetyTools[Global.IndexChoose].Count() + 1;
+            dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexChoose, TypeTool.ToString() + " " + indexName, new Point(G.ToolSettings.X, G.ToolSettings.Y));
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propetyTool);
-            G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(G.ToolSettings.X,G.ToolSettings.Y)));
-            DataTool.LoadPropety(control);
-            ItemTool itemTool = G.listAlltool[Global.IndexChoose][G.listAlltool[Global.IndexChoose].Count() - 1].ItemTool;
-            G.ToolSettings.Y += itemTool.Height + 10;
-            G.ToolSettings.pAllTool.Controls.Add(itemTool);
+            ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexChoose, new Point(G.ToolSettings.X, G.ToolSettings.Y));
+         
+            BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].ItemTool = Itemtool;
+            BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].Control = control;
+            if (propetyTool.worker == null)
+            {
+                propetyTool.worker = new System.ComponentModel.BackgroundWorker();
+                propetyTool.timer = new System.Diagnostics.Stopwatch();
+                propetyTool.worker.DoWork += (sender, e) =>
+                {
+                    propetyTool.StatusTool = StatusTool.Processing;
+                    propetyTool.timer.Restart();
+                    if (!Global.IsRun)
+                        propetyTool.Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
+                    propetyTool.Propety.DoWork(propetyTool.Propety.rotAreaAdjustment);
+                };
+                propetyTool.worker.RunWorkerCompleted += (sender, e) =>
+                {
+                    propetyTool.Propety.Complete();
+                    if (!Global.IsRun)
+                        Global.StatusDraw = StatusDraw.Check;
+                    propetyTool.StatusTool = StatusTool.Done;
+                    propetyTool.timer.Stop();
+                    propetyTool.CycleTime = (int)propetyTool.timer.Elapsed.TotalMilliseconds;
+                };
+                //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(G.ToolSettings.X,G.ToolSettings.Y)));
+                DataTool.LoadPropety(control);
+
+                G.ToolSettings.Y += Itemtool.Height + 10;
+                G.ToolSettings.pAllTool.Controls.Add(Itemtool);
+            }
 
         }
          private void btnOk_Click(object sender, EventArgs e)

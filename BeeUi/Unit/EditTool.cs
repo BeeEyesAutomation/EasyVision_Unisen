@@ -65,17 +65,20 @@ namespace BeeUi
                         G.ToolSettings.pAllTool.Visible = true;
                         G.ToolSettings.Dock = DockStyle.None;
                         G.EditTool.View.pHeader.Controls.Clear();
-                        if (G.ResultBar == null)
+                        if ( G.StatusDashboard == null)
                         {
-                            G.ResultBar = new ResultBar();
+                             G.StatusDashboard = new StatusDashboard();
+                            G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(G.Config. AlphaBar-50, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
+                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(G.Config.AlphaBar - 50, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
+                            G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(G.Config.AlphaBar, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
 
                         }
 
-                        G.ResultBar.Dock = DockStyle.None;
-                        G.ResultBar.Parent = G.EditTool.View.pHeader;
-                        G.ResultBar.Location = new Point(0, 0);
-                        G.ResultBar.Size = G.EditTool.View.pHeader.Size;
-                        G.ResultBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                         G.StatusDashboard.Dock = DockStyle.None;
+                         G.StatusDashboard.Parent = G.EditTool.View.pHeader;
+                         G.StatusDashboard.Location = new Point(0, 0);
+                         G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
+                         G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -118,10 +121,10 @@ namespace BeeUi
 
 
                         }
-                        foreach (Tools tool in G.listAlltool[Global.IndexChoose])
-                        {
-                            tool.ItemTool.Score.Enabled = false;
-                        }
+                        //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
+                        //{
+                        //    tool.ItemTool.Score.Enabled = false;
+                        //}
                         G.StepEdit.Dock = DockStyle.None;
                         G.StepEdit.Parent = G.EditTool.View.pHeader;
                         G.StepEdit.Location = new Point(0, 0);
@@ -512,8 +515,8 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "Initial Python", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
               
-                foreach (Tools tool in G.listAlltool[Global.IndexChoose])
-                    tool.tool.LoadPara();
+                //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
+                //    tool.tool.LoadPara();
               //  G.Header.workLoadProgram.RunWorkerAsync();
             }
         }

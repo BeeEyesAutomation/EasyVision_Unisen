@@ -47,8 +47,8 @@ namespace BeeCore
                 dynamic cls = mod.GetAttr("ObjectDetector"); // class
                 dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                G.objYolo.load_model(nameTool, pathFullModel, (int)TypeYolo.YOLO);
-                StatusTool = StatusTool.Initialed;
+                G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo.YOLO);
+                    Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
             }
         }
                 catch (PythonException pyEx)
@@ -136,23 +136,11 @@ namespace BeeCore
         }
         public string pathRaw;
         public TypeCrop TypeCrop;
-        public bool IsOK = false;
+     
         public bool IsAreaWhite = false;
-        public int ScoreRs = 0, cycleTime;
-        private float _score = 70;
+       
         public bool IsIni = false;
-        public float Score
-        {
-            get
-            {
-                return _score;
-            }
-            set
-            {
-                _score = value;
-
-            }
-        }
+      
         int _NumObject = 0;
         public int NumObject
         {
@@ -178,11 +166,11 @@ namespace BeeCore
         public Point p1 = new Point();
         public Point p2 = new Point();
         public int yLine = 100;
-        public String nameTool = "";
+       
         public String Content = "";
         public String Matching = "";
         public bool IsEnContent = false;
-        public StatusTool StatusTool =StatusTool.None;
+      
         List<RectRotate> boxList = new List<RectRotate>();
         List<float> scoreList = new List<float>();
         List<string> labelList = new List<string>();
@@ -228,7 +216,7 @@ namespace BeeCore
                     //dynamic objYolo = cls.Invoke();              // khởi tạo instance
                     //G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
                     var npArray = G.np.array(buffer).reshape(height1, width1, 3);
-                    dynamic result = G.objYolo.predict(npArray, (float)(Score / 100.0), nameTool);
+                    dynamic result = G.objYolo.predict(npArray, (float)(Common.PropetyTools[IndexThread][Index]. Score / 100.0), Common.PropetyTools[IndexThread][Index].Name);
                     PyObject boxes = result[0];
                     PyObject scores = result[1];
                     PyObject labels = result[2];
@@ -292,15 +280,15 @@ namespace BeeCore
                     listLabel = new List<string>();
                     rectRotates = new List<RectRotate>();
                     listScore = new List<float>();
-                   // cycleTime = (int)G.YoloPlus.Cycle;
-                    IsOK = true;
+                    // cycleTime = (int)G.YoloPlus.Cycle;
+                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                     int i = 0;
                     int numOK = 0, numNG = 0;
                     int scoreRS = 0;
                     List<String> _listLabelCompare = new List<String>();
                     if (listLabelCompare == null)
                     {
-                        IsOK = false;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                         return;
                     }
                     Content = "";
@@ -414,32 +402,32 @@ namespace BeeCore
                         foreach (string s in listLabel)
                             Content += s;
                     }
-                    ScoreRs = (int)(scoreRS / (rectRotates.Count() * 1.0));
-                    if (ScoreRs < 0) ScoreRs = 0;
-                    IsOK = true;
+                    Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
+                    if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                     switch (Compare)
                     {
                         case Compares.Equal:
                             if (numOK != NumObject)
-                                IsOK = false;
+                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                             break;
                         case Compares.Less:
                             if (numOK >= NumObject)
-                                IsOK = false;
+                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                             break;
                         case Compares.More:
                             if (numOK <= NumObject)
-                                IsOK = false;
+                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                             break;
                     }
                     if(IsEnContent)
                     {
                         if(Matching!=Content)
                         {
-                            IsOK = false;
+                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                         }
                     }
-                    StatusTool = StatusTool.Done;
+                    
                     G.IsChecked = true;
                     // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
                 }

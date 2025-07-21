@@ -319,19 +319,18 @@ namespace BeeCore
         public int numTempOK;
 
         public List<RectRotate> rectRotates = new List<RectRotate>();
-        public TypeTool TypeTool= TypeTool.Positions;
-        public String nameTool = "";
-        public StatusTool StatusTool = StatusTool.None;
-       
+     
+        
+      
         public void DoWork()
         {
-            StatusTool = StatusTool.Processing;
+           
             Matching(Index);
 
         }
         public void Complete()
         {
-            StatusTool = StatusTool.Done;
+           
 
         }
 

@@ -3,6 +3,7 @@ using BeeGlobal;
 using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -56,6 +57,9 @@ namespace BeeInterface
                 case TypeTool.Circle:
                     control = new ToolCircle();
                     break;
+                case TypeTool.Width:
+                    control = new ToolWidth();
+                    break;
                 default:
                     return null;
                     break;
@@ -81,15 +85,96 @@ namespace BeeInterface
             }
             return new RectRotate();
         }
-        public static Tools CreateControl(BeeCore.PropetyTool PropetyTool,int Index,int IndexThread,Point pDraw)
+        public static dynamic CreateItemTool(BeeCore.PropetyTool PropetyTool, int Index, int IndexThread, Point pDraw)
         {
-            Tools tools = new Tools();
+
+
+            ItemTool itemTool = null;
+            TypeTool TypeTool = PropetyTool.TypeTool;
             try
             {
+                itemTool = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(Index - 1));
+                itemTool.Location = pDraw;
+                itemTool.CT = 0;
+                itemTool.Score = "---";
+                itemTool.Status = "---";
+                // itemTool.Score.Value = Convert.ToInt32((double)control.Propety.Score);
+                itemTool.ClScore = Color.Gray;
+                itemTool.ClStatus = Color.Gray;
+                itemTool.IndexTool = Index;
+                itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+
+                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
+                if (PropetyTool.Name == null) PropetyTool.Name = "";
+                if (PropetyTool.Name.Trim() == "")
+                    itemTool.Name = TypeTool.ToString() + " " + Index;
+                else
+                    itemTool.Name = PropetyTool.Name.Trim();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                BeeCore.Common.PropetyTools[Global.IndexChoose].Remove(PropetyTool);
+                return null;
+            }
+            return itemTool;
+        }
+        public static dynamic NewControl(TypeTool TypeTool, int Index, int IndexThread,String Nametool, Point pDraw)
+        {
+
+
+
+         
+            dynamic control = New(TypeTool);
+
+            try
+            {
+                if (control == null) return null;
+                int with = 50, height = 50;
+               
+                control.Propety.Index = Index;
+                System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
+                if (control.Propety.rotCrop == null)
+                    if (TypeTool != TypeTool.Edge_Pixels &&
+                       TypeTool != TypeTool.BarCode &&
+                      TypeTool != TypeTool.Learning &&
+                      TypeTool != TypeTool.OCR &&
+                      TypeTool != TypeTool.Circle &&
+                      TypeTool != TypeTool.Width &&
+                      TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
+                        control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    else
+                        control.Propety.rotCrop = null;
+                if (control.Propety.rotArea == null)
+                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                if (control.Propety.rotMask == null)
+                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+
+                BeeCore.Common.CreateTemp(TypeTool, IndexThread);
+               
+                control.Name =Nametool;
+             
+                //tools = new Tools(itemTool, control);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
               
-                ItemTool itemTool = null;
+                return null;
+            }
+            return control;
+        }
+
+        public static  dynamic CreateControls(BeeCore.PropetyTool PropetyTool,int Index,int IndexThread,Point pDraw)
+        {
+           
+            
+                
                 TypeTool TypeTool = PropetyTool.TypeTool;
                 dynamic control = New(TypeTool);
+               
+            try
+            {
                 if (control == null) return null;
                 int with = 50, height = 50;
                 control.Propety = PropetyTool.Propety;
@@ -98,9 +183,10 @@ namespace BeeInterface
                 if(PropetyTool.Propety.rotCrop==null)
                 if (TypeTool != TypeTool.Edge_Pixels &&
                    TypeTool != TypeTool.BarCode &&
-                   TypeTool != TypeTool.Learning &&
-                   TypeTool != TypeTool.OCR &&
-                    TypeTool != TypeTool.Circle &&
+                  TypeTool != TypeTool.Learning &&
+                  TypeTool != TypeTool.OCR &&
+                  TypeTool != TypeTool.Circle &&
+                  TypeTool != TypeTool.Width &&
                   TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
                     control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None,false);
                 else
@@ -109,26 +195,30 @@ namespace BeeInterface
                     control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
                 if (PropetyTool.Propety.rotMask== null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
-                itemTool = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(Index - 1));
-                itemTool.Location =pDraw;
-                itemTool.lbCycle.Text = "---";
-                itemTool.lbScore.Text = "---";
-                itemTool.lbStatus.Text = "---";
-                itemTool.Score.Value = Convert.ToInt32((double)control.Propety.Score);
-                itemTool.lbScore.ForeColor = Color.Gray;
-                itemTool.lbStatus.BackColor = Color.Gray;
-                itemTool.IndexTool = Index;
+              
                 BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
-                if (PropetyTool.Name.Trim() == "")
-                    itemTool.name.Text = TypeTool.ToString() + " " + Index;
-                else
-                    itemTool.name.Text = PropetyTool.Name.Trim();
                 control.Name = PropetyTool.Name;
-                PropetyTool.Propety.nameTool = PropetyTool.Name;
-                itemTool.lbNumber.Text = Index + "";
-                itemTool.icon.Image = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-                tools = new Tools(itemTool, control);
+                PropetyTool.worker = new System.ComponentModel.BackgroundWorker();
+                PropetyTool.timer = new System.Diagnostics.Stopwatch();
+                PropetyTool.worker.DoWork += (sender, e) =>
+                {
+                    PropetyTool.StatusTool = StatusTool.Processing;
+                    PropetyTool.timer.Restart();
+                    if (!Global.IsRun)
+                        PropetyTool. Propety.rotAreaAdjustment = PropetyTool.Propety.rotArea;
+                    PropetyTool.Propety.DoWork(PropetyTool.Propety.rotAreaAdjustment);
+                };
+                PropetyTool.worker.RunWorkerCompleted += (sender, e) =>
+                {
+                    PropetyTool.Propety.Complete();
+                    if (!Global.IsRun)
+                        Global.StatusDraw = StatusDraw.Check;
+                    PropetyTool.StatusTool = StatusTool.Done;
+                    PropetyTool.timer.Stop();
+                    PropetyTool.CycleTime = (int)PropetyTool.timer.Elapsed.TotalMilliseconds;
+                };
+                //tools = new Tools(itemTool, control);
             }
             catch(Exception ex)
             {
@@ -136,7 +226,7 @@ namespace BeeInterface
                BeeCore.Common.PropetyTools[Global.IndexChoose].Remove(PropetyTool);
                 return null;
             }
-            return tools;
+            return control;
         }
         public static bool LoadModel(dynamic control)
         {

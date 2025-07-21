@@ -33,13 +33,10 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-
-      
-      
         public int Index = -1;
         public String PathModel = "";
         public TypeOCR TypeOCR = TypeOCR.CPU;
-        public TypeTool TypeTool=TypeTool.Learning;
+       
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
@@ -48,25 +45,10 @@ namespace BeeCore
         public List<String> Labels = new List<string>();
     
         public Compares Compare = Compares.Equal;
-       
-        public string pathRaw;
+   
         public TypeCrop TypeCrop;
-        public bool IsOK = false;
-        public bool IsAreaWhite = false;
-        public int ScoreRs = 0, cycleTime;
-        private int _score = 70;
-        public int Score
-        {
-            get
-            {
-                return _score;
-            }
-            set
-            {
-                _score = value;
-
-            }
-        }
+    
+    
         int _NumObject = 0;
         public int NumObject
         {
@@ -97,8 +79,6 @@ namespace BeeCore
         public String[] listContent ;
         public String[] listMatching;
         public bool IsIni = false;
-        public String nameTool = "";
-        public StatusTool StatusTool = StatusTool.None;
         public int Enhance = 4;
         public int Clahe = 2;
         public int Sigma = 2;
@@ -134,8 +114,8 @@ namespace BeeCore
             // Làm nét bằng unsharp masking
             Mat sharpened = new Mat();
             Cv2.AddWeighted(contrastImg, 1.0 + sharpenFactor, blurred, -sharpenFactor, 0, sharpened);
-            if (Common.IsDebug)
-                Cv2.ImWrite(nameTool+".png", sharpened);
+            //if (Common.IsDebug)
+            //    Cv2.ImWrite(nameTool+".png", sharpened);
             return sharpened;
         }
        
@@ -168,8 +148,8 @@ namespace BeeCore
             if (blur % 2 == 0) blur += 1;  // Chuyển thành số lẻ nếu chẵn
             if (blur < 3) blur = 3;        // Tối thiểu là 3
             Cv2.MedianBlur(sharp, clean, blur);
-            if(Common.IsDebug)
-            Cv2.ImWrite(nameTool +".png", clean);
+            //if(Common.IsDebug)
+            //Cv2.ImWrite(nameTool +".png", clean);
             return clean;
         }
         public  String sAllow = "";
@@ -184,14 +164,14 @@ namespace BeeCore
                     var boxList = new List<RectRotate>();
                 
                     var labelList = new List<string>();
-                    IsOK = false;
+                   
                     listOK = new List<bool>();
                     listLabel = new List<List<string>>();
                     rectRotates = new List<RectRotate>();
                     listScore = new List<float>();
                   
                     Content = "";
-                    ScoreRs = 0;
+                  
                     listLabelResult = new List<String>();
                     using (Mat raw =BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                     {
@@ -227,7 +207,7 @@ namespace BeeCore
                         int limit = LimitArea * 100;
                         //if (!IsEnLimitArea)
                         limit = 0;
-                        dynamic result = G.objOCR.find_ocr(npArray, nameTool, limit);//, (float)(Score / 100.0), nameTool
+                        dynamic result = G.objOCR.find_ocr(npArray, Common.PropetyTools[IndexThread][Index].Name, limit);//, (float)(Score / 100.0), nameTool
 
                         if (result == null) return;
                         // File.WriteAllText("ErC.txt", pyEx.Message);
@@ -309,7 +289,7 @@ namespace BeeCore
                             listOK.Add(false);
                             rectRotates.Add(rt);
                             listScore.Add(score * 100);
-                            ScoreRs += (int)(score * 100);
+                            Common.PropetyTools[IndexThread][Index].ScoreResult  += (int)(score * 100);
 
 
                         }
@@ -355,37 +335,37 @@ namespace BeeCore
             {
 
 
-                IsOK = true;
+                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
 
 
-                ScoreRs = (int)(ScoreRs / (rectRotates.Count() * 1.0));
+                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(Common.PropetyTools[IndexThread][Index].ScoreResult / (rectRotates.Count() * 1.0));
                 //   listContent = Content.Select(c => c.ToString()).ToArray();
                 //  listMatching = Matching.Select(c => c.ToString()).ToArray();
                 Content = "";
                 foreach (String label in listLabelResult)
                     Content += label;
-                if (ScoreRs < 0) ScoreRs = 0;
+                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
                 if (Content != "")
                 {
                     if (Matching == "")
-                        IsOK = true;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                     else
                         if (Matching == Content)
                     {
 
-                        IsOK = true;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                     }
                     else
-                        IsOK = false;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                     //  listContent = CompareStrings(listMatching, listContent);
 
                 }
                 else
                 {
-                    IsOK = false;
+                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 }
               
-                StatusTool = StatusTool.Done;
+               
                 // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
             }
             catch (Exception ex)
@@ -428,10 +408,10 @@ namespace BeeCore
         {
             using (Py.GIL())
             {
-                // khởi tạo instance
-                StatusTool = StatusTool.None;
-         G.objOCR.initialize_ocr(nameTool);
-                StatusTool = StatusTool.Initialed;
+                
+         G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
+                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+           
             }
             return true;
         }

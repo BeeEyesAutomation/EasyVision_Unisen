@@ -56,7 +56,7 @@ namespace BeeInterface
                     btn.ForeColor = Color.Black;
                     btn.BorderRadius = 10;
                     btn.Height = 30;
-                    if (Propety.listScore[index] > Propety.Score)
+                    if (Propety.listScore[index] >Common.PropetyTools[Global.IndexChoose][Propety.Index].Score)
                         btn.IsCLick = true;
                     else
                         btn.IsCLick = false;
@@ -79,36 +79,36 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-            worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
-            {
-                timer = new Stopwatch();
-                timer.Restart();
-                if (!Global.IsRun)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.DoWork(Propety.rotAreaAdjustment);
-            };
+            //worker = new BackgroundWorker();
+            //worker.DoWork += (sender, e) =>
+            //{
+            //    timer = new Stopwatch();
+            //    timer.Restart();
+            //    if (!Global.IsRun)
+            //        Propety.rotAreaAdjustment = Propety.rotArea;
+            //    Propety.DoWork(Propety.rotAreaAdjustment);
+            //};
 
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    //  MessageBox.Show("Worker error: " + e.Error.Message);
-                    return;
-                }
+            //worker.RunWorkerCompleted += (sender, e) =>
+            //{
+            //    if (e.Error != null)
+            //    {
+            //        //  MessageBox.Show("Worker error: " + e.Error.Message);
+            //        return;
+            //    }
               
-                Propety.Complete();
-                if(!Global.IsRun)
-                {
-                    RefreshLabels();
-                    Global.StatusDraw = StatusDraw.Check;
-                    btnTest.Enabled = true;
-                }
+            //    Propety.Complete();
+            //    if(!Global.IsRun)
+            //    {
+            //        RefreshLabels();
+            //        Global.StatusDraw = StatusDraw.Check;
+            //        btnTest.Enabled = true;
+            //    }
               
-                timer.Stop();
+            //    timer.Stop();
 
-              Propety. cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-            };
+              
+            //};
             //String nameModel = Global.Project + ".pt";
             //String PathProg = "Program\\" + nameModel;
             // if(Propety.PathModel!=null)
@@ -125,8 +125,8 @@ namespace BeeInterface
             Global.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
            
-            trackScore.Value =Propety.Score;
-            numScore.Value = Propety.Score;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            numScore.Value =(int) Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             btnEnLimitArea.IsCLick = Propety.IsEnLimitArea ;
             layoutLineLimit.Enabled = Propety.IsEnLimitArea;
             numCLAHE.Value = Propety.Clahe;
@@ -152,27 +152,15 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
            
-            Propety.Score = (int)trackScore.Value;
-            numScore.Value = Propety.Score;
+           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
 
         }
 
         public OCR Propety=new OCR();
         public Mat matTemp = new Mat();
         Mat matClear = new Mat(); Mat matMask = new Mat();
-        public void GetTemp(RectRotate rotateRect, Mat matRegister)
-        {
-           
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-                if (Propety.IsAreaWhite)
-                    Cv2.BitwiseNot(matTemp, matTemp);
-           
-        }
-
+       
         void DrawCharactersEvenly(Graphics g, string[] textArray, RectangleF box, Font font, Brush brush)
         {
             int numChars = textArray.Length;
@@ -221,17 +209,17 @@ namespace BeeInterface
                 //gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
                 //gc.ResetTransform();
                 Color cl = Color.LimeGreen;
-                if (!Propety.IsOK)
-                {
-                    cl = Color.Red;
+                //if (!Propety.IsOK)
+                //{
+                //    cl = Color.Red;
                  
 
-                }
-                else
-                {
-                    cl = Color.LimeGreen;
+                //}
+                //else
+                //{
+                //    cl = Color.LimeGreen;
                    
-                }
+                //}
                 Brush brushText = Brushes.White;
                 gc.ResetTransform();
                 mat = new Matrix();
@@ -243,7 +231,7 @@ namespace BeeInterface
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
                 gc.Transform = mat;
-                String sContent = (int)(Propety.Index + 1) + "." + Propety.nameTool;
+                String sContent = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
                 Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool, brushText, cl);
                 int i = 0;
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
@@ -440,8 +428,7 @@ namespace BeeInterface
      
         public void Loads()
         {
-            Propety.TypeTool = TypeTool.OCR;
- 
+            
            
             //Propety.NumObject = 1;
         }
@@ -478,8 +465,8 @@ namespace BeeInterface
 
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
-            Propety.IsAreaWhite = false;
-             GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexChoose].matRaw );
+        //    Propety.IsAreaWhite = false;
+          //   GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexChoose].matRaw );
          
         }
 
@@ -495,8 +482,8 @@ namespace BeeInterface
         }
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
-            Propety.IsAreaWhite = true;
-            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+         //   Propety.IsAreaWhite = true;
+          //  GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
            
         }
 
@@ -638,8 +625,8 @@ namespace BeeInterface
 
         private void numScore_ValueChanged_1(object sender, EventArgs e)
         {
-            Propety.Score= numScore.Value;
-            trackScore.Value = Propety.Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score= numScore.Value;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
         bool IsFullSize;
         private void btnCropHalt_Click_1(object sender, EventArgs e)

@@ -27,7 +27,7 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
             if (!threadProcess.IsBusy)
                 threadProcess.RunWorkerAsync();
 
@@ -178,7 +178,7 @@ namespace BeeInterface
                 Cv2.BitwiseNot(matProces, matProces);
             Cv2.Canny(matProces.Clone(), matRs, Propety.threshMin, Propety.threshMax);
             Propety.NumPixelComPare = Cv2.CountNonZero(matRs);
-            if(Propety.NumPixelComPare> (Propety.NumPixelTemp* Propety.Score)/100)
+            if(Propety.NumPixelComPare> (Propety.NumPixelTemp * Common.PropetyTools[Global.IndexChoose][Propety.Index].Score)/100)
            {
                 Propety.IsOK = true;
             }

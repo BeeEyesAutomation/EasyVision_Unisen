@@ -28,7 +28,7 @@ namespace BeeInterface
             InitializeComponent();
             
         }
-  
+       
         public MatchingShape Propety = new MatchingShape();
         public BackgroundWorker worker = new BackgroundWorker();
         public void LoadPara()
@@ -78,7 +78,7 @@ namespace BeeInterface
         Mat matRS = new Mat(); 
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
+           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
            
 
         }
@@ -409,9 +409,7 @@ namespace BeeInterface
      
         public void Loads()
         {
-            Propety.TypeTool = TypeTool.MatchingShape;
-     
-           
+          
           
             imgTemp.Image = Propety.matTemp;
 

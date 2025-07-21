@@ -29,7 +29,7 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
             if (!threadProcess.IsBusy)
                 threadProcess.RunWorkerAsync();
 
@@ -58,7 +58,7 @@ namespace BeeInterface
             {
                 Propety.LearnPattern( OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
                 }
-            trackScore.Value = (int)(Propety.Score * 100);
+            trackScore.Value = (int)(Common.PropetyTools[Global.IndexChoose][Propety.Index].Score * 100);
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             txtAngle.Text = (int)Propety.Angle + "";
 
@@ -206,61 +206,61 @@ namespace BeeInterface
         }
         public Graphics  ShowResult(Graphics gc)
         {
-                gc.ResetTransform();
-                var mat = new Matrix();
-            RectRotate rotA = Propety.rotArea;
-            if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                mat.Rotate(rotA._rectRotation);
-                gc.Transform = mat;
+           //     gc.ResetTransform();
+           //     var mat = new Matrix();
+           // RectRotate rotA = Propety.rotArea;
+           // if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
+           // mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+           //     mat.Rotate(rotA._rectRotation);
+           //     gc.Transform = mat;
             
-                gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-                gc.ResetTransform();
-            if (matTemp.Empty()) return gc;
-            if (!Propety.IsOK)
-                {
-                     mat = new Matrix();
+           //     gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+           //     gc.ResetTransform();
+           // if (matTemp.Empty()) return gc;
+           // if (!Propety.IsOK)
+           //     {
+           //          mat = new Matrix();
               
-                mat.Translate(Propety.rotCrop._PosCenter.X , Propety.rotCrop._PosCenter.Y );
-                    mat.Rotate(Propety.rotCrop._rectRotation);
-                    gc.Transform = mat;
-                    Bitmap bmTemp = matTemp.ToBitmap();
-                    bmTemp.MakeTransparent(Color.Black);
-                    bmTemp = ConvertImg.ChangeToColor(bmTemp, Color.Red, 0.7f);
+           //     mat.Translate(Propety.rotCrop._PosCenter.X , Propety.rotCrop._PosCenter.Y );
+           //         mat.Rotate(Propety.rotCrop._rectRotation);
+           //         gc.Transform = mat;
+           //         Bitmap bmTemp = matTemp.ToBitmap();
+           //         bmTemp.MakeTransparent(Color.Black);
+           //         bmTemp = ConvertImg.ChangeToColor(bmTemp, Color.Red, 0.7f);
 
          
-                    RectangleF _rect = Propety.rotCrop._rect;
-                    gc.DrawRectangle(new Pen(Color.Red, 2), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
-                    gc.DrawImage(bmTemp,  Propety.rotCrop._rect);
-                    gc.ResetTransform();
-                    return gc;
-                }    
-                foreach (RectRotate rot in Propety.rectRotates)
-                {
-                    mat = new Matrix();
+           //         RectangleF _rect = Propety.rotCrop._rect;
+           //         gc.DrawRectangle(new Pen(Color.Red, 2), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+           //         gc.DrawImage(bmTemp,  Propety.rotCrop._rect);
+           //         gc.ResetTransform();
+           //         return gc;
+           //     }    
+           //     foreach (RectRotate rot in Propety.rectRotates)
+           //     {
+           //         mat = new Matrix();
                
-                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y );
-                mat.Rotate(rotA._rectRotation);
-                mat.Translate(rotA._rect.X, rotA._rect.Y);
-                gc.Transform = mat;
-                mat.Translate(rot._PosCenter.X,  rot._PosCenter.Y);
-                    mat.Rotate(rot._rectRotation);
-                    gc.Transform = mat;
-                    Mat matShow =matTemp.Clone();
-                //if (TypeTool == TypeTool.Pattern)
-                //{
-                //    Cv2.BitwiseNot(matShow, matShow);
-                //}
-                Bitmap myBitmap = matShow.ToBitmap();
-                myBitmap.MakeTransparent(Color.Black);
-                myBitmap = ConvertImg.ChangeToColor(myBitmap, Color.FromArgb(0,255,0),1f);
+           //     mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y );
+           //     mat.Rotate(rotA._rectRotation);
+           //     mat.Translate(rotA._rect.X, rotA._rect.Y);
+           //     gc.Transform = mat;
+           //     mat.Translate(rot._PosCenter.X,  rot._PosCenter.Y);
+           //         mat.Rotate(rot._rectRotation);
+           //         gc.Transform = mat;
+           //         Mat matShow =matTemp.Clone();
+           //     //if (TypeTool == TypeTool.Pattern)
+           //     //{
+           //     //    Cv2.BitwiseNot(matShow, matShow);
+           //     //}
+           //     Bitmap myBitmap = matShow.ToBitmap();
+           //     myBitmap.MakeTransparent(Color.Black);
+           //     myBitmap = ConvertImg.ChangeToColor(myBitmap, Color.FromArgb(0,255,0),1f);
 
 
-                gc.DrawImage(myBitmap, rot._rect);
-                    gc.DrawRectangle(new Pen(Color.LimeGreen, 1), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
-                    gc.ResetTransform();
-                }
-           Propety.rectRotates = new List<RectRotate>();
+           //     gc.DrawImage(myBitmap, rot._rect);
+           //         gc.DrawRectangle(new Pen(Color.LimeGreen, 1), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
+           //         gc.ResetTransform();
+           //     }
+           //Propety.rectRotates = new List<RectRotate>();
 
 
             return gc;

@@ -1,4 +1,10 @@
-﻿using System;
+﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,12 +16,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BeeCore;
-using BeeGlobal;
-using BeeInterface;
-
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
 
 namespace BeeInterface
 {
@@ -176,7 +176,7 @@ namespace BeeInterface
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (!Propety.IsOK)
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].Results==Results.NG)
             {
                 cl = Color.Red;
                 //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
@@ -192,7 +192,7 @@ namespace BeeInterface
                 //    G.Config.ConditionOK == ConditionOK.Logic)
                 //    cl = Color.Red;
             }
-            String nameTool = (int)(Propety.Index + 1) + "." + Propety.nameTool;
+            String nameTool = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
             Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
             gc.ResetTransform();
             if (Propety.listScore == null) return gc;
@@ -453,8 +453,7 @@ namespace BeeInterface
        
         public void Loads()
         {
-            Propety.TypeTool = TypeTool.Position_Adjustment;
-            //Propety = new OutLine();
+           
             Propety.TypeMode = Mode.Pattern;
             Propety.NumObject = 1;
           //  Propety.pathRaw = G.EditTool.View.pathRaw;
@@ -470,24 +469,7 @@ namespace BeeInterface
                 timer = new Stopwatch();
                 timer.Restart();
                 Propety.DoWork(Propety.rotArea);
-                if (Propety.IsOK)
-                {
-                    Matrix mat = new Matrix();
-                    System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
-                    PointF[] pMatrix = { pZero };
-                    mat.Translate(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y);
-                    mat.Rotate(Propety.rotArea._rectRotation);
-                    mat.Translate(Propety.rotArea._rect.X, Propety.rotArea._rect.Y);
-
-                    mat.Translate(Propety.rectRotates[0]._PosCenter.X, Propety.rectRotates[0]._PosCenter.Y);
-                    mat.Rotate(Propety.rectRotates[0]._rectRotation);
-                    mat.TransformPoints(pMatrix);
-
-                    int x = (int)pMatrix[0].X;// (int)Propety.rotArea._PosCenter.X -(int) Propety.rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
-                    int y = (int)pMatrix[0].Y; ;// (int)Propety.rotArea._PosCenter.Y - (int)Propety.rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
-                    Global.AngleOrigin = Propety.rectRotates[0]._angle;
-                    Global.pOrigin = new OpenCvSharp.Point(x, y);
-                }
+               
             };
 
             worker.RunWorkerCompleted += (sender, e) =>
@@ -500,31 +482,7 @@ namespace BeeInterface
                 
               
              
-                if (!Global.IsRun)
-                {
-                    Global.StatusDraw = StatusDraw.Check;
-                    if (Propety.IsOK)
-                    {
-
-                        if (!Propety.IsOK) return;
-                        Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
-                        Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
-
-                    }    //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
-                         //    {
-                         //        tool.ItemTool.lbStatus.Text = "OK";
-                         //        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                         //        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                         //        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                         //    }
-                         //    else
-                         //    {
-                         //        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                         //        tool.ItemTool.lbStatus.Text = "NG";
-                         //        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                         //        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                         //  G.EditTool.View.imgView.Invalidate();
-                }
+                
 
             }
                 ;
@@ -536,7 +494,7 @@ namespace BeeInterface
              if(Propety.rotPositionAdjustment != null)
                     Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
             }
-            trackScore.Value = Propety.Score ;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
             trackAngle.Value =(int)Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             //txtAngle.Text = (int)Propety.Angle + "";
@@ -548,7 +506,7 @@ namespace BeeInterface
             ckSIMD.IsCLick = Propety.ckSIMD;
             ckSubPixel.IsCLick = Propety.ckSubPixel;
             Propety.TypeMode = Propety.TypeMode;
-            Propety.TypeTool = TypeTool.Position_Adjustment;
+         
             Propety.rotMask = null;
             //if (Propety.IsAutoTrig)
             //    btnAutoTrigger.IsCLick = true;
@@ -564,7 +522,7 @@ namespace BeeInterface
                 btnHighSpeed.IsCLick = true;
             else
                 btnNormal.IsCLick = true;
-            Propety.StatusTool = StatusTool.Initialed;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
 
         }
             private void ToolOutLine_Load(object sender, EventArgs e)
@@ -693,7 +651,7 @@ namespace BeeInterface
 
         private void trackScore_MouseMove(object sender, MouseEventArgs e)
         {
-            Propety.Score = (int)trackScore.Value ;
+            Common.PropetyTools[Global.IndexChoose][Propety. Index].Score = (int)trackScore.Value ;
         }
 
         private void trackScore_Load(object sender, EventArgs e)
@@ -703,8 +661,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
-            //numScore.Value = Propety.Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
 
         }
 
@@ -752,8 +710,8 @@ namespace BeeInterface
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
-            Propety.Score = (int)trackScore.Value;
-            //numScore.Value = Propety.Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            //numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
         private void trackAngle_ValueChanged(float obj)
         {

@@ -10,6 +10,8 @@ namespace BeeGlobal
     public class Global
     {
         //Gui
+        public static float ScaleZoom;
+        public static Point pScroll;
         public static Font fontTool = new Font("Arial", 22, FontStyle.Regular);
         public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
         public static StatusDraw _StatusDraw = StatusDraw.None;
@@ -32,6 +34,9 @@ namespace BeeGlobal
         public static StatusProcessing StatusProcessing = StatusProcessing.None;
         public static Step Step = Step.Run;
         public static float Scale = 1, AngleOrigin;
+        public static  Color ColorOK = Color.LimeGreen;
+        public static Color ColorNG= Color.Red;
+        public static Color ColorNone = Color.LightGray;
         public static TypeCrop _TypeCrop = TypeCrop.Crop;
         public static event Action<TypeCrop> TypeCropChanged;
         public static TypeCrop TypeCrop

@@ -150,13 +150,7 @@ namespace BeeInterface
         public Point pTick;
         private Color colorTrack=Color.Gray;
         private Image imgTick = Properties.Resources.BID_SLIDER_HANDLE_ON_NORMAL;
-      public Graphics DrawBase(Graphics gc)
-        {
-            Rectangle rect = new Rectangle(0, 0, pT.Width, (int)(pT.Height / 3.5));
-            gc.FillRectangle(new SolidBrush(colorTrack), rect);
-            gc.DrawImage(Properties.Resources.BID_SLIDER_SCALE_8PIX_W303, new Rectangle(0, (int)(pT.Height / 3.5), pT.Width, pT.Height / 3));
-            return gc;
-        }
+ 
         Graphics gcBase;
         Bitmap bmBase;
         bool IsLoadBase = false;

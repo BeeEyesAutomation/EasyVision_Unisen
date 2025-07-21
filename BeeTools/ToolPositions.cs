@@ -90,8 +90,8 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (int)trackScore.Value;
-            numScore.Value = Propety.Score;
+           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
+            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
           
 
         }
@@ -162,134 +162,134 @@ namespace BeeInterface
            // return ( xRotated, yRotated);
         }
        
-        public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
-        {
+        //public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
+        //{
            
 
-            if (Propety.rotAreaAdjustment == null && Global.IsRun) return gc;
-            if(Global.IsRun)
-            gc.ResetTransform();
-            // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
-            gc.FillEllipse(Brushes.Green, 295, 950, 10, 10);
-            var mat = new Matrix();
-            if (!Global.IsRun)
-            {
-                mat.Translate(pScroll.X, pScroll.Y);
-                mat.Scale(Scale, Scale);
-            }
+        //    if (Propety.rotAreaAdjustment == null && Global.IsRun) return gc;
+        //    if(Global.IsRun)
+        //    gc.ResetTransform();
+        //    // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
+        //    gc.FillEllipse(Brushes.Green, 295, 950, 10, 10);
+        //    var mat = new Matrix();
+        //    if (!Global.IsRun)
+        //    {
+        //        mat.Translate(pScroll.X, pScroll.Y);
+        //        mat.Scale(Scale, Scale);
+        //    }
 
-            RectRotate rotA = Propety.rotArea;
-            if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
-         //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-         //   mat.Rotate(rotA._rectRotation);
-         //   gc.Transform = mat;
-         // //  gc.FillEllipse(Brushes.Green, -5, -5, 10, 10);
-         ////   gc.DrawString(rotA._PosCenter.X + "," + rotA._PosCenter.Y, new Font("Arial", 22, FontStyle.Bold), Brushes.Red, new System.Drawing.Point(0, 20));
+        //    RectRotate rotA = Propety.rotArea;
+        //    if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
+        // //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        // //   mat.Rotate(rotA._rectRotation);
+        // //   gc.Transform = mat;
+        // // //  gc.FillEllipse(Brushes.Green, -5, -5, 10, 10);
+        // ////   gc.DrawString(rotA._PosCenter.X + "," + rotA._PosCenter.Y, new Font("Arial", 22, FontStyle.Bold), Brushes.Red, new System.Drawing.Point(0, 20));
 
-         //   //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
-         //   gc.DrawString(indexTool+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
+        // //   //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
+        // //   gc.DrawString(indexTool+"", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
 
-         //   gc.DrawRectangle(new Pen(Color.line, 5), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-         //   gc.ResetTransform();
-            Color cl = Color.LimeGreen;
-            Brush brushText = Brushes.White;
-            if (!Propety.IsOK)
-            {
-                cl = Color.Red;
+        // //   gc.DrawRectangle(new Pen(Color.line, 5), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
+        // //   gc.ResetTransform();
+        //    Color cl = Color.LimeGreen;
+        //    Brush brushText = Brushes.White;
+        //    if (!Propety.IsOK)
+        //    {
+        //        cl = Color.Red;
                 
 
 
-            }
-            else
-            {
-                cl = Color.LimeGreen;
+        //    }
+        //    else
+        //    {
+        //        cl = Color.LimeGreen;
               
-            }
+        //    }
          
               
-                int i = 0;
+        //        int i = 0;
                
-            foreach (RectRotate rot in Propety.rectRotates)
-            {
-                mat = new Matrix();
-                if (!Global.IsRun)
-                {
-                    mat.Translate(pScroll.X, pScroll.Y);
-                    mat.Scale(Scale, Scale);
-                }
-                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                mat.Rotate(rotA._rectRotation);
-                mat.Translate(rotA._rect.X, rotA._rect.Y);
-                gc.Transform = mat;
-                mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                mat.Rotate(rot._rectRotation);
-               // mat.TransformPoints(pMatrix);
-                gc.Transform = mat;
-                gc.DrawString(i + "", new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y));
-                gc.DrawString(Propety.ScoreRs + "%", new Font("Arial", 10, FontStyle.Bold), Brushes.Green, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y + 10));
-                i++;
+        //    foreach (RectRotate rot in Propety.rectRotates)
+        //    {
+        //        mat = new Matrix();
+        //        if (!Global.IsRun)
+        //        {
+        //            mat.Translate(pScroll.X, pScroll.Y);
+        //            mat.Scale(Scale, Scale);
+        //        }
+        //        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        //        mat.Rotate(rotA._rectRotation);
+        //        mat.Translate(rotA._rect.X, rotA._rect.Y);
+        //        gc.Transform = mat;
+        //        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+        //        mat.Rotate(rot._rectRotation);
+        //       // mat.TransformPoints(pMatrix);
+        //        gc.Transform = mat;
+        //        gc.DrawString(i + "", new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y));
+        //        gc.DrawString(Propety.ScoreRs + "%", new Font("Arial", 10, FontStyle.Bold), Brushes.Green, new System.Drawing.Point((int)rot._rect.X, (int)rot._rect.Y + 10));
+        //        i++;
               
              
-                gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
+        //        gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
 
-                Draws.Plus(gc, 0, 0, 20, cl, 4);
+        //        Draws.Plus(gc, 0, 0, 20, cl, 4);
 
-                gc.ResetTransform();
-                mat = new Matrix();
-                //  mat.Rotate(G.AngleOrigin);
-                mat.Translate(Global.pOrigin.X, Global.pOrigin.Y);
-                gc.Transform = mat;
-                Draws.Plus(gc, 0, 0,(int) rotA._rect.Width/2, Color.Gray, 2);
-               // gc.DrawLine(new Pen(cl, 2), 0, 0,Math.Abs( (float)Propety.deltaX),0);
-                //  gc.DrawLine(new Pen(Brushes.Blue, 2), 0, 0, 0, (float)Propety.deltaY);
-                int radius = (int)rotA._rect.Width / 6;
-                gc.DrawLine(new Pen(cl, 2), 0, 0, (float)Propety.deltaX, -(float)Propety.deltaY);
-                Rectangle rect = new Rectangle(
-                    0 - radius,
-                    0 - radius,
-                    radius * 2,
-                    radius * 2
-                );
+        //        gc.ResetTransform();
+        //        mat = new Matrix();
+        //        //  mat.Rotate(G.AngleOrigin);
+        //        mat.Translate(Global.pOrigin.X, Global.pOrigin.Y);
+        //        gc.Transform = mat;
+        //        Draws.Plus(gc, 0, 0,(int) rotA._rect.Width/2, Color.Gray, 2);
+        //       // gc.DrawLine(new Pen(cl, 2), 0, 0,Math.Abs( (float)Propety.deltaX),0);
+        //        //  gc.DrawLine(new Pen(Brushes.Blue, 2), 0, 0, 0, (float)Propety.deltaY);
+        //        int radius = (int)rotA._rect.Width / 6;
+        //        gc.DrawLine(new Pen(cl, 2), 0, 0, (float)Propety.deltaX, -(float)Propety.deltaY);
+        //        Rectangle rect = new Rectangle(
+        //            0 - radius,
+        //            0 - radius,
+        //            radius * 2,
+        //            radius * 2
+        //        );
 
-                float startAngle = 30; // độ
-                float sweepAngle = 120; // độ
+        //        float startAngle = 30; // độ
+        //        float sweepAngle = 120; // độ
 
-                gc.DrawArc(new Pen(cl,1), rect, 0,-(float) Propety.AngleDetect);
-                gc.FillPie(new SolidBrush(Color.FromArgb(30, cl)), rect, 0, -(float)Propety.AngleDetect);
+        //        gc.DrawArc(new Pen(cl,1), rect, 0,-(float) Propety.AngleDetect);
+        //        gc.FillPie(new SolidBrush(Color.FromArgb(30, cl)), rect, 0, -(float)Propety.AngleDetect);
 
 
-                // Vẽ tâm
-                // gc.FillEllipse(Brushes.Red, 0 - 3, 0 - 3, 6, 6);
-                //SizeF sz = gc.MeasureString("D = " + Propety.DistanceDetect + " pixel", new Font("Arial", 16, FontStyle.Bold));
-                //gc.FillRectangle(Brushes.White, new Rectangle((int)Propety.deltaX + 8,(int) Propety.deltaY + 8, (int)sz.Width + 30, 60));
-                //gc.DrawString("R = " + Propety.DistanceDetect + " pixel", new Font("Arial", 16, FontStyle.Bold), Brushes.OrangeRed,new System.Drawing.Point((int)Propety.deltaX + 10, (int)Propety.deltaY +10));
-                //gc.DrawString("Alpha =" + Propety.AngleDetect + "°", new Font("Arial", 16, FontStyle.Bold), Brushes.OrangeRed, new System.Drawing.Point((int)Propety.deltaX+10, (int)Propety.deltaY+40));
-                //// 
-                ////  G.EditTool.View.lbAngle.Text = angle+"";
-                gc.ResetTransform();
-            }
-            gc.ResetTransform();
-            mat = new Matrix();
-            if (!Global.IsRun)
-            {
-                mat.Translate(pScroll.X, pScroll.Y);
-                mat.Scale(Scale, Scale);
-            }
-            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            mat.Rotate(rotA._rectRotation);
-            gc.Transform = mat;
-            String nameTool = (int)(Propety.Index + 1) + "." + Propety.nameTool;
+        //        // Vẽ tâm
+        //        // gc.FillEllipse(Brushes.Red, 0 - 3, 0 - 3, 6, 6);
+        //        //SizeF sz = gc.MeasureString("D = " + Propety.DistanceDetect + " pixel", new Font("Arial", 16, FontStyle.Bold));
+        //        //gc.FillRectangle(Brushes.White, new Rectangle((int)Propety.deltaX + 8,(int) Propety.deltaY + 8, (int)sz.Width + 30, 60));
+        //        //gc.DrawString("R = " + Propety.DistanceDetect + " pixel", new Font("Arial", 16, FontStyle.Bold), Brushes.OrangeRed,new System.Drawing.Point((int)Propety.deltaX + 10, (int)Propety.deltaY +10));
+        //        //gc.DrawString("Alpha =" + Propety.AngleDetect + "°", new Font("Arial", 16, FontStyle.Bold), Brushes.OrangeRed, new System.Drawing.Point((int)Propety.deltaX+10, (int)Propety.deltaY+40));
+        //        //// 
+        //        ////  G.EditTool.View.lbAngle.Text = angle+"";
+        //        gc.ResetTransform();
+        //    }
+        //    gc.ResetTransform();
+        //    mat = new Matrix();
+        //    if (!Global.IsRun)
+        //    {
+        //        mat.Translate(pScroll.X, pScroll.Y);
+        //        mat.Scale(Scale, Scale);
+        //    }
+        //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+        //    mat.Rotate(rotA._rectRotation);
+        //    gc.Transform = mat;
+        //    String nameTool = (int)(Propety.Index + 1) + "." + Propety.nameTool;
            
-            String Content = "X,Y,A,R : " + Propety.deltaX + "," + Propety.deltaY + "," + Propety.AngleDetect + "°," + Propety.DistanceDetect;
-            Draws.Box2Label(gc, rotA._rect, nameTool, Content, Global.fontRS, cl, brushText, 40, 3);
+        //    String Content = "X,Y,A,R : " + Propety.deltaX + "," + Propety.deltaY + "," + Propety.AngleDetect + "°," + Propety.DistanceDetect;
+        //    Draws.Box2Label(gc, rotA._rect, nameTool, Content, Global.fontRS, cl, brushText, 40, 3);
 
-        //    Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool,brushText,cl);
-
-
+        ////    Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool,brushText,cl);
 
 
-            return gc;
-        }
+
+
+        //    return gc;
+        //}
 
      
         public Graphics ShowEdit(Graphics gc, RectangleF _rect)
@@ -615,8 +615,8 @@ namespace BeeInterface
         {
             numScore.Maxnimum = (int)trackScore.Max;
             numScore.Minimum = (int)trackScore.Min;
-            Propety.Score = numScore.Value;
-            trackScore.Value = Propety.Score;
+           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
+            trackScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
 
         private void rjButton5_Click(object sender, EventArgs e)

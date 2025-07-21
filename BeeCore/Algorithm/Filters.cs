@@ -14,8 +14,99 @@ namespace BeeCore.Algorithm
     /// </summary>
     public static class Filters
     {
-        // =========== 1. LÀM MỊN / NHIỄU ===========
+        public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+        {
+            if (value.CompareTo(min) < 0) return min;
+            else if (value.CompareTo(max) > 0) return max;
+            else return value;
+        }
+        public static Mat GetStrongEdgesOnly(Mat gray, double percentile = 0.98)
+        {
+            // 1. Làm mượt ảnh
+            Mat blur = new Mat();
+            Cv2.GaussianBlur(gray, blur, new Size(3, 3), sigmaX: 1.0);
 
+            // 2. Tính gradient
+            Mat gradX = new Mat(), gradY = new Mat();
+            Cv2.Sobel(blur, gradX, MatType.CV_32F, 1, 0, ksize: 3);
+            Cv2.Sobel(blur, gradY, MatType.CV_32F, 0, 1, ksize: 3);
+
+            // 3. Magnitude
+            Mat magnitude = new Mat();
+            Cv2.Magnitude(gradX, gradY, magnitude);
+
+            // 4. Tự động tính ngưỡng từ histogram gradient
+            float[] magData = new float[magnitude.Rows * magnitude.Cols];
+            magnitude.GetArray(out magData);
+
+            Array.Sort(magData);
+            int index = (int)(magData.Length * percentile);
+            float threshold = magData[Clamp(index, 0, magData.Length - 1)];
+            // 5. Chuẩn hóa và tạo nhị phân
+            Mat result = new Mat();
+            Cv2.Threshold(magnitude, result, threshold, 255, ThresholdTypes.Binary);
+
+            // Chuyển về kiểu 8-bit để hiển thị hoặc xử lý tiếp
+            result.ConvertTo(result, MatType.CV_8U);
+            Cv2.ImWrite("edge.png", result);
+            return result;
+        }
+        // =========== 1. LÀM MỊN / NHIỄU ===========
+        public static (int lower, int upper) AutoCannyThresholdFromHistogram(Mat gray, double k1 = 0.66, double k2 = 1.33)
+        {
+            // 1. Histogram
+            Mat hist = new Mat();
+            int[] histSize = { 256 };
+            Rangef[] ranges = { new Rangef(0, 256) };
+            Cv2.CalcHist(new Mat[] { gray }, new int[] { 0 }, null, hist, 1, histSize, ranges);
+
+            // 2. Đỉnh histogram
+            double minVal, maxVal;
+            Point minLoc, maxLoc;
+            Cv2.MinMaxLoc(hist, out minVal, out maxVal, out minLoc, out maxLoc);
+            int peak = maxLoc.Y != 0 ? maxLoc.Y : maxLoc.X; // fallback cho mọi version OpenCvSharp
+
+            // 3. Ngưỡng
+            int lower = (int)Math.Max(0, peak * k1);
+            int upper = (int)Math.Min(255, peak * k2);
+            return (lower, upper);
+        }
+        public static Mat Edge(Mat raw)
+        {
+            Mat edges = new Mat();
+            Mat gray = new Mat();
+            if (raw.Type() == MatType.CV_8UC3)
+                Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = raw.Clone();
+
+            // 1. Histogram truncation để giảm vùng trắng chói
+            Cv2.Threshold(gray, gray, 245, 245, ThresholdTypes.Trunc);
+
+            // 2. Tăng tương phản nếu cần
+            Cv2.Normalize(gray, gray, 0, 255, NormTypes.MinMax);
+
+            // 3. Làm mượt bằng Gaussian Blur
+            Mat smooth = new Mat();
+            Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
+
+            // 4. Tự động tính threshold Canny dựa trên histogram
+            var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
+
+           
+            Cv2.Canny(smooth, edges, lower, upper);
+
+            // 6. Morphological closing để nối đoạn đứt
+            var kernelClose = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.MorphologyEx(edges, edges, MorphTypes.Close, kernelClose);
+
+            // 7. Làm dày/mịn cạnh
+            var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.Dilate(edges, edges, kernel, iterations: 1);
+            Cv2.Erode(edges, edges, kernel, iterations: 1);
+            Cv2.ImWrite("Edge.png", edges);
+            return edges;
+        }
         public static ImageFilter GaussianBlur(Size ksize, double sigmaX, double sigmaY = 0) =>
             delegate (Mat src, Mat dst) { Cv2.GaussianBlur(src, dst, ksize, sigmaX, sigmaY); };
 

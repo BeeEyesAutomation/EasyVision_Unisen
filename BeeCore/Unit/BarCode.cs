@@ -17,7 +17,7 @@ namespace BeeCore
 
         public int Index;
         public int IndexThread = 0;
-        public TypeTool TypeTool;
+       
         public TypeCrop TypeCrop;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
@@ -28,7 +28,7 @@ namespace BeeCore
         public String MathQRCODE ="";
         public int Score = 0;
         public double cycleTime;
-        public UsedTool UsedTool = UsedTool.Used;
+        
         // Hàm tạo khung bao quanh mã QR từ tọa độ các điểm
         //static Rectangle GetBoundingBox(ResultPoint[] points)
         //{
@@ -45,7 +45,7 @@ namespace BeeCore
         public int ScoreRs = 0;
         public void DoWork()
         {
-            StatusTool = StatusTool.Processing;
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Processing;
             IsOK = false;
             Content = HEROJE.BarcodeStr;
             if (Content != "")
@@ -91,9 +91,9 @@ namespace BeeCore
         }
         public void Complete()
         {
-            StatusTool = StatusTool.Done;
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
 
-            if (UsedTool == UsedTool.Invertse)
+            if (Common.PropetyTools[IndexThread][Index]. UsedTool == UsedTool.Invertse)
                 IsOK = !IsOK;
 
         }
@@ -114,8 +114,8 @@ namespace BeeCore
         //    };
         //}
     
-        public String nameTool = "";
-        public StatusTool StatusTool = StatusTool.None;
+       
+        
         public  Mat Read(RectRotate rotateRect)
         {
             IsOK = false; 

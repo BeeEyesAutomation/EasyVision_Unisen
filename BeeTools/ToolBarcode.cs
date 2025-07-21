@@ -276,16 +276,10 @@ namespace BeeInterface
         
        
       
-        public void Loads()
-        {
-            Propety.TypeTool = TypeTool.BarCode;
-     
-          
-        }
+       
         private void ToolOutLine_Load(object sender, EventArgs e)
         {
-            Loads();
-
+           
         
         }
 

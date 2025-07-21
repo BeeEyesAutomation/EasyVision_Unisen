@@ -287,12 +287,6 @@
     <Compile Include="Unit\Header.Designer.cs">
       <DependentUpon>Header.cs</DependentUpon>
     </Compile>
-    <Compile Include="Unit\ResultBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ResultBar.Designer.cs">
-      <DependentUpon>ResultBar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Unit\SettingPLC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -434,9 +428,6 @@
     <EmbeddedResource Include="Unit\Header.resx">
       <DependentUpon>Header.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ResultBar.resx">
-      <DependentUpon>ResultBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\SettingPLC.resx">
       <DependentUpon>SettingPLC.cs</DependentUpon>

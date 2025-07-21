@@ -54,7 +54,7 @@ namespace BeeUi
        
         public static Tool.AddTool AddTool;
         public static Header Header;
-        public static ResultBar ResultBar;
+        public static StatusDashboard StatusDashboard;
         public static EditProg EditProg;
       
        
@@ -66,7 +66,7 @@ namespace BeeUi
         public static StepEdit StepEdit=new StepEdit();
         public static float angle_Adjustment=0, X_Adjustment=0, Y_Adjustment=0;
        
-        public static List<List<Tools>> listAlltool = new List<List<Tools>>();
+        
        
         public static List<iTool> listItool = new List<iTool>();
    

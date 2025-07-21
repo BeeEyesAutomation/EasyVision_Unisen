@@ -237,7 +237,7 @@ namespace BeeUi
             {
                 PropetyTool propety = ListTool[i];
 
-            X: if (propety.Propety.StatusTool != StatusTool.Initialed)
+            X: if (propety.StatusTool != StatusTool.WaitCheck)
                 {
 
                     goto X;

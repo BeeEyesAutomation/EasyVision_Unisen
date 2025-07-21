@@ -20,7 +20,7 @@ namespace BeeCore
         {
 
         }
-        public TypeTool TypeTool;
+        public int Index = -1;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
@@ -34,17 +34,17 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern IntPtr SetTemp(IntPtr data, int image_rows, int image_cols, MatType matType);
         public  int Threshold=100,  MinArea=100;
-        public StatusTool StatusTool = StatusTool.None;
+    
         public  bool Invert=false;
         public void DoWork()
         {
-            StatusTool = StatusTool.Processing;
+          
           //  Matching(indexTool);
 
         }
         public void Complete()
         {
-            StatusTool = StatusTool.Done;
+            
 
         }
         public  Mat GetImgTemp()

@@ -25,7 +25,7 @@ namespace BeeCore
         }
         public void SetModel()
         {
-            StatusTool = StatusTool.Initialed;
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         public float Scale = 1;
         public TypeMeasure TypeMeasure = TypeMeasure.Angle;
@@ -39,10 +39,8 @@ namespace BeeCore
         public double AngleDetect = 0;
         public int IndexThread = 0;
 
-        public TypeTool TypeTool = TypeTool.Measure;
-        public StatusTool StatusTool = StatusTool.None;
-        public int cycleTime;
-        public bool IsOK = false;
+        
+       
         public List<RectRotate> listRot = new List<RectRotate> { new RectRotate(), new RectRotate(), new RectRotate(), new RectRotate() };
         public List<Point> listLine1Point = new List<Point>();
         public List<Point> listLine2Point = new List<Point>();
@@ -51,7 +49,7 @@ namespace BeeCore
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
-        public float Score, ScoreRs;
+    
         public void IniTool()
         {
             if(listRot==null)

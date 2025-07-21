@@ -8,18 +8,72 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Point = System.Drawing.Point;
+using Point = OpenCvSharp.Point;
 using Size = System.Drawing.Size;
 
 namespace BeeCore
 {
     public class Draws
     {
+     
+        public static void DrawTicks(Graphics gc,System.Drawing. PointF p, LineOrientation ori,Pen pen)
+        {
+            int tickLen = 10;
+            if (ori == LineOrientation.Any || ori == LineOrientation.Vertical)
+            {
+                // Vertical ticks
+                gc.DrawLine( pen, new System.Drawing.PointF(p.X, p.Y - tickLen), new System.Drawing.PointF(p.X, p.Y + tickLen));
+            }
+            else
+            {
+                // Horizontal ticks
+                gc.DrawLine(pen, new System.Drawing.PointF(p.X - tickLen, p.Y), new System.Drawing.PointF(p.X + tickLen, p.Y));
+            }
+        }
+        public static void DrawTicks(Mat img, Point p, LineOrientation ori)
+        {
+            int tickLen = 10;
+            if (ori == LineOrientation.Any || ori == LineOrientation.Vertical)
+            {
+                // Vertical ticks
+                Cv2.Line(img, new Point(p.X, p.Y - tickLen), new Point(p.X, p.Y + tickLen), new Scalar(255, 128, 0), 2);
+            }
+            else
+            {
+                // Horizontal ticks
+                Cv2.Line(img, new Point(p.X - tickLen, p.Y), new Point(p.X + tickLen, p.Y), new Scalar(255, 128, 0), 2);
+            }
+        }
+        public static void DrawPerpendicularLine(Mat img, Line2D Line, Scalar color, int thickness)
+        {
+
+            DrawInfiniteLine(img, Line, color, thickness);
+        }
         public static void Plus(Graphics gc, int centerX, int centerY, int lineLength, Color color, int thiness)
         {
             Pen pen = new Pen(color, thiness);
             gc.DrawLine(pen, centerX - lineLength / 2, centerY, centerX + lineLength / 2, centerY);
             gc.DrawLine(pen, centerX, centerY - lineLength / 2, centerX, centerY + lineLength / 2);
+        }
+        public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen)
+        {
+            float vx =(float) ln.Vx;
+            float vy = (float)ln.Vy;
+            float x0 = (float)ln.X1;
+            float y0 = (float)ln.Y1;
+            System.Drawing.PointF pt1 = new System.Drawing.PointF(x0 + vx * 1000, y0 + vy * 1000);
+            System.Drawing.PointF pt2 = new System.Drawing.PointF(x0 - vx * 1000, y0 - vy * 1000);
+            g.DrawLine(pen, pt1, pt2);
+        }
+        public static void DrawInfiniteLine(Mat img, Line2D ln, Scalar col, int thickness)
+        {
+            double vx = ln.Vx;
+            double vy = ln.Vy;
+            double x0 = ln.X1;
+            double y0 = ln.Y1;
+            Point pt1 = new Point(x0 + vx * 1000, y0 + vy * 1000);
+            Point pt2 = new Point(x0 - vx * 1000, y0 - vy * 1000);
+            Cv2.Line(img, pt1, pt2, col, thickness);
         }
         public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Color backgroundBrush,int thiness=4, bool alignRight = false)
         {
@@ -108,7 +162,7 @@ namespace BeeCore
         }
 
        
-        public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint,Point posAutoScroll,float zoom, int Thiness=2)
+        public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint, System.Drawing.Point posAutoScroll,float zoom, int Thiness=2)
         {
             if (RectDraw == null) return;
             RectangleF _rect = new RectangleF(); ;
@@ -231,7 +285,7 @@ namespace BeeCore
           
             gc.ResetTransform();
         }
-        public static void FillRect(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,  Point posAutoScroll, float zoom, int Opacity =10)
+        public static void FillRect(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw, System.Drawing. Point posAutoScroll, float zoom, int Opacity =10)
         {
             if (RectDraw == null) return;
             RectangleF _rect = new RectangleF(); ;

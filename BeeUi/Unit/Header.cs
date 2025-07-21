@@ -204,8 +204,8 @@ namespace BeeUi.Common
             if (G.Config.nameUser == "Admin")
             {
                 G.SettingPLC.pCom.Enabled = true;
-                if(G.ResultBar!=null)
-                G.ResultBar.btnResetQty.Enabled = true;
+                if( G.StatusDashboard!=null)
+                 G.StatusDashboard.btnReset.Enabled = true;
                 G.EditTool.View.btnRecord.Enabled = Global.IsRun;
                 
 
@@ -226,8 +226,8 @@ namespace BeeUi.Common
                 G.EditTool.View.btnRecord.Enabled = false;
 
                 //G.listProgram.Enabled = IsRun;
-                if (G.ResultBar != null)
-                    G.ResultBar.btnResetQty.Enabled = true;
+                if ( G.StatusDashboard != null)
+                     G.StatusDashboard.btnReset.Enabled = true;
                 btnMode.Enabled = false;
            
              //   btnIO.Enabled = false;
@@ -242,8 +242,8 @@ namespace BeeUi.Common
                 G.listProgram.Enabled = IsRun;
               //  btnReport.Enabled = false;
                 btnMode.Enabled = false;
-                if (G.ResultBar != null)
-                    G.ResultBar.btnResetQty.Enabled = false;
+                if ( G.StatusDashboard != null)
+                     G.StatusDashboard.btnReset.Enabled = false;
               
               //  btnIO.Enabled = false;
                 
@@ -266,9 +266,9 @@ namespace BeeUi.Common
                 MessageBox.Show("Please Stop Mode Continuous");
                 return;
             }
-            foreach (Tools tool in G.listAlltool[Global.IndexChoose])
+            foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
             {
-                tool.ItemTool.IsCLick = false;
+                PropetyTool.ItemTool.IsCLick = false;
             }
             Global.IsRun = !Global.IsRun;
        
@@ -772,11 +772,11 @@ txtQrCode.Focus();
                     stepShow++;
                     break;
                 case 2:
-                    if (indexToolShow < G.listAlltool[Global.IndexChoose].Count)
+                    if (indexToolShow < BeeCore.Common.PropetyTools[Global.IndexChoose].Count)
                     {
                         tmShow.Interval = 50;
                        
-                        G.ToolSettings.pAllTool.Controls.Add(G.listAlltool[Global.IndexChoose][indexToolShow].ItemTool);
+                        G.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
                         indexToolShow++;
                         G.ToolSettings.ResumeLayout(true);
                     }

@@ -1,14 +1,77 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Point = OpenCvSharp.Point;
 
 namespace BeeCore.Func
 {
     public class Cal
     {
+        public static System.Drawing.Size GetSizeText(string text ,Font f)
+        {
+         
+            using (Font font =f)
+            {
+                // Measurement bằng TextRenderer (thường khớp với việc vẽ bằng TextRenderer.DrawText)
+               return TextRenderer.MeasureText(text, font);
+
+            
+            }
+          
+        }
+        public static void GetLineParams(Line2D ln, out double a, out double b, out double c)
+        {
+            double vx = ln.Vx;
+            double vy = ln.Vy;
+            a = vy;
+            b = -vx;
+            c = -(a * ln.X1 + b * ln.Y1);
+        }
+        public static Line2D FindPerpendicularLine(Line2D baseLine, Point throughPoint)
+        {
+            // Vector chỉ phương của baseLine
+            double vx = baseLine.Vx;
+            double vy = baseLine.Vy;
+            // Vector pháp tuyến (perpendicular)
+            double px = -vy;
+            double py = vx;
+            // Chuẩn hóa
+            double norm = Math.Sqrt(px * px + py * py);
+            px /= norm; py /= norm;
+            Point[] points = new Point[2];
+            // Tạo hai điểm rất xa trên đường thẳng vuông góc
+            points[0] = new Point((int)Math.Round(throughPoint.X + px * 1000),
+                                (int)Math.Round(throughPoint.Y + py * 1000));
+            points[1] = new Point((int)Math.Round(throughPoint.X - px * 1000),
+                                (int)Math.Round(throughPoint.Y - py * 1000));
+            // 4. Fit center lines (Line2D) nếu cần
+            return Cv2.FitLine(points.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
+
+        }
+    
+        public static double DistanceBetweenLines(Line2D l1, Line2D l2)
+        {
+            // Local helper without static keyword
+            void Params(Line2D ln, out double a, out double b, out double c)
+            {
+                double vx = ln.Vx;
+                double vy = ln.Vy;
+                double x0 = ln.X1;
+                double y0 = ln.Y1;
+                a = vy; b = -vx; c = -(a * x0 + b * y0);
+            }
+
+            Params(l1, out double a1, out double b1, out double c1);
+            Params(l2, out double a2, out double b2, out double c2);
+            return Math.Abs(c2 - c1) / Math.Sqrt(a1 * a1 + b1 * b1);
+        }
+
+     
         public static float Finddistasnce( PointF A, PointF B)
         {
             float deX = A.X - B.X;

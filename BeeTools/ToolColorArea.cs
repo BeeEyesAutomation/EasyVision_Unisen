@@ -1,4 +1,9 @@
-﻿using System;
+﻿using BeeCore;
+using BeeGlobal;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,10 +16,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BeeCore;
-using BeeGlobal;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
 
 namespace BeeInterface
 {
@@ -39,41 +40,41 @@ namespace BeeInterface
         public void LoadPara( )
         {
             worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
-            {
-                timer.Restart();
-                if (!Global.IsRun)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.DoWork(Propety.rotAreaAdjustment);
-            };
+            //worker.DoWork += (sender, e) =>
+            //{
+            //    timer.Restart();
+            //    if (!Global.IsRun)
+            //        Propety.rotAreaAdjustment = Propety.rotArea;
+            //    Propety.DoWork(Propety.rotAreaAdjustment);
+            //};
 
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    //  MessageBox.Show("Worker error: " + e.Error.Message);
-                    return;
-                }
-                Propety.Complete();
-                Global.StatusDraw = StatusDraw.Check;
-                timer.Stop();
+            //worker.RunWorkerCompleted += (sender, e) =>
+            //{
+            //    if (e.Error != null)
+            //    {
+            //        //  MessageBox.Show("Worker error: " + e.Error.Message);
+            //        return;
+            //    }
+            //    Propety.Complete();
+            //    Global.StatusDraw = StatusDraw.Check;
+            //    timer.Stop();
 
-                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-            };
+            //    Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+            //};
           
             if(Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
             //if(G.Config.TypeCamera==TypeCamera.USB)
-            Propety.TypeTool = TypeTool.Color_Area;
+            
             Propety.LoadTemp();
-            trackScore.Value = Propety.Score ;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety. Index].Score ;
             trackPixel.Value = (int)Propety.AreaPixel;
             if (!Convert.ToBoolean(Propety.StyleColor))
                 btnColor.IsCLick = true;
             else
                 btnClWhite.IsCLick = true;
 
-            trackScore.Value = Propety.Score;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
            
         }
         public Mat RotateMat(Mat raw, RotatedRect rot)
@@ -127,18 +128,11 @@ namespace BeeInterface
             if (!Propety.IsOK)
             {
                 cl = Color.Red;
-                //if (BeeCore.Common.PropetyTools[IndexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.LimeGreen;
-
-
+             
             }
             else
             {
                 cl = Color.LimeGreen;
-                //if (BeeCore.Common.PropetyTools[IndexChoose][Propety.Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.Red;
             }
             int i = 0;
 
@@ -402,8 +396,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-           
-            Propety.Score = (int)trackScore.Value ;
+
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value ;
           
 
         }

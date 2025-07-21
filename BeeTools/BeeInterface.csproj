@@ -95,16 +95,16 @@
     <Compile Include="GroupControl\OK_Cancel.Designer.cs">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ItemTool.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ItemTool.Designer.cs">
-      <DependentUpon>ItemTool.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StatusDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusDashboard.Designer.cs">
+      <DependentUpon>StatusDashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="ToolBarcode.cs">
       <SubType>UserControl</SubType>
@@ -154,6 +154,12 @@
     <Compile Include="ToolOutLine.Designer.cs">
       <DependentUpon>ToolOutLine.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolWidth.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolWidth.Designer.cs">
+      <DependentUpon>ToolWidth.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolPattern.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -195,12 +201,12 @@
     <EmbeddedResource Include="GroupControl\OK_Cancel.resx">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemTool.resx">
-      <DependentUpon>ItemTool.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusDashboard.resx">
+      <DependentUpon>StatusDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolBarcode.resx">
       <DependentUpon>ToolBarcode.cs</DependentUpon>
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolOutLine.resx">
       <DependentUpon>ToolOutLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolWidth.resx">
+      <DependentUpon>ToolWidth.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolPattern.resx">
       <DependentUpon>ToolPattern.cs</DependentUpon>

@@ -1,4 +1,11 @@
-﻿using System;
+﻿using BeeCore;
+using BeeGlobal;
+using BeeInterface;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
+using OpenCvSharp.ML;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,14 +19,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BeeCore;
-using BeeGlobal;
-using BeeInterface;
-
-
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using OpenCvSharp.ML;
 
 namespace BeeInterface
 {
@@ -33,40 +32,19 @@ namespace BeeInterface
             CustomGui.RoundRg(layMaximumObj, 10, Corner.Both);
             CustomGui.RoundRg(layLimitCouter, 10, Corner.Bottom);
         }
-        Stopwatch timer = new Stopwatch();
-        public BackgroundWorker worker = new BackgroundWorker();
+        
 
         public void LoadPara()
         {
 
-            worker = new BackgroundWorker();
-            worker.DoWork += (sender, e) =>
-            {
-
-                timer.Restart();
-                if (!Global.IsRun)
-                    Propety.rotAreaAdjustment = Propety.rotArea;
-                Propety.DoWork(Propety.rotAreaAdjustment);
-            };
-
-            worker.RunWorkerCompleted += (sender, e) =>
-            {
-              
-                Propety.Complete();
-                if (!Global.IsRun)
-                    Global.StatusDraw = StatusDraw.Check;
-                timer.Stop();
-
-                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-
-            }; 
+            
             if (!workLoadModel.IsBusy)
                 workLoadModel.RunWorkerAsync();
-            Propety.TypeTool = TypeTool.Pattern;
-            Propety.StatusTool = StatusTool.Initialed;
+
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
             numAngle.Value = (int)Propety.Angle;
-            trackScore.Value =Propety.Score; 
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score; 
             trackNumObject.Value= Propety.NumObject;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             //txtAngle.Text = (int)Propety.Angle + "";
@@ -85,8 +63,8 @@ namespace BeeInterface
         }
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = (float)trackScore.Value;
-            numScore.Value =(int) Propety.Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (float)trackScore.Value;
+            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
          
 
         }
@@ -180,7 +158,7 @@ namespace BeeInterface
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
             
-            if (!Propety.IsOK)
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].Results==Results.NG)
             {
                 cl = Color.Red;
                 //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
@@ -232,37 +210,7 @@ namespace BeeInterface
         }
 
      
-        public Graphics ShowEdit(Graphics gc, RectangleF _rect)
-        {
-            if (matTemp == null) return gc;
-
-            if (Global.TypeCrop != TypeCrop.Area)
-                try
-                {
-                    Mat matShow = matTemp.Clone();
-                    if (Propety.TypeMode == Mode.OutLine)
-                    {
-                        Bitmap bmTemp = matShow.ToBitmap();
-
-                        bmTemp.MakeTransparent(Color.Black);
-                        bmTemp = ConvertImg.ChangeToColor(bmTemp, Color.FromArgb(0, 255, 0), 1f);
-
-                        gc.DrawImage(bmTemp, _rect);
-                    }
-                    if (matMask != null)
-                    {
-                        Bitmap myBitmap2 = matMask.ToBitmap();
-                        myBitmap2.MakeTransparent(Color.Black);
-                        myBitmap2 = ConvertImg.ChangeToColor(myBitmap2, Color.OrangeRed, 1f);
-
-                        gc.DrawImage(myBitmap2, _rect);
-                    }
-
-                }
-                catch (Exception ex) { }
-            return gc;
-        }
-
+      
        
         private void rjButton3_Click(object sender, EventArgs e)
         {
@@ -511,9 +459,8 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-           
-            if (!worker.IsBusy)
-                worker.RunWorkerAsync();
+            if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -565,8 +512,8 @@ namespace BeeInterface
         {
             numScore.Maxnimum = (int)trackScore.Max;
             numScore.Minimum = (int)trackScore.Min;
-            Propety.Score = numScore.Value;
-            trackScore.Value = Propety.Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
 
         private void rjButton5_Click(object sender, EventArgs e)

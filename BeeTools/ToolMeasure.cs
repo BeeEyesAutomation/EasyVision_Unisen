@@ -1,4 +1,11 @@
-﻿using System;
+﻿using BeeCore;
+using BeeCore.Func;
+using BeeGlobal;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
+using OpenCvSharp.ML;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,13 +20,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BeeCore;
-using BeeCore.Func;
-using BeeGlobal;
-
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using OpenCvSharp.ML;
 using Point = System.Drawing.Point;
 
 namespace BeeInterface
@@ -49,226 +49,226 @@ namespace BeeInterface
             worker.DoWork += (sender, e) =>
             {
                 timer.Restart();
-                Propety.IsOK = true;
-                Propety. StatusTool = StatusTool.Processing;
-                dynamic outLine1 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a=>a.Name== Propety.listPointChoose[0].Item1 )].Propety ;
-                dynamic outLine2 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1)].Propety ;
-                dynamic outLine3 = null, outLine4=null;
-                if (Propety.TypeMeasure==TypeMeasure.Angle)
-                {
-                     outLine3 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1)].Propety;
-                     outLine4 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1)].Propety;
+               // Propety.IsOK = true;
+              //  Propety. StatusTool = StatusTool.Processing;
+                //dynamic outLine1 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a=>a.Name== Propety.listPointChoose[0].Item1 )].Propety ;
+                //dynamic outLine2 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1)].Propety ;
+                //dynamic outLine3 = null, outLine4=null;
+                //if (Propety.TypeMeasure==TypeMeasure.Angle)
+                //{
+                //     outLine3 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1)].Propety;
+                //     outLine4 = BeeCore.Common.PropetyTools[Propety.IndexThread][BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1)].Propety;
 
 
-                }
-                if (outLine1.StatusTool == StatusTool.Done && !IsDone1)
-                {
-                    IsDone1 = true;
-                    if(outLine1.IsOK)
-                    {
-                        int index = Propety.listPointChoose[0].Item2;
-                        if(index< outLine1.listP_Center.Count)
-                        {
-                            Propety.listLine1Point[0] = outLine1.listP_Center[index];
-                            Propety.listRot[0] = outLine1.rectRotates[index];
-                        }
+                //}
+                //if (outLine1.StatusTool == StatusTool.Done && !IsDone1)
+                //{
+                //    IsDone1 = true;
+                //    if(outLine1.IsOK)
+                //    {
+                //        int index = Propety.listPointChoose[0].Item2;
+                //        if(index< outLine1.listP_Center.Count)
+                //        {
+                //            Propety.listLine1Point[0] = outLine1.listP_Center[index];
+                //            Propety.listRot[0] = outLine1.rectRotates[index];
+                //        }
                         
-                        else
-                          Propety.IsOK = false;
-                    }
-                    else
-                    {
-                        Propety.IsOK = false;
-                    }
+                //        else
+                //          Propety.IsOK = false;
+                //    }
+                //    else
+                //    {
+                //        Propety.IsOK = false;
+                //    }
                     
                         
-                }
+                //}
 
-                if (outLine2.StatusTool == StatusTool.Done && !IsDone2)
-                {
-                    IsDone2 = true;
-                    if (outLine2.IsOK)
-                    {
-                        int index = Propety.listPointChoose[1].Item2;
-                        if (index < outLine2.listP_Center.Count)
-                        {
-                            Propety.listLine1Point[1] = outLine2.listP_Center[index];
-                            Propety.listRot[1] = outLine2.rectRotates[index];
-                        }
+                //if (outLine2.StatusTool == StatusTool.Done && !IsDone2)
+                //{
+                //    IsDone2 = true;
+                //    if (outLine2.IsOK)
+                //    {
+                //        int index = Propety.listPointChoose[1].Item2;
+                //        if (index < outLine2.listP_Center.Count)
+                //        {
+                //            Propety.listLine1Point[1] = outLine2.listP_Center[index];
+                //            Propety.listRot[1] = outLine2.rectRotates[index];
+                //        }
                           
-                        else
-                            Propety.IsOK = false;
-                    }
-                    else
-                    {
-                        Propety.IsOK = false;
-                    }
-                }
-                if(outLine3!=null)
-                if (outLine3.StatusTool == StatusTool.Done && !IsDone3)
-                {
-                    IsDone3 = true;
-                    if (outLine3.IsOK)
-                    {
-                        int index = Propety.listPointChoose[2].Item2;
-                        if (index < outLine3.listP_Center.Count)
-                            {
-                                Propety.listLine2Point[0] = outLine3.listP_Center[index];
-                                Propety.listRot[2] = outLine3.rectRotates[index];
-                            }
+                //        else
+                //            Propety.IsOK = false;
+                //    }
+                //    else
+                //    {
+                //        Propety.IsOK = false;
+                //    }
+                //}
+                //if(outLine3!=null)
+                //if (outLine3.StatusTool == StatusTool.Done && !IsDone3)
+                //{
+                //    IsDone3 = true;
+                //    if (outLine3.IsOK)
+                //    {
+                //        int index = Propety.listPointChoose[2].Item2;
+                //        if (index < outLine3.listP_Center.Count)
+                //            {
+                //                Propety.listLine2Point[0] = outLine3.listP_Center[index];
+                //                Propety.listRot[2] = outLine3.rectRotates[index];
+                //            }
                            
-                        else
-                            Propety.IsOK = false;
-                    }
-                    else
-                    {
-                        Propety.IsOK = false;
-                    }
+                //        else
+                //            Propety.IsOK = false;
+                //    }
+                //    else
+                //    {
+                //        Propety.IsOK = false;
+                //    }
 
-                }
-                if (outLine4 != null)
-                    if (outLine4.StatusTool == StatusTool.Done && !IsDone4)
-                {
-                    try
-                    {
-                        IsDone4 = true;
-                        if (outLine4.IsOK)
-                        {
-                            int index = Propety.listPointChoose[3].Item2;
-                            if (index < outLine4.listP_Center.Count)
-                                {
-                                    Propety.listRot[3] = outLine4.rectRotates[index];
-                                    Propety.listLine2Point[1] = outLine4.listP_Center[index];
-                                }
+                //}
+                //if (outLine4 != null)
+                //    if (outLine4.StatusTool == StatusTool.Done && !IsDone4)
+                //{
+                //    try
+                //    {
+                //        IsDone4 = true;
+                //        if (outLine4.IsOK)
+                //        {
+                //            int index = Propety.listPointChoose[3].Item2;
+                //            if (index < outLine4.listP_Center.Count)
+                //                {
+                //                    Propety.listRot[3] = outLine4.rectRotates[index];
+                //                    Propety.listLine2Point[1] = outLine4.listP_Center[index];
+                //                }
                               
-                            else
-                                Propety.IsOK = false;
-                        }
-                        else
-                        {
-                            Propety.IsOK = false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        String s = ex.Message;
-                        //MessageBox.Show(s);
-                    }
+                //            else
+                //                Propety.IsOK = false;
+                //        }
+                //        else
+                //        {
+                //            Propety.IsOK = false;
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        String s = ex.Message;
+                //        //MessageBox.Show(s);
+                //    }
 
-                }
+                //}
             };
             numScale.Value=(decimal)Propety.Scale ;
-            Propety.StatusTool = StatusTool.Initialed;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             worker.RunWorkerCompleted += (sender, e) =>
             {
                 try
                 {
-                    Propety.IsOK = true;
-                    switch(Propety.TypeMeasure)
-                    {
-                        case TypeMeasure.Angle:
-                            if (IsDone1 && IsDone2 && IsDone3 && IsDone4 || !Propety.IsOK)
-                            {
-                                IsDone1 = false;
-                                IsDone2 = false;
-                                IsDone3 = false;
-                                IsDone4 = false;
-                                if (Propety.IsOK)
-                                {
-                                    pCenter1 = Propety.listLine1Point[0];
-                                    pCenter2 = Propety.listLine1Point[1];
-                                    pCenter3= Propety.listLine2Point[0];
-                                    pCenter4= Propety.listLine2Point[1];
-                                    Cal.FindIntersection(pCenter1, pCenter2, pCenter3, pCenter4, out pIntersection);
-                                    Propety.AngleDetect = Cal.GetAngleBetweenSegments(pCenter1, pCenter2, pCenter3, pCenter4);
-                                    // Propety.AngleDetect = Cal.Finddistasnce(Propety.listLine1Point[0], Propety.listLine1Point[1]) / Propety.Scale;
-                                    Propety.AngleDetect = Math.Round(Propety.AngleDetect, 1);
-                                    Propety.ScoreRs = (float)Propety.AngleDetect;
-                                    if (Propety.ScoreRs <= Propety.Score)
-                                        Propety.IsOK = true;
-                                    else Propety.IsOK = false;
-                                }
-                                else
-                                    Propety.IsOK = false;
-                                Propety.StatusTool = StatusTool.Done;
-                            }
-                            else
-                                Propety.StatusTool = StatusTool.Processing;
-                            break;
-                        case TypeMeasure.Distance:
-                            if (IsDone1 && IsDone2 || !Propety.IsOK)
-                            {
-                                IsDone1 = false;
-                                IsDone2 = false;
-                                switch(Propety.DirectMeasure)
-                                {
-                                    case DirectMeasure.XY:
-                                        pCenter1 = Propety.listLine1Point[0];
-                                        pCenter2 = Propety.listLine1Point[1];
-                                        Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter2) / Propety.Scale;                
-                                        break;
-                                    case DirectMeasure.X:
-                                        float width = Math.Abs(Propety.listRot[0]._rect.Width);
-                                        float width2 = Math.Abs(Propety.listRot[1]._rect.Width);
-                                        float Ymin1 = Math.Min(Propety.listLine1Point[0].Y- Propety.listRot[0]._rect.Height/2, Propety.listLine1Point[1].Y - Propety.listRot[1]._rect.Height / 2);
-                                        float Ymax1 = Math.Max(Propety.listLine1Point[0].Y+ Propety.listRot[0]._rect.Height / 2, Propety.listLine1Point[1].Y+ -Propety.listRot[1]._rect.Height / 2);
-                                        float Xmin1 = Math.Min(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
-                                        float Xmax1 = Math.Max(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
-                                        pCenter1 = new PointF(Xmin1 ,Ymin1);
-                                        pCenter2 = new PointF(Xmin1 ,Ymax1);
-                                        pCenter3 = new PointF(Xmax1 ,Ymin1);
-                                        pCenter4 = new PointF(Xmax1 ,Ymax1);
-                                        Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Propety.Scale;
-                                        break;
-                                    case DirectMeasure.Y:
-                                        float height =Math.Abs( Propety.listRot[0]._rect.Height);
-                                        float height2 = Math.Abs(Propety.listRot[1]._rect.Height);
-                                        float Xmin = Math.Min(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
-                                        float Xmax = Math.Max(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
-                                        pCenter1 = new PointF(Xmin, Propety.listLine1Point[0].Y - height / 2);
-                                        pCenter2 = new PointF(Xmax, Propety.listLine1Point[0].Y - height / 2);
-                                        pCenter3 = new PointF(Xmin, Propety.listLine1Point[1].Y - height2 / 2);
-                                        pCenter4 = new PointF(Xmax, Propety.listLine1Point[1].Y - height2 / 2);
-                                        Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Propety.Scale;
-                                        break;
-                                }
-                                Propety.AngleDetect = Math.Round(Propety.AngleDetect, 2);
-                                Propety.ScoreRs = (float)Propety.AngleDetect;
-                                if (Propety.ScoreRs <= Propety.Score)
-                                    Propety.IsOK = true;
-                                else Propety.IsOK = false;
+                    //Propety.IsOK = true;
+                    //switch(Propety.TypeMeasure)
+                    //{
+                    //    case TypeMeasure.Angle:
+                    //        if (IsDone1 && IsDone2 && IsDone3 && IsDone4 || !Propety.IsOK)
+                    //        {
+                    //            IsDone1 = false;
+                    //            IsDone2 = false;
+                    //            IsDone3 = false;
+                    //            IsDone4 = false;
+                    //            if (Propety.IsOK)
+                    //            {
+                    //                pCenter1 = Propety.listLine1Point[0];
+                    //                pCenter2 = Propety.listLine1Point[1];
+                    //                pCenter3= Propety.listLine2Point[0];
+                    //                pCenter4= Propety.listLine2Point[1];
+                    //                Cal.FindIntersection(pCenter1, pCenter2, pCenter3, pCenter4, out pIntersection);
+                    //                Propety.AngleDetect = Cal.GetAngleBetweenSegments(pCenter1, pCenter2, pCenter3, pCenter4);
+                    //                // Propety.AngleDetect = Cal.Finddistasnce(Propety.listLine1Point[0], Propety.listLine1Point[1]) / Propety.Scale;
+                    //                Propety.AngleDetect = Math.Round(Propety.AngleDetect, 1);
+                    //               Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreRs = (float)Propety.AngleDetect;
+                    //                if (Propety.ScoreRs <=Common.PropetyTools[Global.IndexChoose][Propety.Index].Score)
+                    //                    Propety.IsOK = true;
+                    //                else Propety.IsOK = false;
+                    //            }
+                    //            else
+                    //                Propety.IsOK = false;
+                    //            Propety.StatusTool = StatusTool.Done;
+                    //        }
+                    //        else
+                    //            Propety.StatusTool = StatusTool.Processing;
+                    //        break;
+                    //    case TypeMeasure.Distance:
+                    //        if (IsDone1 && IsDone2 || !Propety.IsOK)
+                    //        {
+                    //            IsDone1 = false;
+                    //            IsDone2 = false;
+                    //            switch(Propety.DirectMeasure)
+                    //            {
+                    //                case DirectMeasure.XY:
+                    //                    pCenter1 = Propety.listLine1Point[0];
+                    //                    pCenter2 = Propety.listLine1Point[1];
+                    //                    Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter2) / Propety.Scale;                
+                    //                    break;
+                    //                case DirectMeasure.X:
+                    //                    float width = Math.Abs(Propety.listRot[0]._rect.Width);
+                    //                    float width2 = Math.Abs(Propety.listRot[1]._rect.Width);
+                    //                    float Ymin1 = Math.Min(Propety.listLine1Point[0].Y- Propety.listRot[0]._rect.Height/2, Propety.listLine1Point[1].Y - Propety.listRot[1]._rect.Height / 2);
+                    //                    float Ymax1 = Math.Max(Propety.listLine1Point[0].Y+ Propety.listRot[0]._rect.Height / 2, Propety.listLine1Point[1].Y+ -Propety.listRot[1]._rect.Height / 2);
+                    //                    float Xmin1 = Math.Min(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
+                    //                    float Xmax1 = Math.Max(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
+                    //                    pCenter1 = new PointF(Xmin1 ,Ymin1);
+                    //                    pCenter2 = new PointF(Xmin1 ,Ymax1);
+                    //                    pCenter3 = new PointF(Xmax1 ,Ymin1);
+                    //                    pCenter4 = new PointF(Xmax1 ,Ymax1);
+                    //                    Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Propety.Scale;
+                    //                    break;
+                    //                case DirectMeasure.Y:
+                    //                    float height =Math.Abs( Propety.listRot[0]._rect.Height);
+                    //                    float height2 = Math.Abs(Propety.listRot[1]._rect.Height);
+                    //                    float Xmin = Math.Min(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
+                    //                    float Xmax = Math.Max(Propety.listLine1Point[0].X, Propety.listLine1Point[1].X);
+                    //                    pCenter1 = new PointF(Xmin, Propety.listLine1Point[0].Y - height / 2);
+                    //                    pCenter2 = new PointF(Xmax, Propety.listLine1Point[0].Y - height / 2);
+                    //                    pCenter3 = new PointF(Xmin, Propety.listLine1Point[1].Y - height2 / 2);
+                    //                    pCenter4 = new PointF(Xmax, Propety.listLine1Point[1].Y - height2 / 2);
+                    //                    Propety.AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Propety.Scale;
+                    //                    break;
+                    //            }
+                    //            Propety.AngleDetect = Math.Round(Propety.AngleDetect, 2);
+                    //           Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreRs = (float)Propety.AngleDetect;
+                    //            if (Propety.ScoreRs <=Common.PropetyTools[Global.IndexChoose][Propety.Index].Score)
+                    //                Propety.IsOK = true;
+                    //            else Propety.IsOK = false;
                               
-                                Propety.StatusTool = StatusTool.Done;
-                            }
-                            else
-                                Propety.StatusTool = StatusTool.Processing;
-                            break;
+                    //            Propety.StatusTool = StatusTool.Done;
+                    //        }
+                    //        else
+                    //            Propety.StatusTool = StatusTool.Processing;
+                    //        break;
 
-                    }
+                  //  }
                
                 }
                 catch (Exception ex)
                 {
                     // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                 }
-                if (Propety.StatusTool == StatusTool.Processing)
-                {
-                    Task.Delay(5);
-                    worker.RunWorkerAsync();
-                    return;
-                }
+                //if (Propety.StatusTool == StatusTool.Processing)
+                //{
+                //    Task.Delay(5);
+                //    worker.RunWorkerAsync();
+                //    return;
+                //}
                 if(!Global.IsRun)
                 Global.StatusDraw = StatusDraw.Check;
                 timer.Stop();
 
-                Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
+               // Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
                
             };
         }
    
         private void trackScore_ValueChanged(float obj)
         {
-            Propety.Score = trackScore.Value;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = trackScore.Value;
 
         }
 
@@ -296,22 +296,22 @@ namespace BeeInterface
            
             Color cl = Color.LimeGreen;
             Brush brushText = Brushes.White;
-            if (!Propety.IsOK)
-            {
-                cl = Color.Red;
-                //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.LimeGreen;
+            //if (!Propety.IsOK)
+            //{
+            //    cl = Color.Red;
+            //    //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
+            //    //    G.Config.ConditionOK == ConditionOK.Logic)
+            //    //    cl = Color.LimeGreen;
 
 
-            }
-            else
-            {
-                cl = Color.LimeGreen;
-                //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.Red;
-            }
+            //}
+            //else
+            //{
+            //    cl = Color.LimeGreen;
+            //    //if (BeeCore.Common.PropetyTools[Propety.IndexThread][Propety.Index].UsedTool == UsedTool.Invertse &&
+            //    //    G.Config.ConditionOK == ConditionOK.Logic)
+            //    //    cl = Color.Red;
+            //}
          
               
                 int i = 0;
@@ -782,14 +782,14 @@ namespace BeeInterface
                     OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety as OutLine;
                     Propety.listLine1Point[1] = outLine.listP_Center[cb4.SelectedIndex];
                     Propety.listRot[1] = outLine.rectRotates[cb4.SelectedIndex];
-                    Propety.listPointChoose[1] = new Tuple<String, int>(outLine.nameTool, cb4.SelectedIndex);
+                    Propety.listPointChoose[1] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Name, cb4.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
                     Circle circle = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Propety as Circle;
                     Propety.listLine1Point[1] = circle.listP_Center[cb4.SelectedIndex];
                     Propety.listRot[1] = circle.rectRotates[cb4.SelectedIndex];
-                    Propety.listPointChoose[1] = new Tuple<String, int>(circle.nameTool, cb4.SelectedIndex);
+                    Propety.listPointChoose[1] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2].Name, cb4.SelectedIndex);
 
                     break;
             }
@@ -872,14 +872,14 @@ namespace BeeInterface
                     OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety as OutLine;
                     Propety.listLine2Point[0] = outLine.listP_Center[cb6.SelectedIndex];
                     Propety.listRot[2] = outLine.rectRotates[cb6.SelectedIndex];
-                    Propety.listPointChoose[2] = new Tuple<String, int>(outLine.nameTool, cb6.SelectedIndex);
+                    Propety.listPointChoose[2] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Name, cb6.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
                     Circle circle = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Propety as Circle;
                     Propety.listLine2Point[0] = circle.listP_Center[cb6.SelectedIndex];
                     Propety.listRot[2] = circle.rectRotates[cb6.SelectedIndex];
-                    Propety.listPointChoose[2] = new Tuple<String, int>(circle.nameTool, cb6.SelectedIndex);
+                    Propety.listPointChoose[2] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3].Name, cb6.SelectedIndex);
 
                     break;
             }
@@ -896,14 +896,14 @@ namespace BeeInterface
                     OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety as OutLine;
                     Propety.listLine2Point[1] = outLine.listP_Center[cb8.SelectedIndex];
                     Propety.listRot[3] = outLine.rectRotates[cb8.SelectedIndex];
-                    Propety.listPointChoose[3] = new Tuple<String, int>(outLine.nameTool, cb8.SelectedIndex);
+                    Propety.listPointChoose[3] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Name, cb8.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
                     Circle circle = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Propety as Circle;
                     Propety.listLine2Point[1] = circle.listP_Center[cb8.SelectedIndex];
                     Propety.listRot[3] = circle.rectRotates[cb8.SelectedIndex];
-                    Propety.listPointChoose[3] = new Tuple<String, int>(circle.nameTool, cb8.SelectedIndex);
+                    Propety.listPointChoose[3] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4].Name, cb8.SelectedIndex);
 
                     break;
             }
@@ -929,14 +929,14 @@ namespace BeeInterface
                     OutLine outLine = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety as OutLine;
                     Propety.listLine1Point[0] = outLine.listP_Center[cb2.SelectedIndex];
                     Propety.listRot[0] = outLine.rectRotates[cb2.SelectedIndex];
-                    Propety.listPointChoose[0] = new Tuple<String, int>(outLine.nameTool, cb2.SelectedIndex);
+                    Propety.listPointChoose[0] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Name, cb2.SelectedIndex);
 
                     break;
                 case TypeTool.Circle:
                     Circle circle = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Propety as Circle;
                     Propety.listLine1Point[0] = circle.listP_Center[cb2.SelectedIndex];
                     Propety.listRot[0] = circle.rectRotates[cb2.SelectedIndex];
-                    Propety.listPointChoose[0] = new Tuple<String, int>(circle.nameTool, cb2.SelectedIndex);
+                    Propety.listPointChoose[0] = new Tuple<String, int>(BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1].Name, cb2.SelectedIndex);
 
                     break;
             }
