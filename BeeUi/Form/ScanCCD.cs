@@ -53,7 +53,7 @@ namespace BeeUi
             cbCCD.Text = "Waiting Scan";
             //  Disable();
             //  Enable();
-            String IDCCD = G.Config.IDCamera;
+            String IDCCD =Global.Config.IDCamera;
             // BeeCore.Common.listCamera.Add(new Camera());
             String sRead = "";
             if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
@@ -112,8 +112,8 @@ namespace BeeUi
             }
          
             //   cbCCD.DataSource = ScanIDCCD();
-            //if (G.Config.Resolution == null) G.Config.Resolution = "1280x720 (1.3 MP)";
-            //cbReSolution.SelectedIndex = cbReSolution.FindStringExact(G.Config.Resolution);
+            //if (Global.Config.Resolution == null)Global.Config.Resolution = "1280x720 (1.3 MP)";
+            //cbReSolution.SelectedIndex = cbReSolution.FindStringExact(Global.Config.Resolution);
         }
      public   int indexCCD;
         
@@ -121,7 +121,7 @@ namespace BeeUi
         {
             indexCCD = cbCCD.SelectedIndex;
            BeeCore.Common.listCamera[Global.IndexChoose].Para.Name = cbCCD.Text;
-            G.Config.IDCamera = cbCCD.Text.Trim();
+           Global.Config.IDCamera = cbCCD.Text.Trim();
             G.Load.FormActive.CheckActive(G.Load.addMac);
             if(G.IsActive)
             {
@@ -140,7 +140,7 @@ namespace BeeUi
                     G.Load.FormActive.txtLicence.Text = "Locked Trial";
 
                 }
-                String ID = G.Load.addMac + "*" + G.Config.IDCamera;
+                String ID = G.Load.addMac + "*" +Global.Config.IDCamera;
                 G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
                 G.Load.FormActive.Show();
 
@@ -167,7 +167,7 @@ namespace BeeUi
                     G.Load.FormActive.txtLicence.Text = "Locked Trial";
 
                 }
-                String ID = G.Load.addMac + "*" + G.Config.IDCamera;
+                String ID = G.Load.addMac + "*" +Global.Config.IDCamera;
                 G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
                 G.Load.FormActive.Show();
 
@@ -177,8 +177,8 @@ namespace BeeUi
         {
             if(G.EditTool!=null)
             G.EditTool.View.tmCheckCCD.Enabled = false;
-            //BeeCore.Common.TypeCCD = G.ConfiGlobal.TypeCamera ;
-            //if (G.ConfiGlobal.TypeCamera  == TypeCamera.TinyIV)
+            //BeeCore.Common.TypeCCD =Global.Configlobal.TypeCamera ;
+            //if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
             //    BeeCore.Common.PropertyChanged -=G.EditTool.View. Common_PropertyChanged;
           
             btnConnect.Enabled = false;
@@ -193,10 +193,10 @@ namespace BeeUi
             if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
                 if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
                     BeeCore.Common.listCamera[Global.IndexChoose].IsConnected= BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
-            //if (G.ConfiGlobal.TypeCamera  == TypeCamera.USB|| G.ConfiGlobal.TypeCamera  == TypeCamera.BaslerGigE)
-            //    BeeUi.G.IsCCD = BeeCore.Common.ConnectCCD(indexCCD, G.Config.Resolution);
+            //if (Global.Configlobal.TypeCamera  == TypeCamera.USB||Global.Configlobal.TypeCamera  == TypeCamera.BaslerGigE)
+            //    BeeUi.G.IsCCD = BeeCore.Common.ConnectCCD(indexCCD,Global.Config.Resolution);
 
-            //else if (G.ConfiGlobal.TypeCamera  == TypeCamera.TinyIV)
+            //else if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
             //{
             //    BeeUi.G.IsCCD = true;
                
@@ -205,7 +205,7 @@ namespace BeeUi
         Crypto Crypto = new Crypto();
         private void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //String[] sp = G.Config.Resolution.Split(' ');
+            //String[] sp =Global.Config.Resolution.Split(' ');
             //String[] sp2 = sp[0].Split('x');
         
             //G.MainForm.Show();
@@ -276,7 +276,7 @@ namespace BeeUi
 
         private void cbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-          //G.Config.namePort = cbSerialPort.Text.Trim();
+          //Global.Config.namePort = cbSerialPort.Text.Trim();
         }
 
         private void workScan_DoWork(object sender, DoWorkEventArgs e)
@@ -294,7 +294,7 @@ namespace BeeUi
 
             ScanIDCCD();
             //  else
-            //  G.Config.Resolution = cbReSolution.Text.Trim();
+            // Global.Config.Resolution = cbReSolution.Text.Trim();
         }
 
         private void btnGigE_Click(object sender, EventArgs e)
@@ -449,8 +449,8 @@ namespace BeeUi
             {
 
                 SaveData.Camera(Global.Project,Global.listParaCamera);
-               // Global.Comunication.IO.Connect(G.Config.IDPort);
-                G.Config.IDCamera = cbCCD.Text.Trim();
+               // Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
+               Global.Config.IDCamera = cbCCD.Text.Trim();
                 // G.Load.FormActive.CheckActive(G.Load.addMac);
                 if (G.Main == null)
                 {
@@ -481,7 +481,7 @@ namespace BeeUi
                             G.Load.FormActive.txtLicence.Text = "Locked Trial";
 
                         }
-                        String ID = G.Load.FormActive.KeyActive + "*" + G.Config.IDCamera;
+                        String ID = G.Load.FormActive.KeyActive + "*" +Global.Config.IDCamera;
                         G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
                         G.Load.FormActive.Show();
 

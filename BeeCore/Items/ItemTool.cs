@@ -62,14 +62,14 @@ namespace BeeCore
                 if (Max == Min) Max++;
                 if (value > Max) value = Max;
                 if (value < Min) value = Min;
-
-                this.value = value;
-                pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width )), pTrack.Y);
-                BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score = Value;
-
-                // lbValue.Location = new Point(pTick.X + imgTick.Width / 2 - lbValue.Width / 2, lbValue.Location.Y);
-                // lbValue.Text = this.value + "";
-                this.Invalidate();
+                if (!float.IsNaN(value))
+                {
+                    this.value = (float)Math.Round(value, 1);
+                    pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
+                    BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score = Value;
+                    this.Invalidate();
+                }    
+              
 
             }
         }
@@ -471,9 +471,10 @@ namespace BeeCore
             pTick = new PointF(pTrack.X+Value, pTrack.Y);
             pEnd = new PointF(this.Width - 5, 5);
             this.DoubleClick += ItemTool_DoubleClick;
+            Step = Common.PropetyTools[Global.IndexChoose][IndexTool].StepValue;
             Min = Common.PropetyTools[Global.IndexChoose][IndexTool].MinValue;
             Max = Common.PropetyTools[Global.IndexChoose][IndexTool].MaxValue;
-
+          
             Value = BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score;
             Common.PropetyTools[Global.IndexChoose][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
             Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreChanged += ItemTool_ScoreChanged;

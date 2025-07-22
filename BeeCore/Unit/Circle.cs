@@ -57,6 +57,7 @@ namespace BeeCore
         }
         public void SetModel()
         {
+            rotMask = null;
             Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 20;
@@ -103,7 +104,11 @@ namespace BeeCore
                         case MethordEdge.StrongEdges:
                             matProcess = Filters.GetStrongEdgesOnly(matCrop);
                             break;
-                    }    
+                        case MethordEdge.Binary:
+                            matProcess = Filters.Threshold(matCrop);
+                            break;
+                    }
+
                     var circles = RansacCircleFitter.DetectCircles(
                    matProcess,
                    maxCircles: 3,
@@ -129,8 +134,8 @@ namespace BeeCore
                         {
                             MinInliers = (int)((Inliers * (100-Common.PropetyTools[IndexThread][Index].Score)) / 100.0);
                             double Delta =(  Common.PropetyTools[IndexThread][Index].Score) /100.0;
-                            MinRadius = (int)(RadiusResult * (1-Delta));
-                            MaxRadius = (int)(RadiusResult * (1 + Delta));
+                            MinRadius = (float)(RadiusResult * (1-Delta));
+                            MaxRadius = (float)(RadiusResult * (1 + Delta));
                            // IsCalibs = false;
                         }    
                         
@@ -174,7 +179,8 @@ namespace BeeCore
                     break;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
+            if (!Global.IsHideTool)
+                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
            
             if (!Global.IsRun)
             {
@@ -239,10 +245,13 @@ namespace BeeCore
             }
           
             Common.PropetyTools[IndexThread][Index].ScoreResult = (int)((Math.Abs(RadiusResult - RadiusTemp) / (RadiusTemp * 1.0)) * 100);
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score )
+            if(rectRotates.Count==0)
+            {
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            }
+            else if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-
             }
             else
             {
@@ -267,8 +276,8 @@ namespace BeeCore
 
         }
       
-        public int MinRadius = 0;
-        public int MaxRadius = 0;
+        public float MinRadius = 0;
+        public float MaxRadius = 0;
        
         public float Scale = 1;
         public int IndexThread = 0;

@@ -1,4 +1,5 @@
-﻿using BeeUi.Commons;
+﻿using BeeGlobal;
+using BeeUi.Commons;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace BeeUi
                     {
 
                         case typeKey.Trial:
-                            if (addMac == G.keys.Key && G.keys.IDDev == G.Config.IDCamera)
+                            if (addMac == G.keys.Key && G.keys.IDDev ==Global.Config.IDCamera)
                             {
                                 RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Sytems");
                                 if (key != null)
@@ -150,7 +151,7 @@ namespace BeeUi
                         case typeKey.Machine:
                             if (addMac == G.keys.Key)
                             {
-                                if (G.keys.IDDev == G.Config.IDCamera)
+                                if (G.keys.IDDev ==Global.Config.IDCamera)
                                 {
                                     G.Load.sActive = "Machine";
                                     G.Load.sActive = G.keys.typeKey.ToString();

@@ -20,7 +20,7 @@ namespace BeeUi
         private void SettingDevice_Load(object sender, EventArgs e)
         {
             
-            //if (G.ConfiGlobal.TypeCamera ==TypeCamera.TinyIV)
+            //if (Global.Configlobal.TypeCamera ==TypeCamera.TinyIV)
             //{
               //  G.DeviceConnectForm.ReadingPage.DeviceSettingPage.Init(true);
             //    btnAutoExposure.IsCLick = G.DeviceConnectForm.ReadingPage.DeviceSettingPage.GetAutoExposue();

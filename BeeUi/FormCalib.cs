@@ -72,7 +72,7 @@ namespace BeeUi
         }
         private void trackScoreErr_ValueChanged(float obj)
         {
-            G.Config.ScoreCalib = (int)trackScoreErr.Value;
+           Global.Config.ScoreCalib = (int)trackScoreErr.Value;
             if (trackScoreErr.ValueScore <= trackScoreErr.Value)
             {
 
@@ -102,7 +102,7 @@ namespace BeeUi
                     float valRaw = mask.Get<Vec3b>(row, col)[0];
                     valueMid = Math.Abs(valRaw - valSample);
                     valueMedium += valueMid;
-                    if (valueMid < G.Config.ScoreCalib)
+                    if (valueMid <Global.Config.ScoreCalib)
                         matProcess.Set(row, col, 255);
 
 
@@ -159,8 +159,8 @@ namespace BeeUi
         private void FormCalib_Load(object sender, EventArgs e)
         {
             
-            trackScoreErr.Value = G.Config.ScoreCalib;
-            if (!G.Config.nameUser.Contains("Admin"))
+            trackScoreErr.Value =Global.Config.ScoreCalib;
+            if (!Global.Config.nameUser.Contains("Admin"))
                 trackScoreErr.Enabled = false;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
 
@@ -180,12 +180,12 @@ namespace BeeUi
         {
             if (btnLive.IsCLick)
             {
-                IsHistOld = G.Config.IsHist;
-                G.Config.IsHist = false;
+                IsHistOld =Global.Config.IsHist;
+               Global.Config.IsHist = false;
             }
               
             else
-                G.Config.IsHist = IsHistOld;
+               Global.Config.IsHist = IsHistOld;
             G.EditTool.View.btnLive.IsCLick = !G.EditTool.View.btnLive.IsCLick;
             G.EditTool.View.Live();
         }

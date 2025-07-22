@@ -48,6 +48,7 @@ namespace BeeGlobal
                 }
             }
         }
+        public Comunication Comunication = new Comunication();
         public List<String> NameCCDs = new List<string>();
         public Bitmap matRegister;
         public Bitmap matSample;

@@ -163,79 +163,103 @@ namespace BeeInterface
             //    //         HersheyFonts.HersheySimplex, 0.7, new Scalar(255, 0, 0), 2);
             //    //    }    
 
-                     
-                 
+
+
             //    //}
             //    Propety.DoWork(Propety.rotAreaAdjustment);
             //};
 
             //worker.RunWorkerCompleted += (sender, e) =>
             //{
-              
+
             //    Propety.Complete();
             //     if (!Global.IsRun)
             //        Global.StatusDraw = StatusDraw.Check;
             //    timer.Stop();
             //    Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
             //}; 
-            if (!workLoadModel.IsBusy)
-                workLoadModel.RunWorkerAsync();
+            try
+            {
+                if (!workLoadModel.IsBusy)
+                    workLoadModel.RunWorkerAsync();
+                trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+                trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+                trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
 
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].StatusToolChanged += ToolWidth_StatusToolChanged;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-            numScale.Value = (decimal)Propety.Scale;
-            trackMaxLine.Value = Propety.MaximumLine;
-            trackMinInlier.Value = Propety.MinInliers;
-           
-            numMinRadius.Value = Propety.MinLen;
-            numMaxRadius.Value = Propety.MaxLen;
-            switch (Propety.MethordEdge)
-            {
-                case MethordEdge.StrongEdges:
-                    btnStrongEdge.IsCLick = true;
-                    break;
-                case MethordEdge.CloseEdges:
-                    btnCloseEdge.IsCLick = true;
-                    break;
+                numScore.Minimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+                numScore.Maxnimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+                numScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
+
+                trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+                numScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
+                Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+
+                numScale.Value = (decimal)Propety.Scale;
+                trackMaxLine.Value = Propety.MaximumLine;
+                trackMinInlier.Value = Propety.MinInliers;
+                numScale.Value = (int)Propety.Scale;
+                numMinRadius.Value = Propety.MinLen;
+                numMaxRadius.Value = Propety.MaxLen;
+                switch (Propety.MethordEdge)
+                {
+                    case MethordEdge.StrongEdges:
+                        btnStrongEdge.IsCLick = true;
+                        break;
+                    case MethordEdge.CloseEdges:
+                        btnCloseEdge.IsCLick = true;
+                        break;
+                    case MethordEdge.Binary:
+                        btnBinary.IsCLick = true;
+                        break;
+                }
+                switch (Propety.LineOrientation)
+                {
+                    case LineOrientation.Vertical:
+                        btnVer.IsCLick = true;
+                        break;
+                    case LineOrientation.Horizontal:
+                        btnHori.IsCLick = true;
+                        break;
+                }
+                switch (Propety.SegmentStatType)
+                {
+                    case SegmentStatType.Longest:
+                        btnLong.IsCLick = true;
+                        break;
+                    case SegmentStatType.Shortest:
+                        btnShort.IsCLick = true;
+                        break;
+                    case SegmentStatType.Average:
+                        btnAverage.IsCLick = true;
+                        break;
+                }
+                switch (Propety.GapExtremum)
+                {
+                    case GapExtremum.Outermost:
+                        btnOutter.IsCLick = true;
+                        break;
+                    case GapExtremum.Middle:
+                        btnMid.IsCLick = true;
+                        break;
+                    case GapExtremum.Nearest:
+                        btnNear.IsCLick = true;
+                        break;
+                    case GapExtremum.Farthest:
+                        btnFar.IsCLick = true;
+                        break;
+                }
             }
-            switch (Propety.LineOrientation)
+            catch (Exception ex)
             {
-                case LineOrientation.Vertical:
-                    btnVer.IsCLick = true;
-                    break;
-                case LineOrientation.Horizontal:
-                    btnHori.IsCLick = true;
-                    break;
+                String s = ex.Message;
             }
-            switch (Propety.SegmentStatType)
-            {
-                case SegmentStatType.Longest:
-                    btnLong.IsCLick = true;
-                    break;
-                case SegmentStatType.Shortest:
-                    btnShort.IsCLick = true;
-                    break;
-                case SegmentStatType.Average:
-                    btnAverage.IsCLick = true;
-                    break;
-            }
-            switch (Propety.GapExtremum)
-            {
-                case GapExtremum.Outermost:
-                    btnOutter.IsCLick = true;
-                    break;
-                case GapExtremum.Middle:
-                    btnMid.IsCLick = true;
-                    break;
-                case GapExtremum.Nearest:
-                    btnNear.IsCLick = true;
-                    break;
-                case GapExtremum.Farthest:
-                    btnFar.IsCLick = true;
-                    break;
-            }
+        }
+
+        private void ToolWidth_ScoreChanged(float obj)
+        {
+           trackScore.Value = obj;
         }
 
         private void ToolWidth_StatusToolChanged(StatusTool obj)
@@ -256,7 +280,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
-            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
         public bool IsClear = false;
         public Width Propety=new Width();
@@ -397,8 +421,7 @@ namespace BeeInterface
 
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
-            numScore.Maxnimum = (int)trackScore.Max;
-            numScore.Minimum = (int)trackScore.Min;
+           
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
@@ -566,6 +589,16 @@ namespace BeeInterface
         private void trackScore_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+        }
+
+        private void numScale_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.Scale = (int)numScale.Value;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

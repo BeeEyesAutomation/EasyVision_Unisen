@@ -61,12 +61,15 @@ namespace BeeInterface
                 if (Max == Min) Max++;
                 if (value > Max) value = Max;
                 if (value < Min) value = Min;
+                if (!float.IsNaN(value))
+                {
+                    this.value = (float)Math.Round(value, 1);
 
-                this.value = value;
-                pTick = new Point((int)((value *1.0/ (Max-Min))*(this.pT.Width- imgTick.Width-4)), 5);
-                // lbValue.Location = new Point(pTick.X + imgTick.Width / 2 - lbValue.Width / 2, lbValue.Location.Y);
-                // lbValue.Text = this.value + "";
-                pT.Invalidate();
+                    pTick = new Point((int)((value * 1.0 / (Max - Min)) * (this.pT.Width - imgTick.Width - 4)), 5);
+                    // lbValue.Location = new Point(pTick.X + imgTick.Width / 2 - lbValue.Width / 2, lbValue.Location.Y);
+                    // lbValue.Text = this.value + "";
+                    pT.Invalidate();
+                }
 
             } }
         public event Action<float> ValueChanged;
@@ -111,10 +114,10 @@ namespace BeeInterface
             {
                 imgTick = Properties.Resources.BID_SLIDER_HANDLE_ON_DOWN;
                 Point pointPanel = e.Location;
-                if (pointPanel.X >= imgTick.Width/2 +2&& pointPanel.X <= pT.Width- imgTick.Width/2-2 )
+                if (pointPanel.X >= imgTick.Width/2 && pointPanel.X <= pT.Width- imgTick.Width/2 )
                 {
                    Value = (float)Math.Round( (float)((pointPanel.X- imgTick.Width / 2-2) / ((pT.Width - imgTick.Width-4) * 1.0) * (Max-Min)),1);
-                    Value = Value- Value % Step;
+                    Value =Value- Value % Step;
                 }
                 
             }

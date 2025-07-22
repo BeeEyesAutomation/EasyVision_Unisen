@@ -1,9 +1,11 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static System.Windows.Forms.AxHost;
 namespace BeeCore.Algorithm
@@ -142,66 +144,75 @@ namespace BeeCore.Algorithm
             int iterations = maxIterations ?? Math.Min(Math.Max(points.Count / 5, 100), 1000);
             int inliersNeeded = minInliers ?? Math.Max(15, (int)(points.Count * 0.02));
 
-            (Point2f center, float radius, int inliers) best = (new Point2f(), 0f, 0);
+           // (Point2f center, float radius, int inliers) best = (new Point2f(), 0f, 0);
 
-            Parallel.ForEach(Partitioner.Create(0, iterations),  (range, state) =>
+            int globalSeed = 12345;
+            var threadRandom = new ThreadLocal<Random>(() => new Random(globalSeed + Thread.CurrentThread.ManagedThreadId));
+            var results = new ConcurrentBag<(Point2f center, float radius, int inliers)>();
+
+            Parallel.ForEach(Partitioner.Create(0, iterations), (range, state) =>
             {
-                var localRnd = new Random(Guid.NewGuid().GetHashCode());
+                var localRnd = threadRandom.Value;
                 (Point2f center, float radius, int inliers) localBest = (new Point2f(), 0f, 0);
 
                 for (int i = range.Item1; i < range.Item2; i++)
                 {
-                  //  if (state.ShouldExitCurrentIteration) break; // Thoát sớm
-                    int i1 = localRnd.Next(points.Count);
-                    int i2, i3;
-                    if (points.Count < 3)
-                        continue;
-                    do { i2 = localRnd.Next(points.Count); } while (i2 == i1);
-                    do { i3 = localRnd.Next(points.Count); } while (i3 == i1 || i3 == i2);
+                    if (points.Count < 3) break;
 
-                    var sample = new[] { points[i1], points[i2], points[i3] };
+                    var indices = Enumerable.Range(0, points.Count).OrderBy(_ => localRnd.Next()).Take(3).ToArray();
+                    var sample = new[] { points[indices[0]], points[indices[1]], points[indices[2]] };
+
                     if (!CircleFromPoints(sample[0], sample[1], sample[2], out Point2f center, out float radius))
                         continue;
                     if (radius < MinRadius || radius > MaxRadius) continue;
 
-                    int inliers = CountInliersGrid(grid, center, radius, threshold, earlyBreak ? best.inliers : int.MaxValue);
+                    int inliers = CountInliersGrid(grid, center, radius, threshold, earlyBreak ? int.MaxValue : int.MaxValue);
 
-                    bool isBetter = false;
-                    if (direction == CircleScanDirection.InsideOut)
-                        isBetter = inliers > localBest.inliers || (inliers == localBest.inliers && radius < localBest.radius);
-                    else
-                        isBetter = inliers > localBest.inliers || (inliers == localBest.inliers && radius > localBest.radius);
-
-                    if (isBetter)
-                        localBest = (center, radius, inliers);
-                    //if ( inliers >= inliersNeeded * 2)  // Thỏa mãn vượt ngưỡng an toàn, thoát toàn bộ
-                    //{
-                    //    state.Break();
-                    //    break;
-                    //}
-                }
-
-                lock (points)
-                {
-                    bool isBetter = false;
-                    if (direction == CircleScanDirection.InsideOut)
-                        isBetter = localBest.inliers > best.inliers || (localBest.inliers == best.inliers && localBest.radius < best.radius);
-                    else
-                        isBetter = localBest.inliers > best.inliers || (localBest.inliers == best.inliers && localBest.radius > best.radius);
-
-                    if (isBetter)
-                        best = localBest;
+                    if (inliers >= inliersNeeded)
+                    {
+                        results.Add((center, radius, inliers));
+                    }
                 }
             });
-            var foundCircles = new List<(Point2f, float,int)>();
-            if (best.inliers >= inliersNeeded)
-            {
-                foundCircles.Add((best.center, best.radius, best.inliers));
-                //{
 
-                //    Inliers = best.inliers
-                //};
-            }
+            var sorted = direction == CircleScanDirection.InsideOut
+                ? results.OrderByDescending(r => r.inliers).ThenBy(r => r.radius)
+                : results.OrderByDescending(r => r.inliers).ThenByDescending(r => r.radius);
+            var foundCircles = new List<(Point2f, float, int)>();
+            var best = sorted.FirstOrDefault();
+
+            if (best.inliers >= inliersNeeded)
+                foundCircles.Add((best.center, best.radius, best.inliers));
+           // return new List<(Point2f, float, int)> { (best.center, best.radius, best.inliers) };
+            //lock (points)
+            //{
+            //    bool isBetter = false;
+            //    if (direction == CircleScanDirection.InsideOut)
+            //        isBetter = localBest.inliers > best.inliers || (localBest.inliers == best.inliers && localBest.radius < best.radius);
+            //    else
+            //        isBetter = localBest.inliers > best.inliers || (localBest.inliers == best.inliers && localBest.radius > best.radius);
+
+            //    if (isBetter)
+            //        best = localBest;
+            //}
+        
+            //var sorted = direction == CircleScanDirection.InsideOut
+            //? results.OrderBy(r => r.radius).ThenByDescending(r => r.inliers)
+            //: results.OrderByDescending(r => r.radius).ThenByDescending(r => r.inliers);
+
+            //var best = sorted.FirstOrDefault();
+
+            //if (best.inliers >= inliersNeeded)
+            //    return new List<(Point2f, float, int)> { (best.center, best.radius, best.inliers) };
+          
+            //if (best.inliers >= inliersNeeded)
+            //{
+            //    foundCircles.Add((best.center, best.radius, best.inliers));
+            //    //{
+
+            //    //    Inliers = best.inliers
+            //    //};
+            //}
             return foundCircles;
             
         }

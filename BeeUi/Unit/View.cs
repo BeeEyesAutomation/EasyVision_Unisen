@@ -578,7 +578,7 @@ namespace BeeUi
                                         return;
                                      }
                             if (rotateRect == null) return;
-                            toolEdit.Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor,false);
+                            toolEdit.Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
 
                         }
                         else if (Global.TypeCrop == TypeCrop.Crop)
@@ -918,12 +918,12 @@ namespace BeeUi
             gc.Transform = mat;
 
             int index = 0;
-                if (G.Config.IsShowCenter)
+                if (Global.Config.IsShowCenter)
                 {
                     e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), Global.ParaCommon.SizeCCD.Width / 2, 0, Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height);
                     e.Graphics.DrawLine(new Pen(Brushes.Blue, 1), 0, Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height / 2);
                 }
-                if (G.Config.IsShowGird)
+                if (Global.Config.IsShowGird)
                 {
                     int W =Global.ParaCommon.SizeCCD.Width, H = Global.ParaCommon.SizeCCD.Height;
                     int step = Math.Min(W, H) / 15;
@@ -933,7 +933,7 @@ namespace BeeUi
                         e.Graphics.DrawLine(new Pen(Brushes.Gray, 1), 0, y, W, y);
                 }
             gc.ResetTransform();
-            if (G.Config.IsShowArea)
+            if (Global.Config.IsShowArea)
                 {
                     int indexTool = 0;
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
@@ -1300,11 +1300,11 @@ namespace BeeUi
         private void View_Load(object sender, EventArgs e)
         {
             if (G.Header == null) return;
-            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
-            this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+            this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
-            if (!G.Config.IsExternal)
+            if (!Global.Config.IsExternal)
             {
                 btnTypeTrig.Enabled= false;
                 btnTypeTrig.Text = "Trig Internal";
@@ -1368,12 +1368,14 @@ namespace BeeUi
                 G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 G.EditTool.lbTool.Text = TypeTool.ToString();
                 G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.LoadPara();
+                //BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.LoadPara();
                 G.EditTool.View.imgView.Invalidate();
                 G.EditTool.View.imgView.Update();
-                G.EditTool.View.toolEdit = control;
-             
               
+                G.EditTool.View.toolEdit = control;
+
+                Global.ParaCommon.SizeCCD = new Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height);
+
                 Shows.Full(imgView,Global.ParaCommon.SizeCCD);
             }
 
@@ -1611,14 +1613,14 @@ namespace BeeUi
         Graphics graphicsOld;
         public void SQL_Insert(DateTime time, String model, int Qty, int Total, String Status, Mat raw,Bitmap rs)
         {
-            if (!G.Config.IsSaveOK)
+            if (!Global.Config.IsSaveOK)
             {
                 if(Status.Contains("OK"))
                 {
                     return;
                 }    
             }
-            if (!G.Config.IsSaveNG)
+            if (!Global.Config.IsSaveNG)
             {
                 if (Status.Contains("NG"))
                 {
@@ -1664,7 +1666,7 @@ namespace BeeUi
             }
            
             Mat matRs = rs.ToMat();
-            switch(G.Config.TypeSave)
+            switch(Global.Config.TypeSave)
             {
                 case 1: 
                     Cv2.PyrDown(matRs, matRs);
@@ -1677,9 +1679,9 @@ namespace BeeUi
                     Cv2.PyrDown(raw, raw);
                     break;
             }    
-            if(G.Config.IsSaveRaw)
+            if(Global.Config.IsSaveRaw)
             Cv2.ImWrite( pathRaw + "//" + model + "_"+ Hour + ".png", raw);
-            if (G.Config.IsSaveRS)
+            if (Global.Config.IsSaveRS)
                 Cv2.ImWrite(pathRS + "//" + model + "_" + Hour + ".png", matRs);
 
 
@@ -1766,7 +1768,7 @@ namespace BeeUi
                         PropetyTool.ItemTool.ColorTrack = Color.FromArgb(0, 172, 73);
                         PropetyTool.ItemTool.ClScore = Color.FromArgb(0, 172, 73);
                         PropetyTool.ItemTool.ClStatus = Color.FromArgb(0, 172, 73);
-                        //switch (G.Config.ConditionOK)
+                        //switch (Global.Config.ConditionOK)
                         //{
                         //    case ConditionOK.TotalOK:
                         //        numToolOK++;
@@ -1781,7 +1783,7 @@ namespace BeeUi
                         //        }
                         //        break;
                         //}
-                        //if (G.Config.ConditionOK == ConditionOK.Logic)
+                        //if (Global.Config.ConditionOK == ConditionOK.Logic)
                         //{
                         //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
                         //    {
@@ -1810,7 +1812,7 @@ namespace BeeUi
                     else
                     {
                         G.TotalOK = false;
-                        //switch (G.Config.ConditionOK)
+                        //switch (Global.Config.ConditionOK)
                         //{
 
 
@@ -1821,7 +1823,7 @@ namespace BeeUi
                         //        }
                         //        break;
                         //}
-                        //if (G.Config.ConditionOK == ConditionOK.Logic)
+                        //if (Global.Config.ConditionOK == ConditionOK.Logic)
                         //{
                         //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool != UsedTool.Used)
                         //    {
@@ -1984,7 +1986,7 @@ namespace BeeUi
             DrawTotalResult(0);
 
            
-            //switch (G.Config.ConditionOK)
+            //switch (Global.Config.ConditionOK)
             //{
             //    case ConditionOK.TotalOK:
             //        if (numToolOK < G.listAlltool[0].Count)
@@ -2005,7 +2007,7 @@ namespace BeeUi
                  G.StatusDashboard.StatusText = "OK";
                  G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(255, 27, 186, 98);
                 if (!G.IsModeTest)
-                     G.Config.SumOK++;
+                    Global.Config.SumOK++;
                
             
             }
@@ -2014,25 +2016,25 @@ namespace BeeUi
                  G.StatusDashboard.StatusText = "NG";
                  G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
                 if (!G.IsModeTest)
-                    G.Config.SumNG++;
+                   Global.Config.SumNG++;
 
               
             }
            
             if (!G.IsModeTest)
-            if (G.Config.IsSaveOK || G.Config.IsSaveNG)
+            if (Global.Config.IsSaveOK ||Global.Config.IsSaveNG)
             {
                 if (!workInsert.IsBusy)
                 {
                     workInsert.RunWorkerAsync();
                 }
             }
-            G.Config.SumTime =  G.Config.SumOK + G.Config.SumNG;
+           Global.Config.SumTime = Global.Config.SumOK +Global.Config.SumNG;
            
-             G.StatusDashboard.TotalTimes= G.Config.SumTime;
-             G.StatusDashboard.OkCount=  G.Config.SumOK;  G.StatusDashboard.NgCount= G.Config.SumNG ;
-            G.Config.TotalTime += Convert.ToSingle(SumCycle / (60000.0));
-            G.Config.Percent=Convert.ToSingle((( G.Config.SumOK*1.0)/( G.Config.SumOK+G.Config.SumNG)) * 100.0);
+             G.StatusDashboard.TotalTimes=Global.Config.SumTime;
+             G.StatusDashboard.OkCount= Global.Config.SumOK;  G.StatusDashboard.NgCount=Global.Config.SumNG ;
+           Global.Config.TotalTime += Convert.ToSingle(SumCycle / (60000.0));
+           Global.Config.Percent=Convert.ToSingle(((Global.Config.SumOK*1.0)/(Global.Config.SumOK+Global.Config.SumNG)) * 100.0);
             // G.StatusDashboard.lbTotalTime.Text =Math.Round(BeeCore.Common.Cycle,1)+ " ms";
             
              G.StatusDashboard.CycleTime= (int)SumCycle;
@@ -2112,7 +2114,7 @@ namespace BeeUi
         private  void btnCap_Click(object sender, EventArgs e)
         {
 
-            if (!Global.Comunication.IO.IsConnected&&!Global.Comunication.IO.IsBypass )
+            if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.IO.IsBypass )
             {
                 btnCap.IsCLick = false;
                 return;
@@ -2139,7 +2141,7 @@ namespace BeeUi
         private async void btnRecord_Click(object sender, EventArgs e)
         {
            
-            if (!Global.Comunication.IO.IsConnected && !Global.Comunication.IO.IsBypass)
+            if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.IO.IsBypass)
             {
                 btnRecord.IsCLick = false;
                 return;
@@ -2151,9 +2153,9 @@ namespace BeeUi
             }
             Global.StatusMode = btnRecord.IsCLick ? StatusMode.Continuous : StatusMode.None;
 
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                if (Global.Comunication.IO.IsConnected)
+                if (Global.ParaCommon.Comunication.IO.IsConnected)
                 {
                     tmContinuous.Enabled = btnRecord.IsCLick;
                     //X: G.Header.tmReadPLC.Enabled = false;
@@ -2162,16 +2164,16 @@ namespace BeeUi
                     //        await Task.Delay(10);
                     //        goto X;
                     //    }
-                    //    await Task.Run(() => Global.Comunication.IO.WriteInPut(0, true));
+                    //    await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteInPut(0, true));
                     //    G.Header.tmReadPLC.Enabled = true;
-                    //    Global.Comunication.IO.WriteInPut(0, true);
+                    //    Global.ParaCommon.Comunication.IO.WriteInPut(0, true);
                     //}
                     //if (!workReadCCD.IsBusy)
                     //    workReadCCD.RunWorkerAsync();
                     return;
                 }
             } 
-            else if(Global.Comunication.IO.IsBypass)
+            else if(Global.ParaCommon.Comunication.IO.IsBypass)
             {
                 tmContinuous.Enabled = btnRecord.IsCLick;
             }    
@@ -2195,7 +2197,7 @@ namespace BeeUi
         private Thread displayThread;
         public void Live()
         {
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
                 G.Header.tmReadPLC.Enabled = !btnLive.IsCLick;
             tmLive.Enabled = btnLive.IsCLick;
             if (btnLive.IsCLick)
@@ -2287,7 +2289,7 @@ namespace BeeUi
                 Live();
             
           
-            //else if (G.ConfiGlobal.TypeCamera  == TypeCamera.TinyIV)
+            //else if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
             //{
             //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
             //    BeeCore.Common.IsLive = btnLive.IsCLick;
@@ -2419,7 +2421,7 @@ namespace BeeUi
 
             //    }
             //   // G.listAlltool[indexToolPosition].tool.ShowResult(gc);
-            //    //  BeeCore.Common.listCamera[Global.IndexChoose].Read(G.Config.IsHist );
+            //    //  BeeCore.Common.listCamera[Global.IndexChoose].Read(Global.Config.IsHist );
             //    tmTrig.Enabled = false;
             //    if (!workPlay.IsBusy)
             //        workPlay.RunWorkerAsync();
@@ -2453,8 +2455,8 @@ namespace BeeUi
         {
             using (Mat raw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone())
             {
-                int X = Convert.ToInt32((pMove.X - 10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetX;
-                int Y = Convert.ToInt32((pMove.Y + 10) / (G.Config.imgZoom / 100.0)) + G.Config.imgOffSetY;
+                int X = Convert.ToInt32((pMove.X - 10) / (Global.Config.imgZoom / 100.0)) +Global.Config.imgOffSetX;
+                int Y = Convert.ToInt32((pMove.Y + 10) / (Global.Config.imgZoom / 100.0)) +Global.Config.imgOffSetY;
                 clChoose = toolEdit.Propety.GetColor(raw, X, Y);
             }    
            
@@ -2474,8 +2476,9 @@ namespace BeeUi
 
         private void ckProcess_CheckedChanged(object sender, EventArgs e)
         {
-            BeeCore.Common.IsDebug=ckProcess.Checked;
-          
+           Global.IsHideTool=ckHideTool.Checked;
+
+
         }
 
         private void rjButton1_Click(object sender, EventArgs e)
@@ -2490,9 +2493,9 @@ namespace BeeUi
             if (G.cnn.State == ConnectionState.Closed)
                 G.ucReport.Connect_SQL();
             if (G.TotalOK)
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "OK", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK +Global.Config.SumNG, "OK", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
             else
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""),  G.Config.SumOK,  G.Config.SumOK + G.Config.SumNG, "NG", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK +Global.Config.SumNG, "NG", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
 
         }
         int numErrPort = 0;
@@ -2529,16 +2532,16 @@ namespace BeeUi
 
         private void tmCheckCCD_Tick(object sender, EventArgs e)
         {
-            //if (G.ConfiGlobal.TypeCamera  == TypeCamera.USB)
+            //if (Global.Configlobal.TypeCamera  == TypeCamera.USB)
             //{
             //    if (!btnCap.IsCLick && !btnRecord.IsCLick && !workPlay.IsBusy && !workReadCCD.IsBusy)
             //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
             //    if (BeeCore.Common.listCamera[Global.IndexChoose].Status())
             //    {
 
-            //        if (G.ScanCCD.ScanIDCCD().FindIndex(a => a.Contains(G.Config.IDCamera)) > -1)
+            //        if (G.ScanCCD.ScanIDCCD().FindIndex(a => a.Contains(Global.Config.IDCamera)) > -1)
             //        {
-            //            if (!BeeCore.Common.ConnectCCD(G.ScanCCD.indexCCD, G.Config.Resolution))
+            //            if (!BeeCore.Common.ConnectCCD(G.ScanCCD.indexCCD,Global.Config.Resolution))
             //            {
             //                G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
             //                G.EditTool.lbCam.Text = "Camera Not Connect";
@@ -2554,7 +2557,7 @@ namespace BeeUi
             //                if (Global.IsRun)
             //                {
             //                    btnCap.Enabled = true;
-            //                    if (G.Config.nameUser == "Admin")
+            //                    if (Global.Config.nameUser == "Admin")
             //                    {
 
             //                        btnRecord.Enabled = true;
@@ -2562,7 +2565,7 @@ namespace BeeUi
             //                    }
             //                }
             //                G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-            //                G.EditTool.lbCam.Text = G.Config.IDCamera.Split('$')[0] + " Connected";
+            //                G.EditTool.lbCam.Text =Global.Config.IDCamera.Split('$')[0] + " Connected";
             //            }
             //        }
             //        else
@@ -2582,14 +2585,14 @@ namespace BeeUi
             //        if (Global.IsRun)
             //        {
             //            btnCap.Enabled = true;
-            //            if (G.Config.nameUser == "Admin")
+            //            if (Global.Config.nameUser == "Admin")
             //            {
             //                btnRecord.Enabled = true;
                            
             //            }
             //        }
             //        G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-            //        G.EditTool.lbCam.Text =  G.Config.IDCamera.Split('$')[0] + " Connected";
+            //        G.EditTool.lbCam.Text = Global.Config.IDCamera.Split('$')[0] + " Connected";
             //    }
             //}
                
@@ -2661,9 +2664,9 @@ namespace BeeUi
             if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed) return;
             Size sz = new Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height);
             Shows.Full(imgView,sz);
-            G.Config.imgZoom = imgView.Zoom;
-            G.Config.imgOffSetX = imgView.AutoScrollPosition.X;
-            G.Config.imgOffSetY= imgView.AutoScrollPosition.Y;
+           Global.Config.imgZoom = imgView.Zoom;
+           Global.Config.imgOffSetX = imgView.AutoScrollPosition.X;
+           Global.Config.imgOffSetY= imgView.AutoScrollPosition.Y;
         }
 
         private void imgView_Click_1(object sender, EventArgs e)
@@ -2780,7 +2783,7 @@ namespace BeeUi
         private void pBtn_SizeChanged(object sender, EventArgs e)
         {
             if (G.Header == null) return;
-             BeeCore.CustomGui.RoundRg(this.pBtn, G.Config.RoundRad);
+             BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
 
         }
 
@@ -2792,7 +2795,7 @@ namespace BeeUi
         private void pInforTotal_SizeChanged(object sender, EventArgs e)
         {
             //if (G.Header == null) return;
-            //BeeCore.CustomGui.RoundRg( G.StatusDashboard, G.Config.RoundRad);
+            //BeeCore.CustomGui.RoundRg( G.StatusDashboard,Global.Config.RoundRad);
 
         }
 
@@ -2814,7 +2817,7 @@ namespace BeeUi
 
         private void pHeader_SizeChanged(object sender, EventArgs e)
         {
-            BeeCore.CustomGui.RoundRg(pHeader, G.Config.RoundRad);
+            BeeCore.CustomGui.RoundRg(pHeader,Global.Config.RoundRad);
 
         }
 
@@ -2826,7 +2829,7 @@ namespace BeeUi
 
         private void button1_Click(object sender, EventArgs e)
         {
-            G.Config.IsShowArea = !G.Config.IsShowArea;
+           Global.Config.IsShowArea = !Global.Config.IsShowArea;
          imgView.Invalidate();
         }
        
@@ -2839,7 +2842,7 @@ namespace BeeUi
                 btnRecord.IsCLick = false;
                 return;
             }
-            if (!btnCap.Enabled&&!Global.Comunication.IO.IsBypass)
+            if (!btnCap.Enabled&&!Global.ParaCommon.Comunication.IO.IsBypass)
                 return;
             Continuous();
             tmContinuous.Enabled = false;
@@ -2847,13 +2850,13 @@ namespace BeeUi
 
         private void workTrig_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (Global.Comunication.IO.IsConnected)
-                Global.Comunication.IO.WriteInPut(0, true);//.  BtnWriteInPLC((RJButton)sender);
+            //if (Global.ParaCommon.Comunication.IO.IsConnected)
+            //    Global.ParaCommon.Comunication.IO.WriteInPut(0, true);//.  BtnWriteInPLC((RJButton)sender);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            G.Config.IsShowCenter = !G.Config.IsShowCenter;
+           Global.Config.IsShowCenter = !Global.Config.IsShowCenter;
             imgView.Invalidate();
         }
 
@@ -2865,7 +2868,7 @@ namespace BeeUi
         private void tmPress_Tick(object sender, EventArgs e)
         {
             tmPress.Enabled = false;
-            if(Global.IsRun&&!G.Config.IsExternal)
+            if(Global.IsRun&&!Global.Config.IsExternal)
             btnCap.Enabled = true;
             else
             {
@@ -2978,7 +2981,7 @@ namespace BeeUi
 
         private void btnGird_Click_1(object sender, EventArgs e)
         {
-            G.Config.IsShowGird = !G.Config.IsShowGird;
+           Global.Config.IsShowGird = !Global.Config.IsShowGird;
             imgView.Invalidate();
         }
 
@@ -3075,15 +3078,8 @@ namespace BeeUi
                 Processing3 = StatusProcessing.None;
                 Processing4 = StatusProcessing.None;
             }
-
             else
                 workPlay.RunWorkerAsync();
-
-
-
-
-
-
             // if (IsAutoTrig==false)
             // {
             //     ShowResultTotal();

@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -98,6 +99,10 @@ namespace BeeInterface
                 NgCount = 0;
                 CycleTime = 0;
                 CamTime = 0;
+                Global.Config.SumOK = 0;
+                Global.Config.SumNG = 0;
+                Global.Config.TotalTime = 0;
+               
                 try
                 {
                     String date = DateTime.Now.ToString("yyyyMMdd");

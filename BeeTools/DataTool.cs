@@ -150,8 +150,9 @@ namespace BeeInterface
                 if (control.Propety.rotMask == null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
 
-             
-               
+                control.Propety.SetModel();
+
+
                 control.Name =Nametool;
              
                 //tools = new Tools(itemTool, control);
@@ -199,7 +200,6 @@ namespace BeeInterface
                // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 control.Name = PropetyTool.Name;
-                PropetyTool.Propety.SetModel();
                 PropetyTool.worker = new System.ComponentModel.BackgroundWorker();
                 PropetyTool.timer = new System.Diagnostics.Stopwatch();
                 PropetyTool.worker.DoWork += (sender, e) =>

@@ -58,7 +58,7 @@ namespace BeeUi
         public static EditProg EditProg;
       
        
-         public static Config Config;
+         
         public static VideoCapture camera;
         public static bool IsCCD;
         public static RectRotate rotOriginAdj;

@@ -151,7 +151,7 @@ namespace BeeUi
                             if (G.ScanCCD == null) G.ScanCCD = new ScanCCD();
 
                             int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
-                            // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(G.Config.Resolution);
+                            // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(Global.Config.Resolution);
 
                             if (indexCCD != -1)
                                 G.ScanCCD.cbCCD.SelectedIndex = indexCCD;
@@ -180,11 +180,11 @@ namespace BeeUi
             Global.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
            
             if (File.Exists("Default.config"))
-                G.Config = Access.LoadConfig("Default.config");
+               Global.Config = Access.LoadConfig("Default.config");
             else
-                G.Config = new Config();
+               Global.Config = new Config();
             Global.ParaCommon = LoadData.Para(Global.Project);
-            if (G.Config.RoundRad == 0) G.Config.RoundRad = 10;
+            if (Global.Config.RoundRad == 0)Global.Config.RoundRad = 10;
             tmLoad.Enabled = false;
             lb.Text = "Waiting Initial Learning AI";
             workIniModel.RunWorkerAsync();

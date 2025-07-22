@@ -726,13 +726,13 @@ namespace BeeInterface
             this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numScore.Location = new System.Drawing.Point(293, 0);
             this.numScore.Margin = new System.Windows.Forms.Padding(0);
-            this.numScore.Maxnimum = 100;
-            this.numScore.Minimum = 0;
+            this.numScore.Maxnimum = 100F;
+            this.numScore.Minimum = 0F;
             this.numScore.Name = "numScore";
             this.numScore.Size = new System.Drawing.Size(140, 58);
-            this.numScore.Step = 1;
+            this.numScore.Step = 1F;
             this.numScore.TabIndex = 35;
-            this.numScore.Value = 100;
+            this.numScore.Value = 100F;
             this.numScore.ValueChanged += new System.EventHandler(this.numScore_ValueChanged);
             // 
             // rjButton5
@@ -1175,13 +1175,13 @@ namespace BeeInterface
             this.numOverLap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numOverLap.Location = new System.Drawing.Point(295, 0);
             this.numOverLap.Margin = new System.Windows.Forms.Padding(0);
-            this.numOverLap.Maxnimum = 100;
-            this.numOverLap.Minimum = 0;
+            this.numOverLap.Maxnimum = 100F;
+            this.numOverLap.Minimum = 0F;
             this.numOverLap.Name = "numOverLap";
             this.numOverLap.Size = new System.Drawing.Size(140, 65);
-            this.numOverLap.Step = 1;
+            this.numOverLap.Step = 1F;
             this.numOverLap.TabIndex = 35;
-            this.numOverLap.Value = 100;
+            this.numOverLap.Value = 100F;
             // 
             // rjButton9
             // 

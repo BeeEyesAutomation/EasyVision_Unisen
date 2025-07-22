@@ -88,16 +88,19 @@ namespace BeeCore
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                //switch (MethordEdge)
-                //{
-                //    case MethordEdge.CloseEdges:
-                //        matProcess = Filters.Edge(matCrop);
-                //        break;
-                //    case MethordEdge.StrongEdges:
-                //        matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                //        break;
-                //}
-                matProcess = Filters.Threshold(matCrop);
+                switch (MethordEdge)
+                {
+                    case MethordEdge.CloseEdges:
+                        matProcess = Filters.Edge(matCrop);
+                        break;
+                    case MethordEdge.StrongEdges:
+                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                        break;
+                    case MethordEdge.Binary:
+                        matProcess = Filters.Threshold(matCrop);
+                        break;
+                }
+             
                 GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
 
             }
@@ -107,34 +110,44 @@ namespace BeeCore
             switch (SegmentStatType)
             {
                 case SegmentStatType.Average:
-                    WidthResult = (float)GapResult.GapMedium * Scale;
+                    WidthResult = (float)GapResult.GapMedium /Scale;
                     break;
                 case SegmentStatType.Shortest:
-                    WidthResult = (float)GapResult.GapMin * Scale;
+                    WidthResult = (float)GapResult.GapMin / Scale;
                     break;
                 case SegmentStatType.Longest:
-                    WidthResult = (float)GapResult.GapMax * Scale;
+                    WidthResult = (float)GapResult.GapMax / Scale;
                     break;
             }
-            if (!Global.IsRun)
-            {
-
-
-                WidthTemp = WidthResult;
-            }
+          
             if (IsCalibs)
             {
                 MinInliers = (int)(GapResult.Inlier * ((100-Common.PropetyTools[IndexThread][Index].Score) / 100.0));
                 double Delta =  Common.PropetyTools[IndexThread][Index].Score / 100.0;
                 MinLen = (int)((GapResult.GapMin/Scale) * (1 + Delta));
                 MaxLen = (int)((GapResult.GapMax/Scale )* (1 + Delta));
-                
+                if (!Global.IsRun)
+                {
+
+
+                    WidthTemp = WidthResult;
+                }
+
             }
             Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
+            if (GapResult.line2Ds ==null)
+            {
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            }
+            else if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                if (!Global.IsRun)
+                {
 
+
+                    WidthTemp = WidthResult;
+                }
             }
             else
             {
@@ -190,8 +203,8 @@ namespace BeeCore
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
-            if (GapResult.line2Ds == null) return gc;
+            if (!Global.IsHideTool)
+                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
           
             if (!Global.IsRun)
             {
@@ -215,6 +228,8 @@ namespace BeeCore
                 }
             }
             gc.ResetTransform();
+            if (GapResult.line2Ds == null) return gc;
+
             mat = new Matrix();
             if (!Global.IsRun)
             {
@@ -234,19 +249,10 @@ namespace BeeCore
             PointF p2 = new PointF(GapResult.lineMid[1].X,GapResult.lineMid[1].Y);
             Draws.DrawTicks(gc, p1,LineOrientation, pen);
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
-            gc.DrawLine(new Pen(Color.Blue, 4), p1, p2);
-            switch(SegmentStatType)
-                {
-                case SegmentStatType.Average:
-                    gc.DrawString($"{GapResult.GapMedium:F2}mm", new Font("Arial", 16), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
-                    break;
-                case SegmentStatType.Shortest:
-                    gc.DrawString($"{GapResult.GapMin:F2}mm", new Font("Arial", 16), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
-                    break;
-                case SegmentStatType.Longest:
-                    gc.DrawString($"{GapResult.GapMax:F2}mm", new Font("Arial", 16), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
-                    break;
-            }
+            gc.DrawLine(new Pen(Color.Blue, 4), p1, p2);          
+           gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", 16), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+               
+            
            
             return gc;
         }
@@ -254,7 +260,7 @@ namespace BeeCore
 
         public void SetModel()
         {
-          
+            rotMask = null;
             ParallelGapDetector = new ParallelGapDetector();
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 20;

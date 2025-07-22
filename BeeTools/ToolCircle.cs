@@ -60,20 +60,35 @@ namespace BeeInterface
             //};
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolCircle_StatusToolChanged;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolCircle_ScoreChanged;
+            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
+
+            numScore.Minimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+            numScore.Maxnimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+            numScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
+
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            numScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+          
             numScale.Value= (decimal) Propety.Scale;
             trackThreshold.Value = Propety.Threshold;
             trackMinInlier.Value = Propety.MinInliers;
             trackIterations.Value = Propety.Iterations;
             numMinRadius.Value = Propety.MinRadius;
             numMaxRadius.Value = Propety.MaxRadius;
-            switch(Propety.MethordEdge)
+            numScale.Value = (int)Propety.Scale;
+            switch (Propety.MethordEdge)
             {
                 case MethordEdge.StrongEdges:
                     btnStrongEdge.IsCLick = true;
                     break;
                 case MethordEdge.CloseEdges:
                     btnCloseEdge.IsCLick = true;
+                    break;
+                case MethordEdge.Binary:
+                    btnBinary.IsCLick = true;
                     break;
             }
             switch (Propety.CircleScanDirection)
@@ -85,6 +100,11 @@ namespace BeeInterface
                     btnOutsideIn.IsCLick = true;
                     break;
             }
+        }
+
+        private void ToolCircle_ScoreChanged(float obj)
+        {
+            trackScore.Value = obj;
         }
 
         private void ToolCircle_StatusToolChanged(StatusTool obj)
@@ -103,8 +123,8 @@ namespace BeeInterface
 
         private void trackScore_ValueChanged(float obj)
         {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
-            numScore.Value =(int) Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score =trackScore.Value;
+            numScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
         public Circle Propety=new Circle();
         public Mat matTemp = new Mat();
@@ -293,7 +313,7 @@ namespace BeeInterface
             Global.StatusDraw = StatusDraw.Edit;
 
             if (IsClear)
-                btnClear.PerformClick();
+                btnMask.PerformClick();
         }
 
         private void btnCropFull_Click(object sender, EventArgs e)
@@ -307,7 +327,7 @@ namespace BeeInterface
             Propety.TypeCrop = Global.TypeCrop;
 
             if (IsClear)
-                btnClear.PerformClick();
+                btnMask.PerformClick();
             Global.StatusDraw = StatusDraw.Edit;
         }
 
@@ -328,8 +348,7 @@ namespace BeeInterface
 
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
-            numScore.Maxnimum = (int)trackScore.Max;
-            numScore.Minimum = (int)trackScore.Min;
+         
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
@@ -440,13 +459,13 @@ namespace BeeInterface
        
 
         private void numMinRadius_ValueChanged(object sender, EventArgs e)
-        {Propety.MinRadius= (int)numMinRadius.Value;
+        {Propety.MinRadius= numMinRadius.Value;
 
         }
 
         private void numMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            Propety.MaxRadius = (int)numMaxRadius.Value;
+            Propety.MaxRadius = numMaxRadius.Value;
         }
 
     
@@ -518,6 +537,24 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
+        }
+
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+
+        }
+
+        private void btnMask_Click(object sender, EventArgs e)
+        {
+            Global.TypeCrop = TypeCrop.Mask;
+            Propety.TypeCrop = Global.TypeCrop;
+            if (Propety.rotMask == null)
+            {
+                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); 
+            }
+            btnElip.IsCLick = Propety.rotMask.IsElip;
+            btnRect.IsCLick = !Propety.rotMask.IsElip;
         }
     }
 }

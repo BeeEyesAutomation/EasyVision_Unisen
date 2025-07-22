@@ -131,7 +131,8 @@ namespace BeeUi.Data
         {
             if (!G.Initial)
                 return StatusProcessing;
-            if (!Global.Comunication.IO.IsConnected && !Global.Comunication.IO.IsBypass)
+
+            if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.IO.IsBypass)
                 return StatusProcessing;
             if (BeeCore.Common.PropetyTools[indexThread].Count == 0)
                 return StatusProcessing.Done;
@@ -238,7 +239,7 @@ namespace BeeUi.Data
                             //if (Tools.tool.Propety.IsOK)
                             //{
 
-                            //    if (G.Config.ConditionOK == ConditionOK.Logic)
+                            //    if (Global.Config.ConditionOK == ConditionOK.Logic)
                             //    {
                             //        if (propetyTool.UsedTool == UsedTool.Used)
                             //        {
@@ -267,7 +268,7 @@ namespace BeeUi.Data
                             //else
                             //{
 
-                            //    if (G.Config.ConditionOK == ConditionOK.Logic)
+                            //    if (Global.Config.ConditionOK == ConditionOK.Logic)
                             //    {
                             //        if (propetyTool.UsedTool != UsedTool.Used)
                             //        {

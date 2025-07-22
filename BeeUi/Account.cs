@@ -25,12 +25,12 @@ namespace BeeUi
                 {
                 if(txtPass.Text.Trim().ToLower()=="393939")
                 {
-                    G.Config.nameUser = cbUser.Text.Trim();
+                   Global.Config.nameUser = cbUser.Text.Trim();
                     this.Hide();
-                   // G.EditTool.btnUser.Text = G.Config.nameUser;
+                   // G.EditTool.btnUser.Text =Global.Config.nameUser;
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
-                    Access.SaveConfig("Default.config", G.Config);
+                    Access.SaveConfig("Default.config",Global.Config);
                     G.Header.Acccess(Global.IsRun);
                 }
                 else
@@ -43,12 +43,12 @@ namespace BeeUi
             {
                 if (txtPass.Text.Trim().ToLower() == "797979")
                 {
-                    G.Config.nameUser = cbUser.Text.Trim();
+                   Global.Config.nameUser = cbUser.Text.Trim();
                     this.Hide();
-                   // G.EditTool.btnUser.Text = G.Config.nameUser;
+                   // G.EditTool.btnUser.Text =Global.Config.nameUser;
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
-                    Access.SaveConfig("Default.config", G.Config);
+                    Access.SaveConfig("Default.config",Global.Config);
                     G.Header.Acccess(Global.IsRun);
                 }
                 else
@@ -61,11 +61,11 @@ namespace BeeUi
             {
                 if (txtPass.Text.Trim().ToLower() == "1234@8765")
                 {
-                    G.Config.nameUser = cbUser.Text.Trim();
+                   Global.Config.nameUser = cbUser.Text.Trim();
                     this.Hide();
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
-                    Access.SaveConfig("Default.config", G.Config);
+                    Access.SaveConfig("Default.config",Global.Config);
                     G.Header.Acccess(Global.IsRun);
                 }
                 else
@@ -76,11 +76,11 @@ namespace BeeUi
             }
             else
             {
-                G.Config.nameUser ="User";
+               Global.Config.nameUser ="User";
                 this.Hide();
                  if (File.Exists("Default.config"))
                     File.Delete("Default.config");
-                Access.SaveConfig("Default.config", G.Config);
+                Access.SaveConfig("Default.config",Global.Config);
                 G.Header.Acccess(Global.IsRun);
             }    
 

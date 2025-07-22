@@ -41,8 +41,7 @@ namespace BeeInterface
             set
             {
                 maxnimum = value;
-                if (_value > maxnimum) Value = maxnimum;
-
+              
 
             }
         }
@@ -56,9 +55,7 @@ namespace BeeInterface
             set
             {
                 minimum = value;
-                if (_value < minimum) Value = minimum;
-
-
+              
             }
         }
         [Category("Step")]
@@ -85,7 +82,7 @@ namespace BeeInterface
             }///lay
             set//gasn
             {
-                _value = value;
+                _value =(float)Math.Round( value,1);
                 if (_value < minimum) _value = minimum;
                 if (_value > maxnimum) _value = maxnimum;
                 txt.Text = _value + "";
@@ -116,20 +113,21 @@ namespace BeeInterface
             // 
             // lay
             // 
+            this.lay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lay.BackColor = System.Drawing.Color.Transparent;
             this.lay.ColumnCount = 3;
-            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.lay.Controls.Add(this.btnSub, 0, 0);
             this.lay.Controls.Add(this.btnPlus, 2, 0);
             this.lay.Controls.Add(this.txt, 1, 0);
-            this.lay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lay.Location = new System.Drawing.Point(0, 0);
             this.lay.Margin = new System.Windows.Forms.Padding(5);
             this.lay.Name = "lay";
             this.lay.RowCount = 1;
             this.lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay.Size = new System.Drawing.Size(288, 54);
+            this.lay.Size = new System.Drawing.Size(177, 43);
             this.lay.TabIndex = 10;
             // 
             // btnSub
@@ -145,17 +143,17 @@ namespace BeeInterface
             this.btnSub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSub.FlatAppearance.BorderSize = 0;
             this.btnSub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSub.ForeColor = System.Drawing.Color.Black;
             this.btnSub.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSub.IsCLick = false;
             this.btnSub.IsNotChange = false;
             this.btnSub.IsRect = false;
             this.btnSub.IsUnGroup = false;
-            this.btnSub.Location = new System.Drawing.Point(5, 3);
-            this.btnSub.Margin = new System.Windows.Forms.Padding(5, 3, 0, 3);
+            this.btnSub.Location = new System.Drawing.Point(0, 0);
+            this.btnSub.Margin = new System.Windows.Forms.Padding(0);
             this.btnSub.Name = "btnSub";
-            this.btnSub.Size = new System.Drawing.Size(81, 48);
+            this.btnSub.Size = new System.Drawing.Size(42, 43);
             this.btnSub.TabIndex = 7;
             this.btnSub.Text = "-";
             this.btnSub.TextColor = System.Drawing.Color.Black;
@@ -175,17 +173,17 @@ namespace BeeInterface
             this.btnPlus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPlus.FlatAppearance.BorderSize = 0;
             this.btnPlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlus.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPlus.ForeColor = System.Drawing.Color.Black;
             this.btnPlus.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPlus.IsCLick = true;
             this.btnPlus.IsNotChange = false;
             this.btnPlus.IsRect = false;
             this.btnPlus.IsUnGroup = false;
-            this.btnPlus.Location = new System.Drawing.Point(201, 3);
-            this.btnPlus.Margin = new System.Windows.Forms.Padding(0, 3, 5, 3);
+            this.btnPlus.Location = new System.Drawing.Point(135, 0);
+            this.btnPlus.Margin = new System.Windows.Forms.Padding(0);
             this.btnPlus.Name = "btnPlus";
-            this.btnPlus.Size = new System.Drawing.Size(82, 48);
+            this.btnPlus.Size = new System.Drawing.Size(42, 43);
             this.btnPlus.TabIndex = 8;
             this.btnPlus.Text = "+";
             this.btnPlus.TextColor = System.Drawing.Color.Black;
@@ -195,14 +193,12 @@ namespace BeeInterface
             // 
             // txt
             // 
-            this.txt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt.Location = new System.Drawing.Point(89, 3);
-            this.txt.Multiline = true;
+            this.txt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt.Location = new System.Drawing.Point(42, 2);
+            this.txt.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.txt.Name = "txt";
-            this.txt.Size = new System.Drawing.Size(109, 48);
+            this.txt.Size = new System.Drawing.Size(93, 39);
             this.txt.TabIndex = 9;
             this.txt.Text = "00";
             this.txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -211,9 +207,12 @@ namespace BeeInterface
             // 
             // CustomNumeric
             // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.Controls.Add(this.lay);
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CustomNumeric";
-            this.Size = new System.Drawing.Size(288, 54);
+            this.Size = new System.Drawing.Size(177, 43);
             this.lay.ResumeLayout(false);
             this.lay.PerformLayout();
             this.ResumeLayout(false);

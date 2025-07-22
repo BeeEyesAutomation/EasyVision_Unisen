@@ -35,7 +35,7 @@ namespace BeeUi.Data
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
-            Access.SaveConfig("Default.config", G.Config);
+            Access.SaveConfig("Default.config",Global.Config);
             Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
             Access.SaveParaCamera(path + "\\" + Global.Project + ".cam",Global.listParaCamera);
         }

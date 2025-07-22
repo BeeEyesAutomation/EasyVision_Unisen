@@ -122,12 +122,12 @@ namespace BeeUi.Tool
 
         private void btnEqualize_Click(object sender, EventArgs e)
         {
-            //G.Config.IsHist  = btnEqubtnalize.IsCLick;
+            //Global.Config.IsHist  = btnEqubtnalize.IsCLick;
 
             //if (File.Exists("Default.config"))
             //    File.Delete("Default.config");
-            //Access.SaveConfig("Default.config", G.Config);
-            //BeeCore.Common.ReadCCD(G.Config.IsHist, G.ConfiGlobal.TypeCamera );
+            //Access.SaveConfig("Default.config",Global.Config);
+            //BeeCore.Common.ReadCCD(Global.Config.IsHist,Global.Configlobal.TypeCamera );
             //BeeCore.Common.listCamera[Global.IndexChoose].matRaw= BeeCore.Common.GetImageRaw();
             //G.EditTool.View.imgView.ImageIpl= BeeCore.Common.listCamera[Global.IndexChoose].matRaw;
         }
@@ -174,9 +174,9 @@ namespace BeeUi.Tool
         {
             if (!this.Visible)
             {
-                G.Config.IsShowCenter = false;
-                G.Config.IsShowArea = false;
-                G.Config.IsShowGird = false;
+               Global.Config.IsShowCenter = false;
+               Global.Config.IsShowArea = false;
+               Global.Config.IsShowGird = false;
                 G.EditTool.View.imgView.Invalidate();
                 
             }
@@ -217,10 +217,10 @@ namespace BeeUi.Tool
 
         private void numDelay_ValueChanged(object sender, EventArgs e)
         {
-          //  G.Config.delayTrigger = (int)numDelay.Value;
+          // Global.Config.delayTrigger = (int)numDelay.Value;
             if (File.Exists("Default.config"))
                 File.Delete("Default.config");
-            Access.SaveConfig("Default.config", G.Config);
+            Access.SaveConfig("Default.config",Global.Config);
         }
 
         private void btnBackLight_Click(object sender, EventArgs e)
@@ -285,27 +285,27 @@ namespace BeeUi.Tool
         {
             Global.ParaCommon.TypeResolution = 1;
             Shows.Full(G.EditTool.View.imgView,BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-            G.Config.imgZoom =G.EditTool.View. imgView.Zoom;
-            G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-            G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
+           Global.Config.imgZoom =G.EditTool.View. imgView.Zoom;
+           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
+           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
         }
 
         private void btnHD_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.TypeResolution = 2;
             Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-            G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
-            G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-            G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
+           Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
+           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
+           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
         }
 
         private void btn480_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.TypeResolution = 3;
             Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-            G.Config.imgZoom = G.EditTool.View.imgView.Zoom;
-            G.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-            G.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
+           Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
+           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
+           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -335,7 +335,7 @@ namespace BeeUi.Tool
 
         private void numDelay_ValueChanged_1(object sender, EventArgs e)
         {
-            G.Config.DelayOutput = (int)numDelay.Value;
+           Global.Config.DelayOutput = (int)numDelay.Value;
             //tmDelaySend.Enabled = false;
             //tmDelaySend.Enabled = true;
 
@@ -343,9 +343,9 @@ namespace BeeUi.Tool
 
         private void btnInternal_Click(object sender, EventArgs e)
         {
-            G.Config.IsExternal =! btnInternal.IsCLick;
+           Global.Config.IsExternal =! btnInternal.IsCLick;
          
-            if (!G.Config.IsExternal)
+            if (!Global.Config.IsExternal)
             {
                 G.EditTool.View.btnTypeTrig.Enabled=false;
                 G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -359,9 +359,9 @@ namespace BeeUi.Tool
 
         private void btnExternal_Click(object sender, EventArgs e)
         {
-            G.Config.IsExternal = btnExternal.IsCLick;
+           Global.Config.IsExternal = btnExternal.IsCLick;
          
-            if (!G.Config.IsExternal)
+            if (!Global.Config.IsExternal)
             {
                 G.EditTool.View.btnTypeTrig.Enabled = false;
                 G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -386,10 +386,10 @@ namespace BeeUi.Tool
         private void tmDelaySend_Tick(object sender, EventArgs e)
         {
             //tmDelaySend.Enabled = false;
-            //G.Config.DelayOutput = numDelay.Value;
-            //if (Global.Comunication.IO.IsConnected)
+            //Global.Config.DelayOutput = numDelay.Value;
+            //if (Global.ParaCommon.Comunication.IO.IsConnected)
             //{
-            //    Global.Comunication.IO.WritePara(4160, G.Config.DelayOutput);
+            //    Global.ParaCommon.Comunication.IO.WritePara(4160,Global.Config.DelayOutput);
             //}
             
         }
@@ -424,7 +424,7 @@ namespace BeeUi.Tool
 
         private void numTrigger_ValueChanged(object sender, EventArgs e)
         {
-            G.Config.delayTrigger = (int)numTrigger.Value;
+           Global.Config.delayTrigger = (int)numTrigger.Value;
         }
 
         private void SettingStep1_Load(object sender, EventArgs e)

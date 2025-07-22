@@ -27,7 +27,7 @@ namespace BeeUi
         public EditTool()
         {
             InitializeComponent();
-           // BeeCore.CustomGui.RoundControl(picLogo, G.Config.RoundRad);
+           // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
          
         }
         public void RefreshGuiEdit( Step Step)
@@ -68,9 +68,9 @@ namespace BeeUi
                         if ( G.StatusDashboard == null)
                         {
                              G.StatusDashboard = new StatusDashboard();
-                            G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(G.Config. AlphaBar-50, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
-                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(G.Config.AlphaBar - 50, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
-                            G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(G.Config.AlphaBar, G.Config.colorGui.R, G.Config.colorGui.G, G.Config.colorGui.B);
+                            G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config. AlphaBar-50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
+                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
+                            G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
 
                         }
 
@@ -90,9 +90,9 @@ namespace BeeUi
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
                                     Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-                                    G.Config.imgZoom = View.imgView.Zoom;
-                                    G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
-                                    G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                   Global.Config.imgZoom = View.imgView.Zoom;
+                                   Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                   Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                 }
                         }
                         catch (Exception ex)
@@ -161,9 +161,9 @@ namespace BeeUi
                                     G.EditTool.View.imgView.Invalidate();
                                     G.EditTool.View.imgView.Update();
                                     Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-                                    G.Config.imgZoom = View.imgView.Zoom;
-                                    G.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
-                                    G.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                   Global.Config.imgZoom = View.imgView.Zoom;
+                                   Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                   Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                 }
                         }
                         catch (Exception ex)
@@ -243,9 +243,9 @@ namespace BeeUi
             G.Header.tmReadPLC.Enabled = false;
             if (G.Header.workPLC.IsBusy)
                 G.Header.workPLC.CancelAsync();
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.Comunication.IO.WriteIO(IO_Processing.Close);
+                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Close);
             }
 
           
@@ -340,7 +340,7 @@ namespace BeeUi
         private void EditTool_Load(object sender, EventArgs e)
         {
             G.EditTool.lbLicence.Text = "Licence: " + G.Licence;
-            LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG, G.Config.colorGui);
+            LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
            
         }
 
@@ -408,7 +408,7 @@ namespace BeeUi
         {
             if (File.Exists("Default.config"))
                 File.Delete("Default.config");
-            Access.SaveConfig("Default.config", G.Config);
+            Access.SaveConfig("Default.config",Global.Config);
             G.Main.Close();
         }
 
@@ -506,7 +506,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "byPass PLC",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 toolStripPort.Text = "ByPass PLC";
-                Global.Comunication.IO.IsBypass = true;
+                Global.ParaCommon.Comunication.IO.IsBypass = true;
             }
         }
 

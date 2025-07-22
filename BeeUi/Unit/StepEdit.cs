@@ -46,7 +46,7 @@ namespace BeeUi.Common
         private void StepEdit_Load(object sender, EventArgs e)
         {
           //  if(G.Header!=null)
-           // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+           // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
 
             //   G.StepEdit = this;
         }
@@ -159,7 +159,7 @@ namespace BeeUi.Common
 
         private void StepEdit_SizeChanged(object sender, EventArgs e)
         {
-          BeeCore.CustomGui.RoundRg(this, G.Config.RoundRad);
+          BeeCore.CustomGui.RoundRg(this,Global.Config.RoundRad);
 
         }
     }

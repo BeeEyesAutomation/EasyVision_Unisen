@@ -51,13 +51,13 @@ namespace BeeUi.Unit
         private void pCamera_SizeChanged(object sender, EventArgs e)
         {
             //if (G.Header == null) return;
-            //    BeeCore.CustomGui.RoundRg(pCamera, G.Config.RoundRad,Corner.Left);
+            //    BeeCore.CustomGui.RoundRg(pCamera,Global.Config.RoundRad,Corner.Left);
         }
 
         private void Cameras_Load(object sender, EventArgs e)
         {
         //   if( G.Header!=null)
-        //    pCamera.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+        //    pCamera.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)

@@ -117,16 +117,16 @@ namespace BeeUi.Common
         {
             if(!G.IsReConnectCCD)
             {
-                if (Global.Comunication.IO.IsConnected)
+                if (Global.ParaCommon.Comunication.IO.IsConnected)
                 {
-                    if (Global.Comunication.IO.valueOutput[4] == 0)
+                    if (Global.ParaCommon.Comunication.IO.valueOutput[4] == 0)
                     {
 
-                       // Global.Comunication.IO.WriteOutPut(4, true);
+                       // Global.ParaCommon.Comunication.IO.WriteOutPut(4, true);
 
                     }
                 }
-                SaveData.Config(G.Config);
+                SaveData.Config(Global.Config);
                 G.Main.Hide();
                 ForrmAlarm ForrmAlarm = new ForrmAlarm();
                 ForrmAlarm.lbHeader.Text = "Camera Disconnect !!";
@@ -150,12 +150,12 @@ namespace BeeUi.Common
           
             //    try
             //{
-            //    if (G.Config.IDPort != null)
+            //    if (Global.Config.IDPort != null)
             //    {
-            //        if (G.Config.IDPort.Trim() != "")
+            //        if (Global.Config.IDPort.Trim() != "")
             //        {
-            //            Global.Comunication.IO.Connect(G.Config.IDPort);
-            //           // Modbus.ConnectPLC(G.Config.namePort.Trim());
+            //            Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
+            //           // Modbus.ConnectPLC(Global.Config.namePort.Trim());
 
             //        }
                    
@@ -201,7 +201,7 @@ namespace BeeUi.Common
             G.EditTool.View.btnLive.Enabled = !Global.IsRun;
             pModel.Enabled = IsRun;
           
-            if (G.Config.nameUser == "Admin")
+            if (Global.Config.nameUser == "Admin")
             {
                 G.SettingPLC.pCom.Enabled = true;
                 if( G.StatusDashboard!=null)
@@ -218,7 +218,7 @@ namespace BeeUi.Common
               
                // btnIO.Enabled = true;
             }
-            else if (G.Config.nameUser == "Leader")
+            else if (Global.Config.nameUser == "Leader")
             {
                 G.SettingPLC.pCom.Enabled = false;
                 // G.EditTool.View.btnRecord.Enabled = false;
@@ -248,18 +248,18 @@ namespace BeeUi.Common
               //  btnIO.Enabled = false;
                 
             }
-            if (G.Config.IsExternal)
+            if (Global.Config.IsExternal)
             {
                G.EditTool.View.btnCap.Enabled = false;
                G.EditTool.View.btnRecord.Enabled = false;
             }
          
-            G.EditTool.btnHeaderBar1.btnUser.Text = G.Config.nameUser;
+            G.EditTool.btnHeaderBar1.btnUser.Text =Global.Config.nameUser;
         }
  
         public async void Mode()
         {
-            if (G.Config.nameUser != "Admin")
+            if (Global.Config.nameUser != "Admin")
                 return;
             if (Global.StatusMode==StatusMode.Once)
             {
@@ -306,7 +306,7 @@ namespace BeeUi.Common
               
 
             }
-            Global.Comunication.IO.WriteIO(IO_Processing.ChangeMode, Global.IsRun);
+            Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.ChangeMode, Global.IsRun);
             Acccess(Global.IsRun);
            
         }
@@ -369,15 +369,15 @@ namespace BeeUi.Common
                 G.EditTool.View.Parent = G.EditTool.pView;
             }
             //if (G.IsLoad) return;
-          //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu, G.Config.RoundRad);
-           BeeCore.CustomGui.RoundRg(pModel, G.Config.RoundRad);
+          //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
+           BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
         
-           BeeCore.CustomGui.RoundRg(pPO, G.Config.RoundRad);
+           BeeCore.CustomGui.RoundRg(pPO,Global.Config.RoundRad);
 
             
-         //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
-            pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
-            pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+         //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
             G.listProgram.Font = new Font("Arial", 16);
             G.listProgram.Parent = G.Main;
             G.listProgram.BringToFront();
@@ -386,7 +386,7 @@ namespace BeeUi.Common
             G.listProgram.Width = txtQrCode.Width;
             G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
             this.myDelegate = new AddDataDelegate(AddDataMethod);
-             //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(G.Config.namePort);
+             //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(Global.Config.namePort);
             if (!Directory.Exists("Program"))
             {
                 Directory.CreateDirectory("Program");
@@ -419,7 +419,7 @@ namespace BeeUi.Common
             {
                 IsLoad = false;
                 return;
-            //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
+                //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
             }
             txtQrCode.Enabled = false;
@@ -450,6 +450,7 @@ namespace BeeUi.Common
         
         private void ListProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!IsIntialProgram) return;
             if(IsKeyPress)
             {
                 IsKeyPress = false;
@@ -487,7 +488,7 @@ namespace BeeUi.Common
              
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
                 G.EditTool.toolStripPort.Text = "Port Connected";
-                SaveData.Config(G.Config);
+                SaveData.Config(Global.Config);
                 G.EditTool.View.tmCheckPort.Enabled = true;
             }
            else if  (sRecept.Contains("Trig"))
@@ -658,10 +659,18 @@ txtQrCode.Focus();
             btnShowList.Enabled = true;
             txtQrCode.Text = Global.Project;
 
-           
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication == null)
+			{
+				Global.ParaCommon.Comunication = new Comunication();
+				Global.ParaCommon.Comunication.IO = new IO();
+				Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
+
+			}    
+             
+
+			if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.Comunication.IO.WriteIO(IO_Processing.Reset);
+                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
                 tmReadPLC.Enabled = true;
             }
@@ -669,7 +678,7 @@ txtQrCode.Focus();
             else
             {
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                if(!Global.Comunication.IO.IsBypass)
+                if(!Global.ParaCommon.Comunication.IO.IsBypass)
                 tmReConnectPLC.Enabled = true;
             }
             Acccess(Global.IsRun);
@@ -741,7 +750,7 @@ txtQrCode.Focus();
         private void pModel_SizeChanged(object sender, EventArgs e)
         {
             if (G.EditTool == null) return;
-           BeeCore.CustomGui.RoundRg(pModel, G.Config.RoundRad);
+           BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
 
         }
 
@@ -806,7 +815,7 @@ txtQrCode.Focus();
         {
           
 
-           // Global.Comunication.IO.Read();
+           // Global.ParaCommon.Comunication.IO.Read();
         }
     public    bool CheckLan()
         {
@@ -843,7 +852,7 @@ txtQrCode.Focus();
             //}
             //if(G.IsPLCNotAlive)
             //    {
-            //        if (Global.Comunication.IO.valueInput[3] == 0)
+            //        if (Global.ParaCommon.Comunication.IO.valueInput[3] == 0)
             //        {
             //            G.IsPLCNotAlive = false;
             //            numAlive = 0;
@@ -865,7 +874,7 @@ txtQrCode.Focus();
 
             }    
                
-            if (!Global.Comunication.IO.IsConnected)
+            if (!Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 if (!G.SettingPLC.pCom.Enabled)
                     G.SettingPLC.pCom.Enabled = true;
@@ -877,22 +886,22 @@ txtQrCode.Focus();
             {
                 if ( G.SettingPLC.pCom.Enabled)
                 G.SettingPLC.pCom.Enabled = false;
-                if (Global.Comunication.IO.valueInput.Count ()< Global.Comunication.IO.LenReads[0]) return;
-                if (Global.Comunication.IO.valueOutput.Count() < Global.Comunication.IO.LenReads[1]) return;
+                if (Global.ParaCommon.Comunication.IO.valueInput.Count ()< Global.ParaCommon.Comunication.IO.LenReads[0]) return;
+                if (Global.ParaCommon.Comunication.IO.valueOutput.Count() < Global.ParaCommon.Comunication.IO.LenReads[1]) return;
                 if (G.IsSendRS)
                 {
-                    Global.Comunication.IO.WriteIO(IO_Processing.Result, G.TotalOK, G.Config.DelayOutput);
+                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, G.TotalOK,Global.Config.DelayOutput);
                     //if (G.TotalOK)
                     //{
-                    //    Global.Comunication.IO.SetOutPut(0, false); //OK
-                    //    Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //    Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //    Global.Comunication.IO.WriteOutPut();
-                    //    await Task.Delay(G.Config.DelayOutput);
-                    //    Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //    Global.Comunication.IO.SetOutPut(0, false); //OK
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //    await Task.Delay(Global.Config.DelayOutput);
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
                        
-                    //    Global.Comunication.IO.WriteOutPut();
+                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
 
 
 
@@ -901,55 +910,55 @@ txtQrCode.Focus();
                     //else
                     //{
 
-                    //    if (Global.Comunication.IO.valueInput[3] == 1)
+                    //    if (Global.ParaCommon.Comunication.IO.valueInput[3] == 1)
                     //    {
-                    //        Global.Comunication.IO.SetOutPut(0, false); //OK
-                    //        Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(G.Config.DelayOutput);
-                    //        Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.Comunication.IO.SetOutPut(0, false); //OK
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //        await Task.Delay(Global.Config.DelayOutput);
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
                           
-                    //        Global.Comunication.IO.WriteOutPut();
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
                     //    }
                     //    else
                     //    {
-                    //        Global.Comunication.IO.SetOutPut(0, true); //NG
-                    //        Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(G.Config.DelayOutput);
-                    //        Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.Comunication.IO.SetOutPut(0, false); //False
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, true); //NG
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //        await Task.Delay(Global.Config.DelayOutput);
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //False
          
-                    //        Global.Comunication.IO.WriteOutPut();
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
                     //    }
                     //}
                     G.IsSendRS = false;
                 }
                 if(!Global.IsRun)
-                if ( Global.ParaCommon.IsOnLight!=Convert.ToBoolean( Global.Comunication.IO.valueOutput[5]))
+                if ( Global.ParaCommon.IsOnLight!=Convert.ToBoolean( Global.ParaCommon.Comunication.IO.valueOutput[5]))
                     {
-                        Global.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
                     }
                
               
-                if (!Global.Comunication.IO.CheckErr(BeeCore.Common.listCamera[Global.IndexChoose].IsConnected))
+                if (!Global.ParaCommon.Comunication.IO.CheckErr(BeeCore.Common.listCamera[Global.IndexChoose].IsConnected))
                 {
                     ShowErr();
                     return;
                 }
               
 
-                if(Global.IsRun&& G.Config.IsExternal)
+                if(Global.IsRun&&Global.Config.IsExternal)
                 {
-                    if (Global.Comunication.IO.CheckReady())
+                    if (Global.ParaCommon.Comunication.IO.CheckReady())
                     {
-                        Global.Comunication.IO.WriteIO(IO_Processing.Trigger);
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
 
-                        await Task.Delay(G.Config.delayTrigger);
-                        if (G.Config.IsExternal)
+                        await Task.Delay(Global.Config.delayTrigger);
+                        if (Global.Config.IsExternal)
                             G.EditTool.View.btnTypeTrig.IsCLick = true;
                         if (Global.IsRun)
                             G.EditTool.View.Cap(false);
@@ -966,9 +975,9 @@ txtQrCode.Focus();
                  tmReadPLC.Enabled = true;
                 if (btnEnQrCode.IsCLick)
                 {
-                    if (Global.Comunication.IO.valueOutput[6] == 0)
+                    if (Global.ParaCommon.Comunication.IO.valueOutput[6] == 0)
                     {
-                        int[] bits = new int[] { Global.Comunication.IO.valueInput[4], Global.Comunication.IO.valueInput[5], Global.Comunication.IO.valueInput[6], Global.Comunication.IO.valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+                        int[] bits = new int[] { Global.ParaCommon.Comunication.IO.valueInput[4], Global.ParaCommon.Comunication.IO.valueInput[5], Global.ParaCommon.Comunication.IO.valueInput[6], Global.ParaCommon.Comunication.IO.valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
 
                         int value = 0;
                         for (int i = 0; i < 4; i++)
@@ -979,7 +988,7 @@ txtQrCode.Focus();
                         if (id != value)
                         {
 
-                            Global.Comunication.IO.WriteIO(IO_Processing.ChangeProg);
+                            Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.ChangeProg);
                             tmReadPLC.Enabled = false;
                             Global.Project = listFilter[value];
                             txtQrCode.Text = Global.Project.ToString();
@@ -1006,7 +1015,7 @@ txtQrCode.Focus();
             if (!G.Initial) return;
             Parallel.For(0, 1, i =>
             {
-                Global.Comunication.IO.Read();
+                Global.ParaCommon.Comunication.IO.Read();
               //  Console.WriteLine($"Task {i} running on thread {System.Threading.Thread.CurrentThread.ManagedThreadId}");
             });
             if (G.SettingPLC != null)
@@ -1019,7 +1028,7 @@ txtQrCode.Focus();
             //}
             //if(G.IsPLCNotAlive)
             //    {
-            //        if (Global.Comunication.IO.valueInput[3] == 0)
+            //        if (Global.ParaCommon.Comunication.IO.valueInput[3] == 0)
             //        {
             //            G.IsPLCNotAlive = false;
             //            numAlive = 0;
@@ -1041,7 +1050,7 @@ txtQrCode.Focus();
 
             }
 
-            if (!Global.Comunication.IO.IsConnected)
+            if (!Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 if (!G.SettingPLC.pCom.Enabled)
                     G.SettingPLC.pCom.Enabled = true;
@@ -1053,22 +1062,22 @@ txtQrCode.Focus();
             {
                 if (G.SettingPLC.pCom.Enabled)
                     G.SettingPLC.pCom.Enabled = false;
-                if (Global.Comunication.IO.valueInput.Count() < Global.Comunication.IO.LenReads[0]) return;
-                if (Global.Comunication.IO.valueOutput.Count() < Global.Comunication.IO.LenReads[1]) return;
+                if (Global.ParaCommon.Comunication.IO.valueInput.Count() < Global.ParaCommon.Comunication.IO.LenReads[0]) return;
+                if (Global.ParaCommon.Comunication.IO.valueOutput.Count() < Global.ParaCommon.Comunication.IO.LenReads[1]) return;
                 if (G.IsSendRS)
                 {
-                    Global.Comunication.IO.WriteIO(IO_Processing.Result, G.TotalOK, G.Config.DelayOutput);
+                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, G.TotalOK,Global.Config.DelayOutput);
                     //if (G.TotalOK)
                     //{
-                    //    Global.Comunication.IO.SetOutPut(0, false); //OK
-                    //    Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //    Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //    Global.Comunication.IO.WriteOutPut();
-                    //    await Task.Delay(G.Config.DelayOutput);
-                    //    Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //    Global.Comunication.IO.SetOutPut(0, false); //OK
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //    await Task.Delay(Global.Config.DelayOutput);
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
 
-                    //    Global.Comunication.IO.WriteOutPut();
+                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
 
 
 
@@ -1077,55 +1086,55 @@ txtQrCode.Focus();
                     //else
                     //{
 
-                    //    if (Global.Comunication.IO.valueInput[3] == 1)
+                    //    if (Global.ParaCommon.Comunication.IO.valueInput[3] == 1)
                     //    {
-                    //        Global.Comunication.IO.SetOutPut(0, false); //OK
-                    //        Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(G.Config.DelayOutput);
-                    //        Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.Comunication.IO.SetOutPut(0, false); //OK
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //        await Task.Delay(Global.Config.DelayOutput);
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
 
-                    //        Global.Comunication.IO.WriteOutPut();
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
                     //    }
                     //    else
                     //    {
-                    //        Global.Comunication.IO.SetOutPut(0, true); //NG
-                    //        Global.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(G.Config.DelayOutput);
-                    //        Global.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.Comunication.IO.SetOutPut(0, false); //False
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, true); //NG
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
+                    //        await Task.Delay(Global.Config.DelayOutput);
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
+                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //False
 
-                    //        Global.Comunication.IO.WriteOutPut();
+                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
                     //    }
                     //}
                     G.IsSendRS = false;
                 }
                 if (!Global.IsRun)
-                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.Comunication.IO.valueOutput[5]))
+                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
                     {
-                        Global.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
                     }
 
 
-                if (!Global.Comunication.IO.CheckErr(BeeCore.Common.listCamera[Global.IndexChoose].IsConnected))
+                if (!Global.ParaCommon.Comunication.IO.CheckErr(BeeCore.Common.listCamera[Global.IndexChoose].IsConnected))
                 {
                     ShowErr();
                     return;
                 }
 
 
-                if (Global.IsRun && G.Config.IsExternal)
+                if (Global.IsRun &&Global.Config.IsExternal)
                 {
-                    if (Global.Comunication.IO.CheckReady())
+                    if (Global.ParaCommon.Comunication.IO.CheckReady())
                     {
-                        Global.Comunication.IO.WriteIO(IO_Processing.Trigger);
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
 
-                        await Task.Delay(G.Config.delayTrigger);
-                        if (G.Config.IsExternal)
+                        await Task.Delay(Global.Config.delayTrigger);
+                        if (Global.Config.IsExternal)
                             G.EditTool.View.btnTypeTrig.IsCLick = true;
                         if (Global.IsRun)
                             G.EditTool.View.Cap(false);
@@ -1142,9 +1151,9 @@ txtQrCode.Focus();
                     tmReadPLC.Enabled = true;
                 if (btnEnQrCode.IsCLick)
                 {
-                    if (Global.Comunication.IO.valueOutput[6] == 0)
+                    if (Global.ParaCommon.Comunication.IO.valueOutput[6] == 0)
                     {
-                        int[] bits = new int[] { Global.Comunication.IO.valueInput[4], Global.Comunication.IO.valueInput[5], Global.Comunication.IO.valueInput[6], Global.Comunication.IO.valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+                        int[] bits = new int[] { Global.ParaCommon.Comunication.IO.valueInput[4], Global.ParaCommon.Comunication.IO.valueInput[5], Global.ParaCommon.Comunication.IO.valueInput[6], Global.ParaCommon.Comunication.IO.valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
 
                         int value = 0;
                         for (int i = 0; i < 4; i++)
@@ -1155,7 +1164,7 @@ txtQrCode.Focus();
                         if (id != value)
                         {
 
-                            Global.Comunication.IO.WriteIO(IO_Processing.ChangeProg);
+                            Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.ChangeProg);
                             tmReadPLC.Enabled = false;
                             Global.Project = listFilter[value];
                             txtQrCode.Text = Global.Project.ToString();
@@ -1186,15 +1195,15 @@ txtQrCode.Focus();
         {
             Parallel.For(0, 1, i =>
             {
-                Global.Comunication.IO.Connect(G.Config.IDPort);                                                                    
+                Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);                                                                    
                 //  Console.WriteLine($"Task {i} running on thread {System.Threading.Thread.CurrentThread.ManagedThreadId}");
             });
          
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.Comunication.IO.WriteIO(IO_Processing.Reset);
+                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
                 G.EditTool.toolStripPort.Text = "PLC Connected";
-                // Global.Comunication.IO.WriteInPut(3, true);
+                // Global.ParaCommon.Comunication.IO.WriteInPut(3, true);
 
                 tmReConnectPLC.Enabled = false;
                 tmReadPLC.Enabled = true;
@@ -1227,11 +1236,11 @@ txtQrCode.Focus();
         private void workReConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
            
-            if (Global.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.Comunication.IO.WriteIO(IO_Processing.Reset);
+                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
                 G.EditTool.toolStripPort.Text = "PLC Connected";
-               // Global.Comunication.IO.WriteInPut(3, true);
+               // Global.ParaCommon.Comunication.IO.WriteInPut(3, true);
 
                 tmReConnectPLC.Enabled = false;
                 tmReadPLC.Enabled = true;
@@ -1251,7 +1260,7 @@ txtQrCode.Focus();
            
           //  tmOutAlive.Enabled = false;
             if (!Global.IsRun) return;
-            if (Global.Comunication.IO.valueInput[3] == 1 )
+            if (Global.ParaCommon.Comunication.IO.valueInput[3] == 1 )
             {
                
                 numAlive++;

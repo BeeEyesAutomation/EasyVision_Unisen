@@ -113,14 +113,14 @@ namespace BeeUi.Tool
 
         private void ToolSettings_Load(object sender, EventArgs e)
         {
-            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
 
         }
 
         private void ToolSettings_SizeChanged(object sender, EventArgs e)
         {
             if(G.Header!=null)
-             BeeCore.CustomGui.RoundRg(this.pBtn, G.Config.RoundRad);
+             BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
 
         }
 

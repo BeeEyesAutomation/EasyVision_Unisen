@@ -55,15 +55,15 @@ namespace BeeUi
             this.lbTool = new System.Windows.Forms.Label();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.LayoutEnd = new System.Windows.Forms.TableLayoutPanel();
+            this.btnShuttdown = new BeeInterface.RJButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnExit = new BeeInterface.RJButton();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.inforBar1 = new BeeUi.Unit.InforBar();
             this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
-            this.btnShuttdown = new BeeInterface.RJButton();
-            this.btnExit = new BeeInterface.RJButton();
             this.header1 = new BeeUi.Common.Header();
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
@@ -335,6 +335,37 @@ namespace BeeUi
             this.LayoutEnd.Size = new System.Drawing.Size(1144, 42);
             this.LayoutEnd.TabIndex = 21;
             // 
+            // btnShuttdown
+            // 
+            this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnShuttdown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnShuttdown.BorderColor = System.Drawing.Color.MidnightBlue;
+            this.btnShuttdown.BorderRadius = 5;
+            this.btnShuttdown.BorderSize = 2;
+            this.btnShuttdown.ButtonImage = null;
+            this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
+            this.btnShuttdown.FlatAppearance.BorderSize = 0;
+            this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShuttdown.ForeColor = System.Drawing.Color.Black;
+            this.btnShuttdown.Image = global::BeeUi.Properties.Resources.Shutdown;
+            this.btnShuttdown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShuttdown.IsCLick = false;
+            this.btnShuttdown.IsNotChange = true;
+            this.btnShuttdown.IsRect = true;
+            this.btnShuttdown.IsUnGroup = true;
+            this.btnShuttdown.Location = new System.Drawing.Point(873, 3);
+            this.btnShuttdown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.btnShuttdown.Name = "btnShuttdown";
+            this.btnShuttdown.Size = new System.Drawing.Size(124, 37);
+            this.btnShuttdown.TabIndex = 8;
+            this.btnShuttdown.Text = "Shutdown";
+            this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnShuttdown.TextColor = System.Drawing.Color.Black;
+            this.btnShuttdown.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnShuttdown.UseVisualStyleBackColor = false;
+            this.btnShuttdown.Click += new System.EventHandler(this.btnShuttdown_Click);
+            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -369,7 +400,7 @@ namespace BeeUi
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(130, 37);
             this.label4.TabIndex = 3;
-            this.label4.Text = "ver Tiger 2.0";
+            this.label4.Text = "ver Trial Free";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // pictureBox1
@@ -382,61 +413,6 @@ namespace BeeUi
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // tmReaPLC
-            // 
-            this.tmReaPLC.Interval = 1;
-            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
-            // 
-            // inforBar1
-            // 
-            this.inforBar1.BackColor = System.Drawing.Color.White;
-            this.inforBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inforBar1.Location = new System.Drawing.Point(3, 775);
-            this.inforBar1.Name = "inforBar1";
-            this.inforBar1.Size = new System.Drawing.Size(1144, 39);
-            this.inforBar1.TabIndex = 0;
-            this.inforBar1.Visible = false;
-            // 
-            // btnHeaderBar1
-            // 
-            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(715, 0);
-            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(435, 55);
-            this.btnHeaderBar1.TabIndex = 8;
-            // 
-            // btnShuttdown
-            // 
-            this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BorderColor = System.Drawing.Color.MidnightBlue;
-            this.btnShuttdown.BorderRadius = 5;
-            this.btnShuttdown.BorderSize = 2;
-            this.btnShuttdown.ButtonImage = null;
-            this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
-            this.btnShuttdown.FlatAppearance.BorderSize = 0;
-            this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShuttdown.ForeColor = System.Drawing.Color.Black;
-            this.btnShuttdown.Image = global::BeeUi.Properties.Resources.Shutdown;
-            this.btnShuttdown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShuttdown.IsCLick = false;
-            this.btnShuttdown.IsNotChange = true;
-            this.btnShuttdown.IsRect = true;
-            this.btnShuttdown.IsUnGroup = true;
-            this.btnShuttdown.Location = new System.Drawing.Point(873, 3);
-            this.btnShuttdown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.btnShuttdown.Name = "btnShuttdown";
-            this.btnShuttdown.Size = new System.Drawing.Size(124, 37);
-            this.btnShuttdown.TabIndex = 8;
-            this.btnShuttdown.Text = "Shutdown";
-            this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnShuttdown.TextColor = System.Drawing.Color.Black;
-            this.btnShuttdown.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnShuttdown.UseVisualStyleBackColor = false;
-            this.btnShuttdown.Click += new System.EventHandler(this.btnShuttdown_Click);
             // 
             // btnExit
             // 
@@ -468,6 +444,30 @@ namespace BeeUi
             this.btnExit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // tmReaPLC
+            // 
+            this.tmReaPLC.Interval = 1;
+            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
+            // 
+            // inforBar1
+            // 
+            this.inforBar1.BackColor = System.Drawing.Color.White;
+            this.inforBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inforBar1.Location = new System.Drawing.Point(3, 775);
+            this.inforBar1.Name = "inforBar1";
+            this.inforBar1.Size = new System.Drawing.Size(1144, 39);
+            this.inforBar1.TabIndex = 0;
+            this.inforBar1.Visible = false;
+            // 
+            // btnHeaderBar1
+            // 
+            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar1.Location = new System.Drawing.Point(715, 0);
+            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar1.Name = "btnHeaderBar1";
+            this.btnHeaderBar1.Size = new System.Drawing.Size(435, 55);
+            this.btnHeaderBar1.TabIndex = 8;
             // 
             // header1
             // 

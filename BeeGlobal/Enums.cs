@@ -26,6 +26,40 @@ namespace BeeGlobal
         Outermost,
         Middle
     }
+    public enum TypeIO
+    {
+        Input,
+        Output
+    }
+    public enum I_O_Input
+    {
+        None,
+        Trigger,
+        Mode,
+        Live,
+        ByPass,
+        Reset,
+        Shuttdown,
+        Prog1,
+        Prog2,
+        Prog3,
+        Prog4
+    }
+    public enum I_O_Output
+    {
+        None,
+        Result,
+        Ready,
+        Busy,
+        Error,
+        Logic1,
+        Logic2,
+        Logic3,
+        Logic4,
+        Light1,
+        Light2,
+
+    }
     public enum SegmentStatType { Shortest, Longest, Average }
     public enum StatusDraw
     {

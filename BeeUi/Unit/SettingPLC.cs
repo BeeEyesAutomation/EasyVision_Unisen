@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BeeUi.Unit
 {
@@ -22,12 +24,128 @@ namespace BeeUi.Unit
         public SettingPLC()
         {
             InitializeComponent();
+            cbIn1.DataSource = listInt[0];
+            cbIn2.DataSource = listInt[1];
+            cbIn3.DataSource = listInt[2];
+            cbIn4.DataSource = listInt[3];
+            cbIn5.DataSource = listInt[4];
+            cbIn6.DataSource = listInt[5];
+            cbIn7.DataSource = listInt[6];
+            cbIn8.DataSource = listInt[7];
         }
-      
+        List<List<string>> listInt = new List<List<string>>{
+            new List<string>(), new List<string>(), new List<string>(), new List<string>(),
+             new List<string>(), new List<string>(), new List<string>(), new List<string>() };
+        // 3. Đổ tất cả enum chưa chọn vào ComboBox
+        private void RefreshComboBoxIn(int index ,String text)
+        {
+
+            listInt[index] = new List<string>();
+            List<String> list = new List<string>();
+            foreach (I_O_Input io in Enum.GetValues(typeof(I_O_Input)))
+            {
+                if (Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a=>a.I_O_Input==io)==-1|| text.Contains(io.ToString()))
+                    listInt[index].Add(io.ToString());
+            }
+
+        }
+        public void ChangeDatasource(int ix,String i_O_Input)
+        {
+            
+            for(int i=0;i<7;i++)
+            {
+                if (ix == i) continue;
+               
+               
+                
+               
+               
+               
+               
+               
+                switch (i)
+                {
+                    case 0:
+                        if (i_O_Input.ToString() == cbIn1.Text)
+                        {
+                            cbIn1.SelectedIndex = 0;
+                            return;
+                        }
+
+                        break;
+                    case 1:
+                        if (i_O_Input.ToString() == cbIn2.Text)
+                        {
+                            cbIn2.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 2:
+                        if (i_O_Input.ToString() == cbIn3.Text)
+                        {
+                            cbIn3.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 3:
+                        if (i_O_Input.ToString() == cbIn4.Text)
+                        {
+                            cbIn4.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 4:
+                        if (i_O_Input.ToString() == cbIn5.Text)
+                        {
+                            cbIn5.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 5:
+                        if (i_O_Input.ToString() == cbIn6.Text)
+                        {
+                            cbIn6.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 6:
+                        if (i_O_Input.ToString() == cbIn7.Text)
+                        {
+                            cbIn7.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 7:
+                        if (i_O_Input.ToString() == cbIn8.Text)
+                        {
+                            cbIn8.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+
+                }    
+            
+            }    
+           
+          
+        }
+        private void RefreshComboBoxOut(ComboBox cb)
+        {
+
+            cb.Items.Clear();
+            foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
+            {
+                if (Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == io) == -1)
+                    cb.Items.Add(io);
+            }
+            // (tuỳ chọn) nếu không có item nào thì disable
+            cb.Enabled = cb.Items.Count > 0;
+        }
+
         public void RefreshValuePLC()
         {if (IsPress) return;
             if (!this.Visible) return;
-            if (Global.Comunication.IO.valueInput.Count() < 16) return;
+            if (Global.ParaCommon.Comunication.IO.valueInput.Count() < 16) return;
             foreach (Control c1 in G.SettingPLC.LayIntput.Controls)
             {
                 foreach (Control c in c1.Controls)
@@ -37,12 +155,12 @@ namespace BeeUi.Unit
                         RJButton btn = c as RJButton;
                         int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-                        btn.IsCLick = Convert.ToBoolean(Global.Comunication.IO.valueInput[numAdd]);
+                        btn.IsCLick = Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueInput[numAdd]);
                     }
                }
             }
-            if (Global.Comunication.IO.valueOutput == null) return;
-            if (Global.Comunication.IO.valueOutput.Count() < 16) return;
+            if (Global.ParaCommon.Comunication.IO.valueOutput == null) return;
+            if (Global.ParaCommon.Comunication.IO.valueOutput.Count() < 16) return;
             foreach (Control c1 in G.SettingPLC.LayOutput.Controls)
             {
                 foreach (Control c in c1.Controls)
@@ -52,7 +170,7 @@ namespace BeeUi.Unit
                         RJButton btn = c as RJButton;
                         int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-                        btn.IsCLick = Convert.ToBoolean(Global.Comunication.IO.valueOutput[numAdd]);
+                        btn.IsCLick = Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[numAdd]);
                     }
                 }
             }
@@ -92,7 +210,7 @@ namespace BeeUi.Unit
             }
 int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
-            await Task.Run(() => Global.Comunication.IO.WriteInPut(numAdd, btn.IsCLick));
+            await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteInPut(numAdd, btn.IsCLick));
             
             G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -109,8 +227,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 goto X;
             }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
-            Global.Comunication.IO.SetOutPut(numAdd, btn.IsCLick);
-            await Task.Run(() => Global.Comunication.IO.WriteOutPut());
+            Global.ParaCommon.Comunication.IO.SetOutPut(numAdd, btn.IsCLick);
+            await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteOutPut());
            
             G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -129,33 +247,52 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            G.Config.IDPort = cbSerialPort.Text;
+           Global.Config.IDPort = cbSerialPort.Text;
             BeeCore.Common.Comunication.IO.Port= cbSerialPort.Text;
         }
 
         private void SettingPLC_Load(object sender, EventArgs e)
         {
             G.SettingPLC.cbSerialPort.DataSource = SerialPort.GetPortNames();
-
-            cbSerialPort.Text = G.Config.IDPort;
+            Parallel.For(0, 1, i =>
+            {
+                RefreshComboBoxIn(0,"");
+                RefreshComboBoxIn(1, "");
+                RefreshComboBoxIn(2, "");
+                RefreshComboBoxIn(3, "");
+                RefreshComboBoxIn(4, "");
+                RefreshComboBoxIn(5, "");
+                RefreshComboBoxIn(6, "");
+                RefreshComboBoxIn(7, "");
+              
+            });
+            cbIn1.DataSource = listInt[0];
+            cbIn2.DataSource = listInt[1];
+            cbIn3.DataSource = listInt[2];
+            cbIn4.DataSource = listInt[3];
+            cbIn5.DataSource = listInt[4];
+            cbIn6.DataSource = listInt[5];
+            cbIn7.DataSource = listInt[6];
+            cbIn8.DataSource = listInt[7];
+            cbSerialPort.Text =Global.Config.IDPort;
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-           Global.Comunication.IO.Connect(G.Config.IDPort);
-            if (Global.Comunication.IO.IsConnected)
+           Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 if (File.Exists("Default.config"))
                     File.Delete("Default.config");
-                Access.SaveConfig("Default.config", G.Config);
+                Access.SaveConfig("Default.config",Global.Config);
             }
         }
 
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
         {
            
-                this.LayIntput.Enabled = Global.Comunication.IO.IsConnected;
-           this.LayOutput.Enabled = Global.Comunication.IO.IsConnected;
+                this.LayIntput.Enabled = Global.ParaCommon.Comunication.IO.IsConnected;
+           this.LayOutput.Enabled = Global.ParaCommon.Comunication.IO.IsConnected;
 
         }
 
@@ -182,6 +319,211 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void numIDSlave_ValueChanged(object sender, EventArgs e)
         {
             BeeCore.Common.Comunication.SlaveID =(byte) numIDSlave.Value;
+        }
+        List< String> OldIn=new List<string> { "", "", "", "", "", "", "", "" };
+
+        private void cbIn8_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn8.SelectedIndex == -1) return;
+            String name = cbIn8.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[7], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[7] = name;
+            }
+            ChangeDatasource(7, name);
+
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn3);
+        }
+
+        private void cbIn7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn7.SelectedIndex == -1) return;
+            String name = cbIn7.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[6], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[6] = name;
+            }
+            ChangeDatasource(6,name);
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn3);
+            //RefreshComboBoxIn(cbIn8);
+
+        }
+
+        private void cbIn6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn6.SelectedIndex == -1) return;
+            String name = cbIn6.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[5], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[5] = name;
+            }
+            ChangeDatasource(5, name);
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn3);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn8);
+
+        }
+
+        private void cbIn5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn5.SelectedIndex == -1) return;
+            String name = cbIn5.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[4], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[4] = name;
+            }
+            ChangeDatasource(4, name);
+
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn3);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn8);
+
+        }
+
+        private void cbIn4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn4.SelectedIndex == -1) return;
+            String name = cbIn4.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[3], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[3] = name;
+            }
+            ChangeDatasource(3, name);
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn3);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn8);
+
+        }
+
+        private void cbIn3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn3.SelectedIndex == -1) return;
+            String name = cbIn3.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[3], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[2] = name;
+            }
+            ChangeDatasource(2, name);
+            //RefreshComboBoxIn(cbIn1);
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn8);
+        }
+
+        private void cbIn2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn2.SelectedIndex == -1) return;
+            String name = cbIn2.Text;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[1], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[1] = name;
+            }
+            ChangeDatasource(1, name);
+            //Parallel.For(0, 7, i =>
+            //{
+            //    RefreshComboBoxIn(cbIn1);
+            //    RefreshComboBoxIn(cbIn3);
+            //    RefreshComboBoxIn(cbIn4);
+            //    RefreshComboBoxIn(cbIn5);
+            //    RefreshComboBoxIn(cbIn6);
+            //    RefreshComboBoxIn(cbIn7);
+            //    RefreshComboBoxIn(cbIn8);
+
+            //});
+
+        }
+
+        private void cbIn1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbIn1.SelectedIndex == -1) return;
+            String name = cbIn1.Text;
+            if (cbIn1.Text.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[0], ignoreCase: true));
+
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[0] = name;
+            }
+            ChangeDatasource(0, name);
+
+            //RefreshComboBoxIn(cbIn2);
+            //RefreshComboBoxIn(cbIn3);
+            //RefreshComboBoxIn(cbIn4);
+            //RefreshComboBoxIn(cbIn5);
+            //RefreshComboBoxIn(cbIn6);
+            //RefreshComboBoxIn(cbIn7);
+            //RefreshComboBoxIn(cbIn8);
         }
     }
 }

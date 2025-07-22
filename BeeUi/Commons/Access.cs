@@ -72,14 +72,27 @@ namespace BeeUi
         }
         public static Config LoadConfig(string Path)
         {
-            Config Config;
-
-            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
+            try
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                Config = (Config)bf.Deserialize(ms);
+                Config Config;
+
+                using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Config = (Config)bf.Deserialize(ms);
+                }
+                return Config;
             }
-            return Config;
+            catch (Exception e)
+            {
+                Config Config = new Config();
+                Config.nameUser = "Admin";
+                Config.IsByPass = true;
+                Config.ConditionOK = ConditionOK.Logic;
+                return Config;
+            }
+          
+           
         }
         public static void SaveParaComon(String path, ParaCommon ParaCam)
         {

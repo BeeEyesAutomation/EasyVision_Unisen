@@ -476,6 +476,7 @@ namespace BeeCore
                 cl = Global.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            if(!Global.IsHideTool)
             Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
             gc.ResetTransform();
             if (listScore == null) return gc;

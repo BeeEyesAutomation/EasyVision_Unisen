@@ -190,7 +190,6 @@
     <Compile Include="Unit\Circle.cs" />
     <Compile Include="Unit\Positions.cs" />
     <Compile Include="Unit\PositionAdj.cs" />
-    <Compile Include="Parameter\Config.cs" />
     <Compile Include="dataMat.cs" />
     <Compile Include="Parameter\G.cs" />
     <Compile Include="Unit\EdgePixel.cs" />

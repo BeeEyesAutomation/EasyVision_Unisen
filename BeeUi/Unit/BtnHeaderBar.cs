@@ -35,12 +35,12 @@ namespace BeeUi.Unit
         private void btnUser_Click(object sender, EventArgs e)
         {
             G.account = new Account();
-            G.account.cbUser.SelectedIndex = G.account.cbUser.FindStringExact(G.Config.nameUser);
+            G.account.cbUser.SelectedIndex = G.account.cbUser.FindStringExact(Global.Config.nameUser);
 
 
             G.account.Location = new Point(G.Main.Location.X + G.Main.Width / 2 - G.account.Width / 2, G.Main.Location.Y + G.Main.Height / 2 - G.account.Height / 2);
             G.account.Show();
-           btnUser.Text = G.Config.nameUser;
+           btnUser.Text =Global.Config.nameUser;
 
 
         }

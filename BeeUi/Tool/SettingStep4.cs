@@ -37,14 +37,14 @@ namespace BeeUi.Tool
         private void btnCancel_Click(object sender, EventArgs e)
         {
             G.Header.btnMode.PerformClick();
-            G.Config.ConditionOK = ConditionOK.TotalOK;
-            Data.SaveData.Config(G.Config);
+           Global.Config.ConditionOK = ConditionOK.TotalOK;
+            Data.SaveData.Config(Global.Config);
         }
         public void RefreshLogic()
         {
             int y = 10;
             int index = 0;
-            switch (G.Config.ConditionOK)
+            switch (Global.Config.ConditionOK)
             {
                 case ConditionOK.TotalOK:
 
@@ -57,7 +57,7 @@ namespace BeeUi.Tool
                     btnLogin.PerformClick();
                     break;
             }
-            //switch (G.Config.LogicOK)
+            //switch (Global.Config.LogicOK)
             //{
             //    case LogicOK.AND:
 
@@ -108,7 +108,7 @@ namespace BeeUi.Tool
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            G.Config.ConditionOK = ConditionOK.Logic;
+           Global.Config.ConditionOK = ConditionOK.Logic;
             //pLogic.Enabled = true; 
             //pAnyTool.Enabled = false;
         }
@@ -116,13 +116,13 @@ namespace BeeUi.Tool
       
         private void btnTotalOK_Click(object sender, EventArgs e)
         {
-            G.Config.ConditionOK = ConditionOK.TotalOK;
+           Global.Config.ConditionOK = ConditionOK.TotalOK;
             //pLogic.Enabled = false; pAnyTool.Enabled = false;
         }
 
         private void btnAnyOK_Click(object sender, EventArgs e)
         {
-            G.Config.ConditionOK = ConditionOK.AnyOK;
+           Global.Config.ConditionOK = ConditionOK.AnyOK;
             //pLogic.Enabled = false;
             //pAnyTool.Enabled = true;
         }
@@ -145,12 +145,12 @@ namespace BeeUi.Tool
 
         private void btnAnd_Click(object sender, EventArgs e)
         {
-            G.Config.LogicOK = LogicOK.AND;
+           Global.Config.LogicOK = LogicOK.AND;
         }
 
         private void btnOr_Click(object sender, EventArgs e)
         {
-            G.Config.LogicOK = LogicOK.OR;
+           Global.Config.LogicOK = LogicOK.OR;
         }
     }
 }

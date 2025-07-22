@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeGlobal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -130,7 +131,7 @@ namespace BeeUi.Tool
                  String Date = Path.GetFileNameWithoutExtension(path2);
                 DateTime date2 = DateTime.ParseExact(Date, "yyyyMMdd", null);
                 TimeSpan sp = dtNow - date2;
-                if(sp.TotalDays> G.Config.LimitDateSave)
+                if(sp.TotalDays>Global.Config.LimitDateSave)
                 {
                     
                         File.Delete(path2);

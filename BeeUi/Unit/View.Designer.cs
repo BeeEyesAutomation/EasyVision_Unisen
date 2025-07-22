@@ -34,7 +34,7 @@ namespace BeeUi
         {
             this.components = new System.ComponentModel.Container();
             this.imgView = new Cyotek.Windows.Forms.ImageBox();
-            this.ckProcess = new System.Windows.Forms.CheckBox();
+            this.ckHideTool = new System.Windows.Forms.CheckBox();
             this.pMenu = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnDropColor = new BeeInterface.RJButton();
@@ -96,6 +96,8 @@ namespace BeeUi
             // 
             // imgView
             // 
+            this.imgView.AllowClickZoom = true;
+            this.imgView.AllowDoubleClick = true;
             this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -105,7 +107,7 @@ namespace BeeUi
             this.imgView.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
             this.imgView.Location = new System.Drawing.Point(0, 0);
             this.imgView.Name = "imgView";
-            this.imgView.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.Middle;
+            this.imgView.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.None;
             this.imgView.ShortcutsEnabled = false;
             this.imgView.Size = new System.Drawing.Size(1287, 425);
             this.imgView.TabIndex = 1;
@@ -120,22 +122,22 @@ namespace BeeUi
             this.imgView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseMove);
             this.imgView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseUp);
             // 
-            // ckProcess
+            // ckHideTool
             // 
-            this.ckProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ckProcess.AutoSize = true;
-            this.ckProcess.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckProcess.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ckProcess.Location = new System.Drawing.Point(572, 3);
-            this.ckProcess.Name = "ckProcess";
-            this.ckProcess.Size = new System.Drawing.Size(271, 48);
-            this.ckProcess.TabIndex = 13;
-            this.ckProcess.Text = "Trigger 2";
-            this.ckProcess.UseVisualStyleBackColor = true;
-            this.ckProcess.Visible = false;
-            this.ckProcess.CheckedChanged += new System.EventHandler(this.ckProcess_CheckedChanged);
+            this.ckHideTool.AutoSize = true;
+            this.ckHideTool.BackColor = System.Drawing.Color.Transparent;
+            this.ckHideTool.Checked = true;
+            this.ckHideTool.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckHideTool.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ckHideTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckHideTool.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.ckHideTool.Location = new System.Drawing.Point(572, 3);
+            this.ckHideTool.Name = "ckHideTool";
+            this.ckHideTool.Size = new System.Drawing.Size(92, 48);
+            this.ckHideTool.TabIndex = 13;
+            this.ckHideTool.Text = "Hide Box";
+            this.ckHideTool.UseVisualStyleBackColor = false;
+            this.ckHideTool.CheckedChanged += new System.EventHandler(this.ckProcess_CheckedChanged);
             // 
             // pMenu
             // 
@@ -486,7 +488,7 @@ namespace BeeUi
             this.pBtn.Controls.Add(this.btnCap, 0, 0);
             this.pBtn.Controls.Add(this.btnRecord, 1, 0);
             this.pBtn.Controls.Add(this.btnLive, 2, 0);
-            this.pBtn.Controls.Add(this.ckProcess, 4, 0);
+            this.pBtn.Controls.Add(this.ckHideTool, 4, 0);
             this.pBtn.Controls.Add(this.btnMenu, 12, 0);
             this.pBtn.Controls.Add(this.btnShowSetting, 11, 0);
             this.pBtn.Controls.Add(this.btnSave, 10, 0);
@@ -841,7 +843,7 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workGetColor;
         public RJButton btnCap;
         public RJButton btnRecord;
-        private System.Windows.Forms.CheckBox ckProcess;
+        private System.Windows.Forms.CheckBox ckHideTool;
         public RJButton btnLive;
         private System.ComponentModel.BackgroundWorker workInsert;
         public System.Windows.Forms.Timer tmCheckPort;

@@ -10,6 +10,7 @@ namespace BeeGlobal
     public class Global
     {
         //Gui
+        public static bool IsHideTool = true;
         public static List<iTool> listItool = new List<iTool>();
         public static System.Drawing.Point pShowTool=new Point(10,10);
         public static float ScaleZoom;
@@ -19,6 +20,9 @@ namespace BeeGlobal
         public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
+        public static Config Config;
+        public static  bool IsLearning=false;
+        public static bool IsOCR = false;
         public static StatusDraw StatusDraw
         {
             get => _StatusDraw;
@@ -65,7 +69,7 @@ namespace BeeGlobal
         public static float angle_Adjustment = 0, X_Adjustment = 0, Y_Adjustment = 0;
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();
         private static int _IndexToolSelected=-1;
-        public static Comunication Comunication = new Comunication();
+       
        public static event Action<int> IndexToolChanged;
         public static dynamic OldPropetyTool = null;
        

@@ -115,7 +115,8 @@ namespace BeeCore.Algorithm
                 Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
             else
                 gray = raw.Clone();
-            Cv2.Threshold(gray, gray, 50, 245, ThresholdTypes.BinaryInv);
+            Cv2.Threshold(gray, gray, 0, 245, ThresholdTypes.Otsu);
+            Cv2.BitwiseNot(gray, gray);
             // 3. Làm mượt bằng Gaussian Blur
             Mat smooth = new Mat();
             Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);

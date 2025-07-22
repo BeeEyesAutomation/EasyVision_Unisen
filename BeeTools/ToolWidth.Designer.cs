@@ -50,6 +50,7 @@ namespace BeeInterface
             this.btnHori = new BeeInterface.RJButton();
             this.btnVer = new BeeInterface.RJButton();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnBinary = new BeeInterface.RJButton();
             this.btnStrongEdge = new BeeInterface.RJButton();
             this.btnCloseEdge = new BeeInterface.RJButton();
             this.label2 = new System.Windows.Forms.Label();
@@ -534,9 +535,11 @@ namespace BeeInterface
             // tableLayoutPanel15
             // 
             this.tableLayoutPanel15.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel15.ColumnCount = 2;
-            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.ColumnCount = 3;
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel15.Controls.Add(this.btnBinary, 2, 0);
             this.tableLayoutPanel15.Controls.Add(this.btnStrongEdge, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.btnCloseEdge, 0, 0);
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -547,6 +550,36 @@ namespace BeeInterface
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel15.Size = new System.Drawing.Size(378, 55);
             this.tableLayoutPanel15.TabIndex = 62;
+            // 
+            // btnBinary
+            // 
+            this.btnBinary.BackColor = System.Drawing.Color.Transparent;
+            this.btnBinary.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnBinary.BorderColor = System.Drawing.Color.Silver;
+            this.btnBinary.BorderRadius = 10;
+            this.btnBinary.BorderSize = 1;
+            this.btnBinary.ButtonImage = null;
+            this.btnBinary.Corner = BeeGlobal.Corner.Right;
+            this.btnBinary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnBinary.FlatAppearance.BorderSize = 0;
+            this.btnBinary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBinary.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBinary.ForeColor = System.Drawing.Color.Black;
+            this.btnBinary.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBinary.IsCLick = false;
+            this.btnBinary.IsNotChange = false;
+            this.btnBinary.IsRect = false;
+            this.btnBinary.IsUnGroup = false;
+            this.btnBinary.Location = new System.Drawing.Point(252, 0);
+            this.btnBinary.Margin = new System.Windows.Forms.Padding(0);
+            this.btnBinary.Name = "btnBinary";
+            this.btnBinary.Size = new System.Drawing.Size(126, 55);
+            this.btnBinary.TabIndex = 4;
+            this.btnBinary.Text = "Binay";
+            this.btnBinary.TextColor = System.Drawing.Color.Black;
+            this.btnBinary.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnBinary.UseVisualStyleBackColor = false;
+            this.btnBinary.Click += new System.EventHandler(this.btnBinary_Click);
             // 
             // btnStrongEdge
             // 
@@ -567,10 +600,10 @@ namespace BeeInterface
             this.btnStrongEdge.IsNotChange = false;
             this.btnStrongEdge.IsRect = false;
             this.btnStrongEdge.IsUnGroup = false;
-            this.btnStrongEdge.Location = new System.Drawing.Point(189, 0);
-            this.btnStrongEdge.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnStrongEdge.Location = new System.Drawing.Point(126, 0);
+            this.btnStrongEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnStrongEdge.Name = "btnStrongEdge";
-            this.btnStrongEdge.Size = new System.Drawing.Size(186, 55);
+            this.btnStrongEdge.Size = new System.Drawing.Size(126, 55);
             this.btnStrongEdge.TabIndex = 3;
             this.btnStrongEdge.Text = "Strong Edge";
             this.btnStrongEdge.TextColor = System.Drawing.Color.Black;
@@ -600,7 +633,7 @@ namespace BeeInterface
             this.btnCloseEdge.Location = new System.Drawing.Point(3, 0);
             this.btnCloseEdge.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnCloseEdge.Name = "btnCloseEdge";
-            this.btnCloseEdge.Size = new System.Drawing.Size(186, 55);
+            this.btnCloseEdge.Size = new System.Drawing.Size(123, 55);
             this.btnCloseEdge.TabIndex = 2;
             this.btnCloseEdge.Text = "Close Edge";
             this.btnCloseEdge.TextColor = System.Drawing.Color.Black;
@@ -703,13 +736,13 @@ namespace BeeInterface
             this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numScore.Location = new System.Drawing.Point(231, 0);
             this.numScore.Margin = new System.Windows.Forms.Padding(0);
-            this.numScore.Maxnimum = 100;
-            this.numScore.Minimum = 0;
+            this.numScore.Maxnimum = 100F;
+            this.numScore.Minimum = 0F;
             this.numScore.Name = "numScore";
             this.numScore.Size = new System.Drawing.Size(140, 66);
-            this.numScore.Step = 1;
+            this.numScore.Step = 1F;
             this.numScore.TabIndex = 35;
-            this.numScore.Value = 100;
+            this.numScore.Value = 100F;
             this.numScore.ValueChanged += new System.EventHandler(this.numScore_ValueChanged);
             // 
             // rjButton5
@@ -1041,6 +1074,11 @@ namespace BeeInterface
             this.numScale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numScale.Location = new System.Drawing.Point(192, 3);
+            this.numScale.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numScale.Name = "numScale";
             this.numScale.Size = new System.Drawing.Size(183, 47);
             this.numScale.TabIndex = 47;
@@ -1049,6 +1087,7 @@ namespace BeeInterface
             0,
             0,
             0});
+            this.numScale.ValueChanged += new System.EventHandler(this.numScale_ValueChanged);
             // 
             // label1
             // 
@@ -1137,13 +1176,13 @@ namespace BeeInterface
             this.numMinRadius.ForeColor = System.Drawing.Color.Red;
             this.numMinRadius.Location = new System.Drawing.Point(0, 0);
             this.numMinRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMinRadius.Maxnimum = 1000;
-            this.numMinRadius.Minimum = 0;
+            this.numMinRadius.Maxnimum = 1000F;
+            this.numMinRadius.Minimum = 0F;
             this.numMinRadius.Name = "numMinRadius";
             this.numMinRadius.Size = new System.Drawing.Size(189, 45);
-            this.numMinRadius.Step = 1;
+            this.numMinRadius.Step = 1F;
             this.numMinRadius.TabIndex = 38;
-            this.numMinRadius.Value = 0;
+            this.numMinRadius.Value = 0F;
             // 
             // numMaxRadius
             // 
@@ -1153,13 +1192,13 @@ namespace BeeInterface
             this.numMaxRadius.ForeColor = System.Drawing.Color.Red;
             this.numMaxRadius.Location = new System.Drawing.Point(189, 0);
             this.numMaxRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMaxRadius.Maxnimum = 10000;
-            this.numMaxRadius.Minimum = 0;
+            this.numMaxRadius.Maxnimum = 10000F;
+            this.numMaxRadius.Minimum = 0F;
             this.numMaxRadius.Name = "numMaxRadius";
             this.numMaxRadius.Size = new System.Drawing.Size(189, 45);
-            this.numMaxRadius.Step = 1;
+            this.numMaxRadius.Step = 1F;
             this.numMaxRadius.TabIndex = 35;
-            this.numMaxRadius.Value = 10000;
+            this.numMaxRadius.Value = 10000F;
             // 
             // tableLayoutPanel11
             // 
@@ -1265,7 +1304,7 @@ namespace BeeInterface
             this.trackMinInlier.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackMinInlier.Location = new System.Drawing.Point(3, 16);
             this.trackMinInlier.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackMinInlier.Max = 1000F;
+            this.trackMinInlier.Max = 10000F;
             this.trackMinInlier.Min = 1F;
             this.trackMinInlier.Name = "trackMinInlier";
             this.trackMinInlier.Size = new System.Drawing.Size(357, 49);
@@ -1601,5 +1640,6 @@ namespace BeeInterface
         private RJButton btnLong;
         private RJButton btnShort;
         private RJButton btnAverage;
+        private RJButton btnBinary;
     }
 }
