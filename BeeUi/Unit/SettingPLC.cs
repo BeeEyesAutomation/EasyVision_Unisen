@@ -279,7 +279,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-           Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
+           Global.ParaCommon.Comunication.IO.Connect();
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 if (File.Exists("Default.config"))
@@ -524,6 +524,31 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             //RefreshComboBoxIn(cbIn6);
             //RefreshComboBoxIn(cbIn7);
             //RefreshComboBoxIn(cbIn8);
+        }
+
+        private void comIO_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.Port = comIO.Text;
+        }
+
+        private void cbBaurate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.Baurate =Convert.ToInt32( cbBaurate.Text);
+        }
+
+        private void slaveID_ValueChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.SlaveID =(byte) slaveID.Value;
+        }
+
+        private void btnConectIO_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.Connect();
+        }
+
+        private void timerRead_ValueChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.timeRead = (int)timerRead.Value;
         }
     }
 }

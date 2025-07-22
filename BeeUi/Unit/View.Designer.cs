@@ -370,16 +370,9 @@ namespace BeeUi
             this.pView.MouseLeave += new System.EventHandler(this.pView_MouseLeave);
             this.pView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pView_MouseMove);
             // 
-            // workUndo
-            // 
-            this.workUndo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workUndo_DoWork);
-            this.workUndo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workUndo_RunWorkerCompleted);
-            // 
+           
             // tmTool
-            // 
-            this.tmTool.Interval = 1000;
-            this.tmTool.Tick += new System.EventHandler(this.tmTool_Tick);
-            // 
+           
             // workPlay
             // 
             this.workPlay.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPlay_DoWork);
@@ -795,23 +788,7 @@ namespace BeeUi
             this.tmLive.Interval = 2;
             this.tmLive.Tick += new System.EventHandler(this.tmLive_Tick);
             // 
-            // workCheck1
-            // 
-            this.workCheck1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workCheck1_DoWork);
-            this.workCheck1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCheck1_RunWorkerCompleted);
-            // 
-            // workCheck2
-            // 
-            this.workCheck2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCheck2_RunWorkerCompleted);
-            // 
-            // workCheck3
-            // 
-            this.workCheck3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCheck3_RunWorkerCompleted);
-            // 
-            // workCheck4
-            // 
-            this.workCheck4.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workCheck4_RunWorkerCompleted);
-            // 
+            
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

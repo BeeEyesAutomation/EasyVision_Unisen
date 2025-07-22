@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BeeGlobal
@@ -13,8 +14,94 @@ namespace BeeGlobal
     [Serializable()]
     public class IO
     {
-        public String StringConnect = "192.168.1:100";
-      
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource
+            ();
+
+        public void StartRead()
+        {
+            // Khởi chạy task nền
+            Task.Run(async () =>
+            {
+                while (!_cts.Token.IsCancellationRequested)
+                {
+                    DoWork();                            // ========== Công việc chính
+                    await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
+                }
+            }, _cts.Token);
+        }
+
+        public void StopRead() => _cts.Cancel();
+
+        private async void DoWork()
+        {
+            Read();
+            if (IsConnected)
+            {
+
+                if (valueInput.Count() < LenReads[0]) return;
+                if (valueOutput.Count() < LenReads[1]) return;
+                if (Global.IsSendRS)
+                {
+                    WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
+                  
+                    Global.IsSendRS = false;
+                }
+                if (!Global.IsRun)
+                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(valueOutput[5]))
+                    {
+                        WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
+                    }
+
+
+              
+
+                if (Global.IsRun && Global.Config.IsExternal)
+                {
+                    if (CheckReady())
+                    {Global.StatusProcessing= StatusProcessing.Triggered;
+                        WriteIO(IO_Processing.Trigger);
+                        Global.StatusMode = StatusMode.Once;
+                        await Task.Delay(Global.Config.delayTrigger);
+                      
+                        
+                        
+                    }
+                   
+                }
+               
+                //if (btnEnQrCode.IsCLick)
+                //{
+                //    if (valueOutput[6] == 0)
+                //    {
+                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+
+                //        int value = 0;
+                //        for (int i = 0; i < 4; i++)
+                //        {
+                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
+                //        }
+                //        int id = listFilter.FindIndex(a => a == Global.Project);
+                //        if (id != value)
+                //        {
+
+                //            WriteIO(IO_Processing.ChangeProg);
+                //            tmReadPLC.Enabled = false;
+                //            Global.Project = listFilter[value];
+                //            txtQrCode.Text = Global.Project.ToString();
+                //            txtQrCode.Enabled = false;
+                //            btnShowList.Enabled = false;
+
+                //            workLoadProgram.RunWorkerAsync();
+                //        }
+                //    }
+                //}
+
+
+                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+            }
+
+            Console.WriteLine($"Work at {DateTime.Now:HH:mm:ss.fff}");
+        }
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
         public String[] nameOutput = new String[16];
@@ -27,6 +114,7 @@ namespace BeeGlobal
         public byte SlaveID=1;
         public bool IsBypass=true;
         public IO() { }
+        public int timeRead = 0;
         public List<ParaIO> paraIOs = new List<ParaIO>();
         public bool IsConnected = false,IsWriting=false;
         public bool AddInPut(int index,I_O_Input Input)
@@ -79,18 +167,18 @@ namespace BeeGlobal
                 return false;
           
         }
-        public bool Connect( String IdPort )
+        public bool Connect(  )
         {
-            if (!File.Exists("PLC.ini"))
+
+            try
+            {
+                IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
+                if (IsConnected) valueOutput = Modbus.ReadBit(2);
+            }
+            catch(Exception)
+            {
                 return false;
-            String[] stringLine = File.ReadAllLines("PLC.ini");
-            AddressStarts = Array.ConvertAll(stringLine[0].Split(','), int.Parse);
-            LenReads = Array.ConvertAll(stringLine[1].Split(','), int.Parse);
-            nameInput = stringLine[2].Split(',');
-            nameOutput = stringLine[3].Split(',');
-            if (IdPort.Trim() == "") return false;
-            IsConnected= Modbus.ConnectPLC(Port, Baurate, SlaveID);
-            if(IsConnected) valueOutput = Modbus.ReadBit(2);
+            }
             //  Modbus.ReadHolding(0, 10);
            
             return IsConnected;

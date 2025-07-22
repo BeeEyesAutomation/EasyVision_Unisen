@@ -33,6 +33,7 @@ using BeeUi.Data;
 using System.Web;
 using BeeGlobal;
 using BeeInterface;
+using Microsoft.VisualBasic;
 namespace BeeUi
 {
     [Serializable()]
@@ -1321,6 +1322,7 @@ namespace BeeUi
             Global.IndexToolChanged += Global_IndexToolChanged;
             Global.StatusDrawChanged += Global_StatusDrawChanged;
             Global.TypeCropChanged += Global_TypeCropChanged;
+            Global.StatusProcessingChanged += Global_StatusProcessingChanged;
             // toolEdit.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tool_MouseMove);
             //BeeCore.Common.listCamera[Global.IndexChoose].matRaw= BeeCore.Common.GetImageRaw();
             //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw!=null)
@@ -1329,10 +1331,68 @@ namespace BeeUi
             btnMenu.PerformClick();
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+            Checking1.StatusProcessingChanged += Checking1_StatusProcessingChanged;
+            Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
+            Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
+            Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
+        }
 
-            //BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += Common_FrameChanged;
+        private void Checking4_StatusProcessingChanged(StatusProcessing obj)
+        {
+			Processing4 = obj;
+		}
+
+        private void Checking3_StatusProcessingChanged(StatusProcessing obj)
+        {
+			Processing3 = obj;
+		}
+
+        private void Checking2_StatusProcessingChanged(StatusProcessing obj)
+        {
+			Processing2= obj;
+		}
+
+        private void Checking1_StatusProcessingChanged(StatusProcessing obj)
+        {
+            Processing1 = obj;
+        }
+
+        private void Global_StatusProcessingChanged(StatusProcessing obj)
+        {
+            switch(obj)
+            {
+                case StatusProcessing.None:
+                    break;
+				case StatusProcessing.Triggered:
+					//if (Global.Config.IsExternal)
+					//	G.EditTool.View.btnTypeTrig.IsCLick = true;
+					//if (Global.IsRun)
+					//	G.EditTool.View.Cap(false);
+					workReadCCD.RunWorkerAsync();
+					break;
+				case StatusProcessing.Readed:				
+					RunProcessing();
+                  break;
+				case StatusProcessing.WaitingDone:
+					break;
+				case StatusProcessing.Done:
+
+					timer.Stop();
+
+					ShowResultTotal();
 
 
+					SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
+					if (G.Header.IsWaitingRead)
+					{
+						G.Header.IsWaitingRead = false;
+						//G.Header.tmReadPLC.Enabled = true;
+					}
+
+					CheckStatusMode();
+					IsCompleteAll = false;
+					break;
+			}    
         }
 
         private void Global_TypeCropChanged(TypeCrop obj)
@@ -1462,136 +1522,24 @@ namespace BeeUi
        public  String pathRaw;
        public bool IsProcess;
 
-        private void workUndo_DoWork(object sender, DoWorkEventArgs e)
-        {
-           
-        }
-
-        private void workUndo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-           
-           
-        }
+     
 
         public String[] listPath;
         public int indexTool = 0; int indexImg = 0;
  
 
-        private void tmTool_Tick(object sender, EventArgs e)
-        {
-            
-        }
-       
+     
     
       
         int indexToolPosition = -1;
         bool IsAutoTrig;
     //    OutLine ParaPosition;
-        public void Checking()
-        {
-
-        }
+      
         bool IsCompleteAll = false;
         private void workPlay_DoWork(object sender, DoWorkEventArgs e)
         {
 
-           
-            //int index = 0;
-            //        foreach (Tools tool in G.listAlltool)
-            //        {
-            //            if (tool.PropetyTool.TypeTool == TypeTool.Yolo)
-            //                continue;
-            //            if (tool.PropetyTool.TypeTool == TypeTool.OCR)
-            //                continue;
-            //            if (BeeCore.Common.PropetyTools[index].UsedTool != UsedTool.NotUsed)
-            //            {
-            //                tool.tool.Process();
-            //            }
-            //            index++;
-            //        }
-                    return;
-                    
- 
-                
-                     
-
-                //if (G.StatusTrig == Trig.None)
-                //{
-                //    indexToolPosition = BeeCore.Common.PropetyTools.FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
-                //    if (indexToolPosition > -1 && BeeCore.Common.PropetyTools[indexToolPosition].Propety.IsAutoTrig)
-                //    {
-                //        ParaPosition = (OutLine)G.listAlltool[indexToolPosition].tool.Propety;
-                //        IsAutoTrig = ParaPosition.IsAutoTrig;
-                //        G.StatusTrig = Trig.Processing;
-                //    }
-                //    else
-                //    {
-                //        foreach (Tools tool in G.listAlltool)
-                //        {
-
-                //            tool.tool.Process();
-
-                //        }
-                //        return;
-                //    }
-                //}
-                //else if (G.StatusTrig == Trig.Processing || G.StatusTrig == Trig.NotTrig)
-                //{
-                //    G.listAlltool[indexToolPosition].tool.Process();
-                //    if (ParaPosition.IsOK && G.StatusTrig == Trig.Processing)
-                //    {
-                //        ParaPosition.numTempOK++;
-                //        if (ParaPosition.numTempOK >= ParaPosition.NumOK)
-                //        {
-                //            ParaPosition.numTempOK = 0;
-                //            G.StatusTrig = Trig.Trigged;
-
-
-                //        }
-                //    }
-                //    else if (!ParaPosition.IsOK && G.StatusTrig == Trig.Processing)
-                //    {
-                //        ParaPosition.numTempOK = 0;
-                //    }
-
-
-                //    if (!ParaPosition.IsOK && G.StatusTrig == Trig.NotTrig)
-                //    {
-                //        ParaPosition.numTempOK++;
-                //        if (ParaPosition.numTempOK >= ParaPosition.NumOK)
-                //        {
-                //            ParaPosition.numTempOK = 0;
-                //            G.StatusTrig = Trig.Complete;
-
-
-                //        }
-                //    }
-                //    else if (ParaPosition.IsOK && G.StatusTrig == Trig.NotTrig)
-                //    {
-                //        ParaPosition.numTempOK = 0;
-                //    }
-                //    return;
-
-                //}
-                ////    else if (G.StatusTrig == Trig.Continue)
-                //{
-                   
-                //    foreach (Tools tool in G.listAlltool)
-                //    {
-                //        if (tool.PropetyTool.TypeTool != TypeTool.Position_Adjustment)
-                //            tool.tool.Process();
-
-                //    }
-                //}
-            
-
-         
-            
-             
-                 
-              
-              
-            
+    
         }
         [DllImport("KERNEL32.DLL", EntryPoint =
    "SetProcessWorkingSetSize", SetLastError = true,
@@ -1811,7 +1759,7 @@ namespace BeeUi
 
                     else
                     {
-                        G.TotalOK = false;
+                        Global.TotalOK = false;
                         //switch (Global.Config.ConditionOK)
                         //{
 
@@ -1963,7 +1911,7 @@ namespace BeeUi
             int indexTool = 0;
 
             numToolOK = 0;
-            G.TotalOK = true;
+			Global.TotalOK = true;
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
 
@@ -1977,12 +1925,12 @@ namespace BeeUi
                 }
                 if (PropetyTool.Results==Results.NG)
                 {
-                    G.TotalOK = false;
+					Global.TotalOK = false;
                     break;
                 }
                     
             }
-            G.IsSendRS = true;
+			Global.IsSendRS = true;
             DrawTotalResult(0);
 
            
@@ -2002,7 +1950,7 @@ namespace BeeUi
             //        break;
 
             //}
-            if (G.TotalOK)
+            if (Global.TotalOK)
             {
                  G.StatusDashboard.StatusText = "OK";
                  G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(255, 27, 186, 98);
@@ -2104,7 +2052,7 @@ namespace BeeUi
 
                 btnCap.Enabled = false;
 
-           Global.StatusMode =  StatusMode.Once;
+          
 
             
             timer.Restart();
@@ -2373,11 +2321,12 @@ namespace BeeUi
                 workReadCCD.RunWorkerAsync();
                 return;
             }
-            else if (Global.StatusMode==StatusMode.Continuous|| Global.StatusMode == StatusMode.Once)
-            {
-                RunProcessing();
-            }
-        }
+
+			if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+			{
+                Global.StatusProcessing = StatusProcessing.Readed;
+			}
+		}
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
         {
         }
@@ -2492,7 +2441,7 @@ namespace BeeUi
         {
             if (G.cnn.State == ConnectionState.Closed)
                 G.ucReport.Connect_SQL();
-            if (G.TotalOK)
+            if (Global.TotalOK)
                 SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK +Global.Config.SumNG, "OK", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
             else
                 SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK +Global.Config.SumNG, "NG", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
@@ -2895,7 +2844,9 @@ namespace BeeUi
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                  btnFile.Enabled = false;
                 Global.StatusMode = StatusMode.SimOne;
-                RunProcessing();
+                Global.StatusProcessing = StatusProcessing.Readed;
+
+				RunProcessing();
                 btnRunSim.Enabled = true;
             }
 
@@ -3003,53 +2954,14 @@ namespace BeeUi
         bool wIsWork2= false;
         bool wIsWork3 = false;
         bool wIsWork4 = false;
-        StatusProcessing Processing1 = StatusProcessing.None;
-        StatusProcessing Processing2 = StatusProcessing.None;
-        StatusProcessing Processing3 = StatusProcessing.None;
-        StatusProcessing Processing4 = StatusProcessing.None;
-        ClassProject classProcessing1 = new ClassProject();
-        ClassProject classProcessing2 = new ClassProject();
-        ClassProject classProcessing3 = new ClassProject();
-        ClassProject classProcessing4 = new ClassProject();
 
-        private void workCheck1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
+		Checking Checking1 = new Checking(0);
+		Checking Checking2 = new Checking(1);
+		Checking Checking3 = new Checking(2);
+		Checking Checking4 = new Checking(3);
+		
 
-            Processing1= classProcessing1.ProcessingAll( Processing1,0);
-            if (Processing1 != StatusProcessing.Done) workCheck1.RunWorkerAsync();
-            else
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[0])
-                {
-
-                    propetyTool.StatusTool =StatusTool.WaitCheck;
-                }
-
-        }
-
-        private void workCheck2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Processing2 = classProcessing2.ProcessingAll(Processing2,1);
-            if (Processing2 != StatusProcessing.Done) workCheck2.RunWorkerAsync();
-            else
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[1])
-                {
-
-                    propetyTool.StatusTool =StatusTool.WaitCheck;
-                }
-        }
-
-        private void workCheck3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Processing3 = classProcessing3.ProcessingAll(Processing3,2);
-            if (Processing3 != StatusProcessing.Done) workCheck3.RunWorkerAsync();
-            else
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[2])
-                {
-
-                    propetyTool.StatusTool =StatusTool.WaitCheck;
-                }
-        }
-        private void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+         private void workPlay_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // ClassProject.  ProcessingAll();
 
@@ -3073,10 +2985,7 @@ namespace BeeUi
                 CheckStatusMode();
                 IsCompleteAll = false;
                 
-                Processing1 = StatusProcessing.None;
-                Processing2 = StatusProcessing.None;
-                Processing3 = StatusProcessing.None;
-                Processing4 = StatusProcessing.None;
+              
             }
             else
                 workPlay.RunWorkerAsync();
@@ -3183,63 +3092,55 @@ namespace BeeUi
 
 
         }
-
-        private void workCheck4_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Processing4 = classProcessing4.ProcessingAll(Processing4,3);
-            if (Processing4 != StatusProcessing.Done) workCheck4.RunWorkerAsync();
-            else
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[3])
-                {
-
-                    propetyTool.StatusTool = StatusTool.WaitCheck;
-                }
-        }
-        public void RunProcessing()
+        StatusProcessing Processing1 = StatusProcessing.None;
+		StatusProcessing Processing2 = StatusProcessing.None;
+		StatusProcessing Processing3 = StatusProcessing.None;
+		StatusProcessing Processing4 = StatusProcessing.None;
+		public void RunProcessing()
         {
             if (BeeCore.Common.listCamera[0] != null)
             {
-                if (!workCheck1.IsBusy)
-                    workCheck1.RunWorkerAsync();
-                else
-                    Processing1 = StatusProcessing.Done;
-            }
-            else
-                Processing1 = StatusProcessing.Done;
-            if (BeeCore.Common.listCamera[1] != null)
-            {
-                if (!workCheck2.IsBusy)
-                    workCheck2.RunWorkerAsync();
-                else
-                    Processing2 = StatusProcessing.Done;
-            }
-            else
-                Processing2 = StatusProcessing.Done;
+                Checking1.Start();
+			}
+           else
+				Processing1 = StatusProcessing.Done;
 
-            if (BeeCore.Common.listCamera[2] != null)
+			if (BeeCore.Common.listCamera[1] != null)
             {
-                if (!workCheck3.IsBusy)
-                    workCheck3.RunWorkerAsync();
-                else
-                    Processing3 = StatusProcessing.Done;
-            }
-            else
-                Processing3 = StatusProcessing.Done;
+                Checking2.Start();
+			}
+			else
+				Processing2 = StatusProcessing.Done;
 
-            if (BeeCore.Common.listCamera[3] != null)
+			if (BeeCore.Common.listCamera[2] != null)
             {
-                if (!workCheck4.IsBusy)
-                    workCheck4.RunWorkerAsync();
-                else
-                    Processing4 = StatusProcessing.Done;
-            }
-            else
-                Processing4 = StatusProcessing.Done;
-            if (!workPlay.IsBusy)
-                    workPlay.RunWorkerAsync();
-        }
-
-        private void imgView_Scroll(object sender, ScrollEventArgs e)
+				Checking3.Start();
+			}
+			else
+				Processing3 = StatusProcessing.Done;
+			if (BeeCore.Common.listCamera[3] != null)
+            {
+				Checking4.Start();
+			}
+			else
+				Processing4 = StatusProcessing.Done;
+			Task.Run(() =>
+			{
+				while (!_cts.Token.IsCancellationRequested)
+				{
+					if( Processing1==StatusProcessing.Done && Processing2== StatusProcessing.Done &&
+                    Processing3 == StatusProcessing.Done && Processing4 == StatusProcessing.Done )
+                    {
+                        Global.StatusProcessing = StatusProcessing.Done;
+						break;
+					}    
+						
+				}
+			}, _cts.Token);
+		}
+		private readonly CancellationTokenSource _cts = new CancellationTokenSource
+		  ();
+		private void imgView_Scroll(object sender, ScrollEventArgs e)
         {
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);

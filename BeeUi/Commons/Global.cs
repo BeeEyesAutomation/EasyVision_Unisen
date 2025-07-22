@@ -28,10 +28,10 @@ namespace BeeUi
         public static int[] valuesPLCInPut=new int[16];
         public static int[] valuesPLCOutPut;
         public static SettingPLC SettingPLC = new SettingPLC();
-      
-      
-        
-        public static System.Windows.Forms.ListBox listProgram = new System.Windows.Forms.ListBox ();
+
+        public static StatusProcessing StatusProcessing = StatusProcessing.None;
+
+         public static System.Windows.Forms.ListBox listProgram = new System.Windows.Forms.ListBox ();
        public static float Scale=1;
       
       public static System.Drawing.Point pScale=new System.Drawing.Point(0,0);
@@ -39,10 +39,10 @@ namespace BeeUi
         public static String Licence = "";
        
         public static ScanCCD ScanCCD=new ScanCCD();
-      public static bool IsModeTest = false,IsSendRS=false;
+      public static bool IsModeTest = false;
         public static bool IsDone = false,IsIniOCR,IsIniPython;
         public static ucReport ucReport=new ucReport();
-        public static bool TotalOK = false;
+        
 
          public static String NamePort = "";
         public static Main Main;

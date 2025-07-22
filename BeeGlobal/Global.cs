@@ -9,7 +9,13 @@ namespace BeeGlobal
 {
     public class Global
     {
+        /// <summary>
+        ///
+        /// </summary>
+        public static bool IsSendRS = false;
+        public static bool TotalOK = false;
         //Gui
+
         public static bool IsHideTool = true;
         public static List<iTool> listItool = new List<iTool>();
         public static System.Drawing.Point pShowTool=new Point(10,10);
@@ -38,7 +44,20 @@ namespace BeeGlobal
         public static Trig StatusTrig = Trig.None;
         public static StatusMode StatusMode = StatusMode.None;
 
-        public static StatusProcessing StatusProcessing = StatusProcessing.None;
+        public static StatusProcessing _StatusProcessing = StatusProcessing.None;
+        public static event Action<StatusProcessing> StatusProcessingChanged;
+        public static StatusProcessing StatusProcessing
+        {
+            get => _StatusProcessing;
+            set
+            {
+                if (_StatusProcessing != value)
+                {
+                    _StatusProcessing = value;
+                    StatusProcessingChanged?.Invoke(_StatusProcessing); // Gọi event
+                }
+            }
+        }
         public static Step Step = Step.Run;
         public static float Scale = 1, AngleOrigin;
         public static  Color ColorOK = Color.LimeGreen;
