@@ -2,6 +2,7 @@
 using EasyModbus;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Management;
@@ -214,9 +215,10 @@ namespace BeeGlobal
                 return -1;
             }
         }
-        public static int[] ReadBit(int startAddress)
+        public static  int[] ReadBit(int startAddress)
         {
-            int[] values = new int[16];
+            int[] values =new  int[16];
+
             try
             {
                 int[] val = modbusClient.ReadHoldingRegisters(startAddress, 1);
@@ -224,7 +226,8 @@ namespace BeeGlobal
                 // Lấy từng bit
                 for (int i = 15; i >= 0; i--)  // bit 15 là MSB, bit 0 là LSB
                 {
-                    values[i] = (registerValue >> i) & 1;
+                    int val2 = (registerValue >> i) & 1; ;
+                    values[i] = val2;
 
                 }
 

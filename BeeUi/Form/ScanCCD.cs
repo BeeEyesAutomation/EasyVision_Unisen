@@ -1,7 +1,7 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeUi.Commons;
-using BeeUi.Data;
+
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -526,7 +526,7 @@ namespace BeeUi
             BeeCore.Common.listCamera[Global.IndexChoose] = null;
            Global.listParaCamera[Global.IndexChoose] = null;
             Global.IndexChoose--;
-            Data.SaveData.Camera(Global.Project,Global.listParaCamera);
+            SaveData.Camera(Global.Project,Global.listParaCamera);
 
             if (Global.IndexChoose < 0) Global.IndexChoose = 0;
             Global.ToolSettings.pAllTool.Controls.Clear();

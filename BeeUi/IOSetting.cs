@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

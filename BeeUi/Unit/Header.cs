@@ -4,8 +4,7 @@ using BeeCore.EtherNetIP;
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
-using BeeUi.Commons;
-using BeeUi.Data;
+
 using BeeUi.Tool;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
@@ -565,7 +564,7 @@ namespace BeeUi.Common
         List<String> listFilter = new List<string>();
         private void txtQrCode_TextChanged(object sender, EventArgs e)
         {
-            if(!G.IsLoad) return;
+            if(!Global.IsLoadProgFist) return;
            G.listProgram.Visible = true;
             if (IsKeyEnter) return;
                 // Lấy chuỗi tìm kiếm từ TextBox
@@ -631,7 +630,7 @@ txtQrCode.Focus();
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
             if(IsIntialProgram)
-            ClassProject.Load(Global.Project);
+            DataTool.LoadProject(Global.Project);
         }
 
         private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -665,21 +664,30 @@ txtQrCode.Focus();
 				Global.ParaCommon.Comunication.IO = new IO();
 				Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
 
-			}    
-             
+			}
 
-			if (Global.ParaCommon.Comunication.IO.IsConnected)
+
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
+                Global.ParaCommon.Comunication.IO.StartRead();
                 Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-                tmReadPLC.Enabled = true;
+
             }
 
             else
             {
                 G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                if(!Global.ParaCommon.Comunication.IO.IsBypass)
-                tmReConnectPLC.Enabled = true;
+                if (!Global.ParaCommon.Comunication.IO.IsBypass)
+                {
+                    Global.ParaCommon.Comunication.IO.Connect();
+                    if (Global.ParaCommon.Comunication.IO.IsConnected)
+                        Global.ParaCommon.Comunication.IO.StartRead();
+                    else
+                    {
+                        MessageBox.Show("Check connect I_O");
+                    }
+                }
             }
             Acccess(Global.IsRun);
             G.listProgram.Visible = false;
@@ -886,8 +894,8 @@ txtQrCode.Focus();
             {
                 if ( G.SettingPLC.pCom.Enabled)
                 G.SettingPLC.pCom.Enabled = false;
-                if (Global.ParaCommon.Comunication.IO.valueInput.Count ()< Global.ParaCommon.Comunication.IO.LenReads[0]) return;
-                if (Global.ParaCommon.Comunication.IO.valueOutput.Count() < Global.ParaCommon.Comunication.IO.LenReads[1]) return;
+                if (Global.ParaCommon.Comunication.IO.valueInput.Length< Global.ParaCommon.Comunication.IO.LenReads[0]) return;
+                if (Global.ParaCommon.Comunication.IO.valueOutput.Length < Global.ParaCommon.Comunication.IO.LenReads[1]) return;
                 if (Global.IsSendRS)
                 {
                     Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, Global.TotalOK,Global.Config.DelayOutput);

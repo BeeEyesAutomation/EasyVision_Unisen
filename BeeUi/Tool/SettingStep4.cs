@@ -38,7 +38,7 @@ namespace BeeUi.Tool
         {
             G.Header.btnMode.PerformClick();
            Global.Config.ConditionOK = ConditionOK.TotalOK;
-            Data.SaveData.Config(Global.Config);
+           SaveData.Config(Global.Config);
         }
         public void RefreshLogic()
         {

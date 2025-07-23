@@ -96,15 +96,15 @@ namespace BeeInterface
             {
                 case StatusProcessing.Trigger:
                     StatusText = obj.ToString();
-                    StatusBlockBackColor = Global.ColorTrigger; this.Refresh();
+                    StatusBlockBackColor = Global.ColorNone; this.Refresh();
                     break;
                 case StatusProcessing.Read:
                     StatusText = obj.ToString();
-                    StatusBlockBackColor = Global.ColorRead; this.Refresh();
+                    StatusBlockBackColor = Global.ColorNone; this.Refresh();
                     break;
                 case StatusProcessing.Checking:
                     StatusText = obj.ToString();
-                    StatusBlockBackColor = Global.ColorProssing; this.Refresh();
+                    StatusBlockBackColor = Global.ColorNone; this.Refresh();
                     break;
                 case StatusProcessing.Done:
                     if(Global.TotalOK)

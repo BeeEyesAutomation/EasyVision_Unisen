@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using BeeUi.Commons;
 using Microsoft.Win32;
 using System;

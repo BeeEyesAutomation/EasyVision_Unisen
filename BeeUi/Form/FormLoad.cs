@@ -2,8 +2,8 @@
 using BeeCore;
 using BeeCore.EtherNetIP;
 using BeeGlobal;
+using BeeInterface;
 using BeeUi.Commons;
-using BeeUi.Data;
 using BeeUi.Unit;
 using Microsoft.Win32;
 using System;
@@ -229,7 +229,7 @@ namespace BeeUi
         {
             Global.Project = Properties.Settings.Default.programCurrent;
 
-            ClassProject.Load(Global.Project);
+            DataTool.LoadProject(Global.Project);
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
                 if (ListTool == null) continue;

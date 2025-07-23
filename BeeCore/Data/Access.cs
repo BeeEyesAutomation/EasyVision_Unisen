@@ -1,4 +1,4 @@
-﻿using BeeUi.Commons;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,9 +6,9 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-using BeeCore;
+
 using BeeGlobal;
-namespace BeeUi
+namespace BeeCore
 {
     [Serializable()]
 

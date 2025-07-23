@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BeeGlobal
 {
@@ -15,7 +16,8 @@ namespace BeeGlobal
         public static bool IsSendRS = false;
         public static bool TotalOK = false;
         //Gui
-
+       
+        public static bool IsLoadProgFist = false;
         public static bool IsHideTool = true;
         public static List<iTool> listItool = new List<iTool>();
         public static System.Drawing.Point pShowTool=new Point(10,10);

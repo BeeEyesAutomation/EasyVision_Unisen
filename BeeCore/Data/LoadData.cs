@@ -1,4 +1,4 @@
-﻿using BeeCore;
+﻿
 using BeeGlobal;
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BeeUi.Data
-{
+namespace BeeCore { 
     public  class LoadData
     {
         public static List<List<BeeCore.PropetyTool>> Project(String Project)

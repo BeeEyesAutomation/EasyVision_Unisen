@@ -1,10 +1,10 @@
 ﻿using BeeCore;
 using BeeGlobal;
-using BeeInterface;
-using BeeUi.Common;
-using BeeUi.Commons;
+using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -14,10 +14,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace BeeUi.Unit
+namespace BeeInterface
 {
     public partial class SettingPLC : UserControl
     {
@@ -145,8 +146,8 @@ namespace BeeUi.Unit
         public void RefreshValuePLC()
         {if (IsPress) return;
             if (!this.Visible) return;
-            if (Global.ParaCommon.Comunication.IO.valueInput.Count() < 16) return;
-            foreach (Control c1 in G.SettingPLC.LayIntput.Controls)
+            if (Global.ParaCommon.Comunication.IO.valueInput.Length < 16) return;
+            foreach (Control c1 in LayIntput.Controls)
             {
                 foreach (Control c in c1.Controls)
                 { 
@@ -160,8 +161,8 @@ namespace BeeUi.Unit
                }
             }
             if (Global.ParaCommon.Comunication.IO.valueOutput == null) return;
-            if (Global.ParaCommon.Comunication.IO.valueOutput.Count() < 16) return;
-            foreach (Control c1 in G.SettingPLC.LayOutput.Controls)
+            if (Global.ParaCommon.Comunication.IO.valueOutput.Length < 16) return;
+            foreach (Control c1 in LayOutput.Controls)
             {
                 foreach (Control c in c1.Controls)
                 {
@@ -192,9 +193,14 @@ namespace BeeUi.Unit
             //In16.IsCLick = Convert.ToBoolean(G.valuesPLCInPut[15]);
 
         }
+        int index = 0;
         private void tmShow_Tick(object sender, EventArgs e)
         {
-             }
+            index++;
+            if(Global.ParaCommon.Comunication.IO.valueInput!=null)
+           Global.ParaCommon.Comunication.IO.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
+
+        }
 
         bool IsPress = false;
         bool IsShow = false;
@@ -202,17 +208,17 @@ namespace BeeUi.Unit
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-        X: G.Header.tmReadPLC.Enabled = false;
-            if (G.Header.workPLC.IsBusy)
-            {
-                await Task.Delay(5);
-                goto X;
-            }
+        //X: G.Header.tmReadPLC.Enabled = false;
+        //    if (G.Header.workPLC.IsBusy)
+        //    {
+        //        await Task.Delay(5);
+        //        goto X;
+        //    }
 int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
             await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteInPut(numAdd, btn.IsCLick));
             
-            G.Header.tmReadPLC.Enabled = true;
+          //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 12, FontStyle.Regular);
         }
@@ -220,17 +226,17 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-        X: G.Header.tmReadPLC.Enabled = false;
-            if (G.Header.workPLC.IsBusy)
-            {
-                await Task.Delay(5);
-                goto X;
-            }
+        //X: G.Header.tmReadPLC.Enabled = false;
+        //    if (G.Header.workPLC.IsBusy)
+        //    {
+        //        await Task.Delay(5);
+        //        goto X;
+        //    }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
             Global.ParaCommon.Comunication.IO.SetOutPut(numAdd, btn.IsCLick);
             await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteOutPut());
            
-            G.Header.tmReadPLC.Enabled = true;
+          //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 12, FontStyle.Regular);
         }
@@ -250,10 +256,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            Global.Config.IDPort = cbSerialPort.Text;
             BeeCore.Common.Comunication.IO.Port= cbSerialPort.Text;
         }
-
+      
         private void SettingPLC_Load(object sender, EventArgs e)
-        {
-            G.SettingPLC.cbSerialPort.DataSource = SerialPort.GetPortNames();
+        {// 1) Khởi tạo và bind:
+         
+            comIO.DataSource = SerialPort.GetPortNames();
+            btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
             Parallel.For(0, 1, i =>
             {
                 RefreshComboBoxIn(0,"");
@@ -275,17 +283,67 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbIn7.DataSource = listInt[6];
             cbIn8.DataSource = listInt[7];
             cbSerialPort.Text =Global.Config.IDPort;
+            if (!Global.ParaCommon.Comunication.IO.IsBypass)
+            {
+                if (Global.ParaCommon.Comunication.IO.IsConnected)
+                {
+                    btnConectIO.Text = "Connected";
+                    btnConectIO.IsCLick = true;
+
+                    Global.ParaCommon.Comunication.IO.IsBypass = false;
+                    Global.ParaCommon.Comunication.IO.StartRead();
+                }
+                else
+                {
+                    btnConectIO.Text = "Fail Connect";
+                    Global.ParaCommon.Comunication.IO.IsBypass = true;
+                    MessageBox.Show("Fail Connect to Module I/O");
+
+                }
+            }
+            if (Global.ParaCommon.Comunication.IO.valueInput == null)
+                Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
+            if (Global.ParaCommon.Comunication.IO.valueOutput == null)
+                Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
+            // 2) Subscribe sự kiện
+            Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
+            Global.ParaCommon.Comunication.IO.valueOutput.BulkChanged += ValueOutput_BulkChanged;
+          listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
+            listLabelsOut = new List<Label> { DO0, DO1, DO2, DO3, DO4, DO5, DO6, DO7 };
+            btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
         }
 
+        private void ValueOutput_BulkChanged(object sender, BulkChangedEventArgs e)
+        {
+            for (int k = 0; k < e.Count; k++)
+            {
+                int idx = e.StartIndex + k;
+                if (idx < listLabelsOut.Count)
+                    listLabelsOut[idx].Text = e.NewValues[k].ToString();
+                else
+                    break;
+            }
+        }
+
+        List<Label> listLabelsIn = new List<Label>();
+        List<Label> listLabelsOut = new List<Label>();
+        private void ValueInput_BulkChanged(object sender, BulkChangedEventArgs e)
+        {
+            for (int k = 0; k < e.Count; k++)
+            {
+                int idx = e.StartIndex + k;
+                if(idx < listLabelsIn.Count)
+                  listLabelsIn[idx].Text = e.NewValues[k].ToString();
+                else
+                    break;
+            }
+        }
+
+      
         private void btnConnect_Click(object sender, EventArgs e)
         {
            Global.ParaCommon.Comunication.IO.Connect();
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
-            {
-                if (File.Exists("Default.config"))
-                    File.Delete("Default.config");
-                Access.SaveConfig("Default.config",Global.Config);
-            }
+        
         }
 
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
@@ -544,11 +602,38 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnConectIO_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.IO.Connect();
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                btnConectIO.Text = "Connected";
+                btnConectIO.IsCLick = true;
+               
+                Global.ParaCommon.Comunication.IO.IsBypass = false;
+                Global.ParaCommon.Comunication.IO.StartRead();
+            }
+            else
+            {
+                btnConectIO.Text = "Fail Connect";
+                Global.ParaCommon.Comunication.IO.IsBypass = true;
+                MessageBox.Show("Fail Connect to Module I/O");
+               
+            }
+            btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
         }
 
         private void timerRead_ValueChanged(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.IO.timeRead = (int)timerRead.Value;
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            comIO.DataSource = SerialPort.GetPortNames();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveData.Config(Global.Config);
+
         }
     }
 }

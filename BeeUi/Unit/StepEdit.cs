@@ -1,8 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
-using BeeUi.Commons;
-using BeeUi.Data;
 using BeeUi.Tool;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;

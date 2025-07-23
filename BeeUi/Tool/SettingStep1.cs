@@ -1,7 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
-using BeeUi.Data;
+
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;

@@ -2,6 +2,7 @@
 using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
@@ -20,6 +21,10 @@ namespace BeeGlobal
 
         public void StartRead()
         {
+            if (valueInput == null)
+                valueInput = new IntArrayWithEvent(16);
+            if (valueOutput == null)
+                valueOutput = new IntArrayWithEvent(16);
             // Khởi chạy task nền
             Task.Run(async () =>
             {
@@ -39,8 +44,8 @@ namespace BeeGlobal
             if (IsConnected)
             {
 
-                if (valueInput.Count() < LenReads[0]) return;
-                if (valueOutput.Count() < LenReads[1]) return;
+                if (valueInput.Length < LenReads[0]) return;
+                if (valueOutput.Length < LenReads[1]) return;
                 if (Global.IsSendRS)
                 {
                     WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
@@ -106,8 +111,12 @@ namespace BeeGlobal
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
         public String[] nameOutput = new String[16];
-        public int[] valueInput = new int[16];
-        public int[] valueOutput = new int[16];
+        [NonSerialized]
+        public IntArrayWithEvent valueInput = new IntArrayWithEvent(16);
+        [NonSerialized]
+        public IntArrayWithEvent valueOutput = new IntArrayWithEvent(16);
+
+
         public int[] AddressStarts;
         public int[] LenReads;
         public String Port = "COM8";
@@ -174,7 +183,7 @@ namespace BeeGlobal
             try
             {
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
-                if (IsConnected) valueOutput = Modbus.ReadBit(2);
+                if (IsConnected) valueOutput.ReplaceAll(Modbus.ReadBit(2));
             }
             catch(Exception)
             {
@@ -196,8 +205,8 @@ namespace BeeGlobal
             {
                return false;
             }
-             valueInput= Modbus.ReadBit(1);
-            for(int i=0;i<valueInput.Count(); i++)
+             valueInput.ReplaceAll( Modbus.ReadBit(1));
+            for(int i=0;i<valueInput.Length; i++)
             {
                 int index = paraIOs.FindIndex(a => a.Adddress == i);
                 if(index>=-1)
@@ -205,7 +214,8 @@ namespace BeeGlobal
                     paraIOs[index].Value=valueInput[i];
                 }    
             }
-         //   valueOutput = Modbus.ReadBit(2);
+          
+            //   valueOutput = Modbus.ReadBit(2);
             //  valueInput = new int[dataBytes.Length / 2];
 
             // valueInput =  Modbus.ReadHolding(AddressStarts[0]);

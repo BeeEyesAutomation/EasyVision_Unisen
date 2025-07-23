@@ -40,16 +40,10 @@ namespace BeeInterface
         bool IsIni = false;
       
         public StepSetModel StepEdit = StepSetModel.SetModel;
-        public BackgroundWorker worker = new BackgroundWorker();
-     
-        Stopwatch timer = new Stopwatch();
+      
         public void LoadPara()
         {
-            worker = new BackgroundWorker();
-            worker.DoWork += Worker_DoWork;
-
-            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-        
+          
             if (Propety.listModels == null) Propety.listModels = new List<string>();
             Propety.listModels = Propety.listModels.Distinct().ToList();
             Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
@@ -138,31 +132,7 @@ namespace BeeInterface
 
         }
 
-        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-           // if (e.Error != null)
-           // {
-           //     //  MessageBox.Show("Worker error: " + e.Error.Message);
-           //     return;
-           // }
-           // Propety.Complete();
-           //if (!Global.IsRun)
-           //     Global.StatusDraw = StatusDraw.Check;
-           // timer.Stop();
-
-           // Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-        }
-
-        private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-          //  if (G.IsIniPython == false)
-          //      return;
-            timer.Restart();
-            if (!Global.IsRun)
-                Propety.rotAreaAdjustment = Propety.rotArea;
-            Propety.DoWork(Propety.rotAreaAdjustment);
-        }
-
+      
         private void trackScore_ValueChanged(float obj)
         {
 
@@ -187,148 +157,7 @@ namespace BeeInterface
            
         }
       
-        //public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
-        //{
-        //    if (Propety.rotAreaAdjustment == null&& Global.IsRun) return gc;
-        //    gc.ResetTransform();
-        //    // gc.FillEllipse(Brushes.Black, Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y, 6, 6);
-           
-        //    var mat = new Matrix();
-        //    RectRotate rotA = Propety.rotArea;
-        //    if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
-        //    if (!Global.IsRun)
-        //    {
-        //        mat.Translate(pScroll.X, pScroll.Y);
-        //        mat.Scale(Scale, Scale);
-        //    }
-        //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        //    mat.Rotate(rotA._rectRotation);
-        //    gc.Transform = mat;
-        //    //gc.FillEllipse(Brushes.Blue, -3, -3, 6, 6);
-        //    gc.DrawString(indexTool + "", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
-           
-        //    gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-        //    gc.ResetTransform();
-        //    Color cl = Color.LimeGreen;
-        //    Brush brushText = Brushes.White;
-        //    if (!Propety.IsOK)
-        //    {
-        //        cl = Color.Red;
-               
-
-
-        //    }
-        //    else
-        //    {
-        //        cl = Color.LimeGreen;
-              
-        //    }
-        //    int i = 0;
-        //    foreach (RectRotate rot in Propety.rectRotates)
-        //    {
-        //        mat = new Matrix();
-        //        if (!Global.IsRun)
-        //        {
-        //            mat.Translate(pScroll.X, pScroll.Y);
-        //            mat.Scale(Scale, Scale);
-        //        }
-        //        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        //        mat.Rotate(rotA._rectRotation);
-        //        mat.Translate(rotA._rect.X, rotA._rect.Y);
-        //        gc.Transform = mat;
-
-        //        mat.Translate(Propety.CropOffSetX, Propety.CropOffSetY);
-        //        gc.Transform = mat;
-
-        //        if (Propety.IsCheckArea)
-        //        {
-        //            mat.Rotate(rot._rectRotation);
-        //            gc.Transform = mat;
-        //            gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, Propety.yLine), new Point((int)rotA._rect.Width, Propety.yLine));
-
-        //            System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-        //            System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-        //            System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-        //            System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-        //            System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-        //            System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-        //            Color clLine = Color.Red;
-        //            if (Propety.listOK[i])
-        //                clLine = Color.Green;
-        //            gc.DrawLine(new Pen(clLine, 8), point1, point2);
-        //            gc.DrawLine(new Pen(clLine, 8), point3, point4);
-        //            gc.DrawLine(new Pen(clLine, 8), point5, point6);
-        //            mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-
-        //            gc.Transform = mat;
-        //            int index = i + 1;
-        //            String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-        //            if (Propety.IsCheckArea)
-        //                content = rot._rect.Height + " px";
-        //            Font font = new Font("Arial", 30, FontStyle.Bold);
-        //            SizeF sz1 = gc.MeasureString(content, font);
-        //            gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
-        //            i++;
-        //            //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-        //            gc.ResetTransform();
-        //        }
-        //        else
-        //        {
-        //            mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-        //            gc.Transform = mat;
-        //            mat.Rotate(rot._rectRotation);
-        //            gc.Transform = mat;
-
-        //            int index = i + 1;
-        //            //String content = "(" + Propety.listLabel[i] + ") \n" + Math.Round(Propety.listScore[i], 1) + "%";
-        //            //if (Propety.IsCheckArea)
-        //            //    content = rot._rect.Height + " px";
-        //          //  Font font = new Font("Arial", 30, FontStyle.Bold);
-        //          //  SizeF sz2 = gc.MeasureString(content, font);
-        //          if(Propety.IsEnContent)
-        //            Draws.Box2Label(gc, rot._rect, Propety.listLabel[i],"", Global.fontRS,cl, brushText,30,3);
-        //         else
-        //                Draws.Box2Label(gc, rot._rect, Propety.listLabel[i], Math.Round(Propety.listScore[i], 1) + "%", Global.fontRS, cl, brushText, 30, 3);
-
-        //            //  Draws.Box1Label(gc, rot._rect, Math.Round(Propety.listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
-        //            //  gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
-        //            i++;
-        //            //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-        //            gc.ResetTransform();
-        //        }
-
-        //    }
-        //    //if (Propety.rectRotates != null)
-        //    //{
-        //    //    gc.ResetTransform();
-        //    //    var mat2 = new Matrix();
-        //    //    if (!Global.IsRun)
-        //    //    {
-        //    //        mat2.Translate(pScroll.X, pScroll.Y);
-        //    //        mat2.Scale(Scale, Scale);
-        //    //    }
-        //    //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        //    //    mat2.Rotate(rotA._rectRotation);
-        //    //    gc.Transform = mat2;
-        //    //    gc.DrawString("Count: " + Propety.rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
-
-        //    //}
-        //    gc.ResetTransform();
-        //    mat= new Matrix();
-        //    if (!Global.IsRun)
-        //    {
-        //        mat.Translate(pScroll.X, pScroll.Y);
-        //        mat.Scale(Scale, Scale);
-        //    }
-        //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        //    mat.Rotate(rotA._rectRotation);
-        //    gc.Transform = mat;
-        //    String sContent = (int)(Propety.Index + 1) + "." + Propety.nameTool;
-        //    Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool, brushText, cl);
-        //  //  Draws.Box1Label(gc, rotA._rect, sContent,Global.fontTool, Brushes.Black, Brushes.White);
-            
-        //    return gc;
-        //}
+     
         public Graphics ShowEdit(Graphics gc, RectangleF _rect)
         {
             if (matTemp == null) return gc;
@@ -736,9 +565,9 @@ namespace BeeInterface
 
         private void btnTest_Click_1(object sender, EventArgs e)
         {
-          
-            if (!worker.IsBusy)
-                worker.RunWorkerAsync();
+
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }
@@ -851,16 +680,16 @@ namespace BeeInterface
 
         private void tmCheckFist_Tick(object sender, EventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
-            {
-                BeeCore.Common.listCamera[Global. IndexChoose].Read();
-                if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
-                {
-                    Propety.Check();
-                    tmCheckFist.Enabled = false;
-                }
+            //if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
+            //{
+            //    BeeCore.Common.listCamera[Global. IndexChoose].Read();
+            //    if (BeeCore.Common.listCamera[Global. IndexChoose].IsConnected)
+            //    {
+            //       // Propety.Check();
+            //        tmCheckFist.Enabled = false;
+            //    }
                     
-            }
+            //}
         
         }
 
@@ -899,9 +728,11 @@ namespace BeeInterface
         private void numLine_ValueChanged(object sender, EventArgs e)
         {
             Propety.yLine = (int)numLine.Value;
-            
-            if (!worker.IsBusy&&!Global.IsRun)
-                worker.RunWorkerAsync();
+
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            else
+                btnTest.IsCLick = false;
         }
 
         private void btnAddModel_Click(object sender, EventArgs e)

@@ -15,6 +15,7 @@ using BeeUi.Unit;
 using Image = System.Drawing.Image;
 using BeeGlobal;
 using BeeInterface;
+using System.Windows.Forms;
 
 namespace BeeUi
 {
@@ -72,10 +73,9 @@ namespace BeeUi
         public static bool IsCalib, isTop;
         public static string _pathSqlMaster;
         public static SqlConnection cnn=new SqlConnection();
-      
-        public static bool IsLoad= false;
-       
-       // public static TypeTool TypeTool = TypeTool.OutLine;
+        
+
+        // public static TypeTool TypeTool = TypeTool.OutLine;
         public static Tools tool ;
         public static EditTool EditTool ;
         public static bool IsDrawProcess = true;

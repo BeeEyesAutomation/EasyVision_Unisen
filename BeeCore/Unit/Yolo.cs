@@ -19,6 +19,7 @@ using System.Web.UI.WebControls;
 using BeeCore.Funtion;
 using System.Windows.Forms;
 using BeeGlobal;
+using System.Drawing.Drawing2D;
 
 namespace BeeCore
 {
@@ -441,115 +442,143 @@ namespace BeeCore
                 // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
             }
         }
-   
-        public bool Check()
+
+        public Graphics DrawResult(Graphics gc)
         {
-              
-               
+            if (rotAreaAdjustment == null && Global.IsRun) return gc;
+
+            gc.ResetTransform();
+            RectRotate rotA = rotArea;
+            if (Global.IsRun) rotA = rotAreaAdjustment;
+            var mat = new Matrix();
+            if (!Global.IsRun)
+            {
+                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            }
+            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            mat.Rotate(rotA._rectRotation);
+            gc.Transform = mat;
+            Brush brushText = Brushes.White;
+            Color cl = Color.LimeGreen;
+            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            {
+                case Results.OK:
+                    cl = Global.ColorOK;
+                    break;
+                case Results.NG:
+                    cl = Global.ColorNG;
+                    break;
+            }
+            Pen pen = new Pen(Color.Blue, 2);
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            if (!Global.IsHideTool)
+                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            int i = 0;
+            foreach (RectRotate rot in rectRotates)
+            {
+                mat = new Matrix();
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
+                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                mat.Rotate(rotA._rectRotation);
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                gc.Transform = mat;
+
+                mat.Translate(CropOffSetX, CropOffSetY);
+                gc.Transform = mat;
+
+                if (IsCheckArea)
+                {
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+                    gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, yLine), new Point((int)rotA._rect.Width, yLine));
+
+                    System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
+                    System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                    Color clLine = Color.Red;
+                    if (listOK[i])
+                        clLine = Color.Green;
+                    gc.DrawLine(new Pen(clLine, 8), point1, point2);
+                    gc.DrawLine(new Pen(clLine, 8), point3, point4);
+                    gc.DrawLine(new Pen(clLine, 8), point5, point6);
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+
+                    gc.Transform = mat;
+                    int index = i + 1;
+                    String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
+                    if (IsCheckArea)
+                        content = rot._rect.Height + " px";
+                    Font font = new Font("Arial", 30, FontStyle.Bold);
+                    SizeF sz1 = gc.MeasureString(content, font);
+                    gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
+                    i++;
+                    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                    gc.ResetTransform();
+                }
+                else
+                {
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    gc.Transform = mat;
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+
+                    int index = i + 1;
+                    //String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
+                    //if (IsCheckArea)
+                    //    content = rot._rect.Height + " px";
+                    //  Font font = new Font("Arial", 30, FontStyle.Bold);
+                    //  SizeF sz2 = gc.MeasureString(content, font);
+                    if (IsEnContent)
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], "", Global.fontRS, cl, brushText, 30, 3);
+                    else
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, cl, brushText, 30, 3);
+
+                    //  Draws.Box1Label(gc, rot._rect, Math.Round(listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
+                    //  gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
+                    i++;
+                    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
+                    gc.ResetTransform();
+                }
+
+            }
+            //if (rectRotates != null)
             //{
+            //    gc.ResetTransform();
+            //    var mat2 = new Matrix();
+            //    if (!Global.IsRun)
+            //    {
+            //        mat2.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //        mat2.Global.ScaleZoom(Global.ScaleZoom, Global.ScaleZoom);
+            //    }
+            //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            //    mat2.Rotate(rotA._rectRotation);
+            //    gc.Transform = mat2;
+            //    gc.DrawString("Count: " + rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
 
-            //    G.IsChecked = false; return false;
             //}
-            //if (!BeeCore.Common.matRaw.Empty())
-            //    BeeCore.Common.matRaw.Release();
-            //    BeeCore.Common.matRaw = BeeCore.Native.GetImg().Clone();
-        
-            //worker.RunWorkerAsync();
-        
-      
-
-           
-                // result là tuple (boxes, scores, labels)
-              
-            
-            //    BeeCore.Native.SetImg(BeeCore.Common.matRaw);
-            //  BeeCore.Common.CropRotate(rot);
-            //   BeeCore.G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle);
-
-
-            //  listMatch = G.YoloPlus.Check( nameTool, (float)(Score / 100.0));
-            //if (listMatch != null)
+            //gc.ResetTransform();
+            //mat = new Matrix();
+            //if (!Global.IsRun)
             //{
-            //    sSplit = listMatch.Split('\n');
-            //    float Score = 0;
-            //    int count = 0;
-            //    int numOK = 0, numNG = 0;
-            //    count= sSplit.Length;
-            //    foreach (String s in sSplit)
-            //    {
-            //        if (s.Trim() == "") break;
-            //        String[] sSp = s.Split(',');
-            //        PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
-
-            //        float width = Convert.ToSingle(sSp[2]);
-            //        float height = Convert.ToSingle(sSp[3]);
-            //        float angle = Convert.ToSingle(sSp[4]);
-            //        float score = Convert.ToSingle(sSp[5])*100;
-            //        string label = Convert.ToString(sSp[6]);
-                  
-            //        int Area = (int)(width * height);
-            //        double Per = (Math.Min(width, height) * 1.0) / Math.Max(width, height);
-                 
-            //        RectRotate rt = new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None);
-                   
-            //        if (Labels.Contains(label))
-            //        {
-            //            if (IsCheckArea )
-            //            {if (height < 300)
-            //                {
-            //                    if (rt._PosCenter.Y - height / 2 < yLine)
-            //                    {
-            //                        listOK.Add(false);
-            //                        rectRotates.Add(rt);
-            //                        listLabel.Add(label);
-            //                        Score += score;
-            //                        listScore.Add(score);
-            //                        numOK++;
-            //                    }
-            //                    else
-            //                    {
-            //                        listOK.Add(true);
-            //                        rectRotates.Add(rt);
-            //                        listLabel.Add(label);
-            //                        Score += score;
-            //                        listScore.Add(score);
-
-            //                    }
-            //                }
-            //            }
-            //            else
-            //            {
-            //                rectRotates.Add(rt);
-            //                listLabel.Add(label);
-            //                Score += score;
-            //                listScore.Add(score); numOK++;
-            //            }
-                           
-                       
-            //        }
-
-            //    }
-            //    ScoreRs = (int)(Score / (rectRotates.Count() * 1.0));
-            //    if (ScoreRs < 0) ScoreRs = 0;
-            //  switch(Compare)
-            //    {
-            //        case Compares.Equal:
-            //            if (numOK != NumObject)
-            //                IsOK = false;
-            //            break;
-            //        case Compares.Less:
-            //            if (numOK >= NumObject)
-            //                IsOK = false;
-            //            break;
-            //        case Compares.More: 
-            //            if (numOK <= NumObject)
-            //                IsOK = false;
-            //            break;
-            //    }
-              
+            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
             //}
-          
-            return true;
+            //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            //mat.Rotate(rotA._rectRotation);
+            //gc.Transform = mat;
+            //String sContent = (int)(Index + 1) + "." + nameTool;
+            //Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool, brushText, cl);
+            //  Draws.Box1Label(gc, rotA._rect, sContent,Global.fontTool, Brushes.Black, Brushes.White);
+
+            return gc;
         }
 
     }

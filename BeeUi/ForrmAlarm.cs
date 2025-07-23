@@ -1,4 +1,5 @@
-﻿using BeeUi.Commons;
+﻿using BeeCore;
+using BeeUi.Commons;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
