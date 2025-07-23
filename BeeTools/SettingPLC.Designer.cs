@@ -116,45 +116,45 @@ namespace BeeInterface
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
-            this.DO7 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.DO7 = new BeeInterface.RJButton();
+            this.DO6 = new BeeInterface.RJButton();
+            this.DO5 = new BeeInterface.RJButton();
+            this.DO4 = new BeeInterface.RJButton();
+            this.D3 = new BeeInterface.RJButton();
+            this.DO2 = new BeeInterface.RJButton();
+            this.DO1 = new BeeInterface.RJButton();
+            this.cbO7 = new System.Windows.Forms.ComboBox();
             this.label33 = new System.Windows.Forms.Label();
-            this.DO6 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cbO6 = new System.Windows.Forms.ComboBox();
             this.label35 = new System.Windows.Forms.Label();
-            this.DO5 = new System.Windows.Forms.Label();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.cbO5 = new System.Windows.Forms.ComboBox();
             this.label37 = new System.Windows.Forms.Label();
-            this.DO4 = new System.Windows.Forms.Label();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.cbO4 = new System.Windows.Forms.ComboBox();
             this.label39 = new System.Windows.Forms.Label();
-            this.DO3 = new System.Windows.Forms.Label();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.cbO3 = new System.Windows.Forms.ComboBox();
             this.label41 = new System.Windows.Forms.Label();
-            this.DO2 = new System.Windows.Forms.Label();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.cbO2 = new System.Windows.Forms.ComboBox();
             this.label43 = new System.Windows.Forms.Label();
-            this.DO1 = new System.Windows.Forms.Label();
-            this.comboBox7 = new System.Windows.Forms.ComboBox();
+            this.cbO1 = new System.Windows.Forms.ComboBox();
             this.label45 = new System.Windows.Forms.Label();
-            this.DO0 = new System.Windows.Forms.Label();
-            this.comboBox8 = new System.Windows.Forms.ComboBox();
+            this.cbO0 = new System.Windows.Forms.ComboBox();
             this.label47 = new System.Windows.Forms.Label();
+            this.DO0 = new BeeInterface.RJButton();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.btnSave = new BeeInterface.RJButton();
             this.btnRefresh = new BeeInterface.RJButton();
             this.label49 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
-            this.btnBypass = new BeeInterface.RJButton();
-            this.btnConectIO = new BeeInterface.RJButton();
-            this.timerRead = new BeeInterface.CustomNumeric();
-            this.slaveID = new BeeInterface.CustomNumeric();
             this.label50 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.cbBaurate = new System.Windows.Forms.ComboBox();
             this.comIO = new System.Windows.Forms.ComboBox();
             this.label52 = new System.Windows.Forms.Label();
+            this.btnBypass = new BeeInterface.RJButton();
+            this.btnConectIO = new BeeInterface.RJButton();
+            this.timerRead = new BeeInterface.CustomNumeric();
+            this.slaveID = new BeeInterface.CustomNumeric();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
@@ -1972,29 +1972,29 @@ namespace BeeInterface
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.48864F));
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.5F));
             this.tableLayoutPanel17.Controls.Add(this.DO7, 2, 7);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox1, 1, 7);
-            this.tableLayoutPanel17.Controls.Add(this.label33, 0, 7);
             this.tableLayoutPanel17.Controls.Add(this.DO6, 2, 6);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox2, 1, 6);
-            this.tableLayoutPanel17.Controls.Add(this.label35, 0, 6);
             this.tableLayoutPanel17.Controls.Add(this.DO5, 2, 5);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox3, 1, 5);
-            this.tableLayoutPanel17.Controls.Add(this.label37, 0, 5);
             this.tableLayoutPanel17.Controls.Add(this.DO4, 2, 4);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox4, 1, 4);
-            this.tableLayoutPanel17.Controls.Add(this.label39, 0, 4);
-            this.tableLayoutPanel17.Controls.Add(this.DO3, 2, 3);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox5, 1, 3);
-            this.tableLayoutPanel17.Controls.Add(this.label41, 0, 3);
+            this.tableLayoutPanel17.Controls.Add(this.D3, 2, 3);
             this.tableLayoutPanel17.Controls.Add(this.DO2, 2, 2);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox6, 1, 2);
-            this.tableLayoutPanel17.Controls.Add(this.label43, 0, 2);
             this.tableLayoutPanel17.Controls.Add(this.DO1, 2, 1);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox7, 1, 1);
+            this.tableLayoutPanel17.Controls.Add(this.cbO7, 1, 7);
+            this.tableLayoutPanel17.Controls.Add(this.label33, 0, 7);
+            this.tableLayoutPanel17.Controls.Add(this.cbO6, 1, 6);
+            this.tableLayoutPanel17.Controls.Add(this.label35, 0, 6);
+            this.tableLayoutPanel17.Controls.Add(this.cbO5, 1, 5);
+            this.tableLayoutPanel17.Controls.Add(this.label37, 0, 5);
+            this.tableLayoutPanel17.Controls.Add(this.cbO4, 1, 4);
+            this.tableLayoutPanel17.Controls.Add(this.label39, 0, 4);
+            this.tableLayoutPanel17.Controls.Add(this.cbO3, 1, 3);
+            this.tableLayoutPanel17.Controls.Add(this.label41, 0, 3);
+            this.tableLayoutPanel17.Controls.Add(this.cbO2, 1, 2);
+            this.tableLayoutPanel17.Controls.Add(this.label43, 0, 2);
+            this.tableLayoutPanel17.Controls.Add(this.cbO1, 1, 1);
             this.tableLayoutPanel17.Controls.Add(this.label45, 0, 1);
-            this.tableLayoutPanel17.Controls.Add(this.DO0, 2, 0);
-            this.tableLayoutPanel17.Controls.Add(this.comboBox8, 1, 0);
+            this.tableLayoutPanel17.Controls.Add(this.cbO0, 1, 0);
             this.tableLayoutPanel17.Controls.Add(this.label47, 0, 0);
+            this.tableLayoutPanel17.Controls.Add(this.DO0, 2, 0);
             this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel17.Location = new System.Drawing.Point(5, 5);
             this.tableLayoutPanel17.Name = "tableLayoutPanel17";
@@ -2014,265 +2014,336 @@ namespace BeeInterface
             // 
             // DO7
             // 
-            this.DO7.AutoSize = true;
-            this.DO7.BackColor = System.Drawing.Color.Wheat;
-            this.DO7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO7.Location = new System.Drawing.Point(232, 273);
+            this.DO7.BackColor = System.Drawing.Color.Transparent;
+            this.DO7.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO7.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO7.BorderRadius = 0;
+            this.DO7.BorderSize = 0;
+            this.DO7.ButtonImage = null;
+            this.DO7.Corner = BeeGlobal.Corner.Both;
+            this.DO7.FlatAppearance.BorderSize = 0;
+            this.DO7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO7.ForeColor = System.Drawing.Color.Black;
+            this.DO7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO7.IsCLick = false;
+            this.DO7.IsNotChange = false;
+            this.DO7.IsRect = false;
+            this.DO7.IsUnGroup = true;
+            this.DO7.Location = new System.Drawing.Point(232, 325);
             this.DO7.Name = "DO7";
-            this.DO7.Size = new System.Drawing.Size(133, 39);
-            this.DO7.TabIndex = 26;
-            this.DO7.Text = "00";
-            this.DO7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.DO7.Size = new System.Drawing.Size(133, 40);
+            this.DO7.TabIndex = 33;
+            this.DO7.Text = "0";
+            this.DO7.TextColor = System.Drawing.Color.Black;
+            this.DO7.UseVisualStyleBackColor = false;
             // 
-            // comboBox1
+            // DO6
             // 
-            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox1.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(88, 276);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(138, 33);
-            this.comboBox1.TabIndex = 25;
-            this.comboBox1.Text = "None";
+            this.DO6.BackColor = System.Drawing.Color.Transparent;
+            this.DO6.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO6.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO6.BorderRadius = 0;
+            this.DO6.BorderSize = 0;
+            this.DO6.ButtonImage = null;
+            this.DO6.Corner = BeeGlobal.Corner.Both;
+            this.DO6.FlatAppearance.BorderSize = 0;
+            this.DO6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO6.ForeColor = System.Drawing.Color.Black;
+            this.DO6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO6.IsCLick = false;
+            this.DO6.IsNotChange = false;
+            this.DO6.IsRect = false;
+            this.DO6.IsUnGroup = true;
+            this.DO6.Location = new System.Drawing.Point(232, 279);
+            this.DO6.Name = "DO6";
+            this.DO6.Size = new System.Drawing.Size(133, 40);
+            this.DO6.TabIndex = 32;
+            this.DO6.Text = "0";
+            this.DO6.TextColor = System.Drawing.Color.Black;
+            this.DO6.UseVisualStyleBackColor = false;
+            // 
+            // DO5
+            // 
+            this.DO5.BackColor = System.Drawing.Color.Transparent;
+            this.DO5.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO5.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO5.BorderRadius = 0;
+            this.DO5.BorderSize = 0;
+            this.DO5.ButtonImage = null;
+            this.DO5.Corner = BeeGlobal.Corner.Both;
+            this.DO5.FlatAppearance.BorderSize = 0;
+            this.DO5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO5.ForeColor = System.Drawing.Color.Black;
+            this.DO5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO5.IsCLick = false;
+            this.DO5.IsNotChange = false;
+            this.DO5.IsRect = false;
+            this.DO5.IsUnGroup = true;
+            this.DO5.Location = new System.Drawing.Point(232, 233);
+            this.DO5.Name = "DO5";
+            this.DO5.Size = new System.Drawing.Size(133, 40);
+            this.DO5.TabIndex = 31;
+            this.DO5.Text = "0";
+            this.DO5.TextColor = System.Drawing.Color.Black;
+            this.DO5.UseVisualStyleBackColor = false;
+            // 
+            // DO4
+            // 
+            this.DO4.BackColor = System.Drawing.Color.Transparent;
+            this.DO4.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO4.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO4.BorderRadius = 0;
+            this.DO4.BorderSize = 0;
+            this.DO4.ButtonImage = null;
+            this.DO4.Corner = BeeGlobal.Corner.Both;
+            this.DO4.FlatAppearance.BorderSize = 0;
+            this.DO4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO4.ForeColor = System.Drawing.Color.Black;
+            this.DO4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO4.IsCLick = false;
+            this.DO4.IsNotChange = false;
+            this.DO4.IsRect = false;
+            this.DO4.IsUnGroup = true;
+            this.DO4.Location = new System.Drawing.Point(232, 187);
+            this.DO4.Name = "DO4";
+            this.DO4.Size = new System.Drawing.Size(133, 40);
+            this.DO4.TabIndex = 30;
+            this.DO4.Text = "0";
+            this.DO4.TextColor = System.Drawing.Color.Black;
+            this.DO4.UseVisualStyleBackColor = false;
+            // 
+            // D3
+            // 
+            this.D3.BackColor = System.Drawing.Color.Transparent;
+            this.D3.BackgroundColor = System.Drawing.Color.Transparent;
+            this.D3.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.D3.BorderRadius = 0;
+            this.D3.BorderSize = 0;
+            this.D3.ButtonImage = null;
+            this.D3.Corner = BeeGlobal.Corner.Both;
+            this.D3.FlatAppearance.BorderSize = 0;
+            this.D3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.D3.ForeColor = System.Drawing.Color.Black;
+            this.D3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.D3.IsCLick = false;
+            this.D3.IsNotChange = false;
+            this.D3.IsRect = false;
+            this.D3.IsUnGroup = true;
+            this.D3.Location = new System.Drawing.Point(232, 141);
+            this.D3.Name = "D3";
+            this.D3.Size = new System.Drawing.Size(133, 40);
+            this.D3.TabIndex = 29;
+            this.D3.Text = "0";
+            this.D3.TextColor = System.Drawing.Color.Black;
+            this.D3.UseVisualStyleBackColor = false;
+            // 
+            // DO2
+            // 
+            this.DO2.BackColor = System.Drawing.Color.Transparent;
+            this.DO2.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO2.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO2.BorderRadius = 0;
+            this.DO2.BorderSize = 0;
+            this.DO2.ButtonImage = null;
+            this.DO2.Corner = BeeGlobal.Corner.Both;
+            this.DO2.FlatAppearance.BorderSize = 0;
+            this.DO2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO2.ForeColor = System.Drawing.Color.Black;
+            this.DO2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO2.IsCLick = false;
+            this.DO2.IsNotChange = false;
+            this.DO2.IsRect = false;
+            this.DO2.IsUnGroup = true;
+            this.DO2.Location = new System.Drawing.Point(232, 95);
+            this.DO2.Name = "DO2";
+            this.DO2.Size = new System.Drawing.Size(133, 40);
+            this.DO2.TabIndex = 28;
+            this.DO2.Text = "0";
+            this.DO2.TextColor = System.Drawing.Color.Black;
+            this.DO2.UseVisualStyleBackColor = false;
+            // 
+            // DO1
+            // 
+            this.DO1.BackColor = System.Drawing.Color.Transparent;
+            this.DO1.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO1.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO1.BorderRadius = 0;
+            this.DO1.BorderSize = 0;
+            this.DO1.ButtonImage = null;
+            this.DO1.Corner = BeeGlobal.Corner.Both;
+            this.DO1.FlatAppearance.BorderSize = 0;
+            this.DO1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO1.ForeColor = System.Drawing.Color.Black;
+            this.DO1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO1.IsCLick = false;
+            this.DO1.IsNotChange = false;
+            this.DO1.IsRect = false;
+            this.DO1.IsUnGroup = true;
+            this.DO1.Location = new System.Drawing.Point(232, 49);
+            this.DO1.Name = "DO1";
+            this.DO1.Size = new System.Drawing.Size(133, 40);
+            this.DO1.TabIndex = 27;
+            this.DO1.Text = "0";
+            this.DO1.TextColor = System.Drawing.Color.Black;
+            this.DO1.UseVisualStyleBackColor = false;
+            // 
+            // cbO7
+            // 
+            this.cbO7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO7.ForeColor = System.Drawing.Color.Blue;
+            this.cbO7.FormattingEnabled = true;
+            this.cbO7.Location = new System.Drawing.Point(88, 325);
+            this.cbO7.Name = "cbO7";
+            this.cbO7.Size = new System.Drawing.Size(138, 33);
+            this.cbO7.TabIndex = 25;
+            this.cbO7.Text = "None";
             // 
             // label33
             // 
             this.label33.AutoSize = true;
             this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label33.Location = new System.Drawing.Point(3, 273);
+            this.label33.Location = new System.Drawing.Point(3, 322);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(79, 39);
+            this.label33.Size = new System.Drawing.Size(79, 46);
             this.label33.TabIndex = 24;
             this.label33.Text = "DO 07";
             // 
-            // DO6
+            // cbO6
             // 
-            this.DO6.AutoSize = true;
-            this.DO6.BackColor = System.Drawing.Color.Wheat;
-            this.DO6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO6.Location = new System.Drawing.Point(232, 234);
-            this.DO6.Name = "DO6";
-            this.DO6.Size = new System.Drawing.Size(133, 39);
-            this.DO6.TabIndex = 23;
-            this.DO6.Text = "00";
-            this.DO6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox2.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(88, 237);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(138, 33);
-            this.comboBox2.TabIndex = 22;
-            this.comboBox2.Text = "None";
+            this.cbO6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO6.ForeColor = System.Drawing.Color.Blue;
+            this.cbO6.FormattingEnabled = true;
+            this.cbO6.Location = new System.Drawing.Point(88, 279);
+            this.cbO6.Name = "cbO6";
+            this.cbO6.Size = new System.Drawing.Size(138, 33);
+            this.cbO6.TabIndex = 22;
+            this.cbO6.Text = "None";
             // 
             // label35
             // 
             this.label35.AutoSize = true;
             this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label35.Location = new System.Drawing.Point(3, 234);
+            this.label35.Location = new System.Drawing.Point(3, 276);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(79, 39);
+            this.label35.Size = new System.Drawing.Size(79, 46);
             this.label35.TabIndex = 21;
             this.label35.Text = "DO 06";
             // 
-            // DO5
+            // cbO5
             // 
-            this.DO5.AutoSize = true;
-            this.DO5.BackColor = System.Drawing.Color.Wheat;
-            this.DO5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO5.Location = new System.Drawing.Point(232, 195);
-            this.DO5.Name = "DO5";
-            this.DO5.Size = new System.Drawing.Size(133, 39);
-            this.DO5.TabIndex = 20;
-            this.DO5.Text = "00";
-            this.DO5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox3
-            // 
-            this.comboBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox3.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(88, 198);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(138, 33);
-            this.comboBox3.TabIndex = 19;
-            this.comboBox3.Text = "None";
+            this.cbO5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO5.ForeColor = System.Drawing.Color.Blue;
+            this.cbO5.FormattingEnabled = true;
+            this.cbO5.Location = new System.Drawing.Point(88, 233);
+            this.cbO5.Name = "cbO5";
+            this.cbO5.Size = new System.Drawing.Size(138, 33);
+            this.cbO5.TabIndex = 19;
+            this.cbO5.Text = "None";
             // 
             // label37
             // 
             this.label37.AutoSize = true;
             this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label37.Location = new System.Drawing.Point(3, 195);
+            this.label37.Location = new System.Drawing.Point(3, 230);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(79, 39);
+            this.label37.Size = new System.Drawing.Size(79, 46);
             this.label37.TabIndex = 18;
             this.label37.Text = "DO 05";
             // 
-            // DO4
+            // cbO4
             // 
-            this.DO4.AutoSize = true;
-            this.DO4.BackColor = System.Drawing.Color.Wheat;
-            this.DO4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO4.Location = new System.Drawing.Point(232, 156);
-            this.DO4.Name = "DO4";
-            this.DO4.Size = new System.Drawing.Size(133, 39);
-            this.DO4.TabIndex = 17;
-            this.DO4.Text = "00";
-            this.DO4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox4.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(88, 159);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(138, 33);
-            this.comboBox4.TabIndex = 16;
-            this.comboBox4.Text = "None";
+            this.cbO4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO4.ForeColor = System.Drawing.Color.Blue;
+            this.cbO4.FormattingEnabled = true;
+            this.cbO4.Location = new System.Drawing.Point(88, 187);
+            this.cbO4.Name = "cbO4";
+            this.cbO4.Size = new System.Drawing.Size(138, 33);
+            this.cbO4.TabIndex = 16;
+            this.cbO4.Text = "None";
             // 
             // label39
             // 
             this.label39.AutoSize = true;
             this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label39.Location = new System.Drawing.Point(3, 156);
+            this.label39.Location = new System.Drawing.Point(3, 184);
             this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(79, 39);
+            this.label39.Size = new System.Drawing.Size(79, 46);
             this.label39.TabIndex = 15;
             this.label39.Text = "DO 04";
             // 
-            // DO3
+            // cbO3
             // 
-            this.DO3.AutoSize = true;
-            this.DO3.BackColor = System.Drawing.Color.Wheat;
-            this.DO3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO3.Location = new System.Drawing.Point(232, 117);
-            this.DO3.Name = "DO3";
-            this.DO3.Size = new System.Drawing.Size(133, 39);
-            this.DO3.TabIndex = 14;
-            this.DO3.Text = "00";
-            this.DO3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox5
-            // 
-            this.comboBox5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox5.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(88, 120);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(138, 33);
-            this.comboBox5.TabIndex = 13;
-            this.comboBox5.Text = "None";
+            this.cbO3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO3.ForeColor = System.Drawing.Color.Blue;
+            this.cbO3.FormattingEnabled = true;
+            this.cbO3.Location = new System.Drawing.Point(88, 141);
+            this.cbO3.Name = "cbO3";
+            this.cbO3.Size = new System.Drawing.Size(138, 33);
+            this.cbO3.TabIndex = 13;
+            this.cbO3.Text = "None";
             // 
             // label41
             // 
             this.label41.AutoSize = true;
             this.label41.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label41.Location = new System.Drawing.Point(3, 117);
+            this.label41.Location = new System.Drawing.Point(3, 138);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(79, 39);
+            this.label41.Size = new System.Drawing.Size(79, 46);
             this.label41.TabIndex = 12;
             this.label41.Text = "DO 03";
             // 
-            // DO2
+            // cbO2
             // 
-            this.DO2.AutoSize = true;
-            this.DO2.BackColor = System.Drawing.Color.Wheat;
-            this.DO2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO2.Location = new System.Drawing.Point(232, 78);
-            this.DO2.Name = "DO2";
-            this.DO2.Size = new System.Drawing.Size(133, 39);
-            this.DO2.TabIndex = 11;
-            this.DO2.Text = "00";
-            this.DO2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox6
-            // 
-            this.comboBox6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox6.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(88, 81);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(138, 33);
-            this.comboBox6.TabIndex = 10;
-            this.comboBox6.Text = "None";
+            this.cbO2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO2.ForeColor = System.Drawing.Color.Blue;
+            this.cbO2.FormattingEnabled = true;
+            this.cbO2.Location = new System.Drawing.Point(88, 95);
+            this.cbO2.Name = "cbO2";
+            this.cbO2.Size = new System.Drawing.Size(138, 33);
+            this.cbO2.TabIndex = 10;
+            this.cbO2.Text = "None";
             // 
             // label43
             // 
             this.label43.AutoSize = true;
             this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label43.Location = new System.Drawing.Point(3, 78);
+            this.label43.Location = new System.Drawing.Point(3, 92);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(79, 39);
+            this.label43.Size = new System.Drawing.Size(79, 46);
             this.label43.TabIndex = 9;
             this.label43.Text = "DO 02";
             // 
-            // DO1
+            // cbO1
             // 
-            this.DO1.AutoSize = true;
-            this.DO1.BackColor = System.Drawing.Color.Wheat;
-            this.DO1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO1.Location = new System.Drawing.Point(232, 39);
-            this.DO1.Name = "DO1";
-            this.DO1.Size = new System.Drawing.Size(133, 39);
-            this.DO1.TabIndex = 8;
-            this.DO1.Text = "00";
-            this.DO1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox7
-            // 
-            this.comboBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox7.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(88, 42);
-            this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(138, 33);
-            this.comboBox7.TabIndex = 7;
-            this.comboBox7.Text = "None";
+            this.cbO1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO1.ForeColor = System.Drawing.Color.Blue;
+            this.cbO1.FormattingEnabled = true;
+            this.cbO1.Location = new System.Drawing.Point(88, 49);
+            this.cbO1.Name = "cbO1";
+            this.cbO1.Size = new System.Drawing.Size(138, 33);
+            this.cbO1.TabIndex = 7;
+            this.cbO1.Text = "None";
             // 
             // label45
             // 
             this.label45.AutoSize = true;
             this.label45.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label45.Location = new System.Drawing.Point(3, 39);
+            this.label45.Location = new System.Drawing.Point(3, 46);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(79, 39);
+            this.label45.Size = new System.Drawing.Size(79, 46);
             this.label45.TabIndex = 6;
             this.label45.Text = "DO 01";
             // 
-            // DO0
+            // cbO0
             // 
-            this.DO0.AutoSize = true;
-            this.DO0.BackColor = System.Drawing.Color.Wheat;
-            this.DO0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DO0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DO0.Location = new System.Drawing.Point(232, 0);
-            this.DO0.Name = "DO0";
-            this.DO0.Size = new System.Drawing.Size(133, 39);
-            this.DO0.TabIndex = 5;
-            this.DO0.Text = "00";
-            this.DO0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox8
-            // 
-            this.comboBox8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox8.ForeColor = System.Drawing.Color.Blue;
-            this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(88, 3);
-            this.comboBox8.Name = "comboBox8";
-            this.comboBox8.Size = new System.Drawing.Size(138, 33);
-            this.comboBox8.TabIndex = 2;
-            this.comboBox8.Text = "None";
+            this.cbO0.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO0.ForeColor = System.Drawing.Color.Blue;
+            this.cbO0.FormattingEnabled = true;
+            this.cbO0.Location = new System.Drawing.Point(88, 3);
+            this.cbO0.Name = "cbO0";
+            this.cbO0.Size = new System.Drawing.Size(138, 33);
+            this.cbO0.TabIndex = 2;
+            this.cbO0.Text = "None";
             // 
             // label47
             // 
@@ -2280,9 +2351,35 @@ namespace BeeInterface
             this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label47.Location = new System.Drawing.Point(3, 0);
             this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(79, 39);
+            this.label47.Size = new System.Drawing.Size(79, 46);
             this.label47.TabIndex = 4;
             this.label47.Text = "DO 00";
+            // 
+            // DO0
+            // 
+            this.DO0.BackColor = System.Drawing.Color.Transparent;
+            this.DO0.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DO0.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DO0.BorderRadius = 0;
+            this.DO0.BorderSize = 0;
+            this.DO0.ButtonImage = null;
+            this.DO0.Corner = BeeGlobal.Corner.Both;
+            this.DO0.FlatAppearance.BorderSize = 0;
+            this.DO0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DO0.ForeColor = System.Drawing.Color.Black;
+            this.DO0.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DO0.IsCLick = false;
+            this.DO0.IsNotChange = false;
+            this.DO0.IsRect = false;
+            this.DO0.IsUnGroup = true;
+            this.DO0.Location = new System.Drawing.Point(232, 3);
+            this.DO0.Name = "DO0";
+            this.DO0.Size = new System.Drawing.Size(133, 40);
+            this.DO0.TabIndex = 26;
+            this.DO0.Text = "0";
+            this.DO0.TextColor = System.Drawing.Color.Black;
+            this.DO0.UseVisualStyleBackColor = false;
+            this.DO0.Click += new System.EventHandler(this.DO0_Click);
             // 
             // tabPage7
             // 
@@ -2290,16 +2387,16 @@ namespace BeeInterface
             this.tabPage7.Controls.Add(this.btnRefresh);
             this.tabPage7.Controls.Add(this.label49);
             this.tabPage7.Controls.Add(this.label48);
-            this.tabPage7.Controls.Add(this.btnBypass);
-            this.tabPage7.Controls.Add(this.btnConectIO);
-            this.tabPage7.Controls.Add(this.timerRead);
-            this.tabPage7.Controls.Add(this.slaveID);
             this.tabPage7.Controls.Add(this.label50);
             this.tabPage7.Controls.Add(this.label53);
             this.tabPage7.Controls.Add(this.label51);
             this.tabPage7.Controls.Add(this.cbBaurate);
             this.tabPage7.Controls.Add(this.comIO);
             this.tabPage7.Controls.Add(this.label52);
+            this.tabPage7.Controls.Add(this.btnBypass);
+            this.tabPage7.Controls.Add(this.btnConectIO);
+            this.tabPage7.Controls.Add(this.timerRead);
+            this.tabPage7.Controls.Add(this.slaveID);
             this.tabPage7.Location = new System.Drawing.Point(4, 34);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
@@ -2383,6 +2480,78 @@ namespace BeeInterface
             this.label48.Text = "(1-254)";
             this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label50
+            // 
+            this.label50.BackColor = System.Drawing.Color.Transparent;
+            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label50.Location = new System.Drawing.Point(9, 138);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(104, 41);
+            this.label50.TabIndex = 65;
+            this.label50.Text = "Timer Read";
+            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label53
+            // 
+            this.label53.BackColor = System.Drawing.Color.Transparent;
+            this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label53.Location = new System.Drawing.Point(3, 3);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(107, 41);
+            this.label53.TabIndex = 60;
+            this.label53.Text = "COM";
+            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label51
+            // 
+            this.label51.BackColor = System.Drawing.Color.Transparent;
+            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label51.Location = new System.Drawing.Point(6, 93);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(107, 41);
+            this.label51.TabIndex = 63;
+            this.label51.Text = "SlaveID";
+            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbBaurate
+            // 
+            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
+            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaurate.FormattingEnabled = true;
+            this.cbBaurate.Items.AddRange(new object[] {
+            "4800",
+            "9600",
+            "115200"});
+            this.cbBaurate.Location = new System.Drawing.Point(133, 47);
+            this.cbBaurate.Name = "cbBaurate";
+            this.cbBaurate.Size = new System.Drawing.Size(151, 32);
+            this.cbBaurate.TabIndex = 62;
+            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
+            // 
+            // comIO
+            // 
+            this.comIO.BackColor = System.Drawing.Color.Wheat;
+            this.comIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comIO.FormattingEnabled = true;
+            this.comIO.Items.AddRange(new object[] {
+            "Bee"});
+            this.comIO.Location = new System.Drawing.Point(133, 6);
+            this.comIO.Name = "comIO";
+            this.comIO.Size = new System.Drawing.Size(151, 32);
+            this.comIO.TabIndex = 59;
+            this.comIO.SelectedIndexChanged += new System.EventHandler(this.comIO_SelectedIndexChanged);
+            // 
+            // label52
+            // 
+            this.label52.BackColor = System.Drawing.Color.Transparent;
+            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label52.Location = new System.Drawing.Point(3, 48);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(111, 41);
+            this.label52.TabIndex = 61;
+            this.label52.Text = "Baurate";
+            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // btnBypass
             // 
             this.btnBypass.BackColor = System.Drawing.Color.Transparent;
@@ -2463,78 +2632,6 @@ namespace BeeInterface
             this.slaveID.TabIndex = 66;
             this.slaveID.Value = 0F;
             this.slaveID.ValueChanged += new System.EventHandler(this.slaveID_ValueChanged);
-            // 
-            // label50
-            // 
-            this.label50.BackColor = System.Drawing.Color.Transparent;
-            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label50.Location = new System.Drawing.Point(9, 138);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(104, 41);
-            this.label50.TabIndex = 65;
-            this.label50.Text = "Timer Read";
-            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label53
-            // 
-            this.label53.BackColor = System.Drawing.Color.Transparent;
-            this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label53.Location = new System.Drawing.Point(3, 3);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(107, 41);
-            this.label53.TabIndex = 60;
-            this.label53.Text = "COM";
-            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label51
-            // 
-            this.label51.BackColor = System.Drawing.Color.Transparent;
-            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label51.Location = new System.Drawing.Point(6, 93);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(107, 41);
-            this.label51.TabIndex = 63;
-            this.label51.Text = "SlaveID";
-            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbBaurate
-            // 
-            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
-            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBaurate.FormattingEnabled = true;
-            this.cbBaurate.Items.AddRange(new object[] {
-            "4800",
-            "9600",
-            "115200"});
-            this.cbBaurate.Location = new System.Drawing.Point(133, 47);
-            this.cbBaurate.Name = "cbBaurate";
-            this.cbBaurate.Size = new System.Drawing.Size(151, 32);
-            this.cbBaurate.TabIndex = 62;
-            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
-            // 
-            // comIO
-            // 
-            this.comIO.BackColor = System.Drawing.Color.Wheat;
-            this.comIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comIO.FormattingEnabled = true;
-            this.comIO.Items.AddRange(new object[] {
-            "Bee"});
-            this.comIO.Location = new System.Drawing.Point(133, 6);
-            this.comIO.Name = "comIO";
-            this.comIO.Size = new System.Drawing.Size(151, 32);
-            this.comIO.TabIndex = 59;
-            this.comIO.SelectedIndexChanged += new System.EventHandler(this.comIO_SelectedIndexChanged);
-            // 
-            // label52
-            // 
-            this.label52.BackColor = System.Drawing.Color.Transparent;
-            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label52.Location = new System.Drawing.Point(3, 48);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(111, 41);
-            this.label52.TabIndex = 61;
-            this.label52.Text = "Baurate";
-            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tabPage3
             // 
@@ -3385,29 +3482,21 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel17;
-        private System.Windows.Forms.Label DO7;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbO7;
         private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label DO6;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cbO6;
         private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.Label DO5;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox cbO5;
         private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label DO4;
-        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ComboBox cbO4;
         private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.Label DO3;
-        private System.Windows.Forms.ComboBox comboBox5;
+        private System.Windows.Forms.ComboBox cbO3;
         private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.Label DO2;
-        private System.Windows.Forms.ComboBox comboBox6;
+        private System.Windows.Forms.ComboBox cbO2;
         private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.Label DO1;
-        private System.Windows.Forms.ComboBox comboBox7;
+        private System.Windows.Forms.ComboBox cbO1;
         private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.Label DO0;
-        private System.Windows.Forms.ComboBox comboBox8;
+        private System.Windows.Forms.ComboBox cbO0;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.TabPage tabPage7;
         private CustomNumeric timerRead;
@@ -3424,5 +3513,13 @@ namespace BeeInterface
         private RJButton btnConectIO;
         private RJButton btnRefresh;
         private RJButton btnSave;
+        private RJButton DO7;
+        private RJButton DO6;
+        private RJButton DO5;
+        private RJButton DO4;
+        private RJButton D3;
+        private RJButton DO2;
+        private RJButton DO1;
+        private RJButton DO0;
     }
 }

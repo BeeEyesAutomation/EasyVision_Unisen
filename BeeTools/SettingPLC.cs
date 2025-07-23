@@ -25,45 +25,55 @@ namespace BeeInterface
         public SettingPLC()
         {
             InitializeComponent();
-            cbIn1.DataSource = listInt[0];
-            cbIn2.DataSource = listInt[1];
-            cbIn3.DataSource = listInt[2];
-            cbIn4.DataSource = listInt[3];
-            cbIn5.DataSource = listInt[4];
-            cbIn6.DataSource = listInt[5];
-            cbIn7.DataSource = listInt[6];
-            cbIn8.DataSource = listInt[7];
+            //cbIn1.DataSource = listIn[0];
+            //cbIn2.DataSource = listIn[1];
+            //cbIn3.DataSource = listIn[2];
+            //cbIn4.DataSource = listIn[3];
+            //cbIn5.DataSource = listIn[4];
+            //cbIn6.DataSource = listIn[5];
+            //cbIn7.DataSource = listIn[6];
+            //cbIn8.DataSource = listIn[7];
         }
-        List<List<string>> listInt = new List<List<string>>{
+        List<List<string>> listIn = new List<List<string>>{
             new List<string>(), new List<string>(), new List<string>(), new List<string>(),
              new List<string>(), new List<string>(), new List<string>(), new List<string>() };
+        List<List<string>> listOut = new List<List<string>>{
+            new List<string>(), new List<string>(), new List<string>(), new List<string>(),
+             new List<string>(), new List<string>(), new List<string>(), new List<string>() };
+        
         // 3. Đổ tất cả enum chưa chọn vào ComboBox
         private void RefreshComboBoxIn(int index ,String text)
         {
 
-            listInt[index] = new List<string>();
+            listIn[index] = new List<string>();
             List<String> list = new List<string>();
             foreach (I_O_Input io in Enum.GetValues(typeof(I_O_Input)))
             {
-                if (Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a=>a.I_O_Input==io)==-1|| text.Contains(io.ToString()))
-                    listInt[index].Add(io.ToString());
+              //  if (Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a=>a.I_O_Input==io)==-1|| text.Contains(io.ToString()))
+                    listIn[index].Add(io.ToString());
             }
 
         }
+        private void RefreshComboBoxOut(int index, String text)
+        {
+
+            listOut[index] = new List<string>();
+            List<String> list = new List<string>();
+            foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
+            {
+             //   if (Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == io) == -1 || text.Contains(io.ToString()))
+                    listOut[index].Add(io.ToString());
+            }
+
+        }
+
         public void ChangeDatasource(int ix,String i_O_Input)
         {
             
             for(int i=0;i<7;i++)
             {
                 if (ix == i) continue;
-               
-               
-                
-               
-               
-               
-               
-               
+
                 switch (i)
                 {
                     case 0:
@@ -142,7 +152,79 @@ namespace BeeInterface
             // (tuỳ chọn) nếu không có item nào thì disable
             cb.Enabled = cb.Items.Count > 0;
         }
+        public void ChangeDatasourceOut(int ix, String i_O_Output)
+        {
 
+            for (int i = 0; i < 7; i++)
+            {
+                if (ix == i) continue;
+
+                switch (i)
+                {
+                    case 0:
+                        if (i_O_Output.ToString() == cbIn1.Text)
+                        {
+                            cbO0.SelectedIndex = 0;
+                            return;
+                        }
+
+                        break;
+                    case 1:
+                        if (i_O_Output.ToString() == cbIn2.Text)
+                        {
+                            cbO1.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 2:
+                        if (i_O_Output.ToString() == cbIn3.Text)
+                        {
+                            cbO2.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 3:
+                        if (i_O_Output.ToString() == cbIn4.Text)
+                        {
+                            cbO3.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 4:
+                        if (i_O_Output.ToString() == cbIn5.Text)
+                        {
+                            cbO4.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 5:
+                        if (i_O_Output.ToString() == cbIn6.Text)
+                        {
+                            cbO5.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 6:
+                        if (i_O_Output.ToString() == cbIn7.Text)
+                        {
+                            cbO6.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+                    case 7:
+                        if (i_O_Output.ToString() == cbIn8.Text)
+                        {
+                            cbO7.SelectedIndex = 0;
+                            return;
+                        }
+                        break;
+
+                }
+
+            }
+
+
+        }
         public void RefreshValuePLC()
         {if (IsPress) return;
             if (!this.Visible) return;
@@ -196,9 +278,9 @@ namespace BeeInterface
         int index = 0;
         private void tmShow_Tick(object sender, EventArgs e)
         {
-            index++;
-            if(Global.ParaCommon.Comunication.IO.valueInput!=null)
-           Global.ParaCommon.Comunication.IO.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
+           // index++;
+           // if(Global.ParaCommon.Comunication.IO.valueInput!=null)
+           //Global.ParaCommon.Comunication.IO.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
 
         }
 
@@ -262,27 +344,54 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
          
             comIO.DataSource = SerialPort.GetPortNames();
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
-            Parallel.For(0, 1, i =>
+            Parallel.For(0, 8, i =>
             {
-                RefreshComboBoxIn(0,"");
-                RefreshComboBoxIn(1, "");
-                RefreshComboBoxIn(2, "");
-                RefreshComboBoxIn(3, "");
-                RefreshComboBoxIn(4, "");
-                RefreshComboBoxIn(5, "");
-                RefreshComboBoxIn(6, "");
-                RefreshComboBoxIn(7, "");
-              
+                RefreshComboBoxIn(i,"");
             });
-            cbIn1.DataSource = listInt[0];
-            cbIn2.DataSource = listInt[1];
-            cbIn3.DataSource = listInt[2];
-            cbIn4.DataSource = listInt[3];
-            cbIn5.DataSource = listInt[4];
-            cbIn6.DataSource = listInt[5];
-            cbIn7.DataSource = listInt[6];
-            cbIn8.DataSource = listInt[7];
-            cbSerialPort.Text =Global.Config.IDPort;
+            Parallel.For(0, 8, i =>
+            {
+                RefreshComboBoxOut(i, "");
+            });
+            cbIn1.DataSource = listIn[0];
+            cbIn2.DataSource = listIn[1];
+            cbIn3.DataSource = listIn[2];
+            cbIn4.DataSource = listIn[3];
+            cbIn5.DataSource = listIn[4];
+            cbIn6.DataSource = listIn[5];
+            cbIn7.DataSource = listIn[6];
+            cbIn8.DataSource = listIn[7];
+
+            cbO0.DataSource = listOut[0];
+            cbO1.DataSource = listOut[1];
+            cbO2.DataSource = listOut[2];
+            cbO3.DataSource = listOut[3];
+            cbO4.DataSource = listOut[4];
+            cbO5.DataSource = listOut[5];
+            cbO6.DataSource = listOut[6];
+            cbO7.DataSource = listOut[7];
+            var paraIOs = Global.ParaCommon.Comunication.IO.paraIOs;
+
+            cbO0.Text = paraIOs.Find(x => x.Adddress == 0&&x.TypeIO==TypeIO.Output)? .I_O_Output .ToString();   // giữ nguyên text cũ nếu không tìm thấy
+            cbO1.Text = paraIOs.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString();   // giữ nguyên text cũ nếu không tìm thấy
+            cbO2.Text = paraIOs.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString();   // giữ nguyên text cũ nếu không tìm thấy
+            cbO3.Text = paraIOs.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbO4.Text = paraIOs.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbO5.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbO6.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbO7.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            
+            cbIn1.Text = paraIOs.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input).I_O_Input.ToString();   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn2.Text = paraIOs.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn3.Text = paraIOs.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn4.Text = paraIOs.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn5.Text = paraIOs.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn6.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn7.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn8.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input) ? .I_O_Input.ToString();      // giữ nguyên text cũ nếu không tìm thấy
+
+            cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
+            slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
+            cbSerialPort.Text = Global.ParaCommon.Comunication.IO.Port;
             if (!Global.ParaCommon.Comunication.IO.IsBypass)
             {
                 if (Global.ParaCommon.Comunication.IO.IsConnected)
@@ -303,13 +412,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             if (Global.ParaCommon.Comunication.IO.valueInput == null)
                 Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
-            if (Global.ParaCommon.Comunication.IO.valueOutput == null)
-                Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
-            // 2) Subscribe sự kiện
+            //if (Global.ParaCommon.Comunication.IO.valueOutput == null)
+            //    Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
+            //// 2) Subscribe sự kiện
             Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
-            Global.ParaCommon.Comunication.IO.valueOutput.BulkChanged += ValueOutput_BulkChanged;
+            //Global.ParaCommon.Comunication.IO.valueOutput.BulkChanged += ValueOutput_BulkChanged;
           listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
-            listLabelsOut = new List<Label> { DO0, DO1, DO2, DO3, DO4, DO5, DO6, DO7 };
+          //  listLabelsOut = new List<Label> { DO0, DO1, DO2, DO3, DO4, DO5, DO6, DO7 };
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
         }
 
@@ -330,24 +439,25 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void ValueInput_BulkChanged(object sender, BulkChangedEventArgs e)
         {
 
-            for (int k = 0; k < e.Count; k++)
-            {
-                int idx = e.StartIndex + k;
-                if(idx < listLabelsIn.Count)
-                        if (listLabelsIn[idx].InvokeRequired)                   // are we on the wrong thread?
-                        {
-                            // re‑invoke this same method on the UI thread
-                           // listLabelsIn[idx].Invoke(new Action<string>(ValueInput_BulkChanged), e.NewValues[k].ToString());
-                        }
-                        else
-                        {
-                            // now we’re on the UI thread—safe to update
-                            listLabelsIn[idx].Text = e.NewValues[k].ToString();
-                        }
-                  ///  listLabelsIn[idx].Text = 
-                else
-                    break;
-            }
+           
+                // 1) If we're not on the UI thread, re‑invoke the entire handler
+                if (this.InvokeRequired)
+                {
+                    // You can use Invoke or BeginInvoke; BeginInvoke won’t block the background thread.
+                    this.BeginInvoke(new Action<object, BulkChangedEventArgs>(ValueInput_BulkChanged), sender, e);
+                    return;
+                }
+
+                // 2) Now we're on the UI thread—safe to touch any control
+                for (int k = 0; k < e.Count; k++)
+                {
+                    int idx = e.StartIndex + k;
+                    if (idx >= listLabelsIn.Count)
+                        break;
+
+                    listLabelsIn[idx].Text = e.NewValues[k].ToString();
+                }
+            
         }
 
       
@@ -645,6 +755,20 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             SaveData.Config(Global.Config);
 
+        }
+
+        private void DO0_Click(object sender, EventArgs e)
+        {
+            int index=Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if(index>-1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress,DO0.IsCLick);//LIGHT 2
+               if(! Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO0.IsCLick = false;
+                }    
+            }    
+               
         }
     }
 }

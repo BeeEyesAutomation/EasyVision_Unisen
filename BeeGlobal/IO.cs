@@ -183,6 +183,8 @@ namespace BeeGlobal
             try
             {
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
+                if (valueInput == null) valueInput = new IntArrayWithEvent(16);
+                if (valueOutput == null) valueOutput = new IntArrayWithEvent(16);
                 if (IsConnected) valueOutput.ReplaceAll(Modbus.ReadBit(2));
             }
             catch(Exception)
@@ -198,13 +200,16 @@ namespace BeeGlobal
              Modbus.DisconnectPLC();
             IsConnected = false;
         }
+        bool IsCanWrite = false;
         public  bool Read()
         {
             if (!IsConnected) return false;
             if (IsWriting)
             {
+                IsCanWrite = true;
                return false;
             }
+           
              valueInput.ReplaceAll( Modbus.ReadBit(1));
             for(int i=0;i<valueInput.Length; i++)
             {
@@ -227,7 +232,14 @@ namespace BeeGlobal
         public IO_Processing IO_Processing = IO_Processing.None;
         public async void WriteIO(IO_Processing Processing,bool Is=false,int Delay=1)
         {   if (!IsConnected) return;
-            IsWriting = true;
+            X: IsWriting = true;
+            await Task.Delay(5);
+            if (IsCanWrite)
+            {
+                IsCanWrite = false;
+            }
+            else
+                goto X;
             switch (Processing )
             {
                 case IO_Processing.Trigger:
