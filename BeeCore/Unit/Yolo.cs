@@ -38,20 +38,28 @@ namespace BeeCore
         public String pathFullModel = "";
         public  void SetModel()
         {
+            Common.PropetyTools[IndexThread][Index].StepValue = 1;
+            Common.PropetyTools[IndexThread][Index].MinValue = 0;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+
             try
             { 
             using (Py.GIL())
             {
 
-
-                dynamic mod = Py.Import("Tool.Learning");
-                dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                dynamic obj = cls.Invoke();              // khởi tạo instance
+                    if(Common.PropetyTools[IndexThread][Index].Name.Trim()=="")
+                    {
+                        Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    }     
+                //dynamic mod = Py.Import("Tool.Learning");
+                //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                //dynamic obj = cls.Invoke();              // khởi tạo instance
 
                 G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo.YOLO);
                     Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
+                  
+                }
             }
-        }
                 catch (PythonException pyEx)
                 {
                        MessageBox.Show("Python Error: " + pyEx.Message);
@@ -60,6 +68,8 @@ namespace BeeCore
                 {
                       MessageBox.Show("Error: " + ex.Message);
                 }
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
         public int Percent = 0;

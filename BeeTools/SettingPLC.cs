@@ -329,11 +329,22 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         List<Label> listLabelsOut = new List<Label>();
         private void ValueInput_BulkChanged(object sender, BulkChangedEventArgs e)
         {
+
             for (int k = 0; k < e.Count; k++)
             {
                 int idx = e.StartIndex + k;
                 if(idx < listLabelsIn.Count)
-                  listLabelsIn[idx].Text = e.NewValues[k].ToString();
+                        if (listLabelsIn[idx].InvokeRequired)                   // are we on the wrong thread?
+                        {
+                            // re‑invoke this same method on the UI thread
+                           // listLabelsIn[idx].Invoke(new Action<string>(ValueInput_BulkChanged), e.NewValues[k].ToString());
+                        }
+                        else
+                        {
+                            // now we’re on the UI thread—safe to update
+                            listLabelsIn[idx].Text = e.NewValues[k].ToString();
+                        }
+                  ///  listLabelsIn[idx].Text = 
                 else
                     break;
             }
@@ -512,7 +523,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             String name = cbIn3.Text;
             if (name.Contains("None"))
             {
-                Global.ParaCommon.Comunication.IO.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[3], ignoreCase: true));
+                Global.ParaCommon.Comunication.IO.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[2], ignoreCase: true));
 
             }
             else

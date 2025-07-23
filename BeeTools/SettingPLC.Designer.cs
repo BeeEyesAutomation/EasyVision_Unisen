@@ -1576,7 +1576,6 @@ namespace BeeInterface
             // 
             // tmShow
             // 
-            this.tmShow.Enabled = true;
             this.tmShow.Interval = 1000;
             this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
             // 

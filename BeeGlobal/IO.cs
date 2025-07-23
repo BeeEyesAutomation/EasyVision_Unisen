@@ -16,11 +16,12 @@ namespace BeeGlobal
     public class IO
     {
         [NonSerialized]
-        private readonly CancellationTokenSource _cts = new CancellationTokenSource
+        private  CancellationTokenSource _cts = new CancellationTokenSource
             ();
 
         public void StartRead()
         {
+            _cts = new CancellationTokenSource();
             if (valueInput == null)
                 valueInput = new IntArrayWithEvent(16);
             if (valueOutput == null)
@@ -44,8 +45,7 @@ namespace BeeGlobal
             if (IsConnected)
             {
 
-                if (valueInput.Length < LenReads[0]) return;
-                if (valueOutput.Length < LenReads[1]) return;
+              
                 if (Global.IsSendRS)
                 {
                     WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
@@ -209,7 +209,7 @@ namespace BeeGlobal
             for(int i=0;i<valueInput.Length; i++)
             {
                 int index = paraIOs.FindIndex(a => a.Adddress == i);
-                if(index>=-1)
+                if(index>-1)
                 {
                     paraIOs[index].Value=valueInput[i];
                 }    

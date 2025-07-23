@@ -215,7 +215,7 @@ namespace BeeInterface
                 itemTool.IndexTool = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
 
-               
+                PropetyTool.Propety.SetModel();
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")
                     itemTool.Name = TypeTool.ToString() + " " + Index;
@@ -261,7 +261,7 @@ namespace BeeInterface
                 if (control.Propety.rotMask == null)
                     control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
 
-                control.Propety.SetModel();
+               
 
 
                 control.Name =Nametool;
