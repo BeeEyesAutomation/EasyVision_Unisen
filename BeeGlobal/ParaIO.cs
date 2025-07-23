@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    [Serializable()]
     public class ParaIO
     {
         public TypeIO TypeIO;

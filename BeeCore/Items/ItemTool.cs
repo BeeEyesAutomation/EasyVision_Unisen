@@ -497,17 +497,47 @@ namespace BeeCore
                
                 case StatusTool.NotInitial:
                     break;
-                case StatusTool.WaitCheck:
+                case StatusTool.Processing:
+                    valueScore = 0;
+                    Score = "---" ;
+                    Status = "---";
+                    CT = 0; 
+                    ClStatus = Global.ColorNone;
+                    ClScore = Global.ColorNone;
+                    colorTrack = Global.ColorNone;
                     break;
                 case StatusTool.Done:
-                    valueScore = Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreResult ;
-                    Score = valueScore + "";
-                    Status = Common.PropetyTools[Global.IndexChoose][IndexTool].Results.ToString();
-                    CT = Common.PropetyTools[Global.IndexChoose][IndexTool].CycleTime;
-                    
-                    break;
-                case StatusTool.Processing:
-                    break;
+                  
+                    if(Common.PropetyTools[Global.IndexChoose][IndexTool].Results==Results.OK)
+                    {
+                        valueScore = Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreResult;
+                        Score = valueScore + "";
+                        Status = Common.PropetyTools[Global.IndexChoose][IndexTool].Results.ToString();
+                        CT = Common.PropetyTools[Global.IndexChoose][IndexTool].CycleTime;
+                        colorTrack = Global.ColorOK;
+                        ClStatus = Global.ColorOK;
+                        ClScore= Global.ColorOK;
+                    }
+                    else if (Common.PropetyTools[Global.IndexChoose][IndexTool].Results == Results.None)
+                    {
+                        Score = "---";
+                        Status = "NC";
+                        colorTrack = Global.ColorNone;
+                        ClStatus = Global.ColorNone;
+                        ClScore = Global.ColorNone;
+                    }
+                    else
+                    {
+                        valueScore = Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreResult;
+                        Score = valueScore + "";
+                        Status = Common.PropetyTools[Global.IndexChoose][IndexTool].Results.ToString();
+                        CT = Common.PropetyTools[Global.IndexChoose][IndexTool].CycleTime;
+                        colorTrack = Global.ColorNG;
+                        ClStatus = Global.ColorNG;
+                        ClScore = Global.ColorNG;
+                    }
+                        break;
+              
 
             }
            

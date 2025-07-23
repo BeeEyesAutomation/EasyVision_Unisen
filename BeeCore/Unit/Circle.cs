@@ -237,7 +237,7 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].Results = Results.OK;
             else
             Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
+           
           
             if (!Global.IsRun)
             {
@@ -245,7 +245,8 @@ namespace BeeCore
             }
           
             Common.PropetyTools[IndexThread][Index].ScoreResult = (int)((Math.Abs(RadiusResult - RadiusTemp) / (RadiusTemp * 1.0)) * 100);
-            if(rectRotates.Count==0)
+            if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+            if (rectRotates.Count==0)
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }

@@ -65,7 +65,7 @@ namespace BeeCore
                     //int    indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
                     if (indexToolPosition == -1)
                     {
-                        StatusProcessing = StatusProcessing.Processing;
+                        StatusProcessing = StatusProcessing.Checking;
                         return StatusProcessing;
                     }
                     if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
@@ -86,7 +86,7 @@ namespace BeeCore
 
 
                         }
-                        StatusProcessing = StatusProcessing.Processing;
+                        StatusProcessing = StatusProcessing.Checking;
                     }
 
                     break;
@@ -95,7 +95,7 @@ namespace BeeCore
                     {
                         dynamic Propety = BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety;
 
-                        StatusProcessing = StatusProcessing.Processing;
+                        StatusProcessing = StatusProcessing.Checking;
 
                         if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
                         {
@@ -126,16 +126,16 @@ namespace BeeCore
                         }
                     }
                     break;
-                case StatusProcessing.Processing:
+                case StatusProcessing.Checking:
                    // G.StatusDashboard.StatusText = "---";
                    // G.StatusDashboard.StatusBlockBackColor = Color.Gray;
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
                     {
-                        PropetyTool.ItemTool.Status = "---";
-                        // Tools.ItemTool.Score.ColorTrack = Color.Gray;
-                        PropetyTool.ItemTool.ClScore = Color.Gray;
-                        PropetyTool.ItemTool.ClStatus = Color.Gray;
-                        PropetyTool.ItemTool.Refresh();
+                        //PropetyTool.ItemTool.Status = "---";
+                        //// Tools.ItemTool.Score.ColorTrack = Color.Gray;
+                        //PropetyTool.ItemTool.ClScore = Color.Gray;
+                        //PropetyTool.ItemTool.ClStatus = Color.Gray;
+                      
                         if (PropetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
                         PropetyTool.StatusTool = StatusTool.WaitCheck;
                         if (!PropetyTool.worker.IsBusy)
@@ -144,7 +144,7 @@ namespace BeeCore
                     StatusProcessing = StatusProcessing.WaitingDone;
                     break;
                 case StatusProcessing.WaitingDone:
-                    StatusProcessing = StatusProcessing.Done;
+                    StatusProcessing Status = StatusProcessing.Done;
                     Parallel.For(0, BeeCore.Common.PropetyTools[indexThread].Count, i =>
                     {
                         PropetyTool PropetyTool = BeeCore.Common.PropetyTools[indexThread][i];
@@ -153,75 +153,17 @@ namespace BeeCore
 
                         if (PropetyTool.StatusTool != StatusTool.Done)
                         {
-                            StatusProcessing = StatusProcessing.WaitingDone;
-
+                            Status = StatusProcessing.WaitingDone;
+                            return;
                         }
                         else
                         {
-                            //if (Tools.tool.Propety.IsOK)
-                            //{
-
-                            //    if (Global.Config.ConditionOK == ConditionOK.Logic)
-                            //    {
-                            //        if (propetyTool.UsedTool == UsedTool.Used)
-                            //        {
-                            //            Tools.ItemTool.lbStatus.Text = "OK";
-                            //            Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //        }
-                            //        else
-                            //        {
-                            //            Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.Text = "NG";
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        Tools.ItemTool.lbStatus.Text = "OK";
-                            //        Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //        Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //        Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //    }
-                            //}
-
-                            //else
-                            //{
-
-                            //    if (Global.Config.ConditionOK == ConditionOK.Logic)
-                            //    {
-                            //        if (propetyTool.UsedTool != UsedTool.Used)
-                            //        {
-                            //            Tools.ItemTool.lbStatus.Text = "OK";
-                            //            Tools.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                            //        }
-                            //        else
-                            //        {
-                            //            Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.Text = "NG";
-                            //            Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //            Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        Tools.ItemTool.Score.ColorTrack = Color.DarkRed;
-                            //        Tools.ItemTool.lbStatus.Text = "NG";
-                            //        Tools.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                            //        Tools.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                            //    }
-
-                            //}
-                            //Tools.ItemTool.Refresh();
+                           
                         }
 
                     }
                     );
-
+                    StatusProcessing= Status;
                     break;
             }
             return StatusProcessing;

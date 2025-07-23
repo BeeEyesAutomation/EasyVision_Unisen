@@ -478,44 +478,44 @@ namespace BeeUi.Common
       
     public void AddDataMethod(String myString)
     {
-        G.EditTool.txtRecept.Text=myString;
+        //G.EditTool.txtRecept.Text=myString;
             
-            if (sRecept.Contains("IO")&& !IsWaitPort)
-            {
-                IsWaitPort = true;
-                tmScanPort.Tick -= TmScanPort_Tick;
-                tmScanPort.Enabled = false;
+        //    if (sRecept.Contains("IO")&& !IsWaitPort)
+        //    {
+        //        IsWaitPort = true;
+        //        tmScanPort.Tick -= TmScanPort_Tick;
+        //        tmScanPort.Enabled = false;
              
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-                G.EditTool.toolStripPort.Text = "Port Connected";
-                SaveData.Config(Global.Config);
-                G.EditTool.View.tmCheckPort.Enabled = true;
-            }
-           else if  (sRecept.Contains("Trig"))
-                {
-                G.EditTool.View.Cap(false);
-                }
-            else if (sRecept.Contains("Mod"))
-            {
-                //SerialPort.WriteLine("Done");
-                btnMode.PerformClick();
-                if (btnMode.Text=="RUN")
-                    SerialPort1.WriteLine("Run");
-                else
-                    SerialPort1.WriteLine("Edit");
-            }
-            else if (sRecept.Contains("Rec"))
-            {
-              G.EditTool.View.btnLive.PerformClick();
-                if (G.EditTool.View.btnLive.IsCLick)
-                    SerialPort1.WriteLine("Live");
-                else
-                    SerialPort1.WriteLine("Cap");
-            }
-            else if (sRecept.Contains("Done"))
-            {
-               // G.IsDone = false;
-            }
+        //        G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+        //        G.EditTool.toolStripPort.Text = "Port Connected";
+        //        SaveData.Config(Global.Config);
+        //        G.EditTool.View.tmCheckPort.Enabled = true;
+        //    }
+        //   else if  (sRecept.Contains("Trig"))
+        //        {
+        //        G.EditTool.View.Cap(false);
+        //        }
+        //    else if (sRecept.Contains("Mod"))
+        //    {
+        //        //SerialPort.WriteLine("Done");
+        //        btnMode.PerformClick();
+        //        if (btnMode.Text=="RUN")
+        //            SerialPort1.WriteLine("Run");
+        //        else
+        //            SerialPort1.WriteLine("Edit");
+        //    }
+        //    else if (sRecept.Contains("Rec"))
+        //    {
+        //      G.EditTool.View.btnLive.PerformClick();
+        //        if (G.EditTool.View.btnLive.IsCLick)
+        //            SerialPort1.WriteLine("Live");
+        //        else
+        //            SerialPort1.WriteLine("Cap");
+        //    }
+        //    else if (sRecept.Contains("Done"))
+        //    {
+        //       // G.IsDone = false;
+        //    }
         }
     private void SerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
@@ -960,10 +960,10 @@ txtQrCode.Focus();
                         await Task.Delay(Global.Config.delayTrigger);
                         if (Global.Config.IsExternal)
                             G.EditTool.View.btnTypeTrig.IsCLick = true;
-                        if (Global.IsRun)
-                            G.EditTool.View.Cap(false);
-                        else
-                            tmReadPLC.Enabled = true;
+                        //if (Global.IsRun)
+                        //    G.EditTool.View.Cap(false);
+                        //else
+                        //    tmReadPLC.Enabled = true;
                         IsWaitingRead = true;
                     }
                     else

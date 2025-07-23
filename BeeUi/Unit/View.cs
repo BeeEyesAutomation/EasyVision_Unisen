@@ -1363,35 +1363,47 @@ namespace BeeUi
             {
                 case StatusProcessing.None:
                     break;
-				case StatusProcessing.Triggered:
+				case StatusProcessing.Read:
 					//if (Global.Config.IsExternal)
 					//	G.EditTool.View.btnTypeTrig.IsCLick = true;
 					//if (Global.IsRun)
 					//	G.EditTool.View.Cap(false);
 					workReadCCD.RunWorkerAsync();
 					break;
-				case StatusProcessing.Readed:				
+				case StatusProcessing.Checking:				
 					RunProcessing();
+                    Global.StatusProcessing = StatusProcessing.WaitingDone;
                   break;
 				case StatusProcessing.WaitingDone:
 					break;
 				case StatusProcessing.Done:
 
-					timer.Stop();
-
-					ShowResultTotal();
+					
+                    if (Global.ParaCommon.Comunication.IO.IsBypass)
+                    {
+                        timer.Stop();
+                    }
+                    ShowResultTotal();
 
 
 					SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
-					if (G.Header.IsWaitingRead)
-					{
-						G.Header.IsWaitingRead = false;
-						//G.Header.tmReadPLC.Enabled = true;
-					}
+                    if(Global.ParaCommon.Comunication.IO.IsBypass)
+                    {
+                        G.StatusDashboard.CycleTime =(int) SumCycle;
+                    }
+					//if (G.Header.IsWaitingRead)
+					//{
+					//	G.Header.IsWaitingRead = false;
+					//	//G.Header.tmReadPLC.Enabled = true;
+					//}
 
 					CheckStatusMode();
-					IsCompleteAll = false;
-					break;
+					Global.StatusProcessing=StatusProcessing.None;
+                    Checking1.StatusProcessing=StatusProcessing.None;
+                    Checking2.StatusProcessing = StatusProcessing.None;
+                    Checking3.StatusProcessing = StatusProcessing.None;
+                    Checking4.StatusProcessing = StatusProcessing.None;
+                    break;
 			}    
         }
 
@@ -1645,264 +1657,82 @@ namespace BeeUi
             }
             return newBmp;
         }
-        public void DrawTotalResult(int IndexThread )
+        public void DrawTotalResult(int IndexThread)
         {
-
-        
-            if (BeeCore.Common.bmResult != null)
+            try
             {
-               
-                BeeCore.Common.bmResult.Dispose();
-            }
+
+                if (BeeCore.Common.bmResult != null)
+                {
+
+                    BeeCore.Common.bmResult.Dispose();
+                }
 
 
-            // BeeCore.Common.listCamera[Global.IndexChoose].matRaw= BeeCore.Common.GetImageRaw();
-            //imgView.ImageIpl = BeeCore.Common.listCamera[Global.IndexChoose].matRaw;
-            // Cv2.ImShow("A", BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-            // Set the scale.
-            //imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y
+                // BeeCore.Common.listCamera[Global.IndexChoose].matRaw= BeeCore.Common.GetImageRaw();
+                //imgView.ImageIpl = BeeCore.Common.listCamera[Global.IndexChoose].matRaw;
+                // Cv2.ImShow("A", BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+                // Set the scale.
+                //imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y
 
-            //gc.Clear(Color.White);
-            Mat rs = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
-            if (rs.Empty()) return;
-            if (rs.Width==0|| rs.Height == 0) return;
-            BeeCore.Common.bmResult = rs.ToBitmap();
+                //gc.Clear(Color.White);
+                Mat rs = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
+                if (rs.Empty()) return;
+                if (rs.Width == 0 || rs.Height == 0) return;
+                BeeCore.Common.bmResult = rs.ToBitmap();
 
-            // Convert nếu cần
-            if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
-            {
-                BeeCore.Common.bmResult = ConvertToNonIndexed(BeeCore.Common.bmResult);
-            }
+                // Convert nếu cần
+                if ((BeeCore.Common.bmResult.PixelFormat & PixelFormat.Indexed) != 0)
+                {
+                    BeeCore.Common.bmResult = ConvertToNonIndexed(BeeCore.Common.bmResult);
+                }
 
                 using (Graphics gc = Graphics.FromImage(BeeCore.Common.bmResult))
-            {
+                {
+
               
-             //   BeeCore.Common.bmResult = new Bitmap(bm, (int)bm.Width, (int)bm.Height);
-                // Convert nếu cần
-               
-                // BeeCore.Common.bmResult = new Bitmap(bm,(int)bm.Width, (int)bm.Height);
-                //Graphics gc = Graphics.FromImage(BeeCore.Common.bmResult);
-                gc.ResetTransform();
-                var mat = new Matrix();
-                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-                //gc.Transform=mat;
-                
-                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                    var mat = new Matrix();
+                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+                    //gc.Transform=mat;
 
-                {
-                    // tool.tool.Propety.ScoreRs = 80;
-                    //tool.tool.Propety.IsOK = true;
-                    if (PropetyTool.UsedTool == UsedTool.NotUsed)
+                    foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+
                     {
-                        //tool.ItemTool.lbStatus.Text = "NC";
-                        //tool.ItemTool.Score.ColorTrack = Color.Gray;
-                        //tool.ItemTool.lbScore.ForeColor = Color.Gray;
-                        //tool.ItemTool.lbStatus.BackColor = Color.Gray;
-
+                  
+                        if (PropetyTool.UsedTool == UsedTool.NotUsed)
+                        {
+                          
+                            continue;
+                        }
                       
-                        continue;
+                        PropetyTool.Propety.DrawResult(gc);
+                    
+                        if (PropetyTool.Results == Results.NG)
+                        {
+                            Global.TotalOK = false;
+                            break;
+
+                        }
+
+                       
+                      
+                     //   indexTool++;
                     }
-                    // BeeCore.Common.PropetyTools[indexTool]
-                    //  SumCycle += tool.tool.Propety.cycleTime;
-                    PropetyTool.Propety.DrawResult(gc);
-                    //PropetyTool.ItemTool.CT = PropetyTool.Propety.cycleTime;
-                    //PropetyTool.ItemTool.Score = PropetyTool.Propety.ScoreRs+"";
-                    //PropetyTool.ItemTool.ValueScore =PropetyTool.Propety.ScoreRs;
-                    if (PropetyTool.Results==Results.OK)
+                    if (imgView.Image != null)
                     {
-                        numToolOK++;
-                        PropetyTool.ItemTool.Status = "OK";
-                        PropetyTool.ItemTool.ColorTrack = Color.FromArgb(0, 172, 73);
-                        PropetyTool.ItemTool.ClScore = Color.FromArgb(0, 172, 73);
-                        PropetyTool.ItemTool.ClStatus = Color.FromArgb(0, 172, 73);
-                        //switch (Global.Config.ConditionOK)
-                        //{
-                        //    case ConditionOK.TotalOK:
-                        //        numToolOK++;
-                        //        break;
-                        //    case ConditionOK.AnyOK:
-                        //        numToolOK++;
-                        //        break;
-                        //    case ConditionOK.Logic:
-                        //        if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Invertse)
-                        //        {
-                        //            G.TotalOK = false;
-                        //        }
-                        //        break;
-                        //}
-                        //if (Global.Config.ConditionOK == ConditionOK.Logic)
-                        //{
-                        //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
-                        //    {
-                        //        tool.ItemTool.lbStatus.Text = "OK";
-                        //        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        //        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        //        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                        //    }
-                        //    else
-                        //    {
-                        //        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                        //        tool.ItemTool.lbStatus.Text = "NG";
-                        //        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                        //        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    tool.ItemTool.lbStatus.Text = "OK";
-                        //    tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        //    tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        //    tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                        //}
+                        imgView.Image.Dispose(); // Giải phóng ảnh cũ
                     }
-
-                    else
-                    {
-                        Global.TotalOK = false;
-                        //switch (Global.Config.ConditionOK)
-                        //{
-
-
-                        //    case ConditionOK.Logic:
-                        //        if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool == UsedTool.Used)
-                        //        {
-                        //            G.TotalOK = false;
-                        //        }
-                        //        break;
-                        //}
-                        //if (Global.Config.ConditionOK == ConditionOK.Logic)
-                        //{
-                        //    if (BeeCore.Common.PropetyTools[IndexThread][indexTool].UsedTool != UsedTool.Used)
-                        //    {
-                        //        tool.ItemTool.lbStatus.Text = "OK";
-                        //        tool.ItemTool.Score.ColorTrack = Color.FromArgb(0, 172, 73);
-                        //        tool.ItemTool.lbScore.ForeColor = Color.FromArgb(0, 172, 73);
-                        //        tool.ItemTool.lbStatus.BackColor = Color.FromArgb(0, 172, 73);
-                        //    }
-                        //    else
-                        //    {
-                        //        tool.ItemTool.Score.ColorTrack = Color.DarkRed;
-                        //        tool.ItemTool.lbStatus.Text = "NG";
-                        //        tool.ItemTool.lbScore.ForeColor = Color.DarkRed;
-                        //        tool.ItemTool.lbStatus.BackColor = Color.DarkRed;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        PropetyTool.ItemTool.ColorTrack = Color.DarkRed;
-                        PropetyTool.ItemTool.Status= "NG";
-                        PropetyTool.ItemTool.ClScore = Color.DarkRed;
-                        PropetyTool.ItemTool.ClStatus= Color.DarkRed;
-                        //}
-
-
-                    }
-                    PropetyTool.ItemTool.Refresh();
-
-                    indexTool++;
-                } 
-                if (imgView.Image != null)
-                {
-                    imgView.Image.Dispose(); // Giải phóng ảnh cũ
-                }   
-                imgView.Image = BeeCore.Common.bmResult; ;
-                rs.Dispose();
-                //if (BeeCore.Common.bmResult == null) return;
-                //if (BeeCore.Common.bmResult.Width == 0) return;
-                //if (BeeCore.Common.bmResult.Height == 0) return;
+                    imgView.Image = BeeCore.Common.bmResult; ;
+                    rs.Dispose();
+                   
+                }
+             
             }
-            //if(G.listHis.Count >20){
-            //    G.listHis[0].bm.Dispose();
-            //    G.listHis.RemoveAt(0);
-            //}
-            // G.listHis.Add(new HistoryCheck( (Bitmap) BeeCore.Common.bmResult.Clone(),G.TotalOK,DateTime.Now));
-            //  Shows.RefreshImg(imgView,TypeImg.Result);
-            //imgView.Invoke((Action)(() =>
-            //{
-            //    if (imgView.Image != null)
-            //    {
-            //        imgView.Image.Dispose(); // Giải phóng ảnh cũ
-            //    }
-            //    Bitmap copy = null;
-            //    try
-            //    {
-            //         //copy = new Bitmap(BeeCore.Common.bmResult);  // tạo bản sao mới
-            //        imgView.Image = BeeCore.Common.bmResult;
-            //        //using (MemoryStream ms = new MemoryStream())
-            //        //{
-            //        //    BeeCore.Common.bmResult.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            //        //    ms.Seek(0, SeekOrigin.Begin); // Đặt lại vị trí đầu stream
-
-            //        //    // Load hình ảnh từ MemoryStream vào PictureBox
-            //        //    imgView.Image = Image.FromStream(ms);
-            //        //}
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        if (ex.Message.Contains("GDI"))
-            //        {
-            //            imgView = new Cyotek.Windows.Forms.ImageBox();
-
-            //            imgView.Size = new System.Drawing.Size(pView.Width, pView.Height);
-
-            //            imgView.Parent = pView;
-            //            imgView.Location = new Point(pView.Width / 2 - 1280 / 2, Height / 2 - 720 / 2);
-
-            //        }
-
-            //    }
-            //    finally
-            //    {
-            //      //  copy.Dispose();
-            //      //  BeeCore.Common.bmResult.Dispose();
-            //    }
-
-            //}));
-            //imgView.Refresh();
-            //imgView.Update();
-            //if (!IsInvert)
-            //{
-            //    imgView.BringToFront();// = true;
-            //    //imgView2.Visible = false;
-            //    imgView.Invoke((Action)(() =>
-            //    {
-            //      if (imgView.Image != null)
-            //        {
-            //            imgView.Image.Dispose(); // Giải phóng ảnh cũ
-            //        }
-            //      imgView.Image = new Bitmap(newImage); // Đặt ảnh mới
-            //    }));
-            //}
-            //else
-            //{
-            //    //imgView.Visible = false;
-            //    imgView2.BringToFront();// = true;
-            //    imgView2.Invoke((Action)(() =>
-            //    {
-            //        if (imgView2.Image != null)
-            //        {
-            //            imgView2.Image.Dispose(); // Giải phóng ảnh cũ
-            //        }
-            //        imgView2.Image = new Bitmap(newImage); // Đặt ảnh mới
-            //    }));
-            //}
-            //  IsInvert = !IsInvert;
-            // Giải phóng ảnh từ file
-            numSetImg++;
-            //if (numSetImg > 1000)
-            //{
-            //    GC.Collect();
-            //    GC.WaitForPendingFinalizers();
-            //    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            //    {
-
-            //        SetProcessWorkingSetSize32Bit(System.Diagnostics
-            //           .Process.GetCurrentProcess().Handle, -1, -1);
-            //    }
-            //    numSetImg = 0;
-            //}
-          
+            catch (Exception ex)
+            {
+                String s = ex.Message;
+            }
 
         }
         int numSetImg;
@@ -2041,23 +1871,7 @@ namespace BeeUi
             
             }
         public float Cyclyle1 = 0;
-        public void Cap(bool IsTest)
-        {
-
-            if (btnLive.IsCLick)
-            {
-                btnCap.IsCLick = false;
-                return;
-            }    
-
-                btnCap.Enabled = false;
-
-          
-
-            
-            timer.Restart();
-            if (!workReadCCD.IsBusy) workReadCCD.RunWorkerAsync();
-        }
+       
         public bool  IsBTNCap=false;
         private  void btnCap_Click(object sender, EventArgs e)
         {
@@ -2082,8 +1896,17 @@ namespace BeeUi
                // MessageBox.Show("Please stop Mode Live");
                 return;
             }
-          //  BeeCore.Common.currentTrig++;
-            Cap(false);
+            if (btnLive.IsCLick)
+            {
+                btnCap.IsCLick = false;
+                return;
+            }
+            Global.StatusMode = StatusMode.Once;
+            timer.Restart();
+            btnCap.Enabled = false;
+            Global.StatusProcessing = StatusProcessing.Read;
+            //  BeeCore.Common.currentTrig++;
+          
         }
 
         private async void btnRecord_Click(object sender, EventArgs e)
@@ -2324,7 +2147,7 @@ namespace BeeUi
 
 			if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
 			{
-                Global.StatusProcessing = StatusProcessing.Readed;
+                Global.StatusProcessing = StatusProcessing.Checking;
 			}
 		}
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
@@ -2844,9 +2667,9 @@ namespace BeeUi
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                  btnFile.Enabled = false;
                 Global.StatusMode = StatusMode.SimOne;
-                Global.StatusProcessing = StatusProcessing.Readed;
+                timer.Restart();
+                Global.StatusProcessing = StatusProcessing.Checking;
 
-				RunProcessing();
                 btnRunSim.Enabled = true;
             }
 
@@ -3096,7 +2919,28 @@ namespace BeeUi
 		StatusProcessing Processing2 = StatusProcessing.None;
 		StatusProcessing Processing3 = StatusProcessing.None;
 		StatusProcessing Processing4 = StatusProcessing.None;
-		public void RunProcessing()
+        public async Task CheckStatus()
+        {
+            await Task.Run(async () =>
+            {
+                // simple delay inside loop to avoid 100% CPU spin
+                while (!_cts.Token.IsCancellationRequested)
+                {
+                    if (Processing1 == StatusProcessing.Done
+                     && Processing2 == StatusProcessing.Done
+                     && Processing3 == StatusProcessing.Done
+                     && Processing4 == StatusProcessing.Done)
+                    {
+                       
+                        return;    // exit the Task.Run delegate
+                    }
+                    await Task.Delay(50, _cts.Token);
+                }
+            }, _cts.Token);
+
+            Global.StatusProcessing = StatusProcessing.Done;
+        }
+        public  async void RunProcessing()
         {
             if (BeeCore.Common.listCamera[0] != null)
             {
@@ -3124,20 +2968,9 @@ namespace BeeUi
 			}
 			else
 				Processing4 = StatusProcessing.Done;
-			Task.Run(() =>
-			{
-				while (!_cts.Token.IsCancellationRequested)
-				{
-					if( Processing1==StatusProcessing.Done && Processing2== StatusProcessing.Done &&
-                    Processing3 == StatusProcessing.Done && Processing4 == StatusProcessing.Done )
-                    {
-                        Global.StatusProcessing = StatusProcessing.Done;
-						break;
-					}    
-						
-				}
-			}, _cts.Token);
-		}
+          await  CheckStatus();
+
+        }
 		private readonly CancellationTokenSource _cts = new CancellationTokenSource
 		  ();
 		private void imgView_Scroll(object sender, ScrollEventArgs e)
@@ -3161,7 +2994,7 @@ namespace BeeUi
                 if (indexFile >= listMat.Count) indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                RunProcessing();
+                Global.StatusProcessing = StatusProcessing.Checking;
             }
             else
             {

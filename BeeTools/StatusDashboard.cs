@@ -84,8 +84,44 @@ namespace BeeInterface
                 Dock = DockStyle.Right,
                 Width = 60
             };
+            Global.StatusProcessingChanged += Global_StatusProcessingChanged;
             btnReset.Click += ResetButton_Click;
             Controls.Add(btnReset);
+        }
+
+        private void Global_StatusProcessingChanged(StatusProcessing obj)
+        {
+           
+            switch (obj)
+            {
+                case StatusProcessing.Trigger:
+                    StatusText = obj.ToString();
+                    StatusBlockBackColor = Global.ColorTrigger; this.Refresh();
+                    break;
+                case StatusProcessing.Read:
+                    StatusText = obj.ToString();
+                    StatusBlockBackColor = Global.ColorRead; this.Refresh();
+                    break;
+                case StatusProcessing.Checking:
+                    StatusText = obj.ToString();
+                    StatusBlockBackColor = Global.ColorProssing; this.Refresh();
+                    break;
+                case StatusProcessing.Done:
+                    if(Global.TotalOK)
+                        StatusBlockBackColor = Global.ColorOK;
+                    else
+                        StatusBlockBackColor = Global.ColorNG;
+                    this.Refresh();
+                    break;
+                case StatusProcessing.WaitingDone:
+                   
+                    break;
+                case StatusProcessing.None:
+
+                    StatusBlockBackColor = Global.ColorNone;
+                    break;
+            }
+            
         }
 
         private void ResetButton_Click(object sender, EventArgs e)

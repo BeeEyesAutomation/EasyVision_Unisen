@@ -68,6 +68,45 @@ namespace BeeCore
         public Stopwatch timer = new Stopwatch();
         [NonSerialized]
         public BackgroundWorker worker = new BackgroundWorker();
+        public void DoWork()
+        {
+          StatusTool = StatusTool.Processing;
+            timer.Restart();
+            if (UsedTool == UsedTool.NotUsed)
+                return;
+                if (!Global.IsRun)
+               Propety.rotAreaAdjustment = Propety.rotArea;
+           Propety.DoWork(Propety.rotAreaAdjustment);
+        }
+        public void Complete()
+        {
+           
+            if (UsedTool==UsedTool.NotUsed)
+            {
+                Results = Results.None;
+                StatusTool = StatusTool.Done;
+                return;
+            }
+            else
+                Propety.Complete();
+            timer.Stop();
+            CycleTime = (int)timer.Elapsed.TotalMilliseconds;
+            switch (UsedTool)
+            {
+                case UsedTool.NotUsed:
+                    Results = Results.None;
+                    break;
+                case UsedTool.Invertse:
+                    if (Results == Results.OK) Results = Results.NG;
+                    else Results = Results.OK;
+                    break;
+               
+            }
+            if (!Global.IsRun)
+                Global.StatusDraw = StatusDraw.Check;
+          StatusTool = StatusTool.Done;
+        
+        }
         public PropetyTool(dynamic Propety, TypeTool TypeTool,String Name)
         {
             this.Name = Name;

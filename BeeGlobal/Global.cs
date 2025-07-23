@@ -60,9 +60,12 @@ namespace BeeGlobal
         }
         public static Step Step = Step.Run;
         public static float Scale = 1, AngleOrigin;
-        public static  Color ColorOK = Color.LimeGreen;
-        public static Color ColorNG= Color.Red;
-        public static Color ColorNone = Color.LightGray;
+        public static  Color ColorOK = Color.FromArgb(0, 172, 73);
+        public static Color ColorNG = Color.DarkRed;
+        public static Color ColorRead = Color.SkyBlue;
+        public static Color ColorProssing = Color.Blue;
+        public static Color ColorTrigger = Color.LightBlue;
+        public static Color ColorNone = Color.Gray;
         public static TypeCrop _TypeCrop = TypeCrop.Crop;
         public static event Action<TypeCrop> TypeCropChanged;
         public static TypeCrop TypeCrop

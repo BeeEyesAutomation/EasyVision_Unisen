@@ -14,6 +14,7 @@ namespace BeeGlobal
     [Serializable()]
     public class IO
     {
+        [NonSerialized]
         private readonly CancellationTokenSource _cts = new CancellationTokenSource
             ();
 
@@ -58,13 +59,13 @@ namespace BeeGlobal
                 if (Global.IsRun && Global.Config.IsExternal)
                 {
                     if (CheckReady())
-                    {Global.StatusProcessing= StatusProcessing.Triggered;
+                    {Global.StatusProcessing= StatusProcessing.Trigger;
                         WriteIO(IO_Processing.Trigger);
                         Global.StatusMode = StatusMode.Once;
                         await Task.Delay(Global.Config.delayTrigger);
-                      
-                        
-                        
+                        Global.StatusProcessing = StatusProcessing.Read;
+
+
                     }
                    
                 }
