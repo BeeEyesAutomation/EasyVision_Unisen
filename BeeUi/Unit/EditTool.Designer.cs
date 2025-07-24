@@ -43,9 +43,11 @@ namespace BeeUi
             this.lbLicence = new System.Windows.Forms.Label();
             this.pView = new System.Windows.Forms.Panel();
             this.pHeader = new System.Windows.Forms.Panel();
+            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.label2 = new System.Windows.Forms.Label();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.LayoutMain = new System.Windows.Forms.TableLayoutPanel();
+            this.inforBar1 = new BeeUi.Unit.InforBar();
             this.LayOutShow = new System.Windows.Forms.TableLayoutPanel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pEditTool = new System.Windows.Forms.Panel();
@@ -61,10 +63,8 @@ namespace BeeUi
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnExit = new BeeInterface.RJButton();
-            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
-            this.inforBar1 = new BeeUi.Unit.InforBar();
-            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.header1 = new BeeUi.Common.Header();
+            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -171,6 +171,16 @@ namespace BeeUi
             this.pHeader.Size = new System.Drawing.Size(1150, 55);
             this.pHeader.TabIndex = 19;
             // 
+            // btnHeaderBar1
+            // 
+            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar1.Location = new System.Drawing.Point(715, 0);
+            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar1.Name = "btnHeaderBar1";
+            this.btnHeaderBar1.Size = new System.Drawing.Size(435, 55);
+            this.btnHeaderBar1.TabIndex = 8;
+            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
+            // 
             // label2
             // 
             this.label2.BackColor = System.Drawing.Color.Transparent;
@@ -218,6 +228,16 @@ namespace BeeUi
             this.LayoutMain.Size = new System.Drawing.Size(1150, 865);
             this.LayoutMain.TabIndex = 21;
             this.LayoutMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            // 
+            // inforBar1
+            // 
+            this.inforBar1.BackColor = System.Drawing.Color.White;
+            this.inforBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inforBar1.Location = new System.Drawing.Point(3, 775);
+            this.inforBar1.Name = "inforBar1";
+            this.inforBar1.Size = new System.Drawing.Size(1144, 39);
+            this.inforBar1.TabIndex = 0;
+            this.inforBar1.Visible = false;
             // 
             // LayOutShow
             // 
@@ -445,30 +465,6 @@ namespace BeeUi
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // tmReaPLC
-            // 
-            this.tmReaPLC.Interval = 1;
-            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
-            // 
-            // inforBar1
-            // 
-            this.inforBar1.BackColor = System.Drawing.Color.White;
-            this.inforBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inforBar1.Location = new System.Drawing.Point(3, 775);
-            this.inforBar1.Name = "inforBar1";
-            this.inforBar1.Size = new System.Drawing.Size(1144, 39);
-            this.inforBar1.TabIndex = 0;
-            this.inforBar1.Visible = false;
-            // 
-            // btnHeaderBar1
-            // 
-            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(715, 0);
-            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(435, 55);
-            this.btnHeaderBar1.TabIndex = 8;
-            // 
             // header1
             // 
             this.header1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -480,6 +476,11 @@ namespace BeeUi
             this.header1.Name = "header1";
             this.header1.Size = new System.Drawing.Size(1150, 90);
             this.header1.TabIndex = 22;
+            // 
+            // tmReaPLC
+            // 
+            this.tmReaPLC.Interval = 1;
+            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
             // EditTool
             // 

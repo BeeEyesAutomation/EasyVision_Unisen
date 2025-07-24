@@ -1697,7 +1697,7 @@ namespace BeeInterface
             this.cbIn8.Size = new System.Drawing.Size(135, 33);
             this.cbIn8.TabIndex = 25;
             this.cbIn8.Text = "None";
-            this.cbIn8.SelectedIndexChanged += new System.EventHandler(this.cbIn8_SelectedIndexChanged);
+            this.cbIn8.SelectionChangeCommitted += new System.EventHandler(this.cbIn8_SelectionChangeCommitted);
             // 
             // label30
             // 
@@ -1732,7 +1732,7 @@ namespace BeeInterface
             this.cbIn7.Size = new System.Drawing.Size(135, 33);
             this.cbIn7.TabIndex = 22;
             this.cbIn7.Text = "None";
-            this.cbIn7.SelectedIndexChanged += new System.EventHandler(this.cbIn7_SelectedIndexChanged);
+            this.cbIn7.SelectionChangeCommitted += new System.EventHandler(this.cbIn7_SelectionChangeCommitted);
             // 
             // label28
             // 
@@ -1767,7 +1767,7 @@ namespace BeeInterface
             this.cbIn6.Size = new System.Drawing.Size(135, 33);
             this.cbIn6.TabIndex = 19;
             this.cbIn6.Text = "None";
-            this.cbIn6.SelectedIndexChanged += new System.EventHandler(this.cbIn6_SelectedIndexChanged);
+            this.cbIn6.SelectionChangeCommitted += new System.EventHandler(this.cbIn6_SelectionChangeCommitted);
             // 
             // label26
             // 
@@ -1802,7 +1802,7 @@ namespace BeeInterface
             this.cbIn5.Size = new System.Drawing.Size(135, 33);
             this.cbIn5.TabIndex = 16;
             this.cbIn5.Text = "None";
-            this.cbIn5.SelectedIndexChanged += new System.EventHandler(this.cbIn5_SelectedIndexChanged);
+            this.cbIn5.SelectionChangeCommitted += new System.EventHandler(this.cbIn5_SelectionChangeCommitted);
             // 
             // label24
             // 
@@ -1837,7 +1837,7 @@ namespace BeeInterface
             this.cbIn4.Size = new System.Drawing.Size(135, 33);
             this.cbIn4.TabIndex = 13;
             this.cbIn4.Text = "None";
-            this.cbIn4.SelectedIndexChanged += new System.EventHandler(this.cbIn4_SelectedIndexChanged);
+            this.cbIn4.SelectionChangeCommitted += new System.EventHandler(this.cbIn4_SelectionChangeCommitted);
             // 
             // label22
             // 
@@ -1872,7 +1872,7 @@ namespace BeeInterface
             this.cbIn3.Size = new System.Drawing.Size(135, 33);
             this.cbIn3.TabIndex = 10;
             this.cbIn3.Text = "None";
-            this.cbIn3.SelectedIndexChanged += new System.EventHandler(this.cbIn3_SelectedIndexChanged);
+            this.cbIn3.SelectionChangeCommitted += new System.EventHandler(this.cbIn3_SelectionChangeCommitted);
             // 
             // label20
             // 
@@ -1907,7 +1907,7 @@ namespace BeeInterface
             this.cbIn2.Size = new System.Drawing.Size(135, 33);
             this.cbIn2.TabIndex = 7;
             this.cbIn2.Text = "None";
-            this.cbIn2.SelectedIndexChanged += new System.EventHandler(this.cbIn2_SelectedIndexChanged);
+            this.cbIn2.SelectionChangeCommitted += new System.EventHandler(this.cbIn2_SelectionChangeCommitted);
             // 
             // label14
             // 
@@ -1942,7 +1942,7 @@ namespace BeeInterface
             this.cbIn1.Size = new System.Drawing.Size(135, 33);
             this.cbIn1.TabIndex = 2;
             this.cbIn1.Text = "None";
-            this.cbIn1.SelectedIndexChanged += new System.EventHandler(this.cbIn1_SelectedIndexChanged);
+            this.cbIn1.SelectionChangeCommitted += new System.EventHandler(this.cbIn1_SelectionChangeCommitted);
             // 
             // label3
             // 
@@ -2197,6 +2197,7 @@ namespace BeeInterface
             this.cbO7.Size = new System.Drawing.Size(138, 33);
             this.cbO7.TabIndex = 25;
             this.cbO7.Text = "None";
+            this.cbO7.SelectionChangeCommitted += new System.EventHandler(this.cbO7_SelectionChangeCommitted);
             // 
             // label33
             // 
@@ -2218,6 +2219,7 @@ namespace BeeInterface
             this.cbO6.Size = new System.Drawing.Size(138, 33);
             this.cbO6.TabIndex = 22;
             this.cbO6.Text = "None";
+            this.cbO6.SelectionChangeCommitted += new System.EventHandler(this.cbO6_SelectionChangeCommitted);
             // 
             // label35
             // 
@@ -2239,6 +2241,7 @@ namespace BeeInterface
             this.cbO5.Size = new System.Drawing.Size(138, 33);
             this.cbO5.TabIndex = 19;
             this.cbO5.Text = "None";
+            this.cbO5.SelectionChangeCommitted += new System.EventHandler(this.cbO5_SelectionChangeCommitted);
             // 
             // label37
             // 
@@ -2260,6 +2263,7 @@ namespace BeeInterface
             this.cbO4.Size = new System.Drawing.Size(138, 33);
             this.cbO4.TabIndex = 16;
             this.cbO4.Text = "None";
+            this.cbO4.SelectionChangeCommitted += new System.EventHandler(this.cbO4_SelectionChangeCommitted);
             // 
             // label39
             // 
@@ -2281,6 +2285,7 @@ namespace BeeInterface
             this.cbO3.Size = new System.Drawing.Size(138, 33);
             this.cbO3.TabIndex = 13;
             this.cbO3.Text = "None";
+            this.cbO3.SelectionChangeCommitted += new System.EventHandler(this.cbO3_SelectionChangeCommitted);
             // 
             // label41
             // 
@@ -2302,6 +2307,7 @@ namespace BeeInterface
             this.cbO2.Size = new System.Drawing.Size(138, 33);
             this.cbO2.TabIndex = 10;
             this.cbO2.Text = "None";
+            this.cbO2.SelectionChangeCommitted += new System.EventHandler(this.cbO2_SelectionChangeCommitted);
             // 
             // label43
             // 
@@ -2323,6 +2329,7 @@ namespace BeeInterface
             this.cbO1.Size = new System.Drawing.Size(138, 33);
             this.cbO1.TabIndex = 7;
             this.cbO1.Text = "None";
+            this.cbO1.SelectionChangeCommitted += new System.EventHandler(this.cbO1_SelectionChangeCommitted);
             // 
             // label45
             // 
@@ -2344,6 +2351,7 @@ namespace BeeInterface
             this.cbO0.Size = new System.Drawing.Size(138, 33);
             this.cbO0.TabIndex = 2;
             this.cbO0.Text = "None";
+            this.cbO0.SelectionChangeCommitted += new System.EventHandler(this.cbO0_SelectionChangeCommitted);
             // 
             // label47
             // 

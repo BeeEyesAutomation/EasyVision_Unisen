@@ -521,6 +521,11 @@ namespace BeeUi
             }
         }
 
+        private void btnHeaderBar1_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void tmReaPLC_Tick(object sender, EventArgs e)
         {
             //value= G.Header.Modbus.ReadHolding(4096);

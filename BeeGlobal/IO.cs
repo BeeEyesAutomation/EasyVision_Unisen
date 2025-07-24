@@ -409,6 +409,7 @@ namespace BeeGlobal
         }
         public void SetOutPut(int Add, bool Value)
         {
+            if (!IsConnected) return;
             if (Add < 0) return;
             valueOutput[Add] = Convert.ToInt32(Value);
            
