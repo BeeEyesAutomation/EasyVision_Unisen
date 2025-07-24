@@ -36,7 +36,7 @@ namespace BeeGlobal
                     if (modbusClient != null)
                         if (modbusClient.Connected)
                             modbusClient?.Disconnect();
-
+                  
                 }
                 catch (Exception ex)
                 {

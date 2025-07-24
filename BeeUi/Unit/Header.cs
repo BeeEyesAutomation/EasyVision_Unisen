@@ -635,7 +635,7 @@ txtQrCode.Focus();
 
         private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            IsIntialProgram = true;
+           
             if (Global.ParaCommon.matRegister != null)
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
             else if (G.IsCCD)
@@ -665,30 +665,34 @@ txtQrCode.Focus();
 				Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
 
 			}
-
-
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
+            if (!IsIntialProgram)
             {
-                Global.ParaCommon.Comunication.IO.StartRead();
-                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+                Global.ParaCommon.Comunication.IO.Connect();
 
-            }
-
-            else
-            {
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                if (!Global.ParaCommon.Comunication.IO.IsBypass)
+                if (Global.ParaCommon.Comunication.IO.IsConnected)
                 {
-                    Global.ParaCommon.Comunication.IO.Connect();
-                    if (Global.ParaCommon.Comunication.IO.IsConnected)
-                        Global.ParaCommon.Comunication.IO.StartRead();
-                    else
+                    Global.ParaCommon.Comunication.IO.StartRead();
+                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
+                    G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+
+                }
+
+                else
+                {
+                    G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                    if (!Global.ParaCommon.Comunication.IO.IsBypass)
                     {
-                        MessageBox.Show("Check connect I_O");
+                        Global.ParaCommon.Comunication.IO.Connect();
+                        if (Global.ParaCommon.Comunication.IO.IsConnected)
+                            Global.ParaCommon.Comunication.IO.StartRead();
+                        else
+                        {
+                            MessageBox.Show("Check connect I_O");
+                        }
                     }
                 }
             }
+            IsIntialProgram = true;
             Acccess(Global.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
@@ -847,260 +851,7 @@ txtQrCode.Focus();
             }
             return false;
         }
-        public bool IsWaitingRead = false;
-        private async void workPLC_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (G.SettingPLC != null)
-                if (G.SettingPLC.Visible)
-                    G.SettingPLC.RefreshValuePLC();
-            //if(!CheckLan())
-            //{
-            //    ShowErr();
-            //    return;
-            //}
-            //if(G.IsPLCNotAlive)
-            //    {
-            //        if (Global.ParaCommon.Comunication.IO.valueInput[3] == 0)
-            //        {
-            //            G.IsPLCNotAlive = false;
-            //            numAlive = 0;
-
-
-            //        }
-            //        return;
-            //    }
-            if (!BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
-            {
-                G.EditTool.lbCam.Text = "Camera Disconnected";
-                G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
-            }
-               
-            else
-            {
-                G.EditTool.lbCam.Text = "Camera Connected";
-                G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-
-            }    
-               
-            if (!Global.ParaCommon.Comunication.IO.IsConnected)
-            {
-                if (!G.SettingPLC.pCom.Enabled)
-                    G.SettingPLC.pCom.Enabled = true;
-                tmReadPLC.Enabled = false;
-                tmReConnectPLC.Enabled = true;
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-            }    
-            else
-            {
-                if ( G.SettingPLC.pCom.Enabled)
-                G.SettingPLC.pCom.Enabled = false;
-                if (Global.ParaCommon.Comunication.IO.valueInput.Length< Global.ParaCommon.Comunication.IO.LenReads[0]) return;
-                if (Global.ParaCommon.Comunication.IO.valueOutput.Length < Global.ParaCommon.Comunication.IO.LenReads[1]) return;
-                if (Global.IsSendRS)
-                {
-                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, Global.TotalOK,Global.Config.DelayOutput);
-                    //if (G.TotalOK)
-                    //{
-                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
-                    //    Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
-                    //    Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
-                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
-                    //    await Task.Delay(Global.Config.DelayOutput);
-                    //    Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //    Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
-
-                    //    Global.ParaCommon.Comunication.IO.WriteOutPut();
-
-
-
-
-                    //}
-                    //else
-                    //{
-
-                    //    if (Global.ParaCommon.Comunication.IO.valueInput[3] == 1)
-                    //    {
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(Global.Config.DelayOutput);
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //OK
-
-                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
-                    //    }
-                    //    else
-                    //    {
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, true); //NG
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(5, false); //Light
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(6, false); //Busy
-                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
-                    //        await Task.Delay(Global.Config.DelayOutput);
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(4, true);//Ready false
-                    //        Global.ParaCommon.Comunication.IO.SetOutPut(0, false); //False
-
-                    //        Global.ParaCommon.Comunication.IO.WriteOutPut();
-                    //    }
-                    //}
-                    Global.IsSendRS = false;
-                }
-                if(!Global.IsRun)
-                if ( Global.ParaCommon.IsOnLight!=Convert.ToBoolean( Global.ParaCommon.Comunication.IO.valueOutput[5]))
-                    {
-                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
-                    }
-               
-              
-                if (!Global.ParaCommon.Comunication.IO.CheckErr(BeeCore.Common.listCamera[Global.IndexChoose].IsConnected))
-                {
-                    ShowErr();
-                    return;
-                }
-              
-
-                if(Global.IsRun&&Global.Config.IsExternal)
-                {
-                    if (Global.ParaCommon.Comunication.IO.CheckReady())
-                    {
-                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
-
-                        await Task.Delay(Global.Config.delayTrigger);
-                        if (Global.Config.IsExternal)
-                            G.EditTool.View.btnTypeTrig.IsCLick = true;
-                        //if (Global.IsRun)
-                        //    G.EditTool.View.Cap(false);
-                        //else
-                        //    tmReadPLC.Enabled = true;
-                        IsWaitingRead = true;
-                    }
-                    else
-                    {
-                        tmReadPLC.Enabled = true;
-                    }
-                }
-                else
-                 tmReadPLC.Enabled = true;
-                if (btnEnQrCode.IsCLick)
-                {
-                    if (Global.ParaCommon.Comunication.IO.valueOutput[6] == 0)
-                    {
-                        int[] bits = new int[] { Global.ParaCommon.Comunication.IO.valueInput[4], Global.ParaCommon.Comunication.IO.valueInput[5], Global.ParaCommon.Comunication.IO.valueInput[6], Global.ParaCommon.Comunication.IO.valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
-
-                        int value = 0;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
-                        }
-                        int id = listFilter.FindIndex(a => a == Global.Project);
-                        if (id != value)
-                        {
-
-                            Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.ChangeProg);
-                            tmReadPLC.Enabled = false;
-                            Global.Project = listFilter[value];
-                            txtQrCode.Text = Global.Project.ToString();
-                            txtQrCode.Enabled = false;
-                            btnShowList.Enabled = false;
-
-                            workLoadProgram.RunWorkerAsync();
-                        }
-                    }
-                }
-              
-                 
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-            }
-          
-            if (G.SettingPLC!=null)
-                if (G.SettingPLC.Visible)
-                    G.SettingPLC.RefreshValuePLC();
-        }
-
-        private async void tmReadPLC_Tick(object sender, EventArgs e)
-        {
-            //  G.EditTool.View.lbNum.Text = BeeCore.Common.listRaw.Count()+ "img";
-            //if (!G.Initial) return;
-            //Parallel.For(0, 1, i =>
-            //{
-               
-            //  //  Console.WriteLine($"Task {i} running on thread {System.Threading.Thread.CurrentThread.ManagedThreadId}");
-            //});
-            if (G.SettingPLC != null)
-                if (G.SettingPLC.Visible)
-                    G.SettingPLC.RefreshValuePLC();
-            //if(!CheckLan())
-            //{
-            //    ShowErr();
-            //    return;
-            //}
-            //if(G.IsPLCNotAlive)
-            //    {
-            //        if (Global.ParaCommon.Comunication.IO.valueInput[3] == 0)
-            //        {
-            //            G.IsPLCNotAlive = false;
-            //            numAlive = 0;
-
-
-            //        }
-            //        return;
-            //    }
-            if (!BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
-            {
-                G.EditTool.lbCam.Text = "Camera Disconnected";
-                G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
-            }
-
-            else
-            {
-                G.EditTool.lbCam.Text = "Camera Connected";
-                G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-
-            }
-
-          
-            if (G.SettingPLC != null)
-                if (G.SettingPLC.Visible)
-                    G.SettingPLC.RefreshValuePLC();
-            //if (!workPLC.IsBusy)
-            //    {
-            //        workPLC.RunWorkerAsync();
-            //        tmReadPLC.Enabled = false;
-            //    }
-
-        }
-
-        private void tmReConnectPLC_Tick(object sender, EventArgs e)
-        {
-            Parallel.For(0, 1, i =>
-            {
-                Global.ParaCommon.Comunication.IO.Connect();                                                                    
-                //  Console.WriteLine($"Task {i} running on thread {System.Threading.Thread.CurrentThread.ManagedThreadId}");
-            });
-         
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
-            {
-                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
-                G.EditTool.toolStripPort.Text = "PLC Connected";
-                // Global.ParaCommon.Comunication.IO.WriteInPut(3, true);
-
-                tmReConnectPLC.Enabled = false;
-                tmReadPLC.Enabled = true;
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-
-            }
-            else
-            {
-                tmReConnectPLC.Enabled = true;
-                G.EditTool.toolStripPort.Text = "PLC Reconect....";
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-            }
-            //if (!workReConnect.IsBusy)
-            //workReConnect.RunWorkerAsync();
-               
-
-        }
-
+      
         private void editProg1_Load(object sender, EventArgs e)
         {
 
@@ -1112,27 +863,6 @@ txtQrCode.Focus();
            
         }
 
-        private void workReConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-           
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
-            {
-                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
-                G.EditTool.toolStripPort.Text = "PLC Connected";
-               // Global.ParaCommon.Comunication.IO.WriteInPut(3, true);
-
-                tmReConnectPLC.Enabled = false;
-                tmReadPLC.Enabled = true;
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-
-            }
-            else
-            {
-                G.EditTool.toolStripPort.Text = "PLC Reconect....";
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-            }
-
-        }
         int numAlive = 0;
         private void tmOutAlive_Tick(object sender, EventArgs e)
         {

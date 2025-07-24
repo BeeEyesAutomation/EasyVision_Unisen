@@ -364,7 +364,7 @@ namespace BeeCore
                     case TypeCamera.BaslerGigE:
                         if (matRaw != null)
                             if (!matRaw.Empty())
-                                matRaw.Dispose();
+                                matRaw.Release();
                         //if (IsHist)
                         //    CCDPlus.ReadRaw(true);
                         //else

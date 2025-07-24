@@ -18,6 +18,8 @@ namespace BeeGlobal
         [NonSerialized]
         private  CancellationTokenSource _cts = new CancellationTokenSource
             ();
+        [NonSerialized]
+        private Timer _timer;
 
         public void StartRead()
         {
@@ -26,22 +28,46 @@ namespace BeeGlobal
                 valueInput = new IntArrayWithEvent(16);
             if (valueOutput == null)
                 valueOutput = new IntArrayWithEvent(16);
-            // Khởi chạy task nền
-            Task.Run(async () =>
-            {
-                while (!_cts.Token.IsCancellationRequested)
-                {
-                    DoWork();                            // ========== Công việc chính
-                    await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
-                }
-            }, _cts.Token);
+            _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
         }
+
+        public void StopTimer()
+        {
+            _timer?.Dispose();
+        }
+        //public void StartRead()
+        //{
+        //    _cts = new CancellationTokenSource();
+        //    if (valueInput == null)
+        //        valueInput = new IntArrayWithEvent(16);
+        //    if (valueOutput == null)
+        //        valueOutput = new IntArrayWithEvent(16);
+        //    // Khởi chạy task nền
+        //    Task.Run(async () =>
+        //    {
+        //        while (!_cts.Token.IsCancellationRequested)
+        //        {
+        //            DoWork();                            // ========== Công việc chính
+        //            await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
+        //        }
+        //    }, _cts.Token);
+        //}
 
         public void StopRead() => _cts.Cancel();
 
         private async void DoWork()
         {
-            Read();
+            if (!Global.Initialed) return;
+            if(Global.StatusProcessing==StatusProcessing.None)
+            {
+                Read();
+                _timer.Change(0, timeRead);
+            }
+            else
+            {
+                _timer.Change(0, 1);
+            }    
+                
             if (IsConnected)
             {
 
@@ -61,10 +87,12 @@ namespace BeeGlobal
 
               
 
-                if (Global.IsRun && Global.Config.IsExternal)
+                if (Global.IsRun && Global.Config.IsExternal || Global.TriggerInternal)
                 {
-                    if (CheckReady())
-                    {Global.StatusProcessing= StatusProcessing.Trigger;
+                    if (CheckReady() || Global.TriggerInternal)
+                    {
+                        Global.TriggerInternal = false;
+                        Global.StatusProcessing= StatusProcessing.Trigger;
                         WriteIO(IO_Processing.Trigger);
                         Global.StatusMode = StatusMode.Once;
                         await Task.Delay(Global.Config.delayTrigger);
@@ -126,6 +154,7 @@ namespace BeeGlobal
         public IO() { }
         public int timeRead = 0;
         public List<ParaIO> paraIOs = new List<ParaIO>();
+        [NonSerialized]
         public bool IsConnected = false,IsWriting=false;
         public bool AddInPut(int index,I_O_Input Input)
         {   int ix= paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
@@ -183,8 +212,10 @@ namespace BeeGlobal
             try
             {
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
-                if (valueInput == null) valueInput = new IntArrayWithEvent(16);
-                if (valueOutput == null) valueOutput = new IntArrayWithEvent(16);
+                if (valueInput == null) 
+                    valueInput = new IntArrayWithEvent(16);
+                if (valueOutput == null) 
+                    valueOutput = new IntArrayWithEvent(16);
                 if (IsConnected) valueOutput.ReplaceAll(Modbus.ReadBit(2));
             }
             catch(Exception)
@@ -232,14 +263,7 @@ namespace BeeGlobal
         public IO_Processing IO_Processing = IO_Processing.None;
         public async void WriteIO(IO_Processing Processing,bool Is=false,int Delay=1)
         {   if (!IsConnected) return;
-            X: IsWriting = true;
-            await Task.Delay(5);
-            if (IsCanWrite)
-            {
-                IsCanWrite = false;
-            }
-            else
-                goto X;
+            
             switch (Processing )
             {
                 case IO_Processing.Trigger:
@@ -248,7 +272,7 @@ namespace BeeGlobal
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//Busy
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//LIGHT 1
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//LIGHT 2
-                    WriteOutPut();
+                   await WriteOutPut();
                     break;
                 case IO_Processing.Close:
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result
@@ -314,6 +338,7 @@ namespace BeeGlobal
                            WriteOutPut();
                         }
                     }
+                    Global.StatusProcessing = StatusProcessing.None;
                     break;
                 case IO_Processing.ChangeMode:
                     if(Is)
@@ -349,7 +374,7 @@ namespace BeeGlobal
         }
         public bool CheckReady()
         {
-        if (valueInput[paraIOs.Find(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input)?.Adddress ?? -1] == 1&& valueOutput[paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == 0)
+        if (valueInput[paraIOs.Find(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input)?.Adddress ?? -1] == 1&&Global.StatusProcessing==StatusProcessing.None)
             {
                 return true;
             }
@@ -416,7 +441,7 @@ namespace BeeGlobal
             // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
            
         }
-        public bool WriteOutPut()
+        public async Task<bool> WriteOutPut()
         {
             int[] bitArray = new int[16] {
                 0, 0, 0, 0, 0, 0, 0, 0,   // Bit 15 đến 8
@@ -436,7 +461,7 @@ namespace BeeGlobal
             }
             IsWriting = true;
             IsConnected = Modbus.WriteBit(Val);
-
+            await Task.Delay(5);
             IsWriting = false;
             return IsConnected;
         }

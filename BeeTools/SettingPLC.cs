@@ -380,7 +380,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         //    }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
             Global.ParaCommon.Comunication.IO.SetOutPut(numAdd, btn.IsCLick);
-            await Task.Run(() => Global.ParaCommon.Comunication.IO.WriteOutPut());
+            await Task.Run(() =>  Global.ParaCommon.Comunication.IO.WriteOutPut());
            
           //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -427,7 +427,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbIn6.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbIn7.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbIn8.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input) ? .I_O_Input.ToString();      // giữ nguyên text cũ nếu không tìm thấy
-
+            timerRead.Value=Global.ParaCommon.Comunication.IO.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
             slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
             cbSerialPort.Text = Global.ParaCommon.Comunication.IO.Port;
@@ -451,42 +451,58 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             if (Global.ParaCommon.Comunication.IO.valueInput == null)
                 Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
-            //if (Global.ParaCommon.Comunication.IO.valueOutput == null)
-            //    Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
-            //// 2) Subscribe sự kiện
+            if (Global.ParaCommon.Comunication.IO.valueOutput == null)
+                Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
+            // 2) Subscribe sự kiện
             Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
-            //Global.ParaCommon.Comunication.IO.valueOutput.BulkChanged += ValueOutput_BulkChanged;
+           Global.ParaCommon.Comunication.IO.valueOutput.ItemChanged += ValueOutput_ItemChanged;
           listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
-          //  listLabelsOut = new List<Label> { DO0, DO1, DO2, DO3, DO4, DO5, DO6, DO7 };
+          listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
         }
 
-        private void ValueOutput_BulkChanged(object sender, BulkChangedEventArgs e)
+        private void ValueOutput_ItemChanged(object sender, ElementChangedEventArgs e)
         {
+            this.Invoke((Action)(() =>
+            {
+                int ix = e.Index;
+                listLabelsOut[ix].Text = e.NewValue.ToString();
+                listLabelsOut[ix].IsCLick = Convert.ToBoolean(e.NewValue);
+            } ));
+           
+        }
+
+        private void ValueOutput_BulkChanged(object sender, BulkChangedEventArgs e)
+        {  // 1) If we're not on the UI thread, re‑invoke the entire handler
+            if (this.InvokeRequired)
+            {
+                // You can use Invoke or BeginInvoke; BeginInvoke won’t block the background thread.
+                this.BeginInvoke(new Action<object, BulkChangedEventArgs>(ValueOutput_BulkChanged), sender, e);
+                return;
+            }
             for (int k = 0; k < e.Count; k++)
             {
                 int idx = e.StartIndex + k;
                 if (idx < listLabelsOut.Count)
+                {
                     listLabelsOut[idx].Text = e.NewValues[k].ToString();
+                    listLabelsOut[idx].IsCLick = Convert.ToBoolean(e.NewValues[k]);
+
+                }    
+                    
                 else
                     break;
             }
         }
 
         List<Label> listLabelsIn = new List<Label>();
-        List<Label> listLabelsOut = new List<Label>();
+        List<RJButton> listLabelsOut = new List<RJButton>();
         private void ValueInput_BulkChanged(object sender, BulkChangedEventArgs e)
         {
 
-           
-                // 1) If we're not on the UI thread, re‑invoke the entire handler
-                if (this.InvokeRequired)
-                {
-                    // You can use Invoke or BeginInvoke; BeginInvoke won’t block the background thread.
-                    this.BeginInvoke(new Action<object, BulkChangedEventArgs>(ValueInput_BulkChanged), sender, e);
-                    return;
-                }
 
+            this.Invoke((Action)(() =>
+            {
                 // 2) Now we're on the UI thread—safe to touch any control
                 for (int k = 0; k < e.Count; k++)
                 {
@@ -496,6 +512,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
                     listLabelsIn[idx].Text = e.NewValues[k].ToString();
                 }
+            }));
             
         }
 
@@ -543,7 +560,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
     
         private void comIO_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.IO.Port = comIO.Text;
+           
         }
 
         private void cbBaurate_SelectedIndexChanged(object sender, EventArgs e)
@@ -593,16 +610,17 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-        private void DO0_Click(object sender, EventArgs e)
+        private async void DO0_Click(object sender, EventArgs e)
         {
             int index=Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if(index>-1)
             {
-                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress,DO0.IsCLick);//LIGHT 2
-               if(! Global.ParaCommon.Comunication.IO.WriteOutPut())
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress,DO0.IsCLick);
+               if(! await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
-                    DO0.IsCLick = false;
-                }    
+                   DO0.IsCLick = !DO0.IsCLick;
+                }
+                DO0.Text = DO0.IsCLick.ToString();
             }    
                
         }
@@ -880,6 +898,119 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 OldOut[7] = name;
             }
             ChangeDatasourceOut(7, name);
+        }
+
+        private async void DO1_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO1.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO1.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO1.IsCLick = !DO1.IsCLick;
+                }
+                DO1.Text = DO1.IsCLick.ToString();
+            }
+        }
+
+        private async void DO2_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO2.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO2.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO2.IsCLick = !DO2.IsCLick;
+                }
+                DO2.Text = DO2.IsCLick.ToString();
+            }
+        }
+
+        private async void D3_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO3.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, D3.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    D3.IsCLick = !D3.IsCLick;
+                }
+                D3.Text = D3.IsCLick.ToString();
+            }
+        }
+
+        private async void DO4_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO4.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO4.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO4.IsCLick = !DO4.IsCLick;
+                }
+                DO4.Text = DO4.IsCLick.ToString();
+            }
+        }
+
+        private async void DO5_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO5.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO5.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO5.IsCLick = !DO5.IsCLick;
+                }
+                DO5.Text = DO5.IsCLick.ToString();
+            }
+        }
+
+        private async void DO6_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO6.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO6.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO6.IsCLick = !DO6.IsCLick;
+                }
+                DO6.Text = DO6.IsCLick.ToString();
+            }
+        }
+
+        private async void DO7_Click(object sender, EventArgs e)
+        {
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO7.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO7.IsCLick);//LIGHT 2
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO7.IsCLick = !DO7.IsCLick;
+                }
+                DO7.Text = DO7.IsCLick.ToString();
+            }
+        }
+
+        private void btnBypass_Click(object sender, EventArgs e)
+        {
+            if(Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                Global.ParaCommon.Comunication.IO.Disconnect();
+                btnConectIO.Text = "No Connect";
+                btnConectIO.IsCLick = false;
+            }    
+        }
+
+        private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.Port = comIO.Text;
         }
     }
 }

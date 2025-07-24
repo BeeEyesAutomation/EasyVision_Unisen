@@ -232,17 +232,13 @@ namespace BeeUi
         public async void DesTroy()
         {
             View.tmContinuous.Enabled = false;
-            G.Header.tmReConnectPLC.Enabled = false;
-            G.Header.tmReadPLC.Enabled = false;
+           
            foreach(Camera camera in BeeCore.Common.listCamera)
                 if(camera!=null)
 				camera.DestroyAll();
 
             View.tmContinuous.Enabled = false;
-            G.Header.tmReConnectPLC.Enabled = false;
-            G.Header.tmReadPLC.Enabled = false;
-            if (G.Header.workPLC.IsBusy)
-                G.Header.workPLC.CancelAsync();
+           
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Close);

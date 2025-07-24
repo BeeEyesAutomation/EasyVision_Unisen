@@ -91,7 +91,13 @@ namespace BeeInterface
 
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
-           
+            // 1) If we're not on the UI thread, re‑invoke the entire handler
+            if (this.InvokeRequired)
+            {
+                // You can use Invoke or BeginInvoke; BeginInvoke won’t block the background thread.
+                this.BeginInvoke(new Action< StatusProcessing>(Global_StatusProcessingChanged), obj);
+                return;
+            }
             switch (obj)
             {
                 case StatusProcessing.Trigger:

@@ -492,11 +492,11 @@ namespace BeeUi
                     this.Hide();
                     G.Main.Show();
 
-                    if (G.IsReConnectCCD)
-                    {
-                        G.IsReConnectCCD = false;
-                        G.Header.tmReadPLC.Enabled = true;
-                    }
+                    //if (G.IsReConnectCCD)
+                    //{
+                    //    G.IsReConnectCCD = false;
+                    //    G.Header.tmReadPLC.Enabled = true;
+                    //}
 
                     BeeCore.Common.listCamera[Global.IndexChoose].Read();
 

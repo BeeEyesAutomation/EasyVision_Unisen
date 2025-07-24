@@ -59,7 +59,9 @@ namespace BeeGlobal
                     StatusProcessingChanged?.Invoke(_StatusProcessing); // Gọi event
                 }
             }
-        }
+        }public static bool TriggerInternal = false;
+
+        public static bool Initialed = false;
         public static Step Step = Step.Run;
         public static float Scale = 1, AngleOrigin;
         public static  Color ColorOK = Color.FromArgb(0, 172, 73);

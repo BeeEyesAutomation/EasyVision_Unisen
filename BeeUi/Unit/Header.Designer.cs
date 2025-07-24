@@ -64,10 +64,6 @@ namespace BeeUi.Common
             this.label1 = new System.Windows.Forms.Label();
             this.CameraBar = new BeeUi.Unit.Cameras();
             this.tmShow = new System.Windows.Forms.Timer(this.components);
-            this.workPLC = new System.ComponentModel.BackgroundWorker();
-            this.tmReadPLC = new System.Windows.Forms.Timer(this.components);
-            this.tmReConnectPLC = new System.Windows.Forms.Timer(this.components);
-            this.workReConnect = new System.ComponentModel.BackgroundWorker();
             this.tmIninitial = new System.Windows.Forms.Timer(this.components);
             tmOutAlive = new System.Windows.Forms.Timer(this.components);
             this.pPO.SuspendLayout();
@@ -449,26 +445,6 @@ namespace BeeUi.Common
             // 
             this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
             // 
-            // workPLC
-            // 
-            this.workPLC.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPLC_DoWork);
-            this.workPLC.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workPLC_RunWorkerCompleted);
-            // 
-            // tmReadPLC
-            // 
-            this.tmReadPLC.Interval = 30;
-            this.tmReadPLC.Tick += new System.EventHandler(this.tmReadPLC_Tick);
-            // 
-            // tmReConnectPLC
-            // 
-            this.tmReConnectPLC.Interval = 300;
-            this.tmReConnectPLC.Tick += new System.EventHandler(this.tmReConnectPLC_Tick);
-            // 
-            // workReConnect
-            // 
-            this.workReConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReConnect_DoWork);
-            this.workReConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReConnect_RunWorkerCompleted);
-            // 
             // tmIninitial
             // 
             this.tmIninitial.Interval = 1000;
@@ -525,10 +501,6 @@ namespace BeeUi.Common
         private Unit.EditProg editProg1;
         public System.Windows.Forms.TableLayoutPanel Layout;
         private System.Windows.Forms.Label label1;
-        public System.Windows.Forms.Timer tmReadPLC;
-        public System.ComponentModel.BackgroundWorker workPLC;
-        public System.Windows.Forms.Timer tmReConnectPLC;
-        public System.ComponentModel.BackgroundWorker workReConnect;
         private System.Windows.Forms.Timer tmIninitial;
         public System.Windows.Forms.Timer tmShow;
         public Unit.Cameras CameraBar;

@@ -1335,6 +1335,9 @@ namespace BeeUi
             Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
             Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
             Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
+           
+            Global.StatusProcessing=StatusProcessing.None;
+            Global.Initialed = true;
         }
 
         private void Checking4_StatusProcessingChanged(StatusProcessing obj)
@@ -1364,11 +1367,24 @@ namespace BeeUi
                 case StatusProcessing.None:
                     break;
 				case StatusProcessing.Read:
-					//if (Global.Config.IsExternal)
-					//	G.EditTool.View.btnTypeTrig.IsCLick = true;
-					//if (Global.IsRun)
-					//	G.EditTool.View.Cap(false);
-					workReadCCD.RunWorkerAsync();
+                    //if (Global.Config.IsExternal)
+                    //	G.EditTool.View.btnTypeTrig.IsCLick = true;
+                    //if (Global.IsRun)
+                    //	G.EditTool.View.Cap(false);
+                    this.Invoke((Action)(async () =>
+                    {
+                    X: if (!workReadCCD.IsBusy)
+                        {
+                            workReadCCD.RunWorkerAsync();
+                        }
+                        else
+                        {
+                            await Task.Delay(5);
+                            goto X;
+                        }    
+                           
+                    }));
+					
 					break;
 				case StatusProcessing.Checking:				
 					RunProcessing();
@@ -1383,22 +1399,25 @@ namespace BeeUi
                     {
                         timer.Stop();
                     }
-                    ShowResultTotal();
-
-
-					SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
-                    if(Global.ParaCommon.Comunication.IO.IsBypass)
+                    this.Invoke((Action)(() =>
                     {
-                        G.StatusDashboard.CycleTime =(int) SumCycle;
-                    }
-					//if (G.Header.IsWaitingRead)
-					//{
-					//	G.Header.IsWaitingRead = false;
-					//	//G.Header.tmReadPLC.Enabled = true;
-					//}
+                        ShowResultTotal();
 
-					CheckStatusMode();
-					Global.StatusProcessing=StatusProcessing.None;
+
+                        SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
+                        if (Global.ParaCommon.Comunication.IO.IsBypass)
+                        {
+                            G.StatusDashboard.CycleTime = (int)SumCycle;
+                        }
+                        //if (G.Header.IsWaitingRead)
+                        //{
+                        //	G.Header.IsWaitingRead = false;
+                        //	//G.Header.tmReadPLC.Enabled = true;
+                        //}
+
+                        CheckStatusMode();
+                    }));
+					
                     Checking1.StatusProcessing=StatusProcessing.None;
                     Checking2.StatusProcessing = StatusProcessing.None;
                     Checking3.StatusProcessing = StatusProcessing.None;
@@ -1904,9 +1923,12 @@ namespace BeeUi
             Global.StatusMode = StatusMode.Once;
             timer.Restart();
             btnCap.Enabled = false;
-            Global.StatusProcessing = StatusProcessing.Read;
+            if (Global.ParaCommon.Comunication.IO.IsBypass)
+                Global.StatusProcessing = StatusProcessing.Read;
+            else
+                Global.TriggerInternal = true;
             //  BeeCore.Common.currentTrig++;
-          
+
         }
 
         private async void btnRecord_Click(object sender, EventArgs e)
@@ -1968,8 +1990,7 @@ namespace BeeUi
         private Thread displayThread;
         public void Live()
         {
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
-                G.Header.tmReadPLC.Enabled = !btnLive.IsCLick;
+            
             tmLive.Enabled = btnLive.IsCLick;
             if (btnLive.IsCLick)
             {
@@ -2799,12 +2820,7 @@ namespace BeeUi
 
 
                 SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
-                if (G.Header.IsWaitingRead)
-                {
-                    G.Header.IsWaitingRead = false;
-                    G.Header.tmReadPLC.Enabled = true;
-                }
-
+             
                 CheckStatusMode();
                 IsCompleteAll = false;
                 

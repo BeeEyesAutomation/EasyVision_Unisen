@@ -2036,6 +2036,7 @@ namespace BeeInterface
             this.DO7.Text = "0";
             this.DO7.TextColor = System.Drawing.Color.Black;
             this.DO7.UseVisualStyleBackColor = false;
+            this.DO7.Click += new System.EventHandler(this.DO7_Click);
             // 
             // DO6
             // 
@@ -2061,6 +2062,7 @@ namespace BeeInterface
             this.DO6.Text = "0";
             this.DO6.TextColor = System.Drawing.Color.Black;
             this.DO6.UseVisualStyleBackColor = false;
+            this.DO6.Click += new System.EventHandler(this.DO6_Click);
             // 
             // DO5
             // 
@@ -2086,6 +2088,7 @@ namespace BeeInterface
             this.DO5.Text = "0";
             this.DO5.TextColor = System.Drawing.Color.Black;
             this.DO5.UseVisualStyleBackColor = false;
+            this.DO5.Click += new System.EventHandler(this.DO5_Click);
             // 
             // DO4
             // 
@@ -2111,6 +2114,7 @@ namespace BeeInterface
             this.DO4.Text = "0";
             this.DO4.TextColor = System.Drawing.Color.Black;
             this.DO4.UseVisualStyleBackColor = false;
+            this.DO4.Click += new System.EventHandler(this.DO4_Click);
             // 
             // D3
             // 
@@ -2136,6 +2140,7 @@ namespace BeeInterface
             this.D3.Text = "0";
             this.D3.TextColor = System.Drawing.Color.Black;
             this.D3.UseVisualStyleBackColor = false;
+            this.D3.Click += new System.EventHandler(this.D3_Click);
             // 
             // DO2
             // 
@@ -2161,6 +2166,7 @@ namespace BeeInterface
             this.DO2.Text = "0";
             this.DO2.TextColor = System.Drawing.Color.Black;
             this.DO2.UseVisualStyleBackColor = false;
+            this.DO2.Click += new System.EventHandler(this.DO2_Click);
             // 
             // DO1
             // 
@@ -2186,6 +2192,7 @@ namespace BeeInterface
             this.DO1.Text = "0";
             this.DO1.TextColor = System.Drawing.Color.Black;
             this.DO1.UseVisualStyleBackColor = false;
+            this.DO1.Click += new System.EventHandler(this.DO1_Click);
             // 
             // cbO7
             // 
@@ -2547,7 +2554,7 @@ namespace BeeInterface
             this.comIO.Name = "comIO";
             this.comIO.Size = new System.Drawing.Size(151, 32);
             this.comIO.TabIndex = 59;
-            this.comIO.SelectedIndexChanged += new System.EventHandler(this.comIO_SelectedIndexChanged);
+            this.comIO.SelectionChangeCommitted += new System.EventHandler(this.comIO_SelectionChangeCommitted);
             // 
             // label52
             // 
@@ -2584,6 +2591,7 @@ namespace BeeInterface
             this.btnBypass.Text = "ByPass";
             this.btnBypass.TextColor = System.Drawing.Color.Black;
             this.btnBypass.UseVisualStyleBackColor = false;
+            this.btnBypass.Click += new System.EventHandler(this.btnBypass_Click);
             // 
             // btnConectIO
             // 
@@ -2617,7 +2625,7 @@ namespace BeeInterface
             this.timerRead.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timerRead.Location = new System.Drawing.Point(133, 138);
             this.timerRead.Margin = new System.Windows.Forms.Padding(0);
-            this.timerRead.Maxnimum = 100F;
+            this.timerRead.Maxnimum = 10000F;
             this.timerRead.Minimum = 0F;
             this.timerRead.Name = "timerRead";
             this.timerRead.Size = new System.Drawing.Size(151, 41);
