@@ -13,7 +13,21 @@ namespace BeeGlobal
         public I_O_Input I_O_Input;
         public I_O_Output I_O_Output ;
         public int Adddress = 0;
-        public int Value = 0;
+        private int _Value = 0;
+        [field: NonSerialized]
+        public event Action<object , int> ValueChanged;
+        public int Value
+        {
+            get => _Value;
+            set
+            {
+                if (_Value != value)
+                {
+                    _Value = value;
+                    ValueChanged?.Invoke(this,_Value); // Gọi event
+                }
+            }
+        }
         public ParaIO()
         {
           

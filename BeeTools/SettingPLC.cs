@@ -449,16 +449,38 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
                 }
             }
-            if (Global.ParaCommon.Comunication.IO.valueInput == null)
-                Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
-            if (Global.ParaCommon.Comunication.IO.valueOutput == null)
-                Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
-            // 2) Subscribe sự kiện
-            Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
-           Global.ParaCommon.Comunication.IO.valueOutput.ItemChanged += ValueOutput_ItemChanged;
+            // if (Global.ParaCommon.Comunication.IO.valueInput == null)
+            //     Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
+            // if (Global.ParaCommon.Comunication.IO.valueOutput == null)
+            //     Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
+            // // 2) Subscribe sự kiện
+            // Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
+            //Global.ParaCommon.Comunication.IO.valueOutput.ItemChanged += ValueOutput_ItemChanged;
+            int index = 0;
+           foreach(ParaIO paraIO in  Global.ParaCommon.Comunication.IO.paraIOs )
+            {
+                paraIO.ValueChanged += ParaIO_ValueChanged1;
+                
+               
+            }
           listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
           listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
+        }
+
+        private void ParaIO_ValueChanged1(object arg1, int arg2)
+        {
+            ParaIO paraIO =arg1 as ParaIO;
+            if (paraIO.TypeIO==TypeIO.Input)
+            {
+                
+                listLabelsIn[paraIO.Adddress].Text=arg2+"";
+            }
+            else
+            {
+                listLabelsOut[paraIO.Adddress].Text = arg2 + "";
+                listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);// + "";
+            }
         }
 
         private void ValueOutput_ItemChanged(object sender, ElementChangedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿
+using OpenCvSharp;
 using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,10 @@ namespace BeeGlobal
         public void StartRead()
         {
             _cts = new CancellationTokenSource();
-            if (valueInput == null)
-                valueInput = new IntArrayWithEvent(16);
-            if (valueOutput == null)
-                valueOutput = new IntArrayWithEvent(16);
+            //if (valueInput == null)
+            //    valueInput = new IntArrayWithEvent(16);
+            //if (valueOutput == null)
+            //    valueOutput = new IntArrayWithEvent(16);
             _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
         }
 
@@ -139,13 +140,14 @@ namespace BeeGlobal
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
         public String[] nameOutput = new String[16];
+       
         [NonSerialized]
-        public IntArrayWithEvent valueInput = new IntArrayWithEvent(16);
+        public int[] valueInput = new int[16];
         [NonSerialized]
-        public IntArrayWithEvent valueOutput = new IntArrayWithEvent(16);
-
-
-        public int[] AddressStarts;
+        public int[] valueOutput = new int[16];
+        [NonSerialized]
+        public int[] AddressInput=new int[30];
+        public int[] AddressOutPut = new int[30];
         public int[] LenReads;
         public String Port = "COM8";
         public int Baurate = 115200;
@@ -156,17 +158,35 @@ namespace BeeGlobal
         public List<ParaIO> paraIOs = new List<ParaIO>();
         [NonSerialized]
         public bool IsConnected = false,IsWriting=false;
+        public void Arrange()
+        {
+          
+            foreach (String  DI in Enum.GetValues(typeof(I_O_Input)))
+            {
+                int index = paraIOs.FindIndex(a => a.I_O_Input.ToString() == DI && a.TypeIO == TypeIO.Input);
+                int value = -1;
+                if (index > -1) value = paraIOs[index].Adddress;
+                AddressInput[(int)( (I_O_Input)Enum.Parse(typeof(I_O_Input), DI, ignoreCase: true))] = value;
+            }
+            foreach (String DO in Enum.GetValues(typeof(I_O_Output)))
+            {
+                int index = paraIOs.FindIndex(a => a.I_O_Output.ToString() == DO && a.TypeIO == TypeIO.Output);
+                int value = -1;
+                if (index > -1) value = paraIOs[index].Adddress;
+                AddressOutPut[(int)((I_O_Output)Enum.Parse(typeof(I_O_Output), DO, ignoreCase: true))] = value;
+            }
+        }
         public bool AddInPut(int index,I_O_Input Input)
         {   int ix= paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
             if (paraIOs.FindIndex(a=>a.Adddress== index && a.TypeIO==TypeIO.Input)==-1)
             {
-                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index));
+                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index)); Arrange();
                 return true;
             }
             else if (ix >= 0)
             {
                 paraIOs.RemoveAt(ix);
-                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index));
+                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index)); Arrange();
                 return true;
             }
             else
@@ -176,7 +196,7 @@ namespace BeeGlobal
         {
             if (paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output) == -1)
             {
-                paraIOs.Add(new ParaIO(TypeIO.Output, Output, index));
+                paraIOs.Add(new ParaIO(TypeIO.Output, Output, index)); Arrange();
                 return true;
             }
             else
@@ -188,7 +208,7 @@ namespace BeeGlobal
             int indexs = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input);
             if (indexs>=0)
             {
-                paraIOs.RemoveAt(indexs);
+                paraIOs.RemoveAt(indexs); Arrange();
                 return true;
             }
             else
@@ -199,7 +219,7 @@ namespace BeeGlobal
             int indexs = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
             if (indexs >= 0)
             {
-                paraIOs.RemoveAt(indexs);
+                paraIOs.RemoveAt(indexs); Arrange();
                 return true;
             }
             else
@@ -212,11 +232,18 @@ namespace BeeGlobal
             try
             {
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
-                if (valueInput == null) 
-                    valueInput = new IntArrayWithEvent(16);
-                if (valueOutput == null) 
-                    valueOutput = new IntArrayWithEvent(16);
-                if (IsConnected) valueOutput.ReplaceAll(Modbus.ReadBit(2));
+                //if (valueInput == null) 
+                //    valueInput = new IntArrayWithEvent(16);
+                //if (valueOutput == null) 
+                //    valueOutput = new IntArrayWithEvent(16);
+                Arrange();
+                if (IsConnected) valueInput=Modbus.ReadBit(1);
+                if (valueInput.Length < 16)
+                {
+                    IsConnected = false;
+                    return false;
+                }
+                    
             }
             catch(Exception)
             {
@@ -241,7 +268,7 @@ namespace BeeGlobal
                return false;
             }
            
-             valueInput.ReplaceAll( Modbus.ReadBit(1));
+             valueInput=Modbus.ReadBit(1);
             for(int i=0;i<valueInput.Length; i++)
             {
                 int index = paraIOs.FindIndex(a => a.Adddress == i);
@@ -267,48 +294,48 @@ namespace BeeGlobal
             switch (Processing )
             {
                 case IO_Processing.Trigger:
-         
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//Ready false
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//LIGHT 1
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//LIGHT 2
+
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], true);//LIGHT 1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], true);//LIGHT 2
                    await WriteOutPut();
                     break;
                 case IO_Processing.Close:
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Ready
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //Busy
-                  
-                    WriteOutPut();
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+
+                    await WriteOutPut();
                     Disconnect();
                     break;
                 case IO_Processing.Error:
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
-                   WriteOutPut();
+                    await WriteOutPut();
                     break;
                 case IO_Processing.NoneErr:
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
-                   WriteOutPut();
+                    await WriteOutPut();
                     break;
                 case IO_Processing.Result:
                     if (Is)
                     {
                        SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //OK
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light
 
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                       WriteOutPut();
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                        await WriteOutPut();
                         await Task.Delay(Delay);
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//Ready false
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
                        SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //OK
-                       WriteOutPut();
+                        await WriteOutPut();
                     }
                     else
                     {
@@ -316,26 +343,26 @@ namespace BeeGlobal
                         if (valueInput[3] == 1) //Bypass
                         {
                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //OK
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light
-                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light
-                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                           WriteOutPut();
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                            await WriteOutPut();
                            await Task.Delay(Delay);
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//Ready false
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //OK
-                           WriteOutPut();
+                            await WriteOutPut();
                         }
                         else
                         {
                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //NG
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Light2
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                           WriteOutPut();
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                           await WriteOutPut();
                             await Task.Delay(Delay);
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//Ready false
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
                            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //False
-                           WriteOutPut();
+                            await WriteOutPut();
                         }
                     }
                     Global.StatusProcessing = StatusProcessing.None;
@@ -343,30 +370,30 @@ namespace BeeGlobal
                 case IO_Processing.ChangeMode:
                     if(Is)
                    {
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                       WriteOutPut();
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                        await WriteOutPut();
                     }
                     else
                     {
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //Not Busy
-                       WriteOutPut();
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Not Busy
+                        await WriteOutPut();
                     }
                         break;
                 case IO_Processing.Light:
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, Is); //Busy
-                       SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Light2 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, Is); //Busy
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Light1], Is); //Busy
+                       SetOutPut(AddressOutPut[(int)I_O_Output.Light2], Is); //Busy
 
-                       WriteOutPut();
+                    await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //Busy
-                   WriteOutPut();
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+                    await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Ready && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //Ready
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Busy && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Err
-                   WriteOutPut();
+                    await WriteOutPut();
                     break;
 
             }
@@ -374,7 +401,7 @@ namespace BeeGlobal
         }
         public bool CheckReady()
         {
-        if (valueInput[paraIOs.Find(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input)?.Adddress ?? -1] == 1&&Global.StatusProcessing==StatusProcessing.None)
+        if (valueInput[AddressInput[(int)I_O_Input.Trigger] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
             {
                 return true;
             }
@@ -385,7 +412,7 @@ namespace BeeGlobal
             }
             return false;
         }
-        public bool CheckErr(bool IsCameraConnected)
+        public async Task<bool> CheckErr(bool IsCameraConnected)
         {
             if (!IsCameraConnected)
             {
@@ -403,7 +430,7 @@ namespace BeeGlobal
                 {
                    IO_Processing = IO_Processing.Error;
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
-                   WriteOutPut();
+                  await WriteOutPut();
                     return true;
                 }
                 return true;
@@ -427,7 +454,7 @@ namespace BeeGlobal
         public   bool WriteInPut(int Add,bool Value)
         {
             IsWriting = true;
-            IsConnected = Modbus.WritePLC(AddressStarts[0]+Add,Convert.ToInt16(Value));
+            IsConnected = Modbus.WritePLC(Add,Convert.ToInt16(Value));//AddressStarts[0]+
 
             IsWriting = false;
             return IsConnected;
@@ -437,7 +464,11 @@ namespace BeeGlobal
             if (!IsConnected) return;
             if (Add < 0) return;
             valueOutput[Add] = Convert.ToInt32(Value);
-           
+         int ix=   paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Add && a.TypeIO == TypeIO.Output);
+            if (ix >= 0)
+            {
+                paraIOs[ix].Value =Convert.ToInt32( Value);
+            }
             // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
            
         }
