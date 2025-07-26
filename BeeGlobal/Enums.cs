@@ -67,6 +67,12 @@ namespace BeeGlobal
         Check,
         Color,None
     }
+    public enum StatusIO
+    {
+        NotConnect,
+        Reading,
+        Writing, ErrRead,ErrWrite
+    }
     public enum MethordEdge
     {
         StrongEdges,
@@ -190,7 +196,7 @@ namespace BeeGlobal
     }
     public enum StatusProcessing
     {
-        None,Trigger,Read,Checking, Adjusting, WaitingDone, Done
+        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done
     }
     public enum StatusMode
     {

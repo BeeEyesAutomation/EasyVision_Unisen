@@ -234,7 +234,8 @@ namespace BeeGlobal
             }
             catch (Exception ex)
             {
-
+                Global.ParaCommon.Comunication.IO.LogError("ErrRead-"+ex.Message);
+                Global.StatusIO = StatusIO.ErrRead;
                 // return i;
             }
             return values;
@@ -250,7 +251,9 @@ namespace BeeGlobal
             }
             catch (Exception ex)
             {
-
+               
+                Global.StatusIO = StatusIO.ErrWrite;
+                Global.ParaCommon.Comunication.IO.LogError("ErrWrite-"+ex.Message);
                 // return i;
             }
             return true;

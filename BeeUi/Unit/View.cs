@@ -1338,6 +1338,7 @@ namespace BeeUi
            
             Global.StatusProcessing=StatusProcessing.None;
             Global.Initialed = true;
+           
         }
 
         private void Checking4_StatusProcessingChanged(StatusProcessing obj)
@@ -1362,11 +1363,14 @@ namespace BeeUi
 
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
-            switch(obj)
+            switch (obj)
             {
                 case StatusProcessing.None:
                     break;
-				case StatusProcessing.Read:
+                case StatusProcessing.Trigger:
+                    timer.Restart();
+                    break;
+                case StatusProcessing.Read:
                     //if (Global.Config.IsExternal)
                     //	G.EditTool.View.btnTypeTrig.IsCLick = true;
                     //if (Global.IsRun)
@@ -1381,49 +1385,41 @@ namespace BeeUi
                         {
                             await Task.Delay(5);
                             goto X;
-                        }    
-                           
-                    }));
-					
-					break;
-				case StatusProcessing.Checking:				
-					RunProcessing();
-                    Global.StatusProcessing = StatusProcessing.WaitingDone;
-                  break;
-				case StatusProcessing.WaitingDone:
-					break;
-				case StatusProcessing.Done:
-
-					
-                    if (Global.ParaCommon.Comunication.IO.IsBypass)
-                    {
-                        timer.Stop();
-                    }
-                    this.Invoke((Action)(() =>
-                    {
-                        ShowResultTotal();
-
-
-                        SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
-                        if (Global.ParaCommon.Comunication.IO.IsBypass)
-                        {
-                            G.StatusDashboard.CycleTime = (int)SumCycle;
                         }
-                        //if (G.Header.IsWaitingRead)
-                        //{
-                        //	G.Header.IsWaitingRead = false;
-                        //	//G.Header.tmReadPLC.Enabled = true;
-                        //}
 
-                        CheckStatusMode();
                     }));
-					
-                    Checking1.StatusProcessing=StatusProcessing.None;
-                    Checking2.StatusProcessing = StatusProcessing.None;
-                    Checking3.StatusProcessing = StatusProcessing.None;
-                    Checking4.StatusProcessing = StatusProcessing.None;
+
                     break;
-			}    
+                case StatusProcessing.Checking:
+                    RunProcessing();
+                    Global.StatusProcessing = StatusProcessing.WaitingDone;
+                    break;
+                case StatusProcessing.SendResult:
+                    if (Global.ParaCommon.Comunication.IO.IsBypass)
+                        Global.StatusProcessing = StatusProcessing.Done;
+                    break;
+                case StatusProcessing.Done:
+                    {
+
+
+                        timer.Stop();
+
+                        this.Invoke((Action)(() =>
+                        {
+                            ShowResultTotal();
+                            SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
+                            G.StatusDashboard.CycleTime = (int)SumCycle;
+                            G.StatusDashboard.CamTime =(int) BeeCore.Common.CycleCamera;
+                            CheckStatusMode();
+                        }));
+                        Global.StatusProcessing = StatusProcessing.None;
+                        Checking1.StatusProcessing = StatusProcessing.None;
+                        Checking2.StatusProcessing = StatusProcessing.None;
+                        Checking3.StatusProcessing = StatusProcessing.None;
+                        Checking4.StatusProcessing = StatusProcessing.None;
+                        break;
+                    }
+            }
         }
 
         private void Global_TypeCropChanged(TypeCrop obj)
@@ -2950,11 +2946,11 @@ namespace BeeUi
                        
                         return;    // exit the Task.Run delegate
                     }
-                    await Task.Delay(50, _cts.Token);
+                 //   await Task.Delay(50, _cts.Token);
                 }
             }, _cts.Token);
-
-            Global.StatusProcessing = StatusProcessing.Done;
+            timer.Stop();
+            Global.StatusProcessing = StatusProcessing.SendResult;
         }
         public  async void RunProcessing()
         {
@@ -2993,6 +2989,12 @@ namespace BeeUi
         {
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        }
+
+        private async void tmFist_Tick(object sender, EventArgs e)
+        {
+           
+           
         }
 
         private void btnRunSim_Click_1(object sender, EventArgs e)

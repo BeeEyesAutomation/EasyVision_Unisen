@@ -22,120 +22,52 @@ namespace BeeGlobal
         [NonSerialized]
         private Timer _timer;
 
-        public void StartRead()
-        {
-            _cts = new CancellationTokenSource();
-            //if (valueInput == null)
-            //    valueInput = new IntArrayWithEvent(16);
-            //if (valueOutput == null)
-            //    valueOutput = new IntArrayWithEvent(16);
-            _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
-        }
+        //public void StartRead()
+        //{
+        //    _cts = new CancellationTokenSource();
+        //    //if (valueInput == null)
+        //    //    valueInput = new IntArrayWithEvent(16);
+        //    //if (valueOutput == null)
+        //    //    valueOutput = new IntArrayWithEvent(16);
+        //    _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
+        //}
 
         public void StopTimer()
         {
             _timer?.Dispose();
         }
-        //public void StartRead()
-        //{
-        //    _cts = new CancellationTokenSource();
-        //    if (valueInput == null)
-        //        valueInput = new IntArrayWithEvent(16);
-        //    if (valueOutput == null)
-        //        valueOutput = new IntArrayWithEvent(16);
-        //    // Khởi chạy task nền
-        //    Task.Run(async () =>
-        //    {
-        //        while (!_cts.Token.IsCancellationRequested)
-        //        {
-        //            DoWork();                            // ========== Công việc chính
-        //            await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
-        //        }
-        //    }, _cts.Token);
-        //}
+        public void StartRead()
+        {
+            _cts = new CancellationTokenSource();
+            Global.StatusIO = StatusIO.Reading;
+            Task.Run(async () =>
+            {
+                while (!_cts.Token.IsCancellationRequested)
+                {
+                   await DoWork();                            // ========== Công việc chính
+                  //  await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
+                }
+            }, _cts.Token);
+        }
 
         public void StopRead() => _cts.Cancel();
 
-        private async void DoWork()
+        private  async Task DoWork()
         {
             if (!Global.Initialed) return;
-            if(Global.StatusProcessing==StatusProcessing.None)
+            if(Global.StatusIO == StatusIO.ErrRead)
+            {
+                //await Task.Delay(50);
+                Global.StatusIO = StatusIO.Reading;
+            }
+            if (Global.StatusIO==StatusIO.Reading)
             {
                 Read();
-                _timer.Change(0, timeRead);
+              
             }
-            else
-            {
-                _timer.Change(0, 1);
-            }    
+           
                 
-            if (IsConnected)
-            {
-
-              
-                if (Global.IsSendRS)
-                {
-                    WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
-                  
-                    Global.IsSendRS = false;
-                }
-                if (!Global.IsRun)
-                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(valueOutput[5]))
-                    {
-                        WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
-                    }
-
-
-              
-
-                if (Global.IsRun && Global.Config.IsExternal || Global.TriggerInternal)
-                {
-                    if (CheckReady() || Global.TriggerInternal)
-                    {
-                        Global.TriggerInternal = false;
-                        Global.StatusProcessing= StatusProcessing.Trigger;
-                        WriteIO(IO_Processing.Trigger);
-                        Global.StatusMode = StatusMode.Once;
-                        await Task.Delay(Global.Config.delayTrigger);
-                        Global.StatusProcessing = StatusProcessing.Read;
-
-
-                    }
-                   
-                }
-               
-                //if (btnEnQrCode.IsCLick)
-                //{
-                //    if (valueOutput[6] == 0)
-                //    {
-                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
-
-                //        int value = 0;
-                //        for (int i = 0; i < 4; i++)
-                //        {
-                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
-                //        }
-                //        int id = listFilter.FindIndex(a => a == Global.Project);
-                //        if (id != value)
-                //        {
-
-                //            WriteIO(IO_Processing.ChangeProg);
-                //            tmReadPLC.Enabled = false;
-                //            Global.Project = listFilter[value];
-                //            txtQrCode.Text = Global.Project.ToString();
-                //            txtQrCode.Enabled = false;
-                //            btnShowList.Enabled = false;
-
-                //            workLoadProgram.RunWorkerAsync();
-                //        }
-                //    }
-                //}
-
-
-                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-            }
-
-            Console.WriteLine($"Work at {DateTime.Now:HH:mm:ss.fff}");
+           
         }
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
@@ -161,19 +93,19 @@ namespace BeeGlobal
         public void Arrange()
         {
           
-            foreach (String  DI in Enum.GetValues(typeof(I_O_Input)))
+            foreach (I_O_Input DI in Enum.GetValues(typeof(I_O_Input)))
             {
-                int index = paraIOs.FindIndex(a => a.I_O_Input.ToString() == DI && a.TypeIO == TypeIO.Input);
+                int index = paraIOs.FindIndex(a => a.I_O_Input== DI && a.TypeIO == TypeIO.Input);
                 int value = -1;
                 if (index > -1) value = paraIOs[index].Adddress;
-                AddressInput[(int)( (I_O_Input)Enum.Parse(typeof(I_O_Input), DI, ignoreCase: true))] = value;
+                AddressInput[(int)(DI)] = value;
             }
-            foreach (String DO in Enum.GetValues(typeof(I_O_Output)))
+            foreach (I_O_Output DO in Enum.GetValues(typeof(I_O_Output)))
             {
-                int index = paraIOs.FindIndex(a => a.I_O_Output.ToString() == DO && a.TypeIO == TypeIO.Output);
+                int index = paraIOs.FindIndex(a => a.I_O_Output== DO && a.TypeIO == TypeIO.Output);
                 int value = -1;
                 if (index > -1) value = paraIOs[index].Adddress;
-                AddressOutPut[(int)((I_O_Output)Enum.Parse(typeof(I_O_Output), DO, ignoreCase: true))] = value;
+                AddressOutPut[(int)(DO)] = value;
             }
         }
         public bool AddInPut(int index,I_O_Input Input)
@@ -232,12 +164,18 @@ namespace BeeGlobal
             try
             {
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
-                //if (valueInput == null) 
-                //    valueInput = new IntArrayWithEvent(16);
-                //if (valueOutput == null) 
-                //    valueOutput = new IntArrayWithEvent(16);
+                if (valueInput == null)
+                    valueInput = new int[16];
+                if (valueOutput == null)
+                    valueOutput = new int[16];
+                if (AddressInput == null)
+                    AddressInput = new int[30];
+                if (AddressOutPut == null)
+                    AddressOutPut = new int[30];
+                
                 Arrange();
-                if (IsConnected) valueInput=Modbus.ReadBit(1);
+                if (IsConnected) 
+                    valueInput=Modbus.ReadBit(1);
                 if (valueInput.Length < 16)
                 {
                     IsConnected = false;
@@ -245,7 +183,7 @@ namespace BeeGlobal
                 }
                     
             }
-            catch(Exception)
+            catch(Exception ex)
             {
                 return false;
             }
@@ -253,30 +191,54 @@ namespace BeeGlobal
            
             return IsConnected;
         }
+        [field: NonSerialized]
+        private StringBuilder _logBuilder = new StringBuilder();
+        [field: NonSerialized]
+        public event Action<StringBuilder> LogChanged;
+        public StringBuilder logBuilder
+        {
+            get => _logBuilder;
+           
+            set
+            {
+                        if (_logBuilder != value)
+                {
+                    _logBuilder = value ?? new StringBuilder();
+                    LogChanged?.Invoke(_logBuilder);
+                }
+            }
+        }
+        public void LogError(string message)
+        {if (logBuilder == null) logBuilder = new StringBuilder();
+            string logLine = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ERROR: {message}";
+            logBuilder.AppendLine(logLine);
+            LogChanged?.Invoke(_logBuilder);
+        }
         public void Disconnect()
         {
+          //  StopRead();
              Modbus.DisconnectPLC();
+            Global.StatusIO = StatusIO.NotConnect;
+            Global.StatusMode = StatusMode.None;
             IsConnected = false;
         }
+    
         bool IsCanWrite = false;
         public  bool Read()
         {
             if (!IsConnected) return false;
-            if (IsWriting)
-            {
-                IsCanWrite = true;
-               return false;
-            }
+            
            
              valueInput=Modbus.ReadBit(1);
-            for(int i=0;i<valueInput.Length; i++)
+            for (int i = 0; i < valueInput.Length; i++)
             {
-                int index = paraIOs.FindIndex(a => a.Adddress == i);
-                if(index>-1)
+                int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
+                if (ix >= 0)
                 {
-                    paraIOs[index].Value=valueInput[i];
-                }    
+                    paraIOs[ix].Value = valueInput[i];
+                }
             }
+          
           
             //   valueOutput = Modbus.ReadBit(2);
             //  valueInput = new int[dataBytes.Length / 2];
@@ -294,7 +256,7 @@ namespace BeeGlobal
             switch (Processing )
             {
                 case IO_Processing.Trigger:
-
+                    Global.StatusIO = StatusIO.Writing;
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Light1], true);//LIGHT 1
@@ -354,18 +316,20 @@ namespace BeeGlobal
                         }
                         else
                         {
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true); //NG
+                           SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
                            SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
                            SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                           await WriteOutPut();
-                            await Task.Delay(Delay);
+                          // await WriteOutPut();
+                           //await Task.Delay(1000);
                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //False
+                         // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
                             await WriteOutPut();
                         }
                     }
-                    Global.StatusProcessing = StatusProcessing.None;
+                    valueInput = new int[16]; 
+                    Global.StatusProcessing = StatusProcessing.Done;
+                    Global.StatusIO = StatusIO.Reading;
                     break;
                 case IO_Processing.ChangeMode:
                     if(Is)
@@ -392,7 +356,7 @@ namespace BeeGlobal
                 case IO_Processing.Reset:
                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Err
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     await WriteOutPut();
                     break;
 
@@ -419,7 +383,7 @@ namespace BeeGlobal
                 if (valueOutput[paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == 0)
                 {
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
-                   WriteOutPut();
+                   await WriteOutPut();
                     return false;
                 }
                 return true;
@@ -464,7 +428,7 @@ namespace BeeGlobal
             if (!IsConnected) return;
             if (Add < 0) return;
             valueOutput[Add] = Convert.ToInt32(Value);
-         int ix=   paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Add && a.TypeIO == TypeIO.Output);
+         int ix=   paraIOs.FindIndex(a => a.Adddress ==Add && a.TypeIO == TypeIO.Output);
             if (ix >= 0)
             {
                 paraIOs[ix].Value =Convert.ToInt32( Value);
@@ -491,8 +455,14 @@ namespace BeeGlobal
 
             }
             IsWriting = true;
-            IsConnected = Modbus.WriteBit(Val);
-            await Task.Delay(5);
+        X: IsConnected = Modbus.WriteBit(Val);
+           if(Global.StatusIO == StatusIO.ErrWrite)
+            {
+                await Task.Delay(50);
+                Global.StatusIO = StatusIO.Writing;
+                goto X;
+            }
+           
             IsWriting = false;
             return IsConnected;
         }

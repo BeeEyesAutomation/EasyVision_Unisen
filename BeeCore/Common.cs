@@ -337,7 +337,7 @@ namespace BeeCore
 
         //    }
         //       }
-        public static float Cycle = 0;
+        public static float CycleCamera = 0;
        
         public static double StepExposure=1,MinExposure=1,MaxExposure=100;
         //public static bool ConnectCCD( int indexCCD,String Resolution)

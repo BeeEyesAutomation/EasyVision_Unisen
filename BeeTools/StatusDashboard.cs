@@ -112,6 +112,10 @@ namespace BeeInterface
                     StatusText = obj.ToString();
                     StatusBlockBackColor = Global.ColorNone; this.Refresh();
                     break;
+                case StatusProcessing.SendResult:
+                    StatusText = obj.ToString();
+                    StatusBlockBackColor = Global.ColorNone; this.Refresh();
+                    break;
                 case StatusProcessing.Done:
                     if(Global.TotalOK)
                         StatusBlockBackColor = Global.ColorOK;

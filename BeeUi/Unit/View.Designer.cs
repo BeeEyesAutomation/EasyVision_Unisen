@@ -70,10 +70,6 @@ namespace BeeUi
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tmSimulation = new System.Windows.Forms.Timer(this.components);
             this.tmLive = new System.Windows.Forms.Timer(this.components);
-            this.workCheck1 = new System.ComponentModel.BackgroundWorker();
-            this.workCheck2 = new System.ComponentModel.BackgroundWorker();
-            this.workCheck3 = new System.ComponentModel.BackgroundWorker();
-            this.workCheck4 = new System.ComponentModel.BackgroundWorker();
             this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnCap = new BeeInterface.RJButton();
             this.btnRecord = new BeeInterface.RJButton();
@@ -858,9 +854,5 @@ namespace BeeUi
         private RJButton btnShowArea;
         private RJButton btnDropColor;
         public System.Windows.Forms.Timer tmLive;
-        public System.ComponentModel.BackgroundWorker workCheck1;
-        public System.ComponentModel.BackgroundWorker workCheck2;
-        public System.ComponentModel.BackgroundWorker workCheck3;
-        public System.ComponentModel.BackgroundWorker workCheck4;
     }
 }

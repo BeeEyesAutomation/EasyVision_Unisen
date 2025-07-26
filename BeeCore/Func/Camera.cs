@@ -346,7 +346,7 @@ namespace BeeCore
                                 raw = new Mat(rows, cols, Type, intPtr);
 
                                 FrameRate = CCDPlus.FPS;
-                                BeeCore.Common.Cycle = CCDPlus.cycle;
+                                BeeCore.Common.CycleCamera = CCDPlus.cycle;
                                matRaw = raw;
                             }
                             //    return new Mat();
@@ -388,7 +388,7 @@ namespace BeeCore
                             
                                    matRaw = raw.Clone();
                                 stopwatch.Stop();
-                                BeeCore.Common.Cycle =(int)stopwatch.Elapsed.TotalMilliseconds;
+                                BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
 
                             }
                            
@@ -405,7 +405,7 @@ namespace BeeCore
                         Size SZ = raw2.Size(); 
                     if(SZ.Width==0&&SZ.Height==0)
                             IsConnected = false;
-                        BeeCore.Common.Cycle =Convert.ToInt32(1000.0 / HEROJE.FrameTime);
+                        BeeCore.Common.CycleCamera = Convert.ToInt32(1000.0 / HEROJE.FrameTime);
                          Native.SetImg(matRaw);
                         break;
                 }

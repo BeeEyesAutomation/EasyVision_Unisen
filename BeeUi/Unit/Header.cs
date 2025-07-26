@@ -667,37 +667,14 @@ txtQrCode.Focus();
 			}
             if (!IsIntialProgram)
             {
-                Global.ParaCommon.Comunication.IO.Connect();
-
-                if (Global.ParaCommon.Comunication.IO.IsConnected)
-                {
-                    Global.ParaCommon.Comunication.IO.StartRead();
-                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
-                    G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-
-                }
-
-                else
-                {
-                    G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                    if (!Global.ParaCommon.Comunication.IO.IsBypass)
-                    {
-                        Global.ParaCommon.Comunication.IO.Connect();
-                        if (Global.ParaCommon.Comunication.IO.IsConnected)
-                            Global.ParaCommon.Comunication.IO.StartRead();
-                        else
-                        {
-                            MessageBox.Show("Check connect I_O");
-                        }
-                    }
-                }
+               
             }
             IsIntialProgram = true;
             Acccess(Global.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
             Global.ToolSettings.pAllTool.Controls.Clear();
-
+           
             tmShow.Enabled = true;
             if(Global.listParaCamera[0]!=null)
                 CameraBar.btnCamera1.Text =Global.listParaCamera[0].Name.Substring(0, 8) + "..";

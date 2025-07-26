@@ -27,6 +27,7 @@ namespace BeeInterface
         public SettingPLC()
         {
             InitializeComponent();
+           
             OldIn = new List<string> { "None", "None", "None", "None", "None", "None", "None", "None" };
             OldOut = new List<string> { "None", "None", "None", "None", "None", "None", "None", "None" };
             comIO.DataSource = SerialPort.GetPortNames();
@@ -431,25 +432,25 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
             slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
             cbSerialPort.Text = Global.ParaCommon.Comunication.IO.Port;
-            if (!Global.ParaCommon.Comunication.IO.IsBypass)
-            {
-                if (Global.ParaCommon.Comunication.IO.IsConnected)
-                {
-                    btnConectIO.Text = "Connected";
-                    btnConectIO.IsCLick = true;
+            //if (!Global.ParaCommon.Comunication.IO.IsBypass)
+            //{
+            //    if (Global.ParaCommon.Comunication.IO.IsConnected)
+            //    {
+            //        btnConectIO.Text = "Connected";
+            //        btnConectIO.IsCLick = true;
 
-                    Global.ParaCommon.Comunication.IO.IsBypass = false;
-                    Global.ParaCommon.Comunication.IO.StartRead();
-                }
-                else
-                {
-                    btnConectIO.Text = "Fail Connect";
-                    Global.ParaCommon.Comunication.IO.IsBypass = true;
-                    MessageBox.Show("Fail Connect to Module I/O");
+            //        Global.ParaCommon.Comunication.IO.IsBypass = false;
+            //        Global.ParaCommon.Comunication.IO.StartRead();
+            //    }
+            //    else
+            //    {
+            //        btnConectIO.Text = "Fail Connect";
+            //        Global.ParaCommon.Comunication.IO.IsBypass = true;
+            //        MessageBox.Show("Fail Connect to Module I/O");
 
-                }
-            }
-            // if (Global.ParaCommon.Comunication.IO.valueInput == null)
+            //    }
+            //}
+            //// if (Global.ParaCommon.Comunication.IO.valueInput == null)
             //     Global.ParaCommon.Comunication.IO.valueInput = new IntArrayWithEvent(16);
             // if (Global.ParaCommon.Comunication.IO.valueOutput == null)
             //     Global.ParaCommon.Comunication.IO.valueOutput = new IntArrayWithEvent(16);
@@ -459,90 +460,134 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             int index = 0;
            foreach(ParaIO paraIO in  Global.ParaCommon.Comunication.IO.paraIOs )
             {
-                paraIO.ValueChanged += ParaIO_ValueChanged1;
+                paraIO.ValueChanged += ParaIO_ValueChanged;
                 
                
             }
           listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
           listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
+            Global.StatusIOChanged += Global_StatusIOChanged;
+            Global.ParaCommon.Comunication.IO.LogChanged += IO_LogChanged;
         }
 
-        private void ParaIO_ValueChanged1(object arg1, int arg2)
+        private void IO_LogChanged(StringBuilder obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+            txtLog1.Text = Global.ParaCommon.Comunication.IO.logBuilder.ToString();
+                txtLog1.Refresh();
+            }));
+        }
+
+        private void Global_StatusIOChanged(StatusIO obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                StatusIObtn.Text = obj.ToString();
+                StatusIObtn.Refresh();
+            }));
+         }
+
+        private void ParaIO_ValueChanged(object arg1, int arg2)
         {
             ParaIO paraIO =arg1 as ParaIO;
-            if (paraIO.TypeIO==TypeIO.Input)
-            {
-                
-                listLabelsIn[paraIO.Adddress].Text=arg2+"";
-            }
-            else
-            {
-                listLabelsOut[paraIO.Adddress].Text = arg2 + "";
-                listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);// + "";
-            }
-        }
-
-        private void ValueOutput_ItemChanged(object sender, ElementChangedEventArgs e)
-        {
             this.Invoke((Action)(() =>
             {
-                int ix = e.Index;
-                listLabelsOut[ix].Text = e.NewValue.ToString();
-                listLabelsOut[ix].IsCLick = Convert.ToBoolean(e.NewValue);
-            } ));
-           
-        }
-
-        private void ValueOutput_BulkChanged(object sender, BulkChangedEventArgs e)
-        {  // 1) If we're not on the UI thread, re‑invoke the entire handler
-            if (this.InvokeRequired)
-            {
-                // You can use Invoke or BeginInvoke; BeginInvoke won’t block the background thread.
-                this.BeginInvoke(new Action<object, BulkChangedEventArgs>(ValueOutput_BulkChanged), sender, e);
-                return;
-            }
-            for (int k = 0; k < e.Count; k++)
-            {
-                int idx = e.StartIndex + k;
-                if (idx < listLabelsOut.Count)
+                if (paraIO.TypeIO == TypeIO.Input)
                 {
-                    listLabelsOut[idx].Text = e.NewValues[k].ToString();
-                    listLabelsOut[idx].IsCLick = Convert.ToBoolean(e.NewValues[k]);
 
-                }    
-                    
+                    listLabelsIn[paraIO.Adddress].Text = arg2 + "";
+                    listLabelsIn[paraIO.Adddress].Refresh();
+                }
                 else
-                    break;
-            }
-        }
-
-        List<Label> listLabelsIn = new List<Label>();
-        List<RJButton> listLabelsOut = new List<RJButton>();
-        private void ValueInput_BulkChanged(object sender, BulkChangedEventArgs e)
-        {
-
-
-            this.Invoke((Action)(() =>
-            {
-                // 2) Now we're on the UI thread—safe to touch any control
-                for (int k = 0; k < e.Count; k++)
                 {
-                    int idx = e.StartIndex + k;
-                    if (idx >= listLabelsIn.Count)
-                        break;
-
-                    listLabelsIn[idx].Text = e.NewValues[k].ToString();
+                    listLabelsOut[paraIO.Adddress].Text = arg2 + "";
+                    listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);// + "";
+                    listLabelsOut[paraIO.Adddress].Refresh();
                 }
             }));
-            
         }
+
+      
+        List<Label> listLabelsIn = new List<Label>();
+        List<RJButton> listLabelsOut = new List<RJButton>();
+      
 
       
         private void btnConnect_Click(object sender, EventArgs e)
         {
            Global.ParaCommon.Comunication.IO.Connect();
         
+        }
+        private async void CheckingIO()
+        {
+            if (Global.ParaCommon.Comunication.IO. IsConnected)
+            {
+
+
+                if (Global.StatusProcessing==StatusProcessing.SendResult)
+                {
+                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
+
+                }
+                if (!Global.IsRun)
+                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
+                    {
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
+                    }
+
+
+
+
+                if (Global.IsRun && Global.Config.IsExternal || Global.TriggerInternal)
+                {
+                    if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
+                    {
+                        Global.TriggerInternal = false;
+                        Global.StatusProcessing = StatusProcessing.Trigger;
+                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
+                        Global.StatusMode = StatusMode.Once;
+                        await Task.Delay(Global.Config.delayTrigger);
+                        Global.StatusProcessing = StatusProcessing.Read;
+
+
+                    }
+
+                }
+
+                //if (btnEnQrCode.IsCLick)
+                //{
+                //    if (valueOutput[6] == 0)
+                //    {
+                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+
+                //        int value = 0;
+                //        for (int i = 0; i < 4; i++)
+                //        {
+                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
+                //        }
+                //        int id = listFilter.FindIndex(a => a == Global.Project);
+                //        if (id != value)
+                //        {
+
+                //            WriteIO(IO_Processing.ChangeProg);
+                //            tmReadPLC.Enabled = false;
+                //            Global.Project = listFilter[value];
+                //            txtQrCode.Text = Global.Project.ToString();
+                //            txtQrCode.Enabled = false;
+                //            btnShowList.Enabled = false;
+
+                //            workLoadProgram.RunWorkerAsync();
+                //        }
+                //    }
+                //}
+
+
+                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+            }
+
+            Console.WriteLine($"Work at {DateTime.Now:HH:mm:ss.fff}");
         }
 
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
@@ -619,6 +664,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void timerRead_ValueChanged(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.IO.timeRead = (int)timerRead.Value;
+            tmRead.Interval = Global.ParaCommon.Comunication.IO.timeRead;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -1033,6 +1079,114 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.IO.Port = comIO.Text;
+        }
+
+        private void tmCheck_Tick(object sender, EventArgs e)
+        {
+            if(Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                CheckingIO();
+                tmCheck.Interval = 10;
+            }
+            else
+            {
+                tmCheck.Enabled = false;
+                tmConnect.Enabled = true;
+               // tmCheck.Interval = 1000;
+            }
+        }
+
+        private void tmRead_Tick(object sender, EventArgs e)
+        {
+            if (!Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                tmRead.Enabled = false;
+                tmConnect.Enabled = true;
+                return;
+            }    
+                if (!Global.Initialed) return;
+            if (Global.StatusIO == StatusIO.ErrRead)
+            {
+                //await Task.Delay(50);
+                Global.StatusIO = StatusIO.Reading;
+            }
+            if (Global.StatusIO == StatusIO.Reading)
+            {
+                Global.ParaCommon.Comunication.IO.Read();
+
+            }
+            CheckingIO();
+
+        }
+
+        private async void tmConnect_Tick(object sender, EventArgs e)
+        {if (!Global.Initialed) return;
+            tmConnect.Enabled = false;
+            tmRead.Interval = Global.ParaCommon.Comunication.IO.timeRead;
+
+            Global.ParaCommon.Comunication.IO.Connect();
+
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
+                await Task.Delay(500);
+                tmRead.Enabled = true;
+              //  tmCheck.Enabled = true;
+               // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+
+            }
+
+            else
+            {
+              //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                if (!Global.ParaCommon.Comunication.IO.IsBypass)
+                {
+                    Global.ParaCommon.Comunication.IO.Connect();
+                    if (Global.ParaCommon.Comunication.IO.IsConnected)
+                        Global.ParaCommon.Comunication.IO.StartRead();
+                    else
+                    {
+                        MessageBox.Show("Check connect I_O");
+                    }
+                }
+            }
+        }
+
+        private void timerRead_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void workRead_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (!Global.Initialed) return;
+            if (Global.StatusIO == StatusIO.ErrRead)
+            {
+                //await Task.Delay(50);
+                Global.StatusIO = StatusIO.Reading;
+            }
+            if (Global.StatusIO == StatusIO.Reading)
+            {
+                Global.ParaCommon.Comunication.IO.Read();
+
+            }
+        }
+
+        private async void  workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+
+        {
+           await Task.Delay( Global.ParaCommon.Comunication.IO.timeRead);
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
+                workRead.RunWorkerAsync();
+            else
+                tmConnect.Enabled = true;
+            //if (Global.ParaCommon.Comunication.IO.logBuilder != null)
+            //{
+            //    txtLog1.Text = Global.ParaCommon.Comunication.IO.logBuilder.ToString();
+            //    txtLog1.Refresh();
+            //}
+
+
         }
     }
 }

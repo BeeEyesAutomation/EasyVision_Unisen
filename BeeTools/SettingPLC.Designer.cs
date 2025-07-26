@@ -141,7 +141,8 @@ namespace BeeInterface
             this.label47 = new System.Windows.Forms.Label();
             this.DO0 = new BeeInterface.RJButton();
             this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.btnSave = new BeeInterface.RJButton();
+            this.txtLog1 = new System.Windows.Forms.TextBox();
+            this.StatusIObtn = new BeeInterface.RJButton();
             this.btnRefresh = new BeeInterface.RJButton();
             this.label49 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
@@ -195,6 +196,10 @@ namespace BeeInterface
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtLogs = new System.Windows.Forms.TextBox();
+            this.tmCheck = new System.Windows.Forms.Timer(this.components);
+            this.tmConnect = new System.Windows.Forms.Timer(this.components);
+            this.tmRead = new System.Windows.Forms.Timer(this.components);
+            this.workRead = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
@@ -2398,7 +2403,8 @@ namespace BeeInterface
             // 
             // tabPage7
             // 
-            this.tabPage7.Controls.Add(this.btnSave);
+            this.tabPage7.Controls.Add(this.txtLog1);
+            this.tabPage7.Controls.Add(this.StatusIObtn);
             this.tabPage7.Controls.Add(this.btnRefresh);
             this.tabPage7.Controls.Add(this.label49);
             this.tabPage7.Controls.Add(this.label48);
@@ -2420,31 +2426,43 @@ namespace BeeInterface
             this.tabPage7.Text = "SerialPort";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
-            // btnSave
+            // txtLog1
             // 
-            this.btnSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnSave.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnSave.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnSave.BorderRadius = 0;
-            this.btnSave.BorderSize = 0;
-            this.btnSave.ButtonImage = null;
-            this.btnSave.Corner = BeeGlobal.Corner.Both;
-            this.btnSave.FlatAppearance.BorderSize = 0;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.ForeColor = System.Drawing.Color.Black;
-            this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSave.IsCLick = false;
-            this.btnSave.IsNotChange = false;
-            this.btnSave.IsRect = false;
-            this.btnSave.IsUnGroup = false;
-            this.btnSave.Location = new System.Drawing.Point(12, 298);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(349, 31);
-            this.btnSave.TabIndex = 73;
-            this.btnSave.Text = "Save Config";
-            this.btnSave.TextColor = System.Drawing.Color.Black;
-            this.btnSave.UseVisualStyleBackColor = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.txtLog1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog1.Location = new System.Drawing.Point(6, 338);
+            this.txtLog1.Multiline = true;
+            this.txtLog1.Name = "txtLog1";
+            this.txtLog1.Size = new System.Drawing.Size(352, 431);
+            this.txtLog1.TabIndex = 74;
+            // 
+            // StatusIObtn
+            // 
+            this.StatusIObtn.BackColor = System.Drawing.Color.Transparent;
+            this.StatusIObtn.BackgroundColor = System.Drawing.Color.Transparent;
+            this.StatusIObtn.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.StatusIObtn.BorderRadius = 0;
+            this.StatusIObtn.BorderSize = 0;
+            this.StatusIObtn.ButtonImage = null;
+            this.StatusIObtn.Corner = BeeGlobal.Corner.Both;
+            this.StatusIObtn.FlatAppearance.BorderSize = 0;
+            this.StatusIObtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StatusIObtn.ForeColor = System.Drawing.Color.Black;
+            this.StatusIObtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.StatusIObtn.IsCLick = false;
+            this.StatusIObtn.IsNotChange = false;
+            this.StatusIObtn.IsRect = false;
+            this.StatusIObtn.IsUnGroup = false;
+            this.StatusIObtn.Location = new System.Drawing.Point(9, 281);
+            this.StatusIObtn.Name = "StatusIObtn";
+            this.StatusIObtn.Size = new System.Drawing.Size(349, 51);
+            this.StatusIObtn.TabIndex = 73;
+            this.StatusIObtn.Text = "----";
+            this.StatusIObtn.TextColor = System.Drawing.Color.Black;
+            this.StatusIObtn.UseVisualStyleBackColor = false;
+            this.StatusIObtn.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnRefresh
             // 
@@ -2625,14 +2643,15 @@ namespace BeeInterface
             this.timerRead.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timerRead.Location = new System.Drawing.Point(133, 138);
             this.timerRead.Margin = new System.Windows.Forms.Padding(0);
-            this.timerRead.Maxnimum = 10000F;
-            this.timerRead.Minimum = 0F;
+            this.timerRead.Maxnimum = 1000F;
+            this.timerRead.Minimum = 1F;
             this.timerRead.Name = "timerRead";
             this.timerRead.Size = new System.Drawing.Size(151, 41);
             this.timerRead.Step = 1F;
             this.timerRead.TabIndex = 67;
             this.timerRead.Value = 0F;
             this.timerRead.ValueChanged += new System.EventHandler(this.timerRead_ValueChanged);
+            this.timerRead.Load += new System.EventHandler(this.timerRead_Load);
             // 
             // slaveID
             // 
@@ -3317,6 +3336,27 @@ namespace BeeInterface
             this.txtLogs.Size = new System.Drawing.Size(364, 582);
             this.txtLogs.TabIndex = 0;
             // 
+            // tmCheck
+            // 
+            this.tmCheck.Interval = 50;
+            this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
+            // 
+            // tmConnect
+            // 
+            this.tmConnect.Enabled = true;
+            this.tmConnect.Interval = 3000;
+            this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
+            // 
+            // tmRead
+            // 
+            this.tmRead.Interval = 10;
+            this.tmRead.Tick += new System.EventHandler(this.tmRead_Tick);
+            // 
+            // workRead
+            // 
+            this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
+            this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
+            // 
             // SettingPLC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3350,6 +3390,7 @@ namespace BeeInterface
             this.tableLayoutPanel17.ResumeLayout(false);
             this.tableLayoutPanel17.PerformLayout();
             this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -3528,7 +3569,7 @@ namespace BeeInterface
         private System.Windows.Forms.Label label48;
         private RJButton btnConectIO;
         private RJButton btnRefresh;
-        private RJButton btnSave;
+        private RJButton StatusIObtn;
         private RJButton DO7;
         private RJButton DO6;
         private RJButton DO5;
@@ -3537,5 +3578,10 @@ namespace BeeInterface
         private RJButton DO2;
         private RJButton DO1;
         private RJButton DO0;
+        private System.Windows.Forms.Timer tmCheck;
+        public System.Windows.Forms.TextBox txtLog1;
+        private System.Windows.Forms.Timer tmConnect;
+        private System.Windows.Forms.Timer tmRead;
+        private System.ComponentModel.BackgroundWorker workRead;
     }
 }
