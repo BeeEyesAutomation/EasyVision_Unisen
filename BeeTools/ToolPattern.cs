@@ -43,7 +43,7 @@ namespace BeeInterface
 
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
-            numAngle.Value = (int)Propety.Angle;
+           
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score; 
             trackNumObject.Value= Propety.NumObject;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
@@ -64,8 +64,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (float)trackScore.Value;
-            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-         
+           
 
         }
 
@@ -508,13 +507,7 @@ namespace BeeInterface
 
         }
 
-        private void numScore_ValueChanged(object sender, EventArgs e)
-        {
-            numScore.Maxnimum = (int)trackScore.Max;
-            numScore.Minimum = (int)trackScore.Min;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-        }
+     
 
         private void rjButton5_Click(object sender, EventArgs e)
         {
@@ -524,7 +517,7 @@ namespace BeeInterface
         private void trackAngle_ValueChanged(float obj)
         {
             Propety.Angle = trackAngle.Value;
-            numAngle.Value =(int) Propety.Angle;
+          
             if (Propety.Angle > 360) Propety.Angle = 360;
          
             if (Propety.Angle == 0)
@@ -541,33 +534,12 @@ namespace BeeInterface
             //    threadProcess.RunWorkerAsync();
         }
 
-        private void numAngle_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.Angle = numAngle.Value;
-            trackAngle.Value = (int)Propety.Angle;
-            if (Propety.Angle > 360) Propety.Angle = 360;
-
-            if (Propety.Angle == 0)
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
-            }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-
+  
         private void trackMaxOverLap_ValueChanged(float obj)
         {
 
            Propety.OverLap= trackMaxOverLap.Value/100.0 ;
-            numOverLap.Value =(int)( Propety.OverLap*100.0);
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
+          
         }
 
         private void trackNumObject_Load(object sender, EventArgs e)
@@ -575,11 +547,7 @@ namespace BeeInterface
 
         }
 
-        private void numOverLap_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.OverLap = numOverLap.Value / 100.0;
-            trackMaxOverLap.Value = (int)(Propety.OverLap * 100.0);
-        }
+      
 
         private void btnLess_Click(object sender, EventArgs e)
         {

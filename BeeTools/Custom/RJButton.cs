@@ -20,7 +20,68 @@ namespace BeeInterface
         private int borderRadius = 0;
         private Corner _Corner = 0;
         private Color borderColor = Color.PaleVioletRed;
+        private TextImageRelation _textImageRelation;
 
+        public new TextImageRelation TextImageRelation
+        {
+            get => base.TextImageRelation;
+            set
+            {
+                if (_textImageRelation != value)
+                {
+                    _textImageRelation = value;
+                    base.TextImageRelation = value;
+
+                    // 👉 Xử lý logic bên trong custom control
+                    HandleTextImageRelationChanged();
+
+                    // 👉 Gọi sự kiện public nếu cần
+                    TextImageRelationChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public event EventHandler TextImageRelationChanged;
+
+        // ✅ Xử lý nội bộ thay đổi
+        private void HandleTextImageRelationChanged()
+        {
+            if (Image != null)
+            {
+                int spacing = 5; // Khoảng cách giữa ảnh và chữ
+                Size imgSize = Image.Size; // Giới hạn kích thước ảnh
+                switch (TextImageRelation)
+                {
+                    case TextImageRelation.ImageBeforeText:
+                        imgRect = new Rectangle(10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 20, this.Height);
+                        break;
+                    case TextImageRelation.TextBeforeImage:
+                        imgRect = new Rectangle(this.Width - imgSize.Width - 10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(10, 0, this.Width - imgSize.Width - 20, this.Height);
+                        break;
+                    case TextImageRelation.ImageAboveText:
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, 5, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(0, imgSize.Height + spacing, this.Width, this.Height - imgSize.Height - spacing);
+                        break;
+                    case TextImageRelation.TextAboveImage:
+                        textRect = new Rectangle(0, 0, this.Width, this.Height - imgSize.Height - spacing);
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, this.Height - imgSize.Height - 5, imgSize.Width, imgSize.Height);
+                        break;
+                    case TextImageRelation.Overlay:
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        break;
+                }
+            }
+            // Ví dụ: Tự resize, redraw, invalidate…
+            this.Invalidate();
+        }
+
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+            _textImageRelation = base.TextImageRelation;
+        }
         //Properties
         [Category("RJ Code Advance")]
         public int BorderSize
@@ -29,6 +90,27 @@ namespace BeeInterface
             set
             {
                 borderSize = value;
+                if (borderSize >= 1 && borderRadius > 0) //Rounded button
+                {
+                    pathSurface = GetFigurePath(rectSurface, borderRadius);
+                    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
+                    // using (Pen penBorder = new Pen(borderColor, borderSize))
+                    if (this.Parent != null)
+                    {
+                        using (GraphicsPath path = pathSurface)
+                        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
+
+                        {
+                            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            this.Region = new Region(path);
+
+                            // if (this.Enabled)
+                            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
+
+                        }
+                    }
+                }
                 this.Invalidate();
             }
         }
@@ -40,6 +122,28 @@ namespace BeeInterface
             set
             {
                 _Corner = value;
+                if (borderSize >= 1 && borderRadius > 0) //Rounded button
+                {
+
+                    pathSurface = GetFigurePath(rectSurface, borderRadius);
+                    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
+                    // using (Pen penBorder = new Pen(borderColor, borderSize))
+                    if (this.Parent != null)
+                    {
+                        using (GraphicsPath path = pathSurface)
+                        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
+
+                        {
+                            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            this.Region = new Region(path);
+
+                            // if (this.Enabled)
+                            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
+
+                        }
+                    }
+                }
                 this.Invalidate();
             }
         }
@@ -50,6 +154,28 @@ namespace BeeInterface
             set
             {
                 borderRadius = value;
+                if (borderSize >= 1 && borderRadius > 0) //Rounded button
+                {
+
+                    pathSurface = GetFigurePath(rectSurface, borderRadius);
+                    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
+                    // using (Pen penBorder = new Pen(borderColor, borderSize))
+                    if (this.Parent != null)
+                    {
+                        using (GraphicsPath path = pathSurface)
+                        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
+
+                        {
+                            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                            this.Region = new Region(path);
+
+                            // if (this.Enabled)
+                            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
+
+                        }
+                    }
+                }
                 this.Invalidate();
             }
         }
@@ -138,7 +264,7 @@ namespace BeeInterface
         }
 
         public bool IsUnGroup { get => isUnGroup; set { isUnGroup = value; this.Invalidate(); } }
-
+      
         //Constructor
         public RJButton()
         {
@@ -151,6 +277,8 @@ namespace BeeInterface
             this.Resize += new EventHandler(Button_Resize);
             this.SizeChanged += RJButton_SizeChanged;
             this.MarginChanged += RJButton_MarginChanged;
+            this.EnabledChanged += RJButton_EnabledChanged;
+            
            // this.MouseMove += (s, e) => { isHovered = true; this.Invalidate(); };
            // this.MouseLeave += (s, e) => { isHovered = false; isPressed = false; this.Invalidate(); };
            // this.Click += (s, e) => { isPressed = true; this.Invalidate(); };
@@ -158,7 +286,11 @@ namespace BeeInterface
             this.MouseMove += RJButton_MouseMove;
             this.MouseLeave += RJButton_MouseLeave;
             this.Click += RJButton_Click;
-           
+            rectSurface = this.ClientRectangle;
+            rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
+            rect = new Rectangle(0, 0, this.Width, this.Height);
+            
+
             //if (IsRect)
             //{
             //    imgChoose = Properties.Resources.btnChoose2;
@@ -177,6 +309,11 @@ namespace BeeInterface
             //    this.BackgroundImage = imgUnChoose;
         }
 
+        private void RJButton_EnabledChanged(object sender, EventArgs e)
+        {
+           
+        }
+
         private void RJButton_MarginChanged(object sender, EventArgs e)
         {
             this.Invalidate();
@@ -184,6 +321,7 @@ namespace BeeInterface
 
         private void RJButton_SizeChanged(object sender, EventArgs e)
         {
+         
             this.Invalidate();
         }
 
@@ -325,15 +463,19 @@ namespace BeeInterface
 
             return flags;
         }
-
+        Rectangle rectSurface;
+        Rectangle rectBorder;
+        Rectangle rect ;
+        Rectangle imgRect ;
+        Rectangle textRect;
         protected override void OnPaint(PaintEventArgs pevent)
         {
             base.OnPaint(pevent);
 
 
-            Rectangle rectSurface = this.ClientRectangle;
-            Rectangle rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
-            Rectangle rect = new Rectangle(0, 0, this.Width , this.Height );
+            //Rectangle rectSurface = this.ClientRectangle;
+            //Rectangle rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
+            //Rectangle rect = new Rectangle(0, 0, this.Width , this.Height );
             // Xác định màu nền dựa trên trạng thái
             Color topColor, middleColor, bottomColor;
             if (!this.Enabled)
@@ -379,37 +521,15 @@ namespace BeeInterface
      
                   // Vẽ hình ảnh nếu có
       
-            Rectangle imgRect = Rectangle.Empty;
-        Rectangle textRect = rect;
-        int spacing = 5; // Khoảng cách giữa ảnh và chữ
+         
+    
             if (this.Enabled)
             {
                 if (Image != null)
                 {
                     Size imgSize = Image.Size; // Giới hạn kích thước ảnh
 
-                    switch (TextImageRelation)
-                    {
-                        case TextImageRelation.ImageBeforeText:
-                            imgRect = new Rectangle(10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 20, this.Height);
-                            break;
-                        case TextImageRelation.TextBeforeImage:
-                            imgRect = new Rectangle(this.Width - imgSize.Width - 10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(10, 0, this.Width - imgSize.Width - 20, this.Height);
-                            break;
-                        case TextImageRelation.ImageAboveText:
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, 5, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(0, imgSize.Height + spacing, this.Width, this.Height - imgSize.Height - spacing);
-                            break;
-                        case TextImageRelation.TextAboveImage:
-                            textRect = new Rectangle(0, 0, this.Width, this.Height - imgSize.Height - spacing);
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, this.Height - imgSize.Height - 5, imgSize.Width, imgSize.Height);
-                            break;
-                        case TextImageRelation.Overlay:
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            break;
-                    }
+                   
                     pevent.Graphics.DrawImage(Image, imgRect);
                     TextFormatFlags flags = ConvertAlignment(this.TextAlign);
 
@@ -439,52 +559,36 @@ namespace BeeInterface
                     TextRenderer.DrawText(pevent.Graphics, this.Text, this.Font, textRect, this.ForeColor, flags);
                 }
             }
-            int smoothSize = 1;
+          //  int smoothSize = 1;
 
-            if (borderRadius == 0) return;
-            if (borderSize >=1) //Rounded button
-            {
-                using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
-                using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-                using (Pen penSurface = new Pen(this.Parent.BackColor, smoothSize))
-                using (Pen penBorder = new Pen(borderColor, borderSize))
-                {
-                    pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    //Button surface
-                    this.Region = new Region(pathSurface);
-                    //Draw surface border for HD result
-                    if (this.Enabled)
-                        pevent.Graphics.DrawPath(penSurface, pathSurface);
+           // if (borderRadius == 0) return;
+            //if (borderSize >=1&& borderRadius >= 1 && pathSurface !=null&& this.Parent!=null) //Rounded button
+            //{
+               
+            //    //using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
+            //    //using (Pen penBorder = new Pen(borderColor, borderSize))
+            //    using (GraphicsPath path =  GetFigurePath(rectSurface, borderRadius))
+            //    using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
 
-                    ////Button border                    
-                    //if (borderSize >= 1)
-                    //    //Draw control border
-                    //    pevent.Graphics.DrawPath(penBorder, pathBorder);
-                    //else
-                    //    pevent.Graphics.DrawPath(new Pen(this.Parent.BackColor,1), pathBorder);
+            //    {
+            //        pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
+            //        //    this.Region = new Region(pathSurface);
 
-                }
-            }
-            else //Normal button
-            {
-                pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
-                //Button surface
-                this.Region = new Region(pathSurface);
-                //pevent.Graphics.SmoothingMode = SmoothingMode.None;
-                ////Button surface
-                //this.Region = new Region(rectSurface);
-                ////Button border
-                //if (borderSize >= 1)
-                //{
-                //    using (Pen penBorder = new Pen(borderColor, borderSize))
-                //    {
-                //        penBorder.Alignment = PenAlignment.Inset;
-                //        pevent.Graphics.DrawRectangle(penBorder, 0, 0, this.Width - 1, this.Height - 1);
-                //    }
-                //}
-            }
+            //        if (this.Enabled)
+            //            pevent.Graphics.DrawPath(penSurface, path);
+            //    }
+
+                
+            //}
+            //else //Normal button
+            //{
+            //    pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            //    using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
+               
+            //    this.Region = new Region(pathSurface);
+              
+            //}
         }
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -494,12 +598,70 @@ namespace BeeInterface
 
         private void Container_BackColorChanged(object sender, EventArgs e)
         {
+           
+            
             this.Invalidate();
         }
+        GraphicsPath pathSurface;
         private void Button_Resize(object sender, EventArgs e)
         {
             if (borderRadius > this.Height)
                 borderRadius = this.Height;
+             rectSurface = this.ClientRectangle;
+             rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
+             rect = new Rectangle(0, 0, this.Width, this.Height);
+             imgRect = Rectangle.Empty;
+             textRect = rect;
+          
+            if (borderSize >= 1 && borderRadius > 0) //Rounded button
+            {
+
+                pathSurface = GetFigurePath(rectSurface, borderRadius);
+                if (this.Parent != null)
+                {
+                    using (GraphicsPath path = pathSurface)
+                    using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
+
+                    {
+                        //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                        this.Region = new Region(path);
+
+                        // if (this.Enabled)
+                        //   pevent.Graphics.DrawPath(penSurface, pathSurface);
+
+                    }
+                }
+            }
+            if (Image != null)
+            {
+                int spacing = 5; // Khoảng cách giữa ảnh và chữ
+                Size imgSize = Image.Size; // Giới hạn kích thước ảnh
+                switch (TextImageRelation)
+                {
+                    case TextImageRelation.ImageBeforeText:
+                        imgRect = new Rectangle(10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 20, this.Height);
+                        break;
+                    case TextImageRelation.TextBeforeImage:
+                        imgRect = new Rectangle(this.Width - imgSize.Width - 10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(10, 0, this.Width - imgSize.Width - 20, this.Height);
+                        break;
+                    case TextImageRelation.ImageAboveText:
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, 5, imgSize.Width, imgSize.Height);
+                        textRect = new Rectangle(0, imgSize.Height + spacing, this.Width, this.Height - imgSize.Height - spacing);
+                        break;
+                    case TextImageRelation.TextAboveImage:
+                        textRect = new Rectangle(0, 0, this.Width, this.Height - imgSize.Height - spacing);
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, this.Height - imgSize.Height - 5, imgSize.Width, imgSize.Height);
+                        break;
+                    case TextImageRelation.Overlay:
+                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
+                        break;
+                }
+            }
+         
+            this.Invalidate();
         }
     }
 }   

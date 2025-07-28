@@ -186,12 +186,8 @@ namespace BeeInterface
                 trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
 
-                numScore.Minimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
-                numScore.Maxnimum = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
-                numScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-
+              
                 trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-                numScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
@@ -280,8 +276,7 @@ namespace BeeInterface
         private void trackScore_ValueChanged(float obj)
         {
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
-            numScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-        }
+         }
         public bool IsClear = false;
         public Width Propety=new Width();
         public Mat matTemp = new Mat();
@@ -419,12 +414,7 @@ namespace BeeInterface
 
         }
 
-        private void numScore_ValueChanged(object sender, EventArgs e)
-        {
-           
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-        }
+       
 
         private void rjButton5_Click(object sender, EventArgs e)
         {

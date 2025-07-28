@@ -1122,8 +1122,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private async void tmConnect_Tick(object sender, EventArgs e)
         {if (!Global.Initialed) return;
             tmConnect.Enabled = false;
-            tmRead.Interval = Global.ParaCommon.Comunication.IO.timeRead;
 
+            if (Global.ParaCommon.Comunication.IO.IsBypass) return;
             Global.ParaCommon.Comunication.IO.Connect();
 
             if (Global.ParaCommon.Comunication.IO.IsConnected)
@@ -1131,8 +1131,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
                 await Task.Delay(500);
                 tmRead.Enabled = true;
-              //  tmCheck.Enabled = true;
-               // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+                if (Global.ParaCommon.Comunication.IO.timeRead == 0) Global.ParaCommon.Comunication.IO.timeRead = 1;
+                tmRead.Interval = Global.ParaCommon.Comunication.IO.timeRead;
+                //  tmCheck.Enabled = true;
+                // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
 
             }
 

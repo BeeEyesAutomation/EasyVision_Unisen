@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using System.ComponentModel;
 using BeeGlobal;
+using BeeCore.Func;
+using BeeCore;
 namespace BeeInterface
 {
     public partial class CustomNumeric : UserControl
@@ -19,6 +21,7 @@ namespace BeeInterface
         {
 
             InitializeComponent();
+            txt.Font = new Font("Arial", 20);
             this.FontChanged += CustomNumeric_FontChanged;
             //InitUI();
         }
@@ -85,7 +88,8 @@ namespace BeeInterface
                 _value =(float)Math.Round( value,1);
                 if (_value < minimum) _value = minimum;
                 if (_value > maxnimum) _value = maxnimum;
-                txt.Text = _value + "";
+                txt.Text = _value + ""; 
+               
                 OnValueChanged(EventArgs.Empty);
             }
         }
@@ -116,18 +120,18 @@ namespace BeeInterface
             this.lay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lay.BackColor = System.Drawing.Color.Transparent;
             this.lay.ColumnCount = 3;
-            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.lay.Controls.Add(this.btnSub, 0, 0);
             this.lay.Controls.Add(this.btnPlus, 2, 0);
             this.lay.Controls.Add(this.txt, 1, 0);
-            this.lay.Location = new System.Drawing.Point(0, 0);
+            this.lay.Location = new System.Drawing.Point(0, 1);
             this.lay.Margin = new System.Windows.Forms.Padding(5);
             this.lay.Name = "lay";
             this.lay.RowCount = 1;
             this.lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay.Size = new System.Drawing.Size(177, 43);
+            this.lay.Size = new System.Drawing.Size(157, 43);
             this.lay.TabIndex = 10;
             // 
             // btnSub
@@ -153,13 +157,15 @@ namespace BeeInterface
             this.btnSub.Location = new System.Drawing.Point(0, 0);
             this.btnSub.Margin = new System.Windows.Forms.Padding(0);
             this.btnSub.Name = "btnSub";
-            this.btnSub.Size = new System.Drawing.Size(42, 43);
+            this.btnSub.Size = new System.Drawing.Size(35, 43);
             this.btnSub.TabIndex = 7;
             this.btnSub.Text = "-";
             this.btnSub.TextColor = System.Drawing.Color.Black;
             this.btnSub.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSub.UseVisualStyleBackColor = false;
             this.btnSub.Click += new System.EventHandler(this.btnSub_Click);
+            this.btnSub.MouseLeave += new System.EventHandler(this.btnSub_MouseLeave);
+            this.btnSub.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnSub_MouseMove);
             // 
             // btnPlus
             // 
@@ -180,25 +186,28 @@ namespace BeeInterface
             this.btnPlus.IsNotChange = false;
             this.btnPlus.IsRect = false;
             this.btnPlus.IsUnGroup = false;
-            this.btnPlus.Location = new System.Drawing.Point(135, 0);
+            this.btnPlus.Location = new System.Drawing.Point(122, 0);
             this.btnPlus.Margin = new System.Windows.Forms.Padding(0);
             this.btnPlus.Name = "btnPlus";
-            this.btnPlus.Size = new System.Drawing.Size(42, 43);
+            this.btnPlus.Size = new System.Drawing.Size(35, 43);
             this.btnPlus.TabIndex = 8;
             this.btnPlus.Text = "+";
             this.btnPlus.TextColor = System.Drawing.Color.Black;
             this.btnPlus.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnPlus.UseVisualStyleBackColor = false;
             this.btnPlus.Click += new System.EventHandler(this.btnPlus_Click);
+            this.btnPlus.MouseLeave += new System.EventHandler(this.btnPlus_MouseLeave);
+            this.btnPlus.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnPlus_MouseMove);
             // 
             // txt
             // 
             this.txt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt.Location = new System.Drawing.Point(42, 2);
+            this.txt.Location = new System.Drawing.Point(35, 2);
             this.txt.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.txt.Multiline = true;
             this.txt.Name = "txt";
-            this.txt.Size = new System.Drawing.Size(93, 39);
+            this.txt.Size = new System.Drawing.Size(87, 41);
             this.txt.TabIndex = 9;
             this.txt.Text = "00";
             this.txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -212,12 +221,19 @@ namespace BeeInterface
             this.Controls.Add(this.lay);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CustomNumeric";
-            this.Size = new System.Drawing.Size(177, 43);
+            this.Size = new System.Drawing.Size(157, 45);
+            this.MouseLeave += new System.EventHandler(this.CustomNumeric_MouseLeave);
             this.lay.ResumeLayout(false);
             this.lay.PerformLayout();
             this.ResumeLayout(false);
 
         }
+
+        private void CustomNumeric_MouseLeave(object sender, EventArgs e)
+        {
+            this.Width =70;
+        }
+
         bool IsAllDigits(string input)
         {
             return !string.IsNullOrEmpty(input) && input.All(char.IsDigit);
@@ -229,7 +245,8 @@ namespace BeeInterface
 
         private void txt_TextChanged(object sender, EventArgs e)
         {
-          
+            txt.Text = txt.Text.Replace("\n", "");
+           
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
@@ -240,21 +257,45 @@ namespace BeeInterface
                 if (IsAllDigits(txt.Text))
                 {
                     Value = Convert.ToInt32(txt.Text.Trim());
+                   
                 }
 
             }
         }
 
+        private void btnSub_MouseMove(object sender, MouseEventArgs e)
+        {
+   
+        }
+
+        private void btnPlus_MouseMove(object sender, MouseEventArgs e)
+        {
+         
+
+        }
+
+        private void btnSub_MouseLeave(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnPlus_MouseLeave(object sender, EventArgs e)
+        {
+            
+        }
+
         private void btnSub_Click(object sender, EventArgs e)
         {
             Value -= Step;
-
+            Size Sz = Cal.GetSizeText(Maxnimum+".0", txt.Font);
+            this.Width = Sz.Width + 70;
         }
 
         private void btnPlus_Click(object sender, EventArgs e)
         {
             Value += Step;
-
+            Size Sz = Cal.GetSizeText(Maxnimum + ".0", txt.Font);
+            this.Width = Sz.Width+70;
         }
     }
 

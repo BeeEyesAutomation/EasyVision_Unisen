@@ -29,7 +29,7 @@ namespace BeeGlobal
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
         public static Config Config;
-        public static  bool IsLearning=true;
+        public static  bool IsLearning=false;
         public static bool IsOCR = false;
         public static StatusDraw StatusDraw
         {
@@ -108,7 +108,7 @@ namespace BeeGlobal
         public static float angle_Adjustment = 0, X_Adjustment = 0, Y_Adjustment = 0;
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();
         private static int _IndexToolSelected=-1;
-       
+        public static bool IsEditTool = false;
        public static event Action<int> IndexToolChanged;
         public static dynamic OldPropetyTool = null;
        

@@ -50,35 +50,40 @@ namespace BeeUi
                     case Step.Run:
                         pName.Visible = false;
                         if (Global.ToolSettings == null)
+                        {
                             Global.ToolSettings = new ToolSettings();
-                        pEditTool.Controls.Clear();
-                      
-                        Global.ToolSettings.Visible = true;
-                      
+                            Global.ToolSettings.Location = new Point(0, 0);
+                            Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                            Global.ToolSettings.pAllTool.Visible = true;
+                            Global.ToolSettings.Dock = DockStyle.None;
+                        }
+                           
+                       
                         G.SettingPLC.Visible = false;
                         //pEditTool.Visible = true;
                         Global.ToolSettings.Parent = pEditTool;
                         Global.ToolSettings.Size = pEditTool.Size;
-                        Global.ToolSettings.Location = new Point(0, 0);
+
+                       
                         Global.ToolSettings.BringToFront();
-                        Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                        Global.ToolSettings.pAllTool.Visible = true;
-                        Global.ToolSettings.Dock = DockStyle.None;
-                        G.EditTool.View.pHeader.Controls.Clear();
+                        
+                       // G.EditTool.View.pHeader.Controls.Clear();
                         if ( G.StatusDashboard == null)
                         {
                              G.StatusDashboard = new StatusDashboard();
                             G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config. AlphaBar-50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
                             G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
                             G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
-
+                            G.StatusDashboard.Dock = DockStyle.None;
+                            G.StatusDashboard.Location = new Point(0, 0); 
+                            G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         }
 
-                         G.StatusDashboard.Dock = DockStyle.None;
+                         
                          G.StatusDashboard.Parent = G.EditTool.View.pHeader;
-                         G.StatusDashboard.Location = new Point(0, 0);
-                         G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
-                         G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                        G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
+                        G.StatusDashboard.BringToFront();
+                         
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -102,35 +107,41 @@ namespace BeeUi
                         break;
                     case Step.Step1:
                        
-                                G.EditTool.View.pHeader.Controls.Clear();
+                       
                         G.StepEdit.btnStep1.IsCLick = true;
                         if (G.StepEdit.SettingStep1 == null)
                         {
                             G.StepEdit.SettingStep1 = new SettingStep1();
-                            G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
-
+                      
+                            G.StepEdit.SettingStep1.Dock = DockStyle.None;
+                            
+                            G.StepEdit.SettingStep1.Location = new Point(0, 0);
+                          
+                            G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                        //  G.StepEdit.SettingStep1.BringToFront();
                         }
-
-                        pEditTool.Controls.Clear();
+                        G.StepEdit.SettingStep1.Size = G.EditTool.pEditTool.Size;
+           
                         G.StepEdit.SettingStep1.Parent = pEditTool;
-
-                        G.EditTool.View.pHeader.Controls.Clear();
+                        G.StepEdit.SettingStep1.BringToFront();
                         if (G.StepEdit == null)
                         {
                             G.StepEdit = new Common.StepEdit();
 
+                            G.StepEdit.Dock = DockStyle.None;
+                            G.StepEdit.Location = new Point(0, 0);
+                            G.StepEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
                         }
                         //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                         //{
                         //    tool.ItemTool.Score.Enabled = false;
                         //}
-                        G.StepEdit.Dock = DockStyle.None;
-                        G.StepEdit.Parent = G.EditTool.View.pHeader;
-                        G.StepEdit.Location = new Point(0, 0);
-                        G.StepEdit.Size = G.EditTool.View.pHeader.Size;
-                        G.StepEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
+                        G.StepEdit.Parent = G.EditTool.View.pHeader;
+                      
+                        G.StepEdit.Size = G.EditTool.View.pHeader.Size;
+                        G.StepEdit.BringToFront();
                         lbNumStep.Text = "Step 1";
                         lbNameStep.Text = "Image Optimization";
                         iconTool.BackgroundImage = Properties.Resources._1;
@@ -199,6 +210,7 @@ namespace BeeUi
                         else
                         {
                             MessageBox.Show("Please,Register Image!");
+                            G.StepEdit.btnStep2.IsCLick = true;
                             Step = Step.Step2;
                             goto X;
                         }

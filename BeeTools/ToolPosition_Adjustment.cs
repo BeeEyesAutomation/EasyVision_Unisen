@@ -693,7 +693,7 @@ namespace BeeInterface
         private void trackAngle_ValueChanged(float obj)
         {
             Propety.Angle = trackAngle.Value;
-            numAngle.Value = (int)Propety.Angle;
+          
             if (Propety.Angle > 360) Propety.Angle = 360;
 
             if (Propety.Angle == 0)
@@ -710,40 +710,15 @@ namespace BeeInterface
                 threadProcess.RunWorkerAsync();
         }
 
-        private void numAngle_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.Angle = numAngle.Value;
-            trackAngle.Value = (int)Propety.Angle;
-            if (Propety.Angle > 360) Propety.Angle = 360;
-
-            if (Propety.Angle == 0)
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
-            }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-
+   
         private void trackMaxOverLap_ValueChanged(float obj)
         {
 
             Propety.OverLap = (trackMaxOverLap.Value*1.0)/100.0;
-            numOverLap.Value = (int)(Propety.OverLap*100.0);
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
+          
         }
 
-        private void numOverLap_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.OverLap = (numOverLap.Value * 1.0)/ 100.0;
-            trackMaxOverLap.Value = (int)(Propety.OverLap*100.0);
-        }
+        
 
         private void btnCropHalt_Click(object sender, EventArgs e)
         {
@@ -762,8 +737,6 @@ namespace BeeInterface
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
             Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None, false);
-
-
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
             Global.StatusDraw = StatusDraw.Edit;

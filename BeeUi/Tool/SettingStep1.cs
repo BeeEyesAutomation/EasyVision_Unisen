@@ -27,8 +27,10 @@ namespace BeeUi.Tool
         public SettingStep1()
         {
             InitializeComponent();
+            this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
+
             //p.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p.Width, p.Height, 5, 5));
-          //  p2.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p2.Width, p2.Height, 5, 5));
+            //  p2.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p2.Width, p2.Height, 5, 5));
 
         }
 
@@ -466,6 +468,16 @@ namespace BeeUi.Tool
             BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value = (int)trackShift.Value;
             BeeCore.Common.listCamera[Global.IndexChoose].SetShift();
             trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
+
+        }
+
+        private void adjustBar2_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void adjustBar3_Load(object sender, EventArgs e)
+        {
 
         }
     }

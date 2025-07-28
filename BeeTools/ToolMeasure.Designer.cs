@@ -722,6 +722,7 @@ namespace BeeInterface
             // 
             // numScore
             // 
+            this.numScore.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.numScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numScore.Location = new System.Drawing.Point(293, 0);
@@ -1171,6 +1172,7 @@ namespace BeeInterface
             // 
             // numOverLap
             // 
+            this.numOverLap.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.numOverLap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.numOverLap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numOverLap.Location = new System.Drawing.Point(295, 0);

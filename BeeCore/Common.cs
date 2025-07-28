@@ -192,9 +192,10 @@ namespace BeeCore
                         {
 
 
-                            G.np = Py.Import("numpy");
+                           
                             if(Global.IsLearning)
                             {
+                                G.np = Py.Import("numpy");
                                 dynamic mod = Py.Import("Tool.Learning");
                                 dynamic cls = mod.GetAttr("ObjectDetector"); // class
                                 G.objYolo = cls.Invoke();              // khởi tạo instance

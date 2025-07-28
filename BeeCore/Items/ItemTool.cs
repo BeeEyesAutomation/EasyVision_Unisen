@@ -564,8 +564,9 @@ namespace BeeCore
             txtEdit.Visible = false;
             Global.StatusDraw = StatusDraw.Edit;
             Global.IndexToolSelected = IndexTool;
+            Global.IsEditTool = true;
             // G.listAlltool[Global.IndexChoose].FindIndex(a => a.ItemTool == this);
-           
+
         }
 
         private void Score_ValueChanged(float obj)

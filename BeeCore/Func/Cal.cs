@@ -12,17 +12,13 @@ namespace BeeCore.Func
 {
     public class Cal
     {
-        public static System.Drawing.Size GetSizeText(string text ,Font f)
+        public static System.Drawing.Size GetSizeText(string text, Font font)
         {
-         
-            using (Font font =f)
+            using (Bitmap bmp = new Bitmap(1, 1))
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                // Measurement bằng TextRenderer (thường khớp với việc vẽ bằng TextRenderer.DrawText)
-               return TextRenderer.MeasureText(text, font);
-
-            
+                return System.Drawing.Size.Ceiling(g.MeasureString(text, font));
             }
-          
         }
         public static void GetLineParams(Line2D ln, out double a, out double b, out double c)
         {

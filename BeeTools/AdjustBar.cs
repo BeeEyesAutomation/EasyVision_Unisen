@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace BeeInterface
         private float _Min = 0;
         private float _Max = 100;
         private float _Step = 1;
+        public event Action<float> ValueChanged;
         // Appearance properties
         [Category("Value"), Description("Value")]
         public float Value
@@ -24,9 +26,13 @@ namespace BeeInterface
             get => _Value;
             set
             {
-                _Value = value;
-                Track.Value = _Value;
-
+                if (_Value != value)
+                {
+                    _Value = value;
+                    Track.Value = _Value;
+                    Num.Value = _Value;
+                    ValueChanged?.Invoke(_Value); // Gọi event
+                }
             }
         }
         [Category("Min"), Description("Min")]
@@ -65,11 +71,13 @@ namespace BeeInterface
 
             }
         }
+      
         public AdjustBar()
         {
             InitializeComponent();
             Track.ValueChanged += Track_ValueChanged;
             Num.ValueChanged += Num_ValueChanged;
+            Gui.RoundRg(this, 10, Corner.Both);
         }
 
         private void Num_ValueChanged(object sender, EventArgs e)
@@ -82,6 +90,16 @@ namespace BeeInterface
         {
             Value = Track.Value;
             Num.Value = Value;
+        }
+
+        private void lay_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Track_MouseMove(object sender, MouseEventArgs e)
+        {
+            Num.Width = 70;
         }
     }
 }

@@ -32,14 +32,13 @@ namespace BeeUi.Tool
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep2));
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tmNotPress = new System.Windows.Forms.Timer(this.components);
-            this.btnCancel = new RJButton();
-            this.btnNextStep = new RJButton();
-            this.btnCapCamera = new RJButton();
-            this.btnLoadImge = new RJButton();
+            this.tmNotPress = new System.Windows.Forms.Timer();
+            this.btnCancel = new BeeInterface.RJButton();
+            this.btnNextStep = new BeeInterface.RJButton();
+            this.btnCapCamera = new BeeInterface.RJButton();
+            this.btnLoadImge = new BeeInterface.RJButton();
             this.SuspendLayout();
             // 
             // workRead
@@ -62,7 +61,7 @@ namespace BeeUi.Tool
             this.btnCancel.BorderRadius = 5;
             this.btnCancel.BorderSize = 1;
             this.btnCancel.ButtonImage = null;
-            this.btnCancel.Corner =Corner.Both;
+            this.btnCancel.Corner = BeeGlobal.Corner.Both;
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -92,7 +91,7 @@ namespace BeeUi.Tool
             this.btnNextStep.BorderRadius = 5;
             this.btnNextStep.BorderSize = 1;
             this.btnNextStep.ButtonImage = null;
-            this.btnNextStep.Corner =Corner.Both;
+            this.btnNextStep.Corner = BeeGlobal.Corner.Both;
             this.btnNextStep.Enabled = false;
             this.btnNextStep.FlatAppearance.BorderSize = 0;
             this.btnNextStep.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -122,7 +121,7 @@ namespace BeeUi.Tool
             this.btnCapCamera.BorderRadius = 10;
             this.btnCapCamera.BorderSize = 1;
             this.btnCapCamera.ButtonImage = null;
-            this.btnCapCamera.Corner =Corner.Both;
+            this.btnCapCamera.Corner = BeeGlobal.Corner.Both;
             this.btnCapCamera.FlatAppearance.BorderSize = 0;
             this.btnCapCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCapCamera.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -152,7 +151,7 @@ namespace BeeUi.Tool
             this.btnLoadImge.BorderRadius = 10;
             this.btnLoadImge.BorderSize = 1;
             this.btnLoadImge.ButtonImage = null;
-            this.btnLoadImge.Corner =Corner.Both;
+            this.btnLoadImge.Corner = BeeGlobal.Corner.Both;
             this.btnLoadImge.FlatAppearance.BorderSize = 0;
             this.btnLoadImge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoadImge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

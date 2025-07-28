@@ -1434,10 +1434,12 @@ namespace BeeUi
         }
 
         private void Global_IndexToolChanged(int obj)
-        {
+        {if (!Global.IsEditTool) return;
             if (Global.IndexToolSelected == -1) return;
+            Global.IsEditTool = false;
             if (Global.StatusDraw == StatusDraw.Edit)
             {
+              
                 Global.OldPropetyTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Clone();
              
                 //   if (Score.Enabled||Global.IsRun) return;
@@ -1568,19 +1570,19 @@ namespace BeeUi
 
     
         }
-        [DllImport("KERNEL32.DLL", EntryPoint =
-   "SetProcessWorkingSetSize", SetLastError = true,
-   CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool SetProcessWorkingSetSize32Bit
-   (IntPtr pProcess, int dwMinimumWorkingSetSize,
-   int dwMaximumWorkingSetSize);
+   //     [DllImport("KERNEL32.DLL", EntryPoint =
+   //"SetProcessWorkingSetSize", SetLastError = true,
+   //CallingConvention = CallingConvention.StdCall)]
+   //     internal static extern bool SetProcessWorkingSetSize32Bit
+   //(IntPtr pProcess, int dwMinimumWorkingSetSize,
+   //int dwMaximumWorkingSetSize);
 
-        [DllImport("KERNEL32.DLL", EntryPoint =
-           "SetProcessWorkingSetSize", SetLastError = true,
-           CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool SetProcessWorkingSetSize64Bit
-           (IntPtr pProcess, long dwMinimumWorkingSetSize,
-           long dwMaximumWorkingSetSize);
+   //     [DllImport("KERNEL32.DLL", EntryPoint =
+   //        "SetProcessWorkingSetSize", SetLastError = true,
+   //        CallingConvention = CallingConvention.StdCall)]
+   //     internal static extern bool SetProcessWorkingSetSize64Bit
+   //        (IntPtr pProcess, long dwMinimumWorkingSetSize,
+   //        long dwMaximumWorkingSetSize);
         bool IsProcessing=false;
         Stopwatch stopWatch = new Stopwatch();
 
@@ -2472,13 +2474,13 @@ namespace BeeUi
                btnLive.IsCLick = false;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                {
+                //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                //{
 
-                    SetProcessWorkingSetSize32Bit(System.Diagnostics
-                       .Process.GetCurrentProcess().Handle, -1, -1);
+                //    SetProcessWorkingSetSize32Bit(System.Diagnostics
+                //       .Process.GetCurrentProcess().Handle, -1, -1);
 
-                }
+                //}
                 Thread.Sleep(50);
 
                 btnLive.IsCLick = true;

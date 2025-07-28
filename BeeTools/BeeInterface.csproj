@@ -66,6 +66,7 @@
       <DependentUpon>AdjustBar.cs</DependentUpon>
     </Compile>
     <Compile Include="ConvertImg.cs" />
+    <Compile Include="CustomGui.cs" />
     <Compile Include="Custom\Custom3DButton .cs">
       <SubType>Component</SubType>
     </Compile>
