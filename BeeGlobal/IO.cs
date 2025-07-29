@@ -51,7 +51,9 @@ namespace BeeGlobal
         }
 
         public void StopRead() => _cts.Cancel();
-
+        public float DealayTrigger = 1;
+        public float DealayOutput= 1;
+        public bool IsLight1,IsLight2,IsLight3;
         private  async Task DoWork()
         {
             if (!Global.Initialed) return;

@@ -126,7 +126,6 @@ namespace BeeInterface
             txtContent.Text = Propety.Matching;
            
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-            numScore.Value =(int) Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             btnEnLimitArea.IsCLick = Propety.IsEnLimitArea ;
             layoutLineLimit.Enabled = Propety.IsEnLimitArea;
             numCLAHE.Value = Propety.Clahe;
@@ -153,8 +152,7 @@ namespace BeeInterface
         {
            
            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
-            numScore.Value =(int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
+           
         }
 
         public OCR Propety=new OCR();
@@ -623,11 +621,7 @@ namespace BeeInterface
 
         }
 
-        private void numScore_ValueChanged_1(object sender, EventArgs e)
-        {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score= numScore.Value;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-        }
+      
         bool IsFullSize;
         private void btnCropHalt_Click_1(object sender, EventArgs e)
         {

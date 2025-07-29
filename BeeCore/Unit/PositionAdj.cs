@@ -398,25 +398,27 @@ namespace BeeCore
             Matching(rectRotate);
 
         }
+       
         public void Complete()
         {
-            Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            Results results = Results.None;
+            results = Results.OK;
             switch (Compare)
             {
                 case Compares.Equal:
                     if (rectRotates.Count() != LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        results = Results.NG;
                     break;
                 case Compares.Less:
                     if (rectRotates.Count() >= LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        results = Results.NG;
                     break;
                 case Compares.More:
                     if (rectRotates.Count() <= LimitCounter)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        results = Results.NG;
                     break;
             }
-            if (Common.PropetyTools[IndexThread][Index].Results == Results.OK)
+            if (results == Results.OK)
             {
                 Matrix mat = new Matrix();
                 System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
@@ -433,18 +435,18 @@ namespace BeeCore
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
                 Global.AngleOrigin = rectRotates[0]._angle;
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
+               
             }
-            if (Common.PropetyTools[IndexThread][Index].TypeTool == TypeTool.Position_Adjustment)
                 if (!Global.IsRun)
                 {
                     Global.StatusDraw = StatusDraw.Check;
-                    if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
+                    if (results == Results.OK)
                     {
                         rotPositionAdjustment = rectRotates[0].Clone();
                         Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X - rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X, rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
                     }
                 }
-
+            Common.PropetyTools[IndexThread][Index].Results = results;
         }
         public Graphics DrawResult(Graphics gc)
         {
@@ -578,7 +580,7 @@ namespace BeeCore
                 rectRotates = new List<RectRotate>();
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>();
-                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                //Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 if (sResult != "")
                 {
                     cycleTime = (int)Pattern.cycleOutLine;

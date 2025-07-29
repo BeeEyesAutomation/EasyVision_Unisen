@@ -131,7 +131,7 @@ namespace BeeInterface
             this.lay.Name = "lay";
             this.lay.RowCount = 1;
             this.lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay.Size = new System.Drawing.Size(157, 43);
+            this.lay.Size = new System.Drawing.Size(69, 43);
             this.lay.TabIndex = 10;
             // 
             // btnSub
@@ -186,7 +186,7 @@ namespace BeeInterface
             this.btnPlus.IsNotChange = false;
             this.btnPlus.IsRect = false;
             this.btnPlus.IsUnGroup = false;
-            this.btnPlus.Location = new System.Drawing.Point(122, 0);
+            this.btnPlus.Location = new System.Drawing.Point(34, 0);
             this.btnPlus.Margin = new System.Windows.Forms.Padding(0);
             this.btnPlus.Name = "btnPlus";
             this.btnPlus.Size = new System.Drawing.Size(35, 43);
@@ -207,7 +207,7 @@ namespace BeeInterface
             this.txt.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.txt.Multiline = true;
             this.txt.Name = "txt";
-            this.txt.Size = new System.Drawing.Size(87, 41);
+            this.txt.Size = new System.Drawing.Size(1, 41);
             this.txt.TabIndex = 9;
             this.txt.Text = "00";
             this.txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -221,7 +221,7 @@ namespace BeeInterface
             this.Controls.Add(this.lay);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CustomNumeric";
-            this.Size = new System.Drawing.Size(157, 45);
+            this.Size = new System.Drawing.Size(69, 45);
             this.MouseLeave += new System.EventHandler(this.CustomNumeric_MouseLeave);
             this.lay.ResumeLayout(false);
             this.lay.PerformLayout();
@@ -246,21 +246,26 @@ namespace BeeInterface
         private void txt_TextChanged(object sender, EventArgs e)
         {
             txt.Text = txt.Text.Replace("\n", "");
-           
+          
+            if (IsAllDigits(txt.Text))
+            {
+                Value = Convert.ToInt32(txt.Text.Trim());
+
+            }
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                txt.Text = txt.Text.Replace("\n", "");
-                if (IsAllDigits(txt.Text))
-                {
-                    Value = Convert.ToInt32(txt.Text.Trim());
+            //if (e.KeyCode == Keys.Enter)
+            //{
+            //    txt.Text = txt.Text.Replace("\n", "");
+            //    if (IsAllDigits(txt.Text))
+            //    {
+            //        Value = Convert.ToInt32(txt.Text.Trim());
                    
-                }
+            //    }
 
-            }
+            //}
         }
 
         private void btnSub_MouseMove(object sender, MouseEventArgs e)

@@ -464,7 +464,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 
                
             }
-          listLabelsIn = new List<Label> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
+          listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
           listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
             btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
             Global.StatusIOChanged += Global_StatusIOChanged;
@@ -510,7 +510,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         }
 
       
-        List<Label> listLabelsIn = new List<Label>();
+        List<RJButton> listLabelsIn = new List<RJButton>();
         List<RJButton> listLabelsOut = new List<RJButton>();
       
 
@@ -540,7 +540,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
 
 
-                if (Global.IsRun && Global.Config.IsExternal || Global.TriggerInternal)
+                if (Global.IsRun &&  Global.ParaCommon.IsExternal || Global.TriggerInternal)
                 {
                     if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
                     {

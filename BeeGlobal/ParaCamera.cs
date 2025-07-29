@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,14 @@ namespace BeeGlobal
                 Gain = new ValuePara();
             if (Shift == null)
                 Shift = new ValuePara();
-
+            if (Width == null)
+                Width = new ValuePara();
+            if (Height == null)
+                Height = new ValuePara();
+            if (OffSetX == null)
+                OffSetX = new ValuePara();
+            if (OffSetY == null)
+                OffSetY = new ValuePara();
         }
     }
 }

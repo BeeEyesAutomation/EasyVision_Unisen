@@ -12,7 +12,7 @@ namespace BeeGlobal
     [Serializable()]
     public class Config
     {
-        public bool IsExternal = false;
+        
         public  float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;
         public  Color colorGui = Color.FromArgb(100, 114, 114, 114);

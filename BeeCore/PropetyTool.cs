@@ -70,6 +70,7 @@ namespace BeeCore
         public BackgroundWorker worker = new BackgroundWorker();
         public void DoWork()
         {
+            Results=Results.None;
           StatusTool = StatusTool.Processing;
             timer.Restart();
             if (UsedTool == UsedTool.NotUsed)

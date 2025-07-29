@@ -13,9 +13,9 @@ namespace BeeGlobal
     [Serializable()]
     public class ParaCommon
     {
-       
-        
-         public String CardChoosed = "";
+
+        public bool IsExternal = false;
+        public String CardChoosed = "";
         public Size SizeCCD;
         public  int _Exposure = 0, _Gain=1, _TypeResolution=1, _TypeLight=1;
         public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;

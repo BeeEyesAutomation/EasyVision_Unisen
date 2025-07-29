@@ -64,8 +64,6 @@ namespace BeeInterface
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-
-           
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             
             numScale.Value= (decimal) Propety.Scale;

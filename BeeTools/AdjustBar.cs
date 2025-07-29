@@ -77,7 +77,34 @@ namespace BeeInterface
             InitializeComponent();
             Track.ValueChanged += Track_ValueChanged;
             Num.ValueChanged += Num_ValueChanged;
+            this.SizeChanged += AdjustBar_SizeChanged;
+           // this.HandleCreated += AdjustBar_HandleCreated;
+          //  Gui.RoundRg(this, 10, Corner.Both);
+        }
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
             Gui.RoundRg(this, 10, Corner.Both);
+        }
+        private void AdjustBar_HandleCreated(object sender, EventArgs e)
+        {
+            //this.Invoke(new Action(() =>
+            //{
+            //    Gui.RoundRg(this, 10, Corner.Both);
+            //}));
+        }
+
+        private void AdjustBar_SizeChanged(object sender, EventArgs e)
+        {
+          
+                // Giả sử có tính toán gì đó ở đây...
+
+                // Quay lại UI thread để bo góc
+                //this.Invoke(new Action(() =>
+                //{
+                //    Gui.RoundRg(this, 10, Corner.Both);
+                //}));
+           
         }
 
         private void Num_ValueChanged(object sender, EventArgs e)
@@ -100,6 +127,12 @@ namespace BeeInterface
         private void Track_MouseMove(object sender, MouseEventArgs e)
         {
             Num.Width = 70;
+        }
+
+        private void AdjustBar_Load(object sender, EventArgs e)
+        {
+            //Gui.RoundRg(this, 10, Corner.Both);
+
         }
     }
 }

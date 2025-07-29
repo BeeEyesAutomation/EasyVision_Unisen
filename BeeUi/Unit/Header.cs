@@ -247,7 +247,7 @@ namespace BeeUi.Common
               //  btnIO.Enabled = false;
                 
             }
-            if (Global.Config.IsExternal)
+            if ( Global.ParaCommon.IsExternal)
             {
                G.EditTool.View.btnCap.Enabled = false;
                G.EditTool.View.btnRecord.Enabled = false;

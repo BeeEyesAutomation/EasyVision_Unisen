@@ -79,12 +79,14 @@ namespace BeeInterface
              CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
             //picTemp1.Image = Propety.matTemp;
             //picTemp2.Image = Propety.matTemp2;
-            
-          //  txtModel.Text = Propety.PathModel;
+
+            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-           btnEnLineLimit.IsCLick = Propety.IsCheckArea ;
-            numScore.Value = (int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-            trackNumObject.Value= Propety.NumObject;
+
+            btnEnLineLimit.IsCLick = Propety.IsCheckArea ;
+             trackNumObject.Value= Propety.NumObject;
             numLine.Value = Propety.yLine;
 
             SetLabels();
@@ -137,8 +139,7 @@ namespace BeeInterface
         {
 
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = (int)trackScore.Value;
-            numScore.Value = (int)Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
+          
         }
 
         public Yolo Propety=new Yolo();
@@ -519,11 +520,7 @@ namespace BeeInterface
 
         }
 
-        private void numScore_ValueChanged_1(object sender, EventArgs e)
-        {
-           Common.PropetyTools[Global.IndexChoose][Propety.Index].Score= numScore.Value;
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-        }
+      
         bool IsFullSize;
         private void btnCropHalt_Click_1(object sender, EventArgs e)
         {

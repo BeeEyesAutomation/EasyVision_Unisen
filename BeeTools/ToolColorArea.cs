@@ -39,39 +39,21 @@ namespace BeeInterface
         public void LoadPara( )
         {
            
-            //worker.DoWork += (sender, e) =>
-            //{
-            //    timer.Restart();
-            //    if (!Global.IsRun)
-            //        Propety.rotAreaAdjustment = Propety.rotArea;
-            //    Propety.DoWork(Propety.rotAreaAdjustment);
-            //};
-
-            //worker.RunWorkerCompleted += (sender, e) =>
-            //{
-            //    if (e.Error != null)
-            //    {
-            //        //  MessageBox.Show("Worker error: " + e.Error.Message);
-            //        return;
-            //    }
-            //    Propety.Complete();
-            //    Global.StatusDraw = StatusDraw.Check;
-            //    timer.Stop();
-
-            //    Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-            //};
-          
+         
             if(Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
-            //if(G.Config.TypeCamera==TypeCamera.USB)
-            
+            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+
             Propety.LoadTemp();
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety. Index].Score ;
             trackPixel.Value = (int)Propety.AreaPixel;
             if (!Convert.ToBoolean(Propety.StyleColor))
-                btnColor.IsCLick = true;
+                btnHSV.IsCLick = true;
             else
-                btnClWhite.IsCLick = true;
+                btnRGB.IsCLick = true;
 
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
            
@@ -375,15 +357,13 @@ namespace BeeInterface
 
         private void btnColor_Click(object sender, EventArgs e)
         {
-            Propety.StyleColor = 0;
+         
 
         }
 
         private void btnClWhite_Click(object sender, EventArgs e)
         {
-            Propety.StyleColor = 1;
-
-            btnDeleteAll.PerformClick();
+           
         }
 
         private void btnClBlack_Click(object sender, EventArgs e)
@@ -466,16 +446,147 @@ namespace BeeInterface
 
         private void btnMask_Click(object sender, EventArgs e)
         {
-
+            Global.TypeCrop = TypeCrop.Mask;
+            Propety.TypeCrop = Global.TypeCrop;
+            if (Propety.rotMask == null)
+            {
+                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask);
+            }
+            btnElip.IsCLick = Propety.rotMask.IsElip;
+            btnRect.IsCLick = !Propety.rotMask.IsElip;
         }
 
         private void btnTest_Click(object sender, EventArgs e)
         {
 
+        
+        }
+
+        private void btnCropHalt_Click(object sender, EventArgs e)
+        {
+            Global.TypeCrop = TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
+            IsFullSize = false;
+            Propety.rotArea = Propety.rotAreaTemp.Clone();
+            Global.StatusDraw = StatusDraw.Edit;
+
+            if (IsClear)
+                btnMask.PerformClick();
+        }
+
+        private void btnCropFull_Click(object sender, EventArgs e)
+        {
+            IsFullSize = true;
+            Propety.rotAreaTemp = Propety.rotArea.Clone();
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None, false);
+
+
+            Global.TypeCrop = TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
+
+            if (IsClear)
+                btnMask.PerformClick();
+            Global.StatusDraw = StatusDraw.Edit;
+        }
+
+        private void btnCropRect_Click(object sender, EventArgs e)
+        {
+            Global.TypeCrop = TypeCrop.Crop;
+            Propety.TypeCrop = Global.TypeCrop;
+            btnElip.IsCLick = Propety.rotCrop.IsElip;
+            btnRect.IsCLick = !Propety.rotCrop.IsElip;
+
+        }
+
+        private void btnCropArea_Click(object sender, EventArgs e)
+        {
+            Global.TypeCrop = TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
+            btnElip.IsCLick = Propety.rotArea.IsElip;
+            btnRect.IsCLick = !Propety.rotArea.IsElip;
+        }
+
+        private void btnRect_Click(object sender, EventArgs e)
+        {
+            if (Propety.rotMask == null)
+            {
+                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
+            }
+            switch (Global.TypeCrop)
+            {
+                case TypeCrop.Crop:
+                    Propety.rotCrop.IsElip = btnElip.IsCLick;
+                    break;
+                case TypeCrop.Area:
+                    Propety.rotArea.IsElip = btnElip.IsCLick;
+                    break;
+                case TypeCrop.Mask:
+                    Propety.rotMask.IsElip = btnElip.IsCLick;
+                    break;
+
+            }
+        }
+
+        private void btnElip_Click(object sender, EventArgs e)
+        {
+            if (Propety.rotMask == null)
+            {
+                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
+            }
+
+            switch (Global.TypeCrop)
+            {
+                case TypeCrop.Crop:
+                    Propety.rotCrop.IsElip = btnElip.IsCLick;
+                    break;
+                case TypeCrop.Area:
+                    Propety.rotArea.IsElip = btnElip.IsCLick;
+                    break;
+                case TypeCrop.Mask:
+                    Propety.rotMask.IsElip = btnElip.IsCLick;
+                    break;
+
+            }
+        }
+
+        private void btnNone_Click(object sender, EventArgs e)
+        {
+            switch (Global.TypeCrop)
+            {
+                //case TypeCrop.Crop:
+                //    Propety.rotCrop.IsElip = btnElip.IsCLick;
+                //    break;
+                //case TypeCrop.Area:
+                //    Propety.rotArea.IsElip = btnElip.IsCLick;
+                //    break;
+                case TypeCrop.Mask:
+                    Propety.rotMask = null;// = btnElip.IsCLick;
+                    break;
+
+            }
+        }
+
+        private void btnHSV_Click(object sender, EventArgs e)
+        {
+            Propety.StyleColor = 0;
+            btnDeleteAll.PerformClick();
+        }
+
+      
+
+        private void btnInspect_Click(object sender, EventArgs e)
+        {
             if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
             else
-                btnTest.IsCLick = false;
+                btnInspect.IsCLick = false;
+        }
+
+        private void btnRGB_Click(object sender, EventArgs e)
+        {
+            Propety.StyleColor = 1;
+
+            btnDeleteAll.PerformClick();
         }
     }
 }

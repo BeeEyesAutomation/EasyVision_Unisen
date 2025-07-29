@@ -61,8 +61,11 @@ namespace BeeCore
             switch (StatusProcessing)
             {
                 case StatusProcessing.None:
-                    // timer.Restart();
-                    //int    indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
+                    foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[indexThread])
+                    {
+                        PropetyTool.StatusTool = StatusTool.WaitCheck;
+                    }
+                        indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
                     if (indexToolPosition == -1)
                     {
                         StatusProcessing = StatusProcessing.Checking;
@@ -95,35 +98,39 @@ namespace BeeCore
                     {
                         dynamic Propety = BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety;
 
-                        StatusProcessing = StatusProcessing.Checking;
 
+                       // BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusTool = StatusTool.WaitCheck;
                         if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
                         {
                             if (Global.rotOriginAdj == null) return StatusProcessing;
                             Global.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - Global.rotOriginAdj._PosCenter.X;
                             Global.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - Global.rotOriginAdj._PosCenter.Y;
                             Global.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - Global.rotOriginAdj._rectRotation;
-                        }
-                        foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
-                        {
-                            if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
-                                continue;
-                            if (Global.rotOriginAdj != null)
+
+                            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
                             {
-                                propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
-                                if (propetyTool.TypeTool == TypeTool.Positions)
+                                if (propetyTool.TypeTool == TypeTool.Position_Adjustment)
+                                    continue;
+                                if (Global.rotOriginAdj != null)
                                 {
-                                    propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
-                                    propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
+                                    propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
+                                    if (propetyTool.TypeTool == TypeTool.Positions)
+                                    {
+                                        propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
+                                        propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
+                                    }
+
+
                                 }
+                                else
+                                    propetyTool.Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
 
 
                             }
-                            else
-                                propetyTool.Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
-
-
+                            StatusProcessing = StatusProcessing.Checking;
                         }
+                        else
+                            StatusProcessing = StatusProcessing.Checking;
                     }
                     break;
                 case StatusProcessing.Checking:
@@ -164,6 +171,7 @@ namespace BeeCore
                     }
                     );
                     StatusProcessing= Status;
+                   
                     break;
             }
             return StatusProcessing;

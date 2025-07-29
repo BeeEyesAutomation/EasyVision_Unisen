@@ -198,7 +198,16 @@ namespace BeeInterface
 
         private void TrackBar2_SizeChanged(object sender, EventArgs e)
         {
-            this.Invalidate();
+            if (!float.IsNaN(Value))
+            {
+                this.Value = (float)Math.Round(Value, 1);
+
+                pTick = new Point((int)((Value * 1.0 / (Max - Min)) * (this.pT.Width - imgTick.Width - 4)), 5);
+                
+                
+            }
+
+            pT.Invalidate();
         }
     }
 }

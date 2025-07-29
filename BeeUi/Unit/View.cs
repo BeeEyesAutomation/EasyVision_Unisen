@@ -672,15 +672,15 @@ namespace BeeUi
 
                             RectangleF _rect = rotateRect._rect;
                            
-                            var rect = new RectangleF(rotateRect._rect.X - WidthPoint/2, rotateRect._rect.Y - WidthPoint / 2, rotateRect._rect.Width+ WidthPoint , rotateRect._rect.Height + WidthPoint );
+                            var rect = new RectangleF(rotateRect._rect.X - Global.RadpEdit/2, rotateRect._rect.Y - Global.RadpEdit / 2, rotateRect._rect.Width+ Global.RadpEdit , rotateRect._rect.Height + Global.RadpEdit );
                             if (Global.TypeCrop == TypeCrop.Area)
                                 rect = new RectangleF(rotateRect._rect.X - 20, rotateRect._rect.Y - 20, rotateRect._rect.Width +40, rotateRect._rect.Height+40);
 
-                            var rectTopLeft = new RectangleF(_rect.Left - WidthPoint/2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
-                            var rectTopRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
-                            var rectBottomLeft = new RectangleF(_rect.Left - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
-                            var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
-                            var rectRotate = new RectangleF(-WidthPoint / 2, _rect.Top - WidthPoint*3, WidthPoint*2, WidthPoint*2);
+                            var rectTopLeft = new RectangleF(_rect.Left - Global.RadpEdit/2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                            var rectTopRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                            var rectBottomLeft = new RectangleF(_rect.Left - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                            var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                            var rectRotate = new RectangleF(-Global.RadpEdit / 2, _rect.Top - Global.RadpEdit*3, Global.RadpEdit*2, Global.RadpEdit*2);
                             _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
                             if (rectTopLeft.Contains(point))
                             {
@@ -892,7 +892,7 @@ namespace BeeUi
 
      
         Graphics gc;
-        int WidthPoint = 10;
+     
         
         private void imgView_Paint(object sender, PaintEventArgs e)
         {
@@ -1055,19 +1055,19 @@ namespace BeeUi
                     case TypeCrop.Crop:
                         Draws.FillRect(gc, TypeCrop.Area, toolEdit.Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, Properties.Resources.Rotate, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
 
                         break;
                     case TypeCrop.Area:
 
                         Draws.FillRect(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Area, toolEdit.Propety.rotArea, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Area, toolEdit.Propety.rotArea, Properties.Resources.Rotate, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
                         break;
                     case TypeCrop.Mask:
                         Draws.FillRect(gc, TypeCrop.Area, toolEdit.Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Crop, toolEdit.Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Mask, toolEdit.Propety.rotMask, Properties.Resources.Rotate, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
 
                         break;
 
@@ -1171,12 +1171,12 @@ namespace BeeUi
                 {
                    
                 
-                    //var rectTopLeft = new RectangleF(_rect.Left - WidthPoint/2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
-                    //var rectTopRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
-                    //var rectBottomLeft = new RectangleF(_rect.Left - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
-                    //var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
-                    //var rectRotate = new RectangleF(-WidthPoint / 2, _rect.Top + -WidthPoint * 3, WidthPoint*2, WidthPoint*2);
-                    //var rectCenter = new RectangleF(-WidthPoint / 2, -WidthPoint / 2, WidthPoint, WidthPoint);
+                    //var rectTopLeft = new RectangleF(_rect.Left - Global.RadpEdit/2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                    //var rectTopRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                    //var rectBottomLeft = new RectangleF(_rect.Left - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                    //var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
+                    //var rectRotate = new RectangleF(-Global.RadpEdit / 2, _rect.Top + -Global.RadpEdit * 3, Global.RadpEdit*2, Global.RadpEdit*2);
+                    //var rectCenter = new RectangleF(-Global.RadpEdit / 2, -Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
 
                     //var backNG = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
                     ////var backChoose = new SolidBrush(Color.FromArgb(60, 255, 205, 35));
@@ -1192,7 +1192,7 @@ namespace BeeUi
                     //    //else if (Global.TypeCrop == TypeCrop.Mask)
                     //    //    gc.FillRectangle(new SolidBrush(Color.FromArgb(90, 111, 211, 213)), new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
       
-                    //      //  BeeCore.Draws.RectEdit(gc, Global.TypeCrop , Global.TypeCrop == TypeCrop.Crop ? toolEdit.Propety.rotCrop : Global.TypeCrop == TypeCrop.Area ? toolEdit.Propety.rotArea :toolEdit.Propety.rotMask, Properties.Resources.Rotate, WidthPoint,imgView.AutoScrollPosition,imgView.Zoom,2);
+                    //      //  BeeCore.Draws.RectEdit(gc, Global.TypeCrop , Global.TypeCrop == TypeCrop.Crop ? toolEdit.Propety.rotCrop : Global.TypeCrop == TypeCrop.Area ? toolEdit.Propety.rotArea :toolEdit.Propety.rotMask, Properties.Resources.Rotate, Global.RadpEdit,imgView.AutoScrollPosition,imgView.Zoom,2);
 
                         
                     //     //switch (_dragAnchor)
@@ -1305,7 +1305,7 @@ namespace BeeUi
           
             this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
-            if (!Global.Config.IsExternal)
+            if (! Global.ParaCommon.IsExternal)
             {
                 btnTypeTrig.Enabled= false;
                 btnTypeTrig.Text = "Trig Internal";
@@ -1371,7 +1371,7 @@ namespace BeeUi
                     timer.Restart();
                     break;
                 case StatusProcessing.Read:
-                    //if (Global.Config.IsExternal)
+                    //if ( Global.ParaCommon.IsExternal)
                     //	G.EditTool.View.btnTypeTrig.IsCLick = true;
                     //if (Global.IsRun)
                     //	G.EditTool.View.Cap(false);
@@ -2659,7 +2659,7 @@ namespace BeeUi
         private void tmPress_Tick(object sender, EventArgs e)
         {
             tmPress.Enabled = false;
-            if(Global.IsRun&&!Global.Config.IsExternal)
+            if(Global.IsRun&&! Global.ParaCommon.IsExternal)
             btnCap.Enabled = true;
             else
             {
@@ -2958,6 +2958,7 @@ namespace BeeUi
         {
             if (BeeCore.Common.listCamera[0] != null)
             {
+                Checking1.StatusProcessing = StatusProcessing.None;
                 Checking1.Start();
 			}
            else
@@ -2965,6 +2966,7 @@ namespace BeeUi
 
 			if (BeeCore.Common.listCamera[1] != null)
             {
+                Checking2.StatusProcessing = StatusProcessing.None;
                 Checking2.Start();
 			}
 			else
@@ -2972,13 +2974,15 @@ namespace BeeUi
 
 			if (BeeCore.Common.listCamera[2] != null)
             {
-				Checking3.Start();
+                Checking3.StatusProcessing = StatusProcessing.None;
+                Checking3.Start();
 			}
 			else
 				Processing3 = StatusProcessing.Done;
 			if (BeeCore.Common.listCamera[3] != null)
             {
-				Checking4.Start();
+                Checking4.StatusProcessing = StatusProcessing.None;
+                Checking4.Start();
 			}
 			else
 				Processing4 = StatusProcessing.Done;

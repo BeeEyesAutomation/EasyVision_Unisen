@@ -225,32 +225,7 @@ namespace BeeUi.Tool
             Access.SaveConfig("Default.config",Global.Config);
         }
 
-        private void btnBackLight_Click(object sender, EventArgs e)
-        {
-           
-                //if (G.Header.SerialPort1.IsOpen)
-                //    G.Header.SerialPort1.WriteLine("Botl");
-                btnBackLight.Enabled = true;
-                btnBackLight.Enabled = true;
-                Global.ParaCommon.TypeLight = 1;
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
-
-            //  BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, btnBackLight.IsCLick);
-        }
-
-        private void btnTopLight_Click(object sender, EventArgs e)
-        {
-           
-
-            //if (G.Header.SerialPort1.IsOpen)
-            //        G.Header.SerialPort1.WriteLine("Topl");
-                btnTopLight.Enabled = true;
-                btnTopLight.Enabled = true;
-                Global.ParaCommon.TypeLight = 2;
-            //  BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, btnTopLight.IsCLick);
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
-
-        }
+      
 
         private void btnBoth_Click(object sender, EventArgs e)
         {
@@ -266,9 +241,7 @@ namespace BeeUi.Tool
         bool _isLight;
         private void btnONLight_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsOnLight = btnONLight.IsCLick;
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
-
+         
         }
 
         private void numExposure_ValueChanged(object sender, EventArgs e)
@@ -335,19 +308,12 @@ namespace BeeUi.Tool
 
         }
 
-        private void numDelay_ValueChanged_1(object sender, EventArgs e)
-        {
-           Global.Config.DelayOutput = (int)numDelay.Value;
-            //tmDelaySend.Enabled = false;
-            //tmDelaySend.Enabled = true;
-
-        }
-
+       
         private void btnInternal_Click(object sender, EventArgs e)
         {
-           Global.Config.IsExternal =! btnInternal.IsCLick;
+           Global.ParaCommon.IsExternal =! btnInternal.IsCLick;
          
-            if (!Global.Config.IsExternal)
+            if (! Global.ParaCommon.IsExternal)
             {
                 G.EditTool.View.btnTypeTrig.Enabled=false;
                 G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -361,9 +327,9 @@ namespace BeeUi.Tool
 
         private void btnExternal_Click(object sender, EventArgs e)
         {
-           Global.Config.IsExternal = btnExternal.IsCLick;
+           Global.ParaCommon.IsExternal = btnExternal.IsCLick;
          
-            if (!Global.Config.IsExternal)
+            if (! Global.ParaCommon.IsExternal)
             {
                 G.EditTool.View.btnTypeTrig.Enabled = false;
                 G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -403,31 +369,28 @@ namespace BeeUi.Tool
             trackGain.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Value;
         }
 
-        private void btnRevese_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.IsRevese = btnRevese.IsCLick;
-        }
+        //private void btnRevese_Click(object sender, EventArgs e)
+        //{
+        //    Global.ParaCommon.IsRevese = btnRevese.IsCLick;
+        //}
 
-        private void btnEqualization_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.IsEqualization = btnRevese.IsCLick;
-        }
+        //private void btnEqualization_Click(object sender, EventArgs e)
+        //{
+        //    Global.ParaCommon.IsEqualization = btnRevese.IsCLick;
+        //}
 
-        private void btnMirror_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.IsMirror = btnMirror.IsCLick;
-        }
+        //private void btnMirror_Click(object sender, EventArgs e)
+        //{
+        //    Global.ParaCommon.IsMirror = btnMirror.IsCLick;
+        //}
 
-        private void btnEnhance_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.IsHance = btnEnhance.IsCLick;
+        //private void btnEnhance_Click(object sender, EventArgs e)
+        //{
+        //    Global.ParaCommon.IsHance = btnEnhance.IsCLick;
            
-        }
+        //}
 
-        private void numTrigger_ValueChanged(object sender, EventArgs e)
-        {
-           Global.Config.delayTrigger = (int)numTrigger.Value;
-        }
+       
 
         private void SettingStep1_Load(object sender, EventArgs e)
         {
@@ -456,6 +419,14 @@ namespace BeeUi.Tool
             trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
             trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
             trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
+            AdDelayTrig.Value = Global.ParaCommon.Comunication.IO.DealayTrigger;
+            AdDelayOutput.Value = Global.ParaCommon.Comunication.IO.DealayOutput;
+            btnLight1.IsCLick = Global.ParaCommon.Comunication.IO.IsLight1;
+            btnLight2.IsCLick = Global.ParaCommon.Comunication.IO.IsLight2;
+            btnLight3.IsCLick = Global.ParaCommon.Comunication.IO.IsLight3;
+            btnOn.IsCLick = Global.ParaCommon.IsOnLight;
+            btnInternal.IsCLick =! Global.ParaCommon.IsExternal;
+            btnExternal.IsCLick = Global.ParaCommon.IsExternal;
         }
 
         private void trackBar21_Load(object sender, EventArgs e)
@@ -479,6 +450,70 @@ namespace BeeUi.Tool
         private void adjustBar3_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void numTrigger_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AdDelayTrig_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.IO.DealayTrigger = (int)AdDelayTrig.Value;
+        }
+
+        private void AdDelayOutput_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.IO.DealayOutput= (int)AdDelayOutput.Value;
+        }
+
+        private void btnOFF_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsOnLight = false;
+            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
+
+        }
+
+        private void btnOn_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsOnLight =true;
+            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
+
+        }
+
+        private void btnLight1_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.IsLight1 = btnLight1.IsCLick;
+        }
+
+        private void btnLight2_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.IsLight1 = btnLight2.IsCLick;
+        }
+
+        private void btnLight3_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.IsLight1 = btnLight3.IsCLick;
+        }
+
+        private void AdjWidth_ValueChanged(float obj)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value = AdjWidth.Value ;
+        }
+
+        private void AdjHeight_ValueChanged(float obj)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value = AdjWidth.Value;
+        }
+
+        private void AdjOffsetX_ValueChanged(float obj)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Value = AdjWidth.Value;
+        }
+
+        private void AdjOffSetY_ValueChanged(float obj)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value = AdjWidth.Value;
         }
     }
 }

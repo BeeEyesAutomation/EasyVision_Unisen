@@ -90,28 +90,20 @@ namespace BeeInterface
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
-            this.DI7 = new System.Windows.Forms.Label();
             this.cbIn8 = new System.Windows.Forms.ComboBox();
             this.label30 = new System.Windows.Forms.Label();
-            this.DI6 = new System.Windows.Forms.Label();
             this.cbIn7 = new System.Windows.Forms.ComboBox();
             this.label28 = new System.Windows.Forms.Label();
-            this.DI5 = new System.Windows.Forms.Label();
             this.cbIn6 = new System.Windows.Forms.ComboBox();
             this.label26 = new System.Windows.Forms.Label();
-            this.DI4 = new System.Windows.Forms.Label();
             this.cbIn5 = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.DI3 = new System.Windows.Forms.Label();
             this.cbIn4 = new System.Windows.Forms.ComboBox();
             this.label22 = new System.Windows.Forms.Label();
-            this.DI2 = new System.Windows.Forms.Label();
             this.cbIn3 = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.DI1 = new System.Windows.Forms.Label();
             this.cbIn2 = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.DI0 = new System.Windows.Forms.Label();
             this.cbIn1 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -200,6 +192,14 @@ namespace BeeInterface
             this.tmConnect = new System.Windows.Forms.Timer(this.components);
             this.tmRead = new System.Windows.Forms.Timer(this.components);
             this.workRead = new System.ComponentModel.BackgroundWorker();
+            this.DI0 = new BeeInterface.RJButton();
+            this.DI1 = new BeeInterface.RJButton();
+            this.DI2 = new BeeInterface.RJButton();
+            this.DI3 = new BeeInterface.RJButton();
+            this.DI4 = new BeeInterface.RJButton();
+            this.DI5 = new BeeInterface.RJButton();
+            this.DI6 = new BeeInterface.RJButton();
+            this.DI7 = new BeeInterface.RJButton();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
@@ -1639,27 +1639,27 @@ namespace BeeInterface
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.20225F));
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.76405F));
             this.tableLayoutPanel16.Controls.Add(this.DI7, 2, 7);
+            this.tableLayoutPanel16.Controls.Add(this.DI6, 2, 6);
+            this.tableLayoutPanel16.Controls.Add(this.DI5, 2, 5);
+            this.tableLayoutPanel16.Controls.Add(this.DI4, 2, 4);
+            this.tableLayoutPanel16.Controls.Add(this.DI3, 2, 3);
+            this.tableLayoutPanel16.Controls.Add(this.DI2, 2, 2);
+            this.tableLayoutPanel16.Controls.Add(this.DI1, 2, 1);
+            this.tableLayoutPanel16.Controls.Add(this.DI0, 2, 0);
             this.tableLayoutPanel16.Controls.Add(this.cbIn8, 1, 7);
             this.tableLayoutPanel16.Controls.Add(this.label30, 0, 7);
-            this.tableLayoutPanel16.Controls.Add(this.DI6, 2, 6);
             this.tableLayoutPanel16.Controls.Add(this.cbIn7, 1, 6);
             this.tableLayoutPanel16.Controls.Add(this.label28, 0, 6);
-            this.tableLayoutPanel16.Controls.Add(this.DI5, 2, 5);
             this.tableLayoutPanel16.Controls.Add(this.cbIn6, 1, 5);
             this.tableLayoutPanel16.Controls.Add(this.label26, 0, 5);
-            this.tableLayoutPanel16.Controls.Add(this.DI4, 2, 4);
             this.tableLayoutPanel16.Controls.Add(this.cbIn5, 1, 4);
             this.tableLayoutPanel16.Controls.Add(this.label24, 0, 4);
-            this.tableLayoutPanel16.Controls.Add(this.DI3, 2, 3);
             this.tableLayoutPanel16.Controls.Add(this.cbIn4, 1, 3);
             this.tableLayoutPanel16.Controls.Add(this.label22, 0, 3);
-            this.tableLayoutPanel16.Controls.Add(this.DI2, 2, 2);
             this.tableLayoutPanel16.Controls.Add(this.cbIn3, 1, 2);
             this.tableLayoutPanel16.Controls.Add(this.label20, 0, 2);
-            this.tableLayoutPanel16.Controls.Add(this.DI1, 2, 1);
             this.tableLayoutPanel16.Controls.Add(this.cbIn2, 1, 1);
             this.tableLayoutPanel16.Controls.Add(this.label14, 0, 1);
-            this.tableLayoutPanel16.Controls.Add(this.DI0, 2, 0);
             this.tableLayoutPanel16.Controls.Add(this.cbIn1, 1, 0);
             this.tableLayoutPanel16.Controls.Add(this.label3, 0, 0);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1679,25 +1679,12 @@ namespace BeeInterface
             this.tableLayoutPanel16.Size = new System.Drawing.Size(372, 769);
             this.tableLayoutPanel16.TabIndex = 18;
             // 
-            // DI7
-            // 
-            this.DI7.AutoSize = true;
-            this.DI7.BackColor = System.Drawing.Color.Wheat;
-            this.DI7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI7.Location = new System.Drawing.Point(230, 273);
-            this.DI7.Name = "DI7";
-            this.DI7.Size = new System.Drawing.Size(139, 39);
-            this.DI7.TabIndex = 26;
-            this.DI7.Text = "00";
-            this.DI7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // cbIn8
             // 
             this.cbIn8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn8.ForeColor = System.Drawing.Color.Blue;
             this.cbIn8.FormattingEnabled = true;
-            this.cbIn8.Location = new System.Drawing.Point(89, 276);
+            this.cbIn8.Location = new System.Drawing.Point(89, 325);
             this.cbIn8.Name = "cbIn8";
             this.cbIn8.Size = new System.Drawing.Size(135, 33);
             this.cbIn8.TabIndex = 25;
@@ -1708,31 +1695,18 @@ namespace BeeInterface
             // 
             this.label30.AutoSize = true;
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label30.Location = new System.Drawing.Point(3, 273);
+            this.label30.Location = new System.Drawing.Point(3, 322);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(80, 39);
+            this.label30.Size = new System.Drawing.Size(80, 46);
             this.label30.TabIndex = 24;
             this.label30.Text = "DI 07";
-            // 
-            // DI6
-            // 
-            this.DI6.AutoSize = true;
-            this.DI6.BackColor = System.Drawing.Color.Wheat;
-            this.DI6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI6.Location = new System.Drawing.Point(230, 234);
-            this.DI6.Name = "DI6";
-            this.DI6.Size = new System.Drawing.Size(139, 39);
-            this.DI6.TabIndex = 23;
-            this.DI6.Text = "00";
-            this.DI6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn7
             // 
             this.cbIn7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn7.ForeColor = System.Drawing.Color.Blue;
             this.cbIn7.FormattingEnabled = true;
-            this.cbIn7.Location = new System.Drawing.Point(89, 237);
+            this.cbIn7.Location = new System.Drawing.Point(89, 279);
             this.cbIn7.Name = "cbIn7";
             this.cbIn7.Size = new System.Drawing.Size(135, 33);
             this.cbIn7.TabIndex = 22;
@@ -1743,31 +1717,18 @@ namespace BeeInterface
             // 
             this.label28.AutoSize = true;
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label28.Location = new System.Drawing.Point(3, 234);
+            this.label28.Location = new System.Drawing.Point(3, 276);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(80, 39);
+            this.label28.Size = new System.Drawing.Size(80, 46);
             this.label28.TabIndex = 21;
             this.label28.Text = "DI 06";
-            // 
-            // DI5
-            // 
-            this.DI5.AutoSize = true;
-            this.DI5.BackColor = System.Drawing.Color.Wheat;
-            this.DI5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI5.Location = new System.Drawing.Point(230, 195);
-            this.DI5.Name = "DI5";
-            this.DI5.Size = new System.Drawing.Size(139, 39);
-            this.DI5.TabIndex = 20;
-            this.DI5.Text = "00";
-            this.DI5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn6
             // 
             this.cbIn6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn6.ForeColor = System.Drawing.Color.Blue;
             this.cbIn6.FormattingEnabled = true;
-            this.cbIn6.Location = new System.Drawing.Point(89, 198);
+            this.cbIn6.Location = new System.Drawing.Point(89, 233);
             this.cbIn6.Name = "cbIn6";
             this.cbIn6.Size = new System.Drawing.Size(135, 33);
             this.cbIn6.TabIndex = 19;
@@ -1778,31 +1739,18 @@ namespace BeeInterface
             // 
             this.label26.AutoSize = true;
             this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label26.Location = new System.Drawing.Point(3, 195);
+            this.label26.Location = new System.Drawing.Point(3, 230);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(80, 39);
+            this.label26.Size = new System.Drawing.Size(80, 46);
             this.label26.TabIndex = 18;
             this.label26.Text = "DI 05";
-            // 
-            // DI4
-            // 
-            this.DI4.AutoSize = true;
-            this.DI4.BackColor = System.Drawing.Color.Wheat;
-            this.DI4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI4.Location = new System.Drawing.Point(230, 156);
-            this.DI4.Name = "DI4";
-            this.DI4.Size = new System.Drawing.Size(139, 39);
-            this.DI4.TabIndex = 17;
-            this.DI4.Text = "00";
-            this.DI4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn5
             // 
             this.cbIn5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn5.ForeColor = System.Drawing.Color.Blue;
             this.cbIn5.FormattingEnabled = true;
-            this.cbIn5.Location = new System.Drawing.Point(89, 159);
+            this.cbIn5.Location = new System.Drawing.Point(89, 187);
             this.cbIn5.Name = "cbIn5";
             this.cbIn5.Size = new System.Drawing.Size(135, 33);
             this.cbIn5.TabIndex = 16;
@@ -1813,31 +1761,18 @@ namespace BeeInterface
             // 
             this.label24.AutoSize = true;
             this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label24.Location = new System.Drawing.Point(3, 156);
+            this.label24.Location = new System.Drawing.Point(3, 184);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(80, 39);
+            this.label24.Size = new System.Drawing.Size(80, 46);
             this.label24.TabIndex = 15;
             this.label24.Text = "DI 04";
-            // 
-            // DI3
-            // 
-            this.DI3.AutoSize = true;
-            this.DI3.BackColor = System.Drawing.Color.Wheat;
-            this.DI3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI3.Location = new System.Drawing.Point(230, 117);
-            this.DI3.Name = "DI3";
-            this.DI3.Size = new System.Drawing.Size(139, 39);
-            this.DI3.TabIndex = 14;
-            this.DI3.Text = "00";
-            this.DI3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn4
             // 
             this.cbIn4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn4.ForeColor = System.Drawing.Color.Blue;
             this.cbIn4.FormattingEnabled = true;
-            this.cbIn4.Location = new System.Drawing.Point(89, 120);
+            this.cbIn4.Location = new System.Drawing.Point(89, 141);
             this.cbIn4.Name = "cbIn4";
             this.cbIn4.Size = new System.Drawing.Size(135, 33);
             this.cbIn4.TabIndex = 13;
@@ -1848,31 +1783,18 @@ namespace BeeInterface
             // 
             this.label22.AutoSize = true;
             this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label22.Location = new System.Drawing.Point(3, 117);
+            this.label22.Location = new System.Drawing.Point(3, 138);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(80, 39);
+            this.label22.Size = new System.Drawing.Size(80, 46);
             this.label22.TabIndex = 12;
             this.label22.Text = "DI 03";
-            // 
-            // DI2
-            // 
-            this.DI2.AutoSize = true;
-            this.DI2.BackColor = System.Drawing.Color.Wheat;
-            this.DI2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI2.Location = new System.Drawing.Point(230, 78);
-            this.DI2.Name = "DI2";
-            this.DI2.Size = new System.Drawing.Size(139, 39);
-            this.DI2.TabIndex = 11;
-            this.DI2.Text = "00";
-            this.DI2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn3
             // 
             this.cbIn3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn3.ForeColor = System.Drawing.Color.Blue;
             this.cbIn3.FormattingEnabled = true;
-            this.cbIn3.Location = new System.Drawing.Point(89, 81);
+            this.cbIn3.Location = new System.Drawing.Point(89, 95);
             this.cbIn3.Name = "cbIn3";
             this.cbIn3.Size = new System.Drawing.Size(135, 33);
             this.cbIn3.TabIndex = 10;
@@ -1883,31 +1805,18 @@ namespace BeeInterface
             // 
             this.label20.AutoSize = true;
             this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label20.Location = new System.Drawing.Point(3, 78);
+            this.label20.Location = new System.Drawing.Point(3, 92);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(80, 39);
+            this.label20.Size = new System.Drawing.Size(80, 46);
             this.label20.TabIndex = 9;
             this.label20.Text = "DI 02";
-            // 
-            // DI1
-            // 
-            this.DI1.AutoSize = true;
-            this.DI1.BackColor = System.Drawing.Color.Wheat;
-            this.DI1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI1.Location = new System.Drawing.Point(230, 39);
-            this.DI1.Name = "DI1";
-            this.DI1.Size = new System.Drawing.Size(139, 39);
-            this.DI1.TabIndex = 8;
-            this.DI1.Text = "00";
-            this.DI1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn2
             // 
             this.cbIn2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIn2.ForeColor = System.Drawing.Color.Blue;
             this.cbIn2.FormattingEnabled = true;
-            this.cbIn2.Location = new System.Drawing.Point(89, 42);
+            this.cbIn2.Location = new System.Drawing.Point(89, 49);
             this.cbIn2.Name = "cbIn2";
             this.cbIn2.Size = new System.Drawing.Size(135, 33);
             this.cbIn2.TabIndex = 7;
@@ -1918,24 +1827,11 @@ namespace BeeInterface
             // 
             this.label14.AutoSize = true;
             this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label14.Location = new System.Drawing.Point(3, 39);
+            this.label14.Location = new System.Drawing.Point(3, 46);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 39);
+            this.label14.Size = new System.Drawing.Size(80, 46);
             this.label14.TabIndex = 6;
             this.label14.Text = "DI 01";
-            // 
-            // DI0
-            // 
-            this.DI0.AutoSize = true;
-            this.DI0.BackColor = System.Drawing.Color.Wheat;
-            this.DI0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DI0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DI0.Location = new System.Drawing.Point(230, 0);
-            this.DI0.Name = "DI0";
-            this.DI0.Size = new System.Drawing.Size(139, 39);
-            this.DI0.TabIndex = 5;
-            this.DI0.Text = "00";
-            this.DI0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIn1
             // 
@@ -1955,7 +1851,7 @@ namespace BeeInterface
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 39);
+            this.label3.Size = new System.Drawing.Size(80, 46);
             this.label3.TabIndex = 4;
             this.label3.Text = "DI 00";
             // 
@@ -2649,7 +2545,7 @@ namespace BeeInterface
             this.timerRead.Size = new System.Drawing.Size(151, 41);
             this.timerRead.Step = 1F;
             this.timerRead.TabIndex = 67;
-            this.timerRead.Value = 0F;
+            this.timerRead.Value = 1F;
             this.timerRead.ValueChanged += new System.EventHandler(this.timerRead_ValueChanged);
             this.timerRead.Load += new System.EventHandler(this.timerRead_Load);
             // 
@@ -3357,6 +3253,206 @@ namespace BeeInterface
             this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
             this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
             // 
+            // DI0
+            // 
+            this.DI0.BackColor = System.Drawing.Color.Transparent;
+            this.DI0.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI0.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI0.BorderRadius = 0;
+            this.DI0.BorderSize = 0;
+            this.DI0.ButtonImage = null;
+            this.DI0.Corner = BeeGlobal.Corner.Both;
+            this.DI0.FlatAppearance.BorderSize = 0;
+            this.DI0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI0.ForeColor = System.Drawing.Color.Black;
+            this.DI0.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI0.IsCLick = false;
+            this.DI0.IsNotChange = false;
+            this.DI0.IsRect = false;
+            this.DI0.IsUnGroup = true;
+            this.DI0.Location = new System.Drawing.Point(230, 3);
+            this.DI0.Name = "DI0";
+            this.DI0.Size = new System.Drawing.Size(133, 40);
+            this.DI0.TabIndex = 27;
+            this.DI0.Text = "0";
+            this.DI0.TextColor = System.Drawing.Color.Black;
+            this.DI0.UseVisualStyleBackColor = false;
+            // 
+            // DI1
+            // 
+            this.DI1.BackColor = System.Drawing.Color.Transparent;
+            this.DI1.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI1.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI1.BorderRadius = 0;
+            this.DI1.BorderSize = 0;
+            this.DI1.ButtonImage = null;
+            this.DI1.Corner = BeeGlobal.Corner.Both;
+            this.DI1.FlatAppearance.BorderSize = 0;
+            this.DI1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI1.ForeColor = System.Drawing.Color.Black;
+            this.DI1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI1.IsCLick = false;
+            this.DI1.IsNotChange = false;
+            this.DI1.IsRect = false;
+            this.DI1.IsUnGroup = true;
+            this.DI1.Location = new System.Drawing.Point(230, 49);
+            this.DI1.Name = "DI1";
+            this.DI1.Size = new System.Drawing.Size(133, 40);
+            this.DI1.TabIndex = 28;
+            this.DI1.Text = "0";
+            this.DI1.TextColor = System.Drawing.Color.Black;
+            this.DI1.UseVisualStyleBackColor = false;
+            // 
+            // DI2
+            // 
+            this.DI2.BackColor = System.Drawing.Color.Transparent;
+            this.DI2.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI2.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI2.BorderRadius = 0;
+            this.DI2.BorderSize = 0;
+            this.DI2.ButtonImage = null;
+            this.DI2.Corner = BeeGlobal.Corner.Both;
+            this.DI2.FlatAppearance.BorderSize = 0;
+            this.DI2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI2.ForeColor = System.Drawing.Color.Black;
+            this.DI2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI2.IsCLick = false;
+            this.DI2.IsNotChange = false;
+            this.DI2.IsRect = false;
+            this.DI2.IsUnGroup = true;
+            this.DI2.Location = new System.Drawing.Point(230, 95);
+            this.DI2.Name = "DI2";
+            this.DI2.Size = new System.Drawing.Size(133, 40);
+            this.DI2.TabIndex = 29;
+            this.DI2.Text = "0";
+            this.DI2.TextColor = System.Drawing.Color.Black;
+            this.DI2.UseVisualStyleBackColor = false;
+            // 
+            // DI3
+            // 
+            this.DI3.BackColor = System.Drawing.Color.Transparent;
+            this.DI3.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI3.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI3.BorderRadius = 0;
+            this.DI3.BorderSize = 0;
+            this.DI3.ButtonImage = null;
+            this.DI3.Corner = BeeGlobal.Corner.Both;
+            this.DI3.FlatAppearance.BorderSize = 0;
+            this.DI3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI3.ForeColor = System.Drawing.Color.Black;
+            this.DI3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI3.IsCLick = false;
+            this.DI3.IsNotChange = false;
+            this.DI3.IsRect = false;
+            this.DI3.IsUnGroup = true;
+            this.DI3.Location = new System.Drawing.Point(230, 141);
+            this.DI3.Name = "DI3";
+            this.DI3.Size = new System.Drawing.Size(133, 40);
+            this.DI3.TabIndex = 30;
+            this.DI3.Text = "0";
+            this.DI3.TextColor = System.Drawing.Color.Black;
+            this.DI3.UseVisualStyleBackColor = false;
+            // 
+            // DI4
+            // 
+            this.DI4.BackColor = System.Drawing.Color.Transparent;
+            this.DI4.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI4.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI4.BorderRadius = 0;
+            this.DI4.BorderSize = 0;
+            this.DI4.ButtonImage = null;
+            this.DI4.Corner = BeeGlobal.Corner.Both;
+            this.DI4.FlatAppearance.BorderSize = 0;
+            this.DI4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI4.ForeColor = System.Drawing.Color.Black;
+            this.DI4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI4.IsCLick = false;
+            this.DI4.IsNotChange = false;
+            this.DI4.IsRect = false;
+            this.DI4.IsUnGroup = true;
+            this.DI4.Location = new System.Drawing.Point(230, 187);
+            this.DI4.Name = "DI4";
+            this.DI4.Size = new System.Drawing.Size(133, 40);
+            this.DI4.TabIndex = 31;
+            this.DI4.Text = "0";
+            this.DI4.TextColor = System.Drawing.Color.Black;
+            this.DI4.UseVisualStyleBackColor = false;
+            // 
+            // DI5
+            // 
+            this.DI5.BackColor = System.Drawing.Color.Transparent;
+            this.DI5.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI5.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI5.BorderRadius = 0;
+            this.DI5.BorderSize = 0;
+            this.DI5.ButtonImage = null;
+            this.DI5.Corner = BeeGlobal.Corner.Both;
+            this.DI5.FlatAppearance.BorderSize = 0;
+            this.DI5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI5.ForeColor = System.Drawing.Color.Black;
+            this.DI5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI5.IsCLick = false;
+            this.DI5.IsNotChange = false;
+            this.DI5.IsRect = false;
+            this.DI5.IsUnGroup = true;
+            this.DI5.Location = new System.Drawing.Point(230, 233);
+            this.DI5.Name = "DI5";
+            this.DI5.Size = new System.Drawing.Size(133, 40);
+            this.DI5.TabIndex = 32;
+            this.DI5.Text = "0";
+            this.DI5.TextColor = System.Drawing.Color.Black;
+            this.DI5.UseVisualStyleBackColor = false;
+            // 
+            // DI6
+            // 
+            this.DI6.BackColor = System.Drawing.Color.Transparent;
+            this.DI6.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI6.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI6.BorderRadius = 0;
+            this.DI6.BorderSize = 0;
+            this.DI6.ButtonImage = null;
+            this.DI6.Corner = BeeGlobal.Corner.Both;
+            this.DI6.FlatAppearance.BorderSize = 0;
+            this.DI6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI6.ForeColor = System.Drawing.Color.Black;
+            this.DI6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI6.IsCLick = false;
+            this.DI6.IsNotChange = false;
+            this.DI6.IsRect = false;
+            this.DI6.IsUnGroup = true;
+            this.DI6.Location = new System.Drawing.Point(230, 279);
+            this.DI6.Name = "DI6";
+            this.DI6.Size = new System.Drawing.Size(133, 40);
+            this.DI6.TabIndex = 33;
+            this.DI6.Text = "0";
+            this.DI6.TextColor = System.Drawing.Color.Black;
+            this.DI6.UseVisualStyleBackColor = false;
+            // 
+            // DI7
+            // 
+            this.DI7.BackColor = System.Drawing.Color.Transparent;
+            this.DI7.BackgroundColor = System.Drawing.Color.Transparent;
+            this.DI7.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.DI7.BorderRadius = 0;
+            this.DI7.BorderSize = 0;
+            this.DI7.ButtonImage = null;
+            this.DI7.Corner = BeeGlobal.Corner.Both;
+            this.DI7.FlatAppearance.BorderSize = 0;
+            this.DI7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DI7.ForeColor = System.Drawing.Color.Black;
+            this.DI7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DI7.IsCLick = false;
+            this.DI7.IsNotChange = false;
+            this.DI7.IsRect = false;
+            this.DI7.IsUnGroup = true;
+            this.DI7.Location = new System.Drawing.Point(230, 325);
+            this.DI7.Name = "DI7";
+            this.DI7.Size = new System.Drawing.Size(133, 40);
+            this.DI7.TabIndex = 34;
+            this.DI7.Text = "0";
+            this.DI7.TextColor = System.Drawing.Color.Black;
+            this.DI7.UseVisualStyleBackColor = false;
+            // 
             // SettingPLC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3512,27 +3608,19 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.ComboBox cbIn1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel16;
-        private System.Windows.Forms.Label DI0;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label DI4;
         private System.Windows.Forms.ComboBox cbIn5;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label DI3;
         private System.Windows.Forms.ComboBox cbIn4;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label DI2;
         private System.Windows.Forms.ComboBox cbIn3;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label DI1;
         private System.Windows.Forms.ComboBox cbIn2;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label DI6;
         private System.Windows.Forms.ComboBox cbIn7;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label DI5;
         private System.Windows.Forms.ComboBox cbIn6;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label DI7;
         private System.Windows.Forms.ComboBox cbIn8;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.TabControl tabControl1;
@@ -3583,5 +3671,13 @@ namespace BeeInterface
         private System.Windows.Forms.Timer tmConnect;
         private System.Windows.Forms.Timer tmRead;
         private System.ComponentModel.BackgroundWorker workRead;
+        private RJButton DI7;
+        private RJButton DI6;
+        private RJButton DI5;
+        private RJButton DI4;
+        private RJButton DI3;
+        private RJButton DI2;
+        private RJButton DI1;
+        private RJButton DI0;
     }
 }
