@@ -32,6 +32,7 @@ namespace BeeUi.Common
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Timer tmOutAlive;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
@@ -49,10 +50,10 @@ namespace BeeUi.Common
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.SerialPort1 = new System.IO.Ports.SerialPort();
+            this.SerialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.workLoadProgram = new System.ComponentModel.BackgroundWorker();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip();
-            this.tmQrCode = new System.Windows.Forms.Timer();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.workSaveProject = new System.ComponentModel.BackgroundWorker();
             this.Layout = new System.Windows.Forms.TableLayoutPanel();
             this.btnMode = new BeeInterface.RJButton();
@@ -62,9 +63,9 @@ namespace BeeUi.Common
             this.editProg1 = new BeeUi.Unit.EditProg();
             this.label1 = new System.Windows.Forms.Label();
             this.CameraBar = new BeeUi.Unit.Cameras();
-            this.tmShow = new System.Windows.Forms.Timer();
-            this.tmIninitial = new System.Windows.Forms.Timer();
-            tmOutAlive = new System.Windows.Forms.Timer();
+            this.tmShow = new System.Windows.Forms.Timer(this.components);
+            this.tmIninitial = new System.Windows.Forms.Timer(this.components);
+            tmOutAlive = new System.Windows.Forms.Timer(this.components);
             this.pPO.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel13.SuspendLayout();
@@ -446,7 +447,7 @@ namespace BeeUi.Common
             // 
             // tmIninitial
             // 
-            this.tmIninitial.Interval = 5000;
+            this.tmIninitial.Interval = 2000;
             this.tmIninitial.Tick += new System.EventHandler(this.tmIninitial_Tick);
             // 
             // Header

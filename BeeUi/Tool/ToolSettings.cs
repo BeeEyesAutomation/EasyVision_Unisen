@@ -22,7 +22,10 @@ namespace BeeUi.Tool
         public ToolSettings()
         {
             InitializeComponent();
-
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
             Global.ToolSettings = this;
         }
       

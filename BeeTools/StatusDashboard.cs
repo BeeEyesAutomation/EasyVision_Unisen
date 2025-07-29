@@ -62,12 +62,16 @@ namespace BeeInterface
 
         public StatusDashboard()
         {
-            // Styles
-            SetStyle(
-                ControlStyles.AllPaintingInWmPaint
-              | ControlStyles.OptimizedDoubleBuffer
-              | ControlStyles.ResizeRedraw
-              | ControlStyles.UserPaint, true);
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            //// Styles
+            //SetStyle(
+            //    ControlStyles.AllPaintingInWmPaint
+            //  | ControlStyles.OptimizedDoubleBuffer
+            //  | ControlStyles.ResizeRedraw
+            //  | ControlStyles.UserPaint, true);
 
             // Default font and size
             this.Font = new Font("Segoe UI", 12, FontStyle.Bold);

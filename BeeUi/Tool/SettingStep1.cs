@@ -27,6 +27,10 @@ namespace BeeUi.Tool
         public SettingStep1()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
 
             //p.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, p.Width, p.Height, 5, 5));
@@ -399,26 +403,26 @@ namespace BeeUi.Tool
             if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift = new ValuePara();
 
 
-            BeeCore.Common.listCamera[Global.IndexChoose].GetExpo();
-            BeeCore.Common.listCamera[Global.IndexChoose].GetGain();
-            BeeCore.Common.listCamera[Global.IndexChoose].GetShift();
-            trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
-            trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
-            if (trackExposure.Max > 20000) 
-                trackExposure.Max = 20000;
-            trackExposure.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step;
-            trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
+            //BeeCore.Common.listCamera[Global.IndexChoose].GetExpo();
+            //BeeCore.Common.listCamera[Global.IndexChoose].GetGain();
+            //BeeCore.Common.listCamera[Global.IndexChoose].GetShift();
+            //trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
+            //trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
+            //if (trackExposure.Max > 20000) 
+            //    trackExposure.Max = 20000;
+            //trackExposure.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step;
+            //trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
 
           
-            trackGain.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Min;
-            trackGain.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Max;
-            trackGain.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Step;
-            trackGain.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Value;
+            //trackGain.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Min;
+            //trackGain.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Max;
+            //trackGain.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Step;
+            //trackGain.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain.Value;
 
-            trackShift.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Min;
-            trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
-            trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
-            trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
+            //trackShift.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Min;
+            //trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
+            //trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
+            //trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
             AdDelayTrig.Value = Global.ParaCommon.Comunication.IO.DelayTrigger;
             AdDelayOutput.Value = Global.ParaCommon.Comunication.IO.DelayOutput;
             btnLight1.IsCLick = Global.ParaCommon.Comunication.IO.IsLight1;

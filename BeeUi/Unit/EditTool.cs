@@ -48,6 +48,8 @@ namespace BeeUi
                         G.SettingPLC.Dock = DockStyle.Fill;
                         break;
                     case Step.Run:
+                        this.SuspendLayout();
+
                         pName.Visible = false;
                         if (Global.ToolSettings == null)
                         {
@@ -57,14 +59,26 @@ namespace BeeUi
                             Global.ToolSettings.pAllTool.Visible = true;
                             Global.ToolSettings.Dock = DockStyle.None;
                         }
-                           
-                       
+                        if (G.StepEdit.SettingStep1 == null)
+                        {
+                            G.StepEdit.SettingStep1 = new SettingStep1();
+
+                            G.StepEdit.SettingStep1.Dock = DockStyle.None;
+
+                            G.StepEdit.SettingStep1.Location = new Point(0, 0);
+
+                            G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                            //  G.StepEdit.SettingStep1.BringToFront();
+                        }
+
+
                         G.SettingPLC.Visible = false;
                         //pEditTool.Visible = true;
                         Global.ToolSettings.Parent = pEditTool;
                         Global.ToolSettings.Size = pEditTool.Size;
 
-                       
+                        Global.ToolSettings.Visible = true;
+                        G.StepEdit.SettingStep1.Visible = false;
                         Global.ToolSettings.BringToFront();
                         
                        // G.EditTool.View.pHeader.Controls.Clear();
@@ -78,8 +92,8 @@ namespace BeeUi
                             G.StatusDashboard.Location = new Point(0, 0); 
                             G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         }
-
-                         
+                        G.StepEdit.Visible = false;
+                        G.StatusDashboard.Visible = true;
                          G.StatusDashboard.Parent = G.EditTool.View.pHeader;
                         G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
                         G.StatusDashboard.BringToFront();
@@ -106,9 +120,18 @@ namespace BeeUi
                         }
                         break;
                     case Step.Step1:
-                       
-                       
+
+                        this.SuspendLayout();
                         G.StepEdit.btnStep1.IsCLick = true;
+                        if (G.StepEdit == null)
+                        {
+                            G.StepEdit = new Common.StepEdit();
+
+                            G.StepEdit.Dock = DockStyle.None;
+                            G.StepEdit.Location = new Point(0, 0);
+                            G.StepEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+
+                        }
                         if (G.StepEdit.SettingStep1 == null)
                         {
                             G.StepEdit.SettingStep1 = new SettingStep1();
@@ -120,19 +143,15 @@ namespace BeeUi
                             G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         //  G.StepEdit.SettingStep1.BringToFront();
                         }
+
                         G.StepEdit.SettingStep1.Size = G.EditTool.pEditTool.Size;
-           
+                        G.StepEdit.Visible = true;
+                        G.StatusDashboard.Visible = false;
+                        Global.ToolSettings.Visible = false;
+                        G.StepEdit.SettingStep1.Visible = true;
                         G.StepEdit.SettingStep1.Parent = pEditTool;
                         G.StepEdit.SettingStep1.BringToFront();
-                        if (G.StepEdit == null)
-                        {
-                            G.StepEdit = new Common.StepEdit();
-
-                            G.StepEdit.Dock = DockStyle.None;
-                            G.StepEdit.Location = new Point(0, 0);
-                            G.StepEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-                        }
+                        
                         //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                         //{
                         //    tool.ItemTool.Score.Enabled = false;
