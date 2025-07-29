@@ -142,42 +142,7 @@ namespace BeeUi.Common
 
             return;
         }
-        public async void ConnectCom()
-        {
-            
-       
-          
-            //    try
-            //{
-            //    if (Global.Config.IDPort != null)
-            //    {
-            //        if (Global.Config.IDPort.Trim() != "")
-            //        {
-            //            Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
-            //           // Modbus.ConnectPLC(Global.Config.namePort.Trim());
-
-            //        }
-                   
-            //    }
-            //    //Thread.Sleep(200);
-            //    //switch (Global.ParaCommon.TypeLight)
-            //    //{
-            //    //    case 1:
-            //    //       SerialPort1.WriteLine("Botl");
-            //    //        break;
-            //    //    case 2:
-            //    //        SerialPort1.WriteLine("Topl");
-            //    //        break;
-            //    //    case 3:
-            //    //        SerialPort1.WriteLine("Both");
-            //    //        break;
-            //    //}
-            //}
-            //catch(Exception ex)
-            //{
-
-            //}
-        }
+   
 
         private async void TmScanPort_Tick(object sender, EventArgs e)
         {
@@ -262,8 +227,11 @@ namespace BeeUi.Common
                 return;
             if (Global.StatusMode==StatusMode.Once)
             {
-                MessageBox.Show("Please Stop Mode Continuous");
-                return;
+                Global.StatusMode = StatusMode.None;
+                Global.StatusProcessing = StatusProcessing.None;
+                
+               // MessageBox.Show("Please Stop Mode Continuous");
+              //  return;
             }
             foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
             {
@@ -665,10 +633,7 @@ txtQrCode.Focus();
 				Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
 
 			}
-            if (!IsIntialProgram)
-            {
-               
-            }
+           
             IsIntialProgram = true;
             Acccess(Global.IsRun);
             G.listProgram.Visible = false;
@@ -684,6 +649,7 @@ txtQrCode.Focus();
                 CameraBar.btnCamera3.Text =Global.listParaCamera[2].Name.Substring(0, 8) + "..";
             if (Global.listParaCamera[3] != null)
                 CameraBar.btnCamera4.Text =Global.listParaCamera[3].Name.Substring(0, 8) + "..";
+    
         }
 
         private void workSaveProject_DoWork(object sender, DoWorkEventArgs e)
@@ -877,7 +843,7 @@ txtQrCode.Focus();
         private void tmIninitial_Tick(object sender, EventArgs e)
         {
             tmIninitial.Enabled= false;
-            G.Initial = true;
+            Global.Initialed = true;
         }
 
         bool IsKeyEnter = false;

@@ -234,6 +234,7 @@ namespace BeeGlobal
             }
             catch (Exception ex)
             {
+                Global.ParaCommon.Comunication.IO.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("ErrRead-"+ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
                 // return i;

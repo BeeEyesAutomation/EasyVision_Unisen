@@ -419,8 +419,8 @@ namespace BeeUi.Tool
             trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
             trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
             trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
-            AdDelayTrig.Value = Global.ParaCommon.Comunication.IO.DealayTrigger;
-            AdDelayOutput.Value = Global.ParaCommon.Comunication.IO.DealayOutput;
+            AdDelayTrig.Value = Global.ParaCommon.Comunication.IO.DelayTrigger;
+            AdDelayOutput.Value = Global.ParaCommon.Comunication.IO.DelayOutput;
             btnLight1.IsCLick = Global.ParaCommon.Comunication.IO.IsLight1;
             btnLight2.IsCLick = Global.ParaCommon.Comunication.IO.IsLight2;
             btnLight3.IsCLick = Global.ParaCommon.Comunication.IO.IsLight3;
@@ -459,12 +459,12 @@ namespace BeeUi.Tool
 
         private void AdDelayTrig_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.IO.DealayTrigger = (int)AdDelayTrig.Value;
+            Global.ParaCommon.Comunication.IO.DelayTrigger = (int)AdDelayTrig.Value;
         }
 
         private void AdDelayOutput_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.IO.DealayOutput= (int)AdDelayOutput.Value;
+            Global.ParaCommon.Comunication.IO.DelayOutput= (int)AdDelayOutput.Value;
         }
 
         private void btnOFF_Click(object sender, EventArgs e)

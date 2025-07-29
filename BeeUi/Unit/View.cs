@@ -1337,7 +1337,7 @@ namespace BeeUi
             Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
            
             Global.StatusProcessing=StatusProcessing.None;
-            Global.Initialed = true;
+           //time
            
         }
 
@@ -2626,13 +2626,13 @@ namespace BeeUi
        
         private  void tmContinuous_Tick(object sender, EventArgs e)
         {
-            if(!BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
-            {
-                G.Header.ShowErr();
-                tmContinuous.Enabled = false;
-                btnRecord.IsCLick = false;
-                return;
-            }
+            //if(!BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
+            //{
+            //    G.Header.ShowErr();
+            //    tmContinuous.Enabled = false;
+            //    btnRecord.IsCLick = false;
+            //    return;
+            //}
             if (!btnCap.Enabled&&!Global.ParaCommon.Comunication.IO.IsBypass)
                 return;
             Continuous();
@@ -3001,6 +3001,15 @@ namespace BeeUi
         {
            
            
+        }
+
+        private void tmShow_Tick(object sender, EventArgs e)
+        {
+           if(Global.ParaCommon.Comunication.IO.IsConnected)
+                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+           else
+                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+
         }
 
         private void btnRunSim_Click_1(object sender, EventArgs e)

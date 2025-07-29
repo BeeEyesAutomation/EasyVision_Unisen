@@ -458,15 +458,39 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             // Global.ParaCommon.Comunication.IO.valueInput.BulkChanged += ValueInput_BulkChanged;
             //Global.ParaCommon.Comunication.IO.valueOutput.ItemChanged += ValueOutput_ItemChanged;
             int index = 0;
-           foreach(ParaIO paraIO in  Global.ParaCommon.Comunication.IO.paraIOs )
+            listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
+            listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
+
+            foreach (ParaIO paraIO in  Global.ParaCommon.Comunication.IO.paraIOs )
             {
                 paraIO.ValueChanged += ParaIO_ValueChanged;
-                
-               
             }
-          listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
-          listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
-            btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
+            foreach (ParaIO paraIO in Global.ParaCommon.Comunication.IO.paraIOs)
+            {
+                if (paraIO.TypeIO == TypeIO.Input)
+                {
+                    listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(paraIO.Value);// + "";
+                    listLabelsIn[paraIO.Adddress].Text = paraIO.Value + "";
+                    listLabelsIn[paraIO.Adddress].Refresh();
+                }
+                else
+                {
+                    listLabelsOut[paraIO.Adddress].Text = paraIO.Value + "";
+                    listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(paraIO.Value);// + "";
+                    listLabelsOut[paraIO.Adddress].Refresh();
+                }
+            }
+            if(Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+                btnConectIO.IsCLick = true;
+                btnConectIO.Text = "Connected";
+            }
+            else
+            {
+                btnConectIO.Text = "Fail connect";
+            }
+
+                btnBypass.IsCLick = Global.ParaCommon.Comunication.IO.IsBypass;
             Global.StatusIOChanged += Global_StatusIOChanged;
             Global.ParaCommon.Comunication.IO.LogChanged += IO_LogChanged;
         }
@@ -485,6 +509,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             this.Invoke((Action)(() =>
             {
                 StatusIObtn.Text = obj.ToString();
+                if (obj.ToString() == "Writing")
+                    StatusIObtn.IsCLick = true;
+                else
+                    StatusIObtn.IsCLick = false;
                 StatusIObtn.Refresh();
             }));
          }
@@ -498,6 +526,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
 
                     listLabelsIn[paraIO.Adddress].Text = arg2 + "";
+                    listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);
                     listLabelsIn[paraIO.Adddress].Refresh();
                 }
                 else
@@ -520,7 +549,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            Global.ParaCommon.Comunication.IO.Connect();
         
         }
-        private async void CheckingIO()
+        private async Task CheckingIO()
         {
             if (Global.ParaCommon.Comunication.IO. IsConnected)
             {
@@ -548,7 +577,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         Global.StatusProcessing = StatusProcessing.Trigger;
                         Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
                         Global.StatusMode = StatusMode.Once;
-                        await Task.Delay(Global.Config.delayTrigger);
+                        await Task.Delay( (int)Global.ParaCommon.Comunication.IO.DelayTrigger);
                         Global.StatusProcessing = StatusProcessing.Read;
 
 
@@ -649,7 +678,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnConectIO.IsCLick = true;
                
                 Global.ParaCommon.Comunication.IO.IsBypass = false;
-                Global.ParaCommon.Comunication.IO.StartRead();
+                tmRead.Enabled = true;
             }
             else
             {
@@ -1081,11 +1110,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             Global.ParaCommon.Comunication.IO.Port = comIO.Text;
         }
 
-        private void tmCheck_Tick(object sender, EventArgs e)
+        private async void tmCheck_Tick(object sender, EventArgs e)
         {
             if(Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                CheckingIO();
+              await  CheckingIO();
                 tmCheck.Interval = 10;
             }
             else
@@ -1096,12 +1125,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
         }
 
-        private void tmRead_Tick(object sender, EventArgs e)
+        private async void tmRead_Tick(object sender, EventArgs e)
         {
             if (!Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 tmRead.Enabled = false;
-                tmConnect.Enabled = true;
+                MessageBox.Show("Connect Fail");
+
                 return;
             }    
                 if (!Global.Initialed) return;
@@ -1112,10 +1142,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             if (Global.StatusIO == StatusIO.Reading)
             {
-                Global.ParaCommon.Comunication.IO.Read();
+            await    Global.ParaCommon.Comunication.IO.Read();
 
             }
-            CheckingIO();
+         await   CheckingIO();
 
         }
 
@@ -1134,8 +1164,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 if (Global.ParaCommon.Comunication.IO.timeRead == 0) Global.ParaCommon.Comunication.IO.timeRead = 1;
                 tmRead.Interval = Global.ParaCommon.Comunication.IO.timeRead;
                 //  tmCheck.Enabled = true;
-                // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-
+                
             }
 
             else

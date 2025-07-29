@@ -231,7 +231,7 @@ namespace BeeCore
         }
         public static void ClosePython()
         {
-            PythonEngine.Shutdown();   
+           // PythonEngine.Shutdown();   
         }
 
         public static Mat AutoCanny(Mat grayImage, double sigma = 0.33)

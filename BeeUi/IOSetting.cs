@@ -46,7 +46,7 @@ namespace BeeUi
         private void btnConnect_Click(object sender, EventArgs e)
         {
         //   Global.Config.namePort =cbSerialPort.Text.Trim();
-            G.Header.ConnectCom();
+           // G.Header.ConnectCom();
             if (File.Exists("Default.config"))
                 File.Delete("Default.config");
             Access.SaveConfig("Default.config",Global.Config);
