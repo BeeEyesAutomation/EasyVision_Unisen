@@ -74,7 +74,13 @@ namespace BeeInterface
       
         public AdjustBar()
         {
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
             InitializeComponent();
+           
+            
             Track.ValueChanged += Track_ValueChanged;
             Num.ValueChanged += Num_ValueChanged;
             this.SizeChanged += AdjustBar_SizeChanged;

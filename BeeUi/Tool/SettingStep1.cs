@@ -58,10 +58,7 @@ namespace BeeUi.Tool
            int nWidthEllipse, // height of ellipse
            int nHeightEllipse // width of ellipse
        );
-        private void SettingStep2_Load(object sender, EventArgs e)
-        {
-
-        }
+      
 
         private void btnLoadImge_Click(object sender, EventArgs e)
         {
@@ -178,14 +175,14 @@ namespace BeeUi.Tool
 
         private void SettingStep1_VisibleChanged(object sender, EventArgs e)
         {
-            if (!this.Visible)
-            {
-               Global.Config.IsShowCenter = false;
-               Global.Config.IsShowArea = false;
-               Global.Config.IsShowGird = false;
-                G.EditTool.View.imgView.Invalidate();
+            //if (!this.Visible)
+            //{
+            //   Global.Config.IsShowCenter = false;
+            //   Global.Config.IsShowArea = false;
+            //   Global.Config.IsShowGird = false;
+            //    G.EditTool.View.imgView.Invalidate();
                 
-            }
+            //}
                    
         }
         FormCalib formCalib;
@@ -223,10 +220,7 @@ namespace BeeUi.Tool
 
         private void numDelay_ValueChanged(object sender, EventArgs e)
         {
-          // Global.Config.delayTrigger = (int)numDelay.Value;
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config",Global.Config);
+        
         }
 
       
@@ -518,6 +512,25 @@ namespace BeeUi.Tool
         private void AdjOffSetY_ValueChanged(float obj)
         {
             BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value = AdjWidth.Value;
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SettingStep1_ParentChanged(object sender, EventArgs e)
+        {
+            //if(this.Parent!=null)
+            //{
+            //    this.SuspendLayout();
+            //    foreach (Control child in this.Controls)
+            //    {
+            //        child.Visible = true;
+                    
+            //    }
+            //    this.ResumeLayout();
+            //}    
         }
     }
 }

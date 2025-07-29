@@ -27,8 +27,14 @@ namespace BeeUi
         public EditTool()
         {
             InitializeComponent();
-           // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
-         
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
+
+                                                    // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
+
         }
         public void RefreshGuiEdit( Step Step)
         {
@@ -65,21 +71,23 @@ namespace BeeUi
 
                             G.StepEdit.SettingStep1.Dock = DockStyle.None;
 
-                            G.StepEdit.SettingStep1.Location = new Point(0, 0);
+                           // G.StepEdit.SettingStep1.Location = new Point(0, 0);
 
-                            G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                          //  G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                             //  G.StepEdit.SettingStep1.BringToFront();
                         }
-
-
                         G.SettingPLC.Visible = false;
+                        pEditTool.Controls.Clear();
+                      
                         //pEditTool.Visible = true;
-                        Global.ToolSettings.Parent = pEditTool;
-                        Global.ToolSettings.Size = pEditTool.Size;
+                        Global.ToolSettings.Dock = DockStyle.Fill;
+                        pEditTool.Controls.Add(Global.ToolSettings);
+                       
+                      //  Global.ToolSettings.Size = pEditTool.Size;
 
-                        Global.ToolSettings.Visible = true;
-                        G.StepEdit.SettingStep1.Visible = false;
-                        Global.ToolSettings.BringToFront();
+                      //  Global.ToolSettings.Visible = true;
+                      //  G.StepEdit.SettingStep1.Visible = false;
+                      //  Global.ToolSettings.BringToFront();
                         
                        // G.EditTool.View.pHeader.Controls.Clear();
                         if ( G.StatusDashboard == null)
@@ -88,16 +96,19 @@ namespace BeeUi
                             G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config. AlphaBar-50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
                             G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
                             G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
-                            G.StatusDashboard.Dock = DockStyle.None;
-                            G.StatusDashboard.Location = new Point(0, 0); 
-                            G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                          //  G.StatusDashboard.Dock = DockStyle.None;
+                          //  G.StatusDashboard.Location = new Point(0, 0); 
+                          //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         }
-                        G.StepEdit.Visible = false;
-                        G.StatusDashboard.Visible = true;
-                         G.StatusDashboard.Parent = G.EditTool.View.pHeader;
-                        G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
-                        G.StatusDashboard.BringToFront();
-                         
+                        //G.StepEdit.Visible = false;
+                        //G.StatusDashboard.Visible = true;
+                        // G.StatusDashboard.Parent = G.EditTool.View.pHeader;
+                        //G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
+                        //G.StatusDashboard.BringToFront();
+                        G.EditTool.View.pHeader.Controls.Clear();
+                        //pEditTool.Visible = true;
+                        G.StatusDashboard.Dock = DockStyle.Fill;
+                        G.EditTool.View.pHeader.Controls.Add(G.StatusDashboard);
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -118,10 +129,11 @@ namespace BeeUi
                         {
                             MessageBox.Show(ex.Message);
                         }
+                        this.ResumeLayout();
                         break;
                     case Step.Step1:
 
-                        this.SuspendLayout();
+                       // this.SuspendLayout();
                         G.StepEdit.btnStep1.IsCLick = true;
                         if (G.StepEdit == null)
                         {
@@ -143,33 +155,56 @@ namespace BeeUi
                             G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         //  G.StepEdit.SettingStep1.BringToFront();
                         }
+                        G.EditTool.View.pHeader.Controls.Clear();
+                        //pEditTool.Visible = true;
+                        G.StepEdit.Dock = DockStyle.Fill;
+                        G.EditTool.View.pHeader.Controls.Add(G.StepEdit);
+                        //G.StepEdit.SettingStep1.Size = G.EditTool.pEditTool.Size;
+                        //G.StepEdit.Visible = true;
+                        //G.StatusDashboard.Visible = false;
+                        pEditTool.Controls.Clear();
 
-                        G.StepEdit.SettingStep1.Size = G.EditTool.pEditTool.Size;
-                        G.StepEdit.Visible = true;
-                        G.StatusDashboard.Visible = false;
-                        Global.ToolSettings.Visible = false;
-                        G.StepEdit.SettingStep1.Visible = true;
-                        G.StepEdit.SettingStep1.Parent = pEditTool;
-                        G.StepEdit.SettingStep1.BringToFront();
+                        //pEditTool.Visible = true;
+                        G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
+                        //G.StepEdit.SettingStep1.Visible = false; // Ẩn trước để tránh redraw liên tục
+
+                        //foreach (Control child in G.StepEdit.SettingStep1.Controls)
+                        //{
+                        //    child.Visible = false;
+                        //}
+                        pEditTool.Controls.Add(G.StepEdit.SettingStep1);
+                        //G.StepEdit.SettingStep1.Visible = true;
+                        //foreach (Control child in G.StepEdit.SettingStep1.Controls)
+                        //{
+                        //    child.Visible = true;
+                        //}
+                     
+                        //Global.ToolSettings.Visible = false;
+                        //G.StepEdit.SettingStep1.Visible = true;
+                        //G.StepEdit.SettingStep1.Parent = pEditTool;
+                        //G.StepEdit.SettingStep1.BringToFront();
                         
                         //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                         //{
                         //    tool.ItemTool.Score.Enabled = false;
                         //}
 
-                        G.StepEdit.Parent = G.EditTool.View.pHeader;
+                        //G.StepEdit.Parent = G.EditTool.View.pHeader;
                       
-                        G.StepEdit.Size = G.EditTool.View.pHeader.Size;
-                        G.StepEdit.BringToFront();
+                        //G.StepEdit.Size = G.EditTool.View.pHeader.Size;
+                        //G.StepEdit.BringToFront();
                         lbNumStep.Text = "Step 1";
                         lbNameStep.Text = "Image Optimization";
                         iconTool.BackgroundImage = Properties.Resources._1;
                         lbTool.Text = "Setup Camera";
 
-                        pName.Visible = true;
+                      ///  pName.Visible = true;
+                       
+
+                     //   this.ResumeLayout();
                         break;
                     case Step.Step2:
-                        pName.Visible = true;
+                     //   pName.Visible = true;
                         G.IsCalib = false;
                         if (G.StepEdit.SettingStep2 == null)
                             G.StepEdit.SettingStep2 = new SettingStep2();
@@ -209,14 +244,16 @@ namespace BeeUi
                         if (Global.ToolSettings == null)
                             Global.ToolSettings = new ToolSettings();
                         pEditTool.Controls.Clear();
-                        Global.ToolSettings.Parent = pEditTool;
-                        Global.ToolSettings.Size = pEditTool.Size;
-                        Global.ToolSettings.Location = new Point(0, 0);
-                        Global.ToolSettings.pAllTool.Visible = true;
-                        Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                        Global.ToolSettings.Dock = DockStyle.Fill;
+                        pEditTool.Controls.Add(Global.ToolSettings);
+                        //Global.ToolSettings.Parent = pEditTool;
+                        //Global.ToolSettings.Size = pEditTool.Size;
+                        //Global.ToolSettings.Location = new Point(0, 0);
+                        //Global.ToolSettings.pAllTool.Visible = true;
+                        //Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                       
                      
-                        Global.ToolSettings.BringToFront();
+                        //Global.ToolSettings.BringToFront();
                         if (Global.ParaCommon.matRegister != null)
                         {
                             G.IsCalib = false;

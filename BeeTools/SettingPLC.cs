@@ -559,75 +559,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            Global.ParaCommon.Comunication.IO.Connect();
         
         }
-        private async void CheckingIO()
-        {
-            if (Global.ParaCommon.Comunication.IO. IsConnected)
-            {
-
-
-                if (Global.StatusProcessing==StatusProcessing.SendResult)
-                {
-                    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Result, Global.TotalOK, Global.Config.DelayOutput);
-
-                }
-                if (!Global.IsRun)
-                    if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
-                    {
-                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light, Global.ParaCommon.IsOnLight);
-                    }
-
-
-
-
-                if (Global.IsRun &&  Global.ParaCommon.IsExternal || Global.TriggerInternal)
-                {
-                    if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
-                    {
-                        Global.TriggerInternal = false;
-                        Global.StatusProcessing = StatusProcessing.Trigger;
-                        Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Trigger);
-                        Global.StatusMode = StatusMode.Once;
-                        await Task.Delay(Global.Config.delayTrigger);
-                        Global.StatusProcessing = StatusProcessing.Read;
-
-
-                    }
-
-                }
-
-                //if (btnEnQrCode.IsCLick)
-                //{
-                //    if (valueOutput[6] == 0)
-                //    {
-                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
-
-                //        int value = 0;
-                //        for (int i = 0; i < 4; i++)
-                //        {
-                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
-                //        }
-                //        int id = listFilter.FindIndex(a => a == Global.Project);
-                //        if (id != value)
-                //        {
-
-                //            WriteIO(IO_Processing.ChangeProg);
-                //            tmReadPLC.Enabled = false;
-                //            Global.Project = listFilter[value];
-                //            txtQrCode.Text = Global.Project.ToString();
-                //            txtQrCode.Enabled = false;
-                //            btnShowList.Enabled = false;
-
-                //            workLoadProgram.RunWorkerAsync();
-                //        }
-                //    }
-                //}
-
-
-                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-            }
-
-            Console.WriteLine($"Work at {DateTime.Now:HH:mm:ss.fff}");
-        }
+       
 
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
         {
@@ -1131,20 +1063,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void tmCheck_Tick(object sender, EventArgs e)
         {
-            if(Global.ParaCommon.Comunication.IO.IsConnected)
-            {
-                CheckingIO();
-                tmCheck.Interval = 10;
-            }
-            else
-            {
-                tmCheck.Enabled = false;
-                tmConnect.Enabled = true;
-               // tmCheck.Interval = 1000;
-            }
+           
         }
 
-        private void tmRead_Tick(object sender, EventArgs e)
+        private async void tmRead_Tick(object sender, EventArgs e)
         {
             if (!Global.ParaCommon.Comunication.IO.IsConnected)
             {
@@ -1160,10 +1082,74 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             if (Global.StatusIO == StatusIO.Reading)
             {
-                Global.ParaCommon.Comunication.IO.Read();
+              await  Global.ParaCommon.Comunication.IO.Read();
 
             }
-            CheckingIO();
+            if (Global.ParaCommon.Comunication.IO.IsConnected)
+            {
+
+
+                if (Global.StatusProcessing == StatusProcessing.SendResult)
+                {
+                    Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Result;
+
+                }
+                //if (!Global.IsRun)
+                    //if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
+                    //{
+                    //    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light);
+                    //}
+
+
+
+
+                if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+                {
+                    if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
+                    {
+                        Global.TriggerInternal = false;
+                        Global.StatusProcessing = StatusProcessing.Trigger;
+                        Global.ParaCommon.Comunication.IO.IO_Processing=IO_Processing.Trigger;
+                        Global.StatusMode = StatusMode.Once;
+                        await Task.Delay(Global.Config.delayTrigger);
+                        Global.StatusProcessing = StatusProcessing.Read;
+
+
+                    }
+
+                }
+
+                //if (btnEnQrCode.IsCLick)
+                //{
+                //    if (valueOutput[6] == 0)
+                //    {
+                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+
+                //        int value = 0;
+                //        for (int i = 0; i < 4; i++)
+                //        {
+                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
+                //        }
+                //        int id = listFilter.FindIndex(a => a == Global.Project);
+                //        if (id != value)
+                //        {
+
+                //            WriteIO(IO_Processing.ChangeProg);
+                //            tmReadPLC.Enabled = false;
+                //            Global.Project = listFilter[value];
+                //            txtQrCode.Text = Global.Project.ToString();
+                //            txtQrCode.Enabled = false;
+                //            btnShowList.Enabled = false;
+
+                //            workLoadProgram.RunWorkerAsync();
+                //        }
+                //    }
+                //}
+
+
+                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+            }
+
 
         }
 

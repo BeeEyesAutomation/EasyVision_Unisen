@@ -233,10 +233,10 @@ namespace BeeUi.Common
                // MessageBox.Show("Please Stop Mode Continuous");
               //  return;
             }
-            foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
-            {
-                PropetyTool.ItemTool.IsCLick = false;
-            }
+            //foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+            //{
+            //    PropetyTool.ItemTool.IsCLick = false;
+            //}
             Global.IsRun = !Global.IsRun;
        
             if (Global.IsRun)
@@ -273,7 +273,8 @@ namespace BeeUi.Common
               
 
             }
-            Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.ChangeMode, Global.IsRun);
+            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+            
             Acccess(Global.IsRun);
            
         }

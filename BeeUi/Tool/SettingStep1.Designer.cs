@@ -57,9 +57,9 @@ namespace BeeUi.Tool
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.AdjOffSetY = new BeeInterface.AdjustBar();
             this.AdjOffsetX = new BeeInterface.AdjustBar();
             this.AdjHeight = new BeeInterface.AdjustBar();
@@ -88,9 +88,9 @@ namespace BeeUi.Tool
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            this.tabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // workRead
@@ -104,9 +104,6 @@ namespace BeeUi.Tool
             // 
             // tableLayout1
             // 
-            this.tableLayout1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 14);
@@ -124,8 +121,9 @@ namespace BeeUi.Tool
             this.tableLayout1.Controls.Add(this.label2, 0, 2);
             this.tableLayout1.Controls.Add(this.label4, 0, 0);
             this.tableLayout1.Controls.Add(this.trackExposure, 0, 1);
+            this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableLayout1.Location = new System.Drawing.Point(6, 6);
+            this.tableLayout1.Location = new System.Drawing.Point(3, 3);
             this.tableLayout1.Name = "tableLayout1";
             this.tableLayout1.RowCount = 16;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -144,7 +142,7 @@ namespace BeeUi.Tool
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayout1.Size = new System.Drawing.Size(380, 713);
+            this.tableLayout1.Size = new System.Drawing.Size(380, 719);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -259,6 +257,7 @@ namespace BeeUi.Tool
             this.label4.TabIndex = 65;
             this.label4.Text = "Exposue Time";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // tableLayoutPanel11
             // 
@@ -277,9 +276,6 @@ namespace BeeUi.Tool
             // 
             // tableLayoutPanel10
             // 
-            this.tableLayoutPanel10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel10.ColumnCount = 1;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel4, 0, 9);
@@ -292,6 +288,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel10.Controls.Add(this.label1, 0, 2);
             this.tableLayoutPanel10.Controls.Add(this.AdDelayTrig, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel6, 0, 1);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
@@ -311,7 +308,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(383, 584);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(380, 719);
             this.tableLayoutPanel10.TabIndex = 53;
             // 
             // tableLayoutPanel4
@@ -327,7 +324,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(363, 48);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(360, 48);
             this.tableLayoutPanel4.TabIndex = 74;
             // 
             // tableLayoutPanel3
@@ -345,7 +342,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(375, 40);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(372, 40);
             this.tableLayoutPanel3.TabIndex = 73;
             // 
             // label9
@@ -357,7 +354,7 @@ namespace BeeUi.Tool
             this.label9.Location = new System.Drawing.Point(0, 336);
             this.label9.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(380, 25);
+            this.label9.Size = new System.Drawing.Size(377, 25);
             this.label9.TabIndex = 72;
             this.label9.Text = "Light";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -371,7 +368,7 @@ namespace BeeUi.Tool
             this.label8.Location = new System.Drawing.Point(0, 5);
             this.label8.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(380, 25);
+            this.label8.Size = new System.Drawing.Size(377, 25);
             this.label8.TabIndex = 71;
             this.label8.Text = "Methord Trigger";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -390,7 +387,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(375, 66);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(372, 66);
             this.tableLayoutPanel2.TabIndex = 70;
             // 
             // label7
@@ -402,7 +399,7 @@ namespace BeeUi.Tool
             this.label7.Location = new System.Drawing.Point(8, 5);
             this.label7.Margin = new System.Windows.Forms.Padding(8, 5, 3, 3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(80, 58);
+            this.label7.Size = new System.Drawing.Size(79, 58);
             this.label7.TabIndex = 69;
             this.label7.Text = "Delay";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -421,7 +418,7 @@ namespace BeeUi.Tool
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(375, 38);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(372, 38);
             this.tableLayoutPanel1.TabIndex = 69;
             // 
             // label6
@@ -433,7 +430,7 @@ namespace BeeUi.Tool
             this.label6.Location = new System.Drawing.Point(0, 199);
             this.label6.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(380, 25);
+            this.label6.Size = new System.Drawing.Size(377, 25);
             this.label6.TabIndex = 68;
             this.label6.Text = "Methord OutPut";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -447,7 +444,7 @@ namespace BeeUi.Tool
             this.label1.Location = new System.Drawing.Point(0, 96);
             this.label1.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(380, 25);
+            this.label1.Size = new System.Drawing.Size(377, 25);
             this.label1.TabIndex = 66;
             this.label1.Text = "Delay Trigger (ms)";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -465,46 +462,42 @@ namespace BeeUi.Tool
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(373, 48);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(370, 48);
             this.tableLayoutPanel6.TabIndex = 44;
             // 
-            // tabControl
+            // tabControl1
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(this.tabPage1);
-            this.tabControl.Controls.Add(this.tabPage2);
-            this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(400, 760);
-            this.tabControl.TabIndex = 57;
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(394, 763);
+            this.tabControl1.TabIndex = 60;
             // 
-            // tabPage1
+            // tabPage3
             // 
-            this.tabPage1.Controls.Add(this.tableLayout1);
-            this.tabPage1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(392, 722);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Basic";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage3.Controls.Add(this.tableLayout1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 34);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(386, 725);
+            this.tabPage3.TabIndex = 0;
+            this.tabPage3.Text = "Camera";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabPage4
             // 
-            this.tabPage2.Controls.Add(this.tableLayoutPanel10);
-            this.tabPage2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(392, 722);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "I/0";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage4.Controls.Add(this.tableLayoutPanel10);
+            this.tabPage4.Location = new System.Drawing.Point(4, 34);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(386, 725);
+            this.tabPage4.TabIndex = 1;
+            this.tabPage4.Text = "Input";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // AdjOffSetY
             // 
@@ -637,10 +630,10 @@ namespace BeeUi.Tool
             this.btnOn.IsNotChange = false;
             this.btnOn.IsRect = false;
             this.btnOn.IsUnGroup = false;
-            this.btnOn.Location = new System.Drawing.Point(181, 0);
+            this.btnOn.Location = new System.Drawing.Point(180, 0);
             this.btnOn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnOn.Name = "btnOn";
-            this.btnOn.Size = new System.Drawing.Size(179, 48);
+            this.btnOn.Size = new System.Drawing.Size(177, 48);
             this.btnOn.TabIndex = 3;
             this.btnOn.Text = "ON";
             this.btnOn.TextColor = System.Drawing.Color.Black;
@@ -671,7 +664,7 @@ namespace BeeUi.Tool
             this.btnOFF.Location = new System.Drawing.Point(3, 0);
             this.btnOFF.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnOFF.Name = "btnOFF";
-            this.btnOFF.Size = new System.Drawing.Size(178, 48);
+            this.btnOFF.Size = new System.Drawing.Size(177, 48);
             this.btnOFF.TabIndex = 2;
             this.btnOFF.Text = "OFF";
             this.btnOFF.TextColor = System.Drawing.Color.Black;
@@ -699,10 +692,10 @@ namespace BeeUi.Tool
             this.btnLight3.IsNotChange = false;
             this.btnLight3.IsRect = false;
             this.btnLight3.IsUnGroup = true;
-            this.btnLight3.Location = new System.Drawing.Point(253, 0);
+            this.btnLight3.Location = new System.Drawing.Point(251, 0);
             this.btnLight3.Margin = new System.Windows.Forms.Padding(0);
             this.btnLight3.Name = "btnLight3";
-            this.btnLight3.Size = new System.Drawing.Size(122, 40);
+            this.btnLight3.Size = new System.Drawing.Size(121, 40);
             this.btnLight3.TabIndex = 4;
             this.btnLight3.Text = "Light 3";
             this.btnLight3.TextColor = System.Drawing.Color.Black;
@@ -733,7 +726,7 @@ namespace BeeUi.Tool
             this.btnLight1.Location = new System.Drawing.Point(0, 0);
             this.btnLight1.Margin = new System.Windows.Forms.Padding(0);
             this.btnLight1.Name = "btnLight1";
-            this.btnLight1.Size = new System.Drawing.Size(121, 40);
+            this.btnLight1.Size = new System.Drawing.Size(120, 40);
             this.btnLight1.TabIndex = 2;
             this.btnLight1.Text = "Light 1";
             this.btnLight1.TextColor = System.Drawing.Color.Black;
@@ -761,10 +754,10 @@ namespace BeeUi.Tool
             this.btnLight2.IsNotChange = false;
             this.btnLight2.IsRect = false;
             this.btnLight2.IsUnGroup = true;
-            this.btnLight2.Location = new System.Drawing.Point(121, 0);
+            this.btnLight2.Location = new System.Drawing.Point(120, 0);
             this.btnLight2.Margin = new System.Windows.Forms.Padding(0);
             this.btnLight2.Name = "btnLight2";
-            this.btnLight2.Size = new System.Drawing.Size(132, 40);
+            this.btnLight2.Size = new System.Drawing.Size(131, 40);
             this.btnLight2.TabIndex = 3;
             this.btnLight2.Text = "Light 2";
             this.btnLight2.TextColor = System.Drawing.Color.Black;
@@ -774,11 +767,11 @@ namespace BeeUi.Tool
             // 
             // AdDelayOutput
             // 
-            this.AdDelayOutput.Location = new System.Drawing.Point(94, 3);
+            this.AdDelayOutput.Location = new System.Drawing.Point(93, 3);
             this.AdDelayOutput.Max = 1000F;
             this.AdDelayOutput.Min = 0F;
             this.AdDelayOutput.Name = "AdDelayOutput";
-            this.AdDelayOutput.Size = new System.Drawing.Size(278, 60);
+            this.AdDelayOutput.Size = new System.Drawing.Size(276, 60);
             this.AdDelayOutput.Step = 1F;
             this.AdDelayOutput.TabIndex = 70;
             this.AdDelayOutput.Value = 0F;
@@ -803,10 +796,10 @@ namespace BeeUi.Tool
             this.btnOutsideIn.IsNotChange = false;
             this.btnOutsideIn.IsRect = false;
             this.btnOutsideIn.IsUnGroup = false;
-            this.btnOutsideIn.Location = new System.Drawing.Point(187, 0);
+            this.btnOutsideIn.Location = new System.Drawing.Point(186, 0);
             this.btnOutsideIn.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnOutsideIn.Name = "btnOutsideIn";
-            this.btnOutsideIn.Size = new System.Drawing.Size(185, 38);
+            this.btnOutsideIn.Size = new System.Drawing.Size(183, 38);
             this.btnOutsideIn.TabIndex = 3;
             this.btnOutsideIn.Text = "All Time";
             this.btnOutsideIn.TextColor = System.Drawing.Color.Black;
@@ -836,7 +829,7 @@ namespace BeeUi.Tool
             this.btnInsideOut.Location = new System.Drawing.Point(3, 0);
             this.btnInsideOut.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnInsideOut.Name = "btnInsideOut";
-            this.btnInsideOut.Size = new System.Drawing.Size(184, 38);
+            this.btnInsideOut.Size = new System.Drawing.Size(183, 38);
             this.btnInsideOut.TabIndex = 2;
             this.btnInsideOut.Text = "Blink";
             this.btnInsideOut.TextColor = System.Drawing.Color.Black;
@@ -852,7 +845,7 @@ namespace BeeUi.Tool
             this.AdDelayTrig.Max = 2000F;
             this.AdDelayTrig.Min = 1F;
             this.AdDelayTrig.Name = "AdDelayTrig";
-            this.AdDelayTrig.Size = new System.Drawing.Size(377, 64);
+            this.AdDelayTrig.Size = new System.Drawing.Size(374, 64);
             this.AdDelayTrig.Step = 1F;
             this.AdDelayTrig.TabIndex = 67;
             this.AdDelayTrig.Value = 1F;
@@ -877,10 +870,10 @@ namespace BeeUi.Tool
             this.btnExternal.IsNotChange = false;
             this.btnExternal.IsRect = false;
             this.btnExternal.IsUnGroup = false;
-            this.btnExternal.Location = new System.Drawing.Point(186, 0);
+            this.btnExternal.Location = new System.Drawing.Point(185, 0);
             this.btnExternal.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnExternal.Name = "btnExternal";
-            this.btnExternal.Size = new System.Drawing.Size(184, 48);
+            this.btnExternal.Size = new System.Drawing.Size(182, 48);
             this.btnExternal.TabIndex = 3;
             this.btnExternal.Text = "External";
             this.btnExternal.TextColor = System.Drawing.Color.Black;
@@ -911,7 +904,7 @@ namespace BeeUi.Tool
             this.btnInternal.Location = new System.Drawing.Point(3, 0);
             this.btnInternal.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnInternal.Name = "btnInternal";
-            this.btnInternal.Size = new System.Drawing.Size(183, 48);
+            this.btnInternal.Size = new System.Drawing.Size(182, 48);
             this.btnInternal.TabIndex = 2;
             this.btnInternal.Text = "Internal";
             this.btnInternal.TextColor = System.Drawing.Color.Black;
@@ -984,14 +977,15 @@ namespace BeeUi.Tool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.Controls.Add(this.tabControl);
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.tableLayoutPanel11);
             this.Name = "SettingStep1";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.Size = new System.Drawing.Size(400, 843);
             this.Load += new System.EventHandler(this.SettingStep1_Load);
             this.VisibleChanged += new System.EventHandler(this.SettingStep1_VisibleChanged);
+            this.ParentChanged += new System.EventHandler(this.SettingStep1_ParentChanged);
             this.tableLayout1.ResumeLayout(false);
             this.tableLayout1.PerformLayout();
             this.tableLayoutPanel11.ResumeLayout(false);
@@ -1003,9 +997,9 @@ namespace BeeUi.Tool
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
-            this.tabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1022,9 +1016,6 @@ namespace BeeUi.Tool
         private RJButton btnCancel;
         private RJButton btnNextStep;
         private AdjustBar trackExposure;
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
         private AdjustBar trackGain;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
@@ -1057,5 +1048,8 @@ namespace BeeUi.Tool
         private System.Windows.Forms.Label label13;
         private AdjustBar AdjOffsetX;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
     }
 }
