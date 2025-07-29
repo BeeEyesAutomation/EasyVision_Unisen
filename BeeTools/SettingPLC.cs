@@ -1118,7 +1118,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     }
 
                 }
-
+                lbmin.Text =Math.Round( Global.ParaCommon.Comunication.IO.CTMin) + "";
+                lbMax.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMax) + "";
+                lbMid.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMid) + "";
                 //if (btnEnQrCode.IsCLick)
                 //{
                 //    if (valueOutput[6] == 0)
@@ -1179,7 +1181,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
                     Global.ParaCommon.Comunication.IO.Connect();
                     if (Global.ParaCommon.Comunication.IO.IsConnected)
-                        Global.ParaCommon.Comunication.IO.StartRead();
+                        tmRead.Enabled = true;
                     else
                     {
                         MessageBox.Show("Check connect I_O");

@@ -4,6 +4,7 @@ using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
@@ -19,8 +20,8 @@ namespace BeeGlobal
         [NonSerialized]
         private  CancellationTokenSource _cts = new CancellationTokenSource
             ();
-        [NonSerialized]
-        private Timer _timer;
+        //[NonSerialized]
+        //private Timer _timer;
 
         //public void StartRead()
         //{
@@ -32,45 +33,45 @@ namespace BeeGlobal
         //    _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
         //}
 
-        public void StopTimer()
-        {
-            _timer?.Dispose();
-        }
-        public void StartRead()
-        {
-            _cts = new CancellationTokenSource();
-            Global.StatusIO = StatusIO.Reading;
-            Task.Run(async () =>
-            {
-                while (!_cts.Token.IsCancellationRequested)
-                {
-                   await DoWork();                            // ========== Công việc chính
-                  //  await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
-                }
-            }, _cts.Token);
-        }
+        //public void StopTimer()
+        //{
+        //    _timer?.Dispose();
+        //}
+        //public void StartRead()
+        //{
+        //    _cts = new CancellationTokenSource();
+        //    Global.StatusIO = StatusIO.Reading;
+        //    Task.Run(async () =>
+        //    {
+        //        while (!_cts.Token.IsCancellationRequested)
+        //        {
+        //           await DoWork();                            // ========== Công việc chính
+        //          //  await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
+        //        }
+        //    }, _cts.Token);
+        //}
 
-        public void StopRead() => _cts.Cancel();
+        //public void StopRead() => _cts.Cancel();
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
-        private  async Task DoWork()
-        {
-            if (!Global.Initialed) return;
-            if(Global.StatusIO == StatusIO.ErrRead)
-            {
-                //await Task.Delay(50);
-                Global.StatusIO = StatusIO.Reading;
-            }
-            if (Global.StatusIO==StatusIO.Reading)
-            {
-                Read();
+        //private  async Task DoWork()
+        //{
+        //    if (!Global.Initialed) return;
+        //    if(Global.StatusIO == StatusIO.ErrRead)
+        //    {
+        //        //await Task.Delay(50);
+        //        Global.StatusIO = StatusIO.Reading;
+        //    }
+        //    if (Global.StatusIO==StatusIO.Reading)
+        //    {
+        //        Read();
               
-            }
+        //    }
            
                 
            
-        }
+        //}
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
         public String[] nameOutput = new String[16];
@@ -165,6 +166,9 @@ namespace BeeGlobal
 
             try
             {
+                CT = new Stopwatch();
+                CTMid = 0;
+                CTMin = 1000; CTMax = 0;
                 IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
                 if (valueInput == null)
                     valueInput = new int[16];
@@ -229,12 +233,24 @@ namespace BeeGlobal
         }
     
         bool IsCanWrite = false;
+        [NonSerialized]
+        Stopwatch CT =new Stopwatch();
+        [NonSerialized]
+       public float CTMid = 0,CTMin=0,CTMax=0;
+
         public  async Task Read()
         {
             if (!IsConnected) return ;
-            
-           
+
+            CT.Restart();
+
              valueInput=Modbus.ReadBit(1);
+            CT.Stop();
+            CTMid =(float) CT.Elapsed.TotalMilliseconds;
+           if(CTMid>CTMax)
+                CTMax = CTMid;
+            if (CTMid < CTMin)
+                CTMin = CTMid;
             Parallel.For(0, valueInput.Length, i =>
               {
                   int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
@@ -272,6 +288,7 @@ namespace BeeGlobal
             {
                 if (_IO_Processing != value)
                 {
+                    _IO_Processing = value;
                     WriteIO(_IO_Processing);
                 }
             }
@@ -493,16 +510,21 @@ namespace BeeGlobal
                 Val |= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
 
             }
-          
-        X: IsConnected = Modbus.WriteBit(Val);
+            CT.Restart();
+            X: IsConnected = Modbus.WriteBit(Val);
            if(Global.StatusIO == StatusIO.ErrWrite)
             {
                 await Task.Delay(50);
                 Global.StatusIO = StatusIO.Writing;
                 goto X;
             }
-           
-           
+
+            CT.Stop();
+            CTMid = (float)CT.Elapsed.TotalMilliseconds;
+            if (CTMid > CTMax)
+                CTMax = CTMid;
+            if (CTMid < CTMin)
+                CTMin = CTMid;
             return IsConnected;
         }
     }
