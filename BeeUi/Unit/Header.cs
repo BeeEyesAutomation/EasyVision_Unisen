@@ -983,7 +983,18 @@ txtQrCode.Focus();
                         G.PLC.WriteOutPut();
                     }
                 }
+                if(G.IsRun&&G.IsCapOne)
+                {
+                    G.IsCapOne = false;
+                    G.PLC.SetOutPut(4, false);//Ready false
+                    G.PLC.SetOutPut(5, true); //Busy
+                    G.PLC.SetOutPut(6, true); //Busy
+                    G.PLC.WriteOutPut();
+                    await Task.Delay(G.Config.delayTrigger);
+                    G.EditTool.View.Cap(false);
+                    IsWaitingRead = true;
 
+                }    
                 if(G.IsRun&& G.Config.IsExternal)
                 {
                     if (G.PLC.valueInput[0] == 1 && G.PLC.valueOutput[6] == 0)

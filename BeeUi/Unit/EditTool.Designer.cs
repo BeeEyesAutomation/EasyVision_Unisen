@@ -417,7 +417,7 @@ namespace BeeUi
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(130, 37);
             this.label4.TabIndex = 3;
-            this.label4.Text = "ver Tiger 2.0";
+            this.label4.Text = "ver Tiger 2.1";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // pictureBox1

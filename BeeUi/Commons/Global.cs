@@ -46,7 +46,7 @@ namespace BeeUi
         public static SettingPLC SettingPLC = new SettingPLC();
        public static PLC PLC = new PLC();
         public static Step Step = Step.Run;
-        
+        public static bool IsCapOne = false;
         public static System.Windows.Forms.ListBox listProgram = new System.Windows.Forms.ListBox ();
        public static float Scale=1,AngleOrigin;
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point ();
@@ -94,7 +94,7 @@ namespace BeeUi
        public static Tools tool ;
         public static EditTool EditTool ;
         public static bool IsDrawProcess = true;
-        public static bool IsByPassPLC = true;
+        public static bool IsByPassPLC = false;
         public static Color clTrack = (Color)new ColorConverter().ConvertFromString("#444444");
         public static Account account = new Account();
         public static InforBar InforBar = new InforBar();

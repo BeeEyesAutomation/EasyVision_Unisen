@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
@@ -33,8 +34,8 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
 
-      
-      
+
+        public int minNumMatch = 1;
         public int Index = -1;
         public String PathModel = "";
         public TypeOCR TypeOCR = TypeOCR.CPU;
@@ -325,7 +326,9 @@ namespace BeeCore
                         combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
                         rectRotates = combined.Select(b => b.Box).ToList();
                         listLabelResult = combined.Select(b => b.Label).ToList();
+                        listScore = combined.Select(b => b.Score).ToList();
                         matCrop.Dispose();
+                        raw.Dispose();
                     }
                     // result: tuple (boxes, scores, labels) từ Python
                     // e.Result = result;
@@ -346,6 +349,32 @@ namespace BeeCore
                 }
             }
 
+        }
+        int LevenshteinDistance(string s, string t)
+        {
+            int n = s.Length, m = t.Length;
+            var d = new int[n + 1, m + 1];
+
+            for (int i = 0; i <= n; i++) d[i, 0] = i;
+            for (int j = 0; j <= m; j++) d[0, j] = j;
+
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= m; j++)
+                {
+                    int cost = (s[i - 1] == t[j - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1,    // xóa
+                                 d[i, j - 1] + 1),   // chèn
+                                 d[i - 1, j - 1] + cost); // thay thế
+                }
+            }
+            return d[n, m];
+        }
+
+        bool IsFuzzyMatch(string a, string b, int maxEdits)
+        {
+            return LevenshteinDistance(a, b) <= maxEdits;
         }
         public void Complete()
         {
@@ -368,13 +397,8 @@ namespace BeeCore
                     if (Matching == "")
                         IsOK = true;
                     else
-                        if (Matching == Content)
-                    {
+                        IsOK = IsFuzzyMatch(Matching, Content, minNumMatch);
 
-                        IsOK = true;
-                    }
-                    else
-                        IsOK = false;
                     //  listContent = CompareStrings(listMatching, listContent);
 
                 }
@@ -388,6 +412,8 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                File.WriteAllText("ErCharp2.txt", ex.Message);
+                exMess = ex.Message;
                 // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
             }
         }

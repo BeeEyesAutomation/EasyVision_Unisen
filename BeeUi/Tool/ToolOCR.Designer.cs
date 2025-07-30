@@ -39,8 +39,8 @@
             this.txtAllow = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.numMatching = new BeeUi.Commons.CustomNumeric();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnReadThresh = new BeeUi.Common.RJButton();
             this.tabLabelResult = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSet = new BeeUi.Common.RJButton();
@@ -242,8 +242,8 @@
             this.tableLayoutPanel11.ColumnCount = 2;
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.49735F));
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.50265F));
+            this.tableLayoutPanel11.Controls.Add(this.numMatching, 1, 0);
             this.tableLayoutPanel11.Controls.Add(this.label4, 0, 0);
-            this.tableLayoutPanel11.Controls.Add(this.btnReadThresh, 1, 0);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel11.Location = new System.Drawing.Point(8, 335);
             this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(8, 5, 3, 3);
@@ -252,6 +252,22 @@
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel11.Size = new System.Drawing.Size(375, 49);
             this.tableLayoutPanel11.TabIndex = 51;
+            // 
+            // numMatching
+            // 
+            this.numMatching.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.numMatching.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numMatching.Location = new System.Drawing.Point(204, 0);
+            this.numMatching.Margin = new System.Windows.Forms.Padding(0);
+            this.numMatching.Maxnimum = 10;
+            this.numMatching.Minimum = 0;
+            this.numMatching.Name = "numMatching";
+            this.numMatching.Size = new System.Drawing.Size(171, 49);
+            this.numMatching.Step = 1;
+            this.numMatching.TabIndex = 46;
+            this.numMatching.Value = 1;
+            this.numMatching.ValueChanged += new System.EventHandler(this.numMatching_ValueChanged);
+            this.numMatching.Load += new System.EventHandler(this.numMatching_Load);
             // 
             // label4
             // 
@@ -263,38 +279,8 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(204, 49);
             this.label4.TabIndex = 45;
-            this.label4.Text = "Set Temp";
+            this.label4.Text = "Number Char Error";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnReadThresh
-            // 
-            this.btnReadThresh.BackColor = System.Drawing.Color.Transparent;
-            this.btnReadThresh.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnReadThresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnReadThresh.BorderColor = System.Drawing.Color.Transparent;
-            this.btnReadThresh.BorderRadius = 10;
-            this.btnReadThresh.BorderSize = 1;
-            this.btnReadThresh.ButtonImage = null;
-            this.btnReadThresh.Corner = BeeCore.Corner.None;
-            this.btnReadThresh.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnReadThresh.FlatAppearance.BorderSize = 0;
-            this.btnReadThresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnReadThresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReadThresh.ForeColor = System.Drawing.Color.Black;
-            this.btnReadThresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReadThresh.IsCLick = false;
-            this.btnReadThresh.IsNotChange = false;
-            this.btnReadThresh.IsRect = false;
-            this.btnReadThresh.IsUnGroup = true;
-            this.btnReadThresh.Location = new System.Drawing.Point(207, 3);
-            this.btnReadThresh.Name = "btnReadThresh";
-            this.btnReadThresh.Size = new System.Drawing.Size(165, 43);
-            this.btnReadThresh.TabIndex = 2;
-            this.btnReadThresh.Text = "Read Threshold";
-            this.btnReadThresh.TextColor = System.Drawing.Color.Black;
-            this.btnReadThresh.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnReadThresh.UseVisualStyleBackColor = false;
-            this.btnReadThresh.Visible = false;
             // 
             // tabLabelResult
             // 
@@ -1201,10 +1187,10 @@
         private Commons.CustomNumeric numLimtArea;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private System.Windows.Forms.Label label4;
-        private Common.RJButton btnReadThresh;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
         private Common.RJButton btnApply;
         private System.Windows.Forms.TextBox txtAllow;
         private System.Windows.Forms.Label label10;
+        private Commons.CustomNumeric numMatching;
     }
 }

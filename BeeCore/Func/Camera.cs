@@ -305,7 +305,7 @@ namespace BeeCore
 
                                 FrameRate = G.CCD.FPS;
                                 BeeCore.Common.Cycle = G.CCD.cycle;
-                                BeeCore.Common.matRaw = raw;
+                                BeeCore.Common.matRaw = raw.Clone();
                             }
                             //    return new Mat();
 
@@ -313,16 +313,16 @@ namespace BeeCore
                         }
                         finally
                         {
-                            //raw.Release();
-                            // Giải phóng bộ nhớ sau khi sử dụng
-                           // if(intPtr!=null)
-                         //  Marshal.FreeHGlobal(intPtr);
+                            raw.Release();
+                           // Giải phóng bộ nhớ sau khi sử dụng
+                            if (intPtr != null)
+                                Marshal.FreeHGlobal(intPtr);
                         }
                         break;
                     case TypeCamera.BaslerGigE:
                         if (Common.matRaw != null)
                             if (!Common.matRaw.Empty())
-                                Common.matRaw.Dispose();
+                                Common.matRaw.Release();
                         //if (IsHist)
                         //    G.CCD.ReadRaw(true);
                         //else

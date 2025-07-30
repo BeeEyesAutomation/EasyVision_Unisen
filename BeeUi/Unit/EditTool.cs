@@ -87,7 +87,7 @@ namespace BeeUi
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                         //   MessageBox.Show(ex.Message);
                         }
                         break;
                     case Step.Step1:
@@ -211,7 +211,7 @@ namespace BeeUi
             
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+              //  MessageBox.Show(ex.Message);
             }
         
         }

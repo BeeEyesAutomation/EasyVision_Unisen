@@ -130,7 +130,7 @@ namespace BeeUi.Tool
          
             G.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
-           
+             numMatching.Value= Propety.minNumMatch;
             trackScore.Value =Propety.Score;
             numScore.Value = Propety.Score;
             btnEnLimitArea.IsCLick = Propety.IsEnLimitArea ;
@@ -257,8 +257,13 @@ namespace BeeUi.Tool
                 String sContent = (int)(Propety.Index + 1) + "." + G.PropetyTools[Propety.Index].Name;
                 Draws.Box1Label(gc, rotA._rect, sContent, G.fontTool, brushText, cl);
                 int i = 0;
+               
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
+                {
+                   // MessageBox.Show(Propety.listLabelResult.Count()+"-" + Propety.rectRotates.Count());
                     return gc;
+                }    
+                  
                 foreach (RectRotate rot in Propety.rectRotates)
                 {
                     mat = new Matrix();
@@ -325,7 +330,8 @@ namespace BeeUi.Tool
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                File.WriteAllText("ErCharp4.txt", ex.Message);
+                //  MessageBox.Show(ex.Message);
             }
             return gc;
         }
@@ -934,6 +940,16 @@ namespace BeeUi.Tool
         private void btnApply_Click(object sender, EventArgs e)
         {
             Propety.sAllow = txtAllow.Text;
+        }
+
+        private void numMatching_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numMatching_ValueChanged(object sender, EventArgs e)
+        {
+            Propety.minNumMatch = numMatching.Value;
         }
     }
 }

@@ -31,8 +31,8 @@ namespace BeeUi.Common
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             System.Windows.Forms.Timer tmOutAlive;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
             this.txtQrCode = new System.Windows.Forms.TextBox();
@@ -74,6 +74,11 @@ namespace BeeUi.Common
             this.Layout.SuspendLayout();
             this.pModel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tmOutAlive
+            // 
+            tmOutAlive.Interval = 500;
+            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // workConnect
             // 
@@ -450,23 +455,18 @@ namespace BeeUi.Common
             // 
             // tmReadPLC
             // 
-            this.tmReadPLC.Interval = 15;
+            this.tmReadPLC.Interval = 30;
             this.tmReadPLC.Tick += new System.EventHandler(this.tmReadPLC_Tick);
             // 
             // tmReConnectPLC
             // 
-            this.tmReConnectPLC.Interval = 300;
+            this.tmReConnectPLC.Interval = 2000;
             this.tmReConnectPLC.Tick += new System.EventHandler(this.tmReConnectPLC_Tick);
             // 
             // workReConnect
             // 
             this.workReConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReConnect_DoWork);
             this.workReConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReConnect_RunWorkerCompleted);
-            // 
-            // tmOutAlive
-            // 
-            tmOutAlive.Interval = 500;
-            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // tmIninitial
             // 
