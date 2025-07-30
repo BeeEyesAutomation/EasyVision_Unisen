@@ -141,6 +141,13 @@ namespace BeeInterface
             this.label47 = new System.Windows.Forms.Label();
             this.DO0 = new BeeInterface.RJButton();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.lbMax = new System.Windows.Forms.Label();
+            this.lbMid = new System.Windows.Forms.Label();
+            this.lbmin = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.btnClear = new BeeInterface.RJButton();
             this.txtLog1 = new System.Windows.Forms.TextBox();
             this.StatusIObtn = new BeeInterface.RJButton();
@@ -202,13 +209,6 @@ namespace BeeInterface
             this.tmConnect = new System.Windows.Forms.Timer(this.components);
             this.tmRead = new System.Windows.Forms.Timer(this.components);
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lbmin = new System.Windows.Forms.Label();
-            this.lbMid = new System.Windows.Forms.Label();
-            this.lbMax = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
@@ -2531,6 +2531,91 @@ namespace BeeInterface
             this.tabPage7.Text = "SerialPort";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.BackColor = System.Drawing.Color.Transparent;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(310, 282);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(32, 16);
+            this.label29.TabIndex = 82;
+            this.label29.Text = "Max";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.BackColor = System.Drawing.Color.Transparent;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(213, 282);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(29, 16);
+            this.label27.TabIndex = 81;
+            this.label27.Text = "Mid";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Transparent;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(118, 282);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(28, 16);
+            this.label25.TabIndex = 80;
+            this.label25.Text = "Min";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lbMax
+            // 
+            this.lbMax.BackColor = System.Drawing.Color.Transparent;
+            this.lbMax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMax.ForeColor = System.Drawing.Color.Red;
+            this.lbMax.Location = new System.Drawing.Point(288, 304);
+            this.lbMax.Name = "lbMax";
+            this.lbMax.Size = new System.Drawing.Size(81, 21);
+            this.lbMax.TabIndex = 79;
+            this.lbMax.Text = "00";
+            this.lbMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbMid
+            // 
+            this.lbMid.BackColor = System.Drawing.Color.Transparent;
+            this.lbMid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMid.Location = new System.Drawing.Point(191, 304);
+            this.lbMid.Name = "lbMid";
+            this.lbMid.Size = new System.Drawing.Size(81, 21);
+            this.lbMid.TabIndex = 78;
+            this.lbMid.Text = "00";
+            this.lbMid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbmin
+            // 
+            this.lbmin.BackColor = System.Drawing.Color.Transparent;
+            this.lbmin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbmin.ForeColor = System.Drawing.Color.Lime;
+            this.lbmin.Location = new System.Drawing.Point(94, 304);
+            this.lbmin.Name = "lbmin";
+            this.lbmin.Size = new System.Drawing.Size(81, 21);
+            this.lbmin.TabIndex = 77;
+            this.lbmin.Text = "00";
+            this.lbmin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(1, 282);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 43);
+            this.label4.TabIndex = 73;
+            this.label4.Text = "CT Read/Write";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -2733,7 +2818,9 @@ namespace BeeInterface
             this.cbBaurate.Items.AddRange(new object[] {
             "4800",
             "9600",
-            "115200"});
+            "115200",
+            "230400",
+            "256000"});
             this.cbBaurate.Location = new System.Drawing.Point(112, 44);
             this.cbBaurate.Name = "cbBaurate";
             this.cbBaurate.Size = new System.Drawing.Size(151, 32);
@@ -3505,91 +3592,6 @@ namespace BeeInterface
             // 
             this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
             this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
-            // 
-            // label4
-            // 
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(1, 282);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 43);
-            this.label4.TabIndex = 73;
-            this.label4.Text = "CT Read/Write";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lbmin
-            // 
-            this.lbmin.BackColor = System.Drawing.Color.Transparent;
-            this.lbmin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbmin.ForeColor = System.Drawing.Color.Lime;
-            this.lbmin.Location = new System.Drawing.Point(94, 304);
-            this.lbmin.Name = "lbmin";
-            this.lbmin.Size = new System.Drawing.Size(81, 21);
-            this.lbmin.TabIndex = 77;
-            this.lbmin.Text = "00";
-            this.lbmin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbMid
-            // 
-            this.lbMid.BackColor = System.Drawing.Color.Transparent;
-            this.lbMid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMid.Location = new System.Drawing.Point(191, 304);
-            this.lbMid.Name = "lbMid";
-            this.lbMid.Size = new System.Drawing.Size(81, 21);
-            this.lbMid.TabIndex = 78;
-            this.lbMid.Text = "00";
-            this.lbMid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbMax
-            // 
-            this.lbMax.BackColor = System.Drawing.Color.Transparent;
-            this.lbMax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMax.ForeColor = System.Drawing.Color.Red;
-            this.lbMax.Location = new System.Drawing.Point(288, 304);
-            this.lbMax.Name = "lbMax";
-            this.lbMax.Size = new System.Drawing.Size(81, 21);
-            this.lbMax.TabIndex = 79;
-            this.lbMax.Text = "00";
-            this.lbMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(118, 282);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(28, 16);
-            this.label25.TabIndex = 80;
-            this.label25.Text = "Min";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(213, 282);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(29, 16);
-            this.label27.TabIndex = 81;
-            this.label27.Text = "Mid";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.BackColor = System.Drawing.Color.Transparent;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(310, 282);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(32, 16);
-            this.label29.TabIndex = 82;
-            this.label29.Text = "Max";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // SettingPLC
             // 

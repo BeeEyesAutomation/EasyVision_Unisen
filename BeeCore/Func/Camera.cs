@@ -154,9 +154,9 @@ namespace BeeCore
             }
         }
 
-
-
-        public  bool SetExpo()
+        public int TypeCCD = -1;
+        public String Err = "";
+        public async Task<  bool> SetExpo()
         {
             try
             {
@@ -165,7 +165,18 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
+                        TypeCCD =  CCDPlus.GetTypeCCD(IndexCCD);
+                        switch(TypeCCD)
+                        {
+                            case 0://Basler
+                                Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value), cancel.Token);
+                               
+                                break;
+                             case 1://Hik
+                                //Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
+
+                                break;
+                        }
                             return true;
                         break;
                     //case TypeCamera.TinyIV:
@@ -175,11 +186,12 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                Err += ex.Message;
                 return false;// ex.Message;
             }
             return false;// Result.Success.ToString();
         }
-        public  bool GetExpo()
+        public async Task< bool> GetExpo()
         {
             try
             {
@@ -188,8 +200,19 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        return CCDPlus.GetPara(IndexCCD, "ExposureTimeRaw",ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value);
-                     
+                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "ExposureTimeRaw", ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value), cancel.Token);
+                               
+                                break;
+                            case 1://Hik
+                                //Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
+
+                                break;
+                        }
+                       
                         break;
                     //case TypeCamera.TinyIV:
 
@@ -199,11 +222,12 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+             MessageBox.Show( ex.Message);
                 return false;
             }
             return false;
         }
-        public  bool SetGain()
+        public async Task< bool> SetGain()
         {
             try
             {
@@ -212,8 +236,18 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        Para.Gain.Value= CCDPlus.SetPara(IndexCCD, "GainRaw", Para.Gain.Value);
-                        break;
+                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                Para.Gain.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "GainRaw", Para.Gain.Value), cancel.Token);
+
+                                break;
+                            case 1://Hik
+                                
+                                break;
+                        }
+                      break;
                     case TypeCamera.TinyIV:
                        // HEROJE.SetExposure(value);
                         break;
@@ -221,11 +255,14 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                Err += ex.Message;
                 return false;// ex.Message;
             }
             return true;// Result.Success.ToString();
         }
-        public bool SetShift()
+        [NonSerialized]
+        CancellationTokenSource cancel = new CancellationTokenSource(2000);
+        public async Task<bool> SetShift()
         {
             try
             {
@@ -234,7 +271,17 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
+                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                Para.Shift.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value), cancel.Token);
+                              //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
+                                break;
+                            case 1://Hik
+
+                                break;
+                        }
                         break;
                     case TypeCamera.TinyIV:
                         // HEROJE.SetExposure(value);
@@ -243,11 +290,12 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                Err += ex.Message;
                 return false;// ex.Message;
             }
             return true;// Result.Success.ToString();
         }
-        public bool GetShift()
+        public async Task< bool> GetShift()
         {
             try
             {
@@ -256,8 +304,18 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        return CCDPlus.GetPara(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value);
+                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value), cancel.Token);
 
+                                break;
+                            case 1://Hik
+
+                                break;
+                        }
+                      
                         return true;
                         //if (value > 1000)
                         //{
@@ -271,12 +329,13 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 return false;
             }
             return false;
         }
         public ParaCamera Para = new ParaCamera();
-        public  bool GetGain()
+        public async Task< bool> GetGain()
         {
             try
             {
@@ -285,8 +344,17 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        return CCDPlus.GetPara(IndexCCD, "GainRaw", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value);
+                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        switch (TypeCCD)
+                        {
+                            case 0://Basler
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "GainRaw", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
+                                break;
+                            case 1://Hik
 
+                                break;
+                        }
+                        
                         return true;
                         //if (value > 1000)
                         //{
@@ -300,6 +368,7 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 return false;
             }
             return false;

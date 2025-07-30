@@ -48,7 +48,7 @@ namespace CvPlus {
 	public:bool	Connect( int indeCCD, System::String^ NameCCD);
 	public:float SetPara(int indexCCD, System::String^ Namepara, float Value);
 	public:bool GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step,  float% current);
-	
+	public:int GetTypeCCD(int indexCCD);
 	public:void	DestroyAll(int indexCCD);
 	public:void	ShowSetting();
 	public:void CalHist();

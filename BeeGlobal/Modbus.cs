@@ -48,7 +48,9 @@ namespace BeeGlobal
                 modbusClient.UnitIdentifier = SlaveId;
                 modbusClient.StopBits = StopBits.One;
                 modbusClient.Parity = Parity.None;
-
+                modbusClient.ConnectionTimeout = 1000; // Timeout khi kết nối (ms)
+              //  modbusClient.ReceiveTimeout = 2000;    // Timeout khi đọc dữ liệu (ms)
+              //  modbusClient.SendTimeout = 2000;       // Timeout khi ghi dữ liệu (ms)
                 modbusClient.Connect();
                 if (modbusClient.Connected)
                 {
@@ -215,48 +217,154 @@ namespace BeeGlobal
                 return -1;
             }
         }
-        public static  int[] ReadBit(int startAddress)
+        private static int[] ReadRegisterOnDedicatedThread(int startAddress, CancellationToken token)
         {
-            int[] values =new  int[16];
+            int[] result = null;
+            Exception threadEx = null;
+
+            var done = new ManualResetEvent(false);
+
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    result = modbusClient.ReadHoldingRegisters(startAddress, 1);
+                }
+                catch (Exception ex)
+                {
+                    threadEx = ex;
+                }
+                finally
+                {
+                    done.Set();
+                }
+            });
+
+            thread.Priority = ThreadPriority.Highest; // Ưu tiên cao
+            thread.IsBackground = true;
+            thread.Start();
+
+            // Chờ với timeout
+            if (!done.WaitOne(2000)) // timeout 2 giây
+            {
+                throw new TimeoutException("Timeout khi đọc Modbus");
+            }
+
+            if (threadEx != null) throw threadEx;
+            return result;
+        }
+
+        public static async Task<int[]> ReadBit(int startAddress)
+        {
+            int[] values = new int[16];
+            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
 
             try
             {
-                int[] val = modbusClient.ReadHoldingRegisters(startAddress, 1);
+              
+                IsReading = true;
+                // Đọc 1 thanh ghi Modbus trong Task
+                //int[] val = await Task.Run(() => modbusClient.ReadHoldingRegisters(startAddress, 1), cts.Token);
+                int[] val = await Task.Run(() =>
+                {
+                    return ReadRegisterOnDedicatedThread(startAddress, cts.Token);
+                });
                 ushort registerValue = (ushort)val[0];
+
                 // Lấy từng bit
                 for (int i = 15; i >= 0; i--)  // bit 15 là MSB, bit 0 là LSB
                 {
-                    int val2 = (registerValue >> i) & 1; ;
-                    values[i] = val2;
-
+                    values[i] = (registerValue >> i) & 1;
                 }
-
+                IsReading = false;
+            }
+            catch (OperationCanceledException)
+            {
+               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                Global.ParaCommon.Comunication.IO.LogError("Read - Timeout sau 2 giây");
+                Global.StatusIO = StatusIO.ErrRead;
             }
             catch (Exception ex)
             {
-                Global.ParaCommon.Comunication.IO.IsConnected = false;
-                Global.ParaCommon.Comunication.IO.LogError("ErrRead-"+ex.Message);
+               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                Global.ParaCommon.Comunication.IO.LogError("Read - " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
-                // return i;
             }
+
             return values;
         }
-        public static bool WriteBit(int value)
+      public  static bool IsReading = false,IsWrite;
+        private static void WriteRegisterOnDedicatedThread(int address, int value)
         {
-            // int[] values = new int[16];
-            try
+            Exception threadEx = null;
+            var done = new ManualResetEvent(false);
+
+            var thread = new Thread(() =>
             {
-                modbusClient.WriteSingleRegister(2, value);
+                try
+                {
+                    modbusClient.WriteSingleRegister(address, value);
+                }
+                catch (Exception ex)
+                {
+                    threadEx = ex;
+                }
+                finally
+                {
+                    done.Set();
+                }
+            });
 
+            thread.Priority = ThreadPriority.Highest;
+            thread.IsBackground = true;
+            thread.Start();
 
+            if (!done.WaitOne(2000)) // timeout 2 giây
+                throw new TimeoutException("Timeout khi ghi Modbus");
+
+            if (threadEx != null) throw threadEx;
+        }
+        public static async Task<bool> WriteBit(int value)
+        {
+            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
+
+            try
+            {if (IsWrite) return true;
+                IsWrite = true;
+                // Đọc 1 thanh ghi Modbus trong Task
+                await Task.Run(() => WriteRegisterOnDedicatedThread(2, value), cts.Token);
+             //   await Task.Run(() => modbusClient.WriteSingleRegister(2, value), cts.Token);
+                IsWrite = false;
+
+            }
+            catch (OperationCanceledException op)
+            {
+               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+
+                Global.StatusIO = StatusIO.ErrWrite;
+                Global.ParaCommon.Comunication.IO.LogError("Write-" + op.Message);
             }
             catch (Exception ex)
             {
-               
+                //  Global.ParaCommon.Comunication.IO.IsConnected = false;
+
                 Global.StatusIO = StatusIO.ErrWrite;
-                Global.ParaCommon.Comunication.IO.LogError("ErrWrite-"+ex.Message);
-                // return i;
+                Global.ParaCommon.Comunication.IO.LogError("Write-" + ex.Message);
             }
+            // int[] values = new int[16];
+            //try
+            //{
+            //    modbusClient.WriteSingleRegister(2, value);
+
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    Global.StatusIO = StatusIO.ErrWrite;
+            //    Global.ParaCommon.Comunication.IO.LogError("ErrWrite-"+ex.Message);
+            //    // return i;
+            //}
             return true;
         }
         public static int[] ReadHolding(int startAddress, int lennght = 16)

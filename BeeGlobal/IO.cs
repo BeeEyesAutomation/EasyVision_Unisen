@@ -161,7 +161,7 @@ namespace BeeGlobal
                 return false;
           
         }
-        public bool Connect(  )
+        public async Task<bool> Connect(  )
         {
 
             try
@@ -181,7 +181,7 @@ namespace BeeGlobal
                 
                 Arrange();
                 if (IsConnected) 
-                    valueInput=Modbus.ReadBit(1);
+                    valueInput=await Modbus.ReadBit(1);
                 if (valueInput.Length < 16)
                 {
                     IsConnected = false;
@@ -241,10 +241,10 @@ namespace BeeGlobal
         public  async Task Read()
         {
             if (!IsConnected) return ;
-
-            CT.Restart();
-
-             valueInput=Modbus.ReadBit(1);
+            if (Modbus.IsReading) return;
+                CT.Restart();
+           
+             valueInput=await Modbus.ReadBit(1);
             CT.Stop();
             CTMid =(float) CT.Elapsed.TotalMilliseconds;
            if(CTMid>CTMax)
@@ -296,6 +296,7 @@ namespace BeeGlobal
         public async void WriteIO(IO_Processing Processing)
         {   if (!IsConnected) return;
             if (IsWait) return;
+            if (Modbus.IsWrite) return;
             switch (Processing )
             {
                 case IO_Processing.Trigger:
@@ -511,7 +512,7 @@ namespace BeeGlobal
 
             }
             CT.Restart();
-            X: IsConnected = Modbus.WriteBit(Val);
+            X: IsConnected =await Modbus.WriteBit(Val);
            if(Global.StatusIO == StatusIO.ErrWrite)
             {
                 await Task.Delay(50);

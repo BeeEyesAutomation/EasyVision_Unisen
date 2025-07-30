@@ -71,6 +71,7 @@ namespace BeeGlobal
     {
         NotConnect,
         Reading,
+        
         Writing, ErrRead,ErrWrite
     }
     public enum MethordEdge

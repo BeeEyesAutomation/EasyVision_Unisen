@@ -554,9 +554,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
       
 
       
-        private void btnConnect_Click(object sender, EventArgs e)
+        private async void btnConnect_Click(object sender, EventArgs e)
         {
-           Global.ParaCommon.Comunication.IO.Connect();
+         await  Global.ParaCommon.Comunication.IO.Connect();
         
         }
        
@@ -611,9 +611,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             Global.ParaCommon.Comunication.IO.SlaveID =(byte) slaveID.Value;
         }
 
-        private void btnConectIO_Click(object sender, EventArgs e)
+        private async void btnConectIO_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.IO.Connect();
+           await Global.ParaCommon.Comunication.IO.Connect();
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 btnConectIO.Text = "Connected";
@@ -1160,7 +1160,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             tmConnect.Enabled = false;
 
             if (Global.ParaCommon.Comunication.IO.IsBypass) return;
-            Global.ParaCommon.Comunication.IO.Connect();
+         await   Global.ParaCommon.Comunication.IO.Connect();
 
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
@@ -1179,7 +1179,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
               //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
                 if (!Global.ParaCommon.Comunication.IO.IsBypass)
                 {
-                    Global.ParaCommon.Comunication.IO.Connect();
+                  await  Global.ParaCommon.Comunication.IO.Connect();
                     if (Global.ParaCommon.Comunication.IO.IsConnected)
                         tmRead.Enabled = true;
                     else

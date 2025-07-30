@@ -629,6 +629,10 @@ System::String^ CCD::ScanCCD()
 //	}
 //	return false;
 //}
+int CCD::GetTypeCCD(int indexCCD)
+{
+	return listTypeCCD[indexCCD];
+}
 float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 {
 	if (m_pcMyCamera[indexCCD] == nullptr)
