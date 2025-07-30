@@ -29,6 +29,8 @@ namespace BeeInterface
                 if (_Value != value)
                 {
                     _Value = value;
+                    if (Value > _Max) Value = _Max;
+                    if (Value < _Min) Value = _Min;
                     Track.Value = _Value;
                     Num.Value = _Value;
                     ValueChanged?.Invoke(_Value); // Gọi event
@@ -42,7 +44,7 @@ namespace BeeInterface
             set
             {
                 _Min = value;
-                if (Value < _Min) Value = _Min;
+              
                 Track.Min = _Min;
                 Num.Minimum = _Min;
             }
@@ -54,7 +56,7 @@ namespace BeeInterface
             set
             {
                 _Max = value;
-                if (Value > _Max) Value = _Max;
+               
                 Track.Max = _Max;
                 Num.Maxnimum = _Max;
             }

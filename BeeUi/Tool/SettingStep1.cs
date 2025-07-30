@@ -81,14 +81,16 @@ namespace BeeUi.Tool
         private async void trackExposure_ValueChanged(float obj)
         {
             //  trackExposure.Value= trackExposure.Value - (trackExposure.Value % trackExposure.Step);
+            if (trackExposure.Value == BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value) 
+                return;
             BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value = (int)trackExposure.Value;
-         await  BeeCore.Common.listCamera[Global.IndexChoose].SetExpo();
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetExpo();
             trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
             //  numExposure.Value = Global.ParaCommon.Exposure;
 
         }
 
-      
+
 
         private void btnBoth_Click(object sender, EventArgs e)
         {
@@ -274,19 +276,27 @@ namespace BeeUi.Tool
       
         private async void workReadPara_DoWork(object sender, DoWorkEventArgs e)
         {
-    
-
-        }
-
-        private async void workReadPara_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
             await BeeCore.Common.listCamera[Global.IndexChoose].GetExpo();
             await BeeCore.Common.listCamera[Global.IndexChoose].GetGain();
             await BeeCore.Common.listCamera[Global.IndexChoose].GetShift();
+
+        }
+
+        private  void workReadPara_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+           
             trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
             trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
             if (trackExposure.Max > 20000)
+            {
+               
                 trackExposure.Max = 20000;
+            }
+            if(BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value>20000)
+            {
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value = 20000;
+            }
+
             trackExposure.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step;
             trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
 
@@ -300,7 +310,6 @@ namespace BeeUi.Tool
             trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
             trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
             trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
-            lbErr.Text= BeeCore.Common.listCamera[Global.IndexChoose].TypeCCD+"-"+BeeCore.Common.listCamera[Global.IndexChoose].Err;
-        }
+            }
     }
 }

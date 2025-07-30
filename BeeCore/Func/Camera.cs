@@ -103,6 +103,21 @@ namespace BeeCore
             //BeeCore.CCDPlus.colCCD = Convert.ToInt32(sp2[0]);
             //BeeCore.CCDPlus.rowCCD = Convert.ToInt32(sp2[1]);
             Mat raw = new Mat();
+            String[] sp = NameCCD.Split('$');
+            if (sp.Length > 1)
+            {
+                String Typ = sp[sp.Length - 2];
+                if (Typ.Contains("Basler"))
+                {
+                    TypeCCD = 0;
+                }
+                else if (Typ.Contains("Hik"))
+                {
+                    TypeCCD = 1;
+                }
+                else
+                    TypeCCD = -1;
+            }
             if (CCDPlus.Connect(IndexCCD, NameCCD))
             {
                 if (matRaw != null)
@@ -112,10 +127,10 @@ namespace BeeCore
                 //    CCDPlus.ReadRaw(true);
                 //else
                 Read();
-            
+
                 if (Global.ParaCommon._Exposure != 0)
                     CCDPlus.Exposure = Global.ParaCommon._Exposure;
-        
+
                 return true;
             }
             return false;
@@ -161,14 +176,15 @@ namespace BeeCore
             try
             {
 
-
+                
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD =  CCDPlus.GetTypeCCD(IndexCCD);
-                        switch(TypeCCD)
+                        cancel = new CancellationTokenSource(2000);
+                        switch (TypeCCD)
                         {
                             case 0://Basler
+
                                 Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value), cancel.Token);
                                
                                 break;
@@ -200,7 +216,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -222,7 +238,7 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
-             MessageBox.Show( ex.Message);
+           
                 return false;
             }
             return false;
@@ -236,7 +252,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -271,7 +287,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -304,7 +320,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -329,7 +345,7 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+               
                 return false;
             }
             return false;
@@ -344,7 +360,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        TypeCCD = CCDPlus.GetTypeCCD(IndexCCD);
+                        cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -368,7 +384,7 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                
                 return false;
             }
             return false;

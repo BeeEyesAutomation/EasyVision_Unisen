@@ -52,7 +52,6 @@ namespace BeeUi.Tool
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.trackExposure = new BeeInterface.AdjustBar();
-            this.lbErr = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnNextStep = new BeeInterface.RJButton();
@@ -99,28 +98,26 @@ namespace BeeUi.Tool
             // 
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 15);
-            this.tableLayout1.Controls.Add(this.label13, 0, 14);
-            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 13);
-            this.tableLayout1.Controls.Add(this.label12, 0, 12);
-            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 11);
-            this.tableLayout1.Controls.Add(this.label11, 0, 10);
-            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 9);
-            this.tableLayout1.Controls.Add(this.label10, 0, 8);
-            this.tableLayout1.Controls.Add(this.label5, 0, 7);
-            this.tableLayout1.Controls.Add(this.trackShift, 0, 6);
-            this.tableLayout1.Controls.Add(this.label3, 0, 5);
-            this.tableLayout1.Controls.Add(this.trackGain, 0, 4);
-            this.tableLayout1.Controls.Add(this.label2, 0, 3);
-            this.tableLayout1.Controls.Add(this.label4, 0, 1);
-            this.tableLayout1.Controls.Add(this.trackExposure, 0, 2);
-            this.tableLayout1.Controls.Add(this.lbErr, 0, 0);
+            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 14);
+            this.tableLayout1.Controls.Add(this.label13, 0, 13);
+            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 12);
+            this.tableLayout1.Controls.Add(this.label12, 0, 11);
+            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 10);
+            this.tableLayout1.Controls.Add(this.label11, 0, 9);
+            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 8);
+            this.tableLayout1.Controls.Add(this.label10, 0, 7);
+            this.tableLayout1.Controls.Add(this.label5, 0, 6);
+            this.tableLayout1.Controls.Add(this.trackShift, 0, 5);
+            this.tableLayout1.Controls.Add(this.label3, 0, 4);
+            this.tableLayout1.Controls.Add(this.trackGain, 0, 3);
+            this.tableLayout1.Controls.Add(this.label2, 0, 2);
+            this.tableLayout1.Controls.Add(this.label4, 0, 0);
+            this.tableLayout1.Controls.Add(this.trackExposure, 0, 1);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayout1.Location = new System.Drawing.Point(3, 3);
             this.tableLayout1.Name = "tableLayout1";
-            this.tableLayout1.RowCount = 17;
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayout1.RowCount = 16;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -137,6 +134,7 @@ namespace BeeUi.Tool
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayout1.Size = new System.Drawing.Size(380, 719);
             this.tableLayout1.TabIndex = 52;
             // 
@@ -145,7 +143,7 @@ namespace BeeUi.Tool
             this.AdjOffSetY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjOffSetY.Location = new System.Drawing.Point(20, 677);
+            this.AdjOffSetY.Location = new System.Drawing.Point(20, 627);
             this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.AdjOffSetY.Max = 100F;
             this.AdjOffSetY.Min = 0F;
@@ -163,7 +161,7 @@ namespace BeeUi.Tool
             this.label13.BackColor = System.Drawing.Color.Transparent;
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(15, 646);
+            this.label13.Location = new System.Drawing.Point(15, 596);
             this.label13.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(362, 25);
@@ -176,7 +174,7 @@ namespace BeeUi.Tool
             this.AdjOffsetX.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjOffsetX.Location = new System.Drawing.Point(20, 584);
+            this.AdjOffsetX.Location = new System.Drawing.Point(20, 534);
             this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.AdjOffsetX.Max = 100F;
             this.AdjOffsetX.Min = 0F;
@@ -185,7 +183,6 @@ namespace BeeUi.Tool
             this.AdjOffsetX.Step = 1F;
             this.AdjOffsetX.TabIndex = 76;
             this.AdjOffsetX.Value = 1F;
-            this.AdjOffsetX.Visible = false;
             this.AdjOffsetX.ValueChanged += new System.Action<float>(this.AdjOffsetX_ValueChanged);
             // 
             // label12
@@ -194,7 +191,7 @@ namespace BeeUi.Tool
             this.label12.BackColor = System.Drawing.Color.Transparent;
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(15, 553);
+            this.label12.Location = new System.Drawing.Point(15, 503);
             this.label12.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(362, 25);
@@ -207,7 +204,7 @@ namespace BeeUi.Tool
             this.AdjHeight.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjHeight.Location = new System.Drawing.Point(20, 491);
+            this.AdjHeight.Location = new System.Drawing.Point(20, 441);
             this.AdjHeight.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.AdjHeight.Max = 100F;
             this.AdjHeight.Min = 0F;
@@ -216,7 +213,6 @@ namespace BeeUi.Tool
             this.AdjHeight.Step = 1F;
             this.AdjHeight.TabIndex = 74;
             this.AdjHeight.Value = 1F;
-            this.AdjHeight.Visible = false;
             this.AdjHeight.ValueChanged += new System.Action<float>(this.AdjHeight_ValueChanged);
             // 
             // label11
@@ -225,7 +221,7 @@ namespace BeeUi.Tool
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(15, 460);
+            this.label11.Location = new System.Drawing.Point(15, 410);
             this.label11.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(362, 25);
@@ -238,7 +234,7 @@ namespace BeeUi.Tool
             this.AdjWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjWidth.Location = new System.Drawing.Point(20, 398);
+            this.AdjWidth.Location = new System.Drawing.Point(20, 348);
             this.AdjWidth.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.AdjWidth.Max = 100F;
             this.AdjWidth.Min = 0F;
@@ -247,7 +243,6 @@ namespace BeeUi.Tool
             this.AdjWidth.Step = 1F;
             this.AdjWidth.TabIndex = 72;
             this.AdjWidth.Value = 1F;
-            this.AdjWidth.Visible = false;
             this.AdjWidth.ValueChanged += new System.Action<float>(this.AdjWidth_ValueChanged);
             // 
             // label10
@@ -256,7 +251,7 @@ namespace BeeUi.Tool
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(15, 367);
+            this.label10.Location = new System.Drawing.Point(15, 317);
             this.label10.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(362, 25);
@@ -270,7 +265,7 @@ namespace BeeUi.Tool
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(0, 334);
+            this.label5.Location = new System.Drawing.Point(0, 284);
             this.label5.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(377, 25);
@@ -283,7 +278,7 @@ namespace BeeUi.Tool
             this.trackShift.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackShift.Location = new System.Drawing.Point(10, 272);
+            this.trackShift.Location = new System.Drawing.Point(10, 222);
             this.trackShift.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.trackShift.Max = 100F;
             this.trackShift.Min = 0F;
@@ -292,7 +287,6 @@ namespace BeeUi.Tool
             this.trackShift.Step = 1F;
             this.trackShift.TabIndex = 69;
             this.trackShift.Value = 1F;
-            this.trackShift.Visible = false;
             this.trackShift.ValueChanged += new System.Action<float>(this.trackShift_ValueChanged);
             // 
             // label3
@@ -301,7 +295,7 @@ namespace BeeUi.Tool
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(0, 241);
+            this.label3.Location = new System.Drawing.Point(0, 191);
             this.label3.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(377, 25);
@@ -314,7 +308,7 @@ namespace BeeUi.Tool
             this.trackGain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackGain.Location = new System.Drawing.Point(10, 179);
+            this.trackGain.Location = new System.Drawing.Point(10, 129);
             this.trackGain.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.trackGain.Max = 100F;
             this.trackGain.Min = 0F;
@@ -323,7 +317,6 @@ namespace BeeUi.Tool
             this.trackGain.Step = 1F;
             this.trackGain.TabIndex = 67;
             this.trackGain.Value = 1F;
-            this.trackGain.Visible = false;
             this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
             // 
             // label2
@@ -332,7 +325,7 @@ namespace BeeUi.Tool
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(0, 148);
+            this.label2.Location = new System.Drawing.Point(0, 98);
             this.label2.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(377, 25);
@@ -346,7 +339,7 @@ namespace BeeUi.Tool
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(0, 55);
+            this.label4.Location = new System.Drawing.Point(0, 5);
             this.label4.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(377, 25);
@@ -359,7 +352,7 @@ namespace BeeUi.Tool
             this.trackExposure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackExposure.Location = new System.Drawing.Point(10, 86);
+            this.trackExposure.Location = new System.Drawing.Point(10, 36);
             this.trackExposure.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.trackExposure.Max = 100F;
             this.trackExposure.Min = 0F;
@@ -368,17 +361,7 @@ namespace BeeUi.Tool
             this.trackExposure.Step = 1F;
             this.trackExposure.TabIndex = 64;
             this.trackExposure.Value = 1F;
-            this.trackExposure.Visible = false;
             this.trackExposure.ValueChanged += new System.Action<float>(this.trackExposure_ValueChanged);
-            // 
-            // lbErr
-            // 
-            this.lbErr.AutoSize = true;
-            this.lbErr.Location = new System.Drawing.Point(3, 0);
-            this.lbErr.Name = "lbErr";
-            this.lbErr.Size = new System.Drawing.Size(41, 13);
-            this.lbErr.TabIndex = 79;
-            this.lbErr.Text = "label14";
             // 
             // tableLayoutPanel11
             // 
@@ -1064,6 +1047,5 @@ namespace BeeUi.Tool
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.ComponentModel.BackgroundWorker workReadPara;
-        private System.Windows.Forms.Label lbErr;
     }
 }

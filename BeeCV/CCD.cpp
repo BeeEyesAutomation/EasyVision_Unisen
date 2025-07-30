@@ -352,8 +352,8 @@ System::String^ ScanHik()
 			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
-					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
@@ -361,16 +361,17 @@ System::String^ ScanHik()
 			else
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
-					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
-			}	memset(strUserName, 0, 256);
+			}
+			memset(strUserName, 0, 256);
 		
 			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, sManufacturerName, dwLenUserName);
 	
-			strMsg.Format(_T("%s"),pUserName);
+			strMsg.Format(_T("%s"),pUserName );
 		}
 		else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
 		{
@@ -792,8 +793,8 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
-					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
@@ -801,8 +802,8 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 			else
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
-					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
