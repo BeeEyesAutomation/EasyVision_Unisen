@@ -242,7 +242,7 @@ namespace BeeGlobal
         public  async Task Read()
         {
             if (!IsConnected) return ;
-           
+            numRead++;
                 CT.Restart();
             Global.StatusIO = StatusIO.Reading;
             valueInput =await Modbus.ReadBit(1);
@@ -261,6 +261,7 @@ namespace BeeGlobal
                       paraIOs[ix].Value = valueInput[i];
                   }
               });
+            numRead--;
             //for (int i = 0; i < valueInput.Length; i++)
             //{
             //    int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
@@ -269,8 +270,8 @@ namespace BeeGlobal
             //        paraIOs[ix].Value = valueInput[i];
             //    }
             //}
-          
-          
+
+
             //   valueOutput = Modbus.ReadBit(2);
             //  valueInput = new int[dataBytes.Length / 2];
 
@@ -299,19 +300,19 @@ namespace BeeGlobal
         }
         public async Task<bool>  WriteIO()
         {   if (!IsConnected) return false;
-        if(IO_Processing== IO_Processing.None)
+       
+            if(IO_Processing== IO_Processing.None)
             {
-                Global.StatusIO = StatusIO.Reading;
+              
                 return false;
             }
-            X:if (Global.StatusIO == StatusIO.Reading)
-            {
-                await Task.Delay(timeRead);
-                goto X;
-            }
+            //X:if (Global.StatusIO == StatusIO.Reading)
+            //{
+            //    await Task.Delay(timeRead);
+            //    goto X;
+            //}
             Global.StatusIO = StatusIO.Writing;
-           // await Task.Delay(timeRead);
-           
+
             switch (IO_Processing )
             {
                 case IO_Processing.Trigger:
@@ -415,6 +416,12 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsRun); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
+                    Global.StatusProcessing= StatusProcessing.None;
+                    IO_Processing = IO_Processing.None;
                     await WriteOutPut();
                    
                         break;
@@ -514,8 +521,41 @@ namespace BeeGlobal
             // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
            
         }
+        public int _numWrite = 0;
+        public int _numRead = 0;
+        [field: NonSerialized]
+        public event Action<int> numReadChanged;
+        public int numRead
+        {
+            get => _numRead;
+
+            set
+            {
+                if (_numRead != value)
+                {
+                    _numRead = value ;
+                    numReadChanged?.Invoke(_numRead);
+                }
+            }
+        }
+        [field: NonSerialized]
+        public event Action<int> numWriteChanged;
+        public int numWrite
+        {
+            get => _numWrite;
+
+            set
+            {
+                if (_numWrite != value)
+                {
+                    _numWrite = value;
+                    numWriteChanged?.Invoke(_numWrite);
+                }
+            }
+        }
         public async Task<bool> WriteOutPut()
         {
+            numWrite++;
             int[] bitArray = new int[16] {
                 0, 0, 0, 0, 0, 0, 0, 0,   // Bit 15 đến 8
                 0, 0, 0, 0, 0, 0, 0, 0   // Bit 7 đến 0
@@ -542,7 +582,7 @@ namespace BeeGlobal
                 Global.StatusIO = StatusIO.Writing;
                 goto X;
             }
-
+            numWrite--;
             CT.Stop();
             CTMid = (float)CT.Elapsed.TotalMilliseconds;
             if (CTMid > CTMax)

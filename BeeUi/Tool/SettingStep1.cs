@@ -166,8 +166,6 @@ namespace BeeUi.Tool
                 G.EditTool.View.btnTypeTrig.Text = "Trig External";
             }
         }
-
-      
         int valueDelyaOld = 0;
      
         private async void trackGain_ValueChanged(float obj)

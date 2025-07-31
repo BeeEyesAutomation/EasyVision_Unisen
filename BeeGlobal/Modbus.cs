@@ -258,7 +258,7 @@ namespace BeeGlobal
         public static async Task<int[]> ReadBit(int startAddress)
         {
             int[] values = new int[16];
-            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
+            var cts = new CancellationTokenSource(300); // Timeout 2 giây
 
             try
             {
@@ -279,16 +279,16 @@ namespace BeeGlobal
                 }
                 IsReading = false;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
                // Global.ParaCommon.Comunication.IO.IsConnected = false;
-                Global.ParaCommon.Comunication.IO.LogError("Read - Timeout sau 2 giây");
+                Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString() + " " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
             catch (Exception ex)
             {
                // Global.ParaCommon.Comunication.IO.IsConnected = false;
-                Global.ParaCommon.Comunication.IO.LogError("Read - " + ex.Message);
+                Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString()+" " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
 
@@ -327,7 +327,7 @@ namespace BeeGlobal
         }
         public static async Task<bool> WriteBit(int value)
         {
-            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
+            var cts = new CancellationTokenSource(300); // Timeout 2 giây
 
             try
             {
@@ -341,14 +341,14 @@ namespace BeeGlobal
                // Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
-                Global.ParaCommon.Comunication.IO.LogError("Write-" + op.Message);
+                Global.ParaCommon.Comunication.IO.LogError("Write- " +Global.StatusProcessing.ToString() +", "+ op.Message);
             }
             catch (Exception ex)
             {
                 //  Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
-                Global.ParaCommon.Comunication.IO.LogError("Write-" + ex.Message);
+                Global.ParaCommon.Comunication.IO.LogError("Write-" + Global.StatusProcessing.ToString() + ", " + ex.Message);
             }
             // int[] values = new int[16];
             //try

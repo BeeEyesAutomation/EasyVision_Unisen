@@ -507,6 +507,32 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnConectIO.Enabled = true;
                 btnBypass.Enabled = false;
             }
+            Global.ParaCommon.Comunication.IO.numReadChanged += IO_numReadChanged;
+            Global.ParaCommon.Comunication.IO.numWriteChanged += IO_numWriteChanged;
+        }
+
+        private void IO_numWriteChanged(int obj)
+        {
+            this.Invoke((Action)(() =>
+            {   if(obj>1)
+                {
+                    lbOut.Text = obj.ToString();
+                    lbOut.Refresh();
+                }
+                
+            }));
+        }
+
+        private void IO_numReadChanged(int obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                if (obj > 1)
+                {
+                    lbIN.Text = obj.ToString();
+                    lbIN.Refresh();
+                }
+            }));
         }
 
         private void IO_LogChanged(StringBuilder obj)
@@ -1076,54 +1102,39 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }    
                 if (!Global.Initialed) return;
             if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
-           
-              await  Global.ParaCommon.Comunication.IO.Read();
-
-            
-           
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
 
-
                 if (Global.StatusProcessing == StatusProcessing.SendResult)
                 {
-                    Global.StatusIO = StatusIO.Writing;
-                    //Global.StatusIO = StatusIO.Writing;
+
                     Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Result;
-                
-                   
+
+
                 }
-                //if (!Global.IsRun)
-                //if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
-                //{
-                //    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light);
-                //}
-
-
-
 
                 if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
                 {
                     if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
                     {
-                         Global.TriggerInternal = false;
+                        Global.TriggerInternal = false;
                         Global.StatusProcessing = StatusProcessing.Trigger;
                         Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Trigger;
 
-                       
-                       
-                     
+
+
+
                     }
 
                 }
-                if (Global.ParaCommon.Comunication.IO.IO_Processing!= IO_ProcessingOld)
+                if (Global.ParaCommon.Comunication.IO.IO_Processing != IO_ProcessingOld)
                 {
-                   
-                     await Global.ParaCommon.Comunication.IO.WriteIO();
+
+                    await Global.ParaCommon.Comunication.IO.WriteIO();
                     IO_ProcessingOld = Global.ParaCommon.Comunication.IO.IO_Processing;
 
                 }
-
+               
                 lbmin.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMin) + "";
                 lbMax.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMax) + "";
                 lbMid.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMid) + "";
@@ -1155,8 +1166,19 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 //}
 
 
-                //G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+                if (Global.StatusIO == StatusIO.Writing || Global.StatusIO == StatusIO.Reading) return;
+                await Global.ParaCommon.Comunication.IO.Read();
             }
+            else
+
+            {
+                Global.StatusProcessing = StatusProcessing.None;
+                Global.StatusIO = StatusIO.None;
+                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.None;
+            }
+            
+           
+        
 
 
         }
