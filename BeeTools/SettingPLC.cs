@@ -421,7 +421,6 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbO5.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbO6.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbO7.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            
             cbIn1.Text = paraIOs.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString();   // giữ nguyên text cũ nếu không tìm thấy
             cbIn2.Text = paraIOs.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbIn3.Text = paraIOs.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
@@ -1045,6 +1044,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             if(Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 tmRead.Enabled = false;
+                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.None;
                 Global.ParaCommon.Comunication.IO.Disconnect();
                 btnConectIO.Text = "No Connect";
             }
@@ -1080,26 +1080,27 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 //await Task.Delay(50);
                 Global.StatusIO = StatusIO.Reading;
             }
-            if (Global.StatusIO == StatusIO.Reading)
+            if (Global.StatusIO == StatusIO.Reading|| Global.StatusIO ==StatusIO.None)
             {
               await  Global.ParaCommon.Comunication.IO.Read();
 
             }
+          
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-               
+
 
                 if (Global.StatusProcessing == StatusProcessing.SendResult)
                 {
-                   
+
                     Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Result;
 
                 }
                 //if (!Global.IsRun)
-                    //if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
-                    //{
-                    //    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light);
-                    //}
+                //if (Global.ParaCommon.IsOnLight != Convert.ToBoolean(Global.ParaCommon.Comunication.IO.valueOutput[5]))
+                //{
+                //    Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Light);
+                //}
 
 
 
@@ -1111,7 +1112,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         await Task.Delay(Global.ParaCommon.Comunication.IO.timeRead);
                         Global.TriggerInternal = false;
                         Global.StatusProcessing = StatusProcessing.Trigger;
-                        Global.ParaCommon.Comunication.IO.IO_Processing=IO_Processing.Trigger;
+                        Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Trigger;
                         Global.StatusMode = StatusMode.Once;
                         await Task.Delay((int)Global.ParaCommon.Comunication.IO.DelayTrigger);
                         Global.StatusProcessing = StatusProcessing.Read;
@@ -1120,7 +1121,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     }
 
                 }
-                lbmin.Text =Math.Round( Global.ParaCommon.Comunication.IO.CTMin) + "";
+                lbmin.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMin) + "";
                 lbMax.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMax) + "";
                 lbMid.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMid) + "";
                 //if (btnEnQrCode.IsCLick)
@@ -1166,7 +1167,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Reset);
+                Global.StatusIO = StatusIO.None;
+                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Reset;
                 await Task.Delay(500);
                 tmRead.Enabled = true;
                 if (Global.ParaCommon.Comunication.IO.timeRead == 0) Global.ParaCommon.Comunication.IO.timeRead = 1;

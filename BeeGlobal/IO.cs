@@ -11,6 +11,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BeeGlobal
 {
@@ -243,8 +244,9 @@ namespace BeeGlobal
             if (!IsConnected) return ;
             if (Modbus.IsReading) return;
                 CT.Restart();
-           
-             valueInput=await Modbus.ReadBit(1);
+            Global.StatusIO = StatusIO.Reading;
+            valueInput =await Modbus.ReadBit(1);
+            Global.StatusIO = StatusIO.None;
             CT.Stop();
             CTMid =(float) CT.Elapsed.TotalMilliseconds;
            if(CTMid>CTMax)
@@ -296,13 +298,18 @@ namespace BeeGlobal
         }
         public async void WriteIO(IO_Processing Processing)
         {   if (!IsConnected) return;
-            if (IsWait) return;
-            if (Modbus.IsWrite) return;
+            X:if (Global.StatusIO == StatusIO.Reading|| Global.StatusIO == StatusIO.Writing)
+            {
+                await Task.Delay(timeRead);
+                goto X;
+            }
+            Global.StatusIO = StatusIO.Writing;
             await Task.Delay(timeRead);
+           
             switch (Processing )
             {
                 case IO_Processing.Trigger:
-                    Global.StatusIO = StatusIO.Writing;
+                    
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Light1], true);//LIGHT 1
@@ -356,7 +363,7 @@ namespace BeeGlobal
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                                IsWait = true;
+                           
                                 await WriteOutPut();
                                 //await Task.Delay((int)DelayOutput);
                                 //SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
@@ -369,7 +376,7 @@ namespace BeeGlobal
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                                IsWait = true;
+                          
                                 await WriteOutPut();
                                 await Task.Delay((int)DelayOutput);
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
@@ -383,16 +390,16 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
                             SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                            IsWait = true;
+                          
                             await WriteOutPut();
                             await Task.Delay((int)DelayOutput);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
                             await WriteOutPut();
                         }
-                        IsWait = false;
-                        valueInput = new int[16];
+                       
+                       
                         Global.StatusProcessing = StatusProcessing.Done;
-                        Global.StatusIO = StatusIO.Reading;
+                    
                     }
                   
                     break;
@@ -404,7 +411,6 @@ namespace BeeGlobal
                 case IO_Processing.Light:
                        SetOutPut(AddressOutPut[(int)I_O_Output.Light1], Global.ParaCommon.IsOnLight); //Busy
                        SetOutPut(AddressOutPut[(int)I_O_Output.Light2], Global.ParaCommon.IsOnLight); //Busy
-
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
@@ -415,11 +421,13 @@ namespace BeeGlobal
                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
-                    await WriteOutPut();
-                    break;
-
+                   await WriteOutPut();
+                   break;
+                    
             }
-           
+            await Task.Delay(timeRead);
+            valueInput = new int[16];
+            Global.StatusIO = StatusIO.Reading;
         }
         public bool CheckReady()
         {
@@ -512,6 +520,8 @@ namespace BeeGlobal
                 Val |= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
 
             }
+            if (!IsConnected)
+                return false;
             CT.Restart();
             X: IsConnected =await Modbus.WriteBit(Val);
            if(Global.StatusIO == StatusIO.ErrWrite)

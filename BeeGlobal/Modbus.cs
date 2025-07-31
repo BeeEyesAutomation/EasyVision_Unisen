@@ -163,6 +163,7 @@ namespace BeeGlobal
         {
             try
             {
+               
                 if (modbusClient != null)
                     if (modbusClient.Connected)
                         modbusClient?.Disconnect();
@@ -329,12 +330,10 @@ namespace BeeGlobal
             var cts = new CancellationTokenSource(2000); // Timeout 2 giây
 
             try
-            {if (IsWrite) return true;
-                IsWrite = true;
-                // Đọc 1 thanh ghi Modbus trong Task
+            {
+               
                 await Task.Run(() => WriteRegisterOnDedicatedThread(2, value), cts.Token);
-             //   await Task.Run(() => modbusClient.WriteSingleRegister(2, value), cts.Token);
-                IsWrite = false;
+            
 
             }
             catch (OperationCanceledException op)
