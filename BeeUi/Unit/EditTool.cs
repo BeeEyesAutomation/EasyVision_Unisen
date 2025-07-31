@@ -309,7 +309,7 @@ namespace BeeUi
            
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-                Global.ParaCommon.Comunication.IO.WriteIO(IO_Processing.Close);
+                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Close;
             }
 
           

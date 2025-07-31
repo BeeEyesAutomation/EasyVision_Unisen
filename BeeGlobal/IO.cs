@@ -242,7 +242,7 @@ namespace BeeGlobal
         public  async Task Read()
         {
             if (!IsConnected) return ;
-            if (Modbus.IsReading) return;
+           
                 CT.Restart();
             Global.StatusIO = StatusIO.Reading;
             valueInput =await Modbus.ReadBit(1);
@@ -290,23 +290,29 @@ namespace BeeGlobal
             {
                 if (_IO_Processing != value)
                 {
-                    _IO_Processing = value;
-                   
-                    WriteIO(_IO_Processing);
-                }
+                   _IO_Processing = value;
+                    
+                //    ;
+                //    WriteIO(_IO_Processing);
+               }
             }
         }
-        public async void WriteIO(IO_Processing Processing)
-        {   if (!IsConnected) return;
-            X:if (Global.StatusIO == StatusIO.Reading|| Global.StatusIO == StatusIO.Writing)
+        public async Task<bool>  WriteIO()
+        {   if (!IsConnected) return false;
+        if(IO_Processing== IO_Processing.None)
+            {
+                Global.StatusIO = StatusIO.Reading;
+                return false;
+            }
+            X:if (Global.StatusIO == StatusIO.Reading)
             {
                 await Task.Delay(timeRead);
                 goto X;
             }
             Global.StatusIO = StatusIO.Writing;
-            await Task.Delay(timeRead);
+           // await Task.Delay(timeRead);
            
-            switch (Processing )
+            switch (IO_Processing )
             {
                 case IO_Processing.Trigger:
                     
@@ -315,6 +321,9 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Light1], true);//LIGHT 1
                     SetOutPut(AddressOutPut[(int)I_O_Output.Light2], true);//LIGHT 2
                    await WriteOutPut();
+                    Global.StatusMode = StatusMode.Once;
+                    await Task.Delay((int)DelayTrigger);
+                    Global.StatusProcessing = StatusProcessing.Read;
                     break;
                 case IO_Processing.Close:
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result
@@ -395,8 +404,9 @@ namespace BeeGlobal
                             await Task.Delay((int)DelayOutput);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
                             await WriteOutPut();
+                           
                         }
-                       
+
                        
                         Global.StatusProcessing = StatusProcessing.Done;
                     
@@ -423,11 +433,13 @@ namespace BeeGlobal
                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                    await WriteOutPut();
                    break;
-                    
+
             }
-            await Task.Delay(timeRead);
             valueInput = new int[16];
-            Global.StatusIO = StatusIO.Reading;
+            //IO_Processing = IO_Processing.None;
+            Global.StatusIO = StatusIO.None;
+            // await Task.Delay(timeRead);
+            return false;
         }
         public bool CheckReady()
         {
