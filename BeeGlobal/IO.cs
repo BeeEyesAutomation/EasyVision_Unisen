@@ -289,6 +289,7 @@ namespace BeeGlobal
                 if (_IO_Processing != value)
                 {
                     _IO_Processing = value;
+                   
                     WriteIO(_IO_Processing);
                 }
             }
@@ -297,6 +298,7 @@ namespace BeeGlobal
         {   if (!IsConnected) return;
             if (IsWait) return;
             if (Modbus.IsWrite) return;
+            await Task.Delay(timeRead);
             switch (Processing )
             {
                 case IO_Processing.Trigger:
@@ -317,7 +319,6 @@ namespace BeeGlobal
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
-
                     await WriteOutPut();
                     Disconnect();
                     break;

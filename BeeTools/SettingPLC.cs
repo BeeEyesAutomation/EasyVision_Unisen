@@ -1087,10 +1087,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
-
+               
 
                 if (Global.StatusProcessing == StatusProcessing.SendResult)
                 {
+                   
                     Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Result;
 
                 }
@@ -1107,11 +1108,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
                     if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
                     {
+                        await Task.Delay(Global.ParaCommon.Comunication.IO.timeRead);
                         Global.TriggerInternal = false;
                         Global.StatusProcessing = StatusProcessing.Trigger;
                         Global.ParaCommon.Comunication.IO.IO_Processing=IO_Processing.Trigger;
                         Global.StatusMode = StatusMode.Once;
-                        await Task.Delay(Global.Config.delayTrigger);
+                        await Task.Delay((int)Global.ParaCommon.Comunication.IO.DelayTrigger);
                         Global.StatusProcessing = StatusProcessing.Read;
 
 

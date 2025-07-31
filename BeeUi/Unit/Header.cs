@@ -151,17 +151,17 @@ namespace BeeUi.Common
 
         public void Acccess(bool IsRun)
         {
-            if(IsRun)
-            {
-                G.EditTool.pName.Visible = false;
+            //if(IsRun)
+            //{
+            //    G.EditTool.pName.Visible = false;
                
-            }
-            else
-            {
-                G.EditTool.pName.Visible = true;
+            //}
+            //else
+            //{
+            //    G.EditTool.pName.Visible = true;
              
-            }
-            G.EditTool.btnHeaderBar1.btnSettingPLC.Enabled= Global.IsRun;
+            //}
+           // G.EditTool.btnHeaderBar1.btnSettingPLC.Enabled= Global.IsRun;
             G.EditTool.View.btnLive.Enabled = !Global.IsRun;
             pModel.Enabled = IsRun;
           
@@ -275,7 +275,7 @@ namespace BeeUi.Common
             }
             Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
             
-           // Acccess(Global.IsRun);
+           Acccess(Global.IsRun);
            
         }
         private void btnMode_Click(object sender, EventArgs e)
