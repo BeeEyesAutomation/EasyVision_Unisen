@@ -1072,8 +1072,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 tmRead.Enabled = false;
                 Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.None;
                 Global.ParaCommon.Comunication.IO.Disconnect();
+             
                 btnConectIO.Text = "No Connect";
             }
+            Modbus.IsWrite = false; Modbus.IsReading = false;
             btnConectIO.IsCLick = false;
             btnConectIO.Enabled = true;
             btnBypass.IsCLick = true;
@@ -1113,7 +1115,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
                 }
 
-                if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+                else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
                 {
                     if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
                     {
@@ -1194,6 +1196,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             {
                 Global.StatusIO = StatusIO.None;
                 Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Reset;
+             await   Global.ParaCommon.Comunication.IO.WriteIO();
                 await Task.Delay(500);
                 tmRead.Enabled = true;
                 if (Global.ParaCommon.Comunication.IO.timeRead == 0) Global.ParaCommon.Comunication.IO.timeRead = 1;
@@ -1257,9 +1260,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.Comunication.IO.logBuilder.Clear();
-            txtLog1.Text = "";
+        {if(Global.ParaCommon.Comunication.IO.logBuilder!=null)
+            {
+                Global.ParaCommon.Comunication.IO.logBuilder.Clear();
+                txtLog1.Text = "";
+            }
+          
         }
     }
 }

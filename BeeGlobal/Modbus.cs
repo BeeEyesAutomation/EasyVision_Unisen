@@ -246,7 +246,7 @@ namespace BeeGlobal
             thread.Start();
 
             // Chờ với timeout
-            if (!done.WaitOne(2000)) // timeout 2 giây
+            if (!done.WaitOne(300)) // timeout 2 giây
             {
                 throw new TimeoutException("Timeout khi đọc Modbus");
             }
@@ -262,8 +262,9 @@ namespace BeeGlobal
 
             try
             {
-              
+                if (IsReading) return new int[16];
                 IsReading = true;
+              
                 // Đọc 1 thanh ghi Modbus trong Task
                 //int[] val = await Task.Run(() => modbusClient.ReadHoldingRegisters(startAddress, 1), cts.Token);
                 int[] val = await Task.Run(() =>
@@ -320,7 +321,7 @@ namespace BeeGlobal
             thread.IsBackground = true;
             thread.Start();
 
-            if (!done.WaitOne(2000)) // timeout 2 giây
+            if (!done.WaitOne(300)) // timeout 2 giây
                 throw new TimeoutException("Timeout khi ghi Modbus");
 
             if (threadEx != null) throw threadEx;
@@ -331,9 +332,11 @@ namespace BeeGlobal
 
             try
             {
-               
+                if (IsWrite) return true;
+                IsWrite = true;
+
                 await Task.Run(() => WriteRegisterOnDedicatedThread(2, value), cts.Token);
-            
+                IsWrite = false;
 
             }
             catch (OperationCanceledException op)

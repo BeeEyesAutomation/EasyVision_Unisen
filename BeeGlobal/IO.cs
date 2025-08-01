@@ -299,16 +299,16 @@ namespace BeeGlobal
             }
         }
         public async Task<bool>  WriteIO()
-        {   if (!IsConnected) return false;
-       
-            if(IO_Processing== IO_Processing.None)
+        {   //if (!IsConnected) return false;
+
+            if (IO_Processing == IO_Processing.None)
             {
-              
+
                 return false;
             }
             //X:if (Global.StatusIO == StatusIO.Reading)
             //{
-            //    await Task.Delay(timeRead);
+            //  await Task.Delay(timeRead);
             //    goto X;
             //}
             Global.StatusIO = StatusIO.Writing;
@@ -357,9 +357,9 @@ namespace BeeGlobal
                         SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                         IsWait = true;
                         await WriteOutPut();
-                        //await Task.Delay((int)DelayOutput);
-                        //SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                        //await WriteOutPut();
+                        await Task.Delay((int)DelayOutput);
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                        await WriteOutPut();
                     }
                     else
                     {
@@ -375,9 +375,9 @@ namespace BeeGlobal
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                            
                                 await WriteOutPut();
-                                //await Task.Delay((int)DelayOutput);
-                                //SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                                //await WriteOutPut();
+                                await Task.Delay((int)DelayOutput);
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                                await WriteOutPut();
                             }
                             else
                             {
@@ -443,9 +443,9 @@ namespace BeeGlobal
 
             }
             valueInput = new int[16];
-            //IO_Processing = IO_Processing.None;
+            IO_Processing = IO_Processing.None;
             Global.StatusIO = StatusIO.None;
-            // await Task.Delay(timeRead);
+             await Task.Delay(timeRead);
             return false;
         }
         public bool CheckReady()
