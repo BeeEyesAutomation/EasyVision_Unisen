@@ -45,7 +45,7 @@ namespace BeeGlobal
         }
         public static Trig StatusTrig = Trig.None;
         public static StatusMode StatusMode = StatusMode.None;
-        public static StatusIO _StatusIO = StatusIO.NotConnect;
+        public static StatusIO _StatusIO = StatusIO.None;
         public static event Action<StatusIO> StatusIOChanged;
         public static StatusIO StatusIO
         {

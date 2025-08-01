@@ -1103,7 +1103,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 return;
             }    
                 if (!Global.Initialed) return;
-            if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
+           // if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
 
@@ -1131,10 +1131,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 }
                 if (Global.ParaCommon.Comunication.IO.IO_Processing != IO_ProcessingOld)
                 {
-
-                    await Global.ParaCommon.Comunication.IO.WriteIO();
-                    IO_ProcessingOld = Global.ParaCommon.Comunication.IO.IO_Processing;
-
+                    if (Global.StatusIO == StatusIO.None)
+                    {
+                        await Global.ParaCommon.Comunication.IO.WriteIO();
+                        IO_ProcessingOld = Global.ParaCommon.Comunication.IO.IO_Processing;
+                    }
                 }
                
                 lbmin.Text = Math.Round(Global.ParaCommon.Comunication.IO.CTMin) + "";
@@ -1168,8 +1169,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 //}
 
 
-                if (Global.StatusIO == StatusIO.Writing || Global.StatusIO == StatusIO.Reading) return;
+                if (Global.StatusIO == StatusIO.None)
                 await Global.ParaCommon.Comunication.IO.Read();
+                if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.IO.IO_Processing == IO_Processing.None)
+                    Global.StatusIO = StatusIO.None;
+                StatusIObtn.Text = Global.StatusIO.ToString();
             }
             else
 

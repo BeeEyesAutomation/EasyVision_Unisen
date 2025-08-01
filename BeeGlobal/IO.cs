@@ -409,10 +409,10 @@ namespace BeeGlobal
                         }
 
                        
-                        Global.StatusProcessing = StatusProcessing.Done;
+                     
                     
                     }
-                  
+                    Global.StatusProcessing = StatusProcessing.Done;
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsRun); //Busy
@@ -444,8 +444,8 @@ namespace BeeGlobal
             }
             valueInput = new int[16];
             IO_Processing = IO_Processing.None;
-            Global.StatusIO = StatusIO.None;
-             await Task.Delay(timeRead);
+           
+            // await Task.Delay(timeRead);
             return false;
         }
         public bool CheckReady()
@@ -456,7 +456,6 @@ namespace BeeGlobal
             }
             else
             {
-              
                 return false;
             }
             return false;

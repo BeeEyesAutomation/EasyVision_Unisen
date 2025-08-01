@@ -246,7 +246,7 @@ namespace BeeGlobal
             thread.Start();
 
             // Chờ với timeout
-            if (!done.WaitOne(300)) // timeout 2 giây
+            if (!done.WaitOne(2000)) // timeout 2 giây
             {
                 throw new TimeoutException("Timeout khi đọc Modbus");
             }
@@ -258,7 +258,7 @@ namespace BeeGlobal
         public static async Task<int[]> ReadBit(int startAddress)
         {
             int[] values = new int[16];
-            var cts = new CancellationTokenSource(300); // Timeout 2 giây
+            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
 
             try
             {
@@ -321,14 +321,14 @@ namespace BeeGlobal
             thread.IsBackground = true;
             thread.Start();
 
-            if (!done.WaitOne(300)) // timeout 2 giây
+            if (!done.WaitOne(2000)) // timeout 2 giây
                 throw new TimeoutException("Timeout khi ghi Modbus");
 
             if (threadEx != null) throw threadEx;
         }
         public static async Task<bool> WriteBit(int value)
         {
-            var cts = new CancellationTokenSource(300); // Timeout 2 giây
+            var cts = new CancellationTokenSource(2000); // Timeout 2 giây
 
             try
             {
