@@ -201,12 +201,6 @@
     <Compile Include="Tool\SettingCamera.designer.cs">
       <DependentUpon>SettingCamera.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tool\SettingStep1.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\SettingStep1.Designer.cs">
-      <DependentUpon>SettingStep1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tool\SettingStep4.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -371,9 +365,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingCamera.resx">
       <DependentUpon>SettingCamera.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\SettingStep1.resx">
-      <DependentUpon>SettingStep1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\SettingStep4.resx">
       <DependentUpon>SettingStep4.cs</DependentUpon>

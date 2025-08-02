@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeGlobal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -73,7 +74,7 @@ namespace BeeUi
             int w = Convert.ToInt32( sp[0]);
             int h = Convert.ToInt32(sp[1]);
             int x = 1280/2-w/2; int y = 1080/2-h/2;
-            G.EditTool.View.imgView.Location = new Point(G.EditTool.View.pView.Width / 2 - w / 2, G.EditTool.View.pView.Height / 2 - h / 2);
+            Global.EditTool.View.imgView.Location = new Point(Global.EditTool.View.pView.Width / 2 - w / 2, Global.EditTool.View.pView.Height / 2 - h / 2);
 
           //  G.DeviceConnectForm.ReadingPage.DeviceSettingPage.SetROI(x, y, w, h);
              }

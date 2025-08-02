@@ -89,7 +89,7 @@ namespace BeeUi
                       //  G.StepEdit.SettingStep1.Visible = false;
                       //  Global.ToolSettings.BringToFront();
                         
-                       // G.EditTool.View.pHeader.Controls.Clear();
+                       // Global.EditTool.View.pHeader.Controls.Clear();
                         if ( G.StatusDashboard == null)
                         {
                              G.StatusDashboard = new StatusDashboard();
@@ -102,13 +102,13 @@ namespace BeeUi
                         }
                         //G.StepEdit.Visible = false;
                         //G.StatusDashboard.Visible = true;
-                        // G.StatusDashboard.Parent = G.EditTool.View.pHeader;
-                        //G.StatusDashboard.Size = G.EditTool.View.pHeader.Size;
+                        // G.StatusDashboard.Parent = Global.EditTool.View.pHeader;
+                        //G.StatusDashboard.Size = Global.EditTool.View.pHeader.Size;
                         //G.StatusDashboard.BringToFront();
-                        G.EditTool.View.pHeader.Controls.Clear();
+                        Global.EditTool.View.pHeader.Controls.Clear();
                         //pEditTool.Visible = true;
                         G.StatusDashboard.Dock = DockStyle.Fill;
-                        G.EditTool.View.pHeader.Controls.Add(G.StatusDashboard);
+                        Global.EditTool.View.pHeader.Controls.Add(G.StatusDashboard);
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -116,9 +116,9 @@ namespace BeeUi
                                 {
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                    G.EditTool.View.imgView.Invalidate();
-                                    G.EditTool.View.imgView.Update();
+                                    Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                    Global.EditTool.View.imgView.Invalidate();
+                                    Global.EditTool.View.imgView.Update();
                                     Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                    Global.Config.imgZoom = View.imgView.Zoom;
                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
@@ -155,11 +155,11 @@ namespace BeeUi
                             G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                         //  G.StepEdit.SettingStep1.BringToFront();
                         }
-                        G.EditTool.View.pHeader.Controls.Clear();
+                        Global.EditTool.View.pHeader.Controls.Clear();
                         //pEditTool.Visible = true;
                         G.StepEdit.Dock = DockStyle.Fill;
-                        G.EditTool.View.pHeader.Controls.Add(G.StepEdit);
-                        //G.StepEdit.SettingStep1.Size = G.EditTool.pEditTool.Size;
+                        Global.EditTool.View.pHeader.Controls.Add(G.StepEdit);
+                        //G.StepEdit.SettingStep1.Size = Global.EditTool.pEditTool.Size;
                         //G.StepEdit.Visible = true;
                         //G.StatusDashboard.Visible = false;
                         pEditTool.Controls.Clear();
@@ -189,9 +189,9 @@ namespace BeeUi
                         //    tool.ItemTool.Score.Enabled = false;
                         //}
 
-                        //G.StepEdit.Parent = G.EditTool.View.pHeader;
+                        //G.StepEdit.Parent = Global.EditTool.View.pHeader;
                       
-                        //G.StepEdit.Size = G.EditTool.View.pHeader.Size;
+                        //G.StepEdit.Size = Global.EditTool.View.pHeader.Size;
                         //G.StepEdit.BringToFront();
                         lbNumStep.Text = "Step 1";
                         lbNameStep.Text = "Image Optimization";
@@ -209,7 +209,7 @@ namespace BeeUi
                         if (G.StepEdit.SettingStep2 == null)
                             G.StepEdit.SettingStep2 = new SettingStep2();
                         pEditTool.Controls.Clear();
-                        G.StepEdit.SettingStep2.Parent = G.EditTool.pEditTool;
+                        G.StepEdit.SettingStep2.Parent = Global.EditTool.pEditTool;
                         G.StepEdit.SettingStep2.Dock = DockStyle.Fill;
                         lbNumStep.Text = "Step 2";
                         lbNameStep.Text = "Master Resgistration";
@@ -222,9 +222,9 @@ namespace BeeUi
                                 {
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
-                                    G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                    G.EditTool.View.imgView.Invalidate();
-                                    G.EditTool.View.imgView.Update();
+                                    Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                    Global.EditTool.View.imgView.Invalidate();
+                                    Global.EditTool.View.imgView.Update();
                                     Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                    Global.Config.imgZoom = View.imgView.Zoom;
                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
@@ -235,9 +235,9 @@ namespace BeeUi
                         {
 
                         }
-                        //G.EditTool.View.imgView.Image = Global.ParaCommon.matRegister;
-                        //G.EditTool.View.imgView.Invalidate();
-                        //G.EditTool.View.imgView.Update();
+                        //Global.EditTool.View.imgView.Image = Global.ParaCommon.matRegister;
+                        //Global.EditTool.View.imgView.Invalidate();
+                        //Global.EditTool.View.imgView.Update();
                         break;
                     case Step.Step3:
                         pName.Visible = true;
@@ -280,7 +280,7 @@ namespace BeeUi
                         if (G.StepEdit.SettingStep4 == null)
                             G.StepEdit.SettingStep4 = new SettingStep4();
                         pEditTool.Controls.Clear();
-                        G.StepEdit.SettingStep4.Parent = G.EditTool.pEditTool;
+                        G.StepEdit.SettingStep4.Parent = Global.EditTool.pEditTool;
                         G.StepEdit.SettingStep4.Dock = DockStyle.Fill;
                         lbNumStep.Text = "Step 4";
                         lbNameStep.Text = "Output Assignment";
@@ -403,7 +403,7 @@ namespace BeeUi
        
         private void EditTool_Load(object sender, EventArgs e)
         {
-            G.EditTool.lbLicence.Text = "Licence: " + G.Licence;
+            Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
             LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
            
         }
@@ -534,15 +534,15 @@ namespace BeeUi
         private void pView_SizeChanged(object sender, EventArgs e)
         {
 
-            if (G.EditTool == null) return;
-            if (G.EditTool.View == null)
+            if (Global.EditTool == null) return;
+            if (Global.EditTool.View == null)
                     return;
            
-            G.EditTool.View.Size = G.EditTool.pView.Size;
-            G.EditTool.View.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            G.EditTool.View.Location = new Point(0, 0);
-            G.EditTool.View.Dock = DockStyle.None;
-            G.EditTool.View.Parent = G.EditTool.pView;
+            Global.EditTool.View.Size = Global.EditTool.pView.Size;
+            Global.EditTool.View.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            Global.EditTool.View.Location = new Point(0, 0);
+            Global.EditTool.View.Dock = DockStyle.None;
+            Global.EditTool.View.Parent = Global.EditTool.pView;
 
         }
 

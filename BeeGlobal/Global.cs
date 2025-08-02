@@ -13,10 +13,24 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary>
+         public static dynamic EditTool ;
         public static bool IsSendRS = false;
         public static bool TotalOK = false;
         //Gui
-       
+        public static bool _IsLive = false;
+        public static event Action<bool> LiveChanged;
+        public static bool IsLive
+        {
+            get => _IsLive;
+            set
+            {
+                if (_IsLive != value)
+                {
+                    _IsLive = value;
+                    LiveChanged?.Invoke(_IsLive); // Gọi event
+                }
+            }
+        }
         public static bool IsLoadProgFist = false;
         public static bool IsHideTool = true;
         public static List<iTool> listItool = new List<iTool>();

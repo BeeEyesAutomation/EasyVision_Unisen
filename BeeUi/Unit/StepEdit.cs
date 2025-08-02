@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
+using BeeInterface;
 using BeeUi.Tool;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -52,12 +53,12 @@ namespace BeeUi.Common
         public SettingStep1 SettingStep1;
         private void btnStep2_Click(object sender, EventArgs e)
         {
-            if (G.EditTool.View.btnLive.IsCLick)
+            if (Global.EditTool.View.btnLive.IsCLick)
             {
-                G.EditTool.View.btnLive.PerformClick();
+                Global.EditTool.View.btnLive.PerformClick();
             }
-            G.EditTool.View.btnLive.Enabled = false;
-            G.EditTool.RefreshGuiEdit(Step.Step2);
+            Global.EditTool.View.btnLive.Enabled = false;
+            Global.EditTool.RefreshGuiEdit(Step.Step2);
            
         }
 
@@ -67,34 +68,34 @@ namespace BeeUi.Common
         bool IsLoaded = false;
         private void btnStep3_Click(object sender, EventArgs e)
         {
-            if(G.EditTool.View.btnLive.IsCLick)
+            if(Global.EditTool.View.btnLive.IsCLick)
             {
-                G.EditTool.View.btnLive.PerformClick();
+                Global.EditTool.View.btnLive.PerformClick();
             }
             if(Global.ParaCommon.matRegister!=null)
             Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
-            G.EditTool.View.btnLive.Enabled = false;
-            G.EditTool.RefreshGuiEdit(Step.Step3);
+            Global.EditTool.View.btnLive.Enabled = false;
+            Global.EditTool.RefreshGuiEdit(Step.Step3);
           
         }
 
         private void btnStep1_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.btnLive.Enabled = true;
-            G.EditTool.RefreshGuiEdit(Step.Step1);
+            Global.EditTool.View.btnLive.Enabled = true;
+            Global.EditTool.RefreshGuiEdit(Step.Step1);
             //SettingStep1.btnNextStep.Enabled = true;
             //if (SettingStep1 == null)
             //    SettingStep1 = new SettingStep1();
 
 
-            //G.EditTool.pEditTool.Controls.Clear();
+            //Global.EditTool.pEditTool.Controls.Clear();
             //SettingStep1 = new SettingStep1();
-            //SettingStep1.Parent = G.EditTool.pEditTool;
+            //SettingStep1.Parent = Global.EditTool.pEditTool;
             //SettingStep1.Dock = DockStyle.Fill;
-            //G.EditTool.lbNumStep.Text = "Step 1";
-            //G.EditTool.lbNameStep.Text = "Image Optimization";
-            //G.EditTool.iconTool.BackgroundImage = Properties.Resources._1;
-            //G.EditTool.lbTool.Text = "Setup Camera";
+            //Global.EditTool.lbNumStep.Text = "Step 1";
+            //Global.EditTool.lbNameStep.Text = "Image Optimization";
+            //Global.EditTool.iconTool.BackgroundImage = Properties.Resources._1;
+            //Global.EditTool.lbTool.Text = "Setup Camera";
             //if (!workConnect.IsBusy)
             //    workConnect.RunWorkerAsync();
         }
@@ -116,7 +117,7 @@ namespace BeeUi.Common
             if (G.IsCCD)
             {
 
-                Shows.RefreshImg(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+                Shows.RefreshImg(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
 
                
             }
@@ -139,12 +140,12 @@ namespace BeeUi.Common
       public  SettingStep4 SettingStep4;
         private void btnStep4_Click(object sender, EventArgs e)
         {
-            if (G.EditTool.View.btnLive.IsCLick)
+            if (Global.EditTool.View.btnLive.IsCLick)
             {
-                G.EditTool.View.btnLive.PerformClick();
+                Global.EditTool.View.btnLive.PerformClick();
             }
-            G.EditTool.View.btnLive.Enabled = false;
-            G.EditTool.RefreshGuiEdit(Step.Step4);
+            Global.EditTool.View.btnLive.Enabled = false;
+            Global.EditTool.RefreshGuiEdit(Step.Step4);
          
 
         }

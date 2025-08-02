@@ -14,10 +14,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Windows.Forms;
 
-namespace BeeUi.Tool
+namespace BeeInterface
 {
    
     [Serializable()]
@@ -41,34 +40,21 @@ namespace BeeUi.Tool
         private void btnNextStep_Click(object sender, EventArgs e)
         {
            
-            SaveData.Project(Global.Project);
-            btnNextStep.Enabled = false;
-            this.Parent.Controls.Remove(this);
-          
-            G.StepEdit.btnStep2.PerformClick();
+            //SaveData.Project(Global.Project);
+            //btnNextStep.Enabled = false;
+            //this.Parent.Controls.Remove(this);
+            Global.EditTool.RefreshGuiEdit(Step.Step2);
+            //G.StepEdit.btnStep2.PerformClick();
 
         }
    
      
 
-        private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Native.GetImg();
-            Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-         
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            G.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
-            btnNextStep.Enabled = true;
-            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-          //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-
-        }
+     
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            G.Header.btnMode.PerformClick();
+            Global.EditTool.RefreshGuiEdit(Step.Run);
         }
         public int indexTool;
    
@@ -106,31 +92,24 @@ namespace BeeUi.Tool
        
       
 
-        private void btnFull_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.TypeResolution = 1;
-            Shows.Full(G.EditTool.View.imgView,BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-           Global.Config.imgZoom =G.EditTool.View. imgView.Zoom;
-           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
-        }
+       
 
         private void btnHD_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.TypeResolution = 2;
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-           Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
-           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
+        //    Global.ParaCommon.TypeResolution = 2;
+        //    Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+        //   Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
+        //   Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
+        //   Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
         }
 
         private void btn480_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.TypeResolution = 3;
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-           Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
-           Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
-           Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
+        //    Global.ParaCommon.TypeResolution = 3;
+        //    Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+        //   Global.Config.imgZoom = G.EditTool.View.imgView.Zoom;
+        //   Global.Config.imgOffSetX = G.EditTool.View.imgView.AutoScrollPosition.X;
+        //   Global.Config.imgOffSetY = G.EditTool.View.imgView.AutoScrollPosition.Y;
         }
 
      
@@ -139,32 +118,32 @@ namespace BeeUi.Tool
         {
            Global.ParaCommon.IsExternal =! btnInternal.IsCLick;
          
-            if (! Global.ParaCommon.IsExternal)
-            {
-                G.EditTool.View.btnTypeTrig.Enabled=false;
-                G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
-            }
-            else
-            {
-                G.EditTool.View.btnTypeTrig.Enabled = true;
-                G.EditTool.View.btnTypeTrig.Text = "Trig External";
-            }
+            //if (! Global.ParaCommon.IsExternal)
+            //{
+            //    G.EditTool.View.btnTypeTrig.Enabled=false;
+            //    G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
+            //}
+            //else
+            //{
+            //    G.EditTool.View.btnTypeTrig.Enabled = true;
+            //    G.EditTool.View.btnTypeTrig.Text = "Trig External";
+            //}
         }
 
         private void btnExternal_Click(object sender, EventArgs e)
         {
            Global.ParaCommon.IsExternal = btnExternal.IsCLick;
          
-            if (! Global.ParaCommon.IsExternal)
-            {
-                G.EditTool.View.btnTypeTrig.Enabled = false;
-                G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
-            }
-            else
-            {
-                G.EditTool.View.btnTypeTrig.Enabled = true;
-                G.EditTool.View.btnTypeTrig.Text = "Trig External";
-            }
+            //if (! Global.ParaCommon.IsExternal)
+            //{
+            //    G.EditTool.View.btnTypeTrig.Enabled = false;
+            //    G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
+            //}
+            //else
+            //{
+            //    G.EditTool.View.btnTypeTrig.Enabled = true;
+            //    G.EditTool.View.btnTypeTrig.Text = "Trig External";
+            //}
         }
         int valueDelyaOld = 0;
      
@@ -192,15 +171,17 @@ namespace BeeUi.Tool
             btnOn.IsCLick = Global.ParaCommon.IsOnLight;
             btnInternal.IsCLick =! Global.ParaCommon.IsExternal;
             btnExternal.IsCLick = Global.ParaCommon.IsExternal;
-            if(!IsReaded)
-            {
-                IsReaded = true;
-                if (!workReadPara.IsBusy)
-                    workReadPara.RunWorkerAsync();
-            }
+            Global.LiveChanged += Global_LiveChanged;
            
         }
 
+        private void Global_LiveChanged(bool obj)
+        {
+            AdjWidth.Enabled =! obj;
+            AdjHeight.Enabled = !obj;
+           
+           
+        }
 
         private async void trackShift_ValueChanged(float obj)
         {
@@ -250,24 +231,34 @@ namespace BeeUi.Tool
             Global.ParaCommon.Comunication.IO.IsLight1 = btnLight3.IsCLick;
         }
 
-        private void AdjWidth_ValueChanged(float obj)
+        private async void AdjWidth_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value = AdjWidth.Value ;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value = (int)AdjWidth.Value;
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetWidth();
+            AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value;
+
         }
 
-        private void AdjHeight_ValueChanged(float obj)
+        private async void AdjHeight_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value = AdjWidth.Value;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value = (int)AdjHeight.Value;
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetHeight();
+            AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value;
+
         }
 
-        private void AdjOffsetX_ValueChanged(float obj)
+        private async void AdjOffsetX_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Value = AdjWidth.Value;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Value = (int)AdjOffsetX.Value;
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetOffSetX();
+            AdjOffsetX.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Value;
         }
 
-        private void AdjOffSetY_ValueChanged(float obj)
+        private async void AdjOffSetY_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value = AdjWidth.Value;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value = (int)AdjOffSetY.Value;
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetOffSetY();
+            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value;
         }
 
    
@@ -277,7 +268,12 @@ namespace BeeUi.Tool
             await BeeCore.Common.listCamera[Global.IndexChoose].GetExpo();
             await BeeCore.Common.listCamera[Global.IndexChoose].GetGain();
             await BeeCore.Common.listCamera[Global.IndexChoose].GetShift();
-
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetWidth();
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetHeight();
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetOffSetX();
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetOffSetY();
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterX();
+            await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterY();
         }
 
         private  void workReadPara_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -308,6 +304,55 @@ namespace BeeUi.Tool
             trackShift.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Max;
             trackShift.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Step;
             trackShift.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift.Value;
-            }
+
+            AdjWidth.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Min;
+            AdjWidth.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Max;
+            AdjWidth.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Step;
+            AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value;
+
+            AdjHeight.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Min;
+            AdjHeight.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Max;
+            AdjHeight.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Step;
+            AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value;
+
+            AdjOffsetX.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Min;
+            AdjOffsetX.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Max;
+            AdjOffsetX.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Step;
+            AdjOffsetX.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetX.Value;
+
+            AdjOffSetY.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Min;
+            AdjOffSetY.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Max;
+            AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Step;
+            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value;
+            btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX);
+            btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY);
+
+            btnDownLoadPara.IsCLick = false;
+            btnDownLoadPara.Enabled = true;
+        }
+
+        private void btnDownLoadPara_Click(object sender, EventArgs e)
+        {
+            
+            if(workReadPara.IsBusy) return;
+            workReadPara.RunWorkerAsync();
+            btnDownLoadPara.IsCLick = true;
+            btnDownLoadPara.Enabled = false;
+        }
+
+        private async void btnCenterX_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX =Convert.ToInt32( btnCenterX.IsCLick);
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetCenterX();
+            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX;
+
+        }
+
+        private async void btnCenterY_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY = Convert.ToInt32(btnCenterY.IsCLick);
+            await BeeCore.Common.listCamera[Global.IndexChoose].SetCenterY();
+            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY;
+        }
     }
 }

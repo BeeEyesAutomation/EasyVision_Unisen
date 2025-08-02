@@ -104,6 +104,12 @@
     <Compile Include="SettingPLC.Designer.cs">
       <DependentUpon>SettingPLC.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingStep1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingStep1.Designer.cs">
+      <DependentUpon>SettingStep1.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -217,6 +223,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingPLC.resx">
       <DependentUpon>SettingPLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingStep1.resx">
+      <DependentUpon>SettingStep1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>

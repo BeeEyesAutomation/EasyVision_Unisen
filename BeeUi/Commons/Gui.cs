@@ -20,11 +20,11 @@ namespace BeeUi.Commons
     {
         public static  void RefreshColor(Color color,int AlphaBar= 80, int AlphaMenu= 150, int AlphaBg=20,int AlphaText=40)
         {
-            G.EditTool.LayoutEnd.BackColor = Color.White;
-           // G.EditTool.pMain.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
-            G.EditTool.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
-            G.EditTool.View.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
-            G.EditTool.pHeader.BackColor = Color.FromArgb(190, color.R, color.G, color.B);
+            Global.EditTool.LayoutEnd.BackColor = Color.White;
+           // Global.EditTool.pMain.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
+            Global.EditTool.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
+            Global.EditTool.View.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
+            Global.EditTool.pHeader.BackColor = Color.FromArgb(190, color.R, color.G, color.B);
             G.Header.BackColor =  Color.FromArgb(AlphaBg, color.R,color.G,color.B);
             // G.Header.pPO.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             //G.Header.pModel.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
@@ -34,7 +34,7 @@ namespace BeeUi.Commons
             G.StatusDashboard.MidHeaderBackColor= Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             //G.StepEdit.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
           //   G.StatusDashboard.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
-           // G.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
+           // Global.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             Global.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             foreach (Control c in G.Header.Controls)
             {
@@ -88,7 +88,7 @@ namespace BeeUi.Commons
            // G.Header.pPO.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.Header.pPO.Width, G.Header.pPO.Height, radius, radius));
             //G.Header.pModel.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.Header.pModel.Width, G.Header.pModel.Height, radius, radius));
            // G.Header.pCamera.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.Header.pCamera.Width, G.Header.pCamera.Height, radius, radius));
-         //   G.EditTool.View.pTool.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.EditTool.View.pTool.Width, G.EditTool.View.pTool.Height, radius, radius));
+         //   Global.EditTool.View.pTool.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.EditTool.View.pTool.Width, Global.EditTool.View.pTool.Height, radius, radius));
         
             Global.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.ToolSettings.pBtn.Width, Global.ToolSettings.pBtn.Height, radius, radius));
         }

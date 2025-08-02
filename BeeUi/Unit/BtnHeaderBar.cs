@@ -47,9 +47,9 @@ namespace BeeUi.Unit
 
         private void btnSettingPLC_Click(object sender, EventArgs e)
         {if(btnSettingPLC.IsCLick)
-           G.EditTool.RefreshGuiEdit(Step.PLC);
+           Global.EditTool.RefreshGuiEdit(Step.PLC);
         else
-            G.EditTool.RefreshGuiEdit(Step.Run);
+            Global.EditTool.RefreshGuiEdit(Step.Run);
         }
 
         private async void btnfull_Click(object sender, EventArgs e)
@@ -61,11 +61,11 @@ namespace BeeUi.Unit
             await Task.Delay(500);
             // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
             if (btnfull.IsCLick)
-                G.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
             else
-                G.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
             await Task.Delay(1000);
-            Shows.Full(G.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+            Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
 
         private void btnCamera_Click(object sender, EventArgs e)

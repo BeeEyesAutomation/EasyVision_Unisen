@@ -58,6 +58,7 @@ namespace BeeGlobal
         Logic4,
         Light1,
         Light2,
+        Light3,
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }

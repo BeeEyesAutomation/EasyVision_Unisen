@@ -372,13 +372,13 @@ namespace BeeUi.Unit
 
         private void pMenu_SizeChanged(object sender, EventArgs e)
         {
-            //if (G.EditTool == null) return;
+            //if (Global.EditTool == null) return;
             // BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
         }
 
         private void EditProg_Load(object sender, EventArgs e)
         {
-            if(G.EditTool == null)return;   
+            if(Global.EditTool == null)return;   
             btnMenu.PerformClick();
         }
     }

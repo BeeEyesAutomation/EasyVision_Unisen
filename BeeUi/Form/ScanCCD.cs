@@ -175,11 +175,11 @@ namespace BeeUi
         }
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
-            if(G.EditTool!=null)
-            G.EditTool.View.tmCheckCCD.Enabled = false;
+            if(Global.EditTool!=null)
+            Global.EditTool.View.tmCheckCCD.Enabled = false;
             //BeeCore.Common.TypeCCD =Global.Configlobal.TypeCamera ;
             //if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
-            //    BeeCore.Common.PropertyChanged -=G.EditTool.View. Common_PropertyChanged;
+            //    BeeCore.Common.PropertyChanged -=Global.EditTool.View. Common_PropertyChanged;
           
             btnConnect.Enabled = false;
            
@@ -218,8 +218,8 @@ namespace BeeUi
                         if(G.Main==null)
                         {
                             Main Main = new Main();
-                            G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-                            G.EditTool.lbCam.Text = "Camera Connected";
+                            Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                            Global.EditTool.lbCam.Text = "Camera Connected";
 
                             String sProgram = Properties.Settings.Default.programCurrent;
                             G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
@@ -458,8 +458,8 @@ namespace BeeUi
                     if (G.IsActive)
                     {
                         Main Main = new Main();
-                        G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-                        G.EditTool.lbCam.Text = "Camera Connected";
+                        Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                        Global.EditTool.lbCam.Text = "Camera Connected";
 
                         String sProgram = Properties.Settings.Default.programCurrent;
                         G.Load.lb.Text = "Loading program.. (" + sProgram + ")";

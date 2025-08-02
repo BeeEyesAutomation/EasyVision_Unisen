@@ -27,7 +27,7 @@ namespace BeeUi.Unit
                 this.Width = btnHide.Width - 1;
                 btnHide.Text = "";
                 btnHide.Image = Properties.Resources.Show;
-                G.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
                
 
 
@@ -37,13 +37,13 @@ namespace BeeUi.Unit
                 btnHide.Corner = Corner.Right;
                 this.Width = 400;
                 btnHide.Image = Properties.Resources.Hide;
-                G.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
                
                
             }
             G.Header.Layout.ResumeLayout(true);
-            G.EditTool.LayOutShow.ResumeLayout(true);
-            G.EditTool.LayoutMain.ResumeLayout(true);
+            Global.EditTool.LayOutShow.ResumeLayout(true);
+            Global.EditTool.LayoutMain.ResumeLayout(true);
 
         }
         int percent = 0;

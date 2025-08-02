@@ -1372,9 +1372,9 @@ namespace BeeUi
                     break;
                 case StatusProcessing.Read:
                     //if ( Global.ParaCommon.IsExternal)
-                    //	G.EditTool.View.btnTypeTrig.IsCLick = true;
+                    //	Global.EditTool.View.btnTypeTrig.IsCLick = true;
                     //if (Global.IsRun)
-                    //	G.EditTool.View.Cap(false);
+                    //	Global.EditTool.View.Cap(false);
                     this.Invoke((Action)(async () =>
                     {
                     X: if (!workReadCCD.IsBusy)
@@ -1444,24 +1444,24 @@ namespace BeeUi
              
                 //   if (Score.Enabled||Global.IsRun) return;
                 Global.TypeCrop = TypeCrop.Area;
-              //  G.EditTool.pEditTool.Controls.Clear();
+              //  Global.EditTool.pEditTool.Controls.Clear();
                 Control control = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
-                control.Parent = G.EditTool.pEditTool;
-                control.Size =G.EditTool. pEditTool.Size;
+                control.Parent = Global.EditTool.pEditTool;
+                control.Size =Global.EditTool. pEditTool.Size;
                 control.Location = new Point(0, 0);
                 control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                 control.BringToFront();
                // DataTool.LoadPropety(control);
                 TypeTool TypeTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool;
 
-                G.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-                G.EditTool.lbTool.Text = TypeTool.ToString();
-                G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                Global.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+                Global.EditTool.lbTool.Text = TypeTool.ToString();
+                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 //BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.LoadPara();
-                G.EditTool.View.imgView.Invalidate();
-                G.EditTool.View.imgView.Update();
+                Global.EditTool.View.imgView.Invalidate();
+                Global.EditTool.View.imgView.Update();
               
-                G.EditTool.View.toolEdit = control;
+                Global.EditTool.View.toolEdit = control;
 
                 Global.ParaCommon.SizeCCD = new Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height);
 
@@ -1484,7 +1484,7 @@ namespace BeeUi
 
         private void Common_FrameChanged(object sender, PropertyChangedEventArgs e)
         {
-            G.EditTool.lbFrameRate.Text = Global.ParaCommon.SizeCCD.ToString()+"-"+ BeeCore.Common.listCamera[Global.IndexChoose].FrameRate+" img/s ";
+            Global.EditTool.lbFrameRate.Text = Global.ParaCommon.SizeCCD.ToString()+"-"+ BeeCore.Common.listCamera[Global.IndexChoose].FrameRate+" img/s ";
         }
 
         public dynamic toolEdit;
@@ -2058,7 +2058,7 @@ namespace BeeUi
         }
         private void btnSer_Click(object sender, EventArgs e)
         {
-          
+            Global.IsLive = btnLive.IsCLick;
             if (btnCap.Enabled == false&&Global.IsRun)
             {
                 btnLive.IsCLick = false;
@@ -2090,7 +2090,7 @@ namespace BeeUi
             //}
             //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
             //    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-            //        //G.EditTool.View.imgView.Location = new Point(G.EditTool.View.pView.Width / 2 - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, G.EditTool.View.pView.Height / 2 - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2);
+            //        //Global.EditTool.View.imgView.Location = new Point(Global.EditTool.View.pView.Width / 2 - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, Global.EditTool.View.pView.Height / 2 - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2);
             if (btnLive.IsCLick)
             {
               //  tmRefresh.Enabled = true;
@@ -2297,8 +2297,8 @@ namespace BeeUi
             {
                 try
                 {
-                    G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                    G.EditTool.toolStripPort.Text = "Port Not Connect";
+                    Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                    Global.EditTool.toolStripPort.Text = "Port Not Connect";
                     G.Header.SerialPort1.Close();
                     G.Header.SerialPort1.Open();
                 }
@@ -2308,8 +2308,8 @@ namespace BeeUi
                 }
                 if(numErrPort>5)
                 {
-                   // G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                   // G.EditTool.toolStripPort.Text = "Port Not Connect";
+                   // Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                   // Global.EditTool.toolStripPort.Text = "Port Not Connect";
                     // MessageBox.Show("Error connect Port " + G.Header.SerialPort.PortName);
 
                 }
@@ -2334,8 +2334,8 @@ namespace BeeUi
             //        {
             //            if (!BeeCore.Common.ConnectCCD(G.ScanCCD.indexCCD,Global.Config.Resolution))
             //            {
-            //                G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
-            //                G.EditTool.lbCam.Text = "Camera Not Connect";
+            //                Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
+            //                Global.EditTool.lbCam.Text = "Camera Not Connect";
 
             //                btnCap.Enabled = false;
             //                btnRecord.Enabled = false;
@@ -2355,8 +2355,8 @@ namespace BeeUi
                                   
             //                    }
             //                }
-            //                G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-            //                G.EditTool.lbCam.Text =Global.Config.IDCamera.Split('$')[0] + " Connected";
+            //                Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+            //                Global.EditTool.lbCam.Text =Global.Config.IDCamera.Split('$')[0] + " Connected";
             //            }
             //        }
             //        else
@@ -2365,8 +2365,8 @@ namespace BeeUi
             //            btnCap.Enabled = false;
             //            btnRecord.Enabled = false;
                       
-            //            G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
-            //            G.EditTool.lbCam.Text = "Camera Not Connect";
+            //            Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
+            //            Global.EditTool.lbCam.Text = "Camera Not Connect";
 
             //        }
             //    }
@@ -2382,8 +2382,8 @@ namespace BeeUi
                            
             //            }
             //        }
-            //        G.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
-            //        G.EditTool.lbCam.Text = Global.Config.IDCamera.Split('$')[0] + " Connected";
+            //        Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+            //        Global.EditTool.lbCam.Text = Global.Config.IDCamera.Split('$')[0] + " Connected";
             //    }
             //}
                
@@ -2665,7 +2665,7 @@ namespace BeeUi
             {
                 btnCap.Enabled = false;
             }
-            G.EditTool.View.btnTypeTrig.IsCLick = false;
+            Global.EditTool.View.btnTypeTrig.IsCLick = false;
         }
 
         private void btnFile_Click(object sender, EventArgs e)
@@ -2707,7 +2707,7 @@ namespace BeeUi
                     if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
-                G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+                Global.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
                 BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -2755,7 +2755,7 @@ namespace BeeUi
                 btnPlayStep.Enabled = false;
             }
 
-            G.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+            Global.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
           
            
         }
@@ -2897,7 +2897,7 @@ namespace BeeUi
             //     RectRotate rot = Propety.rotArea;
             //     float angle = rot._rectRotation;
             //     if (rot._rectRotation < 0) angle = 360 + rot._rectRotation;
-            //     Mat matCrop = G.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
+            //     Mat matCrop = Global.EditTool.View.CropRotatedRect(matCCD, new RotatedRect(new Point2f(rot._PosCenter.X + (rot._rect.Width / 2 + rot._rect.X), rot._PosCenter.Y + (rot._rect.Height / 2 + rot._rect.Y)), new Size2f(rot._rect.Width, rot._rect.Height), angle));
 
             //     matCrop.CopyTo(new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw, new Rect((int)rot._PosCenter.X + (int)rot._rect.X, (int)rot._PosCenter.Y + (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height)));
             //     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -3006,9 +3006,9 @@ namespace BeeUi
         private void tmShow_Tick(object sender, EventArgs e)
         {
            if(Global.ParaCommon.Comunication.IO.IsConnected)
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+                Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
            else
-                G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
 
         }
 
@@ -3037,7 +3037,7 @@ namespace BeeUi
             }
             if(indexFile >= Files.Count)
             indexFile = 0;
-            G.EditTool.lbNamefile.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
+            Global.EditTool.lbNamefile.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
 
         }
 

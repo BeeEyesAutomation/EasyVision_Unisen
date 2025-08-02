@@ -1,4 +1,5 @@
-﻿using BeeUi.Commons;
+﻿using BeeGlobal;
+using BeeUi.Commons;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,15 +25,15 @@ namespace BeeUi.Unit
             if (btnHide.IsCLick)
             {
 
-                //  G.EditTool.LayOutShow.ColumnStyles[0].Width = 100;
-                G.EditTool.LayoutMain.RowStyles[3].Height = 255;
-                G.EditTool.LayoutMain.ResumeLayout(true);
+                //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 100;
+                Global.EditTool.LayoutMain.RowStyles[3].Height = 255;
+                Global.EditTool.LayoutMain.ResumeLayout(true);
             }
             else
             {
-                //  G.EditTool.LayOutShow.ColumnStyles[0].Width = 70;
-                G.EditTool.LayoutMain.RowStyles[3].Height = 45;
-                G.EditTool.LayoutMain.ResumeLayout(true);
+                //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 70;
+                Global.EditTool.LayoutMain.RowStyles[3].Height = 45;
+                Global.EditTool.LayoutMain.ResumeLayout(true);
             }
 
             //if (btnHide.IsCLick)

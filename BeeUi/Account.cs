@@ -28,7 +28,7 @@ namespace BeeUi
                 {
                    Global.Config.nameUser = cbUser.Text.Trim();
                     this.Hide();
-                   // G.EditTool.btnUser.Text =Global.Config.nameUser;
+                   // Global.EditTool.btnUser.Text =Global.Config.nameUser;
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
                     Access.SaveConfig("Default.config",Global.Config);
@@ -46,7 +46,7 @@ namespace BeeUi
                 {
                    Global.Config.nameUser = cbUser.Text.Trim();
                     this.Hide();
-                   // G.EditTool.btnUser.Text =Global.Config.nameUser;
+                   // Global.EditTool.btnUser.Text =Global.Config.nameUser;
                     if (File.Exists("Default.config"))
                         File.Delete("Default.config");
                     Access.SaveConfig("Default.config",Global.Config);

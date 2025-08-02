@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
@@ -22,70 +23,70 @@ namespace BeeUi.Commons
 
         private void btnHide_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
-            G.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
-            G.EditTool.View.RefreshMask();
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
+            Global.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
+            Global.EditTool.View.RefreshMask();
+            Global.EditTool.View.imgView.Invalidate();
           
-            G.EditTool.View.toolEdit.btnClear.PerformClick();
+            Global.EditTool.View.toolEdit.btnClear.PerformClick();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
-            G.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
-            G.EditTool.View.RefreshMask();
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
+            Global.EditTool.View.listMask = new List<OpenCvSharp.Mat>();
+            Global.EditTool.View.RefreshMask();
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void trackClear_Scroll(object sender, EventArgs e)
         {
          
-            G.EditTool.View.widthClear = trackClear.Value;
-            G.EditTool.View.RefreshMask();
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.widthClear = trackClear.Value;
+            Global.EditTool.View.RefreshMask();
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnSub_Click(object sender, EventArgs e)
         {
             trackClear.Value -= trackClear.SmallChange;
-            G.EditTool.View.widthClear = trackClear.Value;
-            G.EditTool.View.RefreshMask();
+            Global.EditTool.View.widthClear = trackClear.Value;
+            Global.EditTool.View.RefreshMask();
 
         }
 
         private void btnPlus_Click(object sender, EventArgs e)
         {
             trackClear.Value += trackClear.SmallChange;
-            G.EditTool.View.widthClear = trackClear.Value;
-            G.EditTool.View.RefreshMask();
+            Global.EditTool.View.widthClear = trackClear.Value;
+            Global.EditTool.View.RefreshMask();
 
         }
 
         private void btnUndo_Click(object sender, EventArgs e)
         {
-            if (G.EditTool.View.listRedo == null) G.EditTool.View.listRedo = new List<Mat>();
-            if (G.EditTool.View.listMask == null) G.EditTool.View.listMask = new List<Mat>();
+            if (Global.EditTool.View.listRedo == null) Global.EditTool.View.listRedo = new List<Mat>();
+            if (Global.EditTool.View.listMask == null) Global.EditTool.View.listMask = new List<Mat>();
 
-            if (G.EditTool.View.listMask.Count == 0) return;
-                G.EditTool.View.listRedo.Add(G.EditTool.View.listMask[G.EditTool.View.listMask.Count - 1].Clone());
-            G.EditTool.View.listMask.RemoveAt(G.EditTool.View.listMask.Count - 1);
-            G.EditTool.View.RefreshMask();
-            G.EditTool.View.imgView.Invalidate(true);
+            if (Global.EditTool.View.listMask.Count == 0) return;
+                Global.EditTool.View.listRedo.Add(Global.EditTool.View.listMask[Global.EditTool.View.listMask.Count - 1].Clone());
+            Global.EditTool.View.listMask.RemoveAt(Global.EditTool.View.listMask.Count - 1);
+            Global.EditTool.View.RefreshMask();
+            Global.EditTool.View.imgView.Invalidate(true);
         }
 
         private void btnRedo_Click(object sender, EventArgs e)
         {
-            if (G.EditTool.View.listMask.Count == 0) return;
-            G.EditTool.View.listMask.Add(G.EditTool.View.listRedo[G.EditTool.View.listRedo.Count - 1]);
-            G.EditTool.View.listRedo.RemoveAt(G.EditTool.View.listRedo.Count - 1);
-            G.EditTool.View.RefreshMask();
-            G.EditTool.View.imgView.Invalidate(true);
+            if (Global.EditTool.View.listMask.Count == 0) return;
+            Global.EditTool.View.listMask.Add(Global.EditTool.View.listRedo[Global.EditTool.View.listRedo.Count - 1]);
+            Global.EditTool.View.listRedo.RemoveAt(Global.EditTool.View.listRedo.Count - 1);
+            Global.EditTool.View.RefreshMask();
+            Global.EditTool.View.imgView.Invalidate(true);
         }
 
         private void rjButton5_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.toolEdit.btnClear.PerformClick() ;
+            Global.EditTool.View.toolEdit.btnClear.PerformClick() ;
         }
 
         private void Eraser_Load(object sender, EventArgs e)

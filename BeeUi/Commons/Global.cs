@@ -77,7 +77,7 @@ namespace BeeUi
 
         // public static TypeTool TypeTool = TypeTool.OutLine;
         public static Tools tool ;
-        public static EditTool EditTool ;
+        
         public static bool IsDrawProcess = true;
 
         public static Color clTrack = (Color)new ColorConverter().ConvertFromString("#444444");

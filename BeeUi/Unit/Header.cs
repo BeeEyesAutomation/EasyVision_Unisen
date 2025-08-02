@@ -133,7 +133,7 @@ namespace BeeUi.Common
                 ForrmAlarm.ShowDialog();
                 G.Main.Close();
                 //G.IsReConnectCCD = true;
-                //G.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
+                //Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                 //G.ScanCCD.Show();
                 //G.Header.tmReadPLC.Enabled = false;
 
@@ -153,16 +153,16 @@ namespace BeeUi.Common
         {
             //if(IsRun)
             //{
-            //    G.EditTool.pName.Visible = false;
+            //    Global.EditTool.pName.Visible = false;
                
             //}
             //else
             //{
-            //    G.EditTool.pName.Visible = true;
+            //    Global.EditTool.pName.Visible = true;
              
             //}
-           // G.EditTool.btnHeaderBar1.btnSettingPLC.Enabled= Global.IsRun;
-            G.EditTool.View.btnLive.Enabled = !Global.IsRun;
+           // Global.EditTool.btnHeaderBar1.btnSettingPLC.Enabled= Global.IsRun;
+            Global.EditTool.View.btnLive.Enabled = !Global.IsRun;
             pModel.Enabled = IsRun;
           
             if (Global.Config.nameUser == "Admin")
@@ -170,7 +170,7 @@ namespace BeeUi.Common
                 G.SettingPLC.pCom.Enabled = true;
                 if( G.StatusDashboard!=null)
                  G.StatusDashboard.btnReset.Enabled = true;
-                G.EditTool.View.btnRecord.Enabled = Global.IsRun;
+                Global.EditTool.View.btnRecord.Enabled = Global.IsRun;
                 
 
                 //  G.listProgram.Enabled = IsRun;
@@ -185,9 +185,9 @@ namespace BeeUi.Common
             else if (Global.Config.nameUser == "Leader")
             {
                 G.SettingPLC.pCom.Enabled = false;
-                // G.EditTool.View.btnRecord.Enabled = false;
+                // Global.EditTool.View.btnRecord.Enabled = false;
 
-                G.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.View.btnRecord.Enabled = false;
 
                 //G.listProgram.Enabled = IsRun;
                 if ( G.StatusDashboard != null)
@@ -198,9 +198,9 @@ namespace BeeUi.Common
             }
             else 
             {
-                G.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.View.btnRecord.Enabled = false;
 
-                // G.EditTool.View.btnRecord.Enabled = false;
+                // Global.EditTool.View.btnRecord.Enabled = false;
                 G.SettingPLC.pCom.Enabled = false;
 
                 G.listProgram.Enabled = IsRun;
@@ -214,11 +214,11 @@ namespace BeeUi.Common
             }
             if ( Global.ParaCommon.IsExternal)
             {
-               G.EditTool.View.btnCap.Enabled = false;
-               G.EditTool.View.btnRecord.Enabled = false;
+               Global.EditTool.View.btnCap.Enabled = false;
+               Global.EditTool.View.btnRecord.Enabled = false;
             }
          
-            G.EditTool.btnHeaderBar1.btnUser.Text =Global.Config.nameUser;
+            Global.EditTool.btnHeaderBar1.btnUser.Text =Global.Config.nameUser;
         }
  
         public async void Mode()
@@ -242,8 +242,8 @@ namespace BeeUi.Common
             if (Global.IsRun)
             {
               
-                G.EditTool.View.btnCap.Enabled = true;
-                G.EditTool.View.btnRecord.Enabled = true;
+                Global.EditTool.View.btnCap.Enabled = true;
+                Global.EditTool.View.btnRecord.Enabled = true;
 
                
                 Global.ToolSettings.btnAdd.Enabled = false;
@@ -252,18 +252,18 @@ namespace BeeUi.Common
                 Global.ToolSettings.btnEnEdit.Enabled = true;
                 btnMode.Text = "RUN";
                 btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
-                G.EditTool.RefreshGuiEdit(Step.Run);
+                Global.EditTool.RefreshGuiEdit(Step.Run);
 
             }
             else
             {
-                if (G.EditTool.View.btnRecord.IsCLick)
-                    if (G.EditTool.View.btnRecord.Enabled == true)
-                        G.EditTool.View.btnRecord.PerformClick();
-                G.EditTool.btnHeaderBar1.btnSettingPLC.IsCLick = false;
-                G.EditTool.View.btnCap.Enabled = false;
-                G.EditTool.View.btnRecord.Enabled = false;
-                G.EditTool.RefreshGuiEdit(Step.Step1);
+                if (Global.EditTool.View.btnRecord.IsCLick)
+                    if (Global.EditTool.View.btnRecord.Enabled == true)
+                        Global.EditTool.View.btnRecord.PerformClick();
+                Global.EditTool.btnHeaderBar1.btnSettingPLC.IsCLick = false;
+                Global.EditTool.View.btnCap.Enabled = false;
+                Global.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.RefreshGuiEdit(Step.Step1);
                 Global.ToolSettings.btnAdd.Enabled = true;
                 Global.ToolSettings.btnCopy.Enabled = true;
                 Global.ToolSettings.btnDelect.Enabled = true;
@@ -280,9 +280,9 @@ namespace BeeUi.Common
         }
         private void btnMode_Click(object sender, EventArgs e)
         {
-            if (G.EditTool.View.btnLive.IsCLick)
+            if (Global.EditTool.View.btnLive.IsCLick)
             {
-                G.EditTool.View.btnLive.PerformClick();
+                Global.EditTool.View.btnLive.PerformClick();
             }
          //   G.Header.tmReadPLC.Enabled = true;
             Mode();
@@ -300,20 +300,20 @@ namespace BeeUi.Common
         }
         private void FadeEffect(object sender, EventArgs e)
         {
-            if (G.EditTool.pEdit.Visible && opacity < 1.0f)
+            if (Global.EditTool.pEdit.Visible && opacity < 1.0f)
             {
                 opacity += 0.1f;
-                G.EditTool.pEdit.BackColor = Color.FromArgb((int)(opacity * 255), G.EditTool.pEdit.BackColor);
+                Global.EditTool.pEdit.BackColor = Color.FromArgb((int)(opacity * 255), Global.EditTool.pEdit.BackColor);
             }
-            else if (!G.EditTool.pEdit.Visible && opacity > 0.0f)
+            else if (!Global.EditTool.pEdit.Visible && opacity > 0.0f)
             {
                 opacity -= 0.1f;
-                G.EditTool.pEdit.BackColor = Color.FromArgb((int)(opacity * 255), G.EditTool.pEdit.BackColor);
+                Global.EditTool.pEdit.BackColor = Color.FromArgb((int)(opacity * 255), Global.EditTool.pEdit.BackColor);
             }
             else
             {
                 fadeTimer.Stop();
-                if (opacity == 0.0f) G.EditTool.pEdit.Visible = false;
+                if (opacity == 0.0f) Global.EditTool.pEdit.Visible = false;
             }
         }
         private void Header_Load(object sender, EventArgs e)
@@ -323,18 +323,18 @@ namespace BeeUi.Common
 
             //fadeTimer = new Timer { Interval = 20 };
             //fadeTimer.Tick += FadeEffect;
-            if (G.EditTool == null) return;
-            if (G.EditTool.View == null)
+            if (Global.EditTool == null) return;
+            if (Global.EditTool.View == null)
             {
 
-                G.EditTool.View = new View();
+                Global.EditTool.View = new View();
 
-                G.EditTool.View.Dock = DockStyle.None;
-                G.EditTool.View.Size = G.EditTool.pView.Size;
-                G.EditTool.View.Anchor = AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right|AnchorStyles.Bottom;
-                G.EditTool.View.Location = new Point(0,0);
+                Global.EditTool.View.Dock = DockStyle.None;
+                Global.EditTool.View.Size = Global.EditTool.pView.Size;
+                Global.EditTool.View.Anchor = AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right|AnchorStyles.Bottom;
+                Global.EditTool.View.Location = new Point(0,0);
 
-                G.EditTool.View.Parent = G.EditTool.pView;
+                Global.EditTool.View.Parent = Global.EditTool.pView;
             }
             //if (G.IsLoad) return;
           //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
@@ -446,7 +446,7 @@ namespace BeeUi.Common
       
     public void AddDataMethod(String myString)
     {
-        //G.EditTool.txtRecept.Text=myString;
+        //Global.EditTool.txtRecept.Text=myString;
             
         //    if (sRecept.Contains("IO")&& !IsWaitPort)
         //    {
@@ -454,14 +454,14 @@ namespace BeeUi.Common
         //        tmScanPort.Tick -= TmScanPort_Tick;
         //        tmScanPort.Enabled = false;
              
-        //        G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-        //        G.EditTool.toolStripPort.Text = "Port Connected";
+        //        Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+        //        Global.EditTool.toolStripPort.Text = "Port Connected";
         //        SaveData.Config(Global.Config);
-        //        G.EditTool.View.tmCheckPort.Enabled = true;
+        //        Global.EditTool.View.tmCheckPort.Enabled = true;
         //    }
         //   else if  (sRecept.Contains("Trig"))
         //        {
-        //        G.EditTool.View.Cap(false);
+        //        Global.EditTool.View.Cap(false);
         //        }
         //    else if (sRecept.Contains("Mod"))
         //    {
@@ -474,8 +474,8 @@ namespace BeeUi.Common
         //    }
         //    else if (sRecept.Contains("Rec"))
         //    {
-        //      G.EditTool.View.btnLive.PerformClick();
-        //        if (G.EditTool.View.btnLive.IsCLick)
+        //      Global.EditTool.View.btnLive.PerformClick();
+        //        if (Global.EditTool.View.btnLive.IsCLick)
         //            SerialPort1.WriteLine("Live");
         //        else
         //            SerialPort1.WriteLine("Cap");
@@ -611,7 +611,7 @@ txtQrCode.Focus();
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
             if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
             {
-                G.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
+                Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
                 //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
             }
             if (Global.ToolSettings == null)
@@ -705,7 +705,7 @@ txtQrCode.Focus();
 
         private void pModel_SizeChanged(object sender, EventArgs e)
         {
-            if (G.EditTool == null) return;
+            if (Global.EditTool == null) return;
            BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
 
         }
@@ -727,13 +727,13 @@ txtQrCode.Focus();
             switch (stepShow)
             {
                 case 0:
-                G.EditTool.View.imgView.Visible = true;
-                G.EditTool.View.imgView.Size = G.EditTool.View.pView.Size;
+                Global.EditTool.View.imgView.Visible = true;
+                Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
                     stepShow++;
                     tmShow.Interval = 500;
                     break;
                 case 1:
-                    G.EditTool.RefreshGuiEdit(Step.Run);
+                    Global.EditTool.RefreshGuiEdit(Step.Run);
                     stepShow++;
                     break;
                 case 2:
@@ -749,7 +749,7 @@ txtQrCode.Focus();
                     {
                         stepShow = 0;
                         indexToolShow = 0;
-                        G.EditTool.View.btnFull.PerformClick();
+                        Global.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
                         Global.ToolSettings.ResumeLayout(true);
                     }

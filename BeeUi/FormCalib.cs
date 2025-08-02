@@ -26,22 +26,22 @@ namespace BeeUi
                 btnCheck.PerformClick();
             if (btnLive.IsCLick)
                 btnLive.PerformClick();
-            if (G.EditTool.View.btnLive.IsCLick)
+            if (Global.EditTool.View.btnLive.IsCLick)
             {
-                //G.EditTool.View.btnRecord.Enabled = true;
-                G.EditTool.View.btnLive.PerformClick();
+                //Global.EditTool.View.btnRecord.Enabled = true;
+                Global.EditTool.View.btnLive.PerformClick();
 
             }
-            if (G.EditTool.View.btnRecord.IsCLick)
+            if (Global.EditTool.View.btnRecord.IsCLick)
             {
-                //G.EditTool.View.btnRecord.Enabled = true;
-                G.EditTool.View.btnRecord.PerformClick();
+                //Global.EditTool.View.btnRecord.Enabled = true;
+                Global.EditTool.View.btnRecord.PerformClick();
 
             }
            BeeCore.Common.listCamera[Global.IndexChoose].Read();
           
             Global.ParaCommon.matSample = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-            G.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
 
         }
 
@@ -66,7 +66,7 @@ namespace BeeUi
             }    
                 
 
-             G.EditTool.View.imgView.Image = matRS.ToBitmap();
+             Global.EditTool.View.imgView.Image = matRS.ToBitmap();
             if (btnCheck.IsCLick)
                 workerCalib.RunWorkerAsync();
         }
@@ -138,16 +138,16 @@ namespace BeeUi
                 btnLive.PerformClick();
             if (btnCheck.IsCLick)
             {
-                if (G.EditTool.View.btnLive.IsCLick)
+                if (Global.EditTool.View.btnLive.IsCLick)
                 {
-                    //G.EditTool.View.btnRecord.Enabled = true;
-                    G.EditTool.View.btnLive.PerformClick();
+                    //Global.EditTool.View.btnRecord.Enabled = true;
+                    Global.EditTool.View.btnLive.PerformClick();
 
                 }
-                if (G.EditTool.View.btnRecord.IsCLick)
+                if (Global.EditTool.View.btnRecord.IsCLick)
                 {
-                    //G.EditTool.View.btnRecord.Enabled = true;
-                    G.EditTool.View.btnRecord.PerformClick();
+                    //Global.EditTool.View.btnRecord.Enabled = true;
+                    Global.EditTool.View.btnRecord.PerformClick();
 
                 }
                 if (!workerCalib.IsBusy)
@@ -186,8 +186,8 @@ namespace BeeUi
               
             else
                Global.Config.IsHist = IsHistOld;
-            G.EditTool.View.btnLive.IsCLick = !G.EditTool.View.btnLive.IsCLick;
-            G.EditTool.View.Live();
+            Global.EditTool.View.btnLive.IsCLick = !Global.EditTool.View.btnLive.IsCLick;
+            Global.EditTool.View.Live();
         }
     }
 }

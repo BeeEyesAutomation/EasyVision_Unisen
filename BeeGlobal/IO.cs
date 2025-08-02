@@ -298,6 +298,15 @@ namespace BeeGlobal
                }
             }
         }
+        private void SetLight(bool IsOn)
+        {
+            if (IsLight1)
+                SetOutPut(AddressOutPut[(int)I_O_Output.Light1], IsOn);
+            if (IsLight2)
+                SetOutPut(AddressOutPut[(int)I_O_Output.Light2], IsOn);
+            if (IsLight3)
+                SetOutPut(AddressOutPut[(int)I_O_Output.Light3], IsOn);
+        }
         public async Task<bool>  WriteIO()
         {   //if (!IsConnected) return false;
 
@@ -306,11 +315,6 @@ namespace BeeGlobal
 
                 return false;
             }
-            //X:if (Global.StatusIO == StatusIO.Reading)
-            //{
-            //  await Task.Delay(timeRead);
-            //    goto X;
-            //}
             Global.StatusIO = StatusIO.Writing;
 
             switch (IO_Processing )
@@ -319,9 +323,8 @@ namespace BeeGlobal
                     
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], true);//LIGHT 1
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], true);//LIGHT 2
-                   await WriteOutPut();
+                    SetLight(true);
+                    await WriteOutPut();
                     Global.StatusMode = StatusMode.Once;
                     await Task.Delay((int)DelayTrigger);
                     Global.StatusProcessing = StatusProcessing.Read;
@@ -329,8 +332,7 @@ namespace BeeGlobal
                 case IO_Processing.Close:
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Busy
+                  
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
@@ -352,8 +354,7 @@ namespace BeeGlobal
                     {
                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                         SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
+                        SetLight(false);
                         SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                         IsWait = true;
                         await WriteOutPut();
@@ -370,8 +371,7 @@ namespace BeeGlobal
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
+                                SetLight(false);
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                            
                                 await WriteOutPut();
@@ -383,8 +383,7 @@ namespace BeeGlobal
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
+                                SetLight(false);
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                           
                                 await WriteOutPut();
@@ -397,8 +396,7 @@ namespace BeeGlobal
                         {
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Light
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Light2
+                            SetLight(false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                           
                             await WriteOutPut();
@@ -417,8 +415,8 @@ namespace BeeGlobal
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light1], false); //Ready
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Light2], false); //Ready
+                    SetLight(false);
+
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     Global.StatusProcessing= StatusProcessing.None;
                     IO_Processing = IO_Processing.None;
@@ -426,8 +424,7 @@ namespace BeeGlobal
                    
                         break;
                 case IO_Processing.Light:
-                       SetOutPut(AddressOutPut[(int)I_O_Output.Light1], Global.ParaCommon.IsOnLight); //Busy
-                       SetOutPut(AddressOutPut[(int)I_O_Output.Light2], Global.ParaCommon.IsOnLight); //Busy
+                    SetLight(Global.ParaCommon.IsOnLight);
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
@@ -438,7 +435,8 @@ namespace BeeGlobal
                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
-                   await WriteOutPut();
+                   SetLight(false);
+                    await WriteOutPut();
                    break;
 
             }

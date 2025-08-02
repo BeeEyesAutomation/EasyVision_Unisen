@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeGlobal;
 using BeeUi.Commons;
 using BeeUi.Tool;
 using System;
@@ -22,7 +23,7 @@ namespace BeeUi
         {
             InitializeComponent();
             G.Main = this;
-            G.EditTool = this.editTool1;
+            Global.EditTool = this.editTool1;
             //G.Header = editTool1.header1;
             this.MinimumSize = new Size(1190, 780);
         }
@@ -119,7 +120,7 @@ namespace BeeUi
 
                 //lastTime = DateTime.Now;
                 //if(e.KeyChar=='\n')
-                //G.EditTool.View.txtQRcode.Text = barcode;
+                //Global.EditTool.View.txtQRcode.Text = barcode;
                 /*
 
                 Test your Barcode, and if it matches your criteria then change your TextBox text

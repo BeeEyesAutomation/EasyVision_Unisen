@@ -14,6 +14,8 @@ namespace BeeGlobal
         public ValuePara Width,Height,OffSetX,OffSetY;
         public ValuePara Exposure,Gain,Briness,Shift;
         public bool IsConnect;
+        public float CenterX;
+        public float CenterY;
         public String Ex;
         public float Fps;
         public TypeCamera TypeCamera = TypeCamera.USB;

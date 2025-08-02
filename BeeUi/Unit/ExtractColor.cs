@@ -24,55 +24,55 @@ namespace BeeUi.Commons
         private void btnHide_Click(object sender, EventArgs e)
         {
            
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.imgView.Invalidate();
 
-            G.EditTool.View.toolEdit.btnGetColor.PerformClick();
+            Global.EditTool.View.toolEdit.btnGetColor.PerformClick();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.toolEdit.Propety.ClearTemp(Global.IsRun);
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.toolEdit.Propety.ClearTemp(Global.IsRun);
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void trackClear_Scroll(object sender, EventArgs e)
         {
             ColorArea.AreaPixel = trackClear.Value;
-            G.EditTool.View.toolEdit.GetTemp(G.EditTool.View.toolEdit.Propety.rotArea);
+            Global.EditTool.View.toolEdit.GetTemp(Global.EditTool.View.toolEdit.Propety.rotArea);
 
 
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnSub_Click(object sender, EventArgs e)
         {
             trackClear.Value -= trackClear.SmallChange;
             ColorArea.AreaPixel = trackClear.Value;
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnPlus_Click(object sender, EventArgs e)
         {
             trackClear.Value += trackClear.SmallChange;
             ColorArea.AreaPixel = trackClear.Value;
-            G.EditTool.View.imgView.Invalidate();
+            Global.EditTool.View.imgView.Invalidate();
         }
 
         private void btnUndo_Click(object sender, EventArgs e)
         {
-          G.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-            G.EditTool.View.RefreshMask();
+          Global.EditTool.View.toolEdit.Propety.Undo(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+            Global.EditTool.View.RefreshMask();
         }
 
         private void btnRedo_Click(object sender, EventArgs e)
         {
             
-            G.EditTool.View.imgView.Invalidate(true);
+            Global.EditTool.View.imgView.Invalidate(true);
         }
 
         private void rjButton5_Click(object sender, EventArgs e)
         {
-            G.EditTool.View.toolEdit.btnGetColor.PerformClick();
+            Global.EditTool.View.toolEdit.btnGetColor.PerformClick();
         }
 
         private void ExtractColor_Load(object sender, EventArgs e)
