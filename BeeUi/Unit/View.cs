@@ -898,7 +898,7 @@ namespace BeeUi
         {
             
 
-                if (Global.IsRun)
+                if (Global.IsRun|| Global.IndexToolSelected==-1)
                 {
                //
 

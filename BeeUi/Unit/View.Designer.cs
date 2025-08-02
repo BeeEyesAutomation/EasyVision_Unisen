@@ -93,15 +93,15 @@ namespace BeeUi
             // 
             // imgView
             // 
-            this.imgView.AllowClickZoom = true;
             this.imgView.AllowFreePan = false;
             this.imgView.AllowZoom = false;
+            this.imgView.AlwaysShowHScroll = true;
+            this.imgView.AlwaysShowVScroll = true;
             this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.imgView.AutoCenter = false;
             this.imgView.AutoPan = false;
-            this.imgView.AutoScroll = false;
             this.imgView.GridColor = System.Drawing.Color.Transparent;
             this.imgView.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
             this.imgView.Location = new System.Drawing.Point(0, 0);
