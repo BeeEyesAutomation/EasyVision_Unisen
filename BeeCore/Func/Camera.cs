@@ -1,6 +1,7 @@
 ﻿using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using OpenCvSharp.Features2D;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -89,7 +90,7 @@ namespace BeeCore
         {
             CCDPlus.DestroyAll(IndexCCD);
         }
-        public  bool Connect(String NameCCD )
+        public  async Task<bool> Connect(String NameCCD )
         {
             if(Para.TypeCamera == TypeCamera.TinyIV)
             {
@@ -127,15 +128,44 @@ namespace BeeCore
                 //    CCDPlus.ReadRaw(true);
                 //else
                 Read();
-
-                if (Global.ParaCommon._Exposure != 0)
-                    CCDPlus.Exposure = Global.ParaCommon._Exposure;
+                if (Para.Exposure == null)
+                    Para.Exposure = new ValuePara();
+                if (Para.Gain == null)
+                    Para.Gain = new ValuePara();
+                if (Para.Shift == null)
+                    Para.Shift = new ValuePara();
+                if (Para.Width == null)
+                    Para.Width = new ValuePara();
+                if (Para.Height == null)
+                    Para.Height = new ValuePara();
+                if (Para.OffSetX == null)
+                    Para.OffSetX = new ValuePara();
+                if (Para.OffSetY == null)
+                    Para.OffSetY = new ValuePara();
+               await SetFullPara();
+                //if (Global.ParaCommon._Exposure != 0)
+                //    CCDPlus.Exposure = Global.ParaCommon._Exposure;
 
                 return true;
             }
             return false;
 
         }
+        public async Task<bool> SetFullPara()
+
+        {
+            await  SetWidth();
+            await SetHeight();
+            await SetOffSetX();
+            await SetOffSetY();
+            await SetCenterX();
+            await SetCenterY();
+            await SetExpo();
+            await SetGain();
+            await SetShift();
+            return true;
+        }
+
         //public static void SetRaw()
         //{
         //    //{if (matRaw == null) matRaw = new Mat();

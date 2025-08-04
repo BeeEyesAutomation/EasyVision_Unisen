@@ -188,12 +188,9 @@ namespace BeeUi
 
         }
 
-        private void work_DoWork(object sender, DoWorkEventArgs e)
+        private  void work_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
-                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                    BeeCore.Common.listCamera[Global.IndexChoose].IsConnected= BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
-            //if (Global.Configlobal.TypeCamera  == TypeCamera.USB||Global.Configlobal.TypeCamera  == TypeCamera.BaslerGigE)
+             //if (Global.Configlobal.TypeCamera  == TypeCamera.USB||Global.Configlobal.TypeCamera  == TypeCamera.BaslerGigE)
             //    BeeUi.G.IsCCD = BeeCore.Common.ConnectCCD(indexCCD,Global.Config.Resolution);
 
             //else if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
@@ -203,11 +200,15 @@ namespace BeeUi
             //}
         }
         Crypto Crypto = new Crypto();
-        private void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
+                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                    BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
+
             //String[] sp =Global.Config.Resolution.Split(' ');
             //String[] sp2 = sp[0].Split('x');
-        
+
             //G.MainForm.Show();
             btnConnect.Enabled = true;
             if ( BeeCore.Common.listCamera.Count() > Global.IndexChoose)
@@ -417,24 +418,25 @@ namespace BeeUi
             //BeeCore.Common.listCamera[3] = new Camera(Global.listParaCamera[3],3);
         }
 
-        private void workConAll_DoWork(object sender, DoWorkEventArgs e)
+        private  void workConAll_DoWork(object sender, DoWorkEventArgs e)
+        {
+          
+        }
+
+        private async void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             int indexCCD = 0;
-         foreach (Camera camera in BeeCore.Common.listCamera)
+            foreach (Camera camera in BeeCore.Common.listCamera)
             {
                 if (camera != null)
                 {
                     camera.Init();
                     camera.Scan();
-                    camera.IsConnected = camera.Connect(camera.Para.Name);
+                    camera.IsConnected = await camera.Connect(camera.Para.Name);
                     indexCCD++;
                 }
-                    
-            }
-        }
 
-        private void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
+            }
             bool IsConnect = false;
             foreach (Camera camera in BeeCore.Common.listCamera)
             {

@@ -89,10 +89,10 @@ namespace BeeUi.Tool
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-          //  BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Native.GetImg();
             if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-                    Global.ParaCommon.matRegister = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone().ToBitmap(); ;
+                if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                        Global.ParaCommon.matRegister = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone().ToBitmap(); ;
             if (Global.ParaCommon.matRegister == null)
                 return;
             Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);

@@ -29,7 +29,6 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingPLC));
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -84,7 +83,7 @@ namespace BeeInterface
             this.In3 = new BeeInterface.RJButton();
             this.In2 = new BeeInterface.RJButton();
             this.In1 = new BeeInterface.RJButton();
-            this.tmShow = new System.Windows.Forms.Timer(this.components);
+            this.tmShow = new System.Windows.Forms.Timer();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -207,9 +206,9 @@ namespace BeeInterface
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtLogs = new System.Windows.Forms.TextBox();
-            this.tmCheck = new System.Windows.Forms.Timer(this.components);
-            this.tmConnect = new System.Windows.Forms.Timer(this.components);
-            this.tmRead = new System.Windows.Forms.Timer(this.components);
+            this.tmCheck = new System.Windows.Forms.Timer();
+            this.tmConnect = new System.Windows.Forms.Timer();
+            this.tmRead = new System.Windows.Forms.Timer();
             this.workRead = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();

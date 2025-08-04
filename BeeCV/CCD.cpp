@@ -640,8 +640,8 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 		return -1;
 
 
-
-	TypeCCD = listTypeCCD[indexCCD];
+	m_pcMyCamera[indexCCD]->StopGrabbing();
+	//TypeCCD = listTypeCCD[indexCCD];
 	std::string namepara = marshal_as<std::string>(Namepara);
 	MVCC_INTVALUE_EX expInfo = {};
 	if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
@@ -663,13 +663,16 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 	// Set giá trị
 	if (m_pcMyCamera[indexCCD]->SetIntValue(namepara.c_str(), (int)adjustedExposure) == MV_OK)
 	{
+		m_pcMyCamera[indexCCD]->StartGrabbing();
 		return Value;
 	}
 	else
 	{
+		m_pcMyCamera[indexCCD]->StartGrabbing();
 		return -1;
 		std::cerr << "❌ Set ExposureTime thất bại!" << std::endl;
 	}
+	m_pcMyCamera[indexCCD]->StartGrabbing();
 	return -1;
 	/*int nRet = MV_CC_SetFloatValue(m_pcMyCamera[indexCCD], namepara.c_str(), Value);
 	if (MV_OK != nRet)
@@ -682,6 +685,7 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 
 bool	CCD::GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step, float% current)
 {
+	
 		std::string namepara = marshal_as<std::string>(Namepara);
 	float value = -1;
 	MVCC_INTVALUE_EX expInfo = {};
@@ -697,7 +701,8 @@ bool	CCD::GetPara(int indexCCD, System::String^ Namepara, float% min,  float% ma
 		step = expInfo.nInc;
 		min = expInfo.nMin;
 		max = expInfo.nMax;
-	}
+	}	
+
 	/*if (m_pcMyCamera[indexCCD] == nullptr)
 		return -1;
 	MVCC_ENUMVALUE enumVal = {};

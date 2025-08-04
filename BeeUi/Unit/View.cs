@@ -2149,8 +2149,10 @@ namespace BeeUi
          
             if (btnLive.IsCLick)
             {
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null && !BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                    using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw))
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                 if( !BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                 using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw))
                 {
                     lock (frameLock)
                     {

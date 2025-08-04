@@ -34,7 +34,6 @@ namespace BeeInterface
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tmDelaySend = new System.Windows.Forms.Timer(this.components);
             this.tableLayout1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnDownLoadPara = new BeeInterface.RJButton();
             this.AdjOffSetY = new BeeInterface.AdjustBar();
@@ -83,7 +82,7 @@ namespace BeeInterface
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.workReadPara = new System.ComponentModel.BackgroundWorker();
+            this.tmShowPara = new System.Windows.Forms.Timer(this.components);
             this.tableLayout1.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -435,9 +434,9 @@ namespace BeeInterface
             this.btnCenterY.ForeColor = System.Drawing.Color.Black;
             this.btnCenterY.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCenterY.IsCLick = false;
-            this.btnCenterY.IsNotChange = true;
+            this.btnCenterY.IsNotChange = false;
             this.btnCenterY.IsRect = false;
-            this.btnCenterY.IsUnGroup = false;
+            this.btnCenterY.IsUnGroup = true;
             this.btnCenterY.Location = new System.Drawing.Point(181, 3);
             this.btnCenterY.Name = "btnCenterY";
             this.btnCenterY.Size = new System.Drawing.Size(173, 38);
@@ -465,9 +464,9 @@ namespace BeeInterface
             this.btnCenterX.ForeColor = System.Drawing.Color.Black;
             this.btnCenterX.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCenterX.IsCLick = false;
-            this.btnCenterX.IsNotChange = true;
+            this.btnCenterX.IsNotChange = false;
             this.btnCenterX.IsRect = false;
-            this.btnCenterX.IsUnGroup = false;
+            this.btnCenterX.IsUnGroup = true;
             this.btnCenterX.Location = new System.Drawing.Point(3, 3);
             this.btnCenterX.Name = "btnCenterX";
             this.btnCenterX.Size = new System.Drawing.Size(172, 38);
@@ -1079,10 +1078,10 @@ namespace BeeInterface
             this.tabPage3.Text = "Camera";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // workReadPara
+            // tmShowPara
             // 
-            this.workReadPara.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReadPara_DoWork);
-            this.workReadPara.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReadPara_RunWorkerCompleted);
+            this.tmShowPara.Interval = 200;
+            this.tmShowPara.Tick += new System.EventHandler(this.tmShowPara_Tick);
             // 
             // SettingStep1
             // 
@@ -1120,7 +1119,6 @@ namespace BeeInterface
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private RJButton btnExternal;
         private RJButton btnInternal;
-        private System.Windows.Forms.Timer tmDelaySend;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton btnCancel;
@@ -1161,10 +1159,10 @@ namespace BeeInterface
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.ComponentModel.BackgroundWorker workReadPara;
         private RJButton btnDownLoadPara;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private RJButton btnCenterY;
         private RJButton btnCenterX;
+        private System.Windows.Forms.Timer tmShowPara;
     }
 }

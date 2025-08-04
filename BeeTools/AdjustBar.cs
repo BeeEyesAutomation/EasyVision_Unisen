@@ -19,6 +19,7 @@ namespace BeeInterface
         private float _Max = 100;
         private float _Step = 1;
         public event Action<float> ValueChanged;
+       public  bool IsInital = false;
         // Appearance properties
         [Category("Value"), Description("Value")]
         public float Value
@@ -33,7 +34,12 @@ namespace BeeInterface
                     if (Value < _Min) Value = _Min;
                     Track.Value = _Value;
                     Num.Value = _Value;
-                    ValueChanged?.Invoke(_Value); // Gọi event
+                    if (!IsInital)
+                    {
+                        ValueChanged?.Invoke(_Value); // Gọi event
+                    }
+                    else
+                        IsInital = false;
                 }
             }
         }
