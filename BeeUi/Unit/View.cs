@@ -898,7 +898,7 @@ namespace BeeUi
         {
             
 
-                if (Global.IsRun|| Global.IndexToolSelected==-1)
+                if (Global.IsRun)
                 {
                //
 
@@ -959,7 +959,15 @@ namespace BeeUi
                 }
 
             }
-            if(Global.StatusDraw == StatusDraw.None)
+            if ( Global.IndexToolSelected == -1)
+            {
+                //
+
+                //  gcResult = gc;
+
+                return;
+            }
+            if (Global.StatusDraw == StatusDraw.None)
                 if (toolEdit != null)
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
@@ -1305,16 +1313,7 @@ namespace BeeUi
           
             this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
-            if (! Global.ParaCommon.IsExternal)
-            {
-                btnTypeTrig.Enabled= false;
-                btnTypeTrig.Text = "Trig Internal";
-            }
-            else
-            {
-                btnTypeTrig.Enabled = true;
-                btnTypeTrig.Text = "Trig External";
-            }
+         
             //  
 
             // BeeCore.Common.Scan();
@@ -1335,10 +1334,40 @@ namespace BeeUi
             Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
             Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
             Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
-           
+            Global.ParaCommon.ExternalChange += ParaCommon_ExternalChange;
             Global.StatusProcessing=StatusProcessing.None;
            //time
            
+        }
+
+        private void ParaCommon_ExternalChange(bool obj)
+        {
+            if (!obj)
+            {
+                //btnTypeTrig.Enabled = false;
+                btnTypeTrig.Text = "Trig Internal";
+                btnCap.Enabled = true;
+                btnContinuous.Enabled = true;
+                btnFile.Enabled = true;
+                btnFolder.Enabled = true;
+                btnPlayStep.Enabled = true;
+                btnRunSim.Enabled = true;
+            }
+            else
+            {
+               // btnTypeTrig.Enabled = true;
+               if(Global.ParaCommon.Comunication.IO.IsBypass)
+                    btnTypeTrig.Text = "ByPass I/O";
+                else
+                    btnTypeTrig.Text = "Trig External";
+                btnCap.Enabled = false;
+                btnContinuous.Enabled = false;
+                btnFile.Enabled = false;
+                btnFolder.Enabled = false;
+                btnPlayStep.Enabled = false;
+                btnRunSim.Enabled = false;
+                
+            }
         }
 
         private void Checking4_StatusProcessingChanged(StatusProcessing obj)
@@ -1368,9 +1397,15 @@ namespace BeeUi
                 case StatusProcessing.None:
                     break;
                 case StatusProcessing.Trigger:
+                    G.StatusDashboard. StatusText = obj.ToString();
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                  //  G.StatusDashboard.Refresh();
                     timer.Restart();
                     break;
                 case StatusProcessing.Read:
+                    G.StatusDashboard.StatusText = obj.ToString();
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                  //  G.StatusDashboard.Refresh();
                     //if ( Global.ParaCommon.IsExternal)
                     //	Global.EditTool.View.btnTypeTrig.IsCLick = true;
                     //if (Global.IsRun)
@@ -1391,10 +1426,16 @@ namespace BeeUi
 
                     break;
                 case StatusProcessing.Checking:
+                    G.StatusDashboard.StatusText = obj.ToString();
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                   // G.StatusDashboard.Refresh();
                     RunProcessing();
                     Global.StatusProcessing = StatusProcessing.WaitingDone;
                     break;
                 case StatusProcessing.SendResult:
+                    G.StatusDashboard.StatusText = obj.ToString();
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                   // G.StatusDashboard.Refresh();
                     if (Global.ParaCommon.Comunication.IO.IsBypass)
                         Global.StatusProcessing = StatusProcessing.Done;
                     break;
@@ -1403,7 +1444,7 @@ namespace BeeUi
 
 
                         timer.Stop();
-
+                       
                         this.Invoke((Action)(() =>
                         {
                             ShowResultTotal();
@@ -1444,13 +1485,14 @@ namespace BeeUi
              
                 //   if (Score.Enabled||Global.IsRun) return;
                 Global.TypeCrop = TypeCrop.Area;
-              //  Global.EditTool.pEditTool.Controls.Clear();
+                Global.EditTool.pEditTool.Controls.Clear();
                 Control control = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
+                control.Dock = DockStyle.Fill;
                 control.Parent = Global.EditTool.pEditTool;
-                control.Size =Global.EditTool. pEditTool.Size;
-                control.Location = new Point(0, 0);
-                control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                control.BringToFront();
+                //control.Size =Global.EditTool. pEditTool.Size;
+                //control.Location = new Point(0, 0);
+              
+               // control.BringToFront();
                // DataTool.LoadPropety(control);
                 TypeTool TypeTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool;
 
@@ -1892,6 +1934,7 @@ namespace BeeUi
         public bool  IsBTNCap=false;
         private  void btnCap_Click(object sender, EventArgs e)
         {
+           
 
             if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.IO.IsBypass )
             {
@@ -1899,7 +1942,7 @@ namespace BeeUi
                 return;
             }
          
-            if (btnRecord.IsCLick)
+            if (btnContinuous.IsCLick)
             {
                
                 btnCap.IsCLick = false;
@@ -1934,21 +1977,21 @@ namespace BeeUi
            
             if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.IO.IsBypass)
             {
-                btnRecord.IsCLick = false;
+                btnContinuous.IsCLick = false;
                 return;
             }
             if (btnLive.IsCLick)
             {
-                btnRecord.IsCLick = false;
+                btnContinuous.IsCLick = false;
                 return;
             }
-            Global.StatusMode = btnRecord.IsCLick ? StatusMode.Continuous : StatusMode.None;
+            Global.StatusMode = btnContinuous.IsCLick ? StatusMode.Continuous : StatusMode.None;
 
             if (Global.ParaCommon.Comunication.IO.IsConnected)
             {
                 if (Global.ParaCommon.Comunication.IO.IsConnected)
                 {
-                    tmContinuous.Enabled = btnRecord.IsCLick;
+                    tmContinuous.Enabled = btnContinuous.IsCLick;
                     //X: G.Header.tmReadPLC.Enabled = false;
                     //    if (G.Header.workPLC.IsBusy)
                     //    {
@@ -1966,15 +2009,15 @@ namespace BeeUi
             } 
             else if(Global.ParaCommon.Comunication.IO.IsBypass)
             {
-                tmContinuous.Enabled = btnRecord.IsCLick;
+                tmContinuous.Enabled = btnContinuous.IsCLick;
             }    
             else
             {
-                btnRecord.IsCLick = false;
+                btnContinuous.IsCLick = false;
                 tmContinuous.Enabled = false;
                 return;
             }
-            if (!btnRecord.IsCLick) btnCap.Enabled = true;
+            if (!btnContinuous.IsCLick) btnCap.Enabled = true;
           
            
 
@@ -1998,7 +2041,7 @@ namespace BeeUi
                 btnShowCenter.Enabled = true;
                 btnGird.Enabled = true;
                 btnCap.Enabled = false;
-                btnRecord.Enabled = false;
+                btnContinuous.Enabled = false;
             }
             else
             {
@@ -2037,6 +2080,7 @@ namespace BeeUi
                             {
 
                                 imgView.Image = frameToDisplay;
+                              
                             }));
                         }
                         catch
@@ -2064,7 +2108,7 @@ namespace BeeUi
                 btnLive.IsCLick = false;
                 return;
             }
-            if (btnRecord.IsCLick)
+            if (btnContinuous.IsCLick)
             {
 
                 btnLive.IsCLick = false;
@@ -2682,11 +2726,10 @@ namespace BeeUi
                 Files .Add( openFile.FileName);
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
                 listMat = new List<Mat>();
-
                 listMat.Add(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                 btnFile.Enabled = false;
+                btnFile.Enabled = false;
                 Global.StatusMode = StatusMode.SimOne;
                 timer.Restart();
                 Global.StatusProcessing = StatusProcessing.Checking;
@@ -2714,7 +2757,7 @@ namespace BeeUi
                 BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 RunProcessing();
-            }
+                }
                 else
                 {
                    
@@ -2727,7 +2770,9 @@ namespace BeeUi
 
         private void btnTypeTrig_Click(object sender, EventArgs e)
         {
-
+            if (Global.Config.nameUser != "Admin")
+                return;
+                Global.ParaCommon.IsExternal = !Global.ParaCommon.IsExternal;
         }
 
         private void btnRunSim_Click(object sender, EventArgs e)

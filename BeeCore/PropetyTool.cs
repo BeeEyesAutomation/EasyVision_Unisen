@@ -21,6 +21,7 @@ namespace BeeCore
         public String Name = "";
         public dynamic Propety;
         public TypeTool TypeTool;
+        public bool[] IndexLogics = new bool[6];
         public UsedTool UsedTool=UsedTool.NotUsed;
         [NonSerialized]
         public ItemTool ItemTool;

@@ -170,7 +170,7 @@ namespace BeeUi.Common
                 G.SettingPLC.pCom.Enabled = true;
                 if( G.StatusDashboard!=null)
                  G.StatusDashboard.btnReset.Enabled = true;
-                Global.EditTool.View.btnRecord.Enabled = Global.IsRun;
+                Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
                 
 
                 //  G.listProgram.Enabled = IsRun;
@@ -185,9 +185,9 @@ namespace BeeUi.Common
             else if (Global.Config.nameUser == "Leader")
             {
                 G.SettingPLC.pCom.Enabled = false;
-                // Global.EditTool.View.btnRecord.Enabled = false;
+                // Global.EditTool.View.btnContinuous.Enabled = false;
 
-                Global.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.View.btnContinuous.Enabled = false;
 
                 //G.listProgram.Enabled = IsRun;
                 if ( G.StatusDashboard != null)
@@ -198,9 +198,9 @@ namespace BeeUi.Common
             }
             else 
             {
-                Global.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.View.btnContinuous.Enabled = false;
 
-                // Global.EditTool.View.btnRecord.Enabled = false;
+                // Global.EditTool.View.btnContinuous.Enabled = false;
                 G.SettingPLC.pCom.Enabled = false;
 
                 G.listProgram.Enabled = IsRun;
@@ -215,7 +215,7 @@ namespace BeeUi.Common
             if ( Global.ParaCommon.IsExternal)
             {
                Global.EditTool.View.btnCap.Enabled = false;
-               Global.EditTool.View.btnRecord.Enabled = false;
+               Global.EditTool.View.btnContinuous.Enabled = false;
             }
          
             Global.EditTool.btnHeaderBar1.btnUser.Text =Global.Config.nameUser;
@@ -243,7 +243,7 @@ namespace BeeUi.Common
             {
               
                 Global.EditTool.View.btnCap.Enabled = true;
-                Global.EditTool.View.btnRecord.Enabled = true;
+                Global.EditTool.View.btnContinuous.Enabled = true;
 
                
                 Global.ToolSettings.btnAdd.Enabled = false;
@@ -257,12 +257,12 @@ namespace BeeUi.Common
             }
             else
             {
-                if (Global.EditTool.View.btnRecord.IsCLick)
-                    if (Global.EditTool.View.btnRecord.Enabled == true)
-                        Global.EditTool.View.btnRecord.PerformClick();
+                if (Global.EditTool.View.btnContinuous.IsCLick)
+                    if (Global.EditTool.View.btnContinuous.Enabled == true)
+                        Global.EditTool.View.btnContinuous.PerformClick();
                 Global.EditTool.btnHeaderBar1.btnSettingPLC.IsCLick = false;
                 Global.EditTool.View.btnCap.Enabled = false;
-                Global.EditTool.View.btnRecord.Enabled = false;
+                Global.EditTool.View.btnContinuous.Enabled = false;
                 Global.EditTool.RefreshGuiEdit(Step.Step1);
                 Global.ToolSettings.btnAdd.Enabled = true;
                 Global.ToolSettings.btnCopy.Enabled = true;

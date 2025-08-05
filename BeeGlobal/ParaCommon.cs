@@ -13,8 +13,27 @@ namespace BeeGlobal
     [Serializable()]
     public class ParaCommon
     {
-
-        public bool IsExternal = false;
+        public List<int> indexLogic1 = new List<int>();
+        public List<int> indexLogic2 = new List<int>();
+        public List<int> indexLogic3 = new List<int>();
+        public List<int> indexLogic4 = new List<int>();
+        public List<int> indexLogic5 = new List<int>();
+        public List<int> indexLogic6 = new List<int>();
+        private bool _IsExternal = false;
+        [field: NonSerialized]
+        public event Action<bool> ExternalChange;
+        public bool IsExternal
+        {
+            get => _IsExternal;
+            set
+            {
+                if (_IsExternal != value)
+                {
+                    _IsExternal = value;
+                    ExternalChange?.Invoke(_IsExternal); // Gọi event
+                }
+            }
+        }
         public String CardChoosed = "";
         public Size SizeCCD;
         public  int _Exposure = 0, _Gain=1, _TypeResolution=1, _TypeLight=1;

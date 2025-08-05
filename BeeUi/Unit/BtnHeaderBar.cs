@@ -22,6 +22,7 @@ namespace BeeUi.Unit
 
         private void btnSetting_Click(object sender, EventArgs e)
         {
+
             IOSetting IOSetting = new IOSetting();
             IOSetting.Show();
         }
@@ -104,6 +105,12 @@ namespace BeeUi.Unit
                     break;
             }
             G.ScanCCD.ShowDialog();
+        }
+
+        private void btncheck_Click(object sender, EventArgs e)
+        {
+            FormCheckUpdate formCheckUpdate = new FormCheckUpdate();
+            formCheckUpdate.ShowDialog();
         }
     }
 }

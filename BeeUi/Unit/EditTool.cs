@@ -55,7 +55,9 @@ namespace BeeUi
                         break;
                     case Step.Run:
                         this.SuspendLayout();
-
+                        Global.IsRun = true;
+                        G.Header.btnMode.Text = "Run";
+                        G.Header.btnMode.IsCLick = false;
                         pName.Visible = false;
                         if (Global.ToolSettings == null)
                         {
@@ -65,17 +67,7 @@ namespace BeeUi
                             Global.ToolSettings.pAllTool.Visible = true;
                             Global.ToolSettings.Dock = DockStyle.None;
                         }
-                        if (G.StepEdit.SettingStep1 == null)
-                        {
-                            G.StepEdit.SettingStep1 = new SettingStep1();
-
-                            G.StepEdit.SettingStep1.Dock = DockStyle.None;
-
-                           // G.StepEdit.SettingStep1.Location = new Point(0, 0);
-
-                          //  G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                            //  G.StepEdit.SettingStep1.BringToFront();
-                        }
+                       
                         G.SettingPLC.Visible = false;
                         pEditTool.Controls.Clear();
                       
@@ -132,8 +124,10 @@ namespace BeeUi
                         this.ResumeLayout();
                         break;
                     case Step.Step1:
-
-                       // this.SuspendLayout();
+                        Global.IsRun = false;
+                        G.Header.btnMode.Text = "Edit";
+                        G.Header.btnMode.IsCLick = true;
+                        this.SuspendLayout();
                         G.StepEdit.btnStep1.IsCLick = true;
                         if (G.StepEdit == null)
                         {
@@ -141,19 +135,15 @@ namespace BeeUi
 
                             G.StepEdit.Dock = DockStyle.None;
                             G.StepEdit.Location = new Point(0, 0);
-                            G.StepEdit.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
+                           
                         }
                         if (G.StepEdit.SettingStep1 == null)
                         {
                             G.StepEdit.SettingStep1 = new SettingStep1();
-                      
-                            G.StepEdit.SettingStep1.Dock = DockStyle.None;
-                            
+
                             G.StepEdit.SettingStep1.Location = new Point(0, 0);
-                          
-                            G.StepEdit.SettingStep1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                        //  G.StepEdit.SettingStep1.BringToFront();
+                            G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
+                            //  G.StepEdit.SettingStep1.BringToFront();
                         }
                         Global.EditTool.View.pHeader.Controls.Clear();
                         //pEditTool.Visible = true;
@@ -201,7 +191,7 @@ namespace BeeUi
                       ///  pName.Visible = true;
                        
 
-                     //   this.ResumeLayout();
+                       this.ResumeLayout();
                         break;
                     case Step.Step2:
                      //   pName.Visible = true;

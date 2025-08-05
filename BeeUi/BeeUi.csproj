@@ -77,8 +77,21 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeeUi, Version=1.0.6.34739, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.70.0\lib\net462\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.70.0\lib\net462\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.70.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.70.0\lib\net462\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3, Version=1.70.0.3856, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Drive.v3.1.70.0.3856\lib\net462\Google.Apis.Drive.v3.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -148,6 +161,12 @@
     <Compile Include="Commons\Gui.cs" />
     <Compile Include="Commons\RsDirPermissions.cs" />
     <Compile Include="Commons\SqlServer.cs" />
+    <Compile Include="FormCheckUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCheckUpdate.Designer.cs">
+      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="ForrmAlarm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +191,7 @@
     <Compile Include="Form\FormActive.Designer.cs">
       <DependentUpon>FormActive.cs</DependentUpon>
     </Compile>
+    <Compile Include="GoogleDriveDllManager.cs" />
     <Compile Include="IOSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -200,12 +220,6 @@
     </Compile>
     <Compile Include="Tool\SettingCamera.designer.cs">
       <DependentUpon>SettingCamera.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tool\SettingStep4.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\SettingStep4.Designer.cs">
-      <DependentUpon>SettingStep4.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ucReport.cs">
       <SubType>UserControl</SubType>
@@ -254,12 +268,6 @@
     </Compile>
     <Compile Include="Unit\InforBar.Designer.cs">
       <DependentUpon>InforBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\ItemLogic.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ItemLogic.Designer.cs">
-      <DependentUpon>ItemLogic.cs</DependentUpon>
     </Compile>
     <Compile Include="Commons\Global.cs" />
     <Compile Include="Commons\KbdListener.cs" />
@@ -319,12 +327,6 @@
       <DependentUpon>AddTool.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\DataContractAttribute.cs" />
-    <Compile Include="Tool\SettingStep2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\SettingStep2.Designer.cs">
-      <DependentUpon>SettingStep2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tool\ToolSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -341,6 +343,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCheckUpdate.resx">
+      <DependentUpon>FormCheckUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForrmAlarm.resx">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>
@@ -366,9 +371,6 @@
     <EmbeddedResource Include="Tool\SettingCamera.resx">
       <DependentUpon>SettingCamera.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tool\SettingStep4.resx">
-      <DependentUpon>SettingStep4.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ucReport.resx">
       <DependentUpon>ucReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -392,9 +394,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\InforBar.resx">
       <DependentUpon>InforBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ItemLogic.resx">
-      <DependentUpon>ItemLogic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\ShowEraser.resx">
       <DependentUpon>ShowEraser.cs</DependentUpon>
@@ -425,9 +424,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\AddTool.resx">
       <DependentUpon>AddTool.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tool\SettingStep2.resx">
-      <DependentUpon>SettingStep2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolSettings.resx">
       <DependentUpon>ToolSettings.cs</DependentUpon>
@@ -510,7 +506,7 @@
       <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BeeTools\BeeInterface.csproj">
+    <ProjectReference Include="..\BeeInterface\BeeInterface.csproj">
       <Project>{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
       <Name>BeeInterface</Name>
     </ProjectReference>
@@ -633,6 +629,8 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Folder_11.png" />
+    <None Include="Resources\Camera1.png" />
     <None Include="Resources\Ruler.png" />
     <None Include="Resources\Track Order1.png" />
     <None Include="Resources\Track Order.png" />

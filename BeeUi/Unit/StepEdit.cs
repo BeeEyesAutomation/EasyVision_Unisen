@@ -27,7 +27,11 @@ namespace BeeUi.Common
         public StepEdit()
         {
             InitializeComponent();
-           
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
             // this.Visible = false;
             G.StepEdit = this;
 

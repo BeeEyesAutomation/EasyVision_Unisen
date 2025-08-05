@@ -67,10 +67,9 @@ namespace BeeUi
             this.btnFile = new System.Windows.Forms.Button();
             this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnCap = new BeeInterface.RJButton();
-            this.btnRecord = new BeeInterface.RJButton();
+            this.btnContinuous = new BeeInterface.RJButton();
             this.btnLive = new BeeInterface.RJButton();
             this.btnMenu = new System.Windows.Forms.Button();
-            this.btnShowSetting = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnFolder = new System.Windows.Forms.Button();
             this.btnRunSim = new BeeInterface.RJButton();
@@ -93,8 +92,7 @@ namespace BeeUi
             // 
             // imgView
             // 
-            this.imgView.AllowFreePan = false;
-            this.imgView.AllowZoom = false;
+            this.imgView.AllowDoubleClick = true;
             this.imgView.AlwaysShowHScroll = true;
             this.imgView.AlwaysShowVScroll = true;
             this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -475,11 +473,10 @@ namespace BeeUi
             this.pBtn.Controls.Add(this.btnFile, 8, 0);
             this.pBtn.Controls.Add(this.btnTypeTrig, 3, 0);
             this.pBtn.Controls.Add(this.btnCap, 0, 0);
-            this.pBtn.Controls.Add(this.btnRecord, 1, 0);
+            this.pBtn.Controls.Add(this.btnContinuous, 1, 0);
             this.pBtn.Controls.Add(this.btnLive, 2, 0);
             this.pBtn.Controls.Add(this.ckHideTool, 4, 0);
             this.pBtn.Controls.Add(this.btnMenu, 12, 0);
-            this.pBtn.Controls.Add(this.btnShowSetting, 11, 0);
             this.pBtn.Controls.Add(this.btnSave, 10, 0);
             this.pBtn.Controls.Add(this.btnFolder, 9, 0);
             this.pBtn.Controls.Add(this.btnRunSim, 7, 0);
@@ -497,18 +494,19 @@ namespace BeeUi
             // 
             this.btnDeleteFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.btnDeleteFile.Image = global::BeeUi.Properties.Resources.Erase;
-            this.btnDeleteFile.Location = new System.Drawing.Point(849, 3);
+            this.btnDeleteFile.Location = new System.Drawing.Point(905, 3);
             this.btnDeleteFile.Name = "btnDeleteFile";
             this.btnDeleteFile.Size = new System.Drawing.Size(55, 48);
             this.btnDeleteFile.TabIndex = 44;
             this.btnDeleteFile.UseVisualStyleBackColor = true;
+            this.btnDeleteFile.Visible = false;
             this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
             // 
             // btnPlayStep
             // 
             this.btnPlayStep.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.btnPlayStep.Image = global::BeeUi.Properties.Resources.End;
-            this.btnPlayStep.Location = new System.Drawing.Point(910, 3);
+            this.btnPlayStep.Location = new System.Drawing.Point(966, 3);
             this.btnPlayStep.Name = "btnPlayStep";
             this.btnPlayStep.Size = new System.Drawing.Size(60, 48);
             this.btnPlayStep.TabIndex = 43;
@@ -519,7 +517,7 @@ namespace BeeUi
             // 
             this.btnFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.btnFile.Image = global::BeeUi.Properties.Resources.File;
-            this.btnFile.Location = new System.Drawing.Point(1048, 3);
+            this.btnFile.Location = new System.Drawing.Point(1104, 3);
             this.btnFile.Name = "btnFile";
             this.btnFile.Size = new System.Drawing.Size(60, 48);
             this.btnFile.TabIndex = 41;
@@ -590,39 +588,39 @@ namespace BeeUi
             this.btnCap.UseVisualStyleBackColor = false;
             this.btnCap.Click += new System.EventHandler(this.btnCap_Click);
             // 
-            // btnRecord
+            // btnContinuous
             // 
-            this.btnRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnContinuous.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRecord.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnRecord.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnRecord.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnRecord.BorderRadius = 5;
-            this.btnRecord.BorderSize = 1;
-            this.btnRecord.ButtonImage = null;
-            this.btnRecord.Corner = BeeGlobal.Corner.Both;
-            this.btnRecord.FlatAppearance.BorderSize = 0;
-            this.btnRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRecord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.btnRecord.ForeColor = System.Drawing.Color.Black;
-            this.btnRecord.Image = global::BeeUi.Properties.Resources.Play_2;
-            this.btnRecord.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRecord.IsCLick = false;
-            this.btnRecord.IsNotChange = false;
-            this.btnRecord.IsRect = false;
-            this.btnRecord.IsUnGroup = true;
-            this.btnRecord.Location = new System.Drawing.Point(145, 5);
-            this.btnRecord.Margin = new System.Windows.Forms.Padding(5);
-            this.btnRecord.Name = "btnRecord";
-            this.btnRecord.Size = new System.Drawing.Size(130, 44);
-            this.btnRecord.TabIndex = 10;
-            this.btnRecord.Text = "Continuous";
-            this.btnRecord.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRecord.TextColor = System.Drawing.Color.Black;
-            this.btnRecord.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnRecord.UseVisualStyleBackColor = false;
-            this.btnRecord.Click += new System.EventHandler(this.btnRecord_Click);
+            this.btnContinuous.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnContinuous.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnContinuous.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnContinuous.BorderRadius = 5;
+            this.btnContinuous.BorderSize = 1;
+            this.btnContinuous.ButtonImage = null;
+            this.btnContinuous.Corner = BeeGlobal.Corner.Both;
+            this.btnContinuous.FlatAppearance.BorderSize = 0;
+            this.btnContinuous.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnContinuous.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.btnContinuous.ForeColor = System.Drawing.Color.Black;
+            this.btnContinuous.Image = global::BeeUi.Properties.Resources.Play_2;
+            this.btnContinuous.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnContinuous.IsCLick = false;
+            this.btnContinuous.IsNotChange = false;
+            this.btnContinuous.IsRect = false;
+            this.btnContinuous.IsUnGroup = true;
+            this.btnContinuous.Location = new System.Drawing.Point(145, 5);
+            this.btnContinuous.Margin = new System.Windows.Forms.Padding(5);
+            this.btnContinuous.Name = "btnContinuous";
+            this.btnContinuous.Size = new System.Drawing.Size(130, 44);
+            this.btnContinuous.TabIndex = 10;
+            this.btnContinuous.Text = "Continuous";
+            this.btnContinuous.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnContinuous.TextColor = System.Drawing.Color.Black;
+            this.btnContinuous.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnContinuous.UseVisualStyleBackColor = false;
+            this.btnContinuous.Click += new System.EventHandler(this.btnRecord_Click);
             // 
             // btnLive
             // 
@@ -671,22 +669,11 @@ namespace BeeUi
             this.btnMenu.UseVisualStyleBackColor = false;
             this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
             // 
-            // btnShowSetting
-            // 
-            this.btnShowSetting.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnShowSetting.Image = global::BeeUi.Properties.Resources.setting;
-            this.btnShowSetting.Location = new System.Drawing.Point(1240, 3);
-            this.btnShowSetting.Name = "btnShowSetting";
-            this.btnShowSetting.Size = new System.Drawing.Size(50, 48);
-            this.btnShowSetting.TabIndex = 35;
-            this.btnShowSetting.UseVisualStyleBackColor = true;
-            this.btnShowSetting.Click += new System.EventHandler(this.btnShowSetting_Click);
-            // 
             // btnSave
             // 
             this.btnSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.btnSave.Image = global::BeeUi.Properties.Resources.Save_1;
-            this.btnSave.Location = new System.Drawing.Point(1180, 3);
+            this.btnSave.Location = new System.Drawing.Point(1236, 3);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(54, 48);
             this.btnSave.TabIndex = 33;
@@ -697,7 +684,7 @@ namespace BeeUi
             // 
             this.btnFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.btnFolder.Image = global::BeeUi.Properties.Resources.Folder;
-            this.btnFolder.Location = new System.Drawing.Point(1114, 3);
+            this.btnFolder.Location = new System.Drawing.Point(1170, 3);
             this.btnFolder.Name = "btnFolder";
             this.btnFolder.Size = new System.Drawing.Size(60, 48);
             this.btnFolder.TabIndex = 34;
@@ -723,7 +710,7 @@ namespace BeeUi
             this.btnRunSim.IsNotChange = false;
             this.btnRunSim.IsRect = false;
             this.btnRunSim.IsUnGroup = true;
-            this.btnRunSim.Location = new System.Drawing.Point(976, 3);
+            this.btnRunSim.Location = new System.Drawing.Point(1032, 3);
             this.btnRunSim.Name = "btnRunSim";
             this.btnRunSim.Size = new System.Drawing.Size(66, 48);
             this.btnRunSim.TabIndex = 45;
@@ -820,7 +807,7 @@ namespace BeeUi
         private System.Windows.Forms.Timer tmTrig;
         private System.ComponentModel.BackgroundWorker workGetColor;
         public RJButton btnCap;
-        public RJButton btnRecord;
+        public RJButton btnContinuous;
         private System.Windows.Forms.CheckBox ckHideTool;
         public RJButton btnLive;
         private System.ComponentModel.BackgroundWorker workInsert;
@@ -834,7 +821,6 @@ namespace BeeUi
         public System.Windows.Forms.Timer tmOut;
         public System.Windows.Forms.Button btnSave;
         public System.Windows.Forms.Button btnFolder;
-        public System.Windows.Forms.Button btnShowSetting;
         public System.Windows.Forms.Panel pMenu;
         public System.Windows.Forms.Button btnMenu;
         private System.Windows.Forms.TableLayoutPanel LayOutShow;

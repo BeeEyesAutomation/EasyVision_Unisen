@@ -96,7 +96,15 @@ namespace BeeGlobal
         public bool IsConnected = false,IsWriting=false;
         public void Arrange()
         {
-          
+            if (valueInput == null)
+                valueInput = new int[16];
+            if (valueOutput == null)
+                valueOutput = new int[16];
+            if (AddressInput == null)
+                AddressInput = new int[30];
+            if (AddressOutPut == null)
+                AddressOutPut = new int[30];
+
             foreach (I_O_Input DI in Enum.GetValues(typeof(I_O_Input)))
             {
                 int index = paraIOs.FindIndex(a => a.I_O_Input== DI && a.TypeIO == TypeIO.Input);
@@ -307,6 +315,8 @@ namespace BeeGlobal
             if (IsLight3)
                 SetOutPut(AddressOutPut[(int)I_O_Output.Light3], IsOn);
         }
+        public bool IsBlink = false;
+        public bool IsLogic1, IsLogic2, IsLogic3, IsLogic4, IsLogic5, IsLogic6;
         public async Task<bool>  WriteIO()
         {   //if (!IsConnected) return false;
 
@@ -350,7 +360,24 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
+                    bool IsOK = false;
                     if (Global.TotalOK)
+                    {
+                        IsOK = true;
+                    }
+                    else
+                    {
+                        int ix = AddressInput[(int)I_O_Input.ByPass];
+                        if (ix > -1)
+                        {
+                            if (valueInput[ix] == 1)
+                            {
+                                IsOK = true;
+                            }
+                        }
+
+                     }
+                        if (IsOK)
                     {
                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                         SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
@@ -358,57 +385,32 @@ namespace BeeGlobal
                         SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                         IsWait = true;
                         await WriteOutPut();
-                        await Task.Delay((int)DelayOutput);
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                        await WriteOutPut();
+                        if(IsBlink)
+                        {
+                            await Task.Delay((int)DelayOutput);
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                            await WriteOutPut();
+                        }
+                      
                     }
                     else
                     {
-                        int ix = AddressInput[(int)I_O_Input.ByPass];
-                        if (ix > -1)
-                        {
-                            if (valueInput[ix] == 1) //Bypass
-                            {
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                                SetLight(false);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                           
-                                await WriteOutPut();
-                                await Task.Delay((int)DelayOutput);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                                await WriteOutPut();
-                            }
-                            else
-                            {
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                                SetLight(false);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                          
-                                await WriteOutPut();
-                                await Task.Delay((int)DelayOutput);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                                await WriteOutPut();
-                            }
-                        }
-                        else
-                        {
+                      
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
                             SetLight(false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                          
                             await WriteOutPut();
-                            await Task.Delay((int)DelayOutput);
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
-                            await WriteOutPut();
-                           
-                        }
+                            if (IsBlink)
+                            {
+                                await Task.Delay((int)DelayOutput);
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                                await WriteOutPut();
+                            }
 
-                       
-                     
-                    
+
+
+
                     }
                     Global.StatusProcessing = StatusProcessing.Done;
                     break;

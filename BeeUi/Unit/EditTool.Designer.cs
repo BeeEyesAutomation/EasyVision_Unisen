@@ -43,11 +43,9 @@ namespace BeeUi
             this.lbLicence = new System.Windows.Forms.Label();
             this.pView = new System.Windows.Forms.Panel();
             this.pHeader = new System.Windows.Forms.Panel();
-            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.label2 = new System.Windows.Forms.Label();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.LayoutMain = new System.Windows.Forms.TableLayoutPanel();
-            this.inforBar1 = new BeeUi.Unit.InforBar();
             this.LayOutShow = new System.Windows.Forms.TableLayoutPanel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pEditTool = new System.Windows.Forms.Panel();
@@ -57,14 +55,15 @@ namespace BeeUi
             this.lbTool = new System.Windows.Forms.Label();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.LayoutEnd = new System.Windows.Forms.TableLayoutPanel();
-            this.btnShuttdown = new BeeInterface.RJButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnExit = new BeeInterface.RJButton();
-            this.header1 = new BeeUi.Common.Header();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.btnShuttdown = new BeeInterface.RJButton();
+            this.btnExit = new BeeInterface.RJButton();
+            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
+            this.header1 = new BeeUi.Common.Header();
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -152,7 +151,7 @@ namespace BeeUi
             this.pView.BackColor = System.Drawing.Color.Transparent;
             this.pView.Location = new System.Drawing.Point(3, 3);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(738, 615);
+            this.pView.Size = new System.Drawing.Size(738, 660);
             this.pView.TabIndex = 16;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
             // 
@@ -171,16 +170,6 @@ namespace BeeUi
             this.pHeader.Size = new System.Drawing.Size(1150, 55);
             this.pHeader.TabIndex = 19;
             // 
-            // btnHeaderBar1
-            // 
-            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(715, 0);
-            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(435, 55);
-            this.btnHeaderBar1.TabIndex = 8;
-            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
-            // 
             // label2
             // 
             this.label2.BackColor = System.Drawing.Color.Transparent;
@@ -189,9 +178,9 @@ namespace BeeUi
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(70, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(296, 55);
+            this.label2.Size = new System.Drawing.Size(402, 55);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Vision Sensor";
+            this.label2.Text = "Vision Sensor 1.1.0";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label2.Click += new System.EventHandler(this.label2_Click_1);
             // 
@@ -211,33 +200,22 @@ namespace BeeUi
             // 
             this.LayoutMain.ColumnCount = 1;
             this.LayoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayoutMain.Controls.Add(this.inforBar1, 0, 3);
             this.LayoutMain.Controls.Add(this.pHeader, 0, 0);
             this.LayoutMain.Controls.Add(this.LayOutShow, 0, 2);
-            this.LayoutMain.Controls.Add(this.LayoutEnd, 0, 4);
+            this.LayoutMain.Controls.Add(this.LayoutEnd, 0, 3);
             this.LayoutMain.Controls.Add(this.header1, 0, 1);
             this.LayoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LayoutMain.Location = new System.Drawing.Point(0, 0);
             this.LayoutMain.Name = "LayoutMain";
-            this.LayoutMain.RowCount = 5;
+            this.LayoutMain.RowCount = 4;
             this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.LayoutMain.Size = new System.Drawing.Size(1150, 865);
             this.LayoutMain.TabIndex = 21;
             this.LayoutMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // inforBar1
-            // 
-            this.inforBar1.BackColor = System.Drawing.Color.White;
-            this.inforBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inforBar1.Location = new System.Drawing.Point(3, 775);
-            this.inforBar1.Name = "inforBar1";
-            this.inforBar1.Size = new System.Drawing.Size(1144, 39);
-            this.inforBar1.TabIndex = 0;
-            this.inforBar1.Visible = false;
             // 
             // LayOutShow
             // 
@@ -245,6 +223,7 @@ namespace BeeUi
             this.LayOutShow.ColumnCount = 2;
             this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 400F));
+            this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.LayOutShow.Controls.Add(this.pEdit, 1, 0);
             this.LayOutShow.Controls.Add(this.pView, 0, 0);
             this.LayOutShow.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -252,7 +231,7 @@ namespace BeeUi
             this.LayOutShow.Name = "LayOutShow";
             this.LayOutShow.RowCount = 1;
             this.LayOutShow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayOutShow.Size = new System.Drawing.Size(1144, 621);
+            this.LayOutShow.Size = new System.Drawing.Size(1144, 666);
             this.LayOutShow.TabIndex = 20;
             // 
             // pEdit
@@ -264,7 +243,7 @@ namespace BeeUi
             this.pEdit.Location = new System.Drawing.Point(747, 3);
             this.pEdit.Name = "pEdit";
             this.pEdit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.pEdit.Size = new System.Drawing.Size(394, 615);
+            this.pEdit.Size = new System.Drawing.Size(394, 660);
             this.pEdit.TabIndex = 14;
             // 
             // pEditTool
@@ -273,7 +252,7 @@ namespace BeeUi
             this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pEditTool.Location = new System.Drawing.Point(0, 64);
             this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(394, 546);
+            this.pEditTool.Size = new System.Drawing.Size(394, 591);
             this.pEditTool.TabIndex = 1;
             this.pEditTool.Paint += new System.Windows.Forms.PaintEventHandler(this.pEditTool_Paint_1);
             // 
@@ -355,37 +334,6 @@ namespace BeeUi
             this.LayoutEnd.Size = new System.Drawing.Size(1144, 42);
             this.LayoutEnd.TabIndex = 21;
             // 
-            // btnShuttdown
-            // 
-            this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BorderColor = System.Drawing.Color.MidnightBlue;
-            this.btnShuttdown.BorderRadius = 5;
-            this.btnShuttdown.BorderSize = 2;
-            this.btnShuttdown.ButtonImage = null;
-            this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
-            this.btnShuttdown.FlatAppearance.BorderSize = 0;
-            this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShuttdown.ForeColor = System.Drawing.Color.Black;
-            this.btnShuttdown.Image = global::BeeUi.Properties.Resources.Shutdown;
-            this.btnShuttdown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShuttdown.IsCLick = false;
-            this.btnShuttdown.IsNotChange = true;
-            this.btnShuttdown.IsRect = true;
-            this.btnShuttdown.IsUnGroup = true;
-            this.btnShuttdown.Location = new System.Drawing.Point(873, 3);
-            this.btnShuttdown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.btnShuttdown.Name = "btnShuttdown";
-            this.btnShuttdown.Size = new System.Drawing.Size(124, 37);
-            this.btnShuttdown.TabIndex = 8;
-            this.btnShuttdown.Text = "Shutdown";
-            this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnShuttdown.TextColor = System.Drawing.Color.Black;
-            this.btnShuttdown.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnShuttdown.UseVisualStyleBackColor = false;
-            this.btnShuttdown.Click += new System.EventHandler(this.btnShuttdown_Click);
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -434,6 +382,42 @@ namespace BeeUi
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // tmReaPLC
+            // 
+            this.tmReaPLC.Interval = 1;
+            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
+            // 
+            // btnShuttdown
+            // 
+            this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnShuttdown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnShuttdown.BorderColor = System.Drawing.Color.MidnightBlue;
+            this.btnShuttdown.BorderRadius = 5;
+            this.btnShuttdown.BorderSize = 2;
+            this.btnShuttdown.ButtonImage = null;
+            this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
+            this.btnShuttdown.FlatAppearance.BorderSize = 0;
+            this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShuttdown.ForeColor = System.Drawing.Color.Black;
+            this.btnShuttdown.Image = global::BeeUi.Properties.Resources.Shutdown;
+            this.btnShuttdown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShuttdown.IsCLick = false;
+            this.btnShuttdown.IsNotChange = true;
+            this.btnShuttdown.IsRect = true;
+            this.btnShuttdown.IsUnGroup = true;
+            this.btnShuttdown.Location = new System.Drawing.Point(873, 3);
+            this.btnShuttdown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.btnShuttdown.Name = "btnShuttdown";
+            this.btnShuttdown.Size = new System.Drawing.Size(124, 37);
+            this.btnShuttdown.TabIndex = 8;
+            this.btnShuttdown.Text = "Shutdown";
+            this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnShuttdown.TextColor = System.Drawing.Color.Black;
+            this.btnShuttdown.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnShuttdown.UseVisualStyleBackColor = false;
+            this.btnShuttdown.Click += new System.EventHandler(this.btnShuttdown_Click);
+            // 
             // btnExit
             // 
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
@@ -465,6 +449,16 @@ namespace BeeUi
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // btnHeaderBar1
+            // 
+            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar1.Location = new System.Drawing.Point(657, 0);
+            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar1.Name = "btnHeaderBar1";
+            this.btnHeaderBar1.Size = new System.Drawing.Size(493, 55);
+            this.btnHeaderBar1.TabIndex = 8;
+            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
+            // 
             // header1
             // 
             this.header1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -476,11 +470,6 @@ namespace BeeUi
             this.header1.Name = "header1";
             this.header1.Size = new System.Drawing.Size(1150, 90);
             this.header1.TabIndex = 22;
-            // 
-            // tmReaPLC
-            // 
-            this.tmReaPLC.Interval = 1;
-            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
             // EditTool
             // 
@@ -520,7 +509,6 @@ namespace BeeUi
         private RJButton btnExit;
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label label2;
-        public Unit.InforBar inforBar1;
         public System.Windows.Forms.Panel pHeader;
         public System.Windows.Forms.Panel pEdit;
         public System.Windows.Forms.Panel pEditTool;

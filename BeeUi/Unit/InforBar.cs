@@ -26,14 +26,14 @@ namespace BeeUi.Unit
             {
 
                 //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 100;
-                Global.EditTool.LayoutMain.RowStyles[3].Height = 255;
-                Global.EditTool.LayoutMain.ResumeLayout(true);
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 255;
+                Global.EditTool.LayOutShow.ResumeLayout(true);
             }
             else
             {
                 //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 70;
-                Global.EditTool.LayoutMain.RowStyles[3].Height = 45;
-                Global.EditTool.LayoutMain.ResumeLayout(true);
+                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 45;
+                Global.EditTool.LayOutShow.ResumeLayout(true);
             }
 
             //if (btnHide.IsCLick)
