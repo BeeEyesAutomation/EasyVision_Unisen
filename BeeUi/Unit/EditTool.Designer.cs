@@ -32,7 +32,6 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
@@ -59,10 +58,10 @@ namespace BeeUi
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.tmReaPLC = new System.Windows.Forms.Timer();
+            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.btnShuttdown = new BeeInterface.RJButton();
             this.btnExit = new BeeInterface.RJButton();
-            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.header1 = new BeeUi.Common.Header();
             this.statusStrip1.SuspendLayout();
             this.pHeader.SuspendLayout();
@@ -151,7 +150,7 @@ namespace BeeUi
             this.pView.BackColor = System.Drawing.Color.Transparent;
             this.pView.Location = new System.Drawing.Point(3, 3);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(738, 660);
+            this.pView.Size = new System.Drawing.Size(738, 670);
             this.pView.TabIndex = 16;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
             // 
@@ -227,11 +226,11 @@ namespace BeeUi
             this.LayOutShow.Controls.Add(this.pEdit, 1, 0);
             this.LayOutShow.Controls.Add(this.pView, 0, 0);
             this.LayOutShow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LayOutShow.Location = new System.Drawing.Point(3, 148);
+            this.LayOutShow.Location = new System.Drawing.Point(3, 138);
             this.LayOutShow.Name = "LayOutShow";
             this.LayOutShow.RowCount = 1;
             this.LayOutShow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayOutShow.Size = new System.Drawing.Size(1144, 666);
+            this.LayOutShow.Size = new System.Drawing.Size(1144, 676);
             this.LayOutShow.TabIndex = 20;
             // 
             // pEdit
@@ -243,16 +242,16 @@ namespace BeeUi
             this.pEdit.Location = new System.Drawing.Point(747, 3);
             this.pEdit.Name = "pEdit";
             this.pEdit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.pEdit.Size = new System.Drawing.Size(394, 660);
+            this.pEdit.Size = new System.Drawing.Size(394, 670);
             this.pEdit.TabIndex = 14;
             // 
             // pEditTool
             // 
             this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(0, 64);
+            this.pEditTool.Location = new System.Drawing.Point(0, 47);
             this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(394, 591);
+            this.pEditTool.Size = new System.Drawing.Size(394, 618);
             this.pEditTool.TabIndex = 1;
             this.pEditTool.Paint += new System.Windows.Forms.PaintEventHandler(this.pEditTool_Paint_1);
             // 
@@ -266,7 +265,7 @@ namespace BeeUi
             this.pName.Dock = System.Windows.Forms.DockStyle.Top;
             this.pName.Location = new System.Drawing.Point(0, 0);
             this.pName.Name = "pName";
-            this.pName.Size = new System.Drawing.Size(394, 64);
+            this.pName.Size = new System.Drawing.Size(394, 47);
             this.pName.TabIndex = 0;
             this.pName.Visible = false;
             this.pName.Paint += new System.Windows.Forms.PaintEventHandler(this.pName_Paint);
@@ -274,30 +273,30 @@ namespace BeeUi
             // lbNameStep
             // 
             this.lbNameStep.AutoSize = true;
-            this.lbNameStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNameStep.Location = new System.Drawing.Point(81, 5);
+            this.lbNameStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNameStep.Location = new System.Drawing.Point(176, 1);
             this.lbNameStep.Name = "lbNameStep";
-            this.lbNameStep.Size = new System.Drawing.Size(139, 25);
+            this.lbNameStep.Size = new System.Drawing.Size(106, 20);
             this.lbNameStep.TabIndex = 3;
             this.lbNameStep.Text = "Tool Setting";
             // 
             // lbNumStep
             // 
             this.lbNumStep.AutoSize = true;
-            this.lbNumStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumStep.Location = new System.Drawing.Point(13, 5);
+            this.lbNumStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNumStep.Location = new System.Drawing.Point(114, 3);
             this.lbNumStep.Name = "lbNumStep";
-            this.lbNumStep.Size = new System.Drawing.Size(62, 20);
+            this.lbNumStep.Size = new System.Drawing.Size(56, 18);
             this.lbNumStep.TabIndex = 2;
             this.lbNumStep.Text = "Step 3";
             // 
             // lbTool
             // 
             this.lbTool.AutoSize = true;
-            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTool.Location = new System.Drawing.Point(47, 40);
+            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTool.Location = new System.Drawing.Point(37, 25);
             this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(72, 20);
+            this.lbTool.Size = new System.Drawing.Size(59, 16);
             this.lbTool.TabIndex = 1;
             this.lbTool.Text = "OutLine";
             // 
@@ -305,7 +304,7 @@ namespace BeeUi
             // 
             this.iconTool.BackgroundImage = global::BeeUi.Properties.Resources.Add;
             this.iconTool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.iconTool.Location = new System.Drawing.Point(17, 36);
+            this.iconTool.Location = new System.Drawing.Point(7, 17);
             this.iconTool.Name = "iconTool";
             this.iconTool.Size = new System.Drawing.Size(24, 24);
             this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -387,6 +386,16 @@ namespace BeeUi
             this.tmReaPLC.Interval = 1;
             this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
+            // btnHeaderBar1
+            // 
+            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar1.Location = new System.Drawing.Point(657, 0);
+            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar1.Name = "btnHeaderBar1";
+            this.btnHeaderBar1.Size = new System.Drawing.Size(493, 55);
+            this.btnHeaderBar1.TabIndex = 8;
+            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
+            // 
             // btnShuttdown
             // 
             this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
@@ -449,16 +458,6 @@ namespace BeeUi
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // btnHeaderBar1
-            // 
-            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(657, 0);
-            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(493, 55);
-            this.btnHeaderBar1.TabIndex = 8;
-            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
-            // 
             // header1
             // 
             this.header1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -468,7 +467,7 @@ namespace BeeUi
             this.header1.Location = new System.Drawing.Point(0, 55);
             this.header1.Margin = new System.Windows.Forms.Padding(0);
             this.header1.Name = "header1";
-            this.header1.Size = new System.Drawing.Size(1150, 90);
+            this.header1.Size = new System.Drawing.Size(1150, 80);
             this.header1.TabIndex = 22;
             // 
             // EditTool

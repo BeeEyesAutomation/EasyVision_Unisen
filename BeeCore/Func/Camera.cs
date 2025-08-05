@@ -128,21 +128,51 @@ namespace BeeCore
                 //    CCDPlus.ReadRaw(true);
                 //else
                 Read();
+                bool IsFail = false;
                 if (Para.Exposure == null)
+                {
+                    IsFail = true;
                     Para.Exposure = new ValuePara();
+                }    
+                   
                 if (Para.Gain == null)
+                {
+                    IsFail = true;
                     Para.Gain = new ValuePara();
+                }    
+                  
                 if (Para.Shift == null)
+                {
+                    IsFail = true;
                     Para.Shift = new ValuePara();
+                }    
+                   
                 if (Para.Width == null)
+                {
+                    IsFail = true;
                     Para.Width = new ValuePara();
+                }    
+                   
                 if (Para.Height == null)
+                {
+                    IsFail = true;
                     Para.Height = new ValuePara();
+                }    
+                    
                 if (Para.OffSetX == null)
+                {
+                    IsFail = true;
                     Para.OffSetX = new ValuePara();
+                }    
+                   
                 if (Para.OffSetY == null)
+                {
+                    IsFail = true;
                     Para.OffSetY = new ValuePara();
-               await SetFullPara();
+                }    
+                  
+                if(!IsFail&&Para.Width.Value>Para.Width.Min+1 && Para.Height.Value > Para.Height.Min + 1)
+                 await SetFullPara();
                 //if (Global.ParaCommon._Exposure != 0)
                 //    CCDPlus.Exposure = Global.ParaCommon._Exposure;
 

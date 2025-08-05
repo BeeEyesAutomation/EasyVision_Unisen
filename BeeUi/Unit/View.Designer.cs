@@ -128,7 +128,7 @@ namespace BeeUi
             this.ckHideTool.Dock = System.Windows.Forms.DockStyle.Left;
             this.ckHideTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ckHideTool.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ckHideTool.Location = new System.Drawing.Point(572, 3);
+            this.ckHideTool.Location = new System.Drawing.Point(403, 3);
             this.ckHideTool.Name = "ckHideTool";
             this.ckHideTool.Size = new System.Drawing.Size(92, 48);
             this.ckHideTool.TabIndex = 13;
@@ -455,10 +455,10 @@ namespace BeeUi
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pBtn.ColumnCount = 13;
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -511,6 +511,7 @@ namespace BeeUi
             this.btnPlayStep.Size = new System.Drawing.Size(60, 48);
             this.btnPlayStep.TabIndex = 43;
             this.btnPlayStep.UseVisualStyleBackColor = true;
+            this.btnPlayStep.Visible = false;
             this.btnPlayStep.Click += new System.EventHandler(this.btnPlayStep_Click);
             // 
             // btnFile
@@ -522,6 +523,7 @@ namespace BeeUi
             this.btnFile.Size = new System.Drawing.Size(60, 48);
             this.btnFile.TabIndex = 41;
             this.btnFile.UseVisualStyleBackColor = true;
+            this.btnFile.Visible = false;
             this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
             // 
             // btnTypeTrig
@@ -538,17 +540,17 @@ namespace BeeUi
             this.btnTypeTrig.Corner = BeeGlobal.Corner.Both;
             this.btnTypeTrig.FlatAppearance.BorderSize = 0;
             this.btnTypeTrig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTypeTrig.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTypeTrig.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTypeTrig.ForeColor = System.Drawing.Color.Black;
             this.btnTypeTrig.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnTypeTrig.IsCLick = false;
             this.btnTypeTrig.IsNotChange = true;
             this.btnTypeTrig.IsRect = false;
             this.btnTypeTrig.IsUnGroup = true;
-            this.btnTypeTrig.Location = new System.Drawing.Point(425, 5);
+            this.btnTypeTrig.Location = new System.Drawing.Point(305, 5);
             this.btnTypeTrig.Margin = new System.Windows.Forms.Padding(5);
             this.btnTypeTrig.Name = "btnTypeTrig";
-            this.btnTypeTrig.Size = new System.Drawing.Size(139, 44);
+            this.btnTypeTrig.Size = new System.Drawing.Size(90, 44);
             this.btnTypeTrig.TabIndex = 39;
             this.btnTypeTrig.Text = "Trig Internal";
             this.btnTypeTrig.TextColor = System.Drawing.Color.Black;
@@ -580,7 +582,7 @@ namespace BeeUi
             this.btnCap.Location = new System.Drawing.Point(5, 5);
             this.btnCap.Margin = new System.Windows.Forms.Padding(5);
             this.btnCap.Name = "btnCap";
-            this.btnCap.Size = new System.Drawing.Size(130, 44);
+            this.btnCap.Size = new System.Drawing.Size(90, 44);
             this.btnCap.TabIndex = 9;
             this.btnCap.Text = "Trigger";
             this.btnCap.TextColor = System.Drawing.Color.Black;
@@ -610,10 +612,10 @@ namespace BeeUi
             this.btnContinuous.IsNotChange = false;
             this.btnContinuous.IsRect = false;
             this.btnContinuous.IsUnGroup = true;
-            this.btnContinuous.Location = new System.Drawing.Point(145, 5);
+            this.btnContinuous.Location = new System.Drawing.Point(105, 5);
             this.btnContinuous.Margin = new System.Windows.Forms.Padding(5);
             this.btnContinuous.Name = "btnContinuous";
-            this.btnContinuous.Size = new System.Drawing.Size(130, 44);
+            this.btnContinuous.Size = new System.Drawing.Size(90, 44);
             this.btnContinuous.TabIndex = 10;
             this.btnContinuous.Text = "Continuous";
             this.btnContinuous.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -640,15 +642,14 @@ namespace BeeUi
             this.btnLive.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLive.ForeColor = System.Drawing.Color.Black;
             this.btnLive.Image = global::BeeUi.Properties.Resources.Record_2;
-            this.btnLive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLive.IsCLick = false;
             this.btnLive.IsNotChange = false;
             this.btnLive.IsRect = false;
             this.btnLive.IsUnGroup = true;
-            this.btnLive.Location = new System.Drawing.Point(285, 5);
+            this.btnLive.Location = new System.Drawing.Point(205, 5);
             this.btnLive.Margin = new System.Windows.Forms.Padding(5);
             this.btnLive.Name = "btnLive";
-            this.btnLive.Size = new System.Drawing.Size(130, 44);
+            this.btnLive.Size = new System.Drawing.Size(90, 44);
             this.btnLive.TabIndex = 11;
             this.btnLive.Tag = "";
             this.btnLive.Text = "Live";
@@ -689,6 +690,7 @@ namespace BeeUi
             this.btnFolder.Size = new System.Drawing.Size(60, 48);
             this.btnFolder.TabIndex = 34;
             this.btnFolder.UseVisualStyleBackColor = true;
+            this.btnFolder.Visible = false;
             this.btnFolder.Click += new System.EventHandler(this.btnImg_Click);
             // 
             // btnRunSim
@@ -716,6 +718,7 @@ namespace BeeUi
             this.btnRunSim.TabIndex = 45;
             this.btnRunSim.TextColor = System.Drawing.Color.White;
             this.btnRunSim.UseVisualStyleBackColor = false;
+            this.btnRunSim.Visible = false;
             this.btnRunSim.Click += new System.EventHandler(this.btnRunSim_Click_1);
             // 
             // LayOutShow

@@ -190,43 +190,43 @@ namespace BeeUi
             string batPath = Path.Combine(appFolder, "update_and_restart.bat");
 
             string batContent = $@"
-@echo off
-set LOGFILE={appFolder}\\update_log.txt
+            @echo off
+            set LOGFILE={appFolder}\\update_log.txt
 
-echo ==== START UPDATE: %date% %time% ==== >> ""%LOGFILE%""
-set APPNAME={appName}
+            echo ==== START UPDATE: %date% %time% ==== >> ""%LOGFILE%""
+            set APPNAME={appName}
 
-tasklist | find /I ""%APPNAME%.exe"" >nul
-if %errorlevel%==0 (
-    echo Application running, killing process... >> ""%LOGFILE%""
-    taskkill /F /IM ""%APPNAME%.exe"" >> ""%LOGFILE%"" 2>&1
-    timeout /t 2 >nul
-) else (
-    echo Application is not running. >> ""%LOGFILE%""
-)
+            tasklist | find /I ""%APPNAME%.exe"" >nul
+            if %errorlevel%==0 (
+                echo Application running, killing process... >> ""%LOGFILE%""
+                taskkill /F /IM ""%APPNAME%.exe"" >> ""%LOGFILE%"" 2>&1
+                timeout /t 2 >nul
+            ) else (
+                echo Application is not running. >> ""%LOGFILE%""
+            )
 
-for %%f in (""{appFolder}\\*.dll.new"") do (
-    if exist ""%%f"" (
-        echo Found new DLL: %%f >> ""%LOGFILE%""
-        if exist ""%%~dpnf.dll"" (
-            echo Deleting old DLL: %%~dpnf.dll >> ""%LOGFILE%""
-            del ""%%~dpnf.dll"" >> ""%LOGFILE%"" 2>&1
-        )
-        echo Renaming %%f to %%~dpnf.dll >> ""%LOGFILE%""
-        move /Y ""%%f"" ""%%~dpnf.dll"" >> ""%LOGFILE%"" 2>&1
-    ) else (
-        echo No .dll.new found for %%f >> ""%LOGFILE%""
-    )
-)
+            for %%f in (""{appFolder}\\*.dll.new"") do (
+                if exist ""%%f"" (
+                    echo Found new DLL: %%f >> ""%LOGFILE%""
+                    if exist ""%%~dpnf"" (
+                        echo Deleting old DLL: %%~dpnf >> ""%LOGFILE%""
+                        del ""%%~dpnf"" >> ""%LOGFILE%"" 2>&1
+                    )
+                    echo Renaming %%f to %%~dpnf >> ""%LOGFILE%""
+                    move /Y ""%%f"" ""%%~dpnf"" >> ""%LOGFILE%"" 2>&1
+                ) else (
+                    echo No .dll.new found for %%f >> ""%LOGFILE%""
+                )
+            )
 
-echo Restarting application... >> ""%LOGFILE%""
-start """" ""{Path.Combine(appFolder, exeName)}""
+            echo Restarting application... >> ""%LOGFILE%""
+            start """" ""{Path.Combine(appFolder, exeName)}""
 
-echo ==== END UPDATE: %date% %time% ==== >> ""%LOGFILE%""
-echo. >> ""%LOGFILE%""
+            echo ==== END UPDATE: %date% %time% ==== >> ""%LOGFILE%""
+            echo. >> ""%LOGFILE%""
 
-del ""%~f0""
-";
+            del ""%~f0""
+            ";
 
             File.WriteAllText(batPath, batContent);
         }
