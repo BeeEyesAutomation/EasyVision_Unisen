@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeGlobal;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -46,7 +47,8 @@ namespace BeeInterface
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
+            Propety.rotMask = null;
+            
             Propety.LoadTemp();
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety. Index].Score ;
             trackPixel.Value = (int)Propety.AreaPixel;
@@ -58,28 +60,28 @@ namespace BeeInterface
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
            
         }
-        public Mat RotateMat(Mat raw, RotatedRect rot)
-        {
-            Mat matRs = new Mat(), matR = Cv2.GetRotationMatrix2D(rot.Center, rot.Angle, 1);
+        //public Mat RotateMat(Mat raw, RotatedRect rot)
+        //{
+        //    Mat matRs = new Mat(), matR = Cv2.GetRotationMatrix2D(rot.Center, rot.Angle, 1);
 
-            float fTranslationX = (rot.Size.Width - 1) / 2.0f - rot.Center.X;
-            float fTranslationY = (rot.Size.Height - 1) / 2.0f - rot.Center.Y;
-            matR.At<double>(0, 2) += fTranslationX;
-            matR.At<double>(1, 2) += fTranslationY;
-            Cv2.WarpAffine(raw, matRs, matR, new OpenCvSharp.Size(rot.Size.Width, rot.Size.Height), InterpolationFlags.Linear, BorderTypes.Constant);
-            return matRs;
-        }
+        //    float fTranslationX = (rot.Size.Width - 1) / 2.0f - rot.Center.X;
+        //    float fTranslationY = (rot.Size.Height - 1) / 2.0f - rot.Center.Y;
+        //    matR.At<double>(0, 2) += fTranslationX;
+        //    matR.At<double>(1, 2) += fTranslationY;
+        //    Cv2.WarpAffine(raw, matRs, matR, new OpenCvSharp.Size(rot.Size.Width, rot.Size.Height), InterpolationFlags.Linear, BorderTypes.Constant);
+        //    return matRs;
+        //}
         public Mat matCrop=new Mat();
-        public Mat GetTemp(RectRotate rotateRect)
+        public void GetTemp()
         {
           
-            float angle = rotateRect._rectRotation;
-            if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-             matCrop =  RotateMat( BeeCore.Common.listCamera[Global.IndexChoose].matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
+            //float angle = rotateRect._rectRotation;
+          //  if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
+          //   matCrop =  RotateMat( BeeCore.Common.listCamera[Global.IndexChoose].matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
             //Cv2.ImWrite("cropColor.png", matCrop);
             
             picColor.Invalidate();
-            return Propety.SetColor(Global.IsRun, matCrop);
+            Propety.matRs= Propety.SetColor();
            
         }
         
@@ -155,44 +157,7 @@ namespace BeeInterface
         // //   return gc;
         //}
 
-        public Graphics ShowEdit(Graphics gc, RectangleF _rect)
-        {
-            if (matTemp.Empty())
-            {
-                float angle = Propety.rotArea._rectRotation;
-                if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
-                 matCrop = RotateMat(BeeCore.Common.listCamera[Global. IndexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
-
-                matTemp = Propety.SetColor(false, matCrop);
-               
-            }
-           
-
-            try
-                {
-                    Mat matShow = matTemp.Clone();
-                   
-                    Bitmap bmTemp = matShow.ToBitmap();
-                    bmTemp.MakeTransparent(Color.Black);
-                    bmTemp = ConvertImg.ChangeToColor(bmTemp, Color.LimeGreen, 0.6f);
-
-                    gc.DrawImage(bmTemp, _rect);
-                    //if (matMask != null)
-                    //{
-                    //    Bitmap myBitmap2 = matMask.ToBitmap();
-                    //    myBitmap2.MakeTransparent(Color.Black);
-                    //    myBitmap2 = ConvertImg.ChangeToColor(myBitmap2, Color.Orange, 0.9f);
-                    //    myBitmap2.MakeTransparent(Color.Black);
-
-                    //    gc.DrawImage(myBitmap2, _rect);
-                    //}
-
-                }
-                catch (Exception ex) { 
-            }
-            return gc;
-        }
-       
+  
         private void rjButton3_Click(object sender, EventArgs e)
         {
 
@@ -282,7 +247,7 @@ namespace BeeInterface
 
 
 
-
+            
             btnGetColor.IsCLick = !Propety.IsGetColor;
             Propety.IsGetColor = btnGetColor.IsCLick;
             if (Propety.IsGetColor)
@@ -291,17 +256,18 @@ namespace BeeInterface
                 // ExtractColor.Show();
                 // G.EditTool.View.imgView.Cursor = new Cursor(Properties.Resources.Color_Dropper.Handle);
 
-                Global.StatusDraw = StatusDraw.Edit;
+                Global.StatusDraw = StatusDraw.Color;
                 //  G.EditTool.View.imgView.Invalidate();
             }
-            //else
-              //  G.EditTool.View.imgView.Cursor = Cursors.Default;
+            else 
+                Global.StatusDraw = StatusDraw.Edit;
+            //  G.EditTool.View.imgView.Cursor = Cursors.Default;
 
 
 
 
 
-           // G.EditTool.View.imgView.Invalidate();
+            // G.EditTool.View.imgView.Invalidate();
 
         }
 
@@ -406,15 +372,15 @@ namespace BeeInterface
         private void trackPixel_ValueChanged(float obj)
         {
             Propety.AreaPixel = (int)trackPixel.Value;
-            if(matCrop.Empty())
-            {
-                float angle = Propety.rotArea._rectRotation;
-                if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
-                matCrop = RotateMat(BeeCore.Common.listCamera[Global. IndexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
+            //if(matCrop.Empty())
+            //{
+            //    float angle = Propety.rotArea._rectRotation;
+            //    if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
+            //    matCrop = RotateMat(BeeCore.Common.listCamera[Global. IndexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
 
 
-            }
-            matTemp =  Propety.SetColor(false, matCrop);
+            //}
+            matTemp =  Propety.SetColor();
            
         }
 

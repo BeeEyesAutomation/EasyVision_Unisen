@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -67,7 +68,7 @@ namespace BeeCore
         {
 
               ColorAreaPlus.Undo(AreaPixel);
-            SetColor(false, raw);
+            SetColor();
             return OpenCvSharp.Extensions.BitmapConverter.ToMat(G.CommonPlus.GetImageRsTemp());
            
         }
@@ -109,24 +110,27 @@ namespace BeeCore
         }
         public System.Drawing.Color GetColor( Mat raw, int x,int y)
         {
-            if(raw.Empty())return Color.Empty;
-            if (raw.Type()==MatType.CV_8UC1){
-                Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+            using (Mat mat = raw.Clone())
+            {
+                if (mat.Empty()) return Color.Empty;
+                if (mat.Type() == MatType.CV_8UC1)
+                {
+                    Cv2.CvtColor(mat, mat, ColorConversionCodes.GRAY2BGR);
+                }
+                //  Mat contrastImg = new Mat();
+                //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
+                //Cv2.EqualizeHist(contrastImg, contrastImg);
+                //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+                ColorAreaPlus.StyleColor = styleColor;
+                //  Cv2.ImWrite("Color.png", raw);
+                //    G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(mat.Clone()));
+
+                String S = ColorAreaPlus.GetColor(mat.Data, mat.Cols, mat.Rows, (int)mat.Step(), mat.Type(), x, y);
+                clShow = System.Drawing.Color.Black;
+                if (S == null || S == "") return clShow;
+                String[] sp = S.Split(',');
+                clShow = System.Drawing.Color.FromArgb(255, Convert.ToInt32(sp[0]), Convert.ToInt32(sp[1]), Convert.ToInt32(sp[2]));
             }
-          //  Mat contrastImg = new Mat();
-            //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
-            //Cv2.EqualizeHist(contrastImg, contrastImg);
-            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
-              ColorAreaPlus.StyleColor = styleColor;
-          //  Cv2.ImWrite("Color.png", raw);
-            G.CommonPlus.BitmapSrc(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(raw.Clone()));
-           
-            String S =   ColorAreaPlus.GetColor(x, y);
-            clShow = System.Drawing.Color.Black;
-            if (S == null||S=="") return clShow;
-            String[] sp = S.Split(',');
-            clShow = System.Drawing.Color.FromArgb(255, Convert.ToInt32(sp[0]), Convert.ToInt32(sp[1]), Convert.ToInt32(sp[2]));
-          
             return clShow;
 
             
@@ -143,19 +147,19 @@ namespace BeeCore
         public void LoadTemp()
         {
             
-            if (BeeCore.Common.listCamera[IndexThread] == null) return;
-            if(BeeCore.Common.listCamera[IndexThread].matRaw.Empty())return;
-            BeeCore.Native.SetImg(BeeCore.Common.listCamera[IndexThread].matRaw);
+         //   if (BeeCore.Common.listCamera[IndexThread] == null) return;
+          //  if(BeeCore.Common.listCamera[IndexThread].matRaw.Empty())return;
+         //   BeeCore.Native.SetImg(BeeCore.Common.listCamera[IndexThread].matRaw);
               ColorAreaPlus.StyleColor = styleColor;
-       Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotArea,rotMask);
-            if (matCrop.Empty()) return;
+    //   Mat matCrop=     Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotArea,rotMask);
+         //   if (matCrop.Empty()) return;
 
-            Native.SetImg(matCrop, TypeImg.Crop);
+         //   Native.SetImg(matCrop, TypeImg.Crop);
         //    BeeCore.G.CommonPlus.CropRotate((int)rotArea._PosCenter.X, (int)rotArea._PosCenter.Y, (int)rotArea._rect.Width, (int)rotArea._rect.Height, rotArea._angle);
 
             //  BeeCore.Camera.Read();
               ColorAreaPlus.LoadTemp(listColor);
-              ColorAreaPlus.SetColorArea(AreaPixel);
+          //    ColorAreaPlus.SetColorArea(AreaPixel);
         }
         public Mat ClearTemp()
         {
@@ -167,25 +171,44 @@ namespace BeeCore
             return OpenCvSharp.Extensions.BitmapConverter.ToMat(G.CommonPlus.GetImageRsTemp());
 
         }
-        public Mat SetColor(bool IsCCD, Mat raw)
+        public Mat SetColor()
         {
-           // Mat contrastImg = new Mat(); 
-            if (raw.Type() == MatType.CV_8UC1)
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
-                Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+                matProcess = new Mat();
+                if (raw.Empty()) return new Mat();
+                Mat matCrop = Common.CropRotatedRect(raw, rotArea, rotMask);
+
+
+
+
+
+                // Tăng độ tương phản
+                int clipLimit = 2;
+                // Mat contrastImg = new Mat();
+                if (matCrop.Type() == MatType.CV_8UC1)
+                {
+                    Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.GRAY2BGR);
+                }
+                else
+                    matProcess = matCrop;
+                // Mat contrastImg = new Mat(); 
+                //    if (raw.Type() == MatType.CV_8UC1)
+                //{
+                //    Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+                //}
+                //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
+                //Cv2.EqualizeHist(contrastImg, contrastImg);
+                //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
+                ColorAreaPlus.StyleColor = styleColor;
+                Native.SetImg(matProcess, TypeImg.Crop);
+                pxTemp = ColorAreaPlus.SetColorArea(AreaPixel);
+
+
+                listColor = ColorAreaPlus.SaveTemp();
+                return OpenCvSharp.Extensions.BitmapConverter.ToMat(G.CommonPlus.GetImageRsTemp());
+
             }
-            //Cv2.CvtColor(raw, contrastImg, ColorConversionCodes.BGR2GRAY);
-            //Cv2.EqualizeHist(contrastImg, contrastImg);
-            //Cv2.CvtColor(contrastImg, contrastImg, ColorConversionCodes.GRAY2BGR);
-              ColorAreaPlus.StyleColor = styleColor;
-            Native.SetImg(raw, TypeImg.Crop);
-             pxTemp =   ColorAreaPlus.SetColorArea(AreaPixel);
-           
-         
-                listColor =   ColorAreaPlus.SaveTemp();
-                 return OpenCvSharp.Extensions.BitmapConverter.ToMat(G.CommonPlus.GetImageRsTemp());
-      
-            
           
         }
      
@@ -235,7 +258,9 @@ namespace BeeCore
         public Graphics DrawResult(Graphics gc)
         {
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
-            gc.ResetTransform();
+            if (Global.IsRun)
+                gc.ResetTransform();
+
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
             var mat = new Matrix();
@@ -249,17 +274,19 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+
+            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
             {
-                case Results.OK:
-                    cl = Global.ColorOK;
-                    break;
-                case Results.NG:
-                    cl = Global.ColorNG;
-                    break;
+                cl = Global.ColorNG;
+            }
+            else
+            {
+                cl = Global.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
+            if (!Global.IsHideTool)
+                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
+            if(matRs!=null)
             if (!matRs .Empty())
             {
                 gc.ResetTransform();
@@ -357,7 +384,7 @@ namespace BeeCore
                 {
 
                     Mat raws = new Mat(rows, cols, Type, intPtr);
-                    Cv2.ImWrite("color.png", raws);
+                  //  Cv2.ImWrite("color.png", raws);
                     return raws;
                 }
             }

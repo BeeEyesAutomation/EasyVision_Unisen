@@ -56,12 +56,12 @@ namespace BeeUi.Unit
             this.pCamera.Controls.Add(this.btnCamera2, 1, 0);
             this.pCamera.Controls.Add(this.btnCamera3, 2, 0);
             this.pCamera.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pCamera.Location = new System.Drawing.Point(5, 5);
-            this.pCamera.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
+            this.pCamera.Location = new System.Drawing.Point(1, 1);
+            this.pCamera.Margin = new System.Windows.Forms.Padding(1);
             this.pCamera.Name = "pCamera";
             this.pCamera.RowCount = 1;
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pCamera.Size = new System.Drawing.Size(315, 63);
+            this.pCamera.Size = new System.Drawing.Size(318, 71);
             this.pCamera.TabIndex = 31;
             this.pCamera.SizeChanged += new System.EventHandler(this.pCamera_SizeChanged);
             // 
@@ -89,7 +89,7 @@ namespace BeeUi.Unit
             this.btnCamera4.Location = new System.Drawing.Point(240, 5);
             this.btnCamera4.Margin = new System.Windows.Forms.Padding(1, 5, 5, 5);
             this.btnCamera4.Name = "btnCamera4";
-            this.btnCamera4.Size = new System.Drawing.Size(70, 53);
+            this.btnCamera4.Size = new System.Drawing.Size(73, 61);
             this.btnCamera4.TabIndex = 31;
             this.btnCamera4.Text = "Camera 4";
             this.btnCamera4.TextColor = System.Drawing.Color.Black;
@@ -121,7 +121,7 @@ namespace BeeUi.Unit
             this.btnCamera1.Location = new System.Drawing.Point(5, 5);
             this.btnCamera1.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnCamera1.Name = "btnCamera1";
-            this.btnCamera1.Size = new System.Drawing.Size(78, 53);
+            this.btnCamera1.Size = new System.Drawing.Size(78, 61);
             this.btnCamera1.TabIndex = 20;
             this.btnCamera1.Text = "Camera 1";
             this.btnCamera1.TextColor = System.Drawing.Color.Black;
@@ -153,7 +153,7 @@ namespace BeeUi.Unit
             this.btnCamera2.Location = new System.Drawing.Point(83, 5);
             this.btnCamera2.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera2.Name = "btnCamera2";
-            this.btnCamera2.Size = new System.Drawing.Size(78, 53);
+            this.btnCamera2.Size = new System.Drawing.Size(78, 61);
             this.btnCamera2.TabIndex = 19;
             this.btnCamera2.Text = "Camera 2";
             this.btnCamera2.TextColor = System.Drawing.Color.Black;
@@ -185,7 +185,7 @@ namespace BeeUi.Unit
             this.btnCamera3.Location = new System.Drawing.Point(161, 5);
             this.btnCamera3.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera3.Name = "btnCamera3";
-            this.btnCamera3.Size = new System.Drawing.Size(78, 53);
+            this.btnCamera3.Size = new System.Drawing.Size(78, 61);
             this.btnCamera3.TabIndex = 29;
             this.btnCamera3.Text = "Camera 3";
             this.btnCamera3.TextColor = System.Drawing.Color.Black;
@@ -230,10 +230,10 @@ namespace BeeUi.Unit
             this.btnHide.IsNotChange = false;
             this.btnHide.IsRect = false;
             this.btnHide.IsUnGroup = true;
-            this.btnHide.Location = new System.Drawing.Point(321, 5);
-            this.btnHide.Margin = new System.Windows.Forms.Padding(1, 5, 5, 5);
+            this.btnHide.Location = new System.Drawing.Point(321, 1);
+            this.btnHide.Margin = new System.Windows.Forms.Padding(1);
             this.btnHide.Name = "btnHide";
-            this.btnHide.Size = new System.Drawing.Size(44, 63);
+            this.btnHide.Size = new System.Drawing.Size(48, 71);
             this.btnHide.TabIndex = 32;
             this.btnHide.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnHide.TextColor = System.Drawing.Color.Black;

@@ -794,7 +794,11 @@ namespace BeeUi
                       
                     }
                 if (rotateRect._dragAnchor != AnchorPoint.None)
-                    Global.StatusDraw = StatusDraw.None;
+                {
+                    if(Global.StatusDraw!=StatusDraw.Color)
+                    Global.StatusDraw = StatusDraw.Edit;
+                }    
+                   
               //  rotateDraw = rotateRect.Clone();
                 //  ShowCursor(rotateRect._dragAnchor, rotateRect._rectRotation);
                 imgView.Invalidate();
@@ -822,17 +826,9 @@ namespace BeeUi
             //else
             //{
             //    G.IsCheck = false;
-              
-              if(Global.IndexToolSelected>=0)
-                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool == TypeTool.Color_Area)
-                {
-              
-                    if (toolEdit.Propety.IsGetColor)
-                        toolEdit.Propety.AddColor();
-                
-             
-
-                }
+            if (Global.StatusDraw == StatusDraw.Color)
+                toolEdit.Propety.AddColor();
+          
            // }
          
               
@@ -962,12 +958,12 @@ namespace BeeUi
             if ( Global.IndexToolSelected == -1)
             {
                 //
-
+              
                 //  gcResult = gc;
 
                 return;
             }
-            if (Global.StatusDraw == StatusDraw.None)
+          //  if (Global.StatusDraw == StatusDraw.None)
                 if (toolEdit != null)
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
@@ -1052,11 +1048,11 @@ namespace BeeUi
                 Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
 
                 BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.DrawResult(gc);
-                Global.StatusDraw = StatusDraw.None;
+               // Global.StatusDraw = StatusDraw.None;
             
-                return;
+                //return;
             }
-            else
+            else if (Global.StatusDraw == StatusDraw.Edit)
             {
                 switch (Global.TypeCrop)
                 {
@@ -1289,7 +1285,10 @@ namespace BeeUi
 
                     if (toolEdit.Propety.IsGetColor)
                     {
-                        e.Graphics.DrawEllipse(new Pen(clChoose, 5), new Rectangle(new Point(pMove.X - 25, pMove.Y - 25), new Size(50, 50)));
+                    gc.ResetTransform();
+
+                    gc.DrawEllipse(new Pen(clChoose, 5), new Rectangle(new Point(pMove.X - 25, pMove.Y - 25), new Size(50, 50)));
+                   
                     }
                 }
                 catch (Exception)
@@ -1336,9 +1335,40 @@ namespace BeeUi
             Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
             Global.ParaCommon.ExternalChange += ParaCommon_ExternalChange;
             Global.StatusProcessing=StatusProcessing.None;
-           //time
-           
+            //time
+            RefreshExternal(Global.ParaCommon.IsExternal);
         }
+        public void RefreshExternal(bool obj)
+
+        {
+            if (!obj)
+            {
+                //btnTypeTrig.Enabled = false;
+                btnTypeTrig.Text = "Trig Internal";
+                btnCap.Enabled = true;
+                btnContinuous.Enabled = true;
+                btnFile.Enabled = true;
+                btnFolder.Enabled = true;
+                btnPlayStep.Enabled = true;
+                btnRunSim.Enabled = true;
+            }
+            else
+            {
+                // btnTypeTrig.Enabled = true;
+                if (Global.ParaCommon.Comunication.IO.IsBypass)
+                    btnTypeTrig.Text = "ByPass I/O";
+                else
+                    btnTypeTrig.Text = "Trig External";
+                btnCap.Enabled = false;
+                btnContinuous.Enabled = false;
+                btnFile.Enabled = false;
+                btnFolder.Enabled = false;
+                btnPlayStep.Enabled = false;
+                btnRunSim.Enabled = false;
+
+            }
+        }
+
 
         private void ParaCommon_ExternalChange(bool obj)
         {
@@ -1576,7 +1606,8 @@ namespace BeeUi
                     break;
                 case TypeTool.Color_Area:
                   
-                    toolEdit.matTemp = toolEdit.GetTemp( toolEdit.Propety.rotArea);
+                    toolEdit.GetTemp();
+                        Global.StatusDraw = StatusDraw.Check;
                     break;
             }
             //if (G.IsCheck)

@@ -289,7 +289,7 @@ namespace BeeUi.Common
         }
         String[] PathFile;
         bool IsLoad = false;
-        public void IniProject()
+        public void RefreshListPJ()
         {
             string[] files =  Directory.GetDirectories("Program");
           
@@ -362,7 +362,7 @@ namespace BeeUi.Common
             else
             {
                 // Access.SaveProg("Program\\Default.prog", new List<PropetyTool>());
-                IniProject();
+              
 
                 Global.Project= Properties.Settings.Default.programCurrent;
 
@@ -392,10 +392,13 @@ namespace BeeUi.Common
             }
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
+           
+           
+            Global.Project= program;
+             Properties.Settings.Default.programCurrent = Global.Project;
+             Properties.Settings.Default.Save();
             if (!workLoadProgram.IsBusy)
                 workLoadProgram.RunWorkerAsync();
-
-            Global.Project= program;
             txtQrCode.Text = Global.Project;
             if (btnEnQrCode.IsCLick)
             {
@@ -584,8 +587,10 @@ txtQrCode.Focus();
             G.listProgram.Location = new Point(pModel.Location.X+ txtQrCode.Location.X, this.Location.Y + pModel.Location.Y  + txtQrCode.Location.Y + txtQrCode.Height + 10);
             G.listProgram.Width = txtQrCode.Width;
             G.listProgram.Visible=!G.listProgram.Visible;
-            if(G.listProgram.Visible )
+           
+            if (G.listProgram.Visible )
             {
+                RefreshListPJ();
                 IsLoad = true;
                 G.listProgram.DataSource = PathFile;
 
@@ -609,19 +614,18 @@ txtQrCode.Focus();
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
             else if (G.IsCCD)
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
-            if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-            {
-                Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-                //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-            }
+            //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+            //{
+            //    Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
+            //    //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+            //}
             if (Global.ToolSettings == null)
             {
                 Global.ToolSettings = new ToolSettings();
 
             }
           
-            Properties.Settings.Default.programCurrent = Global.Project;
-            Properties.Settings.Default.Save();
+          
             G.listProgram.Visible = false;
             txtQrCode.Enabled = true;
             btnShowList.Enabled = true;
@@ -636,7 +640,7 @@ txtQrCode.Focus();
 			}
            
             IsIntialProgram = true;
-            Acccess(Global.IsRun);
+          //  Acccess(Global.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
             Global.ToolSettings.pAllTool.Controls.Clear();

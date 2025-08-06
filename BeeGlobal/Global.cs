@@ -123,7 +123,7 @@ namespace BeeGlobal
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();
         private static int _IndexToolSelected=-1;
         public static bool IsEditTool = false;
-        public static int RadpEdit = 10;
+        public static int RadpEdit = 40;
         public static event Action<int> IndexToolChanged;
         public static dynamic OldPropetyTool = null;
        

@@ -31,7 +31,7 @@ namespace CvPlus {
 	};
 	public ref class CCD
 	{
-	
+	public: System::String^ Ex = "";
 	public: float Exposure = 0;
 	public: double StepExposure = 0,MinExposure=1,MaxExposure=1000;
 	public: 	int TypeCCD = 0;

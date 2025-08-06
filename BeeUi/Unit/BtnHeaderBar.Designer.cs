@@ -33,26 +33,25 @@ namespace BeeUi.Unit
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BtnHeaderBar));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btncheck = new BeeInterface.RJButton();
             this.btnUser = new BeeInterface.RJButton();
             this.btnSettingPLC = new BeeInterface.RJButton();
             this.btnCamera = new BeeInterface.RJButton();
             this.btnfull = new BeeInterface.RJButton();
             this.btnSetting = new BeeInterface.RJButton();
             this.btnReport = new BeeInterface.RJButton();
-            this.btncheck = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 7;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.btncheck, 6, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnUser, 5, 0);
@@ -67,8 +66,39 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 55);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(433, 55);
             this.tableLayoutPanel1.TabIndex = 36;
+            // 
+            // btncheck
+            // 
+            this.btncheck.BackColor = System.Drawing.Color.Transparent;
+            this.btncheck.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btncheck.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btncheck.BackgroundImage")));
+            this.btncheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btncheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(108)))), ((int)(((byte)(182)))));
+            this.btncheck.BorderRadius = 5;
+            this.btncheck.BorderSize = 1;
+            this.btncheck.ButtonImage = null;
+            this.btncheck.Corner = BeeGlobal.Corner.Both;
+            this.btncheck.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btncheck.FlatAppearance.BorderSize = 0;
+            this.btncheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btncheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btncheck.ForeColor = System.Drawing.Color.Black;
+            this.btncheck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btncheck.IsCLick = false;
+            this.btncheck.IsNotChange = true;
+            this.btncheck.IsRect = true;
+            this.btncheck.IsUnGroup = true;
+            this.btncheck.Location = new System.Drawing.Point(363, 3);
+            this.btncheck.Name = "btncheck";
+            this.btncheck.Size = new System.Drawing.Size(67, 49);
+            this.btncheck.TabIndex = 39;
+            this.btncheck.Text = "Update";
+            this.btncheck.TextColor = System.Drawing.Color.Black;
+            this.btncheck.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btncheck.UseVisualStyleBackColor = false;
+            this.btncheck.Click += new System.EventHandler(this.btncheck_Click);
             // 
             // btnUser
             // 
@@ -92,10 +122,9 @@ namespace BeeUi.Unit
             this.btnUser.IsNotChange = true;
             this.btnUser.IsRect = true;
             this.btnUser.IsUnGroup = true;
-            this.btnUser.Location = new System.Drawing.Point(361, 3);
-            this.btnUser.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.btnUser.Location = new System.Drawing.Point(303, 3);
             this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(60, 49);
+            this.btnUser.Size = new System.Drawing.Size(54, 49);
             this.btnUser.TabIndex = 32;
             this.btnUser.Text = "Account";
             this.btnUser.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -125,9 +154,9 @@ namespace BeeUi.Unit
             this.btnSettingPLC.IsNotChange = false;
             this.btnSettingPLC.IsRect = false;
             this.btnSettingPLC.IsUnGroup = true;
-            this.btnSettingPLC.Location = new System.Drawing.Point(73, 3);
+            this.btnSettingPLC.Location = new System.Drawing.Point(63, 3);
             this.btnSettingPLC.Name = "btnSettingPLC";
-            this.btnSettingPLC.Size = new System.Drawing.Size(64, 49);
+            this.btnSettingPLC.Size = new System.Drawing.Size(54, 49);
             this.btnSettingPLC.TabIndex = 37;
             this.btnSettingPLC.Text = "PLC";
             this.btnSettingPLC.TextColor = System.Drawing.Color.Black;
@@ -157,9 +186,9 @@ namespace BeeUi.Unit
             this.btnCamera.IsNotChange = true;
             this.btnCamera.IsRect = true;
             this.btnCamera.IsUnGroup = true;
-            this.btnCamera.Location = new System.Drawing.Point(284, 3);
+            this.btnCamera.Location = new System.Drawing.Point(243, 3);
             this.btnCamera.Name = "btnCamera";
-            this.btnCamera.Size = new System.Drawing.Size(64, 49);
+            this.btnCamera.Size = new System.Drawing.Size(54, 49);
             this.btnCamera.TabIndex = 33;
             this.btnCamera.Text = "Camera";
             this.btnCamera.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -190,9 +219,8 @@ namespace BeeUi.Unit
             this.btnfull.IsRect = false;
             this.btnfull.IsUnGroup = true;
             this.btnfull.Location = new System.Drawing.Point(3, 3);
-            this.btnfull.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.btnfull.Name = "btnfull";
-            this.btnfull.Size = new System.Drawing.Size(57, 49);
+            this.btnfull.Size = new System.Drawing.Size(54, 49);
             this.btnfull.TabIndex = 38;
             this.btnfull.Text = "Full";
             this.btnfull.TextColor = System.Drawing.Color.Black;
@@ -222,9 +250,9 @@ namespace BeeUi.Unit
             this.btnSetting.IsNotChange = true;
             this.btnSetting.IsRect = true;
             this.btnSetting.IsUnGroup = true;
-            this.btnSetting.Location = new System.Drawing.Point(213, 3);
+            this.btnSetting.Location = new System.Drawing.Point(183, 3);
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(65, 49);
+            this.btnSetting.Size = new System.Drawing.Size(54, 49);
             this.btnSetting.TabIndex = 35;
             this.btnSetting.Text = "Settings";
             this.btnSetting.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -255,9 +283,9 @@ namespace BeeUi.Unit
             this.btnReport.IsNotChange = true;
             this.btnReport.IsRect = true;
             this.btnReport.IsUnGroup = true;
-            this.btnReport.Location = new System.Drawing.Point(143, 3);
+            this.btnReport.Location = new System.Drawing.Point(123, 3);
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(64, 49);
+            this.btnReport.Size = new System.Drawing.Size(54, 49);
             this.btnReport.TabIndex = 34;
             this.btnReport.Text = "Report";
             this.btnReport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -266,43 +294,13 @@ namespace BeeUi.Unit
             this.btnReport.UseVisualStyleBackColor = false;
             this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
             // 
-            // btncheck
-            // 
-            this.btncheck.BackColor = System.Drawing.Color.Transparent;
-            this.btncheck.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btncheck.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btncheck.BackgroundImage")));
-            this.btncheck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btncheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(108)))), ((int)(((byte)(182)))));
-            this.btncheck.BorderRadius = 5;
-            this.btncheck.BorderSize = 1;
-            this.btncheck.ButtonImage = null;
-            this.btncheck.Corner = BeeGlobal.Corner.Both;
-            this.btncheck.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btncheck.FlatAppearance.BorderSize = 0;
-            this.btncheck.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btncheck.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btncheck.ForeColor = System.Drawing.Color.Black;
-            this.btncheck.IsCLick = false;
-            this.btncheck.IsNotChange = true;
-            this.btncheck.IsRect = true;
-            this.btncheck.IsUnGroup = true;
-            this.btncheck.Location = new System.Drawing.Point(438, 3);
-            this.btncheck.Name = "btncheck";
-            this.btncheck.Size = new System.Drawing.Size(57, 49);
-            this.btncheck.TabIndex = 39;
-            this.btncheck.Text = "Update";
-            this.btncheck.TextColor = System.Drawing.Color.Black;
-            this.btncheck.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btncheck.UseVisualStyleBackColor = false;
-            this.btncheck.Click += new System.EventHandler(this.btncheck_Click);
-            // 
             // BtnHeaderBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "BtnHeaderBar";
-            this.Size = new System.Drawing.Size(498, 55);
+            this.Size = new System.Drawing.Size(433, 55);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

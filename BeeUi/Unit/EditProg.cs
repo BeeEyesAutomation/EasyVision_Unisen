@@ -32,7 +32,7 @@ namespace BeeUi.Unit
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
               //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-               G.Header. IniProject();
+               G.Header.RefreshListPJ(); 
 
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
@@ -61,7 +61,7 @@ namespace BeeUi.Unit
                 Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
                Directory.CreateDirectory("Program\\"+Global.Project);
                 Access.SaveProg("Program\\" + Global.Project+"\\"+ Global.Project+ ".prog", BeeCore.Common.PropetyTools);
-                G.Header.IniProject();
+                G.Header.RefreshListPJ();
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
             }
@@ -82,7 +82,7 @@ namespace BeeUi.Unit
                 Global.Project = G.listProgram.Items[0].ToString();
                 Properties.Settings.Default.programCurrent = Global.Project;
                 Properties.Settings.Default.Save();
-                G.Header.IniProject();
+                G.Header.RefreshListPJ();
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
 

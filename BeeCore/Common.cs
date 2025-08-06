@@ -444,14 +444,14 @@ namespace BeeCore
                 Cv2.WarpAffine(source, crop1, M, source.Size(), InterpolationFlags.Cubic);
 
                 Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, mCrop);
-                if (TypeMat == MatType.CV_8UC3)
-                {
-                    Cv2.CvtColor(mCrop, mCrop, ColorConversionCodes.BGR2GRAY);
-                }
-
+                //if (TypeMat == MatType.CV_8UC3)
+                //{
+                //    Cv2.CvtColor(mCrop, mCrop, ColorConversionCodes.BGR2GRAY);
+                //}
+              
                 if (rot.IsElip)
                 {
-                    Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, MatType.CV_8UC1, new Scalar(0));
+                    Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, TypeMat, new Scalar(0));
                     int deltaX = (int)rot._rect.Width / 2;
                     int deltaY = (int)rot._rect.Height / 2;
                     RotatedRect rectElip = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rot._rect.Width, rot._rect.Height), rot._rectRotation);
@@ -468,7 +468,7 @@ namespace BeeCore
             }
             if(rotMask != null)
             {
-               Mat matMask=new Mat((int)rot._rect.Height, (int)rot._rect.Width,MatType.CV_8UC1, new Scalar(255));
+               Mat matMask=new Mat((int)rot._rect.Height, (int)rot._rect.Width, TypeMat, new Scalar(255));
                 int deltaX = (int)rot._rect.Width / 2 - (int)(rot._PosCenter.X - rotMask._PosCenter.X);
                 int deltaY = (int)rot._rect.Height / 2 - (int)(rot._PosCenter.Y - rotMask._PosCenter.Y);
                 RotatedRect retMask = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rotMask._rect.Width, rotMask._rect.Height), rotMask._rectRotation);
@@ -490,11 +490,11 @@ namespace BeeCore
                     Cv2.FillPoly(matMask, new[] { pts }, new Scalar(0)); // Đỏ
 
                 }
-                if (matResult.Type() == MatType.CV_8UC3)
-                {
-                    Cv2.CvtColor(matResult, matResult, ColorConversionCodes.BGR2GRAY);
+                //if (matResult.Type() == MatType.CV_8UC3)
+                //{
+                //    Cv2.CvtColor(matResult, matResult, ColorConversionCodes.BGR2GRAY);
 
-                }
+                //}
                 Mat matAnd = new Mat();
                     Cv2.BitwiseAnd(matResult, matMask, matAnd);
                

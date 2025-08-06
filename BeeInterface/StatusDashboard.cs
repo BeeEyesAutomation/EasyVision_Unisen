@@ -58,7 +58,7 @@ namespace BeeInterface
         [Category("Appearance"), Description("Màu nền ô thông số CT bên phải")]
         public Color InfoBlockBackColor { get; set; } = Color.White;
         [Category("Appearance"), Description("Font cho phần thông số bên phải")]
-        public Font InfoFont { get; set; } = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+        public Font InfoFont { get; set; } = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Pixel);
 
         public StatusDashboard()
         {
@@ -74,7 +74,7 @@ namespace BeeInterface
             //  | ControlStyles.UserPaint, true);
 
             // Default font and size
-            this.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            this.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             this.MinimumSize = new Size(240, 50);
 
             // Reset button
@@ -206,7 +206,7 @@ namespace BeeInterface
 
             // Layout
             int bigW = (int)(w * 0.14f);
-            int rightW = (int)(w * 0.12f);
+            int rightW = (int)(100);//* 0.14f
             int midW = (w - bigW - rightW) / 3;
             if (bigW <= 0 || midW <= 0 || rightW <= 0) return;
            
@@ -237,7 +237,7 @@ namespace BeeInterface
             DrawRightInfo(g, rR);
         }
         Color clBoder = Color.LightGray;
-        int ThinessBoder = 3;
+        int ThinessBoder = 1;
         // Drawing helpers (unchanged): DrawMidBlock, DrawBlock, DrawRightInfo, GetRoundedRect, GetFittingFont
         // ... (same as before)
         private void DrawMidBlock(Graphics g, Rectangle r, string header, string value, Color valueBackColor, Color valColor)

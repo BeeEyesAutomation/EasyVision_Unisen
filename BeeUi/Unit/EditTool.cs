@@ -63,14 +63,14 @@ namespace BeeUi
                         {
                             Global.ToolSettings = new ToolSettings();
                             Global.ToolSettings.Location = new Point(0, 0);
-                            Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                           // Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
                             Global.ToolSettings.pAllTool.Visible = true;
-                            Global.ToolSettings.Dock = DockStyle.None;
+                            Global.ToolSettings.Dock = DockStyle.Fill;
                         }
                        
                         G.SettingPLC.Visible = false;
                         pEditTool.Controls.Clear();
-                      
+                        
                         //pEditTool.Visible = true;
                         Global.ToolSettings.Dock = DockStyle.Fill;
                         pEditTool.Controls.Add(Global.ToolSettings);

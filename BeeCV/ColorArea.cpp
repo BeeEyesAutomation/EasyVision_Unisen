@@ -1,4 +1,4 @@
-#include "ColorArea.h"
+﻿#include "ColorArea.h"
 using namespace CvPlus;
 string _toString(System::String^ STR)
 {
@@ -61,7 +61,7 @@ Mat matMask;
         cvtColor(mat.clone(), matHSV, COLOR_BGR2RGB);
     else
         cvtColor(mat.clone(), matHSV, COLOR_BGR2HSV);
-   
+    //cv::imwrite("color2.png", matHSV);
     //cv::blur(matHSV, matHSV, cv::Size(3, 3));
     for each (Scalar scalar in listColor)
     {
@@ -90,13 +90,17 @@ Mat matMask;
 
 
 }
- System::String^ ColorArea:: GetColor( int x, int y)
+ System::String^ ColorArea:: GetColor(System::IntPtr buffer, int width, int height, int Step, int image_type, int x, int y)
 {
      try
-     {
-         if (matRaw.empty()) return "";
+     { // Chuyển IntPtr → uchar*
+         uchar* uc = static_cast<uchar*>(buffer.ToPointer());
+
+         // Tạo cv::Mat từ dữ liệu đó
+         cv::Mat raw(height, width, image_type, uc, Step);
+         if(raw.empty())return "";
          System::String^ sWrite = "";
-         Mat raw = matRaw.clone();
+        
          Mat matProccess=Mat();
          if (x > raw.cols || y > raw.rows)
              return   "";
@@ -220,10 +224,10 @@ float ColorArea::CheckColor(int iAreaPixel) {
     cv::medianBlur(matRaw, matBilate, 5);
     matResult = matRaw.clone();
 
-    cv::imwrite("color1.png", matRaw);
+    //cv::imwrite("color1.png", matRaw);
         GetMask(matBilate, iAreaPixel);
     Mat matRS = matMask.clone();
-    cv::imwrite("color2.png", matRS);
+   
     pxMathching = countNonZero(matRS);
     if(matRS.type()==CV_8UC3)
         cvtColor(matRS, matRS, COLOR_BGR2GRAY);

@@ -1210,7 +1210,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 //}
 
 
-                if (Global.StatusIO == StatusIO.None)
+                if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
                 await Global.ParaCommon.Comunication.IO.Read();
                 if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.IO.IO_Processing == IO_Processing.None)
                     Global.StatusIO = StatusIO.None;

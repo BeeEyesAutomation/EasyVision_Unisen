@@ -17,7 +17,7 @@ namespace CvPlus {
 	public:float cycle = 0;
 	public:	int pxMathching = 0;
 	public:	int StyleColor = 0;
-	public:System::String^ GetColor(int x,int y);
+	public:System::String^ GetColor(System::IntPtr buffer, int width, int height, int Step, int image_type, int x,int y);
 	 bool GetLimitColor(Scalar color, int iAreaPixel);
 	public: int SetColorArea(int iAreaPixel);
 	public:bool Undo(int iAreaPixel);

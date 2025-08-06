@@ -29,8 +29,9 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingPLC));
-            this.tmShow = new System.Windows.Forms.Timer();
+            this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -150,9 +151,9 @@ namespace BeeInterface
             this.cbSerialPort = new System.Windows.Forms.ComboBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.tmCheck = new System.Windows.Forms.Timer();
-            this.tmConnect = new System.Windows.Forms.Timer();
-            this.tmRead = new System.Windows.Forms.Timer();
+            this.tmCheck = new System.Windows.Forms.Timer(this.components);
+            this.tmConnect = new System.Windows.Forms.Timer(this.components);
+            this.tmRead = new System.Windows.Forms.Timer(this.components);
             this.workRead = new System.ComponentModel.BackgroundWorker();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();

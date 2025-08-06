@@ -38,6 +38,7 @@ namespace CvPlus
 	 }
 	string _toString(System::String^ STR)
 	{
+		string sss = "";
 		char cStr[1000] = { 0 };
 		sprintf(cStr, "%s", STR);
 		std::string s(cStr);

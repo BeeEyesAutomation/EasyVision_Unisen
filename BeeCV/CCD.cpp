@@ -13,7 +13,7 @@ using namespace System::Runtime::InteropServices;
 void ReadImage()
 {
 
-	ucRaw = MatToBytes(matRaw);
+	ucRaw = MatToBytes(matRaw);//
 }
 void 	SetImage(int ixThread, int indexTool, uchar* uc, int image_rows, int image_cols, int image_type)
 {
@@ -1001,7 +1001,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
 			return false;
 
 		
-		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR);  // hoặc COLOR_BayerBG2BGR tùy loại
+		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2RGB);  // hoặc COLOR_BayerBG2BGR tùy loại
 		
 		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
 		break;

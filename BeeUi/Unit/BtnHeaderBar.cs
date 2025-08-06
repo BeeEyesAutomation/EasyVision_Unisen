@@ -62,9 +62,27 @@ namespace BeeUi.Unit
             await Task.Delay(500);
             // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
             if (btnfull.IsCLick)
+            {
+                Global.EditTool.pHeader.Visible = false;
+                Global.EditTool.LayoutEnd.Visible = false;
                 Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
+                Global.ToolSettings.Dock = DockStyle.Fill;
+                Global.ToolSettings.Width = 300;
+                Global.EditTool.View.LayOutShow.Controls.Add(Global.ToolSettings,1,0);
+                Global.EditTool.View.pBtn.Visible = false;
+            }    
+               
             else
+            {
+                Global.EditTool.pHeader.Visible = true;
+                Global.EditTool.LayoutEnd.Visible = true;
                 Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+                Global.EditTool.View.pBtn.Visible = true;
+                Global.EditTool.View.LayOutShow.Controls.Remove(Global.ToolSettings);
+                Global.EditTool.LayOutShow.Controls.Add(Global.ToolSettings, 1, 0);
+
+            }    
+               
             await Task.Delay(1000);
             Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
