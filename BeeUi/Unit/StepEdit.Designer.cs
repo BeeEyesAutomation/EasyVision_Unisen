@@ -37,23 +37,29 @@ namespace BeeUi.Common
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.workConnect = new System.ComponentModel.BackgroundWorker();
-            this.btnSaveProgram = new BeeInterface.RJButton();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnStep1 = new BeeInterface.RJButton();
+            this.btnSave = new BeeInterface.RJButton();
+            this.btnStep2 = new BeeInterface.RJButton();
             this.btnStep4 = new BeeInterface.RJButton();
             this.btnStep3 = new BeeInterface.RJButton();
-            this.btnStep2 = new BeeInterface.RJButton();
-            this.btnStep1 = new BeeInterface.RJButton();
+            this.btnSaveProgram = new BeeInterface.RJButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox3.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox3.Location = new System.Drawing.Point(440, 31);
+            this.pictureBox3.Location = new System.Drawing.Point(575, 3);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(29, 37);
+            this.pictureBox3.Size = new System.Drawing.Size(43, 94);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 5;
             this.pictureBox3.TabStop = false;
@@ -61,10 +67,11 @@ namespace BeeUi.Common
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox2.Location = new System.Drawing.Point(284, 31);
+            this.pictureBox2.Location = new System.Drawing.Point(368, 3);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(29, 37);
+            this.pictureBox2.Size = new System.Drawing.Size(43, 94);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
@@ -72,10 +79,11 @@ namespace BeeUi.Common
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox1.Location = new System.Drawing.Point(124, 31);
+            this.pictureBox1.Location = new System.Drawing.Point(161, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(29, 37);
+            this.pictureBox1.Size = new System.Drawing.Size(43, 94);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
@@ -84,6 +92,196 @@ namespace BeeUi.Common
             // 
             this.workConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workConnect_DoWork);
             this.workConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workConnect_RunWorkerCompleted);
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox4.Image = global::BeeUi.Properties.Resources.Hide;
+            this.pictureBox4.Location = new System.Drawing.Point(782, 3);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(43, 94);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 11;
+            this.pictureBox4.TabStop = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 9;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tableLayoutPanel1.Controls.Add(this.btnStep1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnSave, 8, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox4, 7, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnStep2, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnStep4, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnStep3, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox3, 5, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(988, 100);
+            this.tableLayoutPanel1.TabIndex = 13;
+            // 
+            // btnStep1
+            // 
+            this.btnStep1.BackColor = System.Drawing.Color.White;
+            this.btnStep1.BackgroundColor = System.Drawing.Color.White;
+            this.btnStep1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep1.BackgroundImage")));
+            this.btnStep1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStep1.BorderColor = System.Drawing.Color.Silver;
+            this.btnStep1.BorderRadius = 20;
+            this.btnStep1.BorderSize = 2;
+            this.btnStep1.Corner = BeeGlobal.Corner.Both;
+            this.btnStep1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnStep1.FlatAppearance.BorderSize = 0;
+            this.btnStep1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStep1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.btnStep1.ForeColor = System.Drawing.Color.Black;
+            this.btnStep1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnStep1.IsCLick = false;
+            this.btnStep1.IsNotChange = false;
+            this.btnStep1.IsRect = true;
+            this.btnStep1.IsUnGroup = false;
+            this.btnStep1.Location = new System.Drawing.Point(10, 10);
+            this.btnStep1.Margin = new System.Windows.Forms.Padding(10);
+            this.btnStep1.Name = "btnStep1";
+            this.btnStep1.Size = new System.Drawing.Size(138, 80);
+            this.btnStep1.TabIndex = 6;
+            this.btnStep1.Text = "1.Image \r\nOptimization";
+            this.btnStep1.TextColor = System.Drawing.Color.Black;
+            this.btnStep1.UseVisualStyleBackColor = false;
+            this.btnStep1.Click += new System.EventHandler(this.btnStep1_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.BackColor = System.Drawing.Color.White;
+            this.btnSave.BackgroundColor = System.Drawing.Color.White;
+            this.btnSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSave.BackgroundImage")));
+            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSave.BorderColor = System.Drawing.Color.Silver;
+            this.btnSave.BorderRadius = 20;
+            this.btnSave.BorderSize = 2;
+            this.btnSave.Corner = BeeGlobal.Corner.Both;
+            this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSave.FlatAppearance.BorderSize = 0;
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.21484F);
+            this.btnSave.ForeColor = System.Drawing.Color.Black;
+            this.btnSave.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnSave.IsCLick = false;
+            this.btnSave.IsNotChange = false;
+            this.btnSave.IsRect = true;
+            this.btnSave.IsUnGroup = false;
+            this.btnSave.Location = new System.Drawing.Point(838, 10);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(10);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(140, 80);
+            this.btnSave.TabIndex = 12;
+            this.btnSave.Text = "Save And Exit";
+            this.btnSave.TextColor = System.Drawing.Color.Black;
+            this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnStep2
+            // 
+            this.btnStep2.BackColor = System.Drawing.Color.Transparent;
+            this.btnStep2.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnStep2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStep2.BorderColor = System.Drawing.Color.Silver;
+            this.btnStep2.BorderRadius = 20;
+            this.btnStep2.BorderSize = 2;
+            this.btnStep2.Corner = BeeGlobal.Corner.Both;
+            this.btnStep2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnStep2.FlatAppearance.BorderSize = 0;
+            this.btnStep2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStep2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.btnStep2.ForeColor = System.Drawing.Color.Black;
+            this.btnStep2.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnStep2.IsCLick = false;
+            this.btnStep2.IsNotChange = false;
+            this.btnStep2.IsRect = true;
+            this.btnStep2.IsUnGroup = false;
+            this.btnStep2.Location = new System.Drawing.Point(217, 10);
+            this.btnStep2.Margin = new System.Windows.Forms.Padding(10);
+            this.btnStep2.Name = "btnStep2";
+            this.btnStep2.Size = new System.Drawing.Size(138, 80);
+            this.btnStep2.TabIndex = 7;
+            this.btnStep2.Text = "2.Master \r\nResgistration";
+            this.btnStep2.TextColor = System.Drawing.Color.Black;
+            this.btnStep2.UseVisualStyleBackColor = false;
+            this.btnStep2.Click += new System.EventHandler(this.btnStep2_Click);
+            // 
+            // btnStep4
+            // 
+            this.btnStep4.BackColor = System.Drawing.Color.White;
+            this.btnStep4.BackgroundColor = System.Drawing.Color.White;
+            this.btnStep4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep4.BackgroundImage")));
+            this.btnStep4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStep4.BorderColor = System.Drawing.Color.Silver;
+            this.btnStep4.BorderRadius = 20;
+            this.btnStep4.BorderSize = 2;
+            this.btnStep4.Corner = BeeGlobal.Corner.Both;
+            this.btnStep4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnStep4.FlatAppearance.BorderSize = 0;
+            this.btnStep4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStep4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.btnStep4.ForeColor = System.Drawing.Color.Black;
+            this.btnStep4.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnStep4.IsCLick = false;
+            this.btnStep4.IsNotChange = false;
+            this.btnStep4.IsRect = true;
+            this.btnStep4.IsUnGroup = false;
+            this.btnStep4.Location = new System.Drawing.Point(631, 10);
+            this.btnStep4.Margin = new System.Windows.Forms.Padding(10);
+            this.btnStep4.Name = "btnStep4";
+            this.btnStep4.Size = new System.Drawing.Size(138, 80);
+            this.btnStep4.TabIndex = 9;
+            this.btnStep4.Text = "4.Output\r\nAssignment";
+            this.btnStep4.TextColor = System.Drawing.Color.Black;
+            this.btnStep4.UseVisualStyleBackColor = false;
+            this.btnStep4.Click += new System.EventHandler(this.btnStep4_Click);
+            // 
+            // btnStep3
+            // 
+            this.btnStep3.BackColor = System.Drawing.Color.White;
+            this.btnStep3.BackgroundColor = System.Drawing.Color.White;
+            this.btnStep3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep3.BackgroundImage")));
+            this.btnStep3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStep3.BorderColor = System.Drawing.Color.Silver;
+            this.btnStep3.BorderRadius = 20;
+            this.btnStep3.BorderSize = 2;
+            this.btnStep3.Corner = BeeGlobal.Corner.Both;
+            this.btnStep3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnStep3.FlatAppearance.BorderSize = 0;
+            this.btnStep3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStep3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.btnStep3.ForeColor = System.Drawing.Color.Black;
+            this.btnStep3.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnStep3.IsCLick = false;
+            this.btnStep3.IsNotChange = false;
+            this.btnStep3.IsRect = true;
+            this.btnStep3.IsUnGroup = false;
+            this.btnStep3.Location = new System.Drawing.Point(424, 10);
+            this.btnStep3.Margin = new System.Windows.Forms.Padding(10);
+            this.btnStep3.Name = "btnStep3";
+            this.btnStep3.Size = new System.Drawing.Size(138, 80);
+            this.btnStep3.TabIndex = 8;
+            this.btnStep3.Text = "3.Tool\r\nSettings";
+            this.btnStep3.TextColor = System.Drawing.Color.Black;
+            this.btnStep3.UseVisualStyleBackColor = false;
+            this.btnStep3.Click += new System.EventHandler(this.btnStep3_Click);
             // 
             // btnSaveProgram
             // 
@@ -94,7 +292,6 @@ namespace BeeUi.Common
             this.btnSaveProgram.BorderColor = System.Drawing.Color.Silver;
             this.btnSaveProgram.BorderRadius = 20;
             this.btnSaveProgram.BorderSize = 2;
-            this.btnSaveProgram.ButtonImage = null;
             this.btnSaveProgram.Corner = BeeGlobal.Corner.Both;
             this.btnSaveProgram.FlatAppearance.BorderSize = 0;
             this.btnSaveProgram.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -117,151 +314,23 @@ namespace BeeUi.Common
             this.btnSaveProgram.Visible = false;
             this.btnSaveProgram.Click += new System.EventHandler(this.btnSaveProgram_Click);
             // 
-            // btnStep4
-            // 
-            this.btnStep4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStep4.BackColor = System.Drawing.Color.White;
-            this.btnStep4.BackgroundColor = System.Drawing.Color.White;
-            this.btnStep4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep4.BackgroundImage")));
-            this.btnStep4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStep4.BorderColor = System.Drawing.Color.Silver;
-            this.btnStep4.BorderRadius = 20;
-            this.btnStep4.BorderSize = 2;
-            this.btnStep4.ButtonImage = null;
-            this.btnStep4.Corner = BeeGlobal.Corner.Both;
-            this.btnStep4.FlatAppearance.BorderSize = 0;
-            this.btnStep4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStep4.ForeColor = System.Drawing.Color.Black;
-            this.btnStep4.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnStep4.IsCLick = false;
-            this.btnStep4.IsNotChange = false;
-            this.btnStep4.IsRect = true;
-            this.btnStep4.IsUnGroup = false;
-            this.btnStep4.Location = new System.Drawing.Point(475, 7);
-            this.btnStep4.Name = "btnStep4";
-            this.btnStep4.Size = new System.Drawing.Size(115, 92);
-            this.btnStep4.TabIndex = 9;
-            this.btnStep4.Text = "4.Output\r\nAssignment";
-            this.btnStep4.TextColor = System.Drawing.Color.Black;
-            this.btnStep4.UseVisualStyleBackColor = false;
-            this.btnStep4.Click += new System.EventHandler(this.btnStep4_Click);
-            // 
-            // btnStep3
-            // 
-            this.btnStep3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStep3.BackColor = System.Drawing.Color.White;
-            this.btnStep3.BackgroundColor = System.Drawing.Color.White;
-            this.btnStep3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep3.BackgroundImage")));
-            this.btnStep3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStep3.BorderColor = System.Drawing.Color.Silver;
-            this.btnStep3.BorderRadius = 20;
-            this.btnStep3.BorderSize = 2;
-            this.btnStep3.ButtonImage = null;
-            this.btnStep3.Corner = BeeGlobal.Corner.Both;
-            this.btnStep3.FlatAppearance.BorderSize = 0;
-            this.btnStep3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStep3.ForeColor = System.Drawing.Color.Black;
-            this.btnStep3.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnStep3.IsCLick = false;
-            this.btnStep3.IsNotChange = false;
-            this.btnStep3.IsRect = true;
-            this.btnStep3.IsUnGroup = false;
-            this.btnStep3.Location = new System.Drawing.Point(319, 7);
-            this.btnStep3.Name = "btnStep3";
-            this.btnStep3.Size = new System.Drawing.Size(115, 92);
-            this.btnStep3.TabIndex = 8;
-            this.btnStep3.Text = "3.Tool\r\nSettings";
-            this.btnStep3.TextColor = System.Drawing.Color.Black;
-            this.btnStep3.UseVisualStyleBackColor = false;
-            this.btnStep3.Click += new System.EventHandler(this.btnStep3_Click);
-            // 
-            // btnStep2
-            // 
-            this.btnStep2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStep2.BackColor = System.Drawing.Color.White;
-            this.btnStep2.BackgroundColor = System.Drawing.Color.White;
-            this.btnStep2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep2.BackgroundImage")));
-            this.btnStep2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStep2.BorderColor = System.Drawing.Color.Silver;
-            this.btnStep2.BorderRadius = 20;
-            this.btnStep2.BorderSize = 2;
-            this.btnStep2.ButtonImage = null;
-            this.btnStep2.Corner = BeeGlobal.Corner.Both;
-            this.btnStep2.FlatAppearance.BorderSize = 0;
-            this.btnStep2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStep2.ForeColor = System.Drawing.Color.Black;
-            this.btnStep2.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnStep2.IsCLick = false;
-            this.btnStep2.IsNotChange = false;
-            this.btnStep2.IsRect = true;
-            this.btnStep2.IsUnGroup = false;
-            this.btnStep2.Location = new System.Drawing.Point(163, 7);
-            this.btnStep2.Name = "btnStep2";
-            this.btnStep2.Size = new System.Drawing.Size(115, 92);
-            this.btnStep2.TabIndex = 7;
-            this.btnStep2.Text = "2.Master \r\nResgistration";
-            this.btnStep2.TextColor = System.Drawing.Color.Black;
-            this.btnStep2.UseVisualStyleBackColor = false;
-            this.btnStep2.Click += new System.EventHandler(this.btnStep2_Click);
-            // 
-            // btnStep1
-            // 
-            this.btnStep1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStep1.BackColor = System.Drawing.Color.White;
-            this.btnStep1.BackgroundColor = System.Drawing.Color.White;
-            this.btnStep1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnStep1.BackgroundImage")));
-            this.btnStep1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStep1.BorderColor = System.Drawing.Color.Silver;
-            this.btnStep1.BorderRadius = 20;
-            this.btnStep1.BorderSize = 2;
-            this.btnStep1.ButtonImage = null;
-            this.btnStep1.Corner = BeeGlobal.Corner.Both;
-            this.btnStep1.FlatAppearance.BorderSize = 0;
-            this.btnStep1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStep1.ForeColor = System.Drawing.Color.Black;
-            this.btnStep1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnStep1.IsCLick = false;
-            this.btnStep1.IsNotChange = false;
-            this.btnStep1.IsRect = true;
-            this.btnStep1.IsUnGroup = false;
-            this.btnStep1.Location = new System.Drawing.Point(3, 7);
-            this.btnStep1.Name = "btnStep1";
-            this.btnStep1.Size = new System.Drawing.Size(115, 92);
-            this.btnStep1.TabIndex = 6;
-            this.btnStep1.Text = "1.Image \r\nOptimization";
-            this.btnStep1.TextColor = System.Drawing.Color.Black;
-            this.btnStep1.UseVisualStyleBackColor = false;
-            this.btnStep1.Click += new System.EventHandler(this.btnStep1_Click);
-            // 
             // StepEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.btnSaveProgram);
-            this.Controls.Add(this.btnStep4);
-            this.Controls.Add(this.btnStep3);
-            this.Controls.Add(this.btnStep2);
-            this.Controls.Add(this.btnStep1);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
             this.Name = "StepEdit";
-            this.Size = new System.Drawing.Size(950, 108);
+            this.Size = new System.Drawing.Size(988, 100);
             this.Load += new System.EventHandler(this.StepEdit_Load);
             this.SizeChanged += new System.EventHandler(this.StepEdit_SizeChanged);
             this.VisibleChanged += new System.EventHandler(this.StepEdit_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -276,5 +345,8 @@ namespace BeeUi.Common
         public RJButton btnStep4;
         private System.ComponentModel.BackgroundWorker workConnect;
         public RJButton btnSaveProgram;
+        public RJButton btnSave;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

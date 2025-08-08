@@ -142,7 +142,7 @@ namespace BeeInterface
             this.btnSub.BorderColor = System.Drawing.Color.Transparent;
             this.btnSub.BorderRadius = 10;
             this.btnSub.BorderSize = 1;
-            this.btnSub.ButtonImage = null;
+            this.btnSub.Image = null;
             this.btnSub.Corner = BeeGlobal.Corner.Left;
             this.btnSub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSub.FlatAppearance.BorderSize = 0;
@@ -174,7 +174,7 @@ namespace BeeInterface
             this.btnPlus.BorderColor = System.Drawing.Color.Transparent;
             this.btnPlus.BorderRadius = 10;
             this.btnPlus.BorderSize = 1;
-            this.btnPlus.ButtonImage = null;
+            this.btnPlus.Image = null;
             this.btnPlus.Corner = BeeGlobal.Corner.Right;
             this.btnPlus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPlus.FlatAppearance.BorderSize = 0;

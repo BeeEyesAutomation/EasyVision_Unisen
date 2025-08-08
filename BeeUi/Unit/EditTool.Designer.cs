@@ -42,39 +42,42 @@ namespace BeeUi
             this.txtRecept = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbLicence = new System.Windows.Forms.Label();
             this.pView = new System.Windows.Forms.Panel();
-            this.pHeader = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.picLogo = new System.Windows.Forms.PictureBox();
-            this.LayoutMain = new System.Windows.Forms.TableLayoutPanel();
-            this.LayOutShow = new System.Windows.Forms.TableLayoutPanel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pEditTool = new System.Windows.Forms.Panel();
             this.pName = new System.Windows.Forms.Panel();
-            this.lbNameStep = new System.Windows.Forms.Label();
-            this.lbNumStep = new System.Windows.Forms.Label();
-            this.lbTool = new System.Windows.Forms.Label();
+            this.lbTool = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
-            this.LayoutEnd = new System.Windows.Forms.TableLayoutPanel();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.LayoutEnd = new System.Windows.Forms.Panel();
             this.btnShuttdown = new BeeInterface.RJButton();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnExit = new BeeInterface.RJButton();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.pTop = new System.Windows.Forms.Panel();
+            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.picLogo = new System.Windows.Forms.PictureBox();
+            this.rjButton1 = new BeeInterface.RJButton();
+            this.CameraBar = new BeeUi.Unit.Cameras();
+            this.pHeader = new BeeUi.Common.Header();
             this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
-            this.header1 = new BeeUi.Common.Header();
             this.statusStrip1.SuspendLayout();
-            this.pHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
-            this.LayoutMain.SuspendLayout();
-            this.LayOutShow.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).BeginInit();
             this.LayoutEnd.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -87,12 +90,12 @@ namespace BeeUi
             this.toolStripPort,
             this.lbNamefile,
             this.txtRecept});
-            this.statusStrip1.Location = new System.Drawing.Point(458, 0);
+            this.statusStrip1.Location = new System.Drawing.Point(435, 0);
             this.statusStrip1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStrip1.Size = new System.Drawing.Size(309, 43);
+            this.statusStrip1.Size = new System.Drawing.Size(1453, 39);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -100,20 +103,20 @@ namespace BeeUi
             // 
             this.lbCam.Image = global::BeeUi.Properties.Resources.CameraNotConnect;
             this.lbCam.Name = "lbCam";
-            this.lbCam.Size = new System.Drawing.Size(48, 38);
+            this.lbCam.Size = new System.Drawing.Size(48, 34);
             this.lbCam.Text = "0 fps";
             // 
             // lbFrameRate
             // 
             this.lbFrameRate.Name = "lbFrameRate";
-            this.lbFrameRate.Size = new System.Drawing.Size(34, 38);
+            this.lbFrameRate.Size = new System.Drawing.Size(34, 34);
             this.lbFrameRate.Text = "0 Fps";
             // 
             // toolStripPort
             // 
             this.toolStripPort.Image = global::BeeUi.Properties.Resources.PortNotConnect;
             this.toolStripPort.Name = "toolStripPort";
-            this.toolStripPort.Size = new System.Drawing.Size(79, 38);
+            this.toolStripPort.Size = new System.Drawing.Size(79, 34);
             this.toolStripPort.Text = "PLC Ready";
             this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
             this.toolStripPort.DoubleClick += new System.EventHandler(this.toolStripPort_DoubleClick);
@@ -121,22 +124,23 @@ namespace BeeUi
             // lbNamefile
             // 
             this.lbNamefile.Name = "lbNamefile";
-            this.lbNamefile.Size = new System.Drawing.Size(22, 38);
+            this.lbNamefile.Size = new System.Drawing.Size(22, 34);
             this.lbNamefile.Text = "---";
             // 
             // txtRecept
             // 
             this.txtRecept.Name = "txtRecept";
-            this.txtRecept.Size = new System.Drawing.Size(22, 38);
+            this.txtRecept.Size = new System.Drawing.Size(22, 34);
             this.txtRecept.Text = "---";
             // 
             // lbLicence
             // 
             this.lbLicence.BackColor = System.Drawing.Color.Transparent;
+            this.lbLicence.Dock = System.Windows.Forms.DockStyle.Right;
             this.lbLicence.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbLicence.Location = new System.Drawing.Point(770, 0);
+            this.lbLicence.Location = new System.Drawing.Point(1888, 0);
             this.lbLicence.Name = "lbLicence";
-            this.lbLicence.Size = new System.Drawing.Size(97, 37);
+            this.lbLicence.Size = new System.Drawing.Size(97, 39);
             this.lbLicence.TabIndex = 1;
             this.lbLicence.Text = "Licence :";
             this.lbLicence.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -145,205 +149,113 @@ namespace BeeUi
             // 
             // pView
             // 
-            this.pView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pView.BackColor = System.Drawing.Color.Transparent;
-            this.pView.Location = new System.Drawing.Point(1, 1);
+            this.pView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pView.Location = new System.Drawing.Point(0, 127);
             this.pView.Margin = new System.Windows.Forms.Padding(1);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(742, 683);
+            this.pView.Size = new System.Drawing.Size(1735, 1234);
             this.pView.TabIndex = 16;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
             // 
-            // pHeader
-            // 
-            this.pHeader.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.pHeader.Controls.Add(this.btnHeaderBar1);
-            this.pHeader.Controls.Add(this.label2);
-            this.pHeader.Controls.Add(this.picLogo);
-            this.pHeader.Location = new System.Drawing.Point(0, 0);
-            this.pHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.pHeader.Name = "pHeader";
-            this.pHeader.Size = new System.Drawing.Size(1150, 55);
-            this.pHeader.TabIndex = 19;
-            // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(70, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(402, 55);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Vision Sensor ";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label2.Click += new System.EventHandler(this.label2_Click_1);
-            // 
-            // picLogo
-            // 
-            this.picLogo.BackColor = System.Drawing.Color.Transparent;
-            this.picLogo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.picLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
-            this.picLogo.Location = new System.Drawing.Point(0, 0);
-            this.picLogo.Name = "picLogo";
-            this.picLogo.Size = new System.Drawing.Size(70, 55);
-            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picLogo.TabIndex = 7;
-            this.picLogo.TabStop = false;
-            // 
-            // LayoutMain
-            // 
-            this.LayoutMain.ColumnCount = 1;
-            this.LayoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayoutMain.Controls.Add(this.pHeader, 0, 0);
-            this.LayoutMain.Controls.Add(this.LayOutShow, 0, 2);
-            this.LayoutMain.Controls.Add(this.LayoutEnd, 0, 3);
-            this.LayoutMain.Controls.Add(this.header1, 0, 1);
-            this.LayoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LayoutMain.Location = new System.Drawing.Point(0, 0);
-            this.LayoutMain.Name = "LayoutMain";
-            this.LayoutMain.RowCount = 4;
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.LayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.LayoutMain.Size = new System.Drawing.Size(1150, 865);
-            this.LayoutMain.TabIndex = 21;
-            this.LayoutMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // LayOutShow
-            // 
-            this.LayOutShow.BackColor = System.Drawing.Color.Transparent;
-            this.LayOutShow.ColumnCount = 2;
-            this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 400F));
-            this.LayOutShow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.LayOutShow.Controls.Add(this.pEdit, 1, 0);
-            this.LayOutShow.Controls.Add(this.pView, 0, 0);
-            this.LayOutShow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LayOutShow.Location = new System.Drawing.Point(3, 129);
-            this.LayOutShow.Name = "LayOutShow";
-            this.LayOutShow.RowCount = 1;
-            this.LayOutShow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayOutShow.Size = new System.Drawing.Size(1144, 685);
-            this.LayOutShow.TabIndex = 20;
-            // 
             // pEdit
             // 
+            this.pEdit.AutoScroll = true;
             this.pEdit.BackColor = System.Drawing.Color.Transparent;
             this.pEdit.Controls.Add(this.pEditTool);
             this.pEdit.Controls.Add(this.pName);
-            this.pEdit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEdit.Location = new System.Drawing.Point(747, 3);
+            this.pEdit.Controls.Add(this.CameraBar);
+            this.pEdit.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pEdit.Location = new System.Drawing.Point(1740, 127);
+            this.pEdit.MaximumSize = new System.Drawing.Size(500, 0);
             this.pEdit.Name = "pEdit";
             this.pEdit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.pEdit.Size = new System.Drawing.Size(394, 679);
+            this.pEdit.Size = new System.Drawing.Size(500, 1234);
             this.pEdit.TabIndex = 14;
             // 
             // pEditTool
             // 
             this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(0, 47);
+            this.pEditTool.Location = new System.Drawing.Point(0, 112);
             this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(394, 627);
+            this.pEditTool.Size = new System.Drawing.Size(500, 1117);
             this.pEditTool.TabIndex = 1;
             this.pEditTool.Paint += new System.Windows.Forms.PaintEventHandler(this.pEditTool_Paint_1);
             // 
             // pName
             // 
             this.pName.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pName.Controls.Add(this.lbNameStep);
-            this.pName.Controls.Add(this.lbNumStep);
             this.pName.Controls.Add(this.lbTool);
             this.pName.Controls.Add(this.iconTool);
             this.pName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pName.Location = new System.Drawing.Point(0, 0);
+            this.pName.Location = new System.Drawing.Point(0, 64);
             this.pName.Name = "pName";
-            this.pName.Size = new System.Drawing.Size(394, 47);
+            this.pName.Size = new System.Drawing.Size(500, 48);
             this.pName.TabIndex = 0;
             this.pName.Visible = false;
             this.pName.Paint += new System.Windows.Forms.PaintEventHandler(this.pName_Paint);
             // 
-            // lbNameStep
-            // 
-            this.lbNameStep.AutoSize = true;
-            this.lbNameStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNameStep.Location = new System.Drawing.Point(176, 1);
-            this.lbNameStep.Name = "lbNameStep";
-            this.lbNameStep.Size = new System.Drawing.Size(106, 20);
-            this.lbNameStep.TabIndex = 3;
-            this.lbNameStep.Text = "Tool Setting";
-            // 
-            // lbNumStep
-            // 
-            this.lbNumStep.AutoSize = true;
-            this.lbNumStep.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumStep.Location = new System.Drawing.Point(114, 3);
-            this.lbNumStep.Name = "lbNumStep";
-            this.lbNumStep.Size = new System.Drawing.Size(56, 18);
-            this.lbNumStep.TabIndex = 2;
-            this.lbNumStep.Text = "Step 3";
-            // 
             // lbTool
             // 
-            this.lbTool.AutoSize = true;
-            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTool.Location = new System.Drawing.Point(37, 25);
+            this.lbTool.AutoFont = true;
+            this.lbTool.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.16406F);
+            this.lbTool.Location = new System.Drawing.Point(54, 0);
             this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(59, 16);
-            this.lbTool.TabIndex = 1;
-            this.lbTool.Text = "OutLine";
+            this.lbTool.Size = new System.Drawing.Size(419, 48);
+            this.lbTool.TabIndex = 2;
+            this.lbTool.Text = "Tool";
+            this.lbTool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // iconTool
             // 
             this.iconTool.BackgroundImage = global::BeeUi.Properties.Resources.Add;
-            this.iconTool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.iconTool.Location = new System.Drawing.Point(7, 17);
+            this.iconTool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconTool.Dock = System.Windows.Forms.DockStyle.Left;
+            this.iconTool.Location = new System.Drawing.Point(0, 0);
             this.iconTool.Name = "iconTool";
-            this.iconTool.Size = new System.Drawing.Size(24, 24);
-            this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.iconTool.Size = new System.Drawing.Size(54, 48);
+            this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.iconTool.TabIndex = 0;
             this.iconTool.TabStop = false;
             // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(1735, 127);
+            this.splitter1.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(5, 1234);
+            this.splitter1.TabIndex = 2;
+            this.splitter1.TabStop = false;
+            // 
             // LayoutEnd
             // 
-            this.LayoutEnd.BackColor = System.Drawing.Color.Transparent;
-            this.LayoutEnd.ColumnCount = 5;
-            this.LayoutEnd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 448F));
-            this.LayoutEnd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.LayoutEnd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.LayoutEnd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 137F));
-            this.LayoutEnd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 137F));
-            this.LayoutEnd.Controls.Add(this.btnShuttdown, 3, 0);
-            this.LayoutEnd.Controls.Add(this.lbLicence, 2, 0);
-            this.LayoutEnd.Controls.Add(this.statusStrip1, 1, 0);
-            this.LayoutEnd.Controls.Add(this.panel1, 0, 0);
-            this.LayoutEnd.Controls.Add(this.btnExit, 4, 0);
-            this.LayoutEnd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LayoutEnd.Location = new System.Drawing.Point(3, 820);
+            this.LayoutEnd.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.LayoutEnd.Controls.Add(this.statusStrip1);
+            this.LayoutEnd.Controls.Add(this.lbLicence);
+            this.LayoutEnd.Controls.Add(this.btnShuttdown);
+            this.LayoutEnd.Controls.Add(this.label3);
+            this.LayoutEnd.Controls.Add(this.label4);
+            this.LayoutEnd.Controls.Add(this.pictureBox1);
+            this.LayoutEnd.Controls.Add(this.btnExit);
+            this.LayoutEnd.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.LayoutEnd.Location = new System.Drawing.Point(0, 1361);
+            this.LayoutEnd.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.LayoutEnd.Name = "LayoutEnd";
-            this.LayoutEnd.RowCount = 1;
-            this.LayoutEnd.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.LayoutEnd.Size = new System.Drawing.Size(1144, 42);
-            this.LayoutEnd.TabIndex = 21;
+            this.LayoutEnd.Size = new System.Drawing.Size(2240, 39);
+            this.LayoutEnd.TabIndex = 7;
             // 
             // btnShuttdown
             // 
-            this.btnShuttdown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnShuttdown.BorderColor = System.Drawing.Color.MidnightBlue;
+            this.btnShuttdown.BackColor = System.Drawing.Color.Transparent;
+            this.btnShuttdown.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnShuttdown.BorderColor = System.Drawing.Color.Transparent;
             this.btnShuttdown.BorderRadius = 5;
             this.btnShuttdown.BorderSize = 2;
-            this.btnShuttdown.ButtonImage = null;
             this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
+            this.btnShuttdown.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnShuttdown.FlatAppearance.BorderSize = 0;
             this.btnShuttdown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShuttdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -354,10 +266,10 @@ namespace BeeUi
             this.btnShuttdown.IsNotChange = true;
             this.btnShuttdown.IsRect = true;
             this.btnShuttdown.IsUnGroup = true;
-            this.btnShuttdown.Location = new System.Drawing.Point(873, 3);
+            this.btnShuttdown.Location = new System.Drawing.Point(1985, 0);
             this.btnShuttdown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.btnShuttdown.Name = "btnShuttdown";
-            this.btnShuttdown.Size = new System.Drawing.Size(124, 37);
+            this.btnShuttdown.Size = new System.Drawing.Size(124, 39);
             this.btnShuttdown.TabIndex = 8;
             this.btnShuttdown.Text = "Shutdown";
             this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -366,39 +278,26 @@ namespace BeeUi
             this.btnShuttdown.UseVisualStyleBackColor = false;
             this.btnShuttdown.Click += new System.EventHandler(this.btnShuttdown_Click);
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(435, 37);
-            this.panel1.TabIndex = 7;
-            // 
             // label3
             // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Left;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.label3.Location = new System.Drawing.Point(138, 0);
+            this.label3.Location = new System.Drawing.Point(206, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(229, 37);
+            this.label3.Size = new System.Drawing.Size(229, 39);
             this.label3.TabIndex = 2;
             this.label3.Text = " Sensing the future";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label4
             // 
-            this.label4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Left;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.label4.Location = new System.Drawing.Point(367, 0);
+            this.label4.Location = new System.Drawing.Point(138, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 37);
+            this.label4.Size = new System.Drawing.Size(68, 39);
             this.label4.TabIndex = 3;
             this.label4.Text = "ver 1.1.*";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -406,24 +305,24 @@ namespace BeeUi
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox1.Image = global::BeeUi.Properties.Resources.UNISEN_LOGO__1_;
+            this.pictureBox1.Image = global::BeeUi.Properties.Resources.UNISEN_LOGO;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(138, 37);
+            this.pictureBox1.Size = new System.Drawing.Size(138, 39);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // btnExit
             // 
-            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnExit.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnExit.BackColor = System.Drawing.Color.Transparent;
+            this.btnExit.BackgroundColor = System.Drawing.Color.Transparent;
             this.btnExit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExit.BackgroundImage")));
-            this.btnExit.BorderColor = System.Drawing.Color.MidnightBlue;
+            this.btnExit.BorderColor = System.Drawing.Color.Red;
             this.btnExit.BorderRadius = 5;
-            this.btnExit.BorderSize = 2;
-            this.btnExit.ButtonImage = null;
+            this.btnExit.BorderSize = 1;
             this.btnExit.Corner = BeeGlobal.Corner.Both;
+            this.btnExit.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -434,9 +333,9 @@ namespace BeeUi
             this.btnExit.IsNotChange = true;
             this.btnExit.IsRect = true;
             this.btnExit.IsUnGroup = true;
-            this.btnExit.Location = new System.Drawing.Point(1010, 3);
+            this.btnExit.Location = new System.Drawing.Point(2109, 0);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(131, 37);
+            this.btnExit.Size = new System.Drawing.Size(131, 39);
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "EXit";
             this.btnExit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -450,51 +349,177 @@ namespace BeeUi
             this.tmReaPLC.Interval = 1;
             this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(247, 23);
+            this.button1.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(0, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(247, 23);
+            this.button2.TabIndex = 0;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(247, 0);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(247, 23);
+            this.button3.TabIndex = 0;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(206, 0);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(206, 23);
+            this.button4.TabIndex = 0;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(206, 0);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(206, 23);
+            this.button5.TabIndex = 0;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(0, 0);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(206, 23);
+            this.button6.TabIndex = 0;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(0, 0);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(206, 23);
+            this.button7.TabIndex = 0;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(412, 0);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(206, 23);
+            this.button8.TabIndex = 0;
+            // 
+            // pTop
+            // 
+            this.pTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.pTop.Controls.Add(this.autoFontLabel1);
+            this.pTop.Controls.Add(this.btnHeaderBar1);
+            this.pTop.Controls.Add(this.picLogo);
+            this.pTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pTop.Location = new System.Drawing.Point(0, 0);
+            this.pTop.Name = "pTop";
+            this.pTop.Size = new System.Drawing.Size(2240, 51);
+            this.pTop.TabIndex = 22;
+            // 
+            // autoFontLabel1
+            // 
+            this.autoFontLabel1.AutoFont = true;
+            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
+            this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
+            this.autoFontLabel1.Location = new System.Drawing.Point(70, 0);
+            this.autoFontLabel1.Name = "autoFontLabel1";
+            this.autoFontLabel1.Size = new System.Drawing.Size(365, 51);
+            this.autoFontLabel1.TabIndex = 9;
+            this.autoFontLabel1.Text = "Vision Sensor ";
+            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // picLogo
+            // 
+            this.picLogo.BackColor = System.Drawing.Color.Transparent;
+            this.picLogo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.picLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
+            this.picLogo.Location = new System.Drawing.Point(0, 0);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Size = new System.Drawing.Size(70, 51);
+            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLogo.TabIndex = 7;
+            this.picLogo.TabStop = false;
+            // 
+            // rjButton1
+            // 
+            this.rjButton1.BackColor = System.Drawing.Color.Transparent;
+            this.rjButton1.BackgroundColor = System.Drawing.Color.Transparent;
+            this.rjButton1.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjButton1.BorderRadius = 0;
+            this.rjButton1.BorderSize = 0;
+            this.rjButton1.Corner = BeeGlobal.Corner.Both;
+            this.rjButton1.FlatAppearance.BorderSize = 0;
+            this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton1.ForeColor = System.Drawing.Color.White;
+            this.rjButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton1.IsCLick = false;
+            this.rjButton1.IsNotChange = false;
+            this.rjButton1.IsRect = false;
+            this.rjButton1.IsUnGroup = false;
+            this.rjButton1.Location = new System.Drawing.Point(35, 4);
+            this.rjButton1.Name = "rjButton1";
+            this.rjButton1.Size = new System.Drawing.Size(150, 40);
+            this.rjButton1.TabIndex = 2;
+            this.rjButton1.Text = "rjButton1";
+            this.rjButton1.TextColor = System.Drawing.Color.White;
+            this.rjButton1.UseVisualStyleBackColor = false;
+            this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
+            // 
+            // CameraBar
+            // 
+            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CameraBar.Location = new System.Drawing.Point(0, 0);
+            this.CameraBar.Name = "CameraBar";
+            this.CameraBar.Size = new System.Drawing.Size(500, 64);
+            this.CameraBar.TabIndex = 3;
+            // 
+            // pHeader
+            // 
+            this.pHeader.BackColor = System.Drawing.Color.Transparent;
+            this.pHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pHeader.Location = new System.Drawing.Point(0, 51);
+            this.pHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.pHeader.Name = "pHeader";
+            this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.pHeader.Size = new System.Drawing.Size(2240, 76);
+            this.pHeader.TabIndex = 22;
+            // 
             // btnHeaderBar1
             // 
             this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(720, 0);
+            this.btnHeaderBar1.Location = new System.Drawing.Point(1735, 0);
             this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
             this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(430, 55);
+            this.btnHeaderBar1.Size = new System.Drawing.Size(505, 51);
             this.btnHeaderBar1.TabIndex = 8;
             this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
-            // 
-            // header1
-            // 
-            this.header1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.header1.BackColor = System.Drawing.Color.Transparent;
-            this.header1.Location = new System.Drawing.Point(0, 55);
-            this.header1.Margin = new System.Windows.Forms.Padding(0);
-            this.header1.Name = "header1";
-            this.header1.Size = new System.Drawing.Size(1150, 71);
-            this.header1.TabIndex = 22;
             // 
             // EditTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.LayoutMain);
+            this.Controls.Add(this.pView);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.pEdit);
+            this.Controls.Add(this.LayoutEnd);
+            this.Controls.Add(this.pHeader);
+            this.Controls.Add(this.pTop);
             this.Name = "EditTool";
-            this.Size = new System.Drawing.Size(1150, 865);
+            this.Size = new System.Drawing.Size(2240, 1400);
             this.Load += new System.EventHandler(this.EditTool_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.pHeader.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
-            this.LayoutMain.ResumeLayout(false);
-            this.LayOutShow.ResumeLayout(false);
             this.pEdit.ResumeLayout(false);
             this.pName.ResumeLayout(false);
-            this.pName.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).EndInit();
             this.LayoutEnd.ResumeLayout(false);
             this.LayoutEnd.PerformLayout();
-            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.pTop.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -509,27 +534,33 @@ namespace BeeUi
         public System.Windows.Forms.ToolStripStatusLabel lbFrameRate;
         private RJButton btnExit;
         private System.Windows.Forms.PictureBox picLogo;
-        private System.Windows.Forms.Label label2;
-        public System.Windows.Forms.Panel pHeader;
         public System.Windows.Forms.Panel pEdit;
         public System.Windows.Forms.Panel pEditTool;
         public System.Windows.Forms.Panel pName;
-        public System.Windows.Forms.Label lbNameStep;
-        public System.Windows.Forms.Label lbNumStep;
-        public System.Windows.Forms.Label lbTool;
         public System.Windows.Forms.PictureBox iconTool;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
-
-        public System.Windows.Forms.TableLayoutPanel LayOutShow;
-        public System.Windows.Forms.TableLayoutPanel LayoutEnd;
-        public System.Windows.Forms.TableLayoutPanel LayoutMain;
         public System.Windows.Forms.Timer tmReaPLC;
-        private Common.Header header1;
         public Unit.BtnHeaderBar btnHeaderBar1;
         private RJButton btnShuttdown;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.ToolStripStatusLabel lbNamefile;
+
+        private RJButton rjButton1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Panel pTop;
+        private System.Windows.Forms.Splitter splitter1;
+        private Unit.Cameras CameraBar;
+        public System.Windows.Forms.Panel LayoutEnd;
+        private AutoFontLabel autoFontLabel1;
+        public Common.Header pHeader;
+        public AutoFontLabel lbTool;
     }
 }

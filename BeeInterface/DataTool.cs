@@ -214,7 +214,7 @@ namespace BeeInterface
                 itemTool.ClStatus = Color.Gray;
                 itemTool.IndexTool = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
-
+                itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
                 PropetyTool.Propety.SetModel();
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")

@@ -96,7 +96,7 @@ namespace BeeUi
             this.btnSmall.BorderColor = System.Drawing.Color.Transparent;
             this.btnSmall.BorderRadius = 5;
             this.btnSmall.BorderSize = 1;
-            this.btnSmall.ButtonImage = null;
+            this.btnSmall.Image = null;
             this.btnSmall.Corner =Corner.Both;
             this.btnSmall.FlatAppearance.BorderSize = 0;
             this.btnSmall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -125,7 +125,7 @@ namespace BeeUi
             this.btnNormal.BorderColor = System.Drawing.Color.Transparent;
             this.btnNormal.BorderRadius = 5;
             this.btnNormal.BorderSize = 1;
-            this.btnNormal.ButtonImage = null;
+            this.btnNormal.Image = null;
             this.btnNormal.Corner =Corner.Both;
             this.btnNormal.FlatAppearance.BorderSize = 0;
             this.btnNormal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -154,7 +154,7 @@ namespace BeeUi
             this.btnbig.BorderColor = System.Drawing.Color.Transparent;
             this.btnbig.BorderRadius = 5;
             this.btnbig.BorderSize = 1;
-            this.btnbig.ButtonImage = null;
+            this.btnbig.Image = null;
             this.btnbig.Corner =Corner.Both;
             this.btnbig.FlatAppearance.BorderSize = 0;
             this.btnbig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -257,7 +257,7 @@ namespace BeeUi
             this.btnSaveNG.BorderColor = System.Drawing.Color.Silver;
             this.btnSaveNG.BorderRadius = 5;
             this.btnSaveNG.BorderSize = 1;
-            this.btnSaveNG.ButtonImage = null;
+            this.btnSaveNG.Image = null;
             this.btnSaveNG.Corner =Corner.Both;
             this.btnSaveNG.FlatAppearance.BorderSize = 0;
             this.btnSaveNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -286,7 +286,7 @@ namespace BeeUi
             this.btnSaveOK.BorderColor = System.Drawing.Color.Transparent;
             this.btnSaveOK.BorderRadius = 5;
             this.btnSaveOK.BorderSize = 1;
-            this.btnSaveOK.ButtonImage = null;
+            this.btnSaveOK.Image = null;
             this.btnSaveOK.Corner =Corner.Both;
             this.btnSaveOK.FlatAppearance.BorderSize = 0;
             this.btnSaveOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -333,7 +333,7 @@ namespace BeeUi
             this.btnSaveRS.BorderColor = System.Drawing.Color.Silver;
             this.btnSaveRS.BorderRadius = 5;
             this.btnSaveRS.BorderSize = 1;
-            this.btnSaveRS.ButtonImage = null;
+            this.btnSaveRS.Image = null;
             this.btnSaveRS.Corner =Corner.Both;
             this.btnSaveRS.FlatAppearance.BorderSize = 0;
             this.btnSaveRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -362,7 +362,7 @@ namespace BeeUi
             this.btnSaveRaw.BorderColor = System.Drawing.Color.Transparent;
             this.btnSaveRaw.BorderRadius = 5;
             this.btnSaveRaw.BorderSize = 1;
-            this.btnSaveRaw.ButtonImage = null;
+            this.btnSaveRaw.Image = null;
             this.btnSaveRaw.Corner =Corner.Both;
             this.btnSaveRaw.FlatAppearance.BorderSize = 0;
             this.btnSaveRaw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

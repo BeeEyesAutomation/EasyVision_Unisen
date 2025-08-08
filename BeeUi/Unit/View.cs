@@ -1311,8 +1311,8 @@ namespace BeeUi
             this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
             this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-          
-         
+           pHeader.Height = (int)(pHeader.Height * Global.PerScaleHeight);
+            pBtn.Height = (int)(pBtn.Height * Global.PerScaleHeight);
             //  
 
             // BeeCore.Common.Scan();
@@ -2685,7 +2685,7 @@ namespace BeeUi
 
         private void pHeader_SizeChanged(object sender, EventArgs e)
         {
-            BeeCore.CustomGui.RoundRg(pHeader,Global.Config.RoundRad);
+            //BeeCore.CustomGui.RoundRg(pHeader,Global.Config.RoundRad);
 
         }
 

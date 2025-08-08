@@ -65,8 +65,14 @@
     <Compile Include="AdjustBar.Designer.cs">
       <DependentUpon>AdjustBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
+    <Compile Include="CustomTablePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Custom\CustomNumeric .cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -139,6 +145,9 @@
     </Compile>
     <Compile Include="StatusDashboard.Designer.cs">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxAuto.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ToolBarcode.cs">
       <SubType>UserControl</SubType>

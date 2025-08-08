@@ -63,46 +63,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _1 {
-            get {
-                object obj = ResourceManager.GetObject("1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _2 {
-            get {
-                object obj = ResourceManager.GetObject("2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _3 {
-            get {
-                object obj = ResourceManager.GetObject("3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _4 {
-            get {
-                object obj = ResourceManager.GetObject("4", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Add {
             get {
                 object obj = ResourceManager.GetObject("Add", resourceCulture);
@@ -133,79 +93,9 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AS_68876_L {
-            get {
-                object obj = ResourceManager.GetObject("AS_68876_L", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AS_68876_L1 {
-            get {
-                object obj = ResourceManager.GetObject("AS_68876_L1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AS_68876_L2 {
-            get {
-                object obj = ResourceManager.GetObject("AS_68876_L2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BarCode {
-            get {
-                object obj = ResourceManager.GetObject("BarCode", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap baslerGigE {
-            get {
-                object obj = ResourceManager.GetObject("baslerGigE", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap baslerGigE1 {
-            get {
-                object obj = ResourceManager.GetObject("baslerGigE1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap BeauNho {
             get {
                 object obj = ResourceManager.GetObject("BeauNho", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BeauNho1 {
-            get {
-                object obj = ResourceManager.GetObject("BeauNho1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -673,26 +563,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_20231201092021 {
-            get {
-                object obj = ResourceManager.GetObject("Image_20231201092021", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap image_ace_2_bas_gige_color {
-            get {
-                object obj = ResourceManager.GetObject("image-ace-2-bas-gige-color", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Invert_Colors {
             get {
                 object obj = ResourceManager.GetObject("Invert_Colors", resourceCulture);
@@ -743,56 +613,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LogoAHSo {
-            get {
-                object obj = ResourceManager.GetObject("LogoAHSo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LogoAHSo1 {
-            get {
-                object obj = ResourceManager.GetObject("LogoAHSo1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LogoTeamRound {
-            get {
-                object obj = ResourceManager.GetObject("LogoTeamRound", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LogoTeamRound1 {
-            get {
-                object obj = ResourceManager.GetObject("LogoTeamRound1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LogoTrans {
-            get {
-                object obj = ResourceManager.GetObject("LogoTrans", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Logout_3 {
             get {
                 object obj = ResourceManager.GetObject("Logout_3", resourceCulture);
@@ -826,16 +646,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Natural_User_Interface_2 {
             get {
                 object obj = ResourceManager.GetObject("Natural_User_Interface_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap output_onlinepngtools {
-            get {
-                object obj = ResourceManager.GetObject("output-onlinepngtools", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1133,36 +943,6 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap UNISEN_2 {
-            get {
-                object obj = ResourceManager.GetObject("UNISEN_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISEN_21 {
-            get {
-                object obj = ResourceManager.GetObject("UNISEN_21", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISEN_icon {
-            get {
-                object obj = ResourceManager.GetObject("UNISEN_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap UNISEN_icon1 {
             get {
                 object obj = ResourceManager.GetObject("UNISEN_icon1", resourceCulture);
@@ -1176,66 +956,6 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap UNISEN_LOGO {
             get {
                 object obj = ResourceManager.GetObject("UNISEN LOGO", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISEN_LOGO__1_ {
-            get {
-                object obj = ResourceManager.GetObject("UNISEN LOGO (1)", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISEN_LOGO__1_1 {
-            get {
-                object obj = ResourceManager.GetObject("UNISEN LOGO (1)1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UniSenBackground {
-            get {
-                object obj = ResourceManager.GetObject("UniSenBackground", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UniSenBackground1 {
-            get {
-                object obj = ResourceManager.GetObject("UniSenBackground1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISENLogo {
-            get {
-                object obj = ResourceManager.GetObject("UNISENLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UNISENLogo1 {
-            get {
-                object obj = ResourceManager.GetObject("UNISENLogo1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

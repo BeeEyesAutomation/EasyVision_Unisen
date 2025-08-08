@@ -60,7 +60,7 @@ namespace BeeInterface
             this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
             this.btnCancel.BorderRadius = 5;
             this.btnCancel.BorderSize = 1;
-            this.btnCancel.ButtonImage = null;
+            this.btnCancel.Image = null;
             this.btnCancel.Corner = BeeGlobal.Corner.Both;
             this.btnCancel.FlatAppearance.BorderSize = 0;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -90,7 +90,7 @@ namespace BeeInterface
             this.btnNextStep.BorderColor = System.Drawing.Color.Transparent;
             this.btnNextStep.BorderRadius = 5;
             this.btnNextStep.BorderSize = 1;
-            this.btnNextStep.ButtonImage = null;
+            this.btnNextStep.Image = null;
             this.btnNextStep.Corner = BeeGlobal.Corner.Both;
             this.btnNextStep.Enabled = false;
             this.btnNextStep.FlatAppearance.BorderSize = 0;
@@ -120,7 +120,7 @@ namespace BeeInterface
             this.btnCapCamera.BorderColor = System.Drawing.Color.DarkGray;
             this.btnCapCamera.BorderRadius = 10;
             this.btnCapCamera.BorderSize = 1;
-            this.btnCapCamera.ButtonImage = null;
+            this.btnCapCamera.Image = null;
             this.btnCapCamera.Corner = BeeGlobal.Corner.Both;
             this.btnCapCamera.FlatAppearance.BorderSize = 0;
             this.btnCapCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -150,7 +150,7 @@ namespace BeeInterface
             this.btnLoadImge.BorderColor = System.Drawing.Color.DarkGray;
             this.btnLoadImge.BorderRadius = 10;
             this.btnLoadImge.BorderSize = 1;
-            this.btnLoadImge.ButtonImage = null;
+            this.btnLoadImge.Image = null;
             this.btnLoadImge.Corner = BeeGlobal.Corner.Both;
             this.btnLoadImge.FlatAppearance.BorderSize = 0;
             this.btnLoadImge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

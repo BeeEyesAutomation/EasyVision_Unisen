@@ -57,7 +57,7 @@
             this.btnOK.BorderColor = System.Drawing.Color.Transparent;
             this.btnOK.BorderRadius = 4;
             this.btnOK.BorderSize = 1;
-            this.btnOK.ButtonImage = null;
+            this.btnOK.Image = null;
             this.btnOK.Corner = BeeGlobal.Corner.Left;
             this.btnOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOK.FlatAppearance.BorderSize = 0;
@@ -87,7 +87,7 @@
             this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
             this.btnCancel.BorderRadius = 4;
             this.btnCancel.BorderSize = 1;
-            this.btnCancel.ButtonImage = null;
+            this.btnCancel.Image = null;
             this.btnCancel.Corner = BeeGlobal.Corner.Right;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.FlatAppearance.BorderSize = 0;

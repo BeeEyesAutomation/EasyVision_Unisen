@@ -97,7 +97,7 @@ namespace BeeInterface
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            Gui.RoundRg(this, 10, Corner.Both);
+           // Gui.RoundRg(this, 10, Corner.Both);
         }
         private void AdjustBar_HandleCreated(object sender, EventArgs e)
         {
@@ -109,15 +109,16 @@ namespace BeeInterface
 
         private void AdjustBar_SizeChanged(object sender, EventArgs e)
         {
-          
-                // Giả sử có tính toán gì đó ở đây...
 
-                // Quay lại UI thread để bo góc
-                //this.Invoke(new Action(() =>
-                //{
-                //    Gui.RoundRg(this, 10, Corner.Both);
-                //}));
-           
+            // Giả sử có tính toán gì đó ở đây...
+
+            // Quay lại UI thread để bo góc
+            //if(this!=null)
+            //this.Invoke(new Action(() =>
+            //{
+            //    Gui.RoundRg(this, 10, Corner.Both);
+            //}));
+
         }
 
         private void Num_ValueChanged(object sender, EventArgs e)
@@ -144,6 +145,13 @@ namespace BeeInterface
 
         private void AdjustBar_Load(object sender, EventArgs e)
         {
+            //  
+            if (this.Height != 55)
+            {
+                this.Height = 55;
+              
+                Gui.RoundRg(this, 10, Corner.Both);
+            }
             //Gui.RoundRg(this, 10, Corner.Both);
 
         }
@@ -156,6 +164,11 @@ namespace BeeInterface
         private void Num_MouseLeave(object sender, EventArgs e)
         {
             Num.Width = 70;
+        }
+
+        private void AdjustBar_SizeChanged_1(object sender, EventArgs e)
+        {
+            //this.Height = (int)(this.Height * Global.PerScaleHeight);
         }
     }
 }

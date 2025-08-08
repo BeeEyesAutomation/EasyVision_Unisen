@@ -437,5 +437,10 @@ namespace BeeInterface
             Global.ParaCommon.Comunication.IO.IsBlink = false;
             layoutDelay.Enabled = false;
         }
+
+        private void tableLayout1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

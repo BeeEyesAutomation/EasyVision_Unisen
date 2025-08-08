@@ -121,12 +121,12 @@ namespace BeeUi.Unit
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProg));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnMenu = new RJButton();
+            this.btnMenu = new BeeInterface.RJButton();
             this.pMenu = new System.Windows.Forms.TableLayoutPanel();
-            this.btnDelect = new RJButton();
-            this.btnSave = new RJButton();
-            this.btnSaveAs = new RJButton();
-            this.btnAdd = new RJButton();
+            this.btnDelect = new BeeInterface.RJButton();
+            this.btnSave = new BeeInterface.RJButton();
+            this.btnSaveAs = new BeeInterface.RJButton();
+            this.btnAdd = new BeeInterface.RJButton();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.pMenu.SuspendLayout();
@@ -145,7 +145,7 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 58);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 58);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // btnMenu
@@ -158,8 +158,7 @@ namespace BeeUi.Unit
             this.btnMenu.BorderColor = System.Drawing.Color.Transparent;
             this.btnMenu.BorderRadius = 12;
             this.btnMenu.BorderSize = 0;
-            this.btnMenu.ButtonImage = null;
-            this.btnMenu.Corner =Corner.Right;
+            this.btnMenu.Corner = BeeGlobal.Corner.Right;
             this.btnMenu.FlatAppearance.BorderSize = 0;
             this.btnMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenu.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -170,7 +169,7 @@ namespace BeeUi.Unit
             this.btnMenu.IsNotChange = false;
             this.btnMenu.IsRect = false;
             this.btnMenu.IsUnGroup = true;
-            this.btnMenu.Location = new System.Drawing.Point(370, 0);
+            this.btnMenu.Location = new System.Drawing.Point(470, 0);
             this.btnMenu.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenu.Name = "btnMenu";
             this.btnMenu.Size = new System.Drawing.Size(30, 58);
@@ -182,10 +181,11 @@ namespace BeeUi.Unit
             // pMenu
             // 
             this.pMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pMenu.ColumnCount = 4;
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.pMenu.ColumnCount = 5;
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pMenu.Controls.Add(this.btnDelect, 3, 0);
             this.pMenu.Controls.Add(this.btnSave, 1, 0);
@@ -198,7 +198,7 @@ namespace BeeUi.Unit
             this.pMenu.Padding = new System.Windows.Forms.Padding(3);
             this.pMenu.RowCount = 1;
             this.pMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pMenu.Size = new System.Drawing.Size(370, 58);
+            this.pMenu.Size = new System.Drawing.Size(470, 58);
             this.pMenu.TabIndex = 25;
             this.pMenu.SizeChanged += new System.EventHandler(this.pMenu_SizeChanged);
             // 
@@ -213,8 +213,7 @@ namespace BeeUi.Unit
             this.btnDelect.BorderColor = System.Drawing.Color.Transparent;
             this.btnDelect.BorderRadius = 8;
             this.btnDelect.BorderSize = 1;
-            this.btnDelect.ButtonImage = null;
-            this.btnDelect.Corner =Corner.Both;
+            this.btnDelect.Corner = BeeGlobal.Corner.Both;
             this.btnDelect.FlatAppearance.BorderSize = 0;
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -248,8 +247,7 @@ namespace BeeUi.Unit
             this.btnSave.BorderColor = System.Drawing.Color.Transparent;
             this.btnSave.BorderRadius = 8;
             this.btnSave.BorderSize = 1;
-            this.btnSave.ButtonImage = null;
-            this.btnSave.Corner =Corner.Both;
+            this.btnSave.Corner = BeeGlobal.Corner.Both;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -282,8 +280,7 @@ namespace BeeUi.Unit
             this.btnSaveAs.BorderColor = System.Drawing.Color.Transparent;
             this.btnSaveAs.BorderRadius = 8;
             this.btnSaveAs.BorderSize = 1;
-            this.btnSaveAs.ButtonImage = null;
-            this.btnSaveAs.Corner =Corner.Both;
+            this.btnSaveAs.Corner = BeeGlobal.Corner.Both;
             this.btnSaveAs.FlatAppearance.BorderSize = 0;
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -316,8 +313,7 @@ namespace BeeUi.Unit
             this.btnAdd.BorderColor = System.Drawing.Color.Transparent;
             this.btnAdd.BorderRadius = 8;
             this.btnAdd.BorderSize = 1;
-            this.btnAdd.ButtonImage = null;
-            this.btnAdd.Corner =Corner.Both;
+            this.btnAdd.Corner = BeeGlobal.Corner.Both;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -353,7 +349,7 @@ namespace BeeUi.Unit
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "EditProg";
-            this.Size = new System.Drawing.Size(400, 58);
+            this.Size = new System.Drawing.Size(500, 58);
             this.Load += new System.EventHandler(this.EditProg_Load);
             this.SizeChanged += new System.EventHandler(this.EditProg_SizeChanged);
             this.tableLayoutPanel1.ResumeLayout(false);

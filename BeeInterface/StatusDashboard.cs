@@ -205,7 +205,7 @@ namespace BeeInterface
             if (w <= 0 || h <= 0) return;
 
             // Layout
-            int bigW = (int)(w * 0.14f);
+            int bigW = (int)(w * 0.2f);
             int rightW = (int)(100);//* 0.14f
             int midW = (w - bigW - rightW) / 3;
             if (bigW <= 0 || midW <= 0 || rightW <= 0) return;

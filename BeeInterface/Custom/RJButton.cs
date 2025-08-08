@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +11,31 @@ using BeeGlobal;
 
 namespace BeeInterface
 {
-  
     [Serializable()]
     public class RJButton : Button
     {
-        //Fields
+        // Fields
         private int borderSize = 0;
         private int borderRadius = 0;
-        private Corner _Corner = 0;
+        private Corner _Corner = Corner.None;
         private Color borderColor = Color.PaleVioletRed;
         private TextImageRelation _textImageRelation;
+
+        // State variables
+        private bool isCLick = false;
+        private bool isHovered = false;
+        private bool isPressed = false;
+        private bool isNotChange = false;
+        private bool isUnGroup = false;
+        private bool _IsRect = false;
+
+        // Layout rectangles
+        private Rectangle imgRect = Rectangle.Empty;
+        private Rectangle textRect = Rectangle.Empty;
+        private Rectangle rectSurface;
+        private Rectangle rectBorder;
+        private Rectangle rect;
+        private GraphicsPath pathSurface;
 
         public new TextImageRelation TextImageRelation
         {
@@ -31,11 +46,7 @@ namespace BeeInterface
                 {
                     _textImageRelation = value;
                     base.TextImageRelation = value;
-
-                    // 👉 Xử lý logic bên trong custom control
-                    HandleTextImageRelationChanged();
-
-                    // 👉 Gọi sự kiện public nếu cần
+                    UpdateTextImageLayout();
                     TextImageRelationChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -43,229 +54,36 @@ namespace BeeInterface
 
         public event EventHandler TextImageRelationChanged;
 
-        // ✅ Xử lý nội bộ thay đổi
-        private void HandleTextImageRelationChanged()
+        [Category("RJ Code Advance")] public int BorderSize { get => borderSize; set { borderSize = value; this.Invalidate(); } }
+        [Category("RJ Code Advance")] public int BorderRadius { get => borderRadius; set { borderRadius = value; UpdateRegion(); this.Invalidate(); } }
+        [Category("RJ Code Advance")] public Color BorderColor { get => borderColor; set { borderColor = value; this.Invalidate(); } }
+        [Category("RJ Code Advance")] public Color BackgroundColor { get => this.BackColor; set { this.BackColor = value; } }
+        [Category("RJ Code Advance")] public Color TextColor { get => this.ForeColor; set { this.ForeColor = value; } }
+        [Category("_Corner")] public Corner Corner { get => _Corner; set { _Corner = value; UpdateRegion(); this.Invalidate(); } }
+
+        [Category("Bool Button Rect")] public bool IsRect { get => _IsRect; set { _IsRect = value; this.Invalidate(); } }
+        [Category("Bool Button State")] public bool IsNotChange { get => isNotChange; set { isNotChange = value; this.Invalidate(); } }
+        [Category("Bool Button State")] public bool IsUnGroup { get => isUnGroup; set { isUnGroup = value; this.Invalidate(); } }
+
+        public bool IsCLick
         {
-            if (Image != null)
+            get => isCLick;
+            set
             {
-                int spacing = 5; // Khoảng cách giữa ảnh và chữ
-                Size imgSize = Image.Size; // Giới hạn kích thước ảnh
-                switch (TextImageRelation)
+                if (isNotChange) return;
+                isCLick = value;
+                if (isCLick && !isUnGroup && this.Parent != null)
                 {
-                    case TextImageRelation.ImageBeforeText:
-                        imgRect = new Rectangle(10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                        textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 20, this.Height);
-                        break;
-                    case TextImageRelation.TextBeforeImage:
-                        imgRect = new Rectangle(this.Width - imgSize.Width - 10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                        textRect = new Rectangle(10, 0, this.Width - imgSize.Width - 20, this.Height);
-                        break;
-                    case TextImageRelation.ImageAboveText:
-                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, 5, imgSize.Width, imgSize.Height);
-                        textRect = new Rectangle(0, imgSize.Height + spacing, this.Width, this.Height - imgSize.Height - spacing);
-                        break;
-                    case TextImageRelation.TextAboveImage:
-                        textRect = new Rectangle(0, 0, this.Width, this.Height - imgSize.Height - spacing);
-                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, this.Height - imgSize.Height - 5, imgSize.Width, imgSize.Height);
-                        break;
-                    case TextImageRelation.Overlay:
-                        imgRect = new Rectangle((this.Width - imgSize.Width) / 2, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                        break;
-                }
-            }
-            // Ví dụ: Tự resize, redraw, invalidate…
-            this.Invalidate();
-        }
-
-        protected override void OnCreateControl()
-        {
-            base.OnCreateControl();
-            _textImageRelation = base.TextImageRelation;
-        }
-        //Properties
-        [Category("RJ Code Advance")]
-        public int BorderSize
-        {
-            get { return borderSize; }
-            set
-            {
-                borderSize = value;
-                //if (borderSize >= 1 && borderRadius > 0) //Rounded button
-                //{
-                //    pathSurface = GetFigurePath(rectSurface, borderRadius);
-                //    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-                //    // using (Pen penBorder = new Pen(borderColor, borderSize))
-                //    if (this.Parent != null)
-                //    {
-                //        using (GraphicsPath path = pathSurface)
-                //        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-                //        {
-                //            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                //            this.Region = new Region(path);
-
-                //            // if (this.Enabled)
-                //            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-                //        }
-                //    }
-                //}
-               // this.Invalidate();
-            }
-        }
-        //Properties
-        [Category("_Corner")]
-        public Corner Corner
-        {
-            get { return _Corner; }
-            set
-            {
-                _Corner = value;
-                //if (borderSize >= 1 && borderRadius > 0) //Rounded button
-                //{
-
-                //    pathSurface = GetFigurePath(rectSurface, borderRadius);
-                //    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-                //    // using (Pen penBorder = new Pen(borderColor, borderSize))
-                //    if (this.Parent != null)
-                //    {
-                //        using (GraphicsPath path = pathSurface)
-                //        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-                //        {
-                //            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                //            this.Region = new Region(path);
-
-                //            // if (this.Enabled)
-                //            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-                //        }
-                //    }
-                //}
-            //    this.Invalidate();
-            }
-        }
-        [Category("RJ Code Advance")]
-        public int BorderRadius
-        {
-            get { return borderRadius; }
-            set
-            {
-                borderRadius = value;
-                //if (borderSize >= 1 && borderRadius > 0) //Rounded button
-                //{
-
-                //    pathSurface = GetFigurePath(rectSurface, borderRadius);
-                //    //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-                //    // using (Pen penBorder = new Pen(borderColor, borderSize))
-                //    if (this.Parent != null)
-                //    {
-                //        using (GraphicsPath path = pathSurface)
-                //        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-                //        {
-                //            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                //            this.Region = new Region(path);
-
-                //            // if (this.Enabled)
-                //            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-                //        }
-                //    }
-                //}
-                //this.Invalidate();
-            }
-        }
-
-        [Category("RJ Code Advance")]
-        public Color BorderColor
-        {
-            get { return borderColor; }
-            set
-            {
-                borderColor = value;
-                this.Invalidate();
-            }
-        }
-
-        [Category("RJ Code Advance")]
-        public Color BackgroundColor
-        {
-            get { return this.BackColor; }
-            set { this.BackColor = value; }
-        }
-
-        [Category("RJ Code Advance")]
-        public Color TextColor
-        {
-            get { return this.ForeColor; }
-            set { this.ForeColor = value; }
-        }
-        bool _IsRect=false;
-        //Image imgChoose = Properties.Resources.btnChoose1;
-        //Image imgSelect = Properties.Resources.btnSelect;
-        //Image imgUnChoose = Properties.Resources.btnUnChoose;
-        [Category("Bool Button Rect")]
-        public Boolean IsRect
-        {
-            get { return this._IsRect; }
-            set { this._IsRect = value;
-                //if(_IsRect)
-                //{
-                //    imgChoose = Properties.Resources.btnChoose2;
-                //    imgUnChoose = Properties.Resources.btnUnChoose2;
-                //    imgSelect = Properties.Resources.btnSelect2;
-                //}
-                //if (IsCLick)
-                //    this.BackgroundImage = imgChoose;
-                //else
-                //    this.BackgroundImage = imgUnChoose;
-                this.Invalidate();
-
-            }
-        }
-       
-        public bool IsCLick {
-            get { return this.isCLick; }
-            set
-            {
-                this.isCLick = value;
-                //if (value)
-                //{
-                //    this.BackgroundImage = imgChoose;
-                //}
-                //else
-                //    this.BackgroundImage = imgUnChoose;
-                if(value==true&&!this.IsUnGroup&&this.Parent!=null)
-                foreach (Control c in this.Parent.Controls)
-                {
-
-                    if (c is RJButton && c != this)
+                    foreach (Control c in this.Parent.Controls)
                     {
-                        RJButton btn = c as RJButton;
-                        btn.IsCLick = false;
-                      //  this.borderColor = Color.Silver;
-                      //  c.BackgroundImage = imgUnChoose;
+                        if (c is RJButton btn && btn != this)
+                            btn.IsCLick = false;
                     }
                 }
                 this.Invalidate();
-
-            }
-        }
-        private bool isNotChange;
-        [Category("Bool Button Rect")]
-        public bool IsNotChange { get => isNotChange; set
-            {
-                isNotChange = value; this.Invalidate();
             }
         }
 
-        public bool IsUnGroup { get => isUnGroup; set { isUnGroup = value; this.Invalidate(); } }
-      
-        //Constructor
         public RJButton()
         {
             this.DoubleBuffered = true;
@@ -277,473 +95,346 @@ namespace BeeInterface
             this.Size = new Size(150, 40);
             this.BackgroundColor = Color.Transparent;
             this.ForeColor = Color.White;
-            this.Resize += new EventHandler(Button_Resize);
+
+            _textImageRelation = base.TextImageRelation;
+            this.Resize += Button_Resize;
             this.SizeChanged += RJButton_SizeChanged;
             this.MarginChanged += RJButton_MarginChanged;
             this.EnabledChanged += RJButton_EnabledChanged;
-           // this.HandleCreated += RJButton_HandleCreated;
-           // this.MouseMove += (s, e) => { isHovered = true; this.Invalidate(); };
-           // this.MouseLeave += (s, e) => { isHovered = false; isPressed = false; this.Invalidate(); };
-           // this.Click += (s, e) => { isPressed = true; this.Invalidate(); };
-           //// this.MouseUp += (s, e) => { isPressed = false; this.Invalidate(); };
             this.MouseMove += RJButton_MouseMove;
             this.MouseLeave += RJButton_MouseLeave;
             this.Click += RJButton_Click;
+        }
+
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+            _textImageRelation = base.TextImageRelation;
+        }
+
+        private void UpdateRegion()
+        {
             rectSurface = this.ClientRectangle;
             rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
-            rect = new Rectangle(0, 0, this.Width, this.Height);
-                
-
-            //if (IsRect)
-            //{
-            //    imgChoose = Properties.Resources.btnChoose2;
-            //    imgUnChoose = Properties.Resources.btnUnChoose2;
-            //    imgSelect = Properties.Resources.btnSelect2;
-            //}else
-            //{
-            //    imgChoose = Properties.Resources.btnChoose1;
-            //    imgUnChoose = Properties.Resources.btnUnChoose;
-            //    imgSelect = Properties.Resources.btnSelect;
-
-            //}
-            //if(IsCLick)
-            //this.BackgroundImage = imgChoose;
-            //else
-            //    this.BackgroundImage = imgUnChoose;
-        }
-      
-        private void RJButton_HandleCreated(object sender, EventArgs e)
-        {
-            //this.Invoke(new Action(() =>
-            //{
-            //    if (borderSize >= 1 && borderRadius > 0) //Rounded button
-            //    {
-
-            //        pathSurface = GetFigurePath(rectSurface, borderRadius);
-            //        //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-            //        // using (Pen penBorder = new Pen(borderColor, borderSize))
-            //        if (this.Parent != null)
-            //        {
-            //            using (GraphicsPath path = pathSurface)
-            //            using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-            //            {
-            //                //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            //                this.Region = new Region(path);
-
-            //                // if (this.Enabled)
-            //                //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-            //            }
-            //        }
-            //    }
-            //}));
-        }
-
-        private void RJButton_EnabledChanged(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void RJButton_MarginChanged(object sender, EventArgs e)
-        {
-            this.Invalidate();
-        }
-
-        private void RJButton_SizeChanged(object sender, EventArgs e)
-        {
-            if (this.IsHandleCreated)
+            if (borderSize >= 1 && borderRadius > 0)
             {
-                rectSurface = this.ClientRectangle;
-                rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
-                rect = new Rectangle(0, 0, this.Width, this.Height);
-
-                if (borderSize >= 1 && borderRadius > 0) //Rounded button
-                {
-
-                    pathSurface = GetFigurePath(rectSurface, borderRadius);
-                    if (this.Parent != null)
-                    {
-                        using (GraphicsPath path = pathSurface)
-                        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-                        {
-                            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                            this.Region = new Region(path);
-
-                            // if (this.Enabled)
-                            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-                        }
-                    }
-                }
-                this.Invalidate();
-            }
-        }
-
-        private bool isCLick = false;
-        private bool isUnGroup;
-
-        private Image imgOld;
-        private void RJButton_Click(object sender, EventArgs e)
-        {if (isNotChange) return;
-           
-            if (IsUnGroup)
-            {
-                IsCLick = !IsCLick;
-                return;
+                pathSurface = GetFigurePath(rectSurface, borderRadius);
+                this.Region = new Region(pathSurface);
             }
             else
-                isPressed = true;
-            this.IsCLick = true;
-            
-            foreach (Control c in this.Parent.Controls)
-            {
+                this.Region = new Region(rectSurface);
+        }
+        private Size ScaleSize(Size orig, int maxW, int maxH)
+        {
+            if (orig.Width <= 0 || orig.Height <= 0) return Size.Empty;
+            double ratio = Math.Min((double)maxW / orig.Width, (double)maxH / orig.Height);
+            if (ratio > 1) ratio = 1;
+            return new Size((int)(orig.Width * ratio), (int)(orig.Height * ratio));
+        }
+        private float FindMaxFontSize(Graphics g, string text, FontFamily family, FontStyle style, float maxWidth, float maxHeight, float maxSize = 100f)
+        {
+            float low = 1f, high = maxSize, bestFit = 1f;
 
-                if(c is RJButton&&c!=this)
+            while (high - low > 0.5f)
+            {
+                float mid = (low + high) / 2;
+                using (Font testFont = new Font(family, mid, style))
                 {
-                    RJButton btn = c as RJButton;
-                    btn.IsCLick = false;
-                  //  this.borderColor = Color.Silver;
-                  ///  c.BackgroundImage= imgUnChoose;
+                    SizeF size = g.MeasureString(text, testFont);
+                    if (size.Width <= maxWidth && size.Height <= maxHeight)
+                    {
+                        bestFit = mid;
+                        low = mid;
+                    }
+                    else
+                    {
+                        high = mid;
+                    }
                 }
             }
 
+            return bestFit;
         }
 
-        private void RJButton_MouseLeave(object sender, EventArgs e)
+        private void UpdateTextImageLayout()
         {
-            isPressed = false; isHovered = false;
-            //if (!IsCLick)
-            //        this.BackgroundImage = imgUnChoose;
-            //    else
-            //        this.BackgroundImage = imgChoose;
-               // this.borderColor = Color.Silver;
-            
-        }
+            var bounds = this.ClientRectangle;
+            imgRect = Rectangle.Empty;
+            textRect = bounds;
+            int spacing = 5;
 
-        private void RJButton_MouseMove(object sender, MouseEventArgs e)
-        {
-            isHovered = true;
-            isPressed = false;
-            //if (!IsCLick)
-            //    this.BackgroundImage = imgSelect;
-            //  this.borderColor = Color.Silver;
+            if (Image != null && ! string.IsNullOrEmpty(this.Text))
+            {
+                var orig = Image.Size;
+                Size scaled;
+
+                switch (TextImageRelation)
+                {
+                    case TextImageRelation.ImageBeforeText:
+                        // Ảnh bên trái, chiếm max nửa chiều rộng, full chiều cao
+                        scaled = ScaleSize(orig, bounds.Width / 2 - spacing, bounds.Height - 2 * spacing);
+                        imgRect = new Rectangle(
+                            spacing,
+                            (bounds.Height - scaled.Height) / 2,
+                            scaled.Width, scaled.Height);
+                        textRect = new Rectangle(
+                            imgRect.Right + spacing,
+                            0,
+                            bounds.Width - imgRect.Right - spacing,
+                            bounds.Height);
+                        break;
+
+                    case TextImageRelation.TextBeforeImage:
+                        // Ảnh bên phải, chiếm max nửa chiều rộng
+                        scaled = ScaleSize(orig, bounds.Width / 2 - spacing, bounds.Height - 2 * spacing);
+                        imgRect = new Rectangle(
+                            bounds.Width - scaled.Width - spacing,
+                            (bounds.Height - scaled.Height) / 2,
+                            scaled.Width, scaled.Height);
+                        textRect = new Rectangle(
+                            0,
+                            0,
+                            imgRect.Left - spacing,
+                            bounds.Height);
+                        break;
+
+                    case TextImageRelation.ImageAboveText:
+                        // Ảnh phía trên, chiếm max nửa chiều cao, full chiều rộng
+                        scaled = ScaleSize(orig, bounds.Width - 2 * spacing, bounds.Height / 2 - spacing);
+                        imgRect = new Rectangle(
+                            (bounds.Width - scaled.Width) / 2,
+                            spacing,
+                            scaled.Width, scaled.Height);
+                        // Chữ chỉ cao 1 dòng, nằm ngay dưới ảnh
+                        int th = Font.Height + 2;
+                        textRect = new Rectangle(
+                            0,
+                            imgRect.Bottom + spacing,
+                            bounds.Width,
+                            th);
+                        break;
+
+                    case TextImageRelation.TextAboveImage:
+                        // Chữ phía trên, cao 1 dòng
+                        int th2 = Font.Height + 2;
+                        textRect = new Rectangle(
+                            0,
+                            spacing,
+                            bounds.Width,
+                            th2);
+                        // Ảnh dưới chữ
+                        scaled = ScaleSize(orig, bounds.Width - 2 * spacing, bounds.Height / 2 - spacing);
+                        imgRect = new Rectangle(
+                            (bounds.Width - scaled.Width) / 2,
+                            textRect.Bottom + spacing,
+                            scaled.Width, scaled.Height);
+                        break;
+
+                    case TextImageRelation.Overlay:
+                        // Ảnh overlay chính giữa
+                        scaled = ScaleSize(orig, bounds.Width - 2 * spacing, bounds.Height - 2 * spacing);
+                        imgRect = new Rectangle(
+                            (bounds.Width - scaled.Width) / 2,
+                            (bounds.Height - scaled.Height) / 2,
+                            scaled.Width, scaled.Height);
+                        textRect = bounds;
+                        break;
+
+                    default:
+                        // fallback: image không hiển thị
+                        imgRect = Rectangle.Empty;
+                        textRect = bounds;
+                        break;
+                }
+            }
+            else if (this.Image == null && !string.IsNullOrEmpty(this.Text))
+            {
+                float targetHeight = this.ClientRectangle.Height * 0.5f; // 60% chiều cao
+                float targetWidth = this.ClientRectangle.Width * 0.8f;   // 90% chiều rộng
+
+                using (Graphics g = this.CreateGraphics())
+                {
+                    float bestSize = FindMaxFontSize(g, this.Text, this.Font.FontFamily, this.Font.Style, targetWidth, targetHeight);
+                    if (Math.Abs(this.Font.Size - bestSize) > 0.5f) // chỉ cập nhật nếu khác nhiều
+                    {
+                        this.Font = new Font(this.Font.FontFamily, bestSize, this.Font.Style);
+                    }
+                }
+            }
+            else if (this.Image != null && string.IsNullOrEmpty(this.Text))
+            {
+                // Không cần set textRect — ảnh sẽ là trung tâm
+                imgRect = new Rectangle(
+                    (bounds.Width - Image.Width) / 2,
+                    (bounds.Height - Image.Height) / 2,
+                    Image.Width, Image.Height);
+                textRect = Rectangle.Empty;
+            }
+            this.Invalidate();
         }
-        private bool isHovered = false;
-        private bool isPressed = false;
-        //Methods
-        private  GraphicsPath GetFigurePath(Rectangle rect, int curveSize)
+        //private void UpdateTextImageLayout()
+        //{
+        //    var bounds = this.ClientRectangle;
+        //    imgRect = Rectangle.Empty;
+        //    textRect = bounds;
+        //    if (Image != null)
+        //    {
+        //        int spacing = 5;
+        //        var orig = Image.Size;
+        //        Size scaled;
+        //        switch (TextImageRelation)
+        //        {
+        //            case TextImageRelation.ImageBeforeText:
+        //                scaled = ScaleSize(orig, bounds.Width / 2, bounds.Height - 2 * spacing);
+        //                imgRect = new Rectangle(spacing, (bounds.Height - scaled.Height) / 2, scaled.Width, scaled.Height);
+        //                textRect = new Rectangle(imgRect.Right + spacing, 0, bounds.Width - imgRect.Right - spacing, bounds.Height);
+        //                break;
+        //            case TextImageRelation.TextBeforeImage:
+        //                scaled = ScaleSize(orig, bounds.Width / 2, bounds.Height - 2 * spacing);
+        //                imgRect = new Rectangle(bounds.Right - scaled.Width - spacing, (bounds.Height - scaled.Height) / 2, scaled.Width, scaled.Height);
+        //                textRect = new Rectangle(0, 0, imgRect.Left - spacing, bounds.Height);
+        //                break;
+        //            case TextImageRelation.ImageAboveText:
+        //                scaled = ScaleSize(orig, bounds.Width - 2 * spacing, bounds.Height / 2);
+        //                imgRect = new Rectangle((bounds.Width - scaled.Width) / 2, spacing, scaled.Width, scaled.Height);
+        //                textRect = new Rectangle(0, imgRect.Bottom + spacing, bounds.Width, bounds.Height - imgRect.Bottom - spacing);
+        //                break;
+        //            case TextImageRelation.TextAboveImage:
+        //                scaled = ScaleSize(orig, bounds.Width - 2 * spacing, bounds.Height / 2);
+        //                textRect = new Rectangle(0, 0, bounds.Width, bounds.Height - scaled.Height - spacing);
+        //                imgRect = new Rectangle((bounds.Width - scaled.Width) / 2, textRect.Bottom + spacing, scaled.Width, scaled.Height);
+        //                break;
+        //            case TextImageRelation.Overlay:
+        //                scaled = ScaleSize(orig, bounds.Width, bounds.Height);
+        //                imgRect = new Rectangle((bounds.Width - scaled.Width) / 2, (bounds.Height - scaled.Height) / 2, scaled.Width, scaled.Height);
+        //                textRect = bounds;
+        //                break;
+        //            default:
+        //                imgRect = Rectangle.Empty;
+        //                textRect = bounds;
+        //                break;
+        //        }
+        //    }
+        //    this.Invalidate();
+        //}
+
+        private void Button_Resize(object sender, EventArgs e) => UpdateTextImageLayout();
+        private void RJButton_SizeChanged(object sender, EventArgs e) { UpdateRegion(); this.Invalidate(); }
+        private void RJButton_MarginChanged(object sender, EventArgs e) => this.Invalidate();
+        private void RJButton_EnabledChanged(object sender, EventArgs e) => this.Invalidate();
+
+        private void RJButton_Click(object sender, EventArgs e) { IsCLick = !IsCLick; }
+        private void RJButton_MouseLeave(object sender, EventArgs e) { isPressed = false; isHovered = false; this.Invalidate(); }
+        private void RJButton_MouseMove(object sender, MouseEventArgs e) { isHovered = true; isPressed = false; this.Invalidate(); }
+
+        private GraphicsPath GetFigurePath(Rectangle rect, int curveSize)
         {
             GraphicsPath path = new GraphicsPath();
-
             switch (Corner)
             {
                 case Corner.Both:
-                    // Bo cả 4 góc
-                    path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90); // Top-left
+                    path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90);
                     path.AddLine(rect.X + curveSize, rect.Y, rect.Right - curveSize, rect.Y);
-                    path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90); // Top-right
+                    path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90);
                     path.AddLine(rect.Right, rect.Y + curveSize, rect.Right, rect.Bottom - curveSize);
-                    path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90); // Bottom-right
+                    path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90);
                     path.AddLine(rect.Right - curveSize, rect.Bottom, rect.X + curveSize, rect.Bottom);
-                    path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90); // Bottom-left
+                    path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90);
                     path.AddLine(rect.X, rect.Bottom - curveSize, rect.X, rect.Y + curveSize);
                     break;
-
                 case Corner.Left:
-                    // Bo góc trái (trên + dưới)
-                    path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90); // Top-left
-                    path.AddLine(rect.X + curveSize, rect.Y, rect.Right, rect.Y); // Top
-                    path.AddLine(rect.Right, rect.Y, rect.Right, rect.Bottom); // Right
-                    path.AddLine(rect.Right, rect.Bottom, rect.X + curveSize, rect.Bottom); // Bottom
-                    path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90); // Bottom-left
-                    path.AddLine(rect.X, rect.Bottom - curveSize, rect.X, rect.Y + curveSize); // Left
+                    path.AddArc(rect.X, rect.Y, curveSize, curveSize, 180, 90);
+                    path.AddLine(rect.X + curveSize, rect.Y, rect.Right, rect.Y);
+                    path.AddLine(rect.Right, rect.Y, rect.Right, rect.Bottom);
+                    path.AddLine(rect.Right, rect.Bottom, rect.X + curveSize, rect.Bottom);
+                    path.AddArc(rect.X, rect.Bottom - curveSize, curveSize, curveSize, 90, 90);
+                    path.AddLine(rect.X, rect.Bottom - curveSize, rect.X, rect.Y + curveSize);
                     break;
-
                 case Corner.Right:
-                    // Bo góc phải (trên + dưới)
-                    path.AddLine(rect.X, rect.Y, rect.Right - curveSize, rect.Y); // Top
-                    path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90); // Top-right
-                    path.AddLine(rect.Right, rect.Y + curveSize, rect.Right, rect.Bottom - curveSize); // Right
-                    path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90); // Bottom-right
-                    path.AddLine(rect.Right - curveSize, rect.Bottom, rect.X, rect.Bottom); // Bottom
-                    path.AddLine(rect.X, rect.Bottom, rect.X, rect.Y); // Left
+                    path.AddLine(rect.X, rect.Y, rect.Right - curveSize, rect.Y);
+                    path.AddArc(rect.Right - curveSize, rect.Y, curveSize, curveSize, 270, 90);
+                    path.AddLine(rect.Right, rect.Y + curveSize, rect.Right, rect.Bottom - curveSize);
+                    path.AddArc(rect.Right - curveSize, rect.Bottom - curveSize, curveSize, curveSize, 0, 90);
+                    path.AddLine(rect.Right - curveSize, rect.Bottom, rect.X, rect.Bottom);
+                    path.AddLine(rect.X, rect.Bottom, rect.X, rect.Y);
                     break;
-                case Corner.None:
-                
-                    path.AddRectangle( rect); // Top
-
-                    break;
+                default:
+                    path.AddRectangle(rect); break;
             }
-
-            path.CloseFigure();
-            return path;
+            path.CloseFigure(); return path;
         }
-        public Image ButtonImage { get; set; } // Ảnh hiển thị trên nút
-        public ContentAlignment ImageAlign { get; set; } = ContentAlignment.MiddleLeft; // Vị trí ảnh
-        public static TextFormatFlags ConvertAlignment(ContentAlignment align)
-        {
-            TextFormatFlags flags = TextFormatFlags.GlyphOverhangPadding;
 
-            switch (align)
-            {
-                case ContentAlignment.TopLeft:
-                    flags |= TextFormatFlags.Top | TextFormatFlags.Left;
-                    break;
-                case ContentAlignment.TopCenter:
-                    flags |= TextFormatFlags.Top | TextFormatFlags.HorizontalCenter;
-                    break;
-                case ContentAlignment.TopRight:
-                    flags |= TextFormatFlags.Top | TextFormatFlags.Right;
-                    break;
-                case ContentAlignment.MiddleLeft:
-                    flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
-                    break;
-                case ContentAlignment.MiddleCenter:
-                    flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
-                    break;
-                case ContentAlignment.MiddleRight:
-                    flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Right;
-                    break;
-                case ContentAlignment.BottomLeft:
-                    flags |= TextFormatFlags.Bottom | TextFormatFlags.Left;
-                    break;
-                case ContentAlignment.BottomCenter:
-                    flags |= TextFormatFlags.Bottom | TextFormatFlags.HorizontalCenter;
-                    break;
-                case ContentAlignment.BottomRight:
-                    flags |= TextFormatFlags.Bottom | TextFormatFlags.Right;
-                    break;
-            }
-
-            return flags;
-        }
-        Rectangle rectSurface;
-        Rectangle rectBorder;
-        Rectangle rect ;
-        Rectangle imgRect ;
-        Rectangle textRect;
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            base.OnPaint(pevent);
+            // Skip base.OnPaint to avoid default drawing of text/image
+            // base.OnPaint(pevent);
+            // Draw background
+            OnPaintBackground(pevent);
+            Graphics g = pevent.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            var bounds = ClientRectangle;
 
+            // Gradient background
+            Color top, mid, bot;
+            if (!Enabled) top = mid = bot = BackColor;
+            else if (isCLick) { top = Color.FromArgb(244, 192, 89); mid = Color.FromArgb(246, 204, 120); bot = Color.FromArgb(247, 211, 139); }
+            else if (isHovered) { top = Color.FromArgb(208, 211, 213); mid = Color.FromArgb(193, 197, 199); bot = Color.FromArgb(179, 182, 185); }
+            else { top = Color.FromArgb(245, 248, 251); mid = Color.FromArgb(218, 221, 224); bot = Color.FromArgb(199, 203, 206); }
 
-            //Rectangle rectSurface = this.ClientRectangle;
-            //Rectangle rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
-            //Rectangle rect = new Rectangle(0, 0, this.Width , this.Height );
-            // Xác định màu nền dựa trên trạng thái
-            Color topColor, middleColor, bottomColor;
-            if (!this.Enabled)
+            if (bounds.Width > 0 && bounds.Height > 0)
             {
-                // Màu khi bấm xuống
-                topColor = this.BackColor;// Color.FromArgb(160, 160, 160);
-                middleColor = this.BackColor;// Color.FromArgb(180, 180, 180);
-                bottomColor = this.BackColor;// Color.FromArgb(160, 160, 160);//247, 211, 139
-            }
-           else if (isCLick)
-            {
-                // Màu khi bấm xuống
-                topColor = Color.FromArgb(244, 192, 89);
-                middleColor = Color.FromArgb(246, 204, 120);
-                bottomColor = Color.FromArgb(247, 211, 139);//247, 211, 139
-            }
-            else if (isHovered)
-            {
-                // Màu khi hover
-                topColor = Color.FromArgb(208, 211, 213);
-                middleColor = Color.FromArgb(193, 197, 199);
-                bottomColor = Color.FromArgb(179, 182, 185);
-            }
-            else
-            {
-                // Màu mặc định
-                topColor = Color.FromArgb(245, 248, 251);//243, 247, 250
-                middleColor = Color.FromArgb(218, 221, 224);
-                bottomColor = Color.FromArgb(199, 203, 206);
-            }
-
-            // Gradient 3 màu
-            using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.White, Color.Gray, LinearGradientMode.Vertical))
-            {
-                ColorBlend colorBlend = new ColorBlend();
-                colorBlend.Colors = new Color[] { topColor, middleColor, bottomColor };
-                colorBlend.Positions = new float[] { 0.0f, 0.5f, 1.0f }; // 3 điểm màu
-                brush.InterpolationColors = colorBlend;
-
-                pevent.Graphics.FillRectangle(brush, rect);
-            }
-            // Vẽ hình ảnh nếu có
-     
-                  // Vẽ hình ảnh nếu có
-      
-         
-    
-            if (this.Enabled)
-            {
-                if (Image != null)
+                using (var brush = new LinearGradientBrush(bounds, top, bot, LinearGradientMode.Vertical))
                 {
-                    Size imgSize = Image.Size; // Giới hạn kích thước ảnh
-
-                   
-                    pevent.Graphics.DrawImage(Image, imgRect);
-                    TextFormatFlags flags = ConvertAlignment(this.TextAlign);
-
-                    
-                    TextRenderer.DrawText(pevent.Graphics, this.Text, this.Font, textRect, this.ForeColor, flags);
-
-
-
-                    // Vẽ chữ trên button
-
-                }
-                else
-                {
-
-                    // Vẽ chữ trên button
-                    textRect = new Rectangle(0, 0, this.Width, this.Height);
-                    TextFormatFlags flags = ConvertAlignment(this.TextAlign);
-
-                    //  TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
-
-                    //if (Image != null && ImageAlign == ContentAlignment.MiddleLeft)
-                    //    textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 15, this.Height);
-                    //else if (ButtonImage != null && ImageAlign == ContentAlignment.MiddleRight)
-                    //    textRect = new Rectangle(0, 0, this.Width - imgSize.Width - 15, this.Height);
-                    // Font cho số "1."
-                 
-                    TextRenderer.DrawText(pevent.Graphics, this.Text, this.Font, textRect, this.ForeColor, flags);
+                    brush.InterpolationColors = new ColorBlend
+                    {
+                        Colors = new[] { top, mid, bot },
+                        Positions = new[] { 0f, 0.5f, 1f }
+                    };
+                    g.FillRectangle(brush, bounds);
                 }
             }
-          //  int smoothSize = 1;
 
-           // if (borderRadius == 0) return;
-            //if (borderSize >=1&& borderRadius >= 1 && pathSurface !=null&& this.Parent!=null) //Rounded button
-            //{
-               
-            //    //using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-            //    //using (Pen penBorder = new Pen(borderColor, borderSize))
-            //    using (GraphicsPath path =  GetFigurePath(rectSurface, borderRadius))
-            //    using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
+            // Draw image once
+            if (Image != null && imgRect.Width > 0 && imgRect.Height > 0)
+                g.DrawImage(Image, imgRect);
 
-            //    {
-            //        pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            // Draw text once
+            var flags = TextFormatFlags.GlyphOverhangPadding | TextFormatFlags.EndEllipsis;
+            flags |= ConvertAlignment(TextAlign);
+            if (textRect.Width > 0 && textRect.Height > 0)
+                TextRenderer.DrawText(g, Text, Font, textRect, ForeColor, flags);
 
-            //        //    this.Region = new Region(pathSurface);
-
-            //        if (this.Enabled)
-            //            pevent.Graphics.DrawPath(penSurface, path);
-            //    }
-
+            // Draw border
+            if (borderSize > 0)
+            {
+                Color drawBorderColor = this.Parent?.BackColor ?? borderColor;
+                using (var pen = new Pen(drawBorderColor, borderSize))
                 
-            //}
-            //else //Normal button
-            //{
-            //    pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //    using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
-               
-            //    this.Region = new Region(pathSurface);
-              
-            //}
-        }
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-            if (borderSize >= 1 && borderRadius > 0) //Rounded button
-            {
-
-                pathSurface = GetFigurePath(rectSurface, borderRadius);
-                //  using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius))
-                // using (Pen penBorder = new Pen(borderColor, borderSize))
-                if (this.Parent != null)
-                {
-                    using (GraphicsPath path = pathSurface)
-                    using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
                     {
-                        //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                        this.Region = new Region(path);
-
-                        // if (this.Enabled)
-                        //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
+                    var borderRect = Rectangle.Inflate(bounds, -borderSize / 2, -borderSize / 2);
+                    if (borderRect.Width > 0 && borderRect.Height > 0)
+                    {
+                        if (borderRadius > 0)
+                            g.DrawPath(pen, GetFigurePath(borderRect, borderRadius));
+                        else
+                            g.DrawRectangle(pen, borderRect);
                     }
                 }
             }
-            this.Parent.BackColorChanged += new EventHandler(Container_BackColorChanged);
         }
-
-        private void Container_BackColorChanged(object sender, EventArgs e)
+        private static TextFormatFlags ConvertAlignment(ContentAlignment align)
         {
-           
-            
-            this.Invalidate();
-        }
-        GraphicsPath pathSurface;
-        private void Button_Resize(object sender, EventArgs e)
-        {
-            if (borderRadius > this.Height)
-                borderRadius = this.Height;
-             rectSurface = this.ClientRectangle;
-             rectBorder = Rectangle.Inflate(rectSurface, -borderSize, -borderSize);
-             rect = new Rectangle(0, 0, this.Width, this.Height);
-             imgRect = Rectangle.Empty;
-             textRect = rect;
-           
-                //if (borderSize >= 1 && borderRadius > 0) //Rounded button
-                //{
-
-                //    pathSurface = GetFigurePath(rectSurface, borderRadius);
-                //    if (this.Parent != null)
-                //    {
-                //        using (GraphicsPath path = pathSurface)
-                //        using (Pen penSurface = new Pen(this.Parent.BackColor, 1))
-
-                //        {
-                //            //  pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-                //            this.Region = new Region(path);
-
-                //            // if (this.Enabled)
-                //            //   pevent.Graphics.DrawPath(penSurface, pathSurface);
-
-                //        }
-                //    }
-                //}
-                if (Image != null)
-                {
-                    int spacing = 5; // Khoảng cách giữa ảnh và chữ
-                    Size imgSize = Image.Size; // Giới hạn kích thước ảnh
-                    switch (TextImageRelation)
-                    {
-                        case TextImageRelation.ImageBeforeText:
-                            imgRect = new Rectangle(10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(imgSize.Width + 15, 0, this.Width - imgSize.Width - 20, this.Height);
-                            break;
-                        case TextImageRelation.TextBeforeImage:
-                            imgRect = new Rectangle(this.Width - imgSize.Width - 10, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(10, 0, this.Width - imgSize.Width - 20, this.Height);
-                            break;
-                        case TextImageRelation.ImageAboveText:
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, 5, imgSize.Width, imgSize.Height);
-                            textRect = new Rectangle(0, imgSize.Height + spacing, this.Width, this.Height - imgSize.Height - spacing);
-                            break;
-                        case TextImageRelation.TextAboveImage:
-                            textRect = new Rectangle(0, 0, this.Width, this.Height - imgSize.Height - spacing);
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, this.Height - imgSize.Height - 5, imgSize.Width, imgSize.Height);
-                            break;
-                        case TextImageRelation.Overlay:
-                            imgRect = new Rectangle((this.Width - imgSize.Width) / 2, (this.Height - imgSize.Height) / 2, imgSize.Width, imgSize.Height);
-                            break;
-                    }
-                }
-          
-         
-            this.Invalidate();
+            var flags = TextFormatFlags.GlyphOverhangPadding;
+            if (align.HasFlag(ContentAlignment.TopLeft)) flags |= TextFormatFlags.Top | TextFormatFlags.Left;
+            if (align.HasFlag(ContentAlignment.TopCenter)) flags |= TextFormatFlags.Top | TextFormatFlags.HorizontalCenter;
+            if (align.HasFlag(ContentAlignment.TopRight)) flags |= TextFormatFlags.Top | TextFormatFlags.Right;
+            if (align.HasFlag(ContentAlignment.MiddleLeft)) flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
+            if (align.HasFlag(ContentAlignment.MiddleCenter)) flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
+            if (align.HasFlag(ContentAlignment.MiddleRight)) flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Right;
+            if (align.HasFlag(ContentAlignment.BottomLeft)) flags |= TextFormatFlags.Bottom | TextFormatFlags.Left;
+            if (align.HasFlag(ContentAlignment.BottomCenter)) flags |= TextFormatFlags.Bottom | TextFormatFlags.HorizontalCenter;
+            if (align.HasFlag(ContentAlignment.BottomRight)) flags |= TextFormatFlags.Bottom | TextFormatFlags.Right;
+            return flags;
         }
     }
-}   
-
+}

@@ -180,7 +180,7 @@ namespace BeeInterface
             this.btnApply.BorderColor = System.Drawing.Color.Silver;
             this.btnApply.BorderRadius = 10;
             this.btnApply.BorderSize = 1;
-            this.btnApply.ButtonImage = null;
+            this.btnApply.Image = null;
             this.btnApply.Corner = BeeGlobal.Corner.Right;
             this.btnApply.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnApply.FlatAppearance.BorderSize = 0;
@@ -264,7 +264,7 @@ namespace BeeInterface
             this.btnReadThresh.BorderColor = System.Drawing.Color.Transparent;
             this.btnReadThresh.BorderRadius = 10;
             this.btnReadThresh.BorderSize = 1;
-            this.btnReadThresh.ButtonImage = null;
+            this.btnReadThresh.Image = null;
             this.btnReadThresh.Corner = BeeGlobal.Corner.None;
             this.btnReadThresh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReadThresh.FlatAppearance.BorderSize = 0;
@@ -324,7 +324,7 @@ namespace BeeInterface
             this.btnSet.BorderColor = System.Drawing.Color.Silver;
             this.btnSet.BorderRadius = 10;
             this.btnSet.BorderSize = 1;
-            this.btnSet.ButtonImage = null;
+            this.btnSet.Image = null;
             this.btnSet.Corner = BeeGlobal.Corner.Right;
             this.btnSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSet.FlatAppearance.BorderSize = 0;
@@ -396,7 +396,7 @@ namespace BeeInterface
             this.btnOK.BorderColor = System.Drawing.Color.Transparent;
             this.btnOK.BorderRadius = 4;
             this.btnOK.BorderSize = 1;
-            this.btnOK.ButtonImage = null;
+            this.btnOK.Image = null;
             this.btnOK.Corner = BeeGlobal.Corner.Left;
             this.btnOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOK.FlatAppearance.BorderSize = 0;
@@ -427,7 +427,7 @@ namespace BeeInterface
             this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
             this.btnCancel.BorderRadius = 4;
             this.btnCancel.BorderSize = 1;
-            this.btnCancel.ButtonImage = null;
+            this.btnCancel.Image = null;
             this.btnCancel.Corner = BeeGlobal.Corner.Right;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.FlatAppearance.BorderSize = 0;
@@ -457,7 +457,7 @@ namespace BeeInterface
             this.btnTest.BorderColor = System.Drawing.Color.Transparent;
             this.btnTest.BorderRadius = 1;
             this.btnTest.BorderSize = 1;
-            this.btnTest.ButtonImage = null;
+            this.btnTest.Image = null;
             this.btnTest.Corner = BeeGlobal.Corner.Both;
             this.btnTest.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTest.FlatAppearance.BorderSize = 0;
@@ -530,7 +530,7 @@ namespace BeeInterface
             this.btnCropFull.BorderColor = System.Drawing.Color.Silver;
             this.btnCropFull.BorderRadius = 10;
             this.btnCropFull.BorderSize = 1;
-            this.btnCropFull.ButtonImage = null;
+            this.btnCropFull.Image = null;
             this.btnCropFull.Corner = BeeGlobal.Corner.Right;
             this.btnCropFull.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCropFull.FlatAppearance.BorderSize = 0;
@@ -561,7 +561,7 @@ namespace BeeInterface
             this.btnCropHalt.BorderColor = System.Drawing.Color.Transparent;
             this.btnCropHalt.BorderRadius = 10;
             this.btnCropHalt.BorderSize = 1;
-            this.btnCropHalt.ButtonImage = null;
+            this.btnCropHalt.Image = null;
             this.btnCropHalt.Corner = BeeGlobal.Corner.Left;
             this.btnCropHalt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCropHalt.FlatAppearance.BorderSize = 0;
@@ -653,7 +653,7 @@ namespace BeeInterface
             this.rjButton1.BorderColor = System.Drawing.Color.Transparent;
             this.rjButton1.BorderRadius = 10;
             this.rjButton1.BorderSize = 1;
-            this.rjButton1.ButtonImage = null;
+            this.rjButton1.Image = null;
             this.rjButton1.Corner = BeeGlobal.Corner.Right;
             this.rjButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton1.Enabled = false;
@@ -683,7 +683,7 @@ namespace BeeInterface
             this.btnMoreArea.BorderColor = System.Drawing.Color.Transparent;
             this.btnMoreArea.BorderRadius = 5;
             this.btnMoreArea.BorderSize = 1;
-            this.btnMoreArea.ButtonImage = null;
+            this.btnMoreArea.Image = null;
             this.btnMoreArea.Corner = BeeGlobal.Corner.None;
             this.btnMoreArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMoreArea.FlatAppearance.BorderSize = 0;
@@ -712,7 +712,7 @@ namespace BeeInterface
             this.btnLessArea.BorderColor = System.Drawing.Color.Transparent;
             this.btnLessArea.BorderRadius = 10;
             this.btnLessArea.BorderSize = 1;
-            this.btnLessArea.ButtonImage = null;
+            this.btnLessArea.Image = null;
             this.btnLessArea.Corner = BeeGlobal.Corner.Left;
             this.btnLessArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnLessArea.FlatAppearance.BorderSize = 0;
@@ -789,7 +789,7 @@ namespace BeeInterface
             this.btnEnLimitArea.BorderColor = System.Drawing.Color.Transparent;
             this.btnEnLimitArea.BorderRadius = 10;
             this.btnEnLimitArea.BorderSize = 1;
-            this.btnEnLimitArea.ButtonImage = null;
+            this.btnEnLimitArea.Image = null;
             this.btnEnLimitArea.Corner = BeeGlobal.Corner.None;
             this.btnEnLimitArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEnLimitArea.FlatAppearance.BorderSize = 0;

@@ -47,7 +47,7 @@ namespace BeeUi
         {
             InitializeComponent();
            this.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, this.Width, this.Height, 20, 20));
-            EDS.GenerateEDS("Visionsensor.eds");
+          //  EDS.GenerateEDS("Visionsensor.eds");
             //  Disable();
             //  Enable();
 
@@ -186,6 +186,11 @@ namespace BeeUi
             Global.ParaCommon = LoadData.Para(Global.Project);
             if (Global.Config.RoundRad == 0)Global.Config.RoundRad = 10;
             tmLoad.Enabled = false;
+            //
+           
+            Global.SizeScreen= Screen.PrimaryScreen.Bounds.Size;
+            Global.PerScaleWidth = (float)((Global.SizeScreen.Width * 1.0)/ 2240.0 );
+            Global.PerScaleHeight = (float)((Global.SizeScreen.Height * 1.0)/ 1400.0 );
             lb.Text = "Waiting Initial Learning AI";
             workIniModel.RunWorkerAsync();
           

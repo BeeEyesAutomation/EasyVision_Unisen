@@ -26,13 +26,15 @@ namespace BeeUi
     {
         public EditTool()
         {
+            
             InitializeComponent();
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.UserPaint, true);
+           
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
-
+            
                                                     // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
 
         }
@@ -54,6 +56,8 @@ namespace BeeUi
                         G.SettingPLC.Dock = DockStyle.Fill;
                         break;
                     case Step.Run:
+                        pHeader.Visible = true;
+                        CameraBar.Visible = true;
                         this.SuspendLayout();
                         Global.IsRun = true;
                         G.Header.btnMode.Text = "Run";
@@ -124,11 +128,14 @@ namespace BeeUi
                         this.ResumeLayout();
                         break;
                     case Step.Step1:
+                        pHeader.Visible = false;
+                        CameraBar.Visible = false;
                         Global.IsRun = false;
                         G.Header.btnMode.Text = "Edit";
                         G.Header.btnMode.IsCLick = true;
-                        this.SuspendLayout();
+                     //   this.SuspendLayout();
                         G.StepEdit.btnStep1.IsCLick = true;
+                       
                         if (G.StepEdit == null)
                         {
                             G.StepEdit = new Common.StepEdit();
@@ -145,10 +152,13 @@ namespace BeeUi
                             G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
                             //  G.StepEdit.SettingStep1.BringToFront();
                         }
-                        Global.EditTool.View.pHeader.Controls.Clear();
-                        //pEditTool.Visible = true;
-                        G.StepEdit.Dock = DockStyle.Fill;
-                        Global.EditTool.View.pHeader.Controls.Add(G.StepEdit);
+                        if (G.StepEdit.Parent != Global.EditTool.View.pHeader)
+                        {
+                            Global.EditTool.View.pHeader.Controls.Clear();
+                            //pEditTool.Visible = true;
+                            G.StepEdit.Dock = DockStyle.Fill;
+                            Global.EditTool.View.pHeader.Controls.Add(G.StepEdit);
+                        }
                         //G.StepEdit.SettingStep1.Size = Global.EditTool.pEditTool.Size;
                         //G.StepEdit.Visible = true;
                         //G.StatusDashboard.Visible = false;
@@ -183,27 +193,26 @@ namespace BeeUi
                       
                         //G.StepEdit.Size = Global.EditTool.View.pHeader.Size;
                         //G.StepEdit.BringToFront();
-                        lbNumStep.Text = "Step 1";
-                        lbNameStep.Text = "Image Optimization";
-                        iconTool.BackgroundImage = Properties.Resources._1;
+                      
+                        //iconTool.BackgroundImage = Properties.Resources._1;
                         lbTool.Text = "Setup Camera";
 
                       ///  pName.Visible = true;
                        
 
-                       this.ResumeLayout();
+                       //this.ResumeLayout();
                         break;
                     case Step.Step2:
-                     //   pName.Visible = true;
+                        G.StepEdit.btnStep2.IsCLick = true;
+                        //   pName.Visible = true;
                         G.IsCalib = false;
                         if (G.StepEdit.SettingStep2 == null)
                             G.StepEdit.SettingStep2 = new SettingStep2();
                         pEditTool.Controls.Clear();
                         G.StepEdit.SettingStep2.Parent = Global.EditTool.pEditTool;
                         G.StepEdit.SettingStep2.Dock = DockStyle.Fill;
-                        lbNumStep.Text = "Step 2";
-                        lbNameStep.Text = "Master Resgistration";
-                        iconTool.BackgroundImage = Properties.Resources._2;
+                       
+                        //iconTool.BackgroundImage = Properties.Resources._2;
                         lbTool.Text = "Register Image";
                         try
                         {
@@ -230,6 +239,7 @@ namespace BeeUi
                         //Global.EditTool.View.imgView.Update();
                         break;
                     case Step.Step3:
+                        G.StepEdit.btnStep3.IsCLick = true;
                         pName.Visible = true;
                         if (Global.ToolSettings == null)
                             Global.ToolSettings = new ToolSettings();
@@ -248,9 +258,8 @@ namespace BeeUi
                         {
                             G.IsCalib = false;
                             pEditTool.Visible = true;
-                            lbNumStep.Text = "Step 3";
-                            lbNameStep.Text = "Tool Setting";
-                            iconTool.BackgroundImage = Properties.Resources._3;
+                           
+                           // iconTool.BackgroundImage = Properties.Resources._3;
                             lbTool.Text = " Add tool and Modify  Tool";
                         }
                         else
@@ -265,6 +274,7 @@ namespace BeeUi
 
                         break;
                     case Step.Step4:
+                        G.StepEdit.btnStep4.IsCLick = true;
                         pName.Visible = true;
                         G.IsCalib = false;
                         if (G.StepEdit.SettingStep4 == null)
@@ -272,9 +282,8 @@ namespace BeeUi
                         pEditTool.Controls.Clear();
                         G.StepEdit.SettingStep4.Parent = Global.EditTool.pEditTool;
                         G.StepEdit.SettingStep4.Dock = DockStyle.Fill;
-                        lbNumStep.Text = "Step 4";
-                        lbNameStep.Text = "Output Assignment";
-                        iconTool.BackgroundImage = Properties.Resources._4;
+                       
+                     //   iconTool.BackgroundImage = Properties.Resources._4;
                         lbTool.Text = "Setup Status OutPut";
                         G.StepEdit.SettingStep4.RefreshLogic();
                         break;
@@ -394,8 +403,21 @@ namespace BeeUi
         private void EditTool_Load(object sender, EventArgs e)
         {
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
-            LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
-           
+            if (Global.listParaCamera[0] != null)
+                CameraBar.btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
+            if (Global.listParaCamera[1] != null)
+                CameraBar.btnCamera2.Text = Global.listParaCamera[1].Name.Substring(0, 8) + "..";
+            if (Global.listParaCamera[2] != null)
+                CameraBar.btnCamera3.Text = Global.listParaCamera[2].Name.Substring(0, 8) + "..";
+            if (Global.listParaCamera[3] != null)
+                CameraBar.btnCamera4.Text = Global.listParaCamera[3].Name.Substring(0, 8) + "..";
+            pHeader.Height =(int)( pHeader.Height * Global.PerScaleHeight);
+            pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);
+            pEdit.Width= (int)(pEdit.Width * Global.PerScaleWidth);
+            
+            // if (pHeader.Height > 100) pHeader.Height = 100;
+            //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
+
         }
 
         private void outLine_Load(object sender, EventArgs e)
@@ -576,6 +598,30 @@ namespace BeeUi
         }
 
         private void btnHeaderBar1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void adjustBar4_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+                    }
+
+        private void customTablePanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CustomTablePanel_CellClick(object sender, CellEventArgs e)
         {
 
         }

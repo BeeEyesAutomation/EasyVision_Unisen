@@ -85,7 +85,7 @@ namespace BeeUi.Tool
             this.btnCopy.BorderColor = System.Drawing.Color.Transparent;
             this.btnCopy.BorderRadius = 10;
             this.btnCopy.BorderSize = 1;
-            this.btnCopy.ButtonImage = null;
+            this.btnCopy.Image = null;
             this.btnCopy.Corner =Corner.Both;
             this.btnCopy.Enabled = false;
             this.btnCopy.FlatAppearance.BorderSize = 0;
@@ -120,7 +120,7 @@ namespace BeeUi.Tool
             this.btnEnEdit.BorderColor = System.Drawing.Color.Transparent;
             this.btnEnEdit.BorderRadius = 10;
             this.btnEnEdit.BorderSize = 1;
-            this.btnEnEdit.ButtonImage = null;
+            this.btnEnEdit.Image = null;
             this.btnEnEdit.Corner =Corner.Both;
             this.btnEnEdit.FlatAppearance.BorderSize = 0;
             this.btnEnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -154,7 +154,7 @@ namespace BeeUi.Tool
             this.btnAdd.BorderColor = System.Drawing.Color.Transparent;
             this.btnAdd.BorderRadius = 10;
             this.btnAdd.BorderSize = 1;
-            this.btnAdd.ButtonImage = null;
+            this.btnAdd.Image = null;
             this.btnAdd.Corner =Corner.Both;
             this.btnAdd.Enabled = false;
             this.btnAdd.FlatAppearance.BorderSize = 0;
@@ -189,7 +189,7 @@ namespace BeeUi.Tool
             this.btnDelect.BorderColor = System.Drawing.Color.Transparent;
             this.btnDelect.BorderRadius = 10;
             this.btnDelect.BorderSize = 1;
-            this.btnDelect.ButtonImage = null;
+            this.btnDelect.Image = null;
             this.btnDelect.Corner =Corner.Both;
             this.btnDelect.Enabled = false;
             this.btnDelect.FlatAppearance.BorderSize = 0;

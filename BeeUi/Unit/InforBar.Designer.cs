@@ -53,7 +53,7 @@ namespace BeeUi.Unit
             this.pView.Controls.Add(this.imgHis);
             this.pView.Location = new System.Drawing.Point(3, 3);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(197, 696);
+            this.pView.Size = new System.Drawing.Size(320, 696);
             this.pView.TabIndex = 7;
             // 
             // imgHis
@@ -91,7 +91,6 @@ namespace BeeUi.Unit
             this.btnHide.BorderColor = System.Drawing.Color.Silver;
             this.btnHide.BorderRadius = 5;
             this.btnHide.BorderSize = 0;
-            this.btnHide.ButtonImage = null;
             this.btnHide.Corner = BeeGlobal.Corner.Both;
             this.btnHide.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnHide.FlatAppearance.BorderSize = 0;
@@ -121,7 +120,7 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.Controls.Add(this.rjButton1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.btnHide, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(219, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(342, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.539007F));
@@ -140,7 +139,6 @@ namespace BeeUi.Unit
             this.rjButton1.BorderColor = System.Drawing.Color.Silver;
             this.rjButton1.BorderRadius = 5;
             this.rjButton1.BorderSize = 0;
-            this.rjButton1.ButtonImage = null;
             this.rjButton1.Corner = BeeGlobal.Corner.Both;
             this.rjButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton1.FlatAppearance.BorderSize = 0;
@@ -170,7 +168,7 @@ namespace BeeUi.Unit
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.pView);
             this.Name = "InforBar";
-            this.Size = new System.Drawing.Size(261, 746);
+            this.Size = new System.Drawing.Size(384, 746);
             this.pView.ResumeLayout(false);
             this.pView.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

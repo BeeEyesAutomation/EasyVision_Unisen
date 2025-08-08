@@ -158,7 +158,6 @@ namespace BeeUi
             this.btnCamera4.BorderColor = System.Drawing.Color.DarkGray;
             this.btnCamera4.BorderRadius = 10;
             this.btnCamera4.BorderSize = 0;
-            this.btnCamera4.ButtonImage = null;
             this.btnCamera4.Corner = BeeGlobal.Corner.Right;
             this.btnCamera4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera4.FlatAppearance.BorderSize = 0;
@@ -190,7 +189,6 @@ namespace BeeUi
             this.btnCamera1.BorderColor = System.Drawing.Color.DarkGray;
             this.btnCamera1.BorderRadius = 10;
             this.btnCamera1.BorderSize = 0;
-            this.btnCamera1.ButtonImage = null;
             this.btnCamera1.Corner = BeeGlobal.Corner.Left;
             this.btnCamera1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera1.FlatAppearance.BorderSize = 0;
@@ -222,7 +220,6 @@ namespace BeeUi
             this.btnCamera2.BorderColor = System.Drawing.Color.Transparent;
             this.btnCamera2.BorderRadius = 5;
             this.btnCamera2.BorderSize = 0;
-            this.btnCamera2.ButtonImage = null;
             this.btnCamera2.Corner = BeeGlobal.Corner.None;
             this.btnCamera2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera2.FlatAppearance.BorderSize = 0;
@@ -254,7 +251,6 @@ namespace BeeUi
             this.btnCamera3.BorderColor = System.Drawing.Color.Transparent;
             this.btnCamera3.BorderRadius = 5;
             this.btnCamera3.BorderSize = 0;
-            this.btnCamera3.ButtonImage = null;
             this.btnCamera3.Corner = BeeGlobal.Corner.None;
             this.btnCamera3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCamera3.FlatAppearance.BorderSize = 0;
@@ -461,7 +457,6 @@ namespace BeeUi
             this.btnUSB2_0.BorderColor = System.Drawing.Color.DarkGray;
             this.btnUSB2_0.BorderRadius = 5;
             this.btnUSB2_0.BorderSize = 0;
-            this.btnUSB2_0.ButtonImage = null;
             this.btnUSB2_0.Corner = BeeGlobal.Corner.Both;
             this.btnUSB2_0.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnUSB2_0.FlatAppearance.BorderSize = 0;
@@ -494,7 +489,6 @@ namespace BeeUi
             this.btnCameraTiny.BorderColor = System.Drawing.Color.DarkGray;
             this.btnCameraTiny.BorderRadius = 5;
             this.btnCameraTiny.BorderSize = 0;
-            this.btnCameraTiny.ButtonImage = null;
             this.btnCameraTiny.Corner = BeeGlobal.Corner.Both;
             this.btnCameraTiny.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCameraTiny.FlatAppearance.BorderSize = 0;
@@ -527,7 +521,6 @@ namespace BeeUi
             this.btnGigE.BorderColor = System.Drawing.Color.DarkGray;
             this.btnGigE.BorderRadius = 5;
             this.btnGigE.BorderSize = 0;
-            this.btnGigE.ButtonImage = null;
             this.btnGigE.Corner = BeeGlobal.Corner.Both;
             this.btnGigE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnGigE.FlatAppearance.BorderSize = 0;

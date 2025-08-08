@@ -43,7 +43,7 @@
             this.btnCheckUpdate.BorderColor = System.Drawing.Color.PaleVioletRed;
             this.btnCheckUpdate.BorderRadius = 0;
             this.btnCheckUpdate.BorderSize = 0;
-            this.btnCheckUpdate.ButtonImage = null;
+            this.btnCheckUpdate.Image = null;
             this.btnCheckUpdate.Corner = BeeGlobal.Corner.Both;
             this.btnCheckUpdate.FlatAppearance.BorderSize = 0;
             this.btnCheckUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -77,7 +77,7 @@
             this.btnUpdate.BorderColor = System.Drawing.Color.PaleVioletRed;
             this.btnUpdate.BorderRadius = 0;
             this.btnUpdate.BorderSize = 0;
-            this.btnUpdate.ButtonImage = null;
+            this.btnUpdate.Image = null;
             this.btnUpdate.Corner = BeeGlobal.Corner.Both;
             this.btnUpdate.Enabled = false;
             this.btnUpdate.FlatAppearance.BorderSize = 0;

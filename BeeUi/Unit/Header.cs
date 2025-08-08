@@ -318,11 +318,12 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
-           
+
             //    this.Controls.Add(btnHide);
 
             //fadeTimer = new Timer { Interval = 20 };
             //fadeTimer.Tick += FadeEffect;
+            if (G.Main == null) return;
             if (Global.EditTool == null) return;
             if (Global.EditTool.View == null)
             {
@@ -331,43 +332,43 @@ namespace BeeUi.Common
 
                 Global.EditTool.View.Dock = DockStyle.None;
                 Global.EditTool.View.Size = Global.EditTool.pView.Size;
-                Global.EditTool.View.Anchor = AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right|AnchorStyles.Bottom;
-                Global.EditTool.View.Location = new Point(0,0);
+                Global.EditTool.View.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                Global.EditTool.View.Location = new Point(0, 0);
 
                 Global.EditTool.View.Parent = Global.EditTool.pView;
             }
             //if (G.IsLoad) return;
-          //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
-           BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
-        
-           BeeCore.CustomGui.RoundRg(pPO,Global.Config.RoundRad);
+            //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
+            BeeCore.CustomGui.RoundRg(pModel, Global.Config.RoundRad);
 
-            
-         //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-            pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-            pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            BeeCore.CustomGui.RoundRg(pPO, Global.Config.RoundRad);
+
+
+            //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
+            pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             G.listProgram.Font = new Font("Arial", 16);
             G.listProgram.Parent = G.Main;
             G.listProgram.BringToFront();
             G.listProgram.Visible = false;
-            G.listProgram.Location = new Point(this.Location.X +btnMode.Width+txtQrCode.Location.X, this.Location.Y+ txtQrCode.Location.Y+txtQrCode.Height+10);
+            G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
             G.listProgram.Width = txtQrCode.Width;
             G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
             this.myDelegate = new AddDataDelegate(AddDataMethod);
-             //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(Global.Config.namePort);
+            //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(Global.Config.namePort);
             if (!Directory.Exists("Program"))
             {
                 Directory.CreateDirectory("Program");
-            }    
+            }
             else
             {
                 // Access.SaveProg("Program\\Default.prog", new List<PropetyTool>());
-              
 
-                Global.Project= Properties.Settings.Default.programCurrent;
 
-                
-                    txtQrCode.Text = Global.Project;
+                Global.Project = Properties.Settings.Default.programCurrent;
+
+
+                txtQrCode.Text = Global.Project;
                 txtQrCode.Enabled = false;
                 btnShowList.Enabled = false;
                 if (!workLoadProgram.IsBusy)
@@ -377,7 +378,7 @@ namespace BeeUi.Common
             }
             ThreadPool.SetMinThreads(Environment.ProcessorCount, Environment.ProcessorCount);
             //Acccess(Global.IsRun);
-            G.Main.Location = new Point(0,0);
+            G.Main.Location = new Point(0, 0);
 
         }
         void ChangeProgram(String program)
@@ -646,15 +647,7 @@ txtQrCode.Focus();
             Global.ToolSettings.pAllTool.Controls.Clear();
            
             tmShow.Enabled = true;
-            if(Global.listParaCamera[0]!=null)
-                CameraBar.btnCamera1.Text =Global.listParaCamera[0].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[1] != null)
-                CameraBar.btnCamera2.Text =Global.listParaCamera[1].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[2] != null)
-                CameraBar.btnCamera3.Text =Global.listParaCamera[2].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[3] != null)
-                CameraBar.btnCamera4.Text =Global.listParaCamera[3].Name.Substring(0, 8) + "..";
-    
+           
         }
 
         private void workSaveProject_DoWork(object sender, DoWorkEventArgs e)
@@ -709,8 +702,8 @@ txtQrCode.Focus();
 
         private void pModel_SizeChanged(object sender, EventArgs e)
         {
-            if (Global.EditTool == null) return;
-           BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
+          //  if (Global.EditTool == null) return;
+          // BeeCore.CustomGui.RoundRg(pModel,Global.Config.RoundRad);
 
         }
 
@@ -744,7 +737,7 @@ txtQrCode.Focus();
                     if (indexToolShow < BeeCore.Common.PropetyTools[Global.IndexChoose].Count)
                     {
                         tmShow.Interval = 50;
-                       
+                        BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool.Width = Global.ToolSettings.Width-10;
                         Global.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
                         indexToolShow++;
                         Global.ToolSettings.ResumeLayout(true);

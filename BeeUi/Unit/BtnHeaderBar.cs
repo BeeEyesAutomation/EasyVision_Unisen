@@ -56,34 +56,37 @@ namespace BeeUi.Unit
         private async void btnfull_Click(object sender, EventArgs e)
         {
             btnSettingPLC.Enabled = !btnfull.IsCLick;
-            G.Header.Visible =! btnfull.IsCLick;
+         //   G.Header.Visible =! btnfull.IsCLick;
           //  await Task.Delay(500);
           //  G.InforBar.Visible =! btnfull.IsCLick;
-            await Task.Delay(500);
-            // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
+           // await Task.Delay(500);
+           // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
+            Global.EditTool.LayoutEnd.Visible=! btnfull.IsCLick;
             if (btnfull.IsCLick)
             {
                 Global.EditTool.pHeader.Visible = false;
-                Global.EditTool.LayoutEnd.Visible = false;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
-                Global.ToolSettings.Dock = DockStyle.Fill;
-                Global.ToolSettings.Width = 300;
-                Global.EditTool.View.LayOutShow.Controls.Add(Global.ToolSettings,1,0);
+               // Global.EditTool.pEdit.Width = 200;
+                //Global.EditTool.LayoutEnd.Visible = false;
+                //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
+                //Global.ToolSettings.Dock = DockStyle.Fill;
+                //Global.ToolSettings.Width = 300;
+                //Global.EditTool.View.LayOutShow.Controls.Add(Global.ToolSettings,1,0);
                 Global.EditTool.View.pBtn.Visible = false;
             }    
                
             else
             {
                 Global.EditTool.pHeader.Visible = true;
-                Global.EditTool.LayoutEnd.Visible = true;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+               // Global.EditTool.pEdit.Width = 400;
+                //Global.EditTool.LayoutEnd.Visible = true;
+                //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
                 Global.EditTool.View.pBtn.Visible = true;
-                Global.EditTool.View.LayOutShow.Controls.Remove(Global.ToolSettings);
-                Global.EditTool.LayOutShow.Controls.Add(Global.ToolSettings, 1, 0);
+                //Global.EditTool.View.LayOutShow.Controls.Remove(Global.ToolSettings);
+                //Global.EditTool.LayOutShow.Controls.Add(Global.ToolSettings, 1, 0);
 
             }    
                
-            await Task.Delay(1000);
+            await Task.Delay(100);
             Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
 

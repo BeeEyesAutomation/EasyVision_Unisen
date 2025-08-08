@@ -459,7 +459,7 @@ namespace BeeUi
                     G.Load.FormActive.CheckActive(G.Load.addMac);
                     if (G.IsActive)
                     {
-                        Main Main = new Main();
+                         Main Main = new Main();
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                         Global.EditTool.lbCam.Text = "Camera Connected";
 

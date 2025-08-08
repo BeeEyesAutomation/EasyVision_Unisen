@@ -151,7 +151,7 @@ namespace BeeInterface
             this.btnComplete.BorderColor = System.Drawing.Color.Transparent;
             this.btnComplete.BorderRadius = 5;
             this.btnComplete.BorderSize = 1;
-            this.btnComplete.ButtonImage = null;
+            this.btnComplete.Image = null;
             this.btnComplete.Corner = BeeGlobal.Corner.Both;
             this.btnComplete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnComplete.FlatAppearance.BorderSize = 0;
@@ -181,7 +181,7 @@ namespace BeeInterface
             this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
             this.btnCancel.BorderRadius = 5;
             this.btnCancel.BorderSize = 1;
-            this.btnCancel.ButtonImage = null;
+            this.btnCancel.Image = null;
             this.btnCancel.Corner = BeeGlobal.Corner.Both;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.FlatAppearance.BorderSize = 0;

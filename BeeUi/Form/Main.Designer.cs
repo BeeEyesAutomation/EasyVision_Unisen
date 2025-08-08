@@ -35,7 +35,7 @@ namespace BeeUi
             // 
             // editTool1
             // 
-            this.editTool1.BackColor = System.Drawing.Color.Transparent;
+            this.editTool1.BackColor = System.Drawing.Color.White;
             this.editTool1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editTool1.Location = new System.Drawing.Point(0, 0);
             this.editTool1.Name = "editTool1";
@@ -61,6 +61,7 @@ namespace BeeUi
             this.ResumeLayout(false);
 
         }
+
 
 
         #endregion

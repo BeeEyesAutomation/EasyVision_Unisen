@@ -48,8 +48,12 @@ namespace BeeUi.Common
         
         private void StepEdit_Load(object sender, EventArgs e)
         {
-          //  if(G.Header!=null)
-           // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            //if (this.Width< 859)
+            //{
+            //    btnStep1.Width=
+            //}
+            //  if(G.Header!=null)
+            // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
 
             //   G.StepEdit = this;
         }
@@ -164,6 +168,12 @@ namespace BeeUi.Common
         {
           BeeCore.CustomGui.RoundRg(this,Global.Config.RoundRad);
 
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveData.Project(Global.Project);
+            Global.EditTool.RefreshGuiEdit(Step.Run);
         }
     }
 }

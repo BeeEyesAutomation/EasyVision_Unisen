@@ -87,7 +87,8 @@ namespace BeeGlobal
                 }
             }
         }public static bool TriggerInternal = false;
-
+        public static Size SizeScreen;
+        public static float PerScaleWidth, PerScaleHeight;
         public static bool Initialed = false;
         public static Step Step = Step.Run;
         public static float Scale = 1, AngleOrigin;

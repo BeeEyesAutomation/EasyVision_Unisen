@@ -50,12 +50,15 @@ namespace BeeCore
                     if(Common.PropetyTools[IndexThread][Index].Name.Trim()=="")
                     {
                         Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                    }     
-                //dynamic mod = Py.Import("Tool.Learning");
-                //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                //dynamic obj = cls.Invoke();              // khởi tạo instance
+                    }
+                    //dynamic mod = Py.Import("Tool.Learning");
+                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                    //dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo.YOLO);
+                    if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
+                    {
+                        Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    }
                     Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
                   
                 }

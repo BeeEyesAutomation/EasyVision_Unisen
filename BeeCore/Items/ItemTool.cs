@@ -466,10 +466,7 @@ namespace BeeCore
         //Image imgUnChoose = Properties.Resources.btnUnChoose;
         private void ItemTool_Load(object sender, EventArgs e)
         {
-            pTrack = new Point(10, this.Height / 2);
-            szTrack = new Size(this.Width - szStatus.Width - pTrack.X-10, 15);
-            pTick = new PointF(pTrack.X+Value, pTrack.Y);
-            pEnd = new PointF(this.Width - 5, 5);
+            UpdateLayout();
             this.DoubleClick += ItemTool_DoubleClick;
             Step = Common.PropetyTools[Global.IndexChoose][IndexTool].StepValue;
             Min = Common.PropetyTools[Global.IndexChoose][IndexTool].MinValue;
@@ -480,10 +477,38 @@ namespace BeeCore
             Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreChanged += ItemTool_ScoreChanged;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
             imgTick = Properties.Resources.Disnable;
-           
+            this.Resize += ItemTool_Resize;
             this.Refresh();
         }
 
+        private void ItemTool_Resize(object sender, EventArgs e)
+        {
+            UpdateLayout();
+            this.Invalidate();
+        }
+
+        private void UpdateLayout()
+        {
+            var r = this.ClientRectangle;
+            int margin = 5;
+
+            // 1) Vị trí và size thanh track:
+            szTrack = new Size(r.Width - szStatus.Width - margin * 2, 15);
+            pTrack = new Point(margin, r.Height / 2 - szTrack.Height / 2);
+
+            // 2) Vị trí tick theo value:
+            float ratio = (Value - Min) / (Max - Min);
+            pTick = new PointF(
+                pTrack.X + ratio * (szTrack.Width - imgTick.Width),
+                pTrack.Y - (imgTick.Height - szTrack.Height) / 2
+            );
+
+            // 3) Vị trí icon/label trên đầu:
+            pFist = new Point(margin, margin);
+            pEnd = new PointF(r.Right - margin, margin);
+
+           
+        }
         private void ItemTool_ScoreChanged(float obj)
         {
             Value = obj;
@@ -620,10 +645,10 @@ namespace BeeCore
 
         private void ItemTool_SizeChanged(object sender, EventArgs e)
         {
-            szTrack = new Size(this.Width - szStatus.Width + 10, 50);
+            //szTrack = new Size(this.Width - szStatus.Width + 10, 50);
             //bmpBase = new Bitmap(szTrack.Width, szTrack.Height);
             //gcBase = Graphics.FromImage(bmpBase);
-            pTrack = new Point(this.Height / 2 - szTrack.Height / 2, szStatus.Height + 10);
+            //pTrack = new Point(this.Height / 2 - szTrack.Height / 2, szStatus.Height + 10);
         }
     }
 }

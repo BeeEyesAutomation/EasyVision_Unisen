@@ -56,7 +56,7 @@
             this.lay.Name = "lay";
             this.lay.RowCount = 1;
             this.lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay.Size = new System.Drawing.Size(404, 54);
+            this.lay.Size = new System.Drawing.Size(459, 54);
             this.lay.TabIndex = 47;
             this.lay.Paint += new System.Windows.Forms.PaintEventHandler(this.lay_Paint);
             this.lay.MouseLeave += new System.EventHandler(this.lay_MouseLeave);
@@ -65,7 +65,7 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(394, 0);
+            this.panel2.Location = new System.Drawing.Point(449, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(10, 54);
@@ -84,7 +84,7 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(314, 54);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(369, 54);
             this.tableLayoutPanel7.TabIndex = 36;
             // 
             // Track
@@ -98,7 +98,7 @@
             this.Track.Max = 30F;
             this.Track.Min = 0F;
             this.Track.Name = "Track";
-            this.Track.Size = new System.Drawing.Size(308, 49);
+            this.Track.Size = new System.Drawing.Size(363, 49);
             this.Track.Step = 1F;
             this.Track.TabIndex = 28;
             this.Track.Value = 10F;
@@ -111,7 +111,7 @@
             this.Num.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.Num.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Num.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Num.Location = new System.Drawing.Point(324, 0);
+            this.Num.Location = new System.Drawing.Point(379, 0);
             this.Num.Margin = new System.Windows.Forms.Padding(0);
             this.Num.Maxnimum = 100F;
             this.Num.Minimum = 0F;
@@ -138,8 +138,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lay);
             this.Name = "AdjustBar";
-            this.Size = new System.Drawing.Size(404, 54);
+            this.Size = new System.Drawing.Size(459, 54);
             this.Load += new System.EventHandler(this.AdjustBar_Load);
+            this.SizeChanged += new System.EventHandler(this.AdjustBar_SizeChanged_1);
             this.lay.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             this.ResumeLayout(false);
