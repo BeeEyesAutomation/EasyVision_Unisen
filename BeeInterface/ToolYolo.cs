@@ -21,6 +21,8 @@ using Label = System.Windows.Forms.Label;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using BeeGlobal;
+using Cyotek.Windows.Forms;
+using OpenCvSharp.Flann;
 
 namespace BeeInterface
 {
@@ -925,38 +927,142 @@ namespace BeeInterface
         }
         public String sClass = "";
         public bool IsUpdateImgCrop = false;
+        //private void btnDraw_Click(object sender, EventArgs e)
+        //{  // Thông tin ảnh
+        //    float imageWidth = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
+        //    float imageHeight = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
+        //    RotatedRect rrect = new RotatedRect(
+        //   new Point2f(Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),    // center
+        //    new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),       // width, height
+        //    Propety.rotCrop._rectRotation                        // angle in degrees
+        //   );
+        //    // Tính 4 điểm
+        //    Point2f[] points = rrect.Points();
+        //    // Normalize
+        //    for (int i = 0; i < points.Length; i++)
+        //    {
+        //        points[i].X /= imageWidth;
+        //        points[i].Y /= imageHeight;
+        //    }
+        //    int classId = cbLabels.SelectedIndex;
+
+        //    // Tạo nội dung dòng annotation
+        //    sClass += classId.ToString();
+        //    foreach (var p in points)
+        //    {
+        //        sClass += $" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}";
+        //    }
+        //    sClass += "\n";
+        //    IsUpdateImgCrop = true;
+        //    imgCrop.Invalidate();
+
+
+        //   // SaveImageAndLabel(rrect, sClass);//note
+        //    sClass = "";
+        //}
         private void btnDraw_Click(object sender, EventArgs e)
-        {  // Thông tin ảnh
-            float imageWidth = BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width;
-            float imageHeight = BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height;
+        {
+            float imageWidth = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
+            float imageHeight = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
+
             RotatedRect rrect = new RotatedRect(
-           new Point2f( Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),    // center
-            new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),       // width, height
-            Propety.rotCrop._rectRotation                        // angle in degrees
-           );
-            // Tính 4 điểm
+                new Point2f(Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),
+                new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),
+                Propety.rotCrop._rectRotation
+            );
+
             Point2f[] points = rrect.Points();
-            // Normalize
+
             for (int i = 0; i < points.Length; i++)
             {
                 points[i].X /= imageWidth;
                 points[i].Y /= imageHeight;
             }
+
+            float minX = points.Min(p => p.X);
+            float maxX = points.Max(p => p.X);
+            float minY = points.Min(p => p.Y);
+            float maxY = points.Max(p => p.Y);
+
+            float xCenter = (minX + maxX) / 2;
+            float yCenter = (minY + maxY) / 2;
+            float width = maxX - minX;
+            float height = maxY - minY;
+
             int classId = cbLabels.SelectedIndex;
-           
-            // Tạo nội dung dòng annotation
-            sClass += classId.ToString();
-            foreach (var p in points)
-            {
-                sClass += $" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}";
-            }
-            sClass += "\n";
-            // Mat matCrop=   CropRotatedRect(BeeCore.Common.listCamera[Global. IndexChoose].matRaw, Propety.rotCrop,Propety.rotMask);
-           // G.listImgTrainYolo.Add(matCrop.ToBitmap());
-           // G.listLabelTrainYolo.Add(cbLabels.Text);
+
+            sClass = $"{classId} {xCenter:0.######} {yCenter:0.######} {width:0.######} {height:0.######}\n";
+
             IsUpdateImgCrop = true;
             imgCrop.Invalidate();
 
+            SaveImageAndLabel(rrect, sClass);
+
+            sClass = "";
+        }
+
+        private void CreateYamlFromLabels(string outputPath)
+        {
+            try
+            {
+                var labels = new List<string>();
+                foreach (var item in cbLabels.Items)
+                    labels.Add(item.ToString());
+
+                int nc = labels.Count;
+
+                // ✅ Lấy full path đến thư mục train/val
+                string trainPath = Path.GetFullPath(Path.Combine("Program", Global.Project, "DataSet", "train", "images"));
+                string valPath = trainPath; // nếu chưa có val riêng
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"train: {trainPath.Replace("\\", "/")}");
+                sb.AppendLine($"val: {valPath.Replace("\\", "/")}");
+                sb.AppendLine();
+                sb.AppendLine($"nc: {nc}");
+                sb.AppendLine("names:");
+
+                foreach (var label in labels)
+                {
+                    sb.AppendLine($"  - {label}");
+                }
+
+                File.WriteAllText(outputPath, sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tạo YAML: " + ex.Message);
+            }
+        }
+
+        private void SaveImageAndLabel(RotatedRect rrect, string labelContent)
+        {
+            try
+            {
+                string imageName = $"img_{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg";
+                string labelName = Path.GetFileNameWithoutExtension(imageName) + ".txt";
+                string pathImage = Path.Combine("Program", Global.Project, "DataSet", "train", "images");
+                string pathLabel = Path.Combine("Program", Global.Project, "DataSet", "train", "labels");
+                Directory.CreateDirectory(pathImage);
+                Directory.CreateDirectory(pathLabel);
+
+                Mat matRaw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw;
+                string fullImagePath = Path.Combine(pathImage, imageName);
+                matRaw.SaveImage(fullImagePath); 
+
+                string fullLabelPath = Path.Combine(pathLabel, labelName);
+                File.WriteAllText(fullLabelPath, labelContent);
+
+                if (!string.IsNullOrEmpty(Propety.pathFullModel))
+                {
+                    string pathFullModel = Propety.pathFullModel;
+                    string modelTxtPath = Path.Combine("Program", Global.Project, "DataSet", "PathModel.txt");
+                    File.WriteAllText(modelTxtPath, pathFullModel);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void tabYolo_SelectedIndexChanged(object sender, EventArgs e)
@@ -1004,7 +1110,10 @@ namespace BeeInterface
             //G.listImgTrainYolo = new List<Bitmap>();
             //G.listLabelTrainYolo = new List<string>();
             imgCrop.Invalidate();
+            string pathYaml = Path.Combine("Program", Global.Project, "DataSet", "data.yaml");//note
+            CreateYamlFromLabels(pathYaml);
             MessageBox.Show("Complete");
+
             //using (StreamWriter sw = new StreamWriter(outputPath, false, Encoding.UTF8))
             //{
             //    sw.Write($"{classId}");
@@ -1071,16 +1180,36 @@ namespace BeeInterface
 
         private void workTrain_DoWork(object sender, DoWorkEventArgs e)
         {
-            Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, "Program\\NIDEC_MH_DEMO2\\DataSet\\data.yaml");
+            //Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, "Program\\NIDEC_MH_DEMO2\\DataSet\\data.yaml");
 
-            workTrain.ReportProgress(Propety.Percent);
+            //workTrain.ReportProgress(Propety.Percent);
+            string pathYaml = Path.Combine("Program", Global.Project, "DataSet", "data.yaml");//note
+            string nameModel = Propety.pathFullModel;//note
+
+            //  workTrain.ReportProgress(Propety.Percent);
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].PercentChange += Yolo_PercentChange;
+            Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, nameModel, pathYaml);
+
         }
-
+        private void Yolo_PercentChange(int percent)//note
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                {
+                    progressBar1.Value = percent;
+                    txtPercent.Text = percent.ToString() + "%";
+                }));
+            }
+            else
+            {
+                progressBar1.Value = percent;
+                txtPercent.Text = percent.ToString() + "%";
+            }
+        }
         private void workTrain_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
-
-
         }
 
         private void workTrain_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1133,6 +1262,17 @@ namespace BeeInterface
         {
             Propety.ArrangeBox = ArrangeBox.Y_Right_Left;
         }
+
+        private void tableLayoutPanel14_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel15_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
     }
 }
 

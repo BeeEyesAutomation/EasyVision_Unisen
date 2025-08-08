@@ -43,6 +43,25 @@ namespace BeeCore
                 }
             }
         }
+
+        public int _Percent = 0;//note
+        [field: NonSerialized]
+        public event Action<int> PercentChange;
+
+        public  int Percent
+        {
+            get => _Percent;
+            set
+            {
+                if (_Percent != value)
+                {
+                    _Percent = value;
+                    PercentChange?.Invoke(_Percent);
+                }
+            }
+        }
+
+
         public float CycleTime = 0;
         public float ScoreResult = 0;
         public float MinValue = 0;

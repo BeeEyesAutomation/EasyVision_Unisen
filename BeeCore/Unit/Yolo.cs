@@ -15,7 +15,6 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Web.UI.WebControls;
-
 using BeeCore.Funtion;
 using System.Windows.Forms;
 using BeeGlobal;
@@ -30,7 +29,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-       
+        
         public void InitialYolo()
         {
            
@@ -75,28 +74,54 @@ namespace BeeCore
 
             // G.YoloPlus.LoadModel(nameTool, nameModel, (int)TypeYolo);
         }
-        public int Percent = 0;
-        
-        public void Training(String nameTool,String pathYaml)
+        //  public int Percent = 0;
+
+        //public void Training(String nameTool,String pathYaml)
+        //{
+        //    using (Py.GIL())
+        //    {
+
+        //        Action<int> onProgress = percent =>
+        //        {
+        //            Percent = percent;
+        //            Console.WriteLine($"Training progress: {percent}%");
+        //        };
+        //        using (PyObject pyCallback = onProgress.ToPython())
+        //        {
+        //            var result = G.objYolo.train(nameTool, pathYaml, Epoch, callback: pyCallback);
+        //            Console.WriteLine(result.ToString());
+        //        }
+        //    }
+
+
+        //}
+       
+        public void Training(string nameTool, string modelPath, string pathYaml)
         {
             using (Py.GIL())
             {
-              
                 Action<int> onProgress = percent =>
                 {
-                    Percent = percent;
+                    Common.PropetyTools[Global.IndexChoose][Index].Percent = percent;
+                    
                     Console.WriteLine($"Training progress: {percent}%");
                 };
+
                 using (PyObject pyCallback = onProgress.ToPython())
                 {
-                    var result = G.objYolo.train(nameTool, pathYaml, Epoch, callback: pyCallback);
+                    var result = G.objYolo.train(
+                        nameTool,
+                        modelPath,   
+                        pathYaml,
+                        Epoch,
+                        callback: pyCallback
+                    );
+
                     Console.WriteLine(result.ToString());
                 }
             }
-
-          
         }
-      
+
         public String[] LoadNameModel(String nameTool)
         {
             using (Py.GIL())
@@ -135,7 +160,7 @@ namespace BeeCore
         private Mode _TypeMode = Mode.Pattern;
         public Compares Compare = Compares.Equal;
         public Compares CompareLine = Compares.More;
-        public int Epoch = 100;
+        public int Epoch =100;
         public Mode TypeMode
         {
             get
