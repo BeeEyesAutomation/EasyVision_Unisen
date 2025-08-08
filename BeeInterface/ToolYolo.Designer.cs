@@ -701,7 +701,7 @@ namespace BeeInterface
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.2F));
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.8F));
             this.tableLayoutPanel14.Controls.Add(this.progressBar1, 0, 0);
-            this.tableLayoutPanel14.Controls.Add(this.label12, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.txtPercent, 1, 0);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel14.Location = new System.Drawing.Point(8, 587);
             this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(8, 15, 3, 3);
@@ -719,16 +719,16 @@ namespace BeeInterface
             this.progressBar1.Size = new System.Drawing.Size(275, 31);
             this.progressBar1.TabIndex = 0;
             // 
-            // label12
+            // txtPercent
             // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(284, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(88, 37);
-            this.label12.TabIndex = 1;
-            this.label12.Text = "0%";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.txtPercent.AutoSize = true;
+            this.txtPercent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPercent.Location = new System.Drawing.Point(284, 0);
+            this.txtPercent.Name = "txtPercent";
+            this.txtPercent.Size = new System.Drawing.Size(88, 37);
+            this.txtPercent.TabIndex = 1;
+            this.txtPercent.Text = "0%";
+            this.txtPercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label11
             // 
@@ -2208,7 +2208,7 @@ namespace BeeInterface
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.2F));
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.8F));
             this.tableLayoutPanel14.Controls.Add(this.progressBar1, 0, 0);
-            this.tableLayoutPanel14.Controls.Add(this.label12, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.txtPercent, 1, 0);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel14.Location = new System.Drawing.Point(8, 587);
             this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(8, 15, 3, 3);
@@ -2226,16 +2226,16 @@ namespace BeeInterface
             this.progressBar1.Size = new System.Drawing.Size(275, 31);
             this.progressBar1.TabIndex = 0;
             // 
-            // label12
+            // txtPercent
             // 
-            this.label12.AutoSize = true;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(284, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(88, 37);
-            this.label12.TabIndex = 1;
-            this.label12.Text = "0%";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.txtPercent.AutoSize = true;
+            this.txtPercent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPercent.Location = new System.Drawing.Point(284, 0);
+            this.txtPercent.Name = "txtPercent";
+            this.txtPercent.Size = new System.Drawing.Size(88, 37);
+            this.txtPercent.TabIndex = 1;
+            this.txtPercent.Text = "0%";
+            this.txtPercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label11
             // 
