@@ -32,7 +32,6 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
@@ -47,6 +46,7 @@ namespace BeeUi
             this.pName = new System.Windows.Forms.Panel();
             this.lbTool = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
+            this.CameraBar = new BeeUi.Unit.Cameras();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.LayoutEnd = new System.Windows.Forms.Panel();
             this.btnShuttdown = new BeeInterface.RJButton();
@@ -54,7 +54,7 @@ namespace BeeUi
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnExit = new BeeInterface.RJButton();
-            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.tmReaPLC = new System.Windows.Forms.Timer();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -65,11 +65,10 @@ namespace BeeUi
             this.button8 = new System.Windows.Forms.Button();
             this.pTop = new System.Windows.Forms.Panel();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.rjButton1 = new BeeInterface.RJButton();
-            this.CameraBar = new BeeUi.Unit.Cameras();
             this.pHeader = new BeeUi.Common.Header();
-            this.btnHeaderBar1 = new BeeUi.Unit.BtnHeaderBar();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pName.SuspendLayout();
@@ -177,9 +176,9 @@ namespace BeeUi
             // 
             this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(0, 112);
+            this.pEditTool.Location = new System.Drawing.Point(0, 124);
             this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(500, 1117);
+            this.pEditTool.Size = new System.Drawing.Size(500, 1105);
             this.pEditTool.TabIndex = 1;
             this.pEditTool.Paint += new System.Windows.Forms.PaintEventHandler(this.pEditTool_Paint_1);
             // 
@@ -189,7 +188,7 @@ namespace BeeUi
             this.pName.Controls.Add(this.lbTool);
             this.pName.Controls.Add(this.iconTool);
             this.pName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pName.Location = new System.Drawing.Point(0, 64);
+            this.pName.Location = new System.Drawing.Point(0, 76);
             this.pName.Name = "pName";
             this.pName.Size = new System.Drawing.Size(500, 48);
             this.pName.TabIndex = 0;
@@ -219,6 +218,14 @@ namespace BeeUi
             this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.iconTool.TabIndex = 0;
             this.iconTool.TabStop = false;
+            // 
+            // CameraBar
+            // 
+            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CameraBar.Location = new System.Drawing.Point(0, 0);
+            this.CameraBar.Name = "CameraBar";
+            this.CameraBar.Size = new System.Drawing.Size(500, 76);
+            this.CameraBar.TabIndex = 3;
             // 
             // splitter1
             // 
@@ -430,6 +437,16 @@ namespace BeeUi
             this.autoFontLabel1.Text = "Vision Sensor ";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btnHeaderBar1
+            // 
+            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar1.Location = new System.Drawing.Point(1735, 0);
+            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar1.Name = "btnHeaderBar1";
+            this.btnHeaderBar1.Size = new System.Drawing.Size(505, 51);
+            this.btnHeaderBar1.TabIndex = 8;
+            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
+            // 
             // picLogo
             // 
             this.picLogo.BackColor = System.Drawing.Color.Transparent;
@@ -467,14 +484,6 @@ namespace BeeUi
             this.rjButton1.UseVisualStyleBackColor = false;
             this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
             // 
-            // CameraBar
-            // 
-            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CameraBar.Location = new System.Drawing.Point(0, 0);
-            this.CameraBar.Name = "CameraBar";
-            this.CameraBar.Size = new System.Drawing.Size(500, 64);
-            this.CameraBar.TabIndex = 3;
-            // 
             // pHeader
             // 
             this.pHeader.BackColor = System.Drawing.Color.Transparent;
@@ -485,16 +494,6 @@ namespace BeeUi
             this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.pHeader.Size = new System.Drawing.Size(2240, 76);
             this.pHeader.TabIndex = 22;
-            // 
-            // btnHeaderBar1
-            // 
-            this.btnHeaderBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar1.Location = new System.Drawing.Point(1735, 0);
-            this.btnHeaderBar1.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar1.Name = "btnHeaderBar1";
-            this.btnHeaderBar1.Size = new System.Drawing.Size(505, 51);
-            this.btnHeaderBar1.TabIndex = 8;
-            this.btnHeaderBar1.Load += new System.EventHandler(this.btnHeaderBar1_Load);
             // 
             // EditTool
             // 

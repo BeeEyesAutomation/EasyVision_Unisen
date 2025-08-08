@@ -97,6 +97,7 @@ namespace BeeInterface
             this.ForeColor = Color.White;
 
             _textImageRelation = base.TextImageRelation;
+
             this.Resize += Button_Resize;
             this.SizeChanged += RJButton_SizeChanged;
             this.MarginChanged += RJButton_MarginChanged;
