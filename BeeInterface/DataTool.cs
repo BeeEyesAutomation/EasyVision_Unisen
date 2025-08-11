@@ -213,6 +213,7 @@ namespace BeeInterface
                 itemTool.ClScore = Color.Gray;
                 itemTool.ClStatus = Color.Gray;
                 itemTool.IndexTool = Index;
+                PropetyTool.Propety.Index = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
                 PropetyTool.Propety.SetModel();

@@ -1,21 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel; // LicenseManager
 using System.Windows.Forms;
 
 namespace BeeInterface
 {
-    public class DbTableLayoutPanel : TableLayoutPanel
+    public class TableLayoutPanel2 :  System.Windows.Forms.TableLayoutPanel
     {
-        public DbTableLayoutPanel()
+        private static bool InDesigner
+            => LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+
+        public TableLayoutPanel2()
         {
-            DoubleBuffered = true;
-            ResizeRedraw = true;
-            SetStyle(ControlStyles.AllPaintingInWmPaint |
-                     ControlStyles.OptimizedDoubleBuffer, true);
-            UpdateStyles();
+            // Tránh set style nặng ở ctor vì DesignMode ở đây không đáng tin với control lồng nhau
+            ResizeRedraw = true; // cái này nhẹ, giữ được
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            if (!InDesigner)
+            {
+                // Bật double buffer sau khi có handle
+                SetStyle(ControlStyles.AllPaintingInWmPaint |
+                         ControlStyles.OptimizedDoubleBuffer, true);
+                DoubleBuffered = true;
+                UpdateStyles();
+            }
         }
 
         protected override CreateParams CreateParams
@@ -23,11 +34,13 @@ namespace BeeInterface
             get
             {
                 var cp = base.CreateParams;
-                cp.Style |= 0x04000000;  // WS_CLIPSIBLINGS
-                cp.Style |= 0x02000000;  // WS_CLIPCHILDREN
+                if (!InDesigner)
+                {
+                    cp.Style |= 0x04000000; // WS_CLIPSIBLINGS
+                    cp.Style |= 0x02000000; // WS_CLIPCHILDREN
+                }
                 return cp;
             }
         }
     }
-
 }

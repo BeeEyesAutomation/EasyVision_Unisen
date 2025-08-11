@@ -25,7 +25,7 @@ namespace BeeInterface.GroupControl
            
            
 
-            Global.IndexToolSelected = -1;
+         //   Global.IndexToolSelected = -1;
          
         }
 
@@ -37,7 +37,7 @@ namespace BeeInterface.GroupControl
             {
                 BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety = Global.OldPropetyTool.Clone();
             }
-            Global.IndexToolSelected = -1;
+           // Global.IndexToolSelected = -1;
            
         }
     }

@@ -102,7 +102,7 @@ namespace BeeCore
                     this.Invalidate();
                     //gcBase = Graphics.FromImage(bmpBase);
                     //Rectangle rect = new Rectangle(0, 0, pT.Width - 2, (int)(pT.Height / 3.5));
-                    //gcBase.FillRectangle(new SolidBrush(colorTrack), rect);
+                    //gcBase.FillRectangle(new SolidBrrush(colorTrack), rect);
                     //gcBase.DrawImage(Properties.Resources.BID_SLIDER_SCALE_8PIX_W303, new Rectangle(0, (int)(pT.Height / 3.5), pT.Width - 2, pT.Height / 3));
 
 
@@ -210,6 +210,7 @@ namespace BeeCore
             if (Global.IsRun) return;
            // this.BackgroundImage = imgChoose;
             this.IsCLick = true;
+            Global.StatusDraw = StatusDraw.None;
             Global.IndexToolSelected = IndexTool;
             foreach (Control c in this.Parent.Controls)
             {
@@ -594,12 +595,7 @@ namespace BeeCore
 
         }
 
-        private void Score_ValueChanged(float obj)
-        {
-            Global.IndexToolSelected = IndexTool;
-          //  BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Score = (float)Score.Value;
-           
-        }
+      
         TextBox txtEdit = new TextBox();
         Point pFist = new Point(5, 5);
         PointF pEnd = new PointF(5,100);

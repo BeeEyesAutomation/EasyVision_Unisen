@@ -116,7 +116,8 @@ namespace BeeUi.Tool
                     File.Exists(@"Report\Default.mdf");
                 }
                 else
-                    MessageBox.Show("Emty File Report Default!");
+                    //MessageBox.Show("Emty File Report Default!");
+                return;
             }
             //Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\ChiTu\Codes\BeeIV2\bin\Release\Report\Default.mdf;Integrated Security=True;Connect Timeout=30
             String path = Path.Combine(Environment.CurrentDirectory, nameFileSQL);

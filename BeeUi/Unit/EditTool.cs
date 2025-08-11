@@ -37,7 +37,10 @@ namespace BeeUi
            
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
             _layout = new LayoutPersistence(this, key: "MainLayout");
-            _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
+            _layout.LoadDelayMs = 300;        // trễ 500ms sau Form.Shown
+            _layout.SplitterLocked = true;   // tuỳ chọn
+            _layout.EnableAuto();
+          ///  _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
                                   // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
 
         }
@@ -432,7 +435,20 @@ namespace BeeUi
 
             pInfor.Register("Dashboard", () => G.StatusDashboard);
             pInfor.Register("StepEdit", () => G.StepEdit);
-           
+            btnShowTop.Checked = Global.EditTool.pTop.Visible;
+            btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
+            btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
+
+            btnShowToolBar.Checked = btnShowToolBar.Checked;
+            if (Global.EditTool.pEdit.Width ==0)
+            {
+                btnShowToolBar.Checked = false;
+                //    Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
+            }
+            else
+            {
+                btnShowToolBar.Checked = true;
+            }
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
 
@@ -640,6 +656,123 @@ namespace BeeUi
         private void pInfor_SizeChanged(object sender, EventArgs e)
         {
             BeeCore.CustomGui.RoundRg(pInfor, 20);
+        }
+
+        private void resetUI_Click(object sender, EventArgs e)
+        {
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BeeInterface");
+            if (MessageBox.Show("Are You Sure!", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir, true);
+                    AppRestart.Delayed(2000);
+                   // Application.Restart(); Environment.Exit(0);
+                }
+            }
+        }
+
+        private void UnlockSpiltter_Click(object sender, EventArgs e)
+        {
+            _layout.SplitterLocked = !_layout.SplitterLocked;
+            
+            if (!_layout.SplitterLocked)
+                UnlockSpiltter.Text = "Lock UI";
+            else
+                UnlockSpiltter.Text = "UnLock";
+        }
+
+        private async void btnFull_Click(object sender, EventArgs e)
+        {
+            btnFull.Checked=!btnFull.Checked; 
+            pTop.Visible = !btnFull.Checked;
+           pHeader.Visible = !btnFull.Checked;
+            View.pBtn.Visible = !btnFull.Checked;
+            btnShowTop.Checked = Global.EditTool.pTop.Visible;
+            btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
+            btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
+            await Task.Delay(100);
+            Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+        }
+
+        private void btnShowTop_Click(object sender, EventArgs e)
+        {
+            btnShowTop.Checked = !btnShowTop.Checked;
+            Global.EditTool.pTop.Visible= btnShowTop.Checked ;
+          
+        }
+
+        private void btnShowDashBoard_Click(object sender, EventArgs e)
+        {
+            btnShowDashBoard.Checked = !btnShowDashBoard.Checked;
+            Global.EditTool.pInfor.Visible= btnShowDashBoard.Checked ;
+            
+        }
+
+        private void btnMenu_Click_1(object sender, EventArgs e)
+        {
+            btnMenu.Checked = !btnMenu.Checked;
+           Global.EditTool.View.pBtn.Visible = btnMenu.Checked ;
+        }
+
+        private void btnShowToolBar_Click(object sender, EventArgs e)
+        {
+            btnShowToolBar.Checked = !btnShowToolBar.Checked;
+            if (!btnShowToolBar.Checked)
+            {
+                Global.WidthOldTools = Global.EditTool.pEdit.Width;
+                Global.EditTool.pEdit.Width = 0;
+                //    Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
+            }
+            else
+            {
+                if (Global.WidthOldTools == 0) Global.WidthOldTools = 400;
+                Global.EditTool.pEdit.Width = Global.WidthOldTools;
+            }
+
+        }
+
+        private void saveToolStrip_Click(object sender, EventArgs e)
+        {
+            SaveData.Project(Global.Project);
+            MessageBox.Show("Save Complete");
+        }
+
+        private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFile=new SaveFileDialog();
+            saveFile.Title = "Save As Program";
+            saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                Directory.CreateDirectory("Program\\" + Global.Project);
+                Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
+                //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+
+                G.Header.RefreshListPJ();
+
+                if (!G.Header.workLoadProgram.IsBusy)
+                    G.Header.workLoadProgram.RunWorkerAsync();
+              
+            }
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Title = "New Program";
+            BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
+            saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                Directory.CreateDirectory("Program\\" + Global.Project);
+                Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
+                G.Header.RefreshListPJ();
+                if (!G.Header.workLoadProgram.IsBusy)
+                    G.Header.workLoadProgram.RunWorkerAsync();
+            }
         }
 
         private void tmReaPLC_Tick(object sender, EventArgs e)

@@ -42,6 +42,7 @@ namespace BeeUi
             this.txtRecept = new System.Windows.Forms.ToolStripStatusLabel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pName = new System.Windows.Forms.Panel();
+            this.lbTool = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.splitter7 = new System.Windows.Forms.Splitter();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -60,14 +61,34 @@ namespace BeeUi
             this.button8 = new System.Windows.Forms.Button();
             this.pTop = new System.Windows.Forms.Panel();
             this.splitter5 = new System.Windows.Forms.Splitter();
+            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
             this.splitter4 = new System.Windows.Forms.Splitter();
-            this.lbTool = new BeeInterface.AutoFontLabel();
-            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnShowTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnShowDashBoard = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnShowToolBar = new System.Windows.Forms.ToolStripMenuItem();
+            this.customUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UnlockSpiltter = new System.Windows.Forms.ToolStripMenuItem();
+            this.screenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x600ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1440ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetUI = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.showsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.girdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.areaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rjButton1 = new BeeInterface.RJButton();
+            this.btnFull = new System.Windows.Forms.ToolStripMenuItem();
             this.pInfor = new BeeUi.ViewHost();
             this.pEditTool = new BeeUi.ViewHost();
             this.CameraBar = new BeeUi.Unit.Cameras();
@@ -82,6 +103,7 @@ namespace BeeUi
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
+            this.mouseLeft.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -172,6 +194,19 @@ namespace BeeUi
             this.pName.TabIndex = 0;
             this.pName.Visible = false;
             this.pName.Paint += new System.Windows.Forms.PaintEventHandler(this.pName_Paint);
+            // 
+            // lbTool
+            // 
+            this.lbTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbTool.AutoFont = true;
+            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
+            this.lbTool.Location = new System.Drawing.Point(56, -1);
+            this.lbTool.Name = "lbTool";
+            this.lbTool.Size = new System.Drawing.Size(444, 44);
+            this.lbTool.TabIndex = 1;
+            this.lbTool.Text = "Tool";
             // 
             // iconTool
             // 
@@ -336,6 +371,19 @@ namespace BeeUi
             this.splitter5.TabIndex = 10;
             this.splitter5.TabStop = false;
             // 
+            // autoFontLabel1
+            // 
+            this.autoFontLabel1.AutoFont = true;
+            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
+            this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
+            this.autoFontLabel1.Location = new System.Drawing.Point(70, 0);
+            this.autoFontLabel1.Name = "autoFontLabel1";
+            this.autoFontLabel1.Size = new System.Drawing.Size(365, 51);
+            this.autoFontLabel1.TabIndex = 9;
+            this.autoFontLabel1.Text = "Vision Sensor ";
+            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // picLogo
             // 
             this.picLogo.BackColor = System.Drawing.Color.Transparent;
@@ -386,31 +434,168 @@ namespace BeeUi
             this.splitter4.TabIndex = 28;
             this.splitter4.TabStop = false;
             // 
-            // lbTool
+            // mouseLeft
             // 
-            this.lbTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbTool.AutoFont = true;
-            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
-            this.lbTool.Location = new System.Drawing.Point(56, -1);
-            this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(444, 44);
-            this.lbTool.TabIndex = 1;
-            this.lbTool.Text = "Tool";
+            this.mouseLeft.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mouseLeft.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnNew,
+            this.saveToolStrip,
+            this.saveAsTool,
+            this.btnFull,
+            this.toolStripMenuItem1,
+            this.showsToolStripMenuItem,
+            this.customUIToolStripMenuItem});
+            this.mouseLeft.Name = "contextMenuStrip2";
+            this.mouseLeft.Size = new System.Drawing.Size(227, 205);
             // 
-            // autoFontLabel1
+            // btnNew
             // 
-            this.autoFontLabel1.AutoFont = true;
-            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
-            this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
-            this.autoFontLabel1.Location = new System.Drawing.Point(70, 0);
-            this.autoFontLabel1.Name = "autoFontLabel1";
-            this.autoFontLabel1.Size = new System.Drawing.Size(365, 51);
-            this.autoFontLabel1.TabIndex = 9;
-            this.autoFontLabel1.Text = "Vision Sensor ";
-            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNew.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.btnNew.Size = new System.Drawing.Size(226, 22);
+            this.btnNew.Text = "New";
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnShowTop,
+            this.btnShowDashBoard,
+            this.btnMenu,
+            this.btnShowToolBar});
+            this.toolStripMenuItem1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(226, 22);
+            this.toolStripMenuItem1.Text = "View";
+            // 
+            // btnShowTop
+            // 
+            this.btnShowTop.Name = "btnShowTop";
+            this.btnShowTop.Size = new System.Drawing.Size(180, 22);
+            this.btnShowTop.Text = "Top Bar";
+            this.btnShowTop.Click += new System.EventHandler(this.btnShowTop_Click);
+            // 
+            // btnShowDashBoard
+            // 
+            this.btnShowDashBoard.Name = "btnShowDashBoard";
+            this.btnShowDashBoard.Size = new System.Drawing.Size(180, 22);
+            this.btnShowDashBoard.Text = "Dash Board";
+            this.btnShowDashBoard.Click += new System.EventHandler(this.btnShowDashBoard_Click);
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(180, 22);
+            this.btnMenu.Text = "Menu Bar";
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
+            // 
+            // btnShowToolBar
+            // 
+            this.btnShowToolBar.Name = "btnShowToolBar";
+            this.btnShowToolBar.Size = new System.Drawing.Size(180, 22);
+            this.btnShowToolBar.Text = "Tool Bar";
+            this.btnShowToolBar.Click += new System.EventHandler(this.btnShowToolBar_Click);
+            // 
+            // customUIToolStripMenuItem
+            // 
+            this.customUIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.UnlockSpiltter,
+            this.screenToolStripMenuItem,
+            this.resetUI});
+            this.customUIToolStripMenuItem.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.customUIToolStripMenuItem.Name = "customUIToolStripMenuItem";
+            this.customUIToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.customUIToolStripMenuItem.Text = "Custom UI";
+            // 
+            // UnlockSpiltter
+            // 
+            this.UnlockSpiltter.Name = "UnlockSpiltter";
+            this.UnlockSpiltter.Size = new System.Drawing.Size(180, 22);
+            this.UnlockSpiltter.Text = "Unlock";
+            this.UnlockSpiltter.Click += new System.EventHandler(this.UnlockSpiltter_Click);
+            // 
+            // screenToolStripMenuItem
+            // 
+            this.screenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x600ToolStripMenuItem,
+            this.x768ToolStripMenuItem,
+            this.x1440ToolStripMenuItem});
+            this.screenToolStripMenuItem.Name = "screenToolStripMenuItem";
+            this.screenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.screenToolStripMenuItem.Text = "Screen";
+            // 
+            // x600ToolStripMenuItem
+            // 
+            this.x600ToolStripMenuItem.Name = "x600ToolStripMenuItem";
+            this.x600ToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.x600ToolStripMenuItem.Text = "800x600";
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.x768ToolStripMenuItem.Text = "1024x768";
+            // 
+            // x1440ToolStripMenuItem
+            // 
+            this.x1440ToolStripMenuItem.Name = "x1440ToolStripMenuItem";
+            this.x1440ToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.x1440ToolStripMenuItem.Text = "1920x1440";
+            // 
+            // resetUI
+            // 
+            this.resetUI.Name = "resetUI";
+            this.resetUI.Size = new System.Drawing.Size(180, 22);
+            this.resetUI.Text = "Reset Default";
+            this.resetUI.Click += new System.EventHandler(this.resetUI_Click);
+            // 
+            // saveAsTool
+            // 
+            this.saveAsTool.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.saveAsTool.Name = "saveAsTool";
+            this.saveAsTool.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.saveAsTool.Size = new System.Drawing.Size(226, 22);
+            this.saveAsTool.Text = "Save As";
+            this.saveAsTool.Click += new System.EventHandler(this.saveAsToolStripMenuItem1_Click);
+            // 
+            // saveToolStrip
+            // 
+            this.saveToolStrip.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.saveToolStrip.Name = "saveToolStrip";
+            this.saveToolStrip.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStrip.Size = new System.Drawing.Size(226, 22);
+            this.saveToolStrip.Text = "Save";
+            this.saveToolStrip.Click += new System.EventHandler(this.saveToolStrip_Click);
+            // 
+            // showsToolStripMenuItem
+            // 
+            this.showsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.centerToolStripMenuItem,
+            this.girdToolStripMenuItem,
+            this.areaToolStripMenuItem});
+            this.showsToolStripMenuItem.Name = "showsToolStripMenuItem";
+            this.showsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.showsToolStripMenuItem.Text = "Shows";
+            // 
+            // centerToolStripMenuItem
+            // 
+            this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
+            this.centerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.centerToolStripMenuItem.Text = "Center";
+            // 
+            // girdToolStripMenuItem
+            // 
+            this.girdToolStripMenuItem.Name = "girdToolStripMenuItem";
+            this.girdToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.girdToolStripMenuItem.Text = "Gird";
+            // 
+            // areaToolStripMenuItem
+            // 
+            this.areaToolStripMenuItem.Name = "areaToolStripMenuItem";
+            this.areaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.areaToolStripMenuItem.Text = "Area";
             // 
             // rjButton1
             // 
@@ -460,6 +645,15 @@ namespace BeeUi
             this.rjButton1.TextColor = System.Drawing.Color.White;
             this.rjButton1.UseVisualStyleBackColor = false;
             this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
+            // 
+            // btnFull
+            // 
+            this.btnFull.Image = global::BeeUi.Properties.Resources.Full_Screen;
+            this.btnFull.Name = "btnFull";
+            this.btnFull.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.btnFull.Size = new System.Drawing.Size(226, 22);
+            this.btnFull.Text = "Full Screen";
+            this.btnFull.Click += new System.EventHandler(this.btnFull_Click);
             // 
             // pInfor
             // 
@@ -527,6 +721,7 @@ namespace BeeUi
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.ContextMenuStrip = this.mouseLeft;
             this.Controls.Add(this.pView);
             this.Controls.Add(this.splitter3);
             this.Controls.Add(this.pInfor);
@@ -551,6 +746,7 @@ namespace BeeUi
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
+            this.mouseLeft.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -598,5 +794,26 @@ namespace BeeUi
         private System.Windows.Forms.Splitter splitter6;
         private System.Windows.Forms.Splitter splitter7;
         public AutoFontLabel lbTool;
+        private System.Windows.Forms.ContextMenuStrip mouseLeft;
+        private System.Windows.Forms.ToolStripMenuItem btnNew;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem btnShowTop;
+        private System.Windows.Forms.ToolStripMenuItem btnShowDashBoard;
+        private System.Windows.Forms.ToolStripMenuItem btnMenu;
+        private System.Windows.Forms.ToolStripMenuItem btnShowToolBar;
+        private System.Windows.Forms.ToolStripMenuItem customUIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UnlockSpiltter;
+        private System.Windows.Forms.ToolStripMenuItem screenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x600ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x768ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x1440ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetUI;
+        private System.Windows.Forms.ToolStripMenuItem saveAsTool;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStrip;
+        private System.Windows.Forms.ToolStripMenuItem showsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem centerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem girdToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem areaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btnFull;
     }
 }

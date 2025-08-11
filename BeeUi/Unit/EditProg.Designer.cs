@@ -1,4 +1,5 @@
 ﻿using BeeInterface;
+using System.Windows.Forms;
 
 namespace BeeUi.Unit
 {
@@ -8,8 +9,8 @@ namespace BeeUi.Unit
         #region Component Designer generated code
 
         #endregion
-        private DbTableLayoutPanel tableLayoutPanel1;
-        public DbTableLayoutPanel pMenu;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        public  System.Windows.Forms.TableLayoutPanel pMenu;
         private System.Windows.Forms.SaveFileDialog saveFile;
         public RJButton btnSave;
         private RJButton btnMenu;

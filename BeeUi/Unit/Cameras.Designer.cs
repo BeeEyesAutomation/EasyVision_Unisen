@@ -1,5 +1,6 @@
 ﻿using BeeGlobal;
 using BeeInterface;
+using System.Windows.Forms;
 
 namespace BeeUi.Unit
 {
@@ -32,7 +33,7 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cameras));
-            this.pCamera = new BeeInterface.DbTableLayoutPanel();
+            this.pCamera = new  System.Windows.Forms.TableLayoutPanel();
             this.btnHistory = new BeeInterface.RJButton();
             this.btnCamera4 = new BeeInterface.RJButton();
             this.btnCamera3 = new BeeInterface.RJButton();
@@ -350,7 +351,7 @@ namespace BeeUi.Unit
         }
 
         #endregion
-        private DbTableLayoutPanel pCamera;
+        private  System.Windows.Forms.TableLayoutPanel pCamera;
         public RJButton btnCamera2;
         public RJButton btnCamera1;
         public RJButton btnCamera4;

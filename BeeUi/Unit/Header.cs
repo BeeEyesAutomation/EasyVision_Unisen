@@ -669,7 +669,7 @@ txtQrCode.Focus();
         private Timer fadeTimer;
         private float opacity = 0.0f; // Bắt đầu từ 0
       
-        private void AnimateColumn(TableLayoutPanel tableLayoutPanel, int columnIndex, bool show)
+        private void AnimateColumn( System.Windows.Forms.TableLayoutPanel tableLayoutPanel, int columnIndex, bool show)
         {
             Timer timer = new Timer();
             timer.Interval = 10; // Thời gian refresh animation

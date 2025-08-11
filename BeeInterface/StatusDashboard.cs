@@ -65,7 +65,7 @@ namespace BeeInterface
         [Category("Appearance")] public float AutoInfoFontMax { get; set; } = 48f;
 
         private Color _borderColor = Color.LightGray;
-        private int _borderThickness = 1;
+        private int _borderThickness = 3;
 
         [Category("Appearance")]
         public Color BorderLineColor { get => _borderColor; set { _borderColor = value; Invalidate(); } }

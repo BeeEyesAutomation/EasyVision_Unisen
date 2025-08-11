@@ -32,7 +32,7 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HideBar));
-            this.tableLayoutPanel1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnExit = new BeeInterface.RJButton();
             this.btnShuttdown = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
@@ -518,7 +518,7 @@ namespace BeeUi.Unit
         }
 
         #endregion
-        private DbTableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public RJButton btnShowDashBoard;
         public RJButton btnShowTop;
         public RJButton btnfull;

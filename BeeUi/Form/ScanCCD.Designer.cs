@@ -1,6 +1,7 @@
 ﻿
 using BeeGlobal;
 using BeeInterface;
+using System.Windows.Forms;
 
 namespace BeeUi
 {
@@ -39,7 +40,7 @@ namespace BeeUi
             this.btnClose = new System.Windows.Forms.Button();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.work = new System.ComponentModel.BackgroundWorker();
-            this.pCamera = new DbTableLayoutPanel();
+            this.pCamera = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCamera4 = new BeeInterface.RJButton();
             this.btnCamera1 = new BeeInterface.RJButton();
             this.btnCamera2 = new BeeInterface.RJButton();
@@ -54,15 +55,15 @@ namespace BeeUi
             this.btnShowList = new System.Windows.Forms.Button();
             this.cbCCD = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnDisConnect = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new DbTableLayoutPanel();
+            this.tableLayoutPanel2 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnUSB2_0 = new BeeInterface.RJButton();
             this.btnCameraTiny = new BeeInterface.RJButton();
             this.btnGigE = new BeeInterface.RJButton();
-            this.tableLayoutPanel3 = new DbTableLayoutPanel();
-            this.tableLayoutPanel4 = new DbTableLayoutPanel();
-            this.tableLayoutPanel5 = new DbTableLayoutPanel();
+            this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel5 = new  System.Windows.Forms.TableLayoutPanel();
             this.pCamera.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -646,7 +647,7 @@ namespace BeeUi
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button btnShowList;
-        private DbTableLayoutPanel pCamera;
+        private  System.Windows.Forms.TableLayoutPanel pCamera;
         public RJButton btnGigE;
         public RJButton btnUSB2_0;
         public RJButton btnCameraTiny;
@@ -654,16 +655,16 @@ namespace BeeUi
         public RJButton btnCamera1;
         public RJButton btnCamera2;
         public RJButton btnCamera3;
-        private DbTableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btnDisConnect;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Button button1;
         public System.Windows.Forms.ComboBox cbReSolution;
-        private DbTableLayoutPanel tableLayoutPanel2;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         public System.ComponentModel.BackgroundWorker workConAll;
-        private DbTableLayoutPanel tableLayoutPanel3;
-        private DbTableLayoutPanel tableLayoutPanel4;
-        private DbTableLayoutPanel tableLayoutPanel5;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
     }
     }

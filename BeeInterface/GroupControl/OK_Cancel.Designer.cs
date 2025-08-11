@@ -1,4 +1,6 @@
-﻿namespace BeeInterface.GroupControl
+﻿using System.Windows.Forms;
+
+namespace BeeInterface.GroupControl
 {
     partial class OK_Cancel
     {
@@ -28,7 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.layout = new DbTableLayoutPanel();
+            this.layout = new  System.Windows.Forms.TableLayoutPanel();
             this.btnOK = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
             this.layout.SuspendLayout();
@@ -123,7 +125,7 @@
 
         #endregion
 
-        private DbTableLayoutPanel layout;
+        private  System.Windows.Forms.TableLayoutPanel layout;
         private RJButton btnOK;
         private RJButton btnCancel;
     }

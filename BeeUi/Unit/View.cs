@@ -1,7 +1,11 @@
 ﻿using BeeCore;
-
+using BeeCore.Funtion;
+using BeeGlobal;
+using BeeInterface;
 using BeeUi.Common;
 using BeeUi.Commons;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -20,20 +24,17 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Web;
+using System.Web.UI;
 using System.Windows.Forms;
+using System.Windows.Markup;
+using Control = System.Windows.Forms.Control;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
-using BeeCore.Funtion;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using System.Timers;
-using System.Windows.Markup;
-
-using System.Web;
-using BeeGlobal;
-using BeeInterface;
-using Microsoft.VisualBasic;
+using UserControl = System.Windows.Forms.UserControl;
 namespace BeeUi
 {
     [Serializable()]
@@ -121,8 +122,8 @@ namespace BeeUi
         public View()
         {
             InitializeComponent();
-            _layout = new LayoutPersistence(this, key: "ViewLayout");
-            _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
+          //  _layout = new LayoutPersistence(this, key: "ViewLayout");
+            //_layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
             this.BackColor = Color.Transparent;
             KeyboardListener.s_KeyEventHandler += new EventHandler(KeyboardListener_s_KeyEventHandler);
             tmKey.Tick += TmKey_Tick;
@@ -1505,7 +1506,7 @@ namespace BeeUi
             if (Global.StatusDraw != StatusDraw.None)
             imgView.Invalidate();
         }
-
+        Control controlEdit;
         private void Global_IndexToolChanged(int obj)
         {if (!Global.IsEditTool) return;
             if (Global.IndexToolSelected == -1) return;
@@ -1518,12 +1519,13 @@ namespace BeeUi
                 //   if (Score.Enabled||Global.IsRun) return;
                 Global.TypeCrop = TypeCrop.Area;
                 Global.EditTool.pEditTool.Controls.Clear();
-                Control control = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
-              
-                EditTool editTool = Global.EditTool as EditTool;
+                controlEdit = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
+                controlEdit.Enabled = false;
+                tmEnableControl.Enabled = true;
+                  EditTool editTool = Global.EditTool as EditTool;
                 if (!editTool.pEditTool.Show(name))
                 {
-                    editTool.pEditTool.Register(name, () => control);
+                    editTool.pEditTool.Register(name, () => controlEdit);
                     editTool.pEditTool.Show(name);
                 }    
                   
@@ -1541,7 +1543,7 @@ namespace BeeUi
                 Global.EditTool.View.imgView.Invalidate();
                 Global.EditTool.View.imgView.Update();
               
-                Global.EditTool.View.toolEdit = control;
+                Global.EditTool.View.toolEdit = controlEdit;
 
                 Global.ParaCommon.SizeCCD = new Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height);
 
@@ -3097,6 +3099,27 @@ namespace BeeUi
                 Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
            else
                 Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+
+        }
+
+        private void tmEnableControl_Tick(object sender, EventArgs e)
+        {
+            controlEdit.Enabled = true;
+            tmEnableControl.Enabled = false;
+        }
+
+        private void pView_SizeChanged(object sender, EventArgs e)
+        {
+            imgView.Size = pView.Size;
+        }
+
+        private void contextMenuStrip2_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
         }
 

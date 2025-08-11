@@ -214,7 +214,7 @@ namespace BeeCore
                             }
 
 
-
+                            Global.IsIntialPython = true;
 
 
                         }

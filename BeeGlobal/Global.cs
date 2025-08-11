@@ -102,6 +102,7 @@ namespace BeeGlobal
         public static Color ColorNone = Color.Gray;
         public static TypeCrop _TypeCrop = TypeCrop.Crop;
         public static event Action<TypeCrop> TypeCropChanged;
+        public static bool IsIntialPython = false;
         public static TypeCrop TypeCrop
         {
             get => _TypeCrop;

@@ -65,6 +65,7 @@
     <Compile Include="AdjustBar.Designer.cs">
       <DependentUpon>AdjustBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppRestart.cs" />
     <Compile Include="AutoLabel.cs">
       <SubType>Component</SubType>
     </Compile>

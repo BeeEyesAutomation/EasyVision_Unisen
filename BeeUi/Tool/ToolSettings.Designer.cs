@@ -35,7 +35,7 @@ namespace BeeUi.Tool
         {
             this.pAllTool = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.pBtn = new BeeInterface.DbTableLayoutPanel();
+            this.pBtn = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCopy = new BeeInterface.RJButton();
             this.btnEnEdit = new BeeInterface.RJButton();
             this.btnAdd = new BeeInterface.RJButton();
@@ -324,7 +324,7 @@ namespace BeeUi.Tool
         public RJButton btnDelect;
         public RJButton btnCopy;
         public RJButton btnEnEdit;
-        public DbTableLayoutPanel pBtn;
+        public  System.Windows.Forms.TableLayoutPanel pBtn;
         private System.Windows.Forms.Splitter splitter1;
     }
 }

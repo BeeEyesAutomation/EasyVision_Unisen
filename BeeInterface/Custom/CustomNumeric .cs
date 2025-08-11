@@ -103,11 +103,11 @@ namespace BeeInterface
         }
         private RJButton btnPlus;
         private RJButton btnSub;
-        private DbTableLayoutPanel lay;
+        private  System.Windows.Forms.TableLayoutPanel lay;
 
         private void InitializeComponent()
         {
-            this.lay = new BeeInterface.DbTableLayoutPanel();
+            this.lay = new  System.Windows.Forms.TableLayoutPanel();
             this.btnSub = new BeeInterface.RJButton();
             this.btnPlus = new BeeInterface.RJButton();
             this.txt = new System.Windows.Forms.TextBox();
@@ -144,10 +144,10 @@ namespace BeeInterface
             this.btnSub.AutoImageMaxRatio = 0.75F;
             this.btnSub.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnSub.AutoImageTint = true;
-            this.btnSub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnSub.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnSub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnSub.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnSub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSub.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnSub.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnSub.BorderRadius = 10;
             this.btnSub.BorderSize = 1;
             this.btnSub.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
@@ -263,6 +263,7 @@ namespace BeeInterface
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.Controls.Add(this.lay);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);

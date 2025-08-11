@@ -41,6 +41,12 @@ namespace BeeInterface
             btn.BorderColor = System.Drawing.Color.Silver;
           btn.BorderRadius = 5;
            btn.BorderSize = 1;
+            btn.AutoFont = true;
+            btn.AutoFontMin = 10;
+            btn.AutoFontWidthRatio = 1;
+            btn.AutoFontHeightRatio = 0.8f;
+            btn.ImageTextSpacing = 1;
+            btn.AutoImageMaxRatio = 0.8f;
            btn.FlatAppearance.BorderSize = 0;
            btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
            btn.ForeColor = System.Drawing.Color.White;

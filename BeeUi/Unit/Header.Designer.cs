@@ -55,7 +55,7 @@ namespace BeeUi.Common
             this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.workSaveProject = new System.ComponentModel.BackgroundWorker();
             this.btnMode = new BeeInterface.RJButton();
-            this.pModel = new BeeInterface.DbTableLayoutPanel();
+            this.pModel = new  System.Windows.Forms.TableLayoutPanel();
             this.btnEnQrCode = new BeeInterface.RJButton();
             this.btnShowList = new BeeInterface.RJButton();
             this.txtQrCode = new BeeInterface.TextBoxAuto();
@@ -557,7 +557,7 @@ namespace BeeUi.Common
         private System.Windows.Forms.TextBox textBox5;
         public System.Windows.Forms.Panel pPO;
         private System.Windows.Forms.Panel panel4;
-        public DbTableLayoutPanel pModel;
+        public  System.Windows.Forms.TableLayoutPanel pModel;
         private System.Windows.Forms.Timer tmIninitial;
         public System.Windows.Forms.Timer tmShow;
         private Unit.EditProg editProg1;

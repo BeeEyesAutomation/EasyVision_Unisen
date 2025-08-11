@@ -8,9 +8,11 @@ using System.Windows.Forms;
 namespace BeeInterface
 {
     /// <summary>
-    /// Lưu/khôi phục layout cho cây control trong host (Width/Height/Bounds + SplitterDistance)
-    /// + Lock/Unlock kéo SplitContainer (chặn cứng bằng message filter).
-    /// Tự LƯU ngay sau thay đổi (debounce), không chờ Closing form.
+    /// Lưu/khôi phục layout (Width/Height/Bounds + SplitterDistance).
+    /// - Auto-save (debounce) sau thay đổi.
+    /// - Lock/Unlock SplitContainer (message filter chặn cả client & non-client).
+    /// - Load trễ sau Form.Shown (LoadDelayMs).
+    /// - QUÉT TỪ FORM/TOPLEVEL để khoá hết splitter trong toàn bộ cây (kể cả UserControl lồng nhau).
     /// </summary>
     public sealed class LayoutPersistence
     {
@@ -26,32 +28,31 @@ namespace BeeInterface
         private bool _splitterLocked;
         private readonly SplitterDragMessageFilter _filter = new SplitterDragMessageFilter();
 
-        // Auto-save sau thay đổi (debounce)
+        // Auto-save debounce
         private readonly Timer _saveTimer;
         private bool _dirtyPending;
-
-        /// <summary>Thời gian trễ gom thay đổi trước khi ghi file (ms).</summary>
+        private int _autoSaveDebounceMs = 400;
         public int AutoSaveDebounceMs
         {
             get => _autoSaveDebounceMs;
-            set
-            {
-                _autoSaveDebounceMs = Math.Max(0, value);
-                _saveTimer.Interval = _autoSaveDebounceMs;
-            }
+            set { _autoSaveDebounceMs = Math.Max(0, value); _saveTimer.Interval = Math.Max(1, _autoSaveDebounceMs); }
         }
-        private int _autoSaveDebounceMs = 400;
 
-        /// <summary>Khoá/mở khoá kéo splitter.</summary>
+        // Load trễ sau Shown
+        public bool IsLoad = false;
+        private readonly Timer _loadTimer;
+        private int _loadDelayMs;
+        public int LoadDelayMs
+        {
+            get => _loadDelayMs;
+            set { _loadDelayMs = Math.Max(0, value); if (_loadTimer != null) _loadTimer.Interval = Math.Max(1, _loadDelayMs); }
+        }
+
+        // Khoá/mở khoá splitter (sâu)
         public bool SplitterLocked
         {
             get => _splitterLocked;
-            set
-            {
-                if (_splitterLocked == value) return;
-                if (value) LockSplitters();
-                else UnlockSplitters();
-            }
+            set { if (_splitterLocked != value) { if (value) LockAllSplittersDeep(); else UnlockSplitters(); } }
         }
 
         public LayoutPersistence(Control host, string key = null)
@@ -62,12 +63,16 @@ namespace BeeInterface
                 : key;
 
             // Debounce saver
-            _saveTimer = new Timer { Interval = _autoSaveDebounceMs };
+            _saveTimer = new Timer { Interval = Math.Max(1, _autoSaveDebounceMs) };
             _saveTimer.Tick += (s, e) =>
             {
                 _saveTimer.Stop();
                 if (_dirtyPending && !_applying) { _dirtyPending = false; SaveNow(); }
             };
+
+            // Load delay timer
+            _loadTimer = new Timer { Interval = 1 };
+            _loadTimer.Tick += (s, e) => { _loadTimer.Stop(); if (!_applying) LoadNow(); };
 
             // Theo dõi vòng đời/child
             _host.HandleCreated += (_, __) => TryHookForm();
@@ -79,16 +84,16 @@ namespace BeeInterface
             _host.Resize += (_, __) => SaveSoon();
             _host.Layout += (_, __) => SaveSoon();
 
-            // Gắn watcher cho mọi control hiện có
+            // Watch mọi control hiện có (phạm vi _host) để lưu layout
             WatchTree(_host, attach: true);
 
-            // SplitContainer hiện có
-            HookAllSplitContainers(_host);
+            // QUÉT SPLITTER từ Form/TopLevel ngay từ đầu (toàn cây)
+            HookAllSplitContainers(GetScanRoot());
 
             TryHookForm();
         }
 
-        // ====== Public API ======
+        // ===== Public API =====
         public void EnableAuto() => TryHookForm(force: true);
 
         public void LoadNow()
@@ -98,7 +103,7 @@ namespace BeeInterface
             try
             {
                 var path = GetLayoutFilePath();
-                if (!File.Exists(path)) return;
+                if (!File.Exists(path)) { IsLoad = true; return; }
 
                 var map = ReadMap(path);
                 _host.SuspendLayout();
@@ -107,19 +112,23 @@ namespace BeeInterface
                 _host.PerformLayout();
                 _host.Invalidate();
                 _host.Update();
+
+                // Sau khi apply, rescan để chắc đã hook đủ mọi splitter
+                RescanSplitContainers();
+
+                IsLoad = true;
             }
             finally { _applying = false; }
         }
 
-        /// <summary>Lưu ngay (không debounce).</summary>
         public void SaveNow()
         {
-            if (_applying) return;
+            if (_applying || !IsLoad) return;
 
             var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             CaptureRecursive(_host, _host, map);
 
-            foreach (var sp in FindAllSplitContainers(_host))
+            foreach (var sp in FindAllSplitContainers(_host)) // chỉ lưu layout thuộc phạm vi _host
             {
                 string path = BuildPath(_host, sp);
                 map[path + "|Split"] = sp.SplitterDistance.ToString();
@@ -127,18 +136,23 @@ namespace BeeInterface
             WriteMap(GetLayoutFilePath(), map);
         }
 
-        /// <summary>Đánh dấu cần lưu, sẽ lưu sau AutoSaveDebounceMs ms.</summary>
         public void SaveSoon()
         {
-            if (_applying) return;
+            if (_applying || !IsLoad) return;
             _dirtyPending = true;
             _saveTimer.Stop();
             _saveTimer.Start();
         }
 
-        // ===== Splitter lock/unlock (cứng) =====
-        public void LockSplitters()
+        // ===== Lock/Unlock (sâu) =====
+        public void LockAllSplittersDeep(bool scanFromFormRoot = true)
         {
+            var root = scanFromFormRoot ? GetScanRoot() : _host;
+
+            // Rescan trước khi khóa
+            foreach (var sp in new List<SplitContainer>(_knownSplits)) UnhookSplit(sp);
+            HookAllSplitContainers(root);
+
             _splitterLocked = true;
 
             _filter.Enable();
@@ -151,6 +165,8 @@ namespace BeeInterface
 
                 sp.IsSplitterFixed = true;
                 sp.Cursor = Cursors.Default;
+                sp.Panel1.Cursor = Cursors.Default;
+                sp.Panel2.Cursor = Cursors.Default;
             }
         }
 
@@ -165,11 +181,13 @@ namespace BeeInterface
             {
                 sp.IsSplitterFixed = false;
                 sp.Cursor = Cursors.VSplit;
+                sp.Panel1.Cursor = Cursors.Default;
+                sp.Panel2.Cursor = Cursors.Default;
             }
             _lockedDistances.Clear();
         }
 
-        // ===== Hook Form (chỉ load sau Shown; KHÔNG save khi Closing) =====
+        // ===== Hook Form (load sau Shown, rescan toàn cây) =====
         private void TryHookForm(bool force = false)
         {
             if (_hooked && !force) return;
@@ -184,22 +202,40 @@ namespace BeeInterface
             {
                 if (loaded) return;
                 loaded = true;
-                LoadNow(); // có size thật rồi mới apply
+
+                RescanSplitContainers(); // quét lại sau khi UI dựng xong
+
+                form.BeginInvoke((MethodInvoker)(() =>
+                {
+                    if (_loadDelayMs <= 0) LoadNow();
+                    else { _loadTimer.Interval = Math.Max(1, _loadDelayMs); _loadTimer.Start(); }
+                }));
             };
-            // KHÔNG đăng ký FormClosing -> không save lúc đóng nữa
+
+            // Bắt splitter thêm/loại bỏ động ở cấp Form
+            form.ControlAdded += (_, ce) => HookAllSplitContainers(ce.Control);
+            form.ControlRemoved += (_, ce) => UnhookAllSplitContainers(ce.Control);
+
+            form.Disposed += (_, __) =>
+            {
+                try { _loadTimer?.Stop(); } catch { }
+                try { _saveTimer?.Stop(); } catch { }
+                try { _filter?.Disable(); } catch { }
+            };
         }
 
-        // ===== Track splitters & controls động =====
+        // ===== Track động trong _host (phục vụ save layout) =====
         private void Host_ControlAddedRecursive(object sender, ControlEventArgs e)
         {
             WatchTree(e.Control, attach: true);
-            HookAllSplitContainers(e.Control);
+            HookAllSplitContainers(e.Control); // nếu nhánh này có splitter
 
             e.Control.ControlAdded += Host_ControlAddedRecursive;
             e.Control.ControlRemoved += Host_ControlRemovedRecursive;
 
             SaveSoon();
         }
+
         private void Host_ControlRemovedRecursive(object sender, ControlEventArgs e)
         {
             UnwatchTree(e.Control);
@@ -211,15 +247,21 @@ namespace BeeInterface
             SaveSoon();
         }
 
+        // ===== Hook/Unhook splitter =====
         private void HookAllSplitContainers(Control root)
         {
-            foreach (var sp in FindAllSplitContainers(root))
-                HookSplit(sp);
+            foreach (var sp in FindAllSplitContainers(root)) HookSplit(sp);
         }
+
         private void UnhookAllSplitContainers(Control root)
         {
-            foreach (var sp in FindAllSplitContainers(root))
-                UnhookSplit(sp);
+            foreach (var sp in FindAllSplitContainers(root)) UnhookSplit(sp);
+        }
+
+        public void RescanSplitContainers()
+        {
+            foreach (var sp in new List<SplitContainer>(_knownSplits)) UnhookSplit(sp);
+            HookAllSplitContainers(GetScanRoot());
         }
 
         private void HookSplit(SplitContainer sp)
@@ -230,6 +272,9 @@ namespace BeeInterface
             sp.SplitterMoving += Sp_SplitterMoving;
             sp.SplitterMoved += Sp_SplitterMoved;
 
+            // theo dõi panel bên trong để bắt thay đổi layout sâu
+            WatchSplitterPanels(sp, attach: true);
+
             if (_splitterLocked)
             {
                 if (!_lockedDistances.ContainsKey(sp))
@@ -239,6 +284,7 @@ namespace BeeInterface
                 _filter.Track(sp);
             }
         }
+
         private void UnhookSplit(SplitContainer sp)
         {
             if (!_knownSplits.Remove(sp)) return;
@@ -248,6 +294,8 @@ namespace BeeInterface
                 sp.SplitterMoved -= Sp_SplitterMoved;
             }
             catch { }
+
+            WatchSplitterPanels(sp, attach: false);
             _lockedDistances.Remove(sp);
             _filter.Untrack(sp);
         }
@@ -262,6 +310,7 @@ namespace BeeInterface
                     sp.SplitterDistance = d;
             }
         }
+
         private void Sp_SplitterMoved(object sender, SplitterEventArgs e)
         {
             if (_splitterLocked)
@@ -272,7 +321,7 @@ namespace BeeInterface
                 return;
             }
 
-            // kẹp & auto-save (debounce)
+            // clamp + auto-save
             var s = (SplitContainer)sender;
             int min1 = s.Panel1MinSize;
             int min2 = s.Panel2MinSize;
@@ -284,14 +333,11 @@ namespace BeeInterface
             SaveSoon();
         }
 
-        // ====== Watch controls thay đổi (Size/Location/Dock) -> SaveSoon ======
+        // ===== Watch thay đổi layout/size/dock =====
         private void WatchTree(Control root, bool attach)
         {
-            if (attach) AttachWatch(root);
-            else DetachWatch(root);
-
-            foreach (Control ch in root.Controls)
-                WatchTree(ch, attach);
+            if (attach) AttachWatch(root); else DetachWatch(root);
+            foreach (Control ch in root.Controls) WatchTree(ch, attach);
         }
         private void UnwatchTree(Control root) => WatchTree(root, attach: false);
 
@@ -300,7 +346,7 @@ namespace BeeInterface
             c.SizeChanged += OnChildChanged;
             c.LocationChanged += OnChildChanged;
             c.DockChanged += OnChildChanged;
-            // nếu cần: c.VisibleChanged += OnChildChanged;
+            c.Layout += OnChildLayout;
         }
         private void DetachWatch(Control c)
         {
@@ -309,11 +355,36 @@ namespace BeeInterface
                 c.SizeChanged -= OnChildChanged;
                 c.LocationChanged -= OnChildChanged;
                 c.DockChanged -= OnChildChanged;
-                // c.VisibleChanged -= OnChildChanged;
+                c.Layout -= OnChildLayout;
             }
             catch { }
         }
+
+        private void WatchSplitterPanels(SplitContainer sp, bool attach)
+        {
+            if (sp == null) return;
+            if (attach)
+            {
+                AttachWatch(sp.Panel1);
+                AttachWatch(sp.Panel2);
+                WatchTree(sp.Panel1, attach: true);
+                WatchTree(sp.Panel2, attach: true);
+            }
+            else
+            {
+                UnwatchTree(sp.Panel1);
+                UnwatchTree(sp.Panel2);
+                DetachWatch(sp.Panel1);
+                DetachWatch(sp.Panel2);
+            }
+        }
+
         private void OnChildChanged(object sender, EventArgs e)
+        {
+            if (_applying) return;
+            SaveSoon();
+        }
+        private void OnChildLayout(object sender, LayoutEventArgs e)
         {
             if (_applying) return;
             SaveSoon();
@@ -337,8 +408,7 @@ namespace BeeInterface
                     map[path + "|B"] = $"{c.Left},{c.Top},{c.Width},{c.Height}";
                     break;
             }
-            foreach (Control ch in c.Controls)
-                CaptureRecursive(root, ch, map);
+            foreach (Control ch in c.Controls) CaptureRecursive(root, ch, map);
         }
 
         private static void ApplyRecursive(Control root, Control c, Dictionary<string, string> map)
@@ -400,8 +470,7 @@ namespace BeeInterface
                 }
             }
 
-            foreach (Control ch in c.Controls)
-                ApplyRecursive(root, ch, map);
+            foreach (Control ch in c.Controls) ApplyRecursive(root, ch, map);
         }
 
         // ===== IO & utils =====
@@ -419,19 +488,19 @@ namespace BeeInterface
             }
             return map;
         }
+
         private void WriteMap(string path, Dictionary<string, string> map)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             var sb = new StringBuilder();
             sb.AppendLine("# BeeLayouts - kv");
-            foreach (var kv in map)
-                sb.AppendLine(kv.Key + "=" + kv.Value);
+            foreach (var kv in map) sb.AppendLine(kv.Key + "=" + kv.Value);
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
 
         private string GetLayoutFilePath()
         {
-            var formName = "App";// string.IsNullOrWhiteSpace(_formNameCache) ? "App" : _formNameCache;
+            var formName = "App"; // hoặc _formNameCache
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BeeInterface");
             var file = $"{formName}.{_key}.layout";
             return Path.Combine(dir, file);
@@ -471,24 +540,17 @@ namespace BeeInterface
             return -1;
         }
 
-        // ====== Message filter chặn chuột trên dải splitter ======
+        private Control GetScanRoot()
+            => (Control)(_host.FindForm() ?? _host.TopLevelControl ?? _host);
+
+        // ===== Message filter chặn chuột trên dải splitter =====
         private sealed class SplitterDragMessageFilter : IMessageFilter
         {
             private readonly HashSet<SplitContainer> _tracked = new HashSet<SplitContainer>();
             private bool _enabled;
 
-            public void Enable()
-            {
-                if (_enabled) return;
-                Application.AddMessageFilter(this);
-                _enabled = true;
-            }
-            public void Disable()
-            {
-                if (!_enabled) return;
-                Application.RemoveMessageFilter(this);
-                _enabled = false;
-            }
+            public void Enable() { if (_enabled) return; Application.AddMessageFilter(this); _enabled = true; }
+            public void Disable() { if (!_enabled) return; Application.RemoveMessageFilter(this); _enabled = false; }
             public void Track(SplitContainer sp) => _tracked.Add(sp);
             public void Untrack(SplitContainer sp) => _tracked.Remove(sp);
 
@@ -496,9 +558,14 @@ namespace BeeInterface
             {
                 if (!_enabled || _tracked.Count == 0) return false;
 
+                // Client
+                const int WM_MOUSEMOVE = 0x0200;
                 const int WM_LBUTTONDOWN = 0x0201;
                 const int WM_LBUTTONDBLCLK = 0x0203;
-                const int WM_MOUSEMOVE = 0x0200;
+                // Non-client
+                const int WM_NCMOUSEMOVE = 0x00A0;
+                const int WM_NCLBUTTONDOWN = 0x00A1;
+                const int WM_NCLBUTTONDBLCLK = 0x00A3;
 
                 Point screenPt = Control.MousePosition;
 
@@ -508,11 +575,21 @@ namespace BeeInterface
                     Rectangle split = sp.RectangleToScreen(sp.SplitterRectangle);
                     if (!split.Contains(screenPt)) continue;
 
-                    if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK)
-                        return true;
-
-                    if (m.Msg == WM_MOUSEMOVE && (Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left)
-                        return true;
+                    switch (m.Msg)
+                    {
+                        case WM_LBUTTONDOWN:
+                        case WM_LBUTTONDBLCLK:
+                            return true;
+                        case WM_MOUSEMOVE:
+                            if ((Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left) return true;
+                            break;
+                        case WM_NCLBUTTONDOWN:
+                        case WM_NCLBUTTONDBLCLK:
+                            return true;
+                        case WM_NCMOUSEMOVE:
+                            if ((Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left) return true;
+                            break;
+                    }
                 }
                 return false;
             }

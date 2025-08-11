@@ -1,5 +1,6 @@
 ﻿using BeeGlobal;
 using BeeInterface;
+using System.Windows.Forms;
 
 namespace BeeUi.Unit
 {
@@ -32,7 +33,7 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BtnHeaderBar));
-            this.tableLayoutPanel1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btncheck = new BeeInterface.RJButton();
             this.btnSetting = new BeeInterface.RJButton();
             this.btnSettingPLC = new BeeInterface.RJButton();
@@ -358,7 +359,7 @@ namespace BeeUi.Unit
         private RJButton btnSetting;
         private RJButton btnReport;
         public RJButton btnUser;
-        private DbTableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public RJButton btnSettingPLC;
         private RJButton btncheck;
     }

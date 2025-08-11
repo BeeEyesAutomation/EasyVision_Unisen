@@ -1,6 +1,6 @@
 ﻿
 using BeeGlobal;
-
+using System.Windows.Forms;
 namespace BeeInterface
 {
     partial class SettingStep1
@@ -34,7 +34,7 @@ namespace BeeInterface
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tableLayout1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayout1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnDownLoadPara = new BeeInterface.RJButton();
             this.AdjOffSetY = new BeeInterface.AdjustBar();
             this.label13 = new System.Windows.Forms.Label();
@@ -51,32 +51,32 @@ namespace BeeInterface
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.trackExposure = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel5 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel5 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCenterY = new BeeInterface.RJButton();
             this.btnCenterX = new BeeInterface.RJButton();
-            this.tableLayoutPanel11 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel11 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnNextStep = new BeeInterface.RJButton();
-            this.tableLayoutPanel10 = new BeeInterface.DbTableLayoutPanel();
-            this.tableLayoutPanel4 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel10 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnOn = new BeeInterface.RJButton();
             this.btnOFF = new BeeInterface.RJButton();
-            this.tableLayoutPanel3 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnLight3 = new BeeInterface.RJButton();
             this.btnLight1 = new BeeInterface.RJButton();
             this.btnLight2 = new BeeInterface.RJButton();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.layoutDelay = new BeeInterface.DbTableLayoutPanel();
+            this.layoutDelay = new  System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
             this.AdDelayOutput = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnAllTime = new BeeInterface.RJButton();
             this.btnBlink = new BeeInterface.RJButton();
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.AdDelayTrig = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel6 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel6 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnExternal = new BeeInterface.RJButton();
             this.btnInternal = new BeeInterface.RJButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -1459,12 +1459,12 @@ namespace BeeInterface
 
         #endregion
         private System.ComponentModel.BackgroundWorker workRead;
-        private DbTableLayoutPanel tableLayout1;
-        private DbTableLayoutPanel tableLayoutPanel6;
+        private  System.Windows.Forms.TableLayoutPanel tableLayout1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private RJButton btnExternal;
         private RJButton btnInternal;
-        private DbTableLayoutPanel tableLayoutPanel10;
-        private DbTableLayoutPanel tableLayoutPanel11;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton btnCancel;
         private RJButton btnNextStep;
         private AdjustBar trackExposure;
@@ -1476,19 +1476,19 @@ namespace BeeInterface
         private System.Windows.Forms.Label label1;
         private AdjustBar AdDelayTrig;
         private System.Windows.Forms.Label label6;
-        private DbTableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private RJButton btnAllTime;
         private RJButton btnBlink;
-        private DbTableLayoutPanel layoutDelay;
+        private  System.Windows.Forms.TableLayoutPanel layoutDelay;
         private System.Windows.Forms.Label label7;
         private AdjustBar AdDelayOutput;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private DbTableLayoutPanel tableLayoutPanel3;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private RJButton btnLight3;
         private RJButton btnLight1;
         private RJButton btnLight2;
-        private DbTableLayoutPanel tableLayoutPanel4;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private RJButton btnOn;
         private RJButton btnOFF;
         private AdjustBar AdjHeight;
@@ -1504,7 +1504,7 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private RJButton btnDownLoadPara;
-        private DbTableLayoutPanel tableLayoutPanel5;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private RJButton btnCenterY;
         private RJButton btnCenterX;
         private System.Windows.Forms.Timer tmShowPara;

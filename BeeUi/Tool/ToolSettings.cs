@@ -54,6 +54,7 @@ namespace BeeUi.Tool
             {
                 PropetyTool.ItemTool.Location = new Point( Global.pShowTool.X,  Global.pShowTool.Y);
                 PropetyTool.Propety.Index = i;
+                PropetyTool.ItemTool.IndexTool = i;
                  Global.pShowTool.Y += PropetyTool.ItemTool.Height + 10;
                 Global.ToolSettings.pAllTool.Controls.Add(PropetyTool.ItemTool);
                 Global.ToolSettings.ResumeLayout(true);
@@ -102,7 +103,9 @@ namespace BeeUi.Tool
        
             propety.Name = propety.TypeTool.ToString() + " " + (int)(BeeCore.Common.PropetyTools[Global.IndexChoose].Count + 1);
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propety);
+           
             int Index = BeeCore.Common.PropetyTools[Global.IndexChoose].Count - 1;
+           // propety.Propety.Index = Index;
             PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexChoose][Index];
             propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexChoose,Global.pShowTool);
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexChoose, Global.pShowTool);

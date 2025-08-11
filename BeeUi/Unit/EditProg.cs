@@ -123,9 +123,9 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProg));
-            this.tableLayoutPanel1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnMenu = new BeeInterface.RJButton();
-            this.pMenu = new BeeInterface.DbTableLayoutPanel();
+            this.pMenu = new System.Windows.Forms.TableLayoutPanel();
             this.btnDelect = new BeeInterface.RJButton();
             this.btnSave = new BeeInterface.RJButton();
             this.btnSaveAs = new BeeInterface.RJButton();
@@ -206,7 +206,7 @@ namespace BeeUi.Unit
             // 
             // pMenu
             // 
-            this.pMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.pMenu.ColumnCount = 4;
             this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));

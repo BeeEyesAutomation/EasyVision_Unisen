@@ -1,24 +1,25 @@
-﻿using OpenCvSharp;
+﻿using BeeCore.Funtion;
+using BeeGlobal;
+using CvPlus;
+using OpenCvSharp;
 using OpenCvSharp.Extensions;
+using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
+using System.Windows.Forms;
+using static LibUsbDotNet.Main.UsbTransferQueue;
 using static OpenCvSharp.ML.DTrees;
 using Point = System.Drawing.Point;
-using Python.Runtime;
-using static LibUsbDotNet.Main.UsbTransferQueue;
-using System.Reflection;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Web.UI.WebControls;
-using BeeCore.Funtion;
-using System.Windows.Forms;
-using BeeGlobal;
-using System.Drawing.Drawing2D;
 
 namespace BeeCore
 {
@@ -42,22 +43,27 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
 
             try
-            { 
-            using (Py.GIL())
+            {
+                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
+                if (pathFullModel.Trim() == "")
+                {
+                    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    return;
+                }
+                if(Global.IsIntialPython)
+                using (Py.GIL())
             {
 
-                    if(Common.PropetyTools[IndexThread][Index].Name.Trim()=="")
-                    {
-                        Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                    }
+                   
+                    G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
                     //dynamic mod = Py.Import("Tool.Learning");
                     //dynamic cls = mod.GetAttr("ObjectDetector"); // class
                     //dynamic obj = cls.Invoke();              // khởi tạo instance
 
-                    if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
-                    {
-                        Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-                    }
+                    //if (Common.PropetyTools[IndexThread][Index].Name.Trim() == "")
+                    //{
+                    //    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                    //}
                     Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
                   
                 }
@@ -98,7 +104,8 @@ namespace BeeCore
        
         public void Training(string nameTool, string modelPath, string pathYaml)
         {
-            using (Py.GIL())
+            if (Global.IsIntialPython)
+                using (Py.GIL())
             {
                 Action<int> onProgress = percent =>
                 {
@@ -124,27 +131,30 @@ namespace BeeCore
 
         public String[] LoadNameModel(String nameTool)
         {
-            using (Py.GIL())
-            {
-
-
-
-                dynamic result = G.objYolo.loadNames(nameTool );
-
-                                                              // Dùng list() để ép dict_values về list
-                PyObject obj = Py.Import("builtins").GetAttr("list").Invoke(result.InvokeMethod("values"));
-                var labels = new List<string>();
-                int counts = (int)obj.Length();
-                for (int j = 0; j < counts; j++)
+            if (Global.IsIntialPython)
+                using (Py.GIL())
                 {
 
-                    labels.Add(obj[j].ToString());  // hoặc item.As<string>() nếu bạn chắc chắn là string
-                }
-                
-              
-                return labels.ToArray();
 
-            }
+
+                    dynamic result = G.objYolo.loadNames(nameTool);
+
+                    // Dùng list() để ép dict_values về list
+                    PyObject obj = Py.Import("builtins").GetAttr("list").Invoke(result.InvokeMethod("values"));
+                    var labels = new List<string>();
+                    int counts = (int)obj.Length();
+                    for (int j = 0; j < counts; j++)
+                    {
+
+                        labels.Add(obj[j].ToString());  // hoặc item.As<string>() nếu bạn chắc chắn là string
+                    }
+
+
+                    return labels.ToArray();
+
+                }
+            else
+                return new  string[0];
         }
         public List<Labels> listLabelCompare = new List<Labels>();
         public int Index = -1;
@@ -217,7 +227,8 @@ namespace BeeCore
         public float CropOffSetX, CropOffSetY=0;
         public void DoWork(RectRotate rotCrop)
         {
-            using (Py.GIL())
+            if (Global.IsIntialPython)
+                using (Py.GIL())
             {
                 try
                 {

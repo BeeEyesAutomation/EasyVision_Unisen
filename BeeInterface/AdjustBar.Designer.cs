@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lay = new DbTableLayoutPanel();
+            this.lay = new  System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel7 = new DbTableLayoutPanel();
+            this.tableLayoutPanel7 = new  System.Windows.Forms.TableLayoutPanel();
             this.Track = new BeeInterface.TrackBar2();
             this.Num = new BeeInterface.CustomNumeric();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -40,7 +40,7 @@
             // 
             // lay
             // 
-            this.lay.BackColor = System.Drawing.Color.Transparent;
+            this.lay.BackColor = System.Drawing.SystemColors.Control;
             this.lay.ColumnCount = 4;
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -137,6 +137,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lay);
+            this.DoubleBuffered = true;
             this.Name = "AdjustBar";
             this.Size = new System.Drawing.Size(459, 54);
             this.Load += new System.EventHandler(this.AdjustBar_Load);
@@ -150,8 +151,8 @@
         #endregion
         public TrackBar2 Track;
         public CustomNumeric Num;
-        private DbTableLayoutPanel lay;
-        private DbTableLayoutPanel tableLayoutPanel7;
+        private  System.Windows.Forms.TableLayoutPanel lay;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
     }

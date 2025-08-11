@@ -35,14 +35,14 @@ namespace BeeInterface
             this.workRead = new System.ComponentModel.BackgroundWorker();
             this.pItemsRs = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new DbTableLayoutPanel();
-            this.tableLayoutPanel3 = new DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnComplete = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
-            this.tableLayoutPanel2 = new DbTableLayoutPanel();
+            this.tableLayoutPanel2 = new  System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.pItemsLogis = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
@@ -267,12 +267,12 @@ namespace BeeInterface
         private System.ComponentModel.BackgroundWorker workRead;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pItemsRs;
-        private DbTableLayoutPanel tableLayoutPanel1;
-        private DbTableLayoutPanel tableLayoutPanel3;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private DbTableLayoutPanel tableLayoutPanel2;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel pItemsLogis;
     }

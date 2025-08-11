@@ -34,7 +34,7 @@ namespace BeeUi.Common
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StepEdit));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
-            this.tableLayoutPanel1 = new BeeInterface.DbTableLayoutPanel();
+            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnStep4 = new BeeInterface.RJButton();
             this.btnStep3 = new BeeInterface.RJButton();
             this.btnStep2 = new BeeInterface.RJButton();
@@ -477,7 +477,7 @@ namespace BeeUi.Common
         public RJButton btnSaveProgram;
         public RJButton btnSave;
         private System.Windows.Forms.PictureBox pictureBox4;
-        private DbTableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public RJButton btnStep1;
         public RJButton btnStep2;
         public RJButton btnStep3;
