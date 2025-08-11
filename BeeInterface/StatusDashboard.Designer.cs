@@ -11,14 +11,7 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+       
 
         #region Component Designer generated code
 
@@ -35,7 +28,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "StatusDashboard";
-            this.Load += new System.EventHandler(this.StatusDashboard_Load);
+           // this.Load += new System.EventHandler(this.StatusDashboard_Load);
             this.ResumeLayout(false);
 
         }

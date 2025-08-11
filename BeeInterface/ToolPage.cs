@@ -252,7 +252,7 @@ namespace BeeInterface
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propetyTool);
             ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
-         
+            Itemtool.Width = Global.ToolSettings.Width - 10;
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].ItemTool = Itemtool;
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].Control = control;
             

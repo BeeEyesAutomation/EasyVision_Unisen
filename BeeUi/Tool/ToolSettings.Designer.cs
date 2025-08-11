@@ -34,34 +34,42 @@ namespace BeeUi.Tool
         private void InitializeComponent()
         {
             this.pAllTool = new System.Windows.Forms.Panel();
-            this.pBtn = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCopy = new RJButton();
-            this.btnEnEdit = new RJButton();
-            this.btnAdd = new RJButton();
-            this.btnDelect = new RJButton();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.pBtn = new BeeInterface.DbTableLayoutPanel();
+            this.btnCopy = new BeeInterface.RJButton();
+            this.btnEnEdit = new BeeInterface.RJButton();
+            this.btnAdd = new BeeInterface.RJButton();
+            this.btnDelect = new BeeInterface.RJButton();
             this.pBtn.SuspendLayout();
             this.SuspendLayout();
             // 
             // pAllTool
             // 
-            this.pAllTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pAllTool.AutoScroll = true;
             this.pAllTool.BackColor = System.Drawing.Color.White;
-            this.pAllTool.Location = new System.Drawing.Point(2, 70);
+            this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pAllTool.Location = new System.Drawing.Point(2, 59);
             this.pAllTool.Name = "pAllTool";
-            this.pAllTool.Size = new System.Drawing.Size(396, 453);
+            this.pAllTool.Size = new System.Drawing.Size(396, 464);
             this.pAllTool.TabIndex = 9;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitter1.Location = new System.Drawing.Point(2, 56);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(396, 3);
+            this.splitter1.TabIndex = 11;
+            this.splitter1.TabStop = false;
             // 
             // pBtn
             // 
-            this.pBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.pBtn.BackColor = System.Drawing.Color.Silver;
             this.pBtn.ColumnCount = 4;
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.pBtn.Controls.Add(this.btnCopy, 2, 0);
             this.pBtn.Controls.Add(this.btnEnEdit, 1, 0);
             this.pBtn.Controls.Add(this.btnAdd, 0, 0);
@@ -72,36 +80,56 @@ namespace BeeUi.Tool
             this.pBtn.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
             this.pBtn.RowCount = 1;
             this.pBtn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pBtn.Size = new System.Drawing.Size(396, 68);
+            this.pBtn.Size = new System.Drawing.Size(396, 54);
             this.pBtn.TabIndex = 10;
+            this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
             // 
             // btnCopy
             // 
-            this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCopy.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCopy.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCopy.AutoFont = true;
+            this.btnCopy.AutoFontHeightRatio = 0.6F;
+            this.btnCopy.AutoFontMax = 100F;
+            this.btnCopy.AutoFontMin = 8F;
+            this.btnCopy.AutoFontWidthRatio = 0.92F;
+            this.btnCopy.AutoImage = true;
+            this.btnCopy.AutoImageMaxRatio = 0.65F;
+            this.btnCopy.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnCopy.AutoImageTint = true;
+            this.btnCopy.BackColor = System.Drawing.Color.Silver;
+            this.btnCopy.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnCopy.BorderColor = System.Drawing.Color.Silver;
             this.btnCopy.BorderRadius = 10;
             this.btnCopy.BorderSize = 1;
-            this.btnCopy.Image = null;
-            this.btnCopy.Corner =Corner.Both;
+            this.btnCopy.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnCopy.Corner = BeeGlobal.Corner.Both;
+            this.btnCopy.DebounceResizeMs = 16;
+            this.btnCopy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCopy.Enabled = false;
             this.btnCopy.FlatAppearance.BorderSize = 0;
             this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnCopy.ForeColor = System.Drawing.Color.Black;
             this.btnCopy.Image = global::BeeUi.Properties.Resources.BID_ICON_COPY_D_32BIT;
             this.btnCopy.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnCopy.ImageDisabled = null;
+            this.btnCopy.ImageHover = null;
+            this.btnCopy.ImageNormal = null;
+            this.btnCopy.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnCopy.ImagePressed = null;
+            this.btnCopy.ImageTextSpacing = 2;
+            this.btnCopy.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnCopy.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnCopy.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnCopy.ImageTintOpacity = 0.5F;
+            this.btnCopy.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnCopy.IsCLick = false;
             this.btnCopy.IsNotChange = true;
             this.btnCopy.IsRect = false;
             this.btnCopy.IsUnGroup = true;
-            this.btnCopy.Location = new System.Drawing.Point(205, 7);
-            this.btnCopy.Margin = new System.Windows.Forms.Padding(5);
+            this.btnCopy.Location = new System.Drawing.Point(201, 5);
+            this.btnCopy.Multiline = false;
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(89, 54);
+            this.btnCopy.Size = new System.Drawing.Size(93, 44);
             this.btnCopy.TabIndex = 9;
             this.btnCopy.Text = "Copy";
             this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -112,30 +140,49 @@ namespace BeeUi.Tool
             // 
             // btnEnEdit
             // 
-            this.btnEnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEnEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnEnEdit.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnEnEdit.BorderColor = System.Drawing.Color.Transparent;
+            this.btnEnEdit.AutoFont = true;
+            this.btnEnEdit.AutoFontHeightRatio = 0.6F;
+            this.btnEnEdit.AutoFontMax = 100F;
+            this.btnEnEdit.AutoFontMin = 8F;
+            this.btnEnEdit.AutoFontWidthRatio = 0.92F;
+            this.btnEnEdit.AutoImage = true;
+            this.btnEnEdit.AutoImageMaxRatio = 0.65F;
+            this.btnEnEdit.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnEnEdit.AutoImageTint = true;
+            this.btnEnEdit.BackColor = System.Drawing.Color.Silver;
+            this.btnEnEdit.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnEnEdit.BorderColor = System.Drawing.Color.Silver;
             this.btnEnEdit.BorderRadius = 10;
             this.btnEnEdit.BorderSize = 1;
-            this.btnEnEdit.Image = null;
-            this.btnEnEdit.Corner =Corner.Both;
+            this.btnEnEdit.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnEnEdit.Corner = BeeGlobal.Corner.Both;
+            this.btnEnEdit.DebounceResizeMs = 16;
+            this.btnEnEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEnEdit.FlatAppearance.BorderSize = 0;
             this.btnEnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnEnEdit.ForeColor = System.Drawing.Color.Black;
             this.btnEnEdit.Image = global::BeeUi.Properties.Resources.BID_ICON_TOOL_EDIT_E_32BIT;
             this.btnEnEdit.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnEnEdit.ImageDisabled = null;
+            this.btnEnEdit.ImageHover = null;
+            this.btnEnEdit.ImageNormal = null;
+            this.btnEnEdit.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnEnEdit.ImagePressed = null;
+            this.btnEnEdit.ImageTextSpacing = 2;
+            this.btnEnEdit.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnEnEdit.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnEnEdit.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnEnEdit.ImageTintOpacity = 0.5F;
+            this.btnEnEdit.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnEnEdit.IsCLick = false;
             this.btnEnEdit.IsNotChange = false;
             this.btnEnEdit.IsRect = false;
             this.btnEnEdit.IsUnGroup = true;
-            this.btnEnEdit.Location = new System.Drawing.Point(108, 7);
-            this.btnEnEdit.Margin = new System.Windows.Forms.Padding(5);
+            this.btnEnEdit.Location = new System.Drawing.Point(102, 5);
+            this.btnEnEdit.Multiline = false;
             this.btnEnEdit.Name = "btnEnEdit";
-            this.btnEnEdit.Size = new System.Drawing.Size(87, 54);
+            this.btnEnEdit.Size = new System.Drawing.Size(93, 44);
             this.btnEnEdit.TabIndex = 8;
             this.btnEnEdit.Text = "Edit";
             this.btnEnEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -146,31 +193,50 @@ namespace BeeUi.Tool
             // 
             // btnAdd
             // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnAdd.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnAdd.BorderColor = System.Drawing.Color.Transparent;
+            this.btnAdd.AutoFont = true;
+            this.btnAdd.AutoFontHeightRatio = 0.6F;
+            this.btnAdd.AutoFontMax = 100F;
+            this.btnAdd.AutoFontMin = 8F;
+            this.btnAdd.AutoFontWidthRatio = 0.92F;
+            this.btnAdd.AutoImage = true;
+            this.btnAdd.AutoImageMaxRatio = 0.65F;
+            this.btnAdd.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnAdd.AutoImageTint = true;
+            this.btnAdd.BackColor = System.Drawing.Color.Silver;
+            this.btnAdd.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnAdd.BorderColor = System.Drawing.Color.Silver;
             this.btnAdd.BorderRadius = 10;
             this.btnAdd.BorderSize = 1;
-            this.btnAdd.Image = null;
-            this.btnAdd.Corner =Corner.Both;
+            this.btnAdd.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnAdd.Corner = BeeGlobal.Corner.Both;
+            this.btnAdd.DebounceResizeMs = 16;
+            this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAdd.Enabled = false;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnAdd.ForeColor = System.Drawing.Color.Black;
             this.btnAdd.Image = global::BeeUi.Properties.Resources.Add;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnAdd.ImageDisabled = null;
+            this.btnAdd.ImageHover = null;
+            this.btnAdd.ImageNormal = null;
+            this.btnAdd.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnAdd.ImagePressed = null;
+            this.btnAdd.ImageTextSpacing = 2;
+            this.btnAdd.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnAdd.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnAdd.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnAdd.ImageTintOpacity = 0.5F;
+            this.btnAdd.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnAdd.IsCLick = false;
             this.btnAdd.IsNotChange = true;
             this.btnAdd.IsRect = false;
             this.btnAdd.IsUnGroup = true;
-            this.btnAdd.Location = new System.Drawing.Point(5, 7);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(5);
+            this.btnAdd.Location = new System.Drawing.Point(3, 5);
+            this.btnAdd.Multiline = false;
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(93, 54);
+            this.btnAdd.Size = new System.Drawing.Size(93, 44);
             this.btnAdd.TabIndex = 7;
             this.btnAdd.Text = "Add";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -181,31 +247,50 @@ namespace BeeUi.Tool
             // 
             // btnDelect
             // 
-            this.btnDelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnDelect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnDelect.BorderColor = System.Drawing.Color.Transparent;
+            this.btnDelect.AutoFont = true;
+            this.btnDelect.AutoFontHeightRatio = 0.75F;
+            this.btnDelect.AutoFontMax = 100F;
+            this.btnDelect.AutoFontMin = 8F;
+            this.btnDelect.AutoFontWidthRatio = 0.92F;
+            this.btnDelect.AutoImage = true;
+            this.btnDelect.AutoImageMaxRatio = 0.65F;
+            this.btnDelect.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnDelect.AutoImageTint = true;
+            this.btnDelect.BackColor = System.Drawing.Color.Silver;
+            this.btnDelect.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnDelect.BorderColor = System.Drawing.Color.Silver;
             this.btnDelect.BorderRadius = 10;
             this.btnDelect.BorderSize = 1;
-            this.btnDelect.Image = null;
-            this.btnDelect.Corner =Corner.Both;
+            this.btnDelect.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnDelect.Corner = BeeGlobal.Corner.Both;
+            this.btnDelect.DebounceResizeMs = 16;
+            this.btnDelect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelect.Enabled = false;
             this.btnDelect.FlatAppearance.BorderSize = 0;
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnDelect.ForeColor = System.Drawing.Color.Black;
             this.btnDelect.Image = global::BeeUi.Properties.Resources.BID_ICON_DELETE_E_32BIT;
             this.btnDelect.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnDelect.ImageDisabled = null;
+            this.btnDelect.ImageHover = null;
+            this.btnDelect.ImageNormal = null;
+            this.btnDelect.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnDelect.ImagePressed = null;
+            this.btnDelect.ImageTextSpacing = 2;
+            this.btnDelect.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnDelect.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnDelect.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnDelect.ImageTintOpacity = 0.5F;
+            this.btnDelect.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnDelect.IsCLick = false;
             this.btnDelect.IsNotChange = true;
             this.btnDelect.IsRect = false;
             this.btnDelect.IsUnGroup = true;
-            this.btnDelect.Location = new System.Drawing.Point(304, 7);
-            this.btnDelect.Margin = new System.Windows.Forms.Padding(5);
+            this.btnDelect.Location = new System.Drawing.Point(300, 5);
+            this.btnDelect.Multiline = false;
             this.btnDelect.Name = "btnDelect";
-            this.btnDelect.Size = new System.Drawing.Size(87, 54);
+            this.btnDelect.Size = new System.Drawing.Size(93, 44);
             this.btnDelect.TabIndex = 10;
             this.btnDelect.Text = "Delete";
             this.btnDelect.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -220,7 +305,9 @@ namespace BeeUi.Tool
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.Controls.Add(this.pAllTool);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pBtn);
+            this.DoubleBuffered = true;
             this.Name = "ToolSettings";
             this.Padding = new System.Windows.Forms.Padding(2);
             this.Size = new System.Drawing.Size(400, 525);
@@ -237,6 +324,7 @@ namespace BeeUi.Tool
         public RJButton btnDelect;
         public RJButton btnCopy;
         public RJButton btnEnEdit;
-        public System.Windows.Forms.TableLayoutPanel pBtn;
+        public DbTableLayoutPanel pBtn;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }

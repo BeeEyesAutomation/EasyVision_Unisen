@@ -19,9 +19,12 @@ namespace BeeUi.Tool
 {
     public partial class ToolSettings : UserControl
     {
+        
         public ToolSettings()
         {
             InitializeComponent();
+            //_layout = new LayoutPersistence(this, key: "ToolLayout");
+          
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -105,6 +108,7 @@ namespace BeeUi.Tool
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexChoose, Global.pShowTool);
             //Tools tool = DataTool.CreateControl(propety, G.listAlltool[Global.IndexChoose].Count(), Global.IndexChoose, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
             //G.listAlltool[Global.IndexChoose].Add(tool);
+            propetyTools.ItemTool.Width = Global.ToolSettings.Width - 10;
             Global.pShowTool.Y += propetyTools.ItemTool.Height + 10;
             DataTool.LoadPropety(propetyTools.Control);
             RefreshTool();
@@ -115,20 +119,26 @@ namespace BeeUi.Tool
 
         private void ToolSettings_Load(object sender, EventArgs e)
         {
+          
             this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-
+         //   _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
         }
 
         private void ToolSettings_SizeChanged(object sender, EventArgs e)
         {
-            if(G.Header!=null)
-             BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
+           // if(G.Header!=null)
+            // BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
 
         }
 
         private void itemTool1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void pBtn_SizeChanged(object sender, EventArgs e)
+        {
+            //BeeCore.CustomGui.RoundRg(this.pBtn, Global.Config.RoundRad);
         }
     }
 

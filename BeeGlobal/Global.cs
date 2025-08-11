@@ -13,6 +13,8 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary>
+    
+        public static int WidthOldTools = 0;
          public static dynamic EditTool ;
         public static bool IsSendRS = false;
         public static bool TotalOK = false;

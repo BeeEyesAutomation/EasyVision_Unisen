@@ -161,9 +161,9 @@ namespace BeeUi.Common
             //    Global.EditTool.pName.Visible = true;
              
             //}
-           // Global.EditTool.btnHeaderBar1.btnSettingPLC.Enabled= Global.IsRun;
+           // Global.EditTool.btnHeaderBar.btnSettingPLC.Enabled= Global.IsRun;
             Global.EditTool.View.btnLive.Enabled = !Global.IsRun;
-            pModel.Enabled = IsRun;
+          //  pModel.Enabled = IsRun;
           
             if (Global.Config.nameUser == "Admin")
             {
@@ -218,7 +218,7 @@ namespace BeeUi.Common
                Global.EditTool.View.btnContinuous.Enabled = false;
             }
          
-            Global.EditTool.btnHeaderBar1.btnUser.Text =Global.Config.nameUser;
+            Global.EditTool.btnHeaderBar.btnUser.Text =Global.Config.nameUser;
         }
  
         public async void Mode()
@@ -260,7 +260,7 @@ namespace BeeUi.Common
                 if (Global.EditTool.View.btnContinuous.IsCLick)
                     if (Global.EditTool.View.btnContinuous.Enabled == true)
                         Global.EditTool.View.btnContinuous.PerformClick();
-                Global.EditTool.btnHeaderBar1.btnSettingPLC.IsCLick = false;
+           //     Global.EditTool.btnHeaderBar.btnSettingPLC.IsCLick = false;
                 Global.EditTool.View.btnCap.Enabled = false;
                 Global.EditTool.View.btnContinuous.Enabled = false;
                 Global.EditTool.RefreshGuiEdit(Step.Step1);
@@ -339,14 +339,14 @@ namespace BeeUi.Common
             }
             //if (G.IsLoad) return;
             //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
-            BeeCore.CustomGui.RoundRg(pModel, Global.Config.RoundRad);
+   //         BeeCore.CustomGui.RoundRg(pModel, Global.Config.RoundRad);
 
             BeeCore.CustomGui.RoundRg(pPO, Global.Config.RoundRad);
 
 
             //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-            pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
-            pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
+           // pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
+           // pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             G.listProgram.Font = new Font("Arial", 16);
             G.listProgram.Parent = G.Main;
             G.listProgram.BringToFront();
@@ -842,6 +842,11 @@ txtQrCode.Focus();
         {
             tmIninitial.Enabled= false;
             Global.Initialed = true;
+        }
+
+        private void editProg1_Load_1(object sender, EventArgs e)
+        {
+
         }
 
         bool IsKeyEnter = false;

@@ -110,8 +110,13 @@ namespace BeeUi.Tool
             string nameFileSQL = @"Report\" + DateTime.Now.ToString("yyyyMMdd") + ".mdf";
             if (!File.Exists(nameFileSQL))
             {
-                File.Copy(@"Report\Default.mdf", nameFileSQL);
-                File.Exists(@"Report\Default.mdf");
+                if (File.Exists(@"Report\Default.mdf"))
+                {
+                    File.Copy(@"Report\Default.mdf", nameFileSQL);
+                    File.Exists(@"Report\Default.mdf");
+                }
+                else
+                    MessageBox.Show("Emty File Report Default!");
             }
             //Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\ChiTu\Codes\BeeIV2\bin\Release\Report\Default.mdf;Integrated Security=True;Connect Timeout=30
             String path = Path.Combine(Environment.CurrentDirectory, nameFileSQL);

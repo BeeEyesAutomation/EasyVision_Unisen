@@ -47,91 +47,104 @@ namespace BeeUi.Unit
         }
 
         private void btnSettingPLC_Click(object sender, EventArgs e)
-        {if(btnSettingPLC.IsCLick)
-           Global.EditTool.RefreshGuiEdit(Step.PLC);
-        else
-            Global.EditTool.RefreshGuiEdit(Step.Run);
+        {  
+            if(btnSettingPLC.IsCLick)
+               Global.EditTool.pEditTool.Show("PLC");
+            else
+               Global.EditTool.pEditTool.Show("Tool");
         }
 
         private async void btnfull_Click(object sender, EventArgs e)
         {
-            btnSettingPLC.Enabled = !btnfull.IsCLick;
-         //   G.Header.Visible =! btnfull.IsCLick;
-          //  await Task.Delay(500);
-          //  G.InforBar.Visible =! btnfull.IsCLick;
-           // await Task.Delay(500);
-           // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
-            Global.EditTool.LayoutEnd.Visible=! btnfull.IsCLick;
-            if (btnfull.IsCLick)
-            {
-                Global.EditTool.pHeader.Visible = false;
-               // Global.EditTool.pEdit.Width = 200;
-                //Global.EditTool.LayoutEnd.Visible = false;
-                //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
-                //Global.ToolSettings.Dock = DockStyle.Fill;
-                //Global.ToolSettings.Width = 300;
-                //Global.EditTool.View.LayOutShow.Controls.Add(Global.ToolSettings,1,0);
-                Global.EditTool.View.pBtn.Visible = false;
-            }    
+         //   btnSettingPLC.Enabled = !btnExit.IsCLick;
+         ////   G.Header.Visible =! btnfull.IsCLick;
+         // //  await Task.Delay(500);
+         // //  G.InforBar.Visible =! btnfull.IsCLick;
+         //  // await Task.Delay(500);
+         //  // G.StatusDashboard.Parent.Visible = !btnfull.IsCLick;
+         //   Global.EditTool.LayoutEnd.Visible=! btnExit.IsCLick;
+         //   if (btnExit.IsCLick)
+         //   {
+         //       Global.EditTool.pHeader.Visible = false;
+         //      // Global.EditTool.pEdit.Width = 200;
+         //       //Global.EditTool.LayoutEnd.Visible = false;
+         //       //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
+         //       //Global.ToolSettings.Dock = DockStyle.Fill;
+         //       //Global.ToolSettings.Width = 300;
+         //       //Global.EditTool.View.LayOutShow.Controls.Add(Global.ToolSettings,1,0);
+         //       Global.EditTool.View.pBtn.Visible = false;
+         //   }    
                
-            else
-            {
-                Global.EditTool.pHeader.Visible = true;
-               // Global.EditTool.pEdit.Width = 400;
-                //Global.EditTool.LayoutEnd.Visible = true;
-                //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
-                Global.EditTool.View.pBtn.Visible = true;
-                //Global.EditTool.View.LayOutShow.Controls.Remove(Global.ToolSettings);
-                //Global.EditTool.LayOutShow.Controls.Add(Global.ToolSettings, 1, 0);
+         //   else
+         //   {
+         //       Global.EditTool.pHeader.Visible = true;
+         //      // Global.EditTool.pEdit.Width = 400;
+         //       //Global.EditTool.LayoutEnd.Visible = true;
+         //       //Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+         //       Global.EditTool.View.pBtn.Visible = true;
+         //       //Global.EditTool.View.LayOutShow.Controls.Remove(Global.ToolSettings);
+         //       //Global.EditTool.LayOutShow.Controls.Add(Global.ToolSettings, 1, 0);
 
-            }    
+         //   }    
                
-            await Task.Delay(100);
-            Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+         //   await Task.Delay(100);
+         //   Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
+         //if (Global.WidthOldTools == 0) Global.WidthOldTools = 400;
+         //   Global.EditTool.pEdit.Width = Global.WidthOldTools;
+         //   btnShuttdown.Visible = false;
+            //if (Global.listParaCamera[Global.IndexChoose] == null)
+            //    Global.listParaCamera[Global.IndexChoose] = new ParaCamera();
+            //BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(Global.listParaCamera[Global.IndexChoose], Global.IndexChoose);
+            //G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
 
+            //switch (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
+            //{
+            //    case TypeCamera.USB:
+            //        G.ScanCCD.btnUSB2_0.IsCLick = true;
+            //        break;
+            //    case TypeCamera.BaslerGigE:
+            //        G.ScanCCD.btnGigE.IsCLick = true;
+            //        break;
+            //    case TypeCamera.TinyIV:
+            //        G.ScanCCD.btnCameraTiny.IsCLick = true;
+            //        break;
+            //}
+            //switch (Global.IndexChoose)
+            //{
+            //    case 0:
+            //        G.ScanCCD.btnCamera1.IsCLick = true;
+            //        break;
+            //    case 1:
+            //        G.ScanCCD.btnCamera2.IsCLick = true;
+            //        break;
+            //    case 2:
+            //        G.ScanCCD.btnCamera3.IsCLick = true;
+            //        break;
+            //    case 3:
+            //        G.ScanCCD.btnCamera4.IsCLick = true;
+            //        break;
+            //}
+            //G.ScanCCD.ShowDialog();
         private void btnCamera_Click(object sender, EventArgs e)
         {
-            
-            if (Global.listParaCamera[Global.IndexChoose] == null)
-                Global.listParaCamera[Global.IndexChoose] = new ParaCamera();
-            BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(Global.listParaCamera[Global.IndexChoose], Global.IndexChoose);
-            G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
-          
-            switch (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
-            {
-                case TypeCamera.USB:
-                    G.ScanCCD.btnUSB2_0.IsCLick = true;
-                    break;
-                case TypeCamera.BaslerGigE:
-                    G.ScanCCD.btnGigE.IsCLick = true;
-                    break;
-                case TypeCamera.TinyIV:
-                    G.ScanCCD.btnCameraTiny.IsCLick = true;
-                    break;
-            }
-            switch (Global.IndexChoose)
-            {
-                case 0:
-                    G.ScanCCD.btnCamera1.IsCLick = true;
-                    break;
-                case 1:
-                    G.ScanCCD.btnCamera2.IsCLick = true;
-                    break;
-                case 2:
-                    G.ScanCCD.btnCamera3.IsCLick = true;
-                    break;
-                case 3:
-                    G.ScanCCD.btnCamera4.IsCLick = true;
-                    break;
-            }
-            G.ScanCCD.ShowDialog();
+           
         }
 
         private void btncheck_Click(object sender, EventArgs e)
         {
             FormCheckUpdate formCheckUpdate = new FormCheckUpdate();
             formCheckUpdate.ShowDialog();
+        }
+
+        private void btnShuttdown_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            G.Main.Close();
         }
     }
 }

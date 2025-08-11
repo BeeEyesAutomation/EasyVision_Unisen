@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lay = new System.Windows.Forms.TableLayoutPanel();
+            this.lay = new DbTableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new DbTableLayoutPanel();
             this.Track = new BeeInterface.TrackBar2();
             this.Num = new BeeInterface.CustomNumeric();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -150,8 +150,8 @@
         #endregion
         public TrackBar2 Track;
         public CustomNumeric Num;
-        private System.Windows.Forms.TableLayoutPanel lay;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private DbTableLayoutPanel lay;
+        private DbTableLayoutPanel tableLayoutPanel7;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
     }

@@ -117,9 +117,12 @@ namespace BeeUi
                 
             
         }
-              public View()
+        private LayoutPersistence _layout;
+        public View()
         {
             InitializeComponent();
+            _layout = new LayoutPersistence(this, key: "ViewLayout");
+            _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
             this.BackColor = Color.Transparent;
             KeyboardListener.s_KeyEventHandler += new EventHandler(KeyboardListener_s_KeyEventHandler);
             tmKey.Tick += TmKey_Tick;
@@ -1308,11 +1311,10 @@ namespace BeeUi
         private void View_Load(object sender, EventArgs e)
         {
             if (G.Header == null) return;
-            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+    //  this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
           
-            this.pHeader.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-           pHeader.Height = (int)(pHeader.Height * Global.PerScaleHeight);
-            pBtn.Height = (int)(pBtn.Height * Global.PerScaleHeight);
+         
+         //   pBtn.Height = (int)(pBtn.Height * Global.PerScaleHeight);
             //  
 
             // BeeCore.Common.Scan();
@@ -1512,18 +1514,24 @@ namespace BeeUi
             {
               
                 Global.OldPropetyTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Clone();
-             
+                String name = "Tools" + BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Name;
                 //   if (Score.Enabled||Global.IsRun) return;
                 Global.TypeCrop = TypeCrop.Area;
                 Global.EditTool.pEditTool.Controls.Clear();
                 Control control = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
-                control.Dock = DockStyle.Fill;
-                control.Parent = Global.EditTool.pEditTool;
+              
+                EditTool editTool = Global.EditTool as EditTool;
+                if (!editTool.pEditTool.Show(name))
+                {
+                    editTool.pEditTool.Register(name, () => control);
+                    editTool.pEditTool.Show(name);
+                }    
+                  
                 //control.Size =Global.EditTool. pEditTool.Size;
                 //control.Location = new Point(0, 0);
-              
-               // control.BringToFront();
-               // DataTool.LoadPropety(control);
+
+                // control.BringToFront();
+                // DataTool.LoadPropety(control);
                 TypeTool TypeTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool;
 
                 Global.EditTool.iconTool.BackgroundImage = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
@@ -2650,8 +2658,10 @@ namespace BeeUi
 
         private void pBtn_SizeChanged(object sender, EventArgs e)
         {
-            if (G.Header == null) return;
-             BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
+            if (this.Parent == null) return;
+            if (this.Width > this.Parent.Width) this.Width = this.Parent.Width;
+          
+            // BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
 
         }
 

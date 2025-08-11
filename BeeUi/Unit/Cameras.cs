@@ -18,32 +18,35 @@ namespace BeeUi.Unit
         {
             InitializeComponent();
         }
-
+      
         private  void btnHide_Click(object sender, EventArgs e)
         {
-            if (btnHide.IsCLick)
-            {
-                btnHide.Corner = Corner.Right;
-                this.Width = btnHide.Width - 1;
-                btnHide.Text = "";
-                btnHide.Image = Properties.Resources.Show;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
-               
+            Global.WidthOldTools = Global.EditTool.pEdit.Width;
+            Global.EditTool.pEdit.Width = 0;
+            Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
+           // if (btnHide.IsCLick)
+           // {
+           //     // btnHide.Corner = Corner.Right;
+
+            //  //   btnHide.Text = "";
+
+            ////     Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
 
 
-            }
-            else
-            {
-                btnHide.Corner = Corner.Right;
-                this.Width = 400;
-                btnHide.Image = Properties.Resources.Hide;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
-               
-               
-            }
-            G.Header.Layout.ResumeLayout(true);
-            Global.EditTool.LayOutShow.ResumeLayout(true);
-            Global.EditTool.LayoutMain.ResumeLayout(true);
+
+            // }
+            // else
+            // {
+            //     //btnHide.Corner = Corner.Right;
+            //     Global.EditTool.pEdit.Width = Global.WidthOldTools;
+
+            //     //   Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
+
+
+            // }
+            //   G.Header.Layout.ResumeLayout(true);
+            //  Global.EditTool.LayOutShow.ResumeLayout(true);
+            //Global.EditTool.LayoutMain.ResumeLayout(true);
 
         }
         int percent = 0;

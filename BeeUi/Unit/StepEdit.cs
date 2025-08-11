@@ -57,8 +57,8 @@ namespace BeeUi.Common
 
             //   G.StepEdit = this;
         }
-        public SettingStep2 SettingStep2 ;
-        public SettingStep1 SettingStep1;
+        public SettingStep2 SettingStep2 = new SettingStep2();
+        public SettingStep1 SettingStep1=new SettingStep1();
         private void btnStep2_Click(object sender, EventArgs e)
         {
             if (Global.EditTool.View.btnLive.IsCLick)
@@ -145,7 +145,7 @@ namespace BeeUi.Common
         //            G.Header.workLoadProgram.RunWorkerAsync();
         //    }
         }
-      public  SettingStep4 SettingStep4;
+      public  SettingStep4 SettingStep4=new SettingStep4();
         private void btnStep4_Click(object sender, EventArgs e)
         {
             if (Global.EditTool.View.btnLive.IsCLick)
@@ -172,7 +172,7 @@ namespace BeeUi.Common
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SaveData.Project(Global.Project);
+           // SaveData.Project(Global.Project);
             Global.EditTool.RefreshGuiEdit(Step.Run);
         }
     }

@@ -116,7 +116,7 @@ namespace BeeInterface
             //if(this!=null)
             //this.Invoke(new Action(() =>
             //{
-            //    Gui.RoundRg(this, 10, Corner.Both);
+             Gui.RoundRg(this, 10, Corner.Both);
             //}));
 
         }

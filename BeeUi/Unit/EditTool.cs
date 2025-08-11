@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -24,6 +25,7 @@ namespace BeeUi
     [Serializable()]
     public partial class EditTool : UserControl
     {
+        private LayoutPersistence _layout;
         public EditTool()
         {
             
@@ -34,9 +36,37 @@ namespace BeeUi
             this.SetStyle(ControlStyles.UserPaint, true);
            
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
-            
-                                                    // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
+            _layout = new LayoutPersistence(this, key: "MainLayout");
+            _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
+                                  // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
 
+        }
+        void ShowView(Control host, Control next)
+        {
+            host.SuspendLayout();
+            foreach (Control c in host.Controls) c.Visible = false; // không remove
+            if (!host.Controls.Contains(next))
+            {
+                next.Dock = DockStyle.Fill;
+                next.Visible = false;
+                host.Controls.Add(next);
+            }
+            next.Visible = true;
+            next.BringToFront();
+            host.ResumeLayout(true);
+            host.PerformLayout();
+        }
+        void EnableDoubleBuffer(Control c)
+        {
+            var t = c.GetType();
+            var piDB = t.GetProperty("DoubleBuffered",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            piDB?.SetValue(c, true, null);
+
+            // giúp redraw mượt khi resize
+            var piRR = t.GetProperty("ResizeRedraw",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            piRR?.SetValue(c, true, null);
         }
         public void RefreshGuiEdit( Step Step)
         {
@@ -56,28 +86,21 @@ namespace BeeUi
                         G.SettingPLC.Dock = DockStyle.Fill;
                         break;
                     case Step.Run:
-                        pHeader.Visible = true;
+                       
                         CameraBar.Visible = true;
-                        this.SuspendLayout();
+                        pHeader.Visible = true;
                         Global.IsRun = true;
                         G.Header.btnMode.Text = "Run";
                         G.Header.btnMode.IsCLick = false;
                         pName.Visible = false;
-                        if (Global.ToolSettings == null)
-                        {
-                            Global.ToolSettings = new ToolSettings();
-                            Global.ToolSettings.Location = new Point(0, 0);
-                           // Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                            Global.ToolSettings.pAllTool.Visible = true;
-                            Global.ToolSettings.Dock = DockStyle.Fill;
-                        }
-                       
                         G.SettingPLC.Visible = false;
-                        pEditTool.Controls.Clear();
+                        pInfor.Show("Dashboard");
+                        pEditTool.Show("Tool");
+                        //pEditTool.Controls.Clear();
                         
-                        //pEditTool.Visible = true;
-                        Global.ToolSettings.Dock = DockStyle.Fill;
-                        pEditTool.Controls.Add(Global.ToolSettings);
+                        ////pEditTool.Visible = true;
+                        //Global.ToolSettings.Dock = DockStyle.Fill;
+                        //pEditTool.Controls.Add(Global.ToolSettings);
                        
                       //  Global.ToolSettings.Size = pEditTool.Size;
 
@@ -86,25 +109,13 @@ namespace BeeUi
                       //  Global.ToolSettings.BringToFront();
                         
                        // Global.EditTool.View.pHeader.Controls.Clear();
-                        if ( G.StatusDashboard == null)
-                        {
-                             G.StatusDashboard = new StatusDashboard();
-                            G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config. AlphaBar-50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
-                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
-                            G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar,Global.Config.colorGui.R,Global.Config.colorGui.G,Global.Config.colorGui.B);
-                          //  G.StatusDashboard.Dock = DockStyle.None;
-                          //  G.StatusDashboard.Location = new Point(0, 0); 
-                          //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                        }
+                     
                         //G.StepEdit.Visible = false;
                         //G.StatusDashboard.Visible = true;
                         // G.StatusDashboard.Parent = Global.EditTool.View.pHeader;
                         //G.StatusDashboard.Size = Global.EditTool.View.pHeader.Size;
                         //G.StatusDashboard.BringToFront();
-                        Global.EditTool.View.pHeader.Controls.Clear();
-                        //pEditTool.Visible = true;
-                        G.StatusDashboard.Dock = DockStyle.Fill;
-                        Global.EditTool.View.pHeader.Controls.Add(G.StatusDashboard);
+                     
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -125,7 +136,7 @@ namespace BeeUi
                         {
                             MessageBox.Show(ex.Message);
                         }
-                        this.ResumeLayout();
+                       
                         break;
                     case Step.Step1:
                         pHeader.Visible = false;
@@ -133,67 +144,40 @@ namespace BeeUi
                         Global.IsRun = false;
                         G.Header.btnMode.Text = "Edit";
                         G.Header.btnMode.IsCLick = true;
-                     //   this.SuspendLayout();
+                   
                         G.StepEdit.btnStep1.IsCLick = true;
+
+                        
                        
-                        if (G.StepEdit == null)
-                        {
-                            G.StepEdit = new Common.StepEdit();
+                       
+                      
 
-                            G.StepEdit.Dock = DockStyle.None;
-                            G.StepEdit.Location = new Point(0, 0);
-                           
-                        }
-                        if (G.StepEdit.SettingStep1 == null)
-                        {
-                            G.StepEdit.SettingStep1 = new SettingStep1();
-
-                            G.StepEdit.SettingStep1.Location = new Point(0, 0);
-                            G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
-                            //  G.StepEdit.SettingStep1.BringToFront();
-                        }
-                        if (G.StepEdit.Parent != Global.EditTool.View.pHeader)
-                        {
-                            Global.EditTool.View.pHeader.Controls.Clear();
-                            //pEditTool.Visible = true;
-                            G.StepEdit.Dock = DockStyle.Fill;
-                            Global.EditTool.View.pHeader.Controls.Add(G.StepEdit);
-                        }
                         //G.StepEdit.SettingStep1.Size = Global.EditTool.pEditTool.Size;
                         //G.StepEdit.Visible = true;
                         //G.StatusDashboard.Visible = false;
-                        pEditTool.Controls.Clear();
-
-                        //pEditTool.Visible = true;
-                        G.StepEdit.SettingStep1.Dock = DockStyle.Fill;
-                        //G.StepEdit.SettingStep1.Visible = false; // Ẩn trước để tránh redraw liên tục
-
-                        //foreach (Control child in G.StepEdit.SettingStep1.Controls)
-                        //{
-                        //    child.Visible = false;
-                        //}
-                        pEditTool.Controls.Add(G.StepEdit.SettingStep1);
+                        pEditTool.Show("Step1");
+                        pInfor.Show("StepEdit");
                         //G.StepEdit.SettingStep1.Visible = true;
                         //foreach (Control child in G.StepEdit.SettingStep1.Controls)
                         //{
                         //    child.Visible = true;
                         //}
-                     
+
                         //Global.ToolSettings.Visible = false;
                         //G.StepEdit.SettingStep1.Visible = true;
                         //G.StepEdit.SettingStep1.Parent = pEditTool;
                         //G.StepEdit.SettingStep1.BringToFront();
-                        
+
                         //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
                         //{
                         //    tool.ItemTool.Score.Enabled = false;
                         //}
 
                         //G.StepEdit.Parent = Global.EditTool.View.pHeader;
-                      
+
                         //G.StepEdit.Size = Global.EditTool.View.pHeader.Size;
                         //G.StepEdit.BringToFront();
-                      
+
                         //iconTool.BackgroundImage = Properties.Resources._1;
                         lbTool.Text = "Setup Camera";
 
@@ -206,12 +190,9 @@ namespace BeeUi
                         G.StepEdit.btnStep2.IsCLick = true;
                         //   pName.Visible = true;
                         G.IsCalib = false;
-                        if (G.StepEdit.SettingStep2 == null)
-                            G.StepEdit.SettingStep2 = new SettingStep2();
-                        pEditTool.Controls.Clear();
-                        G.StepEdit.SettingStep2.Parent = Global.EditTool.pEditTool;
-                        G.StepEdit.SettingStep2.Dock = DockStyle.Fill;
-                       
+
+                        pEditTool.Show("Step2");
+
                         //iconTool.BackgroundImage = Properties.Resources._2;
                         lbTool.Text = "Register Image";
                         try
@@ -241,18 +222,15 @@ namespace BeeUi
                     case Step.Step3:
                         G.StepEdit.btnStep3.IsCLick = true;
                         pName.Visible = true;
-                        if (Global.ToolSettings == null)
-                            Global.ToolSettings = new ToolSettings();
-                        pEditTool.Controls.Clear();
-                        Global.ToolSettings.Dock = DockStyle.Fill;
-                        pEditTool.Controls.Add(Global.ToolSettings);
+                       
+                        pEditTool.Show("Tool");
                         //Global.ToolSettings.Parent = pEditTool;
                         //Global.ToolSettings.Size = pEditTool.Size;
                         //Global.ToolSettings.Location = new Point(0, 0);
                         //Global.ToolSettings.pAllTool.Visible = true;
                         //Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-                      
-                     
+
+
                         //Global.ToolSettings.BringToFront();
                         if (Global.ParaCommon.matRegister != null)
                         {
@@ -277,13 +255,10 @@ namespace BeeUi
                         G.StepEdit.btnStep4.IsCLick = true;
                         pName.Visible = true;
                         G.IsCalib = false;
-                        if (G.StepEdit.SettingStep4 == null)
-                            G.StepEdit.SettingStep4 = new SettingStep4();
-                        pEditTool.Controls.Clear();
-                        G.StepEdit.SettingStep4.Parent = Global.EditTool.pEditTool;
-                        G.StepEdit.SettingStep4.Dock = DockStyle.Fill;
-                       
-                     //   iconTool.BackgroundImage = Properties.Resources._4;
+
+                        pEditTool.Show("Step4");
+
+                        //   iconTool.BackgroundImage = Properties.Resources._4;
                         lbTool.Text = "Setup Status OutPut";
                         G.StepEdit.SettingStep4.RefreshLogic();
                         break;
@@ -324,10 +299,7 @@ namespace BeeUi
 
         public View View;
      
-        private void stepEdit1_Load(object sender, EventArgs e)
-        {
-
-        }
+     
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -379,15 +351,7 @@ namespace BeeUi
 
         }
 
-        private void View_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void outLine11_Load(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
@@ -398,10 +362,38 @@ namespace BeeUi
         {
 
         }
+        MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
 
-       
         private void EditTool_Load(object sender, EventArgs e)
         {
+
+            //    this.Controls.Add(DockHost);
+
+            //    // Nội dung chính
+            //    DockHost.Center = pView;
+
+            //    // Thêm nhiều dock trái/phải/trên/dưới
+            //    DockHost.AddDock(DockSide.Top, "Top", pTop, "Top", size: 120, minSize: 140);
+            //    DockHost.AddDock(DockSide.Top, "Header", pHeader, "Header", size: 200, minSize: 140);
+            //    DockHost.AddDock(DockSide.Right, "Edit", pEdit, "Edit", size: 500);
+            //    DockHost.AddDock(DockSide.Bottom, "Bottom", LayoutEnd, "Bottom", size: 40);
+            //  //  DockHost.AddDock(DockSide.Bottom, "Log", new LogView(), "Log", size: 180);
+
+            //    // Layout tùy ý theo vùng
+            ////    DockHost.LeftLayout = ZoneLayout.Accordion;       // nhiều pane + splitter
+            ////    DockHost.RightLayout = ZoneLayout.Accordion;  // 1 pane mở, còn lại co gọn
+            //   // DockHost.TopLayout = ZoneLayout.Accordion;
+            //   // DockHost.BottomLayout = ZoneLayout.Accordion;
+
+            //    // Thao tác runtime
+            //   // DockHost.ToggleCollapsed("Top");      // thu gọn/mở rộng pane "Layers"
+            //   // DockHost.SetDockVisible("Top", false);   // ẩn pane "Log"
+            //   // DockHost.SetDockSize("Inspector", 360);  // chỉnh size
+            //   // DockHost.MoveDock("Layers", 0);          // đổi thứ tự trong Left
+            BeeCore.CustomGui.RoundRg(pInfor, 20);
+            this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
+            pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
+           
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
             if (Global.listParaCamera[0] != null)
                 CameraBar.btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
@@ -414,7 +406,33 @@ namespace BeeUi
             pHeader.Height =(int)( pHeader.Height * Global.PerScaleHeight);
             pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);
             pEdit.Width= (int)(pEdit.Width * Global.PerScaleWidth);
-            
+            if (Global.ToolSettings == null)
+            {
+                Global.ToolSettings = new ToolSettings();
+                Global.ToolSettings.Location = new Point(0, 0);
+                // Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+                Global.ToolSettings.pAllTool.Visible = true;
+                Global.ToolSettings.Dock = DockStyle.Fill;
+            }
+            if (G.StatusDashboard == null)
+            {
+                G.StatusDashboard = new StatusDashboard();
+                G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+                G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+                G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
+                //  G.StatusDashboard.Dock = DockStyle.None;
+                //  G.StatusDashboard.Location = new Point(0, 0); 
+                //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            }
+            pEditTool.Register("Tool", () =>Global.ToolSettings);
+            pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
+            pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
+            pEditTool.Register("PLC", () => G.SettingPLC);
+            pEditTool.Register("Step4", () => G.StepEdit.SettingStep4);
+
+            pInfor.Register("Dashboard", () => G.StatusDashboard);
+            pInfor.Register("StepEdit", () => G.StepEdit);
+           
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
 
@@ -482,9 +500,7 @@ namespace BeeUi
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config",Global.Config);
+            
             G.Main.Close();
         }
 
@@ -546,15 +562,14 @@ namespace BeeUi
         private void pView_SizeChanged(object sender, EventArgs e)
         {
 
-            if (Global.EditTool == null) return;
-            if (Global.EditTool.View == null)
+         
+            if (View == null)
                     return;
            
-            Global.EditTool.View.Size = Global.EditTool.pView.Size;
-            Global.EditTool.View.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            Global.EditTool.View.Location = new Point(0, 0);
-            Global.EditTool.View.Dock = DockStyle.None;
-            Global.EditTool.View.Parent = Global.EditTool.pView;
+            View.Size = pView.Size;
+
+            View.Dock = DockStyle.Fill;
+           
 
         }
 
@@ -565,11 +580,7 @@ namespace BeeUi
 
         private void btnShuttdown_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure?", "Shutdown", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                G.IsShutDown = true;
-                btnExit.PerformClick();
-            }
+           
         }
 
         private void toolStripPort_DoubleClick(object sender, EventArgs e)
@@ -597,7 +608,7 @@ namespace BeeUi
             }
         }
 
-        private void btnHeaderBar1_Load(object sender, EventArgs e)
+        private void btnHeaderBar_Load(object sender, EventArgs e)
         {
 
         }
@@ -624,6 +635,11 @@ namespace BeeUi
         private void CustomTablePanel_CellClick(object sender, CellEventArgs e)
         {
 
+        }
+
+        private void pInfor_SizeChanged(object sender, EventArgs e)
+        {
+            BeeCore.CustomGui.RoundRg(pInfor, 20);
         }
 
         private void tmReaPLC_Tick(object sender, EventArgs e)

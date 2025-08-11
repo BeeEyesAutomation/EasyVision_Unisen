@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.layout = new System.Windows.Forms.TableLayoutPanel();
+            this.layout = new DbTableLayoutPanel();
             this.btnOK = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
             this.layout.SuspendLayout();
@@ -123,7 +123,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel layout;
+        private DbTableLayoutPanel layout;
         private RJButton btnOK;
         private RJButton btnCancel;
     }

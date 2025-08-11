@@ -243,29 +243,19 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Chart {
-            get {
-                object obj = ResourceManager.GetObject("Chart", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Chart2 {
-            get {
-                object obj = ResourceManager.GetObject("Chart2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Circle_1 {
             get {
                 object obj = ResourceManager.GetObject("Circle_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Close_Window {
+            get {
+                object obj = ResourceManager.GetObject("Close_Window", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -556,6 +546,16 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Image {
             get {
                 object obj = ResourceManager.GetObject("Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Installing_Updates {
+            get {
+                object obj = ResourceManager.GetObject("Installing_Updates", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

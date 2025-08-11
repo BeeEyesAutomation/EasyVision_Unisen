@@ -33,15 +33,15 @@ namespace BeeInterface
             this.threadProcess = new System.ComponentModel.BackgroundWorker();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new DbTableLayoutPanel();
             this.txtQRCODE = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new DbTableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new DbTableLayoutPanel();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new DbTableLayoutPanel();
             this.btnOK = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnTest = new BeeInterface.RJButton();
@@ -433,20 +433,20 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         public System.ComponentModel.BackgroundWorker threadProcess;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private DbTableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private DbTableLayoutPanel tableLayoutPanel6;
         private RJButton btnOK;
         private RJButton btnCancel;
         private RJButton btnTest;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private DbTableLayoutPanel tableLayoutPanel2;
         private RJButton btnCropFull;
         private RJButton btnCropHalt;
 
         private System.Windows.Forms.TextBox txtQRCODE;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private DbTableLayoutPanel tableLayoutPanel3;
         private RJButton btnSet;
     }
 }

@@ -490,11 +490,11 @@ namespace BeeCore
         private void UpdateLayout()
         {
             var r = this.ClientRectangle;
-            int margin = 5;
+            int margin = 10;
 
             // 1) Vị trí và size thanh track:
             szTrack = new Size(r.Width - szStatus.Width - margin * 2, 15);
-            pTrack = new Point(margin, r.Height / 2 - szTrack.Height / 2);
+            pTrack = new Point(margin, r.Height / 2 - szTrack.Height / 2+5);
 
             // 2) Vị trí tick theo value:
             float ratio = (Value - Min) / (Max - Min);

@@ -209,6 +209,7 @@
     <Compile Include="SettingDevice.Designer.cs">
       <DependentUpon>SettingDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="UiPerf.cs" />
     <Compile Include="Unit\AddFilters.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -226,6 +227,12 @@
     </Compile>
     <Compile Include="Tool\ucReport.Designer.cs">
       <DependentUpon>ucReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Unit\HideBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\HideBar.Designer.cs">
+      <DependentUpon>HideBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Unit\BtnHeaderBar.cs">
       <SubType>UserControl</SubType>
@@ -373,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ucReport.resx">
       <DependentUpon>ucReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\HideBar.resx">
+      <DependentUpon>HideBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\BtnHeaderBar.resx">
       <DependentUpon>BtnHeaderBar.cs</DependentUpon>
@@ -629,6 +639,9 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Close Window.png" />
+    <None Include="Resources\Installing Updates_1.png" />
+    <None Include="Resources\Installing Updates.png" />
     <None Include="Resources\Folder_11.png" />
     <None Include="Resources\Camera1.png" />
     <None Include="Resources\Ruler.png" />

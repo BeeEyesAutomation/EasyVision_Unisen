@@ -92,6 +92,9 @@
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
     <Compile Include="DataTool.cs" />
+    <Compile Include="DbTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="GroupControl\OK_Cancel.cs">
       <SubType>UserControl</SubType>
@@ -111,6 +114,8 @@
     <Compile Include="ItemRS.Designer.cs">
       <DependentUpon>ItemRS.cs</DependentUpon>
     </Compile>
+    <Compile Include="LayoutPersistence.cs" />
+    <Compile Include="MultiDockHost.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

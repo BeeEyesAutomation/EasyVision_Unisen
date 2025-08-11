@@ -103,12 +103,11 @@ namespace BeeInterface
         }
         private RJButton btnPlus;
         private RJButton btnSub;
-        private TableLayoutPanel lay;
+        private DbTableLayoutPanel lay;
 
-     
         private void InitializeComponent()
         {
-            this.lay = new System.Windows.Forms.TableLayoutPanel();
+            this.lay = new BeeInterface.DbTableLayoutPanel();
             this.btnSub = new BeeInterface.RJButton();
             this.btnPlus = new BeeInterface.RJButton();
             this.txt = new System.Windows.Forms.TextBox();
@@ -118,7 +117,7 @@ namespace BeeInterface
             // lay
             // 
             this.lay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lay.BackColor = System.Drawing.Color.Transparent;
+            this.lay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.lay.ColumnCount = 3;
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -136,26 +135,49 @@ namespace BeeInterface
             // 
             // btnSub
             // 
-            this.btnSub.BackColor = System.Drawing.Color.Transparent;
-            this.btnSub.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnSub.AutoFont = true;
+            this.btnSub.AutoFontHeightRatio = 0.75F;
+            this.btnSub.AutoFontMax = 100F;
+            this.btnSub.AutoFontMin = 6F;
+            this.btnSub.AutoFontWidthRatio = 0.92F;
+            this.btnSub.AutoImage = true;
+            this.btnSub.AutoImageMaxRatio = 0.75F;
+            this.btnSub.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnSub.AutoImageTint = true;
+            this.btnSub.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnSub.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnSub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSub.BorderColor = System.Drawing.Color.Transparent;
+            this.btnSub.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnSub.BorderRadius = 10;
             this.btnSub.BorderSize = 1;
-            this.btnSub.Image = null;
+            this.btnSub.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSub.Corner = BeeGlobal.Corner.Left;
+            this.btnSub.DebounceResizeMs = 16;
             this.btnSub.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSub.FlatAppearance.BorderSize = 0;
             this.btnSub.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSub.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.34375F, System.Drawing.FontStyle.Bold);
             this.btnSub.ForeColor = System.Drawing.Color.Black;
+            this.btnSub.Image = null;
             this.btnSub.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSub.ImageDisabled = null;
+            this.btnSub.ImageHover = null;
+            this.btnSub.ImageNormal = null;
+            this.btnSub.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnSub.ImagePressed = null;
+            this.btnSub.ImageTextSpacing = 6;
+            this.btnSub.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnSub.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnSub.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnSub.ImageTintOpacity = 0.5F;
+            this.btnSub.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnSub.IsCLick = false;
             this.btnSub.IsNotChange = false;
             this.btnSub.IsRect = false;
             this.btnSub.IsUnGroup = false;
             this.btnSub.Location = new System.Drawing.Point(0, 0);
             this.btnSub.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSub.Multiline = false;
             this.btnSub.Name = "btnSub";
             this.btnSub.Size = new System.Drawing.Size(35, 43);
             this.btnSub.TabIndex = 7;
@@ -169,25 +191,48 @@ namespace BeeInterface
             // 
             // btnPlus
             // 
-            this.btnPlus.BackColor = System.Drawing.Color.Transparent;
-            this.btnPlus.BackgroundColor = System.Drawing.Color.Transparent;
-            this.btnPlus.BorderColor = System.Drawing.Color.Transparent;
+            this.btnPlus.AutoFont = true;
+            this.btnPlus.AutoFontHeightRatio = 0.75F;
+            this.btnPlus.AutoFontMax = 100F;
+            this.btnPlus.AutoFontMin = 6F;
+            this.btnPlus.AutoFontWidthRatio = 0.92F;
+            this.btnPlus.AutoImage = true;
+            this.btnPlus.AutoImageMaxRatio = 0.75F;
+            this.btnPlus.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnPlus.AutoImageTint = true;
+            this.btnPlus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnPlus.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnPlus.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnPlus.BorderRadius = 10;
             this.btnPlus.BorderSize = 1;
-            this.btnPlus.Image = null;
+            this.btnPlus.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnPlus.Corner = BeeGlobal.Corner.Right;
+            this.btnPlus.DebounceResizeMs = 16;
             this.btnPlus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPlus.FlatAppearance.BorderSize = 0;
             this.btnPlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlus.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.40625F, System.Drawing.FontStyle.Bold);
             this.btnPlus.ForeColor = System.Drawing.Color.Black;
+            this.btnPlus.Image = null;
             this.btnPlus.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnPlus.ImageDisabled = null;
+            this.btnPlus.ImageHover = null;
+            this.btnPlus.ImageNormal = null;
+            this.btnPlus.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnPlus.ImagePressed = null;
+            this.btnPlus.ImageTextSpacing = 6;
+            this.btnPlus.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnPlus.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnPlus.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnPlus.ImageTintOpacity = 0.5F;
+            this.btnPlus.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnPlus.IsCLick = true;
             this.btnPlus.IsNotChange = false;
             this.btnPlus.IsRect = false;
             this.btnPlus.IsUnGroup = false;
             this.btnPlus.Location = new System.Drawing.Point(34, 0);
             this.btnPlus.Margin = new System.Windows.Forms.Padding(0);
+            this.btnPlus.Multiline = false;
             this.btnPlus.Name = "btnPlus";
             this.btnPlus.Size = new System.Drawing.Size(35, 43);
             this.btnPlus.TabIndex = 8;
@@ -219,6 +264,7 @@ namespace BeeInterface
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.Controls.Add(this.lay);
+            this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CustomNumeric";
             this.Size = new System.Drawing.Size(69, 45);

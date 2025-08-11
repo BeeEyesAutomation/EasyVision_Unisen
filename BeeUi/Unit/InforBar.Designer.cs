@@ -37,7 +37,7 @@ namespace BeeUi.Unit
             this.imgHis = new Cyotek.Windows.Forms.ImageBox();
             this.tmShowHis = new System.Windows.Forms.Timer(this.components);
             this.btnHide = new BeeInterface.RJButton();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new DbTableLayoutPanel();
             this.rjButton1 = new BeeInterface.RJButton();
             this.pView.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -182,7 +182,7 @@ namespace BeeUi.Unit
         public System.Windows.Forms.Timer tmShowHis;
         public System.Windows.Forms.Panel pView;
         public Cyotek.Windows.Forms.ImageBox imgHis;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private DbTableLayoutPanel tableLayoutPanel1;
         public RJButton rjButton1;
     }
 }

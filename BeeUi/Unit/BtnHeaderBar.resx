@@ -135,7 +135,17 @@
         Trv3jv8BgARLLtlvMk0AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="btnUser.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btncheck.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGPC/xhBQAAARdJREFUaEPt
+        l9EJAjEQRLcES7EES7EDW7EEO9AOtAPtRDtQBm4hDBtW4TAT2AcLR25yzCP5ObOimJK9mT2XwfO0QOC9
+        DJ6nxSV8pqVE1CgRNUpEjRJRo0TUKBE1SkSNElGjREawMbPDMkwm0ts3hGtT9L6IOT0RZJD19XPzbhhc
+        tpXhd4AlWHIYt6CUy/B6T+LCHx0Byj2CclHhaA172+s4lJ5MNlISzq8ykhLOtzLSEk4mM4WE05OZSsJh
+        mSklHJf5qwRfg7WAwJoSac80IELaMw2IkPZMAyKkPdOACGnPNCBC2pMDWw4IgE5txxcHAP4JWEZ9wv+Y
+        XRBUH3QOOQVh1TlyeQaWODLcP948etAJ3bonURQr8wEnGKnJ9F7J9gAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="btnSetting.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAALQAAACuCAYAAACfgCfPAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
         dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ8SURBVHhe7dYxbttAFEVRVfYivEYry1SRws4uBizY
@@ -168,24 +178,7 @@
         rkJggg==
 </value>
   </data>
-  <data name="btnCamera.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAALQAAACuCAYAAACfgCfPAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
-        dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ8SURBVHhe7dYxbttAFEVRVfYivEYry1SRws4uBizY
-        OEVcJfhC3AhcgHlxitPM43QXxFzWtl/+e1rbfl3bflvb/rG2/S98Y9PotDrNTrv3jr9iflnb/nZwCc5g
-        2p2G70FP3WLm7N7Xtj9P0K8HI5zR6wQ975DHAc7oNkF/HgxwRn8m6MdDOC1BkyJoUgRNiqBJETQpgiZF
-        0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQp
-        giZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJ
-        ETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRN
-        iqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJo
-        UgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRB
-        kyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQI
-        mhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkzJBfz4ewkl9TNC3gwHO
-        6DZBXw8GOKPrBP28tv39YIQz+TUtT9DjZW3728FHcAbzQ56GL19Bj6e17T/Wtv9c2/774BJ8J9PotDrN
-        Trv3jv8BgARLLtlvMk0AAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="btnSetting.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btnUser.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAALQAAACuCAYAAACfgCfPAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
         dHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ8SURBVHhe7dYxbttAFEVRVfYivEYry1SRws4uBizY
