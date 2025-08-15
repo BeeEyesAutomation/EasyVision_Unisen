@@ -78,7 +78,7 @@ namespace BeeCore
 
            
             G.CommonPlus.LoadDst(path);
-            pattern.LearnPattern(minArea, indexTool, IndexThead);
+          //  pattern.LearnPattern(minArea, indexTool, IndexThead);
 
         }
         CvPlus.Pattern pattern = new CvPlus.Pattern();

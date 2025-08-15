@@ -400,6 +400,7 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <AdditionalIncludeDirectories>$(MVCAM_COMMON_RUNENV)\Includes</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -427,6 +428,7 @@
     <ClInclude Include="BarCode.h" />
     <ClInclude Include="CCD.h" />
     <ClInclude Include="ColorArea.h" />
+    <ClInclude Include="ColorMaskWrapper.h" />
     <ClInclude Include="Focus.h" />
     <ClInclude Include="MatchingShape.h" />
     <ClInclude Include="MvCamera.h" />
@@ -442,6 +444,7 @@
     <ClCompile Include="BarCode.cpp" />
     <ClCompile Include="CCD.cpp" />
     <ClCompile Include="ColorArea.cpp" />
+    <ClCompile Include="ColorMaskWrapper.cpp" />
     <ClCompile Include="Focus.cpp" />
     <ClCompile Include="MatchingShape.cpp" />
     <ClCompile Include="MvCamera.cpp" />

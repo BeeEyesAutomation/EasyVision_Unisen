@@ -22,18 +22,18 @@ namespace BeeInterface.GroupControl
         private void btnOK_Click(object sender, EventArgs e)
         {
             Global.EditTool.pEditTool.Show("Tool");
-           
-           
+
+            Global.StatusDraw = StatusDraw.None;
 
          //   Global.IndexToolSelected = -1;
-         
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Global.EditTool.pEditTool.Show("Tool");
-           
-            if(Global.OldPropetyTool != null)
+            Global.StatusDraw = StatusDraw.None;
+            if (Global.OldPropetyTool != null)
             {
                 BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety = Global.OldPropetyTool.Clone();
             }

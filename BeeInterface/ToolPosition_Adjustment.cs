@@ -84,17 +84,13 @@ namespace BeeInterface
         }
         private void btnCannyMin_Click(object sender, EventArgs e)
         {
-            Propety.threshMin = 180;
-            Propety.threshMax = 255;
-            Propety.LearnPattern( matTemp);
+           
 
         }
 
         private void btnCannyMedium_Click(object sender, EventArgs e)
         {
-            Propety.threshMin = 100;
-            Propety.threshMax = 255;
-            Propety.LearnPattern( matTemp);
+         
 
         }
 
@@ -154,23 +150,23 @@ namespace BeeInterface
         //{
            
         //}
-        public Mat matTemp=new Mat();
+       
         Mat matClear = new Mat(); Mat matMask = new Mat();
         public Mat matTrig;
       
    
-        public void GetTemp(RectRotate rotateRect, Mat matRegister)
-        {
+        //public void GetTemp(RectRotate rotateRect, Mat matRegister)
+        //{
 
-            float angle = rotateRect._rectRotation;
-            if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-            Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-            if (matCrop.Type() == MatType.CV_8UC3)
-                Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-            if (Propety.IsAreaWhite)
-                Cv2.BitwiseNot(matTemp, matTemp);
+        //    float angle = rotateRect._rectRotation;
+        //    if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
+        //    Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
+        //    if (matCrop.Type() == MatType.CV_8UC3)
+        //        Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
+        //    if (Propety.IsAreaWhite)
+        //        Cv2.BitwiseNot(matTemp, matTemp);
 
-        }
+        //}
 
       
 
@@ -450,14 +446,14 @@ namespace BeeInterface
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
-                matTemp = Propety.GetTemp(Propety.rotCrop, Propety.rotMask,BeeCore.Common.listCamera[Propety.IndexThread].matRaw,null);
+                
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                        Propety.LearnPattern( matTemp);
+                        Propety.LearnPattern(Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.listCamera[Propety.IndexThread].matRaw, null));
 
                     }
-                imgTemp.Image = matTemp.ToBitmap();
+                imgTemp.Image = Propety.matTemp;
             
         }
 
@@ -501,8 +497,7 @@ namespace BeeInterface
                 Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
                 Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
             }
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
+        
         }
 
    

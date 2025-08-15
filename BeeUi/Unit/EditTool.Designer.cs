@@ -35,21 +35,20 @@ namespace BeeUi
             this.components = new System.ComponentModel.Container();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbLicence = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbFrameRate = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbNamefile = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtRecept = new System.Windows.Forms.ToolStripStatusLabel();
             this.pEdit = new System.Windows.Forms.Panel();
+            this.pEditTool = new BeeUi.ViewHost();
             this.pName = new System.Windows.Forms.Panel();
             this.lbTool = new BeeInterface.AutoFontLabel();
-            this.iconTool = new System.Windows.Forms.PictureBox();
             this.splitter7 = new System.Windows.Forms.Splitter();
+            this.CameraBar = new BeeUi.Unit.Cameras();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.LayoutEnd = new System.Windows.Forms.Panel();
             this.splitter6 = new System.Windows.Forms.Splitter();
+            this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -60,20 +59,33 @@ namespace BeeUi
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.pTop = new System.Windows.Forms.Panel();
+            this.lbBypass = new System.Windows.Forms.Label();
             this.splitter5 = new System.Windows.Forms.Splitter();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
-            this.picLogo = new System.Windows.Forms.PictureBox();
+            this.btnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
             this.splitter4 = new System.Windows.Forms.Splitter();
             this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveImageTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openImageTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFolderImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.playTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopTool = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.btnShowTop = new System.Windows.Forms.ToolStripMenuItem();
             this.btnShowDashBoard = new System.Windows.Forms.ToolStripMenuItem();
             this.btnMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.btnShowToolBar = new System.Windows.Forms.ToolStripMenuItem();
+            this.showsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.girdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.areaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UnlockSpiltter = new System.Windows.Forms.ToolStripMenuItem();
             this.screenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,29 +93,27 @@ namespace BeeUi
             this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x1440ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetUI = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
-            this.showsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.girdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.areaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rjButton1 = new BeeInterface.RJButton();
-            this.btnFull = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFile = new System.Windows.Forms.OpenFileDialog();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.pInfor = new BeeUi.ViewHost();
-            this.pEditTool = new BeeUi.ViewHost();
-            this.CameraBar = new BeeUi.Unit.Cameras();
-            this.hideBar = new BeeUi.Unit.HideBar();
             this.pHeader = new BeeUi.Common.Header();
-            this.btnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
+            this.btnFull = new System.Windows.Forms.ToolStripMenuItem();
+            this.iconTool = new System.Windows.Forms.PictureBox();
+            this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picLogo = new System.Windows.Forms.PictureBox();
+            this.openFileTool = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pName.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.iconTool)).BeginInit();
             this.LayoutEnd.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.mouseLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iconTool)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -132,27 +142,11 @@ namespace BeeUi
             this.lbLicence.Size = new System.Drawing.Size(47, 28);
             this.lbLicence.Text = "Licence";
             // 
-            // lbCam
-            // 
-            this.lbCam.Image = global::BeeUi.Properties.Resources.CameraNotConnect;
-            this.lbCam.Name = "lbCam";
-            this.lbCam.Size = new System.Drawing.Size(48, 28);
-            this.lbCam.Text = "0 fps";
-            // 
             // lbFrameRate
             // 
             this.lbFrameRate.Name = "lbFrameRate";
             this.lbFrameRate.Size = new System.Drawing.Size(34, 28);
             this.lbFrameRate.Text = "0 Fps";
-            // 
-            // toolStripPort
-            // 
-            this.toolStripPort.Image = global::BeeUi.Properties.Resources.PortNotConnect;
-            this.toolStripPort.Name = "toolStripPort";
-            this.toolStripPort.Size = new System.Drawing.Size(79, 28);
-            this.toolStripPort.Text = "PLC Ready";
-            this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
-            this.toolStripPort.DoubleClick += new System.EventHandler(this.toolStripPort_DoubleClick);
             // 
             // lbNamefile
             // 
@@ -182,6 +176,15 @@ namespace BeeUi
             this.pEdit.Size = new System.Drawing.Size(500, 1231);
             this.pEdit.TabIndex = 14;
             // 
+            // pEditTool
+            // 
+            this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pEditTool.Location = new System.Drawing.Point(0, 114);
+            this.pEditTool.Name = "pEditTool";
+            this.pEditTool.Size = new System.Drawing.Size(500, 1112);
+            this.pEditTool.TabIndex = 1;
+            // 
             // pName
             // 
             this.pName.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -193,32 +196,17 @@ namespace BeeUi
             this.pName.Size = new System.Drawing.Size(500, 44);
             this.pName.TabIndex = 0;
             this.pName.Visible = false;
-            this.pName.Paint += new System.Windows.Forms.PaintEventHandler(this.pName_Paint);
             // 
             // lbTool
             // 
-            this.lbTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTool.AutoFont = true;
+            this.lbTool.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
-            this.lbTool.Location = new System.Drawing.Point(56, -1);
+            this.lbTool.Location = new System.Drawing.Point(54, 0);
             this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(444, 44);
+            this.lbTool.Size = new System.Drawing.Size(446, 44);
             this.lbTool.TabIndex = 1;
             this.lbTool.Text = "Tool";
-            // 
-            // iconTool
-            // 
-            this.iconTool.BackgroundImage = global::BeeUi.Properties.Resources.Add;
-            this.iconTool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconTool.Dock = System.Windows.Forms.DockStyle.Left;
-            this.iconTool.Location = new System.Drawing.Point(0, 0);
-            this.iconTool.Name = "iconTool";
-            this.iconTool.Size = new System.Drawing.Size(54, 44);
-            this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.iconTool.TabIndex = 0;
-            this.iconTool.TabStop = false;
             // 
             // splitter7
             // 
@@ -228,6 +216,15 @@ namespace BeeUi
             this.splitter7.Size = new System.Drawing.Size(500, 3);
             this.splitter7.TabIndex = 4;
             this.splitter7.TabStop = false;
+            // 
+            // CameraBar
+            // 
+            this.CameraBar.BackColor = System.Drawing.Color.White;
+            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CameraBar.Location = new System.Drawing.Point(0, 0);
+            this.CameraBar.Name = "CameraBar";
+            this.CameraBar.Size = new System.Drawing.Size(500, 67);
+            this.CameraBar.TabIndex = 3;
             // 
             // splitter1
             // 
@@ -264,6 +261,15 @@ namespace BeeUi
             this.splitter6.TabIndex = 4;
             this.splitter6.TabStop = false;
             // 
+            // hideBar
+            // 
+            this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.hideBar.Location = new System.Drawing.Point(1500, 0);
+            this.hideBar.Name = "hideBar";
+            this.hideBar.Size = new System.Drawing.Size(740, 33);
+            this.hideBar.TabIndex = 3;
+            // 
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Left;
@@ -276,21 +282,9 @@ namespace BeeUi
             this.label3.Text = " Sensing the future";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox1.Image = global::BeeUi.Properties.Resources.UNISEN_LOGO;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(138, 33);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // tmReaPLC
             // 
             this.tmReaPLC.Interval = 1;
-            this.tmReaPLC.Tick += new System.EventHandler(this.tmReaPLC_Tick);
             // 
             // button1
             // 
@@ -351,6 +345,7 @@ namespace BeeUi
             // pTop
             // 
             this.pTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.pTop.Controls.Add(this.lbBypass);
             this.pTop.Controls.Add(this.splitter5);
             this.pTop.Controls.Add(this.autoFontLabel1);
             this.pTop.Controls.Add(this.btnHeaderBar);
@@ -360,6 +355,21 @@ namespace BeeUi
             this.pTop.Name = "pTop";
             this.pTop.Size = new System.Drawing.Size(2240, 51);
             this.pTop.TabIndex = 22;
+            // 
+            // lbBypass
+            // 
+            this.lbBypass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lbBypass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbBypass.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lbBypass.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbBypass.ForeColor = System.Drawing.Color.White;
+            this.lbBypass.Location = new System.Drawing.Point(1632, 0);
+            this.lbBypass.Name = "lbBypass";
+            this.lbBypass.Size = new System.Drawing.Size(98, 51);
+            this.lbBypass.TabIndex = 11;
+            this.lbBypass.Text = "ByPass";
+            this.lbBypass.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbBypass.Visible = false;
             // 
             // splitter5
             // 
@@ -384,17 +394,15 @@ namespace BeeUi
             this.autoFontLabel1.Text = "Vision Sensor ";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // picLogo
+            // btnHeaderBar
             // 
-            this.picLogo.BackColor = System.Drawing.Color.Transparent;
-            this.picLogo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.picLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
-            this.picLogo.Location = new System.Drawing.Point(0, 0);
-            this.picLogo.Name = "picLogo";
-            this.picLogo.Size = new System.Drawing.Size(70, 51);
-            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picLogo.TabIndex = 7;
-            this.picLogo.TabStop = false;
+            this.btnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar.Location = new System.Drawing.Point(1735, 0);
+            this.btnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar.Name = "btnHeaderBar";
+            this.btnHeaderBar.Size = new System.Drawing.Size(505, 51);
+            this.btnHeaderBar.TabIndex = 8;
             // 
             // splitter2
             // 
@@ -441,12 +449,15 @@ namespace BeeUi
             this.btnNew,
             this.saveToolStrip,
             this.saveAsTool,
+            this.openFileTool,
+            this.saveImageTool,
+            this.testToolStripMenuItem,
             this.btnFull,
             this.toolStripMenuItem1,
             this.showsToolStripMenuItem,
             this.customUIToolStripMenuItem});
             this.mouseLeft.Name = "contextMenuStrip2";
-            this.mouseLeft.Size = new System.Drawing.Size(227, 205);
+            this.mouseLeft.Size = new System.Drawing.Size(227, 271);
             // 
             // btnNew
             // 
@@ -456,6 +467,72 @@ namespace BeeUi
             this.btnNew.Size = new System.Drawing.Size(226, 22);
             this.btnNew.Text = "New";
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // saveToolStrip
+            // 
+            this.saveToolStrip.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.saveToolStrip.Name = "saveToolStrip";
+            this.saveToolStrip.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStrip.Size = new System.Drawing.Size(226, 22);
+            this.saveToolStrip.Text = "Save";
+            this.saveToolStrip.Click += new System.EventHandler(this.saveToolStrip_Click);
+            // 
+            // saveAsTool
+            // 
+            this.saveAsTool.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.saveAsTool.Name = "saveAsTool";
+            this.saveAsTool.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.saveAsTool.Size = new System.Drawing.Size(226, 22);
+            this.saveAsTool.Text = "Save As";
+            this.saveAsTool.Click += new System.EventHandler(this.saveAsToolStripMenuItem1_Click);
+            // 
+            // saveImageTool
+            // 
+            this.saveImageTool.Name = "saveImageTool";
+            this.saveImageTool.Size = new System.Drawing.Size(226, 22);
+            this.saveImageTool.Text = "Save Image";
+            this.saveImageTool.Click += new System.EventHandler(this.saveImageTool_Click);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openImageTool,
+            this.openFolderImage,
+            this.playTool,
+            this.stopTool});
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.testToolStripMenuItem.Text = "Test";
+            // 
+            // openImageTool
+            // 
+            this.openImageTool.Name = "openImageTool";
+            this.openImageTool.Size = new System.Drawing.Size(210, 22);
+            this.openImageTool.Text = "Open Image";
+            this.openImageTool.Click += new System.EventHandler(this.openImageTool_Click);
+            // 
+            // openFolderImage
+            // 
+            this.openFolderImage.Name = "openFolderImage";
+            this.openFolderImage.Size = new System.Drawing.Size(210, 22);
+            this.openFolderImage.Text = "Open Folder Image";
+            this.openFolderImage.Click += new System.EventHandler(this.openFolderImage_Click);
+            // 
+            // playTool
+            // 
+            this.playTool.Enabled = false;
+            this.playTool.Name = "playTool";
+            this.playTool.Size = new System.Drawing.Size(210, 22);
+            this.playTool.Text = "Play";
+            this.playTool.Click += new System.EventHandler(this.playTool_Click);
+            // 
+            // stopTool
+            // 
+            this.stopTool.Name = "stopTool";
+            this.stopTool.Size = new System.Drawing.Size(210, 22);
+            this.stopTool.Text = "Stop";
+            this.stopTool.Click += new System.EventHandler(this.stopTool_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -472,30 +549,58 @@ namespace BeeUi
             // btnShowTop
             // 
             this.btnShowTop.Name = "btnShowTop";
-            this.btnShowTop.Size = new System.Drawing.Size(180, 22);
+            this.btnShowTop.Size = new System.Drawing.Size(160, 22);
             this.btnShowTop.Text = "Top Bar";
             this.btnShowTop.Click += new System.EventHandler(this.btnShowTop_Click);
             // 
             // btnShowDashBoard
             // 
             this.btnShowDashBoard.Name = "btnShowDashBoard";
-            this.btnShowDashBoard.Size = new System.Drawing.Size(180, 22);
+            this.btnShowDashBoard.Size = new System.Drawing.Size(160, 22);
             this.btnShowDashBoard.Text = "Dash Board";
             this.btnShowDashBoard.Click += new System.EventHandler(this.btnShowDashBoard_Click);
             // 
             // btnMenu
             // 
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(180, 22);
+            this.btnMenu.Size = new System.Drawing.Size(160, 22);
             this.btnMenu.Text = "Menu Bar";
             this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
             // 
             // btnShowToolBar
             // 
             this.btnShowToolBar.Name = "btnShowToolBar";
-            this.btnShowToolBar.Size = new System.Drawing.Size(180, 22);
+            this.btnShowToolBar.Size = new System.Drawing.Size(160, 22);
             this.btnShowToolBar.Text = "Tool Bar";
             this.btnShowToolBar.Click += new System.EventHandler(this.btnShowToolBar_Click);
+            // 
+            // showsToolStripMenuItem
+            // 
+            this.showsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.centerToolStripMenuItem,
+            this.girdToolStripMenuItem,
+            this.areaToolStripMenuItem});
+            this.showsToolStripMenuItem.Name = "showsToolStripMenuItem";
+            this.showsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.showsToolStripMenuItem.Text = "Shows";
+            // 
+            // centerToolStripMenuItem
+            // 
+            this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
+            this.centerToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.centerToolStripMenuItem.Text = "Center";
+            // 
+            // girdToolStripMenuItem
+            // 
+            this.girdToolStripMenuItem.Name = "girdToolStripMenuItem";
+            this.girdToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.girdToolStripMenuItem.Text = "Gird";
+            // 
+            // areaToolStripMenuItem
+            // 
+            this.areaToolStripMenuItem.Name = "areaToolStripMenuItem";
+            this.areaToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.areaToolStripMenuItem.Text = "Area";
             // 
             // customUIToolStripMenuItem
             // 
@@ -511,7 +616,7 @@ namespace BeeUi
             // UnlockSpiltter
             // 
             this.UnlockSpiltter.Name = "UnlockSpiltter";
-            this.UnlockSpiltter.Size = new System.Drawing.Size(180, 22);
+            this.UnlockSpiltter.Size = new System.Drawing.Size(170, 22);
             this.UnlockSpiltter.Text = "Unlock";
             this.UnlockSpiltter.Click += new System.EventHandler(this.UnlockSpiltter_Click);
             // 
@@ -522,7 +627,7 @@ namespace BeeUi
             this.x768ToolStripMenuItem,
             this.x1440ToolStripMenuItem});
             this.screenToolStripMenuItem.Name = "screenToolStripMenuItem";
-            this.screenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.screenToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.screenToolStripMenuItem.Text = "Screen";
             // 
             // x600ToolStripMenuItem
@@ -546,56 +651,9 @@ namespace BeeUi
             // resetUI
             // 
             this.resetUI.Name = "resetUI";
-            this.resetUI.Size = new System.Drawing.Size(180, 22);
+            this.resetUI.Size = new System.Drawing.Size(170, 22);
             this.resetUI.Text = "Reset Default";
             this.resetUI.Click += new System.EventHandler(this.resetUI_Click);
-            // 
-            // saveAsTool
-            // 
-            this.saveAsTool.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.saveAsTool.Name = "saveAsTool";
-            this.saveAsTool.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.S)));
-            this.saveAsTool.Size = new System.Drawing.Size(226, 22);
-            this.saveAsTool.Text = "Save As";
-            this.saveAsTool.Click += new System.EventHandler(this.saveAsToolStripMenuItem1_Click);
-            // 
-            // saveToolStrip
-            // 
-            this.saveToolStrip.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.saveToolStrip.Name = "saveToolStrip";
-            this.saveToolStrip.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStrip.Size = new System.Drawing.Size(226, 22);
-            this.saveToolStrip.Text = "Save";
-            this.saveToolStrip.Click += new System.EventHandler(this.saveToolStrip_Click);
-            // 
-            // showsToolStripMenuItem
-            // 
-            this.showsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.centerToolStripMenuItem,
-            this.girdToolStripMenuItem,
-            this.areaToolStripMenuItem});
-            this.showsToolStripMenuItem.Name = "showsToolStripMenuItem";
-            this.showsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.showsToolStripMenuItem.Text = "Shows";
-            // 
-            // centerToolStripMenuItem
-            // 
-            this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
-            this.centerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.centerToolStripMenuItem.Text = "Center";
-            // 
-            // girdToolStripMenuItem
-            // 
-            this.girdToolStripMenuItem.Name = "girdToolStripMenuItem";
-            this.girdToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.girdToolStripMenuItem.Text = "Gird";
-            // 
-            // areaToolStripMenuItem
-            // 
-            this.areaToolStripMenuItem.Name = "areaToolStripMenuItem";
-            this.areaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.areaToolStripMenuItem.Text = "Area";
             // 
             // rjButton1
             // 
@@ -644,16 +702,10 @@ namespace BeeUi
             this.rjButton1.Text = "rjButton1";
             this.rjButton1.TextColor = System.Drawing.Color.White;
             this.rjButton1.UseVisualStyleBackColor = false;
-            this.rjButton1.Click += new System.EventHandler(this.rjButton1_Click);
             // 
-            // btnFull
+            // openFile
             // 
-            this.btnFull.Image = global::BeeUi.Properties.Resources.Full_Screen;
-            this.btnFull.Name = "btnFull";
-            this.btnFull.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.btnFull.Size = new System.Drawing.Size(226, 22);
-            this.btnFull.Text = "Full Screen";
-            this.btnFull.Click += new System.EventHandler(this.btnFull_Click);
+            this.openFile.FileName = "openFile";
             // 
             // pInfor
             // 
@@ -666,34 +718,6 @@ namespace BeeUi
             this.pInfor.TabIndex = 25;
             this.pInfor.SizeChanged += new System.EventHandler(this.pInfor_SizeChanged);
             // 
-            // pEditTool
-            // 
-            this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(0, 114);
-            this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(500, 1112);
-            this.pEditTool.TabIndex = 1;
-            this.pEditTool.Paint += new System.Windows.Forms.PaintEventHandler(this.pEditTool_Paint_1);
-            // 
-            // CameraBar
-            // 
-            this.CameraBar.BackColor = System.Drawing.Color.White;
-            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CameraBar.Location = new System.Drawing.Point(0, 0);
-            this.CameraBar.Name = "CameraBar";
-            this.CameraBar.Size = new System.Drawing.Size(500, 67);
-            this.CameraBar.TabIndex = 3;
-            // 
-            // hideBar
-            // 
-            this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.hideBar.Location = new System.Drawing.Point(1500, 0);
-            this.hideBar.Name = "hideBar";
-            this.hideBar.Size = new System.Drawing.Size(740, 33);
-            this.hideBar.TabIndex = 3;
-            // 
             // pHeader
             // 
             this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -705,16 +729,71 @@ namespace BeeUi
             this.pHeader.Size = new System.Drawing.Size(2240, 80);
             this.pHeader.TabIndex = 22;
             // 
-            // btnHeaderBar
+            // btnFull
             // 
-            this.btnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar.Location = new System.Drawing.Point(1735, 0);
-            this.btnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar.Name = "btnHeaderBar";
-            this.btnHeaderBar.Size = new System.Drawing.Size(505, 51);
-            this.btnHeaderBar.TabIndex = 8;
-            this.btnHeaderBar.Load += new System.EventHandler(this.btnHeaderBar_Load);
+            this.btnFull.Image = global::BeeUi.Properties.Resources.Full_Screen;
+            this.btnFull.Name = "btnFull";
+            this.btnFull.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.btnFull.Size = new System.Drawing.Size(226, 22);
+            this.btnFull.Text = "Full Screen";
+            this.btnFull.Click += new System.EventHandler(this.btnFull_Click);
+            // 
+            // iconTool
+            // 
+            this.iconTool.BackgroundImage = global::BeeUi.Properties.Resources.Add;
+            this.iconTool.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconTool.Dock = System.Windows.Forms.DockStyle.Left;
+            this.iconTool.Location = new System.Drawing.Point(0, 0);
+            this.iconTool.Name = "iconTool";
+            this.iconTool.Size = new System.Drawing.Size(54, 44);
+            this.iconTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.iconTool.TabIndex = 0;
+            this.iconTool.TabStop = false;
+            // 
+            // lbCam
+            // 
+            this.lbCam.Image = global::BeeUi.Properties.Resources.CameraNotConnect;
+            this.lbCam.Name = "lbCam";
+            this.lbCam.Size = new System.Drawing.Size(48, 16);
+            this.lbCam.Text = "0 fps";
+            // 
+            // toolStripPort
+            // 
+            this.toolStripPort.Image = global::BeeUi.Properties.Resources.PortNotConnect;
+            this.toolStripPort.Name = "toolStripPort";
+            this.toolStripPort.Size = new System.Drawing.Size(79, 16);
+            this.toolStripPort.Text = "PLC Ready";
+            this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pictureBox1.Image = global::BeeUi.Properties.Resources.UNISEN_LOGO;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(138, 33);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // picLogo
+            // 
+            this.picLogo.BackColor = System.Drawing.Color.Transparent;
+            this.picLogo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.picLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
+            this.picLogo.Location = new System.Drawing.Point(0, 0);
+            this.picLogo.Name = "picLogo";
+            this.picLogo.Size = new System.Drawing.Size(70, 51);
+            this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLogo.TabIndex = 7;
+            this.picLogo.TabStop = false;
+            // 
+            // openFileTool
+            // 
+            this.openFileTool.Name = "openFileTool";
+            this.openFileTool.Size = new System.Drawing.Size(226, 22);
+            this.openFileTool.Text = "Open Image";
+            this.openFileTool.Click += new System.EventHandler(this.openFileTool_Click);
             // 
             // EditTool
             // 
@@ -740,13 +819,13 @@ namespace BeeUi
             this.statusStrip1.PerformLayout();
             this.pEdit.ResumeLayout(false);
             this.pName.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.iconTool)).EndInit();
             this.LayoutEnd.ResumeLayout(false);
             this.LayoutEnd.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pTop.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.mouseLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.iconTool)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -815,5 +894,15 @@ namespace BeeUi
         private System.Windows.Forms.ToolStripMenuItem girdToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem areaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem btnFull;
+        public System.Windows.Forms.Label lbBypass;
+        private System.Windows.Forms.ToolStripMenuItem saveImageTool;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openImageTool;
+        private System.Windows.Forms.OpenFileDialog openFile;
+        private System.Windows.Forms.ToolStripMenuItem openFolderImage;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ToolStripMenuItem playTool;
+        private System.Windows.Forms.ToolStripMenuItem stopTool;
+        private System.Windows.Forms.ToolStripMenuItem openFileTool;
     }
 }

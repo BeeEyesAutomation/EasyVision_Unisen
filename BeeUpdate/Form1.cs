@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,17 +36,13 @@ namespace BeeUpdate
         List<string> pathName = new List<string>();
         private void button1_Click(object sender, EventArgs e)
         {
-            string searchPattern = "Bee*.dll";
+            var regex = new Regex(@"^(Bee.*\.dll|OKNG\.dll)$", RegexOptions.IgnoreCase);
+            List<string> dllFiles = Directory
+                .GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
+                .Where(f => regex.IsMatch(Path.GetFileName(f)))
+                .ToList();
 
-            if (!Directory.Exists(path))
-            {
-                Console.WriteLine("Folder không tồn tại!");
-                return;
-            }
-
-            var dllFiles = Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
-
-            if (dllFiles.Length == 0)
+            if (dllFiles.Count == 0)
             {
                 Console.WriteLine("Không tìm thấy file DLL nào!");
                 return;
@@ -66,14 +63,30 @@ namespace BeeUpdate
             }
         }
 
-        private void btnMove_Click(object sender, EventArgs e)
+        private async void btnMove_Click(object sender, EventArgs e)
         {
             foreach(String s in pathName)
             {
                String name= Path.GetFileName(s);
                 name = name.Replace(".dll", ".bin");
                 String pathDir = "G:\\My Drive\\EasyVision\\Update\\" + name;
+              
+                
                 File.Copy(s, pathDir, true);
+              
+             
+            }
+            await Task.Delay(10000);
+            foreach (String s in pathName)
+            {
+                String name = Path.GetFileName(s);
+                name = name.Replace(".dll", ".bin");
+             
+                String pathDirOld = "G:\\My Drive\\EasyVision\\Update\\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+                if (!Directory.Exists(pathDirOld)) Directory.CreateDirectory(pathDirOld);
+              
+             
+                File.Copy(s, pathDirOld + "\\" + name, true);
             }
             MessageBox.Show("Complete!");
         }

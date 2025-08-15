@@ -62,6 +62,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="HistoryCheck.cs" />
     <Compile Include="IntArrayWithEvent.cs" />
     <Compile Include="iTool.cs" />
     <Compile Include="Labels.cs" />

@@ -326,7 +326,7 @@ namespace BeeGlobal
 
             if (threadEx != null) throw threadEx;
         }
-        public static async Task<bool> WriteBit(int value)
+        public static async Task<bool> WriteBit(int Address,int value)
         {
             var cts = new CancellationTokenSource(2000); // Timeout 2 giây
 
@@ -335,7 +335,7 @@ namespace BeeGlobal
                 if (IsWrite) return true;
                 IsWrite = true;
 
-                await Task.Run(() => WriteRegisterOnDedicatedThread(2, value), cts.Token);
+                await Task.Run(() => WriteRegisterOnDedicatedThread(Address, value), cts.Token);
                 IsWrite = false;
 
             }

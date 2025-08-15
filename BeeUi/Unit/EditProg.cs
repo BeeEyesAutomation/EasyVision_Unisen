@@ -71,8 +71,8 @@ namespace BeeUi.Unit
         {
             if (MessageBox.Show("Bạn chắc chắn muốn Xóa  Model này ?", " Xóa  Model", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                int indexCur = G.listProgram.SelectedIndex;
-
+                int indexCur = G.listProgram.Items.IndexOf(Global.Project);
+                if(G.listProgram.Items.Count>0)
                 G.listProgram.SelectedIndex = indexCur - 1;
                 File.Delete("Program\\" + G.listProgram.Items[indexCur].ToString());
                 string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);

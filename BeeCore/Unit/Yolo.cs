@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -45,7 +46,7 @@ namespace BeeCore
             try
             {
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
-                if (pathFullModel.Trim() == "")
+                if (!pathFullModel.Trim().Contains(".pt") )
                 {
                     Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                     return;
@@ -54,7 +55,12 @@ namespace BeeCore
                 using (Py.GIL())
             {
 
-                   
+                   if(!File.Exists(pathFullModel))
+                        {
+
+                            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                            return;
+                        }    
                     G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
                     //dynamic mod = Py.Import("Tool.Learning");
                     //dynamic cls = mod.GetAttr("ObjectDetector"); // class
@@ -170,6 +176,8 @@ namespace BeeCore
         private Mode _TypeMode = Mode.Pattern;
         public Compares Compare = Compares.Equal;
         public Compares CompareLine = Compares.More;
+        public Compares CompareArea = Compares.More;
+        public float LimitArea = 100;
         public int Epoch =100;
         public Mode TypeMode
         {
@@ -211,6 +219,7 @@ namespace BeeCore
         public List<string> listLabel = new List<string>();
         public List<string> listModels = new List<string>();
         String listMatch;
+        public bool IsCheckLine = false;
         public bool IsCheckArea = false;
         public Point p1 = new Point();
         public Point p2 = new Point();
@@ -241,7 +250,7 @@ namespace BeeCore
                     boxList = new List<RectRotate>();
                      scoreList = new List<float>();
                      labelList = new List<string>();
-                    Mat matCrop = Common.CropRotatedRectSharp(BeeCore.Common.listCamera[IndexThread].matRaw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                    Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop,null);
                     if (matCrop.Type() != MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                     if (matCrop.Channels() == 1)
@@ -320,182 +329,236 @@ namespace BeeCore
         public bool IsArrangeBox = false;
         public void Complete()
         {
-            try
+            if (Global.IsIntialPython)
             {
-
-
                 try
                 {
-                    listOK = new List<bool>();
-                    listLabel = new List<string>();
-                    rectRotates = new List<RectRotate>();
-                    listScore = new List<float>();
-                    // cycleTime = (int)G.YoloPlus.Cycle;
-                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                    int i = 0;
-                    int numOK = 0, numNG = 0;
-                    int scoreRS = 0;
-                    List<String> _listLabelCompare = new List<String>();
-                    if (listLabelCompare == null)
-                    {
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                        return;
-                    }
-                    Content = "";
-                    foreach (Labels label in listLabelCompare)
-                    {
-                        if (label == null) continue;
-                        if(!label.IsEn) continue;
-                        _listLabelCompare.Add(label.label);
-                    }
-                    foreach (String label in labelList)
-                    {
-                        if (_listLabelCompare.Contains(label))
-                        {
-                            if (IsCheckArea)
-                            {
-                               switch(CompareLine)
-                                {
-                                    case Compares.More:
-                                        if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 < yLine)
-                                        {
-                                            listOK.Add(false);
-                                            rectRotates.Add(boxList[i]);
-                                            listLabel.Add(label);
-                                            scoreRS += (int)scoreList[i];
-                                            listScore.Add(scoreList[i]);
-                                            numOK++;
-                                        }
-                                        else
-                                        {
-                                            listOK.Add(true);
-                                            rectRotates.Add(boxList[i]);
-                                            listLabel.Add(label);
-                                            scoreRS += (int)scoreList[i];
-                                            listScore.Add(scoreList[i]);
-
-                                        }
-                                        break;
-                                    case Compares.Less:
-                                        if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 >= yLine)
-                                        {
-                                            listOK.Add(false);
-                                            rectRotates.Add(boxList[i]);
-                                            listLabel.Add(label);
-                                            scoreRS += (int)scoreList[i];
-                                            listScore.Add(scoreList[i]);
-                                            numOK++;
-                                        }
-                                        else
-                                        {
-                                            listOK.Add(true);
-                                            rectRotates.Add(boxList[i]);
-                                            listLabel.Add(label);
-                                            scoreRS += (int)scoreList[i];
-                                            listScore.Add(scoreList[i]);
-
-                                        }
-                                        break;
-                                }
-                                   
-                                
-                            }
-                            else
-                            {
-                                Content += label;
-                                rectRotates.Add(boxList[i]);
-                                listLabel.Add(label);
-                                scoreRS += (int)scoreList[i];
-                                listScore.Add(scoreList[i]); numOK++;
-                            }
 
 
-                        }
-                        i++;
-                    }
-                    if (IsArrangeBox)
+                    try
                     {
-                        List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
-
-                        for (int j = 0; j < rectRotates.Count; j++)
-                        {
-                            combined.Add(new RotatedBoxInfo
-                            {
-                                Box = rectRotates[j],
-                                Label = listLabel[j],
-                                Score = listScore[j]
-                            });
-                        }
-                        switch(ArrangeBox)
-                        {
-                            case ArrangeBox.X_Left_Rigth:
-                                // Sort theo X tăng dần (trái → phải)
-                                combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-                                break;
-                            case ArrangeBox.X_Right_Left:
-                                // Sort theo X giảm dần (phải → trái)
-                                 combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
-
-                                break;
-                            case ArrangeBox.Y_Left_Rigth:
-                                // Sort theo Y tăng dần (trên → dưới)
-                                 combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-                                break;
-                            case ArrangeBox.Y_Right_Left:
-                                combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-                                break;
-                        }
-                        rectRotates = combined.Select(b => b.Box).ToList();
-                        listLabel = combined.Select(b => b.Label).ToList();
-                        listScore = combined.Select(b => b.Score).ToList();
-                        Content = "";
-                        foreach (string s in listLabel)
-                            Content += s;
-                    }
-                    Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
-                    if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                    switch (Compare)
-                    {
-                        case Compares.Equal:
-                            if (numOK != NumObject)
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                            break;
-                        case Compares.Less:
-                            if (numOK >= NumObject)
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                            break;
-                        case Compares.More:
-                            if (numOK <= NumObject)
-                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-                            break;
-                    }
-                    if(IsEnContent)
-                    {
-                        if(Matching!=Content)
+                        listOK = new List<bool>();
+                        listLabel = new List<string>();
+                        rectRotates = new List<RectRotate>();
+                        listScore = new List<float>();
+                        // cycleTime = (int)G.YoloPlus.Cycle;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        int i = 0;
+                        int numOK = 0, numNG = 0;
+                        int scoreRS = 0;
+                        List<String> _listLabelCompare = new List<String>();
+                        if (listLabelCompare == null)
                         {
                             Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            return;
                         }
+                        Content = "";
+                        foreach (Labels label in listLabelCompare)
+                        {
+                            if (label == null) continue;
+                            if (!label.IsEn) continue;
+                            _listLabelCompare.Add(label.label);
+                        }
+                        foreach (String label in labelList)
+                        {
+                            if (_listLabelCompare.Contains(label))
+                            {
+                                if (IsCheckLine)
+                                {
+                                    switch (CompareLine)
+                                    {
+                                        case Compares.More:
+                                            if (boxList[i]._rect.Height>= yLine)
+                                           //     if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 >= yLine)
+                                            {
+                                                listOK.Add(true);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                               
+                                            }
+                                            else
+                                            {
+                                                listOK.Add(false);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                                numOK++;
+                                            }
+                                            break;
+                                        case Compares.Less:
+                                            if (boxList[i]._rect.Height <= yLine)
+                                             //   if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 <= yLine)
+                                            {
+                                                listOK.Add(true);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                              
+                                            }
+                                            else
+                                            {
+                                                listOK.Add(false);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                                numOK++;
+                                            }
+                                            break;
+                                    }
+
+
+                                }
+                                else if (IsCheckArea)
+                                {
+                                    switch (CompareArea)
+                                    {
+                                        case Compares.More:
+                                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
+                                            {
+                                                listOK.Add(false);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                                numOK++;
+                                            }
+                                            else
+                                            {
+                                                //listOK.Add(true);
+                                                //rectRotates.Add(boxList[i]);
+                                                //listLabel.Add(label);
+                                                //scoreRS += (int)scoreList[i];
+                                                //listScore.Add(scoreList[i]);
+
+                                            }
+                                            break;
+                                        case Compares.Less:
+                                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
+                                            {
+                                                listOK.Add(false);
+                                                rectRotates.Add(boxList[i]);
+                                                listLabel.Add(label);
+                                                scoreRS += (int)scoreList[i];
+                                                listScore.Add(scoreList[i]);
+                                                numOK++;
+                                            }
+                                            else
+                                            {
+                                                //listOK.Add(true);
+                                                //rectRotates.Add(boxList[i]);
+                                                //listLabel.Add(label);
+                                                //scoreRS += (int)scoreList[i];
+                                                //listScore.Add(scoreList[i]);
+
+                                            }
+                                            break;
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    listOK.Add(true);
+                                    Content += label;
+                                    rectRotates.Add(boxList[i]);
+                                    listLabel.Add(label);
+                                    scoreRS += (int)scoreList[i];
+                                    listScore.Add(scoreList[i]); numOK++;
+                                }
+
+                            }
+                            i++;
+                        }
+                        if (IsArrangeBox)
+                        {
+                            List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+
+                            for (int j = 0; j < rectRotates.Count; j++)
+                            {
+                                combined.Add(new RotatedBoxInfo
+                                {
+                                    Box = rectRotates[j],
+                                    Label = listLabel[j],
+                                    Score = listScore[j]
+                                });
+                            }
+                            switch (ArrangeBox)
+                            {
+                                case ArrangeBox.X_Left_Rigth:
+                                    // Sort theo X tăng dần (trái → phải)
+                                    combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+                                    break;
+                                case ArrangeBox.X_Right_Left:
+                                    // Sort theo X giảm dần (phải → trái)
+                                    combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
+
+                                    break;
+                                case ArrangeBox.Y_Left_Rigth:
+                                    // Sort theo Y tăng dần (trên → dưới)
+                                    combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
+                                    break;
+                                case ArrangeBox.Y_Right_Left:
+                                    combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
+                                    break;
+                            }
+                            rectRotates = combined.Select(b => b.Box).ToList();
+                            listLabel = combined.Select(b => b.Label).ToList();
+                            listScore = combined.Select(b => b.Score).ToList();
+                            Content = "";
+                            foreach (string s in listLabel)
+                                Content += s;
+                        }
+                        Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
+                        if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+                        Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                        switch (Compare)
+                        {
+                            case Compares.Equal:
+                                if (numOK != NumObject)
+                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                break;
+                            case Compares.Less:
+                                if (numOK >= NumObject)
+                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                break;
+                            case Compares.More:
+                                if (numOK <= NumObject)
+                                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                                break;
+                        }
+                        if (IsEnContent)
+                        {
+                            if (Matching != Content)
+                            {
+                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                            }
+                        }
+
+                        G.IsChecked = true;
+                        // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
                     }
-                    
-                    G.IsChecked = true;
-                    // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
+                    catch (Exception ex)
+                    {
+                        // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
+                    }
                 }
                 catch (Exception ex)
                 {
                     // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                 }
             }
-            catch (Exception ex)
-            {
-                // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-            }
+            else
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
         }
 
         public Graphics DrawResult(Graphics gc)
         {
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
-
             gc.ResetTransform();
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
@@ -540,11 +603,11 @@ namespace BeeCore
                 mat.Translate(CropOffSetX, CropOffSetY);
                 gc.Transform = mat;
 
-                if (IsCheckArea)
+                if (IsCheckLine)
                 {
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                    gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, yLine), new Point((int)rotA._rect.Width, yLine));
+                 //   gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, yLine), new Point((int)rotA._rect.Width, yLine));
 
                     System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
                     System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
@@ -563,11 +626,12 @@ namespace BeeCore
                     gc.Transform = mat;
                     int index = i + 1;
                     String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
-                    if (IsCheckArea)
+                    if (IsCheckLine)
                         content = rot._rect.Height + " px";
                     Font font = new Font("Arial", 30, FontStyle.Bold);
                     SizeF sz1 = gc.MeasureString(content, font);
                     gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
+                   
                     i++;
                     //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
                     gc.ResetTransform();
@@ -588,11 +652,10 @@ namespace BeeCore
                     if (IsEnContent)
                         Draws.Box2Label(gc, rot._rect, listLabel[i], "", Global.fontRS, cl, brushText, 30, 3);
                     else
-                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, cl, brushText, 30, 3);
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, cl, brushText, 30, 3,10,1,! Global.IsHideTool);
 
                     //  Draws.Box1Label(gc, rot._rect, Math.Round(listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
-                    //  gc.DrawString(content, font, new SolidBrush(cl), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2 - sz2.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz2.Height / 2)));
-                    i++;
+                      i++;
                     //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
                     gc.ResetTransform();
                 }

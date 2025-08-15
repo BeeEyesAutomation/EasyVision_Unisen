@@ -17,6 +17,7 @@ void ReadImage()
 }
 void 	SetImage(int ixThread, int indexTool, uchar* uc, int image_rows, int image_cols, int image_type)
 {
+	
 	m_matDst[ixThread][indexTool] = Mat();
 	m_matDst[ixThread][indexTool] = BytesToMat(uc, image_rows, image_cols, image_type).clone();
 	if (m_matDst[ixThread][indexTool].type() == CV_8UC3)

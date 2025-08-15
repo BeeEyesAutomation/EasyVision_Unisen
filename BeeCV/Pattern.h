@@ -265,7 +265,7 @@ namespace CvPlus {
 	public:	double m_dToleranceAngle ;
 	public:int m_iMinReduceArea =256;
 	public:	 int m_iMessageCount=1 ;
-	public: void CreateTemp(int ixThread);
+	public: void CreateTemp(int Index, int ixThread);
 	public: int ScoreRS=0;
 		  //System::Collections::Generic::List<System::String^>^ listMatch = gcnew System::Collections::Generic::List<System::String^>();
 	public : System::String^ Match(System::IntPtr buffer, int width, int height, int Step, int image_type,
@@ -296,8 +296,7 @@ namespace CvPlus {
 		  BOOL SubPixEsimation(vector<s_MatchParameter>* vec, double* dX, double* dY, double* dAngle, double dAngleStep, int iMaxScoreIndex);
 		  void DrawDashLine(Mat& matDraw, cv::Point ptStart, cv::Point ptEnd, Scalar color1 , Scalar color2);//= Scalar(0, 0, 255)  = Scalar::all(255)
 		  void DrawMarkCross(Mat& matDraw, int iX, int iY, int iLength, Scalar color, int iThickness);
-		  LRESULT OnShowMSG(WPARAM wMSGPointer, LPARAM lIsShowTime,int m_iMessageCount);
-
+		
 		 
 		///  Mat RefreshSrcView(Mat matDraw, Mat raw, cv::Rect myROI,int ixTemp);
 	};

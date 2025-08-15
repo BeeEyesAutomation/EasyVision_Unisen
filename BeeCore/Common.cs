@@ -44,7 +44,7 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
 
         unsafe public static extern IntPtr GetImageResult(ref int rows, ref int cols, ref int Type);
-
+        public static readonly object BmLock = new object();  // khóa ngắn khi swap/clone
         public static Bitmap bmResult;
         public static List<Camera> listCamera = new List<Camera> { null, null, null, null };
         public int numError = 0;

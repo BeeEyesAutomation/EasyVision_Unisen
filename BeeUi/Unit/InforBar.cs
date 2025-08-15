@@ -20,28 +20,7 @@ namespace BeeUi.Unit
             G.InforBar = this;
         }
 
-        private void btnHide_Click(object sender, EventArgs e)
-        {
-            if (btnHide.IsCLick)
-            {
-
-                //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 100;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 255;
-                Global.EditTool.LayOutShow.ResumeLayout(true);
-            }
-            else
-            {
-                //  Global.EditTool.LayOutShow.ColumnStyles[0].Width = 70;
-                Global.EditTool.LayOutShow.ColumnStyles[1].Width = 45;
-                Global.EditTool.LayOutShow.ResumeLayout(true);
-            }
-
-            //if (btnHide.IsCLick)
-            //    this.Height = 250;
-            //else
-            //    this.Height = 40;
-        }
-
+      
         private void tmShowHis_Tick(object sender, EventArgs e)
         {
             imgHis.Invalidate();
@@ -54,19 +33,19 @@ namespace BeeUi.Unit
         }
 
         private void imgHis_Paint(object sender, PaintEventArgs e)
-        { int x = 10;
-            for (int i= G.listHis.Count-1;i>=0;i--)
+        { int y = 10;
+            for (int i= Global.HistoryChecks.Count-1;i>=0;i--)
             {
 
-                int W = G.listHis[i].bm.Width;
-                int H = G.listHis[i].bm.Height;
+                int W = Global.HistoryChecks[i].bm.Width;
+                int H = Global.HistoryChecks[i].bm.Height;
                 double Scale=(imgHis.Height-20)/ (H * 1.0) ;
                 W = (int)(W * Scale);
-                e.Graphics.DrawImage(G.listHis[i].bm, new Rectangle(x, 5, W, imgHis.Height - 20));
-                e.Graphics.DrawString(G.listHis[i].date.ToString("HH:mm:ss"), new Font("Arial",12), Brushes.Black, x, imgHis.Height - 25);
-                x += W+20;
+                e.Graphics.DrawImage(Global.HistoryChecks[i].bm, new Rectangle(5, y, W, imgHis.Height - 20));
+                e.Graphics.DrawString(Global.HistoryChecks[i].date.ToString("HH:mm:ss"), new Font("Arial",12), Brushes.Black, 5, y);
+                y += H+30;
             }
-            imgHis.Size=new Size(x, imgHis.Height);
+            //imgHis.Size=new Size(5, y);
         }
     }
 }

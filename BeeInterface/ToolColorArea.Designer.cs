@@ -35,35 +35,35 @@ namespace BeeInterface
             this.threadProcess = new System.ComponentModel.BackgroundWorker();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.btnInspect = new BeeInterface.RJButton();
-            this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnMask = new BeeInterface.RJButton();
             this.btnCropRect = new BeeInterface.RJButton();
             this.btnCropArea = new BeeInterface.RJButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel2 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCropFull = new BeeInterface.RJButton();
             this.btnCropHalt = new BeeInterface.RJButton();
-            this.tableLayoutPanel5 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.btnNone = new BeeInterface.RJButton();
             this.btnElip = new BeeInterface.RJButton();
             this.btnRect = new BeeInterface.RJButton();
             this.trackScore = new BeeInterface.AdjustBar();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel10 = new  System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel6 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.btnRGB = new BeeInterface.RJButton();
             this.btnHSV = new BeeInterface.RJButton();
             this.label3 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel7 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.btnGetColor = new BeeInterface.RJButton();
             this.picColor = new System.Windows.Forms.PictureBox();
             this.trackPixel = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel9 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.btnDeleteAll = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.btnRedo = new System.Windows.Forms.Button();
@@ -117,6 +117,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.AutoScroll = true;
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -767,6 +768,7 @@ namespace BeeInterface
             // 
             // tableLayoutPanel10
             // 
+            this.tableLayoutPanel10.AutoScroll = true;
             this.tableLayoutPanel10.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel10.ColumnCount = 1;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -817,8 +819,8 @@ namespace BeeInterface
             this.btnRGB.AutoImageMaxRatio = 0.75F;
             this.btnRGB.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnRGB.AutoImageTint = true;
-            this.btnRGB.BackColor = System.Drawing.Color.Transparent;
-            this.btnRGB.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnRGB.BackColor = System.Drawing.SystemColors.Control;
+            this.btnRGB.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnRGB.BorderColor = System.Drawing.Color.Silver;
             this.btnRGB.BorderRadius = 10;
             this.btnRGB.BorderSize = 1;

@@ -67,7 +67,7 @@ namespace BeeInterface
                 btn.Location = new System.Drawing.Point(25, y);
           //  if (!btn.Text.Contains("Color Area"))
             //    btn.Enabled = false;
-           btn.Size = new System.Drawing.Size(277, 44);
+           btn.Size = new System.Drawing.Size(277, 55);
           btn.TabIndex = 0;
             btn.Click += Btn_Click;
            btn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -118,7 +118,8 @@ namespace BeeInterface
          "Learning",//13
          "Position",//14
          "Measure",//15
-         "Circle"//16
+         "Circle",//16
+         "OKNG"//16
         };
         public static List<GroupTool> groupTools = new List<GroupTool>
         {
@@ -132,12 +133,13 @@ namespace BeeInterface
             GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_1,
             GroupTool.Extra_Tool_2,
-            GroupTool.Basic_Tool,
+            GroupTool.Extra_Tool_1,
             GroupTool.Extra_Tool_2,
              GroupTool.Basic_Tool,
              GroupTool.Extra_Tool_1,
-              GroupTool.Extra_Tool_1,
-               GroupTool.Extra_Tool_1,
+             GroupTool.Extra_Tool_2,
+            GroupTool.Extra_Tool_1,
+              GroupTool.Basic_Tool,
 
         };
         int lenMax = 0;
@@ -162,6 +164,7 @@ namespace BeeInterface
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
+            int space = 70;
              foreach (iTool tool in Global.listItool)
             {
                
@@ -173,7 +176,7 @@ namespace BeeInterface
                         case GroupTool.Basic_Tool:
 
                              btn = NewRadioButton(name, y);
-                        y += 68;
+                        y += space;
                         btn.Parent = Basic_Tool;
                         //if (tool.TypeTool != TypeTool.Position_Adjustment&& tool.TypeTool != TypeTool.Pattern && tool.TypeTool != TypeTool.MatchingShape)
                         //    btn.Enabled = false;
@@ -181,7 +184,7 @@ namespace BeeInterface
                         case GroupTool.Extra_Tool_1:
                              btn = NewRadioButton(name, y2);
                        // btn.Enabled = false;
-                        y2 += 68;
+                        y2 += space;
                         btn.Parent = Extra_Tool_1;
                        // btn.Enabled = false;
                             break;
@@ -189,7 +192,7 @@ namespace BeeInterface
                        
                         btn = NewRadioButton(name, y3);
                         //btn.Enabled = false;
-                        y3 += 68;
+                        y3 += space;
                         btn.Parent = Extra_Tool_2;
                        // btn.Enabled = false;
                         break;

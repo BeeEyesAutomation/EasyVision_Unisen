@@ -12,7 +12,7 @@ void ColorArea::LoadTemp(System::String^ content)
     if (content == nullptr)return;
     std::string contentSTD = _toString(content);
    
-    listColor.clear();
+    native->listColor.clear();
     for each (System::String ^ line in content->Split('\n'))
     {
         if (line->Trim() == "") continue;
@@ -34,13 +34,13 @@ void ColorArea::LoadTemp(System::String^ content)
           
            
         }
-        listColor.push_back(Scalar(R,G,B));
+        native->listColor.push_back(Scalar(R,G,B));
     }
 }
 System::String^ ColorArea::SaveTemp( )
 {
     System::String^ list="";
-    for each (Scalar scalar in listColor)
+    for each (Scalar scalar in  native->listColor)
     {
         list += scalar.val[0]+"," + scalar.val[1] + "," + scalar.val[2]+"\n";
        
@@ -48,48 +48,121 @@ System::String^ ColorArea::SaveTemp( )
     return list;
 }
 Mat matMask;
- void ColorArea::GetMask(Mat mat, int iAreaPixel)
+// Giả định: ColorArea có các member:
+// - std::vector<cv::Scalar> listColor; // màu trung tâm hay mốc để build range
+// - cv::Mat matMask;
+// - int StyleColor; // 0 = HSV, !=0 = RGB
+// - cv::Scalar lower, upper; // được set bởi GetLimitColor(...)
+// - (tuỳ chọn) các buffer tái sử dụng dưới đây
+
+// Gợi ý thêm vào class để tái sử dụng bộ nhớ:
+cv::Mat _conv, _tmp, _tmp2;
+
+void ColorArea::GetMask(const cv::Mat& bgr, int iAreaPixel)
 {
-
-
-     matMask = Mat(mat.rows, mat.cols, CV_8UC1, Scalar(0, 0, 0));
-    Mat matHSV = Mat();
-    if (mat.type() != CV_8UC3)
+    // Kiểm tra nhanh & tránh copy
+    if (bgr.empty() || bgr.type() != CV_8UC3) {
+        matMask.release();
         return;
-    int i = 0;
-    if(StyleColor!=0)
-        cvtColor(mat.clone(), matHSV, COLOR_BGR2RGB);
-    else
-        cvtColor(mat.clone(), matHSV, COLOR_BGR2HSV);
-    //cv::imwrite("color2.png", matHSV);
-    //cv::blur(matHSV, matHSV, cv::Size(3, 3));
-    for each (Scalar scalar in listColor)
-    {
-        bool IsWhite = !ColorArea::GetLimitColor(scalar, iAreaPixel);
-
-        Mat matInrange = Mat();
-        Mat matGroup = Mat();
-
-       
-            
-           /* if (StyleColor==2)
-              cv::threshold(matHSV, matInrange, lower.val[0] + iAreaPixel,255, THRESH_BINARY_INV);
-            else if (StyleColor == 1)
-            cv::threshold(matHSV, matInrange, lower.val[0] - iAreaPixel, 255,THRESH_BINARY);
-            else*/
-            inRange(matHSV, lower, upper, matInrange);
-            cv::erode(matInrange, matInrange, Mat(), cv::Point(-1, -1), 1, 1, 1);
-            cv::dilate(matInrange, matInrange,Mat(), cv::Point(-1, -1),1, 1, 1);
-          
-        bitwise_or(matInrange, matMask, matGroup);
-
-        matMask = matGroup.clone();
-
     }
-    
 
+    // Cấp phát/clear mask 1 lần
+    matMask.create(bgr.size(), CV_8UC1);
+    matMask.setTo(0);
 
+    // Chuyển màu 1 lần, KHÔNG dùng .clone()
+    cv::cvtColor(bgr, _conv,
+        (StyleColor != 0) ? cv::COLOR_BGR2RGB : cv::COLOR_BGR2HSV);
+
+    // Tái sử dụng buffer tránh cấp phát vòng lặp
+    _tmp.create(bgr.size(), CV_8UC1);
+    _tmp2.create(bgr.size(), CV_8UC1);
+
+    // Với nhiều dải màu, OR tích luỹ trực tiếp vào matMask
+    for (const cv::Scalar& c : native->listColor)
+    {
+        // Hàm này nên set (lower, upper) theo c và iAreaPixel.
+        // Trả về gì thì tuỳ bạn, ở đây chỉ cần side-effect lower/upper.
+        (void)ColorArea::GetLimitColor(c, iAreaPixel);
+
+        if (StyleColor == 0) {
+            // HSV: xử lý wrap-around Hue (khi lower.h > upper.h)
+            if (native->lower[0] > native->upper[0]) {
+                // [0..upper.h]  OR  [lower.h..179]
+                cv::inRange(_conv,
+                    cv::Scalar(0, native->lower[1], native->lower[2]),
+                    cv::Scalar(native->upper[0], native->upper[1], native->upper[2]),
+                    _tmp);
+                cv::inRange(_conv,
+                    cv::Scalar(native->lower[0], native->lower[1], native->lower[2]),
+                    cv::Scalar(179, native->upper[1], native->upper[2]),
+                    _tmp2);
+                cv::bitwise_or(_tmp, _tmp2, _tmp);
+            }
+            else {
+                cv::inRange(_conv, native->lower, native->upper, _tmp);
+            }
+        }
+        else {
+            // RGB
+            cv::inRange(_conv, native->lower, native->upper, _tmp);
+        }
+
+        // OR tích luỹ in-place, không tạo matGroup/clone
+        cv::bitwise_or(matMask, _tmp, matMask);
+    }
+
+    // Morphology 1 lần cuối (nhanh hơn nhiều so với mỗi dải màu làm 1 lần)
+    static const cv::Mat k3 = cv::getStructuringElement(cv::MORPH_RECT, { 3,3 });
+    // Tương đương erode+ dilate nhẹ để khử nhiễu
+    cv::morphologyEx(matMask, matMask, cv::MORPH_OPEN, k3, { -1,-1 }, 1);
+    // Nếu cần lấp lỗ nhỏ sau khi mở, thêm CLOSE 1 lần nữa (tùy bài toán):
+    // cv::morphologyEx(matMask, matMask, cv::MORPH_CLOSE, k3, {-1,-1}, 1);
 }
+
+// void ColorArea::GetMask(Mat mat, int iAreaPixel)
+//{
+//
+//
+//     matMask = Mat(mat.rows, mat.cols, CV_8UC1, Scalar(0, 0, 0));
+//    Mat matHSV = Mat();
+//    if (mat.type() != CV_8UC3)
+//        return;
+//    int i = 0;
+//    if(StyleColor!=0)
+//        cvtColor(mat.clone(), matHSV, COLOR_BGR2RGB);
+//    else
+//        cvtColor(mat.clone(), matHSV, COLOR_BGR2HSV);
+//    //cv::imwrite("color2.png", matHSV);
+//    //cv::blur(matHSV, matHSV, cv::Size(3, 3));
+//   
+//    for each (Scalar scalar in listColor)
+//    {
+//        bool IsWhite = !ColorArea::GetLimitColor(scalar, iAreaPixel);
+//
+//        Mat matInrange = Mat();
+//        Mat matGroup = Mat();
+//
+//       
+//            
+//           /* if (StyleColor==2)
+//              cv::threshold(matHSV, matInrange, lower.val[0] + iAreaPixel,255, THRESH_BINARY_INV);
+//            else if (StyleColor == 1)
+//            cv::threshold(matHSV, matInrange, lower.val[0] - iAreaPixel, 255,THRESH_BINARY);
+//            else*/
+//            inRange(matHSV, lower, upper, matInrange);
+//           // cv::erode(matInrange, matInrange, Mat(), cv::Point(-1, -1), 1, 1, 1);
+//           // cv::dilate(matInrange, matInrange,Mat(), cv::Point(-1, -1),1, 1, 1);
+//            cv::imwrite(std::string("mask") + std::to_string(i) + ".png", matInrange);
+//      bitwise_or(matInrange, matMask, matMask);
+//      i++;
+//     //   matMask = matGroup.clone();
+//
+//    }
+//    
+//
+//
+//}
  System::String^ ColorArea:: GetColor(System::IntPtr buffer, int width, int height, int Step, int image_type, int x, int y)
 {
      try
@@ -156,7 +229,7 @@ Mat matMask;
  void  ColorArea::AddColor()
  {
      
-     listColor.push_back(Scalar(H, S, V));
+     native->listColor.push_back(Scalar(H, S, V));
  }
 Mat RotateImge(Mat raw, RotatedRect rot)
 {
@@ -222,6 +295,7 @@ float ColorArea::CheckColor(int iAreaPixel) {
    // cv::imwrite("colorCrop.png", matRaw);
    // cv::bilateralFilter(matCrop, matBilate, 9, 75, 75);
     cv::medianBlur(matRaw, matBilate, 5);
+    if (!matResult.empty())matResult.release();
     matResult = matRaw.clone();
 
     //cv::imwrite("color1.png", matRaw);
@@ -234,6 +308,7 @@ float ColorArea::CheckColor(int iAreaPixel) {
     Mat mask = Mat(matRS.rows, matRS.cols, CV_8UC1, Scalar(255,255,255));
    
     bitwise_and(mask, matRS, matResult);
+   // cv::imwrite("rs.png", matResult);
  //   cycle = int(clock() - d1);
     return pxMathching;
     //if (pxMathching>(pxTemp* Score) / 100)
@@ -263,8 +338,8 @@ bool ColorArea::GetLimitColor(Scalar color,int iAreaPixel)
         int H2 = color[0] + (iAreaPixel * 2);
         int S2 = color[1] + (iAreaPixel * 2);
         int V2 = color[2] + (iAreaPixel * 2);
-        lower = Scalar(H, S, V);
-        upper = Scalar(H2, S2, V2);
+        native->lower = Scalar(H, S, V);
+        native->upper = Scalar(H2, S2, V2);
         return false;
   }
     int H = color[0] ;
@@ -272,13 +347,13 @@ bool ColorArea::GetLimitColor(Scalar color,int iAreaPixel)
     int V = color[2];
     if (H >= 165)
     {
-        lower = Scalar(H - iAreaPixel, 100, 100);
-        upper = Scalar(180, 255, 255);
+        native->lower = Scalar(H - iAreaPixel, 100, 100);
+        native->upper = Scalar(180, 255, 255);
     }
     else if (H <= 35)
     {
-        lower = Scalar(0, 100, 100);
-        upper = Scalar(H + iAreaPixel, 255, 255);
+        native->lower = Scalar(0, 100, 100);
+        native->upper = Scalar(H + iAreaPixel, 255, 255);
     }
 
     else
@@ -291,8 +366,8 @@ bool ColorArea::GetLimitColor(Scalar color,int iAreaPixel)
     int V2 = color[2] + (iAreaPixel / 100.0) * 255;
     if (S < 0)S = 0; if (S2 < 0)S2 = 0;
     if (H < 0)H = 0; if (H2 < 0)H2 = 0;
-    lower = Scalar(H,S,V);
-    upper = Scalar(H2, S2, V2);
+    native->lower = Scalar(H,S,V);
+    native->upper = Scalar(H2, S2, V2);
         return false;
     }
     return true;
@@ -300,16 +375,17 @@ bool ColorArea::GetLimitColor(Scalar color,int iAreaPixel)
 
 bool ColorArea::Undo(int iAreaPixel)
 {
-    int sz= listColor.size();
+    int sz= native->listColor.size();
     if (sz == 0) return false;
-    listColor.resize(listColor.size()-1);
+    if (!native->listColor.empty())
+        native->listColor.pop_back();   // O(1)
     return true;
 }
 
 int  ColorArea::SetColorArea(int iAreaPixel)
 {
    
-    if (listColor.size() == 0)
+    if (native->listColor.size() == 0)
     {
         matRsTemp = Mat(matSetTemp.rows, matSetTemp.cols, CV_8UC1 ,Scalar(0,0,0));// matRaw.clone();
         return false;

@@ -24,55 +24,13 @@ namespace BeeUi.Unit
             Global.WidthOldTools = Global.EditTool.pEdit.Width;
             Global.EditTool.pEdit.Width = 0;
             Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
-           // if (btnHide.IsCLick)
-           // {
-           //     // btnHide.Corner = Corner.Right;
-
-            //  //   btnHide.Text = "";
-
-            ////     Global.EditTool.LayOutShow.ColumnStyles[1].Width = 0;
-
-
-
-            // }
-            // else
-            // {
-            //     //btnHide.Corner = Corner.Right;
-            //     Global.EditTool.pEdit.Width = Global.WidthOldTools;
-
-            //     //   Global.EditTool.LayOutShow.ColumnStyles[1].Width = 400;
-
-
-            // }
-            //   G.Header.Layout.ResumeLayout(true);
-            //  Global.EditTool.LayOutShow.ResumeLayout(true);
-            //Global.EditTool.LayoutMain.ResumeLayout(true);
-
+        
         }
         int percent = 0;
    
-        private void pCamera_SizeChanged(object sender, EventArgs e)
-        {
-            //if (G.Header == null) return;
-            //    BeeCore.CustomGui.RoundRg(pCamera,Global.Config.RoundRad,Corner.Left);
-        }
+  
 
-        private void Cameras_Load(object sender, EventArgs e)
-        {
-        //   if( G.Header!=null)
-        //    pCamera.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void btnIO_Click(object sender, EventArgs e)
-        {
-           
-          
-        }
+ 
         ScanCCD scanCCD = new ScanCCD();
         private void btnCamera1_Click(object sender, EventArgs e)
         {

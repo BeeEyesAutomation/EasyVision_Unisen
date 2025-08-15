@@ -433,6 +433,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
             slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
             comIO.Text = Global.ParaCommon.Comunication.IO.Port;
+                if (Global.ParaCommon.Comunication.IO.AddRead == 0 && Global.ParaCommon.Comunication.IO.AddWrite == 0)
+                {
+                    Global.ParaCommon.Comunication.IO.AddRead = 1;
+                    Global.ParaCommon.Comunication.IO.AddWrite = 2;
+                }
+                AddRead.Value=Global.ParaCommon.Comunication.IO.AddRead;
+            AddWrite.Value = Global.ParaCommon.Comunication.IO.AddWrite;
                 listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
                 listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
                 foreach (ParaIO paraIO in Global.ParaCommon.Comunication.IO.paraIOs)
@@ -507,33 +514,33 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnConectIO.Enabled = true;
                 btnBypass.Enabled = false;
             }
-            Global.ParaCommon.Comunication.IO.numReadChanged += IO_numReadChanged;
-            Global.ParaCommon.Comunication.IO.numWriteChanged += IO_numWriteChanged;
+         //   Global.ParaCommon.Comunication.IO.numReadChanged += IO_numReadChanged;
+          //  Global.ParaCommon.Comunication.IO.numWriteChanged += IO_numWriteChanged;
         }
 
-        private void IO_numWriteChanged(int obj)
-        {
-            this.Invoke((Action)(() =>
-            {   if(obj>1)
-                {
-                    lbOut.Text = obj.ToString();
-                    lbOut.Refresh();
-                }
+        //private void IO_numWriteChanged(int obj)
+        //{
+        //    this.Invoke((Action)(() =>
+        //    {   if(obj>1)
+        //        {
+        //            lbOut.Text = obj.ToString();
+        //            lbOut.Refresh();
+        //        }
                 
-            }));
-        }
+        //    }));
+        //}
 
-        private void IO_numReadChanged(int obj)
-        {
-            this.Invoke((Action)(() =>
-            {
-                if (obj > 1)
-                {
-                    lbIN.Text = obj.ToString();
-                    lbIN.Refresh();
-                }
-            }));
-        }
+        //private void IO_numReadChanged(int obj)
+        //{
+        //    this.Invoke((Action)(() =>
+        //    {
+        //        if (obj > 1)
+        //        {
+        //            lbLog.Text = obj.ToString();
+        //            lbLog.Refresh();
+        //        }
+        //    }));
+        //}
 
         private void IO_LogChanged(StringBuilder obj)
         {
@@ -1163,7 +1170,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         Global.TriggerInternal = false;
                         Global.StatusProcessing = StatusProcessing.Trigger;
                         Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Trigger;
-
+                        if(Global.IsByPassResult)
+                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
 
 
@@ -1172,8 +1180,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 }
                 if (Global.ParaCommon.Comunication.IO.IO_Processing != IO_ProcessingOld)
                 {
+                    
                     if (Global.StatusIO == StatusIO.None)
                     {
+                        if (Global.ParaCommon.Comunication.IO.IO_Processing == IO_Processing.ByPass)
+                            Global.EditTool.lbBypass.ForeColor = Color.Green; 
                         await Global.ParaCommon.Comunication.IO.WriteIO();
                         IO_ProcessingOld = Global.ParaCommon.Comunication.IO.IO_Processing;
                     }
@@ -1211,7 +1222,25 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
 
                 if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
-                await Global.ParaCommon.Comunication.IO.Read();
+                {
+                    await Global.ParaCommon.Comunication.IO.Read();
+                    int ix = Global.ParaCommon.Comunication.IO. AddressInput[(int)I_O_Input.ByPass];
+                    if (ix > -1)
+                    {
+                        if (Global.ParaCommon.Comunication.IO.valueInput[ix] == 1 && !Global.IsByPassResult)
+                        {
+                            Global.IsByPassResult = true;
+                            Global.EditTool.lbBypass.Visible = true;
+                        }
+                        else if (Global.ParaCommon.Comunication.IO.valueInput[ix] == 0 && Global.IsByPassResult)
+
+                        {
+                            Global.IsByPassResult = false;
+                            Global.EditTool.lbBypass.Visible = false;
+                        }        
+                    }
+                }    
+              
                 if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.IO.IO_Processing == IO_Processing.None)
                     Global.StatusIO = StatusIO.None;
                 StatusIObtn.Text = Global.StatusIO.ToString();
@@ -1311,6 +1340,22 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 txtLog1.Text = "";
             }
           
+        }
+
+        private void label50_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddRead_ValueChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.AddRead= (int)AddRead.Value  ;
+           
+        }
+
+        private void AddWrite_ValueChanged(object sender, EventArgs e)
+        {
+             Global.ParaCommon.Comunication.IO.AddWrite=(int)AddWrite.Value ;
         }
     }
 }

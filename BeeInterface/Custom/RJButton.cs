@@ -825,7 +825,7 @@ namespace BeeInterface
         }
         protected override void OnClick(EventArgs e)
         {
-            if (!Global.Initialed) return;
+          //  if (!Global.Initialed) return;
             if (IsUnGroup) IsCLick = !IsCLick; else IsCLick = true;
             base.OnClick(e);
         }

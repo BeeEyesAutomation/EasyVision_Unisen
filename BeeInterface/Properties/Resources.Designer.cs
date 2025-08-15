@@ -233,16 +233,6 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BID_TOOL_HELPIMAGE_DIAMETOR {
-            get {
-                object obj = ResourceManager.GetObject("BID_TOOL_HELPIMAGE_DIAMETOR", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap BID_TOOL_HELPIMAGE_EDGE_PRESENCE {
             get {
                 object obj = ResourceManager.GetObject("BID_TOOL_HELPIMAGE_EDGE_PRESENCE", resourceCulture);
@@ -256,16 +246,6 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap BID_TOOL_HELPIMAGE_EDGE_WIDTH {
             get {
                 object obj = ResourceManager.GetObject("BID_TOOL_HELPIMAGE_EDGE_WIDTH", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_TOOL_HELPIMAGE_OCR {
-            get {
-                object obj = ResourceManager.GetObject("BID_TOOL_HELPIMAGE_OCR", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,6 +393,26 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contentOCR {
+            get {
+                object obj = ResourceManager.GetObject("contentOCR", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap contentOKNG {
+            get {
+                object obj = ResourceManager.GetObject("contentOKNG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap contentOutLine {
             get {
                 object obj = ResourceManager.GetObject("contentOutLine", resourceCulture);
@@ -546,6 +546,16 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap OCR {
             get {
                 object obj = ResourceManager.GetObject("OCR", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OKNG {
+            get {
+                object obj = ResourceManager.GetObject("OKNG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

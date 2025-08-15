@@ -156,7 +156,6 @@
     <Compile Include="Commons\Cryto.cs" />
     <Compile Include="Commons\Decompile.cs" />
     <Compile Include="Commons\Func.cs" />
-    <Compile Include="Commons\HistoryCheck.cs" />
     <Compile Include="Commons\KeyAcitve.cs" />
     <Compile Include="Commons\Gui.cs" />
     <Compile Include="Commons\RsDirPermissions.cs" />

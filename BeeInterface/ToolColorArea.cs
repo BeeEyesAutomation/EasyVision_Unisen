@@ -380,14 +380,15 @@ namespace BeeInterface
 
 
             //}
+            if(Global.Initialed)
             matTemp =  Propety.SetColor();
            
         }
 
         private void btnUndo_Click(object sender, EventArgs e)
-        {
+        {if (Propety.listCLShow.Count == 0) return;
             Propety.listCLShow.RemoveAt(Propety.listCLShow.Count - 1);
-        
+            Propety.Undo();
             picColor.Invalidate();
         }
 
@@ -401,6 +402,7 @@ namespace BeeInterface
         private void btnDeleteAll_Click(object sender, EventArgs e)
         {
             Propety.listCLShow = new List<Color>();
+            Propety.ClearTemp();
           //  G.EditTool.View.ClearTemp(Propety);
             picColor.Invalidate();
         }

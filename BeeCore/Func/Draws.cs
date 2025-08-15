@@ -106,7 +106,7 @@ namespace BeeCore
             // Vẽ text (trong rectangle, có padding)
             graphics.DrawString(text, font, textBrush, labelX + padding, labelY + padding);
         }
-        public static void Box2Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128,int thiness=4, int minFontSize = 10, int padding = 1)
+        public static void Box2Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128,int thiness=4, int minFontSize = 10, int padding = 1,bool ShowArea=false)
         {
             graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
 
@@ -134,7 +134,12 @@ namespace BeeCore
             // LEFT LABEL
             int leftWidth = (int)leftSize.Width + 2 * padding;
             Rectangle leftRect = new Rectangle((int)baseRect.Left, labelY, leftWidth, labelHeight);
-
+            if(ShowArea)
+            {
+                double Area =Math.Round( baseRect.Width * baseRect.Height/100);
+                graphics.DrawString(Area+"px", currentFont,new SolidBrush( Color.Gray), baseRect.X, (int)baseRect.Y + (int)baseRect.Height - labelHeight - 5);
+            }    
+           
             using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))
             {
                 graphics.FillRectangle(leftBgBrush, leftRect);

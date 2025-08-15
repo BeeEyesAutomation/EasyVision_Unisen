@@ -27,12 +27,11 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetDst(int ixThread, int indexTool, IntPtr data, int image_rows, int image_cols, MatType matType);
         [NonSerialized]
-        public CvPlus.Pattern Pattern = new CvPlus.Pattern();
+        public CvPlus.Pattern Pattern=new CvPlus.Pattern();
         public PositionAdj()
         {
+
             Pattern = new CvPlus.Pattern();
-            Pattern.CreateTemp(IndexThread);
-           
         }
         public void SetModel()
         {
@@ -276,17 +275,17 @@ namespace BeeCore
             ////Cv2.ImShow("A"+ indexTool, temp);
             //if (temp == null) return;
             //if (temp.Empty()) return;
-
+            if (Pattern == null)
+            {
+                Pattern = new CvPlus.Pattern();
+                Pattern.CreateTemp(Index, IndexThread);
+            }
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
             // Cv2.ImWrite("matTemp.png", temp);
             SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
             // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
-            if(Pattern==null)
-            {
-                Pattern = new CvPlus.Pattern();
-                Pattern.CreateTemp(IndexThread);
-            }
+          
                
             Pattern.LearnPattern(minArea, Index, IndexThread);
 

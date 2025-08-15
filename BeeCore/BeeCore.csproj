@@ -143,6 +143,7 @@
     <Compile Include="EtherNetIP\EIPAdapter.cs" />
     <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
+    <Compile Include="Func\CameraIOFast.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Items\ItemTool.cs">
@@ -151,6 +152,7 @@
     <Compile Include="Items\ItemTool.Designer.cs">
       <DependentUpon>ItemTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="Unit\OKNGAPI.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -161,6 +163,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Unit\OKNG.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">

@@ -1,18 +1,26 @@
-#pragma once
+﻿#pragma once
 #include "G.h"
 namespace CvPlus {
-	 Scalar  colorTemp;
-	 vector<Scalar> listColor;
-
-	 Scalar lower, upper;
 	
+	class NativeData {
+	public:
+	 Scalar colorTemp;
+	vector<Scalar> listColor;
+	Scalar lower;
+	Scalar upper;
+	};
+
     public ref class ColorArea
 	{
-		double H=0, S=0, V=0;
+	private:
+		NativeData* native;  // pointer tới native
+	public:	ColorArea() { native = new NativeData(); }
+		~ColorArea() { delete native; }
+	double H=0, S=0, V=0;
 	public: void AddColor();
 	public:void LoadTemp(System::String^ listColor);
 	public:System::String^ SaveTemp();
-	public:void  GetMask(Mat mat,int iAreaPixel);
+	public:void  GetMask(const cv::Mat& mat,int iAreaPixel);
 	public: int ScoreRS = 0;
 	public:float cycle = 0;
 	public:	int pxMathching = 0;

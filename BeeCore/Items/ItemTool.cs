@@ -27,6 +27,7 @@ namespace BeeCore
         public TypeTool TypeTool;
         public Image IconTool;
         private float valueScore;
+        public bool NotChange = false;
         [Category("Min")]
         private float min;
         private float max = 100;
@@ -63,7 +64,7 @@ namespace BeeCore
                 if (value > Max) value = Max;
                 if (value < Min) value = Min;
                 if (!float.IsNaN(value))
-                {
+                {if (NotChange) return;
                     this.value = (float)Math.Round(value, 1);
                     pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
                     BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score = Value;
@@ -126,6 +127,7 @@ namespace BeeCore
 
         private void pTrack_MouseClick(object sender, MouseEventArgs e)
         {
+            if (NotChange) return;
             if (e.Location.X -pTick.X >5)
                 Value += Step;
             else if(pTick.X - e.Location.X > 5)
@@ -162,6 +164,7 @@ namespace BeeCore
 
         private void ItemTool_MouseUp(object sender, MouseEventArgs e)
         {
+          
             if (IsDown)
             {
                 if (ValueChanged != null) ValueChanged(Value);
@@ -341,7 +344,8 @@ namespace BeeCore
                 //    pevent.Graphics.DrawPath(new Pen(this.Parent.BackColor,1), pathBorder);
             }
             int num = IndexTool + 1;
-            
+           
+               
             pevent.Graphics.DrawImage(IconTool, pFist);
             pevent.Graphics.DrawString(num+"."+Name, Font,Brushes.Black, new PointF(pFist.X+IconTool.Width+5, pFist.Y));
             Size sz = Cal.GetSizeText(Status, new Font("Arial", 20, FontStyle.Bold));
@@ -369,12 +373,13 @@ namespace BeeCore
           //  pevent.Graphics.DrawImage(imgBar, new Rectangle(pTrack.X,pTrack.Y, szTrack.Width , imgBar.Height));
 
             pevent.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)), new RectangleF(pTrack.X,pTrack.Y, LocalValue, szTrack.Height));
+            if (!NotChange)
+            {
+                pevent.Graphics.DrawImage(imgTick, pTick);
+                sz = Cal.GetSizeText(value + "", new Font("Arial", 11));
 
-            pevent.Graphics.DrawImage(imgTick, pTick);
-            sz = Cal.GetSizeText(value + "", new Font("Arial", 11));
-
-            pevent.Graphics.DrawString(value + "", new Font("Arial", 11), Brushes.Black, new PointF(pTick.X + imgTick.Width / 2 - (int)sz.Width / 2, pTick.Y + imgTick.Height));
-
+                pevent.Graphics.DrawString(value + "", new Font("Arial", 11), Brushes.Black, new PointF(pTick.X + imgTick.Width / 2 - (int)sz.Width / 2, pTick.Y + imgTick.Height));
+            }
         }
         public Color ClStatus = Color.Green;
         public String Status = "---";
@@ -433,25 +438,28 @@ namespace BeeCore
         {
             isHovered = true;
             this.Invalidate();
-            if (IsDown && IsEdit)
+            if (!NotChange)
             {
-                imgTick = Properties.Resources.Choose;
-                Point pointPanel = e.Location;
-                if (pointPanel.X >= imgTick.Width / 2  && pointPanel.X <= pTrack.X+ szTrack.Width - imgTick.Width / 2 )
+                if (IsDown && IsEdit)
                 {
-                    Value = (float)Math.Round((float)((pointPanel.X - imgTick.Width / 2 -pTrack.X) / ((szTrack.Width - imgTick.Width ) * 1.0) * (Max - Min)), 1);
-                    Value = Value - Value % Step;
+                    imgTick = Properties.Resources.Choose;
+                    Point pointPanel = e.Location;
+                    if (pointPanel.X >= imgTick.Width / 2 && pointPanel.X <= pTrack.X + szTrack.Width - imgTick.Width / 2)
+                    {
+                        Value = (float)Math.Round((float)((pointPanel.X - imgTick.Width / 2 - pTrack.X) / ((szTrack.Width - imgTick.Width) * 1.0) * (Max - Min)), 1);
+                        Value = Value - Value % Step;
+                    }
+
                 }
-
-            }
-            else
-            {
-                if (_IsEdit)
-                    imgTick = Properties.Resources.Enable;
                 else
-                    imgTick = Properties.Resources.Disnable;
-                this.Refresh();
+                {
+                    if (_IsEdit)
+                        imgTick = Properties.Resources.Enable;
+                    else
+                        imgTick = Properties.Resources.Disnable;
+                    this.Refresh();
 
+                }
             }
                
           //  imgTick = Properties.Resources.Enable;

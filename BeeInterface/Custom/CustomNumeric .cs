@@ -23,7 +23,10 @@ namespace BeeInterface
             InitializeComponent();
             txt.Font = new Font("Arial", 20);
             this.FontChanged += CustomNumeric_FontChanged;
-            //InitUI();
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
         }
 
         private void CustomNumeric_FontChanged(object sender, EventArgs e)
@@ -101,23 +104,24 @@ namespace BeeInterface
         {
             ValueChanged?.Invoke(this, e);
         }
-        private RJButton btnPlus;
-        private RJButton btnSub;
-        private  System.Windows.Forms.TableLayoutPanel lay;
+
+        public RJButton btnPlus;
+        public RJButton btnSub;
+        private System.Windows.Forms.TableLayoutPanel lay;
 
         private void InitializeComponent()
         {
-            this.lay = new  System.Windows.Forms.TableLayoutPanel();
+            this.lay = new System.Windows.Forms.TableLayoutPanel();
+            this.txt = new System.Windows.Forms.TextBox();
             this.btnSub = new BeeInterface.RJButton();
             this.btnPlus = new BeeInterface.RJButton();
-            this.txt = new System.Windows.Forms.TextBox();
             this.lay.SuspendLayout();
             this.SuspendLayout();
             // 
             // lay
             // 
             this.lay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.lay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.lay.ColumnCount = 3;
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -132,6 +136,21 @@ namespace BeeInterface
             this.lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.lay.Size = new System.Drawing.Size(69, 43);
             this.lay.TabIndex = 10;
+            // 
+            // txt
+            // 
+            this.txt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt.Location = new System.Drawing.Point(35, 2);
+            this.txt.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.txt.Multiline = true;
+            this.txt.Name = "txt";
+            this.txt.Size = new System.Drawing.Size(1, 41);
+            this.txt.TabIndex = 9;
+            this.txt.Text = "00";
+            this.txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txt.TextChanged += new System.EventHandler(this.txt_TextChanged);
+            this.txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnSub
             // 
@@ -200,9 +219,9 @@ namespace BeeInterface
             this.btnPlus.AutoImageMaxRatio = 0.75F;
             this.btnPlus.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnPlus.AutoImageTint = true;
-            this.btnPlus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnPlus.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnPlus.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnPlus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnPlus.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnPlus.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnPlus.BorderRadius = 10;
             this.btnPlus.BorderSize = 1;
             this.btnPlus.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
@@ -244,31 +263,18 @@ namespace BeeInterface
             this.btnPlus.MouseLeave += new System.EventHandler(this.btnPlus_MouseLeave);
             this.btnPlus.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnPlus_MouseMove);
             // 
-            // txt
-            // 
-            this.txt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txt.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt.Location = new System.Drawing.Point(35, 2);
-            this.txt.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.txt.Multiline = true;
-            this.txt.Name = "txt";
-            this.txt.Size = new System.Drawing.Size(1, 41);
-            this.txt.TabIndex = 9;
-            this.txt.Text = "00";
-            this.txt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
             // CustomNumeric
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.lay);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "CustomNumeric";
             this.Size = new System.Drawing.Size(69, 45);
+            this.Load += new System.EventHandler(this.CustomNumeric_Load);
+            this.EnabledChanged += new System.EventHandler(this.CustomNumeric_EnabledChanged);
             this.MouseLeave += new System.EventHandler(this.CustomNumeric_MouseLeave);
             this.lay.ResumeLayout(false);
             this.lay.PerformLayout();
@@ -334,6 +340,21 @@ namespace BeeInterface
         private void btnPlus_MouseLeave(object sender, EventArgs e)
         {
             
+        }
+
+        private void CustomNumeric_Load(object sender, EventArgs e)
+        {
+            //this.BackColor=this.Parent.BackColor;
+            //lay.BackColor = this.BackColor;
+            //btnPlus.BackColor = lay.BackColor;
+            //btnSub.BackColor = lay.BackColor;
+            //btnPlus.BorderColor = lay.BackColor;
+            //btnSub.BorderColor = lay.BackColor;
+        }
+
+        private void CustomNumeric_EnabledChanged(object sender, EventArgs e)
+        {
+           
         }
 
         private void btnSub_Click(object sender, EventArgs e)

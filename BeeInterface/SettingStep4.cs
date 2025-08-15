@@ -30,10 +30,12 @@ namespace BeeInterface
           
             SaveData.Project(Global.Project);
             Global.EditTool.RefreshGuiEdit(Step.Run);
+            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+
         }
 
-       
-    
+
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Global.EditTool.RefreshGuiEdit(Step.Step3);

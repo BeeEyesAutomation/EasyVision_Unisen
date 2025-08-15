@@ -236,11 +236,10 @@ namespace BeeCore
         private int delayTrig;
         public List< System.Drawing.Point > listP_Center=new List<System.Drawing.Point>();
         [NonSerialized]
-        public Pattern Pattern = new CvPlus.Pattern();
+        public Pattern Pattern =new CvPlus.Pattern();
         public Patterns()
         {
-			Pattern = new CvPlus.Pattern();
-            Pattern.CreateTemp(IndexThread);
+            Pattern = new CvPlus.Pattern();
         }
         public static void LoadEdge()
         {
@@ -252,15 +251,20 @@ namespace BeeCore
 
         public void LearnPattern(   Mat temp)
         {
-			////Cv2.ImShow("A"+ indexTool, temp);
-			//if (temp == null) return;
-			//if (temp.Empty()) return;
-			if (Pattern == null)
+            if (temp == null)
+                if (temp.Empty())
+                    return;
+                    ////Cv2.ImShow("A"+ indexTool, temp);
+                    //if (temp == null) return;
+                    //if (temp.Empty()) return;
+                    if (Pattern == null)
 			{
 				Pattern = new CvPlus.Pattern();
-				Pattern.CreateTemp(IndexThread);
+				
 			}
-			matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
+            Pattern.CreateTemp(Index, IndexThread);
+            matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
+           
            // Cv2.ImWrite("matTemp.png", temp);
             SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
@@ -295,7 +299,7 @@ namespace BeeCore
             if (rotCrop._rectRotation < 0) rotCrop._rectRotation = 360 + rotCrop._rectRotation;
             if(rotMask!=null)
             if (rotMask._rectRotation < 0) rotMask._rectRotation = 360 + rotMask._rectRotation;
-            Mat matCrop = Common.CropRotatedRect(matRaw, rotCrop, rotMask);
+            Mat matCrop = Common.CropRotatedRect(matRaw, rotCrop, null);
            
             Mat matOut = new Mat();
             Mat crop=new Mat();

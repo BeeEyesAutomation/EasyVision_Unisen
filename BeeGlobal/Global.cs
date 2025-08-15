@@ -13,11 +13,13 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary>
-    
+        
+        public static List<HistoryCheck> HistoryChecks = new List<HistoryCheck>();
         public static int WidthOldTools = 0;
          public static dynamic EditTool ;
         public static bool IsSendRS = false;
         public static bool TotalOK = false;
+        public static bool IsByPassResult = false;
         //Gui
         public static bool _IsLive = false;
         public static event Action<bool> LiveChanged;

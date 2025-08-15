@@ -246,10 +246,7 @@ namespace BeeUi.Common
                 Global.EditTool.View.btnContinuous.Enabled = true;
 
                
-                Global.ToolSettings.btnAdd.Enabled = false;
-                Global.ToolSettings.btnCopy.Enabled = false;
-                Global.ToolSettings.btnDelect.Enabled = false;
-                Global.ToolSettings.btnEnEdit.Enabled = true;
+              
                 btnMode.Text = "RUN";
                 btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
                 Global.EditTool.RefreshGuiEdit(Step.Run);
@@ -264,10 +261,7 @@ namespace BeeUi.Common
                 Global.EditTool.View.btnCap.Enabled = false;
                 Global.EditTool.View.btnContinuous.Enabled = false;
                 Global.EditTool.RefreshGuiEdit(Step.Step1);
-                Global.ToolSettings.btnAdd.Enabled = true;
-                Global.ToolSettings.btnCopy.Enabled = true;
-                Global.ToolSettings.btnDelect.Enabled = true;
-                Global.ToolSettings.btnEnEdit.Enabled = false;
+              
                 btnMode.Text = "EDIT";
                 btnMode.ForeColor = Color.DarkSlateGray;
               
@@ -279,7 +273,7 @@ namespace BeeUi.Common
            
         }
         private void btnMode_Click(object sender, EventArgs e)
-        {
+        {if (G.listProgram.Visible == true) G.listProgram.Visible = false;
             if (Global.EditTool.View.btnLive.IsCLick)
             {
                 Global.EditTool.View.btnLive.PerformClick();
@@ -318,7 +312,7 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
-
+          ///  RefreshListPJ();
             //    this.Controls.Add(btnHide);
 
             //fadeTimer = new Timer { Interval = 20 };
@@ -440,10 +434,7 @@ namespace BeeUi.Common
         }
       
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+     
         String sRecept = "";
         public delegate void AddDataDelegate(String myString);
         public AddDataDelegate myDelegate;

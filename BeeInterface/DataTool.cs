@@ -171,6 +171,9 @@ namespace BeeInterface
                 case TypeTool.Width:
                     control = new ToolWidth();
                     break;
+                case TypeTool.OKNG:
+                    control = new ToolOKNG();
+                    break;
                 default:
                     return null;
                     break;
@@ -209,6 +212,8 @@ namespace BeeInterface
                 itemTool.CT = 0;
                 itemTool.Score = "---";
                 itemTool.Status = "---";
+                if (TypeTool == TypeTool.OKNG)
+                    itemTool.NotChange = true;
                 // itemTool.Score.Value = Convert.ToInt32((double)control.Propety.Score);
                 itemTool.ClScore = Color.Gray;
                 itemTool.ClStatus = Color.Gray;

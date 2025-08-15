@@ -53,6 +53,8 @@ namespace BeeGlobal
         //}
 
         //public void StopRead() => _cts.Cancel();
+        public int AddRead = 1;
+        public int AddWrite = 2;
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
@@ -89,7 +91,13 @@ namespace BeeGlobal
         public int Baurate = 115200;
         public byte SlaveID=1;
         public bool IsBypass=true;
-        public IO() { }
+        public IO() {
+            if (AddRead == 0 && AddWrite == 0)
+            {
+                AddRead = 1;
+                AddWrite = 2;
+            }
+        }
         public int timeRead = 0;
         public List<ParaIO> paraIOs = new List<ParaIO>();
         [NonSerialized]
@@ -175,6 +183,12 @@ namespace BeeGlobal
 
             try
             {
+                if (AddRead == 0 && AddWrite == 0)
+                {
+                    AddRead = 1;
+                    AddWrite = 2;
+                }
+
                 CT = new Stopwatch();
                 CTMid = 0;
                 CTMin = 1000; CTMax = 0;
@@ -253,7 +267,7 @@ namespace BeeGlobal
             numRead++;
                 CT.Restart();
             Global.StatusIO = StatusIO.Reading;
-            valueInput =await Modbus.ReadBit(1);
+            valueInput =await Modbus.ReadBit(AddRead);
             Global.StatusIO = StatusIO.None;
             CT.Stop();
             CTMid =(float) CT.Elapsed.TotalMilliseconds;
@@ -351,6 +365,20 @@ namespace BeeGlobal
                     await WriteOutPut();
                     Disconnect();
                     break;
+                case IO_Processing.ByPass:
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+                    SetLight(false);
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                    IsWait = true;
+                    await WriteOutPut();
+                    if (IsBlink)
+                    {
+                        await Task.Delay((int)DelayOutput);
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                        await WriteOutPut();
+                    }
+                    break;
                 case IO_Processing.Error:
                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
                     await WriteOutPut();
@@ -415,8 +443,8 @@ namespace BeeGlobal
                     Global.StatusProcessing = StatusProcessing.Done;
                     break;
                 case IO_Processing.ChangeMode:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsRun); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
                     SetLight(false);
 
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
@@ -574,7 +602,7 @@ namespace BeeGlobal
             if (!IsConnected)
                 return false;
             CT.Restart();
-            X: IsConnected =await Modbus.WriteBit(Val);
+            X: IsConnected =await Modbus.WriteBit(AddWrite, Val);
            if(Global.StatusIO == StatusIO.ErrWrite)
             {
                 await Task.Delay(50);

@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore.Func;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Features2D;
@@ -864,7 +865,9 @@ namespace BeeCore
         }
         public  System.Drawing.Size GetSzCCD()
         {
-          return new System.Drawing.Size(matRaw.Width,matRaw.Height);
+            if (matRaw == null) return new System.Drawing.Size();
+                if (matRaw.Empty()) return new System.Drawing.Size();
+            return new System.Drawing.Size(matRaw.Width,matRaw.Height);
 
         }
         public  void Init()
@@ -872,7 +875,8 @@ namespace BeeCore
            
             CCDPlus.TypeCamera = (int)Para.TypeCamera;
         }
-       
+        [NonSerialized]
+        Stopwatch stopwatch = new Stopwatch();
         public   void Read()
         {
             int rows = 0, cols = 0, Type = 0;
@@ -885,78 +889,77 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.USB:
-                        if (matRaw != null)
-                            if (!matRaw.Empty())
-                                matRaw.Release();
-                        //if (IsHist)
-                        //    CCDPlus.ReadRaw(true);
-                        //else
+                      
+                     
+                        stopwatch.Restart();
                         CCDPlus.ReadCCD(IndexCCD);
-                        CCDPlus.ReadCCD(IndexCCD);
-                        
-                        
-                        try
-                        {
+                        //CCDPlus.ReadCCD(IndexCCD);
+                        CameraIOFast.TryGrabFast_NoStride(ref matRaw);
+                       
+                        stopwatch.Stop();
+                        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+                        FrameRate = CCDPlus.FPS;
+                        //try
+                        //{
 
-                            unsafe
-                            {
-                                 intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
-                                raw = new Mat(rows, cols, Type, intPtr);
+                        //    unsafe
+                        //    {
+                        //         intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
+                        //        raw = new Mat(rows, cols, Type, intPtr);
 
-                                FrameRate = CCDPlus.FPS;
-                                BeeCore.Common.CycleCamera = CCDPlus.cycle;
-                               matRaw = raw;
-                            }
-                            //    return new Mat();
+                        //        FrameRate = CCDPlus.FPS;
+                        //        BeeCore.Common.CycleCamera = CCDPlus.cycle;
+                        //       matRaw = raw.Clone();
+                        //    }
+                        //    //    return new Mat();
 
 
-                        }
-                        finally
-                        {
-                            //raw.Release();
-                            // Giải phóng bộ nhớ sau khi sử dụng
-                           // if(intPtr!=null)
-                         //  Marshal.FreeHGlobal(intPtr);
-                        }
+                        //}
+                        //finally
+                        //{
+                        //    raw.Release();
+                        //    Native.FreeBuffer(intPtr);
+                        //}
                         break;
                     case TypeCamera.BaslerGigE:
-                        if (matRaw != null)
-                            if (!matRaw.Empty())
-                                matRaw.Release();
+
                         //if (IsHist)
                         //    CCDPlus.ReadRaw(true);
                         //else
-                        Stopwatch stopwatch = new Stopwatch(); 
-                        stopwatch.Start();
+
+                        stopwatch.Restart();
                         CCDPlus.ReadCCD(IndexCCD);
+                        CameraIOFast.TryGrabFast_NoStride(ref matRaw);
+                        FrameRate = CCDPlus.FPS;
+                        stopwatch.Stop();
+                        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+                        FrameRate = CCDPlus.FPS;
+                        // raw = new Mat();
 
-                        
-                         raw = new Mat();
-                      
-                        try
-                        {
+                        //try
+                        //{
 
-                            unsafe
-                            {
-                              
-                                    intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
-                                raw = new Mat(rows, cols, Type, intPtr);
+                        //    unsafe
+                        //    {
 
-                                FrameRate = CCDPlus.FPS;
-                            
-                                   matRaw = raw.Clone();
-                                stopwatch.Stop();
-                                BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+                        //            intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
+                        //        raw = new Mat(rows, cols, Type, intPtr);
 
-                            }
-                           
+                        //        FrameRate = CCDPlus.FPS;
 
-                        }
-                        finally
-                        {
-                           raw.Release();
-                           Native. FreeBuffer(intPtr);
-                        }
+                        //           matRaw = raw.Clone();
+                        //        stopwatch.Stop();
+                        //        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+
+                        //    }
+
+
+                        //}
+                        //finally
+                        //{
+                        //   raw.Release();
+                        //   Native. FreeBuffer(intPtr);
+                        //}
                         break;
                        case TypeCamera.TinyIV:
                         Mat raw2= HEROJE.Read();

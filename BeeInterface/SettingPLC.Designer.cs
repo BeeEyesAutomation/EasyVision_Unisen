@@ -36,34 +36,7 @@ namespace BeeInterface
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.lbOut = new System.Windows.Forms.Label();
-            this.lbIN = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.lbMax = new System.Windows.Forms.Label();
-            this.lbMid = new System.Windows.Forms.Label();
-            this.lbmin = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtLog1 = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.pComIO = new System.Windows.Forms.Panel();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
-            this.cbBaurate = new System.Windows.Forms.ComboBox();
-            this.label51 = new System.Windows.Forms.Label();
-            this.label53 = new System.Windows.Forms.Label();
-            this.comIO = new System.Windows.Forms.ComboBox();
-            this.label52 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.tmCheck = new System.Windows.Forms.Timer(this.components);
-            this.tmConnect = new System.Windows.Forms.Timer(this.components);
-            this.tmRead = new System.Windows.Forms.Timer(this.components);
-            this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tableLayoutPanel16 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
             this.DI7 = new BeeInterface.RJButton();
             this.DI6 = new BeeInterface.RJButton();
             this.DI5 = new BeeInterface.RJButton();
@@ -88,7 +61,8 @@ namespace BeeInterface
             this.label14 = new System.Windows.Forms.Label();
             this.cbIn1 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel17 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
             this.DO7 = new BeeInterface.RJButton();
             this.DO6 = new BeeInterface.RJButton();
             this.DO5 = new BeeInterface.RJButton();
@@ -113,16 +87,45 @@ namespace BeeInterface
             this.cbO0 = new System.Windows.Forms.ComboBox();
             this.label47 = new System.Windows.Forms.Label();
             this.DO0 = new BeeInterface.RJButton();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnConectIO = new BeeInterface.RJButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnBypass = new BeeInterface.RJButton();
+            this.lbLog = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.lbMax = new System.Windows.Forms.Label();
+            this.lbMid = new System.Windows.Forms.Label();
+            this.lbmin = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtLog1 = new System.Windows.Forms.TextBox();
+            this.pComIO = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.comIO = new System.Windows.Forms.ComboBox();
+            this.AddWrite = new BeeInterface.CustomNumeric();
+            this.label52 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.cbBaurate = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.btnRefresh = new BeeInterface.RJButton();
-            this.timerRead = new BeeInterface.CustomNumeric();
+            this.AddRead = new BeeInterface.CustomNumeric();
+            this.label51 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.slaveID = new BeeInterface.CustomNumeric();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.timerRead = new BeeInterface.CustomNumeric();
+            this.label50 = new System.Windows.Forms.Label();
             this.btnClear = new BeeInterface.RJButton();
             this.StatusIObtn = new BeeInterface.RJButton();
-            this.btnBypass = new BeeInterface.RJButton();
-            this.btnConectIO = new BeeInterface.RJButton();
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel14 = new  System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel15 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton9 = new BeeInterface.RJButton();
             this.rjButton10 = new BeeInterface.RJButton();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
@@ -134,15 +137,15 @@ namespace BeeInterface
             this.label13 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel9 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton7 = new BeeInterface.RJButton();
             this.btnClient = new BeeInterface.RJButton();
             this.btnServer = new BeeInterface.RJButton();
-            this.tableLayoutPanel8 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.btnModeEhternetIP = new BeeInterface.RJButton();
             this.btnModeRS485 = new BeeInterface.RJButton();
             this.btnModeMobusTCP = new BeeInterface.RJButton();
-            this.pCom = new  System.Windows.Forms.TableLayoutPanel();
+            this.pCom = new System.Windows.Forms.TableLayoutPanel();
             this.numIDSlave = new System.Windows.Forms.NumericUpDown();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -155,16 +158,23 @@ namespace BeeInterface
             this.label6 = new System.Windows.Forms.Label();
             this.cbSerialPort = new System.Windows.Forms.ComboBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.tmCheck = new System.Windows.Forms.Timer(this.components);
+            this.tmConnect = new System.Windows.Forms.Timer(this.components);
+            this.tmRead = new System.Windows.Forms.Timer(this.components);
+            this.workRead = new System.ComponentModel.BackgroundWorker();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            this.tabPage7.SuspendLayout();
-            this.pComIO.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.tableLayoutPanel17.SuspendLayout();
+            this.tabPage7.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.pComIO.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
             this.tableLayoutPanel15.SuspendLayout();
@@ -230,319 +240,6 @@ namespace BeeInterface
             this.tabPage5.Size = new System.Drawing.Size(378, 775);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "Input";
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage6.Controls.Add(this.tableLayoutPanel17);
-            this.tabPage6.Location = new System.Drawing.Point(4, 34);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage6.Size = new System.Drawing.Size(378, 775);
-            this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "Output";
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage7.Controls.Add(this.lbOut);
-            this.tabPage7.Controls.Add(this.lbIN);
-            this.tabPage7.Controls.Add(this.label29);
-            this.tabPage7.Controls.Add(this.label27);
-            this.tabPage7.Controls.Add(this.label25);
-            this.tabPage7.Controls.Add(this.lbMax);
-            this.tabPage7.Controls.Add(this.lbMid);
-            this.tabPage7.Controls.Add(this.lbmin);
-            this.tabPage7.Controls.Add(this.label4);
-            this.tabPage7.Controls.Add(this.txtLog1);
-            this.tabPage7.Controls.Add(this.label50);
-            this.tabPage7.Controls.Add(this.pComIO);
-            this.tabPage7.Controls.Add(this.btnClear);
-            this.tabPage7.Controls.Add(this.StatusIObtn);
-            this.tabPage7.Controls.Add(this.btnBypass);
-            this.tabPage7.Controls.Add(this.btnConectIO);
-            this.tabPage7.Location = new System.Drawing.Point(4, 34);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(378, 775);
-            this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "SerialPort";
-            // 
-            // lbOut
-            // 
-            this.lbOut.AutoSize = true;
-            this.lbOut.Location = new System.Drawing.Point(123, 404);
-            this.lbOut.Name = "lbOut";
-            this.lbOut.Size = new System.Drawing.Size(24, 25);
-            this.lbOut.TabIndex = 84;
-            this.lbOut.Text = "0";
-            // 
-            // lbIN
-            // 
-            this.lbIN.AutoSize = true;
-            this.lbIN.Location = new System.Drawing.Point(13, 404);
-            this.lbIN.Name = "lbIN";
-            this.lbIN.Size = new System.Drawing.Size(24, 25);
-            this.lbIN.TabIndex = 83;
-            this.lbIN.Text = "0";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.BackColor = System.Drawing.Color.Transparent;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(310, 282);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(32, 16);
-            this.label29.TabIndex = 82;
-            this.label29.Text = "Max";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(213, 282);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(29, 16);
-            this.label27.TabIndex = 81;
-            this.label27.Text = "Mid";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(118, 282);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(28, 16);
-            this.label25.TabIndex = 80;
-            this.label25.Text = "Min";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lbMax
-            // 
-            this.lbMax.BackColor = System.Drawing.Color.Transparent;
-            this.lbMax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMax.ForeColor = System.Drawing.Color.Red;
-            this.lbMax.Location = new System.Drawing.Point(288, 304);
-            this.lbMax.Name = "lbMax";
-            this.lbMax.Size = new System.Drawing.Size(81, 21);
-            this.lbMax.TabIndex = 79;
-            this.lbMax.Text = "00";
-            this.lbMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbMid
-            // 
-            this.lbMid.BackColor = System.Drawing.Color.Transparent;
-            this.lbMid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMid.Location = new System.Drawing.Point(191, 304);
-            this.lbMid.Name = "lbMid";
-            this.lbMid.Size = new System.Drawing.Size(81, 21);
-            this.lbMid.TabIndex = 78;
-            this.lbMid.Text = "00";
-            this.lbMid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbmin
-            // 
-            this.lbmin.BackColor = System.Drawing.Color.Transparent;
-            this.lbmin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbmin.ForeColor = System.Drawing.Color.Lime;
-            this.lbmin.Location = new System.Drawing.Point(94, 304);
-            this.lbmin.Name = "lbmin";
-            this.lbmin.Size = new System.Drawing.Size(81, 21);
-            this.lbmin.TabIndex = 77;
-            this.lbmin.Text = "00";
-            this.lbmin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(1, 282);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 43);
-            this.label4.TabIndex = 73;
-            this.label4.Text = "CT Read/Write";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // txtLog1
-            // 
-            this.txtLog1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog1.Location = new System.Drawing.Point(9, 458);
-            this.txtLog1.Multiline = true;
-            this.txtLog1.Name = "txtLog1";
-            this.txtLog1.Size = new System.Drawing.Size(363, 311);
-            this.txtLog1.TabIndex = 74;
-            // 
-            // label50
-            // 
-            this.label50.BackColor = System.Drawing.Color.Transparent;
-            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label50.Location = new System.Drawing.Point(31, 138);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(82, 41);
-            this.label50.TabIndex = 65;
-            this.label50.Text = "Timer Read";
-            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // pComIO
-            // 
-            this.pComIO.BackColor = System.Drawing.SystemColors.Control;
-            this.pComIO.Controls.Add(this.label49);
-            this.pComIO.Controls.Add(this.label48);
-            this.pComIO.Controls.Add(this.btnRefresh);
-            this.pComIO.Controls.Add(this.cbBaurate);
-            this.pComIO.Controls.Add(this.label51);
-            this.pComIO.Controls.Add(this.timerRead);
-            this.pComIO.Controls.Add(this.label53);
-            this.pComIO.Controls.Add(this.comIO);
-            this.pComIO.Controls.Add(this.label52);
-            this.pComIO.Controls.Add(this.slaveID);
-            this.pComIO.Location = new System.Drawing.Point(9, 7);
-            this.pComIO.Name = "pComIO";
-            this.pComIO.Size = new System.Drawing.Size(358, 188);
-            this.pComIO.TabIndex = 75;
-            // 
-            // label49
-            // 
-            this.label49.BackColor = System.Drawing.Color.Transparent;
-            this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label49.Location = new System.Drawing.Point(301, 126);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(46, 41);
-            this.label49.TabIndex = 71;
-            this.label49.Text = "ms";
-            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label48
-            // 
-            this.label48.BackColor = System.Drawing.Color.Transparent;
-            this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label48.Location = new System.Drawing.Point(298, 85);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(49, 41);
-            this.label48.TabIndex = 70;
-            this.label48.Text = "(1-254)";
-            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbBaurate
-            // 
-            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
-            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBaurate.FormattingEnabled = true;
-            this.cbBaurate.Items.AddRange(new object[] {
-            "4800",
-            "9600",
-            "115200",
-            "230400",
-            "256000"});
-            this.cbBaurate.Location = new System.Drawing.Point(112, 44);
-            this.cbBaurate.Name = "cbBaurate";
-            this.cbBaurate.Size = new System.Drawing.Size(151, 32);
-            this.cbBaurate.TabIndex = 62;
-            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
-            // 
-            // label51
-            // 
-            this.label51.BackColor = System.Drawing.Color.Transparent;
-            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label51.Location = new System.Drawing.Point(14, 85);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(84, 41);
-            this.label51.TabIndex = 63;
-            this.label51.Text = "SlaveID";
-            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label53
-            // 
-            this.label53.BackColor = System.Drawing.Color.Transparent;
-            this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label53.Location = new System.Drawing.Point(6, 3);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(92, 41);
-            this.label53.TabIndex = 60;
-            this.label53.Text = "COM";
-            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // comIO
-            // 
-            this.comIO.BackColor = System.Drawing.Color.Wheat;
-            this.comIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comIO.FormattingEnabled = true;
-            this.comIO.Items.AddRange(new object[] {
-            "Bee"});
-            this.comIO.Location = new System.Drawing.Point(112, 6);
-            this.comIO.Name = "comIO";
-            this.comIO.Size = new System.Drawing.Size(151, 32);
-            this.comIO.TabIndex = 59;
-            this.comIO.SelectionChangeCommitted += new System.EventHandler(this.comIO_SelectionChangeCommitted);
-            // 
-            // label52
-            // 
-            this.label52.BackColor = System.Drawing.Color.Transparent;
-            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label52.Location = new System.Drawing.Point(3, 44);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(99, 41);
-            this.label52.TabIndex = 61;
-            this.label52.Text = "Baurate";
-            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage3.Controls.Add(this.tableLayoutPanel1);
-            this.tabPage3.Controls.Add(this.btnConnect);
-            this.tabPage3.Location = new System.Drawing.Point(4, 34);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(392, 819);
-            this.tabPage3.TabIndex = 0;
-            this.tabPage3.Text = "Comunication";
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.BackColor = System.Drawing.Color.Brown;
-            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnect.ForeColor = System.Drawing.Color.White;
-            this.btnConnect.Location = new System.Drawing.Point(97, 575);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(231, 31);
-            this.btnConnect.TabIndex = 47;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = false;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
-            // tmCheck
-            // 
-            this.tmCheck.Interval = 50;
-            this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
-            // 
-            // tmConnect
-            // 
-            this.tmConnect.Enabled = true;
-            this.tmConnect.Interval = 3000;
-            this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
-            // 
-            // tmRead
-            // 
-            this.tmRead.Interval = 10;
-            this.tmRead.Tick += new System.EventHandler(this.tmRead_Tick);
-            // 
-            // workRead
-            // 
-            this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
-            this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
             // 
             // tableLayoutPanel16
             // 
@@ -1159,6 +856,17 @@ namespace BeeInterface
             this.label3.Size = new System.Drawing.Size(80, 46);
             this.label3.TabIndex = 4;
             this.label3.Text = "DI 00";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage6.Controls.Add(this.tableLayoutPanel17);
+            this.tabPage6.Location = new System.Drawing.Point(4, 34);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(5);
+            this.tabPage6.Size = new System.Drawing.Size(378, 775);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "Output";
             // 
             // tableLayoutPanel17
             // 
@@ -1784,6 +1492,413 @@ namespace BeeInterface
             this.DO0.UseVisualStyleBackColor = false;
             this.DO0.Click += new System.EventHandler(this.DO0_Click);
             // 
+            // tabPage7
+            // 
+            this.tabPage7.AutoScroll = true;
+            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage7.Controls.Add(this.panel1);
+            this.tabPage7.Controls.Add(this.lbLog);
+            this.tabPage7.Controls.Add(this.label29);
+            this.tabPage7.Controls.Add(this.label27);
+            this.tabPage7.Controls.Add(this.label25);
+            this.tabPage7.Controls.Add(this.lbMax);
+            this.tabPage7.Controls.Add(this.lbMid);
+            this.tabPage7.Controls.Add(this.lbmin);
+            this.tabPage7.Controls.Add(this.label4);
+            this.tabPage7.Controls.Add(this.txtLog1);
+            this.tabPage7.Controls.Add(this.pComIO);
+            this.tabPage7.Controls.Add(this.btnClear);
+            this.tabPage7.Controls.Add(this.StatusIObtn);
+            this.tabPage7.Location = new System.Drawing.Point(4, 34);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(378, 775);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "SerialPort";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnConectIO);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.btnBypass);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(3, 286);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(372, 58);
+            this.panel1.TabIndex = 84;
+            // 
+            // btnConectIO
+            // 
+            this.btnConectIO.AutoFont = true;
+            this.btnConectIO.AutoFontHeightRatio = 0.75F;
+            this.btnConectIO.AutoFontMax = 100F;
+            this.btnConectIO.AutoFontMin = 6F;
+            this.btnConectIO.AutoFontWidthRatio = 0.92F;
+            this.btnConectIO.AutoImage = true;
+            this.btnConectIO.AutoImageMaxRatio = 0.75F;
+            this.btnConectIO.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnConectIO.AutoImageTint = true;
+            this.btnConectIO.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnConectIO.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnConectIO.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnConectIO.BorderRadius = 5;
+            this.btnConectIO.BorderSize = 1;
+            this.btnConectIO.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnConectIO.Corner = BeeGlobal.Corner.Both;
+            this.btnConectIO.DebounceResizeMs = 16;
+            this.btnConectIO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnConectIO.FlatAppearance.BorderSize = 0;
+            this.btnConectIO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConectIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.42188F);
+            this.btnConectIO.ForeColor = System.Drawing.Color.Black;
+            this.btnConectIO.Image = null;
+            this.btnConectIO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnConectIO.ImageDisabled = null;
+            this.btnConectIO.ImageHover = null;
+            this.btnConectIO.ImageNormal = null;
+            this.btnConectIO.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnConectIO.ImagePressed = null;
+            this.btnConectIO.ImageTextSpacing = 6;
+            this.btnConectIO.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnConectIO.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnConectIO.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnConectIO.ImageTintOpacity = 0.5F;
+            this.btnConectIO.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnConectIO.IsCLick = false;
+            this.btnConectIO.IsNotChange = false;
+            this.btnConectIO.IsRect = false;
+            this.btnConectIO.IsUnGroup = false;
+            this.btnConectIO.Location = new System.Drawing.Point(0, 0);
+            this.btnConectIO.Multiline = false;
+            this.btnConectIO.Name = "btnConectIO";
+            this.btnConectIO.Size = new System.Drawing.Size(217, 58);
+            this.btnConectIO.TabIndex = 68;
+            this.btnConectIO.Text = "Not Connect";
+            this.btnConectIO.TextColor = System.Drawing.Color.Black;
+            this.btnConectIO.UseVisualStyleBackColor = false;
+            this.btnConectIO.Click += new System.EventHandler(this.btnConectIO_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(217, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(24, 58);
+            this.panel2.TabIndex = 70;
+            // 
+            // btnBypass
+            // 
+            this.btnBypass.AutoFont = true;
+            this.btnBypass.AutoFontHeightRatio = 0.75F;
+            this.btnBypass.AutoFontMax = 100F;
+            this.btnBypass.AutoFontMin = 6F;
+            this.btnBypass.AutoFontWidthRatio = 0.92F;
+            this.btnBypass.AutoImage = true;
+            this.btnBypass.AutoImageMaxRatio = 0.75F;
+            this.btnBypass.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnBypass.AutoImageTint = true;
+            this.btnBypass.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnBypass.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnBypass.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnBypass.BorderRadius = 5;
+            this.btnBypass.BorderSize = 1;
+            this.btnBypass.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnBypass.Corner = BeeGlobal.Corner.Both;
+            this.btnBypass.DebounceResizeMs = 16;
+            this.btnBypass.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnBypass.FlatAppearance.BorderSize = 0;
+            this.btnBypass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBypass.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.21875F);
+            this.btnBypass.ForeColor = System.Drawing.Color.Black;
+            this.btnBypass.Image = null;
+            this.btnBypass.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBypass.ImageDisabled = null;
+            this.btnBypass.ImageHover = null;
+            this.btnBypass.ImageNormal = null;
+            this.btnBypass.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnBypass.ImagePressed = null;
+            this.btnBypass.ImageTextSpacing = 6;
+            this.btnBypass.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnBypass.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnBypass.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnBypass.ImageTintOpacity = 0.5F;
+            this.btnBypass.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnBypass.IsCLick = false;
+            this.btnBypass.IsNotChange = false;
+            this.btnBypass.IsRect = false;
+            this.btnBypass.IsUnGroup = false;
+            this.btnBypass.Location = new System.Drawing.Point(241, 0);
+            this.btnBypass.Multiline = false;
+            this.btnBypass.Name = "btnBypass";
+            this.btnBypass.Size = new System.Drawing.Size(131, 58);
+            this.btnBypass.TabIndex = 69;
+            this.btnBypass.Text = "ByPass";
+            this.btnBypass.TextColor = System.Drawing.Color.Black;
+            this.btnBypass.UseVisualStyleBackColor = false;
+            this.btnBypass.Click += new System.EventHandler(this.btnBypass_Click);
+            // 
+            // lbLog
+            // 
+            this.lbLog.AutoSize = true;
+            this.lbLog.Location = new System.Drawing.Point(10, 504);
+            this.lbLog.Name = "lbLog";
+            this.lbLog.Size = new System.Drawing.Size(132, 25);
+            this.lbLog.TabIndex = 83;
+            this.lbLog.Text = "History Logs";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.BackColor = System.Drawing.Color.Transparent;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(314, 367);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(32, 16);
+            this.label29.TabIndex = 82;
+            this.label29.Text = "Max";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.BackColor = System.Drawing.Color.Transparent;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(217, 367);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(29, 16);
+            this.label27.TabIndex = 81;
+            this.label27.Text = "Mid";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Transparent;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(122, 367);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(28, 16);
+            this.label25.TabIndex = 80;
+            this.label25.Text = "Min";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lbMax
+            // 
+            this.lbMax.BackColor = System.Drawing.Color.Transparent;
+            this.lbMax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMax.ForeColor = System.Drawing.Color.Red;
+            this.lbMax.Location = new System.Drawing.Point(292, 389);
+            this.lbMax.Name = "lbMax";
+            this.lbMax.Size = new System.Drawing.Size(81, 21);
+            this.lbMax.TabIndex = 79;
+            this.lbMax.Text = "00";
+            this.lbMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbMid
+            // 
+            this.lbMid.BackColor = System.Drawing.Color.Transparent;
+            this.lbMid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbMid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMid.Location = new System.Drawing.Point(195, 389);
+            this.lbMid.Name = "lbMid";
+            this.lbMid.Size = new System.Drawing.Size(81, 21);
+            this.lbMid.TabIndex = 78;
+            this.lbMid.Text = "00";
+            this.lbMid.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbmin
+            // 
+            this.lbmin.BackColor = System.Drawing.Color.Transparent;
+            this.lbmin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbmin.ForeColor = System.Drawing.Color.Lime;
+            this.lbmin.Location = new System.Drawing.Point(98, 389);
+            this.lbmin.Name = "lbmin";
+            this.lbmin.Size = new System.Drawing.Size(81, 21);
+            this.lbmin.TabIndex = 77;
+            this.lbmin.Text = "00";
+            this.lbmin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(5, 367);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 43);
+            this.label4.TabIndex = 73;
+            this.label4.Text = "CT Read/Write";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtLog1
+            // 
+            this.txtLog1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog1.Location = new System.Drawing.Point(9, 532);
+            this.txtLog1.Multiline = true;
+            this.txtLog1.Name = "txtLog1";
+            this.txtLog1.Size = new System.Drawing.Size(363, 237);
+            this.txtLog1.TabIndex = 74;
+            // 
+            // pComIO
+            // 
+            this.pComIO.BackColor = System.Drawing.SystemColors.Control;
+            this.pComIO.Controls.Add(this.tableLayoutPanel2);
+            this.pComIO.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pComIO.Location = new System.Drawing.Point(3, 3);
+            this.pComIO.Name = "pComIO";
+            this.pComIO.Size = new System.Drawing.Size(372, 283);
+            this.pComIO.TabIndex = 75;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.label53, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label18, 2, 5);
+            this.tableLayoutPanel2.Controls.Add(this.comIO, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.AddWrite, 1, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label52, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label19, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.cbBaurate, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label17, 2, 4);
+            this.tableLayoutPanel2.Controls.Add(this.btnRefresh, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.AddRead, 1, 4);
+            this.tableLayoutPanel2.Controls.Add(this.label51, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.slaveID, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label49, 2, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label48, 2, 2);
+            this.tableLayoutPanel2.Controls.Add(this.timerRead, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label50, 0, 3);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 7;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(372, 283);
+            this.tableLayoutPanel2.TabIndex = 79;
+            // 
+            // label53
+            // 
+            this.label53.BackColor = System.Drawing.Color.Transparent;
+            this.label53.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label53.Location = new System.Drawing.Point(3, 0);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(86, 38);
+            this.label53.TabIndex = 60;
+            this.label53.Text = "COM";
+            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label18
+            // 
+            this.label18.BackColor = System.Drawing.Color.Transparent;
+            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(267, 229);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(102, 51);
+            this.label18.TabIndex = 78;
+            this.label18.Text = "16 Bit";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // comIO
+            // 
+            this.comIO.BackColor = System.Drawing.Color.Wheat;
+            this.comIO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comIO.FormattingEnabled = true;
+            this.comIO.Items.AddRange(new object[] {
+            "Bee"});
+            this.comIO.Location = new System.Drawing.Point(95, 3);
+            this.comIO.Name = "comIO";
+            this.comIO.Size = new System.Drawing.Size(166, 32);
+            this.comIO.TabIndex = 59;
+            this.comIO.SelectionChangeCommitted += new System.EventHandler(this.comIO_SelectionChangeCommitted);
+            // 
+            // AddWrite
+            // 
+            this.AddWrite.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.AddWrite.BackColor = System.Drawing.SystemColors.Control;
+            this.AddWrite.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AddWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddWrite.Location = new System.Drawing.Point(97, 234);
+            this.AddWrite.Margin = new System.Windows.Forms.Padding(5);
+            this.AddWrite.Maxnimum = 1000F;
+            this.AddWrite.Minimum = 1F;
+            this.AddWrite.Name = "AddWrite";
+            this.AddWrite.Size = new System.Drawing.Size(162, 41);
+            this.AddWrite.Step = 1F;
+            this.AddWrite.TabIndex = 77;
+            this.AddWrite.Value = 1F;
+            this.AddWrite.ValueChanged += new System.EventHandler(this.AddWrite_ValueChanged);
+            // 
+            // label52
+            // 
+            this.label52.BackColor = System.Drawing.Color.Transparent;
+            this.label52.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label52.Location = new System.Drawing.Point(3, 38);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(86, 38);
+            this.label52.TabIndex = 61;
+            this.label52.Text = "Baurate";
+            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label19
+            // 
+            this.label19.BackColor = System.Drawing.Color.Transparent;
+            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(3, 229);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(86, 51);
+            this.label19.TabIndex = 76;
+            this.label19.Text = "Add.Write";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbBaurate
+            // 
+            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
+            this.cbBaurate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaurate.FormattingEnabled = true;
+            this.cbBaurate.Items.AddRange(new object[] {
+            "4800",
+            "9600",
+            "115200",
+            "230400",
+            "256000"});
+            this.cbBaurate.Location = new System.Drawing.Point(95, 41);
+            this.cbBaurate.Name = "cbBaurate";
+            this.cbBaurate.Size = new System.Drawing.Size(166, 32);
+            this.cbBaurate.TabIndex = 62;
+            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
+            // 
+            // label17
+            // 
+            this.label17.BackColor = System.Drawing.Color.Transparent;
+            this.label17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(267, 178);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(102, 51);
+            this.label17.TabIndex = 75;
+            this.label17.Text = "16 Bit";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // btnRefresh
             // 
             this.btnRefresh.AutoFont = true;
@@ -1803,9 +1918,10 @@ namespace BeeInterface
             this.btnRefresh.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnRefresh.Corner = BeeGlobal.Corner.Both;
             this.btnRefresh.DebounceResizeMs = 16;
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRefresh.FlatAppearance.BorderSize = 0;
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.671875F);
+            this.btnRefresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.9375F);
             this.btnRefresh.ForeColor = System.Drawing.Color.Black;
             this.btnRefresh.Image = null;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1824,48 +1940,128 @@ namespace BeeInterface
             this.btnRefresh.IsNotChange = false;
             this.btnRefresh.IsRect = false;
             this.btnRefresh.IsUnGroup = false;
-            this.btnRefresh.Location = new System.Drawing.Point(269, 7);
+            this.btnRefresh.Location = new System.Drawing.Point(267, 3);
             this.btnRefresh.Multiline = false;
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(78, 69);
+            this.btnRefresh.Size = new System.Drawing.Size(102, 32);
             this.btnRefresh.TabIndex = 72;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.TextColor = System.Drawing.Color.Black;
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // AddRead
+            // 
+            this.AddRead.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.AddRead.BackColor = System.Drawing.SystemColors.Control;
+            this.AddRead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AddRead.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddRead.Location = new System.Drawing.Point(97, 183);
+            this.AddRead.Margin = new System.Windows.Forms.Padding(5);
+            this.AddRead.Maxnimum = 1000F;
+            this.AddRead.Minimum = 1F;
+            this.AddRead.Name = "AddRead";
+            this.AddRead.Size = new System.Drawing.Size(162, 41);
+            this.AddRead.Step = 1F;
+            this.AddRead.TabIndex = 74;
+            this.AddRead.Value = 1F;
+            this.AddRead.ValueChanged += new System.EventHandler(this.AddRead_ValueChanged);
+            // 
+            // label51
+            // 
+            this.label51.BackColor = System.Drawing.Color.Transparent;
+            this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label51.Location = new System.Drawing.Point(3, 76);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(86, 51);
+            this.label51.TabIndex = 63;
+            this.label51.Text = "SlaveID";
+            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 178);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(86, 51);
+            this.label2.TabIndex = 73;
+            this.label2.Text = "Add.Read";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // slaveID
+            // 
+            this.slaveID.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.slaveID.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.slaveID.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.slaveID.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.slaveID.Location = new System.Drawing.Point(97, 81);
+            this.slaveID.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
+            this.slaveID.Maxnimum = 254F;
+            this.slaveID.Minimum = 1F;
+            this.slaveID.Name = "slaveID";
+            this.slaveID.Size = new System.Drawing.Size(167, 41);
+            this.slaveID.Step = 1F;
+            this.slaveID.TabIndex = 66;
+            this.slaveID.Value = 1F;
+            this.slaveID.ValueChanged += new System.EventHandler(this.slaveID_ValueChanged);
+            // 
+            // label49
+            // 
+            this.label49.BackColor = System.Drawing.Color.Transparent;
+            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label49.Location = new System.Drawing.Point(267, 127);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(102, 51);
+            this.label49.TabIndex = 71;
+            this.label49.Text = "ms";
+            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label48
+            // 
+            this.label48.BackColor = System.Drawing.Color.Transparent;
+            this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label48.Location = new System.Drawing.Point(267, 76);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(102, 51);
+            this.label48.TabIndex = 70;
+            this.label48.Text = "(1-254)";
+            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // timerRead
             // 
             this.timerRead.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.timerRead.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.timerRead.Dock = System.Windows.Forms.DockStyle.Fill;
             this.timerRead.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timerRead.Location = new System.Drawing.Point(112, 131);
-            this.timerRead.Margin = new System.Windows.Forms.Padding(0);
+            this.timerRead.Location = new System.Drawing.Point(97, 132);
+            this.timerRead.Margin = new System.Windows.Forms.Padding(5);
             this.timerRead.Maxnimum = 1000F;
             this.timerRead.Minimum = 1F;
             this.timerRead.Name = "timerRead";
-            this.timerRead.Size = new System.Drawing.Size(151, 41);
+            this.timerRead.Size = new System.Drawing.Size(162, 41);
             this.timerRead.Step = 1F;
             this.timerRead.TabIndex = 67;
             this.timerRead.Value = 1F;
             this.timerRead.ValueChanged += new System.EventHandler(this.timerRead_ValueChanged);
             this.timerRead.Load += new System.EventHandler(this.timerRead_Load);
             // 
-            // slaveID
+            // label50
             // 
-            this.slaveID.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.slaveID.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.slaveID.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.slaveID.Location = new System.Drawing.Point(112, 79);
-            this.slaveID.Margin = new System.Windows.Forms.Padding(0);
-            this.slaveID.Maxnimum = 100F;
-            this.slaveID.Minimum = 0F;
-            this.slaveID.Name = "slaveID";
-            this.slaveID.Size = new System.Drawing.Size(151, 41);
-            this.slaveID.Step = 1F;
-            this.slaveID.TabIndex = 66;
-            this.slaveID.Value = 0F;
-            this.slaveID.ValueChanged += new System.EventHandler(this.slaveID_ValueChanged);
+            this.label50.BackColor = System.Drawing.Color.Transparent;
+            this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label50.Location = new System.Drawing.Point(3, 127);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(86, 51);
+            this.label50.TabIndex = 65;
+            this.label50.Text = "Timer Read";
+            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label50.Click += new System.EventHandler(this.label50_Click);
             // 
             // btnClear
             // 
@@ -1908,7 +2104,7 @@ namespace BeeInterface
             this.btnClear.IsNotChange = false;
             this.btnClear.IsRect = false;
             this.btnClear.IsUnGroup = false;
-            this.btnClear.Location = new System.Drawing.Point(241, 404);
+            this.btnClear.Location = new System.Drawing.Point(241, 489);
             this.btnClear.Multiline = false;
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(131, 37);
@@ -1958,7 +2154,7 @@ namespace BeeInterface
             this.StatusIObtn.IsNotChange = false;
             this.StatusIObtn.IsRect = false;
             this.StatusIObtn.IsUnGroup = false;
-            this.StatusIObtn.Location = new System.Drawing.Point(9, 349);
+            this.StatusIObtn.Location = new System.Drawing.Point(12, 434);
             this.StatusIObtn.Multiline = false;
             this.StatusIObtn.Name = "StatusIObtn";
             this.StatusIObtn.Size = new System.Drawing.Size(363, 49);
@@ -1968,105 +2164,17 @@ namespace BeeInterface
             this.StatusIObtn.UseVisualStyleBackColor = false;
             this.StatusIObtn.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnBypass
+            // tabPage3
             // 
-            this.btnBypass.AutoFont = true;
-            this.btnBypass.AutoFontHeightRatio = 0.75F;
-            this.btnBypass.AutoFontMax = 100F;
-            this.btnBypass.AutoFontMin = 6F;
-            this.btnBypass.AutoFontWidthRatio = 0.92F;
-            this.btnBypass.AutoImage = true;
-            this.btnBypass.AutoImageMaxRatio = 0.75F;
-            this.btnBypass.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnBypass.AutoImageTint = true;
-            this.btnBypass.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnBypass.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnBypass.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.btnBypass.BorderRadius = 5;
-            this.btnBypass.BorderSize = 1;
-            this.btnBypass.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnBypass.Corner = BeeGlobal.Corner.Both;
-            this.btnBypass.DebounceResizeMs = 16;
-            this.btnBypass.FlatAppearance.BorderSize = 0;
-            this.btnBypass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBypass.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.21875F);
-            this.btnBypass.ForeColor = System.Drawing.Color.Black;
-            this.btnBypass.Image = null;
-            this.btnBypass.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnBypass.ImageDisabled = null;
-            this.btnBypass.ImageHover = null;
-            this.btnBypass.ImageNormal = null;
-            this.btnBypass.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnBypass.ImagePressed = null;
-            this.btnBypass.ImageTextSpacing = 6;
-            this.btnBypass.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnBypass.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnBypass.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnBypass.ImageTintOpacity = 0.5F;
-            this.btnBypass.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnBypass.IsCLick = false;
-            this.btnBypass.IsNotChange = false;
-            this.btnBypass.IsRect = false;
-            this.btnBypass.IsUnGroup = false;
-            this.btnBypass.Location = new System.Drawing.Point(241, 201);
-            this.btnBypass.Multiline = false;
-            this.btnBypass.Name = "btnBypass";
-            this.btnBypass.Size = new System.Drawing.Size(131, 56);
-            this.btnBypass.TabIndex = 69;
-            this.btnBypass.Text = "ByPass";
-            this.btnBypass.TextColor = System.Drawing.Color.Black;
-            this.btnBypass.UseVisualStyleBackColor = false;
-            this.btnBypass.Click += new System.EventHandler(this.btnBypass_Click);
-            // 
-            // btnConectIO
-            // 
-            this.btnConectIO.AutoFont = true;
-            this.btnConectIO.AutoFontHeightRatio = 0.75F;
-            this.btnConectIO.AutoFontMax = 100F;
-            this.btnConectIO.AutoFontMin = 6F;
-            this.btnConectIO.AutoFontWidthRatio = 0.92F;
-            this.btnConectIO.AutoImage = true;
-            this.btnConectIO.AutoImageMaxRatio = 0.75F;
-            this.btnConectIO.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnConectIO.AutoImageTint = true;
-            this.btnConectIO.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnConectIO.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnConectIO.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.btnConectIO.BorderRadius = 5;
-            this.btnConectIO.BorderSize = 1;
-            this.btnConectIO.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnConectIO.Corner = BeeGlobal.Corner.Both;
-            this.btnConectIO.DebounceResizeMs = 16;
-            this.btnConectIO.FlatAppearance.BorderSize = 0;
-            this.btnConectIO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnConectIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.21875F);
-            this.btnConectIO.ForeColor = System.Drawing.Color.Black;
-            this.btnConectIO.Image = null;
-            this.btnConectIO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnConectIO.ImageDisabled = null;
-            this.btnConectIO.ImageHover = null;
-            this.btnConectIO.ImageNormal = null;
-            this.btnConectIO.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnConectIO.ImagePressed = null;
-            this.btnConectIO.ImageTextSpacing = 6;
-            this.btnConectIO.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnConectIO.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnConectIO.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnConectIO.ImageTintOpacity = 0.5F;
-            this.btnConectIO.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnConectIO.IsCLick = false;
-            this.btnConectIO.IsNotChange = false;
-            this.btnConectIO.IsRect = false;
-            this.btnConectIO.IsUnGroup = false;
-            this.btnConectIO.Location = new System.Drawing.Point(9, 201);
-            this.btnConectIO.Multiline = false;
-            this.btnConectIO.Name = "btnConectIO";
-            this.btnConectIO.Size = new System.Drawing.Size(196, 56);
-            this.btnConectIO.TabIndex = 68;
-            this.btnConectIO.Text = "Not Connect";
-            this.btnConectIO.TextColor = System.Drawing.Color.Black;
-            this.btnConectIO.UseVisualStyleBackColor = false;
-            this.btnConectIO.Click += new System.EventHandler(this.btnConectIO_Click);
+            this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage3.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage3.Controls.Add(this.btnConnect);
+            this.tabPage3.Location = new System.Drawing.Point(4, 34);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(392, 819);
+            this.tabPage3.TabIndex = 0;
+            this.tabPage3.Text = "Comunication";
             // 
             // tableLayoutPanel1
             // 
@@ -2864,6 +2972,41 @@ namespace BeeInterface
             0,
             0});
             // 
+            // btnConnect
+            // 
+            this.btnConnect.BackColor = System.Drawing.Color.Brown;
+            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnConnect.ForeColor = System.Drawing.Color.White;
+            this.btnConnect.Location = new System.Drawing.Point(97, 575);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(231, 31);
+            this.btnConnect.TabIndex = 47;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // tmCheck
+            // 
+            this.tmCheck.Interval = 50;
+            this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
+            // 
+            // tmConnect
+            // 
+            this.tmConnect.Enabled = true;
+            this.tmConnect.Interval = 3000;
+            this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
+            // 
+            // tmRead
+            // 
+            this.tmRead.Interval = 10;
+            this.tmRead.Tick += new System.EventHandler(this.tmRead_Tick);
+            // 
+            // workRead
+            // 
+            this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
+            this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
+            // 
             // SettingPLC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2878,15 +3021,17 @@ namespace BeeInterface
             this.tabPage2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage7.ResumeLayout(false);
-            this.tabPage7.PerformLayout();
-            this.pComIO.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
             this.tableLayoutPanel17.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.pComIO.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel14.ResumeLayout(false);
@@ -3027,7 +3172,15 @@ namespace BeeInterface
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label lbOut;
-        private System.Windows.Forms.Label lbIN;
+        private System.Windows.Forms.Label lbLog;
+        private Label label2;
+        private CustomNumeric AddRead;
+        private Label label18;
+        private CustomNumeric AddWrite;
+        private Label label19;
+        private Label label17;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Panel panel1;
+        private Panel panel2;
     }
 }

@@ -527,52 +527,7 @@ void Pattern::SortPtWithCenter(vector<Point2f>& vecSort)
 	for (int i = 0; i < iSize; i++)
 		vecSort[i] = vecPtAngle[i].first;
 }
-LRESULT Pattern::OnShowMSG(WPARAM wMSGPointer, LPARAM lIsShowTime,int m_iMessageCount)
-{
-	CString* pMSG = (CString*)wMSGPointer;
-	CString strNum;
-	CString strTime;
-	time_t timep;
-	struct tm p;
-	CRect rc;
-	int item;
-	int index = pMSG->Find(_T("\n"));
 
-	time(&timep);
-	localtime_s(&p, &timep);
-	strTime.Format(_T("%02d/%02d %02d:%02d:%02d"), p.tm_mon + 1, p.tm_mday, p.tm_hour, p.tm_min, p.tm_sec);
-
-	int iRowCount = m_listMsg.GetItemCount();
-	m_iMessageCount++;
-	strNum.Format(_T("%d"), m_iMessageCount);
-
-	m_listMsg.InsertItem(iRowCount, strNum);
-	if (index != -1)
-	{
-		m_listMsg.SetItemText(iRowCount, 1, pMSG->Left(index));
-		if (lIsShowTime)
-			m_listMsg.SetItemText(iRowCount, 2, strTime);
-
-		m_listMsg.InsertItem(iRowCount + 1, _T(""));
-		m_listMsg.SetItemText(iRowCount + 1, 1, pMSG->Right(pMSG->GetLength() - index - 1));
-	}
-	else
-	{
-		m_listMsg.SetItemText(iRowCount, 1, *pMSG);
-		if (lIsShowTime)
-			m_listMsg.SetItemText(iRowCount, 2, strTime);
-	}
-
-	//滾輪自動移動最下方
-	item = m_listMsg.GetTopIndex();
-	m_listMsg.GetItemRect(item, rc, LVIR_BOUNDS);
-	CSize sz(0, (m_iMessageCount - item) * rc.Height());
-	m_listMsg.Scroll(sz);
-
-
-
-	return 0;
-}
 void Pattern::DrawDashLine(Mat& matDraw, cv::Point ptStart, cv::Point ptEnd, Scalar color1, Scalar color2)
 {
 	LineIterator itLine(matDraw, ptStart, ptEnd, 8, 0);
@@ -607,10 +562,15 @@ void Pattern::DrawMarkCross(Mat& matDraw, int iX, int iY, int iLength, Scalar co
 }
 
 
-void Pattern::CreateTemp(int ixThread)
-{m_TemplData[ixThread].push_back(s_TemplData());
+void Pattern::CreateTemp(int Index,int ixThread)
+{
+	if (Index == m_TemplData[ixThread].size() - 1)return;
+
+X:m_TemplData[ixThread].push_back(s_TemplData());
 //listMatch[indexThread]->Add("");
 m_matDst[ixThread].push_back(Mat());
+if (Index >= m_TemplData[ixThread].size() )
+goto X;
 }
 void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp,int ixThread)
 {
@@ -618,7 +578,8 @@ void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp,int ixThread)
 
 	//imshow("a", m_matDst[ixTemp].clone());
 	//m_TemplData[0].clear();
-	Mat raw = m_matDst[ixThread][ixTemp].clone();// cv::imread("B.bmp");
+	Mat raw = m_matDst[ixThread][ixTemp].clone();
+	
 	int iTopLayer = GetTopLayer(&raw, (int)sqrt((double)m_iMinReduceArea));
 	buildPyramid(raw, m_TemplData[ixThread][ixTemp].vecPyramid, iTopLayer);
 	s_TemplData* templData = &m_TemplData[ixThread][ixTemp];

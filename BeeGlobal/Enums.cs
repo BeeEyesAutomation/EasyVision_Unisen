@@ -116,7 +116,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg
+      None,Trigger, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass
     }
     public enum AreaCrop
     {
@@ -138,7 +138,7 @@ namespace BeeGlobal
         , Learning,
         Positions,
         Measure,
-        Circle
+        Circle,OKNG
     }
     public enum TypeOCR
     {

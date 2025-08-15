@@ -85,7 +85,7 @@ namespace BeeUi
         public static InforBar InforBar = new InforBar();
         public static List<Bitmap>listImgTrainYolo=new List<Bitmap>();
         public static List<String> listLabelTrainYolo = new List<String>();
-        public static List<HistoryCheck> listHis= new List<HistoryCheck>();
+ 
     }
     internal class Globals
     {

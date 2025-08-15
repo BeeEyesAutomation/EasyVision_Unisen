@@ -96,6 +96,8 @@
     <Compile Include="DbTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FileName.cs" />
+    <Compile Include="FrameRenderer.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="GroupControl\OK_Cancel.cs">
       <SubType>UserControl</SubType>
@@ -209,6 +211,12 @@
     <Compile Include="ToolPage.Designer.cs">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolOKNG.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolOKNG.Designer.cs">
+      <DependentUpon>ToolOKNG.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -307,6 +315,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolPage.resx">
       <DependentUpon>ToolPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolOKNG.resx">
+      <DependentUpon>ToolOKNG.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>
@@ -541,6 +552,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Folder_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ok_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ok_2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

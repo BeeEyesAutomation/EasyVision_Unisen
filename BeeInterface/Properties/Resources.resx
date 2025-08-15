@@ -169,17 +169,11 @@
   <data name="BID_SLIDER_SCALE_8PIX_WHITE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_SLIDER_SCALE_8PIX_WHITE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BID_TOOL_HELPIMAGE_DIAMETOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BID_TOOL_HELPIMAGE_EDGE_PRESENCE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BID_TOOL_HELPIMAGE_EDGE_WIDTH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_TOOL_HELPIMAGE_OCR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_OCR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,6 +217,12 @@
   <data name="contentMatchingShape" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_OUTLINE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="contentOCR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_OCR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="contentOKNG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="contentOutLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PIXElCOUNT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -264,6 +264,9 @@
   </data>
   <data name="OCR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_ICON_OCR_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OKNG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ok_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OutLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_ICON_EDGE_PIXEL_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

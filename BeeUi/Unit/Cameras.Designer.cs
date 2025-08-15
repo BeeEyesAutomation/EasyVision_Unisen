@@ -64,7 +64,7 @@ namespace BeeUi.Unit
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pCamera.Size = new System.Drawing.Size(484, 60);
             this.pCamera.TabIndex = 31;
-            this.pCamera.SizeChanged += new System.EventHandler(this.pCamera_SizeChanged);
+            
             // 
             // btnHistory
             // 
@@ -344,7 +344,7 @@ namespace BeeUi.Unit
             this.DoubleBuffered = true;
             this.Name = "Cameras";
             this.Size = new System.Drawing.Size(484, 60);
-            this.Load += new System.EventHandler(this.Cameras_Load);
+          
             this.pCamera.ResumeLayout(false);
             this.ResumeLayout(false);
 
