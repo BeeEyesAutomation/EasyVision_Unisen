@@ -20,6 +20,7 @@ namespace BeeGlobal
         public static bool IsSendRS = false;
         public static bool TotalOK = false;
         public static bool IsByPassResult = false;
+        public static int NumSend = 0;
         //Gui
         public static bool _IsLive = false;
         public static event Action<bool> LiveChanged;

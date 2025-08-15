@@ -1105,6 +1105,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             if (!Global.ParaCommon.Comunication.IO.IsConnected)
             {
+               // MessageBox.Show("Err");
                 tmRead.Enabled = false;
                 tmConnect.Enabled = true;
                 return;
@@ -1172,6 +1173,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Trigger;
                         if(Global.IsByPassResult)
                         Global.EditTool.lbBypass.ForeColor = Color.White;
+                        tmRead.Enabled = false;
 
 
 

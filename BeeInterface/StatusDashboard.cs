@@ -728,7 +728,7 @@ namespace BeeInterface
             Global.Config.SumOK = 0;
             Global.Config.SumNG = 0;
             Global.Config.TotalTime = 0;
-
+            Global.NumSend = 0;
             try
             {
                 string date = DateTime.Now.ToString("yyyyMMdd");

@@ -275,14 +275,14 @@ namespace BeeGlobal
                 CTMax = CTMid;
             if (CTMid < CTMin)
                 CTMin = CTMid;
-            Parallel.For(0, valueInput.Length, i =>
+          for(int i=0; i<valueInput.Length; i ++)
               {
                   int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
                   if (ix >= 0)
                   {
                       paraIOs[ix].Value = valueInput[i];
                   }
-              });
+              }
             numRead--;
             //for (int i = 0; i < valueInput.Length; i++)
             //{
@@ -440,6 +440,7 @@ namespace BeeGlobal
 
 
                     }
+                    Global.NumSend++;
                     Global.StatusProcessing = StatusProcessing.Done;
                     break;
                 case IO_Processing.ChangeMode:

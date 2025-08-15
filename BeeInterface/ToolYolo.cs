@@ -184,6 +184,8 @@ namespace BeeInterface
         private void ToolYolo_StatusToolChanged(StatusTool obj)
         {
             if (Global.IsRun) return;
+            if (Propety.Index >= Common.PropetyTools[Global.IndexChoose].Count)
+                return;
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;

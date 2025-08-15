@@ -1528,6 +1528,7 @@ namespace BeeUi
                     Global.StatusProcessing = StatusProcessing.WaitingDone;
                     break;
                 case StatusProcessing.SendResult:
+                    G.SettingPLC.tmRead.Enabled = true;
                     G.StatusDashboard.StatusText = obj.ToString();
                     G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                    // G.StatusDashboard.Refresh();
@@ -1537,7 +1538,7 @@ namespace BeeUi
                 case StatusProcessing.Done:
                     {
 
-
+                        Global.EditTool.txtCout.Text = Global.NumSend.ToString();
                         timer.Stop();
                        
                         this.Invoke((Action)(() =>
@@ -3573,6 +3574,7 @@ namespace BeeUi
                 Global.StatusProcessing = StatusProcessing.Done;
             else
                 Global.StatusProcessing = StatusProcessing.SendResult;
+        
         }
         public  async void RunProcessing()
         {
