@@ -672,7 +672,7 @@ namespace BeeUi
      
             if (View.indexFile >= View.Files.Count)
                 View.indexFile = 0;
-            Global.EditTool.lbNamefile.Text = View.indexFile + "." + Path.GetFileNameWithoutExtension(View.Files[View.indexFile]);
+            Global.EditTool.lbEx.Text = View.indexFile + "." + Path.GetFileNameWithoutExtension(View.Files[View.indexFile]);
         }
 
         private void stopTool_Click(object sender, EventArgs e)

@@ -1779,13 +1779,13 @@ namespace BeeUi
                 }
                 catch (Exception ex)
                 {
-                    Global.EditTool.lbNamefile.Text = ex.Message;
+                    Global.EditTool.lbEx.Text = ex.Message;
                    // MessageBox.Show(ex.Message);
                 }
             }
             catch (Exception ex)
             {
-                Global.EditTool.lbNamefile.Text = ex.Message;
+                Global.EditTool.lbEx.Text = ex.Message;
                // MessageBox.Show(ex.Message);
             }
        
@@ -2381,10 +2381,10 @@ namespace BeeUi
                             if (!workInsert.IsBusy)
                                 workInsert.RunWorkerAsync();
                             else
-                                Global.EditTool.lbNamefile.Text = "Busy Save image ";
+                                Global.EditTool.lbEx.Text = "Busy Save image ";
                         }
                         else
-                            Global.EditTool.lbNamefile.Text = "No save ok ";
+                            Global.EditTool.lbEx.Text = "No save ok ";
                       
                         }
                     else
@@ -2394,17 +2394,17 @@ namespace BeeUi
                             if (!workInsert.IsBusy)
                                 workInsert.RunWorkerAsync();
                             else
-                                Global.EditTool.lbNamefile.Text = "Busy Save image ";
+                                Global.EditTool.lbEx.Text = "Busy Save image ";
                         }
                         else
-                            Global.EditTool.lbNamefile.Text = "No save ng ";
+                            Global.EditTool.lbEx.Text = "No save ng ";
                     }    
                     
             
             }
             catch (Exception ex)
             {
-                Global.EditTool.lbNamefile.Text = ex.Message;
+                Global.EditTool.lbEx.Text = ex.Message;
             }
             // btnCap.Enabled = true;
         }
@@ -3306,7 +3306,7 @@ namespace BeeUi
                     if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
-                Global.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+                Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
                 BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -3359,7 +3359,7 @@ namespace BeeUi
                 btnPlayStep.Enabled = false;
             }
 
-            Global.EditTool.lbNamefile.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+            Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
           
            
         }
@@ -3693,7 +3693,7 @@ namespace BeeUi
             }
             if(indexFile >= Files.Count)
             indexFile = 0;
-            Global.EditTool.lbNamefile.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
+            Global.EditTool.lbEx.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
 
         }
 

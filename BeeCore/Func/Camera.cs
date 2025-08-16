@@ -885,9 +885,9 @@ namespace BeeCore
             IntPtr intPtr = IntPtr.Zero;
 
             try
-            {       if (matRaw != null)
-                        if (!matRaw.Empty())
-                        matRaw.Release();
+            {     //  if (matRaw != null)
+            //            if (!matRaw.Empty())
+            //            matRaw.Release();
                         switch (Para.TypeCamera)
                 {
                     case TypeCamera.USB:
