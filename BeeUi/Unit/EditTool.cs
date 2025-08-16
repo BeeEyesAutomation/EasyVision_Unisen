@@ -30,7 +30,11 @@ namespace BeeUi
         private LayoutPersistence _layout;
         public EditTool()
         {
-            
+          
+
+
+           
+
             InitializeComponent();
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -337,8 +341,20 @@ namespace BeeUi
 
         private void EditTool_Load(object sender, EventArgs e)
         {
+            //dashboardList.Items.Add(new LabelItem { Name = "Zone A", IsArea = true, IsWidth = false, IsHeight = true, ValueArea = 10, ValueWidth = 20, ValueHeight = 30 });
+            //dashboardList.Items.Add(new LabelItem { Name = "Zone B", IsArea = false, IsWidth = true, IsHeight = false, ValueArea = 5, ValueWidth = 15, ValueHeight = 25 });
+            //for (int i = 0; i < 25; i++)
+            //    dashboardList.Items.Add(new LabelItem
+            //    {
+            //        Name = $"Zone {i + 1}",
+            //        IsArea = (i % 2 == 0),
+            //        IsWidth = (i % 3 == 0),
+            //        IsHeight = (i % 4 == 0),
+            //        ValueArea = i,
+            //        ValueWidth = i * 2,
+            //        ValueHeight = i * 3
+            //    });
 
-          
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
@@ -669,6 +685,11 @@ namespace BeeUi
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
             }
             }
+
+        private void dashboardList_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void btnNew_Click(object sender, EventArgs e)
         {

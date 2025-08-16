@@ -37,13 +37,13 @@ namespace BeeInterface
         public ToolYolo( )
         {
             InitializeComponent();
-            tabLbs.SizeChanged += TabLbs_SizeChanged;
+           // tabLbs.SizeChanged += TabLbs_SizeChanged;
             
         }
 
         private void TabLbs_SizeChanged(object sender, EventArgs e)
         {
-            CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
+          //  CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
         }
 
         bool IsIni = false;
@@ -102,7 +102,7 @@ namespace BeeInterface
                 RefreshLabels();
 
                 Global.TypeCrop = TypeCrop.Area;
-                CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
+              //  CustomGui.RoundRg(tabLbs, 10, Corner.Bottom);
                 //picTemp1.Image = Propety.matTemp;
                 //picTemp2.Image = Propety.matTemp2;
 
@@ -111,35 +111,7 @@ namespace BeeInterface
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
                 trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
 
-                btnEnLineLimit.IsCLick = Propety.IsCheckLine;
-                btnEnArea.IsCLick = Propety.IsCheckArea;
-                layoutLineLimit.Enabled = btnEnLineLimit.IsCLick;
-                layLimitArea.Enabled = btnEnArea.IsCLick;
-                trackNumObject.Value = Propety.NumObject;
-                numArea.Value = Propety.LimitArea;
                
-               
-                SetLabels();
-                switch (Propety.CompareArea)
-                {
-
-                    case Compares.Less:
-                        btnLessArea.IsCLick = true;
-                        break;
-                    case Compares.More:
-                        btnMoreArea.IsCLick = true;
-                        break;
-                }
-                switch (Propety.CompareLine)
-                {
-
-                    case Compares.Less:
-                        btnLessLine.IsCLick = true;
-                        break;
-                    case Compares.More:
-                        btnMoreLine.IsCLick = true;
-                        break;
-                }
                 switch (Propety.Compare)
                 {
                     case Compares.Equal:
@@ -170,7 +142,7 @@ namespace BeeInterface
 
                 }
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolYolo_StatusToolChanged;
-                numLine.Value = Propety.yLine;
+                
             }
             catch (Exception ex)
             {
@@ -200,52 +172,11 @@ namespace BeeInterface
         }
 
         public Yolo Propety=new Yolo();
-        public Mat matTemp = new Mat();
-        Mat matClear = new Mat(); Mat matMask = new Mat();
-        public void GetTemp(RectRotate rotateRect, Mat matRegister)
-        {
-           
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-                if (Propety.IsAreaWhite)
-                    Cv2.BitwiseNot(matTemp, matTemp);
-           
-        }
+  
+  
       
      
-        public Graphics ShowEdit(Graphics gc, RectangleF _rect)
-        {
-            if (matTemp == null) return gc;
-
-            if (Global.TypeCrop != TypeCrop.Area)
-                try
-                {
-                    Mat matShow = matTemp.Clone();
-                    if (Propety.TypeMode == Mode.OutLine)
-                    {
-                        Bitmap bmTemp = matShow.ToBitmap();
-
-                        bmTemp.MakeTransparent(Color.Black);
-                        bmTemp = ConvertImg.ChangeToColor (bmTemp, Color.FromArgb(0, 255, 0), 1f);
-
-                        gc.DrawImage(bmTemp, _rect);
-                    }
-                    if (matMask != null)
-                    {
-                        Bitmap myBitmap2 = matMask.ToBitmap();
-                        myBitmap2.MakeTransparent(Color.Black);
-                        myBitmap2 = ConvertImg.ChangeToColor(myBitmap2, Color.OrangeRed, 1f);
-
-                        gc.DrawImage(myBitmap2, _rect);
-                    }
-
-                }
-                catch (Exception ex) { }
-            return gc;
-        }
+     
 
        
         private void rjButton3_Click(object sender, EventArgs e)
@@ -378,8 +309,7 @@ namespace BeeInterface
 
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
-            Propety.IsAreaWhite = false;
-             GetTemp(Propety.rotCrop,BeeCore.Common.listCamera[Global. IndexChoose].matRaw );
+        
          
         }
 
@@ -395,8 +325,7 @@ namespace BeeInterface
         }
         private void btnAreaWhite_Click(object sender, EventArgs e)
         {
-            Propety.IsAreaWhite = true;
-            GetTemp(Propety.rotCrop, BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
+          
            // G.EditTool.View.imgView.Invalidate();
         }
 
@@ -610,42 +539,14 @@ namespace BeeInterface
         }
         public void RefreshLabels()
         {
-            if (Propety.listLabelCompare == null)
+            if (Propety.labelItems == null)
                 return;
-            int index = 0;
+            dashboardLabel.Items.Clear();
+            foreach (LabelItem labelItem in Propety.labelItems)
+                dashboardLabel.Items.Add(labelItem);
+            
            
-            tabLbs.Height = 0;
-            tabLbs.Controls.Clear();
-            for (int row = 0; row < 4; row++)
-            {
-                for (int col = 0; col < 5; col++)
-                {
-                   
-                    if (index >= Propety.listLabelCompare.Count)
-                        break;
-                    if (col == 0)
-                        tabLbs.Height += 40;
-                    RJButton btn = new RJButton();
-                    btn.Text = Propety.listLabelCompare[index].label;
-                    btn.Font = new Font("Arial", 11);
-                    btn.IsUnGroup = true;
-                    btn.ForeColor = Color.Black;
-                    btn.BorderRadius = 10; 
-                    btn.Height = 30;
-                    btn.IsCLick = Propety.listLabelCompare[index].IsEn;
-                    btn.Click += Btn_Click;
-                    btn.Corner = Corner.Both;
-                    btn.BackColor = Color.FromArgb(200, 200, 200);
-                    btn.Dock = DockStyle.Fill;
-                    btn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-                    btn.Margin = new Padding(3);
-                 
-                    tabLbs.Controls.Add(btn, col, row);
-                    index++;
-                }
-              
-            }
-            tabLbs.Height += 70;
+        
 
 
         }
@@ -735,90 +636,47 @@ namespace BeeInterface
             //   Propety.
         }
 
-        private void btnCheckArea_Click(object sender, EventArgs e)
-        {
-            Propety.IsCheckLine = btnEnLineLimit.IsCLick;
-            layoutLineLimit.Enabled = btnEnLineLimit.IsCLick;
-        }
-
-        private void rjButton6_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnMoreArea_Click(object sender, EventArgs e)
-        {
-            Propety.CompareLine=Compares.More;
-        }
-
-        private void btnLessArea_Click(object sender, EventArgs e)
-        {
-            Propety.CompareLine = Compares.Less;
-        }
-
-        private void numLine_ValueChanged(object sender, EventArgs e)
-        {
-           Propety.yLine = (int)numLine.Value;
-
-            //if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-            //    Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            //else
-            //    btnTest.IsCLick = false;
-        }
+      
+        
 
         private void btnAddModel_Click(object sender, EventArgs e)
         {
-            switch(StepEdit)
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                String pathModel = OpenFileDialog.FileName;
+
+                String NameModel = Path.GetFileName(pathModel);
+                pathModel = "Program\\" + Global.Project + "\\" + NameModel;
+                if (Propety.listModels == null) Propety.listModels = new List<string>();
+                if (File.Exists(OpenFileDialog.FileName))
+                {
+                    File.Copy(OpenFileDialog.FileName, pathModel, true);
+                    Propety.listModels.Add(NameModel);
+                    Propety.listModels = Propety.listModels.Distinct().ToList();
+                    cbListModel.DataSource = null;
+                    Propety.PathModel = Path.GetFileName(pathModel);
+                    IsReload = true;
+                    if (!workLoadModel.IsBusy)
+                        workLoadModel.RunWorkerAsync();
+                    cbListModel.DataSource = Propety.listModels.ToArray();
+                    cbListModel.Text = Propety.PathModel;
+                    //cbListModel.SelectedIndex = Propety.listModels.Count-1;
+
+
+                }
+            }
+            switch (StepEdit)
             {
                 case StepSetModel.SetModel:
-                    OpenFileDialog OpenFileDialog = new OpenFileDialog();
-
-                    if (OpenFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        String pathModel = OpenFileDialog.FileName;
-
-                        String NameModel = Path.GetFileName(pathModel);
-                        pathModel = "Program\\" + Global.Project + "\\" + NameModel;
-                        if (Propety.listModels == null) Propety.listModels = new List<string>();
-                        if (File.Exists(OpenFileDialog.FileName))
-                        {
-                            File.Copy(OpenFileDialog.FileName, pathModel, true);
-                            Propety.listModels.Add(NameModel);
-                            Propety.listModels= Propety.listModels.Distinct().ToList();
-                            cbListModel.DataSource = null;
-                            Propety.PathModel =Path.GetFileName( pathModel);
-                            IsReload = true;
-                            if(!workLoadModel.IsBusy)
-                            workLoadModel.RunWorkerAsync();
-                            cbListModel.DataSource = Propety.listModels.ToArray();
-                            cbListModel.Text = Propety.PathModel;
-                            //cbListModel.SelectedIndex = Propety.listModels.Count-1;
-
-
-                        }
-                    }
+                   
 
                     break;
                 case StepSetModel.SetLabels:
 
                    
-                    String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name);
-                    if (Content != null && Content.Length > 0)
-                    {
-                        Propety.listLabelCompare = new List<Labels>();
-                        foreach (String label in Content)
-                        {
-                            if (label == "") continue;
-                            Propety.listLabelCompare.Add(new Labels(label, true));
-
-                        }
-                        RefreshLabels();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Check File Class Again", "Error");
-                    }
-
+                    
                     break;
             }    
            
@@ -829,92 +687,71 @@ namespace BeeInterface
          
         }
 
-        private void btnSetModel_Click(object sender, EventArgs e)
-        {
-            StepEdit = StepSetModel.SetModel;
-            tabLbs.Enabled = false;
-            btnAddModel.Text = "Add";
-            btnRemoveModel.Text = "Remove";
-            btnRemoveModel.Visible = true;
-            cbListModel.Enabled = true;
-        }
-        public void SetLabels()
-        {   btnSetLabels.IsCLick = true;
-            cbListModel.SelectionStart = cbListModel.Text.Length;
-            cbListModel.SelectionLength = 0;
-            StepEdit = StepSetModel.SetLabels;
-            tabLbs.Enabled = true;
-            cbListModel.Enabled = false;
-            btnAddModel.Text = "Re.Load";
-            btnRemoveModel.Visible = true;
-            btnRemoveModel.Text = "Import";
-
-
-        }
-        private void btnSetLabels_Click(object sender, EventArgs e)
-        {
-            SetLabels();
-        }
+      
 
         private void btnRemoveModel_Click(object sender, EventArgs e)
         {
-            switch (StepEdit)
+            if (MessageBox.Show("Are you sure", "Delete Model", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                case StepSetModel.SetModel:
+                Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
 
+                String pathModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+
+                if (File.Exists(pathModel))
+                {
+
+                    File.Delete(pathModel);
+                }
+
+                Propety.listModels.Remove(Propety.PathModel);
+                Propety.listModels = Propety.listModels.Distinct().ToList();
+                cbListModel.DataSource = null;
+
+                cbListModel.DataSource = Propety.listModels.ToArray();
+                if (Propety.listModels.Count > 0)
+                {
                     Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
-
-                  String  pathModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
-
-                    if (File.Exists(pathModel))
-                    {
-
-                        File.Delete(pathModel);
-                    }
-              
-                        Propety.listModels.Remove(Propety.PathModel);
-                        Propety.listModels = Propety.listModels.Distinct().ToList();
-                        cbListModel.DataSource = null;
-                 
-                        cbListModel.DataSource = Propety.listModels.ToArray();
-                    if (Propety.listModels.Count > 0)
-                    {
-                        Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
-                        cbListModel.Text = Propety.PathModel;
-                        if (!workLoadModel.IsBusy)
-                            workLoadModel.RunWorkerAsync();
-                    }
-                    else
-                        cbListModel.Text = "";
-
-                        break;
-                case StepSetModel.SetLabels:
-                    OpenFileDialog OpenFileDialog = new OpenFileDialog();
-
-                    if (OpenFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        Propety.PathLabels = OpenFileDialog.FileName;
-
-                        String[] Content = File.ReadAllLines(Propety.PathLabels);
-                        if (Content != null && Content.Length > 0)
-                        {
-                            Propety.listLabelCompare = new List<Labels>();
-                            foreach (String label in Content)
-                            {
-                                if (label == "") continue;
-                                Propety.listLabelCompare.Add(new Labels(label, true));
-
-                            }
-                            RefreshLabels();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Check File Class Again", "Error");
-                        }
-                    }
-
-                    break;
+                    cbListModel.Text = Propety.PathModel;
+                    if (!workLoadModel.IsBusy)
+                        workLoadModel.RunWorkerAsync();
+                }
+                else
+                    cbListModel.Text = "";
             }
+            //switch (StepEdit)
+            //{
+            //    case StepSetModel.SetModel:
+
+                   
+
+            //            break;
+            //    case StepSetModel.SetLabels:
+            //        OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+            //        if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            //        {
+            //            Propety.PathLabels = OpenFileDialog.FileName;
+
+            //            String[] Content = File.ReadAllLines(Propety.PathLabels);
+            //            if (Content != null && Content.Length > 0)
+            //            {
+            //                Propety.labelItems = new List<LabelItem>();
+            //                foreach (String label in Content)
+            //                {
+            //                    if (label == "") continue;
+            //                    Propety.labelItems.Add(new LabelItem(label));
+
+            //                }
+            //                RefreshLabels();
+            //            }
+            //            else
+            //            {
+            //                MessageBox.Show("Check File Class Again", "Error");
+            //            }
+            //        }
+
+            //        break;
+            //}
             }
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
@@ -1218,7 +1055,7 @@ namespace BeeInterface
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             cbListModel.Enabled = true;
-            SetLabels();
+           
           
         }
 
@@ -1327,12 +1164,7 @@ namespace BeeInterface
 
         }
 
-        private void btnEnArea_Click(object sender, EventArgs e)
-        {
-            Propety.IsCheckArea = btnEnArea.IsCLick;
-            layLimitArea.Enabled = btnEnArea.IsCLick;
-        }
-
+     
         private void btnLessArea_Click_1(object sender, EventArgs e)
         {
             Propety.CompareArea =  Compares.Less;
@@ -1348,10 +1180,7 @@ namespace BeeInterface
            
         }
 
-        private void numArea_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.LimitArea = numArea.Value;
-        }
+     
 
         private void cbListModel_SelectionChangeCommitted(object sender, EventArgs e)
         {
@@ -1388,6 +1217,30 @@ namespace BeeInterface
                 //RefreshLabels();
 
             }
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name);
+                if (Content != null && Content.Length > 0)
+                {
+                    Propety.labelItems = new List<LabelItem>();
+                    foreach (String label in Content)
+                    {
+                        if (label == "") continue;
+                        Propety.labelItems.Add(new LabelItem(label));
+
+                    }
+                    RefreshLabels();
+                }
+                else
+                {
+                    MessageBox.Show("Check File Class Again", "Error");
+                }
+            }
+
         }
     }
 }

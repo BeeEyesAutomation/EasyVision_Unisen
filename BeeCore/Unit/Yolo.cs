@@ -42,6 +42,7 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            if (labelItems==null)labelItems = new List<LabelItem>();
 
             try
             {
@@ -162,6 +163,7 @@ namespace BeeCore
             else
                 return new  string[0];
         }
+        public List<LabelItem> labelItems = new List<LabelItem>();
         public List<Labels> listLabelCompare = new List<Labels>();
         public int Index = -1;
         public String PathModel = "",PathLabels="",PathDataSet;
@@ -347,7 +349,7 @@ namespace BeeCore
                         int numOK = 0, numNG = 0;
                         int scoreRS = 0;
                         List<String> _listLabelCompare = new List<String>();
-                        if (listLabelCompare == null)
+                        if (labelItems == null)
                         {
                             Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                             return;
@@ -361,115 +363,130 @@ namespace BeeCore
                         }
                         foreach (String label in labelList)
                         {
-                            if (_listLabelCompare.Contains(label))
+                            int index = labelItems.FindIndex(item =>string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
+                            if (index>-1)
                             {
-                                if (IsCheckLine)
-                                {
-                                    switch (CompareLine)
-                                    {
-                                        case Compares.More:
-                                            if (boxList[i]._rect.Height>= yLine)
-                                           //     if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 >= yLine)
-                                            {
-                                                listOK.Add(true);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                               
-                                            }
-                                            else
-                                            {
-                                                listOK.Add(false);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                                numOK++;
-                                            }
-                                            break;
-                                        case Compares.Less:
-                                            if (boxList[i]._rect.Height <= yLine)
-                                             //   if (boxList[i]._PosCenter.Y - boxList[i]._rect.Size.Height / 2 <= yLine)
-                                            {
-                                                listOK.Add(true);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                              
-                                            }
-                                            else
-                                            {
-                                                listOK.Add(false);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                                numOK++;
-                                            }
-                                            break;
-                                    }
-
-
-                                }
-                                else if (IsCheckArea)
-                                {
-                                    switch (CompareArea)
-                                    {
-                                        case Compares.More:
-                                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
-                                            {
-                                                listOK.Add(false);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                                numOK++;
-                                            }
-                                            else
-                                            {
-                                                //listOK.Add(true);
-                                                //rectRotates.Add(boxList[i]);
-                                                //listLabel.Add(label);
-                                                //scoreRS += (int)scoreList[i];
-                                                //listScore.Add(scoreList[i]);
-
-                                            }
-                                            break;
-                                        case Compares.Less:
-                                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
-                                            {
-                                                listOK.Add(false);
-                                                rectRotates.Add(boxList[i]);
-                                                listLabel.Add(label);
-                                                scoreRS += (int)scoreList[i];
-                                                listScore.Add(scoreList[i]);
-                                                numOK++;
-                                            }
-                                            else
-                                            {
-                                                //listOK.Add(true);
-                                                //rectRotates.Add(boxList[i]);
-                                                //listLabel.Add(label);
-                                                //scoreRS += (int)scoreList[i];
-                                                //listScore.Add(scoreList[i]);
-
-                                            }
-                                            break;
-                                    }
-
-
-                                }
-                                else
+                                LabelItem item = labelItems[index];
+                                if (!item.IsUse)
+                                { i++; continue; }
+                                bool IsOK = false;
+                                if (item.IsHeight)
+                                    if (boxList[i]._rect.Height >= item.ValueHeight)
+                                        IsOK = true;
+                                if (item.IsWidth)
+                                    if (boxList[i]._rect.Width >= item.ValueWidth)
+                                        IsOK = true;
+                                if (item.IsArea)
+                                    if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
+                                        IsOK = true;
+                                if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
+                                    IsOK = true;
+                                if (IsOK)
                                 {
                                     listOK.Add(true);
-                                    Content += label;
                                     rectRotates.Add(boxList[i]);
                                     listLabel.Add(label);
                                     scoreRS += (int)scoreList[i];
-                                    listScore.Add(scoreList[i]); numOK++;
+                                    listScore.Add(scoreList[i]);
+                                    numOK++;
                                 }
+                                else
+                                {
+                                    listOK.Add(false);
+                                    rectRotates.Add(boxList[i]);
+                                    listLabel.Add(label);
+                                    scoreRS += (int)scoreList[i];
+                                    listScore.Add(scoreList[i]);
+
+                                }
+                                //if (IsCheckLine)
+                                //{
+                                //    switch (CompareLine)
+                                //    {
+                                //        case Compares.More:
+                                     
+                                //            break;
+                                //        case Compares.Less:
+                                //            if (boxList[i]._rect.Height <= yLine)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                               
+                                //            }
+                                //            break;
+                                //    }
+
+
+                                //}
+                                //else if (IsCheckArea)
+                                //{
+                                //    switch (CompareArea)
+                                //    {
+                                //        case Compares.More:
+                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+
+                                //            }
+                                //            break;
+                                //        case Compares.Less:
+                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+
+                                //            }
+                                //            break;
+                                //    }
+
+
+                                //}
+                                //else
+                                //{
+                                //    listOK.Add(true);
+                                //    Content += label;
+                                //    rectRotates.Add(boxList[i]);
+                                //    listLabel.Add(label);
+                                //    scoreRS += (int)scoreList[i];
+                                //    listScore.Add(scoreList[i]); numOK++;
+                                //}
 
                             }
                             i++;
@@ -607,7 +624,6 @@ namespace BeeCore
                 {
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                 //   gc.DrawLine(new Pen(Color.Gold, 6), new Point(0, yLine), new Point((int)rotA._rect.Width, yLine));
 
                     System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
                     System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
@@ -616,22 +632,23 @@ namespace BeeCore
                     System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
                     System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
                     Color clLine = Color.Red;
-                    if (listOK[i])
-                        clLine = Color.Green;
-                    gc.DrawLine(new Pen(clLine, 8), point1, point2);
+                    if (!listOK[i])
+                        clLine = Color.LightGray;
+                    else
+                        clLine = cl;
+                        gc.DrawLine(new Pen(clLine, 8), point1, point2);
                     gc.DrawLine(new Pen(clLine, 8), point3, point4);
                     gc.DrawLine(new Pen(clLine, 8), point5, point6);
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
 
                     gc.Transform = mat;
                     int index = i + 1;
-                    String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
-                    if (IsCheckLine)
-                        content = rot._rect.Height + " px";
+                    //String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
+                    //if (IsCheckLine)
+                    String content = rot._rect.Height + " px";
                     Font font = new Font("Arial", 30, FontStyle.Bold);
                     SizeF sz1 = gc.MeasureString(content, font);
                     gc.DrawString(content, font, new SolidBrush(clLine), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
-                   
                     i++;
                     //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
                     gc.ResetTransform();
@@ -644,6 +661,11 @@ namespace BeeCore
                     gc.Transform = mat;
 
                     int index = i + 1;
+                    Color clShow = Color.Red;
+                    if (!listOK[i])
+                        clShow = Color.LightGray;
+                    else
+                        clShow = cl;
                     //String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
                     //if (IsCheckArea)
                     //    content = rot._rect.Height + " px";
@@ -652,7 +674,7 @@ namespace BeeCore
                     if (IsEnContent)
                         Draws.Box2Label(gc, rot._rect, listLabel[i], "", Global.fontRS, cl, brushText, 30, 3);
                     else
-                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, cl, brushText, 30, 3,10,1,! Global.IsHideTool);
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, clShow, brushText, 30, 3,10,1,! Global.IsHideTool);
 
                     //  Draws.Box1Label(gc, rot._rect, Math.Round(listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
                       i++;

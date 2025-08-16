@@ -92,6 +92,9 @@
     <Compile Include="Custom\TrackBar2.Designer.cs">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
+    <Compile Include="DashboardListCompact.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataTool.cs" />
     <Compile Include="DbTableLayoutPanel.cs">
       <SubType>Component</SubType>

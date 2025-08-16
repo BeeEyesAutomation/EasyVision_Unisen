@@ -152,6 +152,7 @@
     <Compile Include="Items\ItemTool.Designer.cs">
       <DependentUpon>ItemTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="LabelItem.cs" />
     <Compile Include="Unit\OKNGAPI.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
