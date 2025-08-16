@@ -334,7 +334,7 @@ namespace BeeUi.Common
             //if (G.IsLoad) return;
             //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
    //         BeeCore.CustomGui.RoundRg(pModel, Global.Config.RoundRad);
-
+   if (Global.Config!=null)
             BeeCore.CustomGui.RoundRg(pPO, Global.Config.RoundRad);
 
 

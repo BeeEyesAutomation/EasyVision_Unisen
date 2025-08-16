@@ -13,7 +13,7 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary>
-        
+  
         public static List<HistoryCheck> HistoryChecks = new List<HistoryCheck>();
         public static int WidthOldTools = 0;
          public static dynamic EditTool ;
@@ -33,6 +33,20 @@ namespace BeeGlobal
                 {
                     _IsLive = value;
                     LiveChanged?.Invoke(_IsLive); // Gọi event
+                }
+            }
+        }
+        private static String _Ex = "";
+        public static event Action<String> ExChanged;
+        public static String Ex
+        {
+            get => _Ex;
+            set
+            {
+                if (_Ex != value)
+                {
+                    _Ex = value;
+                    ExChanged?.Invoke(_Ex); // Gọi event
                 }
             }
         }

@@ -34,49 +34,49 @@ namespace BeeInterface
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tableLayout1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayout1 = new System.Windows.Forms.TableLayoutPanel();
+            this.AdjOffSetY = new BeeInterface.AdjustBarEx();
+            this.AdjOffsetX = new BeeInterface.AdjustBarEx();
+            this.AdjHeight = new BeeInterface.AdjustBarEx();
+            this.AdjWidth = new BeeInterface.AdjustBarEx();
+            this.trackShift = new BeeInterface.AdjustBarEx();
+            this.trackGain = new BeeInterface.AdjustBarEx();
+            this.trackExposure = new BeeInterface.AdjustBarEx();
             this.btnDownLoadPara = new BeeInterface.RJButton();
-            this.AdjOffSetY = new BeeInterface.AdjustBar();
             this.label13 = new System.Windows.Forms.Label();
-            this.AdjOffsetX = new BeeInterface.AdjustBar();
             this.label12 = new System.Windows.Forms.Label();
-            this.AdjHeight = new BeeInterface.AdjustBar();
             this.label11 = new System.Windows.Forms.Label();
-            this.AdjWidth = new BeeInterface.AdjustBar();
             this.label10 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.trackShift = new BeeInterface.AdjustBar();
             this.label3 = new System.Windows.Forms.Label();
-            this.trackGain = new BeeInterface.AdjustBar();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.trackExposure = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel5 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCenterY = new BeeInterface.RJButton();
             this.btnCenterX = new BeeInterface.RJButton();
-            this.tableLayoutPanel11 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnNextStep = new BeeInterface.RJButton();
-            this.tableLayoutPanel10 = new  System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel4 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.AdDelayTrig = new BeeInterface.AdjustBarEx();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOn = new BeeInterface.RJButton();
             this.btnOFF = new BeeInterface.RJButton();
-            this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnLight3 = new BeeInterface.RJButton();
             this.btnLight1 = new BeeInterface.RJButton();
             this.btnLight2 = new BeeInterface.RJButton();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.layoutDelay = new  System.Windows.Forms.TableLayoutPanel();
+            this.layoutDelay = new System.Windows.Forms.TableLayoutPanel();
+            this.AdDelayOutput = new BeeInterface.AdjustBarEx();
             this.label7 = new System.Windows.Forms.Label();
-            this.AdDelayOutput = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnAllTime = new BeeInterface.RJButton();
             this.btnBlink = new BeeInterface.RJButton();
             this.label6 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.AdDelayTrig = new BeeInterface.AdjustBar();
-            this.tableLayoutPanel6 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.btnExternal = new BeeInterface.RJButton();
             this.btnInternal = new BeeInterface.RJButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -103,27 +103,29 @@ namespace BeeInterface
             this.tableLayout1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout1.Controls.Add(this.btnDownLoadPara, 0, 0);
             this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 15);
-            this.tableLayout1.Controls.Add(this.label13, 0, 14);
             this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 13);
-            this.tableLayout1.Controls.Add(this.label12, 0, 12);
             this.tableLayout1.Controls.Add(this.AdjHeight, 0, 11);
-            this.tableLayout1.Controls.Add(this.label11, 0, 10);
             this.tableLayout1.Controls.Add(this.AdjWidth, 0, 9);
+            this.tableLayout1.Controls.Add(this.trackShift, 0, 6);
+            this.tableLayout1.Controls.Add(this.trackGain, 0, 4);
+            this.tableLayout1.Controls.Add(this.trackExposure, 0, 2);
+            this.tableLayout1.Controls.Add(this.btnDownLoadPara, 0, 0);
+            this.tableLayout1.Controls.Add(this.label13, 0, 14);
+            this.tableLayout1.Controls.Add(this.label12, 0, 12);
+            this.tableLayout1.Controls.Add(this.label11, 0, 10);
             this.tableLayout1.Controls.Add(this.label10, 0, 8);
             this.tableLayout1.Controls.Add(this.label5, 0, 7);
-            this.tableLayout1.Controls.Add(this.trackShift, 0, 6);
             this.tableLayout1.Controls.Add(this.label3, 0, 5);
-            this.tableLayout1.Controls.Add(this.trackGain, 0, 4);
             this.tableLayout1.Controls.Add(this.label2, 0, 3);
             this.tableLayout1.Controls.Add(this.label4, 0, 1);
-            this.tableLayout1.Controls.Add(this.trackExposure, 0, 2);
             this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 16);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayout1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayout1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tableLayout1.Name = "tableLayout1";
+            this.tableLayout1.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.tableLayout1.RowCount = 18;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -146,6 +148,405 @@ namespace BeeInterface
             this.tableLayout1.Size = new System.Drawing.Size(480, 704);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
+            // 
+            // AdjOffSetY
+            // 
+            this.AdjOffSetY.AutoShowTextbox = true;
+            this.AdjOffSetY.AutoSizeTextbox = true;
+            this.AdjOffSetY.BackColor = System.Drawing.SystemColors.Control;
+            this.AdjOffSetY.BarLeftGap = 20;
+            this.AdjOffSetY.BarRightGap = 6;
+            this.AdjOffSetY.ChromeGap = 8;
+            this.AdjOffSetY.ChromeWidthRatio = 0.14F;
+            this.AdjOffSetY.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdjOffSetY.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdjOffSetY.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdjOffSetY.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjOffSetY.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjOffSetY.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdjOffSetY.Decimals = 0;
+            this.AdjOffSetY.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdjOffSetY.EdgePadding = 2;
+            this.AdjOffSetY.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdjOffSetY.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdjOffSetY.KeyboardStep = 1F;
+            this.AdjOffSetY.Location = new System.Drawing.Point(20, 667);
+            this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(20, 3, 3, 10);
+            this.AdjOffSetY.MatchTextboxFontToThumb = true;
+            this.AdjOffSetY.Max = 2000F;
+            this.AdjOffSetY.MaxTextboxWidth = 0;
+            this.AdjOffSetY.MaxThumb = 1000;
+            this.AdjOffSetY.MaxTrackHeight = 1000;
+            this.AdjOffSetY.Min = 1F;
+            this.AdjOffSetY.MinChromeWidth = 64;
+            this.AdjOffSetY.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdjOffSetY.MinTextboxWidth = 32;
+            this.AdjOffSetY.MinThumb = 30;
+            this.AdjOffSetY.MinTrackHeight = 8;
+            this.AdjOffSetY.Name = "AdjOffSetY";
+            this.AdjOffSetY.Radius = 8;
+            this.AdjOffSetY.ShowValueOnThumb = true;
+            this.AdjOffSetY.Size = new System.Drawing.Size(432, 49);
+            this.AdjOffSetY.SnapToStep = true;
+            this.AdjOffSetY.StartWithTextboxHidden = true;
+            this.AdjOffSetY.Step = 1F;
+            this.AdjOffSetY.TabIndex = 87;
+            this.AdjOffSetY.TextboxFontSize = 20F;
+            this.AdjOffSetY.TextboxSidePadding = 10;
+            this.AdjOffSetY.TextboxWidth = 600;
+            this.AdjOffSetY.ThumbDiameterRatio = 2F;
+            this.AdjOffSetY.ThumbValueBold = true;
+            this.AdjOffSetY.ThumbValueFontScale = 1.5F;
+            this.AdjOffSetY.ThumbValuePadding = 0;
+            this.AdjOffSetY.TightEdges = true;
+            this.AdjOffSetY.TrackHeightRatio = 0.45F;
+            this.AdjOffSetY.TrackWidthRatio = 1F;
+            this.AdjOffSetY.UnitText = "";
+            this.AdjOffSetY.Value = 1F;
+            this.AdjOffSetY.WheelStep = 1F;
+            this.AdjOffSetY.ValueChanged += new System.Action<float>(this.AdjOffSetY_ValueChanged);
+            // 
+            // AdjOffsetX
+            // 
+            this.AdjOffsetX.AutoShowTextbox = true;
+            this.AdjOffsetX.AutoSizeTextbox = true;
+            this.AdjOffsetX.BackColor = System.Drawing.SystemColors.Control;
+            this.AdjOffsetX.BarLeftGap = 20;
+            this.AdjOffsetX.BarRightGap = 6;
+            this.AdjOffsetX.ChromeGap = 8;
+            this.AdjOffsetX.ChromeWidthRatio = 0.14F;
+            this.AdjOffsetX.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdjOffsetX.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdjOffsetX.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdjOffsetX.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjOffsetX.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjOffsetX.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdjOffsetX.Decimals = 0;
+            this.AdjOffsetX.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdjOffsetX.EdgePadding = 2;
+            this.AdjOffsetX.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdjOffsetX.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdjOffsetX.KeyboardStep = 1F;
+            this.AdjOffsetX.Location = new System.Drawing.Point(20, 577);
+            this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(20, 3, 3, 10);
+            this.AdjOffsetX.MatchTextboxFontToThumb = true;
+            this.AdjOffsetX.Max = 2000F;
+            this.AdjOffsetX.MaxTextboxWidth = 0;
+            this.AdjOffsetX.MaxThumb = 1000;
+            this.AdjOffsetX.MaxTrackHeight = 1000;
+            this.AdjOffsetX.Min = 1F;
+            this.AdjOffsetX.MinChromeWidth = 64;
+            this.AdjOffsetX.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdjOffsetX.MinTextboxWidth = 32;
+            this.AdjOffsetX.MinThumb = 30;
+            this.AdjOffsetX.MinTrackHeight = 8;
+            this.AdjOffsetX.Name = "AdjOffsetX";
+            this.AdjOffsetX.Radius = 8;
+            this.AdjOffsetX.ShowValueOnThumb = true;
+            this.AdjOffsetX.Size = new System.Drawing.Size(432, 49);
+            this.AdjOffsetX.SnapToStep = true;
+            this.AdjOffsetX.StartWithTextboxHidden = true;
+            this.AdjOffsetX.Step = 1F;
+            this.AdjOffsetX.TabIndex = 86;
+            this.AdjOffsetX.TextboxFontSize = 20F;
+            this.AdjOffsetX.TextboxSidePadding = 10;
+            this.AdjOffsetX.TextboxWidth = 600;
+            this.AdjOffsetX.ThumbDiameterRatio = 2F;
+            this.AdjOffsetX.ThumbValueBold = true;
+            this.AdjOffsetX.ThumbValueFontScale = 1.5F;
+            this.AdjOffsetX.ThumbValuePadding = 0;
+            this.AdjOffsetX.TightEdges = true;
+            this.AdjOffsetX.TrackHeightRatio = 0.45F;
+            this.AdjOffsetX.TrackWidthRatio = 1F;
+            this.AdjOffsetX.UnitText = "";
+            this.AdjOffsetX.Value = 1F;
+            this.AdjOffsetX.WheelStep = 1F;
+            this.AdjOffsetX.ValueChanged += new System.Action<float>(this.AdjOffsetX_ValueChanged);
+            // 
+            // AdjHeight
+            // 
+            this.AdjHeight.AutoShowTextbox = true;
+            this.AdjHeight.AutoSizeTextbox = true;
+            this.AdjHeight.BackColor = System.Drawing.SystemColors.Control;
+            this.AdjHeight.BarLeftGap = 20;
+            this.AdjHeight.BarRightGap = 6;
+            this.AdjHeight.ChromeGap = 8;
+            this.AdjHeight.ChromeWidthRatio = 0.14F;
+            this.AdjHeight.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdjHeight.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdjHeight.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdjHeight.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjHeight.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjHeight.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdjHeight.Decimals = 0;
+            this.AdjHeight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdjHeight.EdgePadding = 2;
+            this.AdjHeight.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdjHeight.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdjHeight.KeyboardStep = 1F;
+            this.AdjHeight.Location = new System.Drawing.Point(20, 487);
+            this.AdjHeight.Margin = new System.Windows.Forms.Padding(20, 3, 3, 10);
+            this.AdjHeight.MatchTextboxFontToThumb = true;
+            this.AdjHeight.Max = 2000F;
+            this.AdjHeight.MaxTextboxWidth = 0;
+            this.AdjHeight.MaxThumb = 1000;
+            this.AdjHeight.MaxTrackHeight = 1000;
+            this.AdjHeight.Min = 1F;
+            this.AdjHeight.MinChromeWidth = 64;
+            this.AdjHeight.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdjHeight.MinTextboxWidth = 32;
+            this.AdjHeight.MinThumb = 30;
+            this.AdjHeight.MinTrackHeight = 8;
+            this.AdjHeight.Name = "AdjHeight";
+            this.AdjHeight.Radius = 8;
+            this.AdjHeight.ShowValueOnThumb = true;
+            this.AdjHeight.Size = new System.Drawing.Size(432, 49);
+            this.AdjHeight.SnapToStep = true;
+            this.AdjHeight.StartWithTextboxHidden = true;
+            this.AdjHeight.Step = 1F;
+            this.AdjHeight.TabIndex = 85;
+            this.AdjHeight.TextboxFontSize = 20F;
+            this.AdjHeight.TextboxSidePadding = 10;
+            this.AdjHeight.TextboxWidth = 600;
+            this.AdjHeight.ThumbDiameterRatio = 2F;
+            this.AdjHeight.ThumbValueBold = true;
+            this.AdjHeight.ThumbValueFontScale = 1.5F;
+            this.AdjHeight.ThumbValuePadding = 0;
+            this.AdjHeight.TightEdges = true;
+            this.AdjHeight.TrackHeightRatio = 0.45F;
+            this.AdjHeight.TrackWidthRatio = 1F;
+            this.AdjHeight.UnitText = "";
+            this.AdjHeight.Value = 1F;
+            this.AdjHeight.WheelStep = 1F;
+            this.AdjHeight.ValueChanged += new System.Action<float>(this.AdjHeight_ValueChanged);
+            // 
+            // AdjWidth
+            // 
+            this.AdjWidth.AutoShowTextbox = true;
+            this.AdjWidth.AutoSizeTextbox = true;
+            this.AdjWidth.BackColor = System.Drawing.SystemColors.Control;
+            this.AdjWidth.BarLeftGap = 20;
+            this.AdjWidth.BarRightGap = 6;
+            this.AdjWidth.ChromeGap = 8;
+            this.AdjWidth.ChromeWidthRatio = 0.14F;
+            this.AdjWidth.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdjWidth.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdjWidth.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdjWidth.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjWidth.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdjWidth.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdjWidth.Decimals = 0;
+            this.AdjWidth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdjWidth.EdgePadding = 2;
+            this.AdjWidth.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdjWidth.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdjWidth.KeyboardStep = 1F;
+            this.AdjWidth.Location = new System.Drawing.Point(20, 400);
+            this.AdjWidth.Margin = new System.Windows.Forms.Padding(20, 3, 3, 10);
+            this.AdjWidth.MatchTextboxFontToThumb = true;
+            this.AdjWidth.Max = 2000F;
+            this.AdjWidth.MaxTextboxWidth = 0;
+            this.AdjWidth.MaxThumb = 1000;
+            this.AdjWidth.MaxTrackHeight = 1000;
+            this.AdjWidth.Min = 1F;
+            this.AdjWidth.MinChromeWidth = 64;
+            this.AdjWidth.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdjWidth.MinTextboxWidth = 32;
+            this.AdjWidth.MinThumb = 30;
+            this.AdjWidth.MinTrackHeight = 8;
+            this.AdjWidth.Name = "AdjWidth";
+            this.AdjWidth.Radius = 8;
+            this.AdjWidth.ShowValueOnThumb = true;
+            this.AdjWidth.Size = new System.Drawing.Size(432, 49);
+            this.AdjWidth.SnapToStep = true;
+            this.AdjWidth.StartWithTextboxHidden = true;
+            this.AdjWidth.Step = 1F;
+            this.AdjWidth.TabIndex = 84;
+            this.AdjWidth.TextboxFontSize = 20F;
+            this.AdjWidth.TextboxSidePadding = 10;
+            this.AdjWidth.TextboxWidth = 600;
+            this.AdjWidth.ThumbDiameterRatio = 2F;
+            this.AdjWidth.ThumbValueBold = true;
+            this.AdjWidth.ThumbValueFontScale = 1.5F;
+            this.AdjWidth.ThumbValuePadding = 0;
+            this.AdjWidth.TightEdges = true;
+            this.AdjWidth.TrackHeightRatio = 0.45F;
+            this.AdjWidth.TrackWidthRatio = 1F;
+            this.AdjWidth.UnitText = "";
+            this.AdjWidth.Value = 1F;
+            this.AdjWidth.WheelStep = 1F;
+            this.AdjWidth.ValueChanged += new System.Action<float>(this.AdjWidth_ValueChanged);
+            // 
+            // trackShift
+            // 
+            this.trackShift.AutoShowTextbox = true;
+            this.trackShift.AutoSizeTextbox = true;
+            this.trackShift.BackColor = System.Drawing.SystemColors.Control;
+            this.trackShift.BarLeftGap = 20;
+            this.trackShift.BarRightGap = 6;
+            this.trackShift.ChromeGap = 8;
+            this.trackShift.ChromeWidthRatio = 0.14F;
+            this.trackShift.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackShift.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackShift.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackShift.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackShift.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackShift.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackShift.Decimals = 0;
+            this.trackShift.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackShift.EdgePadding = 2;
+            this.trackShift.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackShift.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackShift.KeyboardStep = 1F;
+            this.trackShift.Location = new System.Drawing.Point(3, 281);
+            this.trackShift.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackShift.MatchTextboxFontToThumb = true;
+            this.trackShift.Max = 2000F;
+            this.trackShift.MaxTextboxWidth = 0;
+            this.trackShift.MaxThumb = 1000;
+            this.trackShift.MaxTrackHeight = 1000;
+            this.trackShift.Min = 1F;
+            this.trackShift.MinChromeWidth = 64;
+            this.trackShift.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackShift.MinTextboxWidth = 32;
+            this.trackShift.MinThumb = 30;
+            this.trackShift.MinTrackHeight = 8;
+            this.trackShift.Name = "trackShift";
+            this.trackShift.Radius = 8;
+            this.trackShift.ShowValueOnThumb = true;
+            this.trackShift.Size = new System.Drawing.Size(449, 49);
+            this.trackShift.SnapToStep = true;
+            this.trackShift.StartWithTextboxHidden = true;
+            this.trackShift.Step = 1F;
+            this.trackShift.TabIndex = 83;
+            this.trackShift.TextboxFontSize = 20F;
+            this.trackShift.TextboxSidePadding = 10;
+            this.trackShift.TextboxWidth = 600;
+            this.trackShift.ThumbDiameterRatio = 2F;
+            this.trackShift.ThumbValueBold = true;
+            this.trackShift.ThumbValueFontScale = 1.5F;
+            this.trackShift.ThumbValuePadding = 0;
+            this.trackShift.TightEdges = true;
+            this.trackShift.TrackHeightRatio = 0.45F;
+            this.trackShift.TrackWidthRatio = 1F;
+            this.trackShift.UnitText = "";
+            this.trackShift.Value = 1F;
+            this.trackShift.WheelStep = 1F;
+            this.trackShift.ValueChanged += new System.Action<float>(this.trackShift_ValueChanged);
+            // 
+            // trackGain
+            // 
+            this.trackGain.AutoShowTextbox = true;
+            this.trackGain.AutoSizeTextbox = true;
+            this.trackGain.BackColor = System.Drawing.SystemColors.Control;
+            this.trackGain.BarLeftGap = 20;
+            this.trackGain.BarRightGap = 6;
+            this.trackGain.ChromeGap = 8;
+            this.trackGain.ChromeWidthRatio = 0.14F;
+            this.trackGain.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackGain.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackGain.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackGain.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackGain.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackGain.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackGain.Decimals = 0;
+            this.trackGain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackGain.EdgePadding = 2;
+            this.trackGain.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackGain.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackGain.KeyboardStep = 1F;
+            this.trackGain.Location = new System.Drawing.Point(3, 190);
+            this.trackGain.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackGain.MatchTextboxFontToThumb = true;
+            this.trackGain.Max = 2000F;
+            this.trackGain.MaxTextboxWidth = 0;
+            this.trackGain.MaxThumb = 1000;
+            this.trackGain.MaxTrackHeight = 1000;
+            this.trackGain.Min = 1F;
+            this.trackGain.MinChromeWidth = 64;
+            this.trackGain.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackGain.MinTextboxWidth = 32;
+            this.trackGain.MinThumb = 30;
+            this.trackGain.MinTrackHeight = 8;
+            this.trackGain.Name = "trackGain";
+            this.trackGain.Radius = 8;
+            this.trackGain.ShowValueOnThumb = true;
+            this.trackGain.Size = new System.Drawing.Size(449, 49);
+            this.trackGain.SnapToStep = true;
+            this.trackGain.StartWithTextboxHidden = true;
+            this.trackGain.Step = 1F;
+            this.trackGain.TabIndex = 82;
+            this.trackGain.TextboxFontSize = 20F;
+            this.trackGain.TextboxSidePadding = 10;
+            this.trackGain.TextboxWidth = 600;
+            this.trackGain.ThumbDiameterRatio = 2F;
+            this.trackGain.ThumbValueBold = true;
+            this.trackGain.ThumbValueFontScale = 1.5F;
+            this.trackGain.ThumbValuePadding = 0;
+            this.trackGain.TightEdges = true;
+            this.trackGain.TrackHeightRatio = 0.45F;
+            this.trackGain.TrackWidthRatio = 1F;
+            this.trackGain.UnitText = "";
+            this.trackGain.Value = 1F;
+            this.trackGain.WheelStep = 1F;
+            this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
+            // 
+            // trackExposure
+            // 
+            this.trackExposure.AutoShowTextbox = true;
+            this.trackExposure.AutoSizeTextbox = true;
+            this.trackExposure.BackColor = System.Drawing.SystemColors.Control;
+            this.trackExposure.BarLeftGap = 20;
+            this.trackExposure.BarRightGap = 6;
+            this.trackExposure.ChromeGap = 8;
+            this.trackExposure.ChromeWidthRatio = 0.14F;
+            this.trackExposure.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackExposure.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackExposure.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackExposure.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackExposure.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackExposure.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackExposure.Decimals = 0;
+            this.trackExposure.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackExposure.EdgePadding = 2;
+            this.trackExposure.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackExposure.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackExposure.KeyboardStep = 1F;
+            this.trackExposure.Location = new System.Drawing.Point(3, 99);
+            this.trackExposure.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackExposure.MatchTextboxFontToThumb = true;
+            this.trackExposure.Max = 2000F;
+            this.trackExposure.MaxTextboxWidth = 0;
+            this.trackExposure.MaxThumb = 1000;
+            this.trackExposure.MaxTrackHeight = 1000;
+            this.trackExposure.Min = 1F;
+            this.trackExposure.MinChromeWidth = 64;
+            this.trackExposure.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackExposure.MinTextboxWidth = 32;
+            this.trackExposure.MinThumb = 30;
+            this.trackExposure.MinTrackHeight = 8;
+            this.trackExposure.Name = "trackExposure";
+            this.trackExposure.Radius = 8;
+            this.trackExposure.ShowValueOnThumb = true;
+            this.trackExposure.Size = new System.Drawing.Size(449, 49);
+            this.trackExposure.SnapToStep = true;
+            this.trackExposure.StartWithTextboxHidden = true;
+            this.trackExposure.Step = 1F;
+            this.trackExposure.TabIndex = 81;
+            this.trackExposure.TextboxFontSize = 20F;
+            this.trackExposure.TextboxSidePadding = 10;
+            this.trackExposure.TextboxWidth = 600;
+            this.trackExposure.ThumbDiameterRatio = 2F;
+            this.trackExposure.ThumbValueBold = true;
+            this.trackExposure.ThumbValueFontScale = 1.5F;
+            this.trackExposure.ThumbValuePadding = 0;
+            this.trackExposure.TightEdges = true;
+            this.trackExposure.TrackHeightRatio = 0.45F;
+            this.trackExposure.TrackWidthRatio = 1F;
+            this.trackExposure.UnitText = "";
+            this.trackExposure.Value = 1F;
+            this.trackExposure.WheelStep = 1F;
+            this.trackExposure.ValueChanged += new System.Action<float>(this.trackExposure_ValueChanged);
             // 
             // btnDownLoadPara
             // 
@@ -170,7 +571,7 @@ namespace BeeInterface
             this.btnDownLoadPara.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDownLoadPara.FlatAppearance.BorderSize = 0;
             this.btnDownLoadPara.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDownLoadPara.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.6875F, System.Drawing.FontStyle.Bold);
+            this.btnDownLoadPara.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.21875F, System.Drawing.FontStyle.Bold);
             this.btnDownLoadPara.ForeColor = System.Drawing.Color.Black;
             this.btnDownLoadPara.Image = null;
             this.btnDownLoadPara.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -192,7 +593,7 @@ namespace BeeInterface
             this.btnDownLoadPara.Location = new System.Drawing.Point(3, 3);
             this.btnDownLoadPara.Multiline = false;
             this.btnDownLoadPara.Name = "btnDownLoadPara";
-            this.btnDownLoadPara.Size = new System.Drawing.Size(474, 58);
+            this.btnDownLoadPara.Size = new System.Drawing.Size(449, 58);
             this.btnDownLoadPara.TabIndex = 79;
             this.btnDownLoadPara.Text = "DownLoad Parameter Camera";
             this.btnDownLoadPara.TextColor = System.Drawing.Color.Black;
@@ -200,52 +601,19 @@ namespace BeeInterface
             this.btnDownLoadPara.UseVisualStyleBackColor = false;
             this.btnDownLoadPara.Click += new System.EventHandler(this.btnDownLoadPara_Click);
             // 
-            // AdjOffSetY
-            // 
-            this.AdjOffSetY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjOffSetY.BackColor = System.Drawing.SystemColors.Control;
-            this.AdjOffSetY.Location = new System.Drawing.Point(20, 661);
-            this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
-            this.AdjOffSetY.Max = 100F;
-            this.AdjOffSetY.Min = 0F;
-            this.AdjOffSetY.Name = "AdjOffSetY";
-            this.AdjOffSetY.Size = new System.Drawing.Size(457, 55);
-            this.AdjOffSetY.Step = 1F;
-            this.AdjOffSetY.TabIndex = 78;
-            this.AdjOffSetY.Value = 1F;
-            this.AdjOffSetY.ValueChanged += new System.Action<float>(this.AdjOffSetY_ValueChanged);
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.Transparent;
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(15, 635);
+            this.label13.Location = new System.Drawing.Point(15, 641);
             this.label13.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(462, 20);
+            this.label13.Size = new System.Drawing.Size(437, 20);
             this.label13.TabIndex = 77;
             this.label13.Text = "OffSet Y";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // AdjOffsetX
-            // 
-            this.AdjOffsetX.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjOffsetX.Location = new System.Drawing.Point(20, 572);
-            this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
-            this.AdjOffsetX.Max = 100F;
-            this.AdjOffsetX.Min = 0F;
-            this.AdjOffsetX.Name = "AdjOffsetX";
-            this.AdjOffsetX.Size = new System.Drawing.Size(457, 55);
-            this.AdjOffsetX.Step = 1F;
-            this.AdjOffsetX.TabIndex = 76;
-            this.AdjOffsetX.Value = 1F;
-            this.AdjOffsetX.ValueChanged += new System.Action<float>(this.AdjOffsetX_ValueChanged);
             // 
             // label12
             // 
@@ -253,29 +621,13 @@ namespace BeeInterface
             this.label12.BackColor = System.Drawing.Color.Transparent;
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(15, 546);
+            this.label12.Location = new System.Drawing.Point(15, 551);
             this.label12.Margin = new System.Windows.Forms.Padding(15, 5, 3, 3);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(462, 20);
+            this.label12.Size = new System.Drawing.Size(437, 20);
             this.label12.TabIndex = 75;
             this.label12.Text = "OffSet X";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // AdjHeight
-            // 
-            this.AdjHeight.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjHeight.Location = new System.Drawing.Point(20, 483);
-            this.AdjHeight.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
-            this.AdjHeight.Max = 100F;
-            this.AdjHeight.Min = 0F;
-            this.AdjHeight.Name = "AdjHeight";
-            this.AdjHeight.Size = new System.Drawing.Size(457, 55);
-            this.AdjHeight.Step = 1F;
-            this.AdjHeight.TabIndex = 74;
-            this.AdjHeight.Value = 1F;
-            this.AdjHeight.ValueChanged += new System.Action<float>(this.AdjHeight_ValueChanged);
             // 
             // label11
             // 
@@ -283,29 +635,13 @@ namespace BeeInterface
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(15, 460);
+            this.label11.Location = new System.Drawing.Point(15, 464);
             this.label11.Margin = new System.Windows.Forms.Padding(15, 5, 3, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(462, 20);
+            this.label11.Size = new System.Drawing.Size(437, 20);
             this.label11.TabIndex = 73;
             this.label11.Text = "Hight";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // AdjWidth
-            // 
-            this.AdjWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdjWidth.Location = new System.Drawing.Point(20, 397);
-            this.AdjWidth.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
-            this.AdjWidth.Max = 100F;
-            this.AdjWidth.Min = 0F;
-            this.AdjWidth.Name = "AdjWidth";
-            this.AdjWidth.Size = new System.Drawing.Size(457, 55);
-            this.AdjWidth.Step = 1F;
-            this.AdjWidth.TabIndex = 72;
-            this.AdjWidth.Value = 1F;
-            this.AdjWidth.ValueChanged += new System.Action<float>(this.AdjWidth_ValueChanged);
             // 
             // label10
             // 
@@ -313,10 +649,10 @@ namespace BeeInterface
             this.label10.BackColor = System.Drawing.Color.Transparent;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(15, 374);
+            this.label10.Location = new System.Drawing.Point(15, 377);
             this.label10.Margin = new System.Windows.Forms.Padding(15, 5, 3, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(462, 20);
+            this.label10.Size = new System.Drawing.Size(437, 20);
             this.label10.TabIndex = 71;
             this.label10.Text = "Width";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -327,29 +663,13 @@ namespace BeeInterface
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(0, 342);
+            this.label5.Location = new System.Drawing.Point(0, 345);
             this.label5.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(477, 24);
+            this.label5.Size = new System.Drawing.Size(452, 24);
             this.label5.TabIndex = 70;
             this.label5.Text = "ReSolution";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // trackShift
-            // 
-            this.trackShift.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackShift.Location = new System.Drawing.Point(10, 279);
-            this.trackShift.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.trackShift.Max = 100F;
-            this.trackShift.Min = 0F;
-            this.trackShift.Name = "trackShift";
-            this.trackShift.Size = new System.Drawing.Size(467, 55);
-            this.trackShift.Step = 1F;
-            this.trackShift.TabIndex = 69;
-            this.trackShift.Value = 1F;
-            this.trackShift.ValueChanged += new System.Action<float>(this.trackShift_ValueChanged);
             // 
             // label3
             // 
@@ -357,29 +677,13 @@ namespace BeeInterface
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(0, 252);
+            this.label3.Location = new System.Drawing.Point(0, 254);
             this.label3.Margin = new System.Windows.Forms.Padding(0, 5, 3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(477, 24);
+            this.label3.Size = new System.Drawing.Size(452, 24);
             this.label3.TabIndex = 68;
             this.label3.Text = "Shift";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // trackGain
-            // 
-            this.trackGain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackGain.Location = new System.Drawing.Point(10, 189);
-            this.trackGain.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.trackGain.Max = 100F;
-            this.trackGain.Min = 0F;
-            this.trackGain.Name = "trackGain";
-            this.trackGain.Size = new System.Drawing.Size(467, 55);
-            this.trackGain.Step = 1F;
-            this.trackGain.TabIndex = 67;
-            this.trackGain.Value = 1F;
-            this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
             // 
             // label2
             // 
@@ -387,10 +691,10 @@ namespace BeeInterface
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(0, 162);
+            this.label2.Location = new System.Drawing.Point(0, 163);
             this.label2.Margin = new System.Windows.Forms.Padding(0, 5, 3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(477, 24);
+            this.label2.Size = new System.Drawing.Size(452, 24);
             this.label2.TabIndex = 66;
             this.label2.Text = "Gain";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -404,26 +708,10 @@ namespace BeeInterface
             this.label4.Location = new System.Drawing.Point(0, 69);
             this.label4.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(477, 24);
+            this.label4.Size = new System.Drawing.Size(452, 24);
             this.label4.TabIndex = 65;
             this.label4.Text = "Exposue Time";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // trackExposure
-            // 
-            this.trackExposure.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackExposure.Location = new System.Drawing.Point(10, 99);
-            this.trackExposure.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.trackExposure.Max = 100F;
-            this.trackExposure.Min = 0F;
-            this.trackExposure.Name = "trackExposure";
-            this.trackExposure.Size = new System.Drawing.Size(467, 55);
-            this.trackExposure.Step = 1F;
-            this.trackExposure.TabIndex = 64;
-            this.trackExposure.Value = 1F;
-            this.trackExposure.ValueChanged += new System.Action<float>(this.trackExposure_ValueChanged);
             // 
             // tableLayoutPanel5
             // 
@@ -435,12 +723,12 @@ namespace BeeInterface
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.btnCenterY, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnCenterX, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 722);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 729);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(457, 60);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(432, 60);
             this.tableLayoutPanel5.TabIndex = 80;
             // 
             // btnCenterY
@@ -485,10 +773,10 @@ namespace BeeInterface
             this.btnCenterY.IsNotChange = false;
             this.btnCenterY.IsRect = false;
             this.btnCenterY.IsUnGroup = true;
-            this.btnCenterY.Location = new System.Drawing.Point(231, 3);
+            this.btnCenterY.Location = new System.Drawing.Point(219, 3);
             this.btnCenterY.Multiline = false;
             this.btnCenterY.Name = "btnCenterY";
-            this.btnCenterY.Size = new System.Drawing.Size(223, 54);
+            this.btnCenterY.Size = new System.Drawing.Size(210, 54);
             this.btnCenterY.TabIndex = 60;
             this.btnCenterY.Text = "CenterY";
             this.btnCenterY.TextColor = System.Drawing.Color.Black;
@@ -541,7 +829,7 @@ namespace BeeInterface
             this.btnCenterX.Location = new System.Drawing.Point(3, 3);
             this.btnCenterX.Multiline = false;
             this.btnCenterX.Name = "btnCenterX";
-            this.btnCenterX.Size = new System.Drawing.Size(222, 54);
+            this.btnCenterX.Size = new System.Drawing.Size(210, 54);
             this.btnCenterX.TabIndex = 59;
             this.btnCenterX.Text = "CenterX";
             this.btnCenterX.TextColor = System.Drawing.Color.Black;
@@ -678,6 +966,7 @@ namespace BeeInterface
             this.tableLayoutPanel10.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tableLayoutPanel10.ColumnCount = 1;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.AdDelayTrig, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel4, 0, 9);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel3, 0, 8);
             this.tableLayoutPanel10.Controls.Add(this.label9, 0, 7);
@@ -686,7 +975,6 @@ namespace BeeInterface
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel1, 0, 5);
             this.tableLayoutPanel10.Controls.Add(this.label6, 0, 4);
             this.tableLayoutPanel10.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.AdDelayTrig, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel6, 0, 1);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -710,6 +998,63 @@ namespace BeeInterface
             this.tableLayoutPanel10.Size = new System.Drawing.Size(480, 704);
             this.tableLayoutPanel10.TabIndex = 53;
             // 
+            // AdDelayTrig
+            // 
+            this.AdDelayTrig.AutoShowTextbox = true;
+            this.AdDelayTrig.AutoSizeTextbox = true;
+            this.AdDelayTrig.BackColor = System.Drawing.SystemColors.Control;
+            this.AdDelayTrig.BarLeftGap = 20;
+            this.AdDelayTrig.BarRightGap = 6;
+            this.AdDelayTrig.ChromeGap = 8;
+            this.AdDelayTrig.ChromeWidthRatio = 0.14F;
+            this.AdDelayTrig.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdDelayTrig.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdDelayTrig.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdDelayTrig.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdDelayTrig.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdDelayTrig.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdDelayTrig.Decimals = 0;
+            this.AdDelayTrig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdDelayTrig.EdgePadding = 2;
+            this.AdDelayTrig.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdDelayTrig.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdDelayTrig.KeyboardStep = 1F;
+            this.AdDelayTrig.Location = new System.Drawing.Point(3, 137);
+            this.AdDelayTrig.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.AdDelayTrig.MatchTextboxFontToThumb = true;
+            this.AdDelayTrig.Max = 2000F;
+            this.AdDelayTrig.MaxTextboxWidth = 0;
+            this.AdDelayTrig.MaxThumb = 1000;
+            this.AdDelayTrig.MaxTrackHeight = 1000;
+            this.AdDelayTrig.Min = 1F;
+            this.AdDelayTrig.MinChromeWidth = 64;
+            this.AdDelayTrig.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdDelayTrig.MinTextboxWidth = 32;
+            this.AdDelayTrig.MinThumb = 30;
+            this.AdDelayTrig.MinTrackHeight = 8;
+            this.AdDelayTrig.Name = "AdDelayTrig";
+            this.AdDelayTrig.Radius = 8;
+            this.AdDelayTrig.ShowValueOnThumb = true;
+            this.AdDelayTrig.Size = new System.Drawing.Size(474, 49);
+            this.AdDelayTrig.SnapToStep = true;
+            this.AdDelayTrig.StartWithTextboxHidden = true;
+            this.AdDelayTrig.Step = 1F;
+            this.AdDelayTrig.TabIndex = 75;
+            this.AdDelayTrig.TextboxFontSize = 20F;
+            this.AdDelayTrig.TextboxSidePadding = 10;
+            this.AdDelayTrig.TextboxWidth = 600;
+            this.AdDelayTrig.ThumbDiameterRatio = 2F;
+            this.AdDelayTrig.ThumbValueBold = true;
+            this.AdDelayTrig.ThumbValueFontScale = 1.5F;
+            this.AdDelayTrig.ThumbValuePadding = 0;
+            this.AdDelayTrig.TightEdges = true;
+            this.AdDelayTrig.TrackHeightRatio = 0.45F;
+            this.AdDelayTrig.TrackWidthRatio = 1F;
+            this.AdDelayTrig.UnitText = "";
+            this.AdDelayTrig.Value = 1F;
+            this.AdDelayTrig.WheelStep = 1F;
+            this.AdDelayTrig.ValueChanged += new System.Action<float>(this.AdDelayTrig_ValueChanged);
+            // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -721,7 +1066,7 @@ namespace BeeInterface
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.Controls.Add(this.btnOn, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.btnOFF, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 444);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 445);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
@@ -848,7 +1193,7 @@ namespace BeeInterface
             this.tableLayoutPanel3.Controls.Add(this.btnLight3, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnLight1, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnLight2, 1, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 379);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 380);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
@@ -1024,7 +1369,7 @@ namespace BeeInterface
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(0, 352);
+            this.label9.Location = new System.Drawing.Point(0, 353);
             this.label9.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(477, 24);
@@ -1052,16 +1397,73 @@ namespace BeeInterface
             this.layoutDelay.ColumnCount = 2;
             this.layoutDelay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.26667F));
             this.layoutDelay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.73333F));
-            this.layoutDelay.Controls.Add(this.label7, 0, 0);
             this.layoutDelay.Controls.Add(this.AdDelayOutput, 1, 0);
+            this.layoutDelay.Controls.Add(this.label7, 0, 0);
             this.layoutDelay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutDelay.Location = new System.Drawing.Point(5, 287);
+            this.layoutDelay.Location = new System.Drawing.Point(5, 288);
             this.layoutDelay.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.layoutDelay.Name = "layoutDelay";
             this.layoutDelay.RowCount = 1;
             this.layoutDelay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layoutDelay.Size = new System.Drawing.Size(472, 60);
             this.layoutDelay.TabIndex = 70;
+            // 
+            // AdDelayOutput
+            // 
+            this.AdDelayOutput.AutoShowTextbox = true;
+            this.AdDelayOutput.AutoSizeTextbox = true;
+            this.AdDelayOutput.BackColor = System.Drawing.SystemColors.Control;
+            this.AdDelayOutput.BarLeftGap = 20;
+            this.AdDelayOutput.BarRightGap = 6;
+            this.AdDelayOutput.ChromeGap = 8;
+            this.AdDelayOutput.ChromeWidthRatio = 0.14F;
+            this.AdDelayOutput.ColorBorder = System.Drawing.Color.DarkGray;
+            this.AdDelayOutput.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.AdDelayOutput.ColorScale = System.Drawing.Color.DarkGray;
+            this.AdDelayOutput.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdDelayOutput.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.AdDelayOutput.ColorTrack = System.Drawing.Color.DarkGray;
+            this.AdDelayOutput.Decimals = 0;
+            this.AdDelayOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdDelayOutput.EdgePadding = 2;
+            this.AdDelayOutput.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.AdDelayOutput.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.AdDelayOutput.KeyboardStep = 1F;
+            this.AdDelayOutput.Location = new System.Drawing.Point(117, 3);
+            this.AdDelayOutput.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.AdDelayOutput.MatchTextboxFontToThumb = true;
+            this.AdDelayOutput.Max = 1000F;
+            this.AdDelayOutput.MaxTextboxWidth = 0;
+            this.AdDelayOutput.MaxThumb = 1000;
+            this.AdDelayOutput.MaxTrackHeight = 1000;
+            this.AdDelayOutput.Min = 1F;
+            this.AdDelayOutput.MinChromeWidth = 64;
+            this.AdDelayOutput.MinimumSize = new System.Drawing.Size(140, 36);
+            this.AdDelayOutput.MinTextboxWidth = 32;
+            this.AdDelayOutput.MinThumb = 30;
+            this.AdDelayOutput.MinTrackHeight = 8;
+            this.AdDelayOutput.Name = "AdDelayOutput";
+            this.AdDelayOutput.Radius = 8;
+            this.AdDelayOutput.ShowValueOnThumb = true;
+            this.AdDelayOutput.Size = new System.Drawing.Size(352, 47);
+            this.AdDelayOutput.SnapToStep = true;
+            this.AdDelayOutput.StartWithTextboxHidden = true;
+            this.AdDelayOutput.Step = 1F;
+            this.AdDelayOutput.TabIndex = 76;
+            this.AdDelayOutput.TextboxFontSize = 20F;
+            this.AdDelayOutput.TextboxSidePadding = 10;
+            this.AdDelayOutput.TextboxWidth = 600;
+            this.AdDelayOutput.ThumbDiameterRatio = 2F;
+            this.AdDelayOutput.ThumbValueBold = true;
+            this.AdDelayOutput.ThumbValueFontScale = 1.5F;
+            this.AdDelayOutput.ThumbValuePadding = 0;
+            this.AdDelayOutput.TightEdges = true;
+            this.AdDelayOutput.TrackHeightRatio = 0.45F;
+            this.AdDelayOutput.TrackWidthRatio = 1F;
+            this.AdDelayOutput.UnitText = "";
+            this.AdDelayOutput.Value = 1F;
+            this.AdDelayOutput.WheelStep = 1F;
+            this.AdDelayOutput.ValueChanged += new System.Action<float>(this.AdDelayOutput_ValueChanged);
             // 
             // label7
             // 
@@ -1077,20 +1479,6 @@ namespace BeeInterface
             this.label7.Text = "Delay";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // AdDelayOutput
-            // 
-            this.AdDelayOutput.BackColor = System.Drawing.SystemColors.Control;
-            this.AdDelayOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AdDelayOutput.Location = new System.Drawing.Point(117, 3);
-            this.AdDelayOutput.Max = 1000F;
-            this.AdDelayOutput.Min = 1F;
-            this.AdDelayOutput.Name = "AdDelayOutput";
-            this.AdDelayOutput.Size = new System.Drawing.Size(352, 54);
-            this.AdDelayOutput.Step = 1F;
-            this.AdDelayOutput.TabIndex = 70;
-            this.AdDelayOutput.Value = 0F;
-            this.AdDelayOutput.ValueChanged += new System.Action<float>(this.AdDelayOutput_ValueChanged);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1102,7 +1490,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btnAllTime, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnBlink, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 227);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 228);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -1223,7 +1611,7 @@ namespace BeeInterface
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(0, 200);
+            this.label6.Location = new System.Drawing.Point(0, 201);
             this.label6.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(477, 24);
@@ -1244,21 +1632,6 @@ namespace BeeInterface
             this.label1.TabIndex = 66;
             this.label1.Text = "Delay Trigger (ms)";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // AdDelayTrig
-            // 
-            this.AdDelayTrig.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AdDelayTrig.Location = new System.Drawing.Point(3, 137);
-            this.AdDelayTrig.Max = 2000F;
-            this.AdDelayTrig.Min = 1F;
-            this.AdDelayTrig.Name = "AdDelayTrig";
-            this.AdDelayTrig.Size = new System.Drawing.Size(474, 55);
-            this.AdDelayTrig.Step = 1F;
-            this.AdDelayTrig.TabIndex = 67;
-            this.AdDelayTrig.Value = 1F;
-            this.AdDelayTrig.ValueChanged += new System.Action<float>(this.AdDelayTrig_ValueChanged);
             // 
             // tableLayoutPanel6
             // 
@@ -1467,21 +1840,16 @@ namespace BeeInterface
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton btnCancel;
         private RJButton btnNextStep;
-        private AdjustBar trackExposure;
-        private AdjustBar trackGain;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
-        private AdjustBar trackShift;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private AdjustBar AdDelayTrig;
         private System.Windows.Forms.Label label6;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private RJButton btnAllTime;
         private RJButton btnBlink;
         private  System.Windows.Forms.TableLayoutPanel layoutDelay;
         private System.Windows.Forms.Label label7;
-        private AdjustBar AdDelayOutput;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
@@ -1491,14 +1859,10 @@ namespace BeeInterface
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private RJButton btnOn;
         private RJButton btnOFF;
-        private AdjustBar AdjHeight;
         private System.Windows.Forms.Label label11;
-        private AdjustBar AdjWidth;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label5;
-        private AdjustBar AdjOffSetY;
         private System.Windows.Forms.Label label13;
-        private AdjustBar AdjOffsetX;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage3;
@@ -1508,5 +1872,14 @@ namespace BeeInterface
         private RJButton btnCenterY;
         private RJButton btnCenterX;
         private System.Windows.Forms.Timer tmShowPara;
+        private AdjustBarEx AdDelayTrig;
+        private AdjustBarEx AdDelayOutput;
+        private AdjustBarEx trackExposure;
+        private AdjustBarEx trackGain;
+        private AdjustBarEx trackShift;
+        private AdjustBarEx AdjWidth;
+        private AdjustBarEx AdjHeight;
+        private AdjustBarEx AdjOffSetY;
+        private AdjustBarEx AdjOffsetX;
     }
 }

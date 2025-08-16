@@ -411,9 +411,20 @@ namespace BeeUi
             {
                 btnShowToolBar.Checked = true;
             }
+            Global.ExChanged += Global_ExChanged;
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
 
+        }
+
+        private void Global_ExChanged(string obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                lbEx.Text = obj;
+               
+            }));
+           
         }
 
         private void outLine_Load(object sender, EventArgs e)

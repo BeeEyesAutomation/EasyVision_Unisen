@@ -146,13 +146,17 @@ namespace BeeGlobal
         }
         public bool AddOutPut(int index, I_O_Output Output)
         {
-            if (paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output) == -1)
+            int ix = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
+            if(ix == -1)
             {
                 paraIOs.Add(new ParaIO(TypeIO.Output, Output, index)); Arrange();
-                return true;
+               
             }
             else
-                return false;
+            {
+                paraIOs[ix].I_O_Output = Output;
+            }    
+                return true;
            
         }
         public bool RemoveInPut(int index, I_O_Input Input)
@@ -217,6 +221,7 @@ namespace BeeGlobal
             }
             catch(Exception ex)
             {
+                Global.Ex = "CON_IO_" + ex.Message;
                 return false;
             }
             //  Modbus.ReadHolding(0, 10);
@@ -263,6 +268,7 @@ namespace BeeGlobal
 
         public  async Task Read()
         {
+
             if (!IsConnected) return ;
             numRead++;
                 CT.Restart();

@@ -38,15 +38,19 @@ namespace BeeUi
             this.lbCam = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbFrameRate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lbNamefile = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbEx = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtCout = new System.Windows.Forms.ToolStripStatusLabel();
             this.pEdit = new System.Windows.Forms.Panel();
+            this.pEditTool = new BeeUi.ViewHost();
             this.pName = new System.Windows.Forms.Panel();
+            this.lbTool = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.splitter7 = new System.Windows.Forms.Splitter();
+            this.CameraBar = new BeeUi.Unit.Cameras();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.LayoutEnd = new System.Windows.Forms.Panel();
             this.splitter6 = new System.Windows.Forms.Splitter();
+            this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
@@ -61,6 +65,8 @@ namespace BeeUi
             this.pTop = new System.Windows.Forms.Panel();
             this.lbBypass = new System.Windows.Forms.Label();
             this.splitter5 = new System.Windows.Forms.Splitter();
+            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.btnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.splitter3 = new System.Windows.Forms.Splitter();
@@ -97,13 +103,7 @@ namespace BeeUi
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.pInfor = new BeeUi.ViewHost();
-            this.pEditTool = new BeeUi.ViewHost();
-            this.lbTool = new BeeInterface.AutoFontLabel();
-            this.CameraBar = new BeeUi.Unit.Cameras();
-            this.hideBar = new BeeUi.Unit.HideBar();
             this.pHeader = new BeeUi.Common.Header();
-            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
-            this.btnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
             this.rjButton1 = new BeeInterface.RJButton();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
@@ -125,7 +125,7 @@ namespace BeeUi
             this.lbCam,
             this.lbFrameRate,
             this.toolStripPort,
-            this.lbNamefile,
+            this.lbEx,
             this.txtCout});
             this.statusStrip1.Location = new System.Drawing.Point(305, 0);
             this.statusStrip1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -164,11 +164,11 @@ namespace BeeUi
             this.toolStripPort.Text = "PLC Ready";
             this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
             // 
-            // lbNamefile
+            // lbEx
             // 
-            this.lbNamefile.Name = "lbNamefile";
-            this.lbNamefile.Size = new System.Drawing.Size(22, 28);
-            this.lbNamefile.Text = "---";
+            this.lbEx.Name = "lbEx";
+            this.lbEx.Size = new System.Drawing.Size(40, 28);
+            this.lbEx.Text = "No Err";
             // 
             // txtCout
             // 
@@ -192,6 +192,15 @@ namespace BeeUi
             this.pEdit.Size = new System.Drawing.Size(500, 1231);
             this.pEdit.TabIndex = 14;
             // 
+            // pEditTool
+            // 
+            this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pEditTool.Location = new System.Drawing.Point(0, 114);
+            this.pEditTool.Name = "pEditTool";
+            this.pEditTool.Size = new System.Drawing.Size(500, 1112);
+            this.pEditTool.TabIndex = 1;
+            // 
             // pName
             // 
             this.pName.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -203,6 +212,17 @@ namespace BeeUi
             this.pName.Size = new System.Drawing.Size(500, 44);
             this.pName.TabIndex = 0;
             this.pName.Visible = false;
+            // 
+            // lbTool
+            // 
+            this.lbTool.AutoFont = true;
+            this.lbTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
+            this.lbTool.Location = new System.Drawing.Point(54, 0);
+            this.lbTool.Name = "lbTool";
+            this.lbTool.Size = new System.Drawing.Size(446, 44);
+            this.lbTool.TabIndex = 1;
+            this.lbTool.Text = "Tool";
             // 
             // iconTool
             // 
@@ -224,6 +244,15 @@ namespace BeeUi
             this.splitter7.Size = new System.Drawing.Size(500, 3);
             this.splitter7.TabIndex = 4;
             this.splitter7.TabStop = false;
+            // 
+            // CameraBar
+            // 
+            this.CameraBar.BackColor = System.Drawing.Color.White;
+            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CameraBar.Location = new System.Drawing.Point(0, 0);
+            this.CameraBar.Name = "CameraBar";
+            this.CameraBar.Size = new System.Drawing.Size(500, 67);
+            this.CameraBar.TabIndex = 3;
             // 
             // splitter1
             // 
@@ -259,6 +288,15 @@ namespace BeeUi
             this.splitter6.Size = new System.Drawing.Size(5, 33);
             this.splitter6.TabIndex = 4;
             this.splitter6.TabStop = false;
+            // 
+            // hideBar
+            // 
+            this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.hideBar.Location = new System.Drawing.Point(1500, 0);
+            this.hideBar.Name = "hideBar";
+            this.hideBar.Size = new System.Drawing.Size(740, 33);
+            this.hideBar.TabIndex = 3;
             // 
             // label3
             // 
@@ -382,6 +420,29 @@ namespace BeeUi
             this.splitter5.Size = new System.Drawing.Size(5, 51);
             this.splitter5.TabIndex = 10;
             this.splitter5.TabStop = false;
+            // 
+            // autoFontLabel1
+            // 
+            this.autoFontLabel1.AutoFont = true;
+            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
+            this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
+            this.autoFontLabel1.Location = new System.Drawing.Point(70, 0);
+            this.autoFontLabel1.Name = "autoFontLabel1";
+            this.autoFontLabel1.Size = new System.Drawing.Size(365, 51);
+            this.autoFontLabel1.TabIndex = 9;
+            this.autoFontLabel1.Text = "Vision Sensor ";
+            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnHeaderBar
+            // 
+            this.btnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnHeaderBar.Location = new System.Drawing.Point(1735, 0);
+            this.btnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHeaderBar.Name = "btnHeaderBar";
+            this.btnHeaderBar.Size = new System.Drawing.Size(505, 51);
+            this.btnHeaderBar.TabIndex = 8;
             // 
             // picLogo
             // 
@@ -677,44 +738,6 @@ namespace BeeUi
             this.pInfor.TabIndex = 25;
             this.pInfor.SizeChanged += new System.EventHandler(this.pInfor_SizeChanged);
             // 
-            // pEditTool
-            // 
-            this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(0, 114);
-            this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(500, 1112);
-            this.pEditTool.TabIndex = 1;
-            // 
-            // lbTool
-            // 
-            this.lbTool.AutoFont = true;
-            this.lbTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
-            this.lbTool.Location = new System.Drawing.Point(54, 0);
-            this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(446, 44);
-            this.lbTool.TabIndex = 1;
-            this.lbTool.Text = "Tool";
-            // 
-            // CameraBar
-            // 
-            this.CameraBar.BackColor = System.Drawing.Color.White;
-            this.CameraBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CameraBar.Location = new System.Drawing.Point(0, 0);
-            this.CameraBar.Name = "CameraBar";
-            this.CameraBar.Size = new System.Drawing.Size(500, 67);
-            this.CameraBar.TabIndex = 3;
-            // 
-            // hideBar
-            // 
-            this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.hideBar.Location = new System.Drawing.Point(1500, 0);
-            this.hideBar.Name = "hideBar";
-            this.hideBar.Size = new System.Drawing.Size(740, 33);
-            this.hideBar.TabIndex = 3;
-            // 
             // pHeader
             // 
             this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -725,29 +748,6 @@ namespace BeeUi
             this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.pHeader.Size = new System.Drawing.Size(2240, 80);
             this.pHeader.TabIndex = 22;
-            // 
-            // autoFontLabel1
-            // 
-            this.autoFontLabel1.AutoFont = true;
-            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
-            this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
-            this.autoFontLabel1.Location = new System.Drawing.Point(70, 0);
-            this.autoFontLabel1.Name = "autoFontLabel1";
-            this.autoFontLabel1.Size = new System.Drawing.Size(365, 51);
-            this.autoFontLabel1.TabIndex = 9;
-            this.autoFontLabel1.Text = "Vision Sensor ";
-            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnHeaderBar
-            // 
-            this.btnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHeaderBar.Location = new System.Drawing.Point(1735, 0);
-            this.btnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
-            this.btnHeaderBar.Name = "btnHeaderBar";
-            this.btnHeaderBar.Size = new System.Drawing.Size(505, 51);
-            this.btnHeaderBar.TabIndex = 8;
             // 
             // rjButton1
             // 
@@ -847,7 +847,7 @@ namespace BeeUi
         public System.Windows.Forms.Timer tmReaPLC;
         public Unit.BtnHeaderBar btnHeaderBar;
         private System.Windows.Forms.Label label3;
-        public System.Windows.Forms.ToolStripStatusLabel lbNamefile;
+        public System.Windows.Forms.ToolStripStatusLabel lbEx;
 
         private RJButton rjButton1;
         private System.Windows.Forms.Button button1;

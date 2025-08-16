@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BeeCore.Func
 {
+    using BeeGlobal;
     using OpenCvSharp;
     using System;
 
@@ -58,8 +59,9 @@ namespace BeeCore.Func
                
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Global.Ex ="CAMERAIOFAST_" +ex.Message;
                 return false;
             }
             finally

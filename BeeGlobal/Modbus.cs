@@ -282,13 +282,15 @@ namespace BeeGlobal
             }
             catch (OperationCanceledException ex)
             {
-               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                Global.Ex = "Read_" + ex.Message;
+                // Global.ParaCommon.Comunication.IO.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString() + " " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
             catch (Exception ex)
             {
-               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                Global.Ex = "Read_" + ex.Message;
+                // Global.ParaCommon.Comunication.IO.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString()+" " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
@@ -341,13 +343,15 @@ namespace BeeGlobal
             }
             catch (OperationCanceledException op)
             {
-               // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                Global.Ex = "Write_" + op.Message;
+                // Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
                 Global.ParaCommon.Comunication.IO.LogError("Write- " +Global.StatusProcessing.ToString() +", "+ op.Message);
             }
             catch (Exception ex)
             {
+                Global.Ex = "Write_" + ex.Message;
                 //  Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;

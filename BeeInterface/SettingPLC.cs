@@ -684,24 +684,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-        private async void DO0_Click(object sender, EventArgs e)
-        {
-            int index=Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if(index>-1)
-            {
-                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress,DO0.IsCLick);
-               if(! await Global.ParaCommon.Comunication.IO.WriteOutPut())
-                {
-                   DO0.IsCLick = !DO0.IsCLick;
-                }
-                DO0.Text = DO0.IsCLick.ToString();
-            }    
-               
-        }
+       
 
         private void cbIn1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn1.SelectedIndex == -1) return;
+           
             String name = cbIn1.SelectedValue.ToString(); if (name == "") return;
             if (cbIn1.Text.Contains("None"))
             {
@@ -719,7 +706,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn2_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn2.SelectedIndex == -1) return;
+          
             String name = cbIn2.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -736,7 +723,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn3_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn3.SelectedIndex == -1) return;
+          
             String name = cbIn3.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -753,7 +740,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn4_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn4.SelectedIndex == -1) return;
+           
             String name = cbIn4.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -770,7 +757,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn5_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn5.SelectedIndex == -1) return;
+      
             String name = cbIn5.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -787,7 +774,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn6_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn6.SelectedIndex == -1) return;
+         
             String name = cbIn6.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -804,7 +791,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn7_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn7.SelectedIndex == -1) return;
+       
             String name = cbIn7.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -821,7 +808,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbIn8_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbIn8.SelectedIndex == -1) return;
+
             String name = cbIn8.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -838,7 +825,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO0_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO0.SelectedIndex == -1) return;
+         
             String name = cbO0.SelectedValue.ToString();
             if (name == "") return;
             if (cbO0.Text.Contains("None"))
@@ -857,7 +844,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO1.SelectedIndex == -1) return;
+          
             String name = cbO1.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -874,7 +861,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO2_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO2.SelectedIndex == -1) return;
+            
             String name = cbO2.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -891,7 +878,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO3_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO3.SelectedIndex == -1) return;
+           
             String name = cbO3.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -908,7 +895,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO4_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO4.SelectedIndex == -1) return;
+           
             String name = cbO4.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -925,7 +912,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO5_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO5.SelectedIndex == -1) return;
+           
             String name = cbO5.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -942,7 +929,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO6_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO6.SelectedIndex == -1) return;
+           
             String name = cbO6.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -959,7 +946,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbO7_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (cbO7.SelectedIndex == -1) return;
+           
             String name = cbO7.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
@@ -973,102 +960,189 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             ChangeDatasourceOut(7, name);
         }
+        private async void DO0_Click(object sender, EventArgs e)
+        {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO0.IsCLick = !DO0.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO0.IsCLick);
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    DO0.IsCLick = !DO0.IsCLick;
+                }
+                tmRead.Enabled = true;
+                DO0.Text =Convert.ToInt16( DO0.IsCLick).ToString();
+            }
 
+        }
         private async void DO1_Click(object sender, EventArgs e)
         {
+            if(Global.ParaCommon.IsExternal)
+            {
+                DO1.IsCLick = !DO1.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }    
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO1.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO1.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO1.IsCLick = !DO1.IsCLick;
                 }
-                DO1.Text = DO1.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO1.Text =Convert.ToInt16( DO1.IsCLick).ToString();
             }
         }
 
         private async void DO2_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO2.IsCLick = !DO2.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO2.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO2.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO2.IsCLick = !DO2.IsCLick;
                 }
-                DO2.Text = DO2.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO2.Text =Convert.ToInt16( DO2.IsCLick).ToString();
             }
         }
 
         private async void D3_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                D3.IsCLick = !D3.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO3.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, D3.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     D3.IsCLick = !D3.IsCLick;
                 }
-                D3.Text = D3.IsCLick.ToString();
+                tmRead.Enabled = true;
+                D3.Text =Convert.ToInt16( D3.IsCLick).ToString();
             }
         }
 
         private async void DO4_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO4.IsCLick = !DO4.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO4.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO4.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO4.IsCLick = !DO4.IsCLick;
                 }
-                DO4.Text = DO4.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO4.Text =Convert.ToInt16( DO4.IsCLick).ToString();
             }
         }
 
         private async void DO5_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO5.IsCLick = !DO5.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO5.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO5.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO5.IsCLick = !DO5.IsCLick;
                 }
-                DO5.Text = DO5.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO5.Text = Convert.ToInt16(DO5.IsCLick).ToString();
             }
         }
 
         private async void DO6_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO6.IsCLick = !DO6.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO6.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO6.IsCLick);//LIGHT 2
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO6.IsCLick = !DO6.IsCLick;
                 }
-                DO6.Text = DO6.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO6.Text = Convert.ToInt16(DO6.IsCLick).ToString();
+                
             }
         }
 
         private async void DO7_Click(object sender, EventArgs e)
         {
+            if (Global.ParaCommon.IsExternal)
+            {
+                DO7.IsCLick = !DO7.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
             int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO7.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
                 Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, DO7.IsCLick);//LIGHT 2
+                
                 if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
                 {
                     DO7.IsCLick = !DO7.IsCLick;
                 }
-                DO7.Text = DO7.IsCLick.ToString();
+                tmRead.Enabled = true;
+                DO7.Text =Convert.ToInt16( DO7.IsCLick).ToString();
             }
         }
 

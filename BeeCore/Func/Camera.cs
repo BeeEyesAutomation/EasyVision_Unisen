@@ -885,8 +885,10 @@ namespace BeeCore
             IntPtr intPtr = IntPtr.Zero;
 
             try
-            {
-                switch (Para.TypeCamera)
+            {       if (matRaw != null)
+                        if (!matRaw.Empty())
+                        matRaw.Release();
+                        switch (Para.TypeCamera)
                 {
                     case TypeCamera.USB:
                       
@@ -975,7 +977,8 @@ namespace BeeCore
 
 
             }
-            catch (Exception e) {
+            catch (Exception ex) {
+                Global.Ex = "Cam_" + ex.Message;
             }
                
             

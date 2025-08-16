@@ -1437,6 +1437,9 @@ namespace BeeUi
 
         private void ParaCommon_ExternalChange(bool obj)
         {
+            Global.StatusProcessing = StatusProcessing.None;
+            Global.StatusIO = StatusIO.None;
+            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
             if (!obj)
             {
                 //btnTypeTrig.Enabled = false;
@@ -1446,7 +1449,8 @@ namespace BeeUi
                 btnFile.Enabled = true;
                 btnFolder.Enabled = true;
                 btnPlayStep.Enabled = true;
-                btnRunSim.Enabled = true;
+                btnRunSim.Enabled = true; 
+                G.SettingPLC.tmRead.Enabled = false;
             }
             else
             {
@@ -1461,6 +1465,7 @@ namespace BeeUi
                 btnFolder.Enabled = false;
                 btnPlayStep.Enabled = false;
                 btnRunSim.Enabled = false;
+                G.SettingPLC.tmRead.Enabled = true;
                 
             }
         }

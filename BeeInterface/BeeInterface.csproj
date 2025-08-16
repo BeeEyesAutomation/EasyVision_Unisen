@@ -71,8 +71,14 @@
     </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
+    <Compile Include="CustomNumericEx.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="CustomTablePanel.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Custom\AdjustBarEx.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Custom\CustomNumeric .cs">
       <SubType>UserControl</SubType>
