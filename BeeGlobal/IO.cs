@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -265,7 +266,7 @@ namespace BeeGlobal
         Stopwatch CT =new Stopwatch();
         [NonSerialized]
        public float CTMid = 0,CTMin=0,CTMax=0;
-
+        public float CTRead,CTWrite;
         public  async Task Read()
         {
 
@@ -276,11 +277,13 @@ namespace BeeGlobal
             valueInput =await Modbus.ReadBit(AddRead);
             Global.StatusIO = StatusIO.None;
             CT.Stop();
-            CTMid =(float) CT.Elapsed.TotalMilliseconds;
-           if(CTMid>CTMax)
-                CTMax = CTMid;
-            if (CTMid < CTMin)
-                CTMin = CTMid;
+            
+            CTRead = (float) CT.Elapsed.TotalMilliseconds;
+           if(CTRead > CTMax)
+                CTMax = CTRead;
+            if (CTRead < CTMin)
+                CTMin = CTRead;
+
           for(int i=0; i<valueInput.Length; i ++)
               {
                   int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
@@ -447,7 +450,7 @@ namespace BeeGlobal
 
                     }
                     Global.NumSend++;
-                    Global.StatusProcessing = StatusProcessing.Done;
+                    Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
@@ -618,11 +621,11 @@ namespace BeeGlobal
             }
             numWrite--;
             CT.Stop();
-            CTMid = (float)CT.Elapsed.TotalMilliseconds;
-            if (CTMid > CTMax)
-                CTMax = CTMid;
-            if (CTMid < CTMin)
-                CTMin = CTMid;
+            CTWrite = (float)CT.Elapsed.TotalMilliseconds;
+            if (CTWrite > CTMax)
+                CTMax = CTWrite;
+            if (CTWrite < CTMin)
+                CTMin = CTWrite;
             return IsConnected;
         }
     }

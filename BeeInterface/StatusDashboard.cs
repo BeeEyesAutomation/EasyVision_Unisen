@@ -15,7 +15,7 @@ namespace BeeInterface
         // ===== Data =====
         private int _totalTimes, _okCount, _ngCount;
         private int _cycleTime, _camTime;
-        private string _statusText = "OK";
+        private string _statusText = "---";
 
         // ===== Controls =====
         public RJButton btnReset;

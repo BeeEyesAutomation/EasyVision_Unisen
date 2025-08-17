@@ -345,11 +345,11 @@ System::String^ ScanHik()
 		}
 		if (pDeviceInfo->nTLayerType == MV_GIGE_DEVICE)
 		{
-			int nIp1 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0xff000000) >> 24);
+			/*int nIp1 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0xff000000) >> 24);
 			int nIp2 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x00ff0000) >> 16);
 			int nIp3 = ((m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x0000ff00) >> 8);
 			int nIp4 = (m_stDevList.pDeviceInfo[i]->SpecialInfo.stGigEInfo.nCurrentIp & 0x000000ff);
-			
+			*/
 			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
 			{
 				memset(strUserName, 0, 256);
@@ -376,11 +376,11 @@ System::String^ ScanHik()
 		}
 		else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
 		{
-			if (strcmp("", (char*)pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName) != 0)
+			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName)) != 0)
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
-					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
@@ -388,13 +388,18 @@ System::String^ ScanHik()
 			else
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
-					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
 			}
-			strMsg.Format(_T("[%d]UsbV3:  %s"), i, pUserName);
+			memset(strUserName, 0, 256);
+
+			MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, sManufacturerName, dwLenUserName);
+
+			strMsg.Format(_T("%s"), pUserName);
+		
 		}
 		else if (pDeviceInfo->nTLayerType == MV_GENTL_CAMERALINK_DEVICE)
 		{
@@ -808,12 +813,31 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 			else
 			{
 				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}
+			/*if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName)) != 0)
+			{
+				memset(strUserName, 0, 256);
 				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
 					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
-			}std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
+			}
+			else
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stGigEInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stGigEInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stGigEInfo.chManufacturerName);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}*/
+			std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
 
 			if (pUserName && wcscmp(pUserName, targetWStr.c_str()) == 0)
 			{
@@ -823,18 +847,13 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 		}
 		else if (pDeviceInfo->nTLayerType == MV_USB_DEVICE)
 		{
-			//const char* userName = (const char*)pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName;
-			//if (userName && strcmp(userName, targetUserName.c_str()) == 0)
-			//{
-			//	return i; // tìm thấy index
-			//}
 			char strUserName[256] = { 0 };
 			wchar_t* pUserName = NULL;
 			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName)) != 0)
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
-					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
@@ -842,17 +861,71 @@ int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string
 			else
 			{
 				memset(strUserName, 0, 256);
-				sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
-					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
 				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
 				pUserName = new wchar_t[dwLenUserName];
 				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
-			}std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
+			}
+			//memset(strUserName, 0, 256);
+
+			//MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, sManufacturerName, dwLenUserName);
+
+		/*	strMsg.Format(_T("%s"), pUserName);
+			if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName)) != 0)
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}
+			else
+			{
+				memset(strUserName, 0, 256);
+				sprintf_s(strUserName, 256, "%s (%s)$%s$", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+					pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber, pDeviceInfo->SpecialInfo.stUsb3VInfo.chManufacturerName);
+				DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+				pUserName = new wchar_t[dwLenUserName];
+				MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			}*/
+			std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
 
 			if (pUserName && wcscmp(pUserName, targetWStr.c_str()) == 0)
 			{
 				return i;
 			}
+			////const char* userName = (const char*)pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName;
+			////if (userName && strcmp(userName, targetUserName.c_str()) == 0)
+			////{
+			////	return i; // tìm thấy index
+			////}
+			//char strUserName[256] = { 0 };
+			//wchar_t* pUserName = NULL;
+			//if (strcmp("", (LPCSTR)(pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName)) != 0)
+			//{
+			//	memset(strUserName, 0, 256);
+			//	sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chUserDefinedName,
+			//		pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+			//	DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+			//	pUserName = new wchar_t[dwLenUserName];
+			//	MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			//}
+			//else
+			//{
+			//	memset(strUserName, 0, 256);
+			//	sprintf_s(strUserName, 256, "%s (%s)", pDeviceInfo->SpecialInfo.stUsb3VInfo.chModelName,
+			//		pDeviceInfo->SpecialInfo.stUsb3VInfo.chSerialNumber);
+			//	DWORD dwLenUserName = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, NULL, 0);
+			//	pUserName = new wchar_t[dwLenUserName];
+			//	MultiByteToWideChar(CP_ACP, 0, (LPCSTR)(strUserName), -1, pUserName, dwLenUserName);
+			//}std::wstring targetWStr = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(targetUserName);
+
+			//if (pUserName && wcscmp(pUserName, targetWStr.c_str()) == 0)
+			//{
+			//	return i;
+			//}
 		}
 	}
 

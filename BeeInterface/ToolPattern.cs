@@ -448,7 +448,7 @@ namespace BeeInterface
         }
 
    
-        private void numLimitCounter_ValueChanged(object sender, EventArgs e)
+        private void numLimitCounter_ValueChanged(float obj)
         {
             Propety.LimitCounter = (int)numLimitCounter.Value;
         }

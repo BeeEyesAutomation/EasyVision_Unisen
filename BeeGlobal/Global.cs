@@ -13,7 +13,8 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary>
-  
+          public static dynamic ScanCCD;
+        public static bool IsDebug = false;
         public static List<HistoryCheck> HistoryChecks = new List<HistoryCheck>();
         public static int WidthOldTools = 0;
          public static dynamic EditTool ;

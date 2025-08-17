@@ -38,7 +38,7 @@ namespace BeeInterface
             this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
             this.layScore = new  System.Windows.Forms.TableLayoutPanel();
             this.rjButton4 = new BeeInterface.RJButton();
-            this.numScore = new BeeInterface.CustomNumeric();
+            this.numScore = new CustomNumericEx();
             this.rjButton5 = new BeeInterface.RJButton();
             this.tableLayoutPanel7 = new  System.Windows.Forms.TableLayoutPanel();
             this.trackScore = new BeeInterface.TrackBar2();
@@ -57,7 +57,7 @@ namespace BeeInterface
             this.rjButton3 = new BeeInterface.RJButton();
             this.rjButton2 = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
-            this.trackNumObject = new BeeInterface.CustomNumeric();
+            this.trackNumObject = new CustomNumericEx();
             this.tableLayoutPanel3 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnClear = new BeeInterface.RJButton();
             this.btnCropRect = new BeeInterface.RJButton();
@@ -80,14 +80,14 @@ namespace BeeInterface
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new  System.Windows.Forms.TableLayoutPanel();
             this.rjButton8 = new BeeInterface.RJButton();
-            this.numOverLap = new BeeInterface.CustomNumeric();
+            this.numOverLap = new CustomNumericEx();
             this.rjButton9 = new BeeInterface.RJButton();
             this.tableLayoutPanel12 = new  System.Windows.Forms.TableLayoutPanel();
             this.trackMaxOverLap = new BeeInterface.TrackBar2();
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel9 = new  System.Windows.Forms.TableLayoutPanel();
             this.rjButton6 = new BeeInterface.RJButton();
-            this.numAngle = new BeeInterface.CustomNumeric();
+            this.numAngle = new CustomNumericEx();
             this.rjButton7 = new BeeInterface.RJButton();
             this.tableLayoutPanel10 = new  System.Windows.Forms.TableLayoutPanel();
             this.trackAngle = new BeeInterface.TrackBar2();
@@ -259,14 +259,14 @@ namespace BeeInterface
             this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numScore.Location = new System.Drawing.Point(293, 0);
             this.numScore.Margin = new System.Windows.Forms.Padding(0);
-            this.numScore.Maxnimum = 100F;
-            this.numScore.Minimum = 0F;
+            this.numScore.Max = 100F;
+            this.numScore.Min = 0F;
             this.numScore.Name = "numScore";
             this.numScore.Size = new System.Drawing.Size(140, 60);
             this.numScore.Step = 1F;
             this.numScore.TabIndex = 35;
             this.numScore.Value = 100F;
-            this.numScore.ValueChanged += new System.EventHandler(this.numScore_ValueChanged);
+            this.numScore.ValueChanged += new System.Action<float>(this.numScore_ValueChanged);
             // 
             // rjButton5
             // 
@@ -893,8 +893,8 @@ namespace BeeInterface
             this.trackNumObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackNumObject.Location = new System.Drawing.Point(225, 0);
             this.trackNumObject.Margin = new System.Windows.Forms.Padding(0);
-            this.trackNumObject.Maxnimum = 100F;
-            this.trackNumObject.Minimum = 0F;
+            this.trackNumObject.Max = 100F;
+            this.trackNumObject.Min = 0F;
             this.trackNumObject.Name = "trackNumObject";
             this.trackNumObject.Size = new System.Drawing.Size(208, 60);
             this.trackNumObject.Step = 1F;
@@ -1690,8 +1690,8 @@ namespace BeeInterface
             this.numOverLap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numOverLap.Location = new System.Drawing.Point(295, 0);
             this.numOverLap.Margin = new System.Windows.Forms.Padding(0);
-            this.numOverLap.Maxnimum = 100F;
-            this.numOverLap.Minimum = 0F;
+            this.numOverLap.Max = 100F;
+            this.numOverLap.Min = 0F;
             this.numOverLap.Name = "numOverLap";
             this.numOverLap.Size = new System.Drawing.Size(140, 65);
             this.numOverLap.Step = 1F;
@@ -1879,14 +1879,14 @@ namespace BeeInterface
             this.numAngle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numAngle.Location = new System.Drawing.Point(295, 0);
             this.numAngle.Margin = new System.Windows.Forms.Padding(0);
-            this.numAngle.Maxnimum = 180F;
-            this.numAngle.Minimum = 0F;
+            this.numAngle.Max = 180F;
+            this.numAngle.Min = 0F;
             this.numAngle.Name = "numAngle";
             this.numAngle.Size = new System.Drawing.Size(140, 65);
             this.numAngle.Step = 1F;
             this.numAngle.TabIndex = 35;
             this.numAngle.Value = 100F;
-            this.numAngle.ValueChanged += new System.EventHandler(this.numAngle_ValueChanged);
+            this.numAngle.ValueChanged += new System.Action<float>(this.numAngle_ValueChanged);
             // 
             // rjButton7
             // 
@@ -2178,22 +2178,22 @@ namespace BeeInterface
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private  System.Windows.Forms.TableLayoutPanel layScore;
         private RJButton rjButton5;
-        private CustomNumeric trackNumObject;
-        private CustomNumeric numScore;
+        private CustomNumericEx trackNumObject;
+        private CustomNumericEx numScore;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
         private RJButton rjButton4;
         public TrackBar2 trackScore;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private RJButton rjButton6;
-        private CustomNumeric numAngle;
+        private CustomNumericEx numAngle;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         public TrackBar2 trackAngle;
         private System.Windows.Forms.Label label4;
         private RJButton rjButton7;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton rjButton8;
-        private CustomNumeric numOverLap;
+        private CustomNumericEx numOverLap;
         private RJButton rjButton9;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
         public TrackBar2 trackMaxOverLap;

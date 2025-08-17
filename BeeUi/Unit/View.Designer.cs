@@ -269,6 +269,7 @@ namespace BeeUi
             // 
             // tmSimulation
             // 
+            this.tmSimulation.Interval = 1000;
             this.tmSimulation.Tick += new System.EventHandler(this.tmSimulation_Tick);
             // 
             // tmLive

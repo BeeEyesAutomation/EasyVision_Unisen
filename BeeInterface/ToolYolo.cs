@@ -339,11 +339,6 @@ namespace BeeInterface
         {
 
         }
-
-        private void trackNumObject_ValueChanged(float obj)
-        {
-          
-        }
         Mat matTemp2;
       
 
@@ -440,7 +435,7 @@ namespace BeeInterface
 
         private void trackNumObject_ValueChanged(object sender, EventArgs e)
         {
-            Propety.NumObject = (int)trackNumObject.Value;
+            
         }
 
         private void btnCropFull_Click(object sender, EventArgs e)
@@ -1240,6 +1235,16 @@ namespace BeeInterface
                     MessageBox.Show("Check File Class Again", "Error");
                 }
             }
+
+        }
+
+        private void trackNumObject_ValueChanged(float obj)
+        {
+            Propety.NumObject = (int)trackNumObject.Value;
+        }
+
+        private void numEpoch_ValueChanged(float obj)
+        {
 
         }
     }

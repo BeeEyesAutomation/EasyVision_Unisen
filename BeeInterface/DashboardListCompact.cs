@@ -7,8 +7,6 @@ using System.Windows.Forms.VisualStyles;
 
 namespace BeeInterface
 {
-
-
     public class DashboardListCompact : Control
     {
         // ===== Data =====
@@ -65,12 +63,12 @@ namespace BeeInterface
             set { _valueWidthRatio = Math.Max(0.15f, Math.Min(0.60f, value)); Invalidate(); }
         }
 
-        // ===== Scroll & editor =====
+        // ===== Scroll & editor (AdjustBarEx) =====
         private readonly VScrollBar _vbar;
-        private NumericUpDown _editor;
-        private Tuple<int, Segment> _editing; // null = không edit
+        private AdjustBarEx _editorBar;                 // << thay NumericUpDown bằng AdjustBarEx
+        private Tuple<int, Segment> _editing;           // null = không edit
 
-        // Range value
+        // Range value cho editor
         public int ValueMin { get; set; } = 0;
         public int ValueMax { get; set; } = 100000;
 
@@ -108,7 +106,9 @@ namespace BeeInterface
             _scale = sW;
 
             float basePt = forceFromFont ? Font.SizeInPoints : BASE_FONT_PT;
-            float newPt = Math.Max(7f, Math.Min(14f, basePt * _scale));
+            float newPt = Math.Max(7f, Math.Min(14f, basePt * _scale)); // dùng Math.max? -> sửa về Math.Max bên dưới
+            // SỬA lỗi gõ: 
+            newPt = Math.Max(7f, Math.Min(14f, basePt * _scale));
 
             if (_scaledFont != null) _scaledFont.Dispose();
             if (_scaledFontBold != null) _scaledFontBold.Dispose();
@@ -127,7 +127,12 @@ namespace BeeInterface
 
             _itemHeight = _nameH + _padY + (_lineH * BASE_LINES) + _rowSpace;
 
-            if (_editor != null) { _editor.Font = _scaledFont; RelayoutEditor(); }
+            // đồng bộ font editor nếu đang hiển thị
+            if (_editorBar != null)
+            {
+                _editorBar.Font = _scaledFont; // ảnh hưởng chữ trong thumb
+                RelayoutEditor();
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -136,6 +141,7 @@ namespace BeeInterface
             {
                 if (_scaledFont != null) _scaledFont.Dispose();
                 if (_scaledFontBold != null) _scaledFontBold.Dispose();
+                if (_editorBar != null) { _editorBar.Dispose(); _editorBar = null; }
             }
             base.Dispose(disposing);
         }
@@ -176,9 +182,11 @@ namespace BeeInterface
         private void DrawUseButton(Graphics g, int itemIndex, int yTop, LabelItem it, int totalWidth)
         {
             var r = new Rectangle(_padX, yTop + 2, totalWidth - _padX * 2, _nameH - 4);
-            Color back = it.IsUse ? Color.FromArgb(40, 167, 69) : Color.FromArgb(190, 190, 190);
-            Color border = it.IsUse ? Color.FromArgb(33, 136, 56) : Color.FromArgb(160, 160, 160);
-            Color fore = it.IsUse ? Color.White : Color.Black;
+
+            // isUse = true -> màu vàng 246,201,110
+            Color back = it.IsUse ? Color.FromArgb(246, 201, 110) : Color.FromArgb(190, 190, 190);
+            Color border = it.IsUse ? Color.FromArgb(220, 178, 98) : Color.FromArgb(160, 160, 160); // đậm hơn 1 chút
+            Color fore = it.IsUse ? Color.Black : Color.Black;
 
             using (var b = new SolidBrush(back)) g.FillRectangle(b, r);
             using (var p = new Pen(border)) g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
@@ -231,9 +239,7 @@ namespace BeeInterface
             using (var pen = new Pen(Color.FromArgb(210, 210, 210)))
                 g.DrawRectangle(pen, valRect.X, valRect.Y, valRect.Width - 1, valRect.Height - 1);
 
-            bool isEditingThis = _editing != null &&
-                                 _editing.Item1 == itemIndex &&
-                                 _editing.Item2 == valSeg;
+            bool isEditingThis = _editing != null && _editing.Item1 == itemIndex && _editing.Item2 == valSeg;
 
             if (enabled && flag)
             {
@@ -380,49 +386,88 @@ namespace BeeInterface
             if (newVal != _vbar.Value) _vbar.Value = newVal;
         }
 
-        // ===== Editor overlay =====
+        // ===== Editor overlay: AdjustBarEx =====
         private void EnsureEditor()
         {
-            if (_editor != null) return;
-            _editor = new NumericUpDown
+            if (_editorBar != null) return;
+
+            _editorBar = new AdjustBarEx
             {
-                BorderStyle = BorderStyle.FixedSingle,
                 Visible = false,
-                Minimum = ValueMin,
-                Maximum = ValueMax,
-                DecimalPlaces = 0,
-                ThousandsSeparator = false,
-                TabStop = false,
-                TextAlign = HorizontalAlignment.Left
+                Decimals = 0,
+                Step = 1f,
+                SnapToStep = true,
+                ShowValueOnThumb = true,
+
+                // Để gọn trong ô value:
+                TightEdges = true,
+                EdgePadding = 1,
+                BarLeftGap = 2,
+                BarRightGap = 2,
+                ChromeGap = 4,
+                ChromeWidthRatio = 0.30f, // nhỏ bớt vùng textbox/±
+                AutoShowTextbox = true,    // hover vào vùng editor sẽ hiện textbox/±
+                StartWithTextboxHidden = true,
             };
-            _editor.Leave += (s, e) => Commit(true);
-            _editor.KeyDown += (s, e) =>
+
+            // Font editor theo scale của control
+            _editorBar.Font = _scaledFont;
+
+            // Cập nhật ngược về item khi đổi giá trị (live update)
+            _editorBar.ValueChanged += (v) =>
             {
-                if (e.KeyCode == Keys.Enter) { Commit(true); e.Handled = true; }
-                else if (e.KeyCode == Keys.Escape) { Commit(false); e.Handled = true; }
+                if (_editing == null) return;
+                int idx = _editing.Item1;
+                Segment seg = _editing.Item2;
+                if (idx < 0 || idx >= _items.Count) return;
+                var it = _items[idx];
+
+                int iv = (int)Math.Round(v);
+                if (seg == Segment.ValueArea && it.IsUse && it.IsArea) it.ValueArea = iv;
+                if (seg == Segment.ValueWidth && it.IsUse && it.IsWidth) it.ValueWidth = iv;
+                if (seg == Segment.ValueHeight && it.IsUse && it.IsHeight) it.ValueHeight = iv;
+
+                Invalidate(RowRect(idx));
             };
-            _editor.Font = _scaledFont;
-            Controls.Add(_editor);
+
+            // Thoát editor bằng ESC
+            _editorBar.KeyDown += (s, e) =>
+            {
+                var ke = e as KeyEventArgs;
+                if (ke != null && ke.KeyCode == Keys.Escape) HideEditor();
+            };
+
+            Controls.Add(_editorBar);
+            _editorBar.BringToFront();
         }
 
         private void BeginEdit(int idx, Segment seg, int value, Rectangle valRect)
         {
             EnsureEditor();
             _editing = new Tuple<int, Segment>(idx, seg);
-            _editor.Minimum = ValueMin;
-            _editor.Maximum = ValueMax;
-            _editor.Value = Math.Max(ValueMin, Math.Min(ValueMax, value));
-            _editor.Font = _scaledFont;
-            _editor.Bounds = new Rectangle(valRect.X + 2, valRect.Y + 1, valRect.Width - 4, valRect.Height - 2);
-            _editor.Visible = true;
-            _editor.Focus();
-            _editor.Select(0, _editor.Text.Length);
+
+            // Thiết lập range và giá trị
+            _editorBar.Min = ValueMin;
+            _editorBar.Max = Math.Max(ValueMin + 1, ValueMax);
+            _editorBar.Step = 1f;
+            _editorBar.Decimals = 0;
+            _editorBar.UnitText = "";
+            _editorBar.Value = Math.Max(ValueMin, Math.Min(ValueMax, value));
+
+            // Đặt editor khít vào ô value
+            Rectangle inner = new Rectangle(valRect.X + 2, valRect.Y + 1, Math.Max(1, valRect.Width - 4), Math.Max(1, valRect.Height - 2));
+            _editorBar.Bounds = inner;
+
+            _editorBar.Visible = true;
+            _editorBar.BringToFront();
+            _editorBar.Focus();
+
             Invalidate(RowRect(idx));
         }
 
         private void RelayoutEditor()
         {
-            if (_editing == null || _editor == null || !_editor.Visible) return;
+            if (_editing == null || _editorBar == null || !_editorBar.Visible) return;
 
             int rightPad = _vbar.Enabled ? _vbar.Width : 0;
             int w = ClientSize.Width - rightPad;
@@ -456,38 +501,16 @@ namespace BeeInterface
             int valW = Math.Min(desiredValW, maxValW);
 
             var valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
-            _editor.Font = _scaledFont;
-            _editor.Bounds = new Rectangle(valRect.X + 2, valRect.Y + 1, valRect.Width - 4, valRect.Height - 2);
-        }
 
-        private void Commit(bool save)
-        {
-            if (_editing == null || _editor == null) return;
-
-            int idx = _editing.Item1;
-            Segment seg = _editing.Item2;
-
-            if (save && idx >= 0 && idx < _items.Count)
-            {
-                int v = (int)_editor.Value;
-                var it = _items[idx];
-                switch (seg)
-                {
-                    case Segment.ValueArea: if (it.IsUse && it.IsArea) it.ValueArea = v; break;
-                    case Segment.ValueWidth: if (it.IsUse && it.IsWidth) it.ValueWidth = v; break;
-                    case Segment.ValueHeight: if (it.IsUse && it.IsHeight) it.ValueHeight = v; break;
-                }
-            }
-
-            _editor.Visible = false;
-            Invalidate(RowRect(idx));
-            _editing = null;
+            Rectangle inner = new Rectangle(valRect.X + 2, valRect.Y + 1, Math.Max(1, valRect.Width - 4), Math.Max(1, valRect.Height - 2));
+            _editorBar.Bounds = inner;
+            _editorBar.Font = _scaledFont;
         }
 
         private void HideEditor()
         {
             _editing = null;
-            if (_editor != null) _editor.Visible = false;
+            if (_editorBar != null) _editorBar.Visible = false;
         }
 
         // ===== Scroll =====
@@ -502,6 +525,4 @@ namespace BeeInterface
             if (_vbar.Value > max) _vbar.Value = max;
         }
     }
-
-
 }

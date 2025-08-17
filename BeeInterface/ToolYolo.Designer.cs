@@ -71,7 +71,7 @@ namespace BeeInterface
             this.btnMore = new BeeInterface.RJButton();
             this.btnEqual = new BeeInterface.RJButton();
             this.btnLess = new BeeInterface.RJButton();
-            this.trackNumObject = new BeeInterface.CustomNumeric();
+            this.trackNumObject = new BeeInterface.CustomNumericEx();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
@@ -85,7 +85,6 @@ namespace BeeInterface
             this.rjButton14 = new BeeInterface.RJButton();
             this.rjButton15 = new BeeInterface.RJButton();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
-            this.numEpoch = new BeeInterface.CustomNumeric();
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
@@ -105,6 +104,7 @@ namespace BeeInterface
             this.workLoadModel = new System.ComponentModel.BackgroundWorker();
             this.workTrain = new System.ComponentModel.BackgroundWorker();
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
+            this.numEpoch = new BeeInterface.CustomNumericEx();
             this.tabYolo.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1469,20 +1469,41 @@ namespace BeeInterface
             // 
             // trackNumObject
             // 
+            this.trackNumObject.AutoShowTextbox = false;
+            this.trackNumObject.AutoSizeTextbox = true;
             this.trackNumObject.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.trackNumObject.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.trackNumObject.BackColor = System.Drawing.SystemColors.Control;
+            this.trackNumObject.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.trackNumObject.BorderRadius = 6;
+            this.trackNumObject.ButtonMaxSize = 64;
+            this.trackNumObject.ButtonMinSize = 24;
+            this.trackNumObject.Decimals = 0;
             this.trackNumObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackNumObject.ElementGap = 6;
+            this.trackNumObject.FillTextboxToAvailable = true;
             this.trackNumObject.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackNumObject.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.trackNumObject.KeyboardStep = 1F;
             this.trackNumObject.Location = new System.Drawing.Point(180, 0);
             this.trackNumObject.Margin = new System.Windows.Forms.Padding(0);
-            this.trackNumObject.Maxnimum = 100F;
-            this.trackNumObject.Minimum = 0F;
+            this.trackNumObject.Max = 100F;
+            this.trackNumObject.MaxTextboxWidth = 0;
+            this.trackNumObject.Min = 0F;
+            this.trackNumObject.MinimumSize = new System.Drawing.Size(120, 32);
+            this.trackNumObject.MinTextboxWidth = 16;
             this.trackNumObject.Name = "trackNumObject";
             this.trackNumObject.Size = new System.Drawing.Size(219, 60);
+            this.trackNumObject.SnapToStep = true;
+            this.trackNumObject.StartWithTextboxHidden = false;
             this.trackNumObject.Step = 1F;
             this.trackNumObject.TabIndex = 34;
+            this.trackNumObject.TextboxFontSize = 30F;
+            this.trackNumObject.TextboxSidePadding = 12;
+            this.trackNumObject.TextboxWidth = 56;
+            this.trackNumObject.UnitText = "";
             this.trackNumObject.Value = 0F;
-            this.trackNumObject.ValueChanged += new System.EventHandler(this.trackNumObject_ValueChanged);
+            this.trackNumObject.WheelStep = 1F;
+            this.trackNumObject.ValueChanged += new System.Action<float>(this.trackNumObject_ValueChanged);
             // 
             // label3
             // 
@@ -1859,24 +1880,6 @@ namespace BeeInterface
             this.tableLayoutPanel15.Size = new System.Drawing.Size(403, 48);
             this.tableLayoutPanel15.TabIndex = 48;
             // 
-            // numEpoch
-            // 
-            this.numEpoch.AutoScroll = true;
-            this.numEpoch.AutoSize = true;
-            this.numEpoch.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.numEpoch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.numEpoch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numEpoch.Location = new System.Drawing.Point(122, 0);
-            this.numEpoch.Margin = new System.Windows.Forms.Padding(0);
-            this.numEpoch.Maxnimum = 1000F;
-            this.numEpoch.Minimum = 0F;
-            this.numEpoch.Name = "numEpoch";
-            this.numEpoch.Size = new System.Drawing.Size(281, 48);
-            this.numEpoch.Step = 1F;
-            this.numEpoch.TabIndex = 46;
-            this.numEpoch.Value = 100F;
-            this.numEpoch.ValueChanged += new System.EventHandler(this.numTourch_ValueChanged);
-            // 
             // label4
             // 
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -2098,7 +2101,7 @@ namespace BeeInterface
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 175F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 177F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
@@ -2159,11 +2162,11 @@ namespace BeeInterface
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(225, 2);
+            this.btnSave.Location = new System.Drawing.Point(223, 2);
             this.btnSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave.Multiline = false;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(172, 26);
+            this.btnSave.Size = new System.Drawing.Size(174, 26);
             this.btnSave.TabIndex = 48;
             this.btnSave.Text = "Save";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -2213,7 +2216,7 @@ namespace BeeInterface
             this.btnCropTemp.IsNotChange = false;
             this.btnCropTemp.IsRect = false;
             this.btnCropTemp.IsUnGroup = true;
-            this.btnCropTemp.Location = new System.Drawing.Point(155, 2);
+            this.btnCropTemp.Location = new System.Drawing.Point(153, 2);
             this.btnCropTemp.Margin = new System.Windows.Forms.Padding(2);
             this.btnCropTemp.Multiline = false;
             this.btnCropTemp.Name = "btnCropTemp";
@@ -2283,6 +2286,44 @@ namespace BeeInterface
             this.oK_Cancel1.Size = new System.Drawing.Size(423, 58);
             this.oK_Cancel1.TabIndex = 19;
             // 
+            // numEpoch
+            // 
+            this.numEpoch.AutoShowTextbox = false;
+            this.numEpoch.AutoSizeTextbox = true;
+            this.numEpoch.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.numEpoch.BackColor = System.Drawing.SystemColors.Control;
+            this.numEpoch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numEpoch.BorderRadius = 6;
+            this.numEpoch.ButtonMaxSize = 64;
+            this.numEpoch.ButtonMinSize = 24;
+            this.numEpoch.Decimals = 0;
+            this.numEpoch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numEpoch.ElementGap = 6;
+            this.numEpoch.FillTextboxToAvailable = true;
+            this.numEpoch.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numEpoch.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numEpoch.KeyboardStep = 1F;
+            this.numEpoch.Location = new System.Drawing.Point(122, 0);
+            this.numEpoch.Margin = new System.Windows.Forms.Padding(0);
+            this.numEpoch.Max = 1000F;
+            this.numEpoch.MaxTextboxWidth = 0;
+            this.numEpoch.Min = 0F;
+            this.numEpoch.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numEpoch.MinTextboxWidth = 16;
+            this.numEpoch.Name = "numEpoch";
+            this.numEpoch.Size = new System.Drawing.Size(281, 48);
+            this.numEpoch.SnapToStep = true;
+            this.numEpoch.StartWithTextboxHidden = false;
+            this.numEpoch.Step = 1F;
+            this.numEpoch.TabIndex = 46;
+            this.numEpoch.TextboxFontSize = 24F;
+            this.numEpoch.TextboxSidePadding = 12;
+            this.numEpoch.TextboxWidth = 56;
+            this.numEpoch.UnitText = "";
+            this.numEpoch.Value = 0F;
+            this.numEpoch.WheelStep = 1F;
+            this.numEpoch.ValueChanged += new System.Action<float>(this.numEpoch_ValueChanged);
+            // 
             // ToolYolo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2316,7 +2357,6 @@ namespace BeeInterface
             this.tableLayoutPanel14.PerformLayout();
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel15.ResumeLayout(false);
-            this.tableLayoutPanel15.PerformLayout();
             this.tableLayoutPanel18.ResumeLayout(false);
             this.tableLayoutPanel17.ResumeLayout(false);
             this.tableLayoutPanel17.PerformLayout();
@@ -2337,7 +2377,7 @@ namespace BeeInterface
         private RJButton btnMore;
         private RJButton btnEqual;
         private RJButton btnLess;
-        private CustomNumeric trackNumObject;
+        private CustomNumericEx trackNumObject;
         private System.Windows.Forms.Label label9;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private RJButton btnCropFull;
@@ -2367,7 +2407,6 @@ namespace BeeInterface
         private RJButton rjButton15;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
         private System.Windows.Forms.Label label10;
-        private CustomNumeric numEpoch;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label txtPercent;
@@ -2400,5 +2439,6 @@ namespace BeeInterface
         private System.Windows.Forms.Label label15;
         private RJButton btnReload;
         private AdjustBarEx trackScore;
+        private CustomNumericEx numEpoch;
     }
 }

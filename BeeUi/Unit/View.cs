@@ -1497,14 +1497,26 @@ namespace BeeUi
                 case StatusProcessing.None:
                     break;
                 case StatusProcessing.Trigger:
-                    G.StatusDashboard. StatusText = obj.ToString();
-                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                  //  G.StatusDashboard.Refresh();
-                    timer.Restart();
+                    if (Global.IsDebug)
+                    {
+                        G.StatusDashboard.StatusText = obj.ToString();
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }
+                    else
+                    {
+                        G.StatusDashboard.StatusText = "---";
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }    
+                   
+                        //  G.StatusDashboard.Refresh();
+                        timer.Restart();
                     break;
                 case StatusProcessing.Read:
-                    G.StatusDashboard.StatusText = obj.ToString();
-                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    if (Global.IsDebug)
+                    {
+                        G.StatusDashboard.StatusText = obj.ToString();
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }
                   //  G.StatusDashboard.Refresh();
                     //if ( Global.ParaCommon.IsExternal)
                     //	Global.EditTool.View.btnTypeTrig.IsCLick = true;
@@ -1526,34 +1538,82 @@ namespace BeeUi
 
                     break;
                 case StatusProcessing.Checking:
-                    G.StatusDashboard.StatusText = obj.ToString();
-                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                   // G.StatusDashboard.Refresh();
-                    RunProcessing();
-                    Global.StatusProcessing = StatusProcessing.WaitingDone;
+                    if (Global.IsDebug)
+                    {
+                        G.StatusDashboard.StatusText = obj.ToString();
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }
+                        // G.StatusDashboard.Refresh();
+                        RunProcessing();
+                        Global.StatusProcessing = StatusProcessing.WaitingDone;
+                    
                     break;
                 case StatusProcessing.SendResult:
+                    if (Global.IsDebug)
+                    {
+                       
+                        G.StatusDashboard.StatusText = obj.ToString();
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }
                     G.SettingPLC.tmRead.Enabled = true;
-                    G.StatusDashboard.StatusText = obj.ToString();
-                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                   // G.StatusDashboard.Refresh();
+                    // G.StatusDashboard.Refresh();
                     if (Global.ParaCommon.Comunication.IO.IsBypass)
-                        Global.StatusProcessing = StatusProcessing.Done;
+                        Global.StatusProcessing = StatusProcessing.Drawing;
+                    break;
+                case StatusProcessing.Drawing:
+                    timer.Stop();
+                    if (!Global.ParaCommon.IsExternal)
+                        G.SettingPLC.tmRead.Enabled = false;
+                    if (Global.IsDebug)
+                    {
+
+                        G.StatusDashboard.StatusText = obj.ToString();
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    }
+                    Global.EditTool.txtCout.Text = Global.NumSend.ToString();
+
+
+                    this.Invoke((Action)(() =>
+                    {
+                      
+                        ShowResultTotal();
+                       
+                      
+                        CheckStatusMode();
+                    }));
+                    Global.StatusProcessing = StatusProcessing.Done;
+
+                  
+
                     break;
                 case StatusProcessing.Done:
                     {
 
-                        Global.EditTool.txtCout.Text = Global.NumSend.ToString();
-                        timer.Stop();
-                       
-                        this.Invoke((Action)(() =>
+                        if (Global.TotalOK)
                         {
-                            ShowResultTotal();
-                            SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
-                            G.StatusDashboard.CycleTime = (int)SumCycle;
-                            G.StatusDashboard.CamTime =(int) BeeCore.Common.CycleCamera;
-                            CheckStatusMode();
-                        }));
+                            G.StatusDashboard.StatusText = "OK";
+                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(255, 27, 186, 98);
+                            Global.Config.SumOK++;
+
+
+                        }
+                        else
+                        {
+                            G.StatusDashboard.StatusText = "NG";
+                            G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
+                            Global.Config.SumNG++;
+
+
+                        }
+                        Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
+                        G.StatusDashboard.CycleTime = (int)(timer.Elapsed.TotalMilliseconds + Cyclyle1);
+                        G.StatusDashboard.CamTime = (int)BeeCore.Common.CycleCamera;
+                        G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                        G.StatusDashboard.OkCount = Global.Config.SumOK; 
+                        G.StatusDashboard.NgCount = Global.Config.SumNG;
+                        Global.Config.TotalTime += Convert.ToSingle(G.StatusDashboard.CycleTime / (60000.0));
+                        Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
+
                         Global.StatusProcessing = StatusProcessing.None;
                         Checking1.StatusProcessing = StatusProcessing.None;
                         Checking2.StatusProcessing = StatusProcessing.None;
@@ -1756,9 +1816,9 @@ namespace BeeUi
                         break;
                 }
                 if (Global.Config.IsSaveRaw)
-                    Cv2.ImWrite(pathRaw + "//" + model + "_" + Hour + ".png", raw);
+                    Cv2.ImWrite(pathRaw + "//" + model + "_"+ Status+ "_"+ Hour + ".png", raw);
                 if (Global.Config.IsSaveRS)
-                    Cv2.ImWrite(pathRS + "//" + model + "_" + Hour + ".png", matRs);
+                    Cv2.ImWrite(pathRS + "//" + model + "_" + Status + "_" + Hour + ".png", matRs);
                 matRs.Release();
                 try
                 {
@@ -1997,6 +2057,11 @@ namespace BeeUi
                         foreach (var tool in tools)
                             if (tool.UsedTool != UsedTool.NotUsed)
                                 tool.Propety.DrawResult(g);
+
+                        String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                             if (!Global.TotalOK)
+                            Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                        g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
                     }
 
                     // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
@@ -2342,36 +2407,10 @@ namespace BeeUi
                 RenderAndDisplay();
 
 
-                if (Global.TotalOK)
-            {
-                 G.StatusDashboard.StatusText = "OK";
-                 G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(255, 27, 186, 98);
-                if (!G.IsModeTest)
-                    Global.Config.SumOK++;
-               
-            
-            }
-            else
-            {
-                 G.StatusDashboard.StatusText = "NG";
-                 G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
-                if (!G.IsModeTest)
-                   Global.Config.SumNG++;
-
-              
-            }
-           
            
        
                     
-                Global.Config.SumTime = Global.Config.SumOK +Global.Config.SumNG;
-           
-             G.StatusDashboard.TotalTimes=Global.Config.SumTime;
-             G.StatusDashboard.OkCount= Global.Config.SumOK;  G.StatusDashboard.NgCount=Global.Config.SumNG ;
-           Global.Config.TotalTime += Convert.ToSingle(SumCycle / (60000.0));
-           Global.Config.Percent=Convert.ToSingle(((Global.Config.SumOK*1.0)/(Global.Config.SumOK+Global.Config.SumNG)) * 100.0);
-             G.StatusDashboard.CycleTime= (int)SumCycle;
-            SumCycle = 0;
+                
                
                
                     if (Global.TotalOK)
@@ -2381,10 +2420,10 @@ namespace BeeUi
                             if (!workInsert.IsBusy)
                                 workInsert.RunWorkerAsync();
                             else
-                                Global.EditTool.lbEx.Text = "Busy Save image ";
+                                Global.Ex = "Busy Save image ";
                         }
-                        else
-                            Global.EditTool.lbEx.Text = "No save ok ";
+                       // else
+                           // Global.EditTool.lbEx.Text = "No save ok ";
                       
                         }
                     else
@@ -2394,10 +2433,10 @@ namespace BeeUi
                             if (!workInsert.IsBusy)
                                 workInsert.RunWorkerAsync();
                             else
-                                Global.EditTool.lbEx.Text = "Busy Save image ";
+                            Global.Ex = "Busy Save image ";
                         }
-                        else
-                            Global.EditTool.lbEx.Text = "No save ng ";
+                       // else
+                           // Global.EditTool.lbEx.Text = "No save ng ";
                     }    
                     
             
@@ -2463,7 +2502,7 @@ namespace BeeUi
         public bool  IsBTNCap=false;
         private  void btnCap_Click(object sender, EventArgs e)
         {
-           
+            
 
             if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.IO.IsBypass )
             {
@@ -2496,7 +2535,11 @@ namespace BeeUi
             if (Global.ParaCommon.Comunication.IO.IsBypass)
                 Global.StatusProcessing = StatusProcessing.Read;
             else
+            {
+                G.SettingPLC.tmRead.Enabled = true;
                 Global.TriggerInternal = true;
+            }    
+               
             //  BeeCore.Common.currentTrig++;
 
         }
@@ -3576,7 +3619,7 @@ namespace BeeUi
 
             }
             if (Global.IsByPassResult)
-                Global.StatusProcessing = StatusProcessing.Done;
+                Global.StatusProcessing = StatusProcessing.Drawing;
             else
                 Global.StatusProcessing = StatusProcessing.SendResult;
         

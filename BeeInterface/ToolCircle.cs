@@ -447,17 +447,8 @@ namespace BeeInterface
 
        
 
-        private void numMinRadius_ValueChanged(object sender, EventArgs e)
-        {Propety.MinRadius= numMinRadius.Value;
-
-        }
-
-        private void numMaxRadius_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.MaxRadius = numMaxRadius.Value;
-        }
-
-    
+ 
+ 
         private void trackBar21_Load_1(object sender, EventArgs e)
         {
 
@@ -549,6 +540,16 @@ namespace BeeInterface
         private void trackIterations_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void numMinRadius_ValueChanged_1(float obj)
+        {
+            Propety.MinRadius = numMinRadius.Value;
+        }
+
+        private void numMaxRadius_ValueChanged(float obj)
+        {
+            Propety.MaxRadius = numMaxRadius.Value;
         }
     }
 }

@@ -482,16 +482,7 @@
     <None Include="Resources\Zoom Out_3.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Save.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Enlarge.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Circle.png" />
@@ -572,80 +563,22 @@
     <None Include="Resources\BID_ICON_EXTRACTION_ADD_E_32BIT.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BID_ICON_AREA_EXTRACTION_COLOR_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_COLOR_AREA.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PIXElCOUNT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_EDGE_PIXEL_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_POSITION_AJUST_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_POSITION.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\BID_ICON_WIDTH_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_DIAMETER_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_EDGE_PRESENCE_W_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_PITCH_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_EDGE_PITCH.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_OCR_TOOL_LARGE_E_32BIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_OCR.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE1.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Bug.png" />
+    <None Include="Resources\Save as.png" />
+    <None Include="Resources\Save.png" />
+    <None Include="Resources\Code_2.png" />
+    <None Include="Resources\Code_1.png" />
     <None Include="Resources\Close Window.png" />
     <None Include="Resources\Installing Updates_1.png" />
     <None Include="Resources\Installing Updates.png" />
     <None Include="Resources\Folder_11.png" />
     <None Include="Resources\Camera1.png" />
-    <None Include="Resources\Ruler.png" />
-    <None Include="Resources\Track Order1.png" />
-    <None Include="Resources\Track Order.png" />
     <None Include="Resources\Stop.png" />
     <None Include="Resources\End.png" />
     <None Include="Resources\File.png" />
@@ -688,8 +621,6 @@
     <None Include="Resources\Image_20231201092021.png" />
     <None Include="Resources\LogoTeamRound.png" />
     <None Include="Resources\LogoTrans.png" />
-    <None Include="Resources\contentYolo.png" />
-    <None Include="Resources\Sparkling.png" />
     <None Include="Resources\Statistic Document.png" />
     <None Include="Resources\Support.png" />
     <None Include="Resources\Language Skill_3.png" />
@@ -708,13 +639,7 @@
     <None Include="Resources\Chevron Right.png" />
     <None Include="Resources\Menu.png" />
     <None Include="Resources\Qr Code_1.png" />
-    <None Include="Resources\Qr Code.png" />
     <None Include="Resources\BeauNho1.png" />
-    <None Include="Resources\Shape_2.png" />
-    <None Include="Resources\Shape_1.png" />
-    <None Include="Resources\Shape.png" />
-    <None Include="Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT11.jpg" />
-    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE111.jpg" />
     <None Include="Resources\Full Screen.png" />
     <None Include="Resources\Zoom Out.png" />
     <None Include="Resources\Zoom In.png" />
@@ -764,10 +689,6 @@
     <None Include="Resources\Edit Property_1.png" />
     <None Include="Resources\Save_1.png" />
     <None Include="Resources\Copy.png" />
-    <None Include="Resources\BtnGreen1.png" />
-    <None Include="Resources\BtnBlue2.png" />
-    <None Include="Resources\BtnBlue1.png" />
-    <None Include="Resources\BtnGreen2.png" />
     <None Include="Resources\Play_2.png" />
     <None Include="Resources\Play_1.png" />
     <None Include="Resources\Record_3.png" />
@@ -775,7 +696,6 @@
     <None Include="Resources\Record.png" />
     <None Include="Resources\Automatic_2.png" />
     <None Include="Resources\BID_ICON_OPERATION_SIMULATION_PC_E_32BIT.jpg" />
-    <None Include="Resources\BID_TOOL_HELPIMAGE_OUTLINE11.jpg" />
     <None Include="Resources\Redo.png" />
     <None Include="Resources\Undo_3.png" />
     <None Include="Resources\Undo_2.png" />
@@ -790,22 +710,6 @@
     <None Include="Resources\Play.png" />
     <None Include="Resources\Add Image.png" />
     <None Include="Resources\Camera.png" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_WHITE.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W303.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W202.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W101.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_ROLLOVER.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_NORMAL.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_DOWN.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_DISABLE.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_ROLLOVER.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_NORMAL.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_DOWN.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_DISABLE.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_NON_THRESHOLD.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_NON_ROLLOVER.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_NON_NORMAL.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_NON_ACTIVE.jpg" />
     <None Include="Resources\BID_ICON_DELETE_E_32BIT.jpg" />
     <None Include="Resources\BID_ICON_TOOL_ADD_E_32BIT.jpg" />
     <None Include="Resources\Eraser.jpg" />

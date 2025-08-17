@@ -835,18 +835,18 @@ namespace BeeInterface
            
         }
 
-        private void numCLAHE_ValueChanged(object sender, EventArgs e)
+        private void numCLAHE_ValueChanged(float obj)
         {
             Propety.Clahe = (int)numCLAHE.Value;
         }
 
-        private void numUnsharp_ValueChanged(object sender, EventArgs e)
+        private void numUnsharp_ValueChanged(float obj)
         {
             Propety.Sigma = (int)numUnsharp.Value;
 
         }
 
-        private void numBlur_ValueChanged(object sender, EventArgs e)
+        private void numBlur_ValueChanged(float obj)
         {
             Propety.Blur = (int)numBlur.Value;
 
@@ -863,7 +863,7 @@ namespace BeeInterface
 
         }
 
-        private void numLimtArea_ValueChanged(object sender, EventArgs e)
+        private void numLimtArea_ValueChanged(float obj)
         {
             Propety.LimitArea =(int) numLimtArea.Value;
         }

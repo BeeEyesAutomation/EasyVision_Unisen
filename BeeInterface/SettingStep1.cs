@@ -442,5 +442,12 @@ namespace BeeInterface
         {
 
         }
+
+        private void btnChnageCamera_Click(object sender, EventArgs e)
+        {
+            if (Global.ScanCCD == null)
+                return;
+            Global.ScanCCD.ShowDialog();
+        }
     }
 }

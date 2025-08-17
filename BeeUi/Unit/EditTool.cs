@@ -338,7 +338,7 @@ namespace BeeUi
 
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
-
+        DashboardImages DashboardImages;
         private void EditTool_Load(object sender, EventArgs e)
         {
             //dashboardList.Items.Add(new LabelItem { Name = "Zone A", IsArea = true, IsWidth = false, IsHeight = true, ValueArea = 10, ValueWidth = 20, ValueHeight = 30 });
@@ -389,12 +389,17 @@ namespace BeeUi
                 //  G.StatusDashboard.Location = new Point(0, 0); 
                 //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             }
+            if(DashboardImages==null)
+            {
+                DashboardImages = new DashboardImages();
+              //  DashboardImages.
+            }
             pEditTool.Register("Tool", () =>Global.ToolSettings);
             pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
             pEditTool.Register("PLC", () => G.SettingPLC);
             pEditTool.Register("Step4", () => G.StepEdit.SettingStep4);
-
+            pEditTool.Register("Images", () => DashboardImages);
             pInfor.Register("Dashboard", () => G.StatusDashboard);
             pInfor.Register("StepEdit", () => G.StepEdit);
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
@@ -412,9 +417,20 @@ namespace BeeUi
                 btnShowToolBar.Checked = true;
             }
             Global.ExChanged += Global_ExChanged;
+            BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
 
+        }
+
+        private void EditTool_FrameChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.Invoke((Action)(() =>
+            {
+                lbFrameRate.Text = sender.ToString() ;
+
+            }));
+           
         }
 
         private void Global_ExChanged(string obj)
@@ -595,25 +611,27 @@ namespace BeeUi
 
         private void openImageTool_Click(object sender, EventArgs e)
         {
+            openFileTool.Enabled = false;
+            openFile.Multiselect = true;
+            openFile.Filter = "Image files (*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|All files (*.*)|*.*";
+
             if (openFile.ShowDialog() == DialogResult.OK)
             {
-                View.Files = new List<string>();
-                View.indexFile = 0;
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
-              View.  Files.Add(openFile.FileName);
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(View.Files[View.indexFile]);
-                View.listMat = new List<Mat>();
-                View.listMat.Add(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                View.btnFile.Enabled = false;
-                Global.StatusMode = StatusMode.SimOne;
-                View.timer.Restart();
-                Global.StatusProcessing = StatusProcessing.Checking;
 
-                View.btnRunSim.Enabled = true;
+                View.Files = new List<string>();
+                View.Files = openFile.FileNames.ToList();
+                workLoadFile.RunWorkerAsync();
+                //BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(View.Files[View.indexFile]);
+                //View.listMat = new List<Mat>();
+                //View.listMat.Add(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+                //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+                //View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                //View.btnFile.Enabled = false;
+                //Global.StatusMode = StatusMode.SimOne;
+                //View.timer.Restart();
+                //Global.StatusProcessing = StatusProcessing.Checking;
+
+                //View.btnRunSim.Enabled = true;
             }
         }
 
@@ -625,15 +643,7 @@ namespace BeeUi
               View.  Files = new List<string>();
                 View.Files = Directory.GetFiles(folderBrowserDialog1.SelectedPath).ToList(); ;
 
-                if (View.Files.Count > 0)
-                {
-                    View.listMat = new List<Mat>();
-                    foreach (string file in View.Files)
-                    {
-                        View.listMat.Add(new Mat(file));
-                    }
-                    View.btnRunSim.Enabled = true; View.btnPlayStep.Enabled = true;playTool.Enabled = true;
-                }
+               
 
             }
             if (!Global.IsRun)
@@ -655,7 +665,7 @@ namespace BeeUi
             if (View.Files.Count == 0)
             { playTool.Enabled = true; return; }
             playTool.Enabled = false;
-            openFolderImage.Enabled = false;
+            openFileTool.Enabled = false;
             openImageTool.Enabled = false;
             stopTool.Enabled = true; View.btnRunSim.IsCLick = true;
             Global.StatusMode = View.btnRunSim.IsCLick ? StatusMode.SimContinuous : StatusMode.None;
@@ -677,7 +687,7 @@ namespace BeeUi
 
         private void stopTool_Click(object sender, EventArgs e)
         {
-            openFolderImage.Enabled = true;
+            openFileTool.Enabled = true;
             openImageTool.Enabled = true;
             View.btnRunSim.Image = Properties.Resources.Play_2;
             View.btnFolder.Enabled = true; 
@@ -700,6 +710,35 @@ namespace BeeUi
         private void dashboardList_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void debugTool_Click(object sender, EventArgs e)
+        {
+            debugTool.Checked = !debugTool.Checked;
+            Global.IsDebug = debugTool.Checked;
+        }
+
+        private void workLoadFile_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (View.Files.Count > 0)
+            {
+                View.listMat = new List<Mat>();
+               
+                View.indexFile = 0;
+               
+                foreach (string file in View.Files)
+                {
+                    View.listMat.Add(new Mat(file));
+                }
+
+             
+            }
+        }
+
+        private void workLoadFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            openFileTool.Enabled = true;
+            View.btnRunSim.Enabled = true; View.btnPlayStep.Enabled = true; playTool.Enabled = true;
         }
 
         private void btnNew_Click(object sender, EventArgs e)

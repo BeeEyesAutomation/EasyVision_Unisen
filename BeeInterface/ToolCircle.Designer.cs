@@ -36,6 +36,7 @@ namespace BeeInterface
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabP1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.trackScore = new BeeInterface.AdjustBarEx();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.btnBinary = new BeeInterface.RJButton();
             this.btnStrongEdge = new BeeInterface.RJButton();
@@ -63,6 +64,9 @@ namespace BeeInterface
             this.btnRect = new BeeInterface.RJButton();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.trackIterations = new BeeInterface.AdjustBarEx();
+            this.trackMinInlier = new BeeInterface.AdjustBarEx();
+            this.trackThreshold = new BeeInterface.AdjustBarEx();
             this.btnCalib = new BeeInterface.RJButton();
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton2 = new BeeInterface.RJButton();
@@ -72,15 +76,11 @@ namespace BeeInterface
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.numMinRadius = new BeeInterface.CustomNumeric();
-            this.numMaxRadius = new BeeInterface.CustomNumeric();
+            this.numMinRadius = new BeeInterface.CustomNumericEx();
+            this.numMaxRadius = new BeeInterface.CustomNumericEx();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.trackMinInlier = new BeeInterface.AdjustBar();
-            this.trackIterations = new BeeInterface.AdjustBar();
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
-            this.trackScore = new BeeInterface.AdjustBarEx();
-            this.trackThreshold = new BeeInterface.AdjustBarEx();
             this.tabControl2.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -164,6 +164,63 @@ namespace BeeInterface
             this.tableLayoutPanel1.TabIndex = 0;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
+            // trackScore
+            // 
+            this.trackScore.AutoShowTextbox = true;
+            this.trackScore.AutoSizeTextbox = true;
+            this.trackScore.BackColor = System.Drawing.SystemColors.Control;
+            this.trackScore.BarLeftGap = 20;
+            this.trackScore.BarRightGap = 6;
+            this.trackScore.ChromeGap = 8;
+            this.trackScore.ChromeWidthRatio = 0.14F;
+            this.trackScore.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackScore.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackScore.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackScore.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackScore.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackScore.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackScore.Decimals = 0;
+            this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackScore.EdgePadding = 2;
+            this.trackScore.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackScore.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackScore.KeyboardStep = 1F;
+            this.trackScore.Location = new System.Drawing.Point(3, 501);
+            this.trackScore.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackScore.MatchTextboxFontToThumb = true;
+            this.trackScore.Max = 100F;
+            this.trackScore.MaxTextboxWidth = 0;
+            this.trackScore.MaxThumb = 1000;
+            this.trackScore.MaxTrackHeight = 1000;
+            this.trackScore.Min = 0F;
+            this.trackScore.MinChromeWidth = 64;
+            this.trackScore.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackScore.MinTextboxWidth = 32;
+            this.trackScore.MinThumb = 30;
+            this.trackScore.MinTrackHeight = 8;
+            this.trackScore.Name = "trackScore";
+            this.trackScore.Radius = 8;
+            this.trackScore.ShowValueOnThumb = true;
+            this.trackScore.Size = new System.Drawing.Size(480, 53);
+            this.trackScore.SnapToStep = true;
+            this.trackScore.StartWithTextboxHidden = true;
+            this.trackScore.Step = 1F;
+            this.trackScore.TabIndex = 69;
+            this.trackScore.TextboxFontSize = 20F;
+            this.trackScore.TextboxSidePadding = 10;
+            this.trackScore.TextboxWidth = 600;
+            this.trackScore.ThumbDiameterRatio = 2F;
+            this.trackScore.ThumbValueBold = true;
+            this.trackScore.ThumbValueFontScale = 1.5F;
+            this.trackScore.ThumbValuePadding = 0;
+            this.trackScore.TightEdges = true;
+            this.trackScore.TrackHeightRatio = 0.45F;
+            this.trackScore.TrackWidthRatio = 1F;
+            this.trackScore.UnitText = "";
+            this.trackScore.Value = 0F;
+            this.trackScore.WheelStep = 1F;
+            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
+            // 
             // tableLayoutPanel15
             // 
             this.tableLayoutPanel15.BackColor = System.Drawing.SystemColors.Control;
@@ -194,8 +251,8 @@ namespace BeeInterface
             this.btnBinary.AutoImageMaxRatio = 0.75F;
             this.btnBinary.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnBinary.AutoImageTint = true;
-            this.btnBinary.BackColor = System.Drawing.Color.Transparent;
-            this.btnBinary.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnBinary.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBinary.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnBinary.BorderColor = System.Drawing.Color.Silver;
             this.btnBinary.BorderRadius = 10;
             this.btnBinary.BorderSize = 1;
@@ -247,8 +304,8 @@ namespace BeeInterface
             this.btnStrongEdge.AutoImageMaxRatio = 0.75F;
             this.btnStrongEdge.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnStrongEdge.AutoImageTint = true;
-            this.btnStrongEdge.BackColor = System.Drawing.Color.Transparent;
-            this.btnStrongEdge.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnStrongEdge.BackColor = System.Drawing.SystemColors.Control;
+            this.btnStrongEdge.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnStrongEdge.BorderColor = System.Drawing.Color.Transparent;
             this.btnStrongEdge.BorderRadius = 10;
             this.btnStrongEdge.BorderSize = 1;
@@ -300,8 +357,8 @@ namespace BeeInterface
             this.btnCloseEdge.AutoImageMaxRatio = 0.75F;
             this.btnCloseEdge.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnCloseEdge.AutoImageTint = true;
-            this.btnCloseEdge.BackColor = System.Drawing.Color.Transparent;
-            this.btnCloseEdge.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCloseEdge.BackColor = System.Drawing.SystemColors.Control;
+            this.btnCloseEdge.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnCloseEdge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnCloseEdge.BorderColor = System.Drawing.Color.Transparent;
             this.btnCloseEdge.BorderRadius = 10;
@@ -385,8 +442,8 @@ namespace BeeInterface
             this.btnOutsideIn.AutoImageMaxRatio = 0.75F;
             this.btnOutsideIn.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnOutsideIn.AutoImageTint = true;
-            this.btnOutsideIn.BackColor = System.Drawing.Color.Transparent;
-            this.btnOutsideIn.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnOutsideIn.BackColor = System.Drawing.SystemColors.Control;
+            this.btnOutsideIn.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnOutsideIn.BorderColor = System.Drawing.Color.Silver;
             this.btnOutsideIn.BorderRadius = 10;
             this.btnOutsideIn.BorderSize = 1;
@@ -810,8 +867,8 @@ namespace BeeInterface
             this.btnCropFull.AutoImageMaxRatio = 0.75F;
             this.btnCropFull.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnCropFull.AutoImageTint = true;
-            this.btnCropFull.BackColor = System.Drawing.Color.Transparent;
-            this.btnCropFull.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCropFull.BackColor = System.Drawing.SystemColors.Control;
+            this.btnCropFull.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnCropFull.BorderColor = System.Drawing.Color.Silver;
             this.btnCropFull.BorderRadius = 10;
             this.btnCropFull.BorderSize = 1;
@@ -1104,6 +1161,8 @@ namespace BeeInterface
             this.tableLayoutPanel8.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel8.ColumnCount = 1;
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Controls.Add(this.trackIterations, 0, 5);
+            this.tableLayoutPanel8.Controls.Add(this.trackMinInlier, 0, 3);
             this.tableLayoutPanel8.Controls.Add(this.trackThreshold, 0, 1);
             this.tableLayoutPanel8.Controls.Add(this.btnCalib, 0, 9);
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel14, 0, 8);
@@ -1112,8 +1171,6 @@ namespace BeeInterface
             this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel4, 0, 7);
             this.tableLayoutPanel8.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel8.Controls.Add(this.label4, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.trackMinInlier, 0, 3);
-            this.tableLayoutPanel8.Controls.Add(this.trackIterations, 0, 5);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
@@ -1121,11 +1178,11 @@ namespace BeeInterface
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 11;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
@@ -1134,6 +1191,176 @@ namespace BeeInterface
             this.tableLayoutPanel8.Size = new System.Drawing.Size(486, 846);
             this.tableLayoutPanel8.TabIndex = 0;
             this.tableLayoutPanel8.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel8_Paint);
+            // 
+            // trackIterations
+            // 
+            this.trackIterations.AutoShowTextbox = true;
+            this.trackIterations.AutoSizeTextbox = true;
+            this.trackIterations.BackColor = System.Drawing.SystemColors.Control;
+            this.trackIterations.BarLeftGap = 20;
+            this.trackIterations.BarRightGap = 6;
+            this.trackIterations.ChromeGap = 8;
+            this.trackIterations.ChromeWidthRatio = 0.14F;
+            this.trackIterations.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackIterations.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackIterations.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackIterations.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackIterations.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackIterations.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackIterations.Decimals = 0;
+            this.trackIterations.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackIterations.EdgePadding = 2;
+            this.trackIterations.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackIterations.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackIterations.KeyboardStep = 1F;
+            this.trackIterations.Location = new System.Drawing.Point(3, 248);
+            this.trackIterations.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackIterations.MatchTextboxFontToThumb = true;
+            this.trackIterations.Max = 1000F;
+            this.trackIterations.MaxTextboxWidth = 0;
+            this.trackIterations.MaxThumb = 1000;
+            this.trackIterations.MaxTrackHeight = 1000;
+            this.trackIterations.Min = 0.1F;
+            this.trackIterations.MinChromeWidth = 64;
+            this.trackIterations.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackIterations.MinTextboxWidth = 32;
+            this.trackIterations.MinThumb = 30;
+            this.trackIterations.MinTrackHeight = 8;
+            this.trackIterations.Name = "trackIterations";
+            this.trackIterations.Radius = 8;
+            this.trackIterations.ShowValueOnThumb = true;
+            this.trackIterations.Size = new System.Drawing.Size(480, 57);
+            this.trackIterations.SnapToStep = true;
+            this.trackIterations.StartWithTextboxHidden = true;
+            this.trackIterations.Step = 1F;
+            this.trackIterations.TabIndex = 72;
+            this.trackIterations.TextboxFontSize = 20F;
+            this.trackIterations.TextboxSidePadding = 10;
+            this.trackIterations.TextboxWidth = 600;
+            this.trackIterations.ThumbDiameterRatio = 2F;
+            this.trackIterations.ThumbValueBold = true;
+            this.trackIterations.ThumbValueFontScale = 1.5F;
+            this.trackIterations.ThumbValuePadding = 0;
+            this.trackIterations.TightEdges = true;
+            this.trackIterations.TrackHeightRatio = 0.45F;
+            this.trackIterations.TrackWidthRatio = 1F;
+            this.trackIterations.UnitText = "";
+            this.trackIterations.Value = 0.1F;
+            this.trackIterations.WheelStep = 1F;
+            this.trackIterations.ValueChanged += new System.Action<float>(this.trackIterations_ValueChanged);
+            // 
+            // trackMinInlier
+            // 
+            this.trackMinInlier.AutoShowTextbox = true;
+            this.trackMinInlier.AutoSizeTextbox = true;
+            this.trackMinInlier.BackColor = System.Drawing.SystemColors.Control;
+            this.trackMinInlier.BarLeftGap = 20;
+            this.trackMinInlier.BarRightGap = 6;
+            this.trackMinInlier.ChromeGap = 8;
+            this.trackMinInlier.ChromeWidthRatio = 0.14F;
+            this.trackMinInlier.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackMinInlier.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackMinInlier.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackMinInlier.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackMinInlier.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackMinInlier.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackMinInlier.Decimals = 0;
+            this.trackMinInlier.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackMinInlier.EdgePadding = 2;
+            this.trackMinInlier.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackMinInlier.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackMinInlier.KeyboardStep = 1F;
+            this.trackMinInlier.Location = new System.Drawing.Point(3, 143);
+            this.trackMinInlier.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackMinInlier.MatchTextboxFontToThumb = true;
+            this.trackMinInlier.Max = 10000F;
+            this.trackMinInlier.MaxTextboxWidth = 0;
+            this.trackMinInlier.MaxThumb = 1000;
+            this.trackMinInlier.MaxTrackHeight = 1000;
+            this.trackMinInlier.Min = 0.1F;
+            this.trackMinInlier.MinChromeWidth = 64;
+            this.trackMinInlier.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackMinInlier.MinTextboxWidth = 32;
+            this.trackMinInlier.MinThumb = 30;
+            this.trackMinInlier.MinTrackHeight = 8;
+            this.trackMinInlier.Name = "trackMinInlier";
+            this.trackMinInlier.Radius = 8;
+            this.trackMinInlier.ShowValueOnThumb = true;
+            this.trackMinInlier.Size = new System.Drawing.Size(480, 57);
+            this.trackMinInlier.SnapToStep = true;
+            this.trackMinInlier.StartWithTextboxHidden = true;
+            this.trackMinInlier.Step = 1F;
+            this.trackMinInlier.TabIndex = 71;
+            this.trackMinInlier.TextboxFontSize = 20F;
+            this.trackMinInlier.TextboxSidePadding = 10;
+            this.trackMinInlier.TextboxWidth = 600;
+            this.trackMinInlier.ThumbDiameterRatio = 2F;
+            this.trackMinInlier.ThumbValueBold = true;
+            this.trackMinInlier.ThumbValueFontScale = 1.5F;
+            this.trackMinInlier.ThumbValuePadding = 0;
+            this.trackMinInlier.TightEdges = true;
+            this.trackMinInlier.TrackHeightRatio = 0.45F;
+            this.trackMinInlier.TrackWidthRatio = 1F;
+            this.trackMinInlier.UnitText = "";
+            this.trackMinInlier.Value = 0.1F;
+            this.trackMinInlier.WheelStep = 1F;
+            this.trackMinInlier.ValueChanged += new System.Action<float>(this.trackMinInlier_ValueChanged);
+            // 
+            // trackThreshold
+            // 
+            this.trackThreshold.AutoShowTextbox = true;
+            this.trackThreshold.AutoSizeTextbox = true;
+            this.trackThreshold.BackColor = System.Drawing.SystemColors.Control;
+            this.trackThreshold.BarLeftGap = 20;
+            this.trackThreshold.BarRightGap = 6;
+            this.trackThreshold.ChromeGap = 8;
+            this.trackThreshold.ChromeWidthRatio = 0.14F;
+            this.trackThreshold.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackThreshold.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackThreshold.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackThreshold.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackThreshold.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackThreshold.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackThreshold.Decimals = 0;
+            this.trackThreshold.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackThreshold.EdgePadding = 2;
+            this.trackThreshold.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackThreshold.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackThreshold.KeyboardStep = 1F;
+            this.trackThreshold.Location = new System.Drawing.Point(3, 38);
+            this.trackThreshold.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackThreshold.MatchTextboxFontToThumb = true;
+            this.trackThreshold.Max = 4F;
+            this.trackThreshold.MaxTextboxWidth = 0;
+            this.trackThreshold.MaxThumb = 1000;
+            this.trackThreshold.MaxTrackHeight = 1000;
+            this.trackThreshold.Min = 0.1F;
+            this.trackThreshold.MinChromeWidth = 64;
+            this.trackThreshold.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackThreshold.MinTextboxWidth = 32;
+            this.trackThreshold.MinThumb = 30;
+            this.trackThreshold.MinTrackHeight = 8;
+            this.trackThreshold.Name = "trackThreshold";
+            this.trackThreshold.Radius = 8;
+            this.trackThreshold.ShowValueOnThumb = true;
+            this.trackThreshold.Size = new System.Drawing.Size(480, 57);
+            this.trackThreshold.SnapToStep = true;
+            this.trackThreshold.StartWithTextboxHidden = true;
+            this.trackThreshold.Step = 1F;
+            this.trackThreshold.TabIndex = 70;
+            this.trackThreshold.TextboxFontSize = 20F;
+            this.trackThreshold.TextboxSidePadding = 10;
+            this.trackThreshold.TextboxWidth = 600;
+            this.trackThreshold.ThumbDiameterRatio = 2F;
+            this.trackThreshold.ThumbValueBold = true;
+            this.trackThreshold.ThumbValueFontScale = 1.5F;
+            this.trackThreshold.ThumbValuePadding = 0;
+            this.trackThreshold.TightEdges = true;
+            this.trackThreshold.TrackHeightRatio = 0.45F;
+            this.trackThreshold.TrackWidthRatio = 1F;
+            this.trackThreshold.UnitText = "";
+            this.trackThreshold.Value = 0.1F;
+            this.trackThreshold.WheelStep = 1F;
             // 
             // btnCalib
             // 
@@ -1146,8 +1373,8 @@ namespace BeeInterface
             this.btnCalib.AutoImageMaxRatio = 0.75F;
             this.btnCalib.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnCalib.AutoImageTint = true;
-            this.btnCalib.BackColor = System.Drawing.Color.Transparent;
-            this.btnCalib.BackgroundColor = System.Drawing.Color.Transparent;
+            this.btnCalib.BackColor = System.Drawing.SystemColors.Control;
+            this.btnCalib.BackgroundColor = System.Drawing.SystemColors.Control;
             this.btnCalib.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnCalib.BorderColor = System.Drawing.Color.Transparent;
             this.btnCalib.BorderRadius = 10;
@@ -1217,8 +1444,8 @@ namespace BeeInterface
             this.rjButton2.AutoImageMaxRatio = 0.75F;
             this.rjButton2.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.rjButton2.AutoImageTint = true;
-            this.rjButton2.BackColor = System.Drawing.Color.Transparent;
-            this.rjButton2.BackgroundColor = System.Drawing.Color.Transparent;
+            this.rjButton2.BackColor = System.Drawing.SystemColors.Control;
+            this.rjButton2.BackgroundColor = System.Drawing.SystemColors.Control;
             this.rjButton2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.rjButton2.BorderColor = System.Drawing.Color.Transparent;
             this.rjButton2.BorderRadius = 10;
@@ -1358,39 +1585,81 @@ namespace BeeInterface
             // 
             // numMinRadius
             // 
+            this.numMinRadius.AutoShowTextbox = false;
+            this.numMinRadius.AutoSizeTextbox = true;
             this.numMinRadius.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.numMinRadius.BackColor = System.Drawing.SystemColors.Control;
+            this.numMinRadius.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numMinRadius.BorderRadius = 6;
+            this.numMinRadius.ButtonMaxSize = 64;
+            this.numMinRadius.ButtonMinSize = 24;
+            this.numMinRadius.Decimals = 0;
             this.numMinRadius.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numMinRadius.ElementGap = 6;
+            this.numMinRadius.FillTextboxToAvailable = true;
             this.numMinRadius.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numMinRadius.ForeColor = System.Drawing.Color.Red;
+            this.numMinRadius.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numMinRadius.KeyboardStep = 1F;
             this.numMinRadius.Location = new System.Drawing.Point(10, 0);
             this.numMinRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMinRadius.Maxnimum = 1000F;
-            this.numMinRadius.Minimum = 0F;
+            this.numMinRadius.Max = 1000F;
+            this.numMinRadius.MaxTextboxWidth = 0;
+            this.numMinRadius.Min = 0F;
+            this.numMinRadius.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numMinRadius.MinTextboxWidth = 16;
             this.numMinRadius.Name = "numMinRadius";
             this.numMinRadius.Size = new System.Drawing.Size(219, 48);
+            this.numMinRadius.SnapToStep = true;
+            this.numMinRadius.StartWithTextboxHidden = false;
             this.numMinRadius.Step = 1F;
             this.numMinRadius.TabIndex = 38;
+            this.numMinRadius.TextboxFontSize = 20F;
+            this.numMinRadius.TextboxSidePadding = 12;
+            this.numMinRadius.TextboxWidth = 56;
+            this.numMinRadius.UnitText = "";
             this.numMinRadius.Value = 100F;
-            this.numMinRadius.ValueChanged += new System.EventHandler(this.numMinRadius_ValueChanged);
+            this.numMinRadius.WheelStep = 1F;
+            this.numMinRadius.ValueChanged += new System.Action<float>(this.numMinRadius_ValueChanged_1);
             // 
             // numMaxRadius
             // 
+            this.numMaxRadius.AutoShowTextbox = false;
+            this.numMaxRadius.AutoSizeTextbox = true;
             this.numMaxRadius.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.numMaxRadius.BackColor = System.Drawing.SystemColors.Control;
+            this.numMaxRadius.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numMaxRadius.BorderRadius = 6;
+            this.numMaxRadius.ButtonMaxSize = 64;
+            this.numMaxRadius.ButtonMinSize = 24;
+            this.numMaxRadius.Decimals = 0;
             this.numMaxRadius.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numMaxRadius.ElementGap = 6;
+            this.numMaxRadius.FillTextboxToAvailable = true;
             this.numMaxRadius.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numMaxRadius.ForeColor = System.Drawing.Color.Red;
+            this.numMaxRadius.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numMaxRadius.KeyboardStep = 1F;
             this.numMaxRadius.Location = new System.Drawing.Point(249, 0);
             this.numMaxRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMaxRadius.Maxnimum = 1000F;
-            this.numMaxRadius.Minimum = 0F;
+            this.numMaxRadius.Max = 1000F;
+            this.numMaxRadius.MaxTextboxWidth = 0;
+            this.numMaxRadius.Min = 0F;
+            this.numMaxRadius.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numMaxRadius.MinTextboxWidth = 16;
             this.numMaxRadius.Name = "numMaxRadius";
             this.numMaxRadius.Size = new System.Drawing.Size(219, 48);
+            this.numMaxRadius.SnapToStep = true;
+            this.numMaxRadius.StartWithTextboxHidden = false;
             this.numMaxRadius.Step = 1F;
             this.numMaxRadius.TabIndex = 35;
+            this.numMaxRadius.TextboxFontSize = 20F;
+            this.numMaxRadius.TextboxSidePadding = 12;
+            this.numMaxRadius.TextboxWidth = 56;
+            this.numMaxRadius.UnitText = "";
             this.numMaxRadius.Value = 100F;
-            this.numMaxRadius.ValueChanged += new System.EventHandler(this.numMaxRadius_ValueChanged);
+            this.numMaxRadius.WheelStep = 1F;
+            this.numMaxRadius.ValueChanged += new System.Action<float>(this.numMaxRadius_ValueChanged);
             // 
             // label6
             // 
@@ -1419,36 +1688,6 @@ namespace BeeInterface
             this.label4.Text = "Threshold";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // trackMinInlier
-            // 
-            this.trackMinInlier.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackMinInlier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.trackMinInlier.Location = new System.Drawing.Point(3, 143);
-            this.trackMinInlier.Max = 10000F;
-            this.trackMinInlier.Min = 1F;
-            this.trackMinInlier.Name = "trackMinInlier";
-            this.trackMinInlier.Size = new System.Drawing.Size(480, 64);
-            this.trackMinInlier.Step = 1F;
-            this.trackMinInlier.TabIndex = 64;
-            this.trackMinInlier.Value = 2F;
-            this.trackMinInlier.ValueChanged += new System.Action<float>(this.trackMinInlier_ValueChanged);
-            // 
-            // trackIterations
-            // 
-            this.trackIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.trackIterations.Location = new System.Drawing.Point(3, 248);
-            this.trackIterations.Max = 5000F;
-            this.trackIterations.Min = 1F;
-            this.trackIterations.Name = "trackIterations";
-            this.trackIterations.Size = new System.Drawing.Size(480, 53);
-            this.trackIterations.Step = 1F;
-            this.trackIterations.TabIndex = 65;
-            this.trackIterations.Value = 1F;
-            this.trackIterations.ValueChanged += new System.Action<float>(this.trackIterations_ValueChanged);
-            this.trackIterations.Load += new System.EventHandler(this.trackIterations_Load);
-            // 
             // oK_Cancel1
             // 
             this.oK_Cancel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -1457,119 +1696,6 @@ namespace BeeInterface
             this.oK_Cancel1.Name = "oK_Cancel1";
             this.oK_Cancel1.Size = new System.Drawing.Size(500, 62);
             this.oK_Cancel1.TabIndex = 18;
-            // 
-            // trackScore
-            // 
-            this.trackScore.AutoShowTextbox = true;
-            this.trackScore.AutoSizeTextbox = true;
-            this.trackScore.BackColor = System.Drawing.SystemColors.Control;
-            this.trackScore.BarLeftGap = 20;
-            this.trackScore.BarRightGap = 6;
-            this.trackScore.ChromeGap = 8;
-            this.trackScore.ChromeWidthRatio = 0.14F;
-            this.trackScore.ColorBorder = System.Drawing.Color.DarkGray;
-            this.trackScore.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
-            this.trackScore.ColorScale = System.Drawing.Color.DarkGray;
-            this.trackScore.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
-            this.trackScore.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
-            this.trackScore.ColorTrack = System.Drawing.Color.DarkGray;
-            this.trackScore.Decimals = 0;
-            this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackScore.EdgePadding = 2;
-            this.trackScore.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.trackScore.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
-            this.trackScore.KeyboardStep = 1F;
-            this.trackScore.Location = new System.Drawing.Point(3, 501);
-            this.trackScore.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.trackScore.MatchTextboxFontToThumb = true;
-            this.trackScore.Max = 100F;
-            this.trackScore.MaxTextboxWidth = 0;
-            this.trackScore.MaxThumb = 1000;
-            this.trackScore.MaxTrackHeight = 1000;
-            this.trackScore.Min = 0F;
-            this.trackScore.MinChromeWidth = 64;
-            this.trackScore.MinimumSize = new System.Drawing.Size(140, 36);
-            this.trackScore.MinTextboxWidth = 32;
-            this.trackScore.MinThumb = 30;
-            this.trackScore.MinTrackHeight = 8;
-            this.trackScore.Name = "trackScore";
-            this.trackScore.Radius = 8;
-            this.trackScore.ShowValueOnThumb = true;
-            this.trackScore.Size = new System.Drawing.Size(480, 53);
-            this.trackScore.SnapToStep = true;
-            this.trackScore.StartWithTextboxHidden = true;
-            this.trackScore.Step = 1F;
-            this.trackScore.TabIndex = 69;
-            this.trackScore.TextboxFontSize = 20F;
-            this.trackScore.TextboxSidePadding = 10;
-            this.trackScore.TextboxWidth = 600;
-            this.trackScore.ThumbDiameterRatio = 2F;
-            this.trackScore.ThumbValueBold = true;
-            this.trackScore.ThumbValueFontScale = 1.5F;
-            this.trackScore.ThumbValuePadding = 0;
-            this.trackScore.TightEdges = true;
-            this.trackScore.TrackHeightRatio = 0.45F;
-            this.trackScore.TrackWidthRatio = 1F;
-            this.trackScore.UnitText = "";
-            this.trackScore.Value = 0F;
-            this.trackScore.WheelStep = 1F;
-            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
-            // 
-            // trackThreshold
-            // 
-            this.trackThreshold.AutoShowTextbox = true;
-            this.trackThreshold.AutoSizeTextbox = true;
-            this.trackThreshold.BackColor = System.Drawing.SystemColors.Control;
-            this.trackThreshold.BarLeftGap = 20;
-            this.trackThreshold.BarRightGap = 6;
-            this.trackThreshold.ChromeGap = 8;
-            this.trackThreshold.ChromeWidthRatio = 0.14F;
-            this.trackThreshold.ColorBorder = System.Drawing.Color.DarkGray;
-            this.trackThreshold.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
-            this.trackThreshold.ColorScale = System.Drawing.Color.DarkGray;
-            this.trackThreshold.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
-            this.trackThreshold.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
-            this.trackThreshold.ColorTrack = System.Drawing.Color.DarkGray;
-            this.trackThreshold.Decimals = 0;
-            this.trackThreshold.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackThreshold.EdgePadding = 2;
-            this.trackThreshold.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.trackThreshold.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
-            this.trackThreshold.KeyboardStep = 1F;
-            this.trackThreshold.Location = new System.Drawing.Point(3, 38);
-            this.trackThreshold.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.trackThreshold.MatchTextboxFontToThumb = true;
-            this.trackThreshold.Max = 4F;
-            this.trackThreshold.MaxTextboxWidth = 0;
-            this.trackThreshold.MaxThumb = 1000;
-            this.trackThreshold.MaxTrackHeight = 1000;
-            this.trackThreshold.Min = 0.1F;
-            this.trackThreshold.MinChromeWidth = 64;
-            this.trackThreshold.MinimumSize = new System.Drawing.Size(140, 36);
-            this.trackThreshold.MinTextboxWidth = 32;
-            this.trackThreshold.MinThumb = 30;
-            this.trackThreshold.MinTrackHeight = 8;
-            this.trackThreshold.Name = "trackThreshold";
-            this.trackThreshold.Radius = 8;
-            this.trackThreshold.ShowValueOnThumb = true;
-            this.trackThreshold.Size = new System.Drawing.Size(480, 57);
-            this.trackThreshold.SnapToStep = true;
-            this.trackThreshold.StartWithTextboxHidden = true;
-            this.trackThreshold.Step = 1F;
-            this.trackThreshold.TabIndex = 70;
-            this.trackThreshold.TextboxFontSize = 20F;
-            this.trackThreshold.TextboxSidePadding = 10;
-            this.trackThreshold.TextboxWidth = 600;
-            this.trackThreshold.ThumbDiameterRatio = 2F;
-            this.trackThreshold.ThumbValueBold = true;
-            this.trackThreshold.ThumbValueFontScale = 1.5F;
-            this.trackThreshold.ThumbValuePadding = 0;
-            this.trackThreshold.TightEdges = true;
-            this.trackThreshold.TrackHeightRatio = 0.45F;
-            this.trackThreshold.TrackWidthRatio = 1F;
-            this.trackThreshold.UnitText = "";
-            this.trackThreshold.Value = 0.1F;
-            this.trackThreshold.WheelStep = 1F;
             // 
             // ToolCircle
             // 
@@ -1612,8 +1738,8 @@ namespace BeeInterface
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label5;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private CustomNumeric numMinRadius;
-        private CustomNumeric numMaxRadius;
+        private CustomNumericEx numMinRadius;
+        private CustomNumericEx numMaxRadius;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private GroupControl.OK_Cancel oK_Cancel1;
@@ -1648,9 +1774,9 @@ namespace BeeInterface
         private RJButton btnElip;
         private RJButton btnRect;
         private RJButton btnBinary;
-        private AdjustBar trackMinInlier;
-        private AdjustBar trackIterations;
         private AdjustBarEx trackScore;
         private AdjustBarEx trackThreshold;
+        private AdjustBarEx trackIterations;
+        private AdjustBarEx trackMinInlier;
     }
 }

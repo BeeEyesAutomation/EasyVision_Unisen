@@ -33,7 +33,7 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cameras));
-            this.pCamera = new  System.Windows.Forms.TableLayoutPanel();
+            this.pCamera = new System.Windows.Forms.TableLayoutPanel();
             this.btnHistory = new BeeInterface.RJButton();
             this.btnCamera4 = new BeeInterface.RJButton();
             this.btnCamera3 = new BeeInterface.RJButton();
@@ -64,7 +64,6 @@ namespace BeeUi.Unit
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pCamera.Size = new System.Drawing.Size(484, 60);
             this.pCamera.TabIndex = 31;
-            
             // 
             // btnHistory
             // 
@@ -118,6 +117,7 @@ namespace BeeUi.Unit
             this.btnHistory.TextColor = System.Drawing.Color.Black;
             this.btnHistory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnHistory.UseVisualStyleBackColor = false;
+            this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
             // 
             // btnCamera4
             // 
@@ -344,7 +344,6 @@ namespace BeeUi.Unit
             this.DoubleBuffered = true;
             this.Name = "Cameras";
             this.Size = new System.Drawing.Size(484, 60);
-          
             this.pCamera.ResumeLayout(false);
             this.ResumeLayout(false);
 

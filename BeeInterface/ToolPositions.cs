@@ -611,10 +611,10 @@ namespace BeeInterface
 
         }
 
-        private void numScore_ValueChanged(object sender, EventArgs e)
+        private void numScore_ValueChanged(float obj )
         {
-            numScore.Maxnimum = (int)trackScore.Max;
-            numScore.Minimum = (int)trackScore.Min;
+            numScore.Max = (int)trackScore.Max;
+            numScore.Min = (int)trackScore.Min;
            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score = numScore.Value;
             trackScore.Value =Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
         }
@@ -644,7 +644,7 @@ namespace BeeInterface
             //    threadProcess.RunWorkerAsync();
         }
 
-        private void numAngle_ValueChanged(object sender, EventArgs e)
+        private void numAngle_ValueChanged(float obj)
         {
             Propety.Angle = numAngle.Value;
             trackAngle.Value = (int)Propety.Angle;

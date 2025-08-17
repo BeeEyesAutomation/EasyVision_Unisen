@@ -39,7 +39,7 @@ namespace BeeUi
         // public static BeeDevice.DeviceConnectForm DeviceConnectForm = new BeeDevice.DeviceConnectForm();
         public static String Licence = "";
        
-        public static ScanCCD ScanCCD=new ScanCCD();
+      
       public static bool IsModeTest = false;
         public static bool IsDone = false,IsIniOCR,IsIniPython;
         public static ucReport ucReport=new ucReport();

@@ -62,7 +62,7 @@ namespace BeeInterface
             this.tableLayoutPanel2 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCropFull = new BeeInterface.RJButton();
             this.btnCropHalt = new BeeInterface.RJButton();
-            this.trackScore = new BeeInterface.AdjustBar();
+            this.trackScore = new BeeInterface.AdjustBarEx();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel8 = new  System.Windows.Forms.TableLayoutPanel();
             this.btnCalib = new BeeInterface.RJButton();
@@ -73,12 +73,12 @@ namespace BeeInterface
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new  System.Windows.Forms.TableLayoutPanel();
-            this.numMinRadius = new BeeInterface.CustomNumeric();
-            this.numMaxRadius = new BeeInterface.CustomNumeric();
+            this.numMinRadius = new CustomNumericEx();
+            this.numMaxRadius = new CustomNumericEx();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.trackMaxLine = new BeeInterface.AdjustBar();
-            this.trackMinInlier = new BeeInterface.AdjustBar();
+            this.trackMaxLine = new BeeInterface.AdjustBarEx();
+            this.trackMinInlier = new BeeInterface.AdjustBarEx();
             this.pCany = new System.Windows.Forms.Panel();
             this.btnAreaBlack = new BeeInterface.RJButton();
             this.btnAreaWhite = new BeeInterface.RJButton();
@@ -1013,8 +1013,8 @@ namespace BeeInterface
             this.numMinRadius.ForeColor = System.Drawing.Color.Red;
             this.numMinRadius.Location = new System.Drawing.Point(0, 0);
             this.numMinRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMinRadius.Maxnimum = 1000F;
-            this.numMinRadius.Minimum = 0F;
+            this.numMinRadius.Max = 1000F;
+            this.numMinRadius.Min = 0F;
             this.numMinRadius.Name = "numMinRadius";
             this.numMinRadius.Size = new System.Drawing.Size(189, 45);
             this.numMinRadius.Step = 1F;
@@ -1030,8 +1030,8 @@ namespace BeeInterface
             this.numMaxRadius.ForeColor = System.Drawing.Color.Red;
             this.numMaxRadius.Location = new System.Drawing.Point(189, 0);
             this.numMaxRadius.Margin = new System.Windows.Forms.Padding(0);
-            this.numMaxRadius.Maxnimum = 10000F;
-            this.numMaxRadius.Minimum = 0F;
+            this.numMaxRadius.Max = 10000F;
+            this.numMaxRadius.Min = 0F;
             this.numMaxRadius.Name = "numMaxRadius";
             this.numMaxRadius.Size = new System.Drawing.Size(189, 45);
             this.numMaxRadius.Step = 1F;
@@ -1232,8 +1232,8 @@ namespace BeeInterface
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label5;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private CustomNumeric numMinRadius;
-        private CustomNumeric numMaxRadius;
+        private CustomNumericEx numMinRadius;
+        private CustomNumericEx numMaxRadius;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label13;
@@ -1251,8 +1251,8 @@ namespace BeeInterface
         private RJButton btnShort;
         private RJButton btnAverage;
         private RJButton btnBinary;
-        private AdjustBar trackMaxLine;
-        private AdjustBar trackMinInlier;
-        private AdjustBar trackScore;
+        private AdjustBarEx trackMaxLine;
+        private AdjustBarEx trackMinInlier;
+        private AdjustBarEx trackScore;
     }
 }

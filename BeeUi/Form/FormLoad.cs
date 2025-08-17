@@ -93,12 +93,12 @@ namespace BeeUi
         
         private void WLoad_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (G.ScanCCD.cbCCD.SelectedIndex == -1)
+            if (Global.ScanCCD.cbCCD.SelectedIndex == -1)
 
             {
                 String NameCamera = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name.Split('$')[0];
                 MessageBox.Show("Connect Failed Camera" + NameCamera + "!");
-                G.ScanCCD.Show();
+                Global.ScanCCD.Show();
                 return;
             }    
                 if (G.Load.IsLockTrial)
@@ -119,7 +119,7 @@ namespace BeeUi
             if (G.IsActive)
             {
                 lb.Text = "Scan Camera Complete";
-                G.ScanCCD.ConnectAll();
+                Global.ScanCCD.ConnectAll();
              
 
             }
@@ -148,16 +148,16 @@ namespace BeeUi
                     if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != null)
                         if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != "")
                         {
-                            if (G.ScanCCD == null) G.ScanCCD = new ScanCCD();
+                            if (Global.ScanCCD == null) Global.ScanCCD = new ScanCCD();
 
                             int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
                             // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(Global.Config.Resolution);
 
                             if (indexCCD != -1)
-                                G.ScanCCD.cbCCD.SelectedIndex = indexCCD;
+                                Global.ScanCCD.cbCCD.SelectedIndex = indexCCD;
                             else
                             {
-                                G.ScanCCD.cbCCD.SelectedIndex = -1;
+                                Global.ScanCCD.cbCCD.SelectedIndex = -1;
                             }
 
 
@@ -201,9 +201,9 @@ namespace BeeUi
             this.Hide();
          
           
-           if(G.ScanCCD==null)
-                G.ScanCCD  = new ScanCCD();
-            G.ScanCCD.Show();
+           if(Global.ScanCCD==null)
+                Global.ScanCCD  = new ScanCCD();
+            Global.ScanCCD.Show();
          //   FormActive.Show();
             tmActive.Enabled = false;
         }
@@ -250,17 +250,17 @@ namespace BeeUi
 
             });
             }
-
+            Global.ScanCCD = new ScanCCD();
                 G.IsIniPython = true;
             lb.Text = "Initial Learning AI Complete";
             Task.Delay(200);
-            listCCD = G.ScanCCD.ScanIDCCD();
+            listCCD = Global.ScanCCD.ScanIDCCD();
             addMac = Decompile.GetMacAddress();
 
 
 
             FormActive.CheckActive(addMac);
-            G.ScanCCD.workConAll.RunWorkerAsync();
+            Global.ScanCCD.workConAll.RunWorkerAsync();
 
         }
     }

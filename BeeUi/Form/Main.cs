@@ -41,7 +41,7 @@ namespace BeeUi
             if (G.AddTool!=null)
             G.AddTool.Close();
             G.Load.Close();
-            G.ScanCCD.Close();
+            Global.ScanCCD.Close();
             if(G.FormActive!=null)
             G.FormActive.Close();
             if (G.IsShutDown)

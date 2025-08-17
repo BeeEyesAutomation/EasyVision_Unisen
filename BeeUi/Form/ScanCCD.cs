@@ -202,10 +202,21 @@ namespace BeeUi
         Crypto Crypto = new Crypto();
         private async void work_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+           
             if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
                 if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                    BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
+                {
+                    if (BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
+                    {
+                        BeeCore.Common.listCamera[Global.IndexChoose].DisConnect();
+                        await Task.Delay(1000);
+                    }
+                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new OpenCvSharp.Mat();
+                        BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
 
+                    
+                }    
+                   
             //String[] sp =Global.Config.Resolution.Split(' ');
             //String[] sp2 = sp[0].Split('x');
 

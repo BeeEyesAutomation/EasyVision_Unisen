@@ -216,7 +216,7 @@ namespace BeeCore
                 frameRate = value;
                 if (FrameChanged != null)
                 {
-                    FrameChanged(G.Common, new PropertyChangedEventArgs("FrameChanged"));
+                    FrameChanged(FrameRate, new PropertyChangedEventArgs("FrameChanged"));
                 }
             }
         }

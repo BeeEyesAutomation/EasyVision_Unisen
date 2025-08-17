@@ -59,12 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdjustBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AdjustBar.Designer.cs">
-      <DependentUpon>AdjustBar.cs</DependentUpon>
-    </Compile>
     <Compile Include="AppRestart.cs" />
     <Compile Include="AutoLabel.cs">
       <SubType>Component</SubType>
@@ -78,9 +72,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Custom\AdjustBarEx.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Custom\CustomNumeric .cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Custom\GradientTabControl.cs">
@@ -98,6 +89,7 @@
     <Compile Include="Custom\TrackBar2.Designer.cs">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
+    <Compile Include="DashboardImages.cs" />
     <Compile Include="DashboardListCompact.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -261,12 +253,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AdjustBar.resx">
-      <DependentUpon>AdjustBar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Custom\CustomNumeric .resx">
-      <DependentUpon>CustomNumeric .cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Custom\TrackBar2.resx">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </EmbeddedResource>

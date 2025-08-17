@@ -93,10 +93,10 @@ namespace BeeCore
             Results=Results.None;
           StatusTool = StatusTool.Processing;
             timer.Restart();
-            if (UsedTool == UsedTool.NotUsed)
+            if (UsedTool == UsedTool.NotUsed&&Global.IsRun)
                 return;
-                if (!Global.IsRun)
-               Propety.rotAreaAdjustment = Propety.rotArea;
+           if (!Global.IsRun)
+            Propety.rotAreaAdjustment = Propety.rotArea;
            Propety.DoWork(Propety.rotAreaAdjustment);
         }
         public void Complete()

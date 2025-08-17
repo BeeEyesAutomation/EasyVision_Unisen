@@ -198,7 +198,7 @@ namespace BeeGlobal
     }
     public enum StatusProcessing
     {
-        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done
+        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done,Drawing
     }
     public enum StatusMode
     {

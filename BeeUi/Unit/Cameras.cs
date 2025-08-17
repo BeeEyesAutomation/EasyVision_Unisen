@@ -40,8 +40,8 @@ namespace BeeUi.Unit
             {
                 btnCamera1.IsCLick = false;
                 return;
-            }    
-              
+            }
+            Global.EditTool.pEditTool.Show("Tool");
             Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -54,9 +54,12 @@ namespace BeeUi.Unit
             Global.IndexChoose = 1;
             if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
+                btnCamera1.IsCLick = true;
+                Global.IndexChoose = 0;
                 btnCamera2.IsCLick = false;
                 return;
             }
+            Global.EditTool.pEditTool.Show("Tool");
             Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -68,9 +71,12 @@ namespace BeeUi.Unit
             Global.IndexChoose = 2;
             if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
+                btnCamera1.IsCLick = true;
+                Global.IndexChoose = 0;
                 btnCamera2.IsCLick = false;
                 return;
             }
+            Global.EditTool.pEditTool.Show("Tool");
             Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
@@ -82,13 +88,21 @@ namespace BeeUi.Unit
             Global.IndexChoose = 3;
             if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
             {
+                Global.IndexChoose = 0;
+                btnCamera1.IsCLick = true;
                 btnCamera4.IsCLick = false;
                 return;
             }
+            Global.EditTool.pEditTool.Show("Tool");
             Global.ToolSettings.pAllTool.Controls.Clear();
             G.Header.stepShow = 0;
             G.Header.indexToolShow = 0;
             G.Header.tmShow.Enabled = true;
+        }
+
+        private void btnHistory_Click(object sender, EventArgs e)
+        {
+          Global.EditTool.pEditTool.Show("Images");
         }
     }
 }

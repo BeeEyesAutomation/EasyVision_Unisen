@@ -10,7 +10,7 @@ namespace BeeInterface
     [DefaultEvent(nameof(ValueChanged))]
     public class CustomNumericEx : UserControl
     {
-        // ====== Value ======
+        // ===== Value / Behavior =====
         private float _min = 0f, _max = 100f, _step = 1f, _value = 0f;
         private int _decimals = 0;
         private string _unitText = "";
@@ -43,13 +43,20 @@ namespace BeeInterface
         }
         public event Action<float> ValueChanged;
 
-        // ====== Appearance / Layout ======
+        // ===== Appearance / Layout =====
         [Category("Appearance")] public Padding InnerPadding { get; set; } = new Padding(6, 6, 6, 6);
+
         [Category("Layout")] public int MinTextboxWidth { get; set; } = 16;
         [Category("Layout")] public int MaxTextboxWidth { get; set; } = 0; // 0 = unlimited
         [Category("Layout")] public int TextboxSidePadding { get; set; } = 12;
         [Category("Layout")] public bool AutoSizeTextbox { get; set; } = true;
-        [Category("Layout")] public int TextboxWidth { get; set; } = 56;  // when AutoSizeTextbox=false
+        [Category("Layout")] public int TextboxWidth { get; set; } = 56;  // khi AutoSizeTextbox=false
+
+        // Full-width layout
+        [Category("Layout")] public int ButtonMinSize { get; set; } = 24;
+        [Category("Layout")] public int ButtonMaxSize { get; set; } = 64;
+        [Category("Layout")] public int ElementGap { get; set; } = 6;
+        [Category("Layout")] public bool FillTextboxToAvailable { get; set; } = true; // lấp đầy phần giữa 2 nút
 
         // Font textbox độc lập
         private float _textboxFontSize = 11f;
@@ -74,15 +81,15 @@ namespace BeeInterface
         private bool _textboxVisible = true;
         private bool _suppressLeaveOnce = false; // nuốt MouseLeave do layout dịch
 
-        // ====== Colors (nếu muốn vẽ border nền control) ======
+        // Viền ngoài tùy chọn
         [Category("Appearance")] public Color BorderColor { get; set; } = Color.FromArgb(210, 210, 210);
         [Category("Appearance")] public int BorderRadius { get; set; } = 6;
 
-        // ====== Inner controls ======
+        // ===== Inner controls =====
         private TextBox _tb;
         private PlusMinusButton _btnMinus, _btnPlus;
 
-        // ====== Init guard ======
+        // ===== Init guard =====
         private bool _isInit;
 
         public CustomNumericEx()
@@ -92,6 +99,7 @@ namespace BeeInterface
                      ControlStyles.UserPaint |
                      ControlStyles.ResizeRedraw, true);
 
+            // TextBox
             _tb = new TextBox
             {
                 BorderStyle = BorderStyle.None,
@@ -109,6 +117,7 @@ namespace BeeInterface
             _tb.Enter += (s, e) => { if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } };
             Controls.Add(_tb);
 
+            // Buttons
             _btnMinus = new PlusMinusButton(-1);
             _btnPlus = new PlusMinusButton(+1);
 
@@ -147,7 +156,8 @@ namespace BeeInterface
             base.OnCreateControl();
             if (InDesigner())
             {
-                AutoShowTextbox = false;        // design-time: luôn hiện
+                // Designer: luôn hiện, không auto ẩn
+                AutoShowTextbox = false;
                 _textboxVisible = true;
                 _tb.Visible = true;
                 _btnMinus.Visible = true;
@@ -166,7 +176,7 @@ namespace BeeInterface
             Invalidate();
         }
 
-        // ====== Behavior ======
+        // ===== Behavior =====
         private void CustomNumericEx_MouseWheel(object sender, MouseEventArgs e)
         {
             if (!ClientRectangle.Contains(PointToClient(Cursor.Position))) return;
@@ -238,81 +248,91 @@ namespace BeeInterface
             return Clamp(s);
         }
 
-        // ====== Layout ======
+        // ===== Layout (full width) =====
         private void LayoutChildren()
         {
             if (!_isInit || _tb == null || _btnMinus == null || _btnPlus == null) return;
+
+            // Nút luôn hiện; TextBox theo trạng thái
+            _btnMinus.Visible = _btnPlus.Visible = true;
+            _tb.Visible = _textboxVisible;
 
             int top = InnerPadding.Top;
             int bottom = Height - InnerPadding.Bottom;
             int h = Math.Max(16, bottom - top);
 
-            // Nút vuông theo chiều cao, 24..36
-            int btnH = h;
-            int btnW = Math.Min(36, Math.Max(24, btnH));
-
-            // đảm bảo font textbox trước khi đo
-            ApplyTextboxFont();
-
-            // đo text nếu đang hiện
-            int textW = 0;
-            if (_textboxVisible)
-            {
-                using (Graphics g = CreateGraphics())
-                {
-                    string t = _tb.Text ?? "0";
-                    Size sz = TextRenderer.MeasureText(
-                        g, t, _tb.Font,
-                        new Size(int.MaxValue, int.MaxValue),
-                        TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
-                    textW = sz.Width;
-                }
-            }
-
-            int tbW = 0;
-            if (_textboxVisible)
-            {
-                if (AutoSizeTextbox)
-                {
-                    tbW = textW + TextboxSidePadding;
-                    if (MaxTextboxWidth > 0) tbW = Math.Min(tbW, MaxTextboxWidth);
-                    tbW = Math.Max(MinTextboxWidth, tbW);
-                }
-                else
-                {
-                    tbW = Math.Max(MinTextboxWidth, TextboxWidth);
-                }
-            }
+            // Nút vuông theo chiều cao, kẹp [ButtonMinSize..ButtonMaxSize]
+            int btnSize = Math.Min(ButtonMaxSize, Math.Max(ButtonMinSize, h));
+            int gap = Math.Max(0, ElementGap);
 
             int left = InnerPadding.Left;
             int right = Width - InnerPadding.Right;
 
-            // tổng bề rộng: minus + (textbox) + plus + các khe 1px
-            int total = btnW + 1 + (_textboxVisible ? tbW + 1 : 0) + btnW;
-            // căn giữa trong control
-            int x0 = left + Math.Max(0, (right - left - total) / 2);
-
-            Rectangle rMinus = new Rectangle(x0, top, btnW, h);
-            Rectangle rPlus = new Rectangle(x0 + btnW + 1 + (_textboxVisible ? tbW + 1 : 0), top, btnW, h);
-
+            // Nút bám mép
+            Rectangle rMinus = new Rectangle(left, top, btnSize, h);
+            Rectangle rPlus = new Rectangle(right - btnSize, top, btnSize, h);
             _btnMinus.Bounds = rMinus;
             _btnPlus.Bounds = rPlus;
 
+            // Vùng textbox ở giữa
+            Rectangle rTbArea = Rectangle.FromLTRB(rMinus.Right + gap, top, rPlus.Left - gap, bottom);
+            int availW = Math.Max(0, rTbArea.Width);
+
+            ApplyTextboxFont();
+
+            // Tính chiều rộng TextBox
+            int tbW = 0;
             if (_textboxVisible)
             {
-                Rectangle rTb = new Rectangle(rMinus.Right + 1, top, tbW, h);
-                _tb.SetBounds(rTb.X, rTb.Y, rTb.Width, rTb.Height);
+                if (FillTextboxToAvailable)
+                {
+                    tbW = availW; // lấp đầy toàn bộ
+                }
+                else
+                {
+                    if (AutoSizeTextbox)
+                    {
+                        int textW;
+                        using (Graphics g = CreateGraphics())
+                        {
+                            string t = _tb.Text ?? "0";
+                            Size sz = TextRenderer.MeasureText(
+                                g, t, _tb.Font,
+                                new Size(int.MaxValue, int.MaxValue),
+                                TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+                            textW = sz.Width;
+                        }
+                        tbW = textW + TextboxSidePadding;
+                        if (MaxTextboxWidth > 0) tbW = Math.Min(tbW, MaxTextboxWidth);
+                        tbW = Math.Max(MinTextboxWidth, tbW);
+                        tbW = Math.Min(availW, tbW);
+                    }
+                    else
+                    {
+                        tbW = Math.Min(availW, Math.Max(MinTextboxWidth, TextboxWidth));
+                    }
+                }
+            }
+
+            // Đặt TextBox
+            if (_textboxVisible)
+            {
+                int tbX;
+                if (FillTextboxToAvailable) tbX = rTbArea.X;                     // lấp đầy
+                else tbX = rTbArea.X + (availW - tbW) / 2;                        // căn giữa
+                _tb.SetBounds(tbX, top, tbW, h);
             }
             else
             {
-                _tb.SetBounds(rMinus.Right + 1, top, 1, h);
+                _tb.SetBounds(rTbArea.X, top, 1, h); // co lại để không chiếm chỗ
             }
 
+            // repaint nút để làm sạch viền khi layout đổi
             _btnMinus.Invalidate();
             _btnPlus.Invalidate();
         }
 
-        // ====== Paint (viền nhẹ tuỳ chọn) ======
+        // ===== Paint (viền nhẹ) =====
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             using (SolidBrush b = new SolidBrush(BackColor))
@@ -391,7 +411,7 @@ namespace BeeInterface
                 HideTextbox();
         }
 
-        // ====== Inner Button ======
+        // ===== Inner Button =====
         private sealed class PlusMinusButton : Control
         {
             private readonly int _dir; // -1 or +1

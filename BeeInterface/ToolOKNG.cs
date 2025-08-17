@@ -437,7 +437,7 @@ namespace BeeInterface
             numCPU.Enabled = Propety.Multi;
         }
 
-        private void numCPU_ValueChanged(object sender, EventArgs e)
+        private void numCPU_ValueChanged(float obj)
         {
             Propety.numCPU =(int) numCPU.Value;
         }

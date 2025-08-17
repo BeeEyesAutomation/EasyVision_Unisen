@@ -63,12 +63,6 @@ namespace BeeInterface
             this.rjButton11 = new BeeInterface.RJButton();
             this.cb2 = new System.Windows.Forms.ComboBox();
             this.cb1 = new System.Windows.Forms.ComboBox();
-            this.layScore = new System.Windows.Forms.TableLayoutPanel();
-            this.rjButton4 = new BeeInterface.RJButton();
-            this.numScore = new BeeInterface.CustomNumeric();
-            this.rjButton5 = new BeeInterface.RJButton();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.trackScore = new BeeInterface.TrackBar2();
             this.label8 = new System.Windows.Forms.Label();
             this.btnTest = new BeeInterface.RJButton();
             this.label7 = new System.Windows.Forms.Label();
@@ -85,7 +79,7 @@ namespace BeeInterface
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.rjButton8 = new BeeInterface.RJButton();
-            this.numOverLap = new BeeInterface.CustomNumeric();
+            this.numOverLap = new BeeInterface.CustomNumericEx();
             this.rjButton9 = new BeeInterface.RJButton();
             this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
             this.trackMaxOverLap = new BeeInterface.TrackBar2();
@@ -101,6 +95,7 @@ namespace BeeInterface
             this.btnAreaBlack = new BeeInterface.RJButton();
             this.btnAreaWhite = new BeeInterface.RJButton();
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
+            this.trackScore = new BeeInterface.AdjustBarEx();
             this.tabControl2.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -111,8 +106,6 @@ namespace BeeInterface
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.layScore.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
@@ -161,6 +154,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.trackScore, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel16, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel15, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 0);
@@ -169,7 +163,6 @@ namespace BeeInterface
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.layScore, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.label8, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.btnTest, 0, 11);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 3);
@@ -841,184 +834,6 @@ namespace BeeInterface
             this.cb1.TabIndex = 1;
             this.cb1.SelectedIndexChanged += new System.EventHandler(this.cb1_SelectedIndexChanged);
             // 
-            // layScore
-            // 
-            this.layScore.BackColor = System.Drawing.SystemColors.Control;
-            this.layScore.ColumnCount = 4;
-            this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
-            this.layScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.layScore.Controls.Add(this.rjButton4, 3, 0);
-            this.layScore.Controls.Add(this.numScore, 2, 0);
-            this.layScore.Controls.Add(this.rjButton5, 0, 0);
-            this.layScore.Controls.Add(this.tableLayoutPanel7, 1, 0);
-            this.layScore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layScore.Location = new System.Drawing.Point(5, 492);
-            this.layScore.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.layScore.Name = "layScore";
-            this.layScore.RowCount = 1;
-            this.layScore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layScore.Size = new System.Drawing.Size(438, 58);
-            this.layScore.TabIndex = 46;
-            // 
-            // rjButton4
-            // 
-            this.rjButton4.AutoFont = true;
-            this.rjButton4.AutoFontHeightRatio = 0.75F;
-            this.rjButton4.AutoFontMax = 100F;
-            this.rjButton4.AutoFontMin = 6F;
-            this.rjButton4.AutoFontWidthRatio = 0.92F;
-            this.rjButton4.AutoImage = true;
-            this.rjButton4.AutoImageMaxRatio = 0.75F;
-            this.rjButton4.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.rjButton4.AutoImageTint = true;
-            this.rjButton4.BackColor = System.Drawing.SystemColors.Control;
-            this.rjButton4.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.rjButton4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.rjButton4.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton4.BorderRadius = 10;
-            this.rjButton4.BorderSize = 1;
-            this.rjButton4.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.rjButton4.Corner = BeeGlobal.Corner.Right;
-            this.rjButton4.DebounceResizeMs = 16;
-            this.rjButton4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rjButton4.Enabled = false;
-            this.rjButton4.FlatAppearance.BorderSize = 0;
-            this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton4.ForeColor = System.Drawing.Color.Black;
-            this.rjButton4.Image = null;
-            this.rjButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton4.ImageDisabled = null;
-            this.rjButton4.ImageHover = null;
-            this.rjButton4.ImageNormal = null;
-            this.rjButton4.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.rjButton4.ImagePressed = null;
-            this.rjButton4.ImageTextSpacing = 6;
-            this.rjButton4.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.rjButton4.ImageTintHover = System.Drawing.Color.Empty;
-            this.rjButton4.ImageTintNormal = System.Drawing.Color.Empty;
-            this.rjButton4.ImageTintOpacity = 0.5F;
-            this.rjButton4.ImageTintPressed = System.Drawing.Color.Empty;
-            this.rjButton4.IsCLick = false;
-            this.rjButton4.IsNotChange = true;
-            this.rjButton4.IsRect = false;
-            this.rjButton4.IsUnGroup = false;
-            this.rjButton4.Location = new System.Drawing.Point(433, 0);
-            this.rjButton4.Margin = new System.Windows.Forms.Padding(0);
-            this.rjButton4.Multiline = false;
-            this.rjButton4.Name = "rjButton4";
-            this.rjButton4.Size = new System.Drawing.Size(5, 58);
-            this.rjButton4.TabIndex = 37;
-            this.rjButton4.TextColor = System.Drawing.Color.Black;
-            this.rjButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton4.UseVisualStyleBackColor = false;
-            // 
-            // numScore
-            // 
-            this.numScore.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.numScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.numScore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numScore.Location = new System.Drawing.Point(293, 0);
-            this.numScore.Margin = new System.Windows.Forms.Padding(0);
-            this.numScore.Maxnimum = 100F;
-            this.numScore.Minimum = 0F;
-            this.numScore.Name = "numScore";
-            this.numScore.Size = new System.Drawing.Size(140, 58);
-            this.numScore.Step = 1F;
-            this.numScore.TabIndex = 35;
-            this.numScore.Value = 100F;
-            this.numScore.ValueChanged += new System.EventHandler(this.numScore_ValueChanged);
-            // 
-            // rjButton5
-            // 
-            this.rjButton5.AutoFont = true;
-            this.rjButton5.AutoFontHeightRatio = 0.75F;
-            this.rjButton5.AutoFontMax = 100F;
-            this.rjButton5.AutoFontMin = 6F;
-            this.rjButton5.AutoFontWidthRatio = 0.92F;
-            this.rjButton5.AutoImage = true;
-            this.rjButton5.AutoImageMaxRatio = 0.75F;
-            this.rjButton5.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.rjButton5.AutoImageTint = true;
-            this.rjButton5.BackColor = System.Drawing.SystemColors.Control;
-            this.rjButton5.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.rjButton5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton5.BorderRadius = 5;
-            this.rjButton5.BorderSize = 1;
-            this.rjButton5.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.rjButton5.Corner = BeeGlobal.Corner.Left;
-            this.rjButton5.DebounceResizeMs = 16;
-            this.rjButton5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rjButton5.Enabled = false;
-            this.rjButton5.FlatAppearance.BorderSize = 0;
-            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton5.ForeColor = System.Drawing.Color.Black;
-            this.rjButton5.Image = null;
-            this.rjButton5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton5.ImageDisabled = null;
-            this.rjButton5.ImageHover = null;
-            this.rjButton5.ImageNormal = null;
-            this.rjButton5.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.rjButton5.ImagePressed = null;
-            this.rjButton5.ImageTextSpacing = 6;
-            this.rjButton5.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.rjButton5.ImageTintHover = System.Drawing.Color.Empty;
-            this.rjButton5.ImageTintNormal = System.Drawing.Color.Empty;
-            this.rjButton5.ImageTintOpacity = 0.5F;
-            this.rjButton5.ImageTintPressed = System.Drawing.Color.Empty;
-            this.rjButton5.IsCLick = false;
-            this.rjButton5.IsNotChange = true;
-            this.rjButton5.IsRect = false;
-            this.rjButton5.IsUnGroup = false;
-            this.rjButton5.Location = new System.Drawing.Point(0, 0);
-            this.rjButton5.Margin = new System.Windows.Forms.Padding(0);
-            this.rjButton5.Multiline = false;
-            this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(5, 58);
-            this.rjButton5.TabIndex = 2;
-            this.rjButton5.TextColor = System.Drawing.Color.Black;
-            this.rjButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rjButton5.UseVisualStyleBackColor = false;
-            this.rjButton5.Click += new System.EventHandler(this.rjButton5_Click);
-            // 
-            // tableLayoutPanel7
-            // 
-            this.tableLayoutPanel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.tableLayoutPanel7.ColumnCount = 1;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Controls.Add(this.trackScore, 0, 1);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(5, 0);
-            this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 2;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.39683F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 74.60317F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(288, 58);
-            this.tableLayoutPanel7.TabIndex = 36;
-            // 
-            // trackScore
-            // 
-            this.trackScore.BackColor = System.Drawing.Color.Transparent;
-            this.trackScore.ColorTrack = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackScore.Location = new System.Drawing.Point(3, 14);
-            this.trackScore.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.trackScore.Max = 10F;
-            this.trackScore.Min = 0F;
-            this.trackScore.Name = "trackScore";
-            this.trackScore.Size = new System.Drawing.Size(282, 44);
-            this.trackScore.Step = 0.1F;
-            this.trackScore.TabIndex = 28;
-            this.trackScore.Value = 1F;
-            this.trackScore.ValueScore = 0F;
-            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -1553,18 +1368,40 @@ namespace BeeInterface
             // 
             // numOverLap
             // 
+            this.numOverLap.AutoShowTextbox = false;
+            this.numOverLap.AutoSizeTextbox = true;
             this.numOverLap.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.numOverLap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.numOverLap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numOverLap.BorderRadius = 6;
+            this.numOverLap.ButtonMaxSize = 64;
+            this.numOverLap.ButtonMinSize = 24;
+            this.numOverLap.Decimals = 0;
             this.numOverLap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numOverLap.ElementGap = 6;
+            this.numOverLap.FillTextboxToAvailable = true;
+            this.numOverLap.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.numOverLap.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numOverLap.KeyboardStep = 1F;
             this.numOverLap.Location = new System.Drawing.Point(295, 0);
             this.numOverLap.Margin = new System.Windows.Forms.Padding(0);
-            this.numOverLap.Maxnimum = 100F;
-            this.numOverLap.Minimum = 0F;
+            this.numOverLap.Max = 100F;
+            this.numOverLap.MaxTextboxWidth = 0;
+            this.numOverLap.Min = 0F;
+            this.numOverLap.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numOverLap.MinTextboxWidth = 16;
             this.numOverLap.Name = "numOverLap";
             this.numOverLap.Size = new System.Drawing.Size(140, 65);
+            this.numOverLap.SnapToStep = true;
+            this.numOverLap.StartWithTextboxHidden = false;
             this.numOverLap.Step = 1F;
             this.numOverLap.TabIndex = 35;
+            this.numOverLap.TextboxFontSize = 11F;
+            this.numOverLap.TextboxSidePadding = 12;
+            this.numOverLap.TextboxWidth = 56;
+            this.numOverLap.UnitText = "";
             this.numOverLap.Value = 100F;
+            this.numOverLap.WheelStep = 1F;
             // 
             // rjButton9
             // 
@@ -1978,6 +1815,63 @@ namespace BeeInterface
             this.oK_Cancel1.Size = new System.Drawing.Size(462, 52);
             this.oK_Cancel1.TabIndex = 18;
             // 
+            // trackScore
+            // 
+            this.trackScore.AutoShowTextbox = true;
+            this.trackScore.AutoSizeTextbox = true;
+            this.trackScore.BackColor = System.Drawing.SystemColors.Control;
+            this.trackScore.BarLeftGap = 20;
+            this.trackScore.BarRightGap = 6;
+            this.trackScore.ChromeGap = 8;
+            this.trackScore.ChromeWidthRatio = 0.14F;
+            this.trackScore.ColorBorder = System.Drawing.Color.DarkGray;
+            this.trackScore.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackScore.ColorScale = System.Drawing.Color.DarkGray;
+            this.trackScore.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackScore.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackScore.ColorTrack = System.Drawing.Color.DarkGray;
+            this.trackScore.Decimals = 0;
+            this.trackScore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackScore.EdgePadding = 2;
+            this.trackScore.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackScore.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackScore.KeyboardStep = 1F;
+            this.trackScore.Location = new System.Drawing.Point(3, 495);
+            this.trackScore.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.trackScore.MatchTextboxFontToThumb = true;
+            this.trackScore.Max = 100F;
+            this.trackScore.MaxTextboxWidth = 0;
+            this.trackScore.MaxThumb = 1000;
+            this.trackScore.MaxTrackHeight = 1000;
+            this.trackScore.Min = 0F;
+            this.trackScore.MinChromeWidth = 64;
+            this.trackScore.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackScore.MinTextboxWidth = 32;
+            this.trackScore.MinThumb = 30;
+            this.trackScore.MinTrackHeight = 8;
+            this.trackScore.Name = "trackScore";
+            this.trackScore.Radius = 8;
+            this.trackScore.ShowValueOnThumb = true;
+            this.trackScore.Size = new System.Drawing.Size(442, 45);
+            this.trackScore.SnapToStep = true;
+            this.trackScore.StartWithTextboxHidden = true;
+            this.trackScore.Step = 1F;
+            this.trackScore.TabIndex = 70;
+            this.trackScore.TextboxFontSize = 20F;
+            this.trackScore.TextboxSidePadding = 10;
+            this.trackScore.TextboxWidth = 600;
+            this.trackScore.ThumbDiameterRatio = 2F;
+            this.trackScore.ThumbValueBold = true;
+            this.trackScore.ThumbValueFontScale = 1.5F;
+            this.trackScore.ThumbValuePadding = 0;
+            this.trackScore.TightEdges = true;
+            this.trackScore.TrackHeightRatio = 0.45F;
+            this.trackScore.TrackWidthRatio = 1F;
+            this.trackScore.UnitText = "";
+            this.trackScore.Value = 0F;
+            this.trackScore.WheelStep = 1F;
+            this.trackScore.ValueChanged += new System.Action<float>(this.trackScore_ValueChanged);
+            // 
             // ToolMeasure
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2002,8 +1896,6 @@ namespace BeeInterface
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.layScore.ResumeLayout(false);
-            this.tableLayoutPanel7.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
@@ -2035,12 +1927,6 @@ namespace BeeInterface
         private RJButton btnTest;
         private System.Windows.Forms.Label label7;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private  System.Windows.Forms.TableLayoutPanel layScore;
-        private RJButton rjButton5;
-        private CustomNumeric numScore;
-        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private RJButton rjButton4;
-        public TrackBar2 trackScore;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private RJButton rjButton6;
@@ -2050,7 +1936,7 @@ namespace BeeInterface
         private RJButton rjButton7;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton rjButton8;
-        private CustomNumeric numOverLap;
+        private CustomNumericEx numOverLap;
         private RJButton rjButton9;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
         public TrackBar2 trackMaxOverLap;
@@ -2088,5 +1974,6 @@ namespace BeeInterface
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
         private RJButton rjButton3;
         private System.Windows.Forms.ComboBox cbMethord;
+        private AdjustBarEx trackScore;
     }
 }
