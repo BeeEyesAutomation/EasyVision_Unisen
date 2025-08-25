@@ -206,7 +206,7 @@ namespace BeeInterface
             this.trackScore.StartWithTextboxHidden = true;
             this.trackScore.Step = 1F;
             this.trackScore.TabIndex = 69;
-            this.trackScore.TextboxFontSize = 20F;
+            this.trackScore.TextboxFontSize = 22F;
             this.trackScore.TextboxSidePadding = 10;
             this.trackScore.TextboxWidth = 600;
             this.trackScore.ThumbDiameterRatio = 2F;

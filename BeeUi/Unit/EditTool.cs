@@ -87,20 +87,13 @@ namespace BeeUi
                     Global.EditTool.View. btnLive.PerformClick();
 
                 }
+                CameraBar.btnCamera1.IsCLick = true;
                 Global.StatusDraw = StatusDraw.None;
             X: switch (Step)
                 {
-                    case Step.PLC:
-                        pName.Visible = false;
-                        if (G.SettingPLC == null)
-                            G.SettingPLC = new SettingPLC();
-                        pEditTool.Controls.Clear();
-                        pEditTool.Visible = true;
-                        G.SettingPLC.Visible = true;
-                        G.SettingPLC.Parent = pEditTool;
-                        G.SettingPLC.Dock = DockStyle.Fill;
-                        break;
+                   
                     case Step.Run:
+                       
                         Global.EditTool.View.btnLive.Enabled = false;
                         CameraBar.Visible = true;
                         pHeader.Visible = true;
@@ -309,8 +302,8 @@ namespace BeeUi
         public async void DesTroy()
         {
             View.tmContinuous.Enabled = false;
-           
-           foreach(Camera camera in BeeCore.Common.listCamera)
+            Global.LogsDashboard.Dispose();
+           foreach (Camera camera in BeeCore.Common.listCamera)
                 if(camera!=null)
 				camera.DestroyAll();
 
@@ -339,6 +332,7 @@ namespace BeeUi
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
         DashboardImages DashboardImages;
+      
         private void EditTool_Load(object sender, EventArgs e)
         {
             //dashboardList.Items.Add(new LabelItem { Name = "Zone A", IsArea = true, IsWidth = false, IsHeight = true, ValueArea = 10, ValueWidth = 20, ValueHeight = 30 });
@@ -359,6 +353,8 @@ namespace BeeUi
             this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
            
+
+
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
             if (Global.listParaCamera[0] != null)
                 CameraBar.btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
@@ -394,18 +390,29 @@ namespace BeeUi
                 DashboardImages = new DashboardImages();
               //  DashboardImages.
             }
+            if(Global.LogsDashboard==null)
+            Global.LogsDashboard = new LogsDashboard();
+            // cấu hình
+            Global.LogsDashboard.MaxLogCount = 5000;
+            Global.LogsDashboard.ProgressiveBatchSize = 200;
+            Global.LogsDashboard.ProgressiveIntervalMs = 10;
+            Global.LogsDashboard.IngestBatchSize = 100;
+            Global.LogsDashboard.IngestIntervalMs = 16; // ~60Hz
             pEditTool.Register("Tool", () =>Global.ToolSettings);
             pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
             pEditTool.Register("PLC", () => G.SettingPLC);
             pEditTool.Register("Step4", () => G.StepEdit.SettingStep4);
             pEditTool.Register("Images", () => DashboardImages);
+            pEditTool.Register("Logs", () => Global.LogsDashboard);
             pInfor.Register("Dashboard", () => G.StatusDashboard);
             pInfor.Register("StepEdit", () => G.StepEdit);
+          
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
-
+            Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
+           
             btnShowToolBar.Checked = btnShowToolBar.Checked;
             if (Global.EditTool.pEdit.Width ==0)
             {
@@ -416,7 +423,7 @@ namespace BeeUi
             {
                 btnShowToolBar.Checked = true;
             }
-            Global.ExChanged += Global_ExChanged;
+          //  Global.ExChanged += Global_ExChanged;
             BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
@@ -740,6 +747,8 @@ namespace BeeUi
             openFileTool.Enabled = true;
             View.btnRunSim.Enabled = true; View.btnPlayStep.Enabled = true; playTool.Enabled = true;
         }
+
+       
 
         private void btnNew_Click(object sender, EventArgs e)
         {

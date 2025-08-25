@@ -1239,6 +1239,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
                     if (Global.ParaCommon.Comunication.IO.CheckReady() || Global.TriggerInternal)
                     {
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
                         Global.TriggerInternal = false;
                         Global.StatusProcessing = StatusProcessing.Trigger;
                         Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Trigger;
@@ -1257,6 +1259,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     
                     if (Global.StatusIO == StatusIO.None)
                     {
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.IO.IO_Processing.ToString()));
                         if (Global.ParaCommon.Comunication.IO.IO_Processing == IO_Processing.ByPass)
                             Global.EditTool.lbBypass.ForeColor = Color.Green; 
                         await Global.ParaCommon.Comunication.IO.WriteIO();
@@ -1296,6 +1300,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
                 if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
                 {
+              
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
+
                     await Global.ParaCommon.Comunication.IO.Read();
                     int ix = Global.ParaCommon.Comunication.IO. AddressInput[(int)I_O_Input.ByPass];
                     if (ix > -1)
@@ -1304,12 +1312,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         {
                             Global.IsByPassResult = true;
                             Global.EditTool.lbBypass.Visible = true;
+                            
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
                         }
                         else if (Global.ParaCommon.Comunication.IO.valueInput[ix] == 0 && Global.IsByPassResult)
 
                         {
                             Global.IsByPassResult = false;
                             Global.EditTool.lbBypass.Visible = false;
+                            
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
                         }        
                     }
                 }    

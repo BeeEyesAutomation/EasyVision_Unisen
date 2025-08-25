@@ -56,12 +56,15 @@ namespace BeeCore.Func
                                       copyBytes);
                 }
 
-               
+                if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
                 return true;
             }
             catch(Exception ex)
             {
-                Global.Ex ="CAMERAIOFAST_" +ex.Message;
+				if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+				Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
+               // Global.Ex ="CAMERAIOFAST_" +ex.Message;
                 return false;
             }
             finally
@@ -69,6 +72,7 @@ namespace BeeCore.Func
                 if (intPtr != IntPtr.Zero)
                     Native.FreeBuffer(intPtr);
             }
+
         }
         public static unsafe bool TryGrabFast_WithStride(ref Mat matRaw)
         {

@@ -30,15 +30,15 @@ namespace BeeInterface
         private const int BASE_WIDTH = 300;
         private const float BASE_FONT_PT = 9f;
         private const int BASE_NAME_H = 22; // nút Name/Use
-        private const int BASE_LINE_H = 22; // 1 dòng Min*
-        private const int BASE_LINES = 3;  // số dòng Min*
-        private const int BASE_ROWSPACE = 6;
+        private const int BASE_LINE_H = 30; // 1 dòng Min*
+        private const int BASE_LINES = 5;  // số dòng Min*
+        private const int BASE_ROWSPACE = 10;
         private const int BASE_PADX = 8;
         private const int BASE_PADY = 6;
         private const int BASE_CHECK = 14;
         private const int BASE_GAP = 6;  // khoảng giữa label và value
         private const int BASE_VALW_MIN = 70;
-        private const int BASE_VAL_RMARG = 15;  // margin phải cố định cho ô value
+        private const int BASE_VAL_RMARG =1;  // margin phải cố định cho ô value
 
         // ===== Runtime scaled metrics =====
         private float _scale = 1f;
@@ -49,7 +49,7 @@ namespace BeeInterface
         private int _itemHeight; // = _nameH + _padY + _lineH*3 + _rowSpace
 
         // ===== Tỉ lệ chia vùng label/value và width value =====
-        private float _labelRatio = 0.38f;   // 58% label/checkbox – 42% value
+        private float _labelRatio = 0.25f;   // 58% label/checkbox – 42% value
         public float LabelColumnRatio
         {
             get { return _labelRatio; }
@@ -69,8 +69,8 @@ namespace BeeInterface
         private Tuple<int, Segment> _editing;           // null = không edit
 
         // Range value cho editor
-        public int ValueMin { get; set; } = 0;
-        public int ValueMax { get; set; } = 100000;
+        public int ValueMin { get; set; } = 1;
+        public int ValueMax { get; set; } = 1000;
 
         public DashboardListCompact()
         {
@@ -174,6 +174,8 @@ namespace BeeInterface
                 DrawLine(g, i, 0, baseY, "MinArea", _items[i], _items[i].IsArea, _items[i].ValueArea, Segment.Area, Segment.ValueArea, w);
                 DrawLine(g, i, 1, baseY, "MinWidth", _items[i], _items[i].IsWidth, _items[i].ValueWidth, Segment.Width, Segment.ValueWidth, w);
                 DrawLine(g, i, 2, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
+                DrawLine(g, i, 3, baseY, "MinX", _items[i], _items[i].IsX, _items[i].ValueX, Segment.X, Segment.ValueX, w);
+                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsX, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
 
                 using (var p = new Pen(Color.FromArgb(230, 230, 230))) g.DrawLine(p, rectItem.Left, rectItem.Bottom - 1, rectItem.Right, rectItem.Bottom - 1);
             }
@@ -264,7 +266,8 @@ namespace BeeInterface
             UseToggle,
             Area, ValueArea,
             Width, ValueWidth,
-            Height, ValueHeight
+            Height,X,Y, ValueHeight,ValueX,ValueY
+                
         }
 
         private bool HitTest(Point pt, out int idx, out Segment seg, out Rectangle targetRect)
@@ -287,7 +290,7 @@ namespace BeeInterface
 
             // 3 dòng Min*
             int baseY = top + _nameH;
-            for (int line = 0; line < 3; line++)
+            for (int line = 0; line < BASE_LINES; line++)
             {
                 int lineY = baseY + _padY + line * _lineH;
                 var lineRect = new Rectangle(_padX, lineY, w - _padX * 2, _lineH);
@@ -308,12 +311,12 @@ namespace BeeInterface
 
                 if (leftRect.Contains(pt))
                 {
-                    seg = line == 0 ? Segment.Area : (line == 1 ? Segment.Width : Segment.Height);
+                    seg = line == 0 ? Segment.Area : (line == 1 ? Segment.Width : (line == 2 ? Segment.Height : (line == 3 ? Segment.X : Segment.Y)));
                     targetRect = leftRect; return true;
                 }
                 if (valRect.Contains(pt))
                 {
-                    seg = line == 0 ? Segment.ValueArea : (line == 1 ? Segment.ValueWidth : Segment.ValueHeight);
+                    seg = line == 0 ? Segment.ValueArea : (line == 1 ? Segment.ValueWidth : (line == 2 ? Segment.ValueHeight : (line == 3 ? Segment.ValueX : Segment.ValueY)));
                     targetRect = valRect; return true;
                 }
             }
@@ -354,13 +357,24 @@ namespace BeeInterface
                             it.IsHeight = !it.IsHeight;
                             if (!it.IsHeight && IsEditing(idx, Segment.ValueHeight)) HideEditor();
                             Invalidate(RowRect(idx)); break;
-
+                        case Segment.X:
+                            it.IsX = !it.IsX;
+                            if (!it.IsX && IsEditing(idx, Segment.ValueX)) HideEditor();
+                            Invalidate(RowRect(idx)); break;
+                        case Segment.Y:
+                            it.IsY = !it.IsY;
+                            if (!it.IsY && IsEditing(idx, Segment.ValueY)) HideEditor();
+                            Invalidate(RowRect(idx)); break;
                         case Segment.ValueArea:
                             if (it.IsArea) BeginEdit(idx, seg, it.ValueArea, rect); break;
                         case Segment.ValueWidth:
                             if (it.IsWidth) BeginEdit(idx, seg, it.ValueWidth, rect); break;
                         case Segment.ValueHeight:
                             if (it.IsHeight) BeginEdit(idx, seg, it.ValueHeight, rect); break;
+                        case Segment.ValueX:
+                            if (it.IsX) BeginEdit(idx, seg, it.ValueX, rect); break;
+                        case Segment.ValueY:
+                            if (it.IsY) BeginEdit(idx, seg, it.ValueY, rect); break;
                     }
                     break;
             }
@@ -395,19 +409,59 @@ namespace BeeInterface
             {
                 Visible = false,
                 Decimals = 0,
-                Step = 1f,
-                SnapToStep = true,
-                ShowValueOnThumb = true,
-
-                // Để gọn trong ô value:
-                TightEdges = true,
-                EdgePadding = 1,
-                BarLeftGap = 2,
-                BarRightGap = 2,
-                ChromeGap = 4,
-                ChromeWidthRatio = 0.30f, // nhỏ bớt vùng textbox/±
-                AutoShowTextbox = true,    // hover vào vùng editor sẽ hiện textbox/±
-                StartWithTextboxHidden = true,
+                Min=1,
+                Max=1000,
+                AutoShowTextbox = true,
+               AutoSizeTextbox = true,
+               BackColor = System.Drawing.SystemColors.Control,
+               BarLeftGap = 14,
+               BarRightGap = 6,
+               ChromeGap = 4,
+               ChromeWidthRatio = 0.14F,
+               ColorBorder = System.Drawing.Color.DarkGray,
+               ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143))))),
+               ColorScale = System.Drawing.Color.DarkGray,
+               ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
+               ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
+               ColorTrack = System.Drawing.Color.DarkGray,
+               EdgePadding = 1,
+               Font = new System.Drawing.Font("Segoe UI", 10F),
+               InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6),
+               KeyboardStep = 1F,
+               MatchTextboxFontToThumb = true,
+              
+               MaxTextboxWidth = 0,
+               MaxThumb = 1000,
+               MaxTrackHeight = 1000,
+             
+               MinChromeWidth = 64,
+              
+             
+               MinThumb = 30,
+               MinTrackHeight = 6,
+               Name = "edit",
+               Radius = 6,
+               ShowValueOnThumb = true,
+              
+               SnapToStep = true,
+               StartWithTextboxHidden = true,
+               Step = 1F,
+               TabIndex = 68,
+               TextboxFontSize = 16F,
+               TextboxSidePadding = 2,
+               
+               ThumbDiameterRatio = 1.5F,
+               ThumbValueBold = true,
+               ThumbValueFontScale = 1.2F,
+               ThumbValuePadding = 0,
+               TightEdges = true,
+               TrackHeightRatio = 0.7F,
+               TrackWidthRatio = 1F,
+               UnitText = "",
+               Value = 0F,
+               WheelStep = 1F,
+              
+                
             };
 
             // Font editor theo scale của control
@@ -426,6 +480,8 @@ namespace BeeInterface
                 if (seg == Segment.ValueArea && it.IsUse && it.IsArea) it.ValueArea = iv;
                 if (seg == Segment.ValueWidth && it.IsUse && it.IsWidth) it.ValueWidth = iv;
                 if (seg == Segment.ValueHeight && it.IsUse && it.IsHeight) it.ValueHeight = iv;
+                if (seg == Segment.ValueX && it.IsUse && it.IsX) it.ValueX = iv;
+                if (seg == Segment.ValueY && it.IsUse && it.IsY) it.ValueY = iv;
 
                 Invalidate(RowRect(idx));
             };
@@ -483,6 +539,8 @@ namespace BeeInterface
                 case Segment.ValueArea: line = 0; break;
                 case Segment.ValueWidth: line = 1; break;
                 case Segment.ValueHeight: line = 2; break;
+                case Segment.ValueX: line = 3; break;
+                case Segment.ValueY: line = 4; break;
                 default: HideEditor(); return;
             }
 

@@ -230,9 +230,6 @@ namespace BeeUi.Unit
             // 
             // btnDelect
             // 
-            this.btnDelect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelect.AutoFont = false;
             this.btnDelect.AutoFontHeightRatio = 0.75F;
             this.btnDelect.AutoFontMax = 100F;
@@ -251,6 +248,7 @@ namespace BeeUi.Unit
             this.btnDelect.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDelect.Corner = BeeGlobal.Corner.Both;
             this.btnDelect.DebounceResizeMs = 16;
+            this.btnDelect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelect.FlatAppearance.BorderSize = 0;
             this.btnDelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -272,11 +270,11 @@ namespace BeeUi.Unit
             this.btnDelect.IsNotChange = true;
             this.btnDelect.IsRect = false;
             this.btnDelect.IsUnGroup = true;
-            this.btnDelect.Location = new System.Drawing.Point(352, 4);
-            this.btnDelect.Margin = new System.Windows.Forms.Padding(1);
+            this.btnDelect.Location = new System.Drawing.Point(356, 4);
+            this.btnDelect.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnDelect.Multiline = false;
             this.btnDelect.Name = "btnDelect";
-            this.btnDelect.Size = new System.Drawing.Size(114, 48);
+            this.btnDelect.Size = new System.Drawing.Size(106, 48);
             this.btnDelect.TabIndex = 13;
             this.btnDelect.Text = "Delete ";
             this.btnDelect.TextColor = System.Drawing.Color.Black;
@@ -286,9 +284,6 @@ namespace BeeUi.Unit
             // 
             // btnSave
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.AutoFont = false;
             this.btnSave.AutoFontHeightRatio = 0.75F;
             this.btnSave.AutoFontMax = 100F;
@@ -308,6 +303,7 @@ namespace BeeUi.Unit
             this.btnSave.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSave.Corner = BeeGlobal.Corner.Both;
             this.btnSave.DebounceResizeMs = 16;
+            this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -329,11 +325,11 @@ namespace BeeUi.Unit
             this.btnSave.IsNotChange = true;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(120, 4);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(1);
+            this.btnSave.Location = new System.Drawing.Point(124, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnSave.Multiline = false;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(114, 48);
+            this.btnSave.Size = new System.Drawing.Size(106, 48);
             this.btnSave.TabIndex = 14;
             this.btnSave.Text = "Save ";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -343,9 +339,6 @@ namespace BeeUi.Unit
             // 
             // btnSaveAs
             // 
-            this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveAs.AutoFont = false;
             this.btnSaveAs.AutoFontHeightRatio = 0.75F;
             this.btnSaveAs.AutoFontMax = 100F;
@@ -364,6 +357,7 @@ namespace BeeUi.Unit
             this.btnSaveAs.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveAs.Corner = BeeGlobal.Corner.Both;
             this.btnSaveAs.DebounceResizeMs = 16;
+            this.btnSaveAs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveAs.FlatAppearance.BorderSize = 0;
             this.btnSaveAs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveAs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -385,11 +379,11 @@ namespace BeeUi.Unit
             this.btnSaveAs.IsNotChange = true;
             this.btnSaveAs.IsRect = false;
             this.btnSaveAs.IsUnGroup = true;
-            this.btnSaveAs.Location = new System.Drawing.Point(236, 4);
-            this.btnSaveAs.Margin = new System.Windows.Forms.Padding(1);
+            this.btnSaveAs.Location = new System.Drawing.Point(240, 4);
+            this.btnSaveAs.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnSaveAs.Multiline = false;
             this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(114, 48);
+            this.btnSaveAs.Size = new System.Drawing.Size(106, 48);
             this.btnSaveAs.TabIndex = 15;
             this.btnSaveAs.Text = "Copy";
             this.btnSaveAs.TextColor = System.Drawing.Color.Black;
@@ -399,9 +393,6 @@ namespace BeeUi.Unit
             // 
             // btnAdd
             // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.AutoFont = false;
             this.btnAdd.AutoFontHeightRatio = 0.75F;
             this.btnAdd.AutoFontMax = 100F;
@@ -420,6 +411,7 @@ namespace BeeUi.Unit
             this.btnAdd.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnAdd.Corner = BeeGlobal.Corner.Both;
             this.btnAdd.DebounceResizeMs = 16;
+            this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAdd.FlatAppearance.BorderSize = 0;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -441,11 +433,11 @@ namespace BeeUi.Unit
             this.btnAdd.IsNotChange = true;
             this.btnAdd.IsRect = false;
             this.btnAdd.IsUnGroup = true;
-            this.btnAdd.Location = new System.Drawing.Point(4, 4);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(1);
+            this.btnAdd.Location = new System.Drawing.Point(8, 4);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnAdd.Multiline = false;
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(114, 48);
+            this.btnAdd.Size = new System.Drawing.Size(106, 48);
             this.btnAdd.TabIndex = 11;
             this.btnAdd.Text = "New";
             this.btnAdd.TextColor = System.Drawing.Color.Black;

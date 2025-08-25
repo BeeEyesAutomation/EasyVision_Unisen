@@ -46,13 +46,7 @@ namespace BeeUi.Unit
 
         }
 
-        private void btnSettingPLC_Click(object sender, EventArgs e)
-        {  
-            if(btnSettingPLC.IsCLick)
-               Global.EditTool.pEditTool.Show("PLC");
-            else
-               Global.EditTool.pEditTool.Show("Tool");
-        }
+     
 
         private async void btnfull_Click(object sender, EventArgs e)
         {

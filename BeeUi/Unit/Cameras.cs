@@ -104,5 +104,16 @@ namespace BeeUi.Unit
         {
           Global.EditTool.pEditTool.Show("Images");
         }
+
+        private void btnLog_Click(object sender, EventArgs e)
+        {
+            Global.EditTool.pEditTool.Show("Logs");
+        }
+
+        private void btnSettingPLC_Click(object sender, EventArgs e)
+        {
+               Global.EditTool.pEditTool.Show("PLC");
+          
+        }
     }
 }

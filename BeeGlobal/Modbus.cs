@@ -282,19 +282,24 @@ namespace BeeGlobal
             }
             catch (OperationCanceledException ex)
             {
-                Global.Ex = "Read_" + ex.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_READ", ex.Message));
+             
                 // Global.ParaCommon.Comunication.IO.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString() + " " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
             catch (Exception ex)
             {
-                Global.Ex = "Read_" + ex.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_READ", ex.Message));
+            
                 // Global.ParaCommon.Comunication.IO.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString()+" " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
-
+           
+            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ", "Success"));
             return values;
         }
       public  static bool IsReading = false,IsWrite;
@@ -343,7 +348,8 @@ namespace BeeGlobal
             }
             catch (OperationCanceledException op)
             {
-                Global.Ex = "Write_" + op.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_WRITE", op.Message));
                 // Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
@@ -351,12 +357,15 @@ namespace BeeGlobal
             }
             catch (Exception ex)
             {
-                Global.Ex = "Write_" + ex.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_WRITE", ex.Message));
                 //  Global.ParaCommon.Comunication.IO.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
                 Global.ParaCommon.Comunication.IO.LogError("Write-" + Global.StatusProcessing.ToString() + ", " + ex.Message);
             }
+            
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", "Success"));
             // int[] values = new int[16];
             //try
             //{

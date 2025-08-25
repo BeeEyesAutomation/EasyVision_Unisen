@@ -27,9 +27,9 @@ namespace BeeInterface
     {
         // ===== Top UI =====
         private readonly Panel _top = new Panel { Height = 40, Dock = DockStyle.Top, Padding = new Padding(8, 6, 8, 6) };
-        private readonly ComboBox _cbDate = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 80, Height = 28, Font = new Font("Arial", 12),Dock = DockStyle.Left };
-        private readonly RadioButton _rbRaw = new RadioButton { Text = "Raw", AutoSize = true };
-        private readonly RadioButton _rbResult = new RadioButton { Text = "Result", AutoSize = true };
+        private readonly ComboBox _cbDate = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 80, Height = 28, Font = new Font("Arial", 12),Dock = DockStyle.Fill };
+        private readonly RadioButton _rbRaw = new RadioButton { Text = "Raw", AutoSize = true, Dock = DockStyle.Right };
+        private readonly RadioButton _rbResult = new RadioButton { Text = "Result", AutoSize = true,Dock = DockStyle.Right };
         private readonly ComboBox _cbFilter = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 100, Dock = DockStyle.Right ,Font=new Font("Arial",12) };
         private readonly Button _btnRefresh = new Button { Text = "Refresh", AutoSize = false, Width =75, Height = 24, Dock = DockStyle.Right };
 
@@ -79,13 +79,19 @@ namespace BeeInterface
             Controls.Add(_vScroll);
 
             // Top: thứ tự để Dock=Right sắp bên phải
-            _top.Controls.Add(_btnRefresh);
+          
+           
+            _top.Controls.Add(_rbRaw);
+            _top.Controls.Add(_rbResult);
             _top.Controls.Add(_cbFilter);
-            _top.Controls.AddRange(new Control[] { _cbDate, _rbRaw, _rbResult });
+            _top.Controls.Add(_btnRefresh);
+            _top.Controls.Add(_cbDate);
+            _cbDate.BringToFront();
             _rbResult.Checked = true;
 
             // Bottom
             _bottom.Controls.AddRange(new Control[] { _btnPrev, _btnNext, _lblPage });
+            _btnNext.BringToFront();
             _btnPrev.Left = _bottom.Padding.Left;
             _btnPrev.Top = _bottom.Padding.Top;
             _btnNext.Left = _btnPrev.Right + 8;

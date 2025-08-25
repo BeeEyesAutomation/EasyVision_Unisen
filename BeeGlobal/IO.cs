@@ -222,11 +222,13 @@ namespace BeeGlobal
             }
             catch(Exception ex)
             {
-                Global.Ex = "CON_IO_" + ex.Message;
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", ex.Message));
                 return false;
             }
-            //  Modbus.ReadHolding(0, 10);
-           
+           if(IsConnected)
+            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO","Connected Success"));
+           else
+            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connect Fail"));
             return IsConnected;
         }
         [field: NonSerialized]

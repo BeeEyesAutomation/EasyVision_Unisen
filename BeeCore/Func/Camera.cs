@@ -978,7 +978,8 @@ namespace BeeCore
 
             }
             catch (Exception ex) {
-                Global.Ex = "Cam_" + ex.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
             }
                
             

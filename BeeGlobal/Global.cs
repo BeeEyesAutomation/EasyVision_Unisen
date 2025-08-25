@@ -37,20 +37,22 @@ namespace BeeGlobal
                 }
             }
         }
-        private static String _Ex = "";
-        public static event Action<String> ExChanged;
-        public static String Ex
-        {
-            get => _Ex;
-            set
-            {
-                if (_Ex != value)
-                {
-                    _Ex = value;
-                    ExChanged?.Invoke(_Ex); // Gọi event
-                }
-            }
-        }
+        //private static String _Ex = "";
+        //public static event Action<String> ExChanged;
+        //public static String Ex
+        //{
+        //    get => _Ex;
+        //    set
+        //    {
+        //        if (_Ex != value)
+        //        {
+        //            _Ex = value;
+        //            ExChanged?.Invoke(_Ex); // Gọi event
+        //        }
+        //    }
+        //}
+        public static LogsDashboard LogsDashboard;
+     
         public static bool IsLoadProgFist = false;
         public static bool IsHideTool = true;
         public static List<iTool> listItool = new List<iTool>();

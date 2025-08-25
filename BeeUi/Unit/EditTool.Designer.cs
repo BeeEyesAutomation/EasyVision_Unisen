@@ -32,7 +32,6 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbLicence = new System.Windows.Forms.ToolStripStatusLabel();
@@ -54,7 +53,7 @@ namespace BeeUi
             this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
+            this.tmReaPLC = new System.Windows.Forms.Timer();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -73,7 +72,7 @@ namespace BeeUi
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
             this.splitter4 = new System.Windows.Forms.Splitter();
-            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip();
             this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -511,7 +510,7 @@ namespace BeeUi
             this.Developer,
             this.customUIToolStripMenuItem});
             this.mouseLeft.Name = "contextMenuStrip2";
-            this.mouseLeft.Size = new System.Drawing.Size(227, 271);
+            this.mouseLeft.Size = new System.Drawing.Size(227, 249);
             // 
             // btnNew
             // 
@@ -651,7 +650,7 @@ namespace BeeUi
             // debugTool
             // 
             this.debugTool.Name = "debugTool";
-            this.debugTool.Size = new System.Drawing.Size(180, 22);
+            this.debugTool.Size = new System.Drawing.Size(169, 22);
             this.debugTool.Text = "Debug";
             this.debugTool.Click += new System.EventHandler(this.debugTool_Click);
             // 
@@ -659,7 +658,7 @@ namespace BeeUi
             // 
             this.openImageTool.Image = global::BeeUi.Properties.Resources.Folder;
             this.openImageTool.Name = "openImageTool";
-            this.openImageTool.Size = new System.Drawing.Size(180, 22);
+            this.openImageTool.Size = new System.Drawing.Size(169, 22);
             this.openImageTool.Text = "Open Images";
             this.openImageTool.Click += new System.EventHandler(this.openImageTool_Click);
             // 
@@ -668,7 +667,7 @@ namespace BeeUi
             this.playTool.Enabled = false;
             this.playTool.Image = global::BeeUi.Properties.Resources.Play;
             this.playTool.Name = "playTool";
-            this.playTool.Size = new System.Drawing.Size(180, 22);
+            this.playTool.Size = new System.Drawing.Size(169, 22);
             this.playTool.Text = "Play";
             this.playTool.Click += new System.EventHandler(this.playTool_Click);
             // 
@@ -676,7 +675,7 @@ namespace BeeUi
             // 
             this.stopTool.Image = global::BeeUi.Properties.Resources.Stop;
             this.stopTool.Name = "stopTool";
-            this.stopTool.Size = new System.Drawing.Size(180, 22);
+            this.stopTool.Size = new System.Drawing.Size(169, 22);
             this.stopTool.Text = "Stop";
             this.stopTool.Click += new System.EventHandler(this.stopTool_Click);
             // 
@@ -874,7 +873,6 @@ namespace BeeUi
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Splitter splitter1;
-        private Unit.Cameras CameraBar;
         public System.Windows.Forms.Panel LayoutEnd;
         private AutoFontLabel autoFontLabel1;
         public Common.Header pHeader;
@@ -922,5 +920,6 @@ namespace BeeUi
         private System.Windows.Forms.ToolStripMenuItem debugTool;
         private System.Windows.Forms.ToolStripMenuItem stopTool;
         private System.ComponentModel.BackgroundWorker workLoadFile;
+        public Unit.Cameras CameraBar;
     }
 }

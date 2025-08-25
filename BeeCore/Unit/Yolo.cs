@@ -324,12 +324,16 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                     {
-                        Global.Ex = "Learning_" + pyEx.Message;
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.Message));
+                       // Global.Ex = "Learning_" + pyEx.Message;
                         //MessageBox.Show("Python Error: " + pyEx.Message);
                 }
                 catch (Exception ex)
                     {
-                        Global.Ex = "Learning_" + ex.Message;
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+                       // Global.Ex = "Learning_" + ex.Message;
                       //  MessageBox.Show("Error: " + ex.Message);
                 }
             }
@@ -569,19 +573,25 @@ namespace BeeCore
                     }
                     catch (Exception ex)
                     {
-                        Global.Ex = "Complete_Learning" + ex.Message;
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+                       // Global.Ex = "Complete_Learning" + ex.Message;
                         // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Global.Ex = "Complete_Learning" + ex.Message;
+                    
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+                  //  Global.Ex = "Complete_Learning" + ex.Message;
                     // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                 }
             }
             else
             {
-                Global.Ex = "No Initial PY";
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
+              //  Global.Ex = "No Initial PY";
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }    
                

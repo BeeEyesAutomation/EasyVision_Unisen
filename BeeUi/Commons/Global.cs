@@ -23,7 +23,7 @@ namespace BeeUi
   
     public struct G
     {
-      
+        
         public static bool Initial = false,IsShutDown=false;
         public static bool IsReConnectCCD=false,IsPLCNotAlive=false;
         public static int[] valuesPLCInPut=new int[16];

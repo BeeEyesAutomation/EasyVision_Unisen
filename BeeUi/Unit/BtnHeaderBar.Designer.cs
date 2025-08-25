@@ -33,10 +33,9 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BtnHeaderBar));
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btncheck = new BeeInterface.RJButton();
             this.btnSetting = new BeeInterface.RJButton();
-            this.btnSettingPLC = new BeeInterface.RJButton();
             this.btnUser = new BeeInterface.RJButton();
             this.btnReport = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
@@ -44,18 +43,15 @@ namespace BeeUi.Unit
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.btncheck, 4, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnSetting, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnSettingPLC, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnUser, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btncheck, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnSetting, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnUser, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnReport, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -63,7 +59,7 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(654, 50);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(450, 50);
             this.tableLayoutPanel1.TabIndex = 36;
             // 
             // btncheck
@@ -109,11 +105,11 @@ namespace BeeUi.Unit
             this.btncheck.IsNotChange = true;
             this.btncheck.IsRect = true;
             this.btncheck.IsUnGroup = true;
-            this.btncheck.Location = new System.Drawing.Point(521, 1);
+            this.btncheck.Location = new System.Drawing.Point(337, 1);
             this.btncheck.Margin = new System.Windows.Forms.Padding(1);
             this.btncheck.Multiline = false;
             this.btncheck.Name = "btncheck";
-            this.btncheck.Size = new System.Drawing.Size(132, 48);
+            this.btncheck.Size = new System.Drawing.Size(112, 48);
             this.btncheck.TabIndex = 39;
             this.btncheck.Text = "Update";
             this.btncheck.TextColor = System.Drawing.Color.Black;
@@ -164,71 +160,17 @@ namespace BeeUi.Unit
             this.btnSetting.IsNotChange = true;
             this.btnSetting.IsRect = true;
             this.btnSetting.IsUnGroup = true;
-            this.btnSetting.Location = new System.Drawing.Point(261, 1);
+            this.btnSetting.Location = new System.Drawing.Point(113, 1);
             this.btnSetting.Margin = new System.Windows.Forms.Padding(1);
             this.btnSetting.Multiline = false;
             this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(128, 48);
+            this.btnSetting.Size = new System.Drawing.Size(110, 48);
             this.btnSetting.TabIndex = 35;
             this.btnSetting.Text = "Settings";
             this.btnSetting.TextColor = System.Drawing.Color.Black;
             this.btnSetting.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSetting.UseVisualStyleBackColor = false;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
-            // 
-            // btnSettingPLC
-            // 
-            this.btnSettingPLC.AutoFont = true;
-            this.btnSettingPLC.AutoFontHeightRatio = 0.85F;
-            this.btnSettingPLC.AutoFontMax = 100F;
-            this.btnSettingPLC.AutoFontMin = 7F;
-            this.btnSettingPLC.AutoFontWidthRatio = 1F;
-            this.btnSettingPLC.AutoImage = true;
-            this.btnSettingPLC.AutoImageMaxRatio = 0.65F;
-            this.btnSettingPLC.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnSettingPLC.AutoImageTint = true;
-            this.btnSettingPLC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnSettingPLC.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnSettingPLC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnSettingPLC.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnSettingPLC.BorderRadius = 5;
-            this.btnSettingPLC.BorderSize = 1;
-            this.btnSettingPLC.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnSettingPLC.Corner = BeeGlobal.Corner.Both;
-            this.btnSettingPLC.DebounceResizeMs = 16;
-            this.btnSettingPLC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSettingPLC.FlatAppearance.BorderSize = 0;
-            this.btnSettingPLC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettingPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.btnSettingPLC.ForeColor = System.Drawing.Color.Black;
-            this.btnSettingPLC.Image = ((System.Drawing.Image)(resources.GetObject("btnSettingPLC.Image")));
-            this.btnSettingPLC.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnSettingPLC.ImageDisabled = null;
-            this.btnSettingPLC.ImageHover = null;
-            this.btnSettingPLC.ImageNormal = null;
-            this.btnSettingPLC.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnSettingPLC.ImagePressed = null;
-            this.btnSettingPLC.ImageTextSpacing = 2;
-            this.btnSettingPLC.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnSettingPLC.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnSettingPLC.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnSettingPLC.ImageTintOpacity = 0.5F;
-            this.btnSettingPLC.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnSettingPLC.IsCLick = false;
-            this.btnSettingPLC.IsNotChange = false;
-            this.btnSettingPLC.IsRect = false;
-            this.btnSettingPLC.IsUnGroup = true;
-            this.btnSettingPLC.Location = new System.Drawing.Point(131, 1);
-            this.btnSettingPLC.Margin = new System.Windows.Forms.Padding(1);
-            this.btnSettingPLC.Multiline = false;
-            this.btnSettingPLC.Name = "btnSettingPLC";
-            this.btnSettingPLC.Size = new System.Drawing.Size(128, 48);
-            this.btnSettingPLC.TabIndex = 37;
-            this.btnSettingPLC.Text = "Hardware";
-            this.btnSettingPLC.TextColor = System.Drawing.Color.Black;
-            this.btnSettingPLC.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnSettingPLC.UseVisualStyleBackColor = false;
-            this.btnSettingPLC.Click += new System.EventHandler(this.btnSettingPLC_Click);
             // 
             // btnUser
             // 
@@ -273,11 +215,11 @@ namespace BeeUi.Unit
             this.btnUser.IsNotChange = true;
             this.btnUser.IsRect = true;
             this.btnUser.IsUnGroup = true;
-            this.btnUser.Location = new System.Drawing.Point(391, 1);
+            this.btnUser.Location = new System.Drawing.Point(225, 1);
             this.btnUser.Margin = new System.Windows.Forms.Padding(1);
             this.btnUser.Multiline = false;
             this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(128, 48);
+            this.btnUser.Size = new System.Drawing.Size(110, 48);
             this.btnUser.TabIndex = 32;
             this.btnUser.Text = "Account";
             this.btnUser.TextColor = System.Drawing.Color.Black;
@@ -332,7 +274,7 @@ namespace BeeUi.Unit
             this.btnReport.Margin = new System.Windows.Forms.Padding(1);
             this.btnReport.Multiline = false;
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(128, 48);
+            this.btnReport.Size = new System.Drawing.Size(110, 48);
             this.btnReport.TabIndex = 34;
             this.btnReport.Text = "Report";
             this.btnReport.TextColor = System.Drawing.Color.Black;
@@ -348,7 +290,7 @@ namespace BeeUi.Unit
             this.Controls.Add(this.tableLayoutPanel1);
             this.DoubleBuffered = true;
             this.Name = "BtnHeaderBar";
-            this.Size = new System.Drawing.Size(654, 50);
+            this.Size = new System.Drawing.Size(450, 50);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -360,7 +302,6 @@ namespace BeeUi.Unit
         private RJButton btnReport;
         public RJButton btnUser;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public RJButton btnSettingPLC;
         private RJButton btncheck;
     }
 }

@@ -1492,6 +1492,8 @@ namespace BeeUi
 
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
+            
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "Processing", obj.ToString()));
             switch (obj)
             {
                 case StatusProcessing.None:
@@ -1613,7 +1615,8 @@ namespace BeeUi
                         G.StatusDashboard.NgCount = Global.Config.SumNG;
                         Global.Config.TotalTime += Convert.ToSingle(G.StatusDashboard.CycleTime / (60000.0));
                         Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
-
+                        
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result",Global.TotalOK + "-CT:" + G.StatusDashboard.CycleTime+"ms - CAM:" +(int) BeeCore.Common.CycleCamera+"ms"));
                         Global.StatusProcessing = StatusProcessing.None;
                         Checking1.StatusProcessing = StatusProcessing.None;
                         Checking2.StatusProcessing = StatusProcessing.None;
@@ -1839,14 +1842,17 @@ namespace BeeUi
                 }
                 catch (Exception ex)
                 {
-                    Global.EditTool.lbEx.Text = ex.Message;
-                   // MessageBox.Show(ex.Message);
+                    
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "InsertData", ex.Message));
+                    // MessageBox.Show(ex.Message);
                 }
+              
             }
             catch (Exception ex)
             {
-                Global.EditTool.lbEx.Text = ex.Message;
-               // MessageBox.Show(ex.Message);
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "InsertData", ex.Message));
+                // MessageBox.Show(ex.Message);
             }
        
            
@@ -2058,10 +2064,10 @@ namespace BeeUi
                             if (tool.UsedTool != UsedTool.NotUsed)
                                 tool.Propety.DrawResult(g);
 
-                        String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                             if (!Global.TotalOK)
-                            Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                        g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
+                        //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                        //     if (!Global.TotalOK)
+                        //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                        //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
                     }
 
                     // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
@@ -2418,10 +2424,15 @@ namespace BeeUi
                         if (Global.Config.IsSaveOK)
                         {
                             if (!workInsert.IsBusy)
-                                workInsert.RunWorkerAsync();
+                        {
+                            workInsert.RunWorkerAsync();
+                           
+                        }    
+                               
                             else
-                                Global.Ex = "Busy Save image ";
-                        }
+                            
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now,LeveLLog.ERROR, "Data", "Fail Save Data OK"));
+                    }
                        // else
                            // Global.EditTool.lbEx.Text = "No save ok ";
                       
@@ -2433,8 +2444,9 @@ namespace BeeUi
                             if (!workInsert.IsBusy)
                                 workInsert.RunWorkerAsync();
                             else
-                            Global.Ex = "Busy Save image ";
-                        }
+                             
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Data", "Fail Save Data NG"));
+                    }
                        // else
                            // Global.EditTool.lbEx.Text = "No save ng ";
                     }    
@@ -2443,7 +2455,8 @@ namespace BeeUi
             }
             catch (Exception ex)
             {
-                Global.EditTool.lbEx.Text = ex.Message;
+                
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Drawing", ex.Message));
             }
             // btnCap.Enabled = true;
         }
@@ -3296,7 +3309,8 @@ namespace BeeUi
 
         private void workInsert_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-           
+            
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "InsertData", " Save Complete"));
         }
 
         private void tmPress_Tick(object sender, EventArgs e)
