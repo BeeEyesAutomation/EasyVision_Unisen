@@ -40,7 +40,7 @@ namespace BeeCore
         //    return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         //}
         // public Polygon[] rectQRCode;
-
+        //nidec
         public String Content = "";
         public int ScoreRs = 0;
         public void DoWork()
