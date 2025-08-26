@@ -85,6 +85,7 @@ namespace BeeInterface
             this.rjButton14 = new BeeInterface.RJButton();
             this.rjButton15 = new BeeInterface.RJButton();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.numEpoch = new BeeInterface.CustomNumericEx();
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
@@ -104,7 +105,6 @@ namespace BeeInterface
             this.workLoadModel = new System.ComponentModel.BackgroundWorker();
             this.workTrain = new System.ComponentModel.BackgroundWorker();
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
-            this.numEpoch = new BeeInterface.CustomNumericEx();
             this.tabYolo.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1880,6 +1880,44 @@ namespace BeeInterface
             this.tableLayoutPanel15.Size = new System.Drawing.Size(403, 48);
             this.tableLayoutPanel15.TabIndex = 48;
             // 
+            // numEpoch
+            // 
+            this.numEpoch.AutoShowTextbox = false;
+            this.numEpoch.AutoSizeTextbox = true;
+            this.numEpoch.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.numEpoch.BackColor = System.Drawing.SystemColors.Control;
+            this.numEpoch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numEpoch.BorderRadius = 6;
+            this.numEpoch.ButtonMaxSize = 64;
+            this.numEpoch.ButtonMinSize = 24;
+            this.numEpoch.Decimals = 0;
+            this.numEpoch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numEpoch.ElementGap = 6;
+            this.numEpoch.FillTextboxToAvailable = true;
+            this.numEpoch.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numEpoch.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numEpoch.KeyboardStep = 1F;
+            this.numEpoch.Location = new System.Drawing.Point(122, 0);
+            this.numEpoch.Margin = new System.Windows.Forms.Padding(0);
+            this.numEpoch.Max = 1000F;
+            this.numEpoch.MaxTextboxWidth = 0;
+            this.numEpoch.Min = 0F;
+            this.numEpoch.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numEpoch.MinTextboxWidth = 16;
+            this.numEpoch.Name = "numEpoch";
+            this.numEpoch.Size = new System.Drawing.Size(281, 48);
+            this.numEpoch.SnapToStep = true;
+            this.numEpoch.StartWithTextboxHidden = false;
+            this.numEpoch.Step = 1F;
+            this.numEpoch.TabIndex = 46;
+            this.numEpoch.TextboxFontSize = 24F;
+            this.numEpoch.TextboxSidePadding = 12;
+            this.numEpoch.TextboxWidth = 56;
+            this.numEpoch.UnitText = "";
+            this.numEpoch.Value = 0F;
+            this.numEpoch.WheelStep = 1F;
+            this.numEpoch.ValueChanged += new System.Action<float>(this.numEpoch_ValueChanged);
+            // 
             // label4
             // 
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -2101,7 +2139,7 @@ namespace BeeInterface
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 177F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 178F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36781F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
@@ -2162,11 +2200,11 @@ namespace BeeInterface
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(223, 2);
+            this.btnSave.Location = new System.Drawing.Point(222, 2);
             this.btnSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave.Multiline = false;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(174, 26);
+            this.btnSave.Size = new System.Drawing.Size(175, 26);
             this.btnSave.TabIndex = 48;
             this.btnSave.Text = "Save";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -2216,7 +2254,7 @@ namespace BeeInterface
             this.btnCropTemp.IsNotChange = false;
             this.btnCropTemp.IsRect = false;
             this.btnCropTemp.IsUnGroup = true;
-            this.btnCropTemp.Location = new System.Drawing.Point(153, 2);
+            this.btnCropTemp.Location = new System.Drawing.Point(152, 2);
             this.btnCropTemp.Margin = new System.Windows.Forms.Padding(2);
             this.btnCropTemp.Multiline = false;
             this.btnCropTemp.Name = "btnCropTemp";
@@ -2231,7 +2269,7 @@ namespace BeeInterface
             // cbLabels
             // 
             this.cbLabels.FormattingEnabled = true;
-            this.cbLabels.Location = new System.Drawing.Point(56, 2);
+            this.cbLabels.Location = new System.Drawing.Point(55, 2);
             this.cbLabels.Margin = new System.Windows.Forms.Padding(2);
             this.cbLabels.Name = "cbLabels";
             this.cbLabels.Size = new System.Drawing.Size(76, 33);
@@ -2245,7 +2283,7 @@ namespace BeeInterface
             this.label13.Location = new System.Drawing.Point(0, 0);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(54, 30);
+            this.label13.Size = new System.Drawing.Size(53, 30);
             this.label13.TabIndex = 45;
             this.label13.Text = "Draw Label";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2285,44 +2323,6 @@ namespace BeeInterface
             this.oK_Cancel1.Name = "oK_Cancel1";
             this.oK_Cancel1.Size = new System.Drawing.Size(423, 58);
             this.oK_Cancel1.TabIndex = 19;
-            // 
-            // numEpoch
-            // 
-            this.numEpoch.AutoShowTextbox = false;
-            this.numEpoch.AutoSizeTextbox = true;
-            this.numEpoch.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.numEpoch.BackColor = System.Drawing.SystemColors.Control;
-            this.numEpoch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
-            this.numEpoch.BorderRadius = 6;
-            this.numEpoch.ButtonMaxSize = 64;
-            this.numEpoch.ButtonMinSize = 24;
-            this.numEpoch.Decimals = 0;
-            this.numEpoch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numEpoch.ElementGap = 6;
-            this.numEpoch.FillTextboxToAvailable = true;
-            this.numEpoch.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numEpoch.InnerPadding = new System.Windows.Forms.Padding(6);
-            this.numEpoch.KeyboardStep = 1F;
-            this.numEpoch.Location = new System.Drawing.Point(122, 0);
-            this.numEpoch.Margin = new System.Windows.Forms.Padding(0);
-            this.numEpoch.Max = 1000F;
-            this.numEpoch.MaxTextboxWidth = 0;
-            this.numEpoch.Min = 0F;
-            this.numEpoch.MinimumSize = new System.Drawing.Size(120, 32);
-            this.numEpoch.MinTextboxWidth = 16;
-            this.numEpoch.Name = "numEpoch";
-            this.numEpoch.Size = new System.Drawing.Size(281, 48);
-            this.numEpoch.SnapToStep = true;
-            this.numEpoch.StartWithTextboxHidden = false;
-            this.numEpoch.Step = 1F;
-            this.numEpoch.TabIndex = 46;
-            this.numEpoch.TextboxFontSize = 24F;
-            this.numEpoch.TextboxSidePadding = 12;
-            this.numEpoch.TextboxWidth = 56;
-            this.numEpoch.UnitText = "";
-            this.numEpoch.Value = 0F;
-            this.numEpoch.WheelStep = 1F;
-            this.numEpoch.ValueChanged += new System.Action<float>(this.numEpoch_ValueChanged);
             // 
             // ToolYolo
             // 

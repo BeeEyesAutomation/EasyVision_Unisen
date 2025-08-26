@@ -61,7 +61,9 @@ namespace BeeCore
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public float CycleTime = 0;
         public float ScoreResult = 0;
         public float MinValue = 0;
