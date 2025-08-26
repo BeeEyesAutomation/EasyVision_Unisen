@@ -35,6 +35,11 @@ namespace BeeCore
         }
         public void SetModel()
         {
+            if (Pattern == null)
+            {
+                Pattern = new CvPlus.Pattern();
+                Pattern.CreateTemp(Index, IndexThread);
+            }
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
