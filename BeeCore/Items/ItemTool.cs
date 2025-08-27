@@ -67,7 +67,7 @@ namespace BeeCore
                 {if (NotChange) return;
                     this.value = (float)Math.Round(value, 1);
                     pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
-                    BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score = Value;
+                    BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score = Value;
                     this.Invalidate();
                 }    
               
@@ -159,7 +159,7 @@ namespace BeeCore
 
         private void ItemTool_VisibleChanged(object sender, EventArgs e)
         {
-          //  Value = BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score;
+          //  Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
         }
 
         private void ItemTool_MouseUp(object sender, MouseEventArgs e)
@@ -183,21 +183,21 @@ namespace BeeCore
        
         private void Parent_VisibleChanged1(object sender, EventArgs e)
         {
-            //if (Parent != null && Global.indexToolSelected != -1 && Global.indexToolSelected < G.listAlltool[Global.IndexChoose].Count)
+            //if (Parent != null && Global.indexToolSelected != -1 && Global.indexToolSelected < G.listAlltool[IndexThread].Count)
             //{
             //    if (this.Parent.Visible)
             //    {
             //        G.IsEdit = false;
-            //        if (G.listAlltool[Global.IndexChoose].FindIndex(a => a.ItemTool == this) != G.indexToolSelected) return;
+            //        if (G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this) != G.indexToolSelected) return;
             //        if (G.PropetyOld != null && G.IsCancel)
             //        {
             //            G.IsCancel = false;
-            //            G.listAlltool[Global.IndexChoose][G.indexToolSelected].tool.Propety = G.PropetyOld.Clone();
-            //            BeeCore.Common.PropetyTools[Global.IndexChoose][G.indexToolSelected].Propety = G.listAlltool[Global.IndexChoose][G.indexToolSelected].tool.Propety;
+            //            G.listAlltool[IndexThread][G.indexToolSelected].tool.Propety = G.PropetyOld.Clone();
+            //            BeeCore.Common.PropetyTools[IndexThread][G.indexToolSelected].Propety = G.listAlltool[IndexThread][G.indexToolSelected].tool.Propety;
 
             //            G.EditTool.View.imgView.Invalidate();
             //        }
-            //        Score.Value = BeeCore.Common.PropetyTools[Global.IndexChoose][G.indexToolSelected].Propety.Score;
+            //        Score.Value = BeeCore.Common.PropetyTools[IndexThread][G.indexToolSelected].Propety.Score;
             //    }
             //}
             
@@ -473,17 +473,17 @@ namespace BeeCore
         //Image imgChoose = Properties.Resources.btnChoose1;
         //Image imgSelect = Properties.Resources.btnSelect;
         //Image imgUnChoose = Properties.Resources.btnUnChoose;
+        public int IndexThread = 0;
         private void ItemTool_Load(object sender, EventArgs e)
         {
             UpdateLayout();
             this.DoubleClick += ItemTool_DoubleClick;
-            Step = Common.PropetyTools[Global.IndexChoose][IndexTool].StepValue;
-            Min = Common.PropetyTools[Global.IndexChoose][IndexTool].MinValue;
-            Max = Common.PropetyTools[Global.IndexChoose][IndexTool].MaxValue;
-          
-            Value = BeeCore.Common.PropetyTools[Global.IndexChoose][IndexTool].Score;
-            Common.PropetyTools[Global.IndexChoose][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
-            Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreChanged += ItemTool_ScoreChanged;
+            Step = Common.PropetyTools[IndexThread][IndexTool].StepValue;
+            Min = Common.PropetyTools[IndexThread][IndexTool].MinValue;
+            Max = Common.PropetyTools[IndexThread][IndexTool].MaxValue;
+            Value = BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score;
+            Common.PropetyTools[IndexThread][IndexTool].StatusToolChanged += ItemTool_StatusToolChanged;
+            Common.PropetyTools[IndexThread][IndexTool].ScoreChanged += ItemTool_ScoreChanged;
             this.Parent.VisibleChanged += Parent_VisibleChanged1;
             imgTick = Properties.Resources.Disnable;
             this.Resize += ItemTool_Resize;
@@ -542,17 +542,17 @@ namespace BeeCore
                     break;
                 case StatusTool.Done:
                   
-                    if(Common.PropetyTools[Global.IndexChoose][IndexTool].Results==Results.OK)
+                    if(Common.PropetyTools[IndexThread][IndexTool].Results==Results.OK)
                     {
-                        valueScore = Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreResult;
+                        valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
                         Score = valueScore + "";
-                        Status = Common.PropetyTools[Global.IndexChoose][IndexTool].Results.ToString();
-                        CT = Common.PropetyTools[Global.IndexChoose][IndexTool].CycleTime;
+                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
+                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
                         colorTrack = Global.ColorOK;
                         ClStatus = Global.ColorOK;
                         ClScore= Global.ColorOK;
                     }
-                    else if (Common.PropetyTools[Global.IndexChoose][IndexTool].Results == Results.None)
+                    else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.None)
                     {
                         Score = "---";
                         Status = "NC";
@@ -562,10 +562,10 @@ namespace BeeCore
                     }
                     else
                     {
-                        valueScore = Common.PropetyTools[Global.IndexChoose][IndexTool].ScoreResult;
+                        valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
                         Score = valueScore + "";
-                        Status = Common.PropetyTools[Global.IndexChoose][IndexTool].Results.ToString();
-                        CT = Common.PropetyTools[Global.IndexChoose][IndexTool].CycleTime;
+                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
+                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
                         colorTrack = Global.ColorNG;
                         ClStatus = Global.ColorNG;
                         ClScore = Global.ColorNG;
@@ -584,10 +584,10 @@ namespace BeeCore
        private void ItemTool_DoubleClick(object sender, EventArgs e)
         {
             //if (Global.ParaCommon.matRegister != null)
-            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
+            //    BeeCore.Common.listCamera[IndexThread].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
             //else if (G.IsCCD)
-            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
-            //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null)
+            //    BeeCore.Common.listCamera[IndexThread].matRaw = null;// BeeCore.Common.GetImageRaw();
+            //if (BeeCore.Common.listCamera[IndexThread].matRaw == null)
             //{
             //    MessageBox.Show("Vui long dang ky Anh");
             //    return;
@@ -599,7 +599,7 @@ namespace BeeCore
             Global.StatusDraw = StatusDraw.Edit;
             Global.IndexToolSelected = IndexTool;
             Global.IsEditTool = true;
-            // G.listAlltool[Global.IndexChoose].FindIndex(a => a.ItemTool == this);
+            // G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this);
 
         }
 
@@ -609,7 +609,7 @@ namespace BeeCore
         PointF pEnd = new PointF(5,100);
         private void name_DoubleClick(object sender, EventArgs e)
         {
-            //G.indexToolSelected = G.listAlltool[Global.IndexChoose].FindIndex(a => a.ItemTool == this);
+            //G.indexToolSelected = G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this);
 
             if (Global.IsRun) return;
             txtEdit.Visible = true;
@@ -630,8 +630,8 @@ namespace BeeCore
             if(e.KeyCode==Keys.Enter)
             {
                 Global.IndexToolSelected = IndexTool;
-                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Name = txtEdit.Text.Trim();
-                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.SetModel();
+                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Name = txtEdit.Text.Trim();
+                BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Propety.SetModel();
               Name= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
             }    

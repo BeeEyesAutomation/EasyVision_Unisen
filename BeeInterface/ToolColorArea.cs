@@ -39,9 +39,8 @@ namespace BeeInterface
        
         public void LoadPara( )
         {
-           
          
-            if(Propety.listCLShow==null)
+            if (Propety.listCLShow==null)
                 Propety.listCLShow = new List<Color>();
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
@@ -56,6 +55,7 @@ namespace BeeInterface
                 btnHSV.IsCLick = true;
             else
                 btnRGB.IsCLick = true;
+            btnGetColor.IsCLick = Propety.IsGetColor;
 
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
            
@@ -248,19 +248,8 @@ namespace BeeInterface
 
 
             
-            btnGetColor.IsCLick = !Propety.IsGetColor;
-            Propety.IsGetColor = btnGetColor.IsCLick;
-            if (Propety.IsGetColor)
-            {
-
-                // ExtractColor.Show();
-                // G.EditTool.View.imgView.Cursor = new Cursor(Properties.Resources.Color_Dropper.Handle);
-
-                Global.StatusDraw = StatusDraw.Color;
-                //  G.EditTool.View.imgView.Invalidate();
-            }
-            else 
-                Global.StatusDraw = StatusDraw.Edit;
+          //  btnGetColor.IsCLick = !Propety.IsGetColor;
+           
             //  G.EditTool.View.imgView.Cursor = Cursors.Default;
 
 
@@ -555,6 +544,20 @@ namespace BeeInterface
             Propety.StyleColor = 1;
 
             btnDeleteAll.PerformClick();
+        }
+
+        private void btnGetColor_Click(object sender, EventArgs e)
+        {
+            Propety.IsGetColor = btnGetColor.IsCLick;
+            if (Propety.IsGetColor)
+            {
+
+              
+                Global.StatusDraw = StatusDraw.Color;
+               
+            }
+            else
+                Global.StatusDraw = StatusDraw.Edit;
         }
     }
 }

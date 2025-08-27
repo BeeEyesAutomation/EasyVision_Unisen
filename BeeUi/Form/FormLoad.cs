@@ -242,7 +242,7 @@ namespace BeeUi
             {
                 PropetyTool propety = ListTool[i];
 
-            X: if (propety.StatusTool != StatusTool.WaitCheck)
+            X: if (propety.StatusTool == StatusTool.NotInitial)
                 {
 
                     goto X;

@@ -356,7 +356,7 @@ namespace BeeGlobal
             {
                 case IO_Processing.Trigger:
                     
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetLight(true);
                     await WriteOutPut();
@@ -365,8 +365,8 @@ namespace BeeGlobal
                     Global.StatusProcessing = StatusProcessing.Read;
                     break;
                 case IO_Processing.Close:
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], false); //Ready
                   
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
@@ -377,8 +377,8 @@ namespace BeeGlobal
                     Disconnect();
                     break;
                 case IO_Processing.ByPass:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
                     SetLight(false);
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                     IsWait = true;
@@ -386,7 +386,7 @@ namespace BeeGlobal
                     if (IsBlink)
                     {
                         await Task.Delay((int)DelayOutput);
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
                         await WriteOutPut();
                     }
                     break;
@@ -418,8 +418,8 @@ namespace BeeGlobal
                      }
                         if (IsOK)
                     {
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
                         SetLight(false);
                         SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                         IsWait = true;
@@ -427,7 +427,7 @@ namespace BeeGlobal
                         if(IsBlink)
                         {
                             await Task.Delay((int)DelayOutput);
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
                             await WriteOutPut();
                         }
                       
@@ -435,15 +435,15 @@ namespace BeeGlobal
                     else
                     {
                       
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
                             SetLight(false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                             await WriteOutPut();
                             if (IsBlink)
                             {
                                 await Task.Delay((int)DelayOutput);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //False
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
                                 await WriteOutPut();
                             }
 
@@ -456,7 +456,7 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], Global.IsRun); //Ready
                     SetLight(false);
 
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
@@ -474,7 +474,7 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true); //Ready
                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                    SetLight(false);
@@ -490,7 +490,7 @@ namespace BeeGlobal
         }
         public bool CheckReady()
         {
-        if (valueInput[AddressInput[(int)I_O_Input.Trigger] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
+        if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
             {
                 return true;
             }

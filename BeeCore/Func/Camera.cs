@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -82,6 +83,197 @@ namespace BeeCore
             Thread.Sleep(500);
             Application.ExitThread();
         }
+        public  Bitmap bmResult;
+        private Mat EnsureWorkingBuffer(Mat src)
+        {
+            // Nếu đang hiển thị A thì vẽ vào B, ngược lại
+            bool useB = ReferenceEquals(_displayMat, _bufA);
+            Mat target = useB ? _bufB : _bufA;
+
+            if (target == null || target.IsDisposed)
+            {
+                target = new Mat();                     // tạo mới nếu đã Dispose
+                if (useB) _bufB = target; else _bufA = target;
+            }
+
+            // target.Create sẽ cấp phát đúng kích thước/kiểu; không cần Release trước
+            target.Create(src.Rows, src.Cols, src.Type());
+            return target;
+        }
+        // Locks
+        private readonly object _bmLock = new object();   // bảo vệ bmResult
+        private readonly object _camLock = new object();   // bảo vệ nguồn camera (nếu cần)
+        private readonly object _swapLock = new object();   // bảo vệ A/B & _displayMat
+
+        // Double-buffer Mat (KHÔNG readonly để có thể thay thế khi bị Dispose)
+        private Mat _bufA = new Mat();
+        private Mat _bufB = new Mat();
+        private Mat _displayMat; // trỏ tới buffer đang hiển thị (A hoặc B)
+
+        private bool _disposed;
+        private static Mat EnsureBgr8Uc3AliasOrConvert(Mat working, out bool createdTemp)
+        {
+            createdTemp = false;
+            if (working.Type() == MatType.CV_8UC3) return working;
+
+            var dst = new Mat();
+            createdTemp = true;
+
+            if (working.Channels() == 1)
+            {
+                if (working.Depth() == MatType.CV_8U)
+                    Cv2.CvtColor(working, dst, ColorConversionCodes.GRAY2BGR);
+                else
+                {
+                    var tmp8 = new Mat();
+                    try
+                    {
+                        Cv2.Normalize(working, tmp8, 0, 255, NormTypes.MinMax);
+                        tmp8.ConvertTo(tmp8, MatType.CV_8U);
+                        Cv2.CvtColor(tmp8, dst, ColorConversionCodes.GRAY2BGR);
+                    }
+                    finally { tmp8.Dispose(); }
+                }
+            }
+            else if (working.Channels() == 4 && working.Depth() == MatType.CV_8U)
+            {
+                Cv2.CvtColor(working, dst, ColorConversionCodes.BGRA2BGR);
+            }
+            else
+            {
+                var tmp8 = new Mat();
+                try
+                {
+                    if (working.Channels() == 3)
+                    {
+                        working.ConvertTo(tmp8, MatType.CV_8UC3);
+                        tmp8.CopyTo(dst);
+                    }
+                    else
+                    {
+                        Cv2.Normalize(working, tmp8, 0, 255, NormTypes.MinMax);
+                        tmp8.ConvertTo(tmp8, MatType.CV_8U);
+                        Cv2.CvtColor(tmp8, dst, ColorConversionCodes.GRAY2BGR);
+                    }
+                }
+                finally { tmp8.Dispose(); }
+            }
+            return dst;
+        }
+
+        public void DrawResult( )
+        {
+            if (_disposed) return;
+
+            // 1) Lấy frame nguồn
+            Mat src;
+            lock (_camLock)
+            {
+                src = matRaw?.Clone();
+            }
+            if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
+            {
+                src?.Dispose();
+                return;
+            }
+
+            // 2) Chuẩn bị buffer
+            Mat working;
+            lock (_swapLock)
+            {
+                working = EnsureWorkingBuffer(src);
+                src.CopyTo(working);
+            }
+            src.Dispose();
+
+            // 3) Convert -> Bitmap & vẽ overlay
+            using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
+            {
+                Bitmap canvas = null;
+                try
+                {
+                    canvas = BitmapConverter.ToBitmap(bgr);
+
+                    using (var g = Graphics.FromImage(canvas))
+                    using (var xf = new Matrix())
+                    {
+                        g.SmoothingMode = SmoothingMode.None;
+                        g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                        g.CompositingQuality = CompositingQuality.HighSpeed;
+                        g.PixelOffsetMode = PixelOffsetMode.Half;
+
+                        xf.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        float s = Global.ScaleZoom;
+                        //try
+                        //{
+                        //    var pi = imgView.GetType().GetProperty("Zoom");
+                        //    if (pi != null) s = Convert.ToSingle(pi.GetValue(imgView)) / 100f;
+                        //}
+                       // catch { }
+                        xf.Scale(s, s);
+                        g.Transform = xf;
+
+                        var tools = BeeCore.Common.PropetyTools[IndexCCD];
+                        foreach (var tool in tools)
+                            if (tool.UsedTool != UsedTool.NotUsed)
+                                tool.Propety.DrawResult(g);
+
+                        //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                        //     if (!Global.TotalOK)
+                        //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                        //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
+                    }
+
+                    // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
+                    Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
+                    using (var gCopy = Graphics.FromImage(storeCopy))
+                    {
+                        gCopy.DrawImageUnscaled(canvas, 0, 0);
+                    }
+
+                    lock (_bmLock)
+                    {
+                       bmResult?.Dispose();
+                       bmResult = storeCopy;
+                        bmResult.Save("Result"+ IndexCCD + ".png");
+                    }
+                    canvas = null; // tránh dispose ở finally
+                    //// 5) Dùng chính canvas cho UI (không clone lại)
+                    //if (imgView.IsHandleCreated && !imgView.IsDisposed)
+                    //{
+                    //    if (imgView.InvokeRequired)
+                    //    {
+                    //        var uiBmp = canvas; // giữ canvas cho UI
+                    //        canvas = null; // tránh dispose ở finally
+                    //        imgView.BeginInvoke(new Action(() =>
+                    //        {
+                    //            if (imgView.IsDisposed) { uiBmp.Dispose(); return; }
+                    //            var oldUi = imgView.Image;
+                    //            imgView.Image = uiBmp;
+                    //            oldUi?.Dispose();
+                    //        }));
+                    //    }
+                    //    else
+                    //    {
+                    //        var oldUi = imgView.Image;
+                    //        imgView.Image = canvas;
+                    //        oldUi?.Dispose();
+                    //        canvas = null; // tránh dispose ở finally
+                    //    }
+                    //}
+
+                    // 6) Xác nhận buffer hiển thị
+                    lock (_swapLock)
+                    {
+                        _displayMat = working;
+                    }
+                }
+                finally
+                {
+                    canvas?.Dispose();
+                }
+            }
+        }
         public  bool Status()
         {
 
@@ -91,6 +283,7 @@ namespace BeeCore
         {
             CCDPlus.DestroyAll(IndexCCD);
         }
+        public int IndexConnect = -1;
         public  async Task<bool> Connect(String NameCCD )
         {
             if(Para.TypeCamera == TypeCamera.TinyIV)
@@ -120,7 +313,7 @@ namespace BeeCore
                 else
                     TypeCCD = -1;
             }
-            if (CCDPlus.Connect(IndexCCD, NameCCD))
+            if (CCDPlus.Connect(IndexConnect, NameCCD))
             {
                 if (matRaw != null)
                     if (!matRaw.Empty())
@@ -693,6 +886,7 @@ namespace BeeCore
             return false;
         }
         float none = 0;
+        public bool IsTrigger = false;
         public async Task<bool> SetCenterX()
         {
             try
@@ -877,6 +1071,66 @@ namespace BeeCore
         }
         [NonSerialized]
         Stopwatch stopwatch = new Stopwatch();
+        private CameraIOFast cameraIOFast = new CameraIOFast();
+        public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
+        {
+
+
+
+            IntPtr intPtr = IntPtr.Zero;
+            int rows = 0, cols = 0;
+            int matType = MatType.CV_8UC1;
+
+            try
+            {
+                intPtr= new IntPtr (CCDPlus.ReadCCD(IndexCCD, &rows, &cols,&matType));
+               // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
+                if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
+                    return false;
+
+                // Allocate/reuse destination Mat
+
+                if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType)
+                {
+                    matRaw?.Dispose();
+                    matRaw = new Mat(rows, cols, matType);
+                }
+
+                byte* src = (byte*)intPtr;
+                byte* dst = (byte*)matRaw.Data;
+
+                int elem = (int)matRaw.ElemSize();
+                long bytesPerRow = (long)cols * elem;
+                long dstStep = (long)matRaw.Step();      // có thể >= bytesPerRow do alignment
+
+                // Copy từng dòng để an toàn với step của đích
+                long copyBytes = Math.Min(bytesPerRow, dstStep);
+                for (int r = 0; r < rows; r++)
+                {
+                    Buffer.MemoryCopy(src + r * bytesPerRow,
+                                      dst + r * dstStep,
+                                      dstStep,
+                                      copyBytes);
+                }
+
+                if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
+                // Global.Ex ="CAMERAIOFAST_" +ex.Message;
+                return false;
+            }
+            finally
+            {
+                if (intPtr != IntPtr.Zero)
+                    Native.FreeBuffer(intPtr);
+            }
+
+        }
         public   void Read()
         {
             int rows = 0, cols = 0, Type = 0;
@@ -894,34 +1148,42 @@ namespace BeeCore
                       
                      
                         stopwatch.Restart();
-                        CCDPlus.ReadCCD(IndexCCD);
-                        //CCDPlus.ReadCCD(IndexCCD);
-                        CameraIOFast.TryGrabFast_NoStride(ref matRaw);
                        
+                        //CCDPlus.ReadCCD(IndexCCD);
+                       //TryGrabFast_NoStride(ref matRaw);
+                     //   Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
                         stopwatch.Stop();
                         BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
                         FrameRate = CCDPlus.FPS;
-                        //try
-                        //{
+                        try
+                        {
 
-                        //    unsafe
-                        //    {
-                        //         intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
-                        //        raw = new Mat(rows, cols, Type, intPtr);
-
-                        //        FrameRate = CCDPlus.FPS;
-                        //        BeeCore.Common.CycleCamera = CCDPlus.cycle;
-                        //       matRaw = raw.Clone();
-                        //    }
-                        //    //    return new Mat();
+                            unsafe
+                            {
+                                intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &Type));
+                                // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
+                                if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
+                                    return;
 
 
-                        //}
-                        //finally
-                        //{
-                        //    raw.Release();
-                        //    Native.FreeBuffer(intPtr);
-                        //}
+                                raw = new Mat(rows, cols, Type, intPtr);
+
+                                FrameRate = CCDPlus.FPS;
+
+                                matRaw = raw.Clone();
+                                //   Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
+                                stopwatch.Stop();
+                                BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+                            }
+                            //    return new Mat();
+
+
+                        }
+                        finally
+                        {
+                            raw.Release();
+                            Native.FreeBuffer(intPtr);
+                        }
                         break;
                     case TypeCamera.BaslerGigE:
 
@@ -930,38 +1192,43 @@ namespace BeeCore
                         //else
 
                         stopwatch.Restart();
-                        CCDPlus.ReadCCD(IndexCCD);
-                        CameraIOFast.TryGrabFast_NoStride(ref matRaw);
+                     //  TryGrabFast_NoStride(ref matRaw);
+                       // Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
                         FrameRate = CCDPlus.FPS;
                         stopwatch.Stop();
                         BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
                         FrameRate = CCDPlus.FPS;
                         // raw = new Mat();
 
-                        //try
-                        //{
+                        try
+                        {
 
-                        //    unsafe
-                        //    {
-
-                        //            intPtr = Native.GetRaw(ref rows, ref cols, ref Type);
-                        //        raw = new Mat(rows, cols, Type, intPtr);
-
-                        //        FrameRate = CCDPlus.FPS;
-
-                        //           matRaw = raw.Clone();
-                        //        stopwatch.Stop();
-                        //        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-
-                        //    }
+                            unsafe
+                            {
+                                intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &Type));
+                                // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
+                                if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
+                                    return;
 
 
-                        //}
-                        //finally
-                        //{
-                        //   raw.Release();
-                        //   Native. FreeBuffer(intPtr);
-                        //}
+                                raw = new Mat(rows, cols, Type, intPtr);
+
+                                FrameRate = CCDPlus.FPS;
+
+                                matRaw = raw.Clone();
+
+                                stopwatch.Stop();
+                                BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+
+                            }
+
+
+                        }
+                        finally
+                        {
+                            raw.Release();
+                            Native.FreeBuffer(intPtr);
+                        }
                         break;
                        case TypeCamera.TinyIV:
                         Mat raw2= HEROJE.Read();
@@ -981,11 +1248,12 @@ namespace BeeCore
                 
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
             }
-               
-            
-          
-           // return new Mat();
+
+
+
+            // return new Mat();
         }
+        private Native Native = new Native();
         public  void Light(int TypeLight, bool IsOn)
         {
             switch (Para.TypeCamera)

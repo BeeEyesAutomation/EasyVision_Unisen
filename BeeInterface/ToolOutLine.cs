@@ -169,9 +169,9 @@ namespace BeeInterface
                 threadProcess.RunWorkerAsync();
 
         }
+        private Native Native = new Native();
 
-       
-      public void Testing()
+        public void Testing()
         {
       
             if (BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Empty()) return;

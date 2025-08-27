@@ -97,7 +97,7 @@ namespace BeeUi
             this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnect.ForeColor = System.Drawing.Color.White;
             this.btnConnect.Location = new System.Drawing.Point(176, 5);
-            this.btnConnect.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(5);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(161, 32);
             this.btnConnect.TabIndex = 33;
@@ -516,7 +516,7 @@ namespace BeeUi
             this.btnDisConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDisConnect.ForeColor = System.Drawing.Color.White;
             this.btnDisConnect.Location = new System.Drawing.Point(5, 5);
-            this.btnDisConnect.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnDisConnect.Margin = new System.Windows.Forms.Padding(5);
             this.btnDisConnect.Name = "btnDisConnect";
             this.btnDisConnect.Size = new System.Drawing.Size(161, 32);
             this.btnDisConnect.TabIndex = 34;
@@ -585,7 +585,7 @@ namespace BeeUi
             this.btnUSB2_0.IsRect = true;
             this.btnUSB2_0.IsUnGroup = false;
             this.btnUSB2_0.Location = new System.Drawing.Point(5, 5);
-            this.btnUSB2_0.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnUSB2_0.Margin = new System.Windows.Forms.Padding(5);
             this.btnUSB2_0.Multiline = false;
             this.btnUSB2_0.Name = "btnUSB2_0";
             this.btnUSB2_0.Size = new System.Drawing.Size(95, 54);
@@ -640,7 +640,7 @@ namespace BeeUi
             this.btnCameraTiny.IsRect = true;
             this.btnCameraTiny.IsUnGroup = false;
             this.btnCameraTiny.Location = new System.Drawing.Point(5, 133);
-            this.btnCameraTiny.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnCameraTiny.Margin = new System.Windows.Forms.Padding(5);
             this.btnCameraTiny.Multiline = false;
             this.btnCameraTiny.Name = "btnCameraTiny";
             this.btnCameraTiny.Size = new System.Drawing.Size(95, 55);
@@ -695,7 +695,7 @@ namespace BeeUi
             this.btnGigE.IsRect = true;
             this.btnGigE.IsUnGroup = false;
             this.btnGigE.Location = new System.Drawing.Point(5, 69);
-            this.btnGigE.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnGigE.Margin = new System.Windows.Forms.Padding(5);
             this.btnGigE.Multiline = false;
             this.btnGigE.Name = "btnGigE";
             this.btnGigE.Size = new System.Drawing.Size(95, 54);
@@ -764,7 +764,7 @@ namespace BeeUi
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ScanCCD";
-            this.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.Text = "FormActive";
             this.Load += new System.EventHandler(this.ScanCCD_Load);
             this.pCamera.ResumeLayout(false);

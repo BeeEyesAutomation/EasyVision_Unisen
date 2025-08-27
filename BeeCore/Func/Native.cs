@@ -26,8 +26,8 @@ namespace BeeCore
         unsafe public static extern void SetImgTemp(IntPtr data, int image_rows, int image_cols, MatType matType);
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void FreeBuffer(IntPtr ptr);
-        public static IntPtr intPtr;
-        public static Mat GetImg( TypeImg typeImg=TypeImg.Raw)
+        public  IntPtr intPtr;
+        public  Mat GetImg( TypeImg typeImg=TypeImg.Raw)
         {
 
             int rows = 0, cols = 0, Type = 0;
@@ -61,7 +61,7 @@ namespace BeeCore
                 //Marshal.FreeHGlobal(intPtr);
             }
         }
-        public static bool SetImg(Mat mat, TypeImg typeImg = TypeImg.Raw)
+        public  bool SetImg(Mat mat, TypeImg typeImg = TypeImg.Raw)
         {if(mat == null)
                 return false;
          if(mat.Empty()) return false;

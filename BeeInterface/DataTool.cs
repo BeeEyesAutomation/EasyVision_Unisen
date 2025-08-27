@@ -32,11 +32,13 @@ namespace BeeInterface
                         BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
                     else
                         BeeCore.Common.listCamera.Add(null);
+                    if (Global.ParaCommon.IsMultiCamera == false)
+                        break;
                     indexCCD++;
                 }
-                if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
-                    if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                        Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                if (BeeCore.Common.listCamera.Count() > 0)
+                    if (BeeCore.Common.listCamera[0] != null)
+                        Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
             }
             //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
             BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
@@ -74,6 +76,7 @@ namespace BeeInterface
 
                             Global.pShowTool.Y += Itemtool.Height + 10;
                             PropTool.ItemTool = Itemtool;
+                            PropTool.Propety.IndexThread = indexThread;
                             PropTool.Control = control;
                             DataTool.LoadPropety(PropTool.Control);
                         }
@@ -87,7 +90,8 @@ namespace BeeInterface
 
                 }
 
-
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
 
                 indexThread++;
 
@@ -122,6 +126,8 @@ namespace BeeInterface
                         if (propety.Propety != null)
                             propety.Propety.SetModel();
                 });
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
             }
 
             Global.IsLoadProgFist = true;
@@ -218,6 +224,7 @@ namespace BeeInterface
                 itemTool.ClScore = Color.Gray;
                 itemTool.ClStatus = Color.Gray;
                 itemTool.IndexTool = Index;
+                itemTool.IndexThread = IndexThread;
                 PropetyTool.Propety.Index = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;

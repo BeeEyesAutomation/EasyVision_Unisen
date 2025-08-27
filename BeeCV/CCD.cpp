@@ -505,7 +505,7 @@ System::String^ ScanUsb()
 	devices = de.getVideoDevicesMap();
 	for (auto const& device : devices) {
 		
-		list1.append(device.second.deviceName).append("$").append(device.second.devicePath);//.append("\n")
+		list1.append(device.second.deviceName).append("$").append(device.second.devicePath).append("\n");
 		listCCCD.push_back(list1);
 		//.append(std::to_string(device.first)).append("$").
 	}
@@ -982,6 +982,7 @@ bool ConnectHik( int index,int indexCCD)
 				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
 			}
 		}
+
 		m_pcMyCamera[indexCCD]->StartGrabbing();
 
 	return true;
@@ -1015,11 +1016,11 @@ bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 
 	case 0:
 	{
-		int it = 0;// std::find(listCCCD.begin(), listCCCD.end(), nameCCD);
+		//*nt it = 0 std::find(listCCCD.begin(), listCCCD.end(), nameCCD);*/
 
 		/*if (it != listCCCD.end()) {
 			int index = std::distance(listCCCD.begin(), it);*/
-			IsConnect = ConnectUsb(0);
+			IsConnect = ConnectUsb(indexCCD);
 	/*	}
 		else {
 			IsConnect = true;
@@ -1035,125 +1036,203 @@ auto lastTime = std::chrono::high_resolution_clock::now();
 int frameCount = 0;
 double fps = 0.0;
 std::chrono::duration<double> elapsed;
-bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
-	MV_FRAME_OUT stImageOut = { 0 };
+//bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
+//	MV_FRAME_OUT stImageOut = { 0 };
+//	
+//	// Lấy buffer ảnh từ camera
+//	int nRet = camera->GetImageBuffer(&stImageOut, 1000); // Timeout: 1000ms
+//	if (nRet != MV_OK) {
+//		std::cerr << "Failed to grab image, error: " << nRet << std::endl;
+//		return false;
+//	}
+//
+//	int width = stImageOut.stFrameInfo.nWidth;
+//	int height = stImageOut.stFrameInfo.nHeight;
+//	int pixelType = stImageOut.stFrameInfo.enPixelType;
+//	void* pBufAddr = stImageOut.pBufAddr;
+//
+//	// Xử lý định dạng ảnh
+//	switch (pixelType) {
+//	case PixelType_Gvsp_BGR8_Packed:
+//		image = cv::Mat(height, width, CV_8UC3, pBufAddr);
+//		break;
+//	case PixelType_Gvsp_Mono8:
+//		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
+//		break;
+//	case PixelType_Gvsp_Mono12:
+//		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
+//		break;
+//	case PixelType_Gvsp_BayerRG8:
+//		break;
+//	case PixelType_Gvsp_BayerBG8:
+//	{
+//		if (pBufAddr == nullptr || width <= 0 || height <= 0)
+//			return false;
+//
+//		cv::Mat rawImage2(height, width, CV_8UC1);
+//		memcpy(rawImage2.data, pBufAddr, height * width);  // Sao chép bộ nhớ để tránh lỗi
+//
+//		if (rawImage2.empty())
+//			return false;
+//
+//		
+//		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2RGB);  // hoặc COLOR_BayerBG2BGR tùy loại
+//		
+//		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+//		break;
+//	}
+//	case PixelType_Gvsp_BayerGR8:
+//		break;
+//	case PixelType_Gvsp_BayerGB8:
+//	{
+//		//image = cv::Mat(height, width, CV_8UC3, pBufAddr);
+//		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
+//		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2RGB); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+//	}
+//	break;
+//	default:
+//		image =Mat();
+//		return false;
+//	}
+//
+//	// Giải phóng buffer
+//	camera->FreeImageBuffer(&stImageOut);
+//	return true;
+//}
+bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
+	MV_FRAME_OUT out = { 0 };
 
-	// Lấy buffer ảnh từ camera
-	int nRet = camera->GetImageBuffer(&stImageOut, 1000); // Timeout: 1000ms
+	// Lấy buffer ảnh từ camera (timeout 1000 ms)
+	int nRet = camera->GetImageBuffer(&out, 1000);
 	if (nRet != MV_OK) {
 		std::cerr << "Failed to grab image, error: " << nRet << std::endl;
 		return false;
 	}
 
-	int width = stImageOut.stFrameInfo.nWidth;
-	int height = stImageOut.stFrameInfo.nHeight;
-	int pixelType = stImageOut.stFrameInfo.enPixelType;
-	void* pBufAddr = stImageOut.pBufAddr;
+	// RAII: luôn trả buffer về SDK khi ra khỏi scope
+	struct BufferGuard {
+		CMvCamera* cam; MV_FRAME_OUT* o;
+		~BufferGuard() { if (cam && o) cam->FreeImageBuffer(o); }
+	} guard{ camera, &out };
 
-	// Xử lý định dạng ảnh
-	switch (pixelType) {
-	case PixelType_Gvsp_BGR8_Packed:
-		image = cv::Mat(height, width, CV_8UC3, pBufAddr);
-		break;
-	case PixelType_Gvsp_Mono8:
-		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
-		break;
-	case PixelType_Gvsp_Mono12:
-		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
-		break;
-	case PixelType_Gvsp_BayerRG8:
-		break;
-	case PixelType_Gvsp_BayerBG8:
-	{
-		if (pBufAddr == nullptr || width <= 0 || height <= 0)
-			return false;
+	const int  w = out.stFrameInfo.nWidth;
+	const int  h = out.stFrameInfo.nHeight;
+	const auto pix = out.stFrameInfo.enPixelType;
+	void* p = out.pBufAddr;
 
-		cv::Mat rawImage2(height, width, CV_8UC1);
-		memcpy(rawImage2.data, pBufAddr, height * width);  // Sao chép bộ nhớ để tránh lỗi
+	if (!p || w <= 0 || h <= 0) return false;
 
-		if (rawImage2.empty())
-			return false;
+	// Tạo Mat "view" trỏ trực tiếp vào buffer của SDK (không copy)
+	auto view8UC1 = [&](void* buf) { return cv::Mat(h, w, CV_8UC1, buf); };
+	auto view8UC3 = [&](void* buf) { return cv::Mat(h, w, CV_8UC3, buf); };
 
-		
-		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2RGB);  // hoặc COLOR_BayerBG2BGR tùy loại
-		
-		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
-		break;
+	switch (pix) {
+	case PixelType_Gvsp_BGR8_Packed: {
+		// Đã là BGR8: copy ra imageBGR để dùng ngoài phạm vi buffer SDK
+		cv::Mat bgrView = view8UC3(p);
+		imageBGR = bgrView.clone();
+		return true;
 	}
-	case PixelType_Gvsp_BayerGR8:
-		break;
-	case PixelType_Gvsp_BayerGB8:
-	{
-		//image = cv::Mat(height, width, CV_8UC3, pBufAddr);
-		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
-		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2RGB); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
+	case PixelType_Gvsp_Mono8: {
+		cv::Mat mono = view8UC1(p);
+		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
+		return true;
 	}
-	break;
+	case PixelType_Gvsp_Mono12: {
+		// Nếu SDK có hàm convert, ưu tiên dùng (ví dụ MV_CC_ConvertPixelType…)
+		// Ở đây minh hoạ nén 12-bit về 8-bit bằng dịch phải 4 bit.
+		// LƯU Ý: Nếu là "Mono12Packed", bố trí bit khác -> cần giải pack đúng theo SDK!
+		const int bytes = w * h * 2; // giả định mỗi pixel 16-bit chứa 12-bit hữu dụng
+		cv::Mat mono16(h, w, CV_16UC1, p);
+		cv::Mat mono8;
+		mono16.convertTo(mono8, CV_8U, 1.0 / 16.0); // >>4
+		cv::cvtColor(mono8, imageBGR, cv::COLOR_GRAY2BGR);
+		return true;
+	}
+	case PixelType_Gvsp_BayerBG8: {
+		cv::Mat raw = view8UC1(p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR);
+		return true;
+	}
+	case PixelType_Gvsp_BayerGB8: {
+		cv::Mat raw = view8UC1(p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
+		return true;
+	}
+	case PixelType_Gvsp_BayerRG8: {
+		cv::Mat raw = view8UC1(p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
+		return true;
+	}
+	case PixelType_Gvsp_BayerGR8: {
+		cv::Mat raw = view8UC1(p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
+		return true;
+	}
 	default:
-		image =Mat();
+		std::cerr << "Unsupported pixel format: " << pix << std::endl;
 		return false;
 	}
-
-	// Giải phóng buffer
-	camera->FreeImageBuffer(&stImageOut);
-	return true;
 }
-void ReadHik(int indexCCD)
+
+uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 {
-	if (CaptureFrame(m_pcMyCamera[indexCCD], matRaw)) {
-
-	}
-	else {
-		std::cerr << "Failed to capture frame 1!" << std::endl;
-	}
-	
-
-	// Dừng camera và giải phóng tài nguyên
-
-}
-void CCD::ReadCCD(int indexCCD)
-{
-	double d1 = clock();
+	auto t0 = std::chrono::steady_clock::now();
 	frameCount++;
-	
+
+	cv::Mat rawBGR;
+
 	switch (TypeCamera)
 	{
-	case 1: 
-		if (!matRaw.empty())
-			matRaw.release();
-		ReadHik(indexCCD);
-
+	case 1: { // Camera SDK
+		if (!CaptureFrame(m_pcMyCamera[indexCCD], rawBGR)) {
+			// Fail: trả nullptr + metadata = 0
+			*rows = *cols = *Type = 0;
+			return nullptr;
+		}
 		break;
-	default:
-		Mat raw = Mat();
-		//camUSB.read(raw);
-		//bool IsRead = camUSB.read(raw);
-		if (!matRaw.empty())
-			matRaw.release();
-		//camUSB >> raw;
-		camUSB.grab(); // Chỉ lấy frame nhưng không xử lý
-		camUSB.retrieve(matRaw); // Xử lý frame gần nhất
-
-		
-		break;
-
 	}
-	
-	
-	
+	default: { // OpenCV VideoCapture
+		// grab/retrieve để giảm latency
+		if (!camUSB.grab() || !camUSB.retrieve(rawBGR)) {
+			*rows = *cols = *Type = 0;
+			return nullptr;
+		}
+		// Đảm bảo ảnh về BGR 8-bit nếu camera trả YUYV/GRAY…
+		if (rawBGR.type() == CV_8UC1) {
+			cv::cvtColor(rawBGR, rawBGR, cv::COLOR_GRAY2BGR);
+		}
+		break;
+	}
+	}
 
-	auto now = std::chrono::high_resolution_clock::now();
+	// Cập nhật FPS mỗi ~1s
+	auto now = std::chrono::steady_clock::now();
 	elapsed = now - lastTime;
-
-	if (elapsed.count() >= 1.0) { // Cập nhật FPS mỗi giây
+	if (elapsed.count() >= 1.0) {
 		FPS = frameCount / elapsed.count();
 		frameCount = 0;
 		lastTime = now;
-		
 	}
-	//camUSB.read(matRaw);
-cycle = int(clock() - d1);
+
+	cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
+
+	*rows = rawBGR.rows;
+	*cols = rawBGR.cols;
+	*Type = rawBGR.type();
+
+	if (rawBGR.empty()) {
+		*rows = *cols = *Type = 0;
+		return nullptr;
+	}
+
+	// Xuất dữ liệu dạng bytes (copy 1 lần để caller sở hữu bộ nhớ)
+	const size_t image_size = rawBGR.total() * rawBGR.elemSize();
+	uchar* image_uchar = new uchar[image_size];
+	std::memcpy(image_uchar, rawBGR.data, image_size);
+	return image_uchar;
 }
+
 Mat equalizeBGRA(const Mat& img)
 {
 	Mat res(img.size(), img.type());

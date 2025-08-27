@@ -160,6 +160,7 @@ namespace BeeInterface
                 return;
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
+               // Propety.rotTrain = Propety.rectRotates;
                 btnTest.Enabled = true;
             }
          }

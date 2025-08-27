@@ -64,6 +64,12 @@
     <Compile Include="AutoLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CameraForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CameraForm.Designer.cs">
+      <DependentUpon>CameraForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
     <Compile Include="CustomNumericEx.cs">
@@ -254,6 +260,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CameraForm.resx">
+      <DependentUpon>CameraForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Custom\TrackBar2.resx">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </EmbeddedResource>

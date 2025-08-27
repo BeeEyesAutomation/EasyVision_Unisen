@@ -101,7 +101,8 @@ namespace BeeCore
         public Color clShow;
         public void SetModel()
         {
-            if(ColorAreaPlus==null)
+            Native = new Native();
+            if (ColorAreaPlus==null)
             ColorAreaPlus = new CvPlus.ColorArea();
             Common.PropetyTools[IndexThread][Index].StepValue = 1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
@@ -260,7 +261,7 @@ namespace BeeCore
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
 
-            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
             {
                 cl = Global.ColorNG;
             }
@@ -268,7 +269,7 @@ namespace BeeCore
             {
                 cl = Global.ColorOK;
             }
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
             if (!Global.IsHideTool)
                 Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
             if(matRs!=null)
@@ -298,6 +299,8 @@ namespace BeeCore
         }
         [NonSerialized]
         public Mat matProcess = new Mat();
+        [NonSerialized]
+        private Native Native = new Native();
         float ValueColor = 0;
         public Mat CheckColor(RectRotate rotCrop)
         {
@@ -338,7 +341,7 @@ namespace BeeCore
                     matProcess = matProcess.Clone();
                 }
                 //ColorAreaPlus.LoadTemp(listColor);
-                BeeCore.Native.SetImg(matProcess);
+                Native.SetImg(matProcess);
                  ValueColor = ColorAreaPlus.CheckColor(  AreaPixel);
                 if (!Global.IsRun) 
                     pxTemp =(int) ValueColor;

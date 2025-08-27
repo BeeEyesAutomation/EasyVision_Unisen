@@ -3,21 +3,72 @@ using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI;
+using System.Windows.Forms;
+using static CvPlus.s_BlockMax;
+using Control = System.Windows.Forms.Control;
+using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace BeeCore.Funtion
 {
   
         public class Shows
+    {
+       
+        public static void ShowAllChart(Control control)
         {
+            control.Controls.Clear();
+            int y = 5;
+            int index = 0;
+            foreach (List<PropetyTool> ListPropety in BeeCore.Common.PropetyTools)
+            {
+                if (ListPropety.Count() == 0) 
+                    continue;
+                Label label = new Label();
+                label.Font=new Font("Arial",12,FontStyle.Bold);
+                label.Text ="Follow Chart(" +BeeCore.Common.listCamera[index].Para.Name+")";
+                label.Location = new Point(3, y);
+                label.AutoSize = false;
+                label.Width= Global.ToolSettings.Width - 10;
+                control.Controls.Add(label);
+                y += 25;
+                foreach (PropetyTool tool in ListPropety)
+                {
+                    tool.ItemTool.Location = new Point(10, y);
+                    y += tool.ItemTool.Height + 5;
+                    tool.ItemTool.Width = Global.ToolSettings.Width - 10;
+                    control.Controls.Add(tool.ItemTool);
+                }
+                index++;
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+            control.ResumeLayout(true);
+        }
+        public static  void ShowChart(  Control control,List< PropetyTool> propetyTool)
+        {
+            control.Controls.Clear();
+            int y = 10;
+            foreach ( PropetyTool tool in propetyTool )
+            {
+                tool.ItemTool.Location = new Point(10,y);
+                y += tool.ItemTool.Height+5;
+                tool.ItemTool.Width = Global.ToolSettings.Width - 10;
+                control. Controls.Add(tool.ItemTool);
+
+            }
+            control.ResumeLayout(true);
+        }
         public static Bitmap bmShow;
-          public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, Mat matRaw, TypeImg typeImg = TypeImg.Raw)
+         public static void RefreshImg(Cyotek.Windows.Forms.ImageBox image, Mat matRaw, TypeImg typeImg = TypeImg.Raw)
 {
     image.Invoke((Action)(() =>
     {
@@ -100,8 +151,8 @@ namespace BeeCore.Funtion
         }
     }));        }
         private static int frameCounter=0;
- public static Cyotek.Windows.Forms.ImageBox imgTemp;
-            public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg)
+        public static Cyotek.Windows.Forms.ImageBox imgTemp;
+        public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg)
             {
             if (image == null) return;
             imgTemp= image;

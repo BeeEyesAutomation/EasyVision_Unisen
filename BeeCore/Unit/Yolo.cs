@@ -218,6 +218,8 @@ namespace BeeCore
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         [NonSerialized]
         public List<RectRotate> rectRotates = new List<RectRotate>();
+        //[NonSerialized]
+        //public List<RectRotate> rotTrain = new List<RectRotate>();
         String[] sSplit;
         [NonSerialized]
         public List<float> listScore = new List<float>();
@@ -614,7 +616,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            switch (Common.PropetyTools[IndexThread][Index].Results)
             {
                 case Results.OK:
                     cl = Global.ColorOK;

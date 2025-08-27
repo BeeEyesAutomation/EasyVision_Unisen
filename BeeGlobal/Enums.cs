@@ -19,6 +19,12 @@ namespace BeeGlobal
     {
         Any, Horizontal, Vertical
     }
+    public enum TriggerNum
+     {  Trigger1,
+        Trigger2,
+        Trigger3,
+        Trigger4
+     }
     public enum GapExtremum
     {
         Nearest,
@@ -34,7 +40,10 @@ namespace BeeGlobal
     public enum I_O_Input
     {
         None,
-        Trigger,
+        Trigger1,
+        Trigger2,
+        Trigger3,
+        Trigger4,
         Mode,
         Live,
         ByPass,
@@ -48,8 +57,14 @@ namespace BeeGlobal
     public enum I_O_Output
     {
         None,
-        Result,
-        Ready,
+        Result1,
+        Result2,
+        Result3,
+        Result4,
+        Ready1,
+        Ready2,
+        Ready3,
+        Ready4,
         Busy,
         Error,
         Logic1,

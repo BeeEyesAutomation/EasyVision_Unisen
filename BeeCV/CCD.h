@@ -42,7 +42,7 @@ namespace CvPlus {
 	public: bool  IsErrCCD = false;
 	public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
-	public:void  ReadCCD(int indeCCD);
+	public:uchar* ReadCCD(int indexCCD,  int* rows, int* cols, int* Type);
 	//public:void  ReadRaw(bool IsHist);
 	public:System::String^ ScanCCD();
 	public:bool	Connect( int indeCCD, System::String^ NameCCD);

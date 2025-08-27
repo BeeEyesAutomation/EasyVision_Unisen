@@ -28,7 +28,11 @@ namespace BeeCore
                 {
                     ProcessingAll();                            // ========== Công việc chính
                     if (StatusProcessing == StatusProcessing.Done)
+                    {
+                     //   BeeCore.Common.listCamera[indexThread].DrawResult();
                         break;
+                    }    
+                       
                 }
             }, _cts.Token);
         }

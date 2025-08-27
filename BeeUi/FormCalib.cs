@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -83,10 +84,12 @@ namespace BeeUi
         }
         Mat matRS = new Mat();
         float valueMedium = 0;
+        private Native Native = new Native();
+
         private void workerCalib_DoWork(object sender, DoWorkEventArgs e)
         {
            BeeCore.Common.listCamera[Global.IndexChoose].Read();
-            Mat matRaw = BeeCore.Native.GetImg();;
+            Mat matRaw = Native.GetImg();;
             Mat matProcess = new Mat(matRaw.Size(), MatType.CV_8UC1);
             Mat matSample = Global.ParaCommon.matSample.ToMat();
             Mat mask = new Mat(), matOr = new Mat();

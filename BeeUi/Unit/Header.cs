@@ -260,7 +260,9 @@ namespace BeeUi.Common
            //     Global.EditTool.btnHeaderBar.btnSettingPLC.IsCLick = false;
                 Global.EditTool.View.btnCap.Enabled = false;
                 Global.EditTool.View.btnContinuous.Enabled = false;
-                Global.EditTool.RefreshGuiEdit(Step.Step1);
+                CameraForm cameraForm = new CameraForm();
+                cameraForm.ShowDialog();
+               // Global.EditTool.RefreshGuiEdit(Step.Step1);
               
                 btnMode.Text = "EDIT";
                 btnMode.ForeColor = Color.DarkSlateGray;
@@ -349,6 +351,19 @@ namespace BeeUi.Common
             G.listProgram.Width = txtQrCode.Width;
             G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
             this.myDelegate = new AddDataDelegate(AddDataMethod);
+            if (Global.ToolSettings == null)
+            {
+                Global.ToolSettings = new ToolSettings();
+
+            }
+
+            if (Global.ParaCommon.Comunication == null)
+            {
+                Global.ParaCommon.Comunication = new Comunication();
+                Global.ParaCommon.Comunication.IO = new IO();
+                Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
+
+            }
             //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(Global.Config.namePort);
             if (!Directory.Exists("Program"))
             {
@@ -370,6 +385,7 @@ namespace BeeUi.Common
 
 
             }
+            tmShow.Interval = 1000;
             ThreadPool.SetMinThreads(Environment.ProcessorCount, Environment.ProcessorCount);
             //Acccess(Global.IsRun);
             G.Main.Location = new Point(0, 0);
@@ -601,41 +617,25 @@ txtQrCode.Focus();
 
         private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null) return;
+            //if (Global.ParaCommon.matRegister != null)
+            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
+            //else if (G.IsCCD)
+            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
            
-            if (Global.ParaCommon.matRegister != null)
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
-            else if (G.IsCCD)
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
-            //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-            //{
-            //    Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            //    //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-            //}
-            if (Global.ToolSettings == null)
-            {
-                Global.ToolSettings = new ToolSettings();
-
-            }
-          
-          
+           
             G.listProgram.Visible = false;
             txtQrCode.Enabled = true;
             btnShowList.Enabled = true;
             txtQrCode.Text = Global.Project;
 
-            if (Global.ParaCommon.Comunication == null)
-			{
-				Global.ParaCommon.Comunication = new Comunication();
-				Global.ParaCommon.Comunication.IO = new IO();
-				Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
-
-			}
+           
            
             IsIntialProgram = true;
           //  Acccess(Global.IsRun);
             G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
-            Global.ToolSettings.pAllTool.Controls.Clear();
+        
            
             tmShow.Enabled = true;
            
@@ -725,22 +725,22 @@ txtQrCode.Focus();
                     stepShow++;
                     break;
                 case 2:
-                    if (indexToolShow < BeeCore.Common.PropetyTools[Global.IndexChoose].Count)
-                    {
-                        tmShow.Interval = 50;
-                        BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool.Width = Global.ToolSettings.Width-10;
-                        Global.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
-                        indexToolShow++;
-                        Global.ToolSettings.ResumeLayout(true);
-                    }
-                    else
-                    {
+                    //if (indexToolShow < BeeCore.Common.PropetyTools[Global.IndexChoose].Count)
+                    //{
+                    //    tmShow.Interval = 50;
+                    //    BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool.Width = Global.ToolSettings.Width-10;
+                    //    Global.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
+                    //    indexToolShow++;
+                    //    Global.ToolSettings.ResumeLayout(true);
+                    //}
+                    //else
+                    //{
                         stepShow = 0;
                         indexToolShow = 0;
                         Global.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
                         Global.ToolSettings.ResumeLayout(true);
-                    }
+                   // }
                     break;
             } 
            

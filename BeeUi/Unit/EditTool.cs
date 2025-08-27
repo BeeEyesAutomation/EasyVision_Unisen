@@ -93,7 +93,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
-                       
+                        Shows.ShowAllChart(Global.ToolSettings.pAllTool as Control);
                         Global.EditTool.View.btnLive.Enabled = false;
                         CameraBar.Visible = true;
                         pHeader.Visible = true;
@@ -641,7 +641,7 @@ namespace BeeUi
                 //View.btnRunSim.Enabled = true;
             }
         }
-
+        private Native Native = new Native();
         private void openFolderImage_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -658,7 +658,7 @@ namespace BeeUi
                 View.indexFile = 0;
                 View.pathFileSeleted = View.Files[View.indexFile];
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-                BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+              Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
             }
         }

@@ -35,6 +35,10 @@ namespace BeeUi
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick =Global.Config.IsSaveRS;
+            btnIsMultiTrig.IsCLick = Global.ParaCommon.IsMultiTrigger;
+            btnIsOneTrig.IsCLick = !Global.ParaCommon.IsMultiTrigger;
+            btnMulti.IsCLick = Global.ParaCommon.IsMultiCamera;
+            btnSingle.IsCLick = !Global.ParaCommon.IsMultiCamera;
             switch (Global.Config.TypeSave){
                 case 1:btnSmall.PerformClick(); break;
                 case 2: btnNormal.PerformClick(); break;
@@ -140,6 +144,26 @@ namespace BeeUi
         private void label19_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnMulti_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsMultiCamera =btnMulti.IsCLick;
+        }
+
+        private void btnSingle_Click(object sender, EventArgs e)
+        {
+         Global.ParaCommon.IsMultiCamera=!   btnSingle.IsCLick;
+        }
+
+        private void btnIsOneTrig_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsMultiTrigger = !btnIsOneTrig.IsCLick;
+        }
+
+        private void btnIsMultiTrig_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsMultiTrigger =btnIsMultiTrig.IsCLick;
         }
     }
 }

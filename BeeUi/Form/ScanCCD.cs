@@ -212,6 +212,7 @@ namespace BeeUi
                         await Task.Delay(1000);
                     }
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new OpenCvSharp.Mat();
+                    BeeCore.Common.listCamera[Global.IndexChoose].IndexConnect = indexCCD;
                         BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
 
                     
@@ -436,17 +437,19 @@ namespace BeeUi
 
         private async void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            int indexCCD = 0;
+            int index = 0;
             foreach (Camera camera in BeeCore.Common.listCamera)
             {
                 if (camera != null)
                 {
                     camera.Init();
                     camera.Scan();
+                    camera.IndexConnect = indexCCD;
                     camera.IsConnected = await camera.Connect(camera.Para.Name);
-                    indexCCD++;
+                    index++;
                 }
-
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
             }
             bool IsConnect = false;
             foreach (Camera camera in BeeCore.Common.listCamera)
@@ -454,8 +457,9 @@ namespace BeeUi
                 if (camera != null)
                     if (camera.IsConnected)
                     IsConnect = true;
-               
-                   
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+
 
             }
             if (IsConnect)
