@@ -1,11 +1,13 @@
 ﻿
 using OpenCvSharp;
 using OpenCvSharp.Flann;
+using OpenCvSharp.ML;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
@@ -13,7 +15,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace BeeGlobal
 {
     [Serializable()]
@@ -34,7 +35,6 @@ namespace BeeGlobal
         //    //    valueOutput = new IntArrayWithEvent(16);
         //    _timer = new Timer(_ => DoWork(), null, dueTime: 0, period: 10000);
         //}
-
         //public void StopTimer()
         //{
         //    _timer?.Dispose();
@@ -52,13 +52,16 @@ namespace BeeGlobal
         //        }
         //    }, _cts.Token);
         //}
-
         //public void StopRead() => _cts.Cancel();
         public int AddRead = 1;
         public int AddWrite = 2;
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
+        [NonSerialized]
+        public ModbusService ModbusService;
+        public ModbusRole ModbusRole = ModbusRole.ClientMaster;
+        public ModbusTransport ModbusTransport = ModbusTransport.SerialRtu;
         //private  async Task DoWork()
         //{
         //    if (!Global.Initialed) return;
@@ -70,11 +73,8 @@ namespace BeeGlobal
         //    if (Global.StatusIO==StatusIO.Reading)
         //    {
         //        Read();
-              
+
         //    }
-           
-                
-           
         //}
         public bool IsBusy = false;
         public String[] nameInput = new String[16];
@@ -89,6 +89,8 @@ namespace BeeGlobal
         public int[] AddressOutPut = new int[30];
         public int[] LenReads;
         public String Port = "COM8";
+        public String PortCom = "COM8";
+        public int PortIP = 502;
         public int Baurate = 115200;
         public byte SlaveID=1;
         public bool IsBypass=true;
@@ -183,11 +185,33 @@ namespace BeeGlobal
                 return false;
           
         }
+        ModbusOptions client=new ModbusOptions();
+        public int timeOut = 2000;
+        public string sIP = "";
+
         public async Task<bool> Connect(  )
         {
-
             try
             {
+                client = new ModbusOptions
+                {
+                    Transport = ModbusTransport,
+                    Role = ModbusRole,
+                    ComPort = PortCom,
+                    Port=PortIP,
+                    Baudrate = Baurate,
+                    Parity = Parity.Even,
+                    StopBits = StopBits.One,
+                    UnitId = SlaveID,
+                    OperationTimeoutMs = timeOut,
+                    Retries = 2,
+                    Host=sIP
+                };
+
+                ModbusService = new ModbusService(client);
+              
+                await ModbusService.StartAsync();
+
                 if (AddRead == 0 && AddWrite == 0)
                 {
                     AddRead = 1;
@@ -197,7 +221,7 @@ namespace BeeGlobal
                 CT = new Stopwatch();
                 CTMid = 0;
                 CTMin = 1000; CTMax = 0;
-                IsConnected = Modbus.ConnectPLC(Port, Baurate, SlaveID);
+                IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
                 if (valueInput == null)
                     valueInput = new int[16];
                 if (valueOutput == null)
@@ -208,9 +232,30 @@ namespace BeeGlobal
                     AddressOutPut = new int[30];
                 
                 Arrange();
-                if (IsConnected) 
-                    valueInput=await Modbus.ReadBit(1);
-                if (valueInput.Length < 16)
+               
+                 if (IsConnected)
+                    if (ModbusRole == ModbusRole.ClientMaster)
+                    {
+                        valueInput = Array.ConvertAll(await ModbusService.ReadCoilsAsync(AddRead, 16), b => b ? 1 : 0); //await Modbus.ReadBit(1);
+
+                    }
+                    else
+                    {
+                        //// bắt sự kiện khi Master ghi
+                        //ModbusService.OnHoldingRegistersWritten += (start, qty) =>
+                        //{
+                        //    valueInput = ModbusService.GetHolding(start, qty);
+                        //    //Console.WriteLine($"Master wrote HR [{start}..{start + qty - 1}] = {string.Join(",", vals)}");
+                        //};
+                        ModbusService.OnCoilsWritten += (start, qty) =>
+                        {   if(start==AddRead)
+                                valueInput = Array.ConvertAll(ModbusService.GetCoils(start, qty), b => b ? 1 : 0);
+                          //  Console.WriteLine($"Master wrote Coils [{start}..{start + qty - 1}] = {string.Join(",", vals)}");
+                        };
+
+                    }
+               
+                    if (valueInput.Length < 16)
                 {
                     IsConnected = false;
                     return false;
@@ -276,7 +321,7 @@ namespace BeeGlobal
             numRead++;
                 CT.Restart();
             Global.StatusIO = StatusIO.Reading;
-            valueInput =await Modbus.ReadBit(AddRead);
+            valueInput = Array.ConvertAll(await ModbusService.ReadCoilsAsync(AddRead, 16), b => b ? 1 : 0); //await Modbus.ReadBit(1);await Modbus.ReadBit(AddRead);
             Global.StatusIO = StatusIO.None;
             CT.Stop();
             
@@ -356,7 +401,7 @@ namespace BeeGlobal
             {
                 case IO_Processing.Trigger:
                     
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], false);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetLight(true);
                     await WriteOutPut();
@@ -366,7 +411,7 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.Close:
                     SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
                   
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
@@ -378,7 +423,7 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.ByPass:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
                     SetLight(false);
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                     IsWait = true;
@@ -399,64 +444,59 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
-                    bool IsOK = false;
-                    if (Global.TotalOK)
-                    {
-                        IsOK = true;
-                    }
-                    else
-                    {
+                  
                         int ix = AddressInput[(int)I_O_Input.ByPass];
                         if (ix > -1)
                         {
                             if (valueInput[ix] == 1)
                             {
-                                IsOK = true;
-                            }
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result],true); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
+                             }
+                            else
+                            {
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
+                            }    
+                        }
+                        else
+                        {
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
                         }
 
-                     }
-                        if (IsOK)
-                    {
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
-                        SetLight(false);
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                        IsWait = true;
-                        await WriteOutPut();
-                        if(IsBlink)
-                        {
-                            await Task.Delay((int)DelayOutput);
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
-                            await WriteOutPut();
-                        }
-                      
-                    }
-                    else
-                    {
-                      
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true);//Ready false
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready 
                             SetLight(false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                            IsWait = true;
                             await WriteOutPut();
                             if (IsBlink)
                             {
                                 await Task.Delay((int)DelayOutput);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
-                                await WriteOutPut();
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result],  false); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
+                        await WriteOutPut();
                             }
 
 
-
-
-                    }
                     Global.NumSend++;
                     Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], Global.IsRun); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
                     SetLight(false);
 
                     SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
@@ -474,7 +514,7 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready1], true); //Ready
+                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                    SetLight(false);
@@ -525,24 +565,25 @@ namespace BeeGlobal
             }
             return false;
         }
-        public int ReadPara(int Add )
-        {
+        //public int ReadPara(int Add )
+        //{
+        //    return 0;
       
-           return Modbus.ReadHolding(Add,1)[0];
+        //   //return Modbus.ReadHolding(Add,1)[0];
         
-        }
-        public bool WritePara(int Add, int Value)
-        {
-            IsWriting = true;
-            IsConnected = Modbus.WritePLC(Add, Value);
+        //}
+        //public bool WritePara(int Add, int Value)
+        //{
+        //    IsWriting = true;
+        //  //  IsConnected = Modbus.WritePLC(Add, Value);
 
-            IsWriting = false;
-            return IsConnected;
-        }
+        //    IsWriting = false;
+        //    return IsConnected;
+        //}
         public   bool WriteInPut(int Add,bool Value)
         {
             IsWriting = true;
-            IsConnected = Modbus.WritePLC(Add,Convert.ToInt16(Value));//AddressStarts[0]+
+         //   IsConnected = Modbus.WritePLC(Add,Convert.ToInt16(Value));//AddressStarts[0]+
 
             IsWriting = false;
             return IsConnected;
@@ -614,13 +655,18 @@ namespace BeeGlobal
             if (!IsConnected)
                 return false;
             CT.Restart();
-            X: IsConnected =await Modbus.WriteBit(AddWrite, Val);
-           if(Global.StatusIO == StatusIO.ErrWrite)
+            if(ModbusRole==ModbusRole.ClientMaster)
+            await  ModbusService.WriteSingleCoilAsync(AddWrite,Convert.ToBoolean( Val)); //Modbus.WriteBit(AddWrite, Val);
+         else
+                ModbusService.SetCoil(AddWrite, Convert.ToBoolean(Val));
+
+            if (Global.StatusIO == StatusIO.ErrWrite)
             {
                 await Task.Delay(50);
                 Global.StatusIO = StatusIO.Writing;
-                goto X;
+                // goto X;
             }
+
             numWrite--;
             CT.Stop();
             CTWrite = (float)CT.Elapsed.TotalMilliseconds;

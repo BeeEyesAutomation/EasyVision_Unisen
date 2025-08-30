@@ -451,17 +451,26 @@ namespace BeeUi
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;
             }
-            bool IsConnect = false;
+            bool IsConnect = true;
+            int numNull = 0;
             foreach (Camera camera in BeeCore.Common.listCamera)
             {
                 if (camera != null)
-                    if (camera.IsConnected)
-                    IsConnect = true;
+                {
+                    if (!camera.IsConnected)
+                        IsConnect = false;
+                }
+                else
+                    numNull++;
+                   
+                
+
                 if (Global.ParaCommon.IsMultiCamera == false)
-                    break;
+                        break;
 
 
             }
+            if (numNull == 4) IsConnect = false;
             if (IsConnect)
             {
 
@@ -546,6 +555,7 @@ namespace BeeUi
             SaveData.Camera(Global.Project,Global.listParaCamera);
 
             if (Global.IndexChoose < 0) Global.IndexChoose = 0;
+            if (Global.ToolSettings!=null)
             Global.ToolSettings.pAllTool.Controls.Clear();
             if (G.Header == null)
             {

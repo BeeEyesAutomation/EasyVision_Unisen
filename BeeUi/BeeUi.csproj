@@ -569,6 +569,7 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Flow.png" />
     <None Include="Resources\LOG.png" />
     <None Include="Resources\Bug.png" />
     <None Include="Resources\Save as.png" />

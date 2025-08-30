@@ -1,7 +1,9 @@
 ﻿using BeeCore;
+using BeeCore.Func;
 using BeeGlobal;
 using OpenCvSharp.Flann;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -12,6 +14,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -22,40 +25,64 @@ namespace BeeInterface
 {
     public partial class SettingPLC : UserControl
     {
-        List<String> OldIn = new List<string> { "", "", "", "", "", "", "", "" };
-        List<String> OldOut= new List<string> { "", "", "", "", "", "", "", "" };
+        List<String> OldIn = new List<string>(16);
+        List<String> OldOut= new List<string>(16);
+        List<ComboBox> listCbIn = new List<ComboBox>();
+        List<ComboBox> listCbOut = new List<ComboBox>();
         public SettingPLC()
         {
             InitializeComponent();
            
-            OldIn = new List<string> { "None", "None", "None", "None", "None", "None", "None", "None" };
-            OldOut = new List<string> { "None", "None", "None", "None", "None", "None", "None", "None" };
+            OldIn = new string[16].ToList();
+            OldOut = new string[16].ToList();
             comIO.DataSource = SerialPort.GetPortNames();
-            Parallel.For(0, 8, i =>
+            Parallel.For(0, 16, i =>
             {
                 RefreshComboBoxIn(i, "");
             });
-            Parallel.For(0, 8, i =>
+            Parallel.For(0, 16, i =>
             {
                 RefreshComboBoxOut(i, "");
             });
-            cbIn1.DataSource = listIn[0];
-            cbIn2.DataSource = listIn[1];
-            cbIn3.DataSource = listIn[2];
-            cbIn4.DataSource = listIn[3];
-            cbIn5.DataSource = listIn[4];
-            cbIn6.DataSource = listIn[5];
-            cbIn7.DataSource = listIn[6];
-            cbIn8.DataSource = listIn[7];
+            foreach(Control ctl in layIn.Controls)
+            {
+                if (ctl is ComboBox cb)
+                    listCbIn.Add(cb);
+            }
+            foreach (Control ctl in layOut.Controls)
+            {
+                if (ctl is ComboBox cb)
+                    listCbOut.Add(cb);
+            }
+            int ix = 0;
+            foreach (ComboBox cb in listCbIn)
+            {
+               cb.DataSource = listIn[ix];
+                ix++;
+            }
+            ix = 0;
+            foreach (ComboBox cb in listCbOut)
+            {
+                cb.DataSource = listOut[ix];
+                ix++;
+            }
+            //cbIn0.DataSource = listIn[0];
+            //cbIn1.DataSource = listIn[1];
+            //cbIn2.DataSource = listIn[2];
+            //cbIn3.DataSource = listIn[3];
+            //cbIn4.DataSource = listIn[4];
+            //cbIn5.DataSource = listIn[5];
+            //cbIn6.DataSource = listIn[6];
+            //cbIn7.DataSource = listIn[7];
 
-            cbO0.DataSource = listOut[0];
-            cbO1.DataSource = listOut[1];
-            cbO2.DataSource = listOut[2];
-            cbO3.DataSource = listOut[3];
-            cbO4.DataSource = listOut[4];
-            cbO5.DataSource = listOut[5];
-            cbO6.DataSource = listOut[6];
-            cbO7.DataSource = listOut[7];
+            //cbO0.DataSource = listOut[0];
+            //cbO1.DataSource = listOut[1];
+            //cbO2.DataSource = listOut[2];
+            //cbO3.DataSource = listOut[3];
+            //cbO4.DataSource = listOut[4];
+            //cbO5.DataSource = listOut[5];
+            //cbO6.DataSource = listOut[6];
+            //cbO7.DataSource = listOut[7];
             //cbIn1.DataSource = listIn[0];
             //cbIn2.DataSource = listIn[1];
             //cbIn3.DataSource = listIn[2];
@@ -67,11 +94,15 @@ namespace BeeInterface
         }
         List<List<string>> listIn = new List<List<string>>{
             new List<string>(), new List<string>(), new List<string>(), new List<string>(),
-             new List<string>(), new List<string>(), new List<string>(), new List<string>() };
+             new List<string>(), new List<string>(), new List<string>(), new List<string>() ,
+         new List<string>(), new List<string>(), new List<string>(), new List<string>(),
+             new List<string>(), new List<string>(), new List<string>(), new List<string>()};
         List<List<string>> listOut = new List<List<string>>{
             new List<string>(), new List<string>(), new List<string>(), new List<string>(),
-             new List<string>(), new List<string>(), new List<string>(), new List<string>() };
-        
+             new List<string>(), new List<string>(), new List<string>(), new List<string>() ,
+         new List<string>(), new List<string>(), new List<string>(), new List<string>(),
+             new List<string>(), new List<string>(), new List<string>(), new List<string>()};
+
         // 3. Đổ tất cả enum chưa chọn vào ComboBox
         private void RefreshComboBoxIn(int index ,String text)
         {
@@ -97,92 +128,72 @@ namespace BeeInterface
             }
 
         }
-
+      
         public void ChangeDatasource(int ix,String i_O_Input)
         {
-            
-            for(int i=0;i<7;i++)
+            for(int i=0;i<15;i++)
             {
                 if (ix == i) continue;
-
-                switch (i)
+                if (i_O_Input.ToString() == nameInput[i])
                 {
-                    case 0:
-                        if (i_O_Input.ToString() == cbIn1.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn1.Text, ignoreCase: true));
-                            cbIn1.SelectedIndex = 0;
+                    Global.ParaCommon.Comunication.IO.RemoveInPut(i, (I_O_Input)Enum.Parse(typeof(I_O_Input), nameInput[i], ignoreCase: true));
+                    switch (i)
+                    {
+                        case 0:
+                            cbIn0.Text = "None";
+                            break;
+                        case 1:
                             cbIn1.Text = "None";
-                            return;
-                        }
-
-                        break;
-                    case 1:
-                        if (i_O_Input.ToString() == cbIn2.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn2.Text, ignoreCase: true));
-
-                            cbIn2.SelectedIndex = 0;
+                            break;
+                        case 2:
                             cbIn2.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 2:
-                        if (i_O_Input.ToString() == cbIn3.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn3.Text, ignoreCase: true));
-
-                            cbIn3.SelectedIndex = 0;
+                            break;
+                        case 3:
                             cbIn3.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 3:
-                        if (i_O_Input.ToString() == cbIn4.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn4.Text, ignoreCase: true));
-
-                            cbIn4.SelectedIndex = 0;
+                            break;
+                        case 4:
                             cbIn4.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 4:
-                        if (i_O_Input.ToString() == cbIn5.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn5.Text, ignoreCase: true));
-
-                            cbIn5.SelectedIndex = 0;
+                            break;
+                        case 5:
                             cbIn5.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 5:
-                        if (i_O_Input.ToString() == cbIn6.Text)
-                        {Global.ParaCommon.Comunication.IO.RemoveInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn6.Text, ignoreCase: true));
-                            cbIn6.SelectedIndex = 0;
+                            break;
+                        case 6:
                             cbIn6.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 6:
-                        if (i_O_Input.ToString() == cbIn7.Text)
-                        {Global.ParaCommon.Comunication.IO.RemoveInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn7.Text, ignoreCase: true));
-                            cbIn7.SelectedIndex = 0;
+                            break;
+                        case 7:
                             cbIn7.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 7:
-                        if (i_O_Input.ToString() == cbIn8.Text)
-                        {   Global.ParaCommon.Comunication.IO.RemoveInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), cbIn8.Text, ignoreCase: true));
-                            cbIn8.SelectedIndex = 0;
+                            break;
+                        case 8:
                             cbIn8.Text = "None";
-                            return;
-                        }
-                        break;
+                            break;
+                        case 9:
+                            cbIn9.Text = "None";
+                            break;
+                        case 10:
+                            cbIn10.Text = "None";
+                            break;
+                        case 11:
+                            cbIn11.Text = "None";
+                            break;
+                        case 12:
+                            cbIn12.Text = "None";
+                            break;
+                        case 13:
+                            cbIn13.Text = "None";
+                            break;
+                        case 14:
+                            cbIn14.Text = "None";
+                            break;
+                        case 15:
+                            cbIn15.Text = "None";
+                            break;
 
+                    }
+                  //  listCbIn[i].SelectedIndex = 0;
+                   // listCbIn[i].Text = "None";
+                   
                 }    
+                    
             
             }    
            
@@ -206,85 +217,66 @@ namespace BeeInterface
             for (int i = 0; i < 7; i++)
             {
                 if (ix == i) continue;
-
-                switch (i)
+                if (i_O_Output.ToString() == nameOut[i])
                 {
-                    case 0:
-                        if (i_O_Output.ToString() == cbO0.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true));
-                            cbO0.SelectedIndex = 0;
-                            cbO0.Text = "None";
-                          
-                            return;
-                        }
-
-                        break;
-                    case 1:
-                        if (i_O_Output.ToString() == cbO1.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(1, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO1.Text, ignoreCase: true));
-                            cbO1.SelectedIndex = 0;
+                  
+                    Global.ParaCommon.Comunication.IO.RemoveOutPut(i, (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[i], ignoreCase: true));
+                  switch(i)
+                    {
+                        case 0:cbO0.Text= "None";
+                            break;
+                        case 1:
                             cbO1.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 2:
-                        if (i_O_Output.ToString() == cbO2.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(2, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO2.Text, ignoreCase: true));
-                            cbO2.SelectedIndex = 0;
+                            break;
+                        case 2:
                             cbO2.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 3:
-                        if (i_O_Output.ToString() == cbIn3.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(3, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO3.Text, ignoreCase: true));
-                            cbO3.SelectedIndex = 0;
+                            break;
+                        case 3:
                             cbO3.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 4:
-                        if (i_O_Output.ToString() == cbO4.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(4, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO4.Text, ignoreCase: true));
-                            cbO4.SelectedIndex = 0;
+                            break;
+                        case 4:
                             cbO4.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 5:
-                        if (i_O_Output.ToString() == cbO5.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(5, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO5.Text, ignoreCase: true));
-                            cbO5.SelectedIndex = 0;
+                            break;
+                        case 5:
                             cbO5.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 6:
-                        if (i_O_Output.ToString() == cbO6.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(6, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO6.Text, ignoreCase: true));
-                            cbO6.SelectedIndex = 0;
+                            break;
+                        case 6:
                             cbO6.Text = "None";
-                            return;
-                        }
-                        break;
-                    case 7:
-                        if (i_O_Output.ToString() == cbO7.Text)
-                        {
-                            Global.ParaCommon.Comunication.IO.RemoveOutPut(7, (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO7.Text, ignoreCase: true));
-                            cbO7.SelectedIndex = 0;
+                            break;
+                        case 7:
                             cbO7.Text = "None";
-                            return;
-                        }
-                        break;
-
+                            break;
+                        case 8:
+                            cbO8.Text = "None";
+                            break;
+                        case 9:
+                            cbO9.Text = "None";
+                            break;
+                        case 10:
+                            cbO10.Text = "None";
+                            break;
+                        case 11:
+                            cbO11.Text = "None";
+                            break;
+                        case 12:
+                            cbO12.Text = "None";
+                            break;
+                        case 13:
+                            cbO13.Text = "None";
+                            break;
+                        case 14:
+                            cbO14.Text = "None";
+                            break;
+                        case 15:
+                            cbO15.Text = "None";
+                            break;
+                        
+                    }    
+                    //listCbOut[i].SelectedIndex = 0;
+                    //listCbOut[i].Text = "None";
+                   
                 }
+           
 
             }
 
@@ -421,14 +413,14 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbO5.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbO6.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
             cbO7.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn1.Text = paraIOs.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString();   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn2.Text = paraIOs.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn3.Text = paraIOs.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn4.Text = paraIOs.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn5.Text = paraIOs.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn6.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn7.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn8.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input) ? .I_O_Input.ToString();      // giữ nguyên text cũ nếu không tìm thấy
+            cbIn0.Text = paraIOs.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString();   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn1.Text = paraIOs.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn2.Text = paraIOs.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn3.Text = paraIOs.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn4.Text = paraIOs.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn5.Text = paraIOs.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn6.Text = paraIOs.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
+            cbIn7.Text = paraIOs.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input) ? .I_O_Input.ToString();      // giữ nguyên text cũ nếu không tìm thấy
             timerRead.Value=Global.ParaCommon.Comunication.IO.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
             slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
@@ -685,8 +677,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn1_SelectionChangeCommitted(object sender, EventArgs e)
         {
            
-            String name = cbIn1.SelectedValue.ToString(); if (name == "") return;
-            if (cbIn1.Text.Contains("None"))
+            String name = cbIn0.SelectedValue.ToString(); if (name == "") return;
+            if (cbIn0.Text.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[0], ignoreCase: true));
 
@@ -703,7 +695,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn2_SelectionChangeCommitted(object sender, EventArgs e)
         {
           
-            String name = cbIn2.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn1.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[1], ignoreCase: true));
@@ -720,7 +712,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn3_SelectionChangeCommitted(object sender, EventArgs e)
         {
           
-            String name = cbIn3.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn2.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[2], ignoreCase: true));
@@ -737,7 +729,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn4_SelectionChangeCommitted(object sender, EventArgs e)
         {
            
-            String name = cbIn4.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn3.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[3], ignoreCase: true));
@@ -754,7 +746,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn5_SelectionChangeCommitted(object sender, EventArgs e)
         {
       
-            String name = cbIn5.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn4.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[4], ignoreCase: true));
@@ -771,7 +763,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn6_SelectionChangeCommitted(object sender, EventArgs e)
         {
          
-            String name = cbIn6.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn5.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[5], ignoreCase: true));
@@ -788,7 +780,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn7_SelectionChangeCommitted(object sender, EventArgs e)
         {
        
-            String name = cbIn7.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn6.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[6], ignoreCase: true));
@@ -805,7 +797,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void cbIn8_SelectionChangeCommitted(object sender, EventArgs e)
         {
 
-            String name = cbIn8.SelectedValue.ToString(); if (name == "") return;
+            String name = cbIn7.SelectedValue.ToString(); if (name == "") return;
             if (name.Contains("None"))
             {
                 Global.ParaCommon.Comunication.IO.RemoveInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[7], ignoreCase: true));
@@ -818,7 +810,43 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             ChangeDatasource(7, name);
         }
+        public String[] nameInput =new  String[16];
+        private void cbIn_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ComboBox cb = sender as ComboBox;
+            String name = cb.SelectedValue.ToString();
+            var m = Regex.Match(cb.Name, @"[+-]?\d+");
+            int value = m.Success ? int.Parse(m.Value) : 0;  // -42
+            if (name == "") return;
+            if (name.Contains("None"))
+            {
+                Global.ParaCommon.Comunication.IO.RemoveInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[value], ignoreCase: true));
+            }
+            else
+            {
+                Global.ParaCommon.Comunication.IO.AddInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                OldIn[value] = name;
+            }
+            nameInput[value] = name;
+            ChangeDatasource(value, name);
+        }
+        public String[] nameOut = new String[16];
+        private void cbOut_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ComboBox cb=  sender  as ComboBox;
+            String name = cb.SelectedValue.ToString();
+            var m = Regex.Match(cb.Name, @"[+-]?\d+");
+            int value = m.Success ? int.Parse(m.Value) : 0;  // -42
+            if (name == "") return;
+            if (cb.Text.Contains("None"))
+                Global.ParaCommon.Comunication.IO.RemoveOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
+            else
+                Global.ParaCommon.Comunication.IO.AddOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
+            OldOut[value] = name;
+            nameOut[value] = name;
+            ChangeDatasourceOut(value, name);
 
+        }
         private void cbO0_SelectionChangeCommitted(object sender, EventArgs e)
         {
          
@@ -1303,8 +1331,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
               
                         
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
-
-                    await Global.ParaCommon.Comunication.IO.Read();
+                    if (Global.ParaCommon.Comunication.IO.ModbusRole == ModbusRole.ClientMaster)
+                        await Global.ParaCommon.Comunication.IO.Read();
                     int ix = Global.ParaCommon.Comunication.IO. AddressInput[(int)I_O_Input.ByPass];
                     if (ix > -1)
                     {
@@ -1461,6 +1489,50 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void AddWrite_ValueChanged(float obj)
         {
             Global.ParaCommon.Comunication.IO.AddWrite = (int)AddWrite.Value;
+        }
+
+        private void btnRTU_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.ModbusTransport = ModbusTransport.SerialRtu;
+            comIO.Enabled = true;
+            cbBaurate.Enabled = true;
+            txtIP.Enabled = false;
+            txtPort.Enabled = false;
+            btnTCP.IsCLick = false;
+            lbRTU1.Enabled = true;
+            lbRTU2.Enabled = true;
+            lbTCP1.Enabled = false;
+            lbTCP2.Enabled=false;
+        }
+
+        private void btnTCP_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.ModbusTransport = ModbusTransport.Tcp;
+            comIO.Enabled = false;
+            cbBaurate.Enabled = false;
+            txtIP.Enabled = true;
+            txtPort.Enabled = true;
+            btnRTU.IsCLick = false;
+            lbRTU1.Enabled = false;
+            lbRTU2.Enabled = false;
+            lbTCP1.Enabled = true;
+            lbTCP2.Enabled = true;
+        }
+
+        private void btnMaster_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.ModbusRole = ModbusRole.ClientMaster;
+            numIDSlave.Enabled = true;
+            lbSlaveID.Enabled = true;
+            btnSlave.IsCLick = false;
+
+        }
+
+        private void btnSlave_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.IO.ModbusRole = ModbusRole.ServerSlave;
+            numIDSlave.Enabled = false;lbSlaveID.Enabled = false;
+            btnMaster.IsCLick = false;
         }
     }
 }

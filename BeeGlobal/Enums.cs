@@ -40,6 +40,7 @@ namespace BeeGlobal
     public enum I_O_Input
     {
         None,
+        Trigger,
         Trigger1,
         Trigger2,
         Trigger3,
@@ -57,14 +58,13 @@ namespace BeeGlobal
     public enum I_O_Output
     {
         None,
+        Result,
         Result1,
         Result2,
         Result3,
         Result4,
-        Ready1,
-        Ready2,
-        Ready3,
-        Ready4,
+        Ready,
+       
         Busy,
         Error,
         Logic1,

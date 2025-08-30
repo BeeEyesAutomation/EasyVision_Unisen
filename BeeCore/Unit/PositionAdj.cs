@@ -280,7 +280,7 @@ namespace BeeCore
             ////Cv2.ImShow("A"+ indexTool, temp);
             //if (temp == null) return;
             //if (temp.Empty()) return;
-            if (Pattern == null)
+           // if (Pattern == null)
             {
                 Pattern = new CvPlus.Pattern();
                 Pattern.CreateTemp(Index, IndexThread);

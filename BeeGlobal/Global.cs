@@ -21,6 +21,10 @@ namespace BeeGlobal
          public static dynamic EditTool ;
         public static bool IsSendRS = false;
         public static bool TotalOK = false;
+        public static bool TotalOK1 = false;
+        public static bool TotalOK2 = false;
+        public static bool TotalOK3 = false;
+        public static bool TotalOK4 = false;
         public static bool IsByPassResult = false;
         public static int NumSend = 0;
         //Gui

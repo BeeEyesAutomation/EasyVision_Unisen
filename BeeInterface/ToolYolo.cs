@@ -16,7 +16,10 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -110,7 +113,7 @@ namespace BeeInterface
                 trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
                 trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
+                numEpoch.Value = Propety.Epoch;
                
                 switch (Propety.Compare)
                 {
@@ -160,7 +163,7 @@ namespace BeeInterface
                 return;
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
-               // Propety.rotTrain = Propety.rectRotates;
+                Propety.rectTrain = Propety.rectRotates;//note
                 btnTest.Enabled = true;
             }
          }
@@ -375,18 +378,6 @@ namespace BeeInterface
            // Propety.TypeYolo = (TypeYolo)cbTypes.SelectedIndex;
         }
 
-        private void btnPathModel_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog OpenFileDialog=new OpenFileDialog();
-
-            if (OpenFileDialog.ShowDialog()==DialogResult.OK)
-            {
-                Propety.PathModel = OpenFileDialog.FileName;
-                //txtModel.Text = Propety.PathModel;
-                LoadPara();
-            }
-          
-        }
 
         private void label4_Click(object sender, EventArgs e)
         {
@@ -807,52 +798,28 @@ namespace BeeInterface
         }
         private void btnPathDataSet_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog OpenFileDialog = new FolderBrowserDialog();
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
 
-            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            if (folderDialog.ShowDialog() == DialogResult.OK)
             {
-                Propety.PathDataSet = OpenFileDialog.SelectedPath;
-                CopyDirectory(Propety.PathDataSet, "Program\\" + Global.Project + "\\DataSet",true);
-             
-              }
+                Propety.PathDataSet = folderDialog.SelectedPath;
+                string destPath = $"Program\\{Global.Project}\\DataSet\\train";
+                tbDataSet.Text = destPath;
+                CopyDirectory(Propety.PathDataSet, destPath, true);
+            }
+
         }
         public String sClass = "";
         public bool IsUpdateImgCrop = false;
-        //private void btnDraw_Click(object sender, EventArgs e)
-        //{  // Thông tin ảnh
-        //    float imageWidth = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
-        //    float imageHeight = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
-        //    RotatedRect rrect = new RotatedRect(
-        //   new Point2f(Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),    // center
-        //    new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),       // width, height
-        //    Propety.rotCrop._rectRotation                        // angle in degrees
-        //   );
-        //    // Tính 4 điểm
-        //    Point2f[] points = rrect.Points();
-        //    // Normalize
-        //    for (int i = 0; i < points.Length; i++)
-        //    {
-        //        points[i].X /= imageWidth;
-        //        points[i].Y /= imageHeight;
-        //    }
-        //    int classId = cbLabels.SelectedIndex;
-
-        //    // Tạo nội dung dòng annotation
-        //    sClass += classId.ToString();
-        //    foreach (var p in points)
-        //    {
-        //        sClass += $" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}";
-        //    }
-        //    sClass += "\n";
-        //    IsUpdateImgCrop = true;
-        //    imgCrop.Invalidate();
-
-
-        //   // SaveImageAndLabel(rrect, sClass);//note
-        //    sClass = "";
-        //}
         private void btnDraw_Click(object sender, EventArgs e)
         {
+         
+            if (cbLabels.Text == "")
+            {
+                MessageBox.Show("Please select label");
+                return;
+            }
+
             float imageWidth = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
             float imageHeight = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
 
@@ -860,6 +827,11 @@ namespace BeeInterface
                 new Point2f(Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),
                 new Size2f(Propety.rotCrop._rect.Width, Propety.rotCrop._rect.Height),
                 Propety.rotCrop._rectRotation
+            );
+
+            Mat matCrop = BeeCore.Common.CropRotatedRect(
+                BeeCore.Common.listCamera[Global.IndexChoose].matRaw,
+                Propety.rotCrop, null
             );
 
             Point2f[] points = rrect.Points();
@@ -870,28 +842,25 @@ namespace BeeInterface
                 points[i].Y /= imageHeight;
             }
 
-            float minX = points.Min(p => p.X);
-            float maxX = points.Max(p => p.X);
-            float minY = points.Min(p => p.Y);
-            float maxY = points.Max(p => p.Y);
-
-            float xCenter = (minX + maxX) / 2;
-            float yCenter = (minY + maxY) / 2;
-            float width = maxX - minX;
-            float height = maxY - minY;
-
             int classId = cbLabels.SelectedIndex;
 
-            sClass = $"{classId} {xCenter:0.######} {yCenter:0.######} {width:0.######} {height:0.######}\n";
+            string segLabel = classId.ToString();
+            foreach (var p in points)
+            {
+                segLabel += $" {p.X:0.######} {p.Y:0.######}";
+            }
+
+            listImgTrainYolo.Add(matCrop.ToBitmap());
+            listLabelTrainYolo.Add(segLabel);
 
             IsUpdateImgCrop = true;
             imgCrop.Invalidate();
 
-            SaveImageAndLabel(rrect, sClass);
+            sClass = segLabel + "\n";
 
-            sClass = "";
         }
-
+        List<Image> listImgTrainYolo = new List<Image>();
+        List<String> listLabelTrainYolo = new List<String>();
         private void CreateYamlFromLabels(string outputPath)
         {
             try
@@ -925,46 +894,127 @@ namespace BeeInterface
                 MessageBox.Show("Lỗi khi tạo YAML: " + ex.Message);
             }
         }
-
-        private void SaveImageAndLabel(RotatedRect rrect, string labelContent)
+        string SaveYoloRects(List<RectRotate> rects, int imgW, int imgH, List<string> labels, List<LabelItem> allLabels)
         {
-            try
+            var sb = new StringBuilder();
+
+            int count = Math.Min(rects.Count, labels.Count);
+
+            for (int i = 0; i < count; i++)
             {
-                string imageName = $"img_{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg";
-                string labelName = Path.GetFileNameWithoutExtension(imageName) + ".txt";
-                string pathImage = Path.Combine("Program", Global.Project, "DataSet", "train", "images");
-                string pathLabel = Path.Combine("Program", Global.Project, "DataSet", "train", "labels");
-                Directory.CreateDirectory(pathImage);
-                Directory.CreateDirectory(pathLabel);
+                var r = rects[i];
+                string lblName = labels[i];
+                int classId = allLabels.FindIndex(x =>
+                 x.Name.Trim().Equals(lblName.Trim(), StringComparison.OrdinalIgnoreCase));
 
-                Mat matRaw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw;
-                string fullImagePath = Path.Combine(pathImage, imageName);
-                matRaw.SaveImage(fullImagePath); 
+                if (classId < 0) continue;
+                 RotatedRect rrect = new RotatedRect(
+                new Point2f(Propety.rotArea._PosCenter.X- Propety.rotArea._rect.Width/2+ rects[i]._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + rects[i]._PosCenter.Y),
+               new Size2f(rects[i]._rect.Width, rects[i]._rect.Height),
+              rects[i]._rectRotation
+           );
 
-                string fullLabelPath = Path.Combine(pathLabel, labelName);
-                File.WriteAllText(fullLabelPath, labelContent);
+              
 
-                if (!string.IsNullOrEmpty(Propety.pathFullModel))
+                Point2f[] points = rrect.Points();
+
+                for (int j = 0; j < points.Length; j++)
                 {
-                    string pathFullModel = Propety.pathFullModel;
-                    string modelTxtPath = Path.Combine("Program", Global.Project, "DataSet", "PathModel.txt");
-                    File.WriteAllText(modelTxtPath, pathFullModel);
+                    points[j].X /= imgW;
+                    points[j].Y /= imgH;
                 }
+
+             
+                string segLabel = classId.ToString();
+                foreach (var p in points)
+                {
+                    segLabel += $" {p.X:0.######} {p.Y:0.######}";
+                }
+                //float xCenter = r._PosCenter.X / imgW;
+                //float yCenter = r._PosCenter.Y / imgH;
+                //float width = r._rect.Width / imgW;
+                //float height = r._rect.Height / imgH;
+
+                sb.AppendLine(segLabel);// $"{classId} {xCenter:F6} {yCenter:F6} {width:F6} {height:F6}");
             }
-            catch (Exception ex)
-            {
-            }
+
+            return sb.ToString();
         }
 
+        private void SaveImageAndLabel()//Hau
+        {
+            
+             //   strImgName = $"img_{DateTime.Now:yyyyMMdd_HHmmssfff}";
+                try
+                {
+                    if (Propety.rectTrain == null)
+                    {
+                        string imageName = strImgName + ".bmp";
+                        string labelName = strImgName + ".txt";
+
+                        string pathImage = Path.Combine("Program", Global.Project, "DataSet", "train", "images");
+                        string pathLabel = Path.Combine("Program", Global.Project, "DataSet", "train", "labels");
+                        Directory.CreateDirectory(pathImage);
+                        Directory.CreateDirectory(pathLabel);
+
+                        string fullImagePath = Path.Combine(pathImage, imageName);
+                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.SaveImage(fullImagePath);
+
+                        string fullLabelPath = Path.Combine(pathLabel, labelName);
+                        File.WriteAllLines(fullLabelPath, listLabelTrainYolo);
+                    }
+                    else
+                    {
+
+                        string lb = SaveYoloRects(
+                            Propety.rectTrain,
+                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width,
+                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height, Propety.listLabel,
+                            Propety.labelItems
+                                    );
+
+                        string imageName = strImgName + ".jpg";
+                        string labelName = strImgName + ".txt";
+
+                        string pathImage = Path.Combine("Program", Global.Project, "DataSet", "train", "images");
+                        string pathLabel = Path.Combine("Program", Global.Project, "DataSet", "train", "labels");
+
+                        Directory.CreateDirectory(pathImage);
+                        Directory.CreateDirectory(pathLabel);
+
+                        string fullImagePath = Path.Combine(pathImage, imageName);
+                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.SaveImage(fullImagePath);
+
+                        string fullLabelPath = Path.Combine(pathLabel, labelName);
+                        File.WriteAllText(fullLabelPath, lb + string.Join("", listLabelTrainYolo));
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+           
+        }
         private void tabYolo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(tabYolo.SelectedIndex ==2)
             {
                 cbLabels.DataSource = new List<string>();
-                List<string> list = new List<string>();
-                foreach (Labels labels in Propety.listLabelCompare)
-                    list.Add(labels.label);
-                cbLabels.DataSource = list.ToArray();
+              
+                if (Propety.labelItems != null)
+                {
+                    cbLabels.DataSource = null;  
+                    cbLabels.Items.Clear();      
+
+                    foreach (LabelItem item in Propety.labelItems)
+                    {
+                        cbLabels.Items.Add(item.Name); 
+                    }
+                    RefreshLabels();
+                }
+                else
+                {
+                    MessageBox.Show("Please select models fist");
+                }
                Global.TypeCrop= TypeCrop.Crop;
                 Propety.TypeCrop = Global.TypeCrop;
                 if (Propety.rotCrop == null)
@@ -973,8 +1023,7 @@ namespace BeeInterface
                     Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Height / 2), 0, AnchorPoint.None,false);
 
                 }
-               // G.EditTool.View.imgView.Invalidate();
-               // G.EditTool.View.imgView.Cursor = Cursors.Default;
+             
             }
             else
             {
@@ -982,70 +1031,65 @@ namespace BeeInterface
                Global.TypeCrop= TypeCrop.Area;
                 Propety.TypeCrop = Global.TypeCrop;
 
-               // G.EditTool.View.imgView.Invalidate();
-              //  G.EditTool.View.imgView.Cursor = Cursors.Default;
-
             }
         }
 
+        private string strImgName = "";//Hau
+        private void ClearImgBox()
+        {
+            try
+            {
+                if (imgCrop.Image != null)
+                {
+                    imgCrop.Image.Dispose();
+                    imgCrop.Image = null;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            listImgTrainYolo.Clear();
+            listLabelTrainYolo.Clear();
+            if(Propety.rectTrain != null)
+            Propety.rectTrain.Clear();
+            else if(Propety.listLabel != null)
+            Propety.listLabel.Clear();
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            //String nameFile = Path.GetFileName(G.EditTool.View.pathFileSeleted);
-            //String nameFileWithOut = Path.GetFileNameWithoutExtension(G.EditTool.View.pathFileSeleted);
-            //File.Copy(G.EditTool.View.pathFileSeleted, "Program\\" + Global.Project + "\\DataSet\\images\\train\\" + nameFile, true);
-            //File.Copy(G.EditTool.View.pathFileSeleted, "Program\\" + Global.Project + "\\DataSet\\images\\val\\" + nameFile, true);
-            //string outputPath = "Program\\" + Global.Project + "\\DataSet\\labels\\train\\" + nameFileWithOut + ".txt";
-            //File.WriteAllText("Program\\" + Global.Project + "\\DataSet\\labels\\train\\" + nameFileWithOut + ".txt", sClass);
-            //File.WriteAllText("Program\\" + Global.Project + "\\DataSet\\labels\\val\\" + nameFileWithOut + ".txt", sClass);
-            //sClass = "";
-            //G.listImgTrainYolo = new List<Bitmap>();
-            //G.listLabelTrainYolo = new List<string>();
+           //if(imgCrop.Image == null)
+           // {
+           //     MessageBox.Show("Please crop images");
+           //     return;
+           // }
             imgCrop.Invalidate();
+            SaveImageAndLabel();
             string pathYaml = Path.Combine("Program", Global.Project, "DataSet", "data.yaml");//note
             CreateYamlFromLabels(pathYaml);
             MessageBox.Show("Complete");
-
-            //using (StreamWriter sw = new StreamWriter(outputPath, false, Encoding.UTF8))
-            //{
-            //    sw.Write($"{classId}");
-            //    foreach (var p in points)
-            //    {
-            //        sw.Write($" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}");
-            //    }
-            //    sw.WriteLine();
-            //}
-            //string outputPath2 = "Program\\" + Global.Project + "\\DataSet\\labels\\val\\" + nameFileWithOut + ".txt";
-            //using (StreamWriter sw = new StreamWriter(outputPath2, false, Encoding.UTF8))
-            //{
-            //    sw.Write($"{classId}");
-            //    foreach (var p in points)
-            //    {
-            //        sw.Write($" {p.X.ToString("0.######", CultureInfo.InvariantCulture)} {p.Y.ToString("0.######", CultureInfo.InvariantCulture)}");
-            //    }
-            //    sw.WriteLine();
-            //}
+            
         }
         int xImgCrop = 10;
         private void imgCrop_Paint(object sender, PaintEventArgs e)
         {
-            //xImgCrop = 10;
-            //for (int i = G.listImgTrainYolo.Count - 1; i >= 0; i--)
-            //{
+            xImgCrop = 10;
+            for (int i = listImgTrainYolo.Count - 1; i >= 0; i--)
+            {
 
-            //    int W = G.listImgTrainYolo[i].Width;
-            //    int H = G.listImgTrainYolo[i].Height;
-            //    double Scale = (imgCrop.Height - 20) / (H * 1.0);
-            //    W = (int)(W * Scale);
-            //    e.Graphics.DrawImage(G.listImgTrainYolo[i], new Rectangle(xImgCrop, 5, W, imgCrop.Height - 20));
-            //    e.Graphics.DrawString(G.listLabelTrainYolo[i], new Font("Arial", 12), Brushes.Black, xImgCrop, imgCrop.Height - 25);
-            //    xImgCrop += W + 20;
-            //}
-            //if(IsUpdateImgCrop)
-            //{
-            //    IsUpdateImgCrop = false;
-            //    imgCrop.Size = new Size(xImgCrop, imgCrop.Height);
-            //}
-            
+                int W = listImgTrainYolo[i].Width;
+                int H = listImgTrainYolo[i].Height;
+                double Scale = (imgCrop.Height - 20) / (H * 1.0);
+                W = (int)(W * Scale);
+                e.Graphics.DrawImage(listImgTrainYolo[i], new Rectangle(xImgCrop, 5, W, imgCrop.Height - 20));
+                e.Graphics.DrawString(listLabelTrainYolo[i], new Font("Arial", 12), Brushes.Black, xImgCrop, imgCrop.Height - 25);
+                xImgCrop += W + 20;
+            }
+            if (IsUpdateImgCrop)
+            {
+                IsUpdateImgCrop = false;
+                imgCrop.Size = new Size(xImgCrop, imgCrop.Height);
+            }
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1055,27 +1099,40 @@ namespace BeeInterface
           
         }
 
-        private void numTourch_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.Epoch = (int)numEpoch.Value;
-        }
-
         private void btnTraining_Click(object sender, EventArgs e)
         {
-            workTrain.RunWorkerAsync();
+            if(!workTrain.IsBusy)
+            {
+                btnTraining.Enabled = false;
+                workTrain.RunWorkerAsync();
+            }
+         
+          
         }
 
         private void workTrain_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, "Program\\NIDEC_MH_DEMO2\\DataSet\\data.yaml");
+            string pathYaml = Path.Combine("Program", Global.Project, "DataSet", "data.yaml");
 
-            //workTrain.ReportProgress(Propety.Percent);
-            string pathYaml = Path.Combine("Program", Global.Project, "DataSet", "data.yaml");//note
-            string nameModel = Propety.pathFullModel;//note
+           // boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Start training: {Propety.PathModel}");
 
-            //  workTrain.ReportProgress(Propety.Percent);
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].PercentChange += Yolo_PercentChange;
-            Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, nameModel, pathYaml);
+            Propety.PercentChange += Yolo_PercentChange;
+
+            try
+            {
+                Propety.Training(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name, Propety.pathFullModel, pathYaml);
+
+            }
+            catch (Exception ex)
+            {
+             //   boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Error train: {ex.Message}");
+            }
+            finally
+            {
+              //  if (boxLog.Items.Count > 0)
+                //    boxLog.TopIndex = boxLog.Items.Count - 1;
+            }
+
 
         }
         private void Yolo_PercentChange(int percent)//note
@@ -1086,12 +1143,19 @@ namespace BeeInterface
                 {
                     progressBar1.Value = percent;
                     txtPercent.Text = percent.ToString() + "%";
+
+                  //  boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Training" + " " + percent.ToString() + "%");
+                  
                 }));
             }
             else
             {
+
                 progressBar1.Value = percent;
                 txtPercent.Text = percent.ToString() + "%";
+
+               // boxLog.Items.Add($"{DateTime.Now:HH:mm:ss} - Training" +" "+ percent.ToString()+"%");
+                
             }
         }
         private void workTrain_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -1101,7 +1165,8 @@ namespace BeeInterface
 
         private void workTrain_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            progressBar1.Value = 100;
+           btnTraining.Enabled = true;
         }
 
         private void btnEnbleContent_Click(object sender, EventArgs e)
@@ -1180,8 +1245,6 @@ namespace BeeInterface
 
         private void cbListModel_SelectionChangeCommitted(object sender, EventArgs e)
         {
-         
-    
             Propety.PathModel = cbListModel.SelectedValue.ToString();//.Text;
             Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
             if (!File.Exists(Propety.pathFullModel))
@@ -1227,7 +1290,6 @@ namespace BeeInterface
                     {
                         if (label == "") continue;
                         Propety.labelItems.Add(new LabelItem(label));
-
                     }
                     RefreshLabels();
                 }
@@ -1246,7 +1308,44 @@ namespace BeeInterface
 
         private void numEpoch_ValueChanged(float obj)
         {
+            Propety.Epoch = (int)numEpoch.Value;
+        }
 
+        private void btnLoadImg_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
+               
+                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
+              
+              Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+
+
+                strImgName =Path.GetFileNameWithoutExtension( openFile.FileName);
+            }
+
+            ClearImgBox();
+        }
+        public List<PointF[]> listBoxCorners = new List<PointF[]>();
+        private void btnCheck_Click(object sender, EventArgs e)
+        {
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+            {
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            }
+                
+            else
+                btnCheck.IsCLick = false;
+            
+        }
+
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+         
         }
     }
 }

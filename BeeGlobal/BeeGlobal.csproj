@@ -69,6 +69,7 @@
     <Compile Include="Labels.cs" />
     <Compile Include="LogsDashboard.cs" />
     <Compile Include="Modbus.cs" />
+    <Compile Include="ModbusService.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ParaCamera.cs" />
     <Compile Include="ParaCommon.cs" />

@@ -2444,6 +2444,8 @@ namespace BeeUi
                         _renderer.AddImage(camera.bmResult, FillMode.Contain,1);
                     index++;
                 }
+                Global.ParaCommon.SizeCCD = _renderer.szImage;
+                Shows.Full(imgView, Global.ParaCommon.SizeCCD);
                 _renderer.Render();
                 // RenderAndDisplay();
                 if (Global.TotalOK)

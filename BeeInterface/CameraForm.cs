@@ -68,5 +68,36 @@ namespace BeeInterface
                btnCamera4.Text = Global.listParaCamera[3].Name.Substring(0, 8) + "..";
             this.Location = new Point(Global.SizeScreen.Width / 2-this.Width/2, Global.SizeScreen.Height / 2 -this.Height/2);
         }
+
+        private void btnDelect1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+           BeeCore.Common.listCamera[1] = null;
+           BeeCore.Common.PropetyTools[1] = new List<BeeCore.PropetyTool>();
+            Global.EditTool.RefreshGuiEdit(Step.Run);
+            this.Close();
+            
+            
+        }
+
+        private void btnDelect3_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[2] = null;
+            BeeCore.Common.PropetyTools[2] = new List<BeeCore.PropetyTool>();
+            Global.EditTool.RefreshGuiEdit(Step.Run);
+            this.Close();
+        }
+
+        private void btnDelect4_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[3] = null;
+            BeeCore.Common.PropetyTools[3] = new List<BeeCore.PropetyTool>();
+            Global.EditTool.RefreshGuiEdit(Step.Run);
+            this.Close();
+        }
     }
 }

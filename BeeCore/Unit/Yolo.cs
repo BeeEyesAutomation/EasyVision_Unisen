@@ -28,6 +28,23 @@ namespace BeeCore
     [Serializable()]
     public class Yolo
     {
+        public int _Percent = 0;//note
+        [field: NonSerialized]
+        public event Action<int> PercentChange;
+
+        public int Percent
+        {
+            get => _Percent;
+            set
+            {
+                if (_Percent != value)
+                {
+                    _Percent = value;
+                    PercentChange?.Invoke(_Percent);
+                }
+            }
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -109,31 +126,39 @@ namespace BeeCore
 
 
         //}
-       
+        String Err = "";
         public void Training(string nameTool, string modelPath, string pathYaml)
         {
-            if (Global.IsIntialPython)
-                using (Py.GIL())
+            try
             {
-                Action<int> onProgress = percent =>
-                {
-                    Common.PropetyTools[Global.IndexChoose][Index].Percent = percent;
-                    
-                    Console.WriteLine($"Training progress: {percent}%");
-                };
+                if (Global.IsIntialPython)
+                    using (Py.GIL())
+                    {
+                        Action<int> onProgress = percent =>
+                        {
+                            Percent = percent;
 
-                using (PyObject pyCallback = onProgress.ToPython())
-                {
-                    var result = G.objYolo.train(
-                        nameTool,
-                        modelPath,   
-                        pathYaml,
-                        Epoch,
-                        callback: pyCallback
-                    );
+                            Console.WriteLine($"Training progress: {percent}%");
+                        };
 
-                    Console.WriteLine(result.ToString());
-                }
+                        using (PyObject pyCallback = onProgress.ToPython())
+                        {
+                            var result = G.objYolo.train(
+                                nameTool,
+                                modelPath,
+                                pathYaml,
+                                Epoch,
+                                callback: pyCallback
+                            );
+
+                            Console.WriteLine(result.ToString());
+                        }
+                    }
+            }
+            catch(Exception ex)
+            {
+                Err=ex.Message;
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "RetTrain", ex.ToString()));
             }
         }
 
@@ -218,8 +243,8 @@ namespace BeeCore
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         [NonSerialized]
         public List<RectRotate> rectRotates = new List<RectRotate>();
-        //[NonSerialized]
-        //public List<RectRotate> rotTrain = new List<RectRotate>();
+        [NonSerialized]
+        public List<RectRotate> rectTrain = new List<RectRotate>();
         String[] sSplit;
         [NonSerialized]
         public List<float> listScore = new List<float>();
@@ -326,18 +351,15 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                     {
-                        
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.Message));
-                       // Global.Ex = "Learning_" + pyEx.Message;
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
+                     
                         //MessageBox.Show("Python Error: " + pyEx.Message);
                 }
                 catch (Exception ex)
                     {
-                        
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-                       // Global.Ex = "Learning_" + ex.Message;
-                      //  MessageBox.Show("Error: " + ex.Message);
-                }
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+                        //  MessageBox.Show("Error: " + ex.Message);
+                    }
             }
 
         }
@@ -575,32 +597,27 @@ namespace BeeCore
                     }
                     catch (Exception ex)
                     {
-                        
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-                       // Global.Ex = "Complete_Learning" + ex.Message;
-                        // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
                     }
                 }
                 catch (Exception ex)
                 {
-                    
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
-                  //  Global.Ex = "Complete_Learning" + ex.Message;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
                     // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                 }
             }
             else
             {
-                
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
-              //  Global.Ex = "No Initial PY";
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning","No Initial PY"));
+           
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }    
                
         }
-
+       
         public Graphics DrawResult(Graphics gc)
         {
+            //Common.PropetyTools[Global.IndexChoose][Index].Percent
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
             gc.ResetTransform();
             RectRotate rotA = rotArea;
@@ -616,7 +633,7 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
-            switch (Common.PropetyTools[IndexThread][Index].Results)
+            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
                     cl = Global.ColorOK;
@@ -641,8 +658,8 @@ namespace BeeCore
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
+   
                 gc.Transform = mat;
-
                 mat.Translate(CropOffSetX, CropOffSetY);
                 gc.Transform = mat;
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
@@ -678,17 +695,18 @@ namespace BeeCore
                     }
                     else
                     {
+
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                         Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, clShow, brushText, 30, 3, 10, 1, !Global.IsHideTool);
                         gc.ResetTransform();
-
+                       
                     }
 
-                  
-                               
+
+
                 }
                 i++;
 

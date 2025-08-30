@@ -87,7 +87,7 @@ namespace BeeUi
                     Global.EditTool.View. btnLive.PerformClick();
 
                 }
-                CameraBar.btnCamera1.IsCLick = true;
+                CameraBar.btnFlowChart.IsCLick = true;
                 Global.StatusDraw = StatusDraw.None;
             X: switch (Step)
                 {
@@ -356,14 +356,7 @@ namespace BeeUi
 
 
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
-            if (Global.listParaCamera[0] != null)
-                CameraBar.btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[1] != null)
-                CameraBar.btnCamera2.Text = Global.listParaCamera[1].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[2] != null)
-                CameraBar.btnCamera3.Text = Global.listParaCamera[2].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[3] != null)
-                CameraBar.btnCamera4.Text = Global.listParaCamera[3].Name.Substring(0, 8) + "..";
+          
             pHeader.Height =(int)( pHeader.Height * Global.PerScaleHeight);
             pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);
             pEdit.Width= (int)(pEdit.Width * Global.PerScaleWidth);
@@ -424,6 +417,7 @@ namespace BeeUi
                 btnShowToolBar.Checked = true;
             }
           //  Global.ExChanged += Global_ExChanged;
+          if (BeeCore.Common.listCamera[Global.IndexChoose]!=null)
             BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
             // if (pHeader.Height > 100) pHeader.Height = 100;
             //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);

@@ -65,12 +65,13 @@ namespace BeeCore
 
         /// Xoá danh sách ảnh (không dispose ảnh nguồn).
         public void ClearImages() => _items.Clear();
-
+        public Size szImage=new Size(0, 0);
         /// Render ảnh ghép theo kích thước PictureBox hiện tại.
         public void Render()
         {
             if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
             var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
+            szImage = newBitmap.Size;
             var old = _pb.Image; _pb.Image = newBitmap; old?.Dispose();
         }
 
