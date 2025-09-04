@@ -38,7 +38,7 @@ namespace BeeInterface
         private const int BASE_CHECK = 14;
         private const int BASE_GAP = 6;  // khoảng giữa label và value
         private const int BASE_VALW_MIN = 70;
-        private const int BASE_VAL_RMARG =1;  // margin phải cố định cho ô value
+        private const int BASE_VAL_RMARG = 1;  // margin phải cố định cho ô value
 
         // ===== Runtime scaled metrics =====
         private float _scale = 1f;
@@ -70,7 +70,7 @@ namespace BeeInterface
 
         // Range value cho editor
         public int ValueMin { get; set; } = 1;
-        public int ValueMax { get; set; } = 1000;
+        public int ValueMax { get; set; } = 10000;
 
         public DashboardListCompact()
         {
@@ -175,7 +175,7 @@ namespace BeeInterface
                 DrawLine(g, i, 1, baseY, "MinWidth", _items[i], _items[i].IsWidth, _items[i].ValueWidth, Segment.Width, Segment.ValueWidth, w);
                 DrawLine(g, i, 2, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
                 DrawLine(g, i, 3, baseY, "MinX", _items[i], _items[i].IsX, _items[i].ValueX, Segment.X, Segment.ValueX, w);
-                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsX, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
+                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsY, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
 
                 using (var p = new Pen(Color.FromArgb(230, 230, 230))) g.DrawLine(p, rectItem.Left, rectItem.Bottom - 1, rectItem.Right, rectItem.Bottom - 1);
             }
@@ -266,8 +266,8 @@ namespace BeeInterface
             UseToggle,
             Area, ValueArea,
             Width, ValueWidth,
-            Height,X,Y, ValueHeight,ValueX,ValueY
-                
+            Height, X, Y, ValueHeight, ValueX, ValueY
+
         }
 
         private bool HitTest(Point pt, out int idx, out Segment seg, out Rectangle targetRect)
@@ -409,59 +409,59 @@ namespace BeeInterface
             {
                 Visible = false,
                 Decimals = 0,
-                Min=1,
-                Max=1000,
+                Min = 1,
+                Max = 1000,
                 AutoShowTextbox = true,
-               AutoSizeTextbox = true,
-               BackColor = System.Drawing.SystemColors.Control,
-               BarLeftGap = 14,
-               BarRightGap = 6,
-               ChromeGap = 4,
-               ChromeWidthRatio = 0.14F,
-               ColorBorder = System.Drawing.Color.DarkGray,
-               ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143))))),
-               ColorScale = System.Drawing.Color.DarkGray,
-               ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
-               ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
-               ColorTrack = System.Drawing.Color.DarkGray,
-               EdgePadding = 1,
-               Font = new System.Drawing.Font("Segoe UI", 10F),
-               InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6),
-               KeyboardStep = 1F,
-               MatchTextboxFontToThumb = true,
-              
-               MaxTextboxWidth = 0,
-               MaxThumb = 1000,
-               MaxTrackHeight = 1000,
-             
-               MinChromeWidth = 64,
-              
-             
-               MinThumb = 30,
-               MinTrackHeight = 6,
-               Name = "edit",
-               Radius = 6,
-               ShowValueOnThumb = true,
-              
-               SnapToStep = true,
-               StartWithTextboxHidden = true,
-               Step = 1F,
-               TabIndex = 68,
-               TextboxFontSize = 16F,
-               TextboxSidePadding = 2,
-               
-               ThumbDiameterRatio = 1.5F,
-               ThumbValueBold = true,
-               ThumbValueFontScale = 1.2F,
-               ThumbValuePadding = 0,
-               TightEdges = true,
-               TrackHeightRatio = 0.7F,
-               TrackWidthRatio = 1F,
-               UnitText = "",
-               Value = 0F,
-               WheelStep = 1F,
-              
-                
+                AutoSizeTextbox = true,
+                BackColor = System.Drawing.SystemColors.Control,
+                BarLeftGap = 14,
+                BarRightGap = 6,
+                ChromeGap = 4,
+                ChromeWidthRatio = 0.14F,
+                ColorBorder = System.Drawing.Color.DarkGray,
+                ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143))))),
+                ColorScale = System.Drawing.Color.DarkGray,
+                ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
+                ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110))))),
+                ColorTrack = System.Drawing.Color.DarkGray,
+                EdgePadding = 1,
+                Font = new System.Drawing.Font("Segoe UI", 10F),
+                InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6),
+                KeyboardStep = 1F,
+                MatchTextboxFontToThumb = true,
+
+                MaxTextboxWidth = 0,
+                MaxThumb = 1000,
+                MaxTrackHeight = 1000,
+
+                MinChromeWidth = 64,
+
+
+                MinThumb = 30,
+                MinTrackHeight = 6,
+                Name = "edit",
+                Radius = 6,
+                ShowValueOnThumb = true,
+
+                SnapToStep = true,
+                StartWithTextboxHidden = true,
+                Step = 1F,
+                TabIndex = 68,
+                TextboxFontSize = 16F,
+                TextboxSidePadding = 2,
+
+                ThumbDiameterRatio = 1.5F,
+                ThumbValueBold = true,
+                ThumbValueFontScale = 1.2F,
+                ThumbValuePadding = 0,
+                TightEdges = true,
+                TrackHeightRatio = 0.7F,
+                TrackWidthRatio = 1F,
+                UnitText = "",
+                Value = 0F,
+                WheelStep = 1F,
+
+
             };
 
             // Font editor theo scale của control

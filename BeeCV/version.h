@@ -1,7 +1,7 @@
 #define VER_MAJOR 1
 #define VER_MINOR 1
-#define VER_BUILD 73
-#define VER_REVISION 250826
+#define VER_BUILD 75
+#define VER_REVISION 250904
 
 #define VER_FILEVERSION_STR "1.1.0.1"
 #define VER_PRODUCTVERSION_STR "1.1.0.1"

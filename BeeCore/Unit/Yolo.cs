@@ -388,10 +388,16 @@ namespace BeeCore
                                 if (item.IsWidth)
                                     if (boxList[i]._rect.Width >= item.ValueWidth)
                                         IsOK = true;
+                                if (item.IsX)
+                                    if (boxList[i]._PosCenter.X+ boxList[i]._rect.Width /2>= item.ValueX)
+                                        IsOK = true;
+                                if (item.IsY)
+                                    if (boxList[i]._PosCenter.Y +boxList[i]._rect.Height / 2 >= item.ValueY)
+                                        IsOK = true;
                                 if (item.IsArea)
                                     if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
                                         IsOK = true;
-                                if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
+                                if(!item.IsHeight&&!item.IsWidth&&!item.IsArea && !item.IsX&& !item.IsY)
                                     IsOK = true;
                                 if (IsOK)
                                 {
@@ -651,7 +657,18 @@ namespace BeeCore
                 {
                     LabelItem item = labelItems[index];
                     
-                   
+                   if(item.IsY)
+                    {
+                        Point p1 = new Point(0, item.ValueY);
+                        Point p2 = new Point(50, item.ValueY);
+                        Draws.DrawInfiniteLine(gc, p1, p2,new Rectangle(0, 0,(int) rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
+                    if (item.IsX)
+                    {
+                        Point p1 = new Point(item.ValueX,0);
+                        Point p2 = new Point(item.ValueX, 50);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
                     if (item.IsHeight|| item.IsWidth)
                     {
                         mat.Rotate(rot._rectRotation);
