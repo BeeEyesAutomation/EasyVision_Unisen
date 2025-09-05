@@ -80,9 +80,9 @@ namespace BeeInterface
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
             this.layMaximumObj = new System.Windows.Forms.TableLayoutPanel();
-            this.trackNumObject = new BeeInterface.CustomNumericEx();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.trackNumObject = new BeeInterface.CustomNumericEx();
             this.layLimitCouter = new System.Windows.Forms.TableLayoutPanel();
             this.numLimitCounter = new BeeInterface.CustomNumericEx();
             this.btnMore = new BeeInterface.RJButton();
@@ -1706,9 +1706,9 @@ namespace BeeInterface
             this.layMaximumObj.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.layMaximumObj.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layMaximumObj.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layMaximumObj.Controls.Add(this.trackNumObject, 2, 0);
             this.layMaximumObj.Controls.Add(this.label11, 1, 0);
             this.layMaximumObj.Controls.Add(this.label1, 0, 0);
+            this.layMaximumObj.Controls.Add(this.trackNumObject, 2, 0);
             this.layMaximumObj.Location = new System.Drawing.Point(10, 34);
             this.layMaximumObj.Margin = new System.Windows.Forms.Padding(10, 5, 5, 0);
             this.layMaximumObj.Name = "layMaximumObj";
@@ -1716,45 +1716,6 @@ namespace BeeInterface
             this.layMaximumObj.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layMaximumObj.Size = new System.Drawing.Size(371, 52);
             this.layMaximumObj.TabIndex = 44;
-            // 
-            // trackNumObject
-            // 
-            this.trackNumObject.AutoShowTextbox = false;
-            this.trackNumObject.AutoSizeTextbox = true;
-            this.trackNumObject.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-            this.trackNumObject.BackColor = System.Drawing.SystemColors.Control;
-            this.trackNumObject.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
-            this.trackNumObject.BorderRadius = 6;
-            this.trackNumObject.ButtonMaxSize = 64;
-            this.trackNumObject.ButtonMinSize = 24;
-            this.trackNumObject.Decimals = 0;
-            this.trackNumObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackNumObject.ElementGap = 6;
-            this.trackNumObject.FillTextboxToAvailable = true;
-            this.trackNumObject.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackNumObject.InnerPadding = new System.Windows.Forms.Padding(6);
-            this.trackNumObject.KeyboardStep = 1F;
-            this.trackNumObject.Location = new System.Drawing.Point(214, 0);
-            this.trackNumObject.Margin = new System.Windows.Forms.Padding(0);
-            this.trackNumObject.Max = 100F;
-            this.trackNumObject.MaxTextboxWidth = 0;
-            this.trackNumObject.Min = 0F;
-            this.trackNumObject.MinimumSize = new System.Drawing.Size(120, 32);
-            this.trackNumObject.MinTextboxWidth = 16;
-            this.trackNumObject.Name = "trackNumObject";
-            this.trackNumObject.Size = new System.Drawing.Size(157, 52);
-            this.trackNumObject.SnapToStep = true;
-            this.trackNumObject.StartWithTextboxHidden = false;
-            this.trackNumObject.Step = 1F;
-            this.trackNumObject.TabIndex = 47;
-            this.trackNumObject.TextboxFontSize = 30F;
-            this.trackNumObject.TextboxSidePadding = 12;
-            this.trackNumObject.TextboxWidth = 56;
-            this.trackNumObject.UnitText = "";
-            this.trackNumObject.Value = 0F;
-            this.trackNumObject.WheelStep = 1F;
-            this.trackNumObject.ValueChanged += new System.Action<float>(this.trackNumObject_ValueChanged);
-            this.trackNumObject.Load += new System.EventHandler(this.trackNumObject_Load);
             // 
             // label11
             // 
@@ -1782,6 +1743,45 @@ namespace BeeInterface
             this.label1.TabIndex = 45;
             this.label1.Text = "Maximum Object";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // trackNumObject
+            // 
+            this.trackNumObject.AutoShowTextbox = false;
+            this.trackNumObject.AutoSizeTextbox = true;
+            this.trackNumObject.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.trackNumObject.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.trackNumObject.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.trackNumObject.BorderRadius = 6;
+            this.trackNumObject.ButtonMaxSize = 64;
+            this.trackNumObject.ButtonMinSize = 24;
+            this.trackNumObject.Decimals = 0;
+            this.trackNumObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackNumObject.ElementGap = 6;
+            this.trackNumObject.FillTextboxToAvailable = true;
+            this.trackNumObject.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackNumObject.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.trackNumObject.KeyboardStep = 1F;
+            this.trackNumObject.Location = new System.Drawing.Point(214, 0);
+            this.trackNumObject.Margin = new System.Windows.Forms.Padding(0);
+            this.trackNumObject.Max = 100F;
+            this.trackNumObject.MaxTextboxWidth = 0;
+            this.trackNumObject.Min = 0F;
+            this.trackNumObject.MinimumSize = new System.Drawing.Size(120, 32);
+            this.trackNumObject.MinTextboxWidth = 16;
+            this.trackNumObject.Name = "trackNumObject";
+            this.trackNumObject.Size = new System.Drawing.Size(157, 52);
+            this.trackNumObject.SnapToStep = true;
+            this.trackNumObject.StartWithTextboxHidden = false;
+            this.trackNumObject.Step = 1F;
+            this.trackNumObject.TabIndex = 34;
+            this.trackNumObject.TextboxFontSize = 11F;
+            this.trackNumObject.TextboxSidePadding = 12;
+            this.trackNumObject.TextboxWidth = 56;
+            this.trackNumObject.UnitText = "";
+            this.trackNumObject.Value = 100F;
+            this.trackNumObject.WheelStep = 1F;
+            this.trackNumObject.ValueChanged += new System.Action<float>(this.trackNumObject_ValueChanged);
+            this.trackNumObject.Load += new System.EventHandler(this.trackNumObject_Load);
             // 
             // layLimitCouter
             // 
@@ -2298,6 +2298,7 @@ namespace BeeInterface
         private System.Windows.Forms.Label label10;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private  System.Windows.Forms.TableLayoutPanel layMaximumObj;
+        private CustomNumericEx trackNumObject;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
@@ -2306,8 +2307,15 @@ namespace BeeInterface
         private System.Windows.Forms.Label label3;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.Label label8;
+        private  System.Windows.Forms.TableLayoutPanel layLimitCouter;
+        private RJButton btnMore;
+        private RJButton btnEqual;
+        private RJButton btnLess;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label11;
+        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel21;
+        private System.Windows.Forms.Label label14;
+        private RJButton btnLimitCounter;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private RJButton btnElip;
         private RJButton btnRect;
@@ -2327,14 +2335,6 @@ namespace BeeInterface
         private AdjustBarEx trackAngle;
         private AdjustBarEx trackMaxOverLap;
         private AdjustBarEx trackScore;
-        private System.Windows.Forms.TableLayoutPanel layLimitCouter;
-        private RJButton btnMore;
-        private RJButton btnEqual;
-        private RJButton btnLess;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel21;
-        private System.Windows.Forms.Label label14;
-        private RJButton btnLimitCounter;
-        private CustomNumericEx trackNumObject;
         private CustomNumericEx numLimitCounter;
     }
 }

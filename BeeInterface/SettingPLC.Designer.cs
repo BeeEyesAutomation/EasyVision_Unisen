@@ -1662,6 +1662,7 @@ namespace BeeInterface
             this.rjButton20.Text = "0";
             this.rjButton20.TextColor = System.Drawing.Color.Black;
             this.rjButton20.UseVisualStyleBackColor = false;
+            this.rjButton20.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO15
             // 
@@ -1733,6 +1734,7 @@ namespace BeeInterface
             this.rjButton19.Text = "0";
             this.rjButton19.TextColor = System.Drawing.Color.Black;
             this.rjButton19.UseVisualStyleBackColor = false;
+            this.rjButton19.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO14
             // 
@@ -1804,6 +1806,7 @@ namespace BeeInterface
             this.rjButton18.Text = "0";
             this.rjButton18.TextColor = System.Drawing.Color.Black;
             this.rjButton18.UseVisualStyleBackColor = false;
+            this.rjButton18.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO13
             // 
@@ -1875,6 +1878,7 @@ namespace BeeInterface
             this.rjButton17.Text = "0";
             this.rjButton17.TextColor = System.Drawing.Color.Black;
             this.rjButton17.UseVisualStyleBackColor = false;
+            this.rjButton17.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO12
             // 
@@ -1946,6 +1950,7 @@ namespace BeeInterface
             this.rjButton16.Text = "0";
             this.rjButton16.TextColor = System.Drawing.Color.Black;
             this.rjButton16.UseVisualStyleBackColor = false;
+            this.rjButton16.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO11
             // 
@@ -2017,6 +2022,7 @@ namespace BeeInterface
             this.rjButton15.Text = "0";
             this.rjButton15.TextColor = System.Drawing.Color.Black;
             this.rjButton15.UseVisualStyleBackColor = false;
+            this.rjButton15.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO10
             // 
@@ -2088,6 +2094,7 @@ namespace BeeInterface
             this.rjButton14.Text = "0";
             this.rjButton14.TextColor = System.Drawing.Color.Black;
             this.rjButton14.UseVisualStyleBackColor = false;
+            this.rjButton14.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO9
             // 
@@ -2159,6 +2166,7 @@ namespace BeeInterface
             this.rjButton13.Text = "0";
             this.rjButton13.TextColor = System.Drawing.Color.Black;
             this.rjButton13.UseVisualStyleBackColor = false;
+            this.rjButton13.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO8
             // 
@@ -2230,7 +2238,7 @@ namespace BeeInterface
             this.DO7.Text = "0";
             this.DO7.TextColor = System.Drawing.Color.Black;
             this.DO7.UseVisualStyleBackColor = false;
-            this.DO7.Click += new System.EventHandler(this.DO7_Click);
+            this.DO7.Click += new System.EventHandler(this.DOutClick);
             // 
             // DO6
             // 
@@ -2280,7 +2288,7 @@ namespace BeeInterface
             this.DO6.Text = "0";
             this.DO6.TextColor = System.Drawing.Color.Black;
             this.DO6.UseVisualStyleBackColor = false;
-            this.DO6.Click += new System.EventHandler(this.DO6_Click);
+            this.DO6.Click += new System.EventHandler(this.DOutClick);
             // 
             // DO5
             // 
@@ -2330,7 +2338,7 @@ namespace BeeInterface
             this.DO5.Text = "0";
             this.DO5.TextColor = System.Drawing.Color.Black;
             this.DO5.UseVisualStyleBackColor = false;
-            this.DO5.Click += new System.EventHandler(this.DO5_Click);
+            this.DO5.Click += new System.EventHandler(this.DOutClick);
             // 
             // DO4
             // 
@@ -2380,7 +2388,7 @@ namespace BeeInterface
             this.DO4.Text = "0";
             this.DO4.TextColor = System.Drawing.Color.Black;
             this.DO4.UseVisualStyleBackColor = false;
-            this.DO4.Click += new System.EventHandler(this.DO4_Click);
+            this.DO4.Click += new System.EventHandler(this.DOutClick);
             // 
             // D3
             // 
@@ -2430,7 +2438,7 @@ namespace BeeInterface
             this.D3.Text = "0";
             this.D3.TextColor = System.Drawing.Color.Black;
             this.D3.UseVisualStyleBackColor = false;
-            this.D3.Click += new System.EventHandler(this.D3_Click);
+            this.D3.Click += new System.EventHandler(this.DOutClick);
             // 
             // DO2
             // 
@@ -2480,7 +2488,7 @@ namespace BeeInterface
             this.DO2.Text = "0";
             this.DO2.TextColor = System.Drawing.Color.Black;
             this.DO2.UseVisualStyleBackColor = false;
-            this.DO2.Click += new System.EventHandler(this.DO2_Click);
+            this.DO2.Click += new System.EventHandler(this.DOutClick);
             // 
             // DO1
             // 
@@ -2530,7 +2538,7 @@ namespace BeeInterface
             this.DO1.Text = "0";
             this.DO1.TextColor = System.Drawing.Color.Black;
             this.DO1.UseVisualStyleBackColor = false;
-            this.DO1.Click += new System.EventHandler(this.DO1_Click);
+            this.DO1.Click += new System.EventHandler(this.DOutClick);
             // 
             // cbO7
             // 
@@ -2756,7 +2764,7 @@ namespace BeeInterface
             this.DO0.Text = "0";
             this.DO0.TextColor = System.Drawing.Color.Black;
             this.DO0.UseVisualStyleBackColor = false;
-            this.DO0.Click += new System.EventHandler(this.DO0_Click);
+            this.DO0.Click += new System.EventHandler(this.DOutClick);
             // 
             // tabPage7
             // 
