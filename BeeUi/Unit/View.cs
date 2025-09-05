@@ -989,18 +989,19 @@ namespace BeeUi
                         if (index != BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Index )
                         {
                             RectRotate rot = PropetyTool.Control.Propety.rotArea;
-                        if (rot == null)
-                            return;
+                        if (rot != null)
+                        {
                             mat = new Matrix();
-                        mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+                            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                            mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
 
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                            mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                             mat.Rotate(rot._rectRotation);
                             RectangleF _rect3 = rot._rect;
                             gc.Transform = mat;
                             gc.DrawRectangle(new Pen(Color.Cornsilk, 4), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
                             gc.ResetTransform();
+                        }
                         }
                         index++;
                     }
