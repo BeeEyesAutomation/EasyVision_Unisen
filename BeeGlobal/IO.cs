@@ -200,8 +200,9 @@ namespace BeeGlobal
                     ComPort = PortCom,
                     Port=PortIP,
                     Baudrate = Baurate,
-                    Parity = Parity.Even,
+                    Parity = Parity.None,
                     StopBits = StopBits.One,
+
                     UnitId = SlaveID,
                     OperationTimeoutMs = timeOut,
                     Retries = 2,
@@ -236,7 +237,7 @@ namespace BeeGlobal
                  if (IsConnected)
                     if (ModbusRole == ModbusRole.ClientMaster)
                     {
-                        valueInput = Array.ConvertAll(await ModbusService.ReadCoilsAsync(AddRead, 16), b => b ? 1 : 0); //await Modbus.ReadBit(1);
+                        valueInput = await ModbusService.ReadCoilsHoldingAsync(AddRead, 16); //await Modbus.ReadBit(1);
 
                     }
                     else
@@ -321,7 +322,7 @@ namespace BeeGlobal
             numRead++;
                 CT.Restart();
             Global.StatusIO = StatusIO.Reading;
-            valueInput = Array.ConvertAll(await ModbusService.ReadCoilsAsync(AddRead, 16), b => b ? 1 : 0); //await Modbus.ReadBit(1);await Modbus.ReadBit(AddRead);
+            valueInput =await ModbusService.ReadCoilsHoldingAsync(AddRead, 16); //await Modbus.ReadBit(1);await Modbus.ReadBit(AddRead);
             Global.StatusIO = StatusIO.None;
             CT.Stop();
             
@@ -656,7 +657,7 @@ namespace BeeGlobal
                 return false;
             CT.Restart();
             if(ModbusRole==ModbusRole.ClientMaster)
-            await  ModbusService.WriteSingleCoilAsync(AddWrite,Convert.ToBoolean( Val)); //Modbus.WriteBit(AddWrite, Val);
+            await  ModbusService.WriteSingleRegisterAsync(AddWrite, Val); //Modbus.WriteBit(AddWrite, Val);
          else
                 ModbusService.SetCoil(AddWrite, Convert.ToBoolean(Val));
 

@@ -424,7 +424,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             timerRead.Value=Global.ParaCommon.Comunication.IO.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.IO.Baurate + "";
             slaveID.Value = Global.ParaCommon.Comunication.IO.SlaveID;
-            comIO.Text = Global.ParaCommon.Comunication.IO.Port;
+            comIO.Text = Global.ParaCommon.Comunication.IO.PortCom;
                 if (Global.ParaCommon.Comunication.IO.AddRead == 0 && Global.ParaCommon.Comunication.IO.AddWrite == 0)
                 {
                     Global.ParaCommon.Comunication.IO.AddRead = 1;
@@ -839,150 +839,42 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
             if (name == "") return;
             if (cb.Text.Contains("None"))
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
+                Global.ParaCommon.Comunication.IO.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
             else
-                Global.ParaCommon.Comunication.IO.AddOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
+                Global.ParaCommon.Comunication.IO.AddOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
             OldOut[value] = name;
             nameOut[value] = name;
             ChangeDatasourceOut(value, name);
 
         }
-        private void cbO0_SelectionChangeCommitted(object sender, EventArgs e)
+
+        private async void DOutClick(object sender, EventArgs e)
         {
+            RJButton btn = sender as RJButton;
          
-            String name = cbO0.SelectedValue.ToString();
-            if (name == "") return;
-            if (cbO0.Text.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[0], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(0, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[0] = name;
-            }
-            ChangeDatasourceOut(0, name);
-
-        }
-
-        private void cbO1_SelectionChangeCommitted(object sender, EventArgs e)
-        {
+            var m = Regex.Match(btn.Name, @"[+-]?\d+");
+            int value = m.Success ? int.Parse(m.Value) : 0;  // -42
           
-            String name = cbO1.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
+            if (Global.ParaCommon.IsExternal)
             {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(1, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[1], ignoreCase: true));
+                btn.IsCLick = !btn.IsCLick;
+                MessageBox.Show("Change Mode to Internal!");
+                return;
+            }
+            int index = Global.ParaCommon.Comunication.IO.paraIOs.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            if (index > -1)
+            {
+                tmRead.Enabled = false;
+                await Task.Delay(100);
+                Global.ParaCommon.Comunication.IO.SetOutPut(Global.ParaCommon.Comunication.IO.paraIOs[index].Adddress, btn.IsCLick);
+                if (!await Global.ParaCommon.Comunication.IO.WriteOutPut())
+                {
+                    btn.IsCLick = !btn.IsCLick;
+                }
+                tmRead.Enabled = true;
+                btn.Text = Convert.ToInt16(btn.IsCLick).ToString();
+            }
 
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(1, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[1] = name;
-            }
-            ChangeDatasourceOut(1, name);
-        }
-
-        private void cbO2_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            
-            String name = cbO2.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(2, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[2], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(2, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[2] = name;
-            }
-            ChangeDatasourceOut(2, name);
-        }
-
-        private void cbO3_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbO3.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(3, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[3], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(3, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[3] = name;
-            }
-            ChangeDatasourceOut(3, name);
-        }
-
-        private void cbO4_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbO4.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(4, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[4], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(4, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[0] = name;
-            }
-            ChangeDatasourceOut(4, name);
-        }
-
-        private void cbO5_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbO5.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(5, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[5], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(5, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[5] = name;
-            }
-            ChangeDatasourceOut(5, name);
-        }
-
-        private void cbO6_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbO6.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(6, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[6], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(6, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[6] = name;
-            }
-            ChangeDatasourceOut(6, name);
-        }
-
-        private void cbO7_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbO7.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.IO.RemoveOutPut(7, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[7], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.IO.AddOutPut(7, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
-                OldOut[7] = name;
-            }
-            ChangeDatasourceOut(7, name);
         }
         private async void DO0_Click(object sender, EventArgs e)
         {
@@ -1192,7 +1084,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.IO.Port = comIO.SelectedValue.ToString() ;
+            Global.ParaCommon.Comunication.IO.PortCom = comIO.SelectedValue.ToString() ;
         }
 
         private void tmCheck_Tick(object sender, EventArgs e)

@@ -111,12 +111,25 @@ namespace BeeGlobal
                 _started = true;
             }
             else
-            {
-                // Client/Master: lazy connect khi I/O
+            {  // --- Client (Master): chủ động kết nối ngay ---
+                await ConnectAsync(ct);
                 _started = true;
+                //// Client/Master: lazy connect khi I/O
+                //_started = true;
             }
         }
+        public async Task ConnectAsync(CancellationToken ct = default(CancellationToken))
+        {
+            EnsureClient(); // cấu hình TCP/RTU, UnitId, Baudrate, Parity, StopBits...
+            if (_client.Connected) return;
 
+            // Bọc timeout ngoài (ngoài ConnectionTimeout của thư viện)
+            await RunWithTimeoutAsync(new Func<Task>(delegate
+            {
+                _client.Connect();
+                return Task.CompletedTask;
+            }), _opt.OperationTimeoutMs, ct);
+        }
         public Task StopAsync()
         {
             ThrowIfDisposed();
@@ -184,6 +197,29 @@ namespace BeeGlobal
                     {
                         bool[] data = _client.ReadCoils(startAddress, count);
                         return Task.FromResult<bool[]>(data);
+                    }, _opt.OperationTimeoutMs, token);
+                }, token);
+            }, ct);
+        }
+        public async Task<int[]> ReadCoilsHoldingAsync(int startAddress, int count, CancellationToken ct = default(CancellationToken))
+        {
+            return await WithIoLock<int[]>(async delegate (CancellationToken token)
+            {
+                await EnsureConnectedAsync(token);
+                return await RetryAsync<int[]>(async delegate
+                {
+                    return await RunWithTimeoutAsync<int[]>(delegate
+                    {//int[] val = await Task.Run(() => modbusClient.ReadHoldingRegisters(startAddress, 1), cts.Token);
+                        int[] values = new int[16];
+                        ushort registerValue = (ushort)_client.ReadHoldingRegisters(startAddress, 1)[0];
+
+                        // Lấy từng bit
+                        for (int i = 15; i >= 0; i--)  // bit 15 là MSB, bit 0 là LSB
+                        {
+                            values[i] = (registerValue >> i) & 1;
+                        }
+                        // values = _client.ReadHoldingRegisters(startAddress, 1);
+                        return Task.FromResult<int[]>(values);
                     }, _opt.OperationTimeoutMs, token);
                 }, token);
             }, ct);
@@ -734,7 +770,9 @@ namespace BeeGlobal
                 Task<T> task = action();
                 Task completed = await Task.WhenAny(task, Task.Delay(Timeout.InfiniteTimeSpan, cts.Token));
                 if (!object.ReferenceEquals(completed, task))
-                    throw new TimeoutException("Modbus operation timed out.");
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_READ", "Modbus operation timed out"));
+
+              //  throw new TimeoutException("Modbus operation timed out.");
                 return await task;
             }
             finally { cts.Dispose(); }

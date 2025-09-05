@@ -3478,14 +3478,15 @@ namespace BeeUi
 
         private void btnDeleteFile_Click(object sender, EventArgs e)
         {
-            File.Delete(Files[indexFile - 1]);
-            Files.RemoveAt(indexFile - 1);
-            listMat.RemoveAt(indexFile - 1);
+            BeeCore.Common.listCamera[Global.IndexChoose].Setting();
+            //File.Delete(Files[indexFile - 1]);
+            //Files.RemoveAt(indexFile - 1);
+            //listMat.RemoveAt(indexFile - 1);
 
-            indexFile--;
-            if (indexFile < 0)
-                indexFile = 0;
-            btnPlayStep.PerformClick();
+            //indexFile--;
+            //if (indexFile < 0)
+            //    indexFile = 0;
+            //btnPlayStep.PerformClick();
         }
 
         private void btnGird_Click_1(object sender, EventArgs e)

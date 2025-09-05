@@ -37,6 +37,13 @@ namespace BeeUi
             this.ckHideTool = new System.Windows.Forms.CheckBox();
             this.pMenu = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnDropColor = new BeeInterface.RJButton();
+            this.btnShowCenter = new BeeInterface.RJButton();
+            this.btnZoomOut = new BeeInterface.RJButton();
+            this.btnZoomIn = new BeeInterface.RJButton();
+            this.btnFull = new BeeInterface.RJButton();
+            this.btnGird = new BeeInterface.RJButton();
+            this.btnShowArea = new BeeInterface.RJButton();
             this.pView = new System.Windows.Forms.Panel();
             this.workUndo = new System.ComponentModel.BackgroundWorker();
             this.tmTool = new System.Windows.Forms.Timer(this.components);
@@ -66,6 +73,7 @@ namespace BeeUi
             this.splitter11 = new System.Windows.Forms.Splitter();
             this.btnPlayStep = new System.Windows.Forms.Button();
             this.splitter10 = new System.Windows.Forms.Splitter();
+            this.btnRunSim = new BeeInterface.RJButton();
             this.splitter9 = new System.Windows.Forms.Splitter();
             this.btnFile = new System.Windows.Forms.Button();
             this.splitter8 = new System.Windows.Forms.Splitter();
@@ -74,23 +82,15 @@ namespace BeeUi
             this.btnSave = new System.Windows.Forms.Button();
             this.splitter6 = new System.Windows.Forms.Splitter();
             this.splitter5 = new System.Windows.Forms.Splitter();
+            this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnMenu = new System.Windows.Forms.Button();
             this.splitter3 = new System.Windows.Forms.Splitter();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
-            this.btnDropColor = new BeeInterface.RJButton();
-            this.btnShowCenter = new BeeInterface.RJButton();
-            this.btnZoomOut = new BeeInterface.RJButton();
-            this.btnZoomIn = new BeeInterface.RJButton();
-            this.btnFull = new BeeInterface.RJButton();
-            this.btnGird = new BeeInterface.RJButton();
-            this.btnShowArea = new BeeInterface.RJButton();
-            this.btnRunSim = new BeeInterface.RJButton();
-            this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnLive = new BeeInterface.RJButton();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.btnContinuous = new BeeInterface.RJButton();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.btnCap = new BeeInterface.RJButton();
+            this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
             this.pMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pView.SuspendLayout();
@@ -177,341 +177,6 @@ namespace BeeUi
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(65, 406);
             this.tableLayoutPanel1.TabIndex = 37;
-            // 
-            // pView
-            // 
-            this.pView.AutoScroll = true;
-            this.pView.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pView.Controls.Add(this.imgView);
-            this.pView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pView.Location = new System.Drawing.Point(0, 62);
-            this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(1429, 697);
-            this.pView.TabIndex = 6;
-            this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
-            this.pView.MouseLeave += new System.EventHandler(this.pView_MouseLeave);
-            this.pView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pView_MouseMove);
-            // 
-            // workPlay
-            // 
-            this.workPlay.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPlay_DoWork);
-            this.workPlay.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workPlay_RunWorkerCompleted);
-            // 
-            // tmPlay
-            // 
-            this.tmPlay.Interval = 200;
-            this.tmPlay.Tick += new System.EventHandler(this.tmPlay_Tick);
-            // 
-            // workReadCCD
-            // 
-            this.workReadCCD.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReadCCD_DoWork);
-            this.workReadCCD.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReadCCD_RunWorkerCompleted);
-            // 
-            // workShow
-            // 
-            this.workShow.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workShow_DoWork);
-            this.workShow.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workShow_RunWorkerCompleted);
-            // 
-            // tmTrig
-            // 
-            this.tmTrig.Interval = 1000;
-            this.tmTrig.Tick += new System.EventHandler(this.tmTrig_Tick);
-            // 
-            // workGetColor
-            // 
-            this.workGetColor.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workGetColor_DoWork);
-            this.workGetColor.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workGetColor_RunWorkerCompleted);
-            // 
-            // workInsert
-            // 
-            this.workInsert.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workInsert_DoWork);
-            this.workInsert.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workInsert_RunWorkerCompleted);
-            // 
-            // tmCheckPort
-            // 
-            this.tmCheckPort.Interval = 2000;
-            this.tmCheckPort.Tick += new System.EventHandler(this.tmCheckPort_Tick);
-            // 
-            // tmCheckCCD
-            // 
-            this.tmCheckCCD.Interval = 1000;
-            this.tmCheckCCD.Tick += new System.EventHandler(this.tmCheckCCD_Tick);
-            // 
-            // openFile
-            // 
-            this.openFile.FileName = "openFile";
-            // 
-            // tmRefresh
-            // 
-            this.tmRefresh.Interval = 30000;
-            this.tmRefresh.Tick += new System.EventHandler(this.tmRefresh_Tick);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // tmOut
-            // 
-            this.tmOut.Tick += new System.EventHandler(this.tmOut_Tick);
-            // 
-            // tmContinuous
-            // 
-            this.tmContinuous.Tick += new System.EventHandler(this.tmContinuous_Tick);
-            // 
-            // workTrig
-            // 
-            this.workTrig.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workTrig_DoWork);
-            // 
-            // tmPress
-            // 
-            this.tmPress.Tick += new System.EventHandler(this.tmPress_Tick);
-            // 
-            // tmSimulation
-            // 
-            this.tmSimulation.Interval = 1000;
-            this.tmSimulation.Tick += new System.EventHandler(this.tmSimulation_Tick);
-            // 
-            // tmLive
-            // 
-            this.tmLive.Interval = 2;
-            this.tmLive.Tick += new System.EventHandler(this.tmLive_Tick);
-            // 
-            // tmShow
-            // 
-            this.tmShow.Enabled = true;
-            this.tmShow.Interval = 1000;
-            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
-            // 
-            // splitter4
-            // 
-            this.splitter4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter4.Location = new System.Drawing.Point(0, 57);
-            this.splitter4.Name = "splitter4";
-            this.splitter4.Size = new System.Drawing.Size(1494, 5);
-            this.splitter4.TabIndex = 30;
-            this.splitter4.TabStop = false;
-            // 
-            // pBtn
-            // 
-            this.pBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.pBtn.Controls.Add(this.btnDeleteFile);
-            this.pBtn.Controls.Add(this.splitter11);
-            this.pBtn.Controls.Add(this.btnPlayStep);
-            this.pBtn.Controls.Add(this.splitter10);
-            this.pBtn.Controls.Add(this.btnRunSim);
-            this.pBtn.Controls.Add(this.splitter9);
-            this.pBtn.Controls.Add(this.btnFile);
-            this.pBtn.Controls.Add(this.splitter8);
-            this.pBtn.Controls.Add(this.btnFolder);
-            this.pBtn.Controls.Add(this.splitter7);
-            this.pBtn.Controls.Add(this.btnSave);
-            this.pBtn.Controls.Add(this.splitter6);
-            this.pBtn.Controls.Add(this.ckHideTool);
-            this.pBtn.Controls.Add(this.splitter5);
-            this.pBtn.Controls.Add(this.btnTypeTrig);
-            this.pBtn.Controls.Add(this.btnMenu);
-            this.pBtn.Controls.Add(this.splitter3);
-            this.pBtn.Controls.Add(this.btnLive);
-            this.pBtn.Controls.Add(this.splitter2);
-            this.pBtn.Controls.Add(this.btnContinuous);
-            this.pBtn.Controls.Add(this.splitter1);
-            this.pBtn.Controls.Add(this.btnCap);
-            this.pBtn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pBtn.Location = new System.Drawing.Point(0, 0);
-            this.pBtn.Name = "pBtn";
-            this.pBtn.Padding = new System.Windows.Forms.Padding(5);
-            this.pBtn.Size = new System.Drawing.Size(1494, 57);
-            this.pBtn.TabIndex = 31;
-            this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
-            // 
-            // btnDeleteFile
-            // 
-            this.btnDeleteFile.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnDeleteFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnDeleteFile.Image = global::BeeUi.Properties.Resources.Erase;
-            this.btnDeleteFile.Location = new System.Drawing.Point(1024, 5);
-            this.btnDeleteFile.Name = "btnDeleteFile";
-            this.btnDeleteFile.Size = new System.Drawing.Size(65, 47);
-            this.btnDeleteFile.TabIndex = 44;
-            this.btnDeleteFile.UseVisualStyleBackColor = true;
-            this.btnDeleteFile.Visible = false;
-            this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
-            // 
-            // splitter11
-            // 
-            this.splitter11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter11.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter11.Location = new System.Drawing.Point(1089, 5);
-            this.splitter11.Name = "splitter11";
-            this.splitter11.Size = new System.Drawing.Size(5, 47);
-            this.splitter11.TabIndex = 47;
-            this.splitter11.TabStop = false;
-            // 
-            // btnPlayStep
-            // 
-            this.btnPlayStep.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnPlayStep.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnPlayStep.Image = global::BeeUi.Properties.Resources.End;
-            this.btnPlayStep.Location = new System.Drawing.Point(1094, 5);
-            this.btnPlayStep.Name = "btnPlayStep";
-            this.btnPlayStep.Size = new System.Drawing.Size(65, 47);
-            this.btnPlayStep.TabIndex = 43;
-            this.btnPlayStep.UseVisualStyleBackColor = true;
-            this.btnPlayStep.Visible = false;
-            this.btnPlayStep.Click += new System.EventHandler(this.btnPlayStep_Click);
-            // 
-            // splitter10
-            // 
-            this.splitter10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter10.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter10.Location = new System.Drawing.Point(1159, 5);
-            this.splitter10.Name = "splitter10";
-            this.splitter10.Size = new System.Drawing.Size(5, 47);
-            this.splitter10.TabIndex = 46;
-            this.splitter10.TabStop = false;
-            // 
-            // splitter9
-            // 
-            this.splitter9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter9.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter9.Location = new System.Drawing.Point(1229, 5);
-            this.splitter9.Name = "splitter9";
-            this.splitter9.Size = new System.Drawing.Size(5, 47);
-            this.splitter9.TabIndex = 44;
-            this.splitter9.TabStop = false;
-            // 
-            // btnFile
-            // 
-            this.btnFile.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnFile.Image = global::BeeUi.Properties.Resources.File;
-            this.btnFile.Location = new System.Drawing.Point(1234, 5);
-            this.btnFile.Name = "btnFile";
-            this.btnFile.Size = new System.Drawing.Size(65, 47);
-            this.btnFile.TabIndex = 41;
-            this.btnFile.UseVisualStyleBackColor = true;
-            this.btnFile.Visible = false;
-            this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
-            // 
-            // splitter8
-            // 
-            this.splitter8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter8.Location = new System.Drawing.Point(1299, 5);
-            this.splitter8.Name = "splitter8";
-            this.splitter8.Size = new System.Drawing.Size(5, 47);
-            this.splitter8.TabIndex = 43;
-            this.splitter8.TabStop = false;
-            // 
-            // btnFolder
-            // 
-            this.btnFolder.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnFolder.Image = global::BeeUi.Properties.Resources.Folder;
-            this.btnFolder.Location = new System.Drawing.Point(1304, 5);
-            this.btnFolder.Name = "btnFolder";
-            this.btnFolder.Size = new System.Drawing.Size(65, 47);
-            this.btnFolder.TabIndex = 34;
-            this.btnFolder.UseVisualStyleBackColor = true;
-            this.btnFolder.Visible = false;
-            this.btnFolder.Click += new System.EventHandler(this.btnImg_Click);
-            // 
-            // splitter7
-            // 
-            this.splitter7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter7.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter7.Location = new System.Drawing.Point(1369, 5);
-            this.splitter7.Name = "splitter7";
-            this.splitter7.Size = new System.Drawing.Size(5, 47);
-            this.splitter7.TabIndex = 42;
-            this.splitter7.TabStop = false;
-            // 
-            // btnSave
-            // 
-            this.btnSave.BackColor = System.Drawing.SystemColors.Control;
-            this.btnSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
-            this.btnSave.Image = global::BeeUi.Properties.Resources.Save_1;
-            this.btnSave.Location = new System.Drawing.Point(1374, 5);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(65, 47);
-            this.btnSave.TabIndex = 33;
-            this.btnSave.UseVisualStyleBackColor = false;
-            this.btnSave.Visible = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // splitter6
-            // 
-            this.splitter6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter6.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter6.Location = new System.Drawing.Point(1439, 5);
-            this.splitter6.Name = "splitter6";
-            this.splitter6.Size = new System.Drawing.Size(5, 47);
-            this.splitter6.TabIndex = 41;
-            this.splitter6.TabStop = false;
-            // 
-            // splitter5
-            // 
-            this.splitter5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter5.Location = new System.Drawing.Point(399, 5);
-            this.splitter5.MinExtra = 1;
-            this.splitter5.MinSize = 10;
-            this.splitter5.Name = "splitter5";
-            this.splitter5.Size = new System.Drawing.Size(5, 47);
-            this.splitter5.TabIndex = 40;
-            this.splitter5.TabStop = false;
-            // 
-            // btnMenu
-            // 
-            this.btnMenu.BackColor = System.Drawing.Color.Transparent;
-            this.btnMenu.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnMenu.Image = global::BeeUi.Properties.Resources.Menu;
-            this.btnMenu.Location = new System.Drawing.Point(1444, 5);
-            this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(45, 47);
-            this.btnMenu.TabIndex = 38;
-            this.btnMenu.UseVisualStyleBackColor = false;
-            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
-            // 
-            // splitter3
-            // 
-            this.splitter3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter3.Location = new System.Drawing.Point(291, 5);
-            this.splitter3.MinExtra = 1;
-            this.splitter3.MinSize = 10;
-            this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(5, 47);
-            this.splitter3.TabIndex = 12;
-            this.splitter3.TabStop = false;
-            // 
-            // splitter2
-            // 
-            this.splitter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter2.Location = new System.Drawing.Point(176, 5);
-            this.splitter2.MinExtra = 1;
-            this.splitter2.MinSize = 10;
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(5, 47);
-            this.splitter2.TabIndex = 11;
-            this.splitter2.TabStop = false;
-            // 
-            // splitter1
-            // 
-            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
-            this.splitter1.Location = new System.Drawing.Point(80, 5);
-            this.splitter1.MinExtra = 1;
-            this.splitter1.MinSize = 10;
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(5, 47);
-            this.splitter1.TabIndex = 10;
-            this.splitter1.TabStop = false;
-            // 
-            // tmEnableControl
-            // 
-            this.tmEnableControl.Interval = 200;
-            this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
             // 
             // btnDropColor
             // 
@@ -856,6 +521,198 @@ namespace BeeUi
             this.btnShowArea.UseVisualStyleBackColor = false;
             this.btnShowArea.Click += new System.EventHandler(this.btnShowArea_Click);
             // 
+            // pView
+            // 
+            this.pView.AutoScroll = true;
+            this.pView.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.pView.Controls.Add(this.imgView);
+            this.pView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pView.Location = new System.Drawing.Point(0, 62);
+            this.pView.Name = "pView";
+            this.pView.Size = new System.Drawing.Size(1429, 697);
+            this.pView.TabIndex = 6;
+            this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
+            this.pView.MouseLeave += new System.EventHandler(this.pView_MouseLeave);
+            this.pView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pView_MouseMove);
+            // 
+            // workPlay
+            // 
+            this.workPlay.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workPlay_DoWork);
+            this.workPlay.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workPlay_RunWorkerCompleted);
+            // 
+            // tmPlay
+            // 
+            this.tmPlay.Interval = 200;
+            this.tmPlay.Tick += new System.EventHandler(this.tmPlay_Tick);
+            // 
+            // workReadCCD
+            // 
+            this.workReadCCD.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workReadCCD_DoWork);
+            this.workReadCCD.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workReadCCD_RunWorkerCompleted);
+            // 
+            // workShow
+            // 
+            this.workShow.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workShow_DoWork);
+            this.workShow.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workShow_RunWorkerCompleted);
+            // 
+            // tmTrig
+            // 
+            this.tmTrig.Interval = 1000;
+            this.tmTrig.Tick += new System.EventHandler(this.tmTrig_Tick);
+            // 
+            // workGetColor
+            // 
+            this.workGetColor.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workGetColor_DoWork);
+            this.workGetColor.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workGetColor_RunWorkerCompleted);
+            // 
+            // workInsert
+            // 
+            this.workInsert.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workInsert_DoWork);
+            this.workInsert.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workInsert_RunWorkerCompleted);
+            // 
+            // tmCheckPort
+            // 
+            this.tmCheckPort.Interval = 2000;
+            this.tmCheckPort.Tick += new System.EventHandler(this.tmCheckPort_Tick);
+            // 
+            // tmCheckCCD
+            // 
+            this.tmCheckCCD.Interval = 1000;
+            this.tmCheckCCD.Tick += new System.EventHandler(this.tmCheckCCD_Tick);
+            // 
+            // openFile
+            // 
+            this.openFile.FileName = "openFile";
+            // 
+            // tmRefresh
+            // 
+            this.tmRefresh.Interval = 30000;
+            this.tmRefresh.Tick += new System.EventHandler(this.tmRefresh_Tick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // tmOut
+            // 
+            this.tmOut.Tick += new System.EventHandler(this.tmOut_Tick);
+            // 
+            // tmContinuous
+            // 
+            this.tmContinuous.Tick += new System.EventHandler(this.tmContinuous_Tick);
+            // 
+            // workTrig
+            // 
+            this.workTrig.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workTrig_DoWork);
+            // 
+            // tmPress
+            // 
+            this.tmPress.Tick += new System.EventHandler(this.tmPress_Tick);
+            // 
+            // tmSimulation
+            // 
+            this.tmSimulation.Interval = 1000;
+            this.tmSimulation.Tick += new System.EventHandler(this.tmSimulation_Tick);
+            // 
+            // tmLive
+            // 
+            this.tmLive.Interval = 2;
+            this.tmLive.Tick += new System.EventHandler(this.tmLive_Tick);
+            // 
+            // tmShow
+            // 
+            this.tmShow.Enabled = true;
+            this.tmShow.Interval = 1000;
+            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
+            // 
+            // splitter4
+            // 
+            this.splitter4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitter4.Location = new System.Drawing.Point(0, 57);
+            this.splitter4.Name = "splitter4";
+            this.splitter4.Size = new System.Drawing.Size(1494, 5);
+            this.splitter4.TabIndex = 30;
+            this.splitter4.TabStop = false;
+            // 
+            // pBtn
+            // 
+            this.pBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.pBtn.Controls.Add(this.btnDeleteFile);
+            this.pBtn.Controls.Add(this.splitter11);
+            this.pBtn.Controls.Add(this.btnPlayStep);
+            this.pBtn.Controls.Add(this.splitter10);
+            this.pBtn.Controls.Add(this.btnRunSim);
+            this.pBtn.Controls.Add(this.splitter9);
+            this.pBtn.Controls.Add(this.btnFile);
+            this.pBtn.Controls.Add(this.splitter8);
+            this.pBtn.Controls.Add(this.btnFolder);
+            this.pBtn.Controls.Add(this.splitter7);
+            this.pBtn.Controls.Add(this.btnSave);
+            this.pBtn.Controls.Add(this.splitter6);
+            this.pBtn.Controls.Add(this.ckHideTool);
+            this.pBtn.Controls.Add(this.splitter5);
+            this.pBtn.Controls.Add(this.btnTypeTrig);
+            this.pBtn.Controls.Add(this.btnMenu);
+            this.pBtn.Controls.Add(this.splitter3);
+            this.pBtn.Controls.Add(this.btnLive);
+            this.pBtn.Controls.Add(this.splitter2);
+            this.pBtn.Controls.Add(this.btnContinuous);
+            this.pBtn.Controls.Add(this.splitter1);
+            this.pBtn.Controls.Add(this.btnCap);
+            this.pBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pBtn.Location = new System.Drawing.Point(0, 0);
+            this.pBtn.Name = "pBtn";
+            this.pBtn.Padding = new System.Windows.Forms.Padding(5);
+            this.pBtn.Size = new System.Drawing.Size(1494, 57);
+            this.pBtn.TabIndex = 31;
+            this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
+            // 
+            // btnDeleteFile
+            // 
+            this.btnDeleteFile.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnDeleteFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            this.btnDeleteFile.Image = global::BeeUi.Properties.Resources.Erase;
+            this.btnDeleteFile.Location = new System.Drawing.Point(1024, 5);
+            this.btnDeleteFile.Name = "btnDeleteFile";
+            this.btnDeleteFile.Size = new System.Drawing.Size(65, 47);
+            this.btnDeleteFile.TabIndex = 44;
+            this.btnDeleteFile.UseVisualStyleBackColor = true;
+            this.btnDeleteFile.Click += new System.EventHandler(this.btnDeleteFile_Click);
+            // 
+            // splitter11
+            // 
+            this.splitter11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter11.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter11.Location = new System.Drawing.Point(1089, 5);
+            this.splitter11.Name = "splitter11";
+            this.splitter11.Size = new System.Drawing.Size(5, 47);
+            this.splitter11.TabIndex = 47;
+            this.splitter11.TabStop = false;
+            // 
+            // btnPlayStep
+            // 
+            this.btnPlayStep.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnPlayStep.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            this.btnPlayStep.Image = global::BeeUi.Properties.Resources.End;
+            this.btnPlayStep.Location = new System.Drawing.Point(1094, 5);
+            this.btnPlayStep.Name = "btnPlayStep";
+            this.btnPlayStep.Size = new System.Drawing.Size(65, 47);
+            this.btnPlayStep.TabIndex = 43;
+            this.btnPlayStep.UseVisualStyleBackColor = true;
+            this.btnPlayStep.Visible = false;
+            this.btnPlayStep.Click += new System.EventHandler(this.btnPlayStep_Click);
+            // 
+            // splitter10
+            // 
+            this.splitter10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter10.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter10.Location = new System.Drawing.Point(1159, 5);
+            this.splitter10.Name = "splitter10";
+            this.splitter10.Size = new System.Drawing.Size(5, 47);
+            this.splitter10.TabIndex = 46;
+            this.splitter10.TabStop = false;
+            // 
             // btnRunSim
             // 
             this.btnRunSim.AutoFont = false;
@@ -906,6 +763,97 @@ namespace BeeUi
             this.btnRunSim.UseVisualStyleBackColor = false;
             this.btnRunSim.Visible = false;
             this.btnRunSim.Click += new System.EventHandler(this.btnRunSim_Click_1);
+            // 
+            // splitter9
+            // 
+            this.splitter9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter9.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter9.Location = new System.Drawing.Point(1229, 5);
+            this.splitter9.Name = "splitter9";
+            this.splitter9.Size = new System.Drawing.Size(5, 47);
+            this.splitter9.TabIndex = 44;
+            this.splitter9.TabStop = false;
+            // 
+            // btnFile
+            // 
+            this.btnFile.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            this.btnFile.Image = global::BeeUi.Properties.Resources.File;
+            this.btnFile.Location = new System.Drawing.Point(1234, 5);
+            this.btnFile.Name = "btnFile";
+            this.btnFile.Size = new System.Drawing.Size(65, 47);
+            this.btnFile.TabIndex = 41;
+            this.btnFile.UseVisualStyleBackColor = true;
+            this.btnFile.Visible = false;
+            this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
+            // 
+            // splitter8
+            // 
+            this.splitter8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter8.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter8.Location = new System.Drawing.Point(1299, 5);
+            this.splitter8.Name = "splitter8";
+            this.splitter8.Size = new System.Drawing.Size(5, 47);
+            this.splitter8.TabIndex = 43;
+            this.splitter8.TabStop = false;
+            // 
+            // btnFolder
+            // 
+            this.btnFolder.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            this.btnFolder.Image = global::BeeUi.Properties.Resources.Folder;
+            this.btnFolder.Location = new System.Drawing.Point(1304, 5);
+            this.btnFolder.Name = "btnFolder";
+            this.btnFolder.Size = new System.Drawing.Size(65, 47);
+            this.btnFolder.TabIndex = 34;
+            this.btnFolder.UseVisualStyleBackColor = true;
+            this.btnFolder.Visible = false;
+            this.btnFolder.Click += new System.EventHandler(this.btnImg_Click);
+            // 
+            // splitter7
+            // 
+            this.splitter7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter7.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter7.Location = new System.Drawing.Point(1369, 5);
+            this.splitter7.Name = "splitter7";
+            this.splitter7.Size = new System.Drawing.Size(5, 47);
+            this.splitter7.TabIndex = 42;
+            this.splitter7.TabStop = false;
+            // 
+            // btnSave
+            // 
+            this.btnSave.BackColor = System.Drawing.SystemColors.Control;
+            this.btnSave.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
+            this.btnSave.Image = global::BeeUi.Properties.Resources.Save_1;
+            this.btnSave.Location = new System.Drawing.Point(1374, 5);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(65, 47);
+            this.btnSave.TabIndex = 33;
+            this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // splitter6
+            // 
+            this.splitter6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter6.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter6.Location = new System.Drawing.Point(1439, 5);
+            this.splitter6.Name = "splitter6";
+            this.splitter6.Size = new System.Drawing.Size(5, 47);
+            this.splitter6.TabIndex = 41;
+            this.splitter6.TabStop = false;
+            // 
+            // splitter5
+            // 
+            this.splitter5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter5.Location = new System.Drawing.Point(399, 5);
+            this.splitter5.MinExtra = 1;
+            this.splitter5.MinSize = 10;
+            this.splitter5.Name = "splitter5";
+            this.splitter5.Size = new System.Drawing.Size(5, 47);
+            this.splitter5.TabIndex = 40;
+            this.splitter5.TabStop = false;
             // 
             // btnTypeTrig
             // 
@@ -958,6 +906,30 @@ namespace BeeUi
             this.btnTypeTrig.TextColor = System.Drawing.Color.Black;
             this.btnTypeTrig.UseVisualStyleBackColor = false;
             this.btnTypeTrig.Click += new System.EventHandler(this.btnTypeTrig_Click);
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenu.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnMenu.Image = global::BeeUi.Properties.Resources.Menu;
+            this.btnMenu.Location = new System.Drawing.Point(1444, 5);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(45, 47);
+            this.btnMenu.TabIndex = 38;
+            this.btnMenu.UseVisualStyleBackColor = false;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
+            // 
+            // splitter3
+            // 
+            this.splitter3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter3.Location = new System.Drawing.Point(291, 5);
+            this.splitter3.MinExtra = 1;
+            this.splitter3.MinSize = 10;
+            this.splitter3.Name = "splitter3";
+            this.splitter3.Size = new System.Drawing.Size(5, 47);
+            this.splitter3.TabIndex = 12;
+            this.splitter3.TabStop = false;
             // 
             // btnLive
             // 
@@ -1015,6 +987,17 @@ namespace BeeUi
             this.btnLive.UseVisualStyleBackColor = false;
             this.btnLive.Click += new System.EventHandler(this.btnSer_Click);
             // 
+            // splitter2
+            // 
+            this.splitter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter2.Location = new System.Drawing.Point(176, 5);
+            this.splitter2.MinExtra = 1;
+            this.splitter2.MinSize = 10;
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(5, 47);
+            this.splitter2.TabIndex = 11;
+            this.splitter2.TabStop = false;
+            // 
             // btnContinuous
             // 
             this.btnContinuous.AutoFont = true;
@@ -1069,6 +1052,17 @@ namespace BeeUi
             this.btnContinuous.UseVisualStyleBackColor = false;
             this.btnContinuous.Click += new System.EventHandler(this.btnRecord_Click);
             // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(119)))), ((int)(((byte)(119)))), ((int)(((byte)(119)))));
+            this.splitter1.Location = new System.Drawing.Point(80, 5);
+            this.splitter1.MinExtra = 1;
+            this.splitter1.MinSize = 10;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(5, 47);
+            this.splitter1.TabIndex = 10;
+            this.splitter1.TabStop = false;
+            // 
             // btnCap
             // 
             this.btnCap.AutoFont = true;
@@ -1122,6 +1116,11 @@ namespace BeeUi
             this.btnCap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCap.UseVisualStyleBackColor = false;
             this.btnCap.Click += new System.EventHandler(this.btnCap_Click);
+            // 
+            // tmEnableControl
+            // 
+            this.tmEnableControl.Interval = 200;
+            this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
             // 
             // View
             // 

@@ -48,6 +48,7 @@ namespace BeeGlobal
                 modbusClient.UnitIdentifier = SlaveId;
                 modbusClient.StopBits = StopBits.One;
                 modbusClient.Parity = Parity.None;
+                
                 modbusClient.ConnectionTimeout = 1000; // Timeout khi kết nối (ms)
               //  modbusClient.ReceiveTimeout = 2000;    // Timeout khi đọc dữ liệu (ms)
               //  modbusClient.SendTimeout = 2000;       // Timeout khi ghi dữ liệu (ms)
