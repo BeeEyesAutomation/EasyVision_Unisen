@@ -20,36 +20,47 @@ namespace BeeCore.Algorithm
             else if (value.CompareTo(max) > 0) return max;
             else return value;
         }
-        public static Mat GetStrongEdgesOnly(Mat gray, double percentile = 0.98)
+        public static String Err = "";
+        public static Mat GetStrongEdgesOnly(Mat raw, double percentile = 0.98)
         {
-            // 1. Làm mượt ảnh
-            Mat blur = new Mat();
-            Cv2.GaussianBlur(gray, blur, new Size(3, 3), sigmaX: 1.0);
+            try
+            {  // 0) Bảo đảm 1 kênh (grayscale)
+                Mat gray = (raw.Channels() == 1)? raw.Clone(): raw.CvtColor(ColorConversionCodes.BGR2GRAY);
 
-            // 2. Tính gradient
-            Mat gradX = new Mat(), gradY = new Mat();
-            Cv2.Sobel(blur, gradX, MatType.CV_32F, 1, 0, ksize: 3);
-            Cv2.Sobel(blur, gradY, MatType.CV_32F, 0, 1, ksize: 3);
+                // 1. Làm mượt ảnh
+                Mat blur = new Mat();
+                Cv2.GaussianBlur(gray, blur, new Size(3, 3), sigmaX: 1.0);
 
-            // 3. Magnitude
-            Mat magnitude = new Mat();
-            Cv2.Magnitude(gradX, gradY, magnitude);
+                // 2. Tính gradient
+                Mat gradX = new Mat(), gradY = new Mat();
+                Cv2.Sobel(blur, gradX, MatType.CV_32F, 1, 0, ksize: 3);
+                Cv2.Sobel(blur, gradY, MatType.CV_32F, 0, 1, ksize: 3);
 
-            // 4. Tự động tính ngưỡng từ histogram gradient
-            float[] magData = new float[magnitude.Rows * magnitude.Cols];
-            magnitude.GetArray(out magData);
+                // 3. Magnitude
+                Mat magnitude = new Mat();
+                Cv2.Magnitude(gradX, gradY, magnitude);
 
-            Array.Sort(magData);
-            int index = (int)(magData.Length * percentile);
-            float threshold = magData[Clamp(index, 0, magData.Length - 1)];
-            // 5. Chuẩn hóa và tạo nhị phân
-            Mat result = new Mat();
-            Cv2.Threshold(magnitude, result, threshold, 255, ThresholdTypes.Binary);
+                // 4. Tự động tính ngưỡng từ histogram gradient
+                float[] magData = new float[magnitude.Rows * magnitude.Cols];
+                magnitude.GetArray(out magData);
 
-            // Chuyển về kiểu 8-bit để hiển thị hoặc xử lý tiếp
-            result.ConvertTo(result, MatType.CV_8U);
-            Cv2.ImWrite("edge.png", result);
-            return result;
+                Array.Sort(magData);
+                int index = (int)(magData.Length * percentile);
+                float threshold = magData[Clamp(index, 0, magData.Length - 1)];
+                // 5. Chuẩn hóa và tạo nhị phân
+                Mat result = new Mat();
+                Cv2.Threshold(magnitude, result, threshold, 255, ThresholdTypes.Binary);
+
+                // Chuyển về kiểu 8-bit để hiển thị hoặc xử lý tiếp
+                result.ConvertTo(result, MatType.CV_8U);
+                return result;
+            }
+            catch(Exception ex)
+            {
+                Err = ex.Message;
+            }
+            // Cv2.ImWrite("edge.png", result);
+            return new Mat();
         }
         // =========== 1. LÀM MỊN / NHIỄU ===========
         public static (int lower, int upper) AutoCannyThresholdFromHistogram(Mat gray, double k1 = 0.66, double k2 = 1.33)
@@ -107,7 +118,7 @@ namespace BeeCore.Algorithm
           //  Cv2.ImWrite("Edge.png", edges);
             return edges;
         }
-        public static Mat Threshold(Mat raw)
+        public static Mat Threshold(Mat raw,int Threshold, ThresholdTypes thresholdTypes=ThresholdTypes.Binary)
         {
             Mat edges = new Mat();
             Mat gray = new Mat();
@@ -115,7 +126,7 @@ namespace BeeCore.Algorithm
                 Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
             else
                 gray = raw.Clone();
-            Cv2.Threshold(gray, gray, 0, 245, ThresholdTypes.Otsu);
+            Cv2.Threshold(gray, gray, Threshold, 245, thresholdTypes);
             Cv2.BitwiseNot(gray, gray);
             // 3. Làm mượt bằng Gaussian Blur
             Mat smooth = new Mat();

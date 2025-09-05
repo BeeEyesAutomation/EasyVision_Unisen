@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -70,7 +71,8 @@ namespace BeeCore
         public float WidthTemp = 0;
         public int MinLen = 0, MaxLen = 10000;
         public bool IsCalibs = false;
-      
+        public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
+        public List<RectRotate> rectRotates = new List<RectRotate>();
         public void DoWork( RectRotate rectRotate)
         {
             if (ParallelGapDetector == null) ParallelGapDetector = new ParallelGapDetector();
@@ -97,11 +99,23 @@ namespace BeeCore
                         matProcess = Filters.GetStrongEdgesOnly(matCrop);
                         break;
                     case MethordEdge.Binary:
-                        matProcess = Filters.Threshold(matCrop);
+                        matProcess = Filters.Threshold(matCrop,220);
                         break;
                 }
              
                 GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
+               if(GapResult.lineMid!=null)
+                    if (GapResult.lineMid.Count()>1)
+                    {
+                        listP_Center = new List<System.Drawing.Point>();
+                        rectRotates = new List<RectRotate>();
+                        PointF p1 = new PointF(GapResult.lineMid[0].X, GapResult.lineMid[0].Y);
+                        PointF p2 = new PointF(GapResult.lineMid[1].X, GapResult.lineMid[1].Y);
+                        float Xmin = Math.Min(p1.X, p2.X); float Ymin = Math.Min(p1.Y, p2.Y);
+                        PointF pCenter = new PointF(Xmin+Math.Abs(p1.X - p2.X) / 2, Ymin+ Math.Abs(p1.Y - p2.Y) / 2);
+                        listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
+                        rectRotates.Add(new RectRotate());
+                    }
 
             }
         }
@@ -208,6 +222,7 @@ namespace BeeCore
           
             if (!Global.IsRun)
             {
+                if (!matProcess.IsDisposed)
                 if (!matProcess.Empty())
                 {
                     gc.ResetTransform();
@@ -251,9 +266,18 @@ namespace BeeCore
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
             gc.DrawLine(new Pen(Color.Blue, 4), p1, p2);          
            gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", 16), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
-               
-            
-           
+            gc.ResetTransform();
+            //mat = new Matrix();
+            //if (!Global.IsRun)
+            //{
+            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            //    gc.Transform = mat;
+            //}
+            //gc.DrawString("X:" + listP_Center[0].X + ":" + listP_Center[0].X, new Font("Arial", 24, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
+
+            //gc.DrawEllipse(new Pen(Brushes.Red, 4), new Rectangle(listP_Center[0].X, listP_Center[0].Y, 10, 10));
+
             return gc;
         }
 

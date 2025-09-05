@@ -21,7 +21,6 @@ namespace BeeCore
         public double GapMedium { get; set; }
         public double GapMax { get; set; }
 
-
     }
 
     /// <summary>

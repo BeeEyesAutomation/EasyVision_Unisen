@@ -95,7 +95,8 @@ namespace BeeCore
                     if (raw.Empty()) return;
                     Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
                     if(matProcess==null) matProcess = new Mat();
-                    if (!matProcess.Empty()) matProcess.Dispose();
+                    if (!matProcess.IsDisposed)
+                        if (!matProcess.Empty()) matProcess.Dispose();
                     switch (MethordEdge)
                     {
                         case MethordEdge.CloseEdges:
@@ -105,7 +106,7 @@ namespace BeeCore
                             matProcess = Filters.GetStrongEdgesOnly(matCrop);
                             break;
                         case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop);
+                            matProcess = Filters.Threshold(matCrop,70,ThresholdTypes.BinaryInv);
                             break;
                     }
 
@@ -184,7 +185,8 @@ namespace BeeCore
            
             if (!Global.IsRun)
             {
-                if (!matProcess.Empty())
+                if (!matProcess.IsDisposed)
+                    if (!matProcess.Empty())
                 {
                     gc.ResetTransform();
                     mat = new Matrix();
@@ -226,7 +228,9 @@ namespace BeeCore
                     gc.ResetTransform();
                     i++;
                 }
+               
             }
+           
             return gc;
         }
         public float RadiusTemp = 0;

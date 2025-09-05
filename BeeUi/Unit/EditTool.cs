@@ -1,4 +1,4 @@
-﻿using BeeCore;
+﻿ using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
@@ -249,8 +249,12 @@ namespace BeeUi
                             G.IsCalib = false;
                             pEditTool.Visible = true;
                            
-                           // iconTool.BackgroundImage = Properties.Resources._3;
-                            lbTool.Text = " Add tool and Modify  Tool";
+                                if (Global.ParaCommon.matRegister.Width != 0)
+                                {
+                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
+                                }
+                                    // iconTool.BackgroundImage = Properties.Resources._3;
+                                    lbTool.Text = " Add tool and Modify  Tool";
                         }
                         else
                         {

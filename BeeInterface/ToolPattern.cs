@@ -168,11 +168,6 @@ namespace BeeInterface
         public int indexTool = 0;
       
 
-        private void trackScore_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void trackScore_MouseUp(object sender, MouseEventArgs e)
         {
            
@@ -425,11 +420,6 @@ namespace BeeInterface
           
         }
 
-        private void trackNumObject_Load(object sender, EventArgs e)
-        {
-
-        }
-
       
 
         private void btnLess_Click(object sender, EventArgs e)
@@ -561,6 +551,11 @@ namespace BeeInterface
 
 
             }
+        }
+
+        private void trackNumObject_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

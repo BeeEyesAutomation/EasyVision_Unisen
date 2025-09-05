@@ -1,4 +1,4 @@
-﻿using BeeCore;
+﻿ using BeeCore;
 using BeeGlobal;
 using BeeInterface;
 using Newtonsoft.Json.Linq;
@@ -67,7 +67,7 @@ namespace BeeInterface
                 btn.Location = new System.Drawing.Point(25, y);
           //  if (!btn.Text.Contains("Color Area"))
             //    btn.Enabled = false;
-           btn.Size = new System.Drawing.Size(277, 55);
+           btn.Size = new System.Drawing.Size(277, 40);
           btn.TabIndex = 0;
             btn.Click += Btn_Click;
            btn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -164,7 +164,7 @@ namespace BeeInterface
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
-            int space = 70;
+            int space = 45;
              foreach (iTool tool in Global.listItool)
             {
                

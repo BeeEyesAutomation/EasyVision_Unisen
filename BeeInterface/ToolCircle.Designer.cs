@@ -1321,7 +1321,7 @@ namespace BeeInterface
             this.trackThreshold.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackThreshold.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackThreshold.ColorTrack = System.Drawing.Color.DarkGray;
-            this.trackThreshold.Decimals = 0;
+            this.trackThreshold.Decimals = 1;
             this.trackThreshold.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackThreshold.EdgePadding = 2;
             this.trackThreshold.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -1346,7 +1346,7 @@ namespace BeeInterface
             this.trackThreshold.Size = new System.Drawing.Size(480, 57);
             this.trackThreshold.SnapToStep = true;
             this.trackThreshold.StartWithTextboxHidden = true;
-            this.trackThreshold.Step = 1F;
+            this.trackThreshold.Step = 0.1F;
             this.trackThreshold.TabIndex = 70;
             this.trackThreshold.TextboxFontSize = 20F;
             this.trackThreshold.TextboxSidePadding = 10;
