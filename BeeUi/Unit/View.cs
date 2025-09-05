@@ -989,6 +989,8 @@ namespace BeeUi
                         if (index != BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Index )
                         {
                             RectRotate rot = PropetyTool.Control.Propety.rotArea;
+                        if (rot == null)
+                            return;
                             mat = new Matrix();
                         mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
                         mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));

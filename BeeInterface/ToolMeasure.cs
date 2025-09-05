@@ -54,32 +54,35 @@ namespace BeeInterface
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             if (Propety.listPointChoose.Count>=4)
             {
-                cb1.SelectedItem = Propety.listPointChoose[0].Item1;
-                cb3.SelectedItem = Propety.listPointChoose[1].Item1;
-                cb5.SelectedItem = Propety.listPointChoose[2].Item1;
-                cb7.SelectedItem = Propety.listPointChoose[3].Item1;
+                if (Propety.listPointChoose[0].Item1 != null)
+                {
+                    cb1.SelectedItem = Propety.listPointChoose[0].Item1;
+                    cb3.SelectedItem = Propety.listPointChoose[1].Item1;
+                    cb5.SelectedItem = Propety.listPointChoose[2].Item1;
+                    cb7.SelectedItem = Propety.listPointChoose[3].Item1;
 
-                int index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[0].Item1);
-                PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
-                cb2.DataSource = null;
-                cb2.DataSource = propetyTool.Propety.listP_Center;
-                index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1);
-                 propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
-                cb4.DataSource = null;
-                cb4.DataSource = propetyTool.Propety.listP_Center;
-                index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1);
-                 propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
-                cb6.DataSource = null;
-                cb6.DataSource = propetyTool.Propety.listP_Center;
-                index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1);
-                 propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
-                cb8.DataSource = null;
-                cb8.DataSource = propetyTool.Propety.listP_Center;
+                    int index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[0].Item1);
+                    PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                    cb2.DataSource = null;
+                    cb2.DataSource = propetyTool.Propety.listP_Center;
+                    index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[1].Item1);
+                    propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                    cb4.DataSource = null;
+                    cb4.DataSource = propetyTool.Propety.listP_Center;
+                    index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1);
+                    propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                    cb6.DataSource = null;
+                    cb6.DataSource = propetyTool.Propety.listP_Center;
+                    index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1);
+                    propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                    cb8.DataSource = null;
+                    cb8.DataSource = propetyTool.Propety.listP_Center;
 
-                cb2.SelectedIndex = Propety.listPointChoose[0].Item2;
-                cb4.SelectedIndex = Propety.listPointChoose[1].Item2;
-                cb6.SelectedIndex = Propety.listPointChoose[2].Item2;
-                cb8.SelectedIndex = Propety.listPointChoose[3].Item2;
+                    cb2.SelectedIndex = Propety.listPointChoose[0].Item2;
+                    cb4.SelectedIndex = Propety.listPointChoose[1].Item2;
+                    cb6.SelectedIndex = Propety.listPointChoose[2].Item2;
+                    cb8.SelectedIndex = Propety.listPointChoose[3].Item2;
+                }
             }
           
             //worker.RunWorkerCompleted += (sender, e) =>
