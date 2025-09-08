@@ -108,7 +108,7 @@ namespace BeeInterface
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(500, 890);
+            this.tabControl2.Size = new System.Drawing.Size(500, 851);
             this.tabControl2.TabIndex = 17;
             // 
             // tabP1
@@ -119,7 +119,7 @@ namespace BeeInterface
             this.tabP1.Location = new System.Drawing.Point(4, 34);
             this.tabP1.Name = "tabP1";
             this.tabP1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabP1.Size = new System.Drawing.Size(492, 852);
+            this.tabP1.Size = new System.Drawing.Size(492, 813);
             this.tabP1.TabIndex = 0;
             this.tabP1.Text = "Basic";
             // 
@@ -160,7 +160,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 66F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(486, 846);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(486, 807);
             this.tableLayoutPanel1.TabIndex = 0;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -639,7 +639,7 @@ namespace BeeInterface
             this.btnTest.Margin = new System.Windows.Forms.Padding(20);
             this.btnTest.Multiline = false;
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(446, 242);
+            this.btnTest.Size = new System.Drawing.Size(446, 203);
             this.btnTest.TabIndex = 37;
             this.btnTest.Text = "Inspect";
             this.btnTest.TextColor = System.Drawing.Color.Black;
@@ -1692,7 +1692,7 @@ namespace BeeInterface
             // 
             this.oK_Cancel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.oK_Cancel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.oK_Cancel1.Location = new System.Drawing.Point(0, 877);
+            this.oK_Cancel1.Location = new System.Drawing.Point(0, 838);
             this.oK_Cancel1.Name = "oK_Cancel1";
             this.oK_Cancel1.Size = new System.Drawing.Size(500, 62);
             this.oK_Cancel1.TabIndex = 18;
@@ -1706,7 +1706,7 @@ namespace BeeInterface
             this.Controls.Add(this.tabControl2);
             this.DoubleBuffered = true;
             this.Name = "ToolCircle";
-            this.Size = new System.Drawing.Size(500, 939);
+            this.Size = new System.Drawing.Size(500, 900);
             this.Load += new System.EventHandler(this.ToolOutLine_Load);
             this.tabControl2.ResumeLayout(false);
             this.tabP1.ResumeLayout(false);

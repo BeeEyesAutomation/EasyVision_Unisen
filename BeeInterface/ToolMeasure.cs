@@ -42,6 +42,9 @@ namespace BeeInterface
         bool IsDone1, IsDone2, IsDone3, IsDone4;
         Tuple<double, double, double> ListAngle = new Tuple<double, double, double>(0, 0, 0);
         PointF pCenter1, pCenter2, pCenter3, pCenter4;
+        /// <summary>
+        /// 
+        /// </summary>
         public void LoadPara()
         {
          
