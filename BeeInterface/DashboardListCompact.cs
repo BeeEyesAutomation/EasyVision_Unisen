@@ -44,7 +44,7 @@ namespace BeeInterface
         private float _scale = 1f;
         private Font _scaledFont;
         private Font _scaledFontBold;
-
+         
         private int _padX, _padY, _check, _gap, _nameH, _lineH, _rowSpace, _valWMin, _valRightMargin;
         private int _itemHeight; // = _nameH + _padY + _lineH*3 + _rowSpace
 

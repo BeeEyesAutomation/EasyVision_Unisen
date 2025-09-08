@@ -59,7 +59,7 @@ namespace BeeCore
         /// <summary>
         /// Đo khoảng cách giữa hai điểm đỉnh (tip) của hai contour lớn nhất
         /// </summary>
-      
+
         /// <summary>
         /// Fit một đường thẳng bằng RANSAC, chỉ xét các segment có độ dài và góc lệch trong ngưỡng cho trước.
         /// </summary>
@@ -70,63 +70,207 @@ namespace BeeCore
         /// <param name="minAngleDeg">Góc lệch nhỏ nhất (độ)</param>
         /// <param name="maxAngleDeg">Góc lệch lớn nhất (độ)</param>
         /// <returns>Line2D chứa (P1,P2)</returns>
+        //private Line2D RansacFitLine(
+        //    List<Point2f> pts,
+        //    out List<Point2f> inliers,
+        //    double minLen = 0,
+        //    double maxLen = double.MaxValue,
+        //    double minAngleDeg = 0,
+        //    double maxAngleDeg = 180)
+        //{
+        //    var rand = new Random();
+        //    int bestCount = 0;
+        //    inliers = new List<Point2f>();
+        //    Line2D bestLine = default;
+
+        //    for (int i = 0; i < RansacIterations; i++)
+        //    {
+        //        if (pts.Count < 2) break;
+        //        int i1 = rand.Next(pts.Count), i2 = rand.Next(pts.Count);
+        //        if (i1 == i2) continue;
+
+        //        var p1 = pts[i1];
+        //        var p2 = pts[i2];
+
+        //        // 1) Kiểm tra độ dài segment
+        //        double dx = p2.X - p1.X, dy = p2.Y - p1.Y;
+        //        double segLen = Math.Sqrt(dx * dx + dy * dy);
+        //        if (segLen < minLen || segLen > maxLen)
+        //            continue;
+
+        //        // 2) Kiểm tra góc lệch so với Ox
+        //        double angle = Math.Abs(Math.Atan2(dy, dx) * 180.0 / Math.PI);
+        //        if (angle < minAngleDeg || angle > maxAngleDeg)
+        //            continue;
+
+        //        // 3) Tính tham số line ax+by+c=0
+        //        double a = p2.Y - p1.Y;
+        //        double b = p1.X - p2.X;
+        //        double norm = Math.Sqrt(a * a + b * b);
+        //        if (norm < 1e-6) continue;
+        //        double c = -(a * p1.X + b * p1.Y);
+
+        //        // 4) Tập inliers
+        //        var currInliers = pts
+        //            .Where(p => Math.Abs(a * p.X + b * p.Y + c) / norm < RansacThreshold)
+        //            .ToList();
+
+        //        if (currInliers.Count > bestCount)
+        //        {
+        //            bestCount = currInliers.Count;
+        //            inliers = currInliers;
+        //        }
+        //    }
+
+        //    // 5) Fit line cuối cùng trên inliers tốt nhất
+        //    if (inliers.Count >= 2)
+        //    {
+        //        // FitLine trả về vx,vy,x0,y0
+        //        bestLine = Cv2.FitLine(inliers.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
+        //    }
+
+        //    return bestLine;
+        //}
         private Line2D RansacFitLine(
-            List<Point2f> pts,
-            out List<Point2f> inliers,
-            double minLen = 0,
-            double maxLen = double.MaxValue,
-            double minAngleDeg = 0,
-            double maxAngleDeg = 180)
+    List<Point2f> pts,
+    out List<Point2f> inliers,
+    double minLen = 0,
+    double maxLen = double.MaxValue,
+    double minAngleDeg = 0,
+    double maxAngleDeg = 180)
         {
-            var rand = new Random();
-            int bestCount = 0;
             inliers = new List<Point2f>();
             Line2D bestLine = default;
 
-            for (int i = 0; i < RansacIterations; i++)
-            {
-                if (pts.Count < 2) break;
-                int i1 = rand.Next(pts.Count), i2 = rand.Next(pts.Count);
-                if (i1 == i2) continue;
+            if (pts == null || pts.Count < 2 || RansacIterations <= 0)
+                return bestLine;
 
-                var p1 = pts[i1];
-                var p2 = pts[i2];
+            // Sắp xếp để ổn định tuyệt đối theo dữ liệu đầu vào
+            pts = pts.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
 
-                // 1) Kiểm tra độ dài segment
-                double dx = p2.X - p1.X, dy = p2.Y - p1.Y;
-                double segLen = Math.Sqrt(dx * dx + dy * dy);
-                if (segLen < minLen || segLen > maxLen)
-                    continue;
+            // Tiền tạo cặp chỉ số theo seed cố định (deterministic)
+            const int FIXED_SEED = 123456789;
+            var pairs = PrecomputePairs(pts.Count, RansacIterations, FIXED_SEED);
 
-                // 2) Kiểm tra góc lệch so với Ox
-                double angle = Math.Abs(Math.Atan2(dy, dx) * 180.0 / Math.PI);
-                if (angle < minAngleDeg || angle > maxAngleDeg)
-                    continue;
+            // Best giữ dạng (inliers, segLen, a,b,c) để tie-break ổn định
+            int bestCount = -1;
+            double bestSegLen = -1;
+            double best_a = 0, best_b = 0, best_c = 0;
+            List<Point2f> bestInliers = null;
 
-                // 3) Tính tham số line ax+by+c=0
-                double a = p2.Y - p1.Y;
-                double b = p1.X - p2.X;
-                double norm = Math.Sqrt(a * a + b * b);
-                if (norm < 1e-6) continue;
-                double c = -(a * p1.X + b * p1.Y);
-
-                // 4) Tập inliers
-                var currInliers = pts
-                    .Where(p => Math.Abs(a * p.X + b * p.Y + c) / norm < RansacThreshold)
-                    .ToList();
-
-                if (currInliers.Count > bestCount)
+            System.Threading.Tasks.Parallel.ForEach(
+                System.Collections.Concurrent.Partitioner.Create(0, RansacIterations),
+                range =>
                 {
-                    bestCount = currInliers.Count;
-                    inliers = currInliers;
-                }
-            }
+                    // local best
+                    int l_count = -1; double l_segLen = -1; double l_a = 0, l_b = 0, l_c = 0;
+                    List<Point2f> l_inliers = null;
 
-            // 5) Fit line cuối cùng trên inliers tốt nhất
-            if (inliers.Count >= 2)
+                    for (int it = range.Item1; it < range.Item2; it++)
+                    {
+                        int i1 = pairs[it].i1, i2 = pairs[it].i2;
+                        if (i1 == i2) continue;
+
+                        var p1 = pts[i1];
+                        var p2 = pts[i2];
+
+                        double dx = p2.X - p1.X, dy = p2.Y - p1.Y;
+                        double segLen = Math.Sqrt(dx * dx + dy * dy);
+                        if (segLen < minLen || segLen > maxLen) continue;
+
+                        double angle = Math.Abs(Math.Atan2(dy, dx) * 180.0 / Math.PI);
+                        if (angle < minAngleDeg || angle > maxAngleDeg) continue;
+
+                        double a = p2.Y - p1.Y;
+                        double b = p1.X - p2.X;
+                        double norm = Math.Sqrt(a * a + b * b);
+                        if (norm < 1e-6) continue;
+                        double c = -(a * p1.X + b * p1.Y);
+
+                        // Đếm inliers
+                        int cnt = 0;
+                        var currInliers = new List<Point2f>();
+                        for (int k = 0; k < pts.Count; k++)
+                        {
+                            var pp = pts[k];
+                            double d = Math.Abs(a * pp.X + b * pp.Y + c) / norm;
+                            if (d < RansacThreshold)
+                            {
+                                cnt++;
+                                currInliers.Add(pp);
+                            }
+                        }
+
+                        if (cnt == 0) continue;
+
+                        // Tie-break ổn định:
+                        // 1) cnt lớn hơn
+                        // 2) segLen lớn hơn
+                        // 3) a nhỏ hơn, rồi b nhỏ hơn, rồi c nhỏ hơn (đảm bảo thứ tự toàn phần)
+                        bool better = false;
+                        if (cnt > l_count) better = true;
+                        else if (cnt == l_count)
+                        {
+                            if (segLen > l_segLen) better = true;
+                            else if (Math.Abs(segLen - l_segLen) <= 1e-9)
+                            {
+                                if (a < l_a) better = true;
+                                else if (a == l_a)
+                                {
+                                    if (b < l_b) better = true;
+                                    else if (b == l_b && c < l_c) better = true;
+                                }
+                            }
+                        }
+
+                        if (better)
+                        {
+                            l_count = cnt; l_segLen = segLen;
+                            l_a = a; l_b = b; l_c = c;
+                            l_inliers = currInliers;
+                        }
+                    }
+
+                    if (l_count > -1)
+                    {
+                        // Hợp nhất lên best toàn cục (tie-break cùng logic)
+                        lock (pairs) // dùng pairs làm lock object nhẹ
+                        {
+                            bool better = false;
+                            if (l_count > bestCount) better = true;
+                            else if (l_count == bestCount)
+                            {
+                                if (l_segLen > bestSegLen) better = true;
+                                else if (Math.Abs(l_segLen - bestSegLen) <= 1e-9)
+                                {
+                                    if (l_a < best_a) better = true;
+                                    else if (l_a == best_a)
+                                    {
+                                        if (l_b < best_b) better = true;
+                                        else if (l_b == best_b && l_c < best_c) better = true;
+                                    }
+                                }
+                            }
+
+                            if (better)
+                            {
+                                bestCount = l_count;
+                                bestSegLen = l_segLen;
+                                best_a = l_a; best_b = l_b; best_c = l_c;
+                                bestInliers = l_inliers;
+                            }
+                        }
+                    }
+                });
+
+            if (bestInliers != null && bestInliers.Count >= 2)
             {
-                // FitLine trả về vx,vy,x0,y0
+                inliers = bestInliers;
                 bestLine = Cv2.FitLine(inliers.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
+            }
+            else
+            {
+                inliers = new List<Point2f>();
             }
 
             return bestLine;
@@ -497,39 +641,188 @@ namespace BeeCore
         //        new TermCriteria(CriteriaTypes.Eps | CriteriaTypes.MaxIter, 30, 0.1));
         //    return ptsArray.ToList();
         //}
+        // Sinh danh sách cặp (i1,i2) theo seed cố định → không phụ thuộc lịch thread/Random
+        private static (int i1, int i2)[] PrecomputePairs(int n, int iterations, int seed)
+        {
+            var pairs = new (int, int)[iterations];
+            uint s = unchecked((uint)seed);
+            for (int i = 0; i < iterations; i++)
+            {
+                int a = NextIndex(ref s, n);
+                int b;
+                do { b = NextIndex(ref s, n); } while (b == a);
+                pairs[i] = (a, b);
+            }
+            return pairs;
+        }
+
+        private static int NextIndex(ref uint s, int n)
+        {
+            // xorshift32 — nhanh & tái lặp
+            s ^= s << 13;
+            s ^= s >> 17;
+            s ^= s << 5;
+            return (int)(s % (uint)n);
+        }
 
         private Line2D RansacFitLine(List<Point2f> pts, out List<Point2f> inliers)
         {
-            var rand = new Random();
-            int bestCount = 0;
             inliers = new List<Point2f>();
             Line2D bestLine = default;
 
-            for (int i = 0; i < RansacIterations; i++)
-            {
-                if (pts.Count < 2) break;
-                int i1 = rand.Next(pts.Count), i2 = rand.Next(pts.Count);
-                if (i1 == i2) continue;
+            if (pts == null || pts.Count < 2 || RansacIterations <= 0)
+                return bestLine;
 
-                var p1 = pts[i1]; var p2 = pts[i2];
-                double a = p2.Y - p1.Y, b = p1.X - p2.X;
-                double norm = Math.Sqrt(a * a + b * b);
-                if (norm < 1e-6) continue;
-                double c = -(a * p1.X + b * p1.Y);
+            pts = pts.OrderBy(p => p.Y).ThenBy(p => p.X).ToList();
 
-                var currInliers = pts.Where(p => Math.Abs(a * p.X + b * p.Y + c) / norm < RansacThreshold).ToList();
-                if (currInliers.Count > bestCount)
+            const int FIXED_SEED = 987654321; // seed khác với hàm kia để độc lập
+            var pairs = PrecomputePairs(pts.Count, RansacIterations, FIXED_SEED);
+
+            int bestCount = -1;
+            double bestSegLen = -1;
+            double best_a = 0, best_b = 0, best_c = 0;
+            List<Point2f> bestInliers = null;
+
+            System.Threading.Tasks.Parallel.ForEach(
+                System.Collections.Concurrent.Partitioner.Create(0, RansacIterations),
+                range =>
                 {
-                    bestCount = currInliers.Count;
-                    inliers = currInliers;
-                }
-            }
+                    int l_count = -1; double l_segLen = -1; double l_a = 0, l_b = 0, l_c = 0;
+                    List<Point2f> l_inliers = null;
 
-            if (inliers.Count >= 2)
+                    for (int it = range.Item1; it < range.Item2; it++)
+                    {
+                        int i1 = pairs[it].i1, i2 = pairs[it].i2;
+                        if (i1 == i2) continue;
+
+                        var p1 = pts[i1];
+                        var p2 = pts[i2];
+
+                        double dx = p2.X - p1.X, dy = p2.Y - p1.Y;
+                        double segLen = Math.Sqrt(dx * dx + dy * dy);
+                        if (segLen < 1e-6) continue;
+
+                        double a = p2.Y - p1.Y;
+                        double b = p1.X - p2.X;
+                        double norm = Math.Sqrt(a * a + b * b);
+                        if (norm < 1e-6) continue;
+                        double c = -(a * p1.X + b * p1.Y);
+
+                        int cnt = 0;
+                        var currInliers = new List<Point2f>();
+                        for (int k = 0; k < pts.Count; k++)
+                        {
+                            var pp = pts[k];
+                            double d = Math.Abs(a * pp.X + b * pp.Y + c) / norm;
+                            if (d < RansacThreshold)
+                            {
+                                cnt++;
+                                currInliers.Add(pp);
+                            }
+                        }
+
+                        if (cnt == 0) continue;
+
+                        bool better = false;
+                        if (cnt > l_count) better = true;
+                        else if (cnt == l_count)
+                        {
+                            if (segLen > l_segLen) better = true;
+                            else if (Math.Abs(segLen - l_segLen) <= 1e-9)
+                            {
+                                if (a < l_a) better = true;
+                                else if (a == l_a)
+                                {
+                                    if (b < l_b) better = true;
+                                    else if (b == l_b && c < l_c) better = true;
+                                }
+                            }
+                        }
+
+                        if (better)
+                        {
+                            l_count = cnt; l_segLen = segLen;
+                            l_a = a; l_b = b; l_c = c;
+                            l_inliers = currInliers;
+                        }
+                    }
+
+                    if (l_count > -1)
+                    {
+                        lock (pairs)
+                        {
+                            bool better = false;
+                            if (l_count > bestCount) better = true;
+                            else if (l_count == bestCount)
+                            {
+                                if (l_segLen > bestSegLen) better = true;
+                                else if (Math.Abs(l_segLen - bestSegLen) <= 1e-9)
+                                {
+                                    if (l_a < best_a) better = true;
+                                    else if (l_a == best_a)
+                                    {
+                                        if (l_b < best_b) better = true;
+                                        else if (l_b == best_b && l_c < best_c) better = true;
+                                    }
+                                }
+                            }
+
+                            if (better)
+                            {
+                                bestCount = l_count;
+                                bestSegLen = l_segLen;
+                                best_a = l_a; best_b = l_b; best_c = l_c;
+                                bestInliers = l_inliers;
+                            }
+                        }
+                    }
+                });
+
+            if (bestInliers != null && bestInliers.Count >= 2)
+            {
+                inliers = bestInliers;
                 bestLine = Cv2.FitLine(inliers.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
+            }
+            else
+            {
+                inliers = new List<Point2f>();
+            }
 
             return bestLine;
         }
+
+        //private Line2D RansacFitLine(List<Point2f> pts, out List<Point2f> inliers)
+        //{
+        //    var rand = new Random();
+        //    int bestCount = 0;
+        //    inliers = new List<Point2f>();
+        //    Line2D bestLine = default;
+
+        //    for (int i = 0; i < RansacIterations; i++)
+        //    {
+        //        if (pts.Count < 2) break;
+        //        int i1 = rand.Next(pts.Count), i2 = rand.Next(pts.Count);
+        //        if (i1 == i2) continue;
+
+        //        var p1 = pts[i1]; var p2 = pts[i2];
+        //        double a = p2.Y - p1.Y, b = p1.X - p2.X;
+        //        double norm = Math.Sqrt(a * a + b * b);
+        //        if (norm < 1e-6) continue;
+        //        double c = -(a * p1.X + b * p1.Y);
+
+        //        var currInliers = pts.Where(p => Math.Abs(a * p.X + b * p.Y + c) / norm < RansacThreshold).ToList();
+        //        if (currInliers.Count > bestCount)
+        //        {
+        //            bestCount = currInliers.Count;
+        //            inliers = currInliers;
+        //        }
+        //    }
+
+        //    if (inliers.Count >= 2)
+        //        bestLine = Cv2.FitLine(inliers.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
+
+        //    return bestLine;
+        //}
 
         private double DistanceBetweenLines(Line2D l1, Line2D l2)
         {
