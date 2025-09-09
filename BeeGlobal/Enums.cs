@@ -53,7 +53,11 @@ namespace BeeGlobal
         Prog1,
         Prog2,
         Prog3,
-        Prog4
+        Prog4,
+        Light1,
+        Light2,
+        Light3,
+        Alive
     }
     public enum I_O_Output
     {
@@ -74,6 +78,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
+        Alive,
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }

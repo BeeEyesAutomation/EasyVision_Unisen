@@ -28,7 +28,7 @@ namespace BeeUi
         public static bool IsReConnectCCD=false,IsPLCNotAlive=false;
         public static int[] valuesPLCInPut=new int[16];
         public static int[] valuesPLCOutPut;
-        public static ProtocolPLC SettingPLC = new ProtocolPLC();
+        public static ProtocolPLC SettingPLC;
 
         public static StatusProcessing StatusProcessing = StatusProcessing.None;
 

@@ -356,6 +356,10 @@ namespace BeeUi.Common
                 Global.ToolSettings = new ToolSettings();
 
             }
+            if (G.SettingPLC == null)
+            {
+                G.SettingPLC = new ProtocolPLC();
+            }
 
             if (Global.ParaCommon.Comunication == null)
             {

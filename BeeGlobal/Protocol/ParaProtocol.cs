@@ -189,7 +189,14 @@ namespace BeeGlobal
         PlcClient PlcClient ;
         public int timeOut = 2000;
         public string sIP = "";
-
+        public bool IsAlive = false;
+        public bool IsChangeAlive = false;
+        [NonSerialized]
+        public System.Windows.Forms.Timer timeAlive = new System.Windows.Forms.Timer();
+        public Parity Parity= Parity.Even;
+        public StopBits StopBits = StopBits.Two;
+        public int DataBit = 7;
+        public bool DtrEnable, RtsEnable;
         public async Task<bool> Connect(  )
         {
             try
@@ -201,10 +208,12 @@ namespace BeeGlobal
                 baudRate: Baurate,
                 port: PortIP,
                  retryCount: 3,
-                  parity:Parity.Even,
-                  stopBits:StopBits.Two,  
-                  databit:7,
-                timeoutMs: 2000);
+                  parity: Parity,
+                  stopBits: StopBits,  
+                  databit: DataBit,
+                  DtrEnable: DtrEnable,
+                  RtsEnable: RtsEnable,
+                timeoutMs: timeOut);
 
                 IsConnected= PlcClient.Connect();
 
@@ -225,20 +234,37 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                    timeAlive.Interval = 100;
+                    timeAlive.Enabled = true;
+                    timeAlive.Tick += TimeAlive_Tick;
                     PlcClient.OnBitsRead += (vals, addrs) =>
                     {
                         valueInput = vals;
-                        int ix = Global.ParaCommon.Comunication.Protocol.AddressInput[(int)I_O_Input.ByPass];
-                      
-                        if (ix > -1)
+                     
+
+                        if (!IsChangeAlive)
                         {
-                            if (valueInput[ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1] == true && !Global.IsByPassResult)
+                            if (valueInput[15] == true)//Alive
+                            {
+                                PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".15", false);
+                                IsAlive = true;
+                                IsChangeAlive = true;
+
+                            }
+                        }
+
+                        int addr = ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1;
+
+                        if (addr > -1)
+                        {
+                          
+                                if (valueInput[addr] == true && !Global.IsByPassResult)
                             {
                                 Global.IsByPassResult = true;
                                 Global.EditTool.lbBypass.Visible = true;
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
                             }
-                            else if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == false && Global.IsByPassResult)
+                            else if (valueInput[addr] == false && Global.IsByPassResult)
                             {
                                 Global.IsByPassResult = false;
                                 Global.EditTool.lbBypass.Visible = false;
@@ -273,6 +299,28 @@ namespace BeeGlobal
             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connect Fail"));
             return IsConnected;
         }
+        private int numTimeOut=0;
+        private void TimeAlive_Tick(object sender, EventArgs e)
+        {
+           if(IsChangeAlive)
+            {
+               
+                PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
+                numTimeOut = 0;
+                IsChangeAlive = false;
+            }
+           else
+            {
+                numTimeOut++;
+                if(numTimeOut>=10)
+                {
+                    IsAlive = false;
+                    
+                }    
+
+            }    
+        }
+
         [field: NonSerialized]
         private StringBuilder _logBuilder = new StringBuilder();
         [field: NonSerialized]

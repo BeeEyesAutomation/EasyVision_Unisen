@@ -59,7 +59,7 @@ namespace PlcLib
         public event Action<string> OnError;
         public event Action OnReconnected;
         public event Action OnDisconnected;
-
+        private bool dtrEnable, rtsEnable;
         public PlcClient(
             PlcBrand brand,
             ConnectionType connType,
@@ -69,6 +69,8 @@ namespace PlcLib
             System.IO.Ports.Parity parity = System.IO.Ports.Parity.Even,
             System.IO.Ports.StopBits stopBits=System.IO.Ports.StopBits.Two,
             int databit=7,
+            bool DtrEnable=true,
+            bool RtsEnable=true,
             int retryCount = 3, int timeoutMs = 2000)
         {
             _brand = brand;
@@ -80,6 +82,8 @@ namespace PlcLib
             Parity = parity;
             StopBits = stopBits;
             DataBits = databit;
+            dtrEnable = DtrEnable;
+            rtsEnable = RtsEnable;
             _retry = retryCount < 1 ? 1 : retryCount;
             _timeoutMs = timeoutMs < 500 ? 500 : timeoutMs;
         }
@@ -122,8 +126,8 @@ namespace PlcLib
                             sp.DataBits = DataBits;                                  // 7
                             sp.Parity = Parity;        // Even
                             sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
-                            sp.RtsEnable = true;
-                            sp.DtrEnable = true;
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
                             sp.ReadTimeout = _timeoutMs;
                             sp.WriteTimeout = _timeoutMs;
                         });

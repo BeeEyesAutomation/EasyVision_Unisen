@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeCore.Func;
+using BeeCore.Funtion;
 using BeeGlobal;
 using OpenCvSharp.Flann;
 using System;
@@ -20,6 +21,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace BeeInterface
 {
@@ -27,15 +30,14 @@ namespace BeeInterface
     {
         List<String> OldIn = new List<string>(16);
         List<String> OldOut= new List<string>(16);
-        List<ComboBox> listCbIn = new List<ComboBox>();
-        List<ComboBox> listCbOut = new List<ComboBox>();
+        
         public ProtocolPLC()
         {
             InitializeComponent();
            
             OldIn = new string[16].ToList();
             OldOut = new string[16].ToList();
-            comIO.DataSource = SerialPort.GetPortNames();
+            cbCom.DataSource = SerialPort.GetPortNames();
             Parallel.For(0, 16, i =>
             {
                 RefreshComboBoxIn(i, "");
@@ -44,29 +46,108 @@ namespace BeeInterface
             {
                 RefreshComboBoxOut(i, "");
             });
-            foreach(Control ctl in layIn.Controls)
+            //foreach(Control ctl in layIn.Controls)
+            //{
+            //    if (ctl is ComboBox cb)
+            //        listCbIn.Add(cb);
+            //}
+            //foreach (Control ctl in layOut.Controls)
+            //{
+            //    if (ctl is ComboBox cb)
+            //        listCbOut.Add(cb);
+            //}
+            cbIn0.DataSource= listIn[0];
+            cbIn1.DataSource = listIn[1];
+            cbIn2.DataSource = listIn[2];
+            cbIn3.DataSource = listIn[3];
+            cbIn4.DataSource = listIn[4];
+            cbIn5.DataSource = listIn[5];
+            cbIn6.DataSource = listIn[6];
+            cbIn7.DataSource = listIn[7];
+            cbIn8.DataSource = listIn[8];
+            cbIn9.DataSource = listIn[9];
+            cbIn10.DataSource = listIn[10];
+            cbIn11.DataSource = listIn[11];
+            cbIn12.DataSource = listIn[12];
+            cbIn13.DataSource = listIn[13];
+            cbIn14.DataSource = listIn[14];
+            cbIn15.DataSource = listIn[15];
+
+            cbO0.DataSource = listOut[0];
+            cbO1.DataSource = listOut[1];
+            cbO2.DataSource = listOut[2];
+            cbO3.DataSource = listOut[3];
+            cbO4.DataSource = listOut[4];
+            cbO5.DataSource = listOut[5];
+            cbO6.DataSource = listOut[6];
+            cbO7.DataSource = listOut[7];
+            cbO8.DataSource = listOut[8];
+            cbO9.DataSource = listOut[9];
+            cbO10.DataSource = listOut[10];
+            cbO11.DataSource = listOut[11];
+            cbO12.DataSource = listOut[12];
+            cbO13.DataSource = listOut[13];
+            cbO14.DataSource = listOut[14];
+            cbO15.DataSource = listOut[15];
+            cbParity.DataSource= (Parity[])Enum.GetValues(typeof(Parity));
+            cbStopBits.DataSource= (StopBits[])Enum.GetValues(typeof(StopBits));
+            cbDataBits.DataSource = new List<String> { "7", "8" };
+            var ParaBits = Global.ParaCommon.Comunication.Protocol.ParaBits;
+            nameOut[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[2] = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[3] = ParaBits.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[4] = ParaBits.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[5] = ParaBits.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[6] = ParaBits.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[7] = ParaBits.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[8] = ParaBits.Find(x => x.Adddress == 8 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[9] = ParaBits.Find(x => x.Adddress == 9 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[10] = ParaBits.Find(x => x.Adddress == 10 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[11] = ParaBits.Find(x => x.Adddress == 11 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[12] = ParaBits.Find(x => x.Adddress == 12 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[13] = ParaBits.Find(x => x.Adddress == 13 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[14] = ParaBits.Find(x => x.Adddress == 14 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            nameOut[15] = ParaBits.Find(x => x.Adddress == 15 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
+            if (nameOut[15] != I_O_Output.Alive.ToString())
             {
-                if (ctl is ComboBox cb)
-                    listCbIn.Add(cb);
+                nameOut[15] = I_O_Output.Alive.ToString();
+                ParaBits.Add(new ParaBit(TypeIO.Output, I_O_Output.Alive, 15));
             }
-            foreach (Control ctl in layOut.Controls)
+            nameInput[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty; 
+            nameInput[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[2] = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[3] = ParaBits.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[4] = ParaBits.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[5] = ParaBits.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[6] = ParaBits.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[7] = ParaBits.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[8] = ParaBits.Find(x => x.Adddress == 8 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[9] = ParaBits.Find(x => x.Adddress == 9 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[10] = ParaBits.Find(x => x.Adddress == 10 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[11] = ParaBits.Find(x => x.Adddress == 11 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[12] = ParaBits.Find(x => x.Adddress == 12 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[13] = ParaBits.Find(x => x.Adddress == 13 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[14] = ParaBits.Find(x => x.Adddress == 14 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            nameInput[15] = ParaBits.Find(x => x.Adddress == 15 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
+            if (nameInput[15] != I_O_Input.Alive.ToString())
             {
-                if (ctl is ComboBox cb)
-                    listCbOut.Add(cb);
+                nameInput[15] = I_O_Input.Alive.ToString();
+                ParaBits.Add(new ParaBit(TypeIO.Input, I_O_Input.Alive, 15));
             }
-            int ix = 0;
-            foreach (ComboBox cb in listCbIn)
-            {
-               cb.DataSource = listIn[ix];
-                ix++;
-            }
-            ix = 0;
-            foreach (ComboBox cb in listCbOut)
-            {
-                cb.DataSource = listOut[ix];
-                ix++;
-            }
-           
+            //int ix = 0;
+            //for(int i=0;i<16;i++)
+            //{
+            //   cb.DataSource = listIn[ix];
+            //    ix++;
+            //}
+            //ix = 0;
+            //foreach (ComboBox cb in listCbOut)
+            //{
+            //    cb.DataSource = listOut[ix];
+            //    ix++;
+            //}
+
         }
         List<List<string>> listIn = new List<List<string>>{
             new List<string>(), new List<string>(), new List<string>(), new List<string>(),
@@ -87,7 +168,7 @@ namespace BeeInterface
             List<String> list = new List<string>();
             foreach (I_O_Input io in Enum.GetValues(typeof(I_O_Input)))
             {
-              //  if (Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a=>a.I_O_Input==io)==-1|| text.Contains(io.ToString()))
+             if(io!=I_O_Input.Alive)
                     listIn[index].Add(io.ToString());
             }
 
@@ -99,7 +180,7 @@ namespace BeeInterface
             List<String> list = new List<string>();
             foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
             {
-             //   if (Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == io) == -1 || text.Contains(io.ToString()))
+                if (io != I_O_Output.Alive)
                     listOut[index].Add(io.ToString());
             }
 
@@ -175,18 +256,18 @@ namespace BeeInterface
            
           
         }
-        private void RefreshComboBoxOut(ComboBox cb)
-        {
+        //private void RefreshComboBoxOut(ComboBox cb)
+        //{
 
-            cb.Items.Clear();
-            foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
-            {
-                if (Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == io) == -1)
-                    cb.Items.Add(io);
-            }
-            // (tuỳ chọn) nếu không có item nào thì disable
-            cb.Enabled = cb.Items.Count > 0;
-        }
+        //    cb.Items.Clear();
+        //    foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
+        //    {
+        //        if (Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == io) == -1)
+        //            cb.Items.Add(io);
+        //    }
+        //    // (tuỳ chọn) nếu không có item nào thì disable
+        //    cb.Enabled = cb.Items.Count > 0;
+        //}
         public void ChangeDatasourceOut(int ix, String i_O_Output)
         {
 
@@ -373,34 +454,58 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
             {
                 btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
-         
-            var ParaBits = Global.ParaCommon.Comunication.Protocol.ParaBits;
+                btnDtrEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.DtrEnable;
+                btnRtsEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.RtsEnable;
+                cbParity.Text = Global.ParaCommon.Comunication.Protocol.Parity.ToString();
+                cbStopBits.Text = Global.ParaCommon.Comunication.Protocol.StopBits.ToString();
+                cbDataBits.Text = Global.ParaCommon.Comunication.Protocol.DataBit.ToString();
 
-            cbO0.Text = ParaBits.Find(x => x.Adddress == 0&&x.TypeIO==TypeIO.Output)? .I_O_Output .ToString();   // giữ nguyên text cũ nếu không tìm thấy
-            cbO1.Text = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString();   // giữ nguyên text cũ nếu không tìm thấy
-            cbO2.Text = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString();   // giữ nguyên text cũ nếu không tìm thấy
-            cbO3.Text = ParaBits.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbO4.Text = ParaBits.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbO5.Text = ParaBits.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbO6.Text = ParaBits.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbO7.Text = ParaBits.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn0.Text = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString();   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn1.Text = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn2.Text = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn3.Text = ParaBits.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn4.Text = ParaBits.Find(x => x.Adddress == 4 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn5.Text = ParaBits.Find(x => x.Adddress == 5 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn6.Text = ParaBits.Find(x => x.Adddress == 6 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ;   // giữ nguyên text cũ nếu không tìm thấy
-            cbIn7.Text = ParaBits.Find(x => x.Adddress == 7 && x.TypeIO == TypeIO.Input) ? .I_O_Input.ToString();      // giữ nguyên text cũ nếu không tìm thấy
-            timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
+                cbO0.Text = nameOut[0];
+                cbO1.Text = nameOut[1];
+                cbO2.Text = nameOut[2];
+                cbO3.Text = nameOut[3];
+                cbO4.Text = nameOut[4];
+                cbO5.Text = nameOut[5];
+                cbO6.Text = nameOut[6];
+                cbO7.Text = nameOut[7];
+                cbO8.Text = nameOut[8];
+                cbO9.Text = nameOut[9];
+                cbO10.Text = nameOut[10];
+                cbO11.Text = nameOut[11];
+                cbO12.Text = nameOut[12];
+                cbO13.Text = nameOut[13];
+                cbO14.Text = nameOut[14];
+                cbO15.Text = nameOut[15];
+
+
+              
+                
+                cbIn0.Text = nameInput[0];
+                cbIn1.Text = nameInput[1];
+                cbIn2.Text = nameInput[2];
+                cbIn3.Text = nameInput[3];
+                cbIn4.Text = nameInput[4];
+                cbIn5.Text = nameInput[5];
+                cbIn6.Text = nameInput[6];
+                cbIn7.Text = nameInput[7];
+                cbIn8.Text = nameInput[8];
+                cbIn9.Text = nameInput[9];
+                cbIn10.Text = nameInput[10];
+                cbIn11.Text = nameInput[11];
+                cbIn12.Text = nameInput[12];
+                cbIn13.Text = nameInput[13];
+                cbIn14.Text = nameInput[14];
+                cbIn15.Text = nameInput[15];
+
+                  timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
            
-            comIO.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
+            cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
             
                 txtAddRead.Text=Global.ParaCommon.Comunication.Protocol.AddRead;
             txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
-                listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 };
-                listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7 };
+                listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 , DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
+                listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
                 foreach (ParaBit paraIO in Global.ParaCommon.Comunication.Protocol.ParaBits)
                 {
                     if (paraIO.TypeIO == TypeIO.Input)
@@ -416,10 +521,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         listLabelsOut[paraIO.Adddress].Refresh();
                     }
                 }
+           
             }
             catch(Exception ex)
             {
-               // MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             //if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
             //{
@@ -609,7 +715,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            comIO.DataSource = SerialPort.GetPortNames();
+            cbCom.DataSource = SerialPort.GetPortNames();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -620,143 +726,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
        
 
-        private void cbIn1_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbIn0.SelectedValue.ToString(); if (name == "") return;
-            if (cbIn0.Text.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[0], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(0, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[0] = name;
-            }
-            ChangeDatasource(0, name);
-
-        }
-
-        private void cbIn2_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-          
-            String name = cbIn1.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[1], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(1, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[1] = name;
-            }
-            ChangeDatasource(1, name);
-        }
-
-        private void cbIn3_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-          
-            String name = cbIn2.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[2], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(2, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[2] = name;
-            }
-            ChangeDatasource(2, name);
-        }
-
-        private void cbIn4_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-           
-            String name = cbIn3.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[3], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(3, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[3] = name;
-            }
-            ChangeDatasource(3, name);
-        }
-
-        private void cbIn5_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-      
-            String name = cbIn4.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[4], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(4, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[4] = name;
-            }
-            ChangeDatasource(4, name);
-        }
-
-        private void cbIn6_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-         
-            String name = cbIn5.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[5], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(5, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[5] = name;
-            }
-            ChangeDatasource(5, name);
-        }
-
-        private void cbIn7_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-       
-            String name = cbIn6.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[6], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(6, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[6] = name;
-            }
-            ChangeDatasource(6, name);
-        }
-
-        private void cbIn8_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-
-            String name = cbIn7.SelectedValue.ToString(); if (name == "") return;
-            if (name.Contains("None"))
-            {
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[7], ignoreCase: true));
-
-            }
-            else
-            {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(7, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
-                OldIn[7] = name;
-            }
-            ChangeDatasource(7, name);
-        }
-        public String[] nameInput =new  String[16];
+   
+        public String[] nameInput =new String[] {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbIn_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox cb = sender as ComboBox;
@@ -776,7 +747,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             nameInput[value] = name;
             ChangeDatasource(value, name);
         }
-        public String[] nameOut = new String[16];
+        public String[] nameOut = new String[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbOut_SelectionChangeCommitted(object sender, EventArgs e)
         {
             ComboBox cb=  sender  as ComboBox;
@@ -807,7 +778,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 MessageBox.Show("Change Mode to Internal!");
                 return;
             }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            int index = Enum.TryParse<I_O_Output>(nameOut[value], true, out var outputEnum)
+           ? Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == outputEnum && a.TypeIO == TypeIO.Output)
+           : -1;
+            //int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
                 tmRead.Enabled = false;
@@ -820,6 +794,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 tmRead.Enabled = true;
                 btn.Text = Convert.ToInt16(btn.IsCLick).ToString();
             }
+            else
+                btn.IsCLick = false;
 
         }
         private async void DO0_Click(object sender, EventArgs e)
@@ -1030,7 +1006,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.ComSerial = comIO.SelectedValue.ToString() ;
+            Global.ParaCommon.Comunication.Protocol.ComSerial = cbCom.SelectedValue.ToString() ;
         }
 
         private void tmCheck_Tick(object sender, EventArgs e)
@@ -1168,7 +1144,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
               
                         
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
+                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
                   
                     //    await Global.ParaCommon.Comunication.Protocol.Read();
                     //int ix = Global.ParaCommon.Comunication.Protocol. AddressInput[(int)I_O_Input.ByPass];
@@ -1339,7 +1315,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnSerial_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Serial;
-            comIO.Enabled = true;
+            cbCom.Enabled = true;
             cbBaurate.Enabled = true;
             txtIP.Enabled = false;
             txtPort.Enabled = false;
@@ -1353,7 +1329,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnTCP_Click_1(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Tcp;
-            comIO.Enabled = false;
+            cbCom.Enabled = false;
             cbBaurate.Enabled = false;
             txtIP.Enabled = true;
             txtPort.Enabled = true;
@@ -1382,6 +1358,38 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void tableLayoutPanel7_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void cbParity_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.Parity = (Parity)Enum.Parse(typeof(Parity), cbParity.SelectedValue.ToString()) ;
+        }
+
+        private void cbStopBits_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.SelectedValue.ToString());
+        }
+
+        private void cbDataBits_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cbDataBits.SelectedValue == null)
+                return;
+            Global.ParaCommon.Comunication.Protocol.DataBit = Convert.ToInt32(cbDataBits.SelectedValue.ToString());
+        }
+
+        private void btnDtrEnable_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.DtrEnable = btnDtrEnable.IsCLick;
+        }
+
+        private void btnRtsEnable_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.RtsEnable = btnRtsEnable.IsCLick;
+        }
+
+        private void btnReScan_Click(object sender, EventArgs e)
+        {
+            cbCom.DataSource = SerialPort.GetPortNames();
         }
     }
 }
