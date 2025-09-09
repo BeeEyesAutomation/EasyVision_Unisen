@@ -575,7 +575,8 @@ namespace BeeGlobal
         }
         public bool CheckReady()
         {
-        if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== true&&Global.StatusProcessing==StatusProcessing.None)
+            if (AddressInput[(int)I_O_Input.Trigger ]== -1)return false;
+        if (valueInput[AddressInput[(int)I_O_Input.Trigger] ]== true&&Global.StatusProcessing==StatusProcessing.None)
             {
                 return true;
             }

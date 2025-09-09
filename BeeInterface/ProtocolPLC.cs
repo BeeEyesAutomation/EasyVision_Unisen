@@ -453,6 +453,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             try
 
             {
+                if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
                 btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
                 btnDtrEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.DtrEnable;
                 btnRtsEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.RtsEnable;
@@ -1192,7 +1193,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private async void tmConnect_Tick(object sender, EventArgs e)
         {if (!Global.Initialed) return;
             tmConnect.Enabled = false;
-
+            if (Global.ParaCommon.Comunication.Protocol == null)Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
             if (Global.ParaCommon.Comunication.Protocol.IsBypass) return;
          await   Global.ParaCommon.Comunication.Protocol.Connect();
 
