@@ -2,6 +2,7 @@
 using OpenCvSharp;
 using OpenCvSharp.Flann;
 using OpenCvSharp.ML;
+using PlcLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,7 +19,7 @@ using System.Windows.Forms;
 namespace BeeGlobal
 {
     [Serializable()]
-    public class IO
+    public class ParaProtocol
     {
         [NonSerialized]
         private  CancellationTokenSource _cts = new CancellationTokenSource
@@ -53,15 +54,15 @@ namespace BeeGlobal
         //    }, _cts.Token);
         //}
         //public void StopRead() => _cts.Cancel();
-        public int AddRead = 1;
-        public int AddWrite = 2;
+        public String AddRead = "D100";
+        public String AddWrite = "D102";
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
         [NonSerialized]
         public ModbusService ModbusService;
-        public ModbusRole ModbusRole = ModbusRole.ClientMaster;
-        public ModbusTransport ModbusTransport = ModbusTransport.SerialRtu;
+        public PlcBrand PlcBrand = PlcBrand.Mitsubishi;
+        public ConnectionType ConnectionType = ConnectionType.Serial;
         //private  async Task DoWork()
         //{
         //    if (!Global.Initialed) return;
@@ -81,36 +82,35 @@ namespace BeeGlobal
         public String[] nameOutput = new String[16];
        
         [NonSerialized]
-        public int[] valueInput = new int[16];
+        public bool[] valueInput = new bool[16];
         [NonSerialized]
-        public int[] valueOutput = new int[16];
+        public bool[] valueOutput = new bool[16];
         [NonSerialized]
         public int[] AddressInput=new int[30];
         public int[] AddressOutPut = new int[30];
         public int[] LenReads;
-        public String Port = "COM8";
-        public String PortCom = "COM8";
+        public String ComSerial = "COM8";
         public int PortIP = 502;
         public int Baurate = 115200;
         public byte SlaveID=1;
         public bool IsBypass=true;
-        public IO() {
-            if (AddRead == 0 && AddWrite == 0)
-            {
-                AddRead = 1;
-                AddWrite = 2;
-            }
+        public ParaProtocol() {
+            //if (AddRead == 0 && AddWrite == 0)
+            //{
+            //    AddRead = 1;
+            //    AddWrite = 2;
+            //}
         }
         public int timeRead = 0;
-        public List<ParaIO> paraIOs = new List<ParaIO>();
+        public List<ParaBit> ParaBits = new List<ParaBit>();
         [NonSerialized]
         public bool IsConnected = false,IsWriting=false;
         public void Arrange()
         {
             if (valueInput == null)
-                valueInput = new int[16];
+                valueInput = new bool[16];
             if (valueOutput == null)
-                valueOutput = new int[16];
+                valueOutput = new bool[16];
             if (AddressInput == null)
                 AddressInput = new int[30];
             if (AddressOutPut == null)
@@ -118,30 +118,30 @@ namespace BeeGlobal
 
             foreach (I_O_Input DI in Enum.GetValues(typeof(I_O_Input)))
             {
-                int index = paraIOs.FindIndex(a => a.I_O_Input== DI && a.TypeIO == TypeIO.Input);
+                int index = ParaBits.FindIndex(a => a.I_O_Input== DI && a.TypeIO == TypeIO.Input);
                 int value = -1;
-                if (index > -1) value = paraIOs[index].Adddress;
+                if (index > -1) value = ParaBits[index].Adddress;
                 AddressInput[(int)(DI)] = value;
             }
             foreach (I_O_Output DO in Enum.GetValues(typeof(I_O_Output)))
             {
-                int index = paraIOs.FindIndex(a => a.I_O_Output== DO && a.TypeIO == TypeIO.Output);
+                int index = ParaBits.FindIndex(a => a.I_O_Output== DO && a.TypeIO == TypeIO.Output);
                 int value = -1;
-                if (index > -1) value = paraIOs[index].Adddress;
+                if (index > -1) value = ParaBits[index].Adddress;
                 AddressOutPut[(int)(DO)] = value;
             }
         }
         public bool AddInPut(int index,I_O_Input Input)
-        {   int ix= paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
-            if (paraIOs.FindIndex(a=>a.Adddress== index && a.TypeIO==TypeIO.Input)==-1)
+        {   int ix= ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
+            if (ParaBits.FindIndex(a=>a.Adddress== index && a.TypeIO==TypeIO.Input)==-1)
             {
-                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index)); Arrange();
+                ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
                 return true;
             }
             else if (ix >= 0)
             {
-                paraIOs.RemoveAt(ix);
-                paraIOs.Add(new ParaIO(TypeIO.Input, Input, index)); Arrange();
+                ParaBits.RemoveAt(ix);
+                ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
                 return true;
             }
             else
@@ -149,25 +149,25 @@ namespace BeeGlobal
         }
         public bool AddOutPut(int index, I_O_Output Output)
         {
-            int ix = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
+            int ix = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
             if(ix == -1)
             {
-                paraIOs.Add(new ParaIO(TypeIO.Output, Output, index)); Arrange();
+                ParaBits.Add(new ParaBit(TypeIO.Output, Output, index)); Arrange();
                
             }
             else
             {
-                paraIOs[ix].I_O_Output = Output;
+                ParaBits[ix].I_O_Output = Output;
             }    
                 return true;
            
         }
         public bool RemoveInPut(int index, I_O_Input Input)
         {
-            int indexs = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input);
+            int indexs = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input);
             if (indexs>=0)
             {
-                paraIOs.RemoveAt(indexs); Arrange();
+                ParaBits.RemoveAt(indexs); Arrange();
                 return true;
             }
             else
@@ -175,17 +175,18 @@ namespace BeeGlobal
         }
         public bool RemoveOutPut(int index, I_O_Output Output)
         {
-            int indexs = paraIOs.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
+            int indexs = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
             if (indexs >= 0)
             {
-                paraIOs.RemoveAt(indexs); Arrange();
+                ParaBits.RemoveAt(indexs); Arrange();
                 return true;
             }
             else
                 return false;
           
         }
-        ModbusOptions client=new ModbusOptions();
+        [NonSerialized]
+        PlcClient PlcClient ;
         public int timeOut = 2000;
         public string sIP = "";
 
@@ -193,40 +194,28 @@ namespace BeeGlobal
         {
             try
             {
-                client = new ModbusOptions
-                {
-                    Transport = ModbusTransport,
-                    Role = ModbusRole,
-                    ComPort = PortCom,
-                    Port=PortIP,
-                    Baudrate = Baurate,
-                    Parity = Parity.None,
-                    StopBits = StopBits.One,
+                PlcClient = new PlcLib.PlcClient(
+                PlcBrand,
+                ConnectionType,
+                comPort: ComSerial,
+                baudRate: Baurate,
+                port: PortIP,
+                 retryCount: 3,
+                  parity:Parity.Even,
+                  stopBits:StopBits.Two,  
+                  databit:7,
+                timeoutMs: 2000);
 
-                    UnitId = SlaveID,
-                    OperationTimeoutMs = timeOut,
-                    Retries = 2,
-                    Host=sIP
-                };
-
-                ModbusService = new ModbusService(client);
-              
-                await ModbusService.StartAsync();
-
-                if (AddRead == 0 && AddWrite == 0)
-                {
-                    AddRead = 1;
-                    AddWrite = 2;
-                }
+                IsConnected= PlcClient.Connect();
 
                 CT = new Stopwatch();
                 CTMid = 0;
                 CTMin = 1000; CTMax = 0;
-                IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
+               // IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
                 if (valueInput == null)
-                    valueInput = new int[16];
+                    valueInput = new bool[16];
                 if (valueOutput == null)
-                    valueOutput = new int[16];
+                    valueOutput = new bool[16];
                 if (AddressInput == null)
                     AddressInput = new int[30];
                 if (AddressOutPut == null)
@@ -235,33 +224,40 @@ namespace BeeGlobal
                 Arrange();
                
                  if (IsConnected)
-                    if (ModbusRole == ModbusRole.ClientMaster)
+                {
+                    PlcClient.OnBitsRead += (vals, addrs) =>
                     {
-                        valueInput = await ModbusService.ReadCoilsHoldingAsync(AddRead, 16); //await Modbus.ReadBit(1);
+                        valueInput = vals;
+                        int ix = Global.ParaCommon.Comunication.Protocol.AddressInput[(int)I_O_Input.ByPass];
+                      
+                        if (ix > -1)
+                        {
+                            if (valueInput[ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1] == true && !Global.IsByPassResult)
+                            {
+                                Global.IsByPassResult = true;
+                                Global.EditTool.lbBypass.Visible = true;
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
+                            }
+                            else if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == false && Global.IsByPassResult)
+                            {
+                                Global.IsByPassResult = false;
+                                Global.EditTool.lbBypass.Visible = false;
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
+                            }
+                        }
+                       
+                    };
+                    PlcClient.StartOneBitReadLoop(AddRead, timeRead);
 
-                    }
-                    else
-                    {
-                        //// bắt sự kiện khi Master ghi
-                        //ModbusService.OnHoldingRegistersWritten += (start, qty) =>
-                        //{
-                        //    valueInput = ModbusService.GetHolding(start, qty);
-                        //    //Console.WriteLine($"Master wrote HR [{start}..{start + qty - 1}] = {string.Join(",", vals)}");
-                        //};
-                        ModbusService.OnCoilsWritten += (start, qty) =>
-                        {   if(start==AddRead)
-                                valueInput = Array.ConvertAll(ModbusService.GetCoils(start, qty), b => b ? 1 : 0);
-                          //  Console.WriteLine($"Master wrote Coils [{start}..{start + qty - 1}] = {string.Join(",", vals)}");
-                        };
-
-                    }
+                }
+              
                
                     if (valueInput.Length < 16)
                 {
                     IsConnected = false;
                     return false;
                 }
-                    foreach(ParaIO paraIO in paraIOs)
+                    foreach(ParaBit paraIO in ParaBits)
                 {
                     paraIO.Value = 0;
                 }
@@ -315,51 +311,51 @@ namespace BeeGlobal
         [NonSerialized]
        public float CTMid = 0,CTMin=0,CTMax=0;
         public float CTRead,CTWrite;
-        public  async Task Read()
-        {
+        //public  async Task Read()
+        //{
 
-            if (!IsConnected) return ;
-            numRead++;
-                CT.Restart();
-            Global.StatusIO = StatusIO.Reading;
-            valueInput =await ModbusService.ReadCoilsHoldingAsync(AddRead, 16); //await Modbus.ReadBit(1);await Modbus.ReadBit(AddRead);
-            Global.StatusIO = StatusIO.None;
-            CT.Stop();
+        //    if (!IsConnected) return ;
+        //    numRead++;
+        //        CT.Restart();
+        //    Global.StatusIO = StatusIO.Reading;
+        //    valueInput =await ModbusService.ReadCoilsHoldingAsync(AddRead, 16); //await Modbus.ReadBit(1);await Modbus.ReadBit(AddRead);
+        //    Global.StatusIO = StatusIO.None;
+        //    CT.Stop();
             
-            CTRead = (float) CT.Elapsed.TotalMilliseconds;
-           if(CTRead > CTMax)
-                CTMax = CTRead;
-            if (CTRead < CTMin)
-                CTMin = CTRead;
+        //    CTRead = (float) CT.Elapsed.TotalMilliseconds;
+        //   if(CTRead > CTMax)
+        //        CTMax = CTRead;
+        //    if (CTRead < CTMin)
+        //        CTMin = CTRead;
 
-          for(int i=0; i<valueInput.Length; i ++)
-              {
-                  int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
-                  if (ix >= 0)
-                  {
-                      paraIOs[ix].Value = valueInput[i];
-                  }
-              }
-            numRead--;
-            //for (int i = 0; i < valueInput.Length; i++)
-            //{
-            //    int ix = paraIOs.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
-            //    if (ix >= 0)
-            //    {
-            //        paraIOs[ix].Value = valueInput[i];
-            //    }
-            //}
+        //  for(int i=0; i<valueInput.Length; i ++)
+        //      {
+        //          int ix = ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
+        //          if (ix >= 0)
+        //          {
+        //              ParaBits[ix].Value = valueInput[i];
+        //          }
+        //      }
+        //    numRead--;
+        //    //for (int i = 0; i < valueInput.Length; i++)
+        //    //{
+        //    //    int ix = ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
+        //    //    if (ix >= 0)
+        //    //    {
+        //    //        ParaBits[ix].Value = valueInput[i];
+        //    //    }
+        //    //}
 
 
-            //   valueOutput = Modbus.ReadBit(2);
-            //  valueInput = new int[dataBytes.Length / 2];
+        //    //   valueOutput = Modbus.ReadBit(2);
+        //    //  valueInput = new int[dataBytes.Length / 2];
 
-            // valueInput =  Modbus.ReadHolding(AddressStarts[0]);
-            //  if(IsReadOut)
-            //valueOutput = Modbus.ReadHolding(AddressStarts[1]);
-            //if (valueInput.Count()==1||valueOutput.Count()==1) IsConnected = false;
-            return ;
-        }
+        //    // valueInput =  Modbus.ReadHolding(AddressStarts[0]);
+        //    //  if(IsReadOut)
+        //    //valueOutput = Modbus.ReadHolding(AddressStarts[1]);
+        //    //if (valueInput.Count()==1||valueOutput.Count()==1) IsConnected = false;
+        //    return ;
+        //}
         bool IsWait = false;
         public IO_Processing _IO_Processing = IO_Processing.None;
         public IO_Processing IO_Processing
@@ -411,13 +407,13 @@ namespace BeeGlobal
                     Global.StatusProcessing = StatusProcessing.Read;
                     break;
                 case IO_Processing.Close:
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
+                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
                   
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
                     await WriteOutPut();
                     Disconnect();
@@ -437,11 +433,11 @@ namespace BeeGlobal
                     }
                     break;
                 case IO_Processing.Error:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
+                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
                     await WriteOutPut();
                     break;
                 case IO_Processing.NoneErr:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
+                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
@@ -449,7 +445,7 @@ namespace BeeGlobal
                         int ix = AddressInput[(int)I_O_Input.ByPass];
                         if (ix > -1)
                         {
-                            if (valueInput[ix] == 1)
+                            if (valueInput[ix] == true)
                             {
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result],true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
@@ -487,9 +483,8 @@ namespace BeeGlobal
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               
-
-                                await WriteOutPut();
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
+                        await WriteOutPut();
                             }
 
 
@@ -524,7 +519,7 @@ namespace BeeGlobal
                    break;
 
             }
-            valueInput = new int[16];
+            valueInput = new bool[16];
             IO_Processing = IO_Processing.None;
            
             // await Task.Delay(timeRead);
@@ -532,7 +527,7 @@ namespace BeeGlobal
         }
         public bool CheckReady()
         {
-        if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
+        if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== true&&Global.StatusProcessing==StatusProcessing.None)
             {
                 return true;
             }
@@ -546,9 +541,9 @@ namespace BeeGlobal
         {
             if (!IsCameraConnected)
             {
-                if (valueOutput[paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == 0)
+                if (valueOutput[ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == false)
                 {
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
+                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
                    await WriteOutPut();
                     return false;
                 }
@@ -556,10 +551,10 @@ namespace BeeGlobal
             }
             else
             {
-                if (valueOutput[paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == 1)
+                if (valueOutput[ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1] == true)
                 {
                    IO_Processing = IO_Processing.Error;
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
+                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
                   await WriteOutPut();
                     return true;
                 }
@@ -594,11 +589,11 @@ namespace BeeGlobal
         {
             if (!IsConnected) return;
             if (Add < 0) return;
-            valueOutput[Add] = Convert.ToInt32(Value);
-         int ix=   paraIOs.FindIndex(a => a.Adddress ==Add && a.TypeIO == TypeIO.Output);
+            valueOutput[Add] =Value;
+         int ix=   ParaBits.FindIndex(a => a.Adddress ==Add && a.TypeIO == TypeIO.Output);
             if (ix >= 0)
             {
-                paraIOs[ix].Value =Convert.ToInt32( Value);
+                ParaBits[ix].Value =Convert.ToInt32( Value);
             }
             // Mảng bit (16 bit: 0 hoặc 1), bit 15 là MSB, bit 0 là LSB
            
@@ -635,32 +630,32 @@ namespace BeeGlobal
                 }
             }
         }
+        public  short BoolsToShort(bool[] bits)
+        {
+            if (bits == null) throw new ArgumentNullException(nameof(bits));
+            if (bits.Length > 16)
+                throw new ArgumentException("Mảng bool[] tối đa 16 phần tử cho 1 short");
+
+            short value = 0;
+            for (int i = 0; i < bits.Length; i++)
+            {
+                if (bits[i])
+                    value |= (short)(1 << i); // set bit thứ i
+            }
+            return value;
+        }
         public async Task<bool> WriteOutPut()
         {
             numWrite++;
-            int[] bitArray = new int[16] {
-                0, 0, 0, 0, 0, 0, 0, 0,   // Bit 15 đến 8
-                0, 0, 0, 0, 0, 0, 0, 0   // Bit 7 đến 0
-            };
-            for (int i = 0; i < 16; i++)
-            {
-                bitArray[15 - i] = valueOutput[i]; // bit 15 là MSB
-
-            }
-            int Val = 0;
-
-            for (int i = 0; i < 16; i++)
-            {
-                Val |= (bitArray[i] & 1) << (15 - i); // bit 15 là MSB
-
-            }
+            
             if (!IsConnected)
                 return false;
             CT.Restart();
-            if(ModbusRole==ModbusRole.ClientMaster)
-            await  ModbusService.WriteSingleRegisterAsync(AddWrite, Val); //Modbus.WriteBit(AddWrite, Val);
-         else
-                ModbusService.SetCoil(AddWrite, Convert.ToBoolean(Val));
+            short value = BoolsToShort(valueOutput);
+            PlcClient.WriteWord("D100.0", value);
+         //   await  ModbusService.WriteSingleRegisterAsync(AddWrite, Val); //Modbus.WriteBit(AddWrite, Val);
+         //else
+         //       ModbusService.SetCoil(AddWrite, Convert.ToBoolean(Val));
 
             if (Global.StatusIO == StatusIO.ErrWrite)
             {

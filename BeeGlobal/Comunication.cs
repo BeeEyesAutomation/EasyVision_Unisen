@@ -10,6 +10,7 @@ namespace BeeGlobal
     [Serializable()]
     public class Comunication
     {
+        public ParaProtocol Protocol=new ParaProtocol();
         public  IO IO = new IO(); 
         public MethordComunication MethordComunication = MethordComunication.Params;
         public StatusComunication StatusComunication = StatusComunication.Disconnect;

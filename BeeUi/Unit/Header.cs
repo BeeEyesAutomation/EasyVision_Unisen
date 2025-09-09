@@ -167,7 +167,7 @@ namespace BeeUi.Common
           
             if (Global.Config.nameUser == "Admin")
             {
-                G.SettingPLC.pCom.Enabled = true;
+               // G.SettingPLC.pCom.Enabled = true;
                 if( G.StatusDashboard!=null)
                  G.StatusDashboard.btnReset.Enabled = true;
                 Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
@@ -184,7 +184,7 @@ namespace BeeUi.Common
             }
             else if (Global.Config.nameUser == "Leader")
             {
-                G.SettingPLC.pCom.Enabled = false;
+              //  G.SettingPLC.pCom.Enabled = false;
                 // Global.EditTool.View.btnContinuous.Enabled = false;
 
                 Global.EditTool.View.btnContinuous.Enabled = false;
@@ -201,7 +201,7 @@ namespace BeeUi.Common
                 Global.EditTool.View.btnContinuous.Enabled = false;
 
                 // Global.EditTool.View.btnContinuous.Enabled = false;
-                G.SettingPLC.pCom.Enabled = false;
+              //  G.SettingPLC.pCom.Enabled = false;
 
                 G.listProgram.Enabled = IsRun;
               //  btnReport.Enabled = false;
