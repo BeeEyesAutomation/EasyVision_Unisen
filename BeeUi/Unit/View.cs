@@ -1429,7 +1429,7 @@ namespace BeeUi
             else
             {
                 // btnTypeTrig.Enabled = true;
-                if (Global.ParaCommon.Comunication.IO.IsBypass)
+                if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                     btnTypeTrig.Text = "ByPass I/O";
                 else
                     btnTypeTrig.Text = "Trig External";
@@ -1464,7 +1464,7 @@ namespace BeeUi
             else
             {
                // btnTypeTrig.Enabled = true;
-               if(Global.ParaCommon.Comunication.IO.IsBypass)
+               if(Global.ParaCommon.Comunication.Protocol.IsBypass)
                     btnTypeTrig.Text = "ByPass I/O";
                 else
                     btnTypeTrig.Text = "Trig External";
@@ -1568,7 +1568,7 @@ namespace BeeUi
                     }
                     G.SettingPLC.tmRead.Enabled = true;
                     // G.StatusDashboard.Refresh();
-                    if (Global.ParaCommon.Comunication.IO.IsBypass)
+                    if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
@@ -2549,7 +2549,7 @@ namespace BeeUi
         {
             
 
-            if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.IO.IsBypass )
+            if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.Protocol.IsBypass )
             {
                 btnCap.IsCLick = false;
                 return;
@@ -2577,7 +2577,7 @@ namespace BeeUi
             Global.StatusMode = StatusMode.Once;
             timer.Restart();
             btnCap.Enabled = false;
-            if (Global.ParaCommon.Comunication.IO.IsBypass)
+            if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                 Global.StatusProcessing = StatusProcessing.Read;
             else
             {
@@ -2592,7 +2592,7 @@ namespace BeeUi
         private async void btnRecord_Click(object sender, EventArgs e)
         {
            
-            if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.IO.IsBypass)
+            if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.Protocol.IsBypass)
             {
                 btnContinuous.IsCLick = false;
                 return;
@@ -2624,7 +2624,7 @@ namespace BeeUi
                     return;
                 }
             } 
-            else if(Global.ParaCommon.Comunication.IO.IsBypass)
+            else if(Global.ParaCommon.Comunication.Protocol.IsBypass)
             {
                 tmContinuous.Enabled = btnContinuous.IsCLick;
             }    
@@ -3345,7 +3345,7 @@ namespace BeeUi
             //    btnRecord.IsCLick = false;
             //    return;
             //}
-            if (!btnCap.Enabled&&!Global.ParaCommon.Comunication.IO.IsBypass)
+            if (!btnCap.Enabled&&!Global.ParaCommon.Comunication.Protocol.IsBypass)
                 return;
             Continuous();
             tmContinuous.Enabled = false;

@@ -68,7 +68,7 @@ namespace BeeGlobal
         Result3,
         Result4,
         Ready,
-       
+        Reset,
         Busy,
         Error,
         Logic1,

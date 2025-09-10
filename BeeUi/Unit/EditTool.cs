@@ -483,7 +483,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "byPass PLC",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 toolStripPort.Text = "ByPass PLC";
-                Global.ParaCommon.Comunication.IO.IsBypass = true;
+                Global.ParaCommon.Comunication.Protocol.IsBypass = true;
             }
         }
 

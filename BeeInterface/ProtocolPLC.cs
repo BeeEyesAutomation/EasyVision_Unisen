@@ -621,7 +621,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void ParaIO_ValueChanged(object arg1, int arg2)
         {
-            ParaIO paraIO =arg1 as ParaIO;
+            ParaBit paraIO =arg1 as ParaBit;
+            if(paraIO!=null)
             this.Invoke((Action)(() =>
             {
                 if (paraIO.TypeIO == TypeIO.Input)
@@ -756,7 +757,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
             if (name == "") return;
-            if (cb.Text.Contains("None"))
+            if (cb.Text.Contains("None")&&OldOut[value]!=null)
                 Global.ParaCommon.Comunication.Protocol.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
             else
                 Global.ParaCommon.Comunication.Protocol.AddOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));

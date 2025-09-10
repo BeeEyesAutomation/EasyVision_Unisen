@@ -234,24 +234,31 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                   
+                    SetOutPut(15, true);
+                      await  WriteOutPut();
+                //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
+                    timeAlive = new System.Windows.Forms.Timer();
                     timeAlive.Interval = 100;
                     timeAlive.Enabled = true;
                     timeAlive.Tick += TimeAlive_Tick;
-                    PlcClient.OnBitsRead += (vals, addrs) =>
+                    PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
                         valueInput = vals;
                      
 
-                        if (!IsChangeAlive)
-                        {
-                            if (valueInput[15] == true)//Alive
-                            {
-                                PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".15", false);
-                                IsAlive = true;
-                                IsChangeAlive = true;
+                        //if (!IsChangeAlive)
+                        //{
+                        //    if (valueInput[15] == true)//Alive
+                        //    {
+                        //        SetOutPut(15, false);
+                        //      await   WriteOutPut();
+                        //       PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".15", false);
+                        //        IsAlive = true;
+                        //        IsChangeAlive = true;
 
-                            }
-                        }
+                        //    }
+                        //}
 
                         int addr = ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1;
 
@@ -300,25 +307,28 @@ namespace BeeGlobal
             return IsConnected;
         }
         private int numTimeOut=0;
-        private void TimeAlive_Tick(object sender, EventArgs e)
+       
+        private async void TimeAlive_Tick(object sender, EventArgs e)
         {
-           if(IsChangeAlive)
-            {
-               
-                PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
-                numTimeOut = 0;
-                IsChangeAlive = false;
-            }
-           else
-            {
-                numTimeOut++;
-                if(numTimeOut>=10)
-                {
-                    IsAlive = false;
+           //if(IsChangeAlive)
+           // {
+                IsAlive = !IsAlive;
+                SetOutPut(15, IsAlive);
+                await WriteOutPut();
+               // PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
+              //  numTimeOut = 0;
+                //IsChangeAlive = false;
+           // }
+           //else
+           // {
+           //     numTimeOut++;
+           //     if(numTimeOut>=10)
+           //     {
+           //         IsAlive = false;
                     
-                }    
+           //     }    
 
-            }    
+           // }    
         }
 
         [field: NonSerialized]
@@ -446,7 +456,7 @@ namespace BeeGlobal
             {
                 case IO_Processing.Trigger:
                     
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                   // SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetLight(true);
                     await WriteOutPut();
@@ -701,7 +711,7 @@ namespace BeeGlobal
                 return false;
             CT.Restart();
             short value = BoolsToShort(valueOutput);
-            PlcClient.WriteWord("D100.0", value);
+            PlcClient.WriteWord(AddWrite, value);
          //   await  ModbusService.WriteSingleRegisterAsync(AddWrite, Val); //Modbus.WriteBit(AddWrite, Val);
          //else
          //       ModbusService.SetCoil(AddWrite, Convert.ToBoolean(Val));
