@@ -8,6 +8,7 @@ using HslCommunication.Profinet.Melsec;
 using HslCommunication.Profinet.Omron;
 using HslCommunication.Profinet.Siemens;
 using System;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -279,7 +280,13 @@ namespace PlcLib
                 {
                     EnsureConnected();
                     dynamic d = _plc;
+                    CT2.Restart();
+                   
+                   
                     OperateResult w = d.Write(wordAddr, value);
+                    CT2.Stop();
+
+                    CTWrite = (float)CT2.Elapsed.TotalMilliseconds;
                     if (!w.IsSuccess)
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", wordAddr + ": " + w.Message));
 
@@ -434,7 +441,12 @@ namespace PlcLib
                 }
             }, "ReadBits");
         }
-
+        [NonSerialized]
+        Stopwatch CT = new Stopwatch();
+        Stopwatch CT2 = new Stopwatch();
+        [NonSerialized]
+        
+        public float CTRead, CTWrite;
         // ====== OneBitRead loop (trả về mảng bits) ======
         public void StartOneBitReadLoop(string addresses, int cycleMs = 500)
         {
@@ -452,10 +464,13 @@ namespace PlcLib
                 {
                     try
                     {
-                        if (Global.IsAllowReadPLC)
+                        //if (Global.IsAllowReadPLC)
                         {
+                            CT.Restart();
                             var values = ReadWordAsBits(addresses);
+                            CT.Stop();
 
+                            CTRead = (float)CT.Elapsed.TotalMilliseconds;
                             var handler = OnBitsRead;
                             if (handler != null) handler(values, addrs);
                         }

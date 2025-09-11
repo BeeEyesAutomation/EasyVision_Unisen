@@ -492,7 +492,7 @@ namespace BeeInterface
         private void btnFocus_Click(object sender, EventArgs e)
         {
            
-            BeeCore.Common.listCamera[Global.IndexChoose].SetAutoFocus();
+            BeeCore.Common.listCamera[Global.IndexChoose].SetAutoFocus(btnFocus.IsCLick);
         }
 
         private void AdjZoom_ValueChanged(float obj)
@@ -503,7 +503,7 @@ namespace BeeInterface
 
         private void AdjFocus_ValueChanged(float obj)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.Focus = (int)AdjZoom.Value;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.Focus = (int)AdjFocus.Value;
             BeeCore.Common.listCamera[Global.IndexChoose].SetFocus();
         }
     }

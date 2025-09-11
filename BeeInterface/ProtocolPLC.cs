@@ -633,6 +633,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
 
                     listLabelsIn[paraIO.Adddress].Text = arg2 + "";
+                    listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);
                     listLabelsIn[paraIO.Adddress].Refresh();
                 }
                 else
@@ -1020,177 +1021,178 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            
         }
         IO_Processing IO_ProcessingOld = IO_Processing.None;
-        private async void tmRead_Tick(object sender, EventArgs e)
+        private  void tmRead_Tick(object sender, EventArgs e)
         {
-            if (!Global.ParaCommon.Comunication.Protocol.IsConnected)
-            {
-               // MessageBox.Show("Err");
-                tmRead.Enabled = false;
-                tmConnect.Enabled = true;
-                return;
-            }    
-                if (!Global.Initialed) return;
-           // if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-            {
-
-                //if (Global.StatusProcessing == StatusProcessing.SendResult)
-                //{
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-                //    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
-                //    foreach (int ix in Global.ParaCommon.indexLogic1)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //         {
-                //                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-                //                break;
-                //         }
-                //    foreach (int ix in Global.ParaCommon.indexLogic2)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //        {
-                //            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-                //            break;
-                //        }
-                //    foreach (int ix in Global.ParaCommon.indexLogic3)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //        {
-                //            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-                //            break;
-                //        }
-                //    foreach (int ix in Global.ParaCommon.indexLogic4)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //        {
-                //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                //            break;
-                //        }
-                //    foreach (int ix in Global.ParaCommon.indexLogic5)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //        {
-                //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                //            break;
-                //        }
-                //    foreach (int ix in Global.ParaCommon.indexLogic6)
-                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                //        {
-                //            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
-                //            break;
-                //        }
-                //    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
-
-
-                //}
-
-                //else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
-                //{
-                //    if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
-                //    {
-                        
-                //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
-                //        Global.TriggerInternal = false;
-                //        Global.StatusProcessing = StatusProcessing.Trigger;
-                //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
-                //        if(Global.IsByPassResult)
-                //        Global.EditTool.lbBypass.ForeColor = Color.White;
-                //        tmRead.Enabled = false;
-
-
-
-                //    }
-                  
-
-                //}
-                //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
-                //{
-                    
-                //    if (Global.StatusIO == StatusIO.None)
-                //    {
-                        
-                //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
-                //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
-                //            Global.EditTool.lbBypass.ForeColor = Color.Green; 
-                //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
-                //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
-                //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
-                       
-                //    }
-                //}
-              
-                //if (btnEnQrCode.IsCLick)
-                //{
-                //    if (valueOutput[6] == 0)
-                //    {
-                //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
-
-                //        int value = 0;
-                //        for (int i = 0; i < 4; i++)
-                //        {
-                //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
-                //        }
-                //        int id = listFilter.FindIndex(a => a == Global.Project);
-                //        if (id != value)
-                //        {
-
-                //            WriteIO(IO_Processing.ChangeProg);
-                //            tmReadPLC.Enabled = false;
-                //            Global.Project = listFilter[value];
-                //            txtQrCode.Text = Global.Project.ToString();
-                //            txtQrCode.Enabled = false;
-                //            btnShowList.Enabled = false;
-
-                //            workLoadProgram.RunWorkerAsync();
-                //        }
-                //    }
-                //}
-
-
-                if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
-                {
-              
-                        
-                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
-                  
-                    //    await Global.ParaCommon.Comunication.Protocol.Read();
-                    //int ix = Global.ParaCommon.Comunication.Protocol. AddressInput[(int)I_O_Input.ByPass];
-                    //if (ix > -1)
-                    //{
-                    //    if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 1 && !Global.IsByPassResult)
-                    //    {
-                    //        Global.IsByPassResult = true;
-                    //        Global.EditTool.lbBypass.Visible = true;
-                            
-                    //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
-                    //    }
-                    //    else if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 0 && Global.IsByPassResult)
-
-                    //    {
-                    //        Global.IsByPassResult = false;
-                    //        Global.EditTool.lbBypass.Visible = false;
-                            
-                    //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
-                    //    }        
-                    //}
-                }    
-              
-                if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.None)
-                    Global.StatusIO = StatusIO.None;
-                //StatusIObtn.Text = Global.StatusIO.ToString();
-            }
-            else
-
-            {
-                Global.StatusProcessing = StatusProcessing.None;
-                Global.StatusIO = StatusIO.None;
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
-            }
-
-
             Global.ParaCommon.Comunication.Protocol.CTMid = (Global.ParaCommon.Comunication.Protocol.CTMin + Global.ParaCommon.Comunication.Protocol.CTMax) / 2;
             lbRead.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTRead) + "";
             lbMax.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTMid) + "";
             lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
+
+            // if (!Global.ParaCommon.Comunication.Protocol.IsConnected)
+            // {
+            //    // MessageBox.Show("Err");
+            //     tmRead.Enabled = false;
+            //     tmConnect.Enabled = true;
+            //     return;
+            // }    
+            //     if (!Global.Initialed) return;
+            //// if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
+            // if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            // {
+
+            //     //if (Global.StatusProcessing == StatusProcessing.SendResult)
+            //     //{
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
+            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic1)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //         {
+            //     //                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+            //     //                break;
+            //     //         }
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic2)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //        {
+            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+            //     //            break;
+            //     //        }
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic3)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //        {
+            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+            //     //            break;
+            //     //        }
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic4)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //        {
+            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+            //     //            break;
+            //     //        }
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic5)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //        {
+            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+            //     //            break;
+            //     //        }
+            //     //    foreach (int ix in Global.ParaCommon.indexLogic6)
+            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+            //     //        {
+            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
+            //     //            break;
+            //     //        }
+            //     //    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
+
+
+            //     //}
+
+            //     //else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+            //     //{
+            //     //    if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
+            //     //    {
+
+            //     //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
+            //     //        Global.TriggerInternal = false;
+            //     //        Global.StatusProcessing = StatusProcessing.Trigger;
+            //     //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
+            //     //        if(Global.IsByPassResult)
+            //     //        Global.EditTool.lbBypass.ForeColor = Color.White;
+            //     //        tmRead.Enabled = false;
+
+
+
+            //     //    }
+
+
+            //     //}
+            //     //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
+            //     //{
+
+            //     //    if (Global.StatusIO == StatusIO.None)
+            //     //    {
+
+            //     //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
+            //     //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
+            //     //            Global.EditTool.lbBypass.ForeColor = Color.Green; 
+            //     //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
+            //     //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
+            //     //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
+
+            //     //    }
+            //     //}
+
+            //     //if (btnEnQrCode.IsCLick)
+            //     //{
+            //     //    if (valueOutput[6] == 0)
+            //     //    {
+            //     //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
+
+            //     //        int value = 0;
+            //     //        for (int i = 0; i < 4; i++)
+            //     //        {
+            //     //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
+            //     //        }
+            //     //        int id = listFilter.FindIndex(a => a == Global.Project);
+            //     //        if (id != value)
+            //     //        {
+
+            //     //            WriteIO(IO_Processing.ChangeProg);
+            //     //            tmReadPLC.Enabled = false;
+            //     //            Global.Project = listFilter[value];
+            //     //            txtQrCode.Text = Global.Project.ToString();
+            //     //            txtQrCode.Enabled = false;
+            //     //            btnShowList.Enabled = false;
+
+            //     //            workLoadProgram.RunWorkerAsync();
+            //     //        }
+            //     //    }
+            //     //}
+
+
+            //     if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
+            //     {
+
+
+            //             //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
+
+            //         //    await Global.ParaCommon.Comunication.Protocol.Read();
+            //         //int ix = Global.ParaCommon.Comunication.Protocol. AddressInput[(int)I_O_Input.ByPass];
+            //         //if (ix > -1)
+            //         //{
+            //         //    if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 1 && !Global.IsByPassResult)
+            //         //    {
+            //         //        Global.IsByPassResult = true;
+            //         //        Global.EditTool.lbBypass.Visible = true;
+
+            //         //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
+            //         //    }
+            //         //    else if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 0 && Global.IsByPassResult)
+
+            //         //    {
+            //         //        Global.IsByPassResult = false;
+            //         //        Global.EditTool.lbBypass.Visible = false;
+
+            //         //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
+            //         //    }        
+            //         //}
+            //     }    
+
+            //     if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.None)
+            //         Global.StatusIO = StatusIO.None;
+            //     //StatusIObtn.Text = Global.StatusIO.ToString();
+            // }
+            // else
+
+            // {
+            //     Global.StatusProcessing = StatusProcessing.None;
+            //     Global.StatusIO = StatusIO.None;
+            //     Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
+            // }
+
+
 
 
         }
@@ -1208,7 +1210,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
            
                 await Task.Delay(500);
-               // tmRead.Enabled = true;
+                tmRead.Enabled = true;
                 //if (Global.ParaCommon.Comunication.Protocol.timeRead == 0) Global.ParaCommon.Comunication.Protocol.timeRead = 1;
                 //tmRead.Interval = Global.ParaCommon.Comunication.Protocol.timeRead;
                 //  tmCheck.Enabled = true;
@@ -1223,7 +1225,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 {
                   await  Global.ParaCommon.Comunication.Protocol.Connect();
                     if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                    {
+                        Global.StatusIO = StatusIO.None;
+                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
                         tmRead.Enabled = true;
+
+                    }
+                 
                     else
                     {
                         MessageBox.Show("Check connect I_O");

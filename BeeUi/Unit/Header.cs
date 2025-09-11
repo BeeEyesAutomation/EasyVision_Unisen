@@ -617,10 +617,12 @@ txtQrCode.Focus();
         {
             if(IsIntialProgram)
             DataTool.LoadProject(Global.Project);
+         
         }
 
-        private void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+         await   BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
             if (BeeCore.Common.listCamera[Global.IndexChoose] == null) return;
             //if (Global.ParaCommon.matRegister != null)
             //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);

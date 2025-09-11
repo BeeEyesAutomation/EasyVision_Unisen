@@ -72,6 +72,7 @@ namespace BeeCore
             if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
             var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
             szImage = newBitmap.Size;
+            BeeCore.Common.bmResult = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
             var old = _pb.Image; _pb.Image = newBitmap; old?.Dispose();
         }
 

@@ -127,9 +127,11 @@ namespace BeeUi
                      
                         try
                         {
-                            if (Global.ParaCommon.matRegister != null)
+                           
+                                if (Global.ParaCommon.matRegister != null)
                                 if (Global.ParaCommon.matRegister.Width != 0)
                                 {
+                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
                                     Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -143,7 +145,7 @@ namespace BeeUi
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                            //MessageBox.Show(ex.Message);
                         }
                       G.Header.Acccess(Global.IsRun);
                       View.RefreshExternal(Global.ParaCommon.IsExternal);

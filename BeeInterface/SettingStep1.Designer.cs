@@ -248,7 +248,7 @@ namespace BeeInterface
             this.AdjZoom.Location = new System.Drawing.Point(3, 167);
             this.AdjZoom.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.AdjZoom.MatchTextboxFontToThumb = true;
-            this.AdjZoom.Max = 2000F;
+            this.AdjZoom.Max = 20000F;
             this.AdjZoom.MaxTextboxWidth = 0;
             this.AdjZoom.MaxThumb = 1000;
             this.AdjZoom.MaxTrackHeight = 1000;
@@ -1092,9 +1092,9 @@ namespace BeeInterface
             this.btnFocus.ImageTintOpacity = 0.5F;
             this.btnFocus.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnFocus.IsCLick = false;
-            this.btnFocus.IsNotChange = true;
+            this.btnFocus.IsNotChange = false;
             this.btnFocus.IsRect = false;
-            this.btnFocus.IsUnGroup = false;
+            this.btnFocus.IsUnGroup = true;
             this.btnFocus.Location = new System.Drawing.Point(258, 0);
             this.btnFocus.Margin = new System.Windows.Forms.Padding(0);
             this.btnFocus.Multiline = false;

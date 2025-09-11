@@ -738,10 +738,10 @@ int CCD::GetFocus()
 	return	camUSB.get(CAP_PROP_FOCUS);
 
 }
-void CCD::AutoFocus()
+void CCD::AutoFocus(bool Auto)
 {
-	camUSB.set(CAP_PROP_AUTOFOCUS, 0);
-	camUSB.set(CAP_PROP_AUTOFOCUS, 1);
+	
+	camUSB.set(CAP_PROP_AUTOFOCUS, Auto);
 
 }
 void CCD::SetWidth(int Value)
@@ -1197,7 +1197,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	}
 	case PixelType_Gvsp_BayerGB8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2RGB);//chinh mau
 		return true;
 	}
 	case PixelType_Gvsp_BayerRG8: {

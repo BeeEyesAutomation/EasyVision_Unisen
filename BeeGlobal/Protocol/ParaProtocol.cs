@@ -302,7 +302,8 @@ namespace BeeGlobal
 
                         //    }
                         //}
-
+                        CTRead = PlcClient.CTRead;
+                        CTWrite = PlcClient.CTWrite;
                         int addr = ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1;
 
                         if (addr > -1)
@@ -353,10 +354,13 @@ namespace BeeGlobal
        
         private async void TimeAlive_Tick(object sender, EventArgs e)
         {
-           //if(IsChangeAlive)
-           // {
+            //if(IsChangeAlive)
+            // {
+            if (Global.IsAllowReadPLC)
+            {
                 IsAlive = !IsAlive;
                 SetOutPut(15, IsAlive);
+            }
                // await WriteOutPut();
             //int ix = ParaBits.FindIndex(a => a.Adddress == Add && a.TypeIO == TypeIO.Output);
             //if (ix >= 0)
@@ -464,7 +468,8 @@ namespace BeeGlobal
         //}
         bool IsWait = false;
         public IO_Processing _IO_Processing = IO_Processing.None;
-        private readonly SemaphoreSlim _ioLock = new SemaphoreSlim(1, 1);
+        [NonSerialized]
+        private  SemaphoreSlim _ioLock = new SemaphoreSlim(1, 1);
         public IO_Processing IO_Processing
         {
             get => _IO_Processing;
@@ -479,6 +484,7 @@ namespace BeeGlobal
                     {
                         try
                         {
+                            if(_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
                             await _ioLock.WaitAsync();
                             await WriteIO(value);
                         }
@@ -524,6 +530,7 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                     SetLight(true);
                     await WriteOutPut();
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                     Global.StatusMode = StatusMode.Once;
                     await Task.Delay((int)DelayTrigger);
                     Global.StatusProcessing = StatusProcessing.Read;
@@ -785,7 +792,7 @@ namespace BeeGlobal
             
             if (!IsConnected)
                 return false;
-            CT.Restart();
+           // CT.Restart();
             short value = BoolsToShort(valueOutput);
             PlcClient.WriteWord(AddWrite, value);
          //   await  ModbusService.WriteSingleRegisterAsync(AddWrite, Val); //Modbus.WriteBit(AddWrite, Val);
@@ -800,12 +807,12 @@ namespace BeeGlobal
             }
 
             numWrite--;
-            CT.Stop();
-            CTWrite = (float)CT.Elapsed.TotalMilliseconds;
-            if (CTWrite > CTMax)
-                CTMax = CTWrite;
-            if (CTWrite < CTMin)
-                CTMin = CTWrite;
+           // CT.Stop();
+            //CTWrite = (float)CT.Elapsed.TotalMilliseconds;
+            //if (CTWrite > CTMax)
+            //    CTMax = CTWrite;
+            //if (CTWrite < CTMin)
+            //    CTMin = CTWrite;
             return IsConnected;
         }
     }
