@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum TypeSendPLC
+    {
+        Bit,
+        Bits,
+        String,
+        Float,
+        Int
+    }
     public enum ShaftMeasureType
     {
         /// <summary>Khoảng cách giữa hai đường tâm</summary>

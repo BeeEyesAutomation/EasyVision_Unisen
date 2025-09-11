@@ -93,8 +93,8 @@ namespace BeeInterface
 
                 if (Propety.PathModel != "")
                     cbListModel.Text = Propety.PathModel;
-                txtMatching.Text = Propety.Matching;
-                btnEnbleContent.IsCLick = Propety.IsEnContent;
+                //txtMatching.Text = Propety.Matching;
+                //btnEnbleContent.IsCLick = Propety.IsEnContent;
                 //if (Propety.PathModel!=null)
                 //   if (File.Exists(Propety.PathModel))
                 //       Propety.SetModel(this.Name, Propety.PathModel, TypeYolo.YOLO);
@@ -757,7 +757,7 @@ namespace BeeInterface
 
 
         }
-
+     
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -1169,26 +1169,7 @@ namespace BeeInterface
            btnTraining.Enabled = true;
         }
 
-        private void btnEnbleContent_Click(object sender, EventArgs e)
-        {
-            Propety.IsEnContent = btnEnbleContent.IsCLick;
-            layContent.Enabled = btnEnbleContent.IsCLick;
-        }
-
-        private void txtMatching_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                txtMatching.Text = txtMatching.Text.Trim().Replace("\n", "") ;
-                Propety.Matching = txtMatching.Text;
-            }
-        }
-
-        private void btnSetContent_Click(object sender, EventArgs e)
-        {
-            Propety.Matching = Propety.Content;
-            txtMatching.Text = Propety.Matching;
-        }
+      
 
         private void btnX_L_R_Click(object sender, EventArgs e)
         {
@@ -1346,6 +1327,27 @@ namespace BeeInterface
         private void btnClearLog_Click(object sender, EventArgs e)
         {
          
+        }
+
+        private void btnEnable_Click(object sender, EventArgs e)
+        {
+            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IsSendResult = btnEnable.IsCLick;
+
+        }
+
+        private void txtAddPLC_TextChanged(object sender, EventArgs e)
+        {
+            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].AddPLC =txtAddPLC.Text.Trim();
+        }
+
+        private void btnBits_Click(object sender, EventArgs e)
+        {
+            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
+        }
+
+        private void btnString_Click(object sender, EventArgs e)
+        {
+            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
         }
     }
 }

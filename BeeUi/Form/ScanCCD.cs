@@ -61,10 +61,19 @@ namespace BeeUi
             {
                 BeeCore.Common.listCamera[Global.IndexChoose].Init();
                  sRead = BeeCore.Common.listCamera[Global.IndexChoose].Scan();
-            }    
-          
-      
-            String[] listStringCCD = sRead.Split('\n');
+            }
+                else
+                {
+                    return new List<string>();
+                }
+
+                    String[] listStringCCD = sRead.Split('\n');
+            if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
+            {
+                int index = Array.FindIndex(listStringCCD, s => s.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
+                if (index != -1)
+                    indexCCD = index;
+            }
             cbCCD.DataSource = listStringCCD;
             if (sRead == "No Device")
                 btnConnect.Enabled = false;
@@ -429,10 +438,25 @@ namespace BeeUi
             }
             //BeeCore.Common.listCamera[3] = new Camera(Global.listParaCamera[3],3);
         }
-
+        String sRead = "";
         private  void workConAll_DoWork(object sender, DoWorkEventArgs e)
         {
-          
+           
+            //if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
+            //    if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+            //        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+            //    {
+            //        BeeCore.Common.listCamera[Global.IndexChoose].Init();
+            //        sRead = BeeCore.Common.listCamera[Global.IndexChoose].Scan();
+
+            //        String[] listStringCCD = sRead.Split('\n');
+            //        int index= Array.FindIndex(listStringCCD, s => s.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
+            //            if (index != -1)
+            //                indexCCD = index;
+
+            //    }
+
+
         }
 
         private async void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

@@ -38,7 +38,35 @@ namespace BeeCore
         {
             CCDPlus.ShowSetting();
 
-
+           
+        }
+        public void SetAutoFocus()
+        {
+            CCDPlus.AutoFocus();
+        }
+        public void SetFocus()
+        {
+            CCDPlus.SetFocus(Para.Focus);
+        }
+        public void SetZoom()
+        {
+            CCDPlus.SetZoom(Para.Zoom);
+        }
+        public int GetFocus()
+        {
+           return CCDPlus.GetFocus();
+        }
+        public int GetZoom()
+        {
+          return  CCDPlus.GetZoom();
+        }
+        public int GetWidthUSB()
+        {
+            return CCDPlus.GetWidth();
+        }
+        public int GetHeightUSB()
+        {
+            return CCDPlus.GetHeight();
         }
         public  string Scan()
         {
@@ -378,15 +406,27 @@ namespace BeeCore
         public async Task<bool> SetFullPara()
 
         {
-            await  SetWidth();
-            await SetHeight();
-            await SetOffSetX();
-            await SetOffSetY();
-            await SetCenterX();
-            await SetCenterY();
-            await SetExpo();
-            await SetGain();
-            await SetShift();
+            if (Para.TypeCamera == TypeCamera.USB)
+            {
+                CCDPlus.SetWidth((int)Para.Width.Value);
+                CCDPlus.SetHeight((int)Para.Height.Value);
+                await Task.Delay(500);
+                CCDPlus.SetFocus((int)Para.Focus);
+                CCDPlus.SetZoom((int)Para.Zoom);
+
+            }
+            else
+            {
+                await SetWidth();
+                await SetHeight();
+                await SetOffSetX();
+                await SetOffSetY();
+                await SetCenterX();
+                await SetCenterY();
+                await SetExpo();
+                await SetGain();
+                await SetShift();
+            }
             return true;
         }
 
@@ -602,7 +642,14 @@ namespace BeeCore
             }
             return false;
         }
-
+        public void SetWidthUSB()
+        {
+            CCDPlus.SetWidth((int)Para.Width.Value);
+        }
+        public void SetHeightUSB()
+        {
+            CCDPlus.SetHeight((int)Para.Height.Value);
+        }
         public async Task<bool> SetWidth()
         {
             try

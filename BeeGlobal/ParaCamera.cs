@@ -20,7 +20,7 @@ namespace BeeGlobal
         public float Fps;
         public TypeCamera TypeCamera = TypeCamera.USB;
         public String Name = "";
-
+        public int Focus, Zoom;
         public ParaCamera()
         {
             if (Exposure == null)

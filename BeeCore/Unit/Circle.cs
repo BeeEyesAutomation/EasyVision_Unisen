@@ -235,6 +235,17 @@ namespace BeeCore
         }
         public float RadiusTemp = 0;
         public float RadiusResult= 0;
+        public async Task SendResult()
+        {
+            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {   
+                    if(listP_Center.Count>0)
+                        await Global.ParaCommon.Comunication.Protocol.WriteResultString(Common.PropetyTools[IndexThread][Index].AddPLC,  listP_Center[0].X+ "," + listP_Center[0].Y + "," + RadiusResult);
+                }
+            }
+        }
         public void Complete()
         {
             if(rectRotates.Count>0)

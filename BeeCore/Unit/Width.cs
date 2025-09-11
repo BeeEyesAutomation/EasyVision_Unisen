@@ -186,7 +186,16 @@ namespace BeeCore
 
 
         }
-
+        public async Task SendResult()
+        {
+            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {
+                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                }
+            }
+        }
         public Graphics DrawResult(Graphics gc)
         {
 

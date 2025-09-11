@@ -718,7 +718,48 @@ bool	CCD::GetPara(int indexCCD, System::String^ Namepara, float% min,  float% ma
 	}*/
 	return true;
 }
+void CCD::SetFocus(int Focus)
+{
+	camUSB.set(CAP_PROP_AUTOFOCUS, 0);
+	camUSB.set(CAP_PROP_FOCUS, Focus);
+}
+void CCD::SetZoom(int Zoom)
+{
+	camUSB.set(CAP_PROP_ZOOM, Zoom);
+	
+}
+int CCD::GetZoom()
+{
+return	camUSB.get(CAP_PROP_ZOOM);
 
+}
+int CCD::GetFocus()
+{
+	return	camUSB.get(CAP_PROP_FOCUS);
+
+}
+void CCD::AutoFocus()
+{
+	camUSB.set(CAP_PROP_AUTOFOCUS, 0);
+	camUSB.set(CAP_PROP_AUTOFOCUS, 1);
+
+}
+void CCD::SetWidth(int Value)
+{
+	camUSB.set(CAP_PROP_FRAME_WIDTH, Value);
+}
+void CCD::SetHeight(int Value)
+{
+	camUSB.set(CAP_PROP_FRAME_HEIGHT, Value);
+}
+int CCD::GetWidth()
+{
+	return camUSB.get(CAP_PROP_FRAME_WIDTH);
+}
+int CCD::GetHeight()
+{
+	return camUSB.get(CAP_PROP_FRAME_HEIGHT);
+}
 bool ConnectUsb( int index)
 {
 	camUSB.open(index);

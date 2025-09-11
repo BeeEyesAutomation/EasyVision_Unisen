@@ -365,6 +365,17 @@ namespace BeeCore
         }
         public ArrangeBox ArrangeBox=new ArrangeBox();
         public bool IsArrangeBox = false;
+        public async Task SendResult()
+        {
+            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            {
+               if( Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {
+                  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(Common.PropetyTools[IndexThread][Index].AddPLC, BitsResult);
+                }
+            }
+        }
+        bool[] BitsResult=new bool[16];
         public void Complete()
         {
             if (Global.IsIntialPython)
@@ -435,97 +446,15 @@ namespace BeeCore
                                     listScore.Add(scoreList[i]);
 
                                 }
-                                //if (IsCheckLine)
-                                //{
-                                //    switch (CompareLine)
-                                //    {
-                                //        case Compares.More:
-                                     
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (boxList[i]._rect.Height <= yLine)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                               
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else if (IsCheckArea)
-                                //{
-                                //    switch (CompareArea)
-                                //    {
-                                //        case Compares.More:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else
-                                //{
-                                //    listOK.Add(true);
-                                //    Content += label;
-                                //    rectRotates.Add(boxList[i]);
-                                //    listLabel.Add(label);
-                                //    scoreRS += (int)scoreList[i];
-                                //    listScore.Add(scoreList[i]); numOK++;
-                                //}
-
+                           
                             }
                             i++;
+                        }
+                        int k = 0; BitsResult = new bool[16];
+                        foreach (bool Iss in listOK)
+                        {
+                            BitsResult[k] = Iss;
+                                k++;
                         }
                         if (IsArrangeBox)
                         {

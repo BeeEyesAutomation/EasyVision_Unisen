@@ -2790,7 +2790,7 @@ namespace BeeInterface
             this.txtLog1.Location = new System.Drawing.Point(2, 530);
             this.txtLog1.Multiline = true;
             this.txtLog1.Name = "txtLog1";
-            this.txtLog1.Size = new System.Drawing.Size(341, 255);
+            this.txtLog1.Size = new System.Drawing.Size(324, 255);
             this.txtLog1.TabIndex = 74;
             // 
             // panel4

@@ -296,8 +296,10 @@ namespace BeeCore
 
         }
 
-
-        int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
+        public async Task SendResult()
+        {
+        }
+            int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
         {
             double maxArea = 0;
             int maxAreaContourId = -1;

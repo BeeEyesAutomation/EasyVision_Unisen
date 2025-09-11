@@ -40,7 +40,7 @@ namespace CvPlus {
 	public: int numERR = 0;
 	public: int TypeCamera = 0;
 	public: bool  IsErrCCD = false;
-	public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
+	//public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
 	public:uchar* ReadCCD(int indexCCD,  int* rows, int* cols, int* Type);
 	//public:void  ReadRaw(bool IsHist);
@@ -52,6 +52,15 @@ namespace CvPlus {
 	public:void	DestroyAll(int indexCCD);
 	public:void	ShowSetting();
 	public:void CalHist();
+	public:  void SetFocus(int Focus);
+	public:void SetZoom(int Zoom);
+	public:	  int GetZoom();
+	public:	  int GetFocus();
+	public:	  void AutoFocus();
+	public:void SetWidth(int Value);
+	public:void SetHeight(int Value);
+	public:int GetWidth();
+	public:int GetHeight();
 	
 	};
 }

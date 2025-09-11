@@ -27,7 +27,9 @@ namespace BeeCore
         public ItemTool ItemTool;
         [NonSerialized]
         public dynamic Control;
-       
+        public bool IsSendResult = false;
+        public string AddPLC = "";
+        public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         private float _Score = 0;
         [field: NonSerialized]
         public event Action<float> ScoreChanged;

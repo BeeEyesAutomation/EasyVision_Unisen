@@ -84,7 +84,9 @@ namespace BeeCore
         public RectangleF rectArea;
         public Compares Compare = Compares.Equal;
         public int LimitCounter = 0;
-       
+        public async Task SendResult()
+        {
+        }
         public bool IsAreaWhite=false;
       
         int _threshMin;

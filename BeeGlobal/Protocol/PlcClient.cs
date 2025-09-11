@@ -10,6 +10,7 @@ using HslCommunication.Profinet.Siemens;
 using System;
 using System.IO.Ports;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -286,7 +287,73 @@ namespace PlcLib
                 }
             }, "WriteWord");
         }
+        public void WriteFloat(string startAddr, float value)
+        {
+            WithRetry(() =>
+            {
+                lock (_commLock)
+                {
+                    EnsureConnected();
+                    dynamic d = _plc;
 
+                    // Convert float -> 4 byte (little endian của .NET)
+                    byte[] bytes = BitConverter.GetBytes(value);
+
+                    // Tùy PLC: có thể phải đảo ngược thứ tự byte
+                    // Ví dụ Modbus big-endian: swap 2 byte trong mỗi word hoặc đảo cả 4 byte
+                    // Ở đây demo Little Endian (lo-hi, lo-hi)
+                    short low = BitConverter.ToInt16(bytes, 0);
+                    short high = BitConverter.ToInt16(bytes, 2);
+
+                    OperateResult w = d.Write(startAddr, new short[] { low, high });
+                    if (!w.IsSuccess)
+                    {
+                        Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", startAddr + ": " + w.Message));
+                    }
+                }
+            }, "WriteFloat");
+        }
+        public void WriteString(string startAddr, string text, int maxLength)
+        {
+            WithRetry(() =>
+            {
+                lock (_commLock)
+                {
+                    EnsureConnected();
+                    dynamic d = _plc;
+
+                    // Giới hạn chiều dài
+                    if (text.Length > maxLength)
+                        text = text.Substring(0, maxLength);
+
+                    // Encode ra bytes (ASCII hoặc UTF8 tùy PLC/HMI, đa số ASCII)
+                    byte[] bytes = Encoding.ASCII.GetBytes(text);
+
+                    // Đệm thêm 0 nếu chưa đủ số byte chẵn (để ghép thành word)
+                    if (bytes.Length % 2 != 0)
+                    {
+                        Array.Resize(ref bytes, bytes.Length + 1);
+                    }
+
+                    // Chuyển byte -> short[]
+                    short[] words = new short[bytes.Length / 2];
+                    for (int i = 0; i < words.Length; i++)
+                    {
+                        words[i] = BitConverter.ToInt16(bytes, i * 2);
+                    }
+
+                    OperateResult w = d.Write(startAddr, words);
+                    if (!w.IsSuccess)
+                    {
+                        Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", startAddr + ": " + w.Message));
+                    }
+                }
+            }, "WriteString");
+        }
         public bool ReadBit(string addrOrWordDotBit)
         {
             return WithRetry(() =>

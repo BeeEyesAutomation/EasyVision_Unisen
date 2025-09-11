@@ -207,7 +207,19 @@ namespace BeeCore
         }
         [NonSerialized]
         private   PointF pCenter1, pCenter2, pCenter3, pCenter4, pIntersection;
-
+        public async Task SendResult()
+        {
+            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {
+                    if (TypeMeasure == TypeMeasure.Angle)
+                    {
+                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
+                    }
+                }
+            }
+        }
         public void Complete()
         {
             Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;

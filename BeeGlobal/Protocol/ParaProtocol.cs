@@ -703,6 +703,18 @@ namespace BeeGlobal
             }
             return value;
         }
+        public async Task WriteResultBits(String Address,bool[] Value)       
+        {
+            PlcClient.WriteWord(Address, BoolsToShort(Value));
+        }
+        public async Task WriteResultFloat(String Address,float Value)
+        {
+            PlcClient.WriteFloat(Address,Value);
+        }
+        public async Task WriteResultString(String Address, string Value)
+        {
+            PlcClient.WriteString(Address, Value,100);
+        }
         public async Task<bool> WriteOutPut()
         {
             numWrite++;

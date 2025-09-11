@@ -92,6 +92,10 @@ namespace BeeInterface
             cbParity.DataSource= (Parity[])Enum.GetValues(typeof(Parity));
             cbStopBits.DataSource= (StopBits[])Enum.GetValues(typeof(StopBits));
             cbDataBits.DataSource = new List<String> { "7", "8" };
+            if(Global.ParaCommon.Comunication.Protocol==null)
+            {
+                Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+            }    
             var ParaBits = Global.ParaCommon.Comunication.Protocol.ParaBits;
             nameOut[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
             nameOut[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
