@@ -1508,6 +1508,7 @@ namespace BeeUi
                 case StatusProcessing.None:
                     break;
                 case StatusProcessing.Trigger:
+                    Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
                         G.StatusDashboard.StatusText = obj.ToString();
@@ -1523,6 +1524,7 @@ namespace BeeUi
                         timer.Restart();
                     break;
                 case StatusProcessing.Read:
+                    Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
                         G.StatusDashboard.StatusText = obj.ToString();
@@ -1549,6 +1551,7 @@ namespace BeeUi
 
                     break;
                 case StatusProcessing.Checking:
+                    Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
                         G.StatusDashboard.StatusText = obj.ToString();
@@ -1560,12 +1563,58 @@ namespace BeeUi
                     
                     break;
                 case StatusProcessing.SendResult:
+                    Global.IsAllowReadPLC = true;
                     if (Global.IsDebug)
                     {
                        
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
+                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
+                    foreach (int ix in Global.ParaCommon.indexLogic1)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+                            break;
+                        }
+                    foreach (int ix in Global.ParaCommon.indexLogic2)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+                            break;
+                        }
+                    foreach (int ix in Global.ParaCommon.indexLogic3)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+                            break;
+                        }
+                    foreach (int ix in Global.ParaCommon.indexLogic4)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                            break;
+                        }
+                    foreach (int ix in Global.ParaCommon.indexLogic5)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                            break;
+                        }
+                    foreach (int ix in Global.ParaCommon.indexLogic6)
+                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        {
+                            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
+                            break;
+                        }
+                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
+
+
                     G.SettingPLC.tmRead.Enabled = true;
                     // G.StatusDashboard.Refresh();
                     if (Global.ParaCommon.Comunication.Protocol.IsBypass)

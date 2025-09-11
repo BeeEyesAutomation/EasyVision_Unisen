@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -234,9 +235,9 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
-                   
-                    SetOutPut(15, true);
-                      await  WriteOutPut();
+                    IO_Processing = IO_Processing.Busy;
+                    //SetOutPut(15, true);
+                    //  await  WriteOutPut();
                 //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
                     timeAlive = new System.Windows.Forms.Timer();
                     timeAlive.Interval = 100;
@@ -245,8 +246,50 @@ namespace BeeGlobal
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
                         valueInput = vals;
-                     
+                        for (int i = 0; i < valueInput.Length; i++)
+                        {
+                            int ix = ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
+                            if (ix >= 0)
+                            {
+                                ParaBits[ix].Value =Convert.ToInt32( valueInput[i]);
+                            }
+                        }
 
+
+                        if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+                        {
+                            if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
+                            {
+
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger OK"));
+                                Global.TriggerInternal = false;
+                                Global.IsAllowReadPLC = false;
+                                Global.StatusProcessing = StatusProcessing.Trigger;
+                                IO_Processing = IO_Processing.Trigger;
+                                if (Global.IsByPassResult)
+                                    Global.EditTool.lbBypass.ForeColor = Color.White;
+                               
+
+
+                            }
+
+
+                        }
+                        //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
+                        //{
+
+                        //    if (Global.StatusIO == StatusIO.None)
+                        //    {
+
+                        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
+                        //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
+                        //            Global.EditTool.lbBypass.ForeColor = Color.Green;
+                        //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
+                        //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
+                        //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
+
+                        //    }
+                        //}
                         //if (!IsChangeAlive)
                         //{
                         //    if (valueInput[15] == true)//Alive
@@ -314,21 +357,26 @@ namespace BeeGlobal
            // {
                 IsAlive = !IsAlive;
                 SetOutPut(15, IsAlive);
-                await WriteOutPut();
-               // PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
-              //  numTimeOut = 0;
-                //IsChangeAlive = false;
-           // }
-           //else
-           // {
-           //     numTimeOut++;
-           //     if(numTimeOut>=10)
-           //     {
-           //         IsAlive = false;
-                    
-           //     }    
+               // await WriteOutPut();
+            //int ix = ParaBits.FindIndex(a => a.Adddress == Add && a.TypeIO == TypeIO.Output);
+            //if (ix >= 0)
+            //{
+            //    ParaBits[ix].Value = Convert.ToInt32(Value);
+            //}
+             PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", IsAlive);
+            //  numTimeOut = 0;
+            //IsChangeAlive = false;
+            // }
+            //else
+            // {
+            //     numTimeOut++;
+            //     if(numTimeOut>=10)
+            //     {
+            //         IsAlive = false;
 
-           // }    
+            //     }    
+
+            // }    
         }
 
         [field: NonSerialized]
@@ -416,6 +464,7 @@ namespace BeeGlobal
         //}
         bool IsWait = false;
         public IO_Processing _IO_Processing = IO_Processing.None;
+        private readonly SemaphoreSlim _ioLock = new SemaphoreSlim(1, 1);
         public IO_Processing IO_Processing
         {
             get => _IO_Processing;
@@ -425,9 +474,24 @@ namespace BeeGlobal
                 if (_IO_Processing != value)
                 {
                    _IO_Processing = value;
-                    
-                //    ;
-                //    WriteIO(_IO_Processing);
+                    // Fire-and-forget có bắt lỗi, không chặn UI
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await _ioLock.WaitAsync();
+                            await WriteIO(value);
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", ex.Message));
+                        }
+                        finally
+                        {
+                            _ioLock.Release();
+                        }
+                    });
+                   
                }
             }
         }
@@ -442,17 +506,17 @@ namespace BeeGlobal
         }
         public bool IsBlink = false;
         public bool IsLogic1, IsLogic2, IsLogic3, IsLogic4, IsLogic5, IsLogic6;
-        public async Task<bool>  WriteIO()
-        {   //if (!IsConnected) return false;
+        public async Task<bool>  WriteIO(IO_Processing _IO_Processing)
+        {   if (!IsConnected) return false;
 
-            if (IO_Processing == IO_Processing.None)
+            if (_IO_Processing == IO_Processing.None)
             {
 
                 return false;
             }
             Global.StatusIO = StatusIO.Writing;
 
-            switch (IO_Processing )
+            switch (_IO_Processing)
             {
                 case IO_Processing.Trigger:
                     
@@ -579,8 +643,8 @@ namespace BeeGlobal
             }
             valueInput = new bool[16];
             IO_Processing = IO_Processing.None;
-           
-            // await Task.Delay(timeRead);
+            Global.StatusIO = StatusIO.None;
+
             return false;
         }
         public bool CheckReady()

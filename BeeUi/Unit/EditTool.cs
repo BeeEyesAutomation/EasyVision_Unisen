@@ -93,6 +93,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                        Global.IsAllowReadPLC = true;
                         Shows.ShowAllChart(Global.ToolSettings.pAllTool as Control);
                         Global.EditTool.View.btnLive.Enabled = false;
                         CameraBar.Visible = true;
@@ -148,6 +149,7 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
+                        Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = true;
                         pHeader.Visible = false;
                         CameraBar.Visible = false;
@@ -197,6 +199,7 @@ namespace BeeUi
                        //this.ResumeLayout();
                         break;
                     case Step.Step2:
+                        Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
                         G.StepEdit.btnStep2.IsCLick = true;
                         //   pName.Visible = true;
@@ -231,6 +234,7 @@ namespace BeeUi
                         //Global.EditTool.View.imgView.Update();
                         break;
                     case Step.Step3:
+                        Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
                         G.StepEdit.btnStep3.IsCLick = true;
                         pName.Visible = true;
@@ -268,6 +272,7 @@ namespace BeeUi
 
                         break;
                     case Step.Step4:
+                        Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
                         G.StepEdit.btnStep4.IsCLick = true;
                         pName.Visible = true;

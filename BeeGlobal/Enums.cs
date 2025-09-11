@@ -144,7 +144,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass
+      None,Trigger, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy
     }
     public enum AreaCrop
     {

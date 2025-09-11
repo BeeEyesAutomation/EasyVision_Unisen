@@ -1034,89 +1034,89 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
 
-                if (Global.StatusProcessing == StatusProcessing.SendResult)
-                {
-                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
-                    foreach (int ix in Global.ParaCommon.indexLogic1)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                         {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-                                break;
-                         }
-                    foreach (int ix in Global.ParaCommon.indexLogic2)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic3)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic4)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic5)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic6)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
-                            break;
-                        }
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
+                //if (Global.StatusProcessing == StatusProcessing.SendResult)
+                //{
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
+                //    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
+                //    foreach (int ix in Global.ParaCommon.indexLogic1)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //         {
+                //                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+                //                break;
+                //         }
+                //    foreach (int ix in Global.ParaCommon.indexLogic2)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //        {
+                //            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+                //            break;
+                //        }
+                //    foreach (int ix in Global.ParaCommon.indexLogic3)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //        {
+                //            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+                //            break;
+                //        }
+                //    foreach (int ix in Global.ParaCommon.indexLogic4)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //        {
+                //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                //            break;
+                //        }
+                //    foreach (int ix in Global.ParaCommon.indexLogic5)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //        {
+                //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                //            break;
+                //        }
+                //    foreach (int ix in Global.ParaCommon.indexLogic6)
+                //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                //        {
+                //            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
+                //            break;
+                //        }
+                //    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
 
 
-                }
+                //}
 
-                else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
-                {
-                    if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
-                    {
+                //else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+                //{
+                //    if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
+                //    {
                         
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
-                        Global.TriggerInternal = false;
-                        Global.StatusProcessing = StatusProcessing.Trigger;
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
-                        if(Global.IsByPassResult)
-                        Global.EditTool.lbBypass.ForeColor = Color.White;
-                        tmRead.Enabled = false;
+                //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
+                //        Global.TriggerInternal = false;
+                //        Global.StatusProcessing = StatusProcessing.Trigger;
+                //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
+                //        if(Global.IsByPassResult)
+                //        Global.EditTool.lbBypass.ForeColor = Color.White;
+                //        tmRead.Enabled = false;
 
 
 
-                    }
+                //    }
                   
 
-                }
-                if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
-                {
+                //}
+                //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
+                //{
                     
-                    if (Global.StatusIO == StatusIO.None)
-                    {
+                //    if (Global.StatusIO == StatusIO.None)
+                //    {
                         
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
-                        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
-                            Global.EditTool.lbBypass.ForeColor = Color.Green; 
-                        await Global.ParaCommon.Comunication.Protocol.WriteIO();
-                        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
-                        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
+                //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
+                //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
+                //            Global.EditTool.lbBypass.ForeColor = Color.Green; 
+                //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
+                //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
+                //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
                        
-                    }
-                }
+                //    }
+                //}
               
                 //if (btnEnQrCode.IsCLick)
                 //{
@@ -1206,11 +1206,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             {
                 Global.StatusIO = StatusIO.None;
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-             await   Global.ParaCommon.Comunication.Protocol.WriteIO();
+           
                 await Task.Delay(500);
-                tmRead.Enabled = true;
-                if (Global.ParaCommon.Comunication.Protocol.timeRead == 0) Global.ParaCommon.Comunication.Protocol.timeRead = 1;
-                tmRead.Interval = Global.ParaCommon.Comunication.Protocol.timeRead;
+               // tmRead.Enabled = true;
+                //if (Global.ParaCommon.Comunication.Protocol.timeRead == 0) Global.ParaCommon.Comunication.Protocol.timeRead = 1;
+                //tmRead.Interval = Global.ParaCommon.Comunication.Protocol.timeRead;
                 //  tmCheck.Enabled = true;
                 // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
 

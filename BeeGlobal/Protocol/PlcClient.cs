@@ -452,9 +452,13 @@ namespace PlcLib
                 {
                     try
                     {
-                        var values = ReadWordAsBits(addresses);
-                        var handler = OnBitsRead;
-                        if (handler != null) handler(values, addrs);
+                        if (Global.IsAllowReadPLC)
+                        {
+                            var values = ReadWordAsBits(addresses);
+
+                            var handler = OnBitsRead;
+                            if (handler != null) handler(values, addrs);
+                        }
                     }
                     catch (Exception ex)
                     {
