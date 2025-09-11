@@ -390,7 +390,7 @@ namespace BeeUi.Common
 
             }
             tmShow.Interval = 1000;
-            ThreadPool.SetMinThreads(Environment.ProcessorCount, Environment.ProcessorCount);
+           // ThreadPool.SetMinThreads(Environment.ProcessorCount, Environment.ProcessorCount);
             //Acccess(Global.IsRun);
             G.Main.Location = new Point(0, 0);
 
@@ -622,14 +622,10 @@ txtQrCode.Focus();
 
         private async void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-         await   BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
             if (BeeCore.Common.listCamera[Global.IndexChoose] == null) return;
-            //if (Global.ParaCommon.matRegister != null)
-            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
-            //else if (G.IsCCD)
-            //    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = null;// BeeCore.Common.GetImageRaw();
-           
-           
+         await   BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
+
+
             G.listProgram.Visible = false;
             txtQrCode.Enabled = true;
             btnShowList.Enabled = true;
@@ -724,29 +720,20 @@ txtQrCode.Focus();
                 Global.EditTool.View.imgView.Visible = true;
                 Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
                     stepShow++;
-                    tmShow.Interval = 500;
+                    tmShow.Interval = 100;
                     break;
                 case 1:
                     Global.EditTool.RefreshGuiEdit(Step.Run);
                     stepShow++;
                     break;
                 case 2:
-                    //if (indexToolShow < BeeCore.Common.PropetyTools[Global.IndexChoose].Count)
-                    //{
-                    //    tmShow.Interval = 50;
-                    //    BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool.Width = Global.ToolSettings.Width-10;
-                    //    Global.ToolSettings.pAllTool.Controls.Add(BeeCore.Common.PropetyTools[Global.IndexChoose][indexToolShow].ItemTool);
-                    //    indexToolShow++;
-                    //    Global.ToolSettings.ResumeLayout(true);
-                    //}
-                    //else
-                    //{
+                  
                         stepShow = 0;
                         indexToolShow = 0;
                         Global.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
                         Global.ToolSettings.ResumeLayout(true);
-                   // }
+
                     break;
             } 
            
@@ -761,12 +748,7 @@ txtQrCode.Focus();
 
         }
       
-        private void workPLC_DoWork(object sender, DoWorkEventArgs e)
-        {
-          
-
-           // Global.ParaCommon.Comunication.IO.Read();
-        }
+   
     public    bool CheckLan()
         {
             string tenMangCanCheck = "LAN"; // Đổi thành tên card mạng bạn muốn kiểm tra

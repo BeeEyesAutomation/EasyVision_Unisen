@@ -31,6 +31,7 @@ using System.Web;
 using System.Web.UI;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using System.Xml;
 using static CvPlus.s_BlockMax;
 using Control = System.Windows.Forms.Control;
 using File = System.IO.File;
@@ -1500,7 +1501,8 @@ namespace BeeUi
         {
             Processing1 = obj;
         }
-
+        Stopwatch tmWrite=new Stopwatch();
+        Stopwatch tmProcessing = new Stopwatch();
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
             
@@ -1523,9 +1525,6 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = "---";
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }    
-                   
-                        //  G.StatusDashboard.Refresh();
-                      
                     break;
                 case StatusProcessing.Read:
                  
@@ -1535,11 +1534,7 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    //  G.StatusDashboard.Refresh();
-                    //if ( Global.ParaCommon.IsExternal)
-                    //	Global.EditTool.View.btnTypeTrig.IsCLick = true;
-                    //if (Global.IsRun)
-                    //	Global.EditTool.View.Cap(false);
+                   
                     if (!Global.IsRun)
                     {
                         BeeCore.Common.listCamera[Global.IndexChoose].Read();
@@ -1585,23 +1580,10 @@ namespace BeeUi
                             Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ByPass;
 
                     }
-                    //this.Invoke((Action)(async () =>
-                    //{
-                    //X: if (!workReadCCD.IsBusy)
-                    //    {
-                    //        workReadCCD.RunWorkerAsync();
-                    //    }
-                    //    else
-                    //    {
-                    //        await Task.Delay(5);
-                    //        goto X;
-                    //    }
-
-                    //}));
-
+                 
                     break;
                 case StatusProcessing.Checking:
-                  
+                    tmProcessing.Restart();
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -1614,7 +1596,8 @@ namespace BeeUi
                     
                     break;
                 case StatusProcessing.SendResult:
-                  
+                    tmProcessing.Stop();
+                    tmWrite.Restart();
                     Global.IsAllowReadPLC = true;
                     if (Global.IsDebug)
                     {
@@ -1673,6 +1656,7 @@ namespace BeeUi
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
+                    tmWrite.Stop();
                     timer.Stop();
                     if (!Global.ParaCommon.IsExternal)
                         G.SettingPLC.tmRead.Enabled = false;
@@ -1726,7 +1710,9 @@ namespace BeeUi
                         Global.Config.TotalTime += Convert.ToSingle(G.StatusDashboard.CycleTime / (60000.0));
                         Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
                         
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result",Global.TotalOK + "-CT:" + G.StatusDashboard.CycleTime+"ms - CAM:" +(int) BeeCore.Common.CycleCamera+"ms"));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result",Global.TotalOK .ToString()));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "CT",  "TT:" + G.StatusDashboard.CycleTime + ""+ "- P:" +(int) tmProcessing.Elapsed.TotalMilliseconds + "- W:" + (int)tmWrite.Elapsed.TotalMilliseconds + " ms"));
+
                         Global.StatusProcessing = StatusProcessing.None;
                         Checking1.StatusProcessing = StatusProcessing.None;
                         Checking2.StatusProcessing = StatusProcessing.None;
@@ -3966,240 +3952,7 @@ namespace BeeUi
             imgView.Invalidate();
         }
 
-        private void tmProcessing_Tick(object sender, EventArgs e)
-        {
-           // Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "Processing", StatusProcessing.ToString()));
-            switch (Global.StatusProcessing)
-            {
-                case StatusProcessing.None:
-                    break;
-                case StatusProcessing.Trigger:
-                    timer.Restart();
-                    Global.IsAllowReadPLC = false;
-                    if (Global.IsDebug)
-                    {
-                        G.StatusDashboard.StatusText = Global.StatusProcessing.ToString();
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-                    else
-                    {
-                        G.StatusDashboard.StatusText = "---";
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-
-                    //  G.StatusDashboard.Refresh();
-
-                    break;
-                case StatusProcessing.Read:
-
-                    Global.IsAllowReadPLC = false;
-                    if (Global.IsDebug)
-                    {
-                        G.StatusDashboard.StatusText = Global.StatusProcessing.ToString();
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-                    //  G.StatusDashboard.Refresh();
-                    //if ( Global.ParaCommon.IsExternal)
-                    //	Global.EditTool.View.btnTypeTrig.IsCLick = true;
-                    //if (Global.IsRun)
-                    //	Global.EditTool.View.Cap(false);
-                    if (!Global.IsRun)
-                    {
-                        BeeCore.Common.listCamera[Global.IndexChoose].Read();
-
-                    }
-                    else
-                    {
-                        if (Global.ParaCommon.IsMultiTrigger)
-                        {
-                            Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
-                            {
-                                if (camera != null)
-                                    camera.Read();
-                            });
-                        }
-                        else
-                        {
-                            switch (Global.TriggerNum)
-                            {
-                                case TriggerNum.Trigger1:
-                                    BeeCore.Common.listCamera[0].Read();
-                                    break;
-                                case TriggerNum.Trigger2:
-                                    BeeCore.Common.listCamera[1].Read();
-                                    break;
-                                case TriggerNum.Trigger3:
-                                    BeeCore.Common.listCamera[2].Read();
-                                    break;
-                                case TriggerNum.Trigger4:
-                                    BeeCore.Common.listCamera[3].Read();
-                                    break;
-
-
-                            }
-                        }
-                    }
-
-                    if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-                    {
-
-                        Global.StatusProcessing = StatusProcessing.Checking;
-                        if (Global.IsByPassResult)
-                            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ByPass;
-
-                    }
-                    //this.Invoke((Action)(async () =>
-                    //{
-                    //X: if (!workReadCCD.IsBusy)
-                    //    {
-                    //        workReadCCD.RunWorkerAsync();
-                    //    }
-                    //    else
-                    //    {
-                    //        await Task.Delay(5);
-                    //        goto X;
-                    //    }
-
-                    //}));
-
-                    break;
-                case StatusProcessing.Checking:
-
-                    Global.IsAllowReadPLC = false;
-                    if (Global.IsDebug)
-                    {
-                        G.StatusDashboard.StatusText = Global.StatusProcessing.ToString();
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-                    // G.StatusDashboard.Refresh();
-                    RunProcessing();
-                    Global.StatusProcessing = StatusProcessing.WaitingDone;
-
-                    break;
-                case StatusProcessing.SendResult:
-                    timer.Stop();
-                    Global.IsAllowReadPLC = true;
-                    if (Global.IsDebug)
-                    {
-
-                        G.StatusDashboard.StatusText = Global.StatusProcessing.ToString();
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
-                    foreach (int ix in Global.ParaCommon.indexLogic1)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic2)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic3)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic4)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic5)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
-                        }
-                    foreach (int ix in Global.ParaCommon.indexLogic6)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-                        {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
-                            break;
-                        }
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
-
-
-                    G.SettingPLC.tmRead.Enabled = true;
-                    // G.StatusDashboard.Refresh();
-                    if (Global.ParaCommon.Comunication.Protocol.IsBypass)
-                        Global.StatusProcessing = StatusProcessing.Drawing;
-                    break;
-                case StatusProcessing.Drawing:
-
-                    if (!Global.ParaCommon.IsExternal)
-                        G.SettingPLC.tmRead.Enabled = false;
-                    if (Global.IsDebug)
-                    {
-
-                        G.StatusDashboard.StatusText = Global.StatusProcessing.ToString();
-                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    }
-                    Global.EditTool.txtCout.Text = Global.NumSend.ToString();
-
-
-                    this.Invoke((Action)(() =>
-                    {
-
-                        ShowResultTotal();
-
-
-                        CheckStatusMode();
-                    }));
-                    Global.StatusProcessing = StatusProcessing.Done;
-
-
-
-                    break;
-                case StatusProcessing.Done:
-                    {
-
-                        if (Global.TotalOK)
-                        {
-                            G.StatusDashboard.StatusText = "OK";
-                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(255, 27, 186, 98);
-                            Global.Config.SumOK++;
-
-
-                        }
-                        else
-                        {
-                            G.StatusDashboard.StatusText = "NG";
-                            G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
-                            Global.Config.SumNG++;
-
-
-                        }
-                        Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
-                        G.StatusDashboard.CycleTime = (int)(timer.Elapsed.TotalMilliseconds + Cyclyle1);
-                        G.StatusDashboard.CamTime = (int)BeeCore.Common.CycleCamera;
-                        G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                        G.StatusDashboard.OkCount = Global.Config.SumOK;
-                        G.StatusDashboard.NgCount = Global.Config.SumNG;
-                        Global.Config.TotalTime += Convert.ToSingle(G.StatusDashboard.CycleTime / (60000.0));
-                        Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
-
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result", Global.TotalOK + "-CT:" + G.StatusDashboard.CycleTime + "ms - CAM:" + (int)BeeCore.Common.CycleCamera + "ms"));
-                        Global.StatusProcessing = StatusProcessing.None;
-                        Checking1.StatusProcessing = StatusProcessing.None;
-                        Checking2.StatusProcessing = StatusProcessing.None;
-                        Checking3.StatusProcessing = StatusProcessing.None;
-                        Checking4.StatusProcessing = StatusProcessing.None;
-                        break;
-                    }
-            }
-        }
-
+     
         private void btnRunSim_Click_1(object sender, EventArgs e)
         {
             if (Files == null) return;

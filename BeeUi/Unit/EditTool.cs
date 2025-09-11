@@ -46,25 +46,11 @@ namespace BeeUi
             _layout.LoadDelayMs = 300;        // trễ 500ms sau Form.Shown
             _layout.SplitterLocked = true;   // tuỳ chọn
             _layout.EnableAuto();
-          ///  _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
-                                  // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
+            ///  _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
+            // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
 
         }
-        void ShowView(Control host, Control next)
-        {
-            host.SuspendLayout();
-            foreach (Control c in host.Controls) c.Visible = false; // không remove
-            if (!host.Controls.Contains(next))
-            {
-                next.Dock = DockStyle.Fill;
-                next.Visible = false;
-                host.Controls.Add(next);
-            }
-            next.Visible = true;
-            next.BringToFront();
-            host.ResumeLayout(true);
-            host.PerformLayout();
-        }
+     
         void EnableDoubleBuffer(Control c)
         {
             var t = c.GetType();
@@ -105,32 +91,12 @@ namespace BeeUi
                         G.SettingPLC.Visible = false;
                         pInfor.Show("Dashboard");
                         pEditTool.Show("Tool");
-                        //pEditTool.Controls.Clear();
-                        
-                        ////pEditTool.Visible = true;
-                        //Global.ToolSettings.Dock = DockStyle.Fill;
-                        //pEditTool.Controls.Add(Global.ToolSettings);
-                       
-                      //  Global.ToolSettings.Size = pEditTool.Size;
-
-                      //  Global.ToolSettings.Visible = true;
-                      //  G.StepEdit.SettingStep1.Visible = false;
-                      //  Global.ToolSettings.BringToFront();
-                        
-                       // Global.EditTool.View.pHeader.Controls.Clear();
-                     
-                        //G.StepEdit.Visible = false;
-                        //G.StatusDashboard.Visible = true;
-                        // G.StatusDashboard.Parent = Global.EditTool.View.pHeader;
-                        //G.StatusDashboard.Size = Global.EditTool.View.pHeader.Size;
-                        //G.StatusDashboard.BringToFront();
-                     
+                   
                         try
                         {
-                           
-                                if (Global.ParaCommon.matRegister != null)
-                                if (Global.ParaCommon.matRegister.Width != 0)
-                                {
+                            if (Global.ParaCommon.matRegister!=null)
+                            if (!Global.ParaCommon.matRegister.IsDisposed())
+                            {
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
@@ -214,6 +180,8 @@ namespace BeeUi
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
+                                if (!Global.ParaCommon.matRegister.IsDisposed())
+                            {
                                 if (Global.ParaCommon.matRegister.Width != 0)
                                 {
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
@@ -222,10 +190,15 @@ namespace BeeUi
                                     Global.EditTool.View.imgView.Invalidate();
                                     Global.EditTool.View.imgView.Update();
                                     Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-                                   Global.Config.imgZoom = View.imgView.Zoom;
-                                   Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
-                                   Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                    Global.Config.imgZoom = View.imgView.Zoom;
+                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                    Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                 }
+                            }
+                            else
+                            {
+
+                            }    
                         }
                         catch (Exception ex)
                         {
@@ -248,9 +221,8 @@ namespace BeeUi
                         //Global.ToolSettings.pAllTool.Visible = true;
                         //Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
 
-
-                        //Global.ToolSettings.BringToFront();
                         if (Global.ParaCommon.matRegister != null)
+                            if (!Global.ParaCommon.matRegister .IsDisposed())
                         {
                             G.IsCalib = false;
                             pEditTool.Visible = true;
@@ -342,7 +314,7 @@ namespace BeeUi
 
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
-        DashboardImages DashboardImages;
+      public  DashboardImages DashboardImages;
       
         private void EditTool_Load(object sender, EventArgs e)
         {
@@ -389,13 +361,13 @@ namespace BeeUi
                 //  G.StatusDashboard.Location = new Point(0, 0); 
                 //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             }
-            if(DashboardImages==null)
-            {
-                DashboardImages = new DashboardImages();
-              //  DashboardImages.
-            }
-            if(Global.LogsDashboard==null)
-            Global.LogsDashboard = new LogsDashboard();
+            //if(DashboardImages==null)
+            //{
+            //    DashboardImages = new DashboardImages();
+            //  //  DashboardImages.
+            //}
+           // if(Global.LogsDashboard==null)
+          //  Global.LogsDashboard = new LogsDashboard();
             // cấu hình
             Global.LogsDashboard.MaxLogCount = 5000;
             Global.LogsDashboard.ProgressiveBatchSize = 200;

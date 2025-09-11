@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeGlobal;
+using BeeInterface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -52,12 +53,19 @@ namespace BeeUi.Unit
      
 
         private void btnHistory_Click(object sender, EventArgs e)
-        {
-          Global.EditTool.pEditTool.Show("Images");
+        { if(Global.EditTool. DashboardImages==null)
+            {
+                Global.EditTool.DashboardImages = new DashboardImages();
+                //  DashboardImages.
+            }
+            
+            Global.EditTool.pEditTool.Show("Images");
         }
 
         private void btnLog_Click(object sender, EventArgs e)
         {
+            if(Global.LogsDashboard==null)
+              Global.LogsDashboard = new LogsDashboard();
             Global.EditTool.pEditTool.Show("Logs");
         }
 

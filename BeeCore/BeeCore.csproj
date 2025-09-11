@@ -133,6 +133,7 @@
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
     <Compile Include="Algorithm\RansacCircleFitter.cs" />
+    <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Checking.cs" />
     <Compile Include="CollageRenderer.cs" />
     <Compile Include="Data\Access.cs" />

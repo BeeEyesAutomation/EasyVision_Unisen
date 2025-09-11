@@ -91,7 +91,6 @@ namespace BeeUi
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.btnCap = new BeeInterface.RJButton();
             this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
-            this.tmProcessing = new System.Windows.Forms.Timer(this.components);
             this.pMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pView.SuspendLayout();
@@ -1123,12 +1122,6 @@ namespace BeeUi
             this.tmEnableControl.Interval = 200;
             this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
             // 
-            // tmProcessing
-            // 
-            this.tmProcessing.Enabled = true;
-            this.tmProcessing.Interval = 1;
-            this.tmProcessing.Tick += new System.EventHandler(this.tmProcessing_Tick);
-            // 
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1211,6 +1204,5 @@ namespace BeeUi
         public System.Windows.Forms.Panel pBtn;
         private System.Windows.Forms.Timer tmEnableControl;
         public RJButton btnRunSim;
-        private System.Windows.Forms.Timer tmProcessing;
     }
 }

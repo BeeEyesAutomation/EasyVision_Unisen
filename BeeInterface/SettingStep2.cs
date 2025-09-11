@@ -95,12 +95,10 @@ namespace BeeInterface
             //Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
             //Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
             btnNextStep.Enabled = true;
-            Global.EditTool.View.imgView.Image = Global.ParaCommon.matRegister;
-            Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
-          //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-
-            //if (!G.Header.workSaveProject.IsBusy)
-            //    G.Header.workSaveProject.RunWorkerAsync();
+            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+            Global.ParaCommon.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
+          if (Global.ParaCommon.matRegister.IsDisposed())
+            { MessageBox.Show("Fail"); }    
 
         }
 

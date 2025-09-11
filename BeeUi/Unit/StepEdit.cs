@@ -73,7 +73,7 @@ namespace BeeUi.Common
         private void btnStep3_Click(object sender, EventArgs e)
         {
           
-            if(Global.ParaCommon.matRegister!=null)
+            if(!Global.ParaCommon.matRegister.IsDisposed())
             Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
            
             Global.EditTool.RefreshGuiEdit(Step.Step3);
