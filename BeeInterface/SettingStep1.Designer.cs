@@ -1310,7 +1310,7 @@ namespace BeeInterface
             this.AdDelayTrig.MaxTextboxWidth = 0;
             this.AdDelayTrig.MaxThumb = 1000;
             this.AdDelayTrig.MaxTrackHeight = 1000;
-            this.AdDelayTrig.Min = 1F;
+            this.AdDelayTrig.Min = 0F;
             this.AdDelayTrig.MinChromeWidth = 64;
             this.AdDelayTrig.MinimumSize = new System.Drawing.Size(140, 36);
             this.AdDelayTrig.MinTextboxWidth = 32;

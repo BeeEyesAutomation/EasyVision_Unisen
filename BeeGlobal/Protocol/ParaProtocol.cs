@@ -235,7 +235,8 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
-                    IO_Processing = IO_Processing.Busy;
+                    Global.IsAllowReadPLC = true;
+                    IO_Processing = IO_Processing.Reset;
                     //SetOutPut(15, true);
                     //  await  WriteOutPut();
                 //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
@@ -261,7 +262,7 @@ namespace BeeGlobal
                             if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
                             {
 
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger OK"));
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
                                 Global.TriggerInternal = false;
                                 Global.IsAllowReadPLC = false;
                                 Global.StatusProcessing = StatusProcessing.Trigger;
@@ -325,7 +326,7 @@ namespace BeeGlobal
                        
                     };
                     PlcClient.StartOneBitReadLoop(AddRead, timeRead);
-
+                    TimingUtils.EnableHighResolutionTimer();
                 }
               
                
@@ -351,6 +352,16 @@ namespace BeeGlobal
             return IsConnected;
         }
         private int numTimeOut=0;
+        public void Disconnect()
+        {
+            Global.IsAllowReadPLC = false;
+            PlcClient.StopOneBitReadLoop();
+            timeAlive.Enabled = false;
+            Global.StatusIO = StatusIO.NotConnect;
+            Global.StatusMode = StatusMode.None;
+            IsConnected = false;
+            PlcClient.Disconnect();
+        }
        
         private async void TimeAlive_Tick(object sender, EventArgs e)
         {
@@ -406,15 +417,7 @@ namespace BeeGlobal
             logBuilder.AppendLine(logLine);
             LogChanged?.Invoke(_logBuilder);
         }
-        public void Disconnect()
-        {
-          //  StopRead();
-             Modbus.DisconnectPLC();
-            Global.StatusIO = StatusIO.NotConnect;
-            Global.StatusMode = StatusMode.None;
-            IsConnected = false;
-        }
-    
+     
         bool IsCanWrite = false;
         [NonSerialized]
         Stopwatch CT =new Stopwatch();
@@ -512,6 +515,8 @@ namespace BeeGlobal
         }
         public bool IsBlink = false;
         public bool IsLogic1, IsLogic2, IsLogic3, IsLogic4, IsLogic5, IsLogic6;
+        [NonSerialized]
+        private Stopwatch tmReadCT = new Stopwatch();
         public async Task<bool>  WriteIO(IO_Processing _IO_Processing)
         {   if (!IsConnected) return false;
 
@@ -525,15 +530,33 @@ namespace BeeGlobal
             switch (_IO_Processing)
             {
                 case IO_Processing.Trigger:
-                    
-                   // SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                    //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".2", true);
+
+                    // SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                    //valueOutput[AddressOutPut[(int)I_O_Output.Busy]] = true;
+                    if (DelayTrigger == 0)
+                    {
+                        Global.StatusMode = StatusMode.Once;
+                        Global.StatusProcessing = StatusProcessing.Read;
+                    }    
+                      
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                    SetLight(true);
+                     SetLight(true);
+                   
                     await WriteOutPut();
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
-                    Global.StatusMode = StatusMode.Once;
-                    await Task.Delay((int)DelayTrigger);
-                    Global.StatusProcessing = StatusProcessing.Read;
+                    if (DelayTrigger > 0)
+                    {
+                        await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                                                                 //  await Task.Delay((int)DelayTrigger);
+
+                        // valueOutput[AddressOutPut[(int)I_O_Output.Ready]] = false;
+
+                        Global.StatusMode = StatusMode.Once;
+
+                        Global.StatusProcessing = StatusProcessing.Read;
+                    }
+
                     break;
                 case IO_Processing.Close:
                     SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
@@ -607,7 +630,9 @@ namespace BeeGlobal
                             await WriteOutPut();
                             if (IsBlink)
                             {
-                                await Task.Delay((int)DelayOutput);
+                            if (DelayOutput == 0)
+                                await TimingUtils.DelayAccurateAsync((int)DelayOutput); // thay cho Task.Delay
+                        
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result],  false); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG

@@ -1192,12 +1192,12 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	}
 	case PixelType_Gvsp_BayerBG8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2RGB);//hik
 		return true;
 	}
 	case PixelType_Gvsp_BayerGB8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2RGB);//chinh mau
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
 		return true;
 	}
 	case PixelType_Gvsp_BayerRG8: {

@@ -1501,8 +1501,7 @@ namespace BeeUi
         {
             Processing1 = obj;
         }
-        Stopwatch tmWrite=new Stopwatch();
-        Stopwatch tmProcessing = new Stopwatch();
+        String CTTotol = "";
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
             
@@ -1513,7 +1512,8 @@ namespace BeeUi
                     break;
                 case StatusProcessing.Trigger:
 
-                    timer.Restart();
+                    timer = CycleTimerSplit.Start();
+
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -1527,7 +1527,7 @@ namespace BeeUi
                     }    
                     break;
                 case StatusProcessing.Read:
-                 
+                   timer.Split("R");
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -1583,7 +1583,7 @@ namespace BeeUi
                  
                     break;
                 case StatusProcessing.Checking:
-                    tmProcessing.Restart();
+                    timer.Split("C");
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -1596,9 +1596,8 @@ namespace BeeUi
                     
                     break;
                 case StatusProcessing.SendResult:
-                    tmProcessing.Stop();
-                    tmWrite.Restart();
-                    Global.IsAllowReadPLC = true;
+                    timer.Split("P");
+                    Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
                        
@@ -1656,8 +1655,10 @@ namespace BeeUi
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
-                    tmWrite.Stop();
-                    timer.Stop();
+                    Global.IsAllowReadPLC = true;
+
+                    timer.Split("W");
+                    CTTotol = timer.StopAndFormat();
                     if (!Global.ParaCommon.IsExternal)
                         G.SettingPLC.tmRead.Enabled = false;
                     if (Global.IsDebug)
@@ -1701,8 +1702,9 @@ namespace BeeUi
 
 
                         }
+                       
                         Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
-                        G.StatusDashboard.CycleTime = (int)(timer.Elapsed.TotalMilliseconds + Cyclyle1);
+                        G.StatusDashboard.CycleTime = (int)(timer.TT + Cyclyle1);
                         G.StatusDashboard.CamTime = (int)BeeCore.Common.CycleCamera;
                         G.StatusDashboard.TotalTimes = Global.Config.SumTime;
                         G.StatusDashboard.OkCount = Global.Config.SumOK; 
@@ -1711,7 +1713,7 @@ namespace BeeUi
                         Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
                         
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result",Global.TotalOK .ToString()));
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "CT",  "TT:" + G.StatusDashboard.CycleTime + ""+ "- P:" +(int) tmProcessing.Elapsed.TotalMilliseconds + "- W:" + (int)tmWrite.Elapsed.TotalMilliseconds + " ms"));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "CT", CTTotol));
 
                         Global.StatusProcessing = StatusProcessing.None;
                         Checking1.StatusProcessing = StatusProcessing.None;
@@ -2637,7 +2639,7 @@ namespace BeeUi
         {
             
 
-            if (!Global.ParaCommon.Comunication.IO.IsConnected&&!Global.ParaCommon.Comunication.Protocol.IsBypass )
+            if (!Global.ParaCommon.Comunication.Protocol.IsConnected&&!Global.ParaCommon.Comunication.Protocol.IsBypass )
             {
                 btnCap.IsCLick = false;
                 return;
@@ -2663,7 +2665,7 @@ namespace BeeUi
                 return;
             }
             Global.StatusMode = StatusMode.Once;
-            timer.Restart();
+            timer= CycleTimerSplit.Start();
             btnCap.Enabled = false;
             if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                 Global.StatusProcessing = StatusProcessing.Read;
@@ -2877,9 +2879,9 @@ namespace BeeUi
       
     
         int numLive = 500;
-      public  Stopwatch timer = new Stopwatch();
+      public CycleTimerSplit timer ;
 
-        public Stopwatch timerCCD = new Stopwatch();
+    
         private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
          
@@ -3490,7 +3492,7 @@ namespace BeeUi
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 btnFile.Enabled = false;
                 Global.StatusMode = StatusMode.SimOne;
-                timer.Restart();
+                timer= CycleTimerSplit.Start();
                 Global.StatusProcessing = StatusProcessing.Checking;
 
                 btnRunSim.Enabled = true;
@@ -3515,7 +3517,7 @@ namespace BeeUi
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
                 Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                timer.Restart();
+                timer = CycleTimerSplit.Start();
                 RunProcessing();
                 }
                 else
@@ -3624,12 +3626,12 @@ namespace BeeUi
 
 
 
-                timer.Stop();
+                //timer.Stop();
 
                 ShowResultTotal();
 
 
-                SumCycle = (int)timer.Elapsed.TotalMilliseconds + Cyclyle1;
+               // SumCycle = (int)timer.TT + Cyclyle1;
              
                 CheckStatusMode();
                 IsCompleteAll = false;

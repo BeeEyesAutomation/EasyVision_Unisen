@@ -187,7 +187,7 @@ namespace BeeUi
             this.pEdit.Controls.Add(this.CameraBar);
             this.pEdit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pEdit.Location = new System.Drawing.Point(1740, 136);
-            this.pEdit.MaximumSize = new System.Drawing.Size(500, 0);
+            this.pEdit.MaximumSize = new System.Drawing.Size(1000, 0);
             this.pEdit.Name = "pEdit";
             this.pEdit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.pEdit.Size = new System.Drawing.Size(500, 1231);

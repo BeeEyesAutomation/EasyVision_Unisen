@@ -280,13 +280,13 @@ namespace PlcLib
                 {
                     EnsureConnected();
                     dynamic d = _plc;
-                    CT2.Restart();
+                  //  CT2.Restart();
                    
                    
                     OperateResult w = d.Write(wordAddr, value);
-                    CT2.Stop();
+                  //  CT2.Stop();
 
-                    CTWrite = (float)CT2.Elapsed.TotalMilliseconds;
+                  //  CTWrite = (float)CT2.Elapsed.TotalMilliseconds;
                     if (!w.IsSuccess)
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", wordAddr + ": " + w.Message));
 
@@ -464,13 +464,13 @@ namespace PlcLib
                 {
                     try
                     {
-                        //if (Global.IsAllowReadPLC)
+                        if (Global.IsAllowReadPLC)
                         {
-                            CT.Restart();
+                          //  CT.Restart();
                             var values = ReadWordAsBits(addresses);
-                            CT.Stop();
+                          //  CT.Stop();
 
-                            CTRead = (float)CT.Elapsed.TotalMilliseconds;
+                          //  CTRead = (float)CT.Elapsed.TotalMilliseconds;
                             var handler = OnBitsRead;
                             if (handler != null) handler(values, addrs);
                         }
