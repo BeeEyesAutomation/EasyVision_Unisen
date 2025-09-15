@@ -120,9 +120,11 @@ namespace BeeUi
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-          
-            this.TopMost= false;
-            this.Close();
+           
+              
+                this.TopMost = false;
+                this.Close();
+           
         }
     }
 }

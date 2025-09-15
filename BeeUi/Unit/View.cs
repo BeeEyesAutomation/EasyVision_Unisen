@@ -1399,8 +1399,78 @@ namespace BeeUi
             _renderer = new CollageRenderer(imgView, gutter: 8, background: Color.White, autoRerenderOnResize: true);
 
             RefreshExternal(Global.ParaCommon.IsExternal);
-
+            Global.PLCStatusChanged += Global_PLCStatusChanged;
+            Global.CameraStatusChanged += Global_CameraStatusChanged;
         }
+
+        private void Global_CameraStatusChanged(CameraStatus obj)
+        {
+            switch (obj)
+            {
+                case CameraStatus.NotConnect:
+                    Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
+                    Global.EditTool.lbCam.Text = "Camera Not Connect";
+                    break;
+                case CameraStatus.Ready:
+                    Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                    Global.EditTool.lbCam.Text = "Camera Connected";
+                    break;
+                case CameraStatus.ErrorConnect:
+                    this.Invoke((Action)(() =>
+                    {
+                        Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
+                        Global.EditTool.lbCam.Text = "Camera Error Connect";
+                        G.Main.Hide();
+                        ForrmAlarm forrmAlarm = new ForrmAlarm();
+                        forrmAlarm.lbHeader.Text = "Camera Error Connect !!";
+                        forrmAlarm.lbContent.Text = "Checking Connect Camera";
+                        forrmAlarm.BringToFront();
+                        forrmAlarm.TopMost = true;
+                        forrmAlarm.ShowDialog();
+                        Global.ScanCCD.Show();
+                    }));
+
+
+                    break;
+
+            }
+        }
+
+        private void Global_PLCStatusChanged(PLCStatus obj)
+        {
+          switch(obj)
+            {
+                case PLCStatus.NotConnect:
+                    Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                    break;
+                case PLCStatus.Ready:
+                    Global.ParaCommon.Comunication.Protocol.IsBypass = false;
+                    Global.EditTool.toolStripPort.Text = "PLC Ready";
+                    Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+                    break;
+                case PLCStatus.ErrorConnect:
+                    this.Invoke((Action)(() =>
+                    {
+                        Global.EditTool.toolStripPort.Text = "PLC Error Connect";
+                        Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                        Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                        G.Main.Hide();
+                        ForrmAlarm forrmAlarm = new ForrmAlarm();
+                        forrmAlarm.lbHeader.Text = "PLC not Alive !!";
+                        forrmAlarm.lbContent.Text = "Checking Mode RUN of PLC";
+                        forrmAlarm.BringToFront();
+                        forrmAlarm.TopMost = true;
+
+                        forrmAlarm.ShowDialog();
+                        G.Main.Show();
+                    }));
+                  
+                   
+                    break;
+
+            }    
+        }
+
         public void RefreshExternal(bool obj)
 
         {
@@ -1462,7 +1532,7 @@ namespace BeeUi
                 btnFolder.Enabled = true;
                 btnPlayStep.Enabled = true;
                 btnRunSim.Enabled = true; 
-                G.SettingPLC.tmRead.Enabled = false;
+              
             }
             else
             {
@@ -1477,7 +1547,7 @@ namespace BeeUi
                 btnFolder.Enabled = false;
                 btnPlayStep.Enabled = false;
                 btnRunSim.Enabled = false;
-                G.SettingPLC.tmRead.Enabled = true;
+              
                 
             }
         }
@@ -1649,7 +1719,7 @@ namespace BeeUi
                     Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
 
 
-                    G.SettingPLC.tmRead.Enabled = true;
+                   
                     // G.StatusDashboard.Refresh();
                     if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                         Global.StatusProcessing = StatusProcessing.Drawing;
@@ -1658,9 +1728,10 @@ namespace BeeUi
                     Global.IsAllowReadPLC = true;
 
                     timer.Split("W");
+                   
                     CTTotol = timer.StopAndFormat();
-                    if (!Global.ParaCommon.IsExternal)
-                        G.SettingPLC.tmRead.Enabled = false;
+                    BeeCore.Common.CycleCamera = timer.seg[timer.seg.FindIndex(a => a.Label == "C")].Ms;
+                 
                     if (Global.IsDebug)
                     {
 
@@ -2627,7 +2698,7 @@ namespace BeeUi
             {
              Global.StatusMode = StatusMode.Continuous;
             if(!workReadCCD.IsBusy)
-            {
+            {timer= CycleTimerSplit.Start();
                 workReadCCD.RunWorkerAsync();
             }    
             
@@ -2671,7 +2742,7 @@ namespace BeeUi
                 Global.StatusProcessing = StatusProcessing.Read;
             else
             {
-                G.SettingPLC.tmRead.Enabled = true;
+             
                 Global.TriggerInternal = true;
             }    
                
@@ -2839,6 +2910,13 @@ namespace BeeUi
                 numLive = 0;
                 tmOut.Enabled = false;
             pMenu.Visible = btnLive.IsCLick;
+            if (Global.IsLive)
+            {
+                BeeCore.Common.listCamera[Global.IndexChoose].Read();
+           
+                Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                Shows.Full(imgView, Global.ParaCommon.SizeCCD);
+            }
             await Task.Delay(300);
           //  tmLive.Enabled = btnLive.IsCLick;
             if (btnLive.IsCLick)

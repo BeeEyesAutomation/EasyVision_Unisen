@@ -3,6 +3,7 @@ using BeeGlobal;
 using BeeUi.Commons;
 
 using OpenCvSharp.Extensions;
+using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -134,8 +135,8 @@ namespace BeeUi
             G.Load.FormActive.CheckActive(G.Load.addMac);
             if(G.IsActive)
             {
-                if (!work.IsBusy)
-                    work.RunWorkerAsync();
+                if (!workConAll.IsBusy)
+                    workConAll.RunWorkerAsync();
             }    
            else
             {
@@ -184,7 +185,25 @@ namespace BeeUi
         }
         private void btnAreaBlack_Click(object sender, EventArgs e)
         {
-            if(Global.EditTool!=null)
+            int index = 0;
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    if (camera.IsConnected)
+                    {
+                        camera.DisConnect();
+
+                        camera.matRaw = new OpenCvSharp.Mat();
+                    }
+                 
+                    
+                    index++;
+                }
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+            if (Global.EditTool!=null)
             Global.EditTool.View.tmCheckCCD.Enabled = false;
             //BeeCore.Common.TypeCCD =Global.Configlobal.TypeCamera ;
             //if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
@@ -458,6 +477,70 @@ namespace BeeUi
 
 
         }
+        public void DisConnectAllCCd()
+        {
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    if (camera.IsConnected)
+                    {
+                        camera.DisConnect();
+
+                        camera.matRaw = new OpenCvSharp.Mat();
+                    }
+                
+                 
+                    
+                }
+              
+            }
+        }
+        public async Task< bool > ChangeCCD()
+        {
+            bool IsConnect = true;
+            int index = 0;
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    if (camera.IsConnected)
+                    {
+                        camera.DisConnect();
+
+                        camera.matRaw = new OpenCvSharp.Mat();
+                    }
+                    camera.Init();
+                    camera.Scan();
+                    camera.IndexConnect = indexCCD;
+                    camera.matRaw = new OpenCvSharp.Mat();
+                    camera.IsConnected = await camera.Connect(camera.Para.Name);
+                    index++;
+                }
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+            int numNull = 0;
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    if (!camera.IsConnected)
+                        IsConnect = false;
+                }
+                else
+                    numNull++;
+
+
+
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+
+
+            }
+            if (numNull == 4) IsConnect = false;
+            return IsConnect;
+        }
 
         private async void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -466,9 +549,16 @@ namespace BeeUi
             {
                 if (camera != null)
                 {
+                    if (camera.IsConnected)
+                    {
+                        camera.DisConnect();
+
+                        camera.matRaw = new OpenCvSharp.Mat();
+                    }
                     camera.Init();
                     camera.Scan();
                     camera.IndexConnect = indexCCD;
+                    camera.matRaw = new OpenCvSharp.Mat();
                     camera.IsConnected = await camera.Connect(camera.Para.Name);
                     index++;
                 }
@@ -497,7 +587,7 @@ namespace BeeUi
             if (numNull == 4) IsConnect = false;
             if (IsConnect)
             {
-
+                Global.CameraStatus = CameraStatus.Ready;
                 SaveData.Camera(Global.Project,Global.listParaCamera);
                // Global.ParaCommon.Comunication.IO.Connect(Global.Config.IDPort);
                Global.Config.IDCamera = cbCCD.Text.Trim();

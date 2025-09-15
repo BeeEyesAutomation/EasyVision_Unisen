@@ -6,6 +6,7 @@ using BeeGlobal;
 using BeeInterface;
 
 using BeeUi.Tool;
+using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -260,10 +261,17 @@ namespace BeeUi.Common
            //     Global.EditTool.btnHeaderBar.btnSettingPLC.IsCLick = false;
                 Global.EditTool.View.btnCap.Enabled = false;
                 Global.EditTool.View.btnContinuous.Enabled = false;
-                CameraForm cameraForm = new CameraForm();
-                cameraForm.ShowDialog();
-               // Global.EditTool.RefreshGuiEdit(Step.Step1);
-              
+                if (Global.ParaCommon.IsMultiCamera)
+                {
+                    CameraForm cameraForm = new CameraForm();
+                    cameraForm.ShowDialog();
+                }
+                else
+                Global.EditTool.RefreshGuiEdit(Step.Step1);
+                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                {
+                    PropetyTool.ItemTool.IsEdit = false;
+                }
                 btnMode.Text = "EDIT";
                 btnMode.ForeColor = Color.DarkSlateGray;
               
@@ -275,7 +283,9 @@ namespace BeeUi.Common
            
         }
         private void btnMode_Click(object sender, EventArgs e)
-        {if (G.listProgram.Visible == true) G.listProgram.Visible = false;
+        {
+            if(G.listProgram!=null)
+            if (G.listProgram.Visible == true) G.listProgram.Visible = false;
             if (Global.EditTool.View.btnLive.IsCLick)
             {
                 Global.EditTool.View.btnLive.PerformClick();
@@ -287,6 +297,19 @@ namespace BeeUi.Common
         bool IsLoad = false;
         public void RefreshListPJ()
         {
+            if (G.listProgram == null)
+            {
+
+                G.listProgram = new System.Windows.Forms.ListBox();
+                G.listProgram.Font = new Font("Arial", 16);
+                G.listProgram.Parent = G.Main;
+                G.listProgram.BringToFront();
+                G.listProgram.Visible = false;
+                G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+                G.listProgram.Width = txtQrCode.Width;
+               
+                G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
+            }
             string[] files =  Directory.GetDirectories("Program");
           
             PathFile = files.Select(a => Path.GetFileNameWithoutExtension(a)).ToArray();
@@ -343,13 +366,7 @@ namespace BeeUi.Common
             //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
            // pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
            // pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
-            G.listProgram.Font = new Font("Arial", 16);
-            G.listProgram.Parent = G.Main;
-            G.listProgram.BringToFront();
-            G.listProgram.Visible = false;
-            G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
-            G.listProgram.Width = txtQrCode.Width;
-            G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
+         
             this.myDelegate = new AddDataDelegate(AddDataMethod);
             if (Global.ToolSettings == null)
             {
@@ -548,8 +565,25 @@ namespace BeeUi.Common
         List<String> listFilter = new List<string>();
         private void txtQrCode_TextChanged(object sender, EventArgs e)
         {
+            if (Global.Initialed)
+            {
+                if (G.listProgram == null)
+                {
+
+                    G.listProgram = new System.Windows.Forms.ListBox();
+                    G.listProgram.Font = new Font("Arial", 16);
+                    G.listProgram.Parent = G.Main;
+                    G.listProgram.BringToFront();
+                    G.listProgram.Visible = false;
+                    G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+                    G.listProgram.Width = txtQrCode.Width;
+                    RefreshListPJ();
+                    G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
+                }
+            }
             if(!Global.IsLoadProgFist) return;
-           G.listProgram.Visible = true;
+            if (Global.Initialed)
+                G.listProgram.Visible = true;
             if (IsKeyEnter) return;
                 // Lấy chuỗi tìm kiếm từ TextBox
                 string filter = txtQrCode.Text.ToLower();
@@ -557,7 +591,8 @@ namespace BeeUi.Common
             // Lọc danh sách dựa trên chuỗi tìm kiếm
             listFilter = items.Where(item => item.ToLower().Contains(filter)).ToList();
                 IsKeyPress = true;
-                // Cập nhật ComboBox với các mục đã lọc
+            // Cập nhật ComboBox với các mục đã lọc
+            if (Global.Initialed)
                 G.listProgram.DataSource = new BindingSource(listFilter, null);
             
 
@@ -570,8 +605,8 @@ namespace BeeUi.Common
 
         private void Header_SizeChanged(object sender, EventArgs e)
         {
-            G.listProgram.Location = new Point(this.Location.X +txtQrCode.Parent.Location.X + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
-            G.listProgram.Width = txtQrCode.Width;
+           // G.listProgram.Location = new Point(this.Location.X +txtQrCode.Parent.Location.X + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+           // G.listProgram.Width = txtQrCode.Width;
         }
 
         private void txtQrCode_KeyPress(object sender, KeyPressEventArgs e)
@@ -596,7 +631,20 @@ txtQrCode.Focus();
 
         private void btnShowList_Click(object sender, EventArgs e)
         {
-            G.listProgram.Location = new Point(pModel.Location.X+ txtQrCode.Location.X, this.Location.Y + pModel.Location.Y  + txtQrCode.Location.Y + txtQrCode.Height + 10);
+            if (G.listProgram == null)
+            {
+
+                G.listProgram = new System.Windows.Forms.ListBox();
+                G.listProgram.Font = new Font("Arial", 16);
+                G.listProgram.Parent = G.Main;
+                G.listProgram.BringToFront();
+                G.listProgram.Visible = false;
+              //  G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+                G.listProgram.Width = txtQrCode.Width;
+              //  RefreshListPJ();
+                G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
+            }
+           G.listProgram.Location = new Point(pModel.Location.X+ txtQrCode.Location.X, this.Location.Y + pModel.Location.Y  + txtQrCode.Location.Y + txtQrCode.Height + 10);
             G.listProgram.Width = txtQrCode.Width;
             G.listProgram.Visible=!G.listProgram.Visible;
            
@@ -616,15 +664,37 @@ txtQrCode.Focus();
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
             if(IsIntialProgram)
-            DataTool.LoadProject(Global.Project);
+            {
+                Global.ScanCCD.DisConnectAllCCd();
+                DataTool.LoadProject(Global.Project);
+                
+
+            }    
+           
          
         }
 
         private async void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global.IndexChoose] == null) return;
-         await   BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
-
+            if (IsIntialProgram)
+            {
+               
+                if (! await Global.ScanCCD.ChangeCCD())
+                {
+                    Global.CameraStatus = CameraStatus.ErrorConnect;
+                }
+                else
+                {
+                    Global.CameraStatus = CameraStatus.Ready;
+                }    
+            }
+            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+            {if (Global.CameraStatus == CameraStatus.Ready)
+                
+                await BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
+            }
+          
+            if ( G.listProgram!=null)
 
             G.listProgram.Visible = false;
             txtQrCode.Enabled = true;
@@ -635,7 +705,7 @@ txtQrCode.Focus();
            
             IsIntialProgram = true;
           //  Acccess(Global.IsRun);
-            G.listProgram.Visible = false;
+            //G.listProgram.Visible = false;
             tmIninitial.Enabled = true;
         
            
@@ -820,6 +890,15 @@ txtQrCode.Focus();
         private void tmIninitial_Tick(object sender, EventArgs e)
         {
             tmIninitial.Enabled= false;
+            if (Global.LogsDashboard == null)
+            {
+                Global.LogsDashboard = new LogsDashboard();
+                Global.LogsDashboard.MaxLogCount = 5000;
+                Global.LogsDashboard.ProgressiveBatchSize = 200;
+                Global.LogsDashboard.ProgressiveIntervalMs = 10;
+                Global.LogsDashboard.IngestBatchSize = 100;
+                Global.LogsDashboard.IngestIntervalMs = 16; // ~60Hz
+            }
             Global.Initialed = true;
         }
 

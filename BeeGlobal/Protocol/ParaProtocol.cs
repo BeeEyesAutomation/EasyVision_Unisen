@@ -205,6 +205,7 @@ namespace BeeGlobal
                 PlcClient = new PlcLib.PlcClient(
                 PlcBrand,
                 ConnectionType,
+                 ip: sIP,
                 comPort: ComSerial,
                 baudRate: Baurate,
                 port: PortIP,
@@ -218,9 +219,7 @@ namespace BeeGlobal
 
                 IsConnected= PlcClient.Connect();
 
-                CT = new Stopwatch();
-                CTMid = 0;
-                CTMin = 1000; CTMax = 0;
+             
                // IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
                 if (valueInput == null)
                     valueInput = new bool[16];
@@ -235,17 +234,25 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                    Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
                     IO_Processing = IO_Processing.Reset;
                     //SetOutPut(15, true);
                     //  await  WriteOutPut();
                 //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
                     timeAlive = new System.Windows.Forms.Timer();
-                    timeAlive.Interval = 100;
+                    timeAlive.Interval = 1000;
                     timeAlive.Enabled = true;
                     timeAlive.Tick += TimeAlive_Tick;
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
+                        if (!PlcClient.IsConnect)
+                        {
+                            Global.PLCStatus = PLCStatus.ErrorConnect;
+                            Global.StatusIO = StatusIO.NotConnect;
+                            Global.ParaCommon.Comunication.Protocol.Disconnect();
+
+                        }
                         valueInput = vals;
                         for (int i = 0; i < valueInput.Length; i++)
                         {
@@ -303,8 +310,7 @@ namespace BeeGlobal
 
                         //    }
                         //}
-                        CTRead = PlcClient.CTRead;
-                        CTWrite = PlcClient.CTWrite;
+                 
                         int addr = ParaBits.Find(a => a.I_O_Input == I_O_Input.ByPass && a.TypeIO == TypeIO.Input)?.Adddress ?? -1;
 
                         if (addr > -1)
@@ -325,7 +331,8 @@ namespace BeeGlobal
                         }
                        
                     };
-                    PlcClient.StartOneBitReadLoop(AddRead, timeRead);
+                    if (!PlcClient.StartOneBitReadLoop(AddRead, timeRead))
+                        IsConnected = false;
                     TimingUtils.EnableHighResolutionTimer();
                 }
               
@@ -365,33 +372,14 @@ namespace BeeGlobal
        
         private async void TimeAlive_Tick(object sender, EventArgs e)
         {
-            //if(IsChangeAlive)
-            // {
             if (Global.IsAllowReadPLC)
             {
                 IsAlive = !IsAlive;
                 SetOutPut(15, IsAlive);
             }
-               // await WriteOutPut();
-            //int ix = ParaBits.FindIndex(a => a.Adddress == Add && a.TypeIO == TypeIO.Output);
-            //if (ix >= 0)
-            //{
-            //    ParaBits[ix].Value = Convert.ToInt32(Value);
-            //}
+           if(IsConnected)
              PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", IsAlive);
-            //  numTimeOut = 0;
-            //IsChangeAlive = false;
-            // }
-            //else
-            // {
-            //     numTimeOut++;
-            //     if(numTimeOut>=10)
-            //     {
-            //         IsAlive = false;
-
-            //     }    
-
-            // }    
+          
         }
 
         [field: NonSerialized]

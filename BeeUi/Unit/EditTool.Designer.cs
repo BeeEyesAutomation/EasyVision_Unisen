@@ -32,6 +32,7 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbLicence = new System.Windows.Forms.ToolStripStatusLabel();
@@ -53,7 +54,7 @@ namespace BeeUi
             this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tmReaPLC = new System.Windows.Forms.Timer();
+            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -72,7 +73,7 @@ namespace BeeUi
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
             this.splitter4 = new System.Windows.Forms.Splitter();
-            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip();
+            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,8 +162,8 @@ namespace BeeUi
             // 
             this.toolStripPort.Image = global::BeeUi.Properties.Resources.PortNotConnect;
             this.toolStripPort.Name = "toolStripPort";
-            this.toolStripPort.Size = new System.Drawing.Size(79, 28);
-            this.toolStripPort.Text = "PLC Ready";
+            this.toolStripPort.Size = new System.Drawing.Size(102, 28);
+            this.toolStripPort.Text = "PLC Not Ready";
             this.toolStripPort.Click += new System.EventHandler(this.toolStripPort_Click);
             // 
             // lbEx

@@ -32,7 +32,7 @@ namespace BeeUi
 
         public static StatusProcessing StatusProcessing = StatusProcessing.None;
 
-         public static System.Windows.Forms.ListBox listProgram = new System.Windows.Forms.ListBox ();
+         public static System.Windows.Forms.ListBox listProgram ;
        public static float Scale=1;
       
       public static System.Drawing.Point pScale=new System.Drawing.Point(0,0);

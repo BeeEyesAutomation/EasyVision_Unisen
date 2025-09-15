@@ -65,7 +65,7 @@ namespace PlcLib
         public PlcClient(
             PlcBrand brand,
             ConnectionType connType,
-            string ip = null,
+            string ip = "",
             int port = 0,
             string comPort = null, int baudRate = 9600,
             System.IO.Ports.Parity parity = System.IO.Ports.Parity.Even,
@@ -98,6 +98,35 @@ namespace PlcLib
         {
             switch (_brand)
             {
+                case PlcBrand.Keyence:
+                    if (_connType == ConnectionType.Tcp)
+                    {
+                        var keyIP = new KeyenceMcNet(_ip, _port);
+                        TrySetProp(keyIP, "ReceiveTimeOut", _timeoutMs);
+                        TrySetProp(keyIP, "ConnectTimeOut", _timeoutMs);
+                        return keyIP;
+                    }
+                    else
+                    {
+
+                        var keySp = new KeyenceNanoSerial();
+                        //fx.LogNet = new LogNetSingle("fx485.log");
+                        keySp.SerialPortInni(sp =>
+                        {
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                        keySp.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
+                       // keySp.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
+                        return keySp;
+                    }
                 case PlcBrand.Mitsubishi:
                     if (_connType == ConnectionType.Tcp)
                     {
@@ -108,19 +137,9 @@ namespace PlcLib
                     }
                     else
                     {
-                        // Ctor không tham số, cấu hình COM qua SerialPortInni
-                        //var fx = new MelsecFxSerial();
-                        //fx.SerialPortInni(sp =>
-                        //{
-                        //    sp.PortName = _com;
-                        //    sp.BaudRate = _baud;
-                        //    sp.DataBits = 7; // thường 7E1 cho FX (đổi nếu bạn cấu hình khác)
-                        //    sp.Parity = System.IO.Ports.Parity.Even;
-                        //    sp.StopBits = System.IO.Ports.StopBits.One;
-                        //});
-                        //return fx;
+                     
                         var fx = new MelsecFxLinks();
-                        fx.LogNet = new LogNetSingle("fx485.log");
+                        //fx.LogNet = new LogNetSingle("fx485.log");
                         fx.SerialPortInni(sp =>
                         {
                             sp.PortName = _com;
@@ -247,7 +266,7 @@ namespace PlcLib
             throw new Exception(op + " failed");
         }
         private void WithRetry(Action f, string op) { WithRetry<object>(() => { f(); return null; }, op); }
-
+        public bool IsConnect = false;
         // ====== Public API ======
         public bool[] ReadWordAsBits(string wordAddr)
         {
@@ -260,11 +279,13 @@ namespace PlcLib
                     OperateResult<short> r = d.ReadInt16(wordAddr);
                     if (!r.IsSuccess)
                     {
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadIO", wordAddr+": "+ r.Message));
-                    
-                       
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadIO", wordAddr + ": " + r.Message));
+
+                        IsConnect = false;
                     }
-                    short w = r.Content;
+                    else
+                        IsConnect = true;
+                        short w = r.Content;
                     var bits = new bool[16];
                     for (int i = 0; i < 16; i++) bits[i] = ((w >> i) & 1) == 1;
                     return bits;
@@ -288,7 +309,11 @@ namespace PlcLib
 
                   //  CTWrite = (float)CT2.Elapsed.TotalMilliseconds;
                     if (!w.IsSuccess)
+                    {
+                        IsConnect = false;
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", wordAddr + ": " + w.Message));
+                    }    
+                       
 
                    
                 }
@@ -315,10 +340,12 @@ namespace PlcLib
                     OperateResult w = d.Write(startAddr, new short[] { low, high });
                     if (!w.IsSuccess)
                     {
+                        IsConnect = false;
                         Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteIO", startAddr + ": " + w.Message));
                     }
+                    else IsConnect = true;
                 }
             }, "WriteFloat");
         }
@@ -405,21 +432,49 @@ namespace PlcLib
                     {
                         string wAddr = addrOrWordDotBit.Substring(0, dot);
                         int bit = int.Parse(addrOrWordDotBit.Substring(dot + 1));
-                        if (bit < 0 || bit > 15) throw new ArgumentException("Bit index 0..15");
+                        if (bit < 0 || bit > 15)
+                        {
+                            IsConnect = false;
+                            Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", "Bit index 0..15"));
+                        }
+                          
 
                         var r = d.ReadInt16(wAddr);
-                        if (!r.IsSuccess) throw new Exception("Read " + wAddr + " lỗi: " + r.Message);
+                        if (!r.IsSuccess)
+                        {
+                            IsConnect = false;
+                            Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", "Read " + wAddr + " lỗi: " + r.Message));
+                        }
+                      
                         short w = r.Content;
                         if (value) w = (short)(w | (1 << bit));
                         else w = (short)(w & ~(1 << bit));
 
                         var wres = d.Write(wAddr, w);
-                        if (!wres.IsSuccess) throw new Exception("Write " + wAddr + " lỗi: " + wres.Message);
+                        if (!wres.IsSuccess)
+                        {
+                            IsConnect = false;
+                            Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", "Write " + wAddr + " lỗi: " + wres.Message));
+                        }
+                        
                     }
                     else
                     {
                         var res = d.Write(addrOrWordDotBit, value);
-                        if (!res.IsSuccess) throw new Exception("Write " + addrOrWordDotBit + " lỗi: " + res.Message);
+                        if (!res.IsSuccess)
+                        {
+                            IsConnect = false;
+                            Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteIO", "Write " + addrOrWordDotBit + " lỗi: " + res.Message));
+                        }
+                        
                     }
                 }
             }, "WriteBit");
@@ -448,11 +503,18 @@ namespace PlcLib
         
         public float CTRead, CTWrite;
         // ====== OneBitRead loop (trả về mảng bits) ======
-        public void StartOneBitReadLoop(string addresses, int cycleMs = 500)
+        public bool  StartOneBitReadLoop(string addresses, int cycleMs = 500)
         {
             StopOneBitReadLoop();
             if (addresses == null || addresses.Length == 0)
-                throw new ArgumentException("Danh sách địa chỉ trống.");
+            {
+                IsConnect = false;
+                Global.LogsDashboard.AddLog(
+                    new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                    "ReadIO", "Add Wrong"));
+                return false;
+            }    
+               
 
             var addrs = (string)addresses.Clone();
             _loopCts = new CancellationTokenSource();
@@ -477,6 +539,7 @@ namespace PlcLib
                     }
                     catch (Exception ex)
                     {
+                        IsConnect = false;
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadIO", "Fail Read"));
                         var onErr = OnError; if (onErr != null) onErr(ex.Message);
 
@@ -496,6 +559,7 @@ namespace PlcLib
                     Thread.Sleep(cycleMs < 50 ? 50 : cycleMs);
                 }
             }, token);
+            return true;
         }
 
         public void StopOneBitReadLoop()

@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum PLCStatus
+    {
+        NotConnect,
+        Reconnect,
+        ErrorConnect,
+        Ready,
+       
+    }
+    public enum CameraStatus
+    {
+        NotConnect,
+        Reconnect,
+        ErrorConnect,
+        Ready,
+
+    }
     public enum TypeSendPLC
     {
         Bit,

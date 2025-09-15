@@ -30,7 +30,6 @@ namespace BeeInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.layIn = new System.Windows.Forms.TableLayoutPanel();
@@ -133,14 +132,6 @@ namespace BeeInterface
             this.label47 = new System.Windows.Forms.Label();
             this.DO0 = new BeeInterface.RJButton();
             this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.lbWrite = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lbRead = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.lbMax = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnTCP = new BeeInterface.RJButton();
@@ -189,15 +180,12 @@ namespace BeeInterface
             this.lbTCP2 = new System.Windows.Forms.Label();
             this.tmCheck = new System.Windows.Forms.Timer(this.components);
             this.tmConnect = new System.Windows.Forms.Timer(this.components);
-            this.tmRead = new System.Windows.Forms.Timer(this.components);
-            this.workRead = new System.ComponentModel.BackgroundWorker();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.layIn.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.layOut.SuspendLayout();
             this.tabPage7.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -207,11 +195,6 @@ namespace BeeInterface
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tmShow
-            // 
-            this.tmShow.Interval = 1000;
-            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
             // 
             // tabControl1
             // 
@@ -2733,7 +2716,6 @@ namespace BeeInterface
             // 
             this.tabPage7.AutoScroll = true;
             this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage7.Controls.Add(this.panel3);
             this.tabPage7.Controls.Add(this.tableLayoutPanel1);
             this.tabPage7.Location = new System.Drawing.Point(4, 34);
             this.tabPage7.Name = "tabPage7";
@@ -2741,106 +2723,6 @@ namespace BeeInterface
             this.tabPage7.Size = new System.Drawing.Size(414, 802);
             this.tabPage7.TabIndex = 2;
             this.tabPage7.Text = "Setting";
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.lbWrite);
-            this.panel3.Controls.Add(this.label4);
-            this.panel3.Controls.Add(this.lbRead);
-            this.panel3.Controls.Add(this.label29);
-            this.panel3.Controls.Add(this.lbMax);
-            this.panel3.Controls.Add(this.label27);
-            this.panel3.Controls.Add(this.label25);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 644);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(408, 84);
-            this.panel3.TabIndex = 85;
-            // 
-            // lbWrite
-            // 
-            this.lbWrite.BackColor = System.Drawing.Color.Transparent;
-            this.lbWrite.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbWrite.Location = new System.Drawing.Point(207, 36);
-            this.lbWrite.Name = "lbWrite";
-            this.lbWrite.Size = new System.Drawing.Size(81, 21);
-            this.lbWrite.TabIndex = 78;
-            this.lbWrite.Text = "00";
-            this.lbWrite.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(17, 26);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(87, 43);
-            this.label4.TabIndex = 73;
-            this.label4.Text = "CT Read/Write";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lbRead
-            // 
-            this.lbRead.BackColor = System.Drawing.Color.Transparent;
-            this.lbRead.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbRead.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRead.ForeColor = System.Drawing.Color.Lime;
-            this.lbRead.Location = new System.Drawing.Point(112, 36);
-            this.lbRead.Name = "lbRead";
-            this.lbRead.Size = new System.Drawing.Size(81, 21);
-            this.lbRead.TabIndex = 77;
-            this.lbRead.Text = "00";
-            this.lbRead.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.BackColor = System.Drawing.Color.Transparent;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(324, 14);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(29, 16);
-            this.label29.TabIndex = 82;
-            this.label29.Text = "Mid";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lbMax
-            // 
-            this.lbMax.BackColor = System.Drawing.Color.Transparent;
-            this.lbMax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMax.ForeColor = System.Drawing.Color.Red;
-            this.lbMax.Location = new System.Drawing.Point(297, 36);
-            this.lbMax.Name = "lbMax";
-            this.lbMax.Size = new System.Drawing.Size(81, 21);
-            this.lbMax.TabIndex = 79;
-            this.lbMax.Text = "00";
-            this.lbMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(228, 14);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(38, 16);
-            this.label27.TabIndex = 81;
-            this.label27.Text = "Write";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(136, 14);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(41, 16);
-            this.label25.TabIndex = 80;
-            this.label25.Text = "Read";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tableLayoutPanel1
             // 
@@ -3400,6 +3282,7 @@ namespace BeeInterface
             this.rjButton7.Corner = BeeGlobal.Corner.Right;
             this.rjButton7.DebounceResizeMs = 16;
             this.rjButton7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton7.Enabled = false;
             this.rjButton7.FlatAppearance.BorderSize = 0;
             this.rjButton7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
@@ -3451,6 +3334,7 @@ namespace BeeInterface
             this.rjButton1.Corner = BeeGlobal.Corner.Right;
             this.rjButton1.DebounceResizeMs = 16;
             this.rjButton1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton1.Enabled = false;
             this.rjButton1.FlatAppearance.BorderSize = 0;
             this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
@@ -3998,6 +3882,8 @@ namespace BeeInterface
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(128, 35);
             this.txtPort.TabIndex = 112;
+            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
+            this.txtPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPort_KeyPress);
             // 
             // txtIP
             // 
@@ -4008,6 +3894,7 @@ namespace BeeInterface
             this.txtIP.Size = new System.Drawing.Size(128, 31);
             this.txtIP.TabIndex = 111;
             this.txtIP.Text = "192.168.1.1";
+            this.txtIP.TextChanged += new System.EventHandler(this.txtIP_TextChanged);
             // 
             // lbTCP2
             // 
@@ -4037,16 +3924,6 @@ namespace BeeInterface
             this.tmConnect.Interval = 3000;
             this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
             // 
-            // tmRead
-            // 
-            this.tmRead.Interval = 10;
-            this.tmRead.Tick += new System.EventHandler(this.tmRead_Tick);
-            // 
-            // workRead
-            // 
-            this.workRead.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workRead_DoWork);
-            this.workRead.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workRead_RunWorkerCompleted);
-            // 
             // ProtocolPLC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4065,8 +3942,6 @@ namespace BeeInterface
             this.layOut.ResumeLayout(false);
             this.layOut.PerformLayout();
             this.tabPage7.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -4084,7 +3959,6 @@ namespace BeeInterface
         }
 
         #endregion
-        private System.Windows.Forms.Timer tmShow;
         private System.Windows.Forms.ComboBox cbIn0;
         private  System.Windows.Forms.TableLayoutPanel layIn;
         private System.Windows.Forms.Label label3;
@@ -4136,7 +4010,6 @@ namespace BeeInterface
         private RJButton DO0;
         private System.Windows.Forms.Timer tmCheck;
         private System.Windows.Forms.Timer tmConnect;
-        private System.ComponentModel.BackgroundWorker workRead;
         private RJButton DI7;
         private RJButton DI6;
         private RJButton DI5;
@@ -4145,19 +4018,10 @@ namespace BeeInterface
         private RJButton DI2;
         private RJButton DI1;
         private RJButton DI0;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label lbMax;
-        private System.Windows.Forms.Label lbWrite;
-        private System.Windows.Forms.Label lbRead;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label27;
         private Label label2;
         private TableLayoutPanel tableLayoutPanel2;
         private Panel panel1;
         private Panel panel2;
-        private Panel panel3;
-        public Timer tmRead;
         private CustomNumericEx timerRead;
         private RJButton btnSerial;
         private RJButton btnTCP;

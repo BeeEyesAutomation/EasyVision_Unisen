@@ -13,6 +13,34 @@ namespace BeeGlobal
         /// <summary>
         ///
         /// </summary> 
+        private static PLCStatus _PLCStatus = PLCStatus.NotConnect;
+        public static event Action<PLCStatus> PLCStatusChanged;
+        public static PLCStatus PLCStatus
+        {
+            get => _PLCStatus;
+            set
+            {
+                if (_PLCStatus != value)
+                {
+                    _PLCStatus = value;
+                    PLCStatusChanged?.Invoke(_PLCStatus); // Gọi event
+                }
+            }
+        }
+        private static CameraStatus _CameraStatus = CameraStatus.NotConnect;
+        public static event Action<CameraStatus> CameraStatusChanged;
+        public static CameraStatus CameraStatus
+        {
+            get => _CameraStatus;
+            set
+            {
+                if (_CameraStatus != value)
+                {
+                    _CameraStatus = value;
+                    CameraStatusChanged?.Invoke(_CameraStatus); // Gọi event
+                }
+            }
+        }
         public static bool IsAllowReadPLC = true;
         public static TriggerNum TriggerNum = TriggerNum.Trigger1;
         public static dynamic ScanCCD;

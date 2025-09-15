@@ -66,15 +66,43 @@ namespace BeeCore
         /// Xoá danh sách ảnh (không dispose ảnh nguồn).
         public void ClearImages() => _items.Clear();
         public Size szImage=new Size(0, 0);
-        /// Render ảnh ghép theo kích thước PictureBox hiện tại.
         public void Render()
         {
             if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
+
+            // 1) Build duy nhất 1 bitmap để hiển thị
             var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
             szImage = newBitmap.Size;
-            BeeCore.Common.bmResult = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
-            var old = _pb.Image; _pb.Image = newBitmap; old?.Dispose();
+
+            // 2) Clone ra bmResult (dành để lưu file sau này)
+            //    Dùng Clone(Rect, PixelFormat) để đảm bảo deep copy
+            Bitmap cloneForSave = newBitmap.Clone(
+                new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
+                newBitmap.PixelFormat);
+
+            // 3) Swap vào BeeCore.Common.bmResult và dispose bản cũ
+            var oldResult = BeeCore.Common.bmResult;
+            BeeCore.Common.bmResult = cloneForSave;
+            oldResult?.Dispose();
+
+            // (Nếu bạn cần thread-safe tuyệt đối cho static field, dùng Interlocked.Exchange)
+            // var oldResult = Interlocked.Exchange(ref BeeCore.Common.bmResult, cloneForSave);
+            // oldResult?.Dispose();
+
+            // 4) Cập nhật PictureBox và dispose ảnh cũ của PictureBox
+            var old = _pb.Image;
+            _pb.Image = newBitmap;
+            old?.Dispose();
         }
+        /// Render ảnh ghép theo kích thước PictureBox hiện tại.
+        //public void Render()
+        //{
+        //    if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
+        //    var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
+        //    szImage = newBitmap.Size;
+        //    BeeCore.Common.bmResult = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
+        //    var old = _pb.Image; _pb.Image = newBitmap; old?.Dispose();
+        //}
 
         /// API static: dựng và trả về Bitmap ghép (không gán PictureBox).
         public static Bitmap BuildCollageBitmap(

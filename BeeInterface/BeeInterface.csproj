@@ -351,7 +351,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BeeCore\BeeCore.csproj">
-      <Project>{AC6E4007-F2A0-49F3-B777-DDE4C58C5ADC}</Project>
+      <Project>{ac6e4007-f2a0-49f3-b777-dde4c58c5adc}</Project>
       <Name>BeeCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">

@@ -39,6 +39,7 @@ namespace BeeGlobal
         }
 
         public int TT;
+      public  List<(string Label, int Ms)> seg = new List<(string Label, int Ms)>();
         /// <summary>Kết thúc đo và trả chuỗi log, TT luôn = tổng các pha</summary>
         public string StopAndFormat()
         {
@@ -51,7 +52,7 @@ namespace BeeGlobal
             points.Add(("END", tEnd));
 
             // Tính các đoạn
-            var seg = new List<(string Label, int Ms)>();
+            seg = new List<(string Label, int Ms)>();
             for (int i = 1; i < points.Count; i++)
             {
                 long delta = points[i].Tick - points[i - 1].Tick;

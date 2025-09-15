@@ -103,6 +103,7 @@ namespace BeeUi.Tool
             foreach (System.IO.DirectoryInfo subDirectory in directory.GetDirectories()) subDirectory.Delete(true);
             directory.Delete();
         }
+        String Ex = "";
         public void Connect_SQL()
         {
             
@@ -123,9 +124,16 @@ namespace BeeUi.Tool
             String path = Path.Combine(Environment.CurrentDirectory, nameFileSQL);
             G._pathSqlMaster = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path + ";Integrated Security=True;Connect Timeout=30"; ;
             G.cnn = new SqlConnection(G._pathSqlMaster);
-           // G.cnn.Close();
-            G.cnn.Open();
-           
+            // G.cnn.Close();
+            try
+            {
+                G.cnn.Open();
+            }
+            catch (Exception ex)
+            {
+                Ex = ex.Message;
+
+            }
 
             string resourceDir = Path.Combine(Environment.CurrentDirectory, "Report");
             string[] files = Directory.GetFiles(resourceDir, "*.mdf");

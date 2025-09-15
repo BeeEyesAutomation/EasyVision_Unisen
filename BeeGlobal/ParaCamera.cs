@@ -21,6 +21,7 @@ namespace BeeGlobal
         public TypeCamera TypeCamera = TypeCamera.USB;
         public String Name = "";
         public int Focus, Zoom;
+        public int ColorCode = -1;
         public ParaCamera()
         {
             if (Exposure == null)

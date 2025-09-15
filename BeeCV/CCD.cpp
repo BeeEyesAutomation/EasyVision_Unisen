@@ -688,6 +688,110 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 
 	return false;*/
 }
+float	CCD::SetParaFloat(int indexCCD, System::String^ Namepara, float Value)
+{
+	if (m_pcMyCamera[indexCCD] == nullptr)
+		return -1;
+
+	std::string namepara = marshal_as<std::string>(Namepara);
+	m_pcMyCamera[indexCCD]->StopGrabbing();
+	
+
+	// Set giá trị
+	if (m_pcMyCamera[indexCCD]->SetFloatValue(namepara.c_str(), Value) == MV_OK)
+	{
+		m_pcMyCamera[indexCCD]->StartGrabbing();
+		return Value;
+	}
+	else
+	{
+		MVCC_INTVALUE_EX expInfo = {};
+		if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
+		{
+			m_pcMyCamera[indexCCD]->StartGrabbing();
+			std::cerr << "❌ Set Para thất bại!" << std::endl;
+			return -1;
+		}
+
+		float minVal = expInfo.nMin;
+		float maxVal = expInfo.nMax;
+		float step = expInfo.nInc > 0 ? expInfo.nInc : 1.0f;  // tránh step = 0
+
+		// Clamp về khoảng hợp lệ
+		Value = std::max(minVal, std::min(maxVal, Value));
+
+		// Làm tròn theo step
+		float adjustedExposure = std::round((Value - minVal) / step) * step + minVal;
+
+		// Set giá trị
+		if (m_pcMyCamera[indexCCD]->SetIntValue(namepara.c_str(), (int)adjustedExposure) == MV_OK)
+		{
+			m_pcMyCamera[indexCCD]->StartGrabbing();
+			return Value;
+		}
+		else
+		{
+			m_pcMyCamera[indexCCD]->StartGrabbing();
+			std::cerr << "❌ Set Para thất bại!" << std::endl;
+			return -1;
+			
+		}
+		
+	}
+	//m_pcMyCamera[indexCCD]->StartGrabbing();
+	return -1;
+	/*int nRet = MV_CC_SetFloatValue(m_pcMyCamera[indexCCD], namepara.c_str(), Value);
+	if (MV_OK != nRet)
+		return false;
+	else
+		return true;
+
+	return false;*/
+}
+bool	CCD::GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current)
+{
+
+	std::string namepara = marshal_as<std::string>(Namepara);
+	float value = -1;
+	MVCC_FLOATVALUE expInfo = {};
+	if (m_pcMyCamera[indexCCD]->GetFloatValue(namepara.c_str(), &expInfo) != MV_OK)
+	{
+		
+		
+		MVCC_INTVALUE_EX expInfo = {};
+		if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
+		{
+
+			std::cerr << "❌ Không đọc được thông tin Para" << std::endl;
+			return false;
+		}
+		else
+		{
+			current = expInfo.nCurValue;
+			step = expInfo.nInc;
+			min = expInfo.nMin;
+			max = expInfo.nMax;
+		}
+		
+		return true;
+	}
+	else
+	{
+		current = expInfo.fCurValue;
+		step = 1;
+		min = expInfo.fMin;
+		max = expInfo.fMax;
+	}
+
+	/*if (m_pcMyCamera[indexCCD] == nullptr)
+		return -1;
+	MVCC_ENUMVALUE enumVal = {};
+	if (m_pcMyCamera[indexCCD]->GetEnumValue(namepara.c_str(), &enumVal) == MV_OK)
+	{
+		value = static_cast<double>(enumVal.nCurValue);
+	}*/
+	return true;
+}
 
 bool	CCD::GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step, float% current)
 {
@@ -782,53 +886,22 @@ bool ConnectUsb( int index)
 	}
 	return false;
 }
-bool GetFrame(cv::Mat& image, void* handle) {
-	MVCC_ENUMVALUE stPixelFormat;
-	memset(&stPixelFormat, 0, sizeof(MVCC_ENUMVALUE));
 
-	// Lấy định dạng ảnh từ camera
-	if (MV_OK != MV_CC_GetEnumValue(handle, "PixelFormat", &stPixelFormat)) {
-		std::cerr << "Failed to get pixel format." << std::endl;
-		return false;
+// ---- Soft reset qua GenICam command "DeviceReset" ----
+static bool DeviceReset(CMvCamera* camera, int waitMsAfter = 3000)
+{
+	if (!camera) return false;
+	camera->StopGrabbing(); // an toàn: dừng stream nếu đang chạy
+
+	int r = camera->CommandExecute("DeviceReset"); // gọi GenICam command
+	if (r != MV_OK) {
+		std::cerr << "DeviceReset unsupported/failed: " << r << "\n";
+		return false; // hoặc fallback: close/reopen
 	}
 
-	// Lấy ảnh từ camera
-	MV_FRAME_OUT stImageOut = { 0 };
-	int nRet = MV_CC_GetImageBuffer(handle, &stImageOut, 1000); // Timeout: 1000ms
-
-	if (nRet != MV_OK) {
-		std::cerr << "Failed to grab image, error: " << nRet << std::endl;
-		return false;
-	}
-
-	int width = stImageOut.stFrameInfo.nWidth;
-	int height = stImageOut.stFrameInfo.nHeight;
-	void* pBufAddr = stImageOut.pBufAddr;
-
-	// Kiểm tra định dạng ảnh và chuyển đổi về OpenCV Mat
-	switch (stPixelFormat.nCurValue) {
-	case PixelType_Gvsp_BGR8_Packed:
-		image = cv::Mat(height, width, CV_8UC3, pBufAddr).clone();
-		break;
-	case PixelType_Gvsp_Mono8:
-		image = cv::Mat(height, width, CV_8UC1, pBufAddr).clone();
-		break;
-	case PixelType_Gvsp_BayerRG8:
-	case PixelType_Gvsp_BayerBG8:
-	case PixelType_Gvsp_BayerGR8:
-	case PixelType_Gvsp_BayerGB8:
-	{
-		cv::Mat rawImage(height, width, CV_8UC3, pBufAddr);
-		cv::cvtColor(rawImage, image, cv::COLOR_BayerBG2BGR);  // Chỉnh lại COLOR_BayerXX2BGR theo format camera
-	}
-	break;
-	default:
-		std::cerr << "Unsupported pixel format: " << stPixelFormat.nCurValue << std::endl;
-		return false;
-	}
-
-	return true;
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitMsAfter));
 }
+
 int FindCameraIndexByUserName(MV_CC_DEVICE_INFO_LIST& devList, const std::string& targetUserName)
 {
 	for (unsigned int i = 0; i < devList.nDeviceNum; ++i)
@@ -997,6 +1070,7 @@ bool ConnectHik( int index,int indexCCD)
 		 nRet = m_pcMyCamera[indexCCD]->Open(m_stDevList.pDeviceInfo[index]);
 		if (MV_OK != nRet)
 		{
+			DeviceReset(m_pcMyCamera[indexCCD]);
 			delete m_pcMyCamera[indexCCD];
 			m_pcMyCamera[indexCCD] = NULL;
 			//ShowErrorMsg(TEXT("Open Fail"), nRet);
@@ -1077,69 +1151,116 @@ auto lastTime = std::chrono::high_resolution_clock::now();
 int frameCount = 0;
 double fps = 0.0;
 std::chrono::duration<double> elapsed;
-//bool CaptureFrame(CMvCamera* camera, cv::Mat& image) {
-//	MV_FRAME_OUT stImageOut = { 0 };
-//	
-//	// Lấy buffer ảnh từ camera
-//	int nRet = camera->GetImageBuffer(&stImageOut, 1000); // Timeout: 1000ms
-//	if (nRet != MV_OK) {
-//		std::cerr << "Failed to grab image, error: " << nRet << std::endl;
-//		return false;
-//	}
-//
-//	int width = stImageOut.stFrameInfo.nWidth;
-//	int height = stImageOut.stFrameInfo.nHeight;
-//	int pixelType = stImageOut.stFrameInfo.enPixelType;
-//	void* pBufAddr = stImageOut.pBufAddr;
-//
-//	// Xử lý định dạng ảnh
-//	switch (pixelType) {
-//	case PixelType_Gvsp_BGR8_Packed:
-//		image = cv::Mat(height, width, CV_8UC3, pBufAddr);
-//		break;
-//	case PixelType_Gvsp_Mono8:
-//		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
-//		break;
-//	case PixelType_Gvsp_Mono12:
-//		image = cv::Mat(height, width, CV_8UC1, pBufAddr);
-//		break;
-//	case PixelType_Gvsp_BayerRG8:
-//		break;
-//	case PixelType_Gvsp_BayerBG8:
-//	{
-//		if (pBufAddr == nullptr || width <= 0 || height <= 0)
-//			return false;
-//
-//		cv::Mat rawImage2(height, width, CV_8UC1);
-//		memcpy(rawImage2.data, pBufAddr, height * width);  // Sao chép bộ nhớ để tránh lỗi
-//
-//		if (rawImage2.empty())
-//			return false;
-//
-//		
-//		cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2RGB);  // hoặc COLOR_BayerBG2BGR tùy loại
-//		
-//		//cv::cvtColor(rawImage2, image, cv::COLOR_BayerBG2BGR); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
-//		break;
-//	}
-//	case PixelType_Gvsp_BayerGR8:
-//		break;
-//	case PixelType_Gvsp_BayerGB8:
-//	{
-//		//image = cv::Mat(height, width, CV_8UC3, pBufAddr);
-//		cv::Mat rawImage(height, width, CV_8UC1, pBufAddr);
-//		cv::cvtColor(rawImage, image, cv::COLOR_BayerGB2RGB); // Chỉnh lại `COLOR_BayerXX2BGR` nếu cần
-//	}
-//	break;
-//	default:
-//		image =Mat();
-//		return false;
-//	}
-//
-//	// Giải phóng buffer
-//	camera->FreeImageBuffer(&stImageOut);
-//	return true;
-//}
+
+int FormatCCD=0;
+static inline void EnsureSize(cv::Mat& img, int w, int h, int type) {
+	if (img.empty() || img.cols != w || img.rows != h || img.type() != type)
+		img.create(h, w, type);
+}
+
+static inline void RGBtoBGR(const cv::Mat& srcRGB, cv::Mat& dstBGR) {
+	const int fromTo[6] = { 2,0, 1,1, 0,2 };
+	cv::mixChannels(&srcRGB, 1, &dstBGR, 1, fromTo, 3);
+}
+static inline bool ConvertBySDKEx(CMvCamera* camera, const MV_FRAME_OUT& out, cv::Mat& dstBGR) {
+	const unsigned w = out.stFrameInfo.nWidth;
+	const unsigned h = out.stFrameInfo.nHeight;
+	EnsureSize(dstBGR, (int)w, (int)h, CV_8UC3);
+
+	MV_CC_PIXEL_CONVERT_PARAM_EX prm{};
+	prm.nWidth = w;
+	prm.nHeight = h;
+	prm.enSrcPixelType = (MvGvspPixelType)out.stFrameInfo.enPixelType;
+	prm.pSrcData = (unsigned char*)out.pBufAddr;      // cast đúng kiểu
+	prm.nSrcDataLen = out.stFrameInfo.nFrameLen;         // dùng frameLen từ SDK
+	prm.enDstPixelType = (MvGvspPixelType)PixelType_Gvsp_BGR8_Packed;
+	prm.pDstBuffer = dstBGR.data;
+	prm.nDstBufferSize = w * h * 3;
+	prm.nDstLen = 0;
+
+	int ret = camera->ConvertPixelType(&prm);
+	if (ret != MV_OK) {
+		std::cerr << "ConvertPixelTypeEx failed: " << ret
+			<< " (srcPix=0x" << std::hex << out.stFrameInfo.enPixelType << std::dec << ")\n";
+		return false;
+	}
+	return true;
+}
+
+bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
+{
+	MV_FRAME_OUT out{};
+	int ret = camera->GetImageBuffer(&out, timeoutMs);
+	if (ret != MV_OK) {
+		std::cerr << "GetImageBuffer failed: " << ret << "\n";
+		return false;
+	}
+
+	struct Guard {
+		CMvCamera* cam; MV_FRAME_OUT* o;
+		~Guard() { if (cam && o) cam->FreeImageBuffer(o); }
+	} guard{ camera, &out };
+
+	const unsigned int w = out.stFrameInfo.nWidth;
+	const unsigned int h = out.stFrameInfo.nHeight;
+	const unsigned int px = out.stFrameInfo.enPixelType;
+	void* p = out.pBufAddr;
+	if (!p || w == 0 || h == 0) return false;
+
+	// --- 1) BGR8: copy thẳng (1 lần) vào buffer tái sử dụng
+	if (px == PixelType_Gvsp_BGR8_Packed) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat view(h, w, CV_8UC3, p);
+		view.copyTo(imageBGR);
+		return true;
+	}
+
+	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
+	if (px == PixelType_Gvsp_RGB8_Packed) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat rgb(h, w, CV_8UC3, p);
+		RGBtoBGR(rgb, imageBGR);
+		return true;
+	}
+
+	// --- 3) MONO8: nâng lên BGR
+	if (px == PixelType_Gvsp_Mono8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat mono(h, w, CV_8UC1, p);
+		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
+		return true;
+	}
+
+	// --- 4) Bayer8: demosaic bằng OpenCV (nhanh). Có 4 pattern thường gặp.
+	// Nếu bạn muốn màu đẹp hơn (HQ), có thể bỏ 4 nhánh này để dùng SDK ConvertBySDKEx.
+	/*if (px == PixelType_Gvsp_BayerBG8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat raw(h, w, CV_8UC1, p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR);
+		return true;
+	}
+	if (px == PixelType_Gvsp_BayerGB8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat raw(h, w, CV_8UC1, p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
+		return true;
+	}
+	if (px == PixelType_Gvsp_BayerRG8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat raw(h, w, CV_8UC1, p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
+		return true;
+	}
+	if (px == PixelType_Gvsp_BayerGR8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat raw(h, w, CV_8UC1, p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
+		return true;
+	}*/
+
+	// --- 5) Các định dạng còn lại (Bayer10/12/16, Mono10/12/16, Packed, v.v.) → dùng SDK EX
+	return ConvertBySDKEx(camera, out, imageBGR);
+}
 bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	MV_FRAME_OUT out = { 0 };
 
@@ -1192,7 +1313,7 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	}
 	case PixelType_Gvsp_BayerBG8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2RGB);//hik
+		cv::cvtColor(raw, imageBGR,cv::COLOR_BayerBG2RGB);//hik
 		return true;
 	}
 	case PixelType_Gvsp_BayerGB8: {
@@ -1202,12 +1323,12 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	}
 	case PixelType_Gvsp_BayerRG8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
+		cv::cvtColor(raw, imageBGR,cv::COLOR_BayerRG2BGR);
 		return true;
 	}
 	case PixelType_Gvsp_BayerGR8: {
 		cv::Mat raw = view8UC1(p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
+		cv::cvtColor(raw, imageBGR,  cv::COLOR_BayerGR2BGR);
 		return true;
 	}
 	default:
@@ -1215,7 +1336,10 @@ bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 		return false;
 	}
 }
-
+void  CCD::SetFormatImage(int Format)
+{
+	FormatCCD = Format;
+}
 uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 {
 	auto t0 = std::chrono::steady_clock::now();
@@ -1226,8 +1350,8 @@ uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 	switch (TypeCamera)
 	{
 	case 1: { // Camera SDK
-		if (!CaptureFrame(m_pcMyCamera[indexCCD], rawBGR)) {
-			// Fail: trả nullptr + metadata = 0
+		if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
+			DeviceReset(m_pcMyCamera[indexCCD]);
 			*rows = *cols = *Type = 0;
 			return nullptr;
 		}

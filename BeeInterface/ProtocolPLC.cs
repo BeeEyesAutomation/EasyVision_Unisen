@@ -526,7 +526,40 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                         listLabelsOut[paraIO.Adddress].Refresh();
                     }
                 }
-           
+                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Keyence)
+                btnKeyence.IsCLick = true;
+                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
+                    btnMitsu.IsCLick = true;
+                txtIP.Text = Global.ParaCommon.Comunication.Protocol.sIP;
+                txtPort.Text =Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
+
+                if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
+                {
+                    cbCom.Enabled = false;
+                    cbBaurate.Enabled = false;
+                    txtIP.Enabled = true;
+                    txtPort.Enabled = true;
+                    btnTCP.IsCLick = true;
+                    lbRTU1.Enabled = false;
+                    lbRTU2.Enabled = false;
+                    lbTCP1.Enabled = true;
+                    lbTCP2.Enabled = true;
+                }    
+                    
+                if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Serial)
+                {
+                    btnSerial.IsCLick = true;
+                    cbCom.Enabled = true;
+                    cbBaurate.Enabled = true;
+                    txtIP.Enabled = false;
+                    txtPort.Enabled = false;
+
+                    lbRTU1.Enabled = true;
+                    lbRTU2.Enabled = true;
+                    lbTCP1.Enabled = false;
+                    lbTCP2.Enabled = false;
+                }    
+                    
             }
             catch(Exception ex)
             {
@@ -574,7 +607,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnConectIO.Text = "Connected";
                 btnConectIO.IsCLick = true;
                 btnConectIO.Enabled = false;
-                btnBypass.Enabled = true;
+               // btnBypass.Enabled = true;
             }
             else
             {
@@ -582,7 +615,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnConectIO.Text = "Fail Connect";
                 btnConectIO.IsCLick = false;
                 btnConectIO.Enabled = true;
-                btnBypass.Enabled = false;
+             //   btnBypass.Enabled = false;
             }
          //   Global.ParaCommon.Comunication.Protocol.numReadChanged += IO_numReadChanged;
           //  Global.ParaCommon.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
@@ -618,6 +651,15 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             this.Invoke((Action)(() =>
             {
+              
+                if (obj == StatusIO.NotConnect)
+                {
+                    btnConectIO.Text = "Fail Connect";
+                    btnConectIO.IsCLick = false;
+                    btnConectIO.Enabled = true;
+                  
+                }    
+               
                 StatusIObtn.Text = obj.ToString();
                 StatusIObtn.Refresh();
             }));
@@ -705,7 +747,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
              
                
                 Global.ParaCommon.Comunication.Protocol.IsBypass = false;
-                tmRead.Enabled = true;
+              
             }
             else
             {
@@ -791,213 +833,29 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             //int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
+               
                 Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, btn.IsCLick);
                 if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
                 {
                     btn.IsCLick = !btn.IsCLick;
                 }
-                tmRead.Enabled = true;
+              
                 btn.Text = Convert.ToInt16(btn.IsCLick).ToString();
             }
             else
                 btn.IsCLick = false;
 
         }
-        private async void DO0_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO0.IsCLick = !DO0.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO0.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO0.IsCLick);
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO0.IsCLick = !DO0.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO0.Text =Convert.ToInt16( DO0.IsCLick).ToString();
-            }
-
-        }
-        private async void DO1_Click(object sender, EventArgs e)
-        {
-            if(Global.ParaCommon.IsExternal)
-            {
-                DO1.IsCLick = !DO1.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }    
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO1.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO1.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO1.IsCLick = !DO1.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO1.Text =Convert.ToInt16( DO1.IsCLick).ToString();
-            }
-        }
-
-        private async void DO2_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO2.IsCLick = !DO2.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO2.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO2.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO2.IsCLick = !DO2.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO2.Text =Convert.ToInt16( DO2.IsCLick).ToString();
-            }
-        }
-
-        private async void D3_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                D3.IsCLick = !D3.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO3.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, D3.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    D3.IsCLick = !D3.IsCLick;
-                }
-                tmRead.Enabled = true;
-                D3.Text =Convert.ToInt16( D3.IsCLick).ToString();
-            }
-        }
-
-        private async void DO4_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO4.IsCLick = !DO4.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO4.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO4.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO4.IsCLick = !DO4.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO4.Text =Convert.ToInt16( DO4.IsCLick).ToString();
-            }
-        }
-
-        private async void DO5_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO5.IsCLick = !DO5.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO5.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO5.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO5.IsCLick = !DO5.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO5.Text = Convert.ToInt16(DO5.IsCLick).ToString();
-            }
-        }
-
-        private async void DO6_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO6.IsCLick = !DO6.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO6.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO6.IsCLick);//LIGHT 2
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO6.IsCLick = !DO6.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO6.Text = Convert.ToInt16(DO6.IsCLick).ToString();
-                
-            }
-        }
-
-        private async void DO7_Click(object sender, EventArgs e)
-        {
-            if (Global.ParaCommon.IsExternal)
-            {
-                DO7.IsCLick = !DO7.IsCLick;
-                MessageBox.Show("Change Mode to Internal!");
-                return;
-            }
-            int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), cbO7.Text, ignoreCase: true) && a.TypeIO == TypeIO.Output);
-            if (index > -1)
-            {
-                tmRead.Enabled = false;
-                await Task.Delay(100);
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, DO7.IsCLick);//LIGHT 2
-                
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
-                {
-                    DO7.IsCLick = !DO7.IsCLick;
-                }
-                tmRead.Enabled = true;
-                DO7.Text =Convert.ToInt16( DO7.IsCLick).ToString();
-            }
-        }
+    
 
         private async void btnBypass_Click(object sender, EventArgs e)
         {
             if(Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-                tmRead.Enabled = false;
-                await Task.Delay(500);
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                
+                
+              
+                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Busy;
                 Global.ParaCommon.Comunication.Protocol.Disconnect();
              
                 btnConectIO.Text = "No Connect";
@@ -1021,182 +879,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            
         }
         IO_Processing IO_ProcessingOld = IO_Processing.None;
-        private  void tmRead_Tick(object sender, EventArgs e)
-        {
-            Global.ParaCommon.Comunication.Protocol.CTMid = (Global.ParaCommon.Comunication.Protocol.CTMin + Global.ParaCommon.Comunication.Protocol.CTMax) / 2;
-            lbRead.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTRead) + "";
-            lbMax.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTMid) + "";
-            lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
-
-            // if (!Global.ParaCommon.Comunication.Protocol.IsConnected)
-            // {
-            //    // MessageBox.Show("Err");
-            //     tmRead.Enabled = false;
-            //     tmConnect.Enabled = true;
-            //     return;
-            // }    
-            //     if (!Global.Initialed) return;
-            //// if (Global.StatusIO == StatusIO.Writing|| Global.StatusIO == StatusIO.Reading) return;
-            // if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-            // {
-
-            //     //if (Global.StatusProcessing == StatusProcessing.SendResult)
-            //     //{
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-            //     //    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic1)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //         {
-            //     //                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-            //     //                break;
-            //     //         }
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic2)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //        {
-            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-            //     //            break;
-            //     //        }
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic3)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //        {
-            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-            //     //            break;
-            //     //        }
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic4)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //        {
-            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-            //     //            break;
-            //     //        }
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic5)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //        {
-            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-            //     //            break;
-            //     //        }
-            //     //    foreach (int ix in Global.ParaCommon.indexLogic6)
-            //     //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
-            //     //        {
-            //     //            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
-            //     //            break;
-            //     //        }
-            //     //    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
-
-
-            //     //}
-
-            //     //else if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
-            //     //{
-            //     //    if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
-            //     //    {
-
-            //     //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO"," Trigger OK"));
-            //     //        Global.TriggerInternal = false;
-            //     //        Global.StatusProcessing = StatusProcessing.Trigger;
-            //     //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
-            //     //        if(Global.IsByPassResult)
-            //     //        Global.EditTool.lbBypass.ForeColor = Color.White;
-            //     //        tmRead.Enabled = false;
-
-
-
-            //     //    }
-
-
-            //     //}
-            //     //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
-            //     //{
-
-            //     //    if (Global.StatusIO == StatusIO.None)
-            //     //    {
-
-            //     //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
-            //     //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
-            //     //            Global.EditTool.lbBypass.ForeColor = Color.Green; 
-            //     //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
-            //     //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
-            //     //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
-
-            //     //    }
-            //     //}
-
-            //     //if (btnEnQrCode.IsCLick)
-            //     //{
-            //     //    if (valueOutput[6] == 0)
-            //     //    {
-            //     //        int[] bits = new int[] { valueInput[4], valueInput[5], valueInput[6], valueInput[7] };  // MSB -> LSB (bit3 bit2 bit1 bit0)
-
-            //     //        int value = 0;
-            //     //        for (int i = 0; i < 4; i++)
-            //     //        {
-            //     //            value |= (bits[i] & 1) << (3 - i);  // bit 3 là cao nhất
-            //     //        }
-            //     //        int id = listFilter.FindIndex(a => a == Global.Project);
-            //     //        if (id != value)
-            //     //        {
-
-            //     //            WriteIO(IO_Processing.ChangeProg);
-            //     //            tmReadPLC.Enabled = false;
-            //     //            Global.Project = listFilter[value];
-            //     //            txtQrCode.Text = Global.Project.ToString();
-            //     //            txtQrCode.Enabled = false;
-            //     //            btnShowList.Enabled = false;
-
-            //     //            workLoadProgram.RunWorkerAsync();
-            //     //        }
-            //     //    }
-            //     //}
-
-
-            //     if (Global.StatusIO == StatusIO.None&& Global.StatusProcessing==StatusProcessing.None)
-            //     {
-
-
-            //             //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_READ","Start.."));
-
-            //         //    await Global.ParaCommon.Comunication.Protocol.Read();
-            //         //int ix = Global.ParaCommon.Comunication.Protocol. AddressInput[(int)I_O_Input.ByPass];
-            //         //if (ix > -1)
-            //         //{
-            //         //    if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 1 && !Global.IsByPassResult)
-            //         //    {
-            //         //        Global.IsByPassResult = true;
-            //         //        Global.EditTool.lbBypass.Visible = true;
-
-            //         //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
-            //         //    }
-            //         //    else if (Global.ParaCommon.Comunication.Protocol.valueInput[ix] == 0 && Global.IsByPassResult)
-
-            //         //    {
-            //         //        Global.IsByPassResult = false;
-            //         //        Global.EditTool.lbBypass.Visible = false;
-
-            //         //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
-            //         //    }        
-            //         //}
-            //     }    
-
-            //     if (Global.StatusIO == StatusIO.Writing && Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.None)
-            //         Global.StatusIO = StatusIO.None;
-            //     //StatusIObtn.Text = Global.StatusIO.ToString();
-            // }
-            // else
-
-            // {
-            //     Global.StatusProcessing = StatusProcessing.None;
-            //     Global.StatusIO = StatusIO.None;
-            //     Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
-            // }
-
-
-
-
-        }
-
+     
         private async void tmConnect_Tick(object sender, EventArgs e)
         {if (!Global.Initialed) return;
             tmConnect.Enabled = false;
@@ -1209,12 +892,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 Global.StatusIO = StatusIO.None;
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
            
-                await Task.Delay(500);
-                tmRead.Enabled = true;
-                //if (Global.ParaCommon.Comunication.Protocol.timeRead == 0) Global.ParaCommon.Comunication.Protocol.timeRead = 1;
-                //tmRead.Interval = Global.ParaCommon.Comunication.Protocol.timeRead;
-                //  tmCheck.Enabled = true;
-                // G.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
+              
+           
+               
 
             }
 
@@ -1228,7 +908,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     {
                         Global.StatusIO = StatusIO.None;
                         Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                        tmRead.Enabled = true;
+                       
 
                     }
                  
@@ -1245,38 +925,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-        private void workRead_DoWork(object sender, DoWorkEventArgs e)
-        {
-            if (!Global.Initialed) return;
-            if (Global.StatusIO == StatusIO.ErrRead)
-            {
-                //await Task.Delay(50);
-                Global.StatusIO = StatusIO.Reading;
-            }
-            if (Global.StatusIO == StatusIO.Reading)
-            {
-               // Global.ParaCommon.Comunication.Protocol.Read();
+    
 
-            }
-        }
-
-        private async void  workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-
-        {
-           await Task.Delay( Global.ParaCommon.Comunication.Protocol.timeRead);
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                workRead.RunWorkerAsync();
-            else
-                tmConnect.Enabled = true;
-            //if (Global.ParaCommon.Comunication.Protocol.logBuilder != null)
-            //{
-            //    txtLog1.Text = Global.ParaCommon.Comunication.Protocol.logBuilder.ToString();
-            //    txtLog1.Refresh();
-            //}
-
-
-        }
-
+ 
         private void btnClear_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.CTMin = 100000;
@@ -1297,7 +948,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void timerRead_ValueChanged(float obj)
         {
             Global.ParaCommon.Comunication.Protocol.timeRead = (int)timerRead.Value;
-            tmRead.Interval = Global.ParaCommon.Comunication.Protocol.timeRead;
+        
         }
 
       
@@ -1316,14 +967,14 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnMitsu_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.PlcBrand=PlcLib.PlcBrand.Mitsubishi;
-            btnKeyence.IsCLick = false;
+           
          
         }
 
         private void btnKeyence_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Keyence;
-            btnMitsu.IsCLick = false;
+         
         }
 
         private void btnSerial_Click(object sender, EventArgs e)
@@ -1333,7 +984,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Enabled = true;
             txtIP.Enabled = false;
             txtPort.Enabled = false;
-            btnTCP.IsCLick = false;
+           
             lbRTU1.Enabled = true;
             lbRTU2.Enabled = true;
             lbTCP1.Enabled = false;
@@ -1347,7 +998,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Enabled = false;
             txtIP.Enabled = true;
             txtPort.Enabled = true;
-            btnSerial.IsCLick = false;
+            
             lbRTU1.Enabled = false;
             lbRTU2.Enabled = false;
             lbTCP1.Enabled = true;
@@ -1404,6 +1055,22 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnReScan_Click(object sender, EventArgs e)
         {
             cbCom.DataSource = SerialPort.GetPortNames();
+        }
+
+        private void txtPort_TextChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.PortIP =Convert.ToInt32( txtPort.Text.Trim());
+        }
+
+        private void txtIP_TextChanged(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.sIP= txtIP.Text.Trim();
+        }
+
+        private void txtPort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
         }
     }
 }

@@ -483,8 +483,7 @@ namespace BeeCore
                                
                                 break;
                              case 1://Hik
-                                //Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
-
+                                Para.Exposure.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "ExposureTime", Para.Exposure.Value), cancel.Token);
                                 break;
                         }
                             return true;
@@ -506,11 +505,11 @@ namespace BeeCore
             try
             {
 
-
+                cancel = new CancellationTokenSource(2000);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
-                        cancel = new CancellationTokenSource(2000);
+                       
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -518,7 +517,7 @@ namespace BeeCore
                                
                                 break;
                             case 1://Hik
-                                //Para.Exposure.Value = CCDPlus.SetPara(IndexCCD, "ExposureTimeRaw", Para.Exposure.Value);
+                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "ExposureTime", ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value), cancel.Token);
 
                                 break;
                         }
@@ -554,7 +553,8 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-                                
+                                Para.Gain.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "Gain", Para.Gain.Value), cancel.Token);
+
                                 break;
                         }
                       break;
@@ -589,7 +589,7 @@ namespace BeeCore
                               //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.Shift.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "DigitalShift", Para.Shift.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -620,6 +620,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
+                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value), cancel.Token);
 
                                 break;
                         }
@@ -667,7 +668,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.Width.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "Width", Para.Width.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -698,7 +699,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "Width", ref Para.Width.Min, ref Para.Width.Max, ref Para.Width.Step, ref Para.Width.Value), cancel.Token);
                                 break;
                         }
 
@@ -737,7 +738,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.Height.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "Height", Para.Height.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -768,7 +769,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "Height", ref Para.Height.Min, ref Para.Height.Max, ref Para.Height.Step, ref Para.Height.Value), cancel.Token);
                                 break;
                         }
 
@@ -808,7 +809,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.OffSetX.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "OffsetX", Para.OffSetX.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -839,7 +840,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "OffsetX", ref Para.OffSetX.Min, ref Para.OffSetX.Max, ref Para.OffSetX.Step, ref Para.OffSetX.Value), cancel.Token);
                                 break;
                         }
 
@@ -879,7 +880,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.OffSetY.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "OffsetY", Para.OffSetY.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -910,7 +911,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "OffsetY", ref Para.OffSetY.Min, ref Para.OffSetY.Max, ref Para.OffSetY.Step, ref Para.OffSetY.Value), cancel.Token);
                                 break;
                         }
 
@@ -951,7 +952,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.CenterX = (int)(await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterX", (int)Para.CenterX), cancel.Token));
                                 break;
                         }
                         break;
@@ -982,7 +983,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterX", ref none, ref none, ref none, ref Para.CenterX), cancel.Token);
                                 break;
                         }
 
@@ -1017,7 +1018,7 @@ namespace BeeCore
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-
+                                Para.CenterY = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterY", Para.CenterY), cancel.Token);
                                 break;
                         }
                         break;
@@ -1048,7 +1049,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterY", ref none, ref none, ref none, ref Para.CenterY), cancel.Token);
                                 break;
                         }
 
@@ -1082,7 +1083,7 @@ namespace BeeCore
                                 return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "GainRaw", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
                                 break;
                             case 1://Hik
-
+                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "Gain", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
                                 break;
                         }
                         
@@ -1111,6 +1112,10 @@ namespace BeeCore
             return new System.Drawing.Size(matRaw.Width,matRaw.Height);
 
         }
+        public void SetFormat()
+        {
+          //  CCDPlus.set();
+        }
         public  void Init()
         {
            
@@ -1130,17 +1135,17 @@ namespace BeeCore
 
             try
             {
-                stopwatch.Restart();
+                //stopwatch.Restart();
                 intPtr = new IntPtr (CCDPlus.ReadCCD(IndexCCD, &rows, &cols,&matType));
-                stopwatch.Stop();
-                BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
+               // stopwatch.Stop();
+              //  BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
                 // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
                 if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
                     return false;
 
                 // Allocate/reuse destination Mat
 
-                if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType)
+                if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType||matRaw.IsDisposed)
                 {
                     matRaw?.Dispose();
                     matRaw = new Mat(rows, cols, matType);
@@ -1184,9 +1189,12 @@ namespace BeeCore
         public   void Read()
         {
          //   stopwatch.Restart();
-            TryGrabFast_NoStride(ref matRaw);
-          //  stopwatch.Stop();
-         //   FrameRate = CCDPlus.FPS;
+         if(! TryGrabFast_NoStride(ref matRaw))
+            {
+                Global.CameraStatus = CameraStatus.ErrorConnect;
+            }    
+        else
+           FrameRate = CCDPlus.FPS;
          //   BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
             //int rows = 0, cols = 0, Type = 0;
 

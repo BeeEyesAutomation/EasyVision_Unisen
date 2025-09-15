@@ -115,23 +115,23 @@ namespace BeeInterface
             this.tableLayout1.Controls.Add(this.AdjZoom, 0, 3);
             this.tableLayout1.Controls.Add(this.label14, 0, 2);
             this.tableLayout1.Controls.Add(this.btnChnageCamera, 0, 0);
-            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 20);
-            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 18);
-            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 16);
-            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 14);
+            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 21);
+            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 19);
+            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 17);
+            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 15);
             this.tableLayout1.Controls.Add(this.trackShift, 0, 11);
             this.tableLayout1.Controls.Add(this.trackGain, 0, 9);
             this.tableLayout1.Controls.Add(this.trackExposure, 0, 7);
             this.tableLayout1.Controls.Add(this.btnDownLoadPara, 0, 1);
-            this.tableLayout1.Controls.Add(this.label13, 0, 19);
-            this.tableLayout1.Controls.Add(this.label12, 0, 17);
-            this.tableLayout1.Controls.Add(this.label11, 0, 15);
-            this.tableLayout1.Controls.Add(this.label10, 0, 13);
-            this.tableLayout1.Controls.Add(this.label5, 0, 12);
+            this.tableLayout1.Controls.Add(this.label13, 0, 20);
+            this.tableLayout1.Controls.Add(this.label12, 0, 18);
+            this.tableLayout1.Controls.Add(this.label11, 0, 16);
+            this.tableLayout1.Controls.Add(this.label10, 0, 14);
+            this.tableLayout1.Controls.Add(this.label5, 0, 13);
             this.tableLayout1.Controls.Add(this.label3, 0, 10);
             this.tableLayout1.Controls.Add(this.label2, 0, 8);
             this.tableLayout1.Controls.Add(this.label4, 0, 6);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 21);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 22);
             this.tableLayout1.Controls.Add(this.tableLayoutPanel21, 0, 4);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -139,12 +139,13 @@ namespace BeeInterface
             this.tableLayout1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tableLayout1.Name = "tableLayout1";
             this.tableLayout1.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.tableLayout1.RowCount = 23;
+            this.tableLayout1.RowCount = 24;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -163,6 +164,7 @@ namespace BeeInterface
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayout1.Size = new System.Drawing.Size(480, 704);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
@@ -519,6 +521,8 @@ namespace BeeInterface
             this.AdjHeight.Value = 1F;
             this.AdjHeight.WheelStep = 1F;
             this.AdjHeight.ValueChanged += new System.Action<float>(this.AdjHeight_ValueChanged);
+            this.AdjHeight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjHeight_MouseDown);
+            this.AdjHeight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AdjHeight_MouseUp);
             // 
             // AdjWidth
             // 
@@ -576,6 +580,8 @@ namespace BeeInterface
             this.AdjWidth.Value = 1F;
             this.AdjWidth.WheelStep = 1F;
             this.AdjWidth.ValueChanged += new System.Action<float>(this.AdjWidth_ValueChanged);
+            this.AdjWidth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjWidth_MouseDown);
+            this.AdjWidth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AdjWidth_MouseUp);
             // 
             // trackShift
             // 
@@ -633,6 +639,8 @@ namespace BeeInterface
             this.trackShift.Value = 1F;
             this.trackShift.WheelStep = 1F;
             this.trackShift.ValueChanged += new System.Action<float>(this.trackShift_ValueChanged);
+            this.trackShift.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackShift_MouseDown);
+            this.trackShift.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackShift_MouseUp);
             // 
             // trackGain
             // 
@@ -690,6 +698,8 @@ namespace BeeInterface
             this.trackGain.Value = 1F;
             this.trackGain.WheelStep = 1F;
             this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
+            this.trackGain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackGain_MouseDown);
+            this.trackGain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackGain_MouseUp);
             // 
             // trackExposure
             // 
@@ -747,6 +757,8 @@ namespace BeeInterface
             this.trackExposure.Value = 1F;
             this.trackExposure.WheelStep = 1F;
             this.trackExposure.ValueChanged += new System.Action<float>(this.trackExposure_ValueChanged);
+            this.trackExposure.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackExposure_MouseDown);
+            this.trackExposure.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackExposure_MouseUp);
             // 
             // btnDownLoadPara
             // 
@@ -971,7 +983,7 @@ namespace BeeInterface
             this.btnCenterY.ImageTintOpacity = 0.5F;
             this.btnCenterY.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnCenterY.IsCLick = false;
-            this.btnCenterY.IsNotChange = false;
+            this.btnCenterY.IsNotChange = true;
             this.btnCenterY.IsRect = false;
             this.btnCenterY.IsUnGroup = true;
             this.btnCenterY.Location = new System.Drawing.Point(219, 3);
@@ -1024,7 +1036,7 @@ namespace BeeInterface
             this.btnCenterX.ImageTintOpacity = 0.5F;
             this.btnCenterX.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnCenterX.IsCLick = false;
-            this.btnCenterX.IsNotChange = false;
+            this.btnCenterX.IsNotChange = true;
             this.btnCenterX.IsRect = false;
             this.btnCenterX.IsUnGroup = true;
             this.btnCenterX.Location = new System.Drawing.Point(3, 3);
@@ -2172,7 +2184,7 @@ namespace BeeInterface
         private AdjustBarEx AdjFocus;
         private AdjustBarEx AdjZoom;
         private TableLayoutPanel2 tableLayoutPanel21;
-        private Label label15;
         private RJButton btnFocus;
+        private Label label15;
     }
 }

@@ -56,6 +56,7 @@ namespace BeeUi.Unit
         { if(Global.EditTool. DashboardImages==null)
             {
                 Global.EditTool.DashboardImages = new DashboardImages();
+
                 //  DashboardImages.
             }
             
@@ -64,8 +65,15 @@ namespace BeeUi.Unit
 
         private void btnLog_Click(object sender, EventArgs e)
         {
-            if(Global.LogsDashboard==null)
-              Global.LogsDashboard = new LogsDashboard();
+            if (Global.LogsDashboard == null)
+            {
+                Global.LogsDashboard = new LogsDashboard();
+                Global.LogsDashboard.MaxLogCount = 5000;
+                Global.LogsDashboard.ProgressiveBatchSize = 200;
+                Global.LogsDashboard.ProgressiveIntervalMs = 10;
+                Global.LogsDashboard.IngestBatchSize = 100;
+                Global.LogsDashboard.IngestIntervalMs = 16; // ~60Hz
+            }
             Global.EditTool.pEditTool.Show("Logs");
         }
 

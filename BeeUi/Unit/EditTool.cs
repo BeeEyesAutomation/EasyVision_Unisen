@@ -369,11 +369,7 @@ namespace BeeUi
            // if(Global.LogsDashboard==null)
           //  Global.LogsDashboard = new LogsDashboard();
             // cấu hình
-            Global.LogsDashboard.MaxLogCount = 5000;
-            Global.LogsDashboard.ProgressiveBatchSize = 200;
-            Global.LogsDashboard.ProgressiveIntervalMs = 10;
-            Global.LogsDashboard.IngestBatchSize = 100;
-            Global.LogsDashboard.IngestIntervalMs = 16; // ~60Hz
+          
             pEditTool.Register("Tool", () =>Global.ToolSettings);
             pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
@@ -387,7 +383,7 @@ namespace BeeUi
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
-            Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
+         //   Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
            
             btnShowToolBar.Checked = btnShowToolBar.Checked;
             if (Global.EditTool.pEdit.Width ==0)
