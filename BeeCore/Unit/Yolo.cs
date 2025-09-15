@@ -65,17 +65,18 @@ namespace BeeCore
             try
             {
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
-                if (pathFullModel.Trim().Contains(".pt") )
-                {
-                    TypeYolo = TypeYolo.YOLO;
-                  
-                }
-                else if (pathFullModel.Trim().Contains(".pth"))
+                if (pathFullModel.Trim().Contains(".pth"))
                 {
                     TypeYolo = TypeYolo.RCNN;
-                  
+
                 }
-                else 
+                else if (pathFullModel.Trim().Contains(".pt"))
+                {
+                    TypeYolo = TypeYolo.YOLO;
+
+                }
+
+                else
                 {
                     TypeYolo = TypeYolo.YOLO;
                     Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
@@ -426,7 +427,7 @@ namespace BeeCore
                             {
                                 int indexLabel = Convert.ToInt32(label);
 
-                                labelConvert = labelItems[indexLabel].Name;
+                                labelConvert = labelItems[indexLabel-1].Name;
                             }    
                             int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
                             if (index>-1)
