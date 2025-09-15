@@ -1230,7 +1230,13 @@ bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
 		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
 		return true;
 	}
-
+	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
+	if (px == PixelType_Gvsp_BayerBG8) {
+		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+		cv::Mat raw(h, w, CV_8UC1, p);
+		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2RGB);
+		return true;
+	}
 	// --- 4) Bayer8: demosaic bằng OpenCV (nhanh). Có 4 pattern thường gặp.
 	// Nếu bạn muốn màu đẹp hơn (HQ), có thể bỏ 4 nhánh này để dùng SDK ConvertBySDKEx.
 	/*if (px == PixelType_Gvsp_BayerBG8) {

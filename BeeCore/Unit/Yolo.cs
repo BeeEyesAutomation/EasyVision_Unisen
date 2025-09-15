@@ -65,12 +65,23 @@ namespace BeeCore
             try
             {
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
-                if (!pathFullModel.Trim().Contains(".pt") )
+                if (pathFullModel.Trim().Contains(".pt") )
                 {
+                    TypeYolo = TypeYolo.YOLO;
+                  
+                }
+                else if (pathFullModel.Trim().Contains(".pth"))
+                {
+                    TypeYolo = TypeYolo.RCNN;
+                  
+                }
+                else 
+                {
+                    TypeYolo = TypeYolo.YOLO;
                     Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                     return;
                 }
-                if(Global.IsIntialPython)
+                if (Global.IsIntialPython)
                 using (Py.GIL())
             {
 
@@ -165,7 +176,7 @@ namespace BeeCore
         public String[] LoadNameModel(String nameTool)
         {
 
-            if (Global.IsIntialPython)
+            if (Global.IsIntialPython&&TypeYolo==TypeYolo.YOLO)
                 using (Py.GIL())
                 {
 
@@ -410,7 +421,14 @@ namespace BeeCore
                         //}
                         foreach (String label in labelList)
                         {
-                            int index = labelItems.FindIndex(item =>string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
+                            String labelConvert = label;
+                            if(TypeYolo==TypeYolo.RCNN)
+                            {
+                                int indexLabel = Convert.ToInt32(label);
+
+                                labelConvert = labelItems[indexLabel].Name;
+                            }    
+                            int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
                             if (index>-1)
                             {
                                 LabelItem item = labelItems[index];
@@ -432,7 +450,7 @@ namespace BeeCore
                                 {
                                     listOK.Add(true);
                                     rectRotates.Add(boxList[i]);
-                                    listLabel.Add(label);
+                                    listLabel.Add(labelConvert);
                                     scoreRS += (int)scoreList[i];
                                     listScore.Add(scoreList[i]);
                                     numOK++;
@@ -441,7 +459,7 @@ namespace BeeCore
                                 {
                                     listOK.Add(false);
                                     rectRotates.Add(boxList[i]);
-                                    listLabel.Add(label);
+                                    listLabel.Add(labelConvert);
                                     scoreRS += (int)scoreList[i];
                                     listScore.Add(scoreList[i]);
 

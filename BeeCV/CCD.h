@@ -3,28 +3,7 @@
 #include <dshow.h>
 #pragma comment(lib, "strmiids")
 #include <msclr/marshal_cppstd.h>
-// Bổ sung định nghĩa RGB8 nếu header SDK của bạn chưa có:
-#ifndef PixelType_Gvsp_RGB8_Packed
-#define PixelType_Gvsp_RGB8_Packed 0x02180021
-#endif
-#ifndef PixelType_Gvsp_BGR8_Packed
-#define PixelType_Gvsp_BGR8_Packed 0x02180014
-#endif
-#ifndef PixelType_Gvsp_Mono8
-#define PixelType_Gvsp_Mono8       0x01080001
-#endif
-#ifndef PixelType_Gvsp_BayerBG8
-#define PixelType_Gvsp_BayerBG8    0x0318000B
-#endif
-#ifndef PixelType_Gvsp_BayerGB8
-#define PixelType_Gvsp_BayerGB8    0x0318000A
-#endif
-#ifndef PixelType_Gvsp_BayerRG8
-#define PixelType_Gvsp_BayerRG8    0x03180009
-#endif
-#ifndef PixelType_Gvsp_BayerGR8
-#define PixelType_Gvsp_BayerGR8    0x03180008
-#endif
+
 
 using namespace System;
 using namespace msclr::interop;
