@@ -645,7 +645,8 @@ namespace BeeUi
             }
             else
             {
-
+                MessageBox.Show("Camera connect Fail");
+                btnConnect.Enabled = true;
                 if (G.Load != null)
                     G.Load.Hide();
                 this.Show();

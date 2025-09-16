@@ -99,7 +99,9 @@ namespace BeeCore
                 return;
            if (!Global.IsRun)
             Propety.rotAreaAdjustment = Propety.rotArea;
-           Propety.DoWork(Propety.rotAreaAdjustment);
+           if (Propety.rotAreaAdjustment==null)
+                Propety.rotAreaAdjustment = Propety.rotArea;
+            Propety.DoWork(Propety.rotAreaAdjustment);
         }
         public void Complete()
         {

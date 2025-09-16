@@ -180,6 +180,9 @@ namespace BeeInterface
                 case TypeTool.OKNG:
                     control = new ToolOKNG();
                     break;
+                case TypeTool.Crop:
+                    control = new ToolCrop();
+                    break;
                 default:
                     return null;
                     break;

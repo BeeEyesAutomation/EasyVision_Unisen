@@ -69,7 +69,7 @@ namespace BeeUpdate
             {
                String name= Path.GetFileName(s);
                 name = name.Replace(".dll", ".bin");
-                String pathDir = "G:\\My Drive\\EasyVision\\Update\\" + name;
+                String pathDir = "G:\\My Drive\\EasyVision\\v2\\" + name;
               
                 
                 File.Copy(s, pathDir, true);
@@ -82,7 +82,7 @@ namespace BeeUpdate
                 String name = Path.GetFileName(s);
                 name = name.Replace(".dll", ".bin");
              
-                String pathDirOld = "G:\\My Drive\\EasyVision\\Update\\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+                String pathDirOld = "G:\\My Drive\\EasyVision\\v2\\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
                 if (!Directory.Exists(pathDirOld)) Directory.CreateDirectory(pathDirOld);
               
              

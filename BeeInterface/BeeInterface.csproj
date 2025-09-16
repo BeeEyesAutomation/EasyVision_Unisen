@@ -189,6 +189,12 @@
     <Compile Include="ToolColorArea.Designer.cs">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolCrop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolCrop.Designer.cs">
+      <DependentUpon>ToolCrop.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolEdgePixels.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -311,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ToolColorArea.resx">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolCrop.resx">
+      <DependentUpon>ToolCrop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolEdgePixels.resx">
       <DependentUpon>ToolEdgePixels.cs</DependentUpon>
@@ -575,6 +584,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Ok_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crop_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Resize File_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crop_3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -131,6 +131,7 @@ namespace BeeUi.Unit
             this.btnSaveAs = new BeeInterface.RJButton();
             this.btnAdd = new BeeInterface.RJButton();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
+            this.btnRename = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.pMenu.SuspendLayout();
             this.SuspendLayout();
@@ -207,15 +208,16 @@ namespace BeeUi.Unit
             // pMenu
             // 
             this.pMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.pMenu.ColumnCount = 4;
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pMenu.Controls.Add(this.btnDelect, 3, 0);
+            this.pMenu.ColumnCount = 5;
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pMenu.Controls.Add(this.btnRename, 2, 0);
+            this.pMenu.Controls.Add(this.btnDelect, 4, 0);
             this.pMenu.Controls.Add(this.btnSave, 1, 0);
-            this.pMenu.Controls.Add(this.btnSaveAs, 2, 0);
+            this.pMenu.Controls.Add(this.btnSaveAs, 3, 0);
             this.pMenu.Controls.Add(this.btnAdd, 0, 0);
             this.pMenu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMenu.Location = new System.Drawing.Point(0, 0);
@@ -241,7 +243,6 @@ namespace BeeUi.Unit
             this.btnDelect.AutoImageTint = true;
             this.btnDelect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnDelect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnDelect.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDelect.BackgroundImage")));
             this.btnDelect.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnDelect.BorderRadius = 4;
             this.btnDelect.BorderSize = 1;
@@ -270,11 +271,11 @@ namespace BeeUi.Unit
             this.btnDelect.IsNotChange = true;
             this.btnDelect.IsRect = false;
             this.btnDelect.IsUnGroup = true;
-            this.btnDelect.Location = new System.Drawing.Point(356, 4);
+            this.btnDelect.Location = new System.Drawing.Point(376, 4);
             this.btnDelect.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnDelect.Multiline = false;
             this.btnDelect.Name = "btnDelect";
-            this.btnDelect.Size = new System.Drawing.Size(106, 48);
+            this.btnDelect.Size = new System.Drawing.Size(86, 48);
             this.btnDelect.TabIndex = 13;
             this.btnDelect.Text = "Delete ";
             this.btnDelect.TextColor = System.Drawing.Color.Black;
@@ -295,7 +296,6 @@ namespace BeeUi.Unit
             this.btnSave.AutoImageTint = true;
             this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnSave.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSave.BackgroundImage")));
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.btnSave.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnSave.BorderRadius = 4;
@@ -325,11 +325,11 @@ namespace BeeUi.Unit
             this.btnSave.IsNotChange = true;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = true;
-            this.btnSave.Location = new System.Drawing.Point(124, 4);
+            this.btnSave.Location = new System.Drawing.Point(100, 4);
             this.btnSave.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnSave.Multiline = false;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(106, 48);
+            this.btnSave.Size = new System.Drawing.Size(82, 48);
             this.btnSave.TabIndex = 14;
             this.btnSave.Text = "Save ";
             this.btnSave.TextColor = System.Drawing.Color.Black;
@@ -379,11 +379,11 @@ namespace BeeUi.Unit
             this.btnSaveAs.IsNotChange = true;
             this.btnSaveAs.IsRect = false;
             this.btnSaveAs.IsUnGroup = true;
-            this.btnSaveAs.Location = new System.Drawing.Point(240, 4);
+            this.btnSaveAs.Location = new System.Drawing.Point(284, 4);
             this.btnSaveAs.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnSaveAs.Multiline = false;
             this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(106, 48);
+            this.btnSaveAs.Size = new System.Drawing.Size(82, 48);
             this.btnSaveAs.TabIndex = 15;
             this.btnSaveAs.Text = "Copy";
             this.btnSaveAs.TextColor = System.Drawing.Color.Black;
@@ -404,7 +404,6 @@ namespace BeeUi.Unit
             this.btnAdd.AutoImageTint = true;
             this.btnAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnAdd.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.BackgroundImage")));
             this.btnAdd.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnAdd.BorderRadius = 4;
             this.btnAdd.BorderSize = 1;
@@ -437,7 +436,7 @@ namespace BeeUi.Unit
             this.btnAdd.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
             this.btnAdd.Multiline = false;
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(106, 48);
+            this.btnAdd.Size = new System.Drawing.Size(82, 48);
             this.btnAdd.TabIndex = 11;
             this.btnAdd.Text = "New";
             this.btnAdd.TextColor = System.Drawing.Color.Black;
@@ -451,6 +450,59 @@ namespace BeeUi.Unit
             this.saveFile.Filter = "Program | *.prog";
             this.saveFile.InitialDirectory = "Program";
             this.saveFile.Title = "Save As";
+            // 
+            // btnRename
+            // 
+            this.btnRename.AutoFont = false;
+            this.btnRename.AutoFontHeightRatio = 0.75F;
+            this.btnRename.AutoFontMax = 100F;
+            this.btnRename.AutoFontMin = 5F;
+            this.btnRename.AutoFontWidthRatio = 0.92F;
+            this.btnRename.AutoImage = true;
+            this.btnRename.AutoImageMaxRatio = 0.65F;
+            this.btnRename.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnRename.AutoImageTint = true;
+            this.btnRename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRename.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRename.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRename.BorderRadius = 4;
+            this.btnRename.BorderSize = 1;
+            this.btnRename.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnRename.Corner = BeeGlobal.Corner.Both;
+            this.btnRename.DebounceResizeMs = 16;
+            this.btnRename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRename.FlatAppearance.BorderSize = 0;
+            this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRename.ForeColor = System.Drawing.Color.Black;
+            this.btnRename.Image = null;
+            this.btnRename.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnRename.ImageDisabled = null;
+            this.btnRename.ImageHover = null;
+            this.btnRename.ImageNormal = null;
+            this.btnRename.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnRename.ImagePressed = null;
+            this.btnRename.ImageTextSpacing = 2;
+            this.btnRename.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnRename.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnRename.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnRename.ImageTintOpacity = 0.5F;
+            this.btnRename.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnRename.IsCLick = false;
+            this.btnRename.IsNotChange = true;
+            this.btnRename.IsRect = false;
+            this.btnRename.IsUnGroup = true;
+            this.btnRename.Location = new System.Drawing.Point(192, 4);
+            this.btnRename.Margin = new System.Windows.Forms.Padding(5, 1, 5, 1);
+            this.btnRename.Multiline = false;
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(82, 48);
+            this.btnRename.TabIndex = 16;
+            this.btnRename.Text = "Rename";
+            this.btnRename.TextColor = System.Drawing.Color.Black;
+            this.btnRename.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRename.UseVisualStyleBackColor = false;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
             // EditProg
             // 
@@ -487,6 +539,11 @@ namespace BeeUi.Unit
         {
             if(Global.EditTool == null)return;   
             btnMenu.PerformClick();
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {
+           
         }
     }
 }

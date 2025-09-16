@@ -842,6 +842,15 @@ int CCD::GetFocus()
 	return	camUSB.get(CAP_PROP_FOCUS);
 
 }
+int CCD::GetExposure()
+{
+	return	camUSB.get(CAP_PROP_EXPOSURE);
+
+}void CCD::SetExposure(int Value)
+{
+	camUSB.set(CAP_PROP_AUTO_EXPOSURE, 0);
+	camUSB.set(CAP_PROP_EXPOSURE, Value);
+}
 void CCD::AutoFocus(bool Auto)
 {
 	

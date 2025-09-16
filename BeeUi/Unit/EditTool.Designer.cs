@@ -32,7 +32,6 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbLicence = new System.Windows.Forms.ToolStripStatusLabel();
@@ -54,7 +53,6 @@ namespace BeeUi
             this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tmReaPLC = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -72,8 +70,8 @@ namespace BeeUi
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.splitter3 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
-            this.splitter4 = new System.Windows.Forms.Splitter();
-            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.splitHeader = new System.Windows.Forms.Splitter();
+            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip();
             this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +105,7 @@ namespace BeeUi
             this.pInfor = new BeeUi.ViewHost();
             this.pHeader = new BeeUi.Common.Header();
             this.rjButton1 = new BeeInterface.RJButton();
+            this.tmReLoadSplit = new System.Windows.Forms.Timer();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pName.SuspendLayout();
@@ -324,10 +323,6 @@ namespace BeeUi
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // tmReaPLC
-            // 
-            this.tmReaPLC.Interval = 1;
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(0, 0);
@@ -487,14 +482,14 @@ namespace BeeUi
             this.pView.TabIndex = 27;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
             // 
-            // splitter4
+            // splitHeader
             // 
-            this.splitter4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter4.Location = new System.Drawing.Point(0, 51);
-            this.splitter4.Name = "splitter4";
-            this.splitter4.Size = new System.Drawing.Size(2240, 5);
-            this.splitter4.TabIndex = 28;
-            this.splitter4.TabStop = false;
+            this.splitHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitHeader.Location = new System.Drawing.Point(0, 51);
+            this.splitHeader.Name = "splitHeader";
+            this.splitHeader.Size = new System.Drawing.Size(2240, 5);
+            this.splitHeader.TabIndex = 28;
+            this.splitHeader.TabStop = false;
             // 
             // mouseLeft
             // 
@@ -812,6 +807,11 @@ namespace BeeUi
             this.rjButton1.TextColor = System.Drawing.Color.White;
             this.rjButton1.UseVisualStyleBackColor = false;
             // 
+            // tmReLoadSplit
+            // 
+            this.tmReLoadSplit.Interval = 1000;
+            this.tmReLoadSplit.Tick += new System.EventHandler(this.tmReLoadSplit_Tick);
+            // 
             // EditTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,7 +826,7 @@ namespace BeeUi
             this.Controls.Add(this.pEdit);
             this.Controls.Add(this.LayoutEnd);
             this.Controls.Add(this.pHeader);
-            this.Controls.Add(this.splitter4);
+            this.Controls.Add(this.splitHeader);
             this.Controls.Add(this.pTop);
             this.DoubleBuffered = true;
             this.Name = "EditTool";
@@ -859,7 +859,6 @@ namespace BeeUi
         public System.Windows.Forms.Panel pName;
         public System.Windows.Forms.PictureBox iconTool;
         private System.Windows.Forms.PictureBox pictureBox1;
-        public System.Windows.Forms.Timer tmReaPLC;
         public Unit.BtnHeaderBar btnHeaderBar;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.ToolStripStatusLabel lbEx;
@@ -881,7 +880,7 @@ namespace BeeUi
         public ViewHost pInfor;
         private System.Windows.Forms.Splitter splitter3;
         public System.Windows.Forms.Panel pView;
-        private System.Windows.Forms.Splitter splitter4;
+        private System.Windows.Forms.Splitter splitHeader;
         private System.Windows.Forms.Splitter splitter5;
         public System.Windows.Forms.Panel pTop;
         private System.Windows.Forms.ToolStripStatusLabel lbLicence;
@@ -922,5 +921,6 @@ namespace BeeUi
         private System.Windows.Forms.ToolStripMenuItem stopTool;
         private System.ComponentModel.BackgroundWorker workLoadFile;
         public Unit.Cameras CameraBar;
+        public System.Windows.Forms.Timer tmReLoadSplit;
     }
 }

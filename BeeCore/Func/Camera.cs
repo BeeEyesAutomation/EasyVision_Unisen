@@ -410,9 +410,10 @@ namespace BeeCore
             {
                 CCDPlus.SetWidth((int)Para.Width.Value);
                 CCDPlus.SetHeight((int)Para.Height.Value);
-                await Task.Delay(500);
+                await Task.Delay(100);
                 CCDPlus.SetFocus((int)Para.Focus);
                 CCDPlus.SetZoom((int)Para.Zoom);
+                CCDPlus.SetExposure(-(int)Para.Exposure.Value);
 
             }
             else
@@ -488,9 +489,10 @@ namespace BeeCore
                         }
                             return true;
                         break;
-                    //case TypeCamera.TinyIV:
-                    //    HEROJE.SetExposure((int)Para.Exposure);
-                    //    break;
+                    case TypeCamera.USB:
+                        CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+                        return true;
+                        break;
                 }
             }
             catch (Exception ex)
@@ -522,6 +524,9 @@ namespace BeeCore
                                 break;
                         }
                        
+                        break;
+                    case TypeCamera.USB:
+                        Para.Exposure.Value=- CCDPlus.GetExposure();
                         break;
                     //case TypeCamera.TinyIV:
 
@@ -1186,15 +1191,23 @@ namespace BeeCore
             }
 
         }
+        public int numTry = 0;
         public   void Read()
         {
-         //   stopwatch.Restart();
-         if(! TryGrabFast_NoStride(ref matRaw))
+        //   stopwatch.Restart();
+        X: if (!TryGrabFast_NoStride(ref matRaw))
             {
+                numTry++;
+                if (numTry < 3)
+                    goto X;
                 Global.CameraStatus = CameraStatus.ErrorConnect;
+            }
+            else
+            {
+                numTry = 0;
+                FrameRate = CCDPlus.FPS;
             }    
-        else
-           FrameRate = CCDPlus.FPS;
+              
          //   BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
             //int rows = 0, cols = 0, Type = 0;
 

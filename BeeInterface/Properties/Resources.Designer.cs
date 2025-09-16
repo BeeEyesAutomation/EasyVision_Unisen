@@ -383,6 +383,16 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contentCrop {
+            get {
+                object obj = ResourceManager.GetObject("contentCrop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap contentMatchingShape {
             get {
                 object obj = ResourceManager.GetObject("contentMatchingShape", resourceCulture);
@@ -446,6 +456,16 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap contentPosition_Adjustment {
             get {
                 object obj = ResourceManager.GetObject("contentPosition_Adjustment", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Crop {
+            get {
+                object obj = ResourceManager.GetObject("Crop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

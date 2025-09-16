@@ -196,8 +196,8 @@ namespace BeeInterface
                 trackMaxLine.Value = Propety.MaximumLine;
                 trackMinInlier.Value = Propety.MinInliers;
                 numScale.Value = (int)Propety.Scale;
-                numMinRadius.Value = Propety.MinLen;
-                numMaxRadius.Value = Propety.MaxLen;
+                numMinLen.Value = Propety.MinLen;
+                numMaxLen.Value = Propety.MaxLen;
                 switch (Propety.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
@@ -269,8 +269,8 @@ namespace BeeInterface
                     Propety.IsCalibs = false;
                     btnCalib.Enabled = true;
                     trackMinInlier.Value = Propety.MinInliers;
-                    numMaxRadius.Value = Propety.MaxLen;
-                    numMinRadius.Value = Propety.MinLen;
+                    numMaxLen.Value = Propety.MaxLen;
+                    numMinLen.Value = Propety.MinLen;
                 }
             }
            
@@ -592,6 +592,16 @@ namespace BeeInterface
         private void numScale_ValueChanged(object sender, EventArgs e)
         {
             Propety.Scale = (int)numScale.Value;
+        }
+
+        private void numMinLen_ValueChanged(float obj)
+        {
+            Propety.MinLen = (int)numMinLen.Value;
+        }
+
+        private void numMaxLen_ValueChanged(float obj)
+        {
+            Propety.MaxLen = (int)numMaxLen.Value;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

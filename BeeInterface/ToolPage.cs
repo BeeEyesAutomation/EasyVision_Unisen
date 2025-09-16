@@ -119,7 +119,8 @@ namespace BeeInterface
          "Position",//14
          "Measure",//15
          "Circle",//16
-         "OKNG"//16
+         "OKNG",//16,
+            "Crop And Save Image",
         };
         public static List<GroupTool> groupTools = new List<GroupTool>
         {
@@ -140,6 +141,7 @@ namespace BeeInterface
              GroupTool.Extra_Tool_2,
             GroupTool.Extra_Tool_1,
               GroupTool.Basic_Tool,
+               GroupTool.Basic_Tool,
 
         };
         int lenMax = 0;
@@ -171,6 +173,7 @@ namespace BeeInterface
                  String name = tool.TypeTool.ToString();
                 GroupTool groupTool = tool.GroupTool;
                 RJButton btn=new RJButton();
+               
                     switch (groupTool)
                     {
                         case GroupTool.Basic_Tool:
@@ -198,7 +201,13 @@ namespace BeeInterface
                         break;
 
                 }
-       
+                if (!Global.IsIntialPython)
+                {
+                    if (tool.TypeTool == TypeTool.Learning)
+                        btn.Enabled = false;
+                    if (tool.TypeTool == TypeTool.OCR)
+                        btn.Enabled = false;
+                }
                 tool.Control = btn;
 
 

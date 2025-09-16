@@ -265,6 +265,7 @@ namespace BeeUi
                     Global.ToolSettings.btnCopy.Enabled = true;
                     Global.ToolSettings.btnDelect.Enabled = true;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
+                    Global.ToolSettings.btnRename.Enabled = true;
                 }
                 else
                 {
@@ -272,13 +273,14 @@ namespace BeeUi
                     Global.ToolSettings.btnCopy.Enabled = false;
                     Global.ToolSettings.btnDelect.Enabled = false;
                     Global.ToolSettings.btnEnEdit.Enabled = true;
+                    Global.ToolSettings.btnRename.Enabled = false;
                     Global.EditTool.View.btnTypeTrig.Enabled = Global.IsRun;
                 }
             }
             
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+             //   MessageBox.Show(ex.Message);
             }
         
         }
@@ -318,20 +320,7 @@ namespace BeeUi
       
         private void EditTool_Load(object sender, EventArgs e)
         {
-            //dashboardList.Items.Add(new LabelItem { Name = "Zone A", IsArea = true, IsWidth = false, IsHeight = true, ValueArea = 10, ValueWidth = 20, ValueHeight = 30 });
-            //dashboardList.Items.Add(new LabelItem { Name = "Zone B", IsArea = false, IsWidth = true, IsHeight = false, ValueArea = 5, ValueWidth = 15, ValueHeight = 25 });
-            //for (int i = 0; i < 25; i++)
-            //    dashboardList.Items.Add(new LabelItem
-            //    {
-            //        Name = $"Zone {i + 1}",
-            //        IsArea = (i % 2 == 0),
-            //        IsWidth = (i % 3 == 0),
-            //        IsHeight = (i % 4 == 0),
-            //        ValueArea = i,
-            //        ValueWidth = i * 2,
-            //        ValueHeight = i * 3
-            //    });
-
+            tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
@@ -721,7 +710,11 @@ namespace BeeUi
             View.btnRunSim.Enabled = true; View.btnPlayStep.Enabled = true; playTool.Enabled = true;
         }
 
-       
+        private void tmReLoadSplit_Tick(object sender, EventArgs e)
+        {
+            splitHeader.Height = 5;
+            tmReLoadSplit.Enabled = false;
+        }
 
         private void btnNew_Click(object sender, EventArgs e)
         {

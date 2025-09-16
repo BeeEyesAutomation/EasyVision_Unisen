@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -263,6 +264,7 @@ namespace BeeCore
         }
         private Size szStatus = new Size(80, 42);
         private Size szCT = new Size(60, 24);
+        private Size szNameTool= new Size(60, 24);
         private Size szTrack = new Size(60, 15);
         private Point pTrack = new Point(10, 10);
         protected override void OnPaint(PaintEventArgs pevent)
@@ -349,6 +351,7 @@ namespace BeeCore
             pevent.Graphics.DrawImage(IconTool, pFist);
             pevent.Graphics.DrawString(num+"."+Name, Font,Brushes.Black, new PointF(pFist.X+IconTool.Width+5, pFist.Y));
             Size sz = Cal.GetSizeText(Status, new Font("Arial", 20, FontStyle.Bold));
+            szNameTool = Cal.GetSizeText(num + "." + Name, Font);
             if (Status == null)
                Status = String.Empty;
 
@@ -604,25 +607,33 @@ namespace BeeCore
         }
 
       
-        TextBox txtEdit = new TextBox();
-        Point pFist = new Point(5, 5);
+        public TextBox txtEdit = new TextBox();
+        Point pFist = new Point(5, 20);
         PointF pEnd = new PointF(5,100);
-        private void name_DoubleClick(object sender, EventArgs e)
+        public void EditName()
         {
-            //G.indexToolSelected = G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this);
-
-            if (Global.IsRun) return;
+           
             txtEdit.Visible = true;
             txtEdit.KeyDown -= TxtEdit_KeyDown;
             txtEdit.Parent = this;
-           // txtEdit.Font = name.Font;
-            txtEdit.Location = new Point(pFist.X, pFist.Y - 2);
-
-            txtEdit.Size = new Size(100,30);
+            // txtEdit.Font = name.Font;
+            txtEdit.Location = new Point(pFist.X + IconTool.Width + 5, pFist.Y-5);
+            txtEdit.Font = new Font("Arial", 14);
+            txtEdit.Size = new Size(szNameTool.Width+20, 30);
             txtEdit.BringToFront();
             txtEdit.Text = Name;
             txtEdit.Focus();
             txtEdit.KeyDown += TxtEdit_KeyDown;
+        }
+        public void VisbleEditname()
+        {
+            txtEdit.Visible = false;
+        }
+        private void name_DoubleClick(object sender, EventArgs e)
+        {
+            //G.indexToolSelected = G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this);
+
+          
         }
 
         private void TxtEdit_KeyDown(object sender, KeyEventArgs e)
@@ -634,6 +645,8 @@ namespace BeeCore
                 BeeCore.Common.PropetyTools[IndexThread][Global.IndexToolSelected].Propety.SetModel();
               Name= txtEdit.Text.Trim();
                 txtEdit.Visible = false;
+                this.Invalidate();
+              Global.ToolSettings.  btnRename.IsCLick = false;
             }    
         }
 

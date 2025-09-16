@@ -17,5 +17,6 @@ namespace BeeUi.Unit
         public RJButton btnDelect;
         public RJButton btnSaveAs;
         public RJButton btnAdd;
+        public RJButton btnRename;
     }
 }

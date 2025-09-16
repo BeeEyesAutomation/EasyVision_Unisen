@@ -61,6 +61,8 @@ namespace CvPlus {
 	public:void SetZoom(int Zoom);
 	public:	  int GetZoom();
 	public:	  int GetFocus();
+	public:	  int GetExposure();
+	public:	  void SetExposure(int Value);
 	public:	  void AutoFocus(bool Auto);
 	public:void SetWidth(int Value);
 	public:void SetHeight(int Value);

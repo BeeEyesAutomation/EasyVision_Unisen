@@ -162,7 +162,6 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(486, 807);
             this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // trackScore
             // 
@@ -1152,7 +1151,7 @@ namespace BeeInterface
             this.tabPage4.Location = new System.Drawing.Point(4, 34);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(492, 852);
+            this.tabPage4.Size = new System.Drawing.Size(492, 813);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Extension";
             // 
@@ -1188,7 +1187,7 @@ namespace BeeInterface
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 93F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(486, 846);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(486, 807);
             this.tableLayoutPanel8.TabIndex = 0;
             this.tableLayoutPanel8.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel8_Paint);
             // 
@@ -1361,6 +1360,7 @@ namespace BeeInterface
             this.trackThreshold.UnitText = "";
             this.trackThreshold.Value = 0.1F;
             this.trackThreshold.WheelStep = 1F;
+            this.trackThreshold.ValueChanged += new System.Action<float>(this.trackThreshold_ValueChanged);
             // 
             // btnCalib
             // 
@@ -1707,7 +1707,6 @@ namespace BeeInterface
             this.DoubleBuffered = true;
             this.Name = "ToolCircle";
             this.Size = new System.Drawing.Size(500, 900);
-            this.Load += new System.EventHandler(this.ToolOutLine_Load);
             this.tabControl2.ResumeLayout(false);
             this.tabP1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

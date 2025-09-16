@@ -35,7 +35,8 @@ namespace BeeUi.Tool
         {
             this.pAllTool = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.pBtn = new  System.Windows.Forms.TableLayoutPanel();
+            this.pBtn = new System.Windows.Forms.TableLayoutPanel();
+            this.btnRename = new BeeInterface.RJButton();
             this.btnCopy = new BeeInterface.RJButton();
             this.btnEnEdit = new BeeInterface.RJButton();
             this.btnAdd = new BeeInterface.RJButton();
@@ -65,15 +66,17 @@ namespace BeeUi.Tool
             // pBtn
             // 
             this.pBtn.BackColor = System.Drawing.Color.Silver;
-            this.pBtn.ColumnCount = 4;
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pBtn.Controls.Add(this.btnCopy, 2, 0);
+            this.pBtn.ColumnCount = 5;
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pBtn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.pBtn.Controls.Add(this.btnRename, 2, 0);
+            this.pBtn.Controls.Add(this.btnCopy, 3, 0);
             this.pBtn.Controls.Add(this.btnEnEdit, 1, 0);
             this.pBtn.Controls.Add(this.btnAdd, 0, 0);
-            this.pBtn.Controls.Add(this.btnDelect, 3, 0);
+            this.pBtn.Controls.Add(this.btnDelect, 4, 0);
             this.pBtn.Dock = System.Windows.Forms.DockStyle.Top;
             this.pBtn.Location = new System.Drawing.Point(2, 2);
             this.pBtn.Name = "pBtn";
@@ -83,6 +86,60 @@ namespace BeeUi.Tool
             this.pBtn.Size = new System.Drawing.Size(396, 54);
             this.pBtn.TabIndex = 10;
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
+            // 
+            // btnRename
+            // 
+            this.btnRename.AutoFont = true;
+            this.btnRename.AutoFontHeightRatio = 0.6F;
+            this.btnRename.AutoFontMax = 100F;
+            this.btnRename.AutoFontMin = 8F;
+            this.btnRename.AutoFontWidthRatio = 0.92F;
+            this.btnRename.AutoImage = true;
+            this.btnRename.AutoImageMaxRatio = 0.65F;
+            this.btnRename.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnRename.AutoImageTint = true;
+            this.btnRename.BackColor = System.Drawing.Color.Silver;
+            this.btnRename.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnRename.BorderColor = System.Drawing.Color.Silver;
+            this.btnRename.BorderRadius = 10;
+            this.btnRename.BorderSize = 1;
+            this.btnRename.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnRename.Corner = BeeGlobal.Corner.Both;
+            this.btnRename.DebounceResizeMs = 16;
+            this.btnRename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRename.Enabled = false;
+            this.btnRename.FlatAppearance.BorderSize = 0;
+            this.btnRename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.btnRename.ForeColor = System.Drawing.Color.Black;
+            this.btnRename.Image = global::BeeUi.Properties.Resources.Rename;
+            this.btnRename.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnRename.ImageDisabled = null;
+            this.btnRename.ImageHover = null;
+            this.btnRename.ImageNormal = null;
+            this.btnRename.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnRename.ImagePressed = null;
+            this.btnRename.ImageTextSpacing = 2;
+            this.btnRename.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnRename.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnRename.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnRename.ImageTintOpacity = 0.5F;
+            this.btnRename.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnRename.IsCLick = false;
+            this.btnRename.IsNotChange = false;
+            this.btnRename.IsRect = false;
+            this.btnRename.IsUnGroup = true;
+            this.btnRename.Location = new System.Drawing.Point(161, 5);
+            this.btnRename.Multiline = false;
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(73, 44);
+            this.btnRename.TabIndex = 11;
+            this.btnRename.Text = "Rename";
+            this.btnRename.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnRename.TextColor = System.Drawing.Color.Black;
+            this.btnRename.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnRename.UseVisualStyleBackColor = false;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
             // btnCopy
             // 
@@ -126,10 +183,10 @@ namespace BeeUi.Tool
             this.btnCopy.IsNotChange = true;
             this.btnCopy.IsRect = false;
             this.btnCopy.IsUnGroup = true;
-            this.btnCopy.Location = new System.Drawing.Point(201, 5);
+            this.btnCopy.Location = new System.Drawing.Point(240, 5);
             this.btnCopy.Multiline = false;
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(93, 44);
+            this.btnCopy.Size = new System.Drawing.Size(73, 44);
             this.btnCopy.TabIndex = 9;
             this.btnCopy.Text = "Copy";
             this.btnCopy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -179,10 +236,10 @@ namespace BeeUi.Tool
             this.btnEnEdit.IsNotChange = false;
             this.btnEnEdit.IsRect = false;
             this.btnEnEdit.IsUnGroup = true;
-            this.btnEnEdit.Location = new System.Drawing.Point(102, 5);
+            this.btnEnEdit.Location = new System.Drawing.Point(82, 5);
             this.btnEnEdit.Multiline = false;
             this.btnEnEdit.Name = "btnEnEdit";
-            this.btnEnEdit.Size = new System.Drawing.Size(93, 44);
+            this.btnEnEdit.Size = new System.Drawing.Size(73, 44);
             this.btnEnEdit.TabIndex = 8;
             this.btnEnEdit.Text = "Edit";
             this.btnEnEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -236,7 +293,7 @@ namespace BeeUi.Tool
             this.btnAdd.Location = new System.Drawing.Point(3, 5);
             this.btnAdd.Multiline = false;
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(93, 44);
+            this.btnAdd.Size = new System.Drawing.Size(73, 44);
             this.btnAdd.TabIndex = 7;
             this.btnAdd.Text = "Add";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -287,10 +344,10 @@ namespace BeeUi.Tool
             this.btnDelect.IsNotChange = true;
             this.btnDelect.IsRect = false;
             this.btnDelect.IsUnGroup = true;
-            this.btnDelect.Location = new System.Drawing.Point(300, 5);
+            this.btnDelect.Location = new System.Drawing.Point(319, 5);
             this.btnDelect.Multiline = false;
             this.btnDelect.Name = "btnDelect";
-            this.btnDelect.Size = new System.Drawing.Size(93, 44);
+            this.btnDelect.Size = new System.Drawing.Size(74, 44);
             this.btnDelect.TabIndex = 10;
             this.btnDelect.Text = "Delete";
             this.btnDelect.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -326,5 +383,6 @@ namespace BeeUi.Tool
         public RJButton btnEnEdit;
         public  System.Windows.Forms.TableLayoutPanel pBtn;
         private System.Windows.Forms.Splitter splitter1;
+        public RJButton btnRename;
     }
 }

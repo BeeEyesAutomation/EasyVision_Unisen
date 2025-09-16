@@ -147,7 +147,12 @@ namespace BeeInterface
         bool IsReaded = false;
         private void SettingStep1_Load(object sender, EventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure = new ValuePara();
+            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
+            { BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
+                Global.ScanCCD.ShowDialog();
+                return;
+            }
+             if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure = new ValuePara();
             if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain = new ValuePara();
             if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift = new ValuePara();
             AdjZoom.IsInital = true;
@@ -260,6 +265,8 @@ namespace BeeInterface
                 AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Value;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value = BeeCore.Common.listCamera[Global.IndexChoose].GetHeightUSB();
                 AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Value;
+              await BeeCore.Common.listCamera[Global.IndexChoose].GetExpo();
+                trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
             }
             else
             {
@@ -272,7 +279,13 @@ namespace BeeInterface
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetOffSetY();
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterX();
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterY();
-                trackExposure.IsInital = true;
+                if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
+                {
+                
+                    BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min = 3;
+                    BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max = 12;
+                }
+                    trackExposure.IsInital = true;
                 trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
                 trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
                 if (trackExposure.Max > 50000)
@@ -346,6 +359,26 @@ namespace BeeInterface
 
         private void tmShowPara_Tick(object sender, EventArgs e)
         {
+        
+           
+            if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+            {
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Min = 320;
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Min = 240;
+
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Max = 3000;
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Max = 3000;
+
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min = 3;
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max = 12;
+             //   trackExposure.Enabled = false;
+                trackGain.Enabled = false;
+                trackShift.Enabled = false;
+                AdjOffsetX.Enabled = false;
+                AdjOffSetY.Enabled = false;
+                btnCenterX.Enabled = false;
+                btnCenterY.Enabled = false;
+            }
             trackExposure.IsInital = true;
             trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
             trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
@@ -359,21 +392,6 @@ namespace BeeInterface
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value = 50000;
             }
 
-            if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
-            {
-                BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Min = 320;
-                BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Min = 240;
-
-                BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Max = 3000;
-                BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Max = 3000;
-                trackExposure.Enabled = false;
-                trackGain.Enabled = false;
-                trackShift.Enabled = false;
-                AdjOffsetX.Enabled = false;
-                AdjOffSetY.Enabled = false;
-                btnCenterX.Enabled = false;
-                btnCenterY.Enabled = false;
-            }    
             trackExposure.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step;
             trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
 

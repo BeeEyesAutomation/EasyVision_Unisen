@@ -1607,7 +1607,10 @@ namespace BeeUi
                    
                     if (!Global.IsRun)
                     {
+                     
                         BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+                            BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
                     }
                     else
@@ -1617,7 +1620,12 @@ namespace BeeUi
                             Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
                             {
                                 if (camera != null)
+                                {
                                     camera.Read();
+                                    if (camera.Para.TypeCamera == TypeCamera.USB)
+                                        camera.Read();
+                                }    
+                                   
                             });
                         }
                         else
@@ -1626,6 +1634,8 @@ namespace BeeUi
                             {
                                 case TriggerNum.Trigger1:
                                     BeeCore.Common.listCamera[0].Read();
+                                    if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                                        BeeCore.Common.listCamera[0].Read();
                                     break;
                                 case TriggerNum.Trigger2:
                                     BeeCore.Common.listCamera[1].Read();

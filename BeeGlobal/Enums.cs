@@ -183,6 +183,7 @@ namespace BeeGlobal
         Positions,
         Measure,
         Circle,OKNG
+            , Crop
     }
     public enum TypeOCR
     {

@@ -109,11 +109,13 @@ namespace BeeUi.Tool
             PropetyTool propetyTools = BeeCore.Common.PropetyTools[Global.IndexChoose][Index];
             propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexChoose,Global.pShowTool);
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexChoose, Global.pShowTool);
+
             //Tools tool = DataTool.CreateControl(propety, G.listAlltool[Global.IndexChoose].Count(), Global.IndexChoose, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
             //G.listAlltool[Global.IndexChoose].Add(tool);
             propetyTools.ItemTool.Width = Global.ToolSettings.Width - 10;
             Global.pShowTool.Y += propetyTools.ItemTool.Height + 10;
             DataTool.LoadPropety(propetyTools.Control);
+            propetyTools.UsedTool = UsedTool.Used;
             RefreshTool();
 
 
@@ -142,6 +144,24 @@ namespace BeeUi.Tool
         private void pBtn_SizeChanged(object sender, EventArgs e)
         {
             //BeeCore.CustomGui.RoundRg(this.pBtn, Global.Config.RoundRad);
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {   if(!btnRename.IsCLick)
+            {
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].ItemTool.VisbleEditname();
+            }
+            else
+            {
+                if (Global.IndexToolSelected == -1)
+                {
+                    btnRename.IsCLick = false;
+                    return;
+                }
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].ItemTool.EditName();
+               
+            }
+         
         }
     }
 

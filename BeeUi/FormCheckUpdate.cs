@@ -35,37 +35,43 @@ namespace BeeUi
 
         private async void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            lbStatus.Text = "Đang kiểm tra DLL...";
-            progressBar.Value = 0;
-            lbList.Items.Clear();
-
-            var progress = new Progress<(int percent, string status)>(p =>
+            try
             {
-                progressBar.Value = p.percent;
-                lbStatus.Text = p.status;
-            });
+                lbStatus.Text = "Đang kiểm tra DLL...";
+                progressBar.Value = 0;
+                lbList.Items.Clear();
 
-            
-            string localFolder = Path.Combine(Environment.CurrentDirectory, "Update");
-
-            _pendingUpdates = await Task.Run(() => _manager.CheckForUpdatesAsync(folderId, localFolder, progress));
-
-            if (_pendingUpdates.Count > 0)
-            {
-                foreach (var dll in _pendingUpdates)
+                var progress = new Progress<(int percent, string status)>(p =>
                 {
-                    string oldVer = dll.OldVersion?.ToString() ?? "Chưa có";
-                    string newVer = dll.NewVersion?.ToString() ?? "Không xác định";
-                    lbList.Items.Add($"{dll.FileName}: {oldVer} → {newVer}");
-                }
+                    progressBar.Value = p.percent;
+                    lbStatus.Text = p.status;
+                });
 
-                lbStatus.Text = $"Có {_pendingUpdates.Count} DLL cần cập nhật!";
-                btnUpdate.Enabled = true;
+
+                string localFolder = Path.Combine(Environment.CurrentDirectory, "Update");
+
+                _pendingUpdates = await Task.Run(() => _manager.CheckForUpdatesAsync(folderId, localFolder, progress));
+
+                if (_pendingUpdates.Count > 0)
+                {
+                    foreach (var dll in _pendingUpdates)
+                    {
+                        string oldVer = dll.OldVersion?.ToString() ?? "Chưa có";
+                        string newVer = dll.NewVersion?.ToString() ?? "Không xác định";
+                        lbList.Items.Add($"{dll.FileName}: {oldVer} → {newVer}");
+                    }
+
+                    lbStatus.Text = $"Có {_pendingUpdates.Count} DLL cần cập nhật!";
+                    btnUpdate.Enabled = true;
+                }
+                else
+                {
+                    lbStatus.Text = "Tất cả version đều mới nhất!";
+                    btnUpdate.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lbStatus.Text = "Tất cả version đều mới nhất!";
-                btnUpdate.Enabled = false;
             }
         }
 
