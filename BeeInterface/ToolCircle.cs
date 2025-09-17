@@ -48,7 +48,7 @@ namespace BeeInterface
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             
-            numScale.Value= (decimal) Propety.Scale;
+            numScale.Value= (float) Propety.Scale;
             trackThreshold.IsInital = true;
             trackThreshold.Value = Propety.Threshold;
             trackMinInlier.IsInital = true;
@@ -62,16 +62,16 @@ namespace BeeInterface
             switch (Propety.MethordEdge)
             {
                 case MethordEdge.StrongEdges:
-                    btnStrongEdge.IsCLick = true;
+                    btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
                     break;
                 case MethordEdge.CloseEdges:
-                    btnCloseEdge.IsCLick = true;
+                    btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
                     break;
                 case MethordEdge.Binary:
-                    btnBinary.IsCLick = true;
+                    btnBinary.IsCLick = true; layThreshod.Enabled = true;
                     break;
                 case MethordEdge.InvertBinary:
-                    btnInvert.IsCLick = true;
+                    btnInvert.IsCLick = true; layThreshod.Enabled = true;
                     break;
             }
             switch (Propety.CircleScanDirection)
@@ -335,12 +335,12 @@ namespace BeeInterface
 
         private void btnCloseEdge_Click(object sender, EventArgs e)
         {
-            Propety.MethordEdge = MethordEdge.CloseEdges;
+            Propety.MethordEdge = MethordEdge.CloseEdges; layThreshod.Enabled = false;
         }
 
         private void btnStrongEdge_Click(object sender, EventArgs e)
         {
-            Propety.MethordEdge = MethordEdge.StrongEdges;
+            Propety.MethordEdge = MethordEdge.StrongEdges; layThreshod.Enabled = false;
         }
 
         private void btnCalib_Click(object sender, EventArgs e)
@@ -356,7 +356,7 @@ namespace BeeInterface
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
-
+            layThreshod.Enabled = true;
         }
 
         private void btnMask_Click(object sender, EventArgs e)
@@ -389,6 +389,7 @@ namespace BeeInterface
         private void btnInvert_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.InvertBinary;
+            layThreshod.Enabled = true;
         }
 
         private void AdjThreshod_ValueChanged(float obj)

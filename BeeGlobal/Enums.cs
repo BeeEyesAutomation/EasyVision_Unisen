@@ -312,9 +312,11 @@ namespace BeeGlobal
     public enum TypeCamera
     {
         USB,
-        BaslerGigE,
+        
+        MVS,
         TinyIV,
-
+        Pylon,
+       
         None
     }
     public enum TypePara

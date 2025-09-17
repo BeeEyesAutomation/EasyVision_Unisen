@@ -97,7 +97,7 @@ namespace BeeUi.Unit
             //    case TypeCamera.USB:
             //        G.ScanCCD.btnUSB2_0.IsCLick = true;
             //        break;
-            //    case TypeCamera.BaslerGigE:
+            //    case TypeCamera.MVS:
             //        G.ScanCCD.btnGigE.IsCLick = true;
             //        break;
             //    case TypeCamera.TinyIV:

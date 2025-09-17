@@ -36,7 +36,7 @@ namespace BeeUpdate
         List<string> pathName = new List<string>();
         private void button1_Click(object sender, EventArgs e)
         {
-            var regex = new Regex(@"^(Bee.*\.dll|OKNG\.dll)$", RegexOptions.IgnoreCase);
+            var regex = new Regex(@"^(Bee.*\.dll|OKNG\.dll|PylonCli\.dll)$", RegexOptions.IgnoreCase);
             List<string> dllFiles = Directory
                 .GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
                 .Where(f => regex.IsMatch(Path.GetFileName(f)))

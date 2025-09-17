@@ -46,6 +46,7 @@ namespace BeeCore
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public Compares Compare = Compares.Equal;
+        public int ThresholdBinary;
         public Width()
         {
 
@@ -99,10 +100,14 @@ namespace BeeCore
                         matProcess = Filters.GetStrongEdgesOnly(matCrop);
                         break;
                     case MethordEdge.Binary:
-                        matProcess = Filters.Threshold(matCrop,220);
+                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
+                        break;
+                    case MethordEdge.InvertBinary:
+                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
                         break;
                 }
-             
+
+
                 GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
                if(GapResult.lineMid!=null)
                     if (GapResult.lineMid.Count()>1)

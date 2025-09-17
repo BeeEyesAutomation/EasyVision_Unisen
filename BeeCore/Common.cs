@@ -399,7 +399,7 @@ namespace BeeCore
         //    //else
         //        G.CCD.ReadCCD();
         //            break;
-        //        case TypeCamera.BaslerGigE:
+        //        case TypeCamera.MVS:
         //            //if (IsHist)
         //            //    G.CCD.ReadRaw(true);
         //            //else

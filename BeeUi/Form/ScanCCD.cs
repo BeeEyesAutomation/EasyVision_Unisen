@@ -52,56 +52,40 @@ namespace BeeUi
         public List<string> ScanIDCCD()
         {
             cbCCD.Text = "Waiting Scan";
-            //  Disable();
-            //  Enable();
             String IDCCD =Global.Config.IDCamera;
-            // BeeCore.Common.listCamera.Add(new Camera());
-            String sRead = "";
+            List<string> listStringCCD = new List<string>();
             if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
                 if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
             {
                 BeeCore.Common.listCamera[Global.IndexChoose].Init();
-                 sRead = BeeCore.Common.listCamera[Global.IndexChoose].Scan();
+                    listStringCCD = BeeCore.Common.listCamera[Global.IndexChoose].Scan().ToList();
             }
                 else
                 {
                     return new List<string>();
                 }
 
-                    String[] listStringCCD = sRead.Split('\n');
-            if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
-            {
-                int index = Array.FindIndex(listStringCCD, s => s.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
-                if (index != -1)
-                    indexCCD = index;
-            }
+                 
+            //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
+            //{
+            //    int index = Array.FindIndex(listStringCCD, s => s.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
+            //    if (index != -1)
+            //        indexCCD = index;
+            //}
             cbCCD.DataSource = listStringCCD;
-            if (sRead == "No Device")
+            if (listStringCCD.Count()==0)
+            { cbCCD.Text = "No Camera";
                 btnConnect.Enabled = false;
+            }
+              
             else
                 btnConnect.Enabled = true;
-            return listStringCCD.ToList();
+            return listStringCCD;
         }
         private void ScanCCD_Load(object sender, EventArgs e)
         {
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
-            if (Global.IndexChoose >= 0)
-                switch (Global.IndexChoose)
-                {
-                    case 0:
-                        btnCamera1.IsCLick = true;
-                        break;
-                    case 1:
-                        btnCamera2.IsCLick = true;
-                        break;
-                    case 2:
-                        btnCamera3.IsCLick = true;
-                        break;
-                    case 3:
-                        btnCamera4.IsCLick = true;
-                        break;
-
-                }
+         
             if (Global.IndexChoose >= 0)
             {
                 if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
@@ -111,7 +95,7 @@ namespace BeeUi
                     case TypeCamera.USB:
                         btnUSB2_0.IsCLick = true;
                         break;
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         btnGigE.IsCLick = true;
                         break;
                     case TypeCamera.TinyIV:
@@ -218,7 +202,7 @@ namespace BeeUi
 
         private  void work_DoWork(object sender, DoWorkEventArgs e)
         {
-             //if (Global.Configlobal.TypeCamera  == TypeCamera.USB||Global.Configlobal.TypeCamera  == TypeCamera.BaslerGigE)
+             //if (Global.Configlobal.TypeCamera  == TypeCamera.USB||Global.Configlobal.TypeCamera  == TypeCamera.MVS)
             //    BeeUi.G.IsCCD = BeeCore.Common.ConnectCCD(indexCCD,Global.Config.Resolution);
 
             //else if (Global.Configlobal.TypeCamera  == TypeCamera.TinyIV)
@@ -349,8 +333,8 @@ namespace BeeUi
 
             }    
                
-            // BeeCore.Common. = TypeCamera.BaslerGigE;
-            BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCamera.BaslerGigE;
+            // BeeCore.Common. = TypeCamera.MVS;
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCamera.MVS;
             ScanIDCCD();
         }
 
@@ -681,6 +665,12 @@ namespace BeeUi
             G.Header.indexToolShow = 0;
             G.Header.tmShow.Enabled = true;
             
+        }
+
+        private void btnPylon_Click(object sender, EventArgs e)
+        {
+            BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCamera.Pylon;
+            ScanIDCCD();
         }
     }
 }

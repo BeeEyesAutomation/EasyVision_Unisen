@@ -44,140 +44,7 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-            //worker = new BackgroundWorker();
-            //worker.DoWork += (sender, e) =>
-            //{
-            //    //Propety.IsOK = true;
-
-            //    //timer.Restart();
-            //    //if (!Global.IsRun)
-            //    //    Propety.rotAreaAdjustment = Propety.rotArea;
-            //    //Propety.StatusTool = StatusTool.Processing;
-            //    //using (Mat raw = BeeCore.Common.listCamera[Propety. IndexThread].matRaw.Clone())
-            //    //{
-            //    //    if (raw.Empty()) return;
-
-            //    //    Mat matCrop = Common.CropRotatedRect(raw, Propety.rotAreaAdjustment, null);
-            //    //    Mat matProcess = new Mat();
-            //    //    if (matCrop.Type() == MatType.CV_8UC3)
-            //    //        Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
-            //    //    else
-            //    //        matProcess = matCrop;
-
-
-
-
-            //    //    Mat bin = new Mat();
-            //    //    Cv2.Threshold(matProcess, bin, ThresholdValue, 255, ThresholdTypes.BinaryInv);
-
-            //    //    // 2. Lấy 2 contour lớn nhất
-            //    //    Cv2.FindContours(bin, out Point[][] contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxNone);
-            //    //    if (contours.Length < 2) throw new InvalidOperationException("Cần ít nhất hai contour để đo shaft gap.");
-            //    //    var top2 = contours.OrderByDescending(c => Cv2.ContourArea(c)).Take(2).ToArray();
-            //    //    var c1 = top2[0];
-            //    //    var c2 = top2[1];
-
-            //    //    // 3. Lấy points
-            //    //    List<Point2f> pts1 = c1.Select(p => new Point2f(p.X, p.Y)).ToList();
-            //    //    List<Point2f> pts2 = c2.Select(p => new Point2f(p.X, p.Y)).ToList();
-
-            //    //    // 4. Fit center lines (Line2D) nếu cần
-            //    //     line1 = Cv2.FitLine(pts1.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
-            //    //     line2 = Cv2.FitLine(pts2.ToArray(), DistanceTypes.L2, 0, 0.01, 0.01);
-            //    //    // Khoảng cách giữa hai đường tâm
-            //    //   double gapPx = Cal.DistanceBetweenLines(line1, line2);
-            //    //     annotated = matProcess.Clone();
-            //    //    Cv2.CvtColor(annotated, annotated, ColorConversionCodes.GRAY2BGR);
-            //    //    // Vẽ 2 đường center
-            //    //    Draws. DrawInfiniteLine(annotated, line1, new Scalar(0, 255, 0), 2);
-            //    //    Draws.DrawInfiniteLine(annotated, line2, new Scalar(0, 0, 255), 2);
-            //    //    // Tính đoạn thẳng đo khoảng cách
-            //    //    // Lấy một điểm trên line1
-
-            //    //    // Tính tham số dòng ax+by+c=0 cho line2
-            //    //    Cal.GetLineParams(line2, out double a2, out double b2, out double c4);
-            //    //    // Tính foot Q của p0 lên line2
-            //    //    double denom = a2 * a2 + b2 * b2;
-            //    //    double k = (a2 * line1.X1 + b2 * line1.Y1 + c4) / denom;
-            //    //    var q = new Point(
-            //    //        (int)Math.Round(line1.X1 - a2 * k),
-            //    //        (int)Math.Round(line1.Y1 - b2 * k)
-            //    //    );
-            //    //    // Vẽ đoạn đo
-            //    //    Cv2.Line(annotated, new Point(line1.X1, line1.Y1), q, new Scalar(255, 0, 0), 2);
-            //    //    // Ghi giá trị lên ảnh
-            //    //    var distMm = gapPx * MmPerPixel;
-            //    //    string text = $"{distMm:F2} mm";
-            //    //    Cv2.PutText(annotated, text, new Point((line1.X1 + q.X) / 2, (line1.Y1 + q.Y) / 2 - 10),
-            //    //        HersheyFonts.HersheySimplex, 0.7, new Scalar(255, 0, 0), 2);
-
-            //    //    Cv2.GaussianBlur(matProcess, matProcess, new Size(5, 5), 0);
-
-            //    //    // 2. Threshold để tách foreground (máy kim) khỏi nền
-            //    //    bin = new Mat();
-            //    //    Cv2.Threshold(matProcess, bin, 150, 255, ThresholdTypes.BinaryInv);
-
-
-            //    //    HierarchyIndex[] hierarchy;
-            //    //    Cv2.FindContours(bin, out contours, out hierarchy,
-            //    //                     RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-            //    //    if (contours.Length < 2)
-            //    //        throw new InvalidOperationException("Cần ít nhất hai contour để đo tip.");
-
-            //    //    // 4. Chọn 2 contour có diện tích lớn nhất
-            //    //    top2 = contours.OrderByDescending(c => Cv2.ContourArea(c)).Take(2).ToArray();
-
-            //    //    // 5. Với mỗi contour, tìm điểm có Y nhỏ nhất (đỉnh hướng lên trên)
-            //    //    Point tip1 = top2[0].OrderBy(p => p.Y).First();
-            //    //    Point tip2 = top2[1].OrderBy(p => p.Y).First();
-            //    //    // 6. Tính khoảng cách Euclid
-            //    //    double dx1 = tip1.X - tip2.X;
-            //    //    double dy1 = tip1.Y - tip2.Y;
-            //    //    double distPx = Math.Sqrt(dx1 * dx1 + dy1 * dy1);
-            //    //    double distMm2 = distPx * MmPerPixel;
-
-            //    //    // 7. Vẽ lên ảnh
-
-            //    //    Cv2.Circle(annotated, tip1, 6, new Scalar(0, 255, 0), -1);
-            //    //    Cv2.Circle(annotated, tip2, 6, new Scalar(0, 0, 255), -1);
-            //    //    Line2D lineCen1 = Cal.FindPerpendicularLine(line1, tip1);
-            //    //    Line2D lineCen2 = Cal.FindPerpendicularLine(line2, tip2);
-            //    //    double gapPx2 = Cal.DistanceBetweenLines(lineCen1, lineCen2);
-            //    //    var distMm3 = gapPx2 * MmPerPixel;
-            //    //    string text2 = $"{distMm3:F2} mm";
-            //    //    if (distMm3 > 0.5)
-            //    //        Propety.IsOK = false;
-            //    //    if (Propety.IsOK)
-            //    //    {
-            //    //        Draws.DrawPerpendicularLine(annotated, lineCen1, new Scalar(0, 255, 0), 2);
-            //    //        Draws.DrawPerpendicularLine(annotated, lineCen2, new Scalar(0, 255, 0), 2);
-            //    //        Cv2.PutText(annotated, text2, tip1,
-            //    //         HersheyFonts.HersheySimplex, 0.7, new Scalar(255, 0, 0), 2);
-            //    //    }
-            //    //    else
-
-            //    //    {
-            //    //        Draws.DrawPerpendicularLine(annotated, lineCen1, new Scalar(255, 0, 0), 2);
-            //    //        Draws.DrawPerpendicularLine(annotated, lineCen2, new Scalar(255, 0, 0), 2);
-            //    //        Cv2.PutText(annotated, text2, tip1,
-            //    //         HersheyFonts.HersheySimplex, 0.7, new Scalar(255, 0, 0), 2);
-            //    //    }    
-
-
-
-            //    //}
-            //    Propety.DoWork(Propety.rotAreaAdjustment);
-            //};
-
-            //worker.RunWorkerCompleted += (sender, e) =>
-            //{
-
-            //    Propety.Complete();
-            //     if (!Global.IsRun)
-            //        Global.StatusDraw = StatusDraw.Check;
-            //    timer.Stop();
-            //    Propety.cycleTime = (int)timer.Elapsed.TotalMilliseconds;
-            //}; 
+          
             try
             {
                 if (!workLoadModel.IsBusy)
@@ -191,8 +58,9 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                AdjThreshod.Value = Propety.ThresholdBinary;
 
-                numScale.Value = (decimal)Propety.Scale;
+                numScale.Value = (float)Propety.Scale;
                 trackMaxLine.Value = Propety.MaximumLine;
                 trackMinInlier.Value = Propety.MinInliers;
                 numScale.Value = (int)Propety.Scale;
@@ -201,13 +69,16 @@ namespace BeeInterface
                 switch (Propety.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true;
+                        btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
                         break;
                     case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true;
+                        btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
                         break;
                     case MethordEdge.Binary:
-                        btnBinary.IsCLick = true;
+                        btnBinary.IsCLick = true; layThreshod.Enabled = true;
+                        break;
+                    case MethordEdge.InvertBinary:
+                        btnInvert.IsCLick = true; layThreshod.Enabled = true;
                         break;
                 }
                 switch (Propety.LineOrientation)
@@ -587,6 +458,7 @@ namespace BeeInterface
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
+            layThreshod.Enabled = true;
         }
 
         private void numScale_ValueChanged(object sender, EventArgs e)
@@ -602,6 +474,39 @@ namespace BeeInterface
         private void numMaxLen_ValueChanged(float obj)
         {
             Propety.MaxLen = (int)numMaxLen.Value;
+        }
+
+        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void numScale_ValueChanged(float obj)
+        {
+            Propety.Scale = numScale.Value;
+        }
+
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.ThresholdBinary = (int)AdjThreshod.Value;
+        }
+
+        private void btnInvert_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.InvertBinary;
+            layThreshod.Enabled = true;
+        }
+
+        private void btnStrongEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.StrongEdges;
+            layThreshod.Enabled = false;
+        }
+
+        private void btnCloseEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.CloseEdges;
+            layThreshod.Enabled = false;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

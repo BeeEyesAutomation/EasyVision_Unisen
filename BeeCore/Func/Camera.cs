@@ -21,7 +21,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
 using static EasyModbus.ModbusServer;
 using Size = OpenCvSharp.Size;
-
+using PylonCli;
 namespace BeeCore
 {
     public class Camera
@@ -68,30 +68,42 @@ namespace BeeCore
         {
             return CCDPlus.GetHeight();
         }
-        public  string Scan()
-        {
-          if(Para.TypeCamera==TypeCamera.TinyIV)
+        public  string[] Scan()
+        {switch(Para.TypeCamera)
             {
-                if (Global.ParaCommon.CardChoosed == null) Global.ParaCommon.CardChoosed = "";
-                    if ( Global.ParaCommon.CardChoosed!="")
-                {
-                    try
+                case TypeCamera.USB:
+                    return CCDPlus.ScanCCD().Split('\n');
+                   
+                case TypeCamera.MVS:
+                    return CCDPlus.ScanCCD().Split('\n'); 
+                   
+                case TypeCamera.Pylon:
+                   return PylonCli. Camera.List();
+                   
+                case TypeCamera.TinyIV:
+                    if (Global.ParaCommon.CardChoosed == null)
+                        Global.ParaCommon.CardChoosed = "";
+                    if (Global.ParaCommon.CardChoosed != "")
                     {
-                        int[] IP = Global.ParaCommon.CardChoosed.Split('.').Select(int.Parse).ToArray();
-                        return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]);
+                        try
+                        {
+                            int[] IP = Global.ParaCommon.CardChoosed.Split('.').Select(int.Parse).ToArray();
+                            return BeeCore.HEROJE.Scan(IP[0], IP[1], IP[2], IP[3]).Split('\n');
 
+                        }
+                        catch (Exception)
+                        {
+                            return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
+                        }
                     }
-                   catch(Exception)
-                    {
-                        return BeeCore.HEROJE.Scan(192, 168, 2, 1);
-                    }
-                }
-               else
-                    return BeeCore.HEROJE.Scan(192, 168, 2,1);
+                    else
+                        return BeeCore.HEROJE.Scan(192, 168, 2, 1).Split('\n');
+                    break;
             }
-           
-          else
-                return CCDPlus.ScanCCD();
+            return new string[1];
+
+
+
 
 
         }
@@ -313,119 +325,135 @@ namespace BeeCore
         }
         public int IndexConnect = -1;
         public  async Task<bool> Connect(String NameCCD )
-        {
-            if(Para.TypeCamera == TypeCamera.TinyIV)
+        {switch(Para.TypeCamera)
             {
-               
+                case TypeCamera.TinyIV:
                     IsConnected = HEROJE.Connect(0);
-                return IsConnected;
+                    return IsConnected;
+                    break;
+                case TypeCamera.MVS:
+                    Mat raw = new Mat();
+                    String[] sp = NameCCD.Split('$');
+                    if (sp.Length > 1)
+                    {
+                        String Typ = sp[sp.Length - 2];
+                        if (Typ.Contains("Basler"))
+                        {
+                            TypeCCD = 0;
+                        }
+                        else if (Typ.Contains("Hik"))
+                        {
+                            TypeCCD = 1;
+                        }
+                        else
+                            TypeCCD = -1;
+
+                    }
+                    if (CCDPlus.Connect(IndexConnect, NameCCD))
+                    {
+                        if (matRaw != null)
+                            if (!matRaw.Empty())
+                                matRaw.Release();
+                        //if (IsHist)
+                        //    CCDPlus.ReadRaw(true);
+                        //else
+                        Read();
+                        bool IsFail = false;
+                        if (Para.Exposure == null)
+                        {
+                            IsFail = true;
+                            Para.Exposure = new ValuePara();
+                        }
+
+                        if (Para.Gain == null)
+                        {
+                            IsFail = true;
+                            Para.Gain = new ValuePara();
+                        }
+
+                        if (Para.Shift == null)
+                        {
+                            IsFail = true;
+                            Para.Shift = new ValuePara();
+                        }
+
+                        if (Para.Width == null)
+                        {
+                            IsFail = true;
+                            Para.Width = new ValuePara();
+                        }
+
+                        if (Para.Height == null)
+                        {
+                            IsFail = true;
+                            Para.Height = new ValuePara();
+                        }
+
+                        if (Para.OffSetX == null)
+                        {
+                            IsFail = true;
+                            Para.OffSetX = new ValuePara();
+                        }
+
+                        if (Para.OffSetY == null)
+                        {
+                            IsFail = true;
+                            Para.OffSetY = new ValuePara();
+                        }
+
+                        //if (!IsFail && Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
+                        //    await SetFullPara();
+
+                        return true;
+                    }
+                    break;
+                case TypeCamera.USB:
+                    return CCDPlus.Connect(IndexConnect, NameCCD);
+                    break;
+                case TypeCamera.Pylon:
+                    PylonCam.Open(NameCCD);
+                    bool IsConnect = PylonCam.IsOpen();
+                    if (IsConnect)
+                    {
+                        PylonCam.SetOutputPixel(OutputPixel.Auto);
+                        PylonCam.Start();
+                    }
+                   
+                    return IsConnect;
+                    break;
+
             }    
-            //String[] sp = Resolution.Split(' ');
-            //String[] sp2 = sp[0].Split('x');
-
-            //BeeCore.CCDPlus.colCCD = Convert.ToInt32(sp2[0]);
-            //BeeCore.CCDPlus.rowCCD = Convert.ToInt32(sp2[1]);
-            Mat raw = new Mat();
-            String[] sp = NameCCD.Split('$');
-            if (sp.Length > 1)
-            {
-                String Typ = sp[sp.Length - 2];
-                if (Typ.Contains("Basler"))
-                {
-                    TypeCCD = 0;
-                }
-                else if (Typ.Contains("Hik"))
-                {
-                    TypeCCD = 1;
-                }
-                else
-                    TypeCCD = -1;
-            }
-            if (CCDPlus.Connect(IndexConnect, NameCCD))
-            {
-                if (matRaw != null)
-                    if (!matRaw.Empty())
-                        matRaw.Release();
-                //if (IsHist)
-                //    CCDPlus.ReadRaw(true);
-                //else
-                Read();
-                bool IsFail = false;
-                if (Para.Exposure == null)
-                {
-                    IsFail = true;
-                    Para.Exposure = new ValuePara();
-                }    
-                   
-                if (Para.Gain == null)
-                {
-                    IsFail = true;
-                    Para.Gain = new ValuePara();
-                }    
-                  
-                if (Para.Shift == null)
-                {
-                    IsFail = true;
-                    Para.Shift = new ValuePara();
-                }    
-                   
-                if (Para.Width == null)
-                {
-                    IsFail = true;
-                    Para.Width = new ValuePara();
-                }    
-                   
-                if (Para.Height == null)
-                {
-                    IsFail = true;
-                    Para.Height = new ValuePara();
-                }    
-                    
-                if (Para.OffSetX == null)
-                {
-                    IsFail = true;
-                    Para.OffSetX = new ValuePara();
-                }    
-                   
-                if (Para.OffSetY == null)
-                {
-                    IsFail = true;
-                    Para.OffSetY = new ValuePara();
-                }    
-                  
-                if(!IsFail&&Para.Width.Value>Para.Width.Min+1 && Para.Height.Value > Para.Height.Min + 1)
-                 await SetFullPara();
-                //if (Global.ParaCommon._Exposure != 0)
-                //    CCDPlus.Exposure = Global.ParaCommon._Exposure;
-
-                return true;
-            }
+          
+          
             return false;
 
         }
         public async Task<bool> SetFullPara()
 
         {
-            if (Para.TypeCamera == TypeCamera.USB)
+            if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
             {
-                CCDPlus.SetWidth((int)Para.Width.Value);
-                CCDPlus.SetHeight((int)Para.Height.Value);
-                await Task.Delay(100);
-                CCDPlus.SetFocus((int)Para.Focus);
-                CCDPlus.SetZoom((int)Para.Zoom);
-                CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+                if (Para.TypeCamera == TypeCamera.USB)
+                {
+                    CCDPlus.SetWidth((int)Para.Width.Value);
+                    CCDPlus.SetHeight((int)Para.Height.Value);
+                    await Task.Delay(100);
+                    CCDPlus.SetFocus((int)Para.Focus);
+                    CCDPlus.SetZoom((int)Para.Zoom);
+                    CCDPlus.SetExposure(-(int)Para.Exposure.Value);
 
-            }
-            else
-            {
-                await SetWidth();
-                await SetHeight();
-                await SetOffSetX();
-                await SetOffSetY();
-                
-                await SetExpo();
-                await SetGain();
-                await SetShift();
+                }
+                else
+                {
+                    await SetWidth();
+                    await SetHeight();
+                    await SetOffSetX();
+                    await SetOffSetY();
+
+                    await SetExpo();
+                    await SetGain();
+                    await SetShift();
+                }
             }
             return true;
         }
@@ -475,7 +503,7 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -512,7 +540,7 @@ namespace BeeCore
                 cancel = new CancellationTokenSource(2000);
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                        
                         switch (TypeCCD)
                         {
@@ -551,7 +579,7 @@ namespace BeeCore
                 Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -588,7 +616,7 @@ namespace BeeCore
                 Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -621,7 +649,7 @@ namespace BeeCore
                
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -670,7 +698,7 @@ namespace BeeCore
                 Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -702,7 +730,7 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -742,7 +770,7 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -774,7 +802,7 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -814,7 +842,7 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -846,7 +874,7 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -886,7 +914,7 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -918,7 +946,7 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -959,7 +987,7 @@ namespace BeeCore
 
         //        switch (Para.TypeCamera)
         //        {
-        //            case TypeCamera.BaslerGigE:
+        //            case TypeCamera.MVS:
         //                cancel = new CancellationTokenSource(2000);
         //                switch (TypeCCD)
         //                {
@@ -990,7 +1018,7 @@ namespace BeeCore
         //    {
         //        switch (Para.TypeCamera)
         //        {
-        //            case TypeCamera.BaslerGigE:
+        //            case TypeCamera.MVS:
         //                cancel = new CancellationTokenSource(2000);
         //                switch (TypeCCD)
         //                {
@@ -1025,7 +1053,7 @@ namespace BeeCore
 
         //        switch (Para.TypeCamera)
         //        {
-        //            case TypeCamera.BaslerGigE:
+        //            case TypeCamera.MVS:
         //                cancel = new CancellationTokenSource(2000);
         //                switch (TypeCCD)
         //                {
@@ -1056,7 +1084,7 @@ namespace BeeCore
         //    {
         //        switch (Para.TypeCamera)
         //        {
-        //            case TypeCamera.BaslerGigE:
+        //            case TypeCamera.MVS:
         //                cancel = new CancellationTokenSource(2000);
         //                switch (TypeCCD)
         //                {
@@ -1091,7 +1119,7 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
-                    case TypeCamera.BaslerGigE:
+                    case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
                         {
@@ -1138,6 +1166,8 @@ namespace BeeCore
             CCDPlus.TypeCamera = (int)Para.TypeCamera;
         }
         [NonSerialized]
+        PylonCli.Camera PylonCam=new PylonCli.Camera();
+        [NonSerialized]
         Stopwatch stopwatch = new Stopwatch();
         private CameraIOFast cameraIOFast = new CameraIOFast();
         public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
@@ -1146,13 +1176,24 @@ namespace BeeCore
 
 
             IntPtr intPtr = IntPtr.Zero;
-            int rows = 0, cols = 0;
+            int rows = 0, cols = 0,stride;
             int matType = MatType.CV_8UC1;
 
             try
             {
-                //stopwatch.Restart();
-                intPtr = new IntPtr (CCDPlus.ReadCCD(IndexCCD, &rows, &cols,&matType));
+                switch(Para.TypeCamera)
+                {
+                    case TypeCamera.MVS:
+                        intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                        break;
+                    case TypeCamera.USB:
+                        intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                        break;
+                    case TypeCamera.Pylon:
+                        intPtr = PylonCam.GrabFramePtrEx( out cols, out rows,out stride,out matType);
+                        break;
+                }
+               
                // stopwatch.Stop();
               //  BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
                 // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
@@ -1273,7 +1314,7 @@ namespace BeeCore
             //            //    Native.FreeBuffer(intPtr);
             //            //}
             //            break;
-            //        case TypeCamera.BaslerGigE:
+            //        case TypeCamera.MVS:
 
             //            //if (IsHist)
             //            //    CCDPlus.ReadRaw(true);
@@ -1350,7 +1391,7 @@ namespace BeeCore
                 case TypeCamera.TinyIV:
                     HEROJE.Light(TypeLight, IsOn);
                     break;
-                case TypeCamera.BaslerGigE:
+                case TypeCamera.MVS:
                     Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Light;
                     break;
                 default:
