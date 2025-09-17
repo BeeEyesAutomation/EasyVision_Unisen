@@ -278,8 +278,8 @@ namespace BeeInterface
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetHeight();
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetOffSetX();
                 await BeeCore.Common.listCamera[Global.IndexChoose].GetOffSetY();
-                await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterX();
-                await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterY();
+                //await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterX();
+                //await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterY();
                 if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
                 {
                 

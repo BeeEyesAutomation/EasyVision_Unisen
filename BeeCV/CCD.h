@@ -43,6 +43,7 @@ namespace CvPlus {
 	public: int numERR = 0;
 	public: int TypeCamera = 0;
 	public: bool  IsErrCCD = false;
+	public: bool  IsSetPara= false;
 	//public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
 	public:uchar* ReadCCD(int indexCCD,  int* rows, int* cols, int* Type);

@@ -422,8 +422,7 @@ namespace BeeCore
                 await SetHeight();
                 await SetOffSetX();
                 await SetOffSetY();
-                await SetCenterX();
-                await SetCenterY();
+                
                 await SetExpo();
                 await SetGain();
                 await SetShift();
@@ -471,7 +470,9 @@ namespace BeeCore
             try
             {
 
-                
+                Global.IsSetPara = true;
+
+
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
@@ -487,11 +488,11 @@ namespace BeeCore
                                 Para.Exposure.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "ExposureTime", Para.Exposure.Value), cancel.Token);
                                 break;
                         }
-                            return true;
+                           
                         break;
                     case TypeCamera.USB:
                         CCDPlus.SetExposure(-(int)Para.Exposure.Value);
-                        return true;
+                     
                         break;
                 }
             }
@@ -500,7 +501,8 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            return false;// Result.Success.ToString();
+            Global.IsSetPara = false;
+            return true;
         }
         public async Task< bool> GetExpo()
         {
@@ -546,7 +548,7 @@ namespace BeeCore
             try
             {
 
-
+                Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
@@ -573,7 +575,8 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            return true;// Result.Success.ToString();
+            Global.IsSetPara = false;
+            return true;
         }
         [NonSerialized]
         CancellationTokenSource cancel = new CancellationTokenSource(2000);
@@ -582,7 +585,7 @@ namespace BeeCore
             try
             {
 
-
+                Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
@@ -608,12 +611,14 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            return true;// Result.Success.ToString();
+            Global.IsSetPara = false;
+            return true;
         }
         public async Task< bool> GetShift()
         {
             try
             {
+               
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
@@ -630,7 +635,7 @@ namespace BeeCore
                                 break;
                         }
                       
-                        return true;
+                     
                         //if (value > 1000)
                         //{
                         //    CCDPlus.Exposure = value; CCDPlus.SetPara();
@@ -646,6 +651,7 @@ namespace BeeCore
                
                 return false;
             }
+        
             return false;
         }
         public void SetWidthUSB()
@@ -661,7 +667,7 @@ namespace BeeCore
             try
             {
 
-
+                Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.BaslerGigE:
@@ -687,6 +693,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
+            Global.IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetWidth()
@@ -730,6 +737,7 @@ namespace BeeCore
         {
             try
             {
+                Global.IsSetPara = true;
 
 
                 switch (Para.TypeCamera)
@@ -757,6 +765,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
+            Global.IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetHeight()
@@ -801,7 +810,7 @@ namespace BeeCore
         {
             try
             {
-
+                Global.IsSetPara = true;
 
                 switch (Para.TypeCamera)
                 {
@@ -828,6 +837,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
+            Global.IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetOffSetX()
@@ -872,7 +882,7 @@ namespace BeeCore
         {
             try
             {
-
+                Global.IsSetPara = true;
 
                 switch (Para.TypeCamera)
                 {
@@ -899,6 +909,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
+            Global.IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetOffSetY()
@@ -940,137 +951,137 @@ namespace BeeCore
         }
         float none = 0;
         public bool IsTrigger = false;
-        public async Task<bool> SetCenterX()
-        {
-            try
-            {
+        //public async Task<bool> SetCenterX()
+        //{
+        //    try
+        //    {
 
 
-                switch (Para.TypeCamera)
-                {
-                    case TypeCamera.BaslerGigE:
-                        cancel = new CancellationTokenSource(2000);
-                        switch (TypeCCD)
-                        {
-                            case 0://Basler
-                                Para.CenterX = (int)(await  Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterX",(int) Para.CenterX), cancel.Token));
-                                //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
-                                break;
-                            case 1://Hik
-                                Para.CenterX = (int)(await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterX", (int)Para.CenterX), cancel.Token));
-                                break;
-                        }
-                        break;
-                    case TypeCamera.TinyIV:
-                        // HEROJE.SetExposure(value);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Err += ex.Message;
-                return false;// ex.Message;
-            }
-            return true;// Result.Success.ToString();
-        }
-        public async Task<bool> GetCenterX()
-        {
-            try
-            {
-                switch (Para.TypeCamera)
-                {
-                    case TypeCamera.BaslerGigE:
-                        cancel = new CancellationTokenSource(2000);
-                        switch (TypeCCD)
-                        {
-                            case 0://Basler
-                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterX", ref none, ref none, ref none, ref Para.CenterX), cancel.Token);
+        //        switch (Para.TypeCamera)
+        //        {
+        //            case TypeCamera.BaslerGigE:
+        //                cancel = new CancellationTokenSource(2000);
+        //                switch (TypeCCD)
+        //                {
+        //                    case 0://Basler
+        //                        Para.CenterX = (int)(await  Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterX",(int) Para.CenterX), cancel.Token));
+        //                        //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
+        //                        break;
+        //                    case 1://Hik
+        //                        Para.CenterX = (int)(await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterX", (int)Para.CenterX), cancel.Token));
+        //                        break;
+        //                }
+        //                break;
+        //            case TypeCamera.TinyIV:
+        //                // HEROJE.SetExposure(value);
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Err += ex.Message;
+        //        return false;// ex.Message;
+        //    }
+        //    return true;// Result.Success.ToString();
+        //}
+        //public async Task<bool> GetCenterX()
+        //{
+        //    try
+        //    {
+        //        switch (Para.TypeCamera)
+        //        {
+        //            case TypeCamera.BaslerGigE:
+        //                cancel = new CancellationTokenSource(2000);
+        //                switch (TypeCCD)
+        //                {
+        //                    case 0://Basler
+        //                        return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterX", ref none, ref none, ref none, ref Para.CenterX), cancel.Token);
 
-                                break;
-                            case 1://Hik
-                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterX", ref none, ref none, ref none, ref Para.CenterX), cancel.Token);
-                                break;
-                        }
+        //                        break;
+        //                    case 1://Hik
+        //                        return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterX", ref none, ref none, ref none, ref Para.CenterX), cancel.Token);
+        //                        break;
+        //                }
 
-                        return true;
+        //                return true;
                 
-                        break;
+        //                break;
                       
-                }
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return false;
-            }
-            return false;
-        }
+        //        return false;
+        //    }
+        //    return false;
+        //}
 
-        public async Task<bool> SetCenterY()
-        {
-            try
-            {
+        //public async Task<bool> SetCenterY()
+        //{
+        //    try
+        //    {
 
 
-                switch (Para.TypeCamera)
-                {
-                    case TypeCamera.BaslerGigE:
-                        cancel = new CancellationTokenSource(2000);
-                        switch (TypeCCD)
-                        {
-                            case 0://Basler
-                                Para.CenterY = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterY", Para.CenterY), cancel.Token);
-                                //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
-                                break;
-                            case 1://Hik
-                                Para.CenterY = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterY", Para.CenterY), cancel.Token);
-                                break;
-                        }
-                        break;
-                    case TypeCamera.TinyIV:
-                        // HEROJE.SetExposure(value);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Err += ex.Message;
-                return false;// ex.Message;
-            }
-            return true;// Result.Success.ToString();
-        }
-        public async Task<bool> GetCenterY()
-        {
-            try
-            {
-                switch (Para.TypeCamera)
-                {
-                    case TypeCamera.BaslerGigE:
-                        cancel = new CancellationTokenSource(2000);
-                        switch (TypeCCD)
-                        {
-                            case 0://Basler
-                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterY", ref none, ref none, ref none, ref Para.CenterY), cancel.Token);
+        //        switch (Para.TypeCamera)
+        //        {
+        //            case TypeCamera.BaslerGigE:
+        //                cancel = new CancellationTokenSource(2000);
+        //                switch (TypeCCD)
+        //                {
+        //                    case 0://Basler
+        //                        Para.CenterY = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterY", Para.CenterY), cancel.Token);
+        //                        //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
+        //                        break;
+        //                    case 1://Hik
+        //                        Para.CenterY = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "CenterY", Para.CenterY), cancel.Token);
+        //                        break;
+        //                }
+        //                break;
+        //            case TypeCamera.TinyIV:
+        //                // HEROJE.SetExposure(value);
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Err += ex.Message;
+        //        return false;// ex.Message;
+        //    }
+        //    return true;// Result.Success.ToString();
+        //}
+        //public async Task<bool> GetCenterY()
+        //{
+        //    try
+        //    {
+        //        switch (Para.TypeCamera)
+        //        {
+        //            case TypeCamera.BaslerGigE:
+        //                cancel = new CancellationTokenSource(2000);
+        //                switch (TypeCCD)
+        //                {
+        //                    case 0://Basler
+        //                        return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterY", ref none, ref none, ref none, ref Para.CenterY), cancel.Token);
 
-                                break;
-                            case 1://Hik
-                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterY", ref none, ref none, ref none, ref Para.CenterY), cancel.Token);
-                                break;
-                        }
+        //                        break;
+        //                    case 1://Hik
+        //                        return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "CenterY", ref none, ref none, ref none, ref Para.CenterY), cancel.Token);
+        //                        break;
+        //                }
 
-                        return true;
+        //                return true;
 
-                        break;
+        //                break;
 
-                }
-            }
-            catch (Exception ex)
-            {
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return false;
-            }
-            return false;
-        }
+        //        return false;
+        //    }
+        //    return false;
+        //}
         public ParaCamera Para = new ParaCamera();
         public async Task< bool> GetGain()
         {
@@ -1194,7 +1205,7 @@ namespace BeeCore
         public int numTry = 0;
         public   void Read()
         {
-        //   stopwatch.Restart();
+       if(Global.IsSetPara)return;
         X: if (!TryGrabFast_NoStride(ref matRaw))
             {
                 numTry++;

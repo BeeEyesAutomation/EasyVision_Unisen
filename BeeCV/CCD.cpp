@@ -644,7 +644,7 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 {
 	if (m_pcMyCamera[indexCCD] == nullptr)
 		return -1;
-
+	IsSetPara = true;
 
 	m_pcMyCamera[indexCCD]->StopGrabbing();
 	//TypeCCD = listTypeCCD[indexCCD];
@@ -652,7 +652,9 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 	MVCC_INTVALUE_EX expInfo = {};
 	if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
 	{
+		m_pcMyCamera[indexCCD]->StartGrabbing();
 		std::cerr << "❌ Không đọc được thông tin ExposureTime" << std::endl;
+		IsSetPara = false;
 		return -1;
 	}
 
@@ -669,16 +671,17 @@ float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
 	// Set giá trị
 	if (m_pcMyCamera[indexCCD]->SetIntValue(namepara.c_str(), (int)adjustedExposure) == MV_OK)
 	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();
+		m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
 		return Value;
 	}
 	else
 	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();
-		return -1;
+		m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
 		std::cerr << "❌ Set ExposureTime thất bại!" << std::endl;
+		return -1;
+		
 	}
-	m_pcMyCamera[indexCCD]->StartGrabbing();
+	m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
 	return -1;
 	/*int nRet = MV_CC_SetFloatValue(m_pcMyCamera[indexCCD], namepara.c_str(), Value);
 	if (MV_OK != nRet)

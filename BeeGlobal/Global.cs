@@ -41,7 +41,8 @@ namespace BeeGlobal
                 }
             }
         }
-        public static bool IsAllowReadPLC = true;
+        public static bool IsSetPara = false;
+       public static bool IsAllowReadPLC = true;
         public static TriggerNum TriggerNum = TriggerNum.Trigger1;
         public static dynamic ScanCCD;
         public static bool IsDebug = false;
