@@ -123,7 +123,7 @@ namespace BeeGlobal
     {
         StrongEdges,
         CloseEdges,
-        Binary,None
+        Binary,InvertBinary,None
     }
     public enum TypeMeasure
     {

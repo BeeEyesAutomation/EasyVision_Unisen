@@ -27,10 +27,10 @@ namespace BeeUi.Common
         public StepEdit()
         {
             InitializeComponent();
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
+            //this.DoubleBuffered = true;
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            //this.SetStyle(ControlStyles.UserPaint, true);
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
             // this.Visible = false;
             G.StepEdit = this;
@@ -101,30 +101,9 @@ namespace BeeUi.Common
             //    workConnect.RunWorkerAsync();
         }
 
-        private void workConnect_DoWork(object sender, DoWorkEventArgs e)
-        {
-           if( G.IsCCD ==true)
-                if(BeeCore.Common.listCamera[Global.IndexChoose].matRaw==null)
-                {
-                    BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                   
-                }
-               
-          
-        }
+      
 
-        private void workConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (G.IsCCD)
-            {
-
-                Shows.RefreshImg(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-
-               
-            }
-        
-        }
-
+    
         private void StepEdit_VisibleChanged(object sender, EventArgs e)
         { 
         //{if (G.Header == null) return;
@@ -155,7 +134,7 @@ namespace BeeUi.Common
 
         private void StepEdit_SizeChanged(object sender, EventArgs e)
         {
-          BeeCore.CustomGui.RoundRg(this,Global.Config.RoundRad);
+          //BeeCore.CustomGui.RoundRg(this,Global.Config.RoundRad);
 
         }
 

@@ -503,6 +503,16 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Down {
+            get {
+                object obj = ResourceManager.GetObject("Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Edge_Pixels {
             get {
                 object obj = ResourceManager.GetObject("Edge_Pixels", resourceCulture);
@@ -666,6 +676,16 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap Rotate {
             get {
                 object obj = ResourceManager.GetObject("Rotate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Transfer {
+            get {
+                object obj = ResourceManager.GetObject("Transfer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

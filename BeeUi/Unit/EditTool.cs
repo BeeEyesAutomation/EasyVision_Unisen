@@ -673,6 +673,8 @@ namespace BeeUi
             {
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                if (Global.IsRun)
+                    Global.StatusProcessing = StatusProcessing.Checking;
             }
             }
 

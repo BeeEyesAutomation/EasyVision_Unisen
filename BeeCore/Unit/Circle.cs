@@ -38,6 +38,7 @@ namespace BeeCore
         public int MaxCircles = 2;
         public int Iterations = 100;
         public float Threshold = 1f;
+        public int ThresholdBinary = 70;
         public int MinInliers=100;
         public bool IsIni = false;
         public int Index = -1;
@@ -106,7 +107,10 @@ namespace BeeCore
                             matProcess = Filters.GetStrongEdgesOnly(matCrop);
                             break;
                         case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop,70,ThresholdTypes.BinaryInv);
+                            matProcess = Filters.Threshold(matCrop,ThresholdBinary,ThresholdTypes.Binary);
+                            break;
+                        case MethordEdge.InvertBinary:
+                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
                             break;
                     }
 

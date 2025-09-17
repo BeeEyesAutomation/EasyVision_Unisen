@@ -263,7 +263,7 @@ namespace BeeCore
                     {
                        bmResult?.Dispose();
                        bmResult = storeCopy;
-                        bmResult.Save("Result"+ IndexCCD + ".png");
+                      //  bmResult.Save("Result"+ IndexCCD + ".png");
                     }
                     canvas = null; // tránh dispose ở finally
                     //// 5) Dùng chính canvas cho UI (không clone lại)

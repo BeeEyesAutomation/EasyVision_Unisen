@@ -33,16 +33,15 @@ namespace BeeUi.Common
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StepEdit));
-            this.workConnect = new System.ComponentModel.BackgroundWorker();
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
-            this.btnStep4 = new BeeInterface.RJButton();
-            this.btnStep3 = new BeeInterface.RJButton();
-            this.btnStep2 = new BeeInterface.RJButton();
-            this.btnSave = new BeeInterface.RJButton();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.btnStep4 = new BeeInterface.RJButton();
+            this.btnStep3 = new BeeInterface.RJButton();
+            this.btnStep2 = new BeeInterface.RJButton();
+            this.btnSave = new BeeInterface.RJButton();
             this.btnStep1 = new BeeInterface.RJButton();
             this.btnSaveProgram = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
@@ -51,11 +50,6 @@ namespace BeeUi.Common
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
-            // 
-            // workConnect
-            // 
-            this.workConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workConnect_DoWork);
-            this.workConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workConnect_RunWorkerCompleted);
             // 
             // tableLayoutPanel1
             // 
@@ -84,8 +78,56 @@ namespace BeeUi.Common
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(983, 110);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1307, 94);
             this.tableLayoutPanel1.TabIndex = 13;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = global::BeeUi.Properties.Resources.Hide;
+            this.pictureBox1.Location = new System.Drawing.Point(212, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(59, 88);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox4.Image = global::BeeUi.Properties.Resources.Hide;
+            this.pictureBox4.Location = new System.Drawing.Point(1034, 3);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(59, 88);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox4.TabIndex = 11;
+            this.pictureBox4.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.Image = global::BeeUi.Properties.Resources.Hide;
+            this.pictureBox2.Location = new System.Drawing.Point(486, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(59, 88);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox2.TabIndex = 4;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox3.Image = global::BeeUi.Properties.Resources.Hide;
+            this.pictureBox3.Location = new System.Drawing.Point(760, 3);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(59, 88);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox3.TabIndex = 5;
+            this.pictureBox3.TabStop = false;
             // 
             // btnStep4
             // 
@@ -109,7 +151,7 @@ namespace BeeUi.Common
             this.btnStep4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStep4.FlatAppearance.BorderSize = 0;
             this.btnStep4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnStep4.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
             this.btnStep4.ForeColor = System.Drawing.Color.Black;
             this.btnStep4.Image = null;
             this.btnStep4.ImageDisabled = null;
@@ -127,11 +169,11 @@ namespace BeeUi.Common
             this.btnStep4.IsNotChange = false;
             this.btnStep4.IsRect = false;
             this.btnStep4.IsUnGroup = false;
-            this.btnStep4.Location = new System.Drawing.Point(628, 2);
-            this.btnStep4.Margin = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.btnStep4.Location = new System.Drawing.Point(832, 5);
+            this.btnStep4.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.btnStep4.Multiline = true;
             this.btnStep4.Name = "btnStep4";
-            this.btnStep4.Size = new System.Drawing.Size(137, 106);
+            this.btnStep4.Size = new System.Drawing.Size(189, 84);
             this.btnStep4.TabIndex = 16;
             this.btnStep4.Text = "4.Output\r\nAssignment";
             this.btnStep4.TextColor = System.Drawing.Color.Black;
@@ -160,7 +202,7 @@ namespace BeeUi.Common
             this.btnStep3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStep3.FlatAppearance.BorderSize = 0;
             this.btnStep3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep3.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.21875F);
+            this.btnStep3.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
             this.btnStep3.ForeColor = System.Drawing.Color.Black;
             this.btnStep3.Image = null;
             this.btnStep3.ImageDisabled = null;
@@ -178,11 +220,11 @@ namespace BeeUi.Common
             this.btnStep3.IsNotChange = false;
             this.btnStep3.IsRect = false;
             this.btnStep3.IsUnGroup = false;
-            this.btnStep3.Location = new System.Drawing.Point(422, 2);
-            this.btnStep3.Margin = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.btnStep3.Location = new System.Drawing.Point(558, 5);
+            this.btnStep3.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.btnStep3.Multiline = true;
             this.btnStep3.Name = "btnStep3";
-            this.btnStep3.Size = new System.Drawing.Size(137, 106);
+            this.btnStep3.Size = new System.Drawing.Size(189, 84);
             this.btnStep3.TabIndex = 15;
             this.btnStep3.Text = "3.Tool\r\nSettings";
             this.btnStep3.TextColor = System.Drawing.Color.Black;
@@ -211,7 +253,7 @@ namespace BeeUi.Common
             this.btnStep2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStep2.FlatAppearance.BorderSize = 0;
             this.btnStep2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.34375F);
+            this.btnStep2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
             this.btnStep2.ForeColor = System.Drawing.Color.Black;
             this.btnStep2.Image = null;
             this.btnStep2.ImageDisabled = null;
@@ -229,11 +271,11 @@ namespace BeeUi.Common
             this.btnStep2.IsNotChange = false;
             this.btnStep2.IsRect = false;
             this.btnStep2.IsUnGroup = false;
-            this.btnStep2.Location = new System.Drawing.Point(216, 2);
-            this.btnStep2.Margin = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.btnStep2.Location = new System.Drawing.Point(284, 5);
+            this.btnStep2.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.btnStep2.Multiline = true;
             this.btnStep2.Name = "btnStep2";
-            this.btnStep2.Size = new System.Drawing.Size(137, 106);
+            this.btnStep2.Size = new System.Drawing.Size(189, 84);
             this.btnStep2.TabIndex = 14;
             this.btnStep2.Text = "2.Master \r\nResgistration";
             this.btnStep2.TextColor = System.Drawing.Color.Black;
@@ -264,7 +306,7 @@ namespace BeeUi.Common
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 22.89063F);
             this.btnSave.ForeColor = System.Drawing.Color.Black;
             this.btnSave.Image = null;
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -283,64 +325,16 @@ namespace BeeUi.Common
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
             this.btnSave.IsUnGroup = false;
-            this.btnSave.Location = new System.Drawing.Point(834, 2);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.btnSave.Location = new System.Drawing.Point(1106, 5);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.btnSave.Multiline = false;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(139, 106);
+            this.btnSave.Size = new System.Drawing.Size(191, 84);
             this.btnSave.TabIndex = 12;
             this.btnSave.Text = "Run Mode";
             this.btnSave.TextColor = System.Drawing.Color.Black;
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox1.Location = new System.Drawing.Point(160, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(43, 104);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox4.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox4.Location = new System.Drawing.Point(778, 3);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(43, 104);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 11;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox2.Location = new System.Drawing.Point(366, 3);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(43, 104);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox3.Image = global::BeeUi.Properties.Resources.Hide;
-            this.pictureBox3.Location = new System.Drawing.Point(572, 3);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(43, 104);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 5;
-            this.pictureBox3.TabStop = false;
             // 
             // btnStep1
             // 
@@ -364,7 +358,7 @@ namespace BeeUi.Common
             this.btnStep1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStep1.FlatAppearance.BorderSize = 0;
             this.btnStep1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStep1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.34375F);
+            this.btnStep1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
             this.btnStep1.ForeColor = System.Drawing.Color.Black;
             this.btnStep1.Image = null;
             this.btnStep1.ImageDisabled = null;
@@ -382,11 +376,11 @@ namespace BeeUi.Common
             this.btnStep1.IsNotChange = false;
             this.btnStep1.IsRect = false;
             this.btnStep1.IsUnGroup = false;
-            this.btnStep1.Location = new System.Drawing.Point(10, 2);
-            this.btnStep1.Margin = new System.Windows.Forms.Padding(10, 2, 10, 2);
+            this.btnStep1.Location = new System.Drawing.Point(10, 5);
+            this.btnStep1.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.btnStep1.Multiline = true;
             this.btnStep1.Name = "btnStep1";
-            this.btnStep1.Size = new System.Drawing.Size(137, 106);
+            this.btnStep1.Size = new System.Drawing.Size(189, 84);
             this.btnStep1.TabIndex = 13;
             this.btnStep1.Text = "1.Image Optimization";
             this.btnStep1.TextColor = System.Drawing.Color.Black;
@@ -456,7 +450,7 @@ namespace BeeUi.Common
             this.Controls.Add(this.btnSaveProgram);
             this.DoubleBuffered = true;
             this.Name = "StepEdit";
-            this.Size = new System.Drawing.Size(983, 110);
+            this.Size = new System.Drawing.Size(1307, 94);
             this.Load += new System.EventHandler(this.StepEdit_Load);
             this.SizeChanged += new System.EventHandler(this.StepEdit_SizeChanged);
             this.VisibleChanged += new System.EventHandler(this.StepEdit_VisibleChanged);
@@ -473,7 +467,6 @@ namespace BeeUi.Common
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.ComponentModel.BackgroundWorker workConnect;
         public RJButton btnSaveProgram;
         public RJButton btnSave;
         private System.Windows.Forms.PictureBox pictureBox4;

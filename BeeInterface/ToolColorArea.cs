@@ -34,7 +34,7 @@ namespace BeeInterface
         public ColorArea Propety=new ColorArea();
         public Mat matTemp = new Mat();
        
-        Mat matClear = new Mat(); Mat matMask = new Mat();
+      
         public bool IsClear;
        
         public void LoadPara( )
@@ -181,84 +181,15 @@ namespace BeeInterface
     
        
 
-        private void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-           /// G.EditTool.View.imgView.Invalidate();
-          //  Cv2.ImShow("a", bmRs);
-          //  G.EditTool.View.lbCycleTrigger.Text = "[" + Propety.cycleTime + "ms]";
-        }
-
-        private void trackScore_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void trackScore_MouseUp(object sender, MouseEventArgs e)
-        {
-           
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-
-      
-        private void trackMaxOverLap_MouseUp(object sender, MouseEventArgs e)
-        {
-          
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-        
       
 
      
 
       
       
-      
-        private void ToolOutLine_Load(object sender, EventArgs e)
-        {
-            TypeTool = TypeTool.Color_Area;
-          
-          
-          //  Propety.pathRaw = G.EditTool.View.pathRaw;
-        }
-
-        private void ToolOutLine_VisibleChanged(object sender, EventArgs e)
-        {
-
-        }
-      
-      //  public ExtractColor ExtractColor;
+    
        
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-           //Propety.SetRaw(BeeCore.Common.listCamera[Global. IndexChoose].matRaw);
-            
-            //if (ExtractColor == null)
-            //{
-
-            //    ExtractColor = new ExtractColor(Propety);
-            //    ExtractColor.Parent = this;
-            //    ExtractColor.BringToFront();
-            //    ExtractColor.Location = new System.Drawing.Point(this.Width / 2 - ExtractColor.Width / 2, this.Height / 2 - ExtractColor.Height / 2);
-            //}
-
-
-
-            
-          //  btnGetColor.IsCLick = !Propety.IsGetColor;
-           
-            //  G.EditTool.View.imgView.Cursor = Cursors.Default;
-
-
-
-
-
-            // G.EditTool.View.imgView.Invalidate();
-
-        }
+       
 
         private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -310,17 +241,7 @@ namespace BeeInterface
             Propety.IsGetColor = btnGetColor.IsCLick;
         }
 
-        private void btnColor_Click(object sender, EventArgs e)
-        {
-         
-
-        }
-
-        private void btnClWhite_Click(object sender, EventArgs e)
-        {
-           
-        }
-
+      
         private void btnClBlack_Click(object sender, EventArgs e)
         {
             Propety.StyleColor = 2;
@@ -336,10 +257,7 @@ namespace BeeInterface
 
         }
        
-        private void picColor_Click(object sender, EventArgs e)
-        {
-            
-        }
+      
 
         private void picColor_Paint(object sender, PaintEventArgs e)
         {
@@ -361,14 +279,7 @@ namespace BeeInterface
         private void trackPixel_ValueChanged(float obj)
         {
             Propety.AreaPixel = (int)trackPixel.Value;
-            //if(matCrop.Empty())
-            //{
-            //    float angle = Propety.rotArea._rectRotation;
-            //    if (Propety.rotArea._rectRotation < 0) angle = 360 + Propety.rotArea._rectRotation;
-            //    matCrop = RotateMat(BeeCore.Common.listCamera[Global. IndexChoose].matRaw, new RotatedRect(new Point2f(Propety.rotArea._PosCenter.X, Propety.rotArea._PosCenter.Y), new Size2f(Propety.rotArea._rect.Width, Propety.rotArea._rect.Height), Propety.rotArea._angle));
 
-
-            //}
             if(Global.Initialed)
             matTemp =  Propety.SetColor();
            

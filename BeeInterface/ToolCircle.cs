@@ -58,6 +58,7 @@ namespace BeeInterface
             numMinRadius.Value = Propety.MinRadius;
             numMaxRadius.Value = Propety.MaxRadius;
             numScale.Value = (int)Propety.Scale;
+            AdjThreshod.Value = Propety.ThresholdBinary;
             switch (Propety.MethordEdge)
             {
                 case MethordEdge.StrongEdges:
@@ -68,6 +69,9 @@ namespace BeeInterface
                     break;
                 case MethordEdge.Binary:
                     btnBinary.IsCLick = true;
+                    break;
+                case MethordEdge.InvertBinary:
+                    btnInvert.IsCLick = true;
                     break;
             }
             switch (Propety.CircleScanDirection)
@@ -380,6 +384,17 @@ namespace BeeInterface
         private void numMaxRadius_ValueChanged(float obj)
         {
             Propety.MaxRadius = numMaxRadius.Value;
+        }
+
+        private void btnInvert_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.InvertBinary;
+        }
+
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.Threshold = AdjThreshod.Value;
+
         }
     }
 }

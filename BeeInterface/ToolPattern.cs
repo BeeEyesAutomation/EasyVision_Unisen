@@ -29,8 +29,8 @@ namespace BeeInterface
         public ToolPattern( )
         {
             InitializeComponent();
-            CustomGui.RoundRg(layMaximumObj, 10, Corner.Both);
-            CustomGui.RoundRg(layLimitCouter, 10, Corner.Bottom);
+           
+           
         }
         
 
@@ -443,11 +443,11 @@ namespace BeeInterface
             Propety.LimitCounter = (int)numLimitCounter.Value;
         }
 
-        private void btnLimitCounter_Click(object sender, EventArgs e)
-        {
-            Propety.IsLimitCouter = btnLimitCounter.IsCLick;
-            layLimitCouter.Enabled = btnLimitCounter.IsCLick;
-        }
+        //private void btnLimitCounter_Click(object sender, EventArgs e)
+        //{
+        //    Propety.IsLimitCouter = btnLimitCounter.IsCLick;
+        //    layLimitCouter.Enabled = btnLimitCounter.IsCLick;
+        //}
 
         private void btnRect_Click(object sender, EventArgs e)
         {
@@ -556,6 +556,29 @@ namespace BeeInterface
         private void trackNumObject_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackAngle_Click(object sender, EventArgs e)
+        {
+            Propety.Angle = trackAngle.Value;
+
+            if (Propety.Angle > 360) Propety.Angle = 360;
+
+            if (Propety.Angle == 0)
+            {
+                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
+                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
+            }
+            else
+            {
+                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
+                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
+            }
         }
     }
 }

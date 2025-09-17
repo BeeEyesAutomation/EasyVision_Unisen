@@ -1663,6 +1663,7 @@ namespace BeeUi
                  
                     break;
                 case StatusProcessing.Checking:
+                    if (timer == null) timer = CycleTimerSplit.Start();
                     timer.Split("C");
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)

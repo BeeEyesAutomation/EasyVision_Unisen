@@ -204,7 +204,7 @@ namespace BeeUi.Common
                 // Global.EditTool.View.btnContinuous.Enabled = false;
               //  G.SettingPLC.pCom.Enabled = false;
 
-                G.listProgram.Enabled = IsRun;
+            //    G.listProgram.Enabled = IsRun;
               //  btnReport.Enabled = false;
                 btnMode.Enabled = false;
                 if ( G.StatusDashboard != null)

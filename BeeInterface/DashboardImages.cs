@@ -363,7 +363,7 @@ namespace BeeInterface
                 }
 
                 // OK/NG: góc phải-trên (scale 18–64pt)
-                string status = it.Caption.IndexOf("NG", StringComparison.OrdinalIgnoreCase) >= 0 ? "NG" :
+                string status = it.Caption.IndexOf("OK", StringComparison.OrdinalIgnoreCase) >= 0 ? "OK" :
                                 (it.Caption.IndexOf("OK", StringComparison.OrdinalIgnoreCase) >= 0 ? "OK" : "");
                 if (!string.IsNullOrEmpty(status))
                 {

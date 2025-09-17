@@ -282,8 +282,7 @@ namespace BeeInterface
             //    btnAutoTrigger.IsCLick = true;
             //else
             //    btnAutoTrigger.IsCLick = false;
-            numDelay.Value = Propety.DelayTrig;
-            numOK.Value=Propety.NumOK;
+          
             //if (Propety.TypeMode==Mode.Pattern)
             //    btnPattern.IsCLick=true;
             //else
@@ -409,15 +408,7 @@ namespace BeeInterface
             
         }
 
-        private void numOK_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.NumOK = (int)numOK.Value;
-        }
-
-        private void numDelay_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.DelayTrig = (int)numDelay.Value;
-        }
+       
 
         private void trackScore_MouseMove(object sender, MouseEventArgs e)
         {
@@ -465,16 +456,7 @@ namespace BeeInterface
                 btnTest.IsCLick = false;
         }
 
-        private void btnOnTrig_Click(object sender, EventArgs e)
-        {
-            Propety.IsAutoTrig = btnOnTrig.IsCLick;
-        }
-
-        private void btnOffTrig_Click(object sender, EventArgs e)
-        {
-            Propety.IsAutoTrig = btnOffTrig.IsCLick;
-        }
-
+    
         private void numScore_ValueChanged(object sender, EventArgs e)
         {
 
