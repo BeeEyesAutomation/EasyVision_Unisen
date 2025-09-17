@@ -240,7 +240,7 @@
     <Folder Include="Propeties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PylonCli\PylonCli.vcxproj">
+    <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
       <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
       <Name>PylonCli</Name>
     </ProjectReference>

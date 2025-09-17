@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCPlus", "Update\TestCPl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OKNG", "OKNG\OKNG.vcxproj", "{06C22819-3C84-4DCA-96BB-9C59508DD85B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PylonCli", "..\PylonCli\PylonCli.vcxproj", "{04DEA65D-1A93-433A-85AE-7366915067CF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PylonCli", "PylonCli\PylonCli.vcxproj", "{04DEA65D-1A93-433A-85AE-7366915067CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
