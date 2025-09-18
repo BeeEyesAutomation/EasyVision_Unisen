@@ -148,6 +148,7 @@
     <Compile Include="Func\CameraIOFast.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\Logs.cs" />
+    <Compile Include="Func\MatHelper.cs" />
     <Compile Include="Items\ItemTool.cs">
       <SubType>UserControl</SubType>
     </Compile>

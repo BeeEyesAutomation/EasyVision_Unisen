@@ -526,7 +526,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Exposure.Value =Convert.ToSingle( await Task.Run(() => PylonCam.SetExposure(Para.Exposure.Value), cancel.Token));
+                        Para.Exposure.Value =await Task.Run(() => PylonCam.SetExposure(Para.Exposure.Value), cancel.Token);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -609,7 +609,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Gain.Value = Convert.ToSingle(await Task.Run(() => PylonCam.SetGain(Para.Gain.Value), cancel.Token));
+                        Para.Gain.Value =await Task.Run(() => PylonCam.SetGain(Para.Gain.Value), cancel.Token);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -649,7 +649,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Shift.Value = Convert.ToSingle(await Task.Run(() => PylonCam.SetBlackLevel(Para.Shift.Value), cancel.Token));
+                        Para.Shift.Value = await Task.Run(() => PylonCam.SetBlackLevel(Para.Shift.Value), cancel.Token);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -737,6 +737,9 @@ namespace BeeCore
                 Global.IsSetPara = true;
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        Para.Width.Value = await Task.Run(() => PylonCam.SetWidth(Para.Width.Value), cancel.Token);
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -769,6 +772,10 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        await Task.Run(() => PylonCam.GetWidth(out Para.Width.Min, out Para.Width.Max, out Para.Width.Step, out Para.Width.Value), cancel.Token);
+                        return true;
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -809,6 +816,9 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        Para.Height.Value = await Task.Run(() => PylonCam.SetHeight(Para.Height.Value), cancel.Token);
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -841,6 +851,10 @@ namespace BeeCore
             {
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        await Task.Run(() => PylonCam.GetHeight(out Para.Height.Min, out Para.Height.Max, out Para.Height.Step, out Para.Height.Value), cancel.Token);
+                        return true;
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -957,6 +971,9 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        Para.OffSetY.Value = await Task.Run(() => PylonCam.SetOffsetY(Para.OffSetY.Value), cancel.Token);
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -1250,11 +1267,10 @@ namespace BeeCore
                         IntPtr p = PylonCam.GrabOneUcharPtr(500, out w, out h, out s, out c);
                         if (p == IntPtr.Zero) return false; // timeout hoặc fail
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
-                        using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
-                        {
-                            matRaw = m.Clone();
-                            return true;
-                        }    
+                        MatHelper.CopyToMat(p, matRaw, h, w, c);
+                        // matRaw = m.Clone();
+                        return true;
+                            
                             
                         break;
                 }

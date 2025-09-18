@@ -229,7 +229,7 @@ bool Camera::IsOpen() { return _opened && _cam && _cam->IsOpen(); }
 void Camera::SetOutputPixel(OutputPixel fmt) { _desiredOutput = fmt; if (_conv) ConfigureConverterForOutput(); }
 OutputPixel Camera::GetOutputPixel() { return (_activeChannels == 1) ? OutputPixel::Mono8 : OutputPixel::BGR8; }
 
-int Camera::SetWidth(int v)
+float Camera::SetWidth(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Width");
@@ -245,7 +245,7 @@ int Camera::SetWidth(int v)
     catch (...) { _lastError = "SetWidth fail"; return 0; }
 }
 
-int Camera::SetHeight(int v)
+float Camera::SetHeight(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Height");
@@ -261,7 +261,7 @@ int Camera::SetHeight(int v)
     catch (...) { _lastError = "SetHeight fail"; return 0; }
 }
 
-int Camera::SetOffsetX(int v)
+float Camera::SetOffsetX(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetX");
@@ -277,7 +277,7 @@ int Camera::SetOffsetX(int v)
     catch (...) { _lastError = "SetOffsetX fail"; return 0; }
 }
 
-int Camera::SetOffsetY(int v)
+float Camera::SetOffsetY(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetY");
@@ -293,7 +293,7 @@ int Camera::SetOffsetY(int v)
     catch (...) { _lastError = "SetOffsetY fail"; return 0; }
 }
 
-double Camera::SetExposure(double us)
+float Camera::SetExposure(float us)
 {
     try {
         TrySetEnum(_cam->GetNodeMap(), "ExposureAuto", "Off");
@@ -311,7 +311,7 @@ double Camera::SetExposure(double us)
     catch (...) { _lastError = "SetExposure fail"; return 0; }
 }
 
-double Camera::SetGain(double v)
+float Camera::SetGain(float v)
 {
     try {
         TrySetEnum(_cam->GetNodeMap(), "GainAuto", "Off");
@@ -319,7 +319,7 @@ double Camera::SetGain(double v)
         CFloatPtr n = _cam->GetNodeMap().GetNode("Gain");
         if (!n || !IsWritable(n)) throw std::runtime_error("Gain not writable");
 
-        double mn = n->GetMin(), mx = n->GetMax();
+        float mn = n->GetMin(), mx = n->GetMax();
         if (v < mn) v = mn;
         if (v > mx) v = mx;
         n->SetValue(v);
@@ -329,7 +329,7 @@ double Camera::SetGain(double v)
     catch (...) { _lastError = "SetGain fail"; return 0; }
 }
 
-double Camera::SetBlackLevel(double v)
+float Camera::SetBlackLevel(float v)
 {
     try {
         TrySetEnum(_cam->GetNodeMap(), "BlackLevelSelector", "All");
@@ -337,7 +337,7 @@ double Camera::SetBlackLevel(double v)
         if (!n || !IsWritable(n)) n = _cam->GetNodeMap().GetNode("BlackLevelRaw");
         if (!n || !IsWritable(n)) throw std::runtime_error("BlackLevel not writable");
 
-        double mn = n->GetMin(), mx = n->GetMax();
+        float mn = n->GetMin(), mx = n->GetMax();
         if (v < mn) v = mn;
         if (v > mx) v = mx;
         n->SetValue(v);
@@ -384,7 +384,7 @@ void Camera::GetGain(float% min, float% max, float% step, float% current)
     }
 }
 
-void Camera::GetWidth(int% min, int% max, int% step, int% current)
+void Camera::GetWidth(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Width");
@@ -402,7 +402,7 @@ void Camera::GetWidth(int% min, int% max, int% step, int% current)
     }
 }
 
-void Camera::GetHeight(int% min, int% max, int% step, int% current)
+void Camera::GetHeight(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Height");
@@ -465,7 +465,7 @@ void Camera::GetBlackLevel(float% min, float% max, float% step, float% current)
 }
 
 
-void Camera::GetOffsetX(int% min, int% max, int% step, int% current)
+void Camera::GetOffsetX(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetX");
@@ -483,7 +483,7 @@ void Camera::GetOffsetX(int% min, int% max, int% step, int% current)
     }
 }
 
-void Camera::GetOffsetY(int% min, int% max, int% step, int% current)
+void Camera::GetOffsetY(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetY");

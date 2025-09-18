@@ -63,15 +63,15 @@ namespace PylonCli {
 
         // ===== ROI =====
       // ROI
-        int  SetWidth(int v);
-        int  SetHeight(int v);
-        int  SetOffsetX(int v);
-        int  SetOffsetY(int v);
+        float  SetWidth(float v);
+        float  SetHeight(float v);
+        float  SetOffsetX(float v);
+        float  SetOffsetY(float v);
 
         // Params
-        double SetExposure(double microseconds);
-        double SetGain(double value);
-        double SetBlackLevel(double value);
+        float SetExposure(float microseconds);
+        float SetGain(float value);
+        float SetBlackLevel(float value);
         void CenterX();    void CenterY();
 
         // ===== Params =====
@@ -86,10 +86,10 @@ namespace PylonCli {
             [System::Runtime::InteropServices::Out] float% step,
             [System::Runtime::InteropServices::Out] float% current);
 
-        void GetWidth([System::Runtime::InteropServices::Out] int% min,
-            [System::Runtime::InteropServices::Out] int% max,
-            [System::Runtime::InteropServices::Out] int% step,
-            [System::Runtime::InteropServices::Out] int% current);
+        void GetWidth([System::Runtime::InteropServices::Out] float% min,
+            [System::Runtime::InteropServices::Out] float% max,
+            [System::Runtime::InteropServices::Out] float% step,
+            [System::Runtime::InteropServices::Out] float% current);
 
         void GetHeight([System::Runtime::InteropServices::Out] float% min,
             [System::Runtime::InteropServices::Out] float% max,
