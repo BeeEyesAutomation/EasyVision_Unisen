@@ -76,7 +76,7 @@ namespace BeeInterface
 
         private void workRead_DoWork(object sender, DoWorkEventArgs e)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Read();
+           
          
 
 
@@ -84,6 +84,7 @@ namespace BeeInterface
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            BeeCore.Common.listCamera[Global.IndexChoose].Read();
             if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
                 if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
                     if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())

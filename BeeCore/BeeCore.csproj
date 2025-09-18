@@ -240,10 +240,6 @@
     <Folder Include="Propeties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
-      <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
-      <Name>PylonCli</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BeeCV\BeeCV.vcxproj">
       <Project>{ef3f0d87-d9d4-4971-a005-1899d08ed33c}</Project>
       <Name>BeeCV</Name>
@@ -251,6 +247,10 @@
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
       <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
+      <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
+      <Name>PylonCli</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
