@@ -95,6 +95,7 @@ namespace BeeUi
                         try
                         {
                             if (Global.ParaCommon.matRegister!=null)
+                                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
                             if (!Global.ParaCommon.matRegister.IsDisposed())
                             {
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();

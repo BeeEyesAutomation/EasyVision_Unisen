@@ -34,7 +34,10 @@ namespace BeeCore.Funtion
                     continue;
                 Label label = new Label();
                 label.Font=new Font("Arial",12,FontStyle.Bold);
-                label.Text ="Follow Chart(" + BeeCore.Common.listCamera[index].Para.Name.Split('(')[0]+")";
+                if (BeeCore.Common.listCamera[index] == null)
+                    label.Text = "Follow Chart(Null)";
+                else
+                    label.Text = "Follow Chart(" + BeeCore.Common.listCamera[index].Para.Name.Split('(')[0] + ")";
                 label.Location = new Point(3, y);
                 label.AutoSize = false;
                 label.Width= Global.ToolSettings.Width - 10;

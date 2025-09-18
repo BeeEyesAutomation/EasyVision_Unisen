@@ -1271,7 +1271,7 @@ namespace BeeCore
                         using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
                         {
                             m.CopyTo(matRaw);
-                            FrameRate = (int)PylonCam.GetMeasuredFps();
+                            FrameRate = (int)PylonCam.GetDeviceFps();
                             // matRaw = m.Clone();
                             return true;
                         }
