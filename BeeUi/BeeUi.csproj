@@ -510,6 +510,10 @@
       <Project>{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
       <Name>BeeInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
+      <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>
+      <Name>PylonCli</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Folder.png" />

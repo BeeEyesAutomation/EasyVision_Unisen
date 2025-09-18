@@ -2946,15 +2946,63 @@ namespace BeeUi
             
             }
             gc = imgView.CreateGraphics();
-            if (!workReadCCD.IsBusy)
-                workReadCCD.RunWorkerAsync();
+           
             if(Global.IsLive)
-            StartLive();
+            {
+                //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.Pylon)
+                //{
+                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.ChangeGrabLoop(true);
+                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.FrameReady += PylonCam_FrameReady;
+
+                //}
+                //else
+                     if (!workReadCCD.IsBusy)
+                    workReadCCD.RunWorkerAsync();
+                StartLive();
+            }    
+            
             else
+            {
                 StopLive();
+                //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.Pylon)
+                //{
+                  
+                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.ChangeGrabLoop(false);
+                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.FrameReady -= PylonCam_FrameReady;
 
-         
+                //}
+              
+            }    
+               
+            
 
+        }
+private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)
+        {
+            if (buffer == IntPtr.Zero) return ; // timeout hoặc fail
+            int matType = (channels == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
+
+            using (var m = new Mat(height, width, matType, buffer, stride))// new OpenCvSharp.Mat(h, w, type, p, s))
+            {
+               
+                BeeCore.Common.listCamera[Global.IndexChoose].FrameRate = (int)BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.GetMeasuredFps();
+                try
+                {
+                    var bmp = BitmapConverter.ToBitmap(m);
+
+                    // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
+                    var old = Interlocked.Exchange(ref _sharedFrame, bmp);
+                    old?.Dispose();
+
+                    // (tuỳ chọn) báo cho display thread là có frame mới
+                    _frameReady?.Set();
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+          
         }
 
         public void Common_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -3037,14 +3085,14 @@ namespace BeeUi
                         _frameReady?.Set();
                         //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw))
                         //{
-                          
+
                         //        _sharedFrame?.Dispose();
                         //        _sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
-                            
+
                         //}
                     }
-                  
-           
+
+
                 workReadCCD.RunWorkerAsync();
                 return;
             }

@@ -104,15 +104,7 @@ CPylonImage* Camera::CurrentBuffer() { return _bufIndex ? _bufB : _bufA; }
 // ===== Lifecycle =====
 Camera::Camera() {}
 Camera::~Camera() { this->!Camera(); }
-Camera::!Camera() {
-    try {
-        Stop(); Close();
-        if (_conv) { delete _conv; _conv = nullptr; }
-        if (_bufA) { delete _bufA; _bufA = nullptr; }
-        if (_bufB) { delete _bufB; _bufB = nullptr; }
-    }
-    catch (...) {}
-}
+
 
 cli::array<String^>^ Camera::List() {
     if (!s_pylonInited) { PylonInitialize(); s_pylonInited = true; }
@@ -168,59 +160,130 @@ void Camera::Open(System::String^ name) {
 }
 
 void Camera::Start() { Start(GrabMode::InternalLoop); }
-
-void Camera::Start(GrabMode mode) {
+void Camera::Start(GrabMode mode)
+{
     try {
         if (!_cam) { _lastError = "Not open"; return; }
         _mode = mode;
 
-        if (_cam->IsGrabbing()) _cam->StopGrabbing();
+        if (_cam->IsGrabbing())
+            _cam->StopGrabbing();
 
-        // gỡ handler cũ nếu có
-        if (_imgHandlerPtr) {
-            _cam->DeregisterImageEventHandler(static_cast<CImageEventHandler*>((ImageHandler*)_imgHandlerPtr));
-            delete (ImageHandler*)_imgHandlerPtr;
-            _imgHandlerPtr = nullptr;
-        }
+        if (mode == GrabMode::InternalLoop)
+        {
+            // Gỡ handler cũ nếu có
+            if (_imgHandlerPtr) {
+                _cam->DeregisterImageEventHandler(_imgHandlerPtr);
+                delete _imgHandlerPtr;
+                _imgHandlerPtr = nullptr;
+            }
 
-        if (mode == GrabMode::InternalLoop) {
-            // Đăng ký handler với Cleanup_None (tự delete)
-            ImageHandler* handler = new ImageHandler(this);
-            _imgHandlerPtr = handler;
-            _cam->RegisterImageEventHandler(handler, RegistrationMode_ReplaceAll, Cleanup_None);
-            _cam->StartGrabbing(GrabStrategy_LatestImageOnly, GrabLoop_ProvidedByInstantCamera);
+            // Tạo mới handler và register
+            _imgHandlerPtr = new ImageHandler(this);
+            _cam->RegisterImageEventHandler(_imgHandlerPtr,
+                Pylon::RegistrationMode_ReplaceAll,
+                Pylon::Cleanup_None);
+
+            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+                Pylon::GrabLoop_ProvidedByInstantCamera);
         }
-        else {
-            // UserLoop: không đăng ký handler
-            _cam->StartGrabbing(GrabStrategy_LatestImageOnly, GrabLoop_ProvidedByUser);
+        else // UserLoop
+        {
+            if (_imgHandlerPtr) {
+                _cam->DeregisterImageEventHandler(_imgHandlerPtr);
+                delete _imgHandlerPtr;
+                _imgHandlerPtr = nullptr;
+            }
+            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+                Pylon::GrabLoop_ProvidedByUser);
         }
 
         ConfigureConverterForOutput();
         _lastError = nullptr;
     }
-    catch (const GenericException& e) { _lastError = gcnew String(e.GetDescription()); }
+    catch (const GenericException& e) {
+        _lastError = gcnew String(e.GetDescription());
+    }
+}
+void Camera::ChangeGrabLoop(bool useInternal)
+{
+    try {
+        if (!_cam) { _lastError = "Not open"; return; }
+
+        if (_cam->IsGrabbing())
+            _cam->StopGrabbing();
+
+        if (useInternal) {
+            // Internal loop
+            if (_imgHandlerPtr) {
+                // gỡ handler cũ
+                delete _imgHandlerPtr;
+                _imgHandlerPtr = nullptr;
+            }
+            _imgHandlerPtr = new ImageHandler(this);
+            _cam->RegisterImageEventHandler(_imgHandlerPtr,
+                Pylon::RegistrationMode_ReplaceAll,
+                Pylon::Cleanup_None);
+            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+                Pylon::GrabLoop_ProvidedByInstantCamera);
+        }
+        else {
+            // User loop
+            if (_imgHandlerPtr) {
+                delete _imgHandlerPtr;
+                _imgHandlerPtr = nullptr;
+            }
+            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+                Pylon::GrabLoop_ProvidedByUser);
+        }
+
+        _lastError = nullptr;
+    }
+    catch (const GenericException& e) {
+        _lastError = gcnew String(e.GetDescription());
+    }
 }
 
-void Camera::Stop() {
-    try { if (_cam && _cam->IsGrabbing()) _cam->StopGrabbing(); }
-    catch (...) { _lastError = "Stop error"; }
+void Camera::Stop()
+{
+    try {
+        if (_cam && _cam->IsGrabbing())
+            _cam->StopGrabbing();
+    }
+    catch (...) {
+        _lastError = "Stop error"; }
 }
 
-void Camera::Close() {
+void Camera::Close()
+{
     try {
         if (_cam) {
+            // Gỡ & delete handler
             if (_imgHandlerPtr) {
-                _cam->DeregisterImageEventHandler(static_cast<CImageEventHandler*>((ImageHandler*)_imgHandlerPtr));
-                delete (ImageHandler*)_imgHandlerPtr;
+                _cam->DeregisterImageEventHandler(_imgHandlerPtr);
+                delete _imgHandlerPtr;
                 _imgHandlerPtr = nullptr;
             }
             if (_cam->IsGrabbing()) _cam->StopGrabbing();
             if (_cam->IsOpen())     _cam->Close();
-            delete _cam; _cam = nullptr;
+            delete _cam;
+            _cam = nullptr;
         }
         _opened = false; _lastError = nullptr;
     }
     catch (...) { _lastError = "Close error"; }
+}
+
+Camera::!Camera()
+{
+    try {
+        Stop();
+        Close();
+        if (_conv) { delete _conv; _conv = nullptr; }
+        if (_bufA) { delete _bufA; _bufA = nullptr; }
+        if (_bufB) { delete _bufB; _bufB = nullptr; }
+    }
+    catch (...) {}
 }
 
 bool Camera::IsOpen() { return _opened && _cam && _cam->IsOpen(); }
@@ -513,9 +576,16 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
         int stride = w * ch; // packed Mono8/BGR8
 
         if (_frameReadyHandlers != nullptr) {
+            _frameCount++;
             System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
             FrameReady(buffer, w, h, stride, ch);
-           
+            auto now = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = now - _lastFrameTime;
+            if (elapsed.count() >= 1.0) {
+                _emaFps = _frameCount / elapsed.count();
+                _frameCount = 0;
+                _lastFrameTime = now;
+            }
         }
         _lastError = nullptr;
     }
@@ -524,7 +594,7 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
 
 // ===== UserLoop API (uchar* qua IntPtr) =====
 System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {
-    auto t0 = std::chrono::steady_clock::now();
+  //  auto t0 = std::chrono::steady_clock::now();
     _frameCount++;
     w = h = stride = channels = 0;
     if (!_cam || !_cam->IsGrabbing()) { _lastError = "Not grabbing"; return System::IntPtr::Zero; }

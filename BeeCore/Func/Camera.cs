@@ -497,7 +497,7 @@ namespace BeeCore
             get => frameRate; set
             {
                 frameRate = value;
-                if (FrameChanged != null)
+                if (FrameChanged != null&&value!=0)
                 {
                     FrameChanged(FrameRate, new PropertyChangedEventArgs("FrameChanged"));
                 }
@@ -1234,7 +1234,7 @@ namespace BeeCore
             CCDPlus.TypeCamera = (int)Para.TypeCamera;
         }
         [NonSerialized]
-        PylonCli.Camera PylonCam=new PylonCli.Camera();
+      public  PylonCli.Camera PylonCam=new PylonCli.Camera();
         [NonSerialized]
         Stopwatch stopwatch = new Stopwatch();
         private CameraIOFast cameraIOFast = new CameraIOFast();
@@ -1242,9 +1242,9 @@ namespace BeeCore
         {
 
 
-            IsReadCCD = true;
+            
             IntPtr intPtr = IntPtr.Zero;
-            int rows = 0, cols = 0,stride;
+            int rows = 0, cols = 0;
             int matType = MatType.CV_8UC1;
           
             try
@@ -1267,13 +1267,15 @@ namespace BeeCore
                         IntPtr p = PylonCam.GrabOneUcharPtr(500, out w, out h, out s, out c);
                         if (p == IntPtr.Zero) return false; // timeout hoặc fail
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
+
                         using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
                         {
                             m.CopyTo(matRaw);
-                           // matRaw = m.Clone();
+                            FrameRate = (int)PylonCam.GetMeasuredFps();
+                            // matRaw = m.Clone();
                             return true;
-                        }    
-                            
+                        }
+                        return true;
                         break;
                 }
 
@@ -1343,7 +1345,7 @@ namespace BeeCore
                 else
                 {
                     numTry = 0;
-                    FrameRate = CCDPlus.FPS;
+                   // FrameRate = CCDPlus.FPS;
                 }
             IsReadCCD = false;
 

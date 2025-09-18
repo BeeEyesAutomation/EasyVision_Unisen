@@ -32,7 +32,7 @@ namespace PylonCli {
         int _bufIndex = 0;
 
         // ImageEventHandler native (quản lý thủ công)
-        void* _imgHandlerPtr = nullptr;
+        Pylon::CImageEventHandler* _imgHandlerPtr = nullptr; // giữ handler
 
         bool _opened = false;
         GrabMode _mode = GrabMode::InternalLoop;
@@ -48,6 +48,7 @@ namespace PylonCli {
         Camera();
         ~Camera();
         !Camera();
+        void  ChangeGrabLoop(bool useInternal);
         // ==== FPS ====
     public:
         double GetMeasuredFps();   // FPS đo từ thời gian giữa các frame (EMA)
