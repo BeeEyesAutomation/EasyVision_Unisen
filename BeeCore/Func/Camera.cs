@@ -526,7 +526,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Exposure.Value =await Task.Run(() => PylonCam.SetExposure(Para.Exposure.Value), cancel.Token);
+                        Para.Exposure.Value = PylonCam.SetExposure(Para.Exposure.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -566,7 +566,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetExposure(out Para.Exposure.Min, out Para.Exposure.Max, out Para.Exposure.Step, out Para.Exposure.Value), cancel.Token);
+                        PylonCam.GetExposure(out Para.Exposure.Min, out Para.Exposure.Max, out Para.Exposure.Step, out Para.Exposure.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -609,7 +609,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Gain.Value =await Task.Run(() => PylonCam.SetGain(Para.Gain.Value), cancel.Token);
+                        Para.Gain.Value = PylonCam.SetGain(Para.Gain.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -649,7 +649,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Shift.Value = await Task.Run(() => PylonCam.SetBlackLevel(Para.Shift.Value), cancel.Token);
+                        Para.Shift.Value = PylonCam.SetBlackLevel(Para.Shift.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -685,7 +685,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetBlackLevel(out Para.Shift.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value), cancel.Token);
+                        PylonCam.GetBlackLevel(out Para.Shift.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -738,7 +738,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Width.Value = await Task.Run(() => PylonCam.SetWidth(Para.Width.Value), cancel.Token);
+                        Para.Width.Value = PylonCam.SetWidth(Para.Width.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -773,7 +773,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetWidth(out Para.Width.Min, out Para.Width.Max, out Para.Width.Step, out Para.Width.Value), cancel.Token);
+                        PylonCam.GetWidth(out Para.Width.Min, out Para.Width.Max, out Para.Width.Step, out Para.Width.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -817,7 +817,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Height.Value = await Task.Run(() => PylonCam.SetHeight(Para.Height.Value), cancel.Token);
+                        Para.Height.Value = PylonCam.SetHeight(Para.Height.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -852,7 +852,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetHeight(out Para.Height.Min, out Para.Height.Max, out Para.Height.Step, out Para.Height.Value), cancel.Token);
+                        PylonCam.GetHeight(out Para.Height.Min, out Para.Height.Max, out Para.Height.Step, out Para.Height.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -928,7 +928,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetOffsetX(out Para.OffSetX.Min, out Para.OffSetX.Max, out Para.OffSetX.Step, out Para.OffSetX.Value), cancel.Token);
+                        PylonCam.GetOffsetX(out Para.OffSetX.Min, out Para.OffSetX.Max, out Para.OffSetX.Step, out Para.OffSetX.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -972,7 +972,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.OffSetY.Value = await Task.Run(() => PylonCam.SetOffsetY(Para.OffSetY.Value), cancel.Token);
+                        Para.OffSetY.Value = PylonCam.SetOffsetY(Para.OffSetY.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -1007,7 +1007,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetOffsetY(out Para.OffSetX.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value), cancel.Token);
+                        PylonCam.GetOffsetY(out Para.OffSetX.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -1184,7 +1184,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        await Task.Run(() => PylonCam.GetGain(out Para.Gain.Min, out Para.Gain.Max, out Para.Gain.Step, out Para.Gain.Value), cancel.Token);
+                       PylonCam.GetGain(out Para.Gain.Min, out Para.Gain.Max, out Para.Gain.Step, out Para.Gain.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:

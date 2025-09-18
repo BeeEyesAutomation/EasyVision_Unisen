@@ -515,19 +515,7 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
         if (_frameReadyHandlers != nullptr) {
             System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
             FrameReady(buffer, w, h, stride, ch);
-            // --- Update FPS ---
-            auto now = std::chrono::steady_clock::now();
-            if (_frameCount > 0) {
-                std::chrono::duration<double> dt = now - _lastFrameTime;
-                double secs = dt.count();
-                if (secs > 0) {
-                    double inst = 1.0 / secs;
-                    const double alpha = 0.2;
-                    _emaFps = (_emaFps <= 0.0) ? inst : (1.0 - alpha) * _emaFps + alpha * inst;
-                }
-            }
-            _lastFrameTime = now;
-            _frameCount++;
+           
         }
         _lastError = nullptr;
     }
@@ -536,6 +524,8 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
 
 // ===== UserLoop API (uchar* qua IntPtr) =====
 System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {
+    auto t0 = std::chrono::steady_clock::now();
+    _frameCount++;
     w = h = stride = channels = 0;
     if (!_cam || !_cam->IsGrabbing()) { _lastError = "Not grabbing"; return System::IntPtr::Zero; }
     if (_mode != GrabMode::UserLoop) { _lastError = "GrabOneUcharPtr only in UserLoop"; return System::IntPtr::Zero; }
@@ -555,19 +545,15 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
 
                 _lastError = nullptr;
                 // --- Update FPS ---
-                using clock = std::chrono::steady_clock;
-                auto now = clock::now();
-                if (_frameCount > 0) {
-                    std::chrono::duration<double> dt = now - _lastFrameTime;
-                    double secs = dt.count();
-                    if (secs > 0) {
-                        double inst = 1.0 / secs;
-                        const double alpha = 0.2; // hệ số EMA
-                        _emaFps = (_emaFps <= 0.0) ? inst : (1.0 - alpha) * _emaFps + alpha * inst;
-                    }
+                // Cập nhật FPS mỗi ~1s
+                auto now = std::chrono::steady_clock::now();
+                std::chrono::duration<double> elapsed = now - _lastFrameTime;
+                if (elapsed.count() >= 1.0) {
+                    _emaFps = _frameCount / elapsed.count();
+                    _frameCount = 0;
+                    _lastFrameTime = now;
                 }
-                _lastFrameTime = now;
-                _frameCount++;
+               
                 return System::IntPtr((unsigned char*)dst->GetBuffer()); // uchar*
             }
             else {
