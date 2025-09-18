@@ -1267,10 +1267,12 @@ namespace BeeCore
                         IntPtr p = PylonCam.GrabOneUcharPtr(500, out w, out h, out s, out c);
                         if (p == IntPtr.Zero) return false; // timeout hoặc fail
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
-                        MatHelper.CopyToMat(p, matRaw, h, w, c);
-                        // matRaw = m.Clone();
-                        return true;
-                            
+                        using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
+                        {
+                            m.CopyTo(matRaw);
+                           // matRaw = m.Clone();
+                            return true;
+                        }    
                             
                         break;
                 }

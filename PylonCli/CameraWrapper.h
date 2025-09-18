@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <pylon/PylonIncludes.h>
+#include <chrono>
 
 using namespace System;
 
@@ -12,9 +13,13 @@ namespace PylonCli {
 
     // Event zero-copy: trả con trỏ uchar* qua IntPtr
     public delegate void FrameReadyHandler(System::IntPtr buffer, int width, int height, int stride, int channels);
-
+    std::chrono::steady_clock::time_point _lastFrameTime;
     public ref class Camera
     {
+    private:
+        double _emaFps = 0.0;
+        long long _frameCount = 0;
+       
     private:
         static bool s_pylonInited;
 
@@ -43,6 +48,10 @@ namespace PylonCli {
         Camera();
         ~Camera();
         !Camera();
+        // ==== FPS ====
+    public:
+        double GetMeasuredFps();   // FPS đo từ thời gian giữa các frame (EMA)
+        double GetDeviceFps();     // FPS report từ node camera
 
         property System::String^ LastError { System::String^ get() { return _lastError; } }
 

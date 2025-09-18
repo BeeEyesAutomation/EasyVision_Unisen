@@ -515,6 +515,19 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
         if (_frameReadyHandlers != nullptr) {
             System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
             FrameReady(buffer, w, h, stride, ch);
+            // --- Update FPS ---
+            auto now = std::chrono::steady_clock::now();
+            if (_frameCount > 0) {
+                std::chrono::duration<double> dt = now - _lastFrameTime;
+                double secs = dt.count();
+                if (secs > 0) {
+                    double inst = 1.0 / secs;
+                    const double alpha = 0.2;
+                    _emaFps = (_emaFps <= 0.0) ? inst : (1.0 - alpha) * _emaFps + alpha * inst;
+                }
+            }
+            _lastFrameTime = now;
+            _frameCount++;
         }
         _lastError = nullptr;
     }
@@ -541,6 +554,20 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
                 stride = w * channels; // packed
 
                 _lastError = nullptr;
+                // --- Update FPS ---
+                using clock = std::chrono::steady_clock;
+                auto now = clock::now();
+                if (_frameCount > 0) {
+                    std::chrono::duration<double> dt = now - _lastFrameTime;
+                    double secs = dt.count();
+                    if (secs > 0) {
+                        double inst = 1.0 / secs;
+                        const double alpha = 0.2; // hệ số EMA
+                        _emaFps = (_emaFps <= 0.0) ? inst : (1.0 - alpha) * _emaFps + alpha * inst;
+                    }
+                }
+                _lastFrameTime = now;
+                _frameCount++;
                 return System::IntPtr((unsigned char*)dst->GetBuffer()); // uchar*
             }
             else {
@@ -568,4 +595,20 @@ System::IntPtr Camera::GrabLatestUcharPtr(int% w, int% h, int% stride, int% chan
     stride = w * channels; // packed
     _lastError = nullptr;
     return System::IntPtr((unsigned char*)cur->GetBuffer()); // uchar*
+}
+double Camera::GetMeasuredFps()
+{
+    return _emaFps; // sẽ >0 sau khi có vài frame
+}
+
+double Camera::GetDeviceFps()
+{
+    try {
+        return GetFloatAny(_cam->GetNodeMap(),
+            { "ResultingFrameRate", "AcquisitionResultingFrameRate", "AcquisitionFrameRate" });
+    }
+    catch (...) {
+        _lastError = "GetDeviceFps fail";
+        return 0.0;
+    }
 }
