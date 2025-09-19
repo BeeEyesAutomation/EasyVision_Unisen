@@ -416,33 +416,7 @@ namespace BeeUi
         private async  void workConAll_DoWork(object sender, DoWorkEventArgs e)
         {
            // int index = 0;
-            foreach (Camera camera in BeeCore.Common.listCamera)
-            {
-                if (camera != null)
-                {
-                    if (camera.IsConnected)
-                    {
-                        camera.DisConnect(camera.Para.TypeCamera);
-
-                        camera.matRaw = new OpenCvSharp.Mat();
-                    }
-                    camera.Init(camera.Para.TypeCamera);
-                     String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
-                    if (camera.Para.TypeCamera == TypeCamera.USB)
-                    {
-                        int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
-                        if (index != -1)
-                            indexCCD = index;
-                    }
-                    camera.IndexConnect = indexCCD;
-                    camera.matRaw = new OpenCvSharp.Mat();
-                    camera.IsConnected = await camera.Connect(camera.Para.Name,camera.Para.TypeCamera);
-                  //  index++;
-                }
-                if (Global.ParaCommon.IsMultiCamera == false)
-                    break;
-            }
-
+         
             //if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
             //    if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
             //        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
@@ -531,9 +505,42 @@ namespace BeeUi
             return IsConnect;
         }
 
-        private  void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async  void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-          
+            if (BeeCore.Common.listCamera[0] != null)
+            {
+                MessageBox.Show("OK Cam " + BeeCore.Common.listCamera[0].Para.Name);
+            }
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    if (camera.IsConnected)
+                    {
+                        camera.DisConnect(camera.Para.TypeCamera);
+
+                        camera.matRaw = new OpenCvSharp.Mat();
+                    }
+                    camera.Init(camera.Para.TypeCamera);
+                    String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
+                    if (camera.Para.TypeCamera == TypeCamera.USB)
+                    {
+                        int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
+                        if (index != -1)
+                            indexCCD = index;
+                    }
+                    camera.IndexConnect = indexCCD;
+                    camera.matRaw = new OpenCvSharp.Mat();
+                    camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
+                    //  index++;
+                }
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+            if (BeeCore.Common.listCamera[0] != null)
+            {
+                MessageBox.Show("OK Cam " + BeeCore.Common.listCamera[0].Para.Name);
+            }
             bool IsConnect = true;
             int numNull = 0;
             foreach (Camera camera in BeeCore.Common.listCamera)

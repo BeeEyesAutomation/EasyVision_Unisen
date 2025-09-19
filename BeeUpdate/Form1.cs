@@ -36,7 +36,7 @@ namespace BeeUpdate
         List<string> pathName = new List<string>();
         private void button1_Click(object sender, EventArgs e)
         {
-            var regex = new Regex(@"^(Bee.*\.dll|OKNG\.dll|PylonCli\.dll|GCBase_MD_VC141_v3_1_Basler_pylon\.dll|GenApi_MD_VC141_v3_1_Basler_pylon\.dll|Log_MD_VC141_v3_1_Basler_pylon\.dll|MathParser_MD_VC141_v3_1_Basler_pylon\.dll|XmlParser_MD_VC141_v3_1_Basler_pylon\.dll|PylonC_v6_1\.dll|PLC_Communication\.dll)$", RegexOptions.IgnoreCase);
+            var regex = new Regex(@"^(Bee.*\.dll|OKNG\.dll|PylonCli\.dll)$", RegexOptions.IgnoreCase);//|GCBase_MD_VC141_v3_1_Basler_pylon\.dll|GenApi_MD_VC141_v3_1_Basler_pylon\.dll|Log_MD_VC141_v3_1_Basler_pylon\.dll|MathParser_MD_VC141_v3_1_Basler_pylon\.dll|XmlParser_MD_VC141_v3_1_Basler_pylon\.dll|PylonC_v6_1\.dll|PLC_Communication\.dll
             List<string> dllFiles = Directory
                 .GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
                 .Where(f => regex.IsMatch(Path.GetFileName(f)))

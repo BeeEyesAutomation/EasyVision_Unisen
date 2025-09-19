@@ -1,10 +1,11 @@
-﻿using OpenCvSharp;
+﻿using BeeGlobal;
+using OpenCvSharp;
+using OpenCvSharp.XPhoto;          // cho White‑Balance
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OpenCvSharp.XPhoto;          // cho White‑Balance
 
 namespace BeeCore.Algorithm
 {
@@ -57,7 +58,8 @@ namespace BeeCore.Algorithm
             }
             catch(Exception ex)
             {
-                Err = ex.Message;
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
+              
             }
             // Cv2.ImWrite("edge.png", result);
             return new Mat();
@@ -83,43 +85,52 @@ namespace BeeCore.Algorithm
             return (lower, upper);
         }
         public static Mat Edge(Mat raw)
-        {
-            Mat edges = new Mat();
-            Mat gray = new Mat();
-            if (raw.Type() == MatType.CV_8UC3)
-                Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
-            else
-                gray = raw.Clone();
+        {try
+            {
+                Mat edges = new Mat();
+                Mat gray = new Mat();
+                if (raw.Type() == MatType.CV_8UC3)
+                    Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+                else
+                    gray = raw.Clone();
 
-            // 1. Histogram truncation để giảm vùng trắng chói
-            Cv2.Threshold(gray, gray, 245, 245, ThresholdTypes.Trunc);
+                // 1. Histogram truncation để giảm vùng trắng chói
+                Cv2.Threshold(gray, gray, 245, 245, ThresholdTypes.Trunc);
 
-            // 2. Tăng tương phản nếu cần
-            Cv2.Normalize(gray, gray, 0, 255, NormTypes.MinMax);
+                // 2. Tăng tương phản nếu cần
+                Cv2.Normalize(gray, gray, 0, 255, NormTypes.MinMax);
 
-            // 3. Làm mượt bằng Gaussian Blur
-            Mat smooth = new Mat();
-            Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
+                // 3. Làm mượt bằng Gaussian Blur
+                Mat smooth = new Mat();
+                Cv2.GaussianBlur(gray, smooth, new Size(5, 5), sigmaX: 1.0);
 
-            // 4. Tự động tính threshold Canny dựa trên histogram
-            var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
+                // 4. Tự động tính threshold Canny dựa trên histogram
+                var (lower, upper) = AutoCannyThresholdFromHistogram(smooth, k1: 0.66, k2: 1.33);
 
-           
-            Cv2.Canny(smooth, edges, lower, upper);
 
-            // 6. Morphological closing để nối đoạn đứt
-            var kernelClose = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
-            Cv2.MorphologyEx(edges, edges, MorphTypes.Close, kernelClose);
+                Cv2.Canny(smooth, edges, lower, upper);
 
-            // 7. Làm dày/mịn cạnh
-            var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
-            Cv2.Dilate(edges, edges, kernel, iterations: 1);
-            Cv2.Erode(edges, edges, kernel, iterations: 1);
-          //  Cv2.ImWrite("Edge.png", edges);
-            return edges;
+                // 6. Morphological closing để nối đoạn đứt
+                var kernelClose = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+                Cv2.MorphologyEx(edges, edges, MorphTypes.Close, kernelClose);
+
+                // 7. Làm dày/mịn cạnh
+                var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+                Cv2.Dilate(edges, edges, kernel, iterations: 1);
+                Cv2.Erode(edges, edges, kernel, iterations: 1);
+                return edges;
+            }
+            catch(Exception ex)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
+
+            }
+            //  Cv2.ImWrite("Edge.png", edges);
+            return null;
         }
         public static Mat Threshold(Mat raw,int Threshold, ThresholdTypes thresholdTypes=ThresholdTypes.Binary)
-        {
+        {try
+            {  
             Mat edges = new Mat();
             Mat gray = new Mat();
             if (raw.Type() == MatType.CV_8UC3)
@@ -138,6 +149,13 @@ namespace BeeCore.Algorithm
            
             Cv2.Canny(smooth, edges, lower, upper);
             return edges;
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Filter", ex.Message));
+
+            }
+            return null;
         }
         public static ImageFilter GaussianBlur(Size ksize, double sigmaX, double sigmaY = 0) =>
             delegate (Mat src, Mat dst) { Cv2.GaussianBlur(src, dst, ksize, sigmaX, sigmaY); };

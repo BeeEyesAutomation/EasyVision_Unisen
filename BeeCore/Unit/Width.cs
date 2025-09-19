@@ -76,53 +76,63 @@ namespace BeeCore
         public List<RectRotate> rectRotates = new List<RectRotate>();
         public void DoWork( RectRotate rectRotate)
         {
-            if (ParallelGapDetector == null) ParallelGapDetector = new ParallelGapDetector();
-            WidthResult = 0;
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            try
             {
-                if (raw.Empty()) return;
-                if (IsCalibs|MaxLen==0)
+                if (ParallelGapDetector == null) ParallelGapDetector = new ParallelGapDetector();
+                WidthResult = 0;
+                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
-                    MinInliers = 2;
-                   
-                }
-                Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
-                if (matProcess == null) matProcess = new Mat();
-                if (!matProcess.Empty()) matProcess.Dispose();
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                switch (MethordEdge)
-                {
-                    case MethordEdge.CloseEdges:
-                        matProcess = Filters.Edge(matCrop);
-                        break;
-                    case MethordEdge.StrongEdges:
-                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                        break;
-                    case MethordEdge.Binary:
-                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                        break;
-                    case MethordEdge.InvertBinary:
-                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                        break;
-                }
-
-
-                GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
-               if(GapResult.lineMid!=null)
-                    if (GapResult.lineMid.Count()>1)
+                    if (raw.Empty()) return;
+                    if (IsCalibs | MaxLen == 0)
                     {
-                        listP_Center = new List<System.Drawing.Point>();
-                        rectRotates = new List<RectRotate>();
-                        PointF p1 = new PointF(GapResult.lineMid[0].X, GapResult.lineMid[0].Y);
-                        PointF p2 = new PointF(GapResult.lineMid[1].X, GapResult.lineMid[1].Y);
-                        float Xmin = Math.Min(p1.X, p2.X); float Ymin = Math.Min(p1.Y, p2.Y);
-                        PointF pCenter = new PointF(Xmin+Math.Abs(p1.X - p2.X) / 2, Ymin+ Math.Abs(p1.Y - p2.Y) / 2);
-                        listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
-                        rectRotates.Add(new RectRotate());
+                        MinInliers = 2;
+
+                    }
+                    Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
+                    if (matProcess == null) matProcess = new Mat();
+                    if (!matProcess.Empty()) matProcess.Dispose();
+                    if (matCrop.Type() == MatType.CV_8UC3)
+                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
+                    switch (MethordEdge)
+                    {
+                        case MethordEdge.CloseEdges:
+                            matProcess = Filters.Edge(matCrop);
+                            break;
+                        case MethordEdge.StrongEdges:
+                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                            break;
+                        case MethordEdge.Binary:
+                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
+                            break;
+                        case MethordEdge.InvertBinary:
+                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
+                            break;
                     }
 
+                    GapResult = new GapResult();
+                    GapResult = ParallelGapDetector.MeasureParallelGap(matCrop, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
+                    if (GapResult.lineMid != null)
+                        if (GapResult.lineMid.Count() > 1)
+                        {
+                            listP_Center = new List<System.Drawing.Point>();
+                            rectRotates = new List<RectRotate>();
+                            PointF p1 = new PointF(GapResult.lineMid[0].X, GapResult.lineMid[0].Y);
+                            PointF p2 = new PointF(GapResult.lineMid[1].X, GapResult.lineMid[1].Y);
+                            float Xmin = Math.Min(p1.X, p2.X); float Ymin = Math.Min(p1.Y, p2.Y);
+                            PointF pCenter = new PointF(Xmin + Math.Abs(p1.X - p2.X) / 2, Ymin + Math.Abs(p1.Y - p2.Y) / 2);
+                            listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
+                            rectRotates.Add(new RectRotate());
+                        }
+                }
             }
+
+            catch (Exception ex)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Width", ex.Message));
+
+            }
+
+        
         }
         public void Complete()
         {
