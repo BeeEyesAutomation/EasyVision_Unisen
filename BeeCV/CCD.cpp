@@ -1082,7 +1082,7 @@ bool ConnectHik( int index,int indexCCD)
 		 nRet = m_pcMyCamera[indexCCD]->Open(m_stDevList.pDeviceInfo[index]);
 		if (MV_OK != nRet)
 		{
-			DeviceReset(m_pcMyCamera[indexCCD]);
+			//DeviceReset(m_pcMyCamera[indexCCD]);
 			delete m_pcMyCamera[indexCCD];
 			m_pcMyCamera[indexCCD] = NULL;
 			//ShowErrorMsg(TEXT("Open Fail"), nRet);
@@ -1369,7 +1369,7 @@ uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 	{
 	case 1: { // Camera SDK
 		if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
-			DeviceReset(m_pcMyCamera[indexCCD]);
+			//DeviceReset(m_pcMyCamera[indexCCD]);
 			*rows = *cols = *Type = 0;
 			return nullptr;
 		}
@@ -1540,7 +1540,7 @@ void CCD::CalHist()
 
 
 }
-void CCD::DestroyAll(int indexCCD)
+void CCD::DestroyAll(int indexCCD,int TypeCamera )
 {
 	
 	switch (TypeCamera)

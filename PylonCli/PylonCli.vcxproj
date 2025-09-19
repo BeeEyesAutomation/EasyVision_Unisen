@@ -135,12 +135,20 @@
       <AdditionalLibraryDirectories>C:\Program Files\Basler\pylon 6\Development\lib\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>GCBase_MD_VC141_v3_1_Basler_pylon.lib;GenApi_MD_VC141_v3_1_Basler_pylon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>powershell -ExecutionPolicy Bypass -Command "$f='$(ProjectDir)version.h'; $c=Get-Content $f; $b=[int]([regex]::Match($c,'VER_BUILD (\d+)').Groups[1].Value)+1; $r=(Get-Date -Format 'yyMMdd'); $c=$c -replace 'VER_BUILD \d+',(\"VER_BUILD $b\") -replace 'VER_REVISION \d+',(\"VER_REVISION $r\"); Set-Content $f $c"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\OKNG\version.h" />
     <ClInclude Include="CameraWrapper.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PylonCli.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

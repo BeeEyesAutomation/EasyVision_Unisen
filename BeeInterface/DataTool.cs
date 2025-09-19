@@ -36,6 +36,11 @@ namespace BeeInterface
                         break;
                     indexCCD++;
                 }
+            X: if (BeeCore.Common.listCamera.Count() != 4)
+                {
+                    BeeCore.Common.listCamera.Add(null);
+                    goto X;
+                }
                 if (BeeCore.Common.listCamera.Count() > 0)
                     if (BeeCore.Common.listCamera[0] != null)
                         Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();

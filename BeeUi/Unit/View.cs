@@ -3072,8 +3072,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
                     if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                    {
-                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                      if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                        {
+                        Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
                         // matRaw là OpenCvSharp.Mat
                         var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
 

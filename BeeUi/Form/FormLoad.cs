@@ -254,7 +254,7 @@ namespace BeeUi
                 G.IsIniPython = true;
             lb.Text = "Initial Learning AI Complete";
             Task.Delay(200);
-            listCCD = Global.ScanCCD.ScanIDCCD();
+          //  listCCD = Global.ScanCCD.ScanIDCCD(Global.Config.ty);
             addMac = Decompile.GetMacAddress();
 
 

@@ -458,13 +458,18 @@ namespace BeeInterface
 
         private void btnChnageCamera_Click(object sender, EventArgs e)
         {
-
+            
             if (Global.ScanCCD == null)
                 return;
             if (Global.IsLive)
                 MessageBox.Show("Please Stop Live");
             else
+            {
+                Global.IsChange = true;
+                Global.ScanCCD.TypeCameraNew = BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera;
                 Global.ScanCCD.ShowDialog();
+            }    
+              
         
         }
 
@@ -565,6 +570,7 @@ namespace BeeInterface
         private async void trackExposure_ValueChanged(float obj)
         {
             if (IsDownEx) return;
+      
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value = (int)trackExposure.Value;
             await BeeCore.Common.listCamera[Global.IndexChoose].SetExpo();
             trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;

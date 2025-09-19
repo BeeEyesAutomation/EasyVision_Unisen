@@ -55,7 +55,7 @@ namespace CvPlus {
 	public:bool GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step,  float% current);
 	public:bool GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current);
 	public:int GetTypeCCD(int indexCCD);
-	public:void	DestroyAll(int indexCCD);
+	public:void	DestroyAll(int indexCCD,int TypeCamera);
 	public:void	ShowSetting();
 	public:void CalHist();
 	public:  void SetFocus(int Focus);

@@ -42,7 +42,8 @@ namespace BeeGlobal
             }
         }
         public static bool IsSetPara = false;
-       public static bool IsAllowReadPLC = true;
+        public static bool IsChange = false;
+        public static bool IsAllowReadPLC = true;
         public static TriggerNum TriggerNum = TriggerNum.Trigger1;
         public static dynamic ScanCCD;
         public static bool IsDebug = false;
@@ -57,8 +58,9 @@ namespace BeeGlobal
         public static bool TotalOK4 = false;
         public static bool IsByPassResult = false;
         public static int NumSend = 0;
-        //Gui
-        public static bool _IsLive = false;
+        public static String Ex = "";
+       //Gui
+       public static bool _IsLive = false;
         public static event Action<bool> LiveChanged;
         public static bool IsLive
         {
