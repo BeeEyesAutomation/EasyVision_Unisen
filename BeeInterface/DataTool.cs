@@ -32,8 +32,7 @@ namespace BeeInterface
                         BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
                     else
                         BeeCore.Common.listCamera.Add(null);
-                    if (Global.ParaCommon.IsMultiCamera == false)
-                        break;
+                  
                     indexCCD++;
                 }
             X: if (BeeCore.Common.listCamera.Count() != 4)
@@ -45,8 +44,21 @@ namespace BeeInterface
                     if (BeeCore.Common.listCamera[0] != null)
                         Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
             }
-            //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
-            BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
+            else
+            {
+                BeeCore.Common.listCamera = new List<Camera>();
+                Global.listParaCamera = new List<ParaCamera> { null,null,null,null};
+                foreach (ParaCamera paraCamera in Global.listParaCamera)
+                {
+                    if (paraCamera== null)
+                       
+                        BeeCore.Common.listCamera.Add(null);
+                    
+                   
+                }
+            }
+                //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
+                BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
 
 
             if (BeeCore.Common.PropetyTools.Count == 0)

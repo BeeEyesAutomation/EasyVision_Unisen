@@ -118,6 +118,9 @@ namespace BeeUi
             indexCCD = cbCCD.SelectedIndex;
            BeeCore.Common.listCamera[Global.IndexChoose].Para.Name = cbCCD.SelectedValue.ToString();
             BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCameraNew;
+            if (Global.listParaCamera[Global.IndexChoose] == null)
+                Global.listParaCamera[Global.IndexChoose] = BeeCore.Common.listCamera[Global.IndexChoose].Para;
+          
            // Global.Config.IDCamera = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
             G.Load.FormActive.CheckActive(G.Load.addMac);
             if(G.IsActive)
@@ -710,6 +713,9 @@ namespace BeeUi
                 if (BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
                {
                     BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCameraNew;
+                    if (Global.listParaCamera[Global.IndexChoose] == null)
+                        Global.listParaCamera[Global.IndexChoose] = BeeCore.Common.listCamera[Global.IndexChoose].Para;
+
                     Global.CameraStatus = CameraStatus.Ready;
                     SaveData.Camera(Global.Project, Global.listParaCamera);
                    // Global.Config.IDCamera = cbCCD.Text.Trim();

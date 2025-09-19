@@ -124,7 +124,8 @@ namespace BeeCore
                     CCDPlus.DestroyAll(IndexCCD, 1);
                     break;
                 case TypeCamera.Pylon:
-                   // PylonCam.Stop();
+                    PylonCam.Stop();
+                   PylonCam.Close();
                     PylonCam.Dispose();
                     break;
 
@@ -1010,7 +1011,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        PylonCam.GetOffsetY(out Para.OffSetX.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value);
+                        PylonCam.GetOffsetY(out Para.OffSetX.Min, out Para.OffSetX.Max, out Para.OffSetX.Step, out Para.OffSetX.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
