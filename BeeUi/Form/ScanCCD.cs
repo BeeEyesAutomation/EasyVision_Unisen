@@ -196,7 +196,7 @@ namespace BeeUi
                     }
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new OpenCvSharp.Mat();
                     BeeCore.Common.listCamera[Global.IndexChoose].IndexConnect = indexCCD;
-                        BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
+                        BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name, BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera);
 
                     
                 }    
@@ -436,7 +436,7 @@ namespace BeeUi
                     }
                     camera.IndexConnect = indexCCD;
                     camera.matRaw = new OpenCvSharp.Mat();
-                    camera.IsConnected = await camera.Connect(camera.Para.Name);
+                    camera.IsConnected = await camera.Connect(camera.Para.Name,camera.Para.TypeCamera);
                   //  index++;
                 }
                 if (Global.ParaCommon.IsMultiCamera == false)
@@ -503,7 +503,7 @@ namespace BeeUi
                     }
                     camera.IndexConnect = indexCCD;
                     camera.matRaw = new OpenCvSharp.Mat();
-                    camera.IsConnected = await camera.Connect(camera.Para.Name);
+                    camera.IsConnected = await camera.Connect(camera.Para.Name,camera.Para.TypeCamera);
                    // index++;
                 }
                 if (Global.ParaCommon.IsMultiCamera == false)
@@ -699,7 +699,7 @@ namespace BeeUi
                 }
                 BeeCore.Common.listCamera[Global.IndexChoose].IndexConnect = indexCCD;
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new OpenCvSharp.Mat();
-                BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name);
+                BeeCore.Common.listCamera[Global.IndexChoose].IsConnected = await BeeCore.Common.listCamera[Global.IndexChoose].Connect(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name,TypeCameraNew);
                 if (BeeCore.Common.listCamera[Global.IndexChoose].IsConnected)
                {
                     BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera = TypeCameraNew;

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 using BeeGlobal;
 namespace BeeCore
 {
@@ -31,13 +31,20 @@ namespace BeeCore
         }
         public static void Project(String Project)
         {
-            String path = "Program\\" + Project;
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
-            Access.SaveConfig("Default.config",Global.Config);
-            Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
-            Access.SaveParaCamera(path + "\\" + Global.Project + ".cam",Global.listParaCamera);
+            try
+            {
+                String path = "Program\\" + Project;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
+                Access.SaveConfig("Default.config", Global.Config);
+                Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
+                Access.SaveParaCamera(path + "\\" + Global.Project + ".cam", Global.listParaCamera);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

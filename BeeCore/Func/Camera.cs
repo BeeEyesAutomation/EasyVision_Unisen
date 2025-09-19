@@ -338,8 +338,8 @@ namespace BeeCore
         }
         
         public int IndexConnect = -1;
-        public  async Task<bool> Connect(String NameCCD )
-        {switch(Para.TypeCamera)
+        public  async Task<bool> Connect(String NameCCD , TypeCamera typeCamera)
+        {switch(typeCamera)
             {
                 case TypeCamera.TinyIV:
                     IsConnected = HEROJE.Connect(0);

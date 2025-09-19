@@ -296,29 +296,44 @@ float Camera::SetWidth(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Width");
-        if (!n || !IsWritable(n)) throw std::runtime_error("Width not writable");
+        _cam->StopGrabbing();
+        if (!n)
+            _lastError="Node Width không tồn tại!";
+
+        if (!IsWritable(n))
+            _lastError="Node Width không cho phép ghi!";
+
         long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
         if (v < mn) v = (int)mn;
         if (v > mx) v = (int)mx;
         if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);
         n->SetValue(v);
         _lastError = nullptr;
+        _cam->StartGrabbing();
         return (int)n->GetValue();
     }
-    catch (...) { _lastError = "SetWidth fail"; return 0; }
+    catch (...) { 
+        _lastError = "SetWidth fail"; return 0; }
 }
 
 float Camera::SetHeight(float v)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Height");
-        if (!n || !IsWritable(n)) throw std::runtime_error("Height not writable");
+        _cam->StopGrabbing();
+        if (!n)
+            _lastError = "Node Width không tồn tại!";
+
+        if (!IsWritable(n))
+            _lastError = "Node Width không cho phép ghi!";
+
         long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
         if (v < mn) v = (int)mn;
         if (v > mx) v = (int)mx;
         if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);
         n->SetValue(v);
         _lastError = nullptr;
+        _cam->StartGrabbing();
         return (int)n->GetValue();
     }
     catch (...) { _lastError = "SetHeight fail"; return 0; }
