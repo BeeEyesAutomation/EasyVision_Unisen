@@ -36,6 +36,8 @@ namespace BeeUi
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick =Global.Config.IsSaveRS;
+            btnTriggerMulti.IsCLick = !Global.ParaCommon.IsOnlyTrigger;
+            btnTriggerOne.IsCLick=Global.ParaCommon.IsOnlyTrigger;
             //btnIsMultiTrig.IsCLick = Global.ParaCommon.IsMultiTrigger;
             //  btnIsOneTrig.IsCLick = !Global.ParaCommon.IsMultiTrigger;
             numTrigger.Value = Global.ParaCommon.NumTrig;
@@ -183,6 +185,21 @@ namespace BeeUi
             SaveData.Config(Global.Config);
             Shows.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
+        }
+
+        private void rjButton1_Click_1(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnTriggerOne_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsOnlyTrigger = true;
+        }
+
+        private void btnTriggerMulti_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsOnlyTrigger = false;
         }
     }
 }

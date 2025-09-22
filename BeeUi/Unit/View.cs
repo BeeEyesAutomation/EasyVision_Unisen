@@ -37,7 +37,7 @@ using static CvPlus.s_BlockMax;
 using Camera = BeeCore.Camera;
 using Control = System.Windows.Forms.Control;
 using File = System.IO.File;
-using FillMode = BeeCore.FillMode;
+
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
@@ -2640,9 +2640,9 @@ namespace BeeUi
                         if (camera == null) continue;
                         camera.DrawResult();
                         if (index == 1)
-                            _renderer.AddImage(camera.bmResult, FillMode.Contain, 0.3f);
+                            _renderer.AddImage(camera.bmResult, FillMode1.Contain, 0.3f);
                         else
-                            _renderer.AddImage(camera.bmResult, FillMode.Contain, 1);
+                            _renderer.AddImage(camera.bmResult, FillMode1.Contain, 1);
                         index++;
                     }
 
@@ -2680,9 +2680,9 @@ namespace BeeUi
                             Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
                             if (_renderer.Count() < 1)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
-                                _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                                 break;
                         case TriggerNum.Trigger2:
                             Global.ToolSettings.Labels[1].ForeColor = Color.FromArgb(114, 114, 114);
@@ -2690,9 +2690,9 @@ namespace BeeUi
                             Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
                             if (_renderer.Count() < 2)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
-                                _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             break;
                         case TriggerNum.Trigger3:
                             Global.ToolSettings.Labels[2].ForeColor = Color.FromArgb(114, 114, 114);
@@ -2700,9 +2700,9 @@ namespace BeeUi
                             Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
                             if (_renderer.Count() < 3)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
-                                _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             break;
                         case TriggerNum.Trigger4:
                             Global.ToolSettings.Labels[3].ForeColor = Color.FromArgb(114, 114, 114);
@@ -2710,9 +2710,9 @@ namespace BeeUi
                             Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
                             Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
                             if (_renderer.Count() < 4)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
-                                _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             break;
                     }    
                       

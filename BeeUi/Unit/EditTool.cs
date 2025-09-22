@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -261,16 +262,44 @@ namespace BeeUi
                         G.StepEdit.SettingStep4.RefreshLogic();
                         break;
                 }
+                //if (Global.IsRun)
+                //{
+
+                   
+
+
+
+                //   G.Header. btnMode.Text = "RUN";
+                //    G.Header.btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                //    Global.Step = Step.Run;
+
+                //}
+                //else
+                //{
+                //    if (Global.EditTool.View.btnContinuous.IsCLick)
+                //        if (Global.EditTool.View.btnContinuous.Enabled == true)
+                //            Global.EditTool.View.btnContinuous.PerformClick();
+                //    //     Global.EditTool.btnHeaderBar.btnSettingPLC.IsCLick = false;
+                
+
+
+                //}
+                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+
                 if (!Global.IsRun)
                 {
                     Global.ToolSettings.btnAdd.Enabled = true;
                     Global.ToolSettings.btnCopy.Enabled = true;
                     Global.ToolSettings.btnDelect.Enabled = true;
                     Global.ToolSettings.btnEnEdit.Enabled = false;
-                    Global.ToolSettings.btnRename.Enabled = true;
+                    Global.ToolSettings.btnRename.Enabled = true; 
+                    Global.EditTool.View.btnCap.Enabled = false;
+                    Global.EditTool.View.btnContinuous.Enabled = false;
                 }
                 else
                 {
+                    Global.EditTool.View.btnCap.Enabled = true;
+                    Global.EditTool.View.btnContinuous.Enabled = true;
                     Global.ToolSettings.btnAdd.Enabled = false;
                     Global.ToolSettings.btnCopy.Enabled = false;
                     Global.ToolSettings.btnDelect.Enabled = false;
@@ -390,7 +419,12 @@ namespace BeeUi
             //  Global.ExChanged += Global_ExChanged;
             if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
                 BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
+            Global.StepModeChanged += Global_StepModeChanged;
+        }
 
+        private void Global_StepModeChanged(Step obj)
+        {
+            RefreshGuiEdit(obj);
         }
 
         private void EditTool_FrameChanged(object sender, PropertyChangedEventArgs e)

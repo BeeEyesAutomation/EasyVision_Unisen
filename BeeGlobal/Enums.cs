@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum FillMode1 { Cover, Contain }
     public enum PLCStatus
     {
         NotConnect,

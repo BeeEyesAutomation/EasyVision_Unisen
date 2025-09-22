@@ -41,6 +41,20 @@ namespace BeeGlobal
                 }
             }
         }
+        private static Step _Step = Step.Run;
+        public static event Action<Step> StepModeChanged;
+        public static Step Step
+        {
+            get => _Step;
+            set
+            {
+                if (_Step != value)
+                {
+                    _Step = value;
+                    StepModeChanged?.Invoke(_Step); // Gọi event
+                }
+            }
+        }
         public static bool IsSetPara = false;
         public static bool IsChange = false;
         public static bool IsAllowReadPLC = true;
@@ -149,7 +163,7 @@ namespace BeeGlobal
         public static Size SizeScreen;
         public static float PerScaleWidth, PerScaleHeight;
         public static bool Initialed = false;
-        public static Step Step = Step.Run;
+       
         public static float Scale = 1, AngleOrigin;
         public static  Color ColorOK = Color.FromArgb(0, 172, 73);
         public static Color ColorNG = Color.DarkRed;

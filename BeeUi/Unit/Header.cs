@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
@@ -238,47 +239,51 @@ namespace BeeUi.Common
             {
                 PropetyTool.ItemTool.IsCLick = false;
             }
-            Global.IsRun = !Global.IsRun;
-       
             if (Global.IsRun)
             {
-              
-                Global.EditTool.View.btnCap.Enabled = true;
-                Global.EditTool.View.btnContinuous.Enabled = true;
-
-               
-              
-                btnMode.Text = "RUN";
-                btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
-                Global.EditTool.RefreshGuiEdit(Step.Run);
-
-            }
-            else
-            {
-                if (Global.EditTool.View.btnContinuous.IsCLick)
-                    if (Global.EditTool.View.btnContinuous.Enabled == true)
-                        Global.EditTool.View.btnContinuous.PerformClick();
-           //     Global.EditTool.btnHeaderBar.btnSettingPLC.IsCLick = false;
-                Global.EditTool.View.btnCap.Enabled = false;
-                Global.EditTool.View.btnContinuous.Enabled = false;
                 if (Global.ParaCommon.IsMultiCamera)
                 {
-                    CameraForm cameraForm = new CameraForm();
-                    cameraForm.ShowDialog();
+                    FormChoose formChoose = new FormChoose();
+                    formChoose.ShowDialog();
+                    if (Global.Step == Step.Step1)
+                    {
+                        CameraForm cameraForm = new CameraForm();
+                        cameraForm.ShowDialog();
+                    }
+                    else
+                    {
+                        btnMode.Text = "RUN"; btnMode.IsCLick = false;
+                        btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                        return;
+                    }
                 }
                 else
-                Global.EditTool.RefreshGuiEdit(Step.Step1);
-                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                 {
-                    PropetyTool.ItemTool.IsEdit = false;
+                    FormChoose formChoose = new FormChoose();
+                    formChoose.ShowDialog();
                 }
-                btnMode.Text = "EDIT";
-                btnMode.ForeColor = Color.DarkSlateGray;
-              
+                if (Global.Step == Step.Step1)
+                {
+
+                    foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                    {
+                        PropetyTool.ItemTool.IsEdit = false;
+                    }
+                    btnMode.Text = "EDIT";
+                    btnMode.ForeColor = Color.DarkSlateGray;
+                }
+                else
+                {
+                    btnMode.Text = "RUN"; btnMode.IsCLick = false;
+                    btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                    return;
+
+                }
 
             }
-            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
-            
+          //  Global.IsRun = !Global.IsRun;
+       
+         
            Acccess(Global.IsRun);
            
         }
@@ -583,7 +588,11 @@ namespace BeeUi.Common
                     G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
                 }
             }
-            if(!Global.IsLoadProgFist) return;
+            if (Global.IsLoadProgFist)
+            {
+                Global.IsLoadProgFist = false;
+                return;
+            }
             if (Global.Initialed)
                 G.listProgram.Visible = true;
             if (IsKeyEnter) return;

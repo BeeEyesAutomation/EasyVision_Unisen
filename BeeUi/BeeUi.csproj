@@ -166,6 +166,12 @@
     <Compile Include="FormCheckUpdate.Designer.cs">
       <DependentUpon>FormCheckUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChoose.Designer.cs">
+      <DependentUpon>FormChoose.cs</DependentUpon>
+    </Compile>
     <Compile Include="ForrmAlarm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormCheckUpdate.resx">
       <DependentUpon>FormCheckUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChoose.resx">
+      <DependentUpon>FormChoose.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForrmAlarm.resx">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>

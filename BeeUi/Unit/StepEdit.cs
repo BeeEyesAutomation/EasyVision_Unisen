@@ -61,8 +61,8 @@ namespace BeeUi.Common
         public SettingStep1 SettingStep1=new SettingStep1();
         private void btnStep2_Click(object sender, EventArgs e)
         {
-         
-            Global.EditTool.RefreshGuiEdit(Step.Step2);
+
+            Global.Step = Step.Step2;
            
         }
 
@@ -75,15 +75,15 @@ namespace BeeUi.Common
           
             if(!Global.ParaCommon.matRegister.IsDisposed())
             Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
-           
-            Global.EditTool.RefreshGuiEdit(Step.Step3);
+
+            Global.Step = Step.Step3;
           
         }
 
         private void btnStep1_Click(object sender, EventArgs e)
         {
             Global.EditTool.View.btnLive.Enabled = true;
-            Global.EditTool.RefreshGuiEdit(Step.Step1);
+            Global.Step = Step.Step1;
             //SettingStep1.btnNextStep.Enabled = true;
             //if (SettingStep1 == null)
             //    SettingStep1 = new SettingStep1();
@@ -120,8 +120,8 @@ namespace BeeUi.Common
       public  SettingStep4 SettingStep4=new SettingStep4();
         private void btnStep4_Click(object sender, EventArgs e)
         {
-            
-            Global.EditTool.RefreshGuiEdit(Step.Step4);
+
+            Global.Step = Step.Step4;
          
 
         }
@@ -140,8 +140,8 @@ namespace BeeUi.Common
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-           // SaveData.Project(Global.Project);
-            Global.EditTool.RefreshGuiEdit(Step.Run);
+            // SaveData.Project(Global.Project);
+            Global.Step = Step.Run;
             Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
 
         }

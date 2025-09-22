@@ -1,190 +1,167 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
 
 using BeeGlobal;
+
 namespace BeeCore
 {
-    [Serializable()]
-
-    public    class Access
+    [Serializable]
+    public class Access
     {
-        public static Stream serialize<T>(T objectToSerialize)
-        {
-            using (MemoryStream mem = new MemoryStream())
-            {
+        // ===================== Generic helpers =====================
 
-                BinaryFormatter b = new BinaryFormatter();
-                b.Serialize(mem, objectToSerialize);
-                return mem;
+        // Serialize object -> Base64 string (hạn chế copy bộ nhớ)
+        private static string SerializeToBase64<T>(T obj)
+        {
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream(capacity: 64 * 1024))
+            {
+                bf.Serialize(ms, obj);
+                if (ms.TryGetBuffer(out ArraySegment<byte> seg))
+                    return Convert.ToBase64String(seg.Array, seg.Offset, (int)ms.Length);
+                // Fallback (hiếm khi cần)
+                return Convert.ToBase64String(ms.ToArray());
             }
         }
 
-        public static void SaveProg(String path, List<List<PropetyTool>> list)
+        // Base64 file -> object (đọc cả file rồi decode)
+        private static T DeserializeFromBase64File<T>(string path)
         {
-            
-            using (MemoryStream ms = new MemoryStream())
+            // Đọc text xong là file đã đóng, không lock
+            string b64 = File.ReadAllText(path, Encoding.UTF8);
+            byte[] bytes = Convert.FromBase64String(b64);
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream(bytes, writable: false))
             {
-               
-                    BinaryFormatter bf = new BinaryFormatter();
-                    bf.Serialize(ms, list);
-                    ms.Position = 0;
-                    byte[] buffer = new byte[(int)ms.Length];
-                    ms.Read(buffer, 0, buffer.Length);
-                    File.WriteAllText(path, Convert.ToBase64String(buffer));
-                    File.Exists(path);
-               
-              
+                object obj = bf.Deserialize(ms);
+                return (T)obj;
             }
         }
-        public static List<List<PropetyTool>> LoadProg(string Path)
+
+        // Ghi text "atomic": ghi vào .tmp rồi Replace để tránh file dở dang
+        private static void AtomicWriteAllText(string path, string content, Encoding enc = null)
         {
-            List<List<PropetyTool>> list = new List<List<PropetyTool>>();
-          
-            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
+            enc = enc ?? Encoding.UTF8;
+            string dir = Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(dir))
+                Directory.CreateDirectory(dir);
+
+            string tmp = path + ".tmp";
+            File.WriteAllText(tmp, content, enc);
+
+            // Nếu file đích chưa tồn tại, Move sẽ nhanh hơn Replace
+            if (!File.Exists(path))
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                list = (List < List<PropetyTool>>)bf.Deserialize(ms);
+                File.Move(tmp, path);
             }
-            return list;
-        }
-        public static void SaveConfig(String path, Config Config)
-        {
-
-            using (MemoryStream ms = new MemoryStream())
+            else
             {
-
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, Config);
-                ms.Position = 0;
-                byte[] buffer = new byte[(int)ms.Length];
-                ms.Read(buffer, 0, buffer.Length);
-                File.WriteAllText(path, Convert.ToBase64String(buffer));
-                File.Exists(path);
-
-
+                // Replace đảm bảo atomic update (có tạo file backup .bak)
+                string bak = path + ".bak";
+                File.Replace(tmp, path, bak, ignoreMetadataErrors: true);
+                // Thử xóa backup (không quan trọng nếu xóa lỗi)
+                try { File.Delete(bak); } catch { /* ignore */ }
             }
         }
-        public static Config LoadConfig(string Path)
+
+        // Save generic
+        private static void SaveBase64<T>(string path, T obj)
+        {
+            string b64 = SerializeToBase64(obj);
+            AtomicWriteAllText(path, b64, Encoding.UTF8);
+        }
+
+        // Load generic với default-factory khi lỗi/không có file
+        private static T LoadBase64<T>(string path, Func<T> defaultFactory = null)
         {
             try
             {
-                Config Config;
-
-                using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
-                {
-                    BinaryFormatter bf = new BinaryFormatter();
-                    Config = (Config)bf.Deserialize(ms);
-                }
-                return Config;
+                if (!File.Exists(path))
+                    return defaultFactory != null ? defaultFactory() : default(T);
+                return DeserializeFromBase64File<T>(path);
             }
-            catch (Exception e)
+            catch
             {
-                Config Config = new Config();
-                Config.nameUser = "Admin";
-                Config.IsByPass = true;
-                Config.ConditionOK = ConditionOK.Logic;
-                return Config;
-            }
-          
-           
-        }
-        public static void SaveParaComon(String path, ParaCommon ParaCam)
-        {
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, ParaCam);
-                ms.Position = 0;
-                byte[] buffer = new byte[(int)ms.Length];
-                ms.Read(buffer, 0, buffer.Length);
-                File.WriteAllText(path, Convert.ToBase64String(buffer));
-                File.Exists(path);
-
-
+                return defaultFactory != null ? defaultFactory() : default(T);
             }
         }
-        public static ParaCommon LoadParaComon(string Path)
+
+        // ===================== Public API =====================
+
+        // Trả về mảng bytes thay vì Stream (tránh trả về stream đã Dispose)
+        public static byte[] SerializeBytes<T>(T objectToSerialize)
         {
-            ParaCommon Config;
-
-            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream(capacity: 32 * 1024))
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                Config = (ParaCommon)bf.Deserialize(ms);
-            }
-            return Config;
-        }
-        public static void SaveParaCamera(String path, List< ParaCamera> ParaCam)
-        {
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, ParaCam);
-                ms.Position = 0;
-                byte[] buffer = new byte[(int)ms.Length];
-                ms.Read(buffer, 0, buffer.Length);
-                File.WriteAllText(path, Convert.ToBase64String(buffer));
-                File.Exists(path);
-
-
+                bf.Serialize(ms, objectToSerialize);
+                return ms.ToArray();
             }
         }
-        public static List<ParaCamera> LoadParaCamera(string Path)
-        {
-            List< ParaCamera> Config;
 
-            using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(File.ReadAllText(Path))))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                Config = (List<ParaCamera>)bf.Deserialize(ms);
-            }
-            return Config;
+        // ----- Programs (List<List<PropetyTool>>) -----
+        public static void SaveProg(string path, List<List<PropetyTool>> list)
+        {
+            SaveBase64(path, list);
         }
-        public void SaveKeys(String Keys, String path)
+
+        public static List<List<PropetyTool>> LoadProg(string path)
         {
-
-
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(ms, Keys);
-                ms.Position = 0;
-                byte[] buffer = new byte[(int)ms.Length];
-                ms.Read(buffer, 0, buffer.Length);
-                File.WriteAllText(path, Convert.ToBase64String(buffer));
-
-
-
-            }
+            return LoadBase64(path, defaultFactory: () => new List<List<PropetyTool>>());
         }
-        public String LoadKeys(String path)
+
+        // ----- Config -----
+        public static void SaveConfig(string path, Config config)
         {
-            try
+            SaveBase64(path, config);
+        }
+
+        public static Config LoadConfig(string path)
+        {
+            return LoadBase64(path, defaultFactory: () =>
             {
-                String text = "";
-                text = File.ReadAllText(path);
-                using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(text)))
-                {
+                var cfg = new Config();
+                cfg.nameUser = "Admin";
+                cfg.IsByPass = true;
+                cfg.ConditionOK = ConditionOK.Logic;
+                return cfg;
+            });
+        }
 
-                    BinaryFormatter bf = new BinaryFormatter();
-                    return (String)bf.Deserialize(ms);
-                }
+        // ----- ParaCommon -----
+        public static void SaveParaComon(string path, ParaCommon para)
+        {
+            SaveBase64(path, para);
+        }
 
-            }
-            catch (Exception)
-            { }
-            return null;
+        public static ParaCommon LoadParaComon(string path)
+        {
+            return LoadBase64<ParaCommon>(path, defaultFactory: () => new ParaCommon());
+        }
+
+        // ----- ParaCamera -----
+        public static void SaveParaCamera(string path, List<ParaCamera> list)
+        {
+            SaveBase64(path, list);
+        }
+
+        public static List<ParaCamera> LoadParaCamera(string path)
+        {
+            return LoadBase64(path, defaultFactory: () => new List<ParaCamera>());
+        }
+
+        // ----- Keys (instance methods trước đây giữ nguyên chữ ký) -----
+        public void SaveKeys(string keys, string path)
+        {
+            SaveBase64(path, keys ?? string.Empty);
+        }
+
+        public string LoadKeys(string path)
+        {
+            return LoadBase64<string>(path, defaultFactory: () => null);
         }
     }
 }

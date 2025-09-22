@@ -13,6 +13,7 @@ namespace BeeGlobal
     [Serializable()]
     public class ParaCommon
     {
+        public bool IsOnlyTrigger = false;
         public bool IsMultiCamera = false;
         //public bool IsMultiTrigger = false;
         public int NumTrig = 1;

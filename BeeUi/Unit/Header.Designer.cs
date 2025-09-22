@@ -576,9 +576,9 @@ namespace BeeUi.Common
         public System.Windows.Forms.Timer tmShow;
         private Unit.EditProg editProg1;
         private RJButton btnShowList;
-        private TextBoxAuto txtQrCode;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.Panel panel1;
+        public TextBoxAuto txtQrCode;
     }
 }

@@ -32,8 +32,8 @@ namespace BeeUi.Unit
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
               //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-               G.Header.RefreshListPJ(); 
-
+               G.Header.RefreshListPJ();
+                Global.IsLoadProgFist = true;
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
                 //PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
@@ -69,20 +69,37 @@ namespace BeeUi.Unit
 
         private void btnDelect_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn chắc chắn muốn Xóa  Model này ?", " Xóa  Model", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Bạn chắc chắn muốn Xóa  Model này ?", " Xóa  Model"+Global.Project, MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                int indexCur = G.listProgram.Items.IndexOf(Global.Project);
-                if(G.listProgram.Items.Count>0)
-                G.listProgram.SelectedIndex = indexCur - 1;
-                File.Delete("Program\\" + G.listProgram.Items[indexCur].ToString());
-                string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);
-              String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
-                G.listProgram.DataSource = PathFile; IsSaveAs = true;
+                string path = Path.Combine("Program", Global.Project);
+
+                if (Directory.Exists(path))
+                {
+                    try
+                    {
+                        foreach (var file in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
+                            File.SetAttributes(file, FileAttributes.Normal);
+
+                        Directory.Delete(path, true);
+                    }
+                    catch(Exception)
+                    {
+
+                    }
+                }
+                //int indexCur = G.listProgram.Items.IndexOf(Global.Project);
+                //if(G.listProgram.Items.Count>0)
+                //G.listProgram.SelectedIndex = indexCur - 1;
+               // Directory.Delete("Program\\" + Global.Project,true);
+                G.Header.RefreshListPJ();
+              //  string[] files = Directory.GetFiles("Program", "*.prog", SearchOption.TopDirectoryOnly);
+              //String[]  PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
+              //  G.listProgram.DataSource = PathFile; IsSaveAs = true;
                 if (G.listProgram.Items.Count == 0) return;
                 Global.Project = G.listProgram.Items[0].ToString();
                 Properties.Settings.Default.programCurrent = Global.Project;
                 Properties.Settings.Default.Save();
-                G.Header.RefreshListPJ();
+                G.Header.RefreshListPJ(); Global.IsLoadProgFist = true;
                 if (!G.Header.workLoadProgram.IsBusy)
                     G.Header.workLoadProgram.RunWorkerAsync();
 
@@ -153,7 +170,29 @@ namespace BeeUi.Unit
 
         private void btnRename_Click(object sender, EventArgs e)
         {
-           
+            if (MessageBox.Show(" Rename Prog To " + G.Header.txtQrCode.Text+ " .Are you sure!", "Rename Prog", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+               if( Directory.Exists("Program\\"+Global.Project))
+                {
+                    String newName = G.Header.txtQrCode.Text.Trim();
+                    Directory.Move("Program\\" + Global.Project, "Program\\" + newName);
+                   
+                    if (File.Exists("Program\\" + newName + "\\"+Global.Project+ ".cam"))
+                        File.Move("Program\\" + newName + "\\" + Global.Project + ".cam", "Program\\" + newName + "\\" + newName + ".cam");
+                    if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".para"))
+                        File.Move("Program\\" + newName + "\\" + Global.Project + ".para", "Program\\" + newName + "\\" + newName + ".para");
+                    if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".prog"))
+                        File.Move("Program\\" + newName + "\\" + Global.Project + ".prog", "Program\\" + newName + "\\" + newName + ".prog");
+             
+                   
+                    G.listProgram.Visible = false;
+                    G.Header.RefreshListPJ();
+
+                    Global.Project = newName;
+                    Properties.Settings.Default.programCurrent = Global.Project;
+                    Properties.Settings.Default.Save();
+                }    
+            }
         }
     }
 }

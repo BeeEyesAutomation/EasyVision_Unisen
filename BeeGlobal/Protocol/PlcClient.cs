@@ -3,9 +3,11 @@ using BeeGlobal;
 using HslCommunication;
 using HslCommunication.LogNet;
 using HslCommunication.ModBus;
+using HslCommunication.Profinet.Delta;
 using HslCommunication.Profinet.Keyence;
 using HslCommunication.Profinet.Melsec;
 using HslCommunication.Profinet.Omron;
+using HslCommunication.Profinet.Panasonic;
 using HslCommunication.Profinet.Siemens;
 using System;
 using System.Diagnostics;
@@ -18,7 +20,7 @@ using System.Threading.Tasks;
 namespace PlcLib
 {
     [Serializable()]
-    public enum PlcBrand { Mitsubishi,Keyence, Omron, Siemens, Modbus }
+    public enum PlcBrand { Mitsubishi,Keyence, Omron, Siemens, ModbusRtu, ModbusAscii,Delta,Pana }
     public enum ConnectionType { Tcp, Serial }
 
     public sealed class PlcClient : IDisposable
@@ -159,8 +161,65 @@ namespace PlcLib
                         fx.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
                         return fx;
                     }
+                case PlcBrand.Delta:
+                    if (_connType == ConnectionType.Tcp)
+                    { 
+                        var mc = new DeltaTcpNet(_ip, _port);
+                        TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        return mc;
+                    }
+                    else
+                    {
 
-                case PlcBrand.Modbus:
+                        var del = new DeltaSerial();
+                        //fx.LogNet = new LogNetSingle("fx485.log");
+                        del.SerialPortInni(sp =>
+                        {
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                        del.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
+                       
+                        return del;
+                    }
+                case PlcBrand.Pana:
+                    if (_connType == ConnectionType.Tcp)
+                    {
+                        var mc = new PanasonicMcNet(_ip, _port);
+                        TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        return mc;
+                    }
+                    else
+                    {
+
+                        var del = new PanasonicMewtocol();
+                        //fx.LogNet = new LogNetSingle("fx485.log");
+                        del.SerialPortInni(sp =>
+                        {
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                        del.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
+
+                        return del;
+                    }
+                case PlcBrand.ModbusRtu:
                     if (_connType == ConnectionType.Tcp)
                     {
                         var mb = new ModbusTcpNet(_ip, _port);
@@ -187,9 +246,38 @@ namespace PlcLib
                             sp.WriteTimeout = _timeoutMs;
                         });
                         rtu.Station = SlaveID;
+
                         return rtu;
                     }
+                case PlcBrand.ModbusAscii:
+                    if (_connType == ConnectionType.Tcp)
+                    {
+                        var mb = new ModbusTcpNet(_ip, _port);
+                        // Station nếu cần: TrySetProp(mb, "Station", (byte)1);
 
+                        TrySetProp(mb, "ReceiveTimeOut", _timeoutMs);
+                        return mb;
+                    }
+                    else
+                    {
+                        // ModbusRtu: tạo với cổng COM, cấu hình qua SerialPortInni
+                        var rtu = new ModbusAscii();
+                        rtu.SerialPortInni(sp =>
+                        {
+
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                        rtu.Station = SlaveID;
+                        return rtu;
+                    }
                 case PlcBrand.Omron:
                     // Chỉ TCP để giản lược (HostLink Serial khác class giữa các bản Hsl)
                     var fins = new OmronFinsNet(_ip, _port);

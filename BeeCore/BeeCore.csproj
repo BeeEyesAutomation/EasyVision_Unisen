@@ -135,7 +135,6 @@
     <Compile Include="Algorithm\RansacCircleFitter.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Checking.cs" />
-    <Compile Include="CollageRenderer.cs" />
     <Compile Include="Data\Access.cs" />
     <Compile Include="Data\ClassProject.cs" />
     <Compile Include="Data\LoadData.cs" />

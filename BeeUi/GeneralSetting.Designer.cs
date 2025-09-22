@@ -54,6 +54,10 @@ namespace BeeUi
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnTriggerMulti = new BeeInterface.RJButton();
+            this.btnTriggerOne = new BeeInterface.RJButton();
+            this.label4 = new System.Windows.Forms.Label();
             this.numTrigger = new BeeInterface.AdjustBarEx();
             this.label1 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -69,6 +73,7 @@ namespace BeeUi
             this.tabControl2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +90,7 @@ namespace BeeUi
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(423, 350);
+            this.tabPage3.Size = new System.Drawing.Size(423, 609);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "History Data";
             // 
@@ -117,6 +122,9 @@ namespace BeeUi
             this.btnSaveRaw.BorderColor = System.Drawing.Color.Transparent;
             this.btnSaveRaw.BorderRadius = 5;
             this.btnSaveRaw.BorderSize = 1;
+            this.btnSaveRaw.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveRaw.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveRaw.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveRaw.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveRaw.Corner = BeeGlobal.Corner.Both;
             this.btnSaveRaw.DebounceResizeMs = 16;
@@ -169,6 +177,9 @@ namespace BeeUi
             this.btnSaveRS.BorderColor = System.Drawing.Color.Silver;
             this.btnSaveRS.BorderRadius = 5;
             this.btnSaveRS.BorderSize = 1;
+            this.btnSaveRS.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveRS.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveRS.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveRS.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveRS.Corner = BeeGlobal.Corner.Both;
             this.btnSaveRS.DebounceResizeMs = 16;
@@ -241,6 +252,9 @@ namespace BeeUi
             this.btnSaveOK.BorderColor = System.Drawing.Color.Transparent;
             this.btnSaveOK.BorderRadius = 5;
             this.btnSaveOK.BorderSize = 1;
+            this.btnSaveOK.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveOK.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveOK.Corner = BeeGlobal.Corner.Both;
             this.btnSaveOK.DebounceResizeMs = 16;
@@ -293,6 +307,9 @@ namespace BeeUi
             this.btnSaveNG.BorderColor = System.Drawing.Color.Silver;
             this.btnSaveNG.BorderRadius = 5;
             this.btnSaveNG.BorderSize = 1;
+            this.btnSaveNG.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveNG.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveNG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveNG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveNG.Corner = BeeGlobal.Corner.Both;
             this.btnSaveNG.DebounceResizeMs = 16;
@@ -422,6 +439,9 @@ namespace BeeUi
             this.btnbig.BorderColor = System.Drawing.Color.Transparent;
             this.btnbig.BorderRadius = 5;
             this.btnbig.BorderSize = 1;
+            this.btnbig.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnbig.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnbig.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnbig.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnbig.Corner = BeeGlobal.Corner.Both;
             this.btnbig.DebounceResizeMs = 16;
@@ -475,6 +495,9 @@ namespace BeeUi
             this.btnNormal.BorderColor = System.Drawing.Color.Transparent;
             this.btnNormal.BorderRadius = 5;
             this.btnNormal.BorderSize = 1;
+            this.btnNormal.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnNormal.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnNormal.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnNormal.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNormal.Corner = BeeGlobal.Corner.Both;
             this.btnNormal.DebounceResizeMs = 16;
@@ -528,6 +551,9 @@ namespace BeeUi
             this.btnSmall.BorderColor = System.Drawing.Color.Transparent;
             this.btnSmall.BorderRadius = 5;
             this.btnSmall.BorderSize = 1;
+            this.btnSmall.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSmall.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSmall.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSmall.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSmall.Corner = BeeGlobal.Corner.Both;
             this.btnSmall.DebounceResizeMs = 16;
@@ -592,6 +618,8 @@ namespace BeeUi
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.numTrigger, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label12, 0, 0);
@@ -601,20 +629,171 @@ namespace BeeUi
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 7;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(417, 603);
             this.tableLayoutPanel1.TabIndex = 35;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint_1);
             // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.BackColor = System.Drawing.Color.White;
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.btnTriggerMulti, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnTriggerOne, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 257);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.Padding = new System.Windows.Forms.Padding(5);
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(407, 55);
+            this.tableLayoutPanel3.TabIndex = 72;
+            // 
+            // btnTriggerMulti
+            // 
+            this.btnTriggerMulti.AutoFont = true;
+            this.btnTriggerMulti.AutoFontHeightRatio = 0.75F;
+            this.btnTriggerMulti.AutoFontMax = 100F;
+            this.btnTriggerMulti.AutoFontMin = 6F;
+            this.btnTriggerMulti.AutoFontWidthRatio = 0.92F;
+            this.btnTriggerMulti.AutoImage = true;
+            this.btnTriggerMulti.AutoImageMaxRatio = 0.75F;
+            this.btnTriggerMulti.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnTriggerMulti.AutoImageTint = true;
+            this.btnTriggerMulti.BackColor = System.Drawing.SystemColors.Control;
+            this.btnTriggerMulti.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnTriggerMulti.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTriggerMulti.BackgroundImage")));
+            this.btnTriggerMulti.BorderColor = System.Drawing.Color.Silver;
+            this.btnTriggerMulti.BorderRadius = 5;
+            this.btnTriggerMulti.BorderSize = 1;
+            this.btnTriggerMulti.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnTriggerMulti.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnTriggerMulti.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnTriggerMulti.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnTriggerMulti.Corner = BeeGlobal.Corner.Both;
+            this.btnTriggerMulti.DebounceResizeMs = 16;
+            this.btnTriggerMulti.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTriggerMulti.FlatAppearance.BorderSize = 0;
+            this.btnTriggerMulti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTriggerMulti.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.btnTriggerMulti.ForeColor = System.Drawing.Color.Black;
+            this.btnTriggerMulti.Image = null;
+            this.btnTriggerMulti.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTriggerMulti.ImageDisabled = null;
+            this.btnTriggerMulti.ImageHover = null;
+            this.btnTriggerMulti.ImageNormal = null;
+            this.btnTriggerMulti.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnTriggerMulti.ImagePressed = null;
+            this.btnTriggerMulti.ImageTextSpacing = 6;
+            this.btnTriggerMulti.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnTriggerMulti.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnTriggerMulti.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnTriggerMulti.ImageTintOpacity = 0.5F;
+            this.btnTriggerMulti.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnTriggerMulti.IsCLick = true;
+            this.btnTriggerMulti.IsNotChange = false;
+            this.btnTriggerMulti.IsRect = false;
+            this.btnTriggerMulti.IsUnGroup = false;
+            this.btnTriggerMulti.Location = new System.Drawing.Point(206, 8);
+            this.btnTriggerMulti.Multiline = false;
+            this.btnTriggerMulti.Name = "btnTriggerMulti";
+            this.btnTriggerMulti.Size = new System.Drawing.Size(193, 39);
+            this.btnTriggerMulti.TabIndex = 9;
+            this.btnTriggerMulti.Text = "Multi";
+            this.btnTriggerMulti.TextColor = System.Drawing.Color.Black;
+            this.btnTriggerMulti.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnTriggerMulti.UseVisualStyleBackColor = false;
+            this.btnTriggerMulti.Click += new System.EventHandler(this.btnTriggerMulti_Click);
+            // 
+            // btnTriggerOne
+            // 
+            this.btnTriggerOne.AutoFont = true;
+            this.btnTriggerOne.AutoFontHeightRatio = 0.75F;
+            this.btnTriggerOne.AutoFontMax = 100F;
+            this.btnTriggerOne.AutoFontMin = 6F;
+            this.btnTriggerOne.AutoFontWidthRatio = 0.92F;
+            this.btnTriggerOne.AutoImage = true;
+            this.btnTriggerOne.AutoImageMaxRatio = 0.75F;
+            this.btnTriggerOne.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnTriggerOne.AutoImageTint = true;
+            this.btnTriggerOne.BackColor = System.Drawing.SystemColors.Control;
+            this.btnTriggerOne.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnTriggerOne.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTriggerOne.BackgroundImage")));
+            this.btnTriggerOne.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnTriggerOne.BorderColor = System.Drawing.Color.Transparent;
+            this.btnTriggerOne.BorderRadius = 5;
+            this.btnTriggerOne.BorderSize = 1;
+            this.btnTriggerOne.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnTriggerOne.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnTriggerOne.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnTriggerOne.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnTriggerOne.Corner = BeeGlobal.Corner.Both;
+            this.btnTriggerOne.DebounceResizeMs = 16;
+            this.btnTriggerOne.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTriggerOne.FlatAppearance.BorderSize = 0;
+            this.btnTriggerOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTriggerOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.btnTriggerOne.ForeColor = System.Drawing.Color.Black;
+            this.btnTriggerOne.Image = null;
+            this.btnTriggerOne.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTriggerOne.ImageDisabled = null;
+            this.btnTriggerOne.ImageHover = null;
+            this.btnTriggerOne.ImageNormal = null;
+            this.btnTriggerOne.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnTriggerOne.ImagePressed = null;
+            this.btnTriggerOne.ImageTextSpacing = 6;
+            this.btnTriggerOne.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnTriggerOne.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnTriggerOne.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnTriggerOne.ImageTintOpacity = 0.5F;
+            this.btnTriggerOne.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnTriggerOne.IsCLick = false;
+            this.btnTriggerOne.IsNotChange = false;
+            this.btnTriggerOne.IsRect = false;
+            this.btnTriggerOne.IsUnGroup = false;
+            this.btnTriggerOne.Location = new System.Drawing.Point(8, 8);
+            this.btnTriggerOne.Multiline = false;
+            this.btnTriggerOne.Name = "btnTriggerOne";
+            this.btnTriggerOne.Size = new System.Drawing.Size(192, 39);
+            this.btnTriggerOne.TabIndex = 7;
+            this.btnTriggerOne.Text = "Single";
+            this.btnTriggerOne.TextColor = System.Drawing.Color.Black;
+            this.btnTriggerOne.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnTriggerOne.UseVisualStyleBackColor = false;
+            this.btnTriggerOne.Click += new System.EventHandler(this.btnTriggerOne_Click);
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Transparent;
+            this.label4.Location = new System.Drawing.Point(5, 225);
+            this.label4.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(407, 32);
+            this.label4.TabIndex = 71;
+            this.label4.Text = "Trigger Mode";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // numTrigger
             // 
+            this.numTrigger.AutoRepeatAccelDeltaMs = -5;
+            this.numTrigger.AutoRepeatAccelerate = true;
+            this.numTrigger.AutoRepeatEnabled = true;
+            this.numTrigger.AutoRepeatInitialDelay = 400;
+            this.numTrigger.AutoRepeatInterval = 60;
+            this.numTrigger.AutoRepeatMinInterval = 20;
             this.numTrigger.AutoShowTextbox = true;
             this.numTrigger.AutoSizeTextbox = true;
             this.numTrigger.BackColor = System.Drawing.Color.White;
@@ -629,6 +808,8 @@ namespace BeeUi
             this.numTrigger.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.numTrigger.ColorTrack = System.Drawing.Color.LightGray;
             this.numTrigger.Decimals = 0;
+            this.numTrigger.DisabledDesaturateMix = 0.3F;
+            this.numTrigger.DisabledDimFactor = 0.9F;
             this.numTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numTrigger.EdgePadding = 2;
             this.numTrigger.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -682,7 +863,7 @@ namespace BeeUi
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(407, 25);
             this.label1.TabIndex = 59;
-            this.label1.Text = "Num Trigger ";
+            this.label1.Text = "Num Follow Chart";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label12
@@ -734,6 +915,9 @@ namespace BeeUi
             this.btnMulti.BorderColor = System.Drawing.Color.Silver;
             this.btnMulti.BorderRadius = 5;
             this.btnMulti.BorderSize = 1;
+            this.btnMulti.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnMulti.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnMulti.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnMulti.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnMulti.Corner = BeeGlobal.Corner.Both;
             this.btnMulti.DebounceResizeMs = 16;
@@ -788,6 +972,9 @@ namespace BeeUi
             this.btnSingle.BorderColor = System.Drawing.Color.Transparent;
             this.btnSingle.BorderRadius = 5;
             this.btnSingle.BorderSize = 1;
+            this.btnSingle.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSingle.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSingle.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSingle.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSingle.Corner = BeeGlobal.Corner.Both;
             this.btnSingle.DebounceResizeMs = 16;
@@ -842,6 +1029,9 @@ namespace BeeUi
             this.btnSave.BorderColor = System.Drawing.Color.Transparent;
             this.btnSave.BorderRadius = 5;
             this.btnSave.BorderSize = 1;
+            this.btnSave.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSave.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSave.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSave.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSave.Corner = BeeGlobal.Corner.Both;
             this.btnSave.DebounceResizeMs = 16;
@@ -903,6 +1093,7 @@ namespace BeeUi
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -937,5 +1128,9 @@ namespace BeeUi
         private System.Windows.Forms.Label label1;
         private AdjustBarEx numTrigger;
         private RJButton btnSave;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private RJButton btnTriggerMulti;
+        private RJButton btnTriggerOne;
+        private System.Windows.Forms.Label label4;
     }
 }

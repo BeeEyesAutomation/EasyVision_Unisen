@@ -240,10 +240,10 @@ namespace BeeCore
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
-            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
             if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
-          
+                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
+
             if (!Global.IsRun)
             {
                 if (!matProcess.IsDisposed)

@@ -72,12 +72,13 @@
     </Compile>
     <Compile Include="ConvertImg.cs" />
     <Compile Include="CustomGui.cs" />
-    <Compile Include="CustomNumericEx.cs">
+    <Compile Include="Custom\CustomNumericEx.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Custom\AdjustBarEx.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Custom\CollageRenderer.cs" />
     <Compile Include="Custom\GradientTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -93,8 +94,8 @@
     <Compile Include="Custom\TrackBar2.Designer.cs">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Custom\DashboardImages.cs" />
-    <Compile Include="Custom\DashboardListCompact.cs">
+    <Compile Include="DashBoard\DashboardImages.cs" />
+    <Compile Include="DashBoard\DashboardListCompact.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataTool.cs" />
@@ -110,16 +111,16 @@
     <Compile Include="GroupControl\OK_Cancel.Designer.cs">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ItemLogic.cs">
+    <Compile Include="General\ItemLogic.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ItemLogic.Designer.cs">
+    <Compile Include="General\ItemLogic.Designer.cs">
       <DependentUpon>ItemLogic.cs</DependentUpon>
     </Compile>
-    <Compile Include="ItemRS.cs">
+    <Compile Include="General\ItemRS.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ItemRS.Designer.cs">
+    <Compile Include="General\ItemRS.Designer.cs">
       <DependentUpon>ItemRS.cs</DependentUpon>
     </Compile>
     <Compile Include="LayoutPersistence.cs" />
@@ -136,37 +137,31 @@
     <Compile Include="ProtocolPLC.Designer.cs">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingPLC.cs">
+    <Compile Include="Steps\SettingStep1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SettingPLC.Designer.cs">
-      <DependentUpon>SettingPLC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingStep1.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingStep1.Designer.cs">
+    <Compile Include="Steps\SettingStep1.Designer.cs">
       <DependentUpon>SettingStep1.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingStep2.cs">
+    <Compile Include="Steps\SettingStep2.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SettingStep2.Designer.cs">
+    <Compile Include="Steps\SettingStep2.Designer.cs">
       <DependentUpon>SettingStep2.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingStep4.cs">
+    <Compile Include="Steps\SettingStep4.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SettingStep4.Designer.cs">
+    <Compile Include="Steps\SettingStep4.Designer.cs">
       <DependentUpon>SettingStep4.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusDashboard.cs">
+    <Compile Include="DashBoard\StatusDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StatusDashboard.Designer.cs">
+    <Compile Include="DashBoard\StatusDashboard.Designer.cs">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextBoxAuto.cs">
+    <Compile Include="Custom\TextBoxAuto.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Tool\ToolBarcode.cs">
@@ -211,10 +206,10 @@
     <Compile Include="Tool\ToolOCR.Designer.cs">
       <DependentUpon>ToolOCR.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolPage.cs">
+    <Compile Include="General\ToolPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolPage.Designer.cs">
+    <Compile Include="General\ToolPage.Designer.cs">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolOKNG.cs">
@@ -261,10 +256,10 @@
     <EmbeddedResource Include="GroupControl\OK_Cancel.resx">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemLogic.resx">
+    <EmbeddedResource Include="General\ItemLogic.resx">
       <DependentUpon>ItemLogic.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemRS.resx">
+    <EmbeddedResource Include="General\ItemRS.resx">
       <DependentUpon>ItemRS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -274,19 +269,16 @@
     <EmbeddedResource Include="ProtocolPLC.resx">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingPLC.resx">
-      <DependentUpon>SettingPLC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingStep1.resx">
+    <EmbeddedResource Include="Steps\SettingStep1.resx">
       <DependentUpon>SettingStep1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingStep2.resx">
+    <EmbeddedResource Include="Steps\SettingStep2.resx">
       <DependentUpon>SettingStep2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingStep4.resx">
+    <EmbeddedResource Include="Steps\SettingStep4.resx">
       <DependentUpon>SettingStep4.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatusDashboard.resx">
+    <EmbeddedResource Include="DashBoard\StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolBarcode.resx">
@@ -310,7 +302,7 @@
     <EmbeddedResource Include="Tool\ToolOCR.resx">
       <DependentUpon>ToolOCR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolPage.resx">
+    <EmbeddedResource Include="General\ToolPage.resx">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolOKNG.resx">

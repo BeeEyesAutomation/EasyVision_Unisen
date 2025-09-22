@@ -530,14 +530,15 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnKeyence.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
                     btnMitsu.IsCLick = true;
-                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Modbus)
-                    btnRS485.IsCLick = true;
+                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
+                    btnRtu.IsCLick = true;
+               
                 txtIP.Text = Global.ParaCommon.Comunication.Protocol.sIP;
                 txtPort.Text =Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
 
                 if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
                 {
-                    cbCom.Enabled = false;
+                    layCom.Enabled = false;
                     cbBaurate.Enabled = false;
                     txtIP.Enabled = true;
                     txtPort.Enabled = true;
@@ -551,7 +552,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Serial)
                 {
                     btnSerial.IsCLick = true;
-                    cbCom.Enabled = true;
+                    layCom.Enabled = true;
                     cbBaurate.Enabled = true;
                     txtIP.Enabled = false;
                     txtPort.Enabled = false;
@@ -982,7 +983,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnSerial_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Serial;
-            cbCom.Enabled = true;
+            layCom.Enabled = true;
             cbBaurate.Enabled = true;
             txtIP.Enabled = false;
             txtPort.Enabled = false;
@@ -996,7 +997,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnTCP_Click_1(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Tcp;
-            cbCom.Enabled = false;
+            layCom.Enabled = false;
             cbBaurate.Enabled = false;
             txtIP.Enabled = true;
             txtPort.Enabled = true;
@@ -1122,7 +1123,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnRS485_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Modbus;
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusRtu;
         }
 
         private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
@@ -1134,6 +1135,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             Global.ParaCommon.Comunication.Protocol.SlaveID =(byte) numSlaveID.Value;
 
+        }
+
+        private void btnModbusASII_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusAscii;
+        }
+
+        private void btnDelta_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Delta;
         }
     }
 }
