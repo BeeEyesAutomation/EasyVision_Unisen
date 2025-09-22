@@ -44,7 +44,9 @@ namespace BeeGlobal
         Any, Horizontal, Vertical
     }
     public enum TriggerNum
-     {  Trigger1,
+     {
+        Trigger0,
+        Trigger1,
         Trigger2,
         Trigger3,
         Trigger4
@@ -65,7 +67,6 @@ namespace BeeGlobal
     {
         None,
         Trigger,
-        Trigger1,
         Trigger2,
         Trigger3,
         Trigger4,
@@ -87,13 +88,18 @@ namespace BeeGlobal
     {
         None,
         Result,
-        Result1,
         Result2,
         Result3,
         Result4,
         Ready,
+        Ready2,
+        Ready3,
+        Ready4,
         Reset,
         Busy,
+        Busy2,
+        Busy3,
+        Busy4,
         Error,
         Logic1,
         Logic2,
@@ -160,7 +166,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy
+      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy
     }
     public enum AreaCrop
     {
@@ -168,22 +174,24 @@ namespace BeeGlobal
     }
     public enum TypeTool
     {
-        Position_Adjustment,
-        Pattern,
-        MatchingShape,
-        OutLine,
-        Edge_Pixels,
-        Color_Area,
-        Width,
-        Diameter,
-        Edge,
-        Pitch,
-        OCR, BarCode
-        , Learning,
-        Positions,
-        Measure,
-        Circle,OKNG
-            , Crop
+        Position_Adjustment=0,
+        Pattern=1,
+        OKNG = 16,
+        Color_Area = 5,
+        MatchingShape = 2,
+        Crop = 17,
+      
+       
+        Width=6,
+        Circle = 15,
+        Measure = 14,
+
+        Learning = 12,
+        OCR =10,
+        BarCode=11, 
+        
+        
+      
     }
     public enum TypeOCR
     {

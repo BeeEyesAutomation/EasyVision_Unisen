@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
 using System;
@@ -43,11 +44,9 @@ namespace BeeUi.Unit
             //    return;
             //}
             Global.EditTool.pEditTool.Show("Tool");
-            Global.ToolSettings.pAllTool.Controls.Clear();
-            G.Header.stepShow = 0;
-            G.Header.indexToolShow = 0;
-            G.Header.  tmShow.Enabled = true;
-           
+        
+            Shows.ShowAllChart(Global.ToolSettings.pAllTool);
+
         }
 
      

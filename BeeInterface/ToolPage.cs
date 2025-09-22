@@ -85,11 +85,11 @@ namespace BeeInterface
             String nameBtn = btn.Name.Replace("btn", "");
 
             TypeTool = (TypeTool)Enum.Parse(typeof(TypeTool), nameBtn, true);
-         int index=   Global.listItool.FindIndex(a => a.TypeTool == TypeTool);
+         int index=   Global.itemNews.FindIndex(a => a.TypeTool == TypeTool);
             if(index>-1)
             { String name = nameBtn.Replace("_", " ");
                 lbName.Text = name;
-                lbContent.Text = Global.listItool[index].Content;
+                lbContent.Text = Global.itemNews[index].Content;
                 img.Image= (Image)Properties.Resources.ResourceManager.GetObject("content"+ nameBtn);
             }
         }
@@ -100,119 +100,59 @@ namespace BeeInterface
 
         }
         //
-        public static List<string> listContent = new List<string>
-        {
-
-       "Position_Adjustment",//1
-       "Pattern" ,//2
-       "Matching Shape" ,//3
-       "OutLine" ,//4
-       "Edge_Pixels" ,//5
-       "Color_Area",//6
-       "Width" ,//7
-       "Diameter" ,//8
-       "Edge" ,//9
-        "Pitch",//10
-        "OCR",//11
-        "QRCODE",//12
-         "Learning",//13
-         "Position",//14
-         "Measure",//15
-         "Circle",//16
-         "OKNG",//16,
-            "Crop And Save Image",
-        };
-        public static List<GroupTool> groupTools = new List<GroupTool>
-        {
-            GroupTool.Basic_Tool,
-            GroupTool.Basic_Tool,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Basic_Tool,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_1,
-            GroupTool.Extra_Tool_2,
-             GroupTool.Basic_Tool,
-             GroupTool.Extra_Tool_1,
-             GroupTool.Extra_Tool_2,
-            GroupTool.Extra_Tool_1,
-              GroupTool.Basic_Tool,
-               GroupTool.Basic_Tool,
-
-        };
+   
         int lenMax = 0;
-        public void LoadAllInforTool()
-        {
-            IsRect = true;
-            Global.listItool = new List<iTool>();
-            int ix = 0;
-            Basic_Tool.Controls.Clear();
-            Extra_Tool_1.Controls.Clear();
-            Extra_Tool_2.Controls.Clear();
-            foreach (String nameTool in GetListTool())
-            {
-                if(lenMax< nameTool.Length)
-                lenMax = nameTool.Length;
-                TypeTool type = (TypeTool)Enum.Parse(typeof(TypeTool), nameTool, true);
-                Global.listItool.Add(new iTool(type,null, listContent[ix], groupTools[ix]));
-                ix++;
-            }
-          }
+       
         bool IsRect = true;
+       
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
             int space = 45;
-             foreach (iTool tool in Global.listItool)
+         
+            foreach(ItemNew itemNew in Global.itemNews)
             {
-               
-                 String name = tool.TypeTool.ToString();
-                GroupTool groupTool = tool.GroupTool;
-                RJButton btn=new RJButton();
-               
-                    switch (groupTool)
-                    {
-                        case GroupTool.Basic_Tool:
+                String name = itemNew.TypeTool.ToString();
+                GroupTool groupTool = itemNew.GroupTool;
+                RJButton btn = new RJButton();
+                switch (groupTool)
+                {
+                    case GroupTool.Basic_Tool:
 
-                             btn = NewRadioButton(name, y);
+                        btn = NewRadioButton(name, y);
                         y += space;
                         btn.Parent = Basic_Tool;
                         //if (tool.TypeTool != TypeTool.Position_Adjustment&& tool.TypeTool != TypeTool.Pattern && tool.TypeTool != TypeTool.MatchingShape)
                         //    btn.Enabled = false;
-                            break;
-                        case GroupTool.Extra_Tool_1:
-                             btn = NewRadioButton(name, y2);
-                       // btn.Enabled = false;
+                        break;
+                    case GroupTool.Extra_Tool_1:
+                        btn = NewRadioButton(name, y2);
+                        // btn.Enabled = false;
                         y2 += space;
                         btn.Parent = Extra_Tool_1;
-                       // btn.Enabled = false;
-                            break;
-                        case GroupTool.Extra_Tool_2:
-                       
+                        // btn.Enabled = false;
+                        break;
+                    case GroupTool.Extra_Tool_2:
+
                         btn = NewRadioButton(name, y3);
                         //btn.Enabled = false;
                         y3 += space;
                         btn.Parent = Extra_Tool_2;
-                       // btn.Enabled = false;
+                        // btn.Enabled = false;
                         break;
 
                 }
                 if (!Global.IsIntialPython)
                 {
-                    if (tool.TypeTool == TypeTool.Learning)
+                    if (itemNew.TypeTool == TypeTool.Learning)
                         btn.Enabled = false;
-                    if (tool.TypeTool == TypeTool.OCR)
+                    if (itemNew.TypeTool == TypeTool.OCR)
                         btn.Enabled = false;
                 }
-                tool.Control = btn;
+                itemNew.btn = btn;
 
-
-
-            }    
+            }
+         
         }
 
         private void btn_Click(object sender, EventArgs e)
@@ -222,7 +162,7 @@ namespace BeeInterface
 
         private void ToolPage_Load(object sender, EventArgs e)
         {
-            LoadAllInforTool();
+         
             LoadGuiAllTool();
         }
 
@@ -232,10 +172,10 @@ namespace BeeInterface
             TabPage tab= tabTool.SelectedTab;
           
                 GroupTool group = (GroupTool)Enum.Parse(typeof(GroupTool), tab.Name, true);
-            int index = Global.listItool.FindIndex(a => a.GroupTool == group);
+            int index =Global.itemNews.FindIndex(a => a.GroupTool == group);
             if(index>-1)
             {
-                RJButton rJButton = Global.listItool[index].Control;
+                RJButton rJButton =Global.itemNews[index].btn as RJButton;
                 
                 rJButton.PerformClick();
                 //foreach (Control c in tab.Controls)

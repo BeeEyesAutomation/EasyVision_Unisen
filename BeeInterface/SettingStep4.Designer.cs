@@ -37,14 +37,14 @@ namespace BeeInterface
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnComplete = new BeeInterface.RJButton();
-            this.btnCancel = new BeeInterface.RJButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.pItemsLogis = new System.Windows.Forms.Panel();
+            this.btnComplete = new BeeInterface.RJButton();
+            this.btnCancel = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -65,7 +65,7 @@ namespace BeeInterface
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(351, 29);
@@ -93,8 +93,8 @@ namespace BeeInterface
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Controls.Add(this.btnComplete, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnCancel, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -104,112 +104,6 @@ namespace BeeInterface
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(371, 54);
             this.tableLayoutPanel3.TabIndex = 22;
-            // 
-            // btnComplete
-            // 
-            this.btnComplete.AutoFont = true;
-            this.btnComplete.AutoFontHeightRatio = 0.75F;
-            this.btnComplete.AutoFontMax = 100F;
-            this.btnComplete.AutoFontMin = 6F;
-            this.btnComplete.AutoFontWidthRatio = 0.92F;
-            this.btnComplete.AutoImage = true;
-            this.btnComplete.AutoImageMaxRatio = 0.75F;
-            this.btnComplete.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnComplete.AutoImageTint = true;
-            this.btnComplete.BackColor = System.Drawing.SystemColors.Control;
-            this.btnComplete.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.btnComplete.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnComplete.BackgroundImage")));
-            this.btnComplete.BorderColor = System.Drawing.Color.Transparent;
-            this.btnComplete.BorderRadius = 5;
-            this.btnComplete.BorderSize = 1;
-            this.btnComplete.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnComplete.Corner = BeeGlobal.Corner.Both;
-            this.btnComplete.DebounceResizeMs = 16;
-            this.btnComplete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnComplete.FlatAppearance.BorderSize = 0;
-            this.btnComplete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnComplete.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F, System.Drawing.FontStyle.Bold);
-            this.btnComplete.ForeColor = System.Drawing.Color.Black;
-            this.btnComplete.Image = null;
-            this.btnComplete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnComplete.ImageDisabled = null;
-            this.btnComplete.ImageHover = null;
-            this.btnComplete.ImageNormal = null;
-            this.btnComplete.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnComplete.ImagePressed = null;
-            this.btnComplete.ImageTextSpacing = 6;
-            this.btnComplete.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnComplete.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnComplete.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnComplete.ImageTintOpacity = 0.5F;
-            this.btnComplete.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnComplete.IsCLick = true;
-            this.btnComplete.IsNotChange = true;
-            this.btnComplete.IsRect = false;
-            this.btnComplete.IsUnGroup = false;
-            this.btnComplete.Location = new System.Drawing.Point(3, 3);
-            this.btnComplete.Multiline = false;
-            this.btnComplete.Name = "btnComplete";
-            this.btnComplete.Size = new System.Drawing.Size(175, 48);
-            this.btnComplete.TabIndex = 12;
-            this.btnComplete.Text = "Complete";
-            this.btnComplete.TextColor = System.Drawing.Color.Black;
-            this.btnComplete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnComplete.UseVisualStyleBackColor = false;
-            this.btnComplete.Click += new System.EventHandler(this.btnNextStep_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.AutoFont = true;
-            this.btnCancel.AutoFontHeightRatio = 0.75F;
-            this.btnCancel.AutoFontMax = 100F;
-            this.btnCancel.AutoFontMin = 6F;
-            this.btnCancel.AutoFontWidthRatio = 0.92F;
-            this.btnCancel.AutoImage = true;
-            this.btnCancel.AutoImageMaxRatio = 0.75F;
-            this.btnCancel.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnCancel.AutoImageTint = true;
-            this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
-            this.btnCancel.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
-            this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
-            this.btnCancel.BorderRadius = 5;
-            this.btnCancel.BorderSize = 1;
-            this.btnCancel.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnCancel.Corner = BeeGlobal.Corner.Both;
-            this.btnCancel.DebounceResizeMs = 16;
-            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancel.FlatAppearance.BorderSize = 0;
-            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
-            this.btnCancel.ForeColor = System.Drawing.Color.Black;
-            this.btnCancel.Image = null;
-            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.ImageDisabled = null;
-            this.btnCancel.ImageHover = null;
-            this.btnCancel.ImageNormal = null;
-            this.btnCancel.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnCancel.ImagePressed = null;
-            this.btnCancel.ImageTextSpacing = 6;
-            this.btnCancel.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnCancel.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnCancel.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnCancel.ImageTintOpacity = 0.5F;
-            this.btnCancel.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnCancel.IsCLick = false;
-            this.btnCancel.IsNotChange = true;
-            this.btnCancel.IsRect = false;
-            this.btnCancel.IsUnGroup = false;
-            this.btnCancel.Location = new System.Drawing.Point(184, 3);
-            this.btnCancel.Multiline = false;
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(184, 48);
-            this.btnCancel.TabIndex = 13;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextColor = System.Drawing.Color.Black;
-            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // tabControl1
             // 
@@ -222,6 +116,7 @@ namespace BeeInterface
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(371, 617);
             this.tabControl1.TabIndex = 23;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -266,7 +161,7 @@ namespace BeeInterface
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(351, 29);
@@ -283,6 +178,118 @@ namespace BeeInterface
             this.pItemsLogis.Name = "pItemsLogis";
             this.pItemsLogis.Size = new System.Drawing.Size(351, 538);
             this.pItemsLogis.TabIndex = 21;
+            // 
+            // btnComplete
+            // 
+            this.btnComplete.AutoFont = true;
+            this.btnComplete.AutoFontHeightRatio = 0.75F;
+            this.btnComplete.AutoFontMax = 100F;
+            this.btnComplete.AutoFontMin = 6F;
+            this.btnComplete.AutoFontWidthRatio = 0.92F;
+            this.btnComplete.AutoImage = true;
+            this.btnComplete.AutoImageMaxRatio = 0.75F;
+            this.btnComplete.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnComplete.AutoImageTint = true;
+            this.btnComplete.BackColor = System.Drawing.SystemColors.Control;
+            this.btnComplete.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnComplete.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnComplete.BackgroundImage")));
+            this.btnComplete.BorderColor = System.Drawing.Color.Transparent;
+            this.btnComplete.BorderRadius = 5;
+            this.btnComplete.BorderSize = 1;
+            this.btnComplete.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnComplete.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnComplete.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnComplete.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnComplete.Corner = BeeGlobal.Corner.Both;
+            this.btnComplete.DebounceResizeMs = 16;
+            this.btnComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnComplete.FlatAppearance.BorderSize = 0;
+            this.btnComplete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnComplete.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F, System.Drawing.FontStyle.Bold);
+            this.btnComplete.ForeColor = System.Drawing.Color.Black;
+            this.btnComplete.Image = null;
+            this.btnComplete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnComplete.ImageDisabled = null;
+            this.btnComplete.ImageHover = null;
+            this.btnComplete.ImageNormal = null;
+            this.btnComplete.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnComplete.ImagePressed = null;
+            this.btnComplete.ImageTextSpacing = 6;
+            this.btnComplete.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnComplete.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnComplete.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnComplete.ImageTintOpacity = 0.5F;
+            this.btnComplete.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnComplete.IsCLick = true;
+            this.btnComplete.IsNotChange = true;
+            this.btnComplete.IsRect = false;
+            this.btnComplete.IsUnGroup = false;
+            this.btnComplete.Location = new System.Drawing.Point(3, 3);
+            this.btnComplete.Multiline = false;
+            this.btnComplete.Name = "btnComplete";
+            this.btnComplete.Size = new System.Drawing.Size(179, 48);
+            this.btnComplete.TabIndex = 12;
+            this.btnComplete.Text = "Complete";
+            this.btnComplete.TextColor = System.Drawing.Color.Black;
+            this.btnComplete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnComplete.UseVisualStyleBackColor = false;
+            this.btnComplete.Click += new System.EventHandler(this.btnNextStep_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.AutoFont = true;
+            this.btnCancel.AutoFontHeightRatio = 0.75F;
+            this.btnCancel.AutoFontMax = 100F;
+            this.btnCancel.AutoFontMin = 6F;
+            this.btnCancel.AutoFontWidthRatio = 0.92F;
+            this.btnCancel.AutoImage = true;
+            this.btnCancel.AutoImageMaxRatio = 0.75F;
+            this.btnCancel.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnCancel.AutoImageTint = true;
+            this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
+            this.btnCancel.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.BackgroundImage")));
+            this.btnCancel.BorderColor = System.Drawing.Color.Transparent;
+            this.btnCancel.BorderRadius = 5;
+            this.btnCancel.BorderSize = 1;
+            this.btnCancel.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCancel.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCancel.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnCancel.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnCancel.Corner = BeeGlobal.Corner.Both;
+            this.btnCancel.DebounceResizeMs = 16;
+            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancel.FlatAppearance.BorderSize = 0;
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
+            this.btnCancel.ForeColor = System.Drawing.Color.Black;
+            this.btnCancel.Image = null;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.ImageDisabled = null;
+            this.btnCancel.ImageHover = null;
+            this.btnCancel.ImageNormal = null;
+            this.btnCancel.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnCancel.ImagePressed = null;
+            this.btnCancel.ImageTextSpacing = 6;
+            this.btnCancel.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnCancel.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnCancel.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnCancel.ImageTintOpacity = 0.5F;
+            this.btnCancel.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnCancel.IsCLick = false;
+            this.btnCancel.IsNotChange = true;
+            this.btnCancel.IsRect = false;
+            this.btnCancel.IsUnGroup = false;
+            this.btnCancel.Location = new System.Drawing.Point(188, 3);
+            this.btnCancel.Multiline = false;
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(180, 48);
+            this.btnCancel.TabIndex = 13;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextColor = System.Drawing.Color.Black;
+            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // SettingStep4
             // 

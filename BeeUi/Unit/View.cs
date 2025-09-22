@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
+using PylonCli;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +34,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using System.Xml;
 using static CvPlus.s_BlockMax;
+using Camera = BeeCore.Camera;
 using Control = System.Windows.Forms.Control;
 using File = System.IO.File;
 using FillMode = BeeCore.FillMode;
@@ -129,7 +131,7 @@ namespace BeeUi
             InitializeComponent();
           //  _layout = new LayoutPersistence(this, key: "ViewLayout");
             //_layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
-            this.BackColor = Color.Transparent;
+          
             KeyboardListener.s_KeyEventHandler += new EventHandler(KeyboardListener_s_KeyEventHandler);
             tmKey.Tick += TmKey_Tick;
             tmKey.Interval = 50;
@@ -956,6 +958,7 @@ namespace BeeUi
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
                         RectRotate rot = PropetyTool.Control.Propety.rotArea;
+                    if (rot == null) continue;
                         mat = new Matrix();
                          mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
@@ -1483,20 +1486,14 @@ namespace BeeUi
                 {
                     btnCap.Enabled = true;
                     btnContinuous.Enabled = true;
-                    btnFile.Enabled = true;
-                    btnFolder.Enabled = true;
-                    btnPlayStep.Enabled = true;
-                    btnRunSim.Enabled = true;
+                  
                 }
                 else
                 {
                    
                     btnCap.Enabled = false;
                     btnContinuous.Enabled = false;
-                    btnFile.Enabled = false;
-                    btnFolder.Enabled = false;
-                    btnPlayStep.Enabled = false;
-                    btnRunSim.Enabled = false;
+                 
                 }    
             }
             else
@@ -1508,11 +1505,7 @@ namespace BeeUi
                     btnTypeTrig.Text = "Trig External";
                 btnCap.Enabled = false;
                 btnContinuous.Enabled = false;
-                btnFile.Enabled = false;
-                btnFolder.Enabled = false;
-                btnPlayStep.Enabled = false;
-                btnRunSim.Enabled = false;
-
+             
             }
         }
 
@@ -1528,10 +1521,7 @@ namespace BeeUi
                 btnTypeTrig.Text = "Trig Internal";
                 btnCap.Enabled = true;
                 btnContinuous.Enabled = true;
-                btnFile.Enabled = true;
-                btnFolder.Enabled = true;
-                btnPlayStep.Enabled = true;
-                btnRunSim.Enabled = true; 
+             
               
             }
             else
@@ -1543,10 +1533,7 @@ namespace BeeUi
                     btnTypeTrig.Text = "Trig External";
                 btnCap.Enabled = false;
                 btnContinuous.Enabled = false;
-                btnFile.Enabled = false;
-                btnFolder.Enabled = false;
-                btnPlayStep.Enabled = false;
-                btnRunSim.Enabled = false;
+              
               
                 
             }
@@ -1615,7 +1602,7 @@ namespace BeeUi
                     }
                     else
                     {
-                        if (Global.ParaCommon.IsMultiTrigger)
+                        if (Global.ParaCommon.IsMultiCamera)
                         {
                             Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
                             {
@@ -1630,25 +1617,28 @@ namespace BeeUi
                         }
                         else
                         {
-                            switch (Global.TriggerNum)
-                            {
-                                case TriggerNum.Trigger1:
-                                    BeeCore.Common.listCamera[0].Read();
-                                    if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                                        BeeCore.Common.listCamera[0].Read();
-                                    break;
-                                case TriggerNum.Trigger2:
-                                    BeeCore.Common.listCamera[1].Read();
-                                    break;
-                                case TriggerNum.Trigger3:
-                                    BeeCore.Common.listCamera[2].Read();
-                                    break;
-                                case TriggerNum.Trigger4:
-                                    BeeCore.Common.listCamera[3].Read();
-                                    break;
+                            BeeCore.Common.listCamera[0].Read();
+                            if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                                BeeCore.Common.listCamera[0].Read();
+                            //switch (Global.TriggerNum)
+                            //{
+                            //    case TriggerNum.Trigger1:
+                            //        BeeCore.Common.listCamera[0].Read();
+                            //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                            //            BeeCore.Common.listCamera[0].Read();
+                            //        break;
+                            //    case TriggerNum.Trigger2:
+                            //        BeeCore.Common.listCamera[1].Read();
+                            //        break;
+                            //    case TriggerNum.Trigger3:
+                            //        BeeCore.Common.listCamera[2].Read();
+                            //        break;
+                            //    case TriggerNum.Trigger4:
+                            //        BeeCore.Common.listCamera[3].Read();
+                            //        break;
 
 
-                            }
+                            //}
                         }
                     }
 
@@ -1784,6 +1774,7 @@ namespace BeeUi
 
 
                         }
+                     
                        
                         Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
                         G.StatusDashboard.CycleTime = (int)(timer.TT + Cyclyle1);
@@ -1793,8 +1784,22 @@ namespace BeeUi
                         G.StatusDashboard.NgCount = Global.Config.SumNG;
                         Global.Config.TotalTime += Convert.ToSingle(G.StatusDashboard.CycleTime / (60000.0));
                         Global.Config.Percent = Convert.ToSingle(((Global.Config.SumOK * 1.0) / (Global.Config.SumOK + Global.Config.SumNG)) * 100.0);
-                        
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result",Global.TotalOK .ToString()));
+                        switch (Global.TriggerNum)
+                        {
+                            case TriggerNum.Trigger1:
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result1", Global.TotalOK.ToString()));
+                                break;
+                            case TriggerNum.Trigger2:
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result2", Global.TotalOK.ToString()));
+                                break;
+                            case TriggerNum.Trigger3:
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result3", Global.TotalOK.ToString()));
+                                break;
+                            case TriggerNum.Trigger4:
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Result4", Global.TotalOK.ToString()));
+                                break;
+                        }
+                       
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "CT", CTTotol));
 
                         Global.StatusProcessing = StatusProcessing.None;
@@ -1802,6 +1807,25 @@ namespace BeeUi
                         Checking2.StatusProcessing = StatusProcessing.None;
                         Checking3.StatusProcessing = StatusProcessing.None;
                         Checking4.StatusProcessing = StatusProcessing.None;
+                        switch (Global.ParaCommon.NumTrig)
+                        {
+                            case 1:
+                                if (Global.TriggerNum == TriggerNum.Trigger1)
+                                    Global.TriggerNum = TriggerNum.Trigger0;
+                                break;
+                            case 2:
+                                if (Global.TriggerNum == TriggerNum.Trigger2)
+                                    Global.TriggerNum = TriggerNum.Trigger0;
+                                break;
+                            case 3:
+                                if (Global.TriggerNum == TriggerNum.Trigger3)
+                                    Global.TriggerNum = TriggerNum.Trigger0;
+                                break;
+                            case 4:
+                                if (Global.TriggerNum == TriggerNum.Trigger4)
+                                    Global.TriggerNum = TriggerNum.Trigger0;
+                                break;
+                        }
                         break;
                     }
             }
@@ -1814,7 +1838,7 @@ namespace BeeUi
 
         private void Global_StatusDrawChanged(StatusDraw obj)
         {
-            if (Global.StatusDraw != StatusDraw.None)
+            //if (Global.StatusDraw != StatusDraw.None)
             imgView.Invalidate();
         }
         Control controlEdit;
@@ -1895,7 +1919,7 @@ namespace BeeUi
           if(Global.IndexToolSelected>=0)
             switch (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool)
             {
-                case TypeTool.OutLine:
+             
                 case TypeTool.Pattern:
                    
                 case TypeTool.Position_Adjustment:
@@ -2606,19 +2630,95 @@ namespace BeeUi
 			
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                _renderer.ClearImages();
-                int index = 0;
-                foreach (Camera camera in BeeCore.Common.listCamera)
+               
+                if(Global.ParaCommon.IsMultiCamera)
                 {
-                    if (camera == null) continue;
-                   camera.DrawResult();
-                   if(index==1)
-                    _renderer.AddImage(camera.bmResult,FillMode.Contain,0.3f);
-                    else
-                        _renderer.AddImage(camera.bmResult, FillMode.Contain,1);
-                    index++;
+                    _renderer.ClearImages();
+                    int index = 0;
+                    foreach (Camera camera in BeeCore.Common.listCamera)
+                    {
+                        if (camera == null) continue;
+                        camera.DrawResult();
+                        if (index == 1)
+                            _renderer.AddImage(camera.bmResult, FillMode.Contain, 0.3f);
+                        else
+                            _renderer.AddImage(camera.bmResult, FillMode.Contain, 1);
+                        index++;
+                    }
+
                 }
-                Global.ParaCommon.SizeCCD = _renderer.szImage;
+                else
+                {
+                    switch (Global.ParaCommon.NumTrig)
+                    {
+                        case 1:
+                            _renderer.LayoutPreset = CollageLayout.One;
+
+                            break;
+                        case 2:
+                            _renderer.LayoutPreset = CollageLayout.Two;
+                            break;
+                        case 3:
+                            _renderer.LayoutPreset = CollageLayout.ThreeRow;
+                            break;
+                        case 4:
+                            _renderer.LayoutPreset = CollageLayout.FourGrid;
+                            break;
+                    }
+                   
+
+                   
+                        if (BeeCore.Common.listCamera[0] == null) return;
+                        BeeCore.Common.listCamera[0].DrawResult();
+                  
+                    switch(Global.TriggerNum)
+                    {
+                        
+                        case TriggerNum.Trigger1:
+                            Global.ToolSettings.Labels[0].ForeColor = Color.FromArgb(114,114,114);
+                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            if (_renderer.Count() < 1)
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            else
+                                _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                                break;
+                        case TriggerNum.Trigger2:
+                            Global.ToolSettings.Labels[1].ForeColor = Color.FromArgb(114, 114, 114);
+                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            if (_renderer.Count() < 2)
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            else
+                                _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            break;
+                        case TriggerNum.Trigger3:
+                            Global.ToolSettings.Labels[2].ForeColor = Color.FromArgb(114, 114, 114);
+                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            if (_renderer.Count() < 3)
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            else
+                                _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            break;
+                        case TriggerNum.Trigger4:
+                            Global.ToolSettings.Labels[3].ForeColor = Color.FromArgb(114, 114, 114);
+                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
+                            if (_renderer.Count() < 4)
+                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            else
+                                _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode.Contain);
+                            break;
+                    }    
+                      
+                }    
+
+                    Global.ParaCommon.SizeCCD = _renderer.szImage;
                 Shows.Full(imgView, Global.ParaCommon.SizeCCD);
                
                 _renderer.Render();
@@ -2671,15 +2771,12 @@ namespace BeeUi
             switch (Global.StatusMode)
             {
                 case StatusMode.SimContinuous:
-                    btnFolder.Enabled = false;
-                    btnRunSim.Enabled = true;
-                    btnPlayStep.Enabled = true;
+                 
                     tmSimulation.Enabled = true;
                     break;
                 case StatusMode.SimOne:
                     indexFile++;
-                    btnFile.Enabled = true;
-                    btnPlayStep.Enabled = true;
+                   
                     Global.StatusMode = StatusMode.None;
                     break;
                 case StatusMode.Once:
@@ -2694,10 +2791,7 @@ namespace BeeUi
                     break;
                 case StatusMode.None:
 
-                    //btnRunSim.Enabled = false;
-                    btnPlayStep.Enabled = false;
-                    btnFile.Enabled = true;
-                    btnFolder.Enabled = true;
+               
                     break;
             }
            
@@ -2750,7 +2844,25 @@ namespace BeeUi
             timer= CycleTimerSplit.Start();
             btnCap.Enabled = false;
             if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+            {
+                switch(Global.TriggerNum)
+                {
+                    case TriggerNum.Trigger0:
+                        Global.TriggerNum=TriggerNum.Trigger1;
+                        break;
+                    case TriggerNum.Trigger1:
+                        Global.TriggerNum = TriggerNum.Trigger2;
+                        break;
+                    case TriggerNum.Trigger2:
+                        Global.TriggerNum = TriggerNum.Trigger3;
+                        break;
+                    case TriggerNum.Trigger3:
+                        Global.TriggerNum = TriggerNum.Trigger4;
+                        break;
+                }    
                 Global.StatusProcessing = StatusProcessing.Read;
+            }    
+               
             else
             {
              
@@ -3029,35 +3141,26 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else
             {
-                if (Global.ParaCommon.IsMultiTrigger)
+                if (Global.ParaCommon.IsMultiCamera)
                 {
                     Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
                     {
                         if (camera != null)
+                        {
                             camera.Read();
+                            if (camera.Para.TypeCamera == TypeCamera.USB)
+                                camera.Read();
+                        }
+
                     });
                 }
                 else
                 {
-                    switch (Global.TriggerNum)
-                    {
-                        case TriggerNum.Trigger1:
-                            BeeCore.Common.listCamera[0].Read();
-                            break;
-                        case TriggerNum.Trigger2:
-                            BeeCore.Common.listCamera[1].Read();
-                            break;
-                        case TriggerNum.Trigger3:
-                            BeeCore.Common.listCamera[2].Read();
-                            break;
-                        case TriggerNum.Trigger4:
-                            BeeCore.Common.listCamera[3].Read();
-                            break;
-
-
-                    }
-                }    
-            }    
+                    BeeCore.Common.listCamera[0].Read();
+                    if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                        BeeCore.Common.listCamera[0].Read();
+                }
+             }    
                
 
 
@@ -3345,7 +3448,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     {
                         listMat.Add(new Mat(file));
                     }
-                    btnRunSim.Enabled = true; btnPlayStep.Enabled = true;
+                  
                 }
                
             }    
@@ -3628,19 +3731,19 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 listMat.Add(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                btnFile.Enabled = false;
+            
                 Global.StatusMode = StatusMode.SimOne;
                 timer= CycleTimerSplit.Start();
                 Global.StatusProcessing = StatusProcessing.Checking;
 
-                btnRunSim.Enabled = true;
+              
             }
 
         }
 
         private void tmSimulation_Tick(object sender, EventArgs e)
         {
-            Global.StatusMode = btnRunSim.IsCLick ? StatusMode.SimContinuous : StatusMode.None;
+            Global.StatusMode = Global.EditTool.IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
 
             tmSimulation.Enabled = false;
 
@@ -3701,7 +3804,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             {
                 Global.StatusMode = StatusMode.SimOne;
                 RunProcessing();
-                btnPlayStep.Enabled = false;
+               
             }
 
             Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
@@ -3944,7 +4047,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
            
             
-            if (Global.ParaCommon.IsMultiTrigger)
+            if (Global.ParaCommon.IsMultiCamera)
             {
                 if (BeeCore.Common.listCamera[0] != null)
                 {
@@ -3983,58 +4086,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else
             {
-                switch(Global.TriggerNum)
+                if (BeeCore.Common.listCamera[0] != null)
                 {
-                    case TriggerNum.Trigger1:
-                        if (BeeCore.Common.listCamera[0] != null)
-                        {
-                            Checking1.StatusProcessing = StatusProcessing.None;
-                            Checking1.Start();
-                        }
-                        else
-                            Processing1 = StatusProcessing.Done;
-                        Processing2 = StatusProcessing.Done;
-                        Processing3 = StatusProcessing.Done;
-                        Processing4 = StatusProcessing.Done;
-                        break;
-                    case TriggerNum.Trigger2:
-                        if (BeeCore.Common.listCamera[1] != null)
-                        {
-                            Checking2.StatusProcessing = StatusProcessing.None;
-                            Checking2.Start();
-                        }
-                        else
-                            Processing2 = StatusProcessing.Done;
-                        Processing1 = StatusProcessing.Done;
-                        Processing3 = StatusProcessing.Done;
-                        Processing4 = StatusProcessing.Done;
-                        break;
-                    case TriggerNum.Trigger3:
-                        if (BeeCore.Common.listCamera[2] != null)
-                        {
-                            Checking3.StatusProcessing = StatusProcessing.None;
-                            Checking3.Start();
-                        }
-                        else
-                            Processing3 = StatusProcessing.Done;
-                        Processing2 = StatusProcessing.Done;
-                        Processing1 = StatusProcessing.Done;
-                        Processing4 = StatusProcessing.Done;
-                        break;
-                    case TriggerNum.Trigger4:
-                        if (BeeCore.Common.listCamera[3] != null)
-                        {
-                            Checking4.StatusProcessing = StatusProcessing.None;
-                            Checking4.Start();
-                        }
-                        else
-                            Processing4 = StatusProcessing.Done;
-                        Processing2 = StatusProcessing.Done;
-                        Processing3 = StatusProcessing.Done;
-                        Processing1 = StatusProcessing.Done;
-                        break;
-
+                    Checking1.StatusProcessing = StatusProcessing.None;
+                    Checking1.Start();
                 }
+                else
+                    Processing1 = StatusProcessing.Done;
+               
             }
                 await CheckStatus();
 
@@ -4092,30 +4151,27 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             imgView.Invalidate();
         }
 
-     
+        private void pBtn_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
         private void btnRunSim_Click_1(object sender, EventArgs e)
         {
             if (Files == null) return;
             if (Files.Count == 0) return;
             
-            Global.StatusMode = btnRunSim.IsCLick  ? StatusMode.SimContinuous : StatusMode.None;
-            if (btnRunSim.IsCLick)
+            Global.StatusMode = Global.EditTool.IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
+            if (Global.EditTool.IsRunSim)
             {
                 
-                btnRunSim.Image = Properties.Resources.Stop;
-
-                btnFolder.Enabled = false;
+               
                 if (indexFile >= listMat.Count) indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = listMat[indexFile];// Cv2.ImRead(Files[indexFile]);
                 imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 Global.StatusProcessing = StatusProcessing.Checking;
             }
-            else
-            {
-                btnRunSim.Image = Properties.Resources.Play_2;
-                btnFolder.Enabled = true; Global.StatusMode=StatusMode.SimContinuous;
-                
-            }
+           
             if(indexFile >= Files.Count)
             indexFile = 0;
             Global.EditTool.lbEx.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);

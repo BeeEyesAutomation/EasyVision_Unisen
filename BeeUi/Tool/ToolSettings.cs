@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
 using BeeUi.Commons;
@@ -25,13 +26,10 @@ namespace BeeUi.Tool
             InitializeComponent();
             //_layout = new LayoutPersistence(this, key: "ToolLayout");
           
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
+        
             Global.ToolSettings = this;
         }
-      
+      public  Label[] Labels = new Label[4] { new Label(), new Label(), new Label(), new Label() };
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (G.AddTool == null)
@@ -44,23 +42,7 @@ namespace BeeUi.Tool
               
             G.AddTool.Show();
         }
-        public void RefreshTool()
-        {
-            Global.ToolSettings.pAllTool.Controls.Clear();
-            Global.pShowTool. Y = 10;
-            Global.pShowTool.X = 10;
-            int i = 0;
-            foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
-            {
-                PropetyTool.ItemTool.Location = new Point( Global.pShowTool.X,  Global.pShowTool.Y);
-                PropetyTool.Propety.Index = i;
-                PropetyTool.ItemTool.IndexTool = i;
-                 Global.pShowTool.Y += PropetyTool.ItemTool.Height + 10;
-                Global.ToolSettings.pAllTool.Controls.Add(PropetyTool.ItemTool);
-                Global.ToolSettings.ResumeLayout(true);
-                i++;
-            }
-        }
+      
 
         private void btnDelect_Click(object sender, EventArgs e)
         {
@@ -72,7 +54,7 @@ namespace BeeUi.Tool
                     BeeCore.Common.PropetyTools[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
                    // G.listAlltool[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
                     Global.IndexToolSelected = BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1;
-                    RefreshTool();
+                    Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
                 }    
             }    
         }
@@ -110,30 +92,25 @@ namespace BeeUi.Tool
             propetyTools.ItemTool = DataTool.CreateItemTool(propety, Index, Global.IndexChoose,Global.pShowTool);
             propetyTools.Control = DataTool.CreateControls(propety, Index, Global.IndexChoose, Global.pShowTool);
 
-            //Tools tool = DataTool.CreateControl(propety, G.listAlltool[Global.IndexChoose].Count(), Global.IndexChoose, new Point( Global.pShowTool.X,  Global.pShowTool.Y));
-            //G.listAlltool[Global.IndexChoose].Add(tool);
-            propetyTools.ItemTool.Width = Global.ToolSettings.Width - 10;
-            Global.pShowTool.Y += propetyTools.ItemTool.Height + 10;
+           
             DataTool.LoadPropety(propetyTools.Control);
             propetyTools.UsedTool = UsedTool.Used;
-            RefreshTool();
-
+            Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
 
         }
 
         private void ToolSettings_Load(object sender, EventArgs e)
         {
+            CustomGui.RoundRg(pBtn, 20, Corner.Both);
           
-            this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
+            //this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
          //   _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
         }
-
+     
         private void ToolSettings_SizeChanged(object sender, EventArgs e)
         {
-           // if(G.Header!=null)
-            // BeeCore.CustomGui.RoundRg(this.pBtn,Global.Config.RoundRad);
-
+           
         }
 
         private void itemTool1_Load(object sender, EventArgs e)
@@ -143,6 +120,7 @@ namespace BeeUi.Tool
 
         private void pBtn_SizeChanged(object sender, EventArgs e)
         {
+            CustomGui.RoundRg(pBtn, 20, Corner.Both);
             //BeeCore.CustomGui.RoundRg(this.pBtn, Global.Config.RoundRad);
         }
 

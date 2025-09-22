@@ -22,7 +22,6 @@ namespace BeeUi.Commons
         {
             Global.EditTool.LayoutEnd.BackColor = Color.White;
            // Global.EditTool.pMain.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
-            Global.EditTool.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
             Global.EditTool.View.BackColor = Color.FromArgb(AlphaBg, color.R, color.G, color.B);
             Global.EditTool.pHeader.BackColor = Color.FromArgb(190, color.R, color.G, color.B);
             G.Header.BackColor =  Color.FromArgb(AlphaBg, color.R,color.G,color.B);
@@ -90,7 +89,7 @@ namespace BeeUi.Commons
            // G.Header.pCamera.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, G.Header.pCamera.Width, G.Header.pCamera.Height, radius, radius));
          //   Global.EditTool.View.pTool.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.EditTool.View.pTool.Width, Global.EditTool.View.pTool.Height, radius, radius));
         
-            Global.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.ToolSettings.pBtn.Width, Global.ToolSettings.pBtn.Height, radius, radius));
+         //   Global.ToolSettings.pBtn.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, Global.ToolSettings.pBtn.Width, Global.ToolSettings.pBtn.Height, radius, radius));
         }
     }
 }

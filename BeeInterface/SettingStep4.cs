@@ -74,15 +74,18 @@ namespace BeeInterface
                 ItemRS itemRs = new ItemRS();
                 ItemLogic itemLogic = new ItemLogic();
                 itemRs.Parent = pItemsRs;
+                itemRs.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                 itemRs.Location = new System.Drawing.Point(5, y);
                 itemRs.name.Text = propetyTool.Name;
                 itemRs.propetyTool = propetyTool;
-                itemRs.Width = 400;
+                itemRs.Width = pItemsRs.Width;
+               
                 itemLogic.Parent = pItemsLogis;
                 itemLogic.Location = new System.Drawing.Point(5, y);
+                itemLogic.Anchor=AnchorStyles.Left|AnchorStyles.Right| AnchorStyles.Top;
                 itemLogic.name.Text = propetyTool.Name;
                 itemLogic.propetyTool = propetyTool;
-                itemLogic.Width = 400;
+                itemLogic.Width = pItemsLogis.Width;
                 index++;
                 if (index < 10)
                     itemRs.lbNumber.Text = "0" + index;
@@ -173,5 +176,12 @@ namespace BeeInterface
         {
            Global.Config.LogicOK = LogicOK.OR;
         }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+          //  RefreshLogic();
+     
+        }
+    
     }
 }

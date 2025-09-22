@@ -253,76 +253,6 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER {
-            get {
-                object obj = ResourceManager.GetObject("BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER {
-            get {
-                object obj = ResourceManager.GetObject("BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER {
-            get {
-                object obj = ResourceManager.GetObject("BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BtnBlue1 {
-            get {
-                object obj = ResourceManager.GetObject("BtnBlue1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BtnBlue2 {
-            get {
-                object obj = ResourceManager.GetObject("BtnBlue2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BtnGreen1 {
-            get {
-                object obj = ResourceManager.GetObject("BtnGreen1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap BtnGreen2 {
-            get {
-                object obj = ResourceManager.GetObject("BtnGreen2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Camera {
             get {
                 object obj = ResourceManager.GetObject("Camera", resourceCulture);
@@ -423,29 +353,9 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap contentOutLine {
-            get {
-                object obj = ResourceManager.GetObject("contentOutLine", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap contentPattern {
             get {
                 object obj = ResourceManager.GetObject("contentPattern", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap contentPitch {
-            get {
-                object obj = ResourceManager.GetObject("contentPitch", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -476,16 +386,6 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap Delete {
             get {
                 object obj = ResourceManager.GetObject("Delete", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Delete1 {
-            get {
-                object obj = ResourceManager.GetObject("Delete1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -666,6 +566,16 @@ namespace BeeInterface.Properties {
         internal static System.Drawing.Bitmap Refresh {
             get {
                 object obj = ResourceManager.GetObject("Refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Refresh25 {
+            get {
+                object obj = ResourceManager.GetObject("Refresh25", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

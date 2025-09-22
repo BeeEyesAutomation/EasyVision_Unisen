@@ -282,7 +282,7 @@ namespace BeeInterface
                 //await BeeCore.Common.listCamera[Global.IndexChoose].GetCenterY();
                 if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.USB)
                 {
-                
+                    BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step = 1;
                     BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min = 3;
                     BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max = 12;
                 }
@@ -367,9 +367,11 @@ namespace BeeInterface
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Min = 320;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Min = 240;
 
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Step = 1;
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Step = 1;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Width.Max = 3000;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Height.Max = 3000;
-
+                BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step = 1;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min = 3;
                 BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max = 12;
              //   trackExposure.Enabled = false;
@@ -379,8 +381,24 @@ namespace BeeInterface
                 AdjOffSetY.Enabled = false;
                 btnCenterX.Enabled = false;
                 btnCenterY.Enabled = false;
+                AdjFocus.Enabled = true;
+                AdjZoom.Enabled = true;
+                btnFocus.Enabled = true;
             }
-            trackExposure.IsInital = true;
+            else
+            {
+                btnFocus.Enabled = false;
+                trackGain.Enabled = true;
+                trackShift.Enabled = true;
+                AdjOffsetX.Enabled = true;
+                AdjOffSetY.Enabled = true;
+                btnCenterX.Enabled = true;
+                btnCenterY.Enabled = true;
+                AdjFocus.Enabled = false;
+                AdjZoom.Enabled = false;
+
+            }    
+                trackExposure.IsInital = true;
             trackExposure.Min = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Min;
             trackExposure.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Max;
             if (trackExposure.Max > 50000)

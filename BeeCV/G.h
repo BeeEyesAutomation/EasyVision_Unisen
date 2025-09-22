@@ -77,7 +77,7 @@ namespace CvPlus {
 	public:void CropRotate(int x, int y, int w, int  h, float angle);
 	public:	Bitmap^	GetImageRaw();
 	public:	Bitmap^ GetImageRsTemp();
-
+	public:System::String^ Ex;
 	public:void	BitmapSrc(Bitmap^ bm);
 	public:void	BitmapDst(Bitmap^ bm, int ix);
 	

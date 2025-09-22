@@ -21,7 +21,7 @@ namespace BeeInterface
         private float _keyboardStep = 1f;
         private string _unitText = "";
 
-        // ===== Appearance =====
+        // ===== Appearance (normal palette) =====
         [Category("Appearance")] public Color ColorTrack { get; set; } = Color.FromArgb(235, 235, 235);
         [Category("Appearance")] public Color ColorScale { get; set; } = Color.FromArgb(180, 180, 180);
         [Category("Appearance")] public Color ColorFill { get; set; } = Color.FromArgb(246, 213, 143);
@@ -31,11 +31,25 @@ namespace BeeInterface
         [Category("Appearance")] public int Radius { get; set; } = 8;
         [Category("Appearance")] public Padding InnerPadding { get; set; } = new Padding(10, 6, 10, 6);
 
+        // ===== Auto-dim when disabled (only trackbar, buttons, textbox) =====
+        [Category("Appearance"), Description("Tỉ lệ pha về xám khi Disabled (0..1). 0=giữ màu, 1=thành xám.")]
+        public float DisabledDesaturateMix { get; set; } = 0.30f;
+
+        [Category("Appearance"), Description("Hệ số giảm sáng khi Disabled (0..1). Nhỏ hơn = tối hơn.")]
+        public float DisabledDimFactor { get; set; } = 0.90f;
+
+        // ===== Auto-Repeat (press & hold +/-) =====
+        [Category("Behavior")] public bool AutoRepeatEnabled { get; set; } = true;
+        [Category("Behavior")] public int AutoRepeatInitialDelay { get; set; } = 400; // ms
+        [Category("Behavior")] public int AutoRepeatInterval { get; set; } = 60;      // ms
+        [Category("Behavior")] public bool AutoRepeatAccelerate { get; set; } = true;
+        [Category("Behavior")] public int AutoRepeatMinInterval { get; set; } = 20;   // ms
+        [Category("Behavior")] public int AutoRepeatAccelDeltaMs { get; set; } = -5;  // mỗi tick giảm bấy nhiêu ms
+
         // ===== Responsive ratios =====
-        // == Font trên thumb ==
-        [Category("Appearance")] public float ThumbValueFontScale { get; set; } = 1.00f; // 1.2 = to hơn 20%
+        [Category("Appearance")] public float ThumbValueFontScale { get; set; } = 1.00f;
         [Category("Appearance")] public int ThumbValuePadding { get; set; } = -1;    // -1 = auto, >=0 = px
-        [Category("Appearance")] public bool ThumbValueBold { get; set; } = true;  // in đậm hay không
+        [Category("Appearance")] public bool ThumbValueBold { get; set; } = true;
 
         [Category("Layout")] public float TrackWidthRatio { get; set; } = 1.00f;
         [Category("Layout")] public float TrackHeightRatio { get; set; } = 0.40f;
@@ -61,14 +75,14 @@ namespace BeeInterface
         [Category("Layout")] public int ChromeGap { get; set; } = 10;
         [Category("Layout")] public int TextboxSidePadding { get; set; } = 12;
 
-        // ===== Back-compat properties (Designer vẫn set) =====
+        // ===== Back-compat properties =====
         [Category("Layout")] public bool AutoSizeTextbox { get; set; } = true;
         [Category("Layout")] public bool MatchTextboxFontToThumb { get; set; } = false; // không dùng
         [Category("Layout")] public int MinTextboxWidth { get; set; } = 16;
         [Category("Layout")] public int MaxTextboxWidth { get; set; } = 0;  // 0 = unlimited
-        [Category("Layout")] public int TextboxWidth { get; set; } = 56; // dùng khi AutoSizeTextbox=false
+        [Category("Layout")] public int TextboxWidth { get; set; } = 56;    // dùng khi AutoSizeTextbox=false
 
-        // ===== TextBox font size (independent) =====
+        // ===== TextBox font size =====
         private float _textboxFontSize = 20f;
         [Category("Appearance")]
         public float TextboxFontSize
@@ -84,12 +98,12 @@ namespace BeeInterface
             }
         }
 
-        // ===== Show/Hide only textbox (no timer) =====
+        // ===== Show/Hide textbox =====
         [Category("Behavior")] public bool AutoShowTextbox { get; set; } = true;
         [Category("Behavior")] public bool StartWithTextboxHidden { get; set; } = true;
 
-        private bool _textboxVisible = true;   // trạng thái hiện/ẩn textbox
-        private int _chromeWidthActual = 0;   // bề rộng thực (± + textbox)
+        private bool _textboxVisible = true;
+        private int _chromeWidthActual = 0;
 
         // ===== Internal controls =====
         private TextBox _tb;
@@ -99,6 +113,11 @@ namespace BeeInterface
         private bool _dragging = false;
         private int _dragXStart;
         private float _dragValueStart;
+
+        // ===== Auto-repeat =====
+        private Timer _repeatTimer;
+        private int _repeatDirection; // -1 hoặc +1
+        private int _repeatPhase;     // 0 = delay đầu, 1 = lặp/accelerate
 
         // ===== Init guard =====
         private bool _isInit;
@@ -158,6 +177,7 @@ namespace BeeInterface
         [Category("Behavior")]
         public float KeyboardStep { get { return _keyboardStep; } set { _keyboardStep = Math.Max(0.000001f, value); } }
         public bool IsInital = false;
+
         [Browsable(false)]
         public float Value
         {
@@ -172,12 +192,9 @@ namespace BeeInterface
                 if (_isInit) LayoutChildren(); // auto-width theo text mới
                 Invalidate();
                 if (!IsInital)
-                {
-                    if (ValueChanged != null) ValueChanged(_value);
-                }
+                    ValueChanged?.Invoke(_value);
                 else
                     IsInital = false;
-               
             }
         }
 
@@ -200,7 +217,6 @@ namespace BeeInterface
             _tb.KeyDown += Tb_KeyDown;
             _tb.Leave += Tb_Leave;
 
-            // Text thay đổi -> auto width + redraw bar
             _tb.TextChanged += (s, e) =>
             {
                 if (!_isInit) return;
@@ -208,7 +224,6 @@ namespace BeeInterface
                 Invalidate();
             };
 
-            // Hover/Focus vào textbox: hiện
             _tb.MouseEnter += (s, e) => { if (AutoShowTextbox && !InDesigner()) ShowTextbox(); };
             _tb.Enter += (s, e) => { if (AutoShowTextbox && !InDesigner()) ShowTextbox(); };
             _tb.MouseLeave += (s, e) => { TryHideTextboxOnLeave(); };
@@ -217,14 +232,33 @@ namespace BeeInterface
             _btnMinus = new PlusMinusButton(-1);
             _btnPlus = new PlusMinusButton(+1);
 
-            // Nút luôn hiện; hover vào nút -> hiện textbox
             _btnMinus.MouseEnter += (s, e) => { if (AutoShowTextbox && !InDesigner()) ShowTextbox(); };
             _btnMinus.MouseLeave += (s, e) => { TryHideTextboxOnLeave(); };
             _btnPlus.MouseEnter += (s, e) => { if (AutoShowTextbox && !InDesigner()) ShowTextbox(); };
             _btnPlus.MouseLeave += (s, e) => { TryHideTextboxOnLeave(); };
 
-            _btnMinus.Click += (s, e) => { Value = _value - _step; if (AutoShowTextbox && !InDesigner()) ShowTextbox(); Focus(); };
-            _btnPlus.Click += (s, e) => { Value = _value + _step; if (AutoShowTextbox && !InDesigner()) ShowTextbox(); Focus(); };
+            // Auto-repeat: xử lý trên MouseDown/Up/Leave
+            _btnMinus.MouseDown += (s, e) =>
+            {
+                if (!Enabled || e.Button != MouseButtons.Left) return;
+                if (AutoShowTextbox && !InDesigner()) ShowTextbox();
+                Focus();
+                ApplyStep(-1);
+                BeginRepeat(-1);
+            };
+            _btnMinus.MouseUp += (s, e) => StopRepeat();
+            _btnMinus.MouseLeave += (s, e) => { if ((Control.MouseButtons & MouseButtons.Left) == 0) StopRepeat(); };
+
+            _btnPlus.MouseDown += (s, e) =>
+            {
+                if (!Enabled || e.Button != MouseButtons.Left) return;
+                if (AutoShowTextbox && !InDesigner()) ShowTextbox();
+                Focus();
+                ApplyStep(+1);
+                BeginRepeat(+1);
+            };
+            _btnPlus.MouseUp += (s, e) => StopRepeat();
+            _btnPlus.MouseLeave += (s, e) => { if ((Control.MouseButtons & MouseButtons.Left) == 0) StopRepeat(); };
 
             Controls.Add(_btnMinus);
             Controls.Add(_btnPlus);
@@ -253,6 +287,21 @@ namespace BeeInterface
             LayoutChildren();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_repeatTimer != null)
+                {
+                    _repeatTimer.Stop();
+                    _repeatTimer.Tick -= RepeatTimer_Tick;
+                    _repeatTimer.Dispose();
+                    _repeatTimer = null;
+                }
+            }
+            base.Dispose(disposing);
+        }
+
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
@@ -274,6 +323,25 @@ namespace BeeInterface
             base.OnFontChanged(e);
             ApplyTextboxFont();
             if (_isInit) LayoutChildren();
+        }
+
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            if (!Enabled) StopRepeat();
+
+            // chỉ dim textbox; background giữ nguyên
+            if (_tb != null)
+            {
+                _tb.Enabled = this.Enabled;
+                _tb.ReadOnly = !this.Enabled;
+                _tb.ForeColor = this.Enabled ? ForeColor : DimAuto(ForeColor);
+                _tb.BackColor = this.Enabled ? Color.White : DimAuto(Color.White);
+            }
+            if (_btnMinus != null) _btnMinus.Enabled = this.Enabled;
+            if (_btnPlus != null) _btnPlus.Enabled = this.Enabled;
+
+            Invalidate();
         }
 
         // ===== Helpers =====
@@ -339,6 +407,7 @@ namespace BeeInterface
         // ===== Input handlers =====
         private void AdjustBarEx_KeyDown(object sender, KeyEventArgs e)
         {
+            if (!Enabled) return;
             if (e.KeyCode == Keys.Left) { Value = _value - KeyboardStep; e.Handled = true; }
             if (e.KeyCode == Keys.Right) { Value = _value + KeyboardStep; e.Handled = true; }
             if (e.KeyCode == Keys.PageDown) { Value = _value - 10 * KeyboardStep; e.Handled = true; }
@@ -349,19 +418,20 @@ namespace BeeInterface
 
         private void AdjustBarEx_MouseWheel(object sender, MouseEventArgs e)
         {
+            if (!Enabled) return;
             if (!ClientRectangle.Contains(PointToClient(Cursor.Position))) return;
             Value = e.Delta > 0 ? _value + WheelStep : _value - WheelStep;
         }
 
         private void AdjustBarEx_MouseDown(object sender, MouseEventArgs e)
         {
+            if (!Enabled) return;
             if (e.Button != MouseButtons.Left) return;
 
             var rects = GetRects();
             Rectangle trackRect = rects.Item1;
             Rectangle thumb = rects.Item2;
 
-            // Nhấn vào thumb hoặc track: ẩn textbox và thao tác
             if (thumb.Contains(e.Location) || trackRect.Contains(e.Location))
                 HideTextbox();
 
@@ -380,9 +450,10 @@ namespace BeeInterface
 
         private void AdjustBarEx_MouseMove(object sender, MouseEventArgs e)
         {
+            if (!Enabled) return;
             if (_dragging)
             {
-                if (_textboxVisible) HideTextbox(); // luôn ẩn trong lúc kéo
+                if (_textboxVisible) HideTextbox();
                 Rectangle trackRect = GetRects().Item1;
                 float dx = e.X - _dragXStart;
                 float dv = dx / Math.Max(1f, trackRect.Width) * (Max - Min);
@@ -392,12 +463,14 @@ namespace BeeInterface
 
         private void AdjustBarEx_MouseUp(object sender, EventArgs e)
         {
+            if (!Enabled) return;
             if (_dragging) { _dragging = false; Capture = false; }
         }
 
         // ===== TextBox events =====
         private void Tb_KeyDown(object sender, KeyEventArgs e)
         {
+            if (!Enabled) return;
             if (e.KeyCode == Keys.Enter)
             {
                 ParseTextbox(); e.Handled = true; e.SuppressKeyPress = true; Focus();
@@ -407,7 +480,7 @@ namespace BeeInterface
                 UpdateText(); e.Handled = true; e.SuppressKeyPress = true; Focus();
             }
         }
-        private void Tb_Leave(object sender, EventArgs e) { ParseTextbox(); TryHideTextboxOnLeave(); }
+        private void Tb_Leave(object sender, EventArgs e) { if (!Enabled) return; ParseTextbox(); TryHideTextboxOnLeave(); }
 
         private void ParseTextbox()
         {
@@ -415,7 +488,7 @@ namespace BeeInterface
             if (!string.IsNullOrEmpty(_unitText) &&
                 s.EndsWith(_unitText, StringComparison.OrdinalIgnoreCase))
             {
-                s = s.Substring(0, s.Length - _unitText.Length).Trim(); // C# 7.3-safe
+                s = s.Substring(0, s.Length - _unitText.Length).Trim();
             }
 
             float v;
@@ -457,7 +530,6 @@ namespace BeeInterface
             if (!_isInit) return;
             if (_tb == null || _btnMinus == null || _btnPlus == null) return;
 
-            // Nút luôn hiện; TextBox theo trạng thái
             _btnMinus.Visible = _btnPlus.Visible = true;
             _tb.Visible = _textboxVisible;
 
@@ -465,11 +537,9 @@ namespace BeeInterface
             int bottom = Height - InnerPadding.Bottom;
             int chromeH = bottom - top;
 
-            // Nút vuông theo chiều cao, 24..36
             int btnH = chromeH;
             int btnW = Math.Min(36, Math.Max(24, btnH));
 
-            // đo text nếu textbox đang hiện
             ApplyTextboxFont();
             int textW = 0;
             if (_textboxVisible)
@@ -485,7 +555,6 @@ namespace BeeInterface
                 }
             }
 
-            // width textbox (auto hoặc cố định)
             int tbW = 0;
             if (_textboxVisible)
             {
@@ -501,22 +570,18 @@ namespace BeeInterface
                 }
             }
 
-            // bề rộng chrome (cần >= base)
             int chromeBase = Math.Max(MinChromeWidth, (int)(Width * ChromeWidthRatio));
             int chromeNeed = btnW + 1 + tbW + 1 + btnW;
             int chromeW = Math.Max(chromeBase, chromeNeed);
             _chromeWidthActual = chromeW;
 
-            // khối chrome bám mép phải
             Rectangle rBox = new Rectangle(
                 Width - (TightEdges ? EdgePadding : InnerPadding.Right) - chromeW,
                 top, chromeW, chromeH);
 
-            // 2 nút
             Rectangle rMinus = new Rectangle(rBox.X, rBox.Y, btnW, rBox.Height);
             Rectangle rPlus = new Rectangle(rBox.Right - btnW, rBox.Y, btnW, rBox.Height);
 
-            // textbox giữa hai nút
             Rectangle rTbArea = Rectangle.FromLTRB(rMinus.Right + 1, rBox.Y, rPlus.Left - 1, rBox.Bottom);
             if (_textboxVisible) tbW = Math.Min(tbW, rTbArea.Width);
 
@@ -524,11 +589,9 @@ namespace BeeInterface
             int tbX = rTbArea.X + (rTbArea.Width - tbW) / 2;
             int tbY = rTbArea.Y + (rTbArea.Height - tbH) / 2;
 
-           
             _btnMinus.Bounds = rMinus;
             _btnPlus.Bounds = rPlus;
 
-            // ép vẽ lại ngay để làm sạch viền cũ sau khi layout đổi
             _btnMinus.Invalidate();
             _btnPlus.Invalidate();
             if (_textboxVisible)
@@ -544,7 +607,6 @@ namespace BeeInterface
             int top = InnerPadding.Top;
             int bot = Height - InnerPadding.Bottom;
 
-            // trừ phần chrome thực
             int cw = (_chromeWidthActual > 0)
                      ? _chromeWidthActual
                      : Math.Max(MinChromeWidth, (int)(Width * ChromeWidthRatio));
@@ -575,6 +637,7 @@ namespace BeeInterface
         // ===== Paint =====
         protected override void OnPaintBackground(PaintEventArgs e)
         {
+            // KHÔNG dim nền: luôn dùng BackColor
             using (SolidBrush b = new SolidBrush(BackColor))
                 e.Graphics.FillRectangle(b, ClientRectangle);
         }
@@ -604,69 +667,69 @@ namespace BeeInterface
             Rectangle trackRect = rects.Item1;
             Rectangle thumb = rects.Item2;
 
+            // palette theo trạng thái (dim chỉ khi disabled)
+            Color track = Enabled ? ColorTrack : DimAuto(ColorTrack);
+            Color scale = Enabled ? ColorScale : DimAuto(ColorScale);
+            Color fill = Enabled ? ColorFill : DimAuto(ColorFill);
+            Color thumbC = Enabled ? ColorThumb : DimAuto(ColorThumb);
+            Color thumbBd = Enabled ? ColorThumbBorder : DimAuto(ColorThumbBorder);
+            Color border = Enabled ? ColorBorder : DimAuto(ColorBorder);
+
             float r = Math.Max(1f, Radius - 2);
 
             // Track
             using (GraphicsPath gp = RoundRect(trackRect, r))
-            using (SolidBrush bTrack = new SolidBrush(ColorTrack))
-            using (Pen pBorder = new Pen(ColorBorder, 1f))
+            using (SolidBrush bTrack = new SolidBrush(track))
+            using (Pen pBorder = new Pen(border, 1f))
             {
                 g.FillPath(bTrack, gp);
                 g.DrawPath(pBorder, gp);
             }
 
-            // Center scale line
-            using (Pen pScale = new Pen(ColorScale, 1f))
+            // Center scale
+            using (Pen pScale = new Pen(scale, 1f) { Alignment = PenAlignment.Center })
             {
-                pScale.Alignment = PenAlignment.Center;
                 g.DrawLine(pScale,
                     trackRect.Left, trackRect.Top + trackRect.Height / 2f,
                     trackRect.Right, trackRect.Top + trackRect.Height / 2f);
             }
 
-            // Fill from left to thumb center
+            // Fill
             int fillRight = thumb.X + thumb.Width / 2;
             Rectangle fillRect = Rectangle.FromLTRB(
                 trackRect.Left, trackRect.Top,
                 Math.Max(trackRect.Left, fillRight), trackRect.Bottom);
 
             using (GraphicsPath gpFill = RoundRect(fillRect, r))
-            using (SolidBrush bFill = new SolidBrush(ColorFill))
+            using (SolidBrush bFill = new SolidBrush(fill))
             {
                 if (fillRect.Width > 0) g.FillPath(bFill, gpFill);
             }
 
             // Thumb
-            using (SolidBrush bThumb = new SolidBrush(ColorThumb))
-            using (Pen pThumb = new Pen(ColorThumbBorder))
+            using (SolidBrush bThumb = new SolidBrush(thumbC))
+            using (Pen pThumb = new Pen(thumbBd))
             {
                 g.FillEllipse(bThumb, thumb);
                 g.DrawEllipse(pThumb, thumb);
             }
 
-            // ===== Value text in thumb (auto-fit + scale/padding options) =====
+            // Value in thumb
             if (_showValueOnThumb)
             {
                 string s = FormatValue(_value);
-
-                // padding hộp chữ: -1 = auto theo thumb; >=0 = px
-                int inset = (ThumbValuePadding >= 0)
-                            ? ThumbValuePadding
-                            : Math.Max(2, ThumbSizePx / 10);
-
+                int inset = (ThumbValuePadding >= 0) ? ThumbValuePadding : Math.Max(2, ThumbSizePx / 10);
                 Rectangle box = Rectangle.Inflate(thumb, -inset, -inset);
 
-                // tìm size chữ tối đa vừa khít box
                 float lo = 6f;
                 float hi = Math.Max(thumb.Width, thumb.Height);
-                float scale = (ThumbValueFontScale > 0f) ? ThumbValueFontScale : 1f;
-                hi *= scale;
+                float scaleText = (ThumbValueFontScale > 0f) ? ThumbValueFontScale : 1f;
+                hi *= scaleText;
 
                 for (int i = 0; i < 12; i++)
                 {
                     float mid = (lo + hi) * 0.5f;
-                    using (Font f = new Font(Font.FontFamily, mid,
-                                             ThumbValueBold ? FontStyle.Bold : FontStyle.Regular))
+                    using (Font f = new Font(Font.FontFamily, mid, ThumbValueBold ? FontStyle.Bold : FontStyle.Regular))
                     {
                         SizeF sz = g.MeasureString(s, f);
                         if (sz.Width <= box.Width && sz.Height <= box.Height) lo = mid;
@@ -676,19 +739,22 @@ namespace BeeInterface
 
                 using (Font ff = new Font(Font.FontFamily, (float)Math.Floor(lo),
                                           ThumbValueBold ? FontStyle.Bold : FontStyle.Regular))
-                using (SolidBrush br = new SolidBrush(
-                           (ColorThumb.GetBrightness() < 0.5f) ? Color.White : Color.Black))
                 {
-                    SizeF ms = g.MeasureString(s, ff);
-                    float tx = box.X + (box.Width - ms.Width) / 2f;
-                    float ty = box.Y + (box.Height - ms.Height) / 2f;
-                    g.DrawString(s, ff, br, tx, ty);
+                    var normalText = (ColorThumb.GetBrightness() < 0.5f) ? Color.White : Color.Black;
+                    Color txt = Enabled ? normalText : Color.FromArgb(170, normalText);
+
+                    using (SolidBrush br = new SolidBrush(txt))
+                    {
+                        SizeF ms = g.MeasureString(s, ff);
+                        float tx = box.X + (box.Width - ms.Width) / 2f;
+                        float ty = box.Y + (box.Height - ms.Height) / 2f;
+                        g.DrawString(s, ff, br, tx, ty);
+                    }
                 }
             }
         }
 
-
-        // ===== Math helpers =====
+        // ===== Math & color helpers =====
         private float Clamp(float v) { return Math.Max(_min, Math.Min(_max, v)); }
         private float Snap(float v)
         {
@@ -700,20 +766,100 @@ namespace BeeInterface
 
         private static GraphicsPath RoundRect(Rectangle rect, float radius)
         {
-            float d = radius * 2f;
-            GraphicsPath path = new GraphicsPath();
-            if (radius <= 0f)
+            var path = new GraphicsPath();
+            if (radius <= 0f || rect.Width <= 0 || rect.Height <= 0)
             {
                 path.AddRectangle(rect);
                 path.CloseFigure();
                 return path;
             }
-            path.AddArc(rect.Left, rect.Top, d, d, 180, 90);
-            path.AddArc(rect.Right - d, rect.Top, d, d, 270, 90);
-            path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-            path.AddArc(rect.Left, rect.Bottom - d, d, d, 90, 90);
+
+            float rr = Math.Min(radius, Math.Min(rect.Width, rect.Height) / 2f);
+            float d = rr * 2f;
+
+            RectangleF a = new RectangleF(rect.Left, rect.Top, d, d);
+            RectangleF b = new RectangleF(rect.Right - d, rect.Top, d, d);
+            RectangleF c = new RectangleF(rect.Right - d, rect.Bottom - d, d, d);
+            RectangleF d2 = new RectangleF(rect.Left, rect.Bottom - d, d, d);
+
+            path.AddArc(a, 180, 90);
+            path.AddLine(rect.Left + rr, rect.Top, rect.Right - rr, rect.Top);
+            path.AddArc(b, 270, 90);
+            path.AddLine(rect.Right, rect.Top + rr, rect.Right, rect.Bottom - rr);
+            path.AddArc(c, 0, 90);
+            path.AddLine(rect.Right - rr, rect.Bottom, rect.Left + rr, rect.Bottom);
+            path.AddArc(d2, 90, 90);
+            path.AddLine(rect.Left, rect.Bottom - rr, rect.Left, rect.Top + rr);
+
             path.CloseFigure();
             return path;
+        }
+
+        // ---- Auto-dim helpers ----
+        private static int Clamp255(int v) { return v < 0 ? 0 : (v > 255 ? 255 : v); }
+        private Color ToGray(Color c)
+        {
+            int y = Clamp255((int)Math.Round(0.299 * c.R + 0.587 * c.G + 0.114 * c.B));
+            return Color.FromArgb(c.A, y, y, y);
+        }
+        private Color Lerp(Color a, Color b, float t)
+        {
+            t = t < 0f ? 0f : (t > 1f ? 1f : t);
+            int r = Clamp255((int)Math.Round(a.R + (b.R - a.R) * t));
+            int g = Clamp255((int)Math.Round(a.G + (b.G - a.G) * t));
+            int bC = Clamp255((int)Math.Round(a.B + (b.B - a.B) * t));
+            return Color.FromArgb(a.A, r, g, bC);
+        }
+        private Color DimAuto(Color c)
+        {
+            // pha về xám rồi giảm sáng (chỉ áp dụng cho trackbar/nút/textbox)
+            Color desat = Lerp(c, ToGray(c), DisabledDesaturateMix);
+            int r = Clamp255((int)Math.Round(desat.R * DisabledDimFactor));
+            int g = Clamp255((int)Math.Round(desat.G * DisabledDimFactor));
+            int b = Clamp255((int)Math.Round(desat.B * DisabledDimFactor));
+            return Color.FromArgb(c.A, r, g, b);
+        }
+
+        // ===== Auto-repeat helpers =====
+        private void ApplyStep(int dir)
+        {
+            if (!Enabled) return;
+            Value = _value + dir * _step;
+        }
+        private void BeginRepeat(int dir)
+        {
+            if (!AutoRepeatEnabled || !Enabled) return;
+
+            _repeatDirection = (dir >= 0) ? +1 : -1;
+            if (_repeatTimer == null)
+            {
+                _repeatTimer = new Timer();
+                _repeatTimer.Tick += RepeatTimer_Tick;
+            }
+            _repeatPhase = 0;
+            _repeatTimer.Interval = Math.Max(1, AutoRepeatInitialDelay);
+            _repeatTimer.Start();
+        }
+        private void StopRepeat()
+        {
+            if (_repeatTimer != null) _repeatTimer.Stop();
+        }
+        private void RepeatTimer_Tick(object sender, EventArgs e)
+        {
+            if (!Enabled) { StopRepeat(); return; }
+
+            ApplyStep(_repeatDirection);
+
+            if (_repeatPhase == 0)
+            {
+                _repeatTimer.Interval = Math.Max(1, AutoRepeatInterval);
+                _repeatPhase = 1;
+            }
+            else if (AutoRepeatAccelerate)
+            {
+                int next = _repeatTimer.Interval + AutoRepeatAccelDeltaMs; // âm => nhanh dần
+                _repeatTimer.Interval = Math.Max(AutoRepeatMinInterval, next);
+            }
         }
 
         // ===== PlusMinusButton =====
@@ -726,7 +872,7 @@ namespace BeeInterface
             public Color BaseColor { get; set; } = Color.FromArgb(245, 245, 245);
             public Color HoverColor { get; set; } = Color.FromArgb(235, 235, 235);
             public Color PressColor { get; set; } = Color.FromArgb(220, 220, 220);
-            public Color BorderColor { get; set; } = Color.Transparent;//.FromArgb(245, 245, 245);
+            public Color BorderColor { get; set; } = Color.Transparent;
             public float BorderWidth { get; set; } = 1.25f;
 
             public PlusMinusButton(int dir)
@@ -738,10 +884,9 @@ namespace BeeInterface
                          ControlStyles.UserPaint |
                          ControlStyles.SupportsTransparentBackColor, true);
 
-                BackColor = Color.Transparent;   // mép bo trộn đúng màu nền cha
+                BackColor = Color.Transparent;
                 Cursor = Cursors.Hand;
 
-                // Không để nút nhận focus -> không có viền chấm xanh của Windows
                 TabStop = false;
                 SetStyle(ControlStyles.Selectable, false);
 
@@ -756,35 +901,27 @@ namespace BeeInterface
 
                 Rectangle rgnRect = new Rectangle(1, 1, Width - 2, Height - 2);
                 int rr = Math.Min(CornerRadius, Math.Min(rgnRect.Width, rgnRect.Height) / 2);
-                using (GraphicsPath path = new GraphicsPath())
+                using (GraphicsPath path = RoundRectF(rgnRect, rr))
                 {
-                    path.AddArc(rgnRect.X, rgnRect.Y, 2 * rr, 2 * rr, 180, 90);
-                    path.AddArc(rgnRect.Right - 2 * rr, rgnRect.Y, 2 * rr, 2 * rr, 270, 90);
-                    path.AddArc(rgnRect.Right - 2 * rr, rgnRect.Bottom - 2 * rr, 2 * rr, 2 * rr, 0, 90);
-                    path.AddArc(rgnRect.X, rgnRect.Bottom - 2 * rr, 2 * rr, 2 * rr, 90, 90);
-                    path.CloseFigure();
                     Region = new Region(path);
                 }
             }
 
-            protected override void OnMouseEnter(EventArgs e) { _hover = true; Invalidate(); base.OnMouseEnter(e); }
+            protected override void OnMouseEnter(EventArgs e) { if (!Enabled) return; _hover = true; Invalidate(); base.OnMouseEnter(e); }
             protected override void OnMouseLeave(EventArgs e) { _hover = false; _press = false; Invalidate(); base.OnMouseLeave(e); }
             protected override void OnMouseDown(MouseEventArgs e)
             {
+                if (!Enabled) { base.OnMouseDown(e); return; }
                 if (e.Button == MouseButtons.Left) { _press = true; Invalidate(); }
                 base.OnMouseDown(e);
             }
             protected override void OnMouseUp(MouseEventArgs e)
             {
-                if (_press && e.Button == MouseButtons.Left)
-                {
-                    _press = false; Invalidate();
-                    if (ClientRectangle.Contains(e.Location)) OnClick(EventArgs.Empty);
-                }
+                bool fire = _press && e.Button == MouseButtons.Left && ClientRectangle.Contains(e.Location);
+                _press = false; Invalidate();
+                if (Enabled && fire) OnClick(EventArgs.Empty);
                 base.OnMouseUp(e);
             }
-            protected override void OnGotFocus(EventArgs e) { Invalidate(); base.OnGotFocus(e); }
-            protected override void OnLostFocus(EventArgs e) { Invalidate(); base.OnLostFocus(e); }
 
             protected override void OnPaint(PaintEventArgs e)
             {
@@ -796,35 +933,29 @@ namespace BeeInterface
                 RectangleF rect = new RectangleF(1.5f, 1.5f, Width - 3f, Height - 3f);
                 float r = Math.Min(CornerRadius, Math.Min(rect.Width, rect.Height) / 2f);
 
+                // chọn màu theo trạng thái
                 Color c0 = _press ? PressColor : _hover ? HoverColor : BaseColor;
+                if (!Enabled) c0 = DimColor(c0, 0.6f, 0.5f); // dim nhẹ khi disabled
                 Color cTop = ControlPaint.Light(c0, 0.05f);
                 Color cBot = ControlPaint.Dark(c0, 0.02f);
+                Color border = !Enabled ? DimColor(BorderColor, 0.6f, 0.5f) : BorderColor;
 
-                using (GraphicsPath path = RoundRectF(rect, r))
+                using (GraphicsPath path = RoundRectF(Rectangle.Truncate(rect), r))
                 using (LinearGradientBrush lg = new LinearGradientBrush(Rectangle.Truncate(rect), cTop, cBot, 90f))
-                using (Pen pen = new Pen(BorderColor, BorderWidth) { Alignment = PenAlignment.Inset })
+                using (Pen pen = new Pen(border, BorderWidth) { Alignment = PenAlignment.Inset })
                 {
                     RectangleF sh = rect; sh.Offset(0, 1f);
                     using (SolidBrush shadow = new SolidBrush(Color.FromArgb(30, Color.Black)))
-                    using (GraphicsPath shPath = RoundRectF(sh, r))
+                    using (GraphicsPath shPath = RoundRectF(Rectangle.Truncate(sh), r))
                         g.FillPath(shadow, shPath);
 
                     g.FillPath(lg, path);
                     g.DrawPath(pen, path);
-
-                    if (Focused)
-                    {
-                        using (Pen pFocus = new Pen(Color.FromArgb(120, 60, 120, 255), 1f))
-                        {
-                            pFocus.DashStyle = DashStyle.Dot;
-                            pFocus.Alignment = PenAlignment.Inset;
-                            g.DrawPath(pFocus, path);
-                        }
-                    }
                 }
 
                 float cx = Width / 2f, cy = Height / 2f;
-                Color glyph = _press ? Color.FromArgb(40, 40, 40) : Color.FromArgb(60, 60, 60);
+                Color glyph = !Enabled ? Color.FromArgb(120, 90, 90, 90)
+                                       : (_press ? Color.FromArgb(40, 40, 40) : Color.FromArgb(60, 60, 60));
                 using (Pen p2 = new Pen(glyph, 2.2f) { StartCap = LineCap.Round, EndCap = LineCap.Round })
                 {
                     int s = Math.Max(8, Math.Min(Width, Height) / 2);
@@ -834,9 +965,41 @@ namespace BeeInterface
                 }
             }
 
+            // RoundRectF overloads using Rectangle / RectangleF + 3-arg AddArc
+            private static GraphicsPath RoundRectF(Rectangle rect, float radius)
+            {
+                var path = new GraphicsPath();
+                if (radius <= 0f || rect.Width <= 0 || rect.Height <= 0)
+                {
+                    path.AddRectangle(rect);
+                    path.CloseFigure();
+                    return path;
+                }
+
+                float rr = Math.Min(radius, Math.Min(rect.Width, rect.Height) / 2f);
+                float d = rr * 2f;
+
+                RectangleF a = new RectangleF(rect.Left, rect.Top, d, d);
+                RectangleF b = new RectangleF(rect.Right - d, rect.Top, d, d);
+                RectangleF c = new RectangleF(rect.Right - d, rect.Bottom - d, d, d);
+                RectangleF d2 = new RectangleF(rect.Left, rect.Bottom - d, d, d);
+
+                path.AddArc(a, 180, 90);
+                path.AddLine(rect.Left + rr, rect.Top, rect.Right - rr, rect.Top);
+                path.AddArc(b, 270, 90);
+                path.AddLine(rect.Right, rect.Top + rr, rect.Right, rect.Bottom - rr);
+                path.AddArc(c, 0, 90);
+                path.AddLine(rect.Right - rr, rect.Bottom, rect.Left + rr, rect.Bottom);
+                path.AddArc(d2, 90, 90);
+                path.AddLine(rect.Left, rect.Bottom - rr, rect.Left, rect.Top + rr);
+
+                path.CloseFigure();
+                return path;
+            }
+
             private static GraphicsPath RoundRectF(RectangleF rect, float radius)
             {
-                GraphicsPath path = new GraphicsPath();
+                var path = new GraphicsPath();
                 if (radius <= 0f || rect.Width <= 0f || rect.Height <= 0f)
                 {
                     path.AddRectangle(Rectangle.Truncate(rect));
@@ -845,13 +1008,39 @@ namespace BeeInterface
                 }
 
                 float rr = Math.Min(radius, Math.Min(rect.Width, rect.Height) / 2f);
-                path.AddArc(rect.Left, rect.Top, 2 * rr, 2 * rr, 180, 90);
-                path.AddArc(rect.Right - 2 * rr, rect.Top, 2 * rr, 2 * rr, 270, 90);
-                path.AddArc(rect.Right - 2 * rr, rect.Bottom - 2 * rr, 2 * rr, 2 * rr, 0, 90);
-                path.AddArc(rect.Left, rect.Bottom - 2 * rr, 2 * rr, 2 * rr, 90, 90);
+                float d = rr * 2f;
+
+                RectangleF a = new RectangleF(rect.Left, rect.Top, d, d);
+                RectangleF b = new RectangleF(rect.Right - d, rect.Top, d, d);
+                RectangleF c = new RectangleF(rect.Right - d, rect.Bottom - d, d, d);
+                RectangleF d2 = new RectangleF(rect.Left, rect.Bottom - d, d, d);
+
+                path.AddArc(a, 180, 90);
+                path.AddLine(rect.Left + rr, rect.Top, rect.Right - rr, rect.Top);
+                path.AddArc(b, 270, 90);
+                path.AddLine(rect.Right, rect.Top + rr, rect.Right, rect.Bottom - rr);
+                path.AddArc(c, 0, 90);
+                path.AddLine(rect.Right - rr, rect.Bottom, rect.Left + rr, rect.Bottom);
+                path.AddArc(d2, 90, 90);
+                path.AddLine(rect.Left, rect.Bottom - rr, rect.Left, rect.Top + rr);
+
                 path.CloseFigure();
                 return path;
             }
+
+            // local helper dim cho nút
+            private static Color DimColor(Color c, float dim, float mixGray)
+            {
+                int y = Clamp255((int)Math.Round(0.299 * c.R + 0.587 * c.G + 0.114 * c.B));
+                Color gray = Color.FromArgb(c.A, y, y, y);
+                float t = mixGray < 0f ? 0f : (mixGray > 1f ? 1f : mixGray);
+                int r = Clamp255((int)Math.Round((c.R + (gray.R - c.R) * t) * dim));
+                int g = Clamp255((int)Math.Round((c.G + (gray.G - c.G) * t) * dim));
+                int b = Clamp255((int)Math.Round((c.B + (gray.B - c.B) * t) * dim));
+                return Color.FromArgb(c.A, r, g, b);
+            }
+
+            private static int Clamp255(int v) => v < 0 ? 0 : (v > 255 ? 255 : v);
         }
     }
 }

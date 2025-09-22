@@ -21,13 +21,50 @@ namespace BeeUi
     {
         public Main()
         {
+            //SetStyle(ControlStyles.AllPaintingInWmPaint |
+            //     ControlStyles.UserPaint |
+            //     ControlStyles.OptimizedDoubleBuffer, true);
+            //typeof(Form).GetProperty("DoubleBuffered",
+            //    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            //    ?.SetValue(this, true, null);
             InitializeComponent();
             G.Main = this;
             Global.EditTool = this.editTool1;
             //G.Header = editTool1.header1;
             this.MinimumSize = new Size(1190, 780);
         }
-
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        var cp = base.CreateParams;
+        //        // WS_EX_COMPOSITED: vẽ từ dưới lên, giảm flicker mạnh cho Form nhiều child
+        //        cp.ExStyle |= 0x02000000;
+        //        return cp;
+        //    }
+        //}
+        //protected override void OnHandleCreated(EventArgs e)
+        //{
+        //    base.OnHandleCreated(e);
+        //    EnableDoubleBufferRecursive(this);
+        //}
+        //private static void EnableDoubleBufferRecursive(Control root)
+        //{
+        //    foreach (Control c in root.Controls)
+        //    {
+        //        var pi = c.GetType().GetProperty("DoubleBuffered",
+        //            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        //        pi?.SetValue(c, true, null);
+        //        EnableDoubleBufferRecursive(c);
+        //    }
+        //}
+        //protected override async void OnShown(EventArgs e)
+        //{
+        //    base.OnShown(e);
+        //    // Cho form hiển thị xong đã
+        //    await System.Threading.Tasks.Task.Yield();
+          
+        //}
         private void button1_Click(object sender, EventArgs e)
         {
           

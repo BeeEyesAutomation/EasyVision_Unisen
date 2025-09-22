@@ -33,18 +33,7 @@ namespace BeeCore
         {
             try
             {
-                if (Global.listParaCamera[0] != null)
-                {
-                    MessageBox.Show("OK Cam " + BeeCore.Common.listCamera[0].Para.Name);
-                }
-                else
-                    MessageBox.Show("NULL1");
-                if (BeeCore.Common.listCamera[0] != null)
-                {
-                    MessageBox.Show("OK Cam " + BeeCore.Common.listCamera[0].Para.Name);
-                }
-                else
-                    MessageBox.Show("NULL2");
+             
                 String path = "Program\\" + Project;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);

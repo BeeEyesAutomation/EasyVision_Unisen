@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ using System.Windows.Forms;
 
 namespace BeeUi
 {
-    public partial class IOSetting : Form
+    public partial class GeneralSetting : Form
     {
-        public IOSetting()
+        public GeneralSetting()
         {
             InitializeComponent();
         }
@@ -35,8 +36,9 @@ namespace BeeUi
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick =Global.Config.IsSaveRS;
-            btnIsMultiTrig.IsCLick = Global.ParaCommon.IsMultiTrigger;
-            btnIsOneTrig.IsCLick = !Global.ParaCommon.IsMultiTrigger;
+            //btnIsMultiTrig.IsCLick = Global.ParaCommon.IsMultiTrigger;
+            //  btnIsOneTrig.IsCLick = !Global.ParaCommon.IsMultiTrigger;
+            numTrigger.Value = Global.ParaCommon.NumTrig;
             btnMulti.IsCLick = Global.ParaCommon.IsMultiCamera;
             btnSingle.IsCLick = !Global.ParaCommon.IsMultiCamera;
             switch (Global.Config.TypeSave){
@@ -156,14 +158,31 @@ namespace BeeUi
          Global.ParaCommon.IsMultiCamera=!   btnSingle.IsCLick;
         }
 
-        private void btnIsOneTrig_Click(object sender, EventArgs e)
-        {
-            Global.ParaCommon.IsMultiTrigger = !btnIsOneTrig.IsCLick;
-        }
+
 
         private void btnIsMultiTrig_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsMultiTrigger =btnIsMultiTrig.IsCLick;
+           
+        }
+
+        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+      
+
+        private void numTrigger_ValueChanged(float obj)
+        {
+            Global.ParaCommon.NumTrig =(int) numTrigger.Value;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveData.ParaPJ(Global.Project, Global.ParaCommon);
+            SaveData.Config(Global.Config);
+            Shows.ShowAllChart(Global.ToolSettings.pAllTool);
+            this.Close();
         }
     }
 }

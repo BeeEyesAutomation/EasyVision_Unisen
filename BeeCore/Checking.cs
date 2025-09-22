@@ -118,11 +118,11 @@ namespace BeeCore
                                 if (Global.rotOriginAdj != null)
                                 {
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
-                                    if (propetyTool.TypeTool == TypeTool.Positions)
-                                    {
-                                        propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
-                                        propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
-                                    }
+                                    //if (propetyTool.TypeTool == TypeTool.Positions)
+                                    //{
+                                    //    propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
+                                    //    propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
+                                    //}
 
 
                                 }

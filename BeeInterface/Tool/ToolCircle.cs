@@ -166,6 +166,7 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+          
           if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else

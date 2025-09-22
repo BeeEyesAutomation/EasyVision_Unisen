@@ -175,27 +175,6 @@
   <data name="BID_TOOL_HELPIMAGE_EDGE_WIDTH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ACTIVE_CENTER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_NORMAL_CENTER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_UNDERBUTTON_72PIX_FORTYPEC_ROLLOVER_CENTER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BtnBlue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BtnBlue1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BtnBlue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BtnBlue2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BtnGreen1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BtnGreen1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BtnGreen2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BtnGreen2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Camera" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Camera.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -224,16 +203,10 @@
     <value>..\Resources\BID_TOOL_HELPIMAGE_OCR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentOKNG" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="contentOutLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PIXElCOUNT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\contentOKNG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentPattern" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_COLOR_AREA.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="contentPitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PITCH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\contentPattern.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentPosition_Adjustment" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_POSITION.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -243,9 +216,6 @@
   </data>
   <data name="Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Delete.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Delete1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeleteUndo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeleteUndo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -300,6 +270,9 @@
   </data>
   <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Refresh25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Available Updates.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Rotate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Rotate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

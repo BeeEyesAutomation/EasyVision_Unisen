@@ -156,7 +156,6 @@ namespace PylonCli {
         double    GetFloatAny(GenApi::INodeMap& nm, std::initializer_list<const char*> names);
         void      SetFloatAny(GenApi::INodeMap& nm, std::initializer_list<const char*> names, double v);
         void      TrySetEnum(GenApi::INodeMap& nm, const char* enumName, const char* entry);
-
         bool DetectIsColorSensor();
         void ConfigureConverterForOutput();
 

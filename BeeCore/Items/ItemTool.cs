@@ -19,9 +19,117 @@ using Image = System.Drawing.Image;
 using TextBox = System.Windows.Forms.TextBox;
 
 namespace BeeCore
-{ [Serializable()]
-    public partial class ItemTool : UserControl
+{ // ADD: nếu muốn dùng chuẩn .NET
+    public interface IDeepCloneable<T>
     {
+        T Clone(bool copyRuntime = true);
+    }
+    public partial class ItemTool : UserControl, IDeepCloneable<ItemTool>, ICloneable
+    {  // ADD: Clone công khai
+        /// <summary>
+        /// Clone ItemTool bằng cách tạo instance mới và sao chép thuộc tính.
+        /// copyRuntime=false: chỉ copy cấu hình; true: copy cả trạng thái runtime (Score/Status/CT...).
+        /// </summary>
+        public ItemTool Clone(bool copyRuntime = true)
+        {
+            var clone = new ItemTool(this.TypeTool, this.Name,this.TriggerNum);
+
+            // --- Cấu hình/thiết kế cơ bản ---
+            clone.Size = this.Size;
+            clone.MinimumSize = this.MinimumSize;
+            clone.MaximumSize = this.MaximumSize;
+            clone.Margin = this.Margin;
+            clone.Padding = this.Padding;
+            clone.Enabled = this.Enabled;
+            clone.Visible = this.Visible;
+            clone.Font = (Font)this.Font?.Clone();
+            clone.ForeColor = this.ForeColor;
+            clone.BackColor = this.BackColor;
+            clone.TriggerNum = this.TriggerNum;
+            clone.IconTool = SafeCloneImage(this.IconTool); // tránh share cùng Bitmap
+            clone.ColorTrack = this.ColorTrack;
+            clone.Score=this.Score;
+            clone.Step = this.Step;
+            clone.Min = this.Min;     // dùng field/backing để không bắn Invalidate quá sớm
+            clone.Max = this.Max;
+            clone.NotChange = this.NotChange;
+            clone.IsEdit = this.IsEdit;
+
+            clone.IndexThread = this.IndexThread;
+            clone.IndexTool = this.IndexTool;
+            clone.TriggerNum = this.TriggerNum;
+
+            // --- Thuộc tính hiển thị/trạng thái ---
+            if (copyRuntime)
+            {
+                clone.ClStatus = this.ClStatus;
+                clone.ClScore = this.ClScore;
+                clone.Status = this.Status;
+                clone.Score = this.Score;
+                clone.CT = this.CT;
+
+                // Set Value/ValueScore cuối cùng để cập nhật pTick + layout
+                clone.ValueScore = this.ValueScore;
+            }
+            else
+            {
+                // Reset runtime: như lúc chưa chạy
+                clone.ClStatus = Global.ColorNone;
+                clone.ClScore = Global.ColorNone;
+                clone.Status = "---";
+                clone.Score = "---";
+                clone.CT = 0;
+                clone.ValueScore = 0;
+                // Nếu muốn giữ Score cấu hình thì lấy từ Common.PropetyTools (nếu có)
+                //try
+                //{
+                //    clone.Step = Common.PropetyTools[clone.IndexThread][clone.IndexTool].StepValue;
+                //    clone.Min = Common.PropetyTools[clone.IndexThread][clone.IndexTool].MinValue;
+                //    clone.Max = Common.PropetyTools[clone.IndexThread][clone.IndexTool].MaxValue;
+                //    clone.Value = BeeCore.Common.PropetyTools[clone.IndexThread][clone.IndexTool].Score;
+                //}
+                //catch { /* an toàn nếu chưa có Common.PropetyTools */ }
+            }
+
+            // Đồng bộ nội bộ hình học
+            clone.UpdateLayout();
+
+            // LƯU Ý: KHÔNG sao chép event subscriber bên ngoài (ValueChanged, ...).
+            // Nếu cần, ở nơi sử dụng hãy đăng ký lại:
+            // clone.ValueChanged += ...;
+
+            return clone;
+        }
+
+        // ADD: hỗ trợ ICloneable (mặc định copyRuntime=true)
+        object ICloneable.Clone() => this.Clone(true);
+
+        // ADD: tiện ích clone Image an toàn
+        private static Image SafeCloneImage(Image src)
+        {
+            if (src == null) return null;
+            try
+            {
+                // Nếu là Bitmap, clone pixel để không share handle/stream
+                if (src is Bitmap bmp)
+                {
+                    // Clone theo toàn bộ rect và format
+                    return bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), bmp.PixelFormat);
+                }
+                // Fallback: dùng MemoryStream
+                using (var ms = new System.IO.MemoryStream())
+                {
+                    src.Save(ms, src.RawFormat);
+                    ms.Position = 0;
+                    return Image.FromStream(ms);
+                }
+            }
+            catch
+            {
+                // Nếu không clone được, chấp nhận trả về ref (ít gặp)
+                return src;
+            }
+        }
         public PointF pTick;
         private Color colorTrack = Color.Gray;
         private Image imgTick = Properties.Resources.Enable;
@@ -46,12 +154,16 @@ namespace BeeCore
 
       
         public float Min { get => min; set { min = value;
+                if (TriggerNum != TriggerNum.Trigger1)
+                    return;
                 if (Value < Min) Value = Min;
                 this.Refresh();
             } }
         public float Max { get => max; set
             {
                 max = value;
+                if (TriggerNum != TriggerNum.Trigger1)
+                    return;
                 if (Value >Max) Value = Max;
                 this.Refresh();
             }
@@ -66,6 +178,8 @@ namespace BeeCore
                 if (value < Min) value = Min;
                 if (!float.IsNaN(value))
                 {if (NotChange) return;
+                    if (TriggerNum != TriggerNum.Trigger1) 
+                        return;
                     this.value = (float)Math.Round(value, 1);
                     pTick = new Point(pTrack.X + (int)((value * 1.0 / (Max - Min)) * (this.szTrack.Width - imgTick.Width)), pTrack.Y);
                     BeeCore.Common.PropetyTools[IndexThread][IndexTool].Score = Value;
@@ -135,7 +249,7 @@ namespace BeeCore
                 Value -= Step;
         }
 
-        public ItemTool(TypeTool typeTool,string names)
+        public ItemTool(TypeTool typeTool,string names,TriggerNum triggerNum)
         {
           
             InitializeComponent();
@@ -147,7 +261,9 @@ namespace BeeCore
             this.MouseDown += ItemTool_MouseDown;
             this.Click += ItemTool_Click;
             this.VisibleChanged += ItemTool_VisibleChanged;
-        
+          TriggerNum = triggerNum;
+            if (TriggerNum != TriggerNum.Trigger1)
+                NotChange = true;
             //if(TypeTool==TypeTool.Measure)
             //{
             //    Score.Max = 10;
@@ -233,6 +349,7 @@ namespace BeeCore
         public String Name = "";
         public Font Font = new Font("Arial", 14);
         public Font FontStaus = new Font("Arial", 22, FontStyle.Bold);
+        public TriggerNum TriggerNum = TriggerNum.Trigger1;
         public bool IsCLick
         {
             get { return this.isCLick; }
@@ -529,6 +646,8 @@ namespace BeeCore
 
         private void ItemTool_StatusToolChanged(StatusTool obj)
         {
+            if (TriggerNum != Global.TriggerNum)
+                return;
             switch(obj)
             {
                
@@ -595,13 +714,15 @@ namespace BeeCore
             //    MessageBox.Show("Vui long dang ky Anh");
             //    return;
             //}
+         
             Global.IndexToolSelected = -1;
             if (Global.IsRun) return;
             //this.Parent.Visible = false;
             txtEdit.Visible = false;
             Global.StatusDraw = StatusDraw.Edit;
-            Global.IndexToolSelected = IndexTool;
             Global.IsEditTool = true;
+            Global.IndexToolSelected = IndexTool;
+          
             // G.listAlltool[IndexThread].FindIndex(a => a.ItemTool == this);
 
         }

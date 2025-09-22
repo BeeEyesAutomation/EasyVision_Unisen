@@ -23,7 +23,7 @@ namespace BeeUi.Unit
         private void btnSetting_Click(object sender, EventArgs e)
         {
 
-            IOSetting IOSetting = new IOSetting();
+            GeneralSetting IOSetting = new GeneralSetting();
             IOSetting.Show();
         }
 

@@ -41,33 +41,35 @@ namespace BeeInterface
             // 
             // lbNumber
             // 
-            this.lbNumber.AutoSize = true;
             this.lbNumber.BackColor = System.Drawing.Color.Transparent;
-            this.lbNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumber.Location = new System.Drawing.Point(3, 10);
+            this.lbNumber.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNumber.Location = new System.Drawing.Point(0, 0);
             this.lbNumber.Name = "lbNumber";
-            this.lbNumber.Size = new System.Drawing.Size(29, 20);
+            this.lbNumber.Size = new System.Drawing.Size(34, 40);
             this.lbNumber.TabIndex = 8;
             this.lbNumber.Text = "01";
+            this.lbNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // name
             // 
             this.name.BackColor = System.Drawing.Color.Transparent;
-            this.name.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.name.Location = new System.Drawing.Point(31, 10);
+            this.name.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.name.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.name.Location = new System.Drawing.Point(34, 0);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(101, 20);
+            this.name.Size = new System.Drawing.Size(110, 40);
             this.name.TabIndex = 7;
             this.name.Text = "OutLine";
+            this.name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ck1
             // 
-            this.ck1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck1.AutoSize = true;
-            this.ck1.Location = new System.Drawing.Point(134, 14);
+            this.ck1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck1.Location = new System.Drawing.Point(144, 0);
             this.ck1.Name = "ck1";
-            this.ck1.Size = new System.Drawing.Size(32, 17);
+            this.ck1.Size = new System.Drawing.Size(41, 40);
             this.ck1.TabIndex = 15;
             this.ck1.Text = "1";
             this.ck1.UseVisualStyleBackColor = true;
@@ -75,12 +77,11 @@ namespace BeeInterface
             // 
             // ck3
             // 
-            this.ck3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck3.AutoSize = true;
-            this.ck3.Location = new System.Drawing.Point(218, 14);
+            this.ck3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck3.Location = new System.Drawing.Point(226, 0);
             this.ck3.Name = "ck3";
-            this.ck3.Size = new System.Drawing.Size(32, 17);
+            this.ck3.Size = new System.Drawing.Size(41, 40);
             this.ck3.TabIndex = 16;
             this.ck3.Text = "3";
             this.ck3.UseVisualStyleBackColor = true;
@@ -88,12 +89,11 @@ namespace BeeInterface
             // 
             // ck4
             // 
-            this.ck4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck4.AutoSize = true;
-            this.ck4.Location = new System.Drawing.Point(260, 14);
+            this.ck4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck4.Location = new System.Drawing.Point(267, 0);
             this.ck4.Name = "ck4";
-            this.ck4.Size = new System.Drawing.Size(32, 17);
+            this.ck4.Size = new System.Drawing.Size(41, 40);
             this.ck4.TabIndex = 17;
             this.ck4.Text = "4";
             this.ck4.UseVisualStyleBackColor = true;
@@ -101,12 +101,11 @@ namespace BeeInterface
             // 
             // ck6
             // 
-            this.ck6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck6.AutoSize = true;
-            this.ck6.Location = new System.Drawing.Point(344, 14);
+            this.ck6.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck6.Location = new System.Drawing.Point(349, 0);
             this.ck6.Name = "ck6";
-            this.ck6.Size = new System.Drawing.Size(32, 17);
+            this.ck6.Size = new System.Drawing.Size(41, 40);
             this.ck6.TabIndex = 18;
             this.ck6.Text = "6";
             this.ck6.UseVisualStyleBackColor = true;
@@ -114,12 +113,11 @@ namespace BeeInterface
             // 
             // ck5
             // 
-            this.ck5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck5.AutoSize = true;
-            this.ck5.Location = new System.Drawing.Point(302, 14);
+            this.ck5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck5.Location = new System.Drawing.Point(308, 0);
             this.ck5.Name = "ck5";
-            this.ck5.Size = new System.Drawing.Size(32, 17);
+            this.ck5.Size = new System.Drawing.Size(41, 40);
             this.ck5.TabIndex = 20;
             this.ck5.Text = "5";
             this.ck5.UseVisualStyleBackColor = true;
@@ -127,12 +125,11 @@ namespace BeeInterface
             // 
             // ck2
             // 
-            this.ck2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ck2.AutoSize = true;
-            this.ck2.Location = new System.Drawing.Point(176, 14);
+            this.ck2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ck2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ck2.Location = new System.Drawing.Point(185, 0);
             this.ck2.Name = "ck2";
-            this.ck2.Size = new System.Drawing.Size(32, 17);
+            this.ck2.Size = new System.Drawing.Size(41, 40);
             this.ck2.TabIndex = 19;
             this.ck2.Text = "2";
             this.ck2.UseVisualStyleBackColor = true;
@@ -143,18 +140,17 @@ namespace BeeInterface
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.Controls.Add(this.ck5);
-            this.Controls.Add(this.ck2);
-            this.Controls.Add(this.ck6);
-            this.Controls.Add(this.ck4);
-            this.Controls.Add(this.ck3);
-            this.Controls.Add(this.ck1);
-            this.Controls.Add(this.lbNumber);
             this.Controls.Add(this.name);
+            this.Controls.Add(this.ck1);
+            this.Controls.Add(this.ck2);
+            this.Controls.Add(this.ck3);
+            this.Controls.Add(this.ck4);
+            this.Controls.Add(this.lbNumber);
+            this.Controls.Add(this.ck5);
+            this.Controls.Add(this.ck6);
             this.Name = "ItemLogic";
             this.Size = new System.Drawing.Size(390, 40);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

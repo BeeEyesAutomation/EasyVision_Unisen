@@ -143,7 +143,7 @@ namespace BeeUi
             if (!Directory.Exists(updateFolder) || !Directory.Exists(appFolder))
                 return false;
 
-            var updateFiles = Directory.GetFiles(updateFolder, "Bee*.dll", SearchOption.TopDirectoryOnly);
+            var updateFiles = Directory.GetFiles(updateFolder, "*.dll", SearchOption.TopDirectoryOnly);
 
             foreach (var updateFile in updateFiles)
             {

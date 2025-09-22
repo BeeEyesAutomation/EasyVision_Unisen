@@ -155,9 +155,7 @@ namespace BeeInterface
             dynamic control = null;
             switch (typeTool)
             {
-                case TypeTool.OutLine:
-                    control = new ToolOutLine();
-                    break;
+               
                 case TypeTool.Color_Area:
                     control = new ToolColorArea();
                     break;
@@ -167,9 +165,7 @@ namespace BeeInterface
                 case TypeTool.Position_Adjustment:
                     control = new ToolPosition_Adjustment();
                     break;
-                case TypeTool.Edge_Pixels:
-                    control = new ToolEdgePixels();
-                    break;
+              
                 case TypeTool.MatchingShape:
                     control = new ToolMatchingShape();
                     break;
@@ -182,9 +178,7 @@ namespace BeeInterface
                 case TypeTool.BarCode:
                     control = new ToolBarcode();
                     break;
-                case TypeTool.Positions:
-                    control = new ToolPositions();
-                    break;
+               
                 case TypeTool.Measure:
                     control = new ToolMeasure();
                     break;
@@ -233,7 +227,7 @@ namespace BeeInterface
             TypeTool TypeTool = PropetyTool.TypeTool;
             try
             {
-                itemTool = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(Index - 1));
+                itemTool = new ItemTool(TypeTool, TypeTool.ToString() + Convert.ToString(Index - 1),TriggerNum.Trigger1);
                 itemTool.Location = pDraw;
                 itemTool.CT = 0;
                 itemTool.Score = "---";
@@ -279,7 +273,7 @@ namespace BeeInterface
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
                 if (control.Propety.rotCrop == null)
-                    if (TypeTool != TypeTool.Edge_Pixels &&
+                    if (
                        TypeTool != TypeTool.BarCode &&
                       TypeTool != TypeTool.Learning &&
                       TypeTool != TypeTool.OCR &&
@@ -326,7 +320,7 @@ namespace BeeInterface
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
                 if(PropetyTool.Propety.rotCrop==null)
-                if (TypeTool != TypeTool.Edge_Pixels &&
+                if (
                    TypeTool != TypeTool.BarCode &&
                   TypeTool != TypeTool.Learning &&
                   TypeTool != TypeTool.OCR &&

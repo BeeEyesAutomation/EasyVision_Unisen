@@ -1082,7 +1082,7 @@ namespace BeeInterface
                 double Scale = (imgCrop.Height - 20) / (H * 1.0);
                 W = (int)(W * Scale);
                 e.Graphics.DrawImage(listImgTrainYolo[i], new Rectangle(xImgCrop, 5, W, imgCrop.Height - 20));
-                e.Graphics.DrawString(listLabelTrainYolo[i], new Font("Arial", 12), Brushes.Black, xImgCrop, imgCrop.Height - 25);
+                e.Graphics.DrawString(listLabelTrainYolo[i], new Font("Arial", 14), Brushes.Black, xImgCrop, imgCrop.Height - 25);
                 xImgCrop += W + 20;
             }
             if (IsUpdateImgCrop)

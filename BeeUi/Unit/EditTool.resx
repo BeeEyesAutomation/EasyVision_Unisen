@@ -126,15 +126,15 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Developer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGPC/xhBQAAAZpJREFUaEPt
-        l+FNxDAMhTsCIzACG8AIjMIINwKbwAYwChvABpyfhCXLil3n5FwN+JPej2uTnF9rp87WNE3zJ7gl3RfV
-        DSnEE+m7uBCjywNpNLGiEKvJM2k0qaIQq8k7aTSpohCrSRs5QG2kmv6fka+f35WEmKaNuAMPIhxfG7kS
-        hxtBk/dJeiGhs76UZUbQUqO13guO14R0s8dHhkh7vszIGwlj8bQtM7qjviMxmIO5uI619lhiRJ9brLb6
-        ROIx2D4l2uTeOSPdiHyS0AfJQq75igsKzOX73psF6UY4pVjeIUeOGz1x/Va8FEs1olPKO+B49SHRBzor
-        xdKMjFLK2228+pBgjUiKpRmRgUH47SHXG9WHJLJ2mpHok2N4HOTtSNE3nWYERIszWh8gunmkGgGR4ozW
-        x8zmkW5klGI6FeRaVn1gzszmkW4E6NR5JEnkPas+MEeOs1KKWWIEcProsTP1wf/pbQZMOL7wwB2kEaRL
-        Flc3ApA2qI29dJnhECMraCPVuMhIdbWRanKN4MOF7fI3yPvINk3TlGbbzkkEctpHpDdKAAAAAElFTkSu
-        QmCC
+        iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGPC/xhBQAAAchJREFUaEPt
+        l9FRRCEMRSnBEizBDrQES7EES7AT7UBLsQPtQOfuwJtMhoTz/AGVM5OPXS7sDQQWStlsNpu/wHUp5XbR
+        uPJmIx5KKV+Lhzym3HU6rRryGvLU6bBqyGvIW6fDqiGvITuRCbETWS3+XyKf9fNKIU+nE0mFk8D+sHAS
+        2B8WTgL7w8KT6JL3UUp5rjfrn4L9YWFFV2pdrUfm2pgKf9lrTwZyPcf+sLDyWrWa7SgZf6O+MW3qo776
+        XmONwP6wsPNu8TPdeDQaHZ8Wn+TonYH9UaGdScW7FxjsmC++sfZt7dnKCuoPC1tJtYhWQ1hdb8b9qmQl
+        Rv0hoS+p7IHjTdr9YfEPul7Cgvi7MBL2Sio7bbL9YdEYpMRG/g5GQmtMoc8Zdrze/rCQsUf+DkZCOnMN
+        aywqF0FXeuTvgAh93Ueb0+ui/SHo4UH8XaBCsjnp/jhzeFB/WNgrMV8Kdqxof6gPKakG9ceFndK5d+22
+        rbdiQn2sLiqpBvaHhZVWPl7rk8z2R/vNKFkL9oeFA2wi2fXlLNgfFgJUNtobo3I5A/aHhZPA/rBwEtgf
+        Fk4C+7PC1WMnslqkieiPS8flb4jsT3az2WwW5xtJBHLasjzR1wAAAABJRU5ErkJggg==
 </value>
   </data>
   <metadata name="openFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -148,5 +148,8 @@
   </metadata>
   <metadata name="tmReLoadSplit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>959, 25</value>
+  </metadata>
+  <metadata name="tmLoad.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1090, 25</value>
   </metadata>
 </root>

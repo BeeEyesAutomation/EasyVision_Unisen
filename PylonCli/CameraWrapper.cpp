@@ -303,17 +303,23 @@ float Camera::SetWidth(float v)
         if (!IsWritable(n))
             _lastError="Node Width không cho phép ghi!";
 
-        long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
+       /* long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
         if (v < mn) v = (int)mn;
         if (v > mx) v = (int)mx;
-        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);
+        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);*/
         n->SetValue(v);
         _lastError = nullptr;
         _cam->StartGrabbing();
         return (int)n->GetValue();
     }
-    catch (...) { 
-        _lastError = "SetWidth fail"; return 0; }
+    catch (const std::exception& ex) {
+        _lastError = gcnew System::String(ex.what()); // chuyển std::string → String^
+        return 1;
+    }
+    catch (...) {
+        _lastError = "SetWidth fail: unknown error";
+        return 2;
+    }
 }
 
 float Camera::SetHeight(float v)
@@ -327,16 +333,23 @@ float Camera::SetHeight(float v)
         if (!IsWritable(n))
             _lastError = "Node Width không cho phép ghi!";
 
-        long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
+       /* long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
         if (v < mn) v = (int)mn;
         if (v > mx) v = (int)mx;
-        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);
+        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);*/
         n->SetValue(v);
         _lastError = nullptr;
         _cam->StartGrabbing();
         return (int)n->GetValue();
     }
-    catch (...) { _lastError = "SetHeight fail"; return 0; }
+    catch (const std::exception& ex) {
+        _lastError = gcnew System::String(ex.what()); // chuyển std::string → String^
+        return 1;
+    }
+    catch (...) {
+        _lastError = "SetHeight fail: unknown error";
+        return 2;
+    }
 }
 
 float Camera::SetOffsetX(float v)
@@ -358,6 +371,7 @@ float Camera::SetOffsetX(float v)
 float Camera::SetOffsetY(float v)
 {
     try {
+        //SetX
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetY");
         if (!n || !IsWritable(n)) throw std::runtime_error("OffsetY not writable");
         long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
@@ -484,7 +498,7 @@ void Camera::GetHeight(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("Height");
-        if (!n || !IsReadable(n)) throw std::runtime_error("Height node not readable");
+        if (!n || !IsReadable(n))  _lastError = "Height node not readable";
 
         min = (int)n->GetMin();
         max = (int)n->GetMax();
@@ -527,7 +541,7 @@ void Camera::GetBlackLevel(float% min, float% max, float% step, float% current)
         if (!n || !IsReadable(n))
             n = _cam->GetNodeMap().GetNode("BlackLevelRaw");
         if (!n || !IsReadable(n))
-            throw std::runtime_error("BlackLevel node not readable");
+            _lastError = "BlackLevel node not readable";
 
         min = (float)n->GetMin();
         max = (float)n->GetMax();
@@ -547,7 +561,7 @@ void Camera::GetOffsetX(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetX");
-        if (!n || !IsReadable(n)) throw std::runtime_error("OffsetX node not readable");
+        if (!n || !IsReadable(n))  _lastError = "OffsetX node not readable";
 
         min = (int)n->GetMin();
         max = (int)n->GetMax();
@@ -565,7 +579,7 @@ void Camera::GetOffsetY(float% min, float% max, float% step, float% current)
 {
     try {
         CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetY");
-        if (!n || !IsReadable(n)) throw std::runtime_error("OffsetY node not readable");
+        if (!n || !IsReadable(n)) _lastError = "OffsetY node not readable";
 
         min = (int)n->GetMin();
         max = (int)n->GetMax();

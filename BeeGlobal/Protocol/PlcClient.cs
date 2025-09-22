@@ -68,6 +68,7 @@ namespace PlcLib
             string ip = "",
             int port = 0,
             string comPort = null, int baudRate = 9600,
+            byte _SlaveID = 1,
             System.IO.Ports.Parity parity = System.IO.Ports.Parity.Even,
             System.IO.Ports.StopBits stopBits=System.IO.Ports.StopBits.Two,
             int databit=7,
@@ -82,6 +83,7 @@ namespace PlcLib
             _com = comPort;
             _baud = baudRate;
             Parity = parity;
+            SlaveID = _SlaveID;
             StopBits = stopBits;
             DataBits = databit;
             dtrEnable = DtrEnable;
@@ -92,6 +94,7 @@ namespace PlcLib
         HslCommunication.Authorization authorization = new Authorization();
         private System.IO.Ports.Parity Parity= System.IO.Ports.Parity.Even;
         private System.IO.Ports.StopBits StopBits= System.IO.Ports.StopBits.Two;
+        private byte SlaveID = 0;
         private int DataBits = 7;
         // ====== tạo driver theo hãng/kết nối (không dùng base type) ======
         private object CreateDriver()
@@ -123,7 +126,7 @@ namespace PlcLib
                             sp.ReadTimeout = _timeoutMs;
                             sp.WriteTimeout = _timeoutMs;
                         });
-                        keySp.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
+                        keySp.Station = SlaveID;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
                        // keySp.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
                         return keySp;
                     }
@@ -172,12 +175,18 @@ namespace PlcLib
                         var rtu = new ModbusRtu();
                         rtu.SerialPortInni(sp =>
                         {
+                           
                             sp.PortName = _com;
                             sp.BaudRate = _baud;
-                            sp.DataBits = 8;
-                            sp.Parity = System.IO.Ports.Parity.None;
-                            sp.StopBits = System.IO.Ports.StopBits.One;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
                         });
+                        rtu.Station = SlaveID;
                         return rtu;
                     }
 
@@ -526,7 +535,7 @@ namespace PlcLib
                 {
                     try
                     {
-                        if (Global.IsAllowReadPLC)
+                      //  if (Global.IsAllowReadPLC)
                         {
                           //  CT.Restart();
                             var values = ReadWordAsBits(addresses);

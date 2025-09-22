@@ -80,7 +80,7 @@ namespace BeeUi
                    
                     case Step.Run:
                         Global.IsAllowReadPLC = true;
-                        Shows.ShowAllChart(Global.ToolSettings.pAllTool as Control);
+                        Shows.ShowAllChart(Global.ToolSettings.pAllTool);
                         Global.EditTool.View.btnLive.Enabled = false;
                         CameraBar.Visible = true;
                         pHeader.Visible = true;
@@ -216,6 +216,7 @@ namespace BeeUi
                         pName.Visible = true;
                        
                         pEditTool.Show("Tool");
+                        Shows.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
                         //Global.ToolSettings.Parent = pEditTool;
                         //Global.ToolSettings.Size = pEditTool.Size;
                         //Global.ToolSettings.Location = new Point(0, 0);
@@ -288,6 +289,7 @@ namespace BeeUi
         public async void DesTroy()
         {
             View.tmContinuous.Enabled = false;
+            if(Global.LogsDashboard!=null)
             Global.LogsDashboard.Dispose();
            foreach (Camera camera in BeeCore.Common.listCamera)
                 if(camera!=null)
@@ -323,16 +325,16 @@ namespace BeeUi
         {
             tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
-            this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
+            //   this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
-           
+
 
 
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
-          
-            pHeader.Height =(int)( pHeader.Height * Global.PerScaleHeight);
+
+            pHeader.Height = (int)(pHeader.Height * Global.PerScaleHeight);
             pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);
-            pEdit.Width= (int)(pEdit.Width * Global.PerScaleWidth);
+            pEdit.Width = (int)(pEdit.Width * Global.PerScaleWidth);
             if (Global.ToolSettings == null)
             {
                 Global.ToolSettings = new ToolSettings();
@@ -356,11 +358,11 @@ namespace BeeUi
             //    DashboardImages = new DashboardImages();
             //  //  DashboardImages.
             //}
-           // if(Global.LogsDashboard==null)
-          //  Global.LogsDashboard = new LogsDashboard();
+            // if(Global.LogsDashboard==null)
+            //  Global.LogsDashboard = new LogsDashboard();
             // cấu hình
-          
-            pEditTool.Register("Tool", () =>Global.ToolSettings);
+
+            pEditTool.Register("Tool", () => Global.ToolSettings);
             pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
             pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
             pEditTool.Register("PLC", () => G.SettingPLC);
@@ -369,14 +371,14 @@ namespace BeeUi
             pEditTool.Register("Logs", () => Global.LogsDashboard);
             pInfor.Register("Dashboard", () => G.StatusDashboard);
             pInfor.Register("StepEdit", () => G.StepEdit);
-          
+
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
-         //   Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
-           
+            //   Global.LogsDashboard.AddLog(LeveLLog.INFO, "Ứng dụng khởi động", "Main");
+
             btnShowToolBar.Checked = btnShowToolBar.Checked;
-            if (Global.EditTool.pEdit.Width ==0)
+            if (Global.EditTool.pEdit.Width == 0)
             {
                 btnShowToolBar.Checked = false;
                 //    Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
@@ -385,11 +387,9 @@ namespace BeeUi
             {
                 btnShowToolBar.Checked = true;
             }
-          //  Global.ExChanged += Global_ExChanged;
-          if (BeeCore.Common.listCamera[Global.IndexChoose]!=null)
-            BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
-            // if (pHeader.Height > 100) pHeader.Height = 100;
-            //   LayoutMain.BackColor= CustomGui.BackColor(TypeCtr.BG,Global.Config.colorGui);
+            //  Global.ExChanged += Global_ExChanged;
+            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
 
         }
 
@@ -626,6 +626,7 @@ namespace BeeUi
             }
         }
 
+     public   bool IsRunSim = false;
         private void playTool_Click(object sender, EventArgs e)
         {
             if (View.Files == null)
@@ -637,14 +638,12 @@ namespace BeeUi
             playTool.Enabled = false;
             openFileTool.Enabled = false;
             openImageTool.Enabled = false;
-            stopTool.Enabled = true; View.btnRunSim.IsCLick = true;
-            Global.StatusMode = View.btnRunSim.IsCLick ? StatusMode.SimContinuous : StatusMode.None;
+            stopTool.Enabled = true; IsRunSim = true;
+            Global.StatusMode = IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
          
          
 
-                View.btnRunSim.Image = Properties.Resources.Stop;
-
-                View.btnFolder.Enabled = false;
+              
                 if (View.indexFile >= View.listMat.Count) View.indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]);
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -659,10 +658,9 @@ namespace BeeUi
         {
             openFileTool.Enabled = true;
             openImageTool.Enabled = true;
-            View.btnRunSim.Image = Properties.Resources.Play_2;
-            View.btnFolder.Enabled = true; 
-            View.btnRunSim.IsCLick = false; 
-            Global.StatusMode = View.btnRunSim.IsCLick ? StatusMode.SimContinuous : StatusMode.None;
+          
+            IsRunSim = false; 
+            Global.StatusMode = IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
 
             stopTool.Enabled = false;
             playTool.Enabled = true;
@@ -710,13 +708,29 @@ namespace BeeUi
         private void workLoadFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             openFileTool.Enabled = true;
-            View.btnRunSim.Enabled = true; View.btnPlayStep.Enabled = true; playTool.Enabled = true;
+            playTool.Enabled = true;
         }
 
         private void tmReLoadSplit_Tick(object sender, EventArgs e)
         {
             splitHeader.Height = 5;
             tmReLoadSplit.Enabled = false;
+        }
+
+        private void pRight_SizeChanged(object sender, EventArgs e)
+        {
+         //   BeeCore.CustomGui.RoundRg(pRight, 20,Corner.Both);
+        }
+
+        private void EditTool_SizeChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tmLoad_Tick(object sender, EventArgs e)
+        {
+            tmLoad.Enabled = false;
+          
         }
 
         private void btnNew_Click(object sender, EventArgs e)

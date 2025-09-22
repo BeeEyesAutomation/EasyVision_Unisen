@@ -52,9 +52,8 @@ namespace BeeInterface
                 trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
-
-              
                 trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;

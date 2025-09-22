@@ -38,31 +38,36 @@ namespace BeeInterface
             // 
             // lbNumber
             // 
-            this.lbNumber.AutoSize = true;
             this.lbNumber.BackColor = System.Drawing.Color.Transparent;
-            this.lbNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumber.Location = new System.Drawing.Point(3, 10);
+            this.lbNumber.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNumber.Location = new System.Drawing.Point(0, 0);
             this.lbNumber.Name = "lbNumber";
-            this.lbNumber.Size = new System.Drawing.Size(29, 20);
+            this.lbNumber.Size = new System.Drawing.Size(32, 40);
             this.lbNumber.TabIndex = 8;
             this.lbNumber.Text = "01";
+            this.lbNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // name
             // 
             this.name.BackColor = System.Drawing.Color.Transparent;
-            this.name.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.name.Location = new System.Drawing.Point(38, 10);
+            this.name.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.name.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.name.Location = new System.Drawing.Point(32, 0);
             this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(114, 20);
+            this.name.Size = new System.Drawing.Size(136, 40);
             this.name.TabIndex = 7;
             this.name.Text = "OutLine";
+            this.name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ckUnused
             // 
             this.ckUnused.AutoSize = true;
-            this.ckUnused.Location = new System.Drawing.Point(157, 12);
+            this.ckUnused.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ckUnused.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckUnused.Location = new System.Drawing.Point(168, 0);
             this.ckUnused.Name = "ckUnused";
-            this.ckUnused.Size = new System.Drawing.Size(62, 17);
+            this.ckUnused.Size = new System.Drawing.Size(94, 40);
             this.ckUnused.TabIndex = 12;
             this.ckUnused.TabStop = true;
             this.ckUnused.Text = "Unused";
@@ -72,9 +77,11 @@ namespace BeeInterface
             // ckUsed
             // 
             this.ckUsed.AutoSize = true;
-            this.ckUsed.Location = new System.Drawing.Point(241, 12);
+            this.ckUsed.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ckUsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckUsed.Location = new System.Drawing.Point(262, 0);
             this.ckUsed.Name = "ckUsed";
-            this.ckUsed.Size = new System.Drawing.Size(50, 17);
+            this.ckUsed.Size = new System.Drawing.Size(72, 40);
             this.ckUsed.TabIndex = 13;
             this.ckUsed.TabStop = true;
             this.ckUsed.Text = "Used";
@@ -84,9 +91,11 @@ namespace BeeInterface
             // ckInverse
             // 
             this.ckInverse.AutoSize = true;
-            this.ckInverse.Location = new System.Drawing.Point(313, 12);
+            this.ckInverse.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ckInverse.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ckInverse.Location = new System.Drawing.Point(334, 0);
             this.ckInverse.Name = "ckInverse";
-            this.ckInverse.Size = new System.Drawing.Size(60, 17);
+            this.ckInverse.Size = new System.Drawing.Size(89, 40);
             this.ckInverse.TabIndex = 14;
             this.ckInverse.TabStop = true;
             this.ckInverse.Text = "Inverse";
@@ -98,13 +107,13 @@ namespace BeeInterface
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.Controls.Add(this.ckInverse);
-            this.Controls.Add(this.ckUsed);
-            this.Controls.Add(this.ckUnused);
-            this.Controls.Add(this.lbNumber);
             this.Controls.Add(this.name);
+            this.Controls.Add(this.ckUnused);
+            this.Controls.Add(this.ckUsed);
+            this.Controls.Add(this.ckInverse);
+            this.Controls.Add(this.lbNumber);
             this.Name = "ItemRS";
-            this.Size = new System.Drawing.Size(390, 40);
+            this.Size = new System.Drawing.Size(423, 40);
             this.ResumeLayout(false);
             this.PerformLayout();
 

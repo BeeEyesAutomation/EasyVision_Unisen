@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,17 +10,32 @@ namespace BeeCore
 {
     public enum FillMode { Cover, Contain }
 
+    // Bố cục cố định
+    public enum CollageLayout
+    {
+        AutoWeighted = 0, // theo weight
+        One,              // 1 ảnh full
+        Two,              // 2 ảnh chia đều (ngang/dọc tùy aspect)
+        ThreeRow,         // 1 hàng 3 cột
+        FourGrid          // 2x2 chia đều
+    }
+
     public sealed class CollageRenderer : IDisposable
     {
-        // Public vì BuildCollageBitmap dùng đến (tránh Inconsistent accessibility)
+        // Public để BuildCollageBitmap dùng và tránh inconsistent accessibility
         public sealed class ImageItem
         {
             public Bitmap Bmp { get; }
             public FillMode Mode { get; }
-            public float Weight { get; } // tỉ lệ diện tích mong muốn (>=0)
-            public ImageItem(Bitmap bmp, FillMode mode, float weight)
+            public float Weight { get; }
+            public bool Owned { get; } // renderer sở hữu và có quyền dispose
+
+            public ImageItem(Bitmap bmp, FillMode mode, float weight, bool owned = false)
             {
-                Bmp = bmp; Mode = mode; Weight = Math.Max(0f, weight);
+                Bmp = bmp;
+                Mode = mode;
+                Weight = Math.Max(0f, weight);
+                Owned = owned;
             }
         }
 
@@ -28,6 +44,19 @@ namespace BeeCore
         private readonly Color _bg;
         private readonly bool _autoRerenderOnResize;
         private readonly List<ImageItem> _items = new List<ImageItem>();
+
+        private CollageLayout _layoutPreset = CollageLayout.AutoWeighted;
+        public CollageLayout LayoutPreset
+        {
+            get => _layoutPreset;
+            set => _layoutPreset = value;
+        }
+
+        /// <summary>
+        /// Khi Render, có dispose ảnh KẾT QUẢ cũ (PictureBox + bmResult) không.
+        /// Ảnh đầu vào trong _items KHÔNG bị dispose ở Render dù cờ này là true.
+        /// </summary>
+        public bool DisposeOnSwap { get; set; } = true;
 
         public CollageRenderer(
             Cyotek.Windows.Forms.ImageBox pictureBox,
@@ -43,13 +72,29 @@ namespace BeeCore
             if (_autoRerenderOnResize) _pb.Resize += OnPictureBoxResize;
         }
 
-        /// Thêm 1 ảnh từ Bitmap. mode: Cover/Contain, weight: tỉ lệ diện tích (>=0).
+        public int Count() => _items.Count;
+
+        public Size szImage = new Size(0, 0);
+
+        // ==================== Public API: Add/Modify/Remove/Clear ====================
+
+        /// <summary>Thêm ảnh từ Bitmap (deep copy, Owned=true)</summary>
         public void AddImage(Bitmap bmp, FillMode mode = FillMode.Cover, float weight = 1f)
         {
-            if (bmp != null) _items.Add(new ImageItem(bmp, mode, weight));
+            if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
+            var owned = DeepCopyBitmap(bmp);
+            if (owned == null) return;
+            _items.Add(new ImageItem(owned, mode, weight, owned: true));
         }
 
-        /// Thêm 1 ảnh từ file (không khóa file). Có thể chuẩn hoá size & set weight.
+        /// <summary>Thêm ảnh + chọn bố cục</summary>
+        public void AddImage(Bitmap bmp, FillMode mode, float weight, CollageLayout layout)
+        {
+            _layoutPreset = layout;
+            AddImage(bmp, mode, weight);
+        }
+
+        /// <summary>Thêm ảnh từ file (deep copy thông qua new Bitmap(img), Owned=true)</summary>
         public void AddImage(string path, FillMode mode = FillMode.Cover, float weight = 1f,
                              bool normalize = true, int longestSideLimit = 2048)
         {
@@ -59,58 +104,113 @@ namespace BeeCore
                 Bitmap bmp = new Bitmap(img);
                 if (normalize && longestSideLimit > 0)
                     bmp = NormalizeLongestSide(bmp, longestSideLimit, disposeInput: true);
-                _items.Add(new ImageItem(bmp, mode, weight));
+                if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
+                _items.Add(new ImageItem(bmp, mode, weight, owned: true));
             }
         }
 
-        /// Xoá danh sách ảnh (không dispose ảnh nguồn).
-        public void ClearImages() => _items.Clear();
-        public Size szImage=new Size(0, 0);
+        /// <summary>
+        /// Modify ảnh tại index bằng Bitmap (deep copy).
+        /// Dispose ảnh đầu vào cũ chỉ ở đúng slot này.
+        /// </summary>
+        public void ModifyImage(int index, Bitmap bmp, FillMode mode = FillMode.Cover, float weight = 1f)
+        {
+            if (bmp == null || index < 0 || index >= _items.Count) return;
+            if (bmp.Width <= 0 || bmp.Height <= 0) return;
+
+            var newOwned = DeepCopyBitmap(bmp);
+            if (newOwned == null) return;
+
+            var old = _items[index];
+            if (old?.Owned == true) old.Bmp?.Dispose();   // chỉ dispose ảnh đầu vào cũ của slot
+
+            _items[index] = new ImageItem(newOwned, mode, weight, owned: true);
+            Render();
+        }
+
+        /// <summary>
+        /// Modify ảnh tại index bằng file.
+        /// Dispose ảnh đầu vào cũ chỉ ở đúng slot này.
+        /// </summary>
+        public void ModifyImage(int index, string path, FillMode mode = FillMode.Cover, float weight = 1f,
+                                bool normalize = true, int longestSideLimit = 2048)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return;
+            if (index < 0 || index >= _items.Count) return;
+
+            using (var img = Image.FromFile(path))
+            {
+                Bitmap bmp = new Bitmap(img);
+                if (normalize && longestSideLimit > 0)
+                    bmp = NormalizeLongestSide(bmp, longestSideLimit, disposeInput: true);
+                if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
+
+                var old = _items[index];
+                if (old?.Owned == true) old.Bmp?.Dispose();   // chỉ dispose ảnh đầu vào cũ của slot
+
+                _items[index] = new ImageItem(bmp, mode, weight, owned: true);
+            }
+            Render();
+        }
+
+        /// <summary>Xoá 1 ảnh (dispose ảnh đầu vào tương ứng)</summary>
+        public void RemoveImage(int index)
+        {
+            if (index < 0 || index >= _items.Count) return;
+            var old = _items[index];
+            if (old?.Owned == true) old.Bmp?.Dispose();  // dispose ảnh đầu vào
+            _items.RemoveAt(index);
+        }
+
+        /// <summary>Clear toàn bộ (dispose ảnh đầu vào)</summary>
+        public void ClearImages()
+        {
+            foreach (var it in _items)
+                if (it?.Owned == true) it.Bmp?.Dispose();
+            _items.Clear();
+        }
+
+        // ==================== Render ====================
+
+        /// <summary>
+        /// Render: chỉ dispose ảnh KẾT QUẢ cũ khi swap (PictureBox + Common.bmResult) nếu DisposeOnSwap=true.
+        /// KHÔNG bao giờ dispose ảnh đầu vào (_items) trong Render.
+        /// </summary>
         public void Render()
         {
             if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
 
-            // 1) Build duy nhất 1 bitmap để hiển thị
-            var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
+            var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg, _layoutPreset);
             szImage = newBitmap.Size;
 
-            // 2) Clone ra bmResult (dành để lưu file sau này)
-            //    Dùng Clone(Rect, PixelFormat) để đảm bảo deep copy
-            Bitmap cloneForSave = newBitmap.Clone(
+            // Clone ra ảnh kết quả để lưu toàn cục
+            var cloneForSave = newBitmap.Clone(
                 new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
                 newBitmap.PixelFormat);
 
-            // 3) Swap vào BeeCore.Common.bmResult và dispose bản cũ
+            // Swap bmResult (ảnh KẾT QUẢ)
             var oldResult = BeeCore.Common.bmResult;
             BeeCore.Common.bmResult = cloneForSave;
-            oldResult?.Dispose();
+            if (DisposeOnSwap) oldResult?.Dispose(); // chỉ dispose ảnh kết quả cũ
 
-            // (Nếu bạn cần thread-safe tuyệt đối cho static field, dùng Interlocked.Exchange)
-            // var oldResult = Interlocked.Exchange(ref BeeCore.Common.bmResult, cloneForSave);
-            // oldResult?.Dispose();
-
-            // 4) Cập nhật PictureBox và dispose ảnh cũ của PictureBox
+            // Swap lên PictureBox (ảnh KẾT QUẢ)
             var old = _pb.Image;
             _pb.Image = newBitmap;
-            old?.Dispose();
-        }
-        /// Render ảnh ghép theo kích thước PictureBox hiện tại.
-        //public void Render()
-        //{
-        //    if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
-        //    var newBitmap = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
-        //    szImage = newBitmap.Size;
-        //    BeeCore.Common.bmResult = BuildCollageBitmap(_items, _pb.ClientSize, _gutter, _bg);
-        //    var old = _pb.Image; _pb.Image = newBitmap; old?.Dispose();
-        //}
+            if (DisposeOnSwap) old?.Dispose();       // chỉ dispose ảnh kết quả cũ
 
-        /// API static: dựng và trả về Bitmap ghép (không gán PictureBox).
+            // KHÔNG dispose _items[i].Bmp ở đây
+        }
+
+        // ==================== Build & Layout ====================
+
+        /// <summary>Build bitmap ghép (không gán vào PictureBox)</summary>
         public static Bitmap BuildCollageBitmap(
-            IList<ImageItem> items, Size targetSize, int gutter = 6, Color? bg = null)
+            IList<ImageItem> items, Size targetSize, int gutter = 6, Color? bg = null,
+            CollageLayout preset = CollageLayout.AutoWeighted)
         {
             int w = Math.Max(1, targetSize.Width);
             int h = Math.Max(1, targetSize.Height);
-            var outBmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var outBmp = new Bitmap(w, h, PixelFormat.Format24bppRgb);
             outBmp.SetResolution(96, 96);
 
             using (var g = Graphics.FromImage(outBmp))
@@ -120,7 +220,11 @@ namespace BeeCore
 
                 int n = Math.Min(items.Count, 4);
                 var dstRect = new Rectangle(0, 0, w, h);
-                var cells = ComputeCellsWeighted(dstRect, items, n, Math.Max(0, gutter));
+
+                List<Rectangle> cells =
+                    (preset == CollageLayout.AutoWeighted)
+                    ? ComputeCellsWeighted(dstRect, items, n, Math.Max(0, gutter))
+                    : ComputeCellsPreset(dstRect, n, Math.Max(0, gutter), preset);
 
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -130,7 +234,7 @@ namespace BeeCore
                 for (int i = 0; i < n; i++)
                 {
                     var it = items[i];
-                    if (it?.Bmp == null) continue;
+                    if (it?.Bmp == null || it.Bmp.Width <= 0 || it.Bmp.Height <= 0) continue;
                     if (it.Mode == FillMode.Cover) DrawImageCover(g, it.Bmp, cells[i]);
                     else DrawImageContain(g, it.Bmp, cells[i]);
                 }
@@ -138,8 +242,79 @@ namespace BeeCore
             return outBmp;
         }
 
-        // ==================== Layout có WEIGHT ====================
+        // ----- Layout preset (chia đều) -----
+        private static List<Rectangle> ComputeCellsPreset(
+            Rectangle dst, int n, int gutter, CollageLayout preset)
+        {
+            var res = new List<Rectangle>(n);
 
+            Rectangle Shrink(Rectangle r, int pad)
+                => new Rectangle(r.X + pad, r.Y + pad,
+                                 Math.Max(0, r.Width - 2 * pad),
+                                 Math.Max(0, r.Height - 2 * pad));
+
+            double aspect = (double)dst.Width / Math.Max(1, dst.Height);
+            bool wide = aspect >= 1.0;
+
+            if (preset == CollageLayout.One || n == 1)
+            {
+                res.Add(Shrink(dst, gutter));
+                return res;
+            }
+
+            if (preset == CollageLayout.Two || n == 2)
+            {
+                if (wide)
+                {
+                    int leftW = (dst.Width - gutter) / 2;
+                    var left = new Rectangle(dst.X, dst.Y, leftW, dst.Height);
+                    var right = new Rectangle(dst.X + leftW + gutter, dst.Y, dst.Width - leftW - gutter, dst.Height);
+                    res.Add(Shrink(left, gutter));
+                    res.Add(Shrink(right, gutter));
+                }
+                else
+                {
+                    int topH = (dst.Height - gutter) / 2;
+                    var top = new Rectangle(dst.X, dst.Y, dst.Width, topH);
+                    var bottom = new Rectangle(dst.X, dst.Y + topH + gutter, dst.Width, dst.Height - topH - gutter);
+                    res.Add(Shrink(top, gutter));
+                    res.Add(Shrink(bottom, gutter));
+                }
+                return res;
+            }
+
+            if (preset == CollageLayout.ThreeRow || n == 3)
+            {
+                int totalGutter = gutter * 2;
+                int cellW = (dst.Width - totalGutter) / 3;
+                var r0 = new Rectangle(dst.X, dst.Y, cellW, dst.Height);
+                var r1 = new Rectangle(dst.X + cellW + gutter, dst.Y, cellW, dst.Height);
+                var r2 = new Rectangle(dst.X + 2 * (cellW + gutter), dst.Y, dst.Width - 2 * (cellW + gutter) - cellW, dst.Height);
+                res.Add(Shrink(r0, gutter));
+                res.Add(Shrink(r1, gutter));
+                res.Add(Shrink(r2, gutter));
+                return res;
+            }
+
+            // FourGrid hoặc n >= 4 -> 2x2
+            {
+                int colLW = (dst.Width - gutter) / 2;
+                int rowTopH = (dst.Height - gutter) / 2;
+
+                var r00 = new Rectangle(dst.X, dst.Y, colLW, rowTopH);
+                var r01 = new Rectangle(dst.X + colLW + gutter, dst.Y, dst.Width - colLW - gutter, rowTopH);
+                var r10 = new Rectangle(dst.X, dst.Y + rowTopH + gutter, colLW, dst.Height - rowTopH - gutter);
+                var r11 = new Rectangle(dst.X + colLW + gutter, dst.Y + rowTopH + gutter, dst.Width - colLW - gutter, dst.Height - rowTopH - gutter);
+
+                res.Add(Shrink(r00, gutter));
+                res.Add(Shrink(r01, gutter));
+                res.Add(Shrink(r10, gutter));
+                res.Add(Shrink(r11, gutter));
+                return res;
+            }
+        }
+
+        // ----- Layout theo weight (đã đầy đủ) -----
         private static List<Rectangle> ComputeCellsWeighted(
             Rectangle dst, IList<ImageItem> items, int n, int gutter)
         {
@@ -150,7 +325,7 @@ namespace BeeCore
             // Chuẩn hoá weight
             float sum = 0f;
             for (int i = 0; i < n; i++) sum += Math.Max(0f, items[i].Weight);
-            if (sum <= 0f) sum = n; // tất cả = 0 -> xem như 1 mỗi ảnh
+            if (sum <= 0f) sum = n;
 
             Rectangle Shrink(Rectangle r, int pad)
                 => new Rectangle(r.X + pad, r.Y + pad,
@@ -164,14 +339,15 @@ namespace BeeCore
             else if (n == 2)
             {
                 float w0 = Math.Max(0f, items[0].Weight) / sum;
-                float w1 = 1f - w0;
 
                 if (wide)
                 {
                     int leftW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * w0));
                     leftW = Math.Min(leftW, dst.Width - gutter - 1);
+
                     var left = new Rectangle(dst.X, dst.Y, leftW, dst.Height);
                     var right = new Rectangle(dst.X + leftW + gutter, dst.Y, dst.Width - leftW - gutter, dst.Height);
+
                     res.Add(Shrink(left, gutter));
                     res.Add(Shrink(right, gutter));
                 }
@@ -179,8 +355,10 @@ namespace BeeCore
                 {
                     int topH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * w0));
                     topH = Math.Min(topH, dst.Height - gutter - 1);
+
                     var top = new Rectangle(dst.X, dst.Y, dst.Width, topH);
                     var bottom = new Rectangle(dst.X, dst.Y + topH + gutter, dst.Width, dst.Height - topH - gutter);
+
                     res.Add(Shrink(top, gutter));
                     res.Add(Shrink(bottom, gutter));
                 }
@@ -193,7 +371,6 @@ namespace BeeCore
 
                 if (wide)
                 {
-                    // Cột trái cho ảnh 0 theo tỉ lệ w0; cột phải chia theo w1:w2 (theo chiều dọc)
                     int leftW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * w0));
                     leftW = Math.Min(leftW, dst.Width - gutter - 1);
 
@@ -213,7 +390,6 @@ namespace BeeCore
                 }
                 else
                 {
-                    // Hàng trên cho ảnh 0+1 theo tỉ lệ (w0+w1); trong hàng trên chia trái/phải theo w0:w1
                     int topH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * (w0 + w1)));
                     topH = Math.Min(topH, dst.Height - gutter - 1);
 
@@ -240,12 +416,10 @@ namespace BeeCore
                 float w3 = Math.Max(0f, items[3].Weight);
                 float total = w0 + w1 + w2 + w3; if (total <= 0f) total = 4f;
 
-                // cột trái = (w0 + w2) / total; cột phải = (w1 + w3) / total
                 float colLRatio = (w0 + w2) / total;
                 int colLW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * colLRatio));
                 colLW = Math.Min(colLW, dst.Width - gutter - 1);
 
-                // hàng trên = (w0 + w1) / total; hàng dưới = (w2 + w3) / total
                 float rowTopRatio = (w0 + w1) / total;
                 int rowTopH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * rowTopRatio));
                 rowTopH = Math.Min(rowTopH, dst.Height - gutter - 1);
@@ -274,8 +448,8 @@ namespace BeeCore
             float scaleY = (float)dst.Height / bmp.Height;
             float scale = Math.Max(scaleX, scaleY);
 
-            int cropW = (int)Math.Round(dst.Width / scale);
-            int cropH = (int)Math.Round(dst.Height / scale);
+            int cropW = Math.Max(1, (int)Math.Round(dst.Width / scale));
+            int cropH = Math.Max(1, (int)Math.Round(dst.Height / scale));
             int cropX = (bmp.Width - cropW) / 2;
             int cropY = (bmp.Height - cropH) / 2;
 
@@ -307,8 +481,26 @@ namespace BeeCore
 
         // ==================== Utils ====================
 
+        private static Bitmap DeepCopyBitmap(Bitmap src)
+        {
+            if (src == null || src.Width <= 0 || src.Height <= 0) return null;
+            var dst = new Bitmap(src.Width, src.Height, PixelFormat.Format24bppRgb);
+            dst.SetResolution(src.HorizontalResolution, src.VerticalResolution);
+            using (var g = Graphics.FromImage(dst))
+            {
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.SmoothingMode = SmoothingMode.None;
+                g.DrawImage(src, new Rectangle(0, 0, src.Width, src.Height));
+            }
+            return dst;
+        }
+
         private static Bitmap NormalizeLongestSide(Bitmap src, int longest, bool disposeInput)
         {
+            if (src == null) return null;
+            if (longest <= 0) return src;
+
             int w = src.Width, h = src.Height;
             int maxSide = Math.Max(w, h);
             if (maxSide <= longest) return src;
@@ -317,7 +509,7 @@ namespace BeeCore
             int nw = Math.Max(1, (int)Math.Round(w * scale));
             int nh = Math.Max(1, (int)Math.Round(h * scale));
 
-            var dst = new Bitmap(nw, nh, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            var dst = new Bitmap(nw, nh, PixelFormat.Format24bppRgb);
             dst.SetResolution(96, 96);
             using (var g = Graphics.FromImage(dst))
             {
@@ -335,8 +527,17 @@ namespace BeeCore
         public void Dispose()
         {
             if (_autoRerenderOnResize) _pb.Resize -= OnPictureBoxResize;
-            _pb.Image?.Dispose();
+
+            if (DisposeOnSwap) _pb.Image?.Dispose(); // chỉ ảnh kết quả
             _pb.Image = null;
+
+            // Khi control bị hủy, dọn ảnh đầu vào để tránh leak
+            foreach (var it in _items)
+                if (it?.Owned == true) it.Bmp?.Dispose();
+            _items.Clear();
+
+            // Ảnh kết quả toàn cục tuỳ bạn quản lý:
+            // if (DisposeOnSwap) BeeCore.Common.bmResult?.Dispose();
         }
     }
 }

@@ -65,7 +65,7 @@ namespace BeeInterface
         [Category("Appearance")] public float AutoInfoFontMax { get; set; } = 48f;
 
         private Color _borderColor = Color.LightGray;
-        private int _borderThickness = 3;
+        private int _borderThickness = 2;
 
         [Category("Appearance")]
         public Color BorderLineColor { get => _borderColor; set { _borderColor = value; Invalidate(); } }
@@ -619,7 +619,7 @@ namespace BeeInterface
 
             using (var fH = GetFittingFont(g, header, Font.FontFamily, FontStyle.Bold, rH.Size))
             using (var sfH = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                g.DrawString(header, fH, Brushes.Black, rH, sfH);
+                g.DrawString(header, fH, Brushes.White, rH, sfH);
 
             using (var fV = GetFittingFont(g, value, Font.FontFamily, FontStyle.Bold, rC.Size))
             using (var sfV = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
@@ -666,7 +666,7 @@ namespace BeeInterface
                 {
                     var cell = new Rectangle(rIn.X, top + i * lineH, rIn.Width, lineH);
                     using (var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
-                        g.DrawString(lines[i], f, Brushes.Black, cell, sf);
+                        g.DrawString(lines[i], f, Brushes.White, cell, sf);
                 }
             }
             finally { if (temp && f != null) f.Dispose(); }

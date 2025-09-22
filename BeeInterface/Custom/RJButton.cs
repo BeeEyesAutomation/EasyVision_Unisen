@@ -72,7 +72,15 @@ namespace BeeInterface
         // ===== Căn giữa icon + text như một khối =====
         [Category("Behavior")] public Padding ContentPadding { get; set; } = new Padding(8, 6, 8, 6);
         [Category("Behavior")] public int ImageTextSpacing { get; set; } = 6;
+        // ===== Click Gradient Colors =====
+        [Category("Click Gradient Colors")]
+        public Color ClickTopColor { get; set; } = Color.FromArgb(244, 192, 89);
 
+        [Category("Click Gradient Colors")]
+        public Color ClickMidColor { get; set; } = Color.FromArgb(246, 204, 120);
+
+        [Category("Click Gradient Colors")]
+        public Color ClickBotColor { get; set; } = Color.FromArgb(247, 211, 139);
         // ===== Helpers =====
         private bool InDesignMode =>
             LicenseManager.UsageMode == LicenseUsageMode.Designtime || (Site?.DesignMode ?? false);
@@ -716,7 +724,12 @@ namespace BeeInterface
             // Gradient theo state
             Color top, mid, bot;
             if (!Enabled) top = mid = bot = BackColor;
-            else if (_isClick) { top = Color.FromArgb(244, 192, 89); mid = Color.FromArgb(246, 204, 120); bot = Color.FromArgb(247, 211, 139); }
+            else if (_isClick)
+            {
+                top = ClickTopColor;
+                mid = ClickMidColor;
+                bot = ClickBotColor;
+            }
             else if (_isHovered) { top = Color.FromArgb(208, 211, 213); mid = Color.FromArgb(193, 197, 199); bot = Color.FromArgb(179, 182, 185); }
             else { top = Color.FromArgb(245, 248, 251); mid = Color.FromArgb(218, 221, 224); bot = Color.FromArgb(199, 203, 206); }
 

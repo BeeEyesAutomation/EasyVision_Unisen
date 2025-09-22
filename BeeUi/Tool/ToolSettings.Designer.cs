@@ -33,9 +33,9 @@ namespace BeeUi.Tool
         /// </summary>
         private void InitializeComponent()
         {
-            this.pAllTool = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.TableLayoutPanel();
+            this.pAllTool = new System.Windows.Forms.TableLayoutPanel();
             this.btnRename = new BeeInterface.RJButton();
             this.btnCopy = new BeeInterface.RJButton();
             this.btnEnEdit = new BeeInterface.RJButton();
@@ -43,16 +43,6 @@ namespace BeeUi.Tool
             this.btnDelect = new BeeInterface.RJButton();
             this.pBtn.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pAllTool
-            // 
-            this.pAllTool.AutoScroll = true;
-            this.pAllTool.BackColor = System.Drawing.Color.White;
-            this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pAllTool.Location = new System.Drawing.Point(2, 59);
-            this.pAllTool.Name = "pAllTool";
-            this.pAllTool.Size = new System.Drawing.Size(396, 464);
-            this.pAllTool.TabIndex = 9;
             // 
             // splitter1
             // 
@@ -87,6 +77,20 @@ namespace BeeUi.Tool
             this.pBtn.TabIndex = 10;
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
             // 
+            // pAllTool
+            // 
+            this.pAllTool.AutoScroll = true;
+            this.pAllTool.ColumnCount = 1;
+            this.pAllTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pAllTool.Location = new System.Drawing.Point(2, 59);
+            this.pAllTool.Name = "pAllTool";
+            this.pAllTool.RowCount = 2;
+            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.Size = new System.Drawing.Size(396, 464);
+            this.pAllTool.TabIndex = 12;
+            // 
             // btnRename
             // 
             this.btnRename.AutoFont = true;
@@ -103,6 +107,9 @@ namespace BeeUi.Tool
             this.btnRename.BorderColor = System.Drawing.Color.Silver;
             this.btnRename.BorderRadius = 10;
             this.btnRename.BorderSize = 1;
+            this.btnRename.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnRename.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnRename.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnRename.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnRename.Corner = BeeGlobal.Corner.Both;
             this.btnRename.DebounceResizeMs = 16;
@@ -157,6 +164,9 @@ namespace BeeUi.Tool
             this.btnCopy.BorderColor = System.Drawing.Color.Silver;
             this.btnCopy.BorderRadius = 10;
             this.btnCopy.BorderSize = 1;
+            this.btnCopy.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCopy.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCopy.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCopy.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCopy.Corner = BeeGlobal.Corner.Both;
             this.btnCopy.DebounceResizeMs = 16;
@@ -211,6 +221,9 @@ namespace BeeUi.Tool
             this.btnEnEdit.BorderColor = System.Drawing.Color.Silver;
             this.btnEnEdit.BorderRadius = 10;
             this.btnEnEdit.BorderSize = 1;
+            this.btnEnEdit.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnEnEdit.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnEnEdit.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnEnEdit.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnEnEdit.Corner = BeeGlobal.Corner.Both;
             this.btnEnEdit.DebounceResizeMs = 16;
@@ -264,6 +277,9 @@ namespace BeeUi.Tool
             this.btnAdd.BorderColor = System.Drawing.Color.Silver;
             this.btnAdd.BorderRadius = 10;
             this.btnAdd.BorderSize = 1;
+            this.btnAdd.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnAdd.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnAdd.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnAdd.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnAdd.Corner = BeeGlobal.Corner.Both;
             this.btnAdd.DebounceResizeMs = 16;
@@ -318,6 +334,9 @@ namespace BeeUi.Tool
             this.btnDelect.BorderColor = System.Drawing.Color.Silver;
             this.btnDelect.BorderRadius = 10;
             this.btnDelect.BorderSize = 1;
+            this.btnDelect.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDelect.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDelect.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDelect.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDelect.Corner = BeeGlobal.Corner.Both;
             this.btnDelect.DebounceResizeMs = 16;
@@ -376,7 +395,6 @@ namespace BeeUi.Tool
         }
 
         #endregion
-        public System.Windows.Forms.Panel pAllTool;
         public RJButton btnAdd;
         public RJButton btnDelect;
         public RJButton btnCopy;
@@ -384,5 +402,6 @@ namespace BeeUi.Tool
         public  System.Windows.Forms.TableLayoutPanel pBtn;
         private System.Windows.Forms.Splitter splitter1;
         public RJButton btnRename;
+        public System.Windows.Forms.TableLayoutPanel pAllTool;
     }
 }

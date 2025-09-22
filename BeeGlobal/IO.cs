@@ -388,158 +388,160 @@ namespace BeeGlobal
         }
         public bool IsBlink = false;
         public bool IsLogic1, IsLogic2, IsLogic3, IsLogic4, IsLogic5, IsLogic6;
-        public async Task<bool>  WriteIO()
-        {   //if (!IsConnected) return false;
-
-            if (IO_Processing == IO_Processing.None)
-            {
-
-                return false;
-            }
-            Global.StatusIO = StatusIO.Writing;
-
-            switch (IO_Processing )
-            {
-                case IO_Processing.Trigger:
-                    
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                    SetLight(true);
-                    await WriteOutPut();
-                    Global.StatusMode = StatusMode.Once;
-                    await Task.Delay((int)DelayTrigger);
-                    Global.StatusProcessing = StatusProcessing.Read;
-                    break;
-                case IO_Processing.Close:
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
-                  
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
-                    await WriteOutPut();
-                    Disconnect();
-                    break;
-                case IO_Processing.ByPass:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
-                    SetLight(false);
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                    IsWait = true;
-                    await WriteOutPut();
-                    if (IsBlink)
-                    {
-                        await Task.Delay((int)DelayOutput);
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
-                        await WriteOutPut();
-                    }
-                    break;
-                case IO_Processing.Error:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
-                    await WriteOutPut();
-                    break;
-                case IO_Processing.NoneErr:
-                   SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
-                    await WriteOutPut();
-                    break;
-                case IO_Processing.Result:
-                  
-                        int ix = AddressInput[(int)I_O_Input.ByPass];
-                        if (ix > -1)
-                        {
-                            if (valueInput[ix] == 1)
-                            {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result],true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
-                             }
-                            else
-                            {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
-                            }    
-                        }
-                        else
-                        {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
-                        }
-
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready 
-                            SetLight(false);
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                            IsWait = true;
-                            await WriteOutPut();
-                            if (IsBlink)
-                            {
-                                await Task.Delay((int)DelayOutput);
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result],  false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               
-
-                                await WriteOutPut();
-                            }
-
-
-                    Global.NumSend++;
-                    Global.StatusProcessing = StatusProcessing.Drawing;
-                    break;
-                case IO_Processing.ChangeMode:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
-                    SetLight(false);
-
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
-                    Global.StatusProcessing= StatusProcessing.None;
-                    IO_Processing = IO_Processing.None;
-                    await WriteOutPut();
-                   
-                        break;
-                case IO_Processing.Light:
-                    SetLight(Global.ParaCommon.IsOnLight);
-                    await WriteOutPut();
-                    break;
-                case IO_Processing.ChangeProg:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
-                    await WriteOutPut();
-                    break;
-                case IO_Processing.Reset:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
-                   SetLight(false);
-                    await WriteOutPut();
-                   break;
-
-            }
-            valueInput = new int[16];
-            IO_Processing = IO_Processing.None;
-           
-            // await Task.Delay(timeRead);
+        public async Task<bool> WriteIO()
+        {
             return false;
+
+            //if (IO_Processing == IO_Processing.None)
+            //{
+
+            //    return false;
+            //}
+            //Global.StatusIO = StatusIO.Writing;
+
+            //switch (IO_Processing )
+            //    {
+            //        case IO_Processing.Trigger:
+
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+            //            SetLight(true);
+            //            await WriteOutPut();
+            //            Global.StatusMode = StatusMode.Once;
+            //            await Task.Delay((int)DelayTrigger);
+            //            Global.StatusProcessing = StatusProcessing.Read;
+            //            break;
+            //        case IO_Processing.Close:
+            //            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
+            //            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+            //            SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+            //            await WriteOutPut();
+            //            Disconnect();
+            //            break;
+            //        case IO_Processing.ByPass:
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+            //            SetLight(false);
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+            //            IsWait = true;
+            //            await WriteOutPut();
+            //            if (IsBlink)
+            //            {
+            //                await Task.Delay((int)DelayOutput);
+            //                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
+            //                await WriteOutPut();
+            //            }
+            //            break;
+            //        case IO_Processing.Error:
+            //           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
+            //            await WriteOutPut();
+            //            break;
+            //        case IO_Processing.NoneErr:
+            //           SetOutPut(paraIOs.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
+            //            await WriteOutPut();
+            //            break;
+            //        case IO_Processing.Result:
+
+            //                int ix = AddressInput[(int)I_O_Input.ByPass];
+            //                if (ix > -1)
+            //                {
+            //                    if (valueInput[ix] == 1)
+            //                    {
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result],true); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
+            //                     }
+            //                    else
+            //                    {
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
+            //                    }    
+            //                }
+            //                else
+            //                {
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
+            //                }
+
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready 
+            //                    SetLight(false);
+            //                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+            //                    IsWait = true;
+            //                    await WriteOutPut();
+            //                    if (IsBlink)
+            //                    {
+            //                        await Task.Delay((int)DelayOutput);
+            //                        SetOutPut(AddressOutPut[(int)I_O_Output.Result],  false); //NG
+            //                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+            //                        SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
+            //                        SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
+            //                        SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               
+
+            //                        await WriteOutPut();
+            //                    }
+
+
+            //            Global.NumSend++;
+            //            Global.StatusProcessing = StatusProcessing.Drawing;
+            //            break;
+            //        case IO_Processing.ChangeMode:
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
+            //            SetLight(false);
+
+            //            SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
+            //            Global.StatusProcessing= StatusProcessing.None;
+            //            IO_Processing = IO_Processing.None;
+            //            await WriteOutPut();
+
+            //                break;
+            //        case IO_Processing.Light:
+            //            SetLight(Global.ParaCommon.IsOnLight);
+            //            await WriteOutPut();
+            //            break;
+            //        case IO_Processing.ChangeProg:
+            //           SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+            //            await WriteOutPut();
+            //            break;
+            //        case IO_Processing.Reset:
+            //           SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+            //           SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+            //           SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
+            //           SetLight(false);
+            //            await WriteOutPut();
+            //           break;
+
+            //    }
+            //    valueInput = new int[16];
+            //    IO_Processing = IO_Processing.None;
+
+            //    // await Task.Delay(timeRead);
+            //    return false;
+            //}
         }
         public bool CheckReady()
         {
-        if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //if (valueInput[AddressInput[(int)I_O_Input.Trigger1] ]== 1&&Global.StatusProcessing==StatusProcessing.None)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
             return false;
         }
         public async Task<bool> CheckErr(bool IsCameraConnected)

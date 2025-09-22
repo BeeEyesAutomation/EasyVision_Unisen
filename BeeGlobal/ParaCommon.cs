@@ -14,7 +14,9 @@ namespace BeeGlobal
     public class ParaCommon
     {
         public bool IsMultiCamera = false;
-        public bool IsMultiTrigger = false;
+        //public bool IsMultiTrigger = false;
+        public int NumTrig = 1;
+        public bool IsAutoReload = false;
         public List<int> indexLogic1 = new List<int>();
         public List<int> indexLogic2 = new List<int>();
         public List<int> indexLogic3 = new List<int>();

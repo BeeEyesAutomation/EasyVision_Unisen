@@ -258,20 +258,20 @@ namespace BeeCore
 
                         xf.Translate(Global.pScroll.X, Global.pScroll.Y);
                         float s = Global.ScaleZoom;
-                        //try
-                        //{
-                        //    var pi = imgView.GetType().GetProperty("Zoom");
-                        //    if (pi != null) s = Convert.ToSingle(pi.GetValue(imgView)) / 100f;
-                        //}
-                       // catch { }
+              
                         xf.Scale(s, s);
                         g.Transform = xf;
-
+                        g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", 16), Brushes.DarkGray, new PointF(10, 10));
+                        if (Global.TotalOK)
+                            g.DrawString("OK", new Font("Arial", 24), Brushes.Green, new PointF(10,30));
+                        else
+                            g.DrawString("NG", new Font("Arial", 24), Brushes.Red, new PointF(10, 30));
                         var tools = BeeCore.Common.PropetyTools[IndexCCD];
                         foreach (var tool in tools)
                             if (tool.UsedTool != UsedTool.NotUsed)
                                 tool.Propety.DrawResult(g);
-
+                       
+                      
                         //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                         //     if (!Global.TotalOK)
                         //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
@@ -457,30 +457,30 @@ namespace BeeCore
         public async Task<bool> SetFullPara()
 
         {
-            //if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
-            //{
-            //    if (Para.TypeCamera == TypeCamera.USB)
-            //    {
-            //        CCDPlus.SetWidth((int)Para.Width.Value);
-            //        CCDPlus.SetHeight((int)Para.Height.Value);
-            //        await Task.Delay(100);
-            //        CCDPlus.SetFocus((int)Para.Focus);
-            //        CCDPlus.SetZoom((int)Para.Zoom);
-            //        CCDPlus.SetExposure(-(int)Para.Exposure.Value);
+            if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
+            {
+                if (Para.TypeCamera == TypeCamera.USB)
+                {
+                    CCDPlus.SetWidth((int)Para.Width.Value);
+                    CCDPlus.SetHeight((int)Para.Height.Value);
+                    await Task.Delay(100);
+                    CCDPlus.SetFocus((int)Para.Focus);
+                    CCDPlus.SetZoom((int)Para.Zoom);
+                    CCDPlus.SetExposure(-(int)Para.Exposure.Value);
 
-            //    }
-            //    else
-            //    {
-            //        await SetWidth();
-            //        await SetHeight();
-            //        await SetOffSetX();
-            //        await SetOffSetY();
+                }
+                else
+                {
+                    await SetWidth();
+                    await SetHeight();
+                    await SetOffSetX();
+                    await SetOffSetY();
 
-            //        await SetExpo();
-            //        await SetGain();
-            //        await SetShift();
-            //    }
-            //}
+                    await SetExpo();
+                    await SetGain();
+                    await SetShift();
+                }
+            }
             return true;
         }
 
@@ -743,7 +743,11 @@ namespace BeeCore
                 {
                     case TypeCamera.Pylon:
                         Para.Width.Value = PylonCam.SetWidth(Para.Width.Value);
-                        break;
+                        if (Para.Width.Value<10)
+                        {
+                            MessageBox.Show(PylonCam.LastError);
+                        }    
+                            break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -899,6 +903,9 @@ namespace BeeCore
 
                 switch (Para.TypeCamera)
                 {
+                    case TypeCamera.Pylon:
+                        Para.OffSetX.Value = PylonCam.SetOffsetX(Para.OffSetX.Value);
+                        break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
                         switch (TypeCCD)
@@ -1011,7 +1018,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        PylonCam.GetOffsetY(out Para.OffSetX.Min, out Para.OffSetX.Max, out Para.OffSetX.Step, out Para.OffSetX.Value);
+                        PylonCam.GetOffsetY(out Para.OffSetY.Min, out Para.OffSetY.Max, out Para.OffSetY.Step, out Para.OffSetY.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:

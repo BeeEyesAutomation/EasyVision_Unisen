@@ -22,7 +22,7 @@ namespace BeeInterface
         private void btnCamera1_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 0;
-            Shows.ShowChart( Global.ToolSettings.pAllTool as Control, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+            Shows.ShowChart( Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexChoose]);
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
            
@@ -31,7 +31,7 @@ namespace BeeInterface
         private void btnCamera2_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 1;
-            Shows.ShowChart(Global.ToolSettings.pAllTool as Control, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+            Shows.ShowChart(Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();

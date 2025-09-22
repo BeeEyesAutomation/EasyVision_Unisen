@@ -359,7 +359,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             
           //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
-            btn.Font = new Font("Arial", 12, FontStyle.Regular);
+            btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
         private async void BtnWriteOutPLC(RJButton btn)
         {
@@ -377,7 +377,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            
           //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
-            btn.Font = new Font("Arial", 12, FontStyle.Regular);
+            btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
 
         private void In_Click(object sender, EventArgs e)
@@ -1425,6 +1425,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             Global.ParaCommon.Comunication.IO.ModbusRole = ModbusRole.ServerSlave;
             numIDSlave.Enabled = false;lbSlaveID.Enabled = false;
             btnMaster.IsCLick = false;
+        }
+
+        private void label31_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label18_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

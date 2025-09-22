@@ -227,6 +227,7 @@ namespace BeeUi
         private void workIniModel_DoWork(object sender, DoWorkEventArgs e)
         {
             BeeCore.Common.IniPython();
+            BeeInterface.Load.NewTool();
 
         }
 
@@ -235,10 +236,7 @@ namespace BeeUi
             Global.Project = Properties.Settings.Default.programCurrent;
 
             DataTool.LoadProject(Global.Project);
-         if(BeeCore.Common.listCamera[0]!=null)
-            {
-                MessageBox.Show("OK Cam " + BeeCore.Common.listCamera[0].Para.Name);
-            }
+        
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
                 if (ListTool == null) continue;

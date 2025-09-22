@@ -222,7 +222,7 @@ namespace BeeCore
         }
         public void Complete()
         {
-            Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;
+           
             switch (TypeMeasure)
             {
                 case TypeMeasure.Angle:
@@ -231,6 +231,7 @@ namespace BeeCore
                         IsDone2 = false;
                         IsDone3 = false;
                         IsDone4 = false;
+                    Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
                         if ( Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
                         {
                             pCenter1 = listLine1Point[0];

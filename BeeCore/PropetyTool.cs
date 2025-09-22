@@ -26,6 +26,12 @@ namespace BeeCore
         [NonSerialized]
         public ItemTool ItemTool;
         [NonSerialized]
+        public ItemTool ItemTool2;
+        [NonSerialized]
+        public ItemTool ItemTool3;
+        [NonSerialized]
+        public ItemTool ItemTool4;
+        [NonSerialized]
         public dynamic Control;
         public bool IsSendResult = false;
         public string AddPLC = "";
@@ -93,7 +99,8 @@ namespace BeeCore
         public void DoWork()
         {
             Results=Results.None;
-          StatusTool = StatusTool.Processing;
+          
+            StatusTool = StatusTool.Processing;
             timer.Restart();
             if (UsedTool == UsedTool.NotUsed&&Global.IsRun)
                 return;
@@ -128,7 +135,11 @@ namespace BeeCore
                
             }
             if (!Global.IsRun)
+            {
+                Global.StatusDraw = StatusDraw.None;
                 Global.StatusDraw = StatusDraw.Check;
+            }    
+                
           StatusTool = StatusTool.Done;
         
         }

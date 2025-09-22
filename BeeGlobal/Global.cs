@@ -44,9 +44,10 @@ namespace BeeGlobal
         public static bool IsSetPara = false;
         public static bool IsChange = false;
         public static bool IsAllowReadPLC = true;
-        public static TriggerNum TriggerNum = TriggerNum.Trigger1;
+        public static TriggerNum TriggerNum = TriggerNum.Trigger0;
         public static dynamic ScanCCD;
         public static bool IsDebug = false;
+        public static Bitmap[] bitmaps = new Bitmap[4] { null, null, null, null };
         public static List<HistoryCheck> HistoryChecks = new List<HistoryCheck>();
         public static int WidthOldTools = 0;
          public static dynamic EditTool ;
@@ -89,10 +90,9 @@ namespace BeeGlobal
         //    }
         //}
         public static LogsDashboard LogsDashboard;
-     
+        public static List<ItemNew> itemNews = new List<ItemNew>();
         public static bool IsLoadProgFist = false;
         public static bool IsHideTool = true;
-        public static List<iTool> listItool = new List<iTool>();
         public static System.Drawing.Point pShowTool=new Point(10,10);
         public static float ScaleZoom;
         public static Point pScroll;

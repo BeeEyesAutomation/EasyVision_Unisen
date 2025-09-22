@@ -209,6 +209,7 @@ namespace BeeGlobal
                 comPort: ComSerial,
                 baudRate: Baurate,
                 port: PortIP,
+                _SlaveID:this.SlaveID,
                  retryCount: 3,
                   parity: Parity,
                   stopBits: StopBits,  
@@ -264,25 +265,123 @@ namespace BeeGlobal
                         }
 
 
-                        if (Global.IsRun && Global.ParaCommon.IsExternal || Global.TriggerInternal)
+                        if (Global.IsRun && Global.ParaCommon.IsExternal )
                         {
-                            if (Global.ParaCommon.Comunication.Protocol.CheckReady() || Global.TriggerInternal)
+                            if (AddressInput[(int)I_O_Input.Trigger4] != -1)
                             {
+                                if (valueInput[AddressInput[(int)I_O_Input.Trigger4]] == true && Global.StatusProcessing == StatusProcessing.None)
+                                {
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 4..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger4;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
-                                Global.TriggerInternal = false;
-                                Global.IsAllowReadPLC = false;
-                                Global.StatusProcessing = StatusProcessing.Trigger;
-                                IO_Processing = IO_Processing.Trigger;
-                                if (Global.IsByPassResult)
-                                    Global.EditTool.lbBypass.ForeColor = Color.White;
-                               
+                                }
+                            }
+                            if (AddressInput[(int)I_O_Input.Trigger3] != -1)
+                            {
+                                if (valueInput[AddressInput[(int)I_O_Input.Trigger3]] == true && Global.StatusProcessing == StatusProcessing.None)
+                                {
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 3..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger3;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
+                                }
+                            }
+                            if (AddressInput[(int)I_O_Input.Trigger2] != -1)
+                            {
+                                if (valueInput[AddressInput[(int)I_O_Input.Trigger2]] == true && Global.StatusProcessing == StatusProcessing.None)
+                                {
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 2..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger2;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
+                                }
+                            }
+                            if (AddressInput[(int)I_O_Input.Trigger] != -1)
+                            {
+                                if (valueInput[AddressInput[(int)I_O_Input.Trigger]] == true && Global.StatusProcessing == StatusProcessing.None)
+                                {
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger1;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+
+                                }
+                            }
+                        
+                            
+                           
+                        }
+                        else if(Global.IsRun && Global.TriggerInternal)
+                        {
+                            switch(Global.TriggerNum)
+                            {
+                                case TriggerNum.Trigger0:
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger1;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+                                    break;
+                                case TriggerNum.Trigger1:
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger2;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+                                    break;
+                                case TriggerNum.Trigger2:
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger3;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+                                    break;
+                                case TriggerNum.Trigger3:
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+                                    Global.TriggerNum = TriggerNum.Trigger4;
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                    if (Global.IsByPassResult)
+                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+                                    break;
                             }
 
-
-                        }
+                        }    
+                          
+                          
+                         
+                        
                         //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
                         //{
 
@@ -518,66 +617,134 @@ namespace BeeGlobal
             switch (_IO_Processing)
             {
                 case IO_Processing.Trigger:
-                    //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".2", true);
-
-                    // SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
-                    //valueOutput[AddressOutPut[(int)I_O_Output.Busy]] = true;
-                    if (DelayTrigger == 0)
-                    {
-                        Global.StatusMode = StatusMode.Once;
-                        Global.StatusProcessing = StatusProcessing.Read;
-                    }    
-                      
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                     SetLight(true);
-                   
-                    await WriteOutPut();
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
-                    if (DelayTrigger > 0)
-                    {
-                        await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
-                                                                                 //  await Task.Delay((int)DelayTrigger);
-
-                        // valueOutput[AddressOutPut[(int)I_O_Output.Ready]] = false;
-
-                        Global.StatusMode = StatusMode.Once;
-
-                        Global.StatusProcessing = StatusProcessing.Read;
-                    }
-
-                    break;
-                case IO_Processing.Close:
-                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Result1 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //T.Result1
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
                   
+                    switch(Global.TriggerNum)
+                    {
+                        case TriggerNum.Trigger1:
+                            if (DelayTrigger == 0)
+                            {
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            SetLight(true);
+                            await WriteOutPut();
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                            if (DelayTrigger > 0)
+                            {
+                                await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            break;
+                        case TriggerNum.Trigger2:
+                            if (DelayTrigger == 0)
+                            {
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true);//Busy
+                            SetLight(true);
+                            await WriteOutPut();
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false);//Ready false
+                            if (DelayTrigger > 0)
+                            {
+                                await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            break;
+                        case TriggerNum.Trigger3:
+                            if (DelayTrigger == 0)
+                            {
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true);//Busy
+                            SetLight(true);
+                            await WriteOutPut();
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false);//Ready false
+                            if (DelayTrigger > 0)
+                            {
+                                await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            break;
+                        case TriggerNum.Trigger4:
+                            if (DelayTrigger == 0)
+                            {
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true);//Busy
+                            SetLight(true);
+                            await WriteOutPut();
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false);//Ready false
+                            if (DelayTrigger > 0)
+                            {
+                                await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
+                            break;
+
+                    }
+                   
+                    break;
+            
+                case IO_Processing.Close:
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //T.Result1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //T.Result1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //T.Result1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //T.Result1
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false); //Ready
+
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
-                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Logic3 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
-                    SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Logic4 && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], false); //Busy
+
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true); //Busy
                     await WriteOutPut();
                     Disconnect();
                     break;
                 case IO_Processing.ByPass:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true);//Ready false
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true);//Ready false
                     SetLight(false);
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //Busy
                     IsWait = true;
                     await WriteOutPut();
-                    if (IsBlink)
-                    {
-                        await Task.Delay((int)DelayOutput);
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
-                        await WriteOutPut();
-                    }
+                    //if (IsBlink)
+                    //{
+                    //    await Task.Delay((int)DelayOutput);
+                    //    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG                           // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
+                    //    await WriteOutPut();
+                    //}
                     break;
                 case IO_Processing.Error:
-                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, true);//CCD Err
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], true); //Err
+                  
                     await WriteOutPut();
                     break;
                 case IO_Processing.NoneErr:
-                   SetOutPut(ParaBits.Find(a => a.I_O_Output == I_O_Output.Error && a.TypeIO == TypeIO.Output)?.Adddress ?? -1, false);//CCD Err
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
@@ -587,45 +754,116 @@ namespace BeeGlobal
                         {
                             if (valueInput[ix] == true)
                             {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result],true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
+                            switch(Global.TriggerNum)
+                            {
+                                case TriggerNum.Trigger1:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                                    break;
+                                case TriggerNum.Trigger2:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
+                                    break;
+                                case TriggerNum.Trigger3:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
+                                    break;
+                                case TriggerNum.Trigger4:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
+                                    break;
+                            }    
+                          
+                        
                              }
                             else
                             {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
-                            }    
+                            switch (Global.TriggerNum)
+                            {
+                                case TriggerNum.Trigger1:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                    break;
+                                case TriggerNum.Trigger2:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK); //NG
+                                    break;
+                                case TriggerNum.Trigger3:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK); //NG
+                                    break;
+                                case TriggerNum.Trigger4:
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK); //NG
+                                    break;
+                            }
+                        }    
                         }
                         else
                         {
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result1], Global.TotalOK1); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK2); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK3); //NG
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK4); //NG
+                        switch (Global.TriggerNum)
+                        {
+                            case TriggerNum.Trigger1:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                break;
+                            case TriggerNum.Trigger2:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK); //NG
+                                break;
+                            case TriggerNum.Trigger3:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK); //NG
+                                break;
+                            case TriggerNum.Trigger4:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK); //NG
+                                break;
                         }
-
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true);//Ready 
+                    }
+                    switch (Global.TriggerNum)
+                    {
+                        case TriggerNum.Trigger1:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
+                            break;
+                        case TriggerNum.Trigger2:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //NG
+                            break;
+                        case TriggerNum.Trigger3:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //NG
+                            break;
+                        case TriggerNum.Trigger4:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //NG
+                            break;
+                    }
+                  
                             SetLight(false);
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                    switch (Global.TriggerNum)
+                    {
+                        case TriggerNum.Trigger1:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
+                            break;
+                        case TriggerNum.Trigger2:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //NG
+                            break;
+                        case TriggerNum.Trigger3:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //NG
+                            break;
+                        case TriggerNum.Trigger4:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //NG
+                            break;
+                    }
+                  
                             IsWait = true;
                             await WriteOutPut();
                             if (IsBlink)
                             {
                             if (DelayOutput == 0)
                                 await TimingUtils.DelayAccurateAsync((int)DelayOutput); // thay cho Task.Delay
-                        
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result],  false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //NG
+
+                        switch (Global.TriggerNum)
+                        {
+                            case TriggerNum.Trigger1:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result],false); //NG
+                                break;
+                            case TriggerNum.Trigger2:
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
+                                break;
+                            case TriggerNum.Trigger3:
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG               // SetOutPut(AddressOutPut[(int)I_O_Output.Result1], false); //False
+                                break;
+                            case TriggerNum.Trigger4:
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG
+                                break;
+                        }      
                         await WriteOutPut();
                             }
 
@@ -635,10 +873,16 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.ChangeMode:
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], !Global.IsRun); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], !Global.IsRun); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], !Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], Global.IsRun); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], Global.IsRun); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], Global.IsRun); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], Global.IsRun); //Ready
                     SetLight(false);
 
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
+                   // SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                     Global.StatusProcessing= StatusProcessing.None;
                     IO_Processing = IO_Processing.None;
                     await WriteOutPut();
@@ -649,13 +893,22 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true); //Busy
                     await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
-                   SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //Busy
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Error], false); //Err
                    SetLight(false);
                     await WriteOutPut();
                    break;
@@ -667,19 +920,7 @@ namespace BeeGlobal
 
             return false;
         }
-        public bool CheckReady()
-        {
-            if (AddressInput[(int)I_O_Input.Trigger ]== -1)return false;
-        if (valueInput[AddressInput[(int)I_O_Input.Trigger] ]== true&&Global.StatusProcessing==StatusProcessing.None)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            return false;
-        }
+       
         public async Task<bool> CheckErr(bool IsCameraConnected)
         {
             if (!IsCameraConnected)

@@ -310,7 +310,9 @@ namespace BeeCore
         {
             rotMask = null;
             ParallelGapDetector = new ParallelGapDetector();
+            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
+          
             Common.PropetyTools[IndexThread][Index].MaxValue = 20;
             Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
         }

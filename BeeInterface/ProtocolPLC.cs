@@ -420,7 +420,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             
           //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
-            btn.Font = new Font("Arial", 12, FontStyle.Regular);
+            btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
         private async void BtnWriteOutPLC(RJButton btn)
         {
@@ -438,7 +438,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            
           //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
-            btn.Font = new Font("Arial", 12, FontStyle.Regular);
+            btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
 
         private void In_Click(object sender, EventArgs e)
@@ -506,7 +506,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
            
             cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
-            
+                numSlaveID.Value= Global.ParaCommon.Comunication.Protocol.SlaveID ;
                 txtAddRead.Text=Global.ParaCommon.Comunication.Protocol.AddRead;
             txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
                 listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 , DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
@@ -530,6 +530,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnKeyence.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
                     btnMitsu.IsCLick = true;
+                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Modbus)
+                    btnRS485.IsCLick = true;
                 txtIP.Text = Global.ParaCommon.Comunication.Protocol.sIP;
                 txtPort.Text =Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
 
@@ -1071,6 +1073,67 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void label47_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label45_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label43_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label41_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label39_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label37_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label35_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label33_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label50_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRS485_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Modbus;
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void numSlaveID_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.Protocol.SlaveID =(byte) numSlaveID.Value;
+
         }
     }
 }

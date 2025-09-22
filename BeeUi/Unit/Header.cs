@@ -337,6 +337,8 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
+          
+        
           ///  RefreshListPJ();
             //    this.Controls.Add(btnHide);
 
@@ -791,18 +793,26 @@ txtQrCode.Focus();
                 Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
                     stepShow++;
                     tmShow.Interval = 100;
+                    Global.ToolSettings.Size = Global.EditTool.pEditTool.Size;
+                  //  Global.ToolSettings.ResumeLayout(true);
                     break;
                 case 1:
                     Global.EditTool.RefreshGuiEdit(Step.Run);
                     stepShow++;
                     break;
                 case 2:
-                  
-                        stepShow = 0;
+                    if (editProg1.Width <= editProg1. btnMenu.Width + 1)
+                    {
+                        editProg1.btnMenu.IsCLick = true;
+                      
+                    }
+                    editProg1.OldWidth = Global.Config.WidthEditProg;
+                    stepShow = 0;
                         indexToolShow = 0;
+                    btnMode.Enabled = true;
                         Global.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
-                        Global.ToolSettings.ResumeLayout(true);
+                       // Global.ToolSettings.ResumeLayout(true);
 
                     break;
             } 

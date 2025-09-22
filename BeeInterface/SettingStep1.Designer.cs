@@ -406,6 +406,9 @@ namespace BeeInterface
             this.btnChnageCamera.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnChnageCamera.BorderRadius = 5;
             this.btnChnageCamera.BorderSize = 1;
+            this.btnChnageCamera.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnChnageCamera.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnChnageCamera.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChnageCamera.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChnageCamera.Corner = BeeGlobal.Corner.Both;
             this.btnChnageCamera.DebounceResizeMs = 16;
@@ -458,6 +461,9 @@ namespace BeeInterface
             this.btnDownLoadPara.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnDownLoadPara.BorderRadius = 5;
             this.btnDownLoadPara.BorderSize = 1;
+            this.btnDownLoadPara.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDownLoadPara.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDownLoadPara.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDownLoadPara.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDownLoadPara.Corner = BeeGlobal.Corner.Both;
             this.btnDownLoadPara.DebounceResizeMs = 16;
@@ -496,6 +502,12 @@ namespace BeeInterface
             // 
             // AdjZoom
             // 
+            this.AdjZoom.AutoRepeatAccelDeltaMs = -5;
+            this.AdjZoom.AutoRepeatAccelerate = true;
+            this.AdjZoom.AutoRepeatEnabled = true;
+            this.AdjZoom.AutoRepeatInitialDelay = 400;
+            this.AdjZoom.AutoRepeatInterval = 60;
+            this.AdjZoom.AutoRepeatMinInterval = 20;
             this.AdjZoom.AutoShowTextbox = true;
             this.AdjZoom.AutoSizeTextbox = true;
             this.AdjZoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -510,6 +522,8 @@ namespace BeeInterface
             this.AdjZoom.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjZoom.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjZoom.Decimals = 0;
+            this.AdjZoom.DisabledDesaturateMix = 0.3F;
+            this.AdjZoom.DisabledDimFactor = 0.9F;
             this.AdjZoom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjZoom.EdgePadding = 2;
             this.AdjZoom.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -553,6 +567,12 @@ namespace BeeInterface
             // 
             // AdjOffSetY
             // 
+            this.AdjOffSetY.AutoRepeatAccelDeltaMs = -5;
+            this.AdjOffSetY.AutoRepeatAccelerate = true;
+            this.AdjOffSetY.AutoRepeatEnabled = true;
+            this.AdjOffSetY.AutoRepeatInitialDelay = 400;
+            this.AdjOffSetY.AutoRepeatInterval = 60;
+            this.AdjOffSetY.AutoRepeatMinInterval = 20;
             this.AdjOffSetY.AutoShowTextbox = true;
             this.AdjOffSetY.AutoSizeTextbox = true;
             this.AdjOffSetY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -567,6 +587,8 @@ namespace BeeInterface
             this.AdjOffSetY.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjOffSetY.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjOffSetY.Decimals = 0;
+            this.AdjOffSetY.DisabledDesaturateMix = 0.3F;
+            this.AdjOffSetY.DisabledDimFactor = 0.9F;
             this.AdjOffSetY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjOffSetY.EdgePadding = 2;
             this.AdjOffSetY.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -610,6 +632,12 @@ namespace BeeInterface
             // 
             // AdjOffsetX
             // 
+            this.AdjOffsetX.AutoRepeatAccelDeltaMs = -5;
+            this.AdjOffsetX.AutoRepeatAccelerate = true;
+            this.AdjOffsetX.AutoRepeatEnabled = true;
+            this.AdjOffsetX.AutoRepeatInitialDelay = 400;
+            this.AdjOffsetX.AutoRepeatInterval = 60;
+            this.AdjOffsetX.AutoRepeatMinInterval = 20;
             this.AdjOffsetX.AutoShowTextbox = true;
             this.AdjOffsetX.AutoSizeTextbox = true;
             this.AdjOffsetX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -624,6 +652,8 @@ namespace BeeInterface
             this.AdjOffsetX.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjOffsetX.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjOffsetX.Decimals = 0;
+            this.AdjOffsetX.DisabledDesaturateMix = 0.3F;
+            this.AdjOffsetX.DisabledDimFactor = 0.9F;
             this.AdjOffsetX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjOffsetX.EdgePadding = 2;
             this.AdjOffsetX.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -667,6 +697,12 @@ namespace BeeInterface
             // 
             // AdjHeight
             // 
+            this.AdjHeight.AutoRepeatAccelDeltaMs = -5;
+            this.AdjHeight.AutoRepeatAccelerate = true;
+            this.AdjHeight.AutoRepeatEnabled = true;
+            this.AdjHeight.AutoRepeatInitialDelay = 400;
+            this.AdjHeight.AutoRepeatInterval = 60;
+            this.AdjHeight.AutoRepeatMinInterval = 20;
             this.AdjHeight.AutoShowTextbox = true;
             this.AdjHeight.AutoSizeTextbox = true;
             this.AdjHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -681,6 +717,8 @@ namespace BeeInterface
             this.AdjHeight.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjHeight.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjHeight.Decimals = 0;
+            this.AdjHeight.DisabledDesaturateMix = 0.3F;
+            this.AdjHeight.DisabledDimFactor = 0.9F;
             this.AdjHeight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjHeight.EdgePadding = 2;
             this.AdjHeight.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -726,6 +764,12 @@ namespace BeeInterface
             // 
             // AdjWidth
             // 
+            this.AdjWidth.AutoRepeatAccelDeltaMs = -5;
+            this.AdjWidth.AutoRepeatAccelerate = true;
+            this.AdjWidth.AutoRepeatEnabled = true;
+            this.AdjWidth.AutoRepeatInitialDelay = 400;
+            this.AdjWidth.AutoRepeatInterval = 60;
+            this.AdjWidth.AutoRepeatMinInterval = 20;
             this.AdjWidth.AutoShowTextbox = true;
             this.AdjWidth.AutoSizeTextbox = true;
             this.AdjWidth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -740,6 +784,8 @@ namespace BeeInterface
             this.AdjWidth.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjWidth.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjWidth.Decimals = 0;
+            this.AdjWidth.DisabledDesaturateMix = 0.3F;
+            this.AdjWidth.DisabledDimFactor = 0.9F;
             this.AdjWidth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjWidth.EdgePadding = 2;
             this.AdjWidth.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -785,6 +831,12 @@ namespace BeeInterface
             // 
             // trackShift
             // 
+            this.trackShift.AutoRepeatAccelDeltaMs = -5;
+            this.trackShift.AutoRepeatAccelerate = true;
+            this.trackShift.AutoRepeatEnabled = true;
+            this.trackShift.AutoRepeatInitialDelay = 400;
+            this.trackShift.AutoRepeatInterval = 60;
+            this.trackShift.AutoRepeatMinInterval = 20;
             this.trackShift.AutoShowTextbox = true;
             this.trackShift.AutoSizeTextbox = true;
             this.trackShift.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -799,6 +851,8 @@ namespace BeeInterface
             this.trackShift.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackShift.ColorTrack = System.Drawing.Color.LightGray;
             this.trackShift.Decimals = 0;
+            this.trackShift.DisabledDesaturateMix = 0.3F;
+            this.trackShift.DisabledDimFactor = 0.9F;
             this.trackShift.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackShift.EdgePadding = 2;
             this.trackShift.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -844,6 +898,12 @@ namespace BeeInterface
             // 
             // trackGain
             // 
+            this.trackGain.AutoRepeatAccelDeltaMs = -5;
+            this.trackGain.AutoRepeatAccelerate = true;
+            this.trackGain.AutoRepeatEnabled = true;
+            this.trackGain.AutoRepeatInitialDelay = 400;
+            this.trackGain.AutoRepeatInterval = 60;
+            this.trackGain.AutoRepeatMinInterval = 20;
             this.trackGain.AutoShowTextbox = true;
             this.trackGain.AutoSizeTextbox = true;
             this.trackGain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -858,6 +918,8 @@ namespace BeeInterface
             this.trackGain.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackGain.ColorTrack = System.Drawing.Color.LightGray;
             this.trackGain.Decimals = 0;
+            this.trackGain.DisabledDesaturateMix = 0.3F;
+            this.trackGain.DisabledDimFactor = 0.9F;
             this.trackGain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackGain.EdgePadding = 2;
             this.trackGain.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -903,6 +965,12 @@ namespace BeeInterface
             // 
             // trackExposure
             // 
+            this.trackExposure.AutoRepeatAccelDeltaMs = -5;
+            this.trackExposure.AutoRepeatAccelerate = true;
+            this.trackExposure.AutoRepeatEnabled = true;
+            this.trackExposure.AutoRepeatInitialDelay = 400;
+            this.trackExposure.AutoRepeatInterval = 60;
+            this.trackExposure.AutoRepeatMinInterval = 20;
             this.trackExposure.AutoShowTextbox = true;
             this.trackExposure.AutoSizeTextbox = true;
             this.trackExposure.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -917,6 +985,8 @@ namespace BeeInterface
             this.trackExposure.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackExposure.ColorTrack = System.Drawing.Color.LightGray;
             this.trackExposure.Decimals = 0;
+            this.trackExposure.DisabledDesaturateMix = 0.3F;
+            this.trackExposure.DisabledDimFactor = 0.9F;
             this.trackExposure.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackExposure.EdgePadding = 2;
             this.trackExposure.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -995,6 +1065,9 @@ namespace BeeInterface
             this.btnCenterY.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnCenterY.BorderRadius = 5;
             this.btnCenterY.BorderSize = 1;
+            this.btnCenterY.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCenterY.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCenterY.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCenterY.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCenterY.Corner = BeeGlobal.Corner.Both;
             this.btnCenterY.DebounceResizeMs = 16;
@@ -1048,6 +1121,9 @@ namespace BeeInterface
             this.btnCenterX.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnCenterX.BorderRadius = 5;
             this.btnCenterX.BorderSize = 1;
+            this.btnCenterX.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCenterX.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCenterX.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCenterX.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCenterX.Corner = BeeGlobal.Corner.Both;
             this.btnCenterX.DebounceResizeMs = 16;
@@ -1118,6 +1194,9 @@ namespace BeeInterface
             this.btnFocus.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnFocus.BorderRadius = 5;
             this.btnFocus.BorderSize = 1;
+            this.btnFocus.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnFocus.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnFocus.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnFocus.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnFocus.Corner = BeeGlobal.Corner.Both;
             this.btnFocus.DebounceResizeMs = 16;
@@ -1157,6 +1236,12 @@ namespace BeeInterface
             // 
             // AdjFocus
             // 
+            this.AdjFocus.AutoRepeatAccelDeltaMs = -5;
+            this.AdjFocus.AutoRepeatAccelerate = true;
+            this.AdjFocus.AutoRepeatEnabled = true;
+            this.AdjFocus.AutoRepeatInitialDelay = 400;
+            this.AdjFocus.AutoRepeatInterval = 60;
+            this.AdjFocus.AutoRepeatMinInterval = 20;
             this.AdjFocus.AutoShowTextbox = true;
             this.AdjFocus.AutoSizeTextbox = true;
             this.AdjFocus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -1171,6 +1256,8 @@ namespace BeeInterface
             this.AdjFocus.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdjFocus.ColorTrack = System.Drawing.Color.LightGray;
             this.AdjFocus.Decimals = 0;
+            this.AdjFocus.DisabledDesaturateMix = 0.3F;
+            this.AdjFocus.DisabledDimFactor = 0.9F;
             this.AdjFocus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdjFocus.EdgePadding = 2;
             this.AdjFocus.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -1245,6 +1332,9 @@ namespace BeeInterface
             this.btnCancel.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnCancel.BorderRadius = 5;
             this.btnCancel.BorderSize = 1;
+            this.btnCancel.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCancel.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCancel.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCancel.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCancel.Corner = BeeGlobal.Corner.Both;
             this.btnCancel.DebounceResizeMs = 16;
@@ -1298,6 +1388,9 @@ namespace BeeInterface
             this.btnNextStep.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnNextStep.BorderRadius = 5;
             this.btnNextStep.BorderSize = 1;
+            this.btnNextStep.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnNextStep.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnNextStep.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnNextStep.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNextStep.Corner = BeeGlobal.Corner.Both;
             this.btnNextStep.DebounceResizeMs = 16;
@@ -1389,6 +1482,12 @@ namespace BeeInterface
             // 
             // AdDelayTrig
             // 
+            this.AdDelayTrig.AutoRepeatAccelDeltaMs = -5;
+            this.AdDelayTrig.AutoRepeatAccelerate = true;
+            this.AdDelayTrig.AutoRepeatEnabled = true;
+            this.AdDelayTrig.AutoRepeatInitialDelay = 400;
+            this.AdDelayTrig.AutoRepeatInterval = 60;
+            this.AdDelayTrig.AutoRepeatMinInterval = 20;
             this.AdDelayTrig.AutoShowTextbox = true;
             this.AdDelayTrig.AutoSizeTextbox = true;
             this.AdDelayTrig.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -1403,6 +1502,8 @@ namespace BeeInterface
             this.AdDelayTrig.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdDelayTrig.ColorTrack = System.Drawing.Color.LightGray;
             this.AdDelayTrig.Decimals = 0;
+            this.AdDelayTrig.DisabledDesaturateMix = 0.3F;
+            this.AdDelayTrig.DisabledDimFactor = 0.9F;
             this.AdDelayTrig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdDelayTrig.EdgePadding = 2;
             this.AdDelayTrig.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -1477,6 +1578,9 @@ namespace BeeInterface
             this.btnOn.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnOn.BorderRadius = 10;
             this.btnOn.BorderSize = 1;
+            this.btnOn.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnOn.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnOn.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnOn.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnOn.Corner = BeeGlobal.Corner.Right;
             this.btnOn.DebounceResizeMs = 16;
@@ -1531,6 +1635,9 @@ namespace BeeInterface
             this.btnOFF.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnOFF.BorderRadius = 10;
             this.btnOFF.BorderSize = 1;
+            this.btnOFF.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnOFF.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnOFF.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnOFF.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnOFF.Corner = BeeGlobal.Corner.Left;
             this.btnOFF.DebounceResizeMs = 16;
@@ -1606,6 +1713,9 @@ namespace BeeInterface
             this.btnLight3.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnLight3.BorderRadius = 10;
             this.btnLight3.BorderSize = 1;
+            this.btnLight3.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnLight3.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnLight3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnLight3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnLight3.Corner = BeeGlobal.Corner.Right;
             this.btnLight3.DebounceResizeMs = 16;
@@ -1660,6 +1770,9 @@ namespace BeeInterface
             this.btnLight1.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnLight1.BorderRadius = 10;
             this.btnLight1.BorderSize = 1;
+            this.btnLight1.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnLight1.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnLight1.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnLight1.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnLight1.Corner = BeeGlobal.Corner.Left;
             this.btnLight1.DebounceResizeMs = 16;
@@ -1714,6 +1827,9 @@ namespace BeeInterface
             this.btnLight2.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnLight2.BorderRadius = 5;
             this.btnLight2.BorderSize = 1;
+            this.btnLight2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnLight2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnLight2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnLight2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnLight2.Corner = BeeGlobal.Corner.None;
             this.btnLight2.DebounceResizeMs = 16;
@@ -1800,6 +1916,12 @@ namespace BeeInterface
             // 
             // AdDelayOutput
             // 
+            this.AdDelayOutput.AutoRepeatAccelDeltaMs = -5;
+            this.AdDelayOutput.AutoRepeatAccelerate = true;
+            this.AdDelayOutput.AutoRepeatEnabled = true;
+            this.AdDelayOutput.AutoRepeatInitialDelay = 400;
+            this.AdDelayOutput.AutoRepeatInterval = 60;
+            this.AdDelayOutput.AutoRepeatMinInterval = 20;
             this.AdDelayOutput.AutoShowTextbox = true;
             this.AdDelayOutput.AutoSizeTextbox = true;
             this.AdDelayOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -1814,6 +1936,8 @@ namespace BeeInterface
             this.AdDelayOutput.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.AdDelayOutput.ColorTrack = System.Drawing.Color.LightGray;
             this.AdDelayOutput.Decimals = 0;
+            this.AdDelayOutput.DisabledDesaturateMix = 0.3F;
+            this.AdDelayOutput.DisabledDimFactor = 0.9F;
             this.AdDelayOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AdDelayOutput.EdgePadding = 2;
             this.AdDelayOutput.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -1904,6 +2028,9 @@ namespace BeeInterface
             this.btnAllTime.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnAllTime.BorderRadius = 10;
             this.btnAllTime.BorderSize = 1;
+            this.btnAllTime.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnAllTime.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnAllTime.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnAllTime.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnAllTime.Corner = BeeGlobal.Corner.Right;
             this.btnAllTime.DebounceResizeMs = 16;
@@ -1958,6 +2085,9 @@ namespace BeeInterface
             this.btnBlink.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnBlink.BorderRadius = 10;
             this.btnBlink.BorderSize = 1;
+            this.btnBlink.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnBlink.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnBlink.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnBlink.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnBlink.Corner = BeeGlobal.Corner.Left;
             this.btnBlink.DebounceResizeMs = 16;
@@ -2060,6 +2190,9 @@ namespace BeeInterface
             this.btnExternal.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnExternal.BorderRadius = 10;
             this.btnExternal.BorderSize = 1;
+            this.btnExternal.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnExternal.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnExternal.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnExternal.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnExternal.Corner = BeeGlobal.Corner.Right;
             this.btnExternal.DebounceResizeMs = 16;
@@ -2114,6 +2247,9 @@ namespace BeeInterface
             this.btnInternal.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnInternal.BorderRadius = 10;
             this.btnInternal.BorderSize = 1;
+            this.btnInternal.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnInternal.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnInternal.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnInternal.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnInternal.Corner = BeeGlobal.Corner.Left;
             this.btnInternal.DebounceResizeMs = 16;

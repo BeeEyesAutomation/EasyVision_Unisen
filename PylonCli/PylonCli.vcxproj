@@ -136,13 +136,18 @@
       <AdditionalDependencies>GCBase_MD_VC141_v3_1_Basler_pylon.lib;GenApi_MD_VC141_v3_1_Basler_pylon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>powershell -ExecutionPolicy Bypass -Command "$f='$(ProjectDir)version.h'; $c=Get-Content $f; $b=[int]([regex]::Match($c,'VER_BUILD (\d+)').Groups[1].Value)+1; $r=(Get-Date -Format 'yyMMdd'); $c=$c -replace 'VER_BUILD \d+',(\"VER_BUILD $b\") -replace 'VER_REVISION \d+',(\"VER_REVISION $r\"); Set-Content $f $c"</Command>
+      <Command>powershell -NoProfile -ExecutionPolicy Bypass -Command "$proj='$(ProjectDir)'; $ver=Join-Path $proj 'version.h'; $hashFile=Join-Path $proj '.version.hash'; if(!(Test-Path $ver)){ '#define VER_MAJOR 1`r`n#define VER_MINOR 0`r`n#define VER_BUILD 0`r`n#define VER_REV 0`r`n#define STR_HELPER(x) #x`r`n#define STR(x) STR_HELPER(x)`r`n#define FILEVER_STR STR(VER_MAJOR) \".\" STR(VER_MINOR) \".\" STR(VER_BUILD) \".\" STR(VER_REV)' | Out-File -Encoding ascii $ver }; $files=Get-ChildItem $proj -Recurse -Include *.cpp,*.c,*.h,*.hpp,*.rc | ?{ $_.FullName -notmatch '\\(Debug|Release|x64|Win32|ipch|\\.git|\\.vs)\\' }; $concat=''; foreach($f in $files){ $concat += (Get-FileHash $f -Algorithm SHA256).Hash }; $hash=[BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($concat))).Replace('-',''); if((Test-Path $hashFile) -and ((Get-Content $hashFile -Raw) -eq $hash)) { return } else { Set-Content -Encoding ascii $hashFile $hash; $t=Get-Content $ver -Raw; if($t -notmatch '#define\s+VER_REV\s+\d+'){ $t += \"`r`n#define VER_REV 0\" }; $rev=[int]([regex]::Match($t,'#define\s+VER_REV\s+(\d+)').Groups[1].Value)+1; $t=[regex]::Replace($t,'#define\s+VER_REV\s+\d+',('#define VER_REV '+$rev)); $t | Set-Content -Encoding ascii $ver }"
+</Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\OKNG\version.h" />
     <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraWrapper.cpp" />

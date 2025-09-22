@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenCvSharp.XFeatures2D;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -403,7 +404,7 @@ namespace BeeGlobal
             _tbFind.TextChanged += delegate { RebuildView(); };
             _chkSaveLog.CheckedChanged += _chkSaveLog_CheckedChanged;
             _chkAutoScroll.CheckedChanged += delegate { AutoScrollToEnd = _chkAutoScroll.Checked; };
-            _chkAutoReload.CheckedChanged += delegate { AutoReloadOnChange = _chkAutoReload.Checked; };
+            _chkAutoReload.CheckedChanged += delegate {   AutoReloadOnChange = _chkAutoReload.Checked; Global.ParaCommon.IsAutoReload = AutoReloadOnChange; };
 
             _btnToday.Click += delegate { SetRangeToday(); };
             _btn7d.Click += delegate { SetRangeDays(7); };
@@ -603,7 +604,7 @@ namespace BeeGlobal
                     Margin = new Padding(2, 2, 8, 2),
                     Padding = Padding.Empty
                 };
-                var lbl = new Label { Text = labelText, AutoSize = true, Margin = new Padding(0, 6, 4, 0) };
+                var lbl = new Label { Text = labelText, AutoSize = true, Margin = new Padding(0, 6, 4, 0) , Font =new Font("Arial", 14) };
                 ctl.Margin = new Padding(0, 2, 0, 2);
                 ctl.Width = ctlWidth;
                 pair.Controls.Add(lbl);
@@ -611,31 +612,35 @@ namespace BeeGlobal
                 return pair;
             }
 
-            _dtpFrom = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm" };
-            _dtpTo = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm" };
-            _cbLevel = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
-            _cbLevel.Items.AddRange(new object[] { "All", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" });
+            _dtpFrom = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm", Font = new Font("Arial", 14) };
+            _dtpTo = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm", Font = new Font("Arial", 14) };
+            _cbLevel = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = new Font("Arial", 14) };
+            _cbLevel.Items.AddRange(new object[] { "All", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"});
             _cbLevel.SelectedIndex = 0;
-            _tbFind = new TextBox { Width = 240 };
+            _tbFind = new TextBox { Width = 240, Font = new Font("Arial", 14) };
 
-            _btnToday = new Button { Text = "Today", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
-            _btn7d = new Button { Text = "7d", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
-            _btn30d = new Button { Text = "30d", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
-            _btnExport = new Button { Text = "Export CSV", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
-            _btnImport = new Button { Text = "Import JSON", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
-            _btnClear = new Button { Text = "Clear", AutoSize = true, Margin = new Padding(6, 3, 0, 3) };
+            _btnToday = new Button { Text = "Today", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
+            _btn7d = new Button { Text = "7d", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
+            _btn30d = new Button { Text = "30d", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
+            _btnExport = new Button { Text = "Export CSV", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
+            _btnImport = new Button { Text = "Import JSON", AutoSize = true, Margin = new Padding(6, 3, 0, 3),Font = new Font("Arial", 14) };
+            _btnClear = new Button { Text = "Clear", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
             if(Global.ParaCommon!=null)
-            _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.ParaCommon.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3) };
+            _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.ParaCommon.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
            else
-                _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = false, AutoSize = true, Margin = new Padding(10, 6, 0, 3) };
+                _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = false, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+            if (Global.ParaCommon != null)
+                _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = Global.ParaCommon.IsAutoReload, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+            else
+                _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = _autoReloadOnChange, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
-            _chkAutoScroll = new CheckBox { Text = "AutoScroll", Checked = _autoScrollToEnd, AutoSize = true, Margin = new Padding(10, 6, 0, 3) };
-            _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = _autoReloadOnChange, AutoSize = true, Margin = new Padding(10, 6, 0, 3) };
-
-            _filter.Controls.Add(Pair("From:", _dtpFrom, 160));
-            _filter.Controls.Add(Pair("To:", _dtpTo, 160));
+            AutoReloadOnChange = Global.ParaCommon.IsAutoReload;
+            _chkAutoScroll = new CheckBox { Text = "AutoScroll", Checked = _autoScrollToEnd, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+          
+            _filter.Controls.Add(Pair("From:", _dtpFrom, 140));
+            _filter.Controls.Add(Pair("To:", _dtpTo, 140));
             _filter.Controls.Add(Pair("Level:", _cbLevel, 110));
-            _filter.Controls.Add(Pair("Find:", _tbFind, 240));
+            _filter.Controls.Add(Pair("Find:", _tbFind, 150));
             _filter.Controls.Add(_btnToday);
             _filter.Controls.Add(_btn7d);
             _filter.Controls.Add(_btn30d);

@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppRestart.cs" />
-    <Compile Include="AutoLabel.cs">
+    <Compile Include="Custom\AutoLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CameraForm.cs">
@@ -74,9 +74,6 @@
     <Compile Include="CustomGui.cs" />
     <Compile Include="CustomNumericEx.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="CustomTablePanel.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Custom\AdjustBarEx.cs">
       <SubType>UserControl</SubType>
@@ -96,12 +93,12 @@
     <Compile Include="Custom\TrackBar2.Designer.cs">
       <DependentUpon>TrackBar2.cs</DependentUpon>
     </Compile>
-    <Compile Include="DashboardImages.cs" />
-    <Compile Include="DashboardListCompact.cs">
+    <Compile Include="Custom\DashboardImages.cs" />
+    <Compile Include="Custom\DashboardListCompact.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataTool.cs" />
-    <Compile Include="DbTableLayoutPanel.cs">
+    <Compile Include="Custom\DbTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileName.cs" />
@@ -126,6 +123,7 @@
       <DependentUpon>ItemRS.cs</DependentUpon>
     </Compile>
     <Compile Include="LayoutPersistence.cs" />
+    <Compile Include="Load.cs" />
     <Compile Include="MultiDockHost.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -171,59 +169,47 @@
     <Compile Include="TextBoxAuto.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ToolBarcode.cs">
+    <Compile Include="Tool\ToolBarcode.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolBarcode.Designer.cs">
+    <Compile Include="Tool\ToolBarcode.Designer.cs">
       <DependentUpon>ToolBarcode.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolCircle.cs">
+    <Compile Include="Tool\ToolCircle.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolCircle.Designer.cs">
+    <Compile Include="Tool\ToolCircle.Designer.cs">
       <DependentUpon>ToolCircle.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolColorArea.cs">
+    <Compile Include="Tool\ToolColorArea.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolColorArea.Designer.cs">
+    <Compile Include="Tool\ToolColorArea.Designer.cs">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolCrop.cs">
+    <Compile Include="Tool\ToolCrop.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolCrop.Designer.cs">
+    <Compile Include="Tool\ToolCrop.Designer.cs">
       <DependentUpon>ToolCrop.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolEdgePixels.cs">
+    <Compile Include="Tool\ToolMatchingShape.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolEdgePixels.Designer.cs">
-      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolMatchingShape.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ToolMatchingShape.Designer.cs">
+    <Compile Include="Tool\ToolMatchingShape.Designer.cs">
       <DependentUpon>ToolMatchingShape.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolMeasure.cs">
+    <Compile Include="Tool\ToolMeasure.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolMeasure.Designer.cs">
+    <Compile Include="Tool\ToolMeasure.Designer.cs">
       <DependentUpon>ToolMeasure.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolOCR.cs">
+    <Compile Include="Tool\ToolOCR.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolOCR.Designer.cs">
+    <Compile Include="Tool\ToolOCR.Designer.cs">
       <DependentUpon>ToolOCR.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolOutLine.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ToolOutLine.Designer.cs">
-      <DependentUpon>ToolOutLine.cs</DependentUpon>
     </Compile>
     <Compile Include="ToolPage.cs">
       <SubType>UserControl</SubType>
@@ -231,41 +217,35 @@
     <Compile Include="ToolPage.Designer.cs">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolOKNG.cs">
+    <Compile Include="Tool\ToolOKNG.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolOKNG.Designer.cs">
+    <Compile Include="Tool\ToolOKNG.Designer.cs">
       <DependentUpon>ToolOKNG.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolWidth.cs">
+    <Compile Include="Tool\ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolWidth.Designer.cs">
+    <Compile Include="Tool\ToolWidth.Designer.cs">
       <DependentUpon>ToolWidth.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolPattern.cs">
+    <Compile Include="Tool\ToolPattern.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolPattern.Designer.cs">
+    <Compile Include="Tool\ToolPattern.Designer.cs">
       <DependentUpon>ToolPattern.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolPositions.cs">
+    <Compile Include="Tool\ToolPosition_Adjustment.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolPositions.Designer.cs">
-      <DependentUpon>ToolPositions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolPosition_Adjustment.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ToolPosition_Adjustment.Designer.cs">
+    <Compile Include="Tool\ToolPosition_Adjustment.Designer.cs">
       <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
-    <Compile Include="ToolYolo.cs">
+    <Compile Include="Tool\ToolYolo.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolYolo.Designer.cs">
+    <Compile Include="Tool\ToolYolo.Designer.cs">
       <DependentUpon>ToolYolo.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -309,52 +289,43 @@
     <EmbeddedResource Include="StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolBarcode.resx">
+    <EmbeddedResource Include="Tool\ToolBarcode.resx">
       <DependentUpon>ToolBarcode.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolCircle.resx">
+    <EmbeddedResource Include="Tool\ToolCircle.resx">
       <DependentUpon>ToolCircle.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolColorArea.resx">
+    <EmbeddedResource Include="Tool\ToolColorArea.resx">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolCrop.resx">
+    <EmbeddedResource Include="Tool\ToolCrop.resx">
       <DependentUpon>ToolCrop.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolEdgePixels.resx">
-      <DependentUpon>ToolEdgePixels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolMatchingShape.resx">
+    <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
       <DependentUpon>ToolMatchingShape.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolMeasure.resx">
+    <EmbeddedResource Include="Tool\ToolMeasure.resx">
       <DependentUpon>ToolMeasure.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolOCR.resx">
+    <EmbeddedResource Include="Tool\ToolOCR.resx">
       <DependentUpon>ToolOCR.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolOutLine.resx">
-      <DependentUpon>ToolOutLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolPage.resx">
       <DependentUpon>ToolPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolOKNG.resx">
+    <EmbeddedResource Include="Tool\ToolOKNG.resx">
       <DependentUpon>ToolOKNG.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolWidth.resx">
+    <EmbeddedResource Include="Tool\ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolPattern.resx">
+    <EmbeddedResource Include="Tool\ToolPattern.resx">
       <DependentUpon>ToolPattern.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolPositions.resx">
-      <DependentUpon>ToolPositions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolPosition_Adjustment.resx">
+    <EmbeddedResource Include="Tool\ToolPosition_Adjustment.resx">
       <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolYolo.resx">
+    <EmbeddedResource Include="Tool\ToolYolo.resx">
       <DependentUpon>ToolYolo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -602,6 +573,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Transfer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Available Updates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contentPattern.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contentOKNG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

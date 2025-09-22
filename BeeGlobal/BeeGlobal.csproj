@@ -73,9 +73,9 @@
     <Compile Include="Global.cs" />
     <Compile Include="HistoryCheck.cs" />
     <Compile Include="IntArrayWithEvent.cs" />
+    <Compile Include="ItemNew.cs" />
     <Compile Include="Protocol\ParaBit.cs" />
     <Compile Include="Protocol\ParaProtocol.cs" />
-    <Compile Include="iTool.cs" />
     <Compile Include="Labels.cs" />
     <Compile Include="LogsDashboard.cs" />
     <Compile Include="Modbus.cs" />
