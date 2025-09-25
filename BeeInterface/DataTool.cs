@@ -137,11 +137,12 @@ namespace BeeInterface
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
 
-                foreach(PropetyTool propety in ListTool) {
+                Parallel.ForEach(ListTool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, propety =>
+                {
                     if (propety != null)
                         if (propety.Propety != null)
                             propety.Propety.SetModel();
-                }
+                });
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;
             }
