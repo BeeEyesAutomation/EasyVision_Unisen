@@ -681,6 +681,8 @@ namespace BeeUi
                 if (View.indexFile >= View.listMat.Count) View.indexFile = 0;
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]);
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+            View.timer = CycleTimerSplit.Start();
+            Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;
      
             if (View.indexFile >= View.Files.Count)

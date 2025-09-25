@@ -574,10 +574,7 @@ goto X;
 }
 void Pattern::LearnPattern(int m_iMinReduceArea, int ixTemp,int ixThread)
 {
-	
 
-	//imshow("a", m_matDst[ixTemp].clone());
-	//m_TemplData[0].clear();
 	Mat raw = m_matDst[ixThread][ixTemp].clone();
 	
 	int iTopLayer = GetTopLayer(&raw, (int)sqrt((double)m_iMinReduceArea));
@@ -677,8 +674,6 @@ System::String^ Pattern::Match(System::IntPtr buffer, int width, int height,int 
 
 	if (raw.type() == CV_8UC3)
 		cvtColor(raw, raw, COLOR_BGR2GRAY);
-
-	//cv::imwrite("crop.png", raw);
 	Mat matDraw = Mat();
 	Mat matCrop = raw.clone();//  RotateMat(matCanny, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
 	//cv::imwrite("crop.png", matCrop);

@@ -55,6 +55,11 @@ namespace BeeCore.Algorithm
             public Point2f A, B;      // giao tuyến với contour gần O (hoặc ép theo yêu cầu)
             public Point2f FootX, FootY;
             public LineAB LineH, LineV;
+            // NEW: góc tuyệt đối & có hướng so với trục ảnh
+            public double ThetaOA_Deg;       // [0..360)
+            public double ThetaOB_Deg;       // [0..360)
+            public double AtoB_CCW_Deg;      // [0..360)
+            public double ThetaBisector_Deg; // [0..360)
         }
         public int MaxLineCandidates = 4;
         // ========= API chính =========
@@ -304,7 +309,25 @@ namespace BeeCore.Algorithm
                 cosTheta = Math.Max(-1.0, Math.Min(1.0, cosTheta));
                 angleAOB = Math.Acos(cosTheta) * 180.0 / Math.PI;
             }
+            // === NEW: Góc tuyệt đối của OA, OB và phân giác so với trục +X ảnh ===
+            var uOA = Normalize(vOA);
+            var uOB = Normalize(vOB);
 
+            double thetaOA = Angle360FromVec(uOA);
+            double thetaOB = Angle360FromVec(uOB);
+
+            // Góc có hướng từ OA -> OB theo CCW (trong hệ ảnh)
+            double a2b_ccw = DeltaCCW360(thetaOA, thetaOB);
+
+            // Phân giác của góc nhỏ hơn giữa OA và OB
+            Point2f uBis;
+            {
+                // tổng 2 vector đơn vị cho phân giác (nếu ~đối nhau, fallback về OA)
+                var sum = new Point2f(uOA.X + uOB.X, uOA.Y + uOB.Y);
+                float n = (float)Math.Sqrt(sum.X * sum.X + sum.Y * sum.Y);
+                uBis = (n > 1e-6f) ? new Point2f(sum.X / n, sum.Y / n) : uOA;
+            }
+            double thetaBis = Angle360FromVec(uBis);
             if (debugDraw)
             {
                 using (var dbg = image.Channels() == 1 ? image.CvtColor(ColorConversionCodes.GRAY2BGR) : image.Clone())
@@ -346,12 +369,29 @@ namespace BeeCore.Algorithm
                 FootX = Ix,
                 FootY = Iy,
                 LineH = lineH,
-                LineV = lineV
+                LineV = lineV,
+                ThetaOA_Deg = thetaOA,
+                ThetaOB_Deg = thetaOB,
+                AtoB_CCW_Deg = a2b_ccw,
+                ThetaBisector_Deg = thetaBis
             };
         }
 
         // ================== Helpers ==================
+        private static double Angle360FromVec(Point2f v)
+        {
+            double ang = Math.Atan2(v.Y, v.X) * 180.0 / Math.PI; // Y ảnh hướng xuống
+            if (ang < 0) ang += 360.0;
+            return ang; // [0..360)
+        }
 
+        private static double DeltaCCW360(double fromDeg, double toDeg)
+        {
+            double d = toDeg - fromDeg;
+            while (d < 0) d += 360.0;
+            while (d >= 360.0) d -= 360.0;
+            return d; // [0..360)
+        }
         // Bảo đảm pháp tuyến (A,B) của line hướng từ O vào trong contour (dùng PointPolygonTest)
         private FilletCornerMeasure.LineAB EnsureNormalInwardsFromO(
             FilletCornerMeasure.LineAB L, Point[] contour, Point2f O)

@@ -113,7 +113,7 @@ namespace BeeCore
         public void Complete()
         {
            
-            if (UsedTool==UsedTool.NotUsed)
+            if (UsedTool==UsedTool.NotUsed && Global.IsRun)
             {
                 Results = Results.None;
                 StatusTool = StatusTool.Done;

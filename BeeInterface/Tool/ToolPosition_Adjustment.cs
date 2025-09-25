@@ -242,29 +242,23 @@ namespace BeeInterface
         }
        
        
-        public void Loads()
-        {
-           
-            Propety.TypeMode = Mode.Pattern;
-            Propety.NumObject = 1;
-          //  Propety.pathRaw = G.EditTool.View.pathRaw;
-            imgTemp.Image = Propety.matTemp;
-        }
+      
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
         public  void LoadPara()
         {
            
                 ;
-            Bitmap bmTemp = Propety.matTemp;
+    
             //Herlo
-            if (bmTemp != null)
+            if (Propety.bmRaw != null)
             {
-                Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
-             if(Propety.rotPositionAdjustment != null)
-                    Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
-            }
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
+                 imgTemp.Image = Propety.bmRaw;
+			}
+			if (Propety.rotPositionAdjustment != null)
+				Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
+
+			trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
             trackAngle.Value =(int)Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             //txtAngle.Text = (int)Propety.Angle + "";
@@ -278,15 +272,7 @@ namespace BeeInterface
             Propety.TypeMode = Propety.TypeMode;
          
             Propety.rotMask = null;
-            //if (Propety.IsAutoTrig)
-            //    btnAutoTrigger.IsCLick = true;
-            //else
-            //    btnAutoTrigger.IsCLick = false;
-          
-            //if (Propety.TypeMode==Mode.Pattern)
-            //    btnPattern.IsCLick=true;
-            //else
-            //    btnOutLine.IsCLick = true;
+            Propety.NumObject = 1;
             if (Propety.IsHighSpeed )
                 btnHighSpeed.IsCLick = true;
             else
@@ -296,7 +282,7 @@ namespace BeeInterface
         }
             private void ToolOutLine_Load(object sender, EventArgs e)
         {
-            Loads();
+            
 
 
         }
@@ -441,10 +427,10 @@ namespace BeeInterface
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                        Propety.LearnPattern(Propety.GetTemp(Propety.rotCrop, Propety.rotMask, BeeCore.Common.listCamera[Propety.IndexThread].matRaw, null));
-
+                    Propety.bmRaw = Propety.LearnPattern( BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(),false).ToBitmap();
+                    imgTemp.Image = Propety.bmRaw;
                     }
-                imgTemp.Image = Propety.matTemp;
+           
             
         }
 

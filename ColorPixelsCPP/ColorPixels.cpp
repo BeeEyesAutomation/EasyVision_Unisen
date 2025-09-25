@@ -1,11 +1,12 @@
 ﻿#include "ColorPixel.h"
+
 #include <vector>
 #include <cstring>
 #include <atomic>
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
-using namespace ColorPixels;
+using namespace BeeCpp;
 using namespace cv;
 
 namespace {
@@ -119,29 +120,51 @@ namespace {
     }
 
 } // anonymous namespace
-Mat RotateMat(Mat raw, RotatedRect rot)
-{
-    Mat matRs, matR = getRotationMatrix2D(rot.center, rot.angle, 1);
-
-    float fTranslationX = (rot.size.width - 1) / 2.0f - rot.center.x;
-    float fTranslationY = (rot.size.height - 1) / 2.0f - rot.center.y;
-    matR.at<double>(0, 2) += fTranslationX;
-    matR.at<double>(1, 2) += fTranslationY;
-    warpAffine(raw, matRs, matR, rot.size, INTER_LINEAR, BORDER_CONSTANT);
-
-    return matRs;
-}
+//cv::Mat BeeCpp::ColorPx::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
+//{
+//    Mat matRs, matR = getRotationMatrix2D(rot.center, rot.angle, 1);
+//
+//    float fTranslationX = (rot.size.width - 1) / 2.0f - rot.center.x;
+//    float fTranslationY = (rot.size.height - 1) / 2.0f - rot.center.y;
+//    matR.at<double>(0, 2) += fTranslationX;
+//    matR.at<double>(1, 2) += fTranslationY;
+//    warpAffine(raw, matRs, matR, rot.size, INTER_LINEAR, BORDER_CONSTANT);
+//
+//    return matRs;
+//}
 // ================= PUBLIC API =================
-void ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle, bool NoCrop,
+    [System::Runtime::InteropServices::Out] int% outW,
+    [System::Runtime::InteropServices::Out] int% outH,
+    [System::Runtime::InteropServices::Out] int% outStride,
+    [System::Runtime::InteropServices::Out] int% outChannels)
 {
-    Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-    _img->temp = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+
+    if (NoCrop)
+        _img->temp = Mat(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride).clone();
+    else
+    {
+        Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
+        _img->temp = Common:: RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+
+
+    }
+ 
+    const int W = _img->temp.cols, H = _img->temp.rows, C = _img->temp.channels();
+    const int S = (int)_img->temp.step;
+    const size_t bytes = (size_t)S * H;
+    IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+    if (mem == IntPtr::Zero) return IntPtr::Zero;
+    std::memcpy(mem.ToPointer(), _img->temp.data, bytes);
+    outW = W; outH = H; outStride = S; outChannels = C;
+    
+    return mem;
 }
 void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
 {
     Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-    _img->raw = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
- 
+    _img->raw = Common::RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+   
 }
 
 IntPtr ColorPixel::CheckImageFromBytes(
@@ -187,11 +210,15 @@ IntPtr ColorPixel::CheckImageFromMat(
     pass = false; cycleTimeMs = 0.0;
     outW = outH = outStride = outChannels = 0;
     TickMeter tm; tm.start();
-    if (_img->raw.channels() != 3 || _img->temp.channels() != 3) return IntPtr::Zero;
-
-    //Mat img(imgH, imgW, CV_8UC3, imgData.ToPointer(), imgStride);
-    //Mat tpl(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-
+    if (_img->raw.type() != CV_8UC3) {
+        return IntPtr::Zero;
+    }
+    if (_img->temp.type() != CV_8UC3) {
+        return IntPtr::Zero;
+    }
+ 
+      
+    
     Mat annotated;
     bool ok = PixelCheck_MT_FullScan(_img->raw, _img->temp, maxDiffPixels, colorTolerance, &annotated);
 
@@ -201,7 +228,8 @@ IntPtr ColorPixel::CheckImageFromMat(
     const size_t bytes = (size_t)S * H;
 
     IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
-    if (mem == IntPtr::Zero) return IntPtr::Zero;
+    if (mem == IntPtr::Zero) 
+        return IntPtr::Zero;
     std::memcpy(mem.ToPointer(), annotated.data, bytes);
     tm.stop(); cycleTimeMs = tm.getTimeMilli();
     outW = W; outH = H; outStride = S; outChannels = C;

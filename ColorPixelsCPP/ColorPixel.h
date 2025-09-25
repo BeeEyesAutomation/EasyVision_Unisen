@@ -1,20 +1,20 @@
 ﻿#pragma once
 #include <opencv2/opencv.hpp>
-
+#include "Global.h"
 using namespace System;
 
-namespace ColorPixels
+namespace BeeCpp
 {
-    class Img {
-    public:
-        cv::Mat temp; cv::Mat raw;
-       
-        Img() {}
-        Img(const cv::Mat& m) : temp(m.clone()) {}
+    class ColorPx {
+    
+    public:  cv::Mat temp; cv::Mat raw;
+        
+        ColorPx() {}
+        ColorPx(const cv::Mat& m) : temp(m.clone()) {}
     };
     public ref class ColorPixel sealed
     {
-    private:Img* _img = new Img();   // native pointer
+    private:ColorPx* _img = new ColorPx();   // native pointer
     public:
         // So khớp ảnh (BGR8) từ bytes nén (PNG/JPG), trả RAW BGR (AllocHGlobal).
         System::IntPtr CheckImageFromBytes(
@@ -41,7 +41,12 @@ namespace ColorPixels
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
         void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle);
-        void  SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels,float x, float y, float w, float h, float angle);
+        System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch,
+            float x, float y, float ww, float hh, float angle, bool NoCrop,
+            [System::Runtime::InteropServices::Out] int% outW,
+            [System::Runtime::InteropServices::Out] int% outH,
+            [System::Runtime::InteropServices::Out] int% outStride,
+            [System::Runtime::InteropServices::Out] int% outChannels);
         // Giải phóng buffer RAW trả về.
         static void FreeBuffer(System::IntPtr p);
     };

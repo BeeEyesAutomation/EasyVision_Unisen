@@ -135,31 +135,8 @@ namespace BeeInterface
         }
 
        
-        private void btnCannyMin_Click(object sender, EventArgs e)
-        {
-            Propety.threshMin = 180;
-            Propety.threshMax = 255;
-            Propety.LearnPattern(matTemp);
-
-        }
-
-        private void btnCannyMedium_Click(object sender, EventArgs e)
-        {
-            Propety.threshMin = 100;
-            Propety.threshMax = 255;
-            Propety.LearnPattern( matTemp);
-        }
-
-        private void btnCannyMax_Click(object sender, EventArgs e)
-        {
-            Propety.threshMin = 0;
-            Propety.threshMax = 255;
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-
-        }
-
-    
+      
+     
         
       
     
@@ -320,16 +297,14 @@ namespace BeeInterface
 
         private void btnLearning_Click(object sender, EventArgs e)
         {
-          
-                  matTemp = Propety.GetTemp(Propety.rotCrop,Propety.rotMask, BeeCore.Common.listCamera[Global. IndexChoose].matRaw,null);
-                if (Propety.rotCrop != null)
-                    if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
-                    {
-                        Propety.LearnPattern(matTemp);
 
-                    }
-                imgTemp.Image = matTemp.ToBitmap();
-            
+            if (Propety.rotCrop != null)
+                if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
+                {
+                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
+                    imgTemp.Image = Propety.bmRaw;
+                }
+
 
         }
 
@@ -542,15 +517,7 @@ namespace BeeInterface
 
                 }    
           
-                Bitmap bmTemp = Propety.matTemp;
-            imgTemp.Image = bmTemp;
-
-            if (bmTemp != null)
-            {
-                Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
-
-
-            }
+          
         }
 
         private void trackNumObject_Load(object sender, EventArgs e)

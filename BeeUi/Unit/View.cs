@@ -3723,14 +3723,15 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         private void tmSimulation_Tick(object sender, EventArgs e)
         {
             Global.StatusMode = Global.EditTool.IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
-
+         
             tmSimulation.Enabled = false;
 
         X: indexFile++;
                 if (indexFile < Files.Count())
-                {
-                   
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+            {
+                Global.TriggerNum = TriggerNum.Trigger1;
+
+                if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
                 Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
@@ -3738,8 +3739,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                     imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 timer = CycleTimerSplit.Start();
-                RunProcessing();
-                }
+                Global.TriggerNum = TriggerNum.Trigger1;
+                Global.StatusProcessing = StatusProcessing.Checking;
+            }
                 else
                 {
 

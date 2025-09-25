@@ -137,12 +137,11 @@ namespace BeeInterface
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
 
-                Parallel.ForEach(ListTool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, propety =>
-                {
+                foreach(PropetyTool propety in ListTool) {
                     if (propety != null)
                         if (propety.Propety != null)
                             propety.Propety.SetModel();
-                });
+                }
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;
             }
@@ -248,7 +247,8 @@ namespace BeeInterface
                 PropetyTool.Propety.Index = Index;
                 itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
-                PropetyTool.Propety.SetModel();
+              
+              
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 if (PropetyTool.Name.Trim() == "")
                     itemTool.Name = TypeTool.ToString() + " " + Index;

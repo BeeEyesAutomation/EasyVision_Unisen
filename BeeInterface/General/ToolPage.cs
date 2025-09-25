@@ -235,9 +235,10 @@ namespace BeeInterface
                     propetyTool.timer.Stop();
                     propetyTool.CycleTime = (int)propetyTool.timer.Elapsed.TotalMilliseconds;
                 };
-                //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(Global.pShowTool.X,Global.pShowTool.Y)));
+            //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(Global.pShowTool.X,Global.pShowTool.Y)));
+                propetyTool.Propety.SetModel();
                 DataTool.LoadPropety(control);
-
+               
                 Global.pShowTool.Y += Itemtool.Height + 10;
                 Global.ToolSettings.pAllTool.Controls.Add(Itemtool);
             

@@ -37,11 +37,12 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-            
-            if (!workLoadModel.IsBusy)
-                workLoadModel.RunWorkerAsync();
-
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            if (Propety.bmRaw != null)
+            {
+				imgTemp.Image = Propety.bmRaw;
+			}
+			
+			Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
           
 
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
@@ -191,17 +192,15 @@ namespace BeeInterface
 
         private void btnLearning_Click(object sender, EventArgs e)
         {
-          
-                if (Propety.rotArea != null)
-                    if (Propety.rotArea._rect.Width != 0 && Propety.rotArea._rect.Height != 0)
-                {
-                    matTemp = Propety.GetTemp(Propety.rotArea, Propety.rotMask, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, null);
 
-                    Propety.LearnPattern(matTemp);
-                    imgTemp.Image = matTemp.ToBitmap();
+            if (Propety.rotArea != null)
+                if (Propety.rotArea._rect.Width != 0 && Propety.rotArea._rect.Height != 0)
+                {
+                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
+                    imgTemp.Image = Propety.bmRaw;
                 }
-              
-            
+
+
 
         }
 
@@ -364,15 +363,15 @@ namespace BeeInterface
         {
            
           
-                Bitmap bmTemp = Propety.bmTemp;
-            imgTemp.Image = bmTemp;
+            //    Bitmap bmTemp = Propety.bmTemp;
+            //imgTemp.Image = bmTemp;
 
-            if (bmTemp != null)
-            {
-                Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
+            //if (bmTemp != null)
+            //{
+            //    Propety.LearnPattern(OpenCvSharp.Extensions.BitmapConverter.ToMat(bmTemp));
 
 
-            }
+            //}
         }
 
         private void trackNumObject_Load(object sender, EventArgs e)
