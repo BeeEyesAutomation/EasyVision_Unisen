@@ -41,7 +41,7 @@ namespace ColorPixels
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
         void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle);
-        void  SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels);
+        void  SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels,float x, float y, float w, float h, float angle);
         // Giải phóng buffer RAW trả về.
         static void FreeBuffer(System::IntPtr p);
     };

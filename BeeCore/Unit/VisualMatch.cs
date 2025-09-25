@@ -37,7 +37,7 @@ namespace BeeCore
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
-        public Bitmap bmTemp;
+        public Bitmap bmTemp,bmRawTemp;
         public List<Point> Postion=new List<Point>();
         private Mode _TypeMode=Mode.Pattern;
         public List<double> listScore = new List<double>();
@@ -77,10 +77,13 @@ namespace BeeCore
             if (temp == null)
                 if (temp.Empty())
                     return;
-            matTemp = temp.Clone();
-        
-            ColorPixel.SetImgeSample(matTemp.Data, matTemp.Width, matTemp.Height, (int)matTemp.Step(), matTemp.Channels());
-            //    Pattern.CreateTemp(Index, IndexThread);
+            if (bmRawTemp != null)
+            {
+                matTemp = bmRawTemp.ToMat();
+
+                ColorPixel.SetImgeSample(matTemp.Data, matTemp.Width, matTemp.Height, (int)matTemp.Step(), matTemp.Channels(), rotArea._PosCenter.X, rotArea._PosCenter.Y, rotArea._rect.Width, rotArea._rect.Height, rotArea._rectRotation);
+            }
+                //    Pattern.CreateTemp(Index, IndexThread);
             //    matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
 
             //    SetDst(IndexThread, Index, temp.Data, temp.Rows, temp.Cols, temp.Type());
@@ -93,8 +96,8 @@ namespace BeeCore
       
         public Mat GetTemp(RectRotate rotCrop, RectRotate rotMask, Mat matRaw, Mat bmMask)
         {
-           
-            Mat matClear = new Mat();
+            bmRawTemp = matRaw.ToBitmap();
+             Mat matClear = new Mat();
             Mat matTemp = new Mat();
             if (rotCrop._rectRotation < 0) rotCrop._rectRotation = 360 + rotCrop._rectRotation;
             if(rotMask!=null)

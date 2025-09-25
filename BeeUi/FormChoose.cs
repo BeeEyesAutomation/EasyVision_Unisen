@@ -39,8 +39,9 @@ namespace BeeUi
 
         private void btnYes_Click(object sender, EventArgs e)
         {
-            Global.Step = Step.Step1;
+         
             this.Close();
+            Global.Step = Step.Step1;
         }
 
         private void btnNo_Click(object sender, EventArgs e)

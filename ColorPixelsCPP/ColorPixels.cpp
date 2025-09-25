@@ -132,10 +132,12 @@ Mat RotateMat(Mat raw, RotatedRect rot)
     return matRs;
 }
 // ================= PUBLIC API =================
-void ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
+void ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
 {
-  _img->temp=  Mat (tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-}void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+    Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
+    _img->temp = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+}
+void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
 {
     Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
     _img->raw = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
