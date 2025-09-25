@@ -23,7 +23,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OKNG", "OKNG\OKNG.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PylonCli", "PylonCli\PylonCli.vcxproj", "{04DEA65D-1A93-433A-85AE-7366915067CF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ColorPixelsCPP", "ColorPixelsCPP\ColorPixelsCPP.vcxproj", "{D7B4BDF8-544D-4D89-8253-E138AF8F65EF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ColorPixels", "ColorPixelsCPP\ColorPixelsCPP.vcxproj", "{D7B4BDF8-544D-4D89-8253-E138AF8F65EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -395,7 +395,6 @@ Global
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release_4.X|x86.ActiveCfg = Release|Win32
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release_4.X|x86.Build.0 = Release|Win32
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release|Any CPU.ActiveCfg = Release|x64
-		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release|Any CPU.Build.0 = Release|x64
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release|ARM.ActiveCfg = Release|x64
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release|ARM.Build.0 = Release|x64
 		{06C22819-3C84-4DCA-96BB-9C59508DD85B}.Release|ARM64.ActiveCfg = Release|x64
