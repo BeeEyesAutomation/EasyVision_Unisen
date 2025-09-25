@@ -99,14 +99,13 @@ namespace {
 
     // ---------- Strategy (luôn quét hết) ----------
     static bool PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
-        int maxDiffPixels, int tol,
-        double% cycleMs, Mat* annotated/*=nullptr*/)
+        int maxDiffPixels, int tol, Mat* annotated/*=nullptr*/)
     {
         CV_Assert(!img.empty() && !tpl.empty());
         CV_Assert(tpl.cols <= img.cols && tpl.rows <= img.rows);
         CV_Assert(IsBGR8(img) && IsBGR8(tpl));
 
-        TickMeter tm; tm.start();
+       
 
         // chọn song song toàn phần cho ảnh lớn, còn lại fast path;
         // KHÔNG early-exit ở cả hai nhánh
@@ -115,17 +114,34 @@ namespace {
             ? DiffCount_ParallelFull(img, tpl, tol, annotated)
             : DiffCount_Fast(img, tpl, tol, annotated);
 
-        tm.stop(); cycleMs = tm.getTimeMilli();
+ 
         return diffCount <= maxDiffPixels;
     }
 
 } // anonymous namespace
+Mat RotateMat(Mat raw, RotatedRect rot)
+{
+    Mat matRs, matR = getRotationMatrix2D(rot.center, rot.angle, 1);
 
+    float fTranslationX = (rot.size.width - 1) / 2.0f - rot.center.x;
+    float fTranslationY = (rot.size.height - 1) / 2.0f - rot.center.y;
+    matR.at<double>(0, 2) += fTranslationX;
+    matR.at<double>(1, 2) += fTranslationY;
+    warpAffine(raw, matRs, matR, rot.size, INTER_LINEAR, BORDER_CONSTANT);
+
+    return matRs;
+}
 // ================= PUBLIC API =================
-void ColorPixel::SetImgeTemple(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
+void ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
 {
   _img->temp=  Mat (tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
+}void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+{
+    Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
+    _img->raw = RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+ 
 }
+
 IntPtr ColorPixel::CheckImageFromBytes(
     array<Byte>^ imageBytes,
     array<Byte>^ templateBytes,
@@ -144,7 +160,7 @@ IntPtr ColorPixel::CheckImageFromBytes(
     if (!IsBGR8(tpl)) cvtColor(tpl, tpl, COLOR_BGR2BGR);*/
 
     Mat annotated;
-    bool ok = PixelCheck_MT_FullScan(img, tpl, maxDiffPixels, colorTolerance, cycleTimeMs, &annotated);
+    bool ok = PixelCheck_MT_FullScan(img, tpl, maxDiffPixels, colorTolerance, &annotated);
 
     if (!annotated.isContinuous()) annotated = annotated.clone();
     const int W = annotated.cols, H = annotated.rows, C = annotated.channels();
@@ -161,21 +177,21 @@ IntPtr ColorPixel::CheckImageFromBytes(
 }
 
 IntPtr ColorPixel::CheckImageFromMat(
-    IntPtr imgData, int imgW, int imgH, int imgStride, int imgChannels,
+    
     int maxDiffPixels, int colorTolerance,
     bool% pass, double% cycleTimeMs,
     int% outW, int% outH, int% outStride, int% outChannels)
 {
     pass = false; cycleTimeMs = 0.0;
     outW = outH = outStride = outChannels = 0;
+    TickMeter tm; tm.start();
+    if (_img->raw.channels() != 3 || _img->temp.channels() != 3) return IntPtr::Zero;
 
-    if (imgChannels != 3 || _img->temp.channels() != 3) return IntPtr::Zero;
-
-    Mat img(imgH, imgW, CV_8UC3, imgData.ToPointer(), imgStride);
+    //Mat img(imgH, imgW, CV_8UC3, imgData.ToPointer(), imgStride);
     //Mat tpl(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
 
     Mat annotated;
-    bool ok = PixelCheck_MT_FullScan(img, _img->temp, maxDiffPixels, colorTolerance, cycleTimeMs, &annotated);
+    bool ok = PixelCheck_MT_FullScan(_img->raw, _img->temp, maxDiffPixels, colorTolerance, &annotated);
 
     if (!annotated.isContinuous()) annotated = annotated.clone();
     const int W = annotated.cols, H = annotated.rows, C = annotated.channels();
@@ -185,7 +201,7 @@ IntPtr ColorPixel::CheckImageFromMat(
     IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
     if (mem == IntPtr::Zero) return IntPtr::Zero;
     std::memcpy(mem.ToPointer(), annotated.data, bytes);
-
+    tm.stop(); cycleTimeMs = tm.getTimeMilli();
     outW = W; outH = H; outStride = S; outChannels = C;
     pass = ok;
     return mem;

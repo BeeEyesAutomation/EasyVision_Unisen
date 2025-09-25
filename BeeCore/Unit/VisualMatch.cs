@@ -79,7 +79,7 @@ namespace BeeCore
                     return;
             matTemp = temp.Clone();
         
-            ColorPixel.SetImgeTemple(matTemp.Data, matTemp.Width, matTemp.Height, (int)matTemp.Step(), matTemp.Channels());
+            ColorPixel.SetImgeSample(matTemp.Data, matTemp.Width, matTemp.Height, (int)matTemp.Step(), matTemp.Channels());
             //    Pattern.CreateTemp(Index, IndexThread);
             //    matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
 
@@ -135,18 +135,19 @@ namespace BeeCore
           
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
+                ColorPixel.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(),rectRotate._PosCenter.X, rectRotate._PosCenter.Y, rectRotate._rect.Width, rectRotate._rect.Height,rectRotate._rectRotation);
 
                 if (raw.Empty()) return;
 
-                Mat matCrop = Common.CropRotatedRect(raw, rectRotate);
+              //  Mat matCrop = Common.CropRotatedRect(raw, rectRotate);
 
-                if (!matCrop.IsContinuous())
-                {
-                    matCrop = matCrop.Clone();
-                }
+                //if (!matCrop.IsContinuous())
+                //{
+                //    matCrop = matCrop.Clone();
+                //}
               
                 int w = 0, h = 0, s = 0, c = 0;
-                IntPtr intpr = ColorPixel.CheckImageFromMat(matCrop.Data, matCrop.Width, matCrop.Height, (int)matCrop.Step(), matCrop.Channels(),
+                IntPtr intpr = ColorPixel.CheckImageFromMat(
                    MaxDiffPixels, ColorTolerance, out ISOK, out cycleTime, out w, out h, out s, out c);
                 matProcess = new Mat();
               
