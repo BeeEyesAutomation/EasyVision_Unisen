@@ -23,58 +23,42 @@ namespace BeeUi
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChoose));
-            this.label1 = new System.Windows.Forms.Label();
-            this.lbHeader = new System.Windows.Forms.Label();
             this.lbContent = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnNo = new BeeInterface.RJButton();
             this.btnYes = new BeeInterface.RJButton();
+            this.lbHeader = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label1.Location = new System.Drawing.Point(130, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Wairming";
-            // 
-            // lbHeader
-            // 
-            this.lbHeader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lbHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbHeader.ForeColor = System.Drawing.Color.Black;
-            this.lbHeader.Location = new System.Drawing.Point(10, 49);
-            this.lbHeader.Name = "lbHeader";
-            this.lbHeader.Size = new System.Drawing.Size(337, 54);
-            this.lbHeader.TabIndex = 1;
-            this.lbHeader.Text = "Change Mode";
-            this.lbHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbContent
             // 
-            this.lbContent.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lbContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lbContent.Location = new System.Drawing.Point(10, 103);
+            this.lbContent.Location = new System.Drawing.Point(3, 60);
             this.lbContent.Name = "lbContent";
-            this.lbContent.Size = new System.Drawing.Size(337, 63);
+            this.lbContent.Size = new System.Drawing.Size(355, 108);
             this.lbContent.TabIndex = 2;
             this.lbContent.Text = "Switch to Program Editing mode?";
-            this.lbContent.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lbContent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Image = global::BeeUi.Properties.Resources.Warning_1;
-            this.pictureBox1.Location = new System.Drawing.Point(72, 3);
+            this.pictureBox1.Location = new System.Drawing.Point(40, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(40, 0, 0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(52, 46);
+            this.pictureBox1.Size = new System.Drawing.Size(60, 60);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
@@ -85,13 +69,49 @@ namespace BeeUi
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 169F));
             this.tableLayoutPanel1.Controls.Add(this.btnNo, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnYes, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 166);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 171);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(337, 66);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(355, 54);
             this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.White;
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lbContent, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 2);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(1, 1);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(361, 228);
+            this.tableLayoutPanel2.TabIndex = 5;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.lbHeader, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.pictureBox1, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(361, 60);
+            this.tableLayoutPanel3.TabIndex = 5;
             // 
             // btnNo
             // 
@@ -115,9 +135,10 @@ namespace BeeUi
             this.btnNo.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNo.Corner = BeeGlobal.Corner.Both;
             this.btnNo.DebounceResizeMs = 16;
+            this.btnNo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnNo.FlatAppearance.BorderSize = 0;
             this.btnNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
             this.btnNo.ForeColor = System.Drawing.Color.DarkGray;
             this.btnNo.Image = null;
             this.btnNo.ImageDisabled = null;
@@ -135,10 +156,10 @@ namespace BeeUi
             this.btnNo.IsNotChange = false;
             this.btnNo.IsRect = false;
             this.btnNo.IsUnGroup = false;
-            this.btnNo.Location = new System.Drawing.Point(171, 3);
+            this.btnNo.Location = new System.Drawing.Point(189, 3);
             this.btnNo.Multiline = false;
             this.btnNo.Name = "btnNo";
-            this.btnNo.Size = new System.Drawing.Size(162, 60);
+            this.btnNo.Size = new System.Drawing.Size(163, 48);
             this.btnNo.TabIndex = 1;
             this.btnNo.Text = "NO";
             this.btnNo.TextColor = System.Drawing.Color.DarkGray;
@@ -167,9 +188,10 @@ namespace BeeUi
             this.btnYes.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnYes.Corner = BeeGlobal.Corner.Both;
             this.btnYes.DebounceResizeMs = 16;
+            this.btnYes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnYes.FlatAppearance.BorderSize = 0;
             this.btnYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnYes.Font = new System.Drawing.Font("Microsoft Sans Serif", 22.89063F, System.Drawing.FontStyle.Bold);
+            this.btnYes.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F, System.Drawing.FontStyle.Bold);
             this.btnYes.ForeColor = System.Drawing.Color.Black;
             this.btnYes.Image = null;
             this.btnYes.ImageDisabled = null;
@@ -190,39 +212,53 @@ namespace BeeUi
             this.btnYes.Location = new System.Drawing.Point(3, 3);
             this.btnYes.Multiline = false;
             this.btnYes.Name = "btnYes";
-            this.btnYes.Size = new System.Drawing.Size(162, 60);
+            this.btnYes.Size = new System.Drawing.Size(180, 48);
             this.btnYes.TabIndex = 0;
             this.btnYes.Text = "YES";
             this.btnYes.TextColor = System.Drawing.Color.Black;
             this.btnYes.UseVisualStyleBackColor = false;
             this.btnYes.Click += new System.EventHandler(this.btnYes_Click);
             // 
+            // lbHeader
+            // 
+            this.lbHeader.BackColor = System.Drawing.Color.Transparent;
+            this.lbHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHeader.ForeColor = System.Drawing.Color.Black;
+            this.lbHeader.Location = new System.Drawing.Point(100, 0);
+            this.lbHeader.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.lbHeader.Name = "lbHeader";
+            this.lbHeader.Size = new System.Drawing.Size(258, 60);
+            this.lbHeader.TabIndex = 4;
+            this.lbHeader.Text = "Change Mode";
+            this.lbHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // FormChoose
             // 
-            this.ClientSize = new System.Drawing.Size(357, 237);
-            this.Controls.Add(this.lbHeader);
-            this.Controls.Add(this.lbContent);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(364, 231);
+            this.Controls.Add(this.tableLayoutPanel2);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormChoose";
-            this.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.Padding = new System.Windows.Forms.Padding(1, 1, 2, 2);
             this.Load += new System.EventHandler(this.ForrmAlarm_Load);
+            this.Shown += new System.EventHandler(this.FormChoose_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        public System.Windows.Forms.Label lbHeader;
         public System.Windows.Forms.Label lbContent;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private BeeInterface.RJButton btnNo;
         private BeeInterface.RJButton btnYes;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        public System.Windows.Forms.Label lbHeader;
     }
 }

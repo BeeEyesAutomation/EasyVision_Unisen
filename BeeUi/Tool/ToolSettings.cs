@@ -2,6 +2,7 @@
 using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
+using BeeInterface.General;
 using BeeUi.Commons;
 using Newtonsoft.Json.Linq;
 using System;
@@ -29,7 +30,7 @@ namespace BeeUi.Tool
         
             Global.ToolSettings = this;
         }
-      public  Label[] Labels = new Label[4] { new Label(), new Label(), new Label(), new Label() };
+      public  InforGroup[] Labels = new InforGroup[4] { new InforGroup(), new InforGroup(), new InforGroup(), new InforGroup() };
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (G.AddTool == null)

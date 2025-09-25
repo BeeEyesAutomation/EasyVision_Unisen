@@ -80,11 +80,12 @@ namespace BeeInterface
                     propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb8.DataSource = null;
                     cb8.DataSource = propetyTool.Propety.listP_Center;
+                    cb2.SafeSelectIndex(Propety.listPointChoose[0].Item2);
+                    cb4.SafeSelectIndex(Propety.listPointChoose[1].Item2);
+                    cb6.SafeSelectIndex(Propety.listPointChoose[2].Item2);
+                    cb8.SafeSelectIndex(Propety.listPointChoose[3].Item2);
 
-                    cb2.SelectedIndex = Propety.listPointChoose[0].Item2;
-                    cb4.SelectedIndex = Propety.listPointChoose[1].Item2;
-                    cb6.SelectedIndex = Propety.listPointChoose[2].Item2;
-                    cb8.SelectedIndex = Propety.listPointChoose[3].Item2;
+                  
                 }
             }
           

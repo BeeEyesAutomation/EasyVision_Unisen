@@ -704,10 +704,15 @@ namespace BeeUi
         {
             if (openFile.ShowDialog() == DialogResult.OK)
             {
+            
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                View.timer = CycleTimerSplit.Start();
                 if (Global.IsRun)
+                {
+                    Global.TriggerNum = TriggerNum.Trigger1;
                     Global.StatusProcessing = StatusProcessing.Checking;
+                }
             }
             }
 
@@ -765,6 +770,17 @@ namespace BeeUi
         {
             tmLoad.Enabled = false;
           
+        }
+
+        private void btnLogo_Click(object sender, EventArgs e)
+        {
+            // Lấy vị trí ngay dưới nút
+            Point menuPoint = new Point(0, btnLogo.Height);
+
+            //if(btnLogo.IsCLick)
+            mouseLeft.Show(btnLogo, menuPoint);
+            //else
+            //    mouseLeft.Hide();
         }
 
         private void btnNew_Click(object sender, EventArgs e)

@@ -65,14 +65,14 @@ namespace BeeInterface
             Cyotek.Windows.Forms.ImageBox pictureBox,
             int gutter = 6,
             Color? background = null,
-            bool autoRerenderOnResize = true)
+            bool autoRerenderOnResize = false)
         {
             _pb = pictureBox ?? throw new ArgumentNullException(nameof(pictureBox));
             _gutter = Math.Max(0, gutter);
             _bg = background ?? Color.Black;
             _autoRerenderOnResize = autoRerenderOnResize;
 
-            if (_autoRerenderOnResize) _pb.Resize += OnPictureBoxResize;
+          //  if (_autoRerenderOnResize) _pb.Resize += OnPictureBoxResize;
         }
 
         public int Count() => _items.Count;
@@ -88,6 +88,7 @@ namespace BeeInterface
             if (owned == null) return;
             _items.Add(new ImageItem(owned, mode, weight, owned: true));
             _lastModifiedIndex = _items.Count - 1;
+            Render();
         }
 
         public void AddImage(Bitmap bmp, FillMode1 mode, float weight, CollageLayout layout)
@@ -188,9 +189,9 @@ namespace BeeInterface
                 new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
                 newBitmap.PixelFormat);
 
-            var oldResult = BeeCore.Common.bmResult;
-            BeeCore.Common.bmResult = cloneForSave;
-            if (DisposeOnSwap) oldResult?.Dispose();
+            //var oldResult = BeeCore.Common.bmResult;
+            //BeeCore.Common.bmResult = cloneForSave;
+            //if (DisposeOnSwap) oldResult?.Dispose();
 
             var old = _pb.Image;
             _pb.Image = newBitmap;
@@ -621,11 +622,11 @@ namespace BeeInterface
             return dst;
         }
 
-        private void OnPictureBoxResize(object sender, EventArgs e) => Render();
+       // private void OnPictureBoxResize(object sender, EventArgs e) => Render();
 
         public void Dispose()
         {
-            if (_autoRerenderOnResize) _pb.Resize -= OnPictureBoxResize;
+           // if (_autoRerenderOnResize) _pb.Resize -= OnPictureBoxResize;
 
             if (DisposeOnSwap) _pb.Image?.Dispose();
             _pb.Image = null;

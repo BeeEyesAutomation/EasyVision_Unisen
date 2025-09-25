@@ -20,20 +20,22 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 
 namespace BeeInterface
 {
     [Serializable()]
-    public partial class ToolWidth : UserControl
+    public partial class ToolCorner : UserControl
     {
         
-        public ToolWidth( )
+        public ToolCorner( )
         {
             InitializeComponent();
-        
+
         }
+        public MeasureCorner Propety = new MeasureCorner();
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
         int ThresholdValue = 100;
@@ -47,7 +49,7 @@ namespace BeeInterface
           
             try
             {
-               
+                
                 trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
                 trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
@@ -57,13 +59,10 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
                 AdjThreshod.Value = Propety.ThresholdBinary;
-
-                AdjScale.Value = (float)Propety.Scale;
-                trackMaxLine.Value = Propety.MaximumLine;
-                trackMinInlier.Value = Propety.MinInliers;
-             
-                numMinLen.Value = Propety.MinLen;
-                numMaxLen.Value = Propety.MaxLen;
+                AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
+                AdjRANSACIterations.Value=Propety.RansacIterations;
+                AdjThreshodAngle.Value =(float) Propety.PerpAngleToleranceDeg;
+                AdjMaxLineCandidates.Value = Propety.MaxLineCandidates;
                 switch (Propety.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
@@ -79,42 +78,24 @@ namespace BeeInterface
                         btnInvert.IsCLick = true; layThreshod.Enabled = true;
                         break;
                 }
-                switch (Propety.LineOrientation)
-                {
-                    case LineOrientation.Vertical:
-                        btnVer.IsCLick = true;
-                        break;
-                    case LineOrientation.Horizontal:
-                        btnHori.IsCLick = true;
-                        break;
-                }
-                switch (Propety.SegmentStatType)
-                {
-                    case SegmentStatType.Longest:
-                        btnLong.IsCLick = true;
-                        break;
-                    case SegmentStatType.Shortest:
-                        btnShort.IsCLick = true;
-                        break;
-                    case SegmentStatType.Average:
-                        btnAverage.IsCLick = true;
-                        break;
-                }
-                switch (Propety.GapExtremum)
-                {
-                    case GapExtremum.Outermost:
-                        btnOutter.IsCLick = true;
-                        break;
-                    case GapExtremum.Middle:
-                        btnMid.IsCLick = true;
-                        break;
-                    case GapExtremum.Nearest:
-                        btnNear.IsCLick = true;
-                        break;
-                    case GapExtremum.Farthest:
-                        btnFar.IsCLick = true;
-                        break;
-                }
+                AdjScale.Value= Propety.Scale;
+                
+                AdjMorphology.Value = Propety.SizeClose;
+                AdjOpen.Value = Propety.SizeOpen;
+                AdjClearNoise.Value = Propety.SizeClearsmall;
+                AdjClearBig.Value = Propety.SizeClearBig;
+                AdjThreshodAngle.Value =(float) Propety.PerpAngleToleranceDeg;
+                btnClose.IsCLick = Propety.IsClose;
+                btnOpen.IsCLick = Propety.IsOpen;
+                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+                AdjClearNoise.Enabled= Propety.IsClearNoiseSmall;
+                AdjClearBig.Enabled= Propety.IsClearNoiseBig;
+                AdjOpen.Enabled= Propety.IsOpen;
+                AdjMorphology.Enabled= Propety.IsClose;
+
+                btnAlway90.IsCLick = Propety.LinePairStrategy == LinePairStrategy.StrongPlusContourOrth ? true : false;
+                btnNoAlway90.IsCLick = Propety.LinePairStrategy == LinePairStrategy.StrongPlusOrth ? true : false;
             }
             catch (Exception ex)
             {
@@ -132,15 +113,15 @@ namespace BeeInterface
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
-                if (Propety.IsCalibs)
-                {
-                    btnCalib.IsCLick = false;
-                    Propety.IsCalibs = false;
-                    btnCalib.Enabled = true;
-                    trackMinInlier.Value = Propety.MinInliers;
-                    numMaxLen.Value = Propety.MaxLen;
-                    numMinLen.Value = Propety.MinLen;
-                }
+                //if (Propety.IsCalibs)
+                //{
+                //    btnCalib.IsCLick = false;
+                //    Propety.IsCalibs = false;
+                //    btnCalib.Enabled = true;
+                //    trackMinInlier.Value = Propety.MinInliers;
+                //    numMaxLen.Value = Propety.MaxLen;
+                //    numMinLen.Value = Propety.MinLen;
+                //}
             }
            
         }
@@ -150,9 +131,8 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
          }
         public bool IsClear = false;
-        public Width Propety=new Width();
-        public Mat matTemp = new Mat();
-        public Mat matTemp2 = new Mat();
+     
+
         Mat matClear = new Mat(); Mat matMask = new Mat();
 
     
@@ -309,15 +289,8 @@ namespace BeeInterface
 
       
 
-        private void trackNumObject_Load(object sender, EventArgs e)
-        {
-
-        }
-
      
 
-      
-   
      
       
   
@@ -366,79 +339,11 @@ namespace BeeInterface
 
         }
 
-        private void btnShort_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Shortest;
-        }
-
-        private void btnAverage_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Average;
-        }
-
-        private void btnLong_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Longest;
-        }
-
-        private void btnMid_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Middle;
-        }
-
-        private void btnOutter_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Outermost;
-        }
-
-        private void btnNear_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Nearest;
-        }
-
-        private void btnFar_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Nearest;
-        }
-
-        private void btnVer_Click(object sender, EventArgs e)
-        {
-            Propety.LineOrientation = LineOrientation.Vertical;
-        }
+   
 
        
 
-        private void btnHori_Click(object sender, EventArgs e)
-        {
-            Propety.LineOrientation = LineOrientation.Horizontal;
-        }
-
-        private void trackMaxLine_ValueChanged(float obj)
-        {
-            Propety.MaximumLine = (int)trackMaxLine.Value;
-        }
-
-        private void trackMinInlier_ValueChanged(float obj)
-        {
-            Propety.MinInliers = (int)trackMinInlier.Value;
-        }
-
-        private void btnCalib_Click(object sender, EventArgs e)
-        {
-            btnCalib.Enabled = false;
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.IsCalibs = true;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                Propety.IsCalibs = false;
-            
-        }
-
-        private void trackScore_Load(object sender, EventArgs e)
-        {
-
-        }
-
+    
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
@@ -447,22 +352,12 @@ namespace BeeInterface
 
       
 
-        private void numMinLen_ValueChanged(float obj)
-        {
-            Propety.MinLen = (int)numMinLen.Value;
-        }
-
-        private void numMaxLen_ValueChanged(float obj)
-        {
-            Propety.MaxLen = (int)numMaxLen.Value;
-        }
-
         private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
         {
 
         }
 
-       
+      
         private void AdjThreshod_ValueChanged(float obj)
         {
             Propety.ThresholdBinary = (int)AdjThreshod.Value;
@@ -485,9 +380,20 @@ namespace BeeInterface
             Propety.MethordEdge = MethordEdge.CloseEdges;
             layThreshod.Enabled = false;
         }
+
+        private void AdjScale_ValueChanged(float obj)
+        {
+            Propety.Scale=AdjScale.Value;
+        }
+
+        private void AdjKensize_ValueChanged(float obj)
+        {
+
+        }
+
         private void AdjClearNoise_ValueChanged(float obj)
         {
-            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
+            Propety.SizeClearsmall =(int) AdjClearNoise.Value;
         }
 
         private void btnEnMorphology_Click(object sender, EventArgs e)
@@ -498,7 +404,7 @@ namespace BeeInterface
 
         private void btnEnableNoise_Click(object sender, EventArgs e)
         {
-
+          
             Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
             AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
         }
@@ -506,10 +412,25 @@ namespace BeeInterface
         private void AdjMorphology_ValueChanged(float obj)
         {
 
-            Propety.SizeClose = (int)AdjMorphology.Value;
+            Propety.SizeClose =(int) AdjMorphology.Value;
         }
 
-      
+        private void btnAlway90_Click(object sender, EventArgs e)
+        {
+            Propety.LinePairStrategy = LinePairStrategy.StrongPlusContourOrth;
+        }
+
+        private void AdjThreshodAngle_ValueChanged(float obj)
+        {
+            Propety.PerpAngleToleranceDeg = AdjThreshodAngle.Value;
+        }
+
+        private void btnNoAlway90_Click(object sender, EventArgs e)
+        {
+
+            Propety.LinePairStrategy = LinePairStrategy.StrongPlusOrth;
+        }
+
         private void AdjOpen_ValueChanged(float obj)
         {
             Propety.SizeOpen = (int)AdjOpen.Value;
@@ -532,23 +453,22 @@ namespace BeeInterface
             AdjClearBig.Enabled = Propety.IsClearNoiseBig;
 
         }
+
         private void AdjRANSACIterations_ValueChanged(float obj)
         {
-            Propety.RansacIterations = (int)AdjRANSACIterations.Value;
+            Propety.RansacIterations =(int) AdjRANSACIterations.Value;
+        }
+
+        private void AdjMaxLineCandidates_ValueChanged(float obj)
+        {
+            Propety.MaxLineCandidates = (int)AdjMaxLineCandidates.Value;
         }
 
         private void AdjRANSACThreshold_ValueChanged(float obj)
         {
             Propety.RansacThreshold = AdjRANSACThreshold.Value;
         }
-        private void AdjScale_ValueChanged(float obj)
-        {
-            Propety.Scale = AdjScale.Value;
-        }
 
-        private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-         
-        }
+      
     }
 }

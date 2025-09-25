@@ -49,8 +49,16 @@ namespace BeeCore
         public Bitmap matTemp,matMask;
         public List<OpenCvSharp.Point> Postion=new List<OpenCvSharp.Point>();
         public TypeCrop TypeCrop;
-        public Compares Compare = Compares.Equal;
+       
         public List< System.Drawing.Point > listP_Center=new List<System.Drawing.Point>();
+        public bool IsClose = false;
+        public bool IsOpen = false;
+        public bool IsClearNoiseBig = false;
+        public bool IsClearNoiseSmall = false;
+        public int SizeClearsmall = 1;
+        public int SizeClearBig = 1;
+        public int SizeClose = 1;
+        public int SizeOpen = 1;
         public Circle()
         {
 
@@ -137,7 +145,7 @@ namespace BeeCore
                         RadiusResult = (float)Math.Round(RadiusResult, 2);
                         if (IsCalibs)
                         {
-                            MinInliers = (int)((Inliers * (100-Common.PropetyTools[IndexThread][Index].Score)) / 100.0);
+                            MinInliers = (int)((Inliers * (80)) / 100.0);
                             double Delta =(  Common.PropetyTools[IndexThread][Index].Score) /100.0;
                             MinRadius = (float)(RadiusResult * (1-Delta));
                             MaxRadius = (float)(RadiusResult * (1 + Delta));

@@ -788,7 +788,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
             if (name == "") return;
             if (name.Contains("None"))
-            {
+            {if (OldIn[value] == null) OldIn[value] = "None";
                 Global.ParaCommon.Comunication.Protocol.RemoveInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[value], ignoreCase: true));
             }
             else
@@ -806,6 +806,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             String name = cb.SelectedValue.ToString();
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
+            if (OldOut[value] == null) OldOut[value] = "None";
             if (name == "") return;
             if (cb.Text.Contains("None")&&OldOut[value]!=null)
                 Global.ParaCommon.Comunication.Protocol.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));

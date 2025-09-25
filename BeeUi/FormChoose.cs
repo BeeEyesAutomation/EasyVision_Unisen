@@ -47,5 +47,10 @@ namespace BeeUi
         {
             this.Close();
         }
+
+        private void FormChoose_Shown(object sender, EventArgs e)
+        {
+            btnYes.Focus();
+        }
     }
 }

@@ -46,6 +46,7 @@ namespace BeeInterface
             btn.AutoFontWidthRatio = 1;
             btn.AutoFontHeightRatio = 0.8f;
             btn.ImageTextSpacing = 1;
+            btn.ImageAlign = ContentAlignment.MiddleLeft;
             btn.AutoImageMaxRatio = 0.8f;
            btn.FlatAppearance.BorderSize = 0;
            btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -67,7 +68,7 @@ namespace BeeInterface
                 btn.Location = new System.Drawing.Point(25, y);
           //  if (!btn.Text.Contains("Color Area"))
             //    btn.Enabled = false;
-           btn.Size = new System.Drawing.Size(277, 40);
+           btn.Size = new System.Drawing.Size(277, 50);
           btn.TabIndex = 0;
             btn.Click += Btn_Click;
            btn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -108,7 +109,7 @@ namespace BeeInterface
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
-            int space = 45;
+            int space = 70;
          
             foreach(ItemNew itemNew in Global.itemNews)
             {

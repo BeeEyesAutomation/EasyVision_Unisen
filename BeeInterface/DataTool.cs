@@ -194,6 +194,12 @@ namespace BeeInterface
                 case TypeTool.Crop:
                     control = new ToolCrop();
                     break;
+                case TypeTool.Corner:
+                    control = new ToolCorner();
+                    break;
+                case TypeTool.VisualMatch:
+                    control = new ToolVisualMatch();
+                    break;
                 default:
                     return null;
                     break;

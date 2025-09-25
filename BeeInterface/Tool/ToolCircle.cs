@@ -48,7 +48,7 @@ namespace BeeInterface
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             
-            numScale.Value= (float) Propety.Scale;
+            AdjScale.Value= (float) Propety.Scale;
             trackThreshold.IsInital = true;
             trackThreshold.Value = Propety.Threshold;
             trackMinInlier.IsInital = true;
@@ -57,8 +57,36 @@ namespace BeeInterface
             trackIterations.Value = Propety.Iterations;
             numMinRadius.Value = Propety.MinRadius;
             numMaxRadius.Value = Propety.MaxRadius;
-            numScale.Value = (int)Propety.Scale;
+
+
+            
             AdjThreshod.Value = Propety.ThresholdBinary;
+            AdjMorphology.Value = Propety.SizeClose;
+            AdjOpen.Value = Propety.SizeOpen;
+            AdjClearNoise.Value = Propety.SizeClearsmall;
+            AdjClearBig.Value = Propety.SizeClearBig;
+           
+            btnClose.IsCLick = Propety.IsClose;
+            btnOpen.IsCLick = Propety.IsOpen;
+            btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+            btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+            AdjOpen.Enabled = Propety.IsOpen;
+            AdjMorphology.Enabled = Propety.IsClose;
+            AdjMorphology.Value = Propety.SizeClose;
+            AdjOpen.Value = Propety.SizeOpen;
+            AdjClearNoise.Value = Propety.SizeClearsmall;
+            AdjClearBig.Value = Propety.SizeClearBig;
+
+            btnClose.IsCLick = Propety.IsClose;
+            btnOpen.IsCLick = Propety.IsOpen;
+            btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+            btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+            AdjOpen.Enabled = Propety.IsOpen;
+            AdjMorphology.Enabled = Propety.IsClose;
             switch (Propety.MethordEdge)
             {
                 case MethordEdge.StrongEdges:
@@ -200,21 +228,6 @@ namespace BeeInterface
             Global.StatusDraw = StatusDraw.Edit;
         }
 
-    
-        private void btnLess_Click(object sender, EventArgs e)
-        {
-            Propety.Compare=Compares.Less;
-        }
-
-        private void btnEqual_Click(object sender, EventArgs e)
-        {
-            Propety.Compare = Compares.Equal;
-        }
-
-        private void btnMore_Click(object sender, EventArgs e)
-        {
-            Propety.Compare = Compares.More;
-        }
 
    
 
@@ -294,11 +307,7 @@ namespace BeeInterface
  
  
 
-        private void numScale_ValueChanged(object sender, EventArgs e)
-        {
-            Propety.Scale =(float) numScale.Value;
-        }
-
+        
         private void rjButton3_Click_2(object sender, EventArgs e)
         {
 
@@ -395,8 +404,61 @@ namespace BeeInterface
 
         private void AdjThreshod_ValueChanged(float obj)
         {
-            Propety.Threshold = AdjThreshod.Value;
+            Propety.ThresholdBinary =(int) AdjThreshod.Value;
 
+        }
+      
+        private void AdjClearNoise_ValueChanged(float obj)
+        {
+            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
+        }
+
+        private void btnIsClose_Click(object sender, EventArgs e)
+        {
+            Propety.IsClose = btnClose.IsCLick;
+            AdjMorphology.Enabled = Propety.IsClose;
+        }
+
+        private void btnIsClearSmall_Click(object sender, EventArgs e)
+        {
+
+            Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+        }
+
+        private void AdjMorphology_ValueChanged(float obj)
+        {
+
+            Propety.SizeClose = (int)AdjMorphology.Value;
+        }
+
+
+        private void AdjOpen_ValueChanged(float obj)
+        {
+            Propety.SizeOpen = (int)AdjOpen.Value;
+        }
+
+        private void AdjClearBig_ValueChanged(float obj)
+        {
+            Propety.SizeClearBig = (int)AdjClearBig.Value;
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            Propety.IsOpen = btnOpen.IsCLick;
+            AdjOpen.Enabled = Propety.IsOpen;
+        }
+
+        private void btnIsClearBig_Click(object sender, EventArgs e)
+        {
+            Propety.IsClearNoiseBig = btnIsClearBig.IsCLick;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+
+        }
+
+        private void AdjScale_ValueChanged(float obj)
+        {
+            Propety.Scale=AdjScale.Value;
         }
     }
 }

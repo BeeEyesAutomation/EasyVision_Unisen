@@ -458,17 +458,17 @@ namespace BeeCore
         {
           
             dtOld = DateTime.Now;
-            if (Common.bmRaw != null)
-                Common.bmRaw.Dispose();
+            //if (Common.bmRaw != null)
+            //    Common.bmRaw.Dispose();
 
-            if (Common.listRaw.Count > 0)
-            {
-                numErr = 0;
-                Mat raw= Common.listRaw[0].ToMat().Clone();// ByteToMat(ImageData, ImageWidth, ImageHeight, ImageType);
-                Common.listRaw[0].Dispose();
-                return raw;
+            //if (Common.listRaw.Count > 0)
+            //{
+            //    numErr = 0;
+            //    Mat raw= Common.listRaw[0].ToMat().Clone();// ByteToMat(ImageData, ImageWidth, ImageHeight, ImageType);
+            //    Common.listRaw[0].Dispose();
+            //    return raw;
                    
-            }
+            //}
 
             return new Mat();
             //uint num2 = 0u;
@@ -1335,9 +1335,9 @@ namespace BeeCore
                             {
                                 Array.Clear(ImageData, 0, ImageData.Length);
                             }
-                           if (Common.listRaw.Count()>1)
-                                Common.listRaw.RemoveAt(0);
-                            Common.listRaw.Add(Byte2Bitmap(ImageData, ImageWidth, ImageHeight, PixelFormat.Format8bppIndexed, ImageType));
+                           //if (Common.listRaw.Count()>1)
+                           //     Common.listRaw.RemoveAt(0);
+                           // Common.listRaw.Add(Byte2Bitmap(ImageData, ImageWidth, ImageHeight, PixelFormat.Format8bppIndexed, ImageType));
 
                             //if (DeviceCfgRead.READ_CFG(11272u, 8u))
                             //{

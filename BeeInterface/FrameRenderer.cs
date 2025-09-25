@@ -123,11 +123,11 @@ namespace BeeInterface
 
                 // 6) Swap: cập nhật bmResult (clone một lần, ảnh cũ dispose) + hiển thị lên imgView
                 //    (không tạo ảnh mới cho viewer; dùng chính backBmp tái sử dụng)
-                lock (_bmLock)
-                {
-                    BeeCore.Common.bmResult?.Dispose();
-                    BeeCore.Common.bmResult = (Bitmap)backBmp.Clone(); // giữ lại cho các hàm lưu ảnh
-                }
+                //lock (_bmLock)
+                //{
+                //    BeeCore.Common.bmResult?.Dispose();
+                //    BeeCore.Common.bmResult = (Bitmap)backBmp.Clone(); // giữ lại cho các hàm lưu ảnh
+                //}
 
                 // swap con trỏ hiển thị (Mat & Bitmap)
                 lock (_swapLock)

@@ -3,6 +3,7 @@ using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Features2D;
+using PylonCli;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -19,9 +21,9 @@ using System.Threading.Tasks;
 using System.Web.UI;
 using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
+using static BeeCore.Algorithm.FilletCornerMeasure;
 using static EasyModbus.ModbusServer;
 using Size = OpenCvSharp.Size;
-using PylonCli;
 namespace BeeCore
 {
     public class Camera
@@ -214,7 +216,28 @@ namespace BeeCore
             }
             return dst;
         }
-
+        public Results Results = Results.OK;
+        public void SumResult()
+        {
+            Results = Results.OK;
+            foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
+            {
+                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[IndexCCD])
+                {
+                    if (PropetyTool.UsedTool == UsedTool.NotUsed)
+                    {
+                        continue;
+                    }
+                    if (PropetyTool.Results == Results.NG)
+                    {
+                        Results = Results.NG;
+                        break;
+                    }
+                }
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+        }
         public void DrawResult( )
         {
             if (_disposed) return;
@@ -289,32 +312,47 @@ namespace BeeCore
                     {
                        bmResult?.Dispose();
                        bmResult = storeCopy;
-                      //  bmResult.Save("Result"+ IndexCCD + ".png");
+                        String pathRaw, pathRS;
+                        String date = DateTime.Now.ToString("yyyyMMdd");
+                        String Hour = DateTime.Now.ToString("HHmmss");
+                        pathRaw = "Report//" + date + "//Raw";
+                        pathRS = "Report//" + date + "//Result";
+                        if (!Directory.Exists(pathRaw))
+                            Directory.CreateDirectory(pathRaw);
+                        if (!Directory.Exists(pathRS))
+                            Directory.CreateDirectory(pathRS);
+                        if (Results == Results.OK && Global.Config.IsSaveOK || Results == Results.NG && Global.Config.IsSaveNG)
+                        {
+                            Mat matRs = bmResult.ToMat();
+                            using (Mat raw = matRaw.Clone())
+                            {
+
+
+                                switch (Global.Config.TypeSave)
+                                {
+                                    case 1:
+                                        Cv2.PyrDown(matRs, matRs);
+                                        Cv2.PyrDown(matRs, matRs);
+                                        Cv2.PyrDown(raw, raw);
+                                        Cv2.PyrDown(raw, raw);
+                                        break;
+                                    case 2:
+                                        Cv2.PyrDown(matRs, matRs);
+                                        Cv2.PyrDown(raw, raw);
+                                        break;
+                                }
+
+                                if (Global.Config.IsSaveRaw)
+                                    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Hour + ".png", raw);
+                                if (Global.Config.IsSaveRS)
+                                    Cv2.ImWrite(pathRS + "//" + Global.Project + "_" + Results.ToString() + "_" + Hour + ".png", matRs);
+                                matRs.Dispose();
+                            }
+                        }
+                        //  bmResult.Save("Result"+ IndexCCD + ".png");
                     }
                     canvas = null; // tránh dispose ở finally
-                    //// 5) Dùng chính canvas cho UI (không clone lại)
-                    //if (imgView.IsHandleCreated && !imgView.IsDisposed)
-                    //{
-                    //    if (imgView.InvokeRequired)
-                    //    {
-                    //        var uiBmp = canvas; // giữ canvas cho UI
-                    //        canvas = null; // tránh dispose ở finally
-                    //        imgView.BeginInvoke(new Action(() =>
-                    //        {
-                    //            if (imgView.IsDisposed) { uiBmp.Dispose(); return; }
-                    //            var oldUi = imgView.Image;
-                    //            imgView.Image = uiBmp;
-                    //            oldUi?.Dispose();
-                    //        }));
-                    //    }
-                    //    else
-                    //    {
-                    //        var oldUi = imgView.Image;
-                    //        imgView.Image = canvas;
-                    //        oldUi?.Dispose();
-                    //        canvas = null; // tránh dispose ở finally
-                    //    }
-                    //}
+                 
 
                     // 6) Xác nhận buffer hiển thị
                     lock (_swapLock)

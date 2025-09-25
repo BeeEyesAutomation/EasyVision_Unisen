@@ -57,9 +57,9 @@ namespace BeeCore
 
         public static int currentTrig = 0;
        
-        public static  List <Bitmap> listRaw = new List<Bitmap>();
-      public static Bitmap bmRaw = null;
-        public static Bitmap bmResult = null;
+      //  public static  List <Bitmap> listRaw = new List<Bitmap>();
+      //public static Bitmap bmRaw = null;
+      //  public static Bitmap bmResult = null;
         public static IntPtr intPtrRaw;
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern void SetSrc( IntPtr data, int image_rows, int image_cols, MatType matType);
@@ -417,6 +417,39 @@ namespace BeeCore
             T temp = lhs;
             lhs = rhs;
             rhs = temp;
+        }
+        public static Mat CropRotatedRect(Mat source, RectRotate rot)
+        {
+
+            MatType TypeMat = source.Type();
+            Mat matResult = new Mat();
+
+            Point2f pCenter = new Point2f(rot._PosCenter.X, rot._PosCenter.Y);
+            Size2f rect_size = new Size2f(rot._rect.Size.Width, rot._rect.Size.Height);
+            RotatedRect rot2 = new RotatedRect(pCenter, rect_size, rot._rectRotation);
+            double angle = rot._rectRotation;
+            if (angle < -45)
+            {
+                angle += 90.0;
+
+                Swap(ref rect_size.Width, ref rect_size.Height);
+            }
+            InputArray M = Cv2.GetRotationMatrix2D(rot2.Center, angle, 1.0);
+            Mat mCrop = new Mat();
+            Mat crop1 = new Mat();
+            try
+            {
+               
+                Cv2.WarpAffine(source, crop1, M, source.Size(), InterpolationFlags.Cubic);
+
+                Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, mCrop);
+               
+            }
+            catch (Exception ex)
+            {
+                //  MessageBox.Show(ex.Message);
+            }
+            return mCrop;
         }
         public static Mat CropRotatedRect(Mat source, RectRotate rot, RectRotate rotMask)
         {

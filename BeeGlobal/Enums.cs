@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    //Corner
+    public enum LinePairStrategy
+    {
+        //BothMaxInliers,        // (cũ) 2 line inliers cao & gần 90°
+        StrongPlusOrth,        // line mạnh nhất + line còn lại gần 90° nhất (từ candidates)
+        StrongPlusContourOrth  // line mạnh nhất + line còn lại fit từ contour và ÉP 90° chính xác
+    }
     public enum FillMode1 { Cover, Contain }
     public enum PLCStatus
     {
@@ -181,18 +188,14 @@ namespace BeeGlobal
         Color_Area = 5,
         MatchingShape = 2,
         Crop = 17,
-      
-       
         Width=6,
         Circle = 15,
         Measure = 14,
-
         Learning = 12,
         OCR =10,
         BarCode=11, 
-        
-        
-      
+        Corner=18,
+        VisualMatch=19,
     }
     public enum TypeOCR
     {

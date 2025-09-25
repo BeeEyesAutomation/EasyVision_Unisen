@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddTool.cs" />
+    <Compile Include="Algorithm\FilletCornerMeasure.cs" />
     <Compile Include="Algorithm\FilterItem.cs" />
     <Compile Include="Algorithm\Filters.cs" />
     <Compile Include="Algorithm\Gap.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\CameraIOFast.cs" />
+    <Compile Include="Func\ComboBoxExtensions.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
@@ -168,6 +170,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Unit\OKNG.cs" />
+    <Compile Include="Unit\MeasureCorner.cs" />
+    <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">
@@ -247,6 +251,10 @@
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
       <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ColorPixelsCPP\ColorPixelsCPP.vcxproj">
+      <Project>{d7b4bdf8-544d-4d89-8253-e138af8f65ef}</Project>
+      <Name>ColorPixels</Name>
     </ProjectReference>
     <ProjectReference Include="..\PylonCli\PylonCli.vcxproj">
       <Project>{04dea65d-1a93-433a-85ae-7366915067cf}</Project>

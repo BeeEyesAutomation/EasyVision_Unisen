@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,18 +37,27 @@ namespace BeeCore.Funtion
                 {
                     if (ListPropety.Count() == 0)
                         continue;
-                    Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Regular);
+                   // Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Regular);
                     if (BeeCore.Common.listCamera[0] == null)
-                        Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " (No Camera)";
+                        Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " (No Camera)";
                     else
                     {
                         int Len = BeeCore.Common.listCamera[i].Para.Name.Length;
                         if (Len > 20)
-                            Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name.Substring(0, 20) + "...";
+                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name.Substring(0, 20) + "...";
                         else
-                            Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name;
+                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name;
                     }
+                    
+
+                    Global.ToolSettings.Labels[i].Height = 40;
+
+                    Global.ToolSettings.Labels[i].Dock = DockStyle.Fill;
+                    Global.ToolSettings.Labels[i].Margin = new Padding(5, 15, 5,0);
                     control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+                    control.RowCount = row + 1;
+                    //  Global.ToolSettings.Labels[i].Margin = new Padding(2, 15, 2, 0);
+                    control.Controls.Add(Global.ToolSettings.Labels[i], 0, row);
                     row++;
                     foreach (PropetyTool tool in ListPropety)
                     {
@@ -101,26 +111,26 @@ namespace BeeCore.Funtion
                 for (int i = 0; i < Global.ParaCommon.NumTrig; i++)
                 {
                     
-                  Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Bold);
+                 // Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Bold);
                     if (BeeCore.Common.listCamera[0] == null)
                         Global.ToolSettings.Labels[i].Text = "Follow Chart "+i+" (No Camera)";
                     else
                     {
                         int Len = BeeCore.Common.listCamera[0].Para.Name.Length;
                         if (Len > 20)
-                            Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name.Substring(0, 20)+"...";
+                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name.Substring(0, 20)+"...";
                         else
-                            Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name;
+                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name;
                     }    
                        
 
-                    Global.ToolSettings.Labels[i].AutoSize = true;
+                    Global.ToolSettings.Labels[i].Height = 40;
                  
                     Global.ToolSettings.Labels[i].Dock = DockStyle.Fill;
-
+                    Global.ToolSettings.Labels[i].Margin = new Padding(5, 15, 5, 0);
                     control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                     control.RowCount = row + 1;
-                    Global.ToolSettings.Labels[i].Margin = new Padding(2, 15, 2, 0);
+                  //  Global.ToolSettings.Labels[i].Margin = new Padding(2, 15, 2, 0);
                     control.Controls.Add(Global.ToolSettings.Labels[i], 0, row);
                     row++;
                     foreach (PropetyTool tool in BeeCore.Common.PropetyTools[0])
@@ -214,9 +224,9 @@ namespace BeeCore.Funtion
                 case TypeImg.Raw:
                     bmShow =matRaw.ToBitmap();
                     break;
-                case TypeImg.Result:
-                    bmShow = BeeCore.Common.bmResult;
-                    break;
+                //case TypeImg.Result:
+                //    bmShow = BeeCore.Common.bmResult;
+                //    break;
             }
             using (Bitmap bm = new Bitmap(bmShow))
             {

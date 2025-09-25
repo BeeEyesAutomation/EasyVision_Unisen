@@ -933,6 +933,7 @@ namespace BeeUi
             if(Global.ParaCommon.SizeCCD.Width==0)
             {
                 if (!Global.IsLive)
+                    if(BeeCore.Common.listCamera[Global.IndexChoose]!=null)
                     Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();//
             }    
             int index = 0;
@@ -1987,7 +1988,7 @@ namespace BeeUi
 
         int DelayTrig;
         Graphics graphicsOld;
-        public void SQL_Insert(DateTime time, String model, int Qty, int Total, String Status, Mat raw,Bitmap result)
+        public void SQL_Insert(DateTime time, String model, int Qty, int Total, String Status)
         {
 
             try
@@ -2000,40 +2001,14 @@ namespace BeeUi
                 String Hour = DateTime.Now.ToString("HHmmss");
                 pathRaw = "Report//" + date + "//Raw";
                 pathRS = "Report//" + date + "//Result";
-                if (!Directory.Exists(pathRaw))
-                {
-
-                    Directory.CreateDirectory(pathRaw);
-                }
-                if (!Directory.Exists(pathRS))
-                {
-                    Directory.CreateDirectory(pathRS);
-                }
-                Mat matRs = result.ToMat();
-                switch (Global.Config.TypeSave)
-                {
-                    case 1:
-                        Cv2.PyrDown(matRs, matRs);
-                        Cv2.PyrDown(matRs, matRs);
-                        Cv2.PyrDown(raw, raw);
-                        Cv2.PyrDown(raw, raw);
-                        break;
-                    case 2:
-                        Cv2.PyrDown(matRs, matRs);
-                        Cv2.PyrDown(raw, raw);
-                        break;
-                }
-                if (Global.Config.IsSaveRaw)
-                    Cv2.ImWrite(pathRaw + "//" + model + "_"+ Status+ "_"+ Hour + ".png", raw);
-                if (Global.Config.IsSaveRS)
-                    Cv2.ImWrite(pathRS + "//" + model + "_" + Status + "_" + Hour + ".png", matRs);
-                matRs.Release();
+               
+            
                 try
                 {
                     SqlCommand command = new SqlCommand();
                     command.Connection = G.cnn;
-                    String Model = Properties.Settings.Default.programCurrent.Replace(".prog", "");
-                    String Sql = "";
+                  
+                 
                     command.CommandText = "INSERT into Report (Date,Model,Qty,Total,Status,Raw,Result) VALUES(@Date,@Model,@Qty,@Total,@Status,@Raw,@Result)";
                     command.Prepare();
                     command.Parameters.Add("@Date", SqlDbType.DateTime).Value = DateTime.Now;             // 1
@@ -2041,8 +2016,8 @@ namespace BeeUi
                     command.Parameters.Add("@Qty", SqlDbType.Int).Value = Qty;                                             // 4
                     command.Parameters.Add("@Total", SqlDbType.Int).Value = Total;                                        // 5
                     command.Parameters.AddWithValue("@Status", Status);                                           // 6
-                    command.Parameters.AddWithValue("@Raw", pathRaw + "//" + Model + "_" + Hour + ".png");// imageToByteArray(raw);         // 7
-                    command.Parameters.AddWithValue("@Result", pathRS + "//" + Model + "_" + Hour + ".png"); ;   // 8
+                    command.Parameters.AddWithValue("@Raw", pathRaw + "//" + Global.Project + "_" + Hour + ".png");// imageToByteArray(raw);         // 7
+                    command.Parameters.AddWithValue("@Result", pathRS + "//" + Global.Project + "_" + Hour + ".png"); ;   // 8
                     command.ExecuteNonQuery();
                 }
                 catch (Exception ex)
@@ -2212,118 +2187,118 @@ namespace BeeUi
             }
             return dst;
         }
-        public void RenderAndDisplay()
-        {
-            if (_disposed) return;
+        //public void RenderAndDisplay()
+        //{
+        //    if (_disposed) return;
 
-            // 1) Lấy frame nguồn
-            Mat src;
-            lock (_camLock)
-            {
-                src = BeeCore.Common.listCamera[Global.IndexChoose].matRaw?.Clone();
-            }
-            if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
-            {
-                src?.Dispose();
-                return;
-            }
+        //    // 1) Lấy frame nguồn
+        //    Mat src;
+        //    lock (_camLock)
+        //    {
+        //        src = BeeCore.Common.listCamera[Global.IndexChoose].matRaw?.Clone();
+        //    }
+        //    if (src == null || src.Empty() || src.Width <= 0 || src.Height <= 0)
+        //    {
+        //        src?.Dispose();
+        //        return;
+        //    }
 
-            // 2) Chuẩn bị buffer
-            Mat working;
-            lock (_swapLock)
-            {
-                working = EnsureWorkingBuffer(src);
-                src.CopyTo(working);
-            }
-            src.Dispose();
+        //    // 2) Chuẩn bị buffer
+        //    Mat working;
+        //    lock (_swapLock)
+        //    {
+        //        working = EnsureWorkingBuffer(src);
+        //        src.CopyTo(working);
+        //    }
+        //    src.Dispose();
 
-            // 3) Convert -> Bitmap & vẽ overlay
-            using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
-            {
-                Bitmap canvas = null;
-                try
-                {
-                    canvas = BitmapConverter.ToBitmap(bgr);
+        //    // 3) Convert -> Bitmap & vẽ overlay
+        //    using (Mat bgr = EnsureBgr8Uc3AliasOrConvert(working, out bool createdTemp))
+        //    {
+        //        Bitmap canvas = null;
+        //        try
+        //        {
+        //            canvas = BitmapConverter.ToBitmap(bgr);
 
-                    using (var g = Graphics.FromImage(canvas))
-                    using (var xf = new Matrix())
-                    {
-                        g.SmoothingMode = SmoothingMode.None;
-                        g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                        g.CompositingQuality = CompositingQuality.HighSpeed;
-                        g.PixelOffsetMode = PixelOffsetMode.Half;
+        //            using (var g = Graphics.FromImage(canvas))
+        //            using (var xf = new Matrix())
+        //            {
+        //                g.SmoothingMode = SmoothingMode.None;
+        //                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+        //                g.CompositingQuality = CompositingQuality.HighSpeed;
+        //                g.PixelOffsetMode = PixelOffsetMode.Half;
 
-                        xf.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                        float s = 1.0f;
-                        try
-                        {
-                            var pi = imgView.GetType().GetProperty("Zoom");
-                            if (pi != null) s = Convert.ToSingle(pi.GetValue(imgView)) / 100f;
-                        }
-                        catch { }
-                        xf.Scale(s, s);
-                        g.Transform = xf;
+        //                xf.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        //                float s = 1.0f;
+        //                try
+        //                {
+        //                    var pi = imgView.GetType().GetProperty("Zoom");
+        //                    if (pi != null) s = Convert.ToSingle(pi.GetValue(imgView)) / 100f;
+        //                }
+        //                catch { }
+        //                xf.Scale(s, s);
+        //                g.Transform = xf;
 
-                        var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
-                        foreach (var tool in tools)
-                            if (tool.UsedTool != UsedTool.NotUsed)
-                                tool.Propety.DrawResult(g);
+        //                var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
+        //                foreach (var tool in tools)
+        //                    if (tool.UsedTool != UsedTool.NotUsed)
+        //                        tool.Propety.DrawResult(g);
 
-                        //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                        //     if (!Global.TotalOK)
-                        //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                        //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
-                    }
+        //                //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        //                //     if (!Global.TotalOK)
+        //                //    Content = "NG Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        //                //g.DrawString(Content, new Font("Arial", 12, FontStyle.Regular),new SolidBrush(Color.WhiteSmoke),new Point(10,10));
+        //            }
 
-                    // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
-                    Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
-                    using (var gCopy = Graphics.FromImage(storeCopy))
-                    {
-                        gCopy.DrawImageUnscaled(canvas, 0, 0);
-                    }
+        //            // 4) Tạo bmResult bằng copy pixel data trực tiếp từ canvas
+        //            Bitmap storeCopy = new Bitmap(canvas.Width, canvas.Height, canvas.PixelFormat);
+        //            using (var gCopy = Graphics.FromImage(storeCopy))
+        //            {
+        //                gCopy.DrawImageUnscaled(canvas, 0, 0);
+        //            }
 
-                    lock (_bmLock)
-                    {
-                        BeeCore.Common.bmResult?.Dispose();
-                        BeeCore.Common.bmResult = storeCopy;
-                    }
+        //            lock (_bmLock)
+        //            {
+        //                BeeCore.Common.bmResult?.Dispose();
+        //                BeeCore.Common.bmResult = storeCopy;
+        //            }
 
-                    // 5) Dùng chính canvas cho UI (không clone lại)
-                    if (imgView.IsHandleCreated && !imgView.IsDisposed)
-                    {
-                        if (imgView.InvokeRequired)
-                        {
-                            var uiBmp = canvas; // giữ canvas cho UI
-                            canvas = null; // tránh dispose ở finally
-                            imgView.BeginInvoke(new Action(() =>
-                            {
-                                if (imgView.IsDisposed) { uiBmp.Dispose(); return; }
-                                var oldUi = imgView.Image;
-                                imgView.Image = uiBmp;
-                                oldUi?.Dispose();
-                            }));
-                        }
-                        else
-                        {
-                            var oldUi = imgView.Image;
-                            imgView.Image = canvas;
-                            oldUi?.Dispose();
-                            canvas = null; // tránh dispose ở finally
-                        }
-                    }
+        //            // 5) Dùng chính canvas cho UI (không clone lại)
+        //            if (imgView.IsHandleCreated && !imgView.IsDisposed)
+        //            {
+        //                if (imgView.InvokeRequired)
+        //                {
+        //                    var uiBmp = canvas; // giữ canvas cho UI
+        //                    canvas = null; // tránh dispose ở finally
+        //                    imgView.BeginInvoke(new Action(() =>
+        //                    {
+        //                        if (imgView.IsDisposed) { uiBmp.Dispose(); return; }
+        //                        var oldUi = imgView.Image;
+        //                        imgView.Image = uiBmp;
+        //                        oldUi?.Dispose();
+        //                    }));
+        //                }
+        //                else
+        //                {
+        //                    var oldUi = imgView.Image;
+        //                    imgView.Image = canvas;
+        //                    oldUi?.Dispose();
+        //                    canvas = null; // tránh dispose ở finally
+        //                }
+        //            }
 
-                    // 6) Xác nhận buffer hiển thị
-                    lock (_swapLock)
-                    {
-                        _displayMat = working;
-                    }
-                }
-                finally
-                {
-                    canvas?.Dispose();
-                }
-            }
-        }
+        //            // 6) Xác nhận buffer hiển thị
+        //            lock (_swapLock)
+        //            {
+        //                _displayMat = working;
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            canvas?.Dispose();
+        //        }
+        //    }
+        //}
 
         //public void RenderAndDisplay()
         //{
@@ -2670,45 +2645,49 @@ namespace BeeUi
                    
                         if (BeeCore.Common.listCamera[0] == null) return;
                         BeeCore.Common.listCamera[0].DrawResult();
-                  
-                    switch(Global.TriggerNum)
+                    Results results = Global.TotalOK==true ? Results.OK : Results.NG;
+                    switch (Global.TriggerNum)
                     {
                         
                         case TriggerNum.Trigger1:
-                            Global.ToolSettings.Labels[0].ForeColor = Color.FromArgb(114,114,114);
-                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[0].Results = results;
+                            Global.ToolSettings.Labels[0].BackColor = Color.FromArgb(246, 204, 120);
+                            Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                             if (_renderer.Count() < 1)
                                 _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
                                 _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                                 break;
                         case TriggerNum.Trigger2:
-                            Global.ToolSettings.Labels[1].ForeColor = Color.FromArgb(114, 114, 114);
-                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[1].Results = results;
+                            Global.ToolSettings.Labels[1].BackColor = Color.FromArgb(246, 204, 120);
+                            Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                             if (_renderer.Count() < 2)
                                 _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
                                 _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             break;
                         case TriggerNum.Trigger3:
-                            Global.ToolSettings.Labels[2].ForeColor = Color.FromArgb(114, 114, 114);
-                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[3].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].Results = results;
+                            Global.ToolSettings.Labels[2].BackColor = Color.FromArgb(246, 204, 120);
+                            Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
                             if (_renderer.Count() < 3)
                                 _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
                                 _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             break;
                         case TriggerNum.Trigger4:
-                            Global.ToolSettings.Labels[3].ForeColor = Color.FromArgb(114, 114, 114);
-                            Global.ToolSettings.Labels[1].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[2].ForeColor = Color.LightGray;
-                            Global.ToolSettings.Labels[0].ForeColor = Color.LightGray;
+                            Global.ToolSettings.Labels[3].Results = results;
+                            Global.ToolSettings.Labels[3].BackColor = Color.FromArgb(246, 204, 120);
+                            Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
+                            Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
                             if (_renderer.Count() < 4)
                                 _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
                             else
@@ -2721,7 +2700,7 @@ namespace BeeUi
                     Global.ParaCommon.SizeCCD = _renderer.szImage;
                 Shows.Full(imgView, Global.ParaCommon.SizeCCD);
                
-                _renderer.Render();
+                //_renderer.Render();
                 // RenderAndDisplay();
                 if (Global.TotalOK)
                     {
@@ -3325,9 +3304,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             if (G.cnn.State == ConnectionState.Closed)
                 G.ucReport.Connect_SQL();
             if (Global.TotalOK)
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, "OK", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, "OK");
             else
-                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, "NG", BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone(), BeeCore.Common.bmResult);
+                SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, "NG");
 
         }
         int numErrPort = 0;
@@ -4011,31 +3990,19 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                             return;    // exit the Task.Run delegate
                         }
                     }
-                 //   await Task.Delay(50, _cts.Token);
                 }
             }, _cts.Token);
          //   timer.Stop();
             Global.TotalOK = true;
-            int indexTool = 0;
-            foreach ( List< PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
-            {
-                foreach (PropetyTool PropetyTool in PropetyTools)
+            foreach ( Camera camera in BeeCore.Common.listCamera)
+            {if (camera == null)
+                    continue;
+               camera. SumResult();
+                if(camera.Results==Results.NG)
                 {
-                    if (PropetyTool.UsedTool == UsedTool.NotUsed)
-                    {
-
-                        indexTool++;
-                        continue;
-                    }
-                    if (PropetyTool.Results == Results.NG)
-                    {
-                        Global.TotalOK = false;
-                        break;
-                    }
-
-                }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                    Global.TotalOK = false;
                     break;
+                }    
             }
             if (Global.IsByPassResult)
                 Global.StatusProcessing = StatusProcessing.Drawing;

@@ -104,6 +104,12 @@
     </Compile>
     <Compile Include="FileName.cs" />
     <Compile Include="FrameRenderer.cs" />
+    <Compile Include="General\InforGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="General\InforGroup.Designer.cs">
+      <DependentUpon>InforGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="GroupControl\OK_Cancel.cs">
       <SubType>UserControl</SubType>
@@ -218,6 +224,18 @@
     <Compile Include="Tool\ToolOKNG.Designer.cs">
       <DependentUpon>ToolOKNG.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolCorner.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCorner.Designer.cs">
+      <DependentUpon>ToolCorner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolVisualMatch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolVisualMatch.Designer.cs">
+      <DependentUpon>ToolVisualMatch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -252,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Custom\TrackBar2.resx">
       <DependentUpon>TrackBar2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\InforGroup.resx">
+      <DependentUpon>InforGroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GroupControl\OK_Cancel.resx">
       <DependentUpon>OK_Cancel.cs</DependentUpon>
@@ -307,6 +328,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolOKNG.resx">
       <DependentUpon>ToolOKNG.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolCorner.resx">
+      <DependentUpon>ToolCorner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolVisualMatch.resx">
+      <DependentUpon>ToolVisualMatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>
@@ -574,6 +601,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\contentOKNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_WIDTH_TOOL_LARGE_E_32BIT1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rounded Corner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VisualMatch25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contentVisualMatch.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
