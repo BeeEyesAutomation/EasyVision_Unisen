@@ -146,8 +146,12 @@ namespace BeeCore
             ColorPixel = new ColorPixel();
             rotCrop = null;
             rotMask = null;
-            matTemp = bmRaw.ToMat();
-            LearnPattern(matTemp, true);
+            if(bmRaw != null)
+            {
+                matTemp = bmRaw.ToMat();
+                LearnPattern(matTemp, true);
+            }
+           
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 

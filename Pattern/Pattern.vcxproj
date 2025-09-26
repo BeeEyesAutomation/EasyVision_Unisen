@@ -125,11 +125,15 @@
     <ClInclude Include="..\ColorPixelsCPP\ColorPixel.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="Pattern.h" />
+    <ClInclude Include="ThreadPitchCLI.h" />
+    <ClInclude Include="ThreadPitchCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ColorPixelsCPP\ColorPixels.cpp" />
     <ClCompile Include="Global.cpp" />
     <ClCompile Include="Pattern.cpp" />
+    <ClCompile Include="ThreadPitchCLI.cpp" />
+    <ClCompile Include="ThreadPitchCore.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

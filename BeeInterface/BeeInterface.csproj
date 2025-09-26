@@ -236,6 +236,12 @@
     <Compile Include="Tool\ToolVisualMatch.Designer.cs">
       <DependentUpon>ToolVisualMatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolPitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolPitch.Designer.cs">
+      <DependentUpon>ToolPitch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -334,6 +340,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolVisualMatch.resx">
       <DependentUpon>ToolVisualMatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolPitch.resx">
+      <DependentUpon>ToolPitch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>
@@ -613,6 +622,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\contentVisualMatch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_PITCH_TOOL_LARGE_E_32BIT1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

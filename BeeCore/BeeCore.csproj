@@ -172,6 +172,7 @@
     <Compile Include="Unit\OKNG.cs" />
     <Compile Include="Unit\MeasureCorner.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
+    <Compile Include="Unit\Pitch.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">

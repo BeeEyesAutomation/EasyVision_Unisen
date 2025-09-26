@@ -200,6 +200,9 @@ namespace BeeInterface
                 case TypeTool.VisualMatch:
                     control = new ToolVisualMatch();
                     break;
+                case TypeTool.Pitch:
+                    control = new ToolPitch();
+                    break;
                 default:
                     return null;
                     break;

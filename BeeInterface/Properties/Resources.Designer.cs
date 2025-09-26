@@ -363,6 +363,16 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap contentPitch {
+            get {
+                object obj = ResourceManager.GetObject("contentPitch", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap contentPosition_Adjustment {
             get {
                 object obj = ResourceManager.GetObject("contentPosition_Adjustment", resourceCulture);
