@@ -582,15 +582,15 @@ namespace BeeInterface
             {
                 var name = Path.GetFileName(f);
                 return name.IndexOf("_OK", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                       name.IndexOf(" OK", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                       name.EndsWith("OK", StringComparison.OrdinalIgnoreCase);
+                       name.IndexOf("_OK", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       name.EndsWith("_OK", StringComparison.OrdinalIgnoreCase);
             }
             bool IsNG(string f)
             {
                 var name = Path.GetFileName(f);
                 return name.IndexOf("_NG", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                       name.IndexOf(" NG", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                       name.EndsWith("NG", StringComparison.OrdinalIgnoreCase);
+                       name.IndexOf("_NG", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                       name.EndsWith("_NG", StringComparison.OrdinalIgnoreCase);
             }
 
             bool TimeInRange(string f)

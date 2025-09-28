@@ -33,38 +33,38 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cameras));
-            this.pCamera = new System.Windows.Forms.TableLayoutPanel();
+            this.Lay = new System.Windows.Forms.TableLayoutPanel();
             this.btnFlowChart = new BeeInterface.RJButton();
-            this.btnSettingPLC = new BeeInterface.RJButton();
+            this.btnHardware = new BeeInterface.RJButton();
             this.btnLog = new BeeInterface.RJButton();
             this.btnHistory = new BeeInterface.RJButton();
-            this.pCamera.SuspendLayout();
+            this.Lay.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pCamera
+            // Lay
             // 
-            this.pCamera.AutoScroll = true;
-            this.pCamera.AutoSize = true;
-            this.pCamera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.pCamera.ColumnCount = 4;
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pCamera.Controls.Add(this.btnFlowChart, 0, 0);
-            this.pCamera.Controls.Add(this.btnSettingPLC, 1, 0);
-            this.pCamera.Controls.Add(this.btnLog, 3, 0);
-            this.pCamera.Controls.Add(this.btnHistory, 2, 0);
-            this.pCamera.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pCamera.Location = new System.Drawing.Point(0, 0);
-            this.pCamera.Margin = new System.Windows.Forms.Padding(1);
-            this.pCamera.Name = "pCamera";
-            this.pCamera.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.pCamera.RowCount = 1;
-            this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pCamera.Size = new System.Drawing.Size(578, 60);
-            this.pCamera.TabIndex = 31;
+            this.Lay.AutoScroll = true;
+            this.Lay.AutoSize = true;
+            this.Lay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.Lay.ColumnCount = 4;
+            this.Lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.Lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.Lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.Lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.Lay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.Lay.Controls.Add(this.btnFlowChart, 0, 0);
+            this.Lay.Controls.Add(this.btnHistory, 1, 0);
+            this.Lay.Controls.Add(this.btnLog, 3, 0);
+            this.Lay.Controls.Add(this.btnHardware, 2, 0);
+            this.Lay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Lay.Location = new System.Drawing.Point(0, 0);
+            this.Lay.Margin = new System.Windows.Forms.Padding(1);
+            this.Lay.Name = "Lay";
+            this.Lay.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.Lay.RowCount = 1;
+            this.Lay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.Lay.Size = new System.Drawing.Size(451, 63);
+            this.Lay.TabIndex = 31;
             // 
             // btnFlowChart
             // 
@@ -105,7 +105,7 @@ namespace BeeUi.Unit
             this.btnFlowChart.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
             this.btnFlowChart.ImageTintHover = System.Drawing.Color.Empty;
             this.btnFlowChart.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnFlowChart.ImageTintOpacity = 1F;
+            this.btnFlowChart.ImageTintOpacity = 0.5F;
             this.btnFlowChart.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnFlowChart.IsCLick = true;
             this.btnFlowChart.IsNotChange = false;
@@ -115,7 +115,7 @@ namespace BeeUi.Unit
             this.btnFlowChart.Margin = new System.Windows.Forms.Padding(0);
             this.btnFlowChart.Multiline = false;
             this.btnFlowChart.Name = "btnFlowChart";
-            this.btnFlowChart.Size = new System.Drawing.Size(144, 55);
+            this.btnFlowChart.Size = new System.Drawing.Size(112, 58);
             this.btnFlowChart.TabIndex = 32;
             this.btnFlowChart.Text = "Chart";
             this.btnFlowChart.TextColor = System.Drawing.Color.Black;
@@ -123,62 +123,62 @@ namespace BeeUi.Unit
             this.btnFlowChart.UseVisualStyleBackColor = false;
             this.btnFlowChart.Click += new System.EventHandler(this.btnCamera1_Click);
             // 
-            // btnSettingPLC
+            // btnHardware
             // 
-            this.btnSettingPLC.AutoFont = true;
-            this.btnSettingPLC.AutoFontHeightRatio = 0.8F;
-            this.btnSettingPLC.AutoFontMax = 100F;
-            this.btnSettingPLC.AutoFontMin = 8F;
-            this.btnSettingPLC.AutoFontWidthRatio = 1F;
-            this.btnSettingPLC.AutoImage = true;
-            this.btnSettingPLC.AutoImageMaxRatio = 0.7F;
-            this.btnSettingPLC.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnSettingPLC.AutoImageTint = true;
-            this.btnSettingPLC.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnSettingPLC.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnSettingPLC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnSettingPLC.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.btnSettingPLC.BorderRadius = 0;
-            this.btnSettingPLC.BorderSize = 0;
-            this.btnSettingPLC.ClickBotColor = System.Drawing.Color.WhiteSmoke;
-            this.btnSettingPLC.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnSettingPLC.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnSettingPLC.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnSettingPLC.Corner = BeeGlobal.Corner.None;
-            this.btnSettingPLC.DebounceResizeMs = 16;
-            this.btnSettingPLC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSettingPLC.FlatAppearance.BorderSize = 0;
-            this.btnSettingPLC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettingPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.btnSettingPLC.ForeColor = System.Drawing.Color.Black;
-            this.btnSettingPLC.Image = ((System.Drawing.Image)(resources.GetObject("btnSettingPLC.Image")));
-            this.btnSettingPLC.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnSettingPLC.ImageDisabled = null;
-            this.btnSettingPLC.ImageHover = null;
-            this.btnSettingPLC.ImageNormal = null;
-            this.btnSettingPLC.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnSettingPLC.ImagePressed = null;
-            this.btnSettingPLC.ImageTextSpacing = 2;
-            this.btnSettingPLC.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnSettingPLC.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnSettingPLC.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnSettingPLC.ImageTintOpacity = 0.5F;
-            this.btnSettingPLC.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnSettingPLC.IsCLick = false;
-            this.btnSettingPLC.IsNotChange = false;
-            this.btnSettingPLC.IsRect = false;
-            this.btnSettingPLC.IsUnGroup = false;
-            this.btnSettingPLC.Location = new System.Drawing.Point(144, 5);
-            this.btnSettingPLC.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSettingPLC.Multiline = false;
-            this.btnSettingPLC.Name = "btnSettingPLC";
-            this.btnSettingPLC.Size = new System.Drawing.Size(144, 55);
-            this.btnSettingPLC.TabIndex = 38;
-            this.btnSettingPLC.Text = "Hardware";
-            this.btnSettingPLC.TextColor = System.Drawing.Color.Black;
-            this.btnSettingPLC.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnSettingPLC.UseVisualStyleBackColor = false;
-            this.btnSettingPLC.Click += new System.EventHandler(this.btnSettingPLC_Click);
+            this.btnHardware.AutoFont = true;
+            this.btnHardware.AutoFontHeightRatio = 0.8F;
+            this.btnHardware.AutoFontMax = 100F;
+            this.btnHardware.AutoFontMin = 8F;
+            this.btnHardware.AutoFontWidthRatio = 1F;
+            this.btnHardware.AutoImage = true;
+            this.btnHardware.AutoImageMaxRatio = 0.7F;
+            this.btnHardware.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnHardware.AutoImageTint = true;
+            this.btnHardware.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnHardware.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnHardware.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnHardware.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnHardware.BorderRadius = 0;
+            this.btnHardware.BorderSize = 0;
+            this.btnHardware.ClickBotColor = System.Drawing.Color.WhiteSmoke;
+            this.btnHardware.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnHardware.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnHardware.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnHardware.Corner = BeeGlobal.Corner.None;
+            this.btnHardware.DebounceResizeMs = 16;
+            this.btnHardware.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnHardware.FlatAppearance.BorderSize = 0;
+            this.btnHardware.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHardware.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.btnHardware.ForeColor = System.Drawing.Color.Black;
+            this.btnHardware.Image = ((System.Drawing.Image)(resources.GetObject("btnHardware.Image")));
+            this.btnHardware.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnHardware.ImageDisabled = null;
+            this.btnHardware.ImageHover = null;
+            this.btnHardware.ImageNormal = null;
+            this.btnHardware.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnHardware.ImagePressed = null;
+            this.btnHardware.ImageTextSpacing = 2;
+            this.btnHardware.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnHardware.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnHardware.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnHardware.ImageTintOpacity = 0.5F;
+            this.btnHardware.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnHardware.IsCLick = false;
+            this.btnHardware.IsNotChange = false;
+            this.btnHardware.IsRect = false;
+            this.btnHardware.IsUnGroup = false;
+            this.btnHardware.Location = new System.Drawing.Point(224, 5);
+            this.btnHardware.Margin = new System.Windows.Forms.Padding(0);
+            this.btnHardware.Multiline = false;
+            this.btnHardware.Name = "btnHardware";
+            this.btnHardware.Size = new System.Drawing.Size(112, 58);
+            this.btnHardware.TabIndex = 38;
+            this.btnHardware.Text = "Hardware";
+            this.btnHardware.TextColor = System.Drawing.Color.Black;
+            this.btnHardware.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnHardware.UseVisualStyleBackColor = false;
+            this.btnHardware.Click += new System.EventHandler(this.btnSettingPLC_Click);
             // 
             // btnLog
             // 
@@ -225,11 +225,11 @@ namespace BeeUi.Unit
             this.btnLog.IsNotChange = false;
             this.btnLog.IsRect = true;
             this.btnLog.IsUnGroup = false;
-            this.btnLog.Location = new System.Drawing.Point(432, 5);
+            this.btnLog.Location = new System.Drawing.Point(336, 5);
             this.btnLog.Margin = new System.Windows.Forms.Padding(0);
             this.btnLog.Multiline = false;
             this.btnLog.Name = "btnLog";
-            this.btnLog.Size = new System.Drawing.Size(146, 55);
+            this.btnLog.Size = new System.Drawing.Size(115, 58);
             this.btnLog.TabIndex = 36;
             this.btnLog.Text = "Logs";
             this.btnLog.TextColor = System.Drawing.Color.Black;
@@ -276,17 +276,17 @@ namespace BeeUi.Unit
             this.btnHistory.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
             this.btnHistory.ImageTintHover = System.Drawing.Color.Empty;
             this.btnHistory.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnHistory.ImageTintOpacity = 1F;
+            this.btnHistory.ImageTintOpacity = 0.5F;
             this.btnHistory.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnHistory.IsCLick = false;
             this.btnHistory.IsNotChange = false;
             this.btnHistory.IsRect = true;
             this.btnHistory.IsUnGroup = false;
-            this.btnHistory.Location = new System.Drawing.Point(288, 5);
+            this.btnHistory.Location = new System.Drawing.Point(112, 5);
             this.btnHistory.Margin = new System.Windows.Forms.Padding(0);
             this.btnHistory.Multiline = false;
             this.btnHistory.Name = "btnHistory";
-            this.btnHistory.Size = new System.Drawing.Size(144, 55);
+            this.btnHistory.Size = new System.Drawing.Size(112, 58);
             this.btnHistory.TabIndex = 35;
             this.btnHistory.Text = "History";
             this.btnHistory.TextColor = System.Drawing.Color.Black;
@@ -299,22 +299,22 @@ namespace BeeUi.Unit
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.Controls.Add(this.pCamera);
+            this.Controls.Add(this.Lay);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "Cameras";
-            this.Size = new System.Drawing.Size(578, 60);
-            this.pCamera.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(451, 63);
+            this.Lay.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private  System.Windows.Forms.TableLayoutPanel pCamera;
+        private  System.Windows.Forms.TableLayoutPanel Lay;
         public RJButton btnFlowChart;
         public RJButton btnHistory;
         public RJButton btnLog;
-        public RJButton btnSettingPLC;
+        public RJButton btnHardware;
     }
 }

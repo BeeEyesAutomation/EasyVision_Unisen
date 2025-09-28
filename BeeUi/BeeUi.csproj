@@ -178,12 +178,6 @@
     <Compile Include="ForrmAlarm.Designer.cs">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormCalib.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormCalib.Designer.cs">
-      <DependentUpon>FormCalib.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,12 +262,6 @@
     </Compile>
     <Compile Include="Unit\Eraser.Designer.cs">
       <DependentUpon>Eraser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Unit\ExtractColor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Unit\ExtractColor.Designer.cs">
-      <DependentUpon>ExtractColor.cs</DependentUpon>
     </Compile>
     <Compile Include="Unit\InforBar.cs">
       <SubType>UserControl</SubType>
@@ -365,9 +353,6 @@
     <EmbeddedResource Include="ForrmAlarm.resx">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormCalib.resx">
-      <DependentUpon>FormCalib.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormReport.resx">
       <DependentUpon>FormReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -406,9 +391,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\Eraser.resx">
       <DependentUpon>Eraser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Unit\ExtractColor.resx">
-      <DependentUpon>ExtractColor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\InforBar.resx">
       <DependentUpon>InforBar.cs</DependentUpon>
@@ -582,6 +564,11 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Hand.png" />
+    <None Include="Resources\Settings.png" />
+    <None Include="Resources\Profile.png" />
+    <None Include="Resources\Password.png" />
+    <None Include="Resources\Access_1.png" />
     <None Include="Resources\Rename.png" />
     <None Include="Resources\Flow.png" />
     <None Include="Resources\LOG.png" />

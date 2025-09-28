@@ -462,9 +462,9 @@ namespace BeeInterface
             splits = new Rectangle[] { s0, s1, s2, s3 };
             return new Rectangle[] { rBig, r1, r2, r3, rR };
         }
-
+        public bool IsLockSplit = false;
         private DragTarget HitSplitter(Point p, Rectangle[] splits, Rectangle sBtn)
-        {
+        {if (IsLockSplit) return DragTarget.None;
             if (splits[0].Contains(p)) return DragTarget.S0;
             if (splits[1].Contains(p)) return DragTarget.S1;
             if (splits[2].Contains(p)) return DragTarget.S2;
@@ -476,6 +476,7 @@ namespace BeeInterface
         // ===== Mouse (splitter) =====
         private void StatusDashboard_MouseMove(object sender, MouseEventArgs e)
         {
+            if (IsLockSplit) return;
             Rectangle[] splits; Rectangle sBtn;
             BuildRects(out splits, out sBtn);
 
@@ -529,6 +530,7 @@ namespace BeeInterface
 
         private void StatusDashboard_MouseDown(object sender, MouseEventArgs e)
         {
+            if (IsLockSplit) return;
             if (e.Button != MouseButtons.Left) return;
 
             Rectangle[] splits; Rectangle sBtn;
@@ -555,6 +557,7 @@ namespace BeeInterface
 
         private void StatusDashboard_MouseUp(object sender, MouseEventArgs e)
         {
+            if (IsLockSplit) return;
             if (_drag != DragTarget.None)
             {
                 _drag = DragTarget.None;

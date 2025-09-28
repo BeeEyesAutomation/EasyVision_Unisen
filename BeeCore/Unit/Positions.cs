@@ -21,8 +21,7 @@ namespace BeeCore
     [Serializable()]
     public class Positions
     {
-        [NonSerialized]
-        public CvPlus.Pattern Pattern = new CvPlus.Pattern();
+      
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -130,7 +129,7 @@ namespace BeeCore
             set
             {
                 _minArea = value;
-                Pattern.m_iMinReduceArea = _minArea;
+                //Pattern.m_iMinReduceArea = _minArea;
             }
         }
         double _OverLap;
@@ -203,18 +202,18 @@ namespace BeeCore
            ////Cv2.ImShow("A"+ indexTool, temp);
             if (temp == null) return;
             if (temp.Empty()) return;
-            if(Pattern==null)
-            {
-                Pattern = new CvPlus.Pattern();
-                Pattern.CreateTemp(Index, IndexThread);
-            }    
+            //if(Pattern==null)
+            //{
+            //    Pattern = new CvPlus.Pattern();
+            //    Pattern.CreateTemp(Index, IndexThread);
+            //}    
             
             matTemp = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(temp.Clone());
             SetDst(IndexThread, Index , temp.Data, temp.Rows, temp.Cols, temp.Type());
             //  G.CommonPlus.LoadDst(path);
            // Mat mat = new Mat(temp.Rows, temp.Cols, temp.Type(), temp.Data);
            
-           Pattern.LearnPattern(minArea, Index, IndexThread);
+           //Pattern.LearnPattern(minArea, Index, IndexThread);
 
         }
     
@@ -399,64 +398,64 @@ namespace BeeCore
                     break;
             }
             //BeeCore.Native.SetImg(matProcess);
-            String sResult = Pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(),IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
+           // String sResult = Pattern.Match(matCrop.Data, matCrop.Rows, matCrop.Cols, (int)matCrop.Step(), matCrop.Type(),IndexThread, Index, IsHighSpeed, AngleLower, AngleUper, Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap);
 
-            ScoreRs = Pattern.ScoreRS;
-            if (sResult!="")
-            {
-                cycleTime = (int)Pattern.cycleOutLine;
-                rectRotates = new List<RectRotate>();
-                if (sResult != null)
-                {
-                    String[] sSplit = sResult.Split('\n');
-                    System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
-                    PointF[] pMatrix = { pZero };
-                    foreach (String s in sSplit)
-                    {
-                        if (s.Trim() == "") break;
-                        String[] sSp = s.Split(',');
-                        PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
-                        float angle = Convert.ToSingle(sSp[2]);
-                        float width = Convert.ToSingle(sSp[3]);
-                        float height =Convert.ToSingle(sSp[4]);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
-                    }
-                    if (rectRotates.Count == 0) return;
-                    RectRotate rot = rectRotates[0];
-                    Matrix mat = new Matrix();
-                    RectRotate rotA = rotArea;
-                    if(rotAreaAdjustment!=null)
-                    rotA = rotAreaAdjustment;
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+           // ScoreRs = Pattern.ScoreRS;
+            //if (sResult!="")
+            //{
+            //    cycleTime = (int)Pattern.cycleOutLine;
+            //    rectRotates = new List<RectRotate>();
+            //    if (sResult != null)
+            //    {
+            //        String[] sSplit = sResult.Split('\n');
+            //        System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
+            //        PointF[] pMatrix = { pZero };
+            //        foreach (String s in sSplit)
+            //        {
+            //            if (s.Trim() == "") break;
+            //            String[] sSp = s.Split(',');
+            //            PointF pCenter = new PointF(Convert.ToSingle(sSp[0]), Convert.ToSingle(sSp[1]));
+            //            float angle = Convert.ToSingle(sSp[2]);
+            //            float width = Convert.ToSingle(sSp[3]);
+            //            float height =Convert.ToSingle(sSp[4]);
+            //            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
+            //        }
+            //        if (rectRotates.Count == 0) return;
+            //        RectRotate rot = rectRotates[0];
+            //        Matrix mat = new Matrix();
+            //        RectRotate rotA = rotArea;
+            //        if(rotAreaAdjustment!=null)
+            //        rotA = rotAreaAdjustment;
+            //        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            //        mat.Rotate(rotA._rectRotation);
+            //        mat.Translate(rotA._rect.X, rotA._rect.Y);
             
-                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                    mat.Rotate(rot._rectRotation);
-                    mat.TransformPoints(pMatrix);
-                    int x = (int)pMatrix[0].X;
-                    int y = (int)pMatrix[0].Y;
-                    // Điểm B và C
-                    double x2 = 10, y2 = 0;
+            //        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+            //        mat.Rotate(rot._rectRotation);
+            //        mat.TransformPoints(pMatrix);
+            //        int x = (int)pMatrix[0].X;
+            //        int y = (int)pMatrix[0].Y;
+            //        // Điểm B và C
+            //        double x2 = 10, y2 = 0;
                    
-                    (deltaX, deltaY) = ConvertToB(x, y, pOrigin.X, pOrigin.Y, AngleOrigin);
-                    deltaY = -deltaY;
-                    double angleAB = Math.Atan2(y2 - 0, x2 - 0) * 180 / Math.PI;
-                    double angleAC = Math.Atan2(deltaY - 0, deltaX - 0) * 180 / Math.PI;
+            //        (deltaX, deltaY) = ConvertToB(x, y, pOrigin.X, pOrigin.Y, AngleOrigin);
+            //        deltaY = -deltaY;
+            //        double angleAB = Math.Atan2(y2 - 0, x2 - 0) * 180 / Math.PI;
+            //        double angleAC = Math.Atan2(deltaY - 0, deltaX - 0) * 180 / Math.PI;
 
-                    double delta = angleAC- angleAB  ;
+            //        double delta = angleAC- angleAB  ;
 
-                    // Chuẩn hóa về [-180, 180]
-                    if (delta > 180) delta -= 360;
-                    if (delta < -180) delta += 360;
+            //        // Chuẩn hóa về [-180, 180]
+            //        if (delta > 180) delta -= 360;
+            //        if (delta < -180) delta += 360;
                   
-                    DistanceDetect = Math.Round(Math.Sqrt(Math.Pow(x -pOrigin.X, 2) + Math.Pow(y - pOrigin.Y, 2)));
+            //        DistanceDetect = Math.Round(Math.Sqrt(Math.Pow(x -pOrigin.X, 2) + Math.Pow(y - pOrigin.Y, 2)));
 
-                    AngleDetect =Math.Round(delta, 0);
-                    if (rectRotates.Count ==0)
-                        IsOK = false;
-                }
-            }
+            //        AngleDetect =Math.Round(delta, 0);
+            //        if (rectRotates.Count ==0)
+            //            IsOK = false;
+            //    }
+            //}
             
 
 

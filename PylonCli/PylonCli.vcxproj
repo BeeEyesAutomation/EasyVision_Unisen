@@ -147,7 +147,6 @@
   <ItemGroup>
     <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>

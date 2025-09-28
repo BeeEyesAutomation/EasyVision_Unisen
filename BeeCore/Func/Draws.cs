@@ -183,7 +183,7 @@ namespace BeeCore
             var rectTopRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top - WidthPoint / 2, WidthPoint, WidthPoint);
             var rectBottomLeft = new RectangleF(_rect.Left - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
             var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - WidthPoint / 2, _rect.Top + _rect.Height - WidthPoint / 2, WidthPoint, WidthPoint);
-            var rectRotate = new RectangleF(-WidthPoint / 2, _rect.Top + -WidthPoint * 3, WidthPoint * 2, WidthPoint * 2);
+            var rectRotate = new RectangleF(-WidthPoint / 2, _rect.Top + -WidthPoint * 2, WidthPoint * 2, WidthPoint * 2);
             var rectCenter = new RectangleF(-WidthPoint / 2, -WidthPoint / 2, WidthPoint, WidthPoint);
             Pen penRect = new Pen(Color.Orange, Thiness);
             var backNG = new SolidBrush(Color.FromArgb(0, 0, 0, 255));

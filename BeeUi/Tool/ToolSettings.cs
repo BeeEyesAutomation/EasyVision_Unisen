@@ -55,6 +55,11 @@ namespace BeeUi.Tool
                     BeeCore.Common.PropetyTools[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
                    // G.listAlltool[Global.IndexChoose].RemoveAt(Global.IndexToolSelected);
                     Global.IndexToolSelected = BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1;
+                    int index = 0;
+                    foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                    {
+                        propetyTool.Propety.Index = index; index++;
+                    }    
                     Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
                 }    
             }    
@@ -96,6 +101,15 @@ namespace BeeUi.Tool
            
             DataTool.LoadPropety(propetyTools.Control);
             propetyTools.UsedTool = UsedTool.Used;
+            propetyTools.worker.DoWork += (senders, es) =>
+            {
+                propetyTools.DoWork();
+            };
+            propetyTools.worker.RunWorkerCompleted += (senders, es) =>
+            {
+                propetyTools.Complete();
+            };
+            propetyTools.Propety.SetModel();
             Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
 

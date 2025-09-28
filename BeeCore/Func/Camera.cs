@@ -3,7 +3,7 @@ using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Features2D;
-using PylonCli;
+
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -468,8 +468,8 @@ namespace BeeCore
                     bool IsConnect = PylonCam.IsOpen();
                     if (IsConnect)
                     {
-                        PylonCam.SetOutputPixel(OutputPixel.Auto);
-                        PylonCam.Start(GrabMode.UserLoop);
+                        PylonCam.SetOutputPixel(PylonCli. OutputPixel.Auto);
+                        PylonCam.Start(PylonCli.GrabMode.UserLoop);
 
 
 

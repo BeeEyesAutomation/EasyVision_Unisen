@@ -118,7 +118,7 @@ namespace BeeUi.Common
         {
             if(!G.IsReConnectCCD)
             {
-                if (Global.ParaCommon.Comunication.IO.IsConnected)
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {
                     if (Global.ParaCommon.Comunication.IO.valueOutput[4] == 0)
                     {
@@ -151,89 +151,24 @@ namespace BeeUi.Common
          
         }
 
-        public void Acccess(bool IsRun)
-        {
-            //if(IsRun)
-            //{
-            //    Global.EditTool.pName.Visible = false;
-               
-            //}
-            //else
-            //{
-            //    Global.EditTool.pName.Visible = true;
-             
-            //}
-           // Global.EditTool.btnHeaderBar.btnSettingPLC.Enabled= Global.IsRun;
-            Global.EditTool.View.btnLive.Enabled = !Global.IsRun;
-          //  pModel.Enabled = IsRun;
-          
-            if (Global.Config.nameUser == "Admin")
-            {
-               // G.SettingPLC.pCom.Enabled = true;
-                if( G.StatusDashboard!=null)
-                 G.StatusDashboard.btnReset.Enabled = true;
-                Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
-                
-
-                //  G.listProgram.Enabled = IsRun;
-                btnMode.Enabled = true;
-             
-
-               
-
-              
-               // btnIO.Enabled = true;
-            }
-            else if (Global.Config.nameUser == "Leader")
-            {
-              //  G.SettingPLC.pCom.Enabled = false;
-                // Global.EditTool.View.btnContinuous.Enabled = false;
-
-                Global.EditTool.View.btnContinuous.Enabled = false;
-
-                //G.listProgram.Enabled = IsRun;
-                if ( G.StatusDashboard != null)
-                     G.StatusDashboard.btnReset.Enabled = true;
-                btnMode.Enabled = false;
-           
-             //   btnIO.Enabled = false;
-            }
-            else 
-            {
-                Global.EditTool.View.btnContinuous.Enabled = false;
-
-                // Global.EditTool.View.btnContinuous.Enabled = false;
-              //  G.SettingPLC.pCom.Enabled = false;
-
-            //    G.listProgram.Enabled = IsRun;
-              //  btnReport.Enabled = false;
-                btnMode.Enabled = false;
-                if ( G.StatusDashboard != null)
-                     G.StatusDashboard.btnReset.Enabled = false;
-              
-              //  btnIO.Enabled = false;
-                
-            }
-            if ( Global.ParaCommon.IsExternal)
-            {
-               Global.EditTool.View.btnCap.Enabled = false;
-               Global.EditTool.View.btnContinuous.Enabled = false;
-            }
-         
-            Global.EditTool.btnHeaderBar.btnUser.Text =Global.Config.nameUser;
-        }
+       
  
-        public async void Mode()
+    
+        private void btnMode_Click(object sender, EventArgs e)
         {
-            if (Global.Config.nameUser != "Admin")
-                return;
-            if (Global.StatusMode==StatusMode.Once)
+            if(G.listProgram!=null)
+            if (G.listProgram.Visible == true) G.listProgram.Visible = false;
+            if (Global.EditTool.View.btnLive.IsCLick)
+            {
+                Global.EditTool.View.btnLive.PerformClick();
+            }
+           
+            if (Global.StatusMode == StatusMode.Once)
             {
                 Global.StatusMode = StatusMode.None;
                 Global.StatusProcessing = StatusProcessing.None;
-                
-               // MessageBox.Show("Please Stop Mode Continuous");
-              //  return;
+
+
             }
             foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
             {
@@ -281,22 +216,8 @@ namespace BeeUi.Common
                 }
 
             }
-          //  Global.IsRun = !Global.IsRun;
-       
-         
-           Acccess(Global.IsRun);
-           
-        }
-        private void btnMode_Click(object sender, EventArgs e)
-        {
-            if(G.listProgram!=null)
-            if (G.listProgram.Visible == true) G.listProgram.Visible = false;
-            if (Global.EditTool.View.btnLive.IsCLick)
-            {
-                Global.EditTool.View.btnLive.PerformClick();
-            }
-         //   G.Header.tmReadPLC.Enabled = true;
-            Mode();
+
+          Global.EditTool.  Acccess(Global.IsRun);
         }
         String[] PathFile;
         bool IsLoad = false;
@@ -715,8 +636,8 @@ txtQrCode.Focus();
            
            
             IsIntialProgram = true;
-          //  Acccess(Global.IsRun);
-            //G.listProgram.Visible = false;
+            Global.EditTool. Acccess(Global.IsRun);
+           
             tmIninitial.Enabled = true;
         
            
@@ -810,15 +731,15 @@ txtQrCode.Focus();
                     stepShow++;
                     break;
                 case 2:
-                    if (editProg1.Width <= editProg1. btnMenu.Width + 1)
+                    if (pEdit.Width <= pEdit. btnMenu.Width + 1)
                     {
-                        editProg1.btnMenu.IsCLick = true;
+                        pEdit.btnMenu.IsCLick = true;
                       
                     }
-                    editProg1.OldWidth = Global.Config.WidthEditProg;
+                    pEdit.OldWidth = Global.Config.WidthEditProg;
                     stepShow = 0;
                         indexToolShow = 0;
-                    btnMode.Enabled = true;
+              
                         Global.EditTool.View.btnFull.PerformClick();
                         tmShow.Enabled = false;
                        // Global.ToolSettings.ResumeLayout(true);

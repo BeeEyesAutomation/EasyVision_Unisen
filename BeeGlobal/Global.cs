@@ -116,7 +116,8 @@ namespace BeeGlobal
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
         public static Config Config;
-        public static  bool IsLearning=true;
+        public static float ZoomMinimum = 0;
+       public static  bool IsLearning=true;
         public static bool IsOCR = false;
         public static StatusDraw StatusDraw
         {

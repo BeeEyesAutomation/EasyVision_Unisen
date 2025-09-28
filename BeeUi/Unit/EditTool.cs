@@ -37,12 +37,12 @@ namespace BeeUi
            
 
             InitializeComponent();
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
+            //this.DoubleBuffered = true;
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            //this.SetStyle(ControlStyles.UserPaint, true);
            
-            this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
+            //this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
             _layout = new LayoutPersistence(this, key: "MainLayout");
             _layout.LoadDelayMs = 300;        // trễ 500ms sau Form.Shown
             _layout.SplitterLocked = true;   // tuỳ chọn
@@ -51,8 +51,64 @@ namespace BeeUi
             // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
 
         }
-     
-        void EnableDoubleBuffer(Control c)
+		public void Acccess(bool IsRun)
+		{
+            BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
+			View.btnLive.Enabled = !Global.IsRun;
+            switch(Global.Config.Users)
+            {
+                case Users.Admin:
+					G.StatusDashboard.btnReset.Enabled = true;
+					Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
+					G.Header.btnMode.Enabled = true;
+                    View.pBtn.Enabled= true;
+					G.Header.pEdit.Enabled = true;
+					View.btnTypeTrig.Enabled = true;
+					BarRight.btnFlowChart.Enabled = true;
+					BarRight.btnHistory.Enabled = true;
+					BarRight.btnHardware.Enabled = true;
+					BarRight.btnLog.Enabled = true;
+                    btnLogo.Enabled = true;
+					break;
+				case Users.Leader:
+					Global.EditTool.View.btnContinuous.Enabled = false;
+					G.StatusDashboard.btnReset.Enabled = true;
+					G.Header.btnMode.Enabled = true;
+					View.pBtn.Enabled = true;
+					View.btnTypeTrig.Enabled = false;
+					G.Header.pEdit.Enabled = true;
+					BarRight.btnFlowChart.Enabled = true;
+					BarRight.btnHistory.Enabled = true;
+					BarRight.btnHardware.Enabled = false;
+					BarRight.btnLog.Enabled = false;
+					btnLogo.Enabled = false;
+					break;
+				case Users.User:
+					Global.EditTool.View.btnContinuous.Enabled = false;
+					G.Header.btnMode.Enabled = false;
+			         G.StatusDashboard.btnReset.Enabled = false;
+					View.pBtn.Enabled = false;
+					View.btnTypeTrig.Enabled = false;
+					G.Header.pEdit.Enabled = false;
+					BarRight.btnFlowChart.Enabled = true;
+					BarRight.btnHistory.Enabled = false;
+					BarRight.btnHardware.Enabled = false;
+					BarRight.btnLog.Enabled = false;
+					btnLogo.Enabled = false;
+					break;
+			
+			}
+			
+		
+			if (Global.ParaCommon.IsExternal)
+			{
+				Global.EditTool.View.btnCap.Enabled = false;
+				Global.EditTool.View.btnContinuous.Enabled = false;
+			}
+
+			Global.EditTool.BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
+		}
+		void EnableDoubleBuffer(Control c)
         {
             var t = c.GetType();
             var piDB = t.GetProperty("DoubleBuffered",
@@ -68,13 +124,14 @@ namespace BeeUi
         {
             try
             {
+                View.pMenu.Visible = true;
                 Global.IndexToolSelected = -1;
                 if(Global.EditTool.View.btnLive.IsCLick)
                 {
                     Global.EditTool.View. btnLive.PerformClick();
 
                 }
-                CameraBar.btnFlowChart.IsCLick = true;
+                BarRight.btnFlowChart.IsCLick = true;
                 Global.StatusDraw = StatusDraw.None;
             X: switch (Step)
                 {
@@ -83,7 +140,7 @@ namespace BeeUi
                         Global.IsAllowReadPLC = true;
                         Shows.ShowAllChart(Global.ToolSettings.pAllTool);
                         Global.EditTool.View.btnLive.Enabled = false;
-                        CameraBar.Visible = true;
+                        BarRight.Visible = true;
                         pHeader.Visible = true;
                         Global.IsRun = true;
                         G.Header.btnMode.Text = "Run";
@@ -115,14 +172,14 @@ namespace BeeUi
                         {
                             //MessageBox.Show(ex.Message);
                         }
-                      G.Header.Acccess(Global.IsRun);
+                     
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
                         Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = true;
                         pHeader.Visible = false;
-                        CameraBar.Visible = false;
+                        BarRight.Visible = false;
                         Global.IsRun = false;
                         G.Header.btnMode.Text = "Edit";
                         G.Header.btnMode.IsCLick = true;
@@ -326,7 +383,7 @@ namespace BeeUi
 
             View.tmContinuous.Enabled = false;
            
-            if (Global.ParaCommon.Comunication.IO.IsConnected)
+            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
                 Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Close;
             }
@@ -349,10 +406,30 @@ namespace BeeUi
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
       public  DashboardImages DashboardImages;
-      
-        private void EditTool_Load(object sender, EventArgs e)
+      public void LockSpilter(bool IsLock)
         {
-            tmReLoadSplit.Enabled = true;
+			split0.Enabled = !IsLock;
+            split1.Enabled = !IsLock;
+			split2.Enabled = !IsLock;
+			split3.Enabled = !IsLock;
+			split4.Enabled = !IsLock;
+			split5.Enabled = !IsLock;
+			split6.Enabled = !IsLock;
+			View.split2.Enabled = !IsLock;
+			View.split3.Enabled = !IsLock;
+			View.split4.Enabled = !IsLock;
+			View.split5.Enabled = !IsLock;
+			G.Header.split1.Enabled = !IsLock;
+			G.Header.split2.Enabled = !IsLock;
+			Global.ToolSettings.split1.Enabled = !IsLock;
+			G.StatusDashboard.IsLockSplit = IsLock;
+		}
+
+		private void EditTool_Load(object sender, EventArgs e)
+        {
+           
+
+			tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             //   this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
@@ -378,18 +455,8 @@ namespace BeeUi
                 G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                 G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                 G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
-                //  G.StatusDashboard.Dock = DockStyle.None;
-                //  G.StatusDashboard.Location = new Point(0, 0); 
-                //  G.StatusDashboard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-            }
-            //if(DashboardImages==null)
-            //{
-            //    DashboardImages = new DashboardImages();
-            //  //  DashboardImages.
-            //}
-            // if(Global.LogsDashboard==null)
-            //  Global.LogsDashboard = new LogsDashboard();
-            // cấu hình
+                  }
+           
 
             pEditTool.Register("Tool", () => Global.ToolSettings);
             pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
@@ -420,7 +487,8 @@ namespace BeeUi
             if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
                 BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
-        }
+			//
+		}
 
         private void Global_StepModeChanged(Step obj)
         {
@@ -520,8 +588,8 @@ namespace BeeUi
         private void UnlockSpiltter_Click(object sender, EventArgs e)
         {
             _layout.SplitterLocked = !_layout.SplitterLocked;
-            
-            if (!_layout.SplitterLocked)
+			LockSpilter(_layout.SplitterLocked);
+			if (!_layout.SplitterLocked)
                 UnlockSpiltter.Text = "Lock UI";
             else
                 UnlockSpiltter.Text = "UnLock";
@@ -708,7 +776,7 @@ namespace BeeUi
             {
             
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
-                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+              //  View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 View.timer = CycleTimerSplit.Start();
                 if (Global.IsRun)
                 {
@@ -754,8 +822,23 @@ namespace BeeUi
 
         private void tmReLoadSplit_Tick(object sender, EventArgs e)
         {
-            splitHeader.Height = 5;
-            tmReLoadSplit.Enabled = false;
+			LockSpilter(true);
+			split0.Height = 5;
+			split1.Height = 5;
+			split2.Height = 5;
+			split3.Height = 5;
+			split4.Height = 5;
+			split5.Height = 5;
+			split6.Height = 5;
+			View.split2.Height = 5;
+			View.split3.Height = 5;
+			View.split4.Height = 5;
+			View.split5.Height = 5;
+			G.Header.split1.Height = 5;
+			G.Header.split2.Height = 5;
+			Global.ToolSettings.split1.Height = 5;
+			
+			tmReLoadSplit.Enabled = false;
         }
 
         private void pRight_SizeChanged(object sender, EventArgs e)

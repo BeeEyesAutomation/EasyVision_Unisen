@@ -366,6 +366,10 @@
       <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Pattern\Pattern.vcxproj">
+      <Project>{39dd1722-85fe-45b8-8954-88c4146bf8bf}</Project>
+      <Name>BeeCpp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -625,6 +629,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BID_ICON_PITCH_TOOL_LARGE_E_32BIT1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hand.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

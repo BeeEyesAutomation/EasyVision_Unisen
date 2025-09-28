@@ -39,7 +39,8 @@ namespace BeeGlobal
         
         public String namePort="",IDPort="";
         public String IDCamera="";
-        public String nameUser = "User";
+       
+        public Users Users = Users.User;
         public int CCD,ScoreCalib=1;
         public bool IsHist = false,IsShowGird=false,IsShowCenter=false,IsShowArea=false;
     }

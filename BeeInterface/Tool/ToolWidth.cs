@@ -115,6 +115,19 @@ namespace BeeInterface
                         btnFar.IsCLick = true;
                         break;
                 }
+                AdjMorphology.Value = Propety.SizeClose;
+                AdjOpen.Value = Propety.SizeOpen;
+                AdjClearNoise.Value = Propety.SizeClearsmall;
+                AdjClearBig.Value = Propety.SizeClearBig;
+               
+                btnClose.IsCLick = Propety.IsClose;
+                btnOpen.IsCLick = Propety.IsOpen;
+                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+                AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+                AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+                AdjOpen.Enabled = Propety.IsOpen;
+                AdjMorphology.Enabled = Propety.IsClose;
             }
             catch (Exception ex)
             {

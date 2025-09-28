@@ -1,4 +1,5 @@
 ﻿using BeeCore;
+using BeeCpp;
 using BeeGlobal;
 using Newtonsoft.Json.Linq;
 using OpenCvSharp;
@@ -31,8 +32,8 @@ namespace BeeInterface
         }
         public int indexTool;
         
-        public ColorArea Propety=new ColorArea();
-        public Mat matTemp = new Mat();
+        public BeeCore. ColorArea Propety=new BeeCore.ColorArea();
+      
        
       
         public bool IsClear;
@@ -46,118 +47,77 @@ namespace BeeInterface
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-            Propety.rotMask = null;
-            
-            Propety.LoadTemp();
-            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety. Index].Score ;
-            trackPixel.Value = (int)Propety.AreaPixel;
-            if (!Convert.ToBoolean(Propety.StyleColor))
-                btnHSV.IsCLick = true;
-            else
-                btnRGB.IsCLick = true;
+            AdjValueTemp.Value = Propety.PxTemp;
+
+            AdjClose.Value = Propety.SizeClose;
+            AdjOpen.Value = Propety.SizeOpen;
+            AdjClearNoise.Value = Propety.SizeClearsmall;
+            AdjClearBig.Value = Propety.SizeClearBig;
+            btnClose.IsCLick = Propety.IsClose;
+            btnOpen.IsCLick = Propety.IsOpen;
+            btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+            btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+            AdjOpen.Enabled = Propety.IsOpen;
+            AdjClose.Enabled = Propety.IsClose;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolColorArea_StatusToolChanged;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolColorArea_ScoreChanged;
+        
+            trackPixel.Value = (int)Propety.Extraction;
+            switch(Propety.TypeColor)
+            {
+                case ColorGp.RGB:
+                    btnRGB.IsCLick = true;
+                    break;
+                case ColorGp.HSV:
+                    btnHSV.IsCLick = true;
+                    break;
+            }
+          
+              
             btnGetColor.IsCLick = Propety.IsGetColor;
 
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
            
         }
-        //public Mat RotateMat(Mat raw, RotatedRect rot)
-        //{
-        //    Mat matRs = new Mat(), matR = Cv2.GetRotationMatrix2D(rot.Center, rot.Angle, 1);
 
-        //    float fTranslationX = (rot.Size.Width - 1) / 2.0f - rot.Center.X;
-        //    float fTranslationY = (rot.Size.Height - 1) / 2.0f - rot.Center.Y;
-        //    matR.At<double>(0, 2) += fTranslationX;
-        //    matR.At<double>(1, 2) += fTranslationY;
-        //    Cv2.WarpAffine(raw, matRs, matR, new OpenCvSharp.Size(rot.Size.Width, rot.Size.Height), InterpolationFlags.Linear, BorderTypes.Constant);
-        //    return matRs;
-        //}
+        private void ToolColorArea_ScoreChanged(float obj)
+        {
+           trackScore.Value =(float)obj;
+        }
+
+        private void ToolColorArea_StatusToolChanged(StatusTool obj)
+        {
+
+            if (Global.IsRun) return;
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            {
+                if (Propety.IsCalib)
+                {
+                    btnCalib.IsCLick = false;
+                    btnCalib.Enabled = true;
+                    Propety.IsCalib = false;
+                    Propety.PxTemp = Propety.pxRS;
+                    AdjValueTemp.Value = Propety.PxTemp;
+                }
+            }
+
+            btnInspect.Enabled = true;
+        }
+
         public Mat matCrop=new Mat();
         public void GetTemp()
         {
           
-            //float angle = rotateRect._rectRotation;
-          //  if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-          //   matCrop =  RotateMat( BeeCore.Common.listCamera[Global.IndexChoose].matRaw, new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._angle));
-            //Cv2.ImWrite("cropColor.png", matCrop);
+        
             
             picColor.Invalidate();
-            Propety.matRs= Propety.SetColor();
+            Propety.SetColor();
            
         }
         
-        //public Graphics ShowResult(Graphics gc, float Scale, System.Drawing.Point pScroll)
-        //{
-        // //   if (Propety.rotAreaAdjustment == null && Global.IsRun) return gc;
-        // //   gc.ResetTransform();
-        // //   var mat = new Matrix();
-          
-        // //   RectRotate rotA = Propety.rotArea;
-        // //   if (Global.IsRun) rotA = Propety.rotAreaAdjustment;
-        // //   if (!Global.IsRun)
-        // //   {
-        // //       mat.Translate(pScroll.X, pScroll.Y);
-        // //       mat.Scale(Scale, Scale);
-        // //   }
-        // //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        // //   mat.Rotate(rotA._rectRotation);
-           
-        // //   gc.Transform = mat;
 
-        // //   gc.DrawRectangle(new Pen(Color.Silver, 1), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-       
-        // //     gc.ResetTransform();
-
-        // //   Color cl = Color.LimeGreen;
-        // //   if (!Propety.IsOK)
-        // //   {
-        // //       cl = Color.Red;
-             
-        // //   }
-        // //   else
-        // //   {
-        // //       cl = Color.LimeGreen;
-        // //   }
-        // //   int i = 0;
-
-        // //   mat = new Matrix();
-        // //   if (!Global.IsRun)
-        // //   {
-        // //       mat.Translate(pScroll.X, pScroll.Y);
-        // //       mat.Scale(Scale, Scale);
-        // //   }
-        // //   mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        // //   mat.Rotate(rotA._rectRotation);
-        // //  // mat.Translate(rotA._rect.X, rotA._rect.Y);
-        // //   gc.Transform = mat;
-
-        // //   //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-        // //   //mat.Rotate(rotA._rectRotation);
-        // //   //gc.Transform = mat;
-        // //   gc.DrawRectangle(new Pen(cl, 2), new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)rotA._rect.Width, (int)rotA._rect.Height));
-        // //       if (Propety.bmRS == null) return gc;
-        // //   //if (G.IsDrawProcess)
-        // //   //{
-        // //   //  mat.Translate(rotA._rect.X, rotA._rect.Y);
-        // //   //  gc.Transform = mat;
-        // //   Bitmap myBitmap = Propety.bmRS;
-        // //   myBitmap.MakeTransparent(Color.Black);
-        // //   myBitmap = ConvertImg.ChangeToColor(myBitmap, cl, 1f);
-        // //   gc.DrawImage(myBitmap, rotA._rect);
-        // //   //}
-
-
-
-
-        // //   String s= (int)(  Propety.Index+1)+"."+ Propety.nameTool;
-        // //SizeF sz=   gc.MeasureString(s, new Font("Arial", 10, FontStyle.Bold));
-        // //   gc.FillRectangle(Brushes.White, new Rectangle((int)rotA._rect.X, (int)rotA._rect.Y, (int)sz.Width,(int) sz.Height));
-        // //   gc.DrawString(s, new Font("Arial", 10, FontStyle.Bold), Brushes.Black, new System.Drawing.Point((int)rotA._rect.X, (int)rotA._rect.Y));
-
-        // //   gc.ResetTransform();
-        // //   return gc;
-        //}
-
-  
         private void rjButton3_Click(object sender, EventArgs e)
         {
 
@@ -244,8 +204,7 @@ namespace BeeInterface
       
         private void btnClBlack_Click(object sender, EventArgs e)
         {
-            Propety.StyleColor = 2;
-
+           
             btnDeleteAll.PerformClick();
         }
 
@@ -278,10 +237,10 @@ namespace BeeInterface
 
         private void trackPixel_ValueChanged(float obj)
         {
-            Propety.AreaPixel = (int)trackPixel.Value;
+            Propety.Extraction = (int)trackPixel.Value;
 
             if(Global.Initialed)
-            matTemp =  Propety.SetColor();
+             Propety.SetColor();
            
         }
 
@@ -322,12 +281,6 @@ namespace BeeInterface
             }
             btnElip.IsCLick = Propety.rotMask.IsElip;
             btnRect.IsCLick = !Propety.rotMask.IsElip;
-        }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-
-        
         }
 
         private void btnCropHalt_Click(object sender, EventArgs e)
@@ -436,7 +389,7 @@ namespace BeeInterface
 
         private void btnHSV_Click(object sender, EventArgs e)
         {
-            Propety.StyleColor = 0;
+            Propety.TypeColor = ColorGp.HSV;
             btnDeleteAll.PerformClick();
         }
 
@@ -452,7 +405,7 @@ namespace BeeInterface
 
         private void btnRGB_Click(object sender, EventArgs e)
         {
-            Propety.StyleColor = 1;
+         Propety .TypeColor = ColorGp.RGB;
 
             btnDeleteAll.PerformClick();
         }
@@ -469,6 +422,70 @@ namespace BeeInterface
             }
             else
                 Global.StatusDraw = StatusDraw.Edit;
+        }
+
+      
+        private void AdjClearNoise_ValueChanged(float obj)
+        {
+            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Propety.IsClose = btnClose.IsCLick;
+            AdjClose.Enabled = Propety.IsClose;
+        }
+
+        private void btnEnableNoise_Click(object sender, EventArgs e)
+        {
+
+            Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+        }
+
+        private void AdjClose_ValueChanged(float obj)
+        {
+
+            Propety.SizeClose = (int)AdjClose.Value;
+        }
+
+
+        private void AdjOpen_ValueChanged(float obj)
+        {
+            Propety.SizeOpen = (int)AdjOpen.Value;
+        }
+
+        private void AdjClearBig_ValueChanged(float obj)
+        {
+            Propety.SizeClearBig = (int)AdjClearBig.Value;
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            Propety.IsOpen = btnOpen.IsCLick;
+            AdjOpen.Enabled = Propety.IsOpen;
+        }
+
+        private void btnIsClearBig_Click(object sender, EventArgs e)
+        {
+            Propety.IsClearNoiseBig = btnIsClearBig.IsCLick;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+
+        }
+
+        private void btnCalib_Click(object sender, EventArgs e)
+        {
+            btnCalib.Enabled = false;
+            Propety.IsCalib = true;
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            else
+                btnCalib.IsCLick = false;
+        }
+
+        private void AdjValueTemp_ValueChanged(float obj)
+        {
+            Propety.PxTemp = (int)AdjValueTemp.Value;
         }
     }
 }

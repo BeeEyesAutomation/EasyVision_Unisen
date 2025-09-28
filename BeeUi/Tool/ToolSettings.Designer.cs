@@ -33,25 +33,25 @@ namespace BeeUi.Tool
         /// </summary>
         private void InitializeComponent()
         {
-            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.split1 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.TableLayoutPanel();
-            this.pAllTool = new System.Windows.Forms.TableLayoutPanel();
             this.btnRename = new BeeInterface.RJButton();
             this.btnCopy = new BeeInterface.RJButton();
             this.btnEnEdit = new BeeInterface.RJButton();
             this.btnAdd = new BeeInterface.RJButton();
             this.btnDelect = new BeeInterface.RJButton();
+            this.pAllTool = new System.Windows.Forms.TableLayoutPanel();
             this.pBtn.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitter1
+            // split1
             // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter1.Location = new System.Drawing.Point(2, 56);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(396, 3);
-            this.splitter1.TabIndex = 11;
-            this.splitter1.TabStop = false;
+            this.split1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.split1.Location = new System.Drawing.Point(2, 56);
+            this.split1.Name = "split1";
+            this.split1.Size = new System.Drawing.Size(396, 3);
+            this.split1.TabIndex = 11;
+            this.split1.TabStop = false;
             // 
             // pBtn
             // 
@@ -76,20 +76,6 @@ namespace BeeUi.Tool
             this.pBtn.Size = new System.Drawing.Size(396, 54);
             this.pBtn.TabIndex = 10;
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
-            // 
-            // pAllTool
-            // 
-            this.pAllTool.AutoScroll = true;
-            this.pAllTool.ColumnCount = 1;
-            this.pAllTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pAllTool.Location = new System.Drawing.Point(2, 59);
-            this.pAllTool.Name = "pAllTool";
-            this.pAllTool.RowCount = 2;
-            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pAllTool.Size = new System.Drawing.Size(396, 464);
-            this.pAllTool.TabIndex = 12;
             // 
             // btnRename
             // 
@@ -375,13 +361,27 @@ namespace BeeUi.Tool
             this.btnDelect.UseVisualStyleBackColor = false;
             this.btnDelect.Click += new System.EventHandler(this.btnDelect_Click);
             // 
+            // pAllTool
+            // 
+            this.pAllTool.AutoScroll = true;
+            this.pAllTool.ColumnCount = 1;
+            this.pAllTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pAllTool.Location = new System.Drawing.Point(2, 59);
+            this.pAllTool.Name = "pAllTool";
+            this.pAllTool.RowCount = 2;
+            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pAllTool.Size = new System.Drawing.Size(396, 464);
+            this.pAllTool.TabIndex = 12;
+            // 
             // ToolSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.Controls.Add(this.pAllTool);
-            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.split1);
             this.Controls.Add(this.pBtn);
             this.DoubleBuffered = true;
             this.Name = "ToolSettings";
@@ -400,8 +400,8 @@ namespace BeeUi.Tool
         public RJButton btnCopy;
         public RJButton btnEnEdit;
         public  System.Windows.Forms.TableLayoutPanel pBtn;
-        private System.Windows.Forms.Splitter splitter1;
         public RJButton btnRename;
         public System.Windows.Forms.TableLayoutPanel pAllTool;
+        public System.Windows.Forms.Splitter split1;
     }
 }

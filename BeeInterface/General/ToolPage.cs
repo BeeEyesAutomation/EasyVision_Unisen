@@ -220,23 +220,14 @@ namespace BeeInterface
                 propetyTool.timer = new System.Diagnostics.Stopwatch();
                 propetyTool.worker.DoWork += (sender, e) =>
                 {
-                    propetyTool.StatusTool = StatusTool.Processing;
-                    propetyTool.timer.Restart();
-                    if (!Global.IsRun)
-                        propetyTool.Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
-                    propetyTool.Propety.DoWork(propetyTool.Propety.rotAreaAdjustment);
+                    propetyTool.DoWork();
                 };
                 propetyTool.worker.RunWorkerCompleted += (sender, e) =>
                 {
-                    propetyTool.Propety.Complete();
-                    if (!Global.IsRun)
-                        Global.StatusDraw = StatusDraw.Check;
-                    propetyTool.StatusTool = StatusTool.Done;
-                    propetyTool.timer.Stop();
-                    propetyTool.CycleTime = (int)propetyTool.timer.Elapsed.TotalMilliseconds;
+                    propetyTool.Complete();
                 };
-            //  G.listAlltool[Global.IndexChoose].Add(DataTool.CreateControl(propetyTool, indexName-1, Global.IndexChoose,new Point(Global.pShowTool.X,Global.pShowTool.Y)));
                 propetyTool.Propety.SetModel();
+            
                 DataTool.LoadPropety(control);
                
                 Global.pShowTool.Y += Itemtool.Height + 10;

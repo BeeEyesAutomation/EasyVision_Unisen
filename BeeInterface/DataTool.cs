@@ -358,7 +358,6 @@ namespace BeeInterface
                 {
                     PropetyTool.Complete();
                 };
-                //tools = new Tools(itemTool, control);
             }
             catch(Exception ex)
             {

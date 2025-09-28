@@ -27,9 +27,10 @@ namespace BeeUi
            
            if(File.Exists("update.bin"))
                 folderId= File.ReadAllText("update.bin");
-           
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
+
         }
-       
+
         private GoogleDriveDllManager _manager = new GoogleDriveDllManager();
         private List<(string FileName, string FileId, Version NewVersion, Version OldVersion)> _pendingUpdates;
 
@@ -134,6 +135,11 @@ namespace BeeUi
             }
 
             btnUpdate.Enabled = false;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

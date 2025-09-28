@@ -129,7 +129,7 @@ namespace BeeUi.Common
         private void btnSaveProgram_Click(object sender, EventArgs e)
         {
             SaveData.Project(Global.Project);
-            G.Header.Mode();
+            //G.Header.Mode();
         }
 
         private void StepEdit_SizeChanged(object sender, EventArgs e)

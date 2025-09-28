@@ -121,14 +121,15 @@ namespace BeeCore
 
         public static Config LoadConfig(string path)
         {
-            return LoadBase64(path, defaultFactory: () =>
-            {
-                var cfg = new Config();
-                cfg.nameUser = "Admin";
-                cfg.IsByPass = true;
-                cfg.ConditionOK = ConditionOK.Logic;
-                return cfg;
-            });
+            return LoadBase64<Config>(path, defaultFactory: () => new Config());
+            //return LoadBase64(path, defaultFactory: () =>
+            //{
+            //    var cfg = new Config();
+            //    cfg.nameUser = "Admin";
+            //    cfg.IsByPass = true;
+            //    cfg.ConditionOK = ConditionOK.Logic;
+            //    return cfg;
+            //});
         }
 
         // ----- ParaCommon -----

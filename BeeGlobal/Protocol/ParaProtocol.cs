@@ -238,19 +238,19 @@ namespace BeeGlobal
                     Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
                     IO_Processing = IO_Processing.Reset;
-                    //SetOutPut(15, true);
-                    //  await  WriteOutPut();
-                //   PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", true);
+                  //  Global.PLCStatusChanged += Global_PLCStatusChanged;
                     timeAlive = new System.Windows.Forms.Timer();
                     timeAlive.Interval = 1000;
                     timeAlive.Enabled = true;
                     timeAlive.Tick += TimeAlive_Tick;
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
+                      
                         if (!PlcClient.IsConnect)
                         {
                             Global.PLCStatus = PLCStatus.ErrorConnect;
                             Global.StatusIO = StatusIO.NotConnect;
+                            PlcClient.StopOneBitReadLoop();
                             Global.ParaCommon.Comunication.Protocol.Disconnect();
 
                         }
@@ -478,6 +478,9 @@ namespace BeeGlobal
             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connect Fail"));
             return IsConnected;
         }
+
+     
+
         private int numTimeOut=0;
         public void Disconnect()
         {

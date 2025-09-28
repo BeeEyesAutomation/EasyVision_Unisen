@@ -25,29 +25,86 @@ namespace BeeInterface
         public ToolPosition_Adjustment( )
         {
             InitializeComponent();
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
-            this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
-        }
-  
-        public PositionAdj Propety=new PositionAdj();
-        private void rjButton3_Click(object sender, EventArgs e)
-        {
-
           
-          //  cv3.Pattern();
         }
+        public void LoadPara()
+        {
+            if (Propety.bmRaw != null)
+            {
+                imgTemp.Image = Propety.bmRaw;
+            }
+            if (Propety.rotPositionAdjustment != null)
+               Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
+            trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+            trackAngle.Value = (int)Propety.Angle;
+            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
+            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
+            Propety.ckSIMD = Propety.ckSIMD;
+            Propety.ckSubPixel = Propety.ckSubPixel;
+            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
+            ckSIMD.IsCLick = Propety.ckSIMD;
+            ckSubPixel.IsCLick = Propety.ckSubPixel;
+            AdjMorphology.Value = Propety.SizeClose;
+            AdjOpen.Value = Propety.SizeOpen;
+            AdjClearNoise.Value = Propety.SizeClearsmall;
+            AdjClearBig.Value = Propety.SizeClearBig;
 
+            btnClose.IsCLick = Propety.IsClose;
+            btnOpen.IsCLick = Propety.IsOpen;
+            btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+            btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+            AdjOpen.Enabled = Propety.IsOpen;
+            AdjMorphology.Enabled = Propety.IsClose;
+            switch(Propety.MethodSample)
+            {
+                case MethodSample.Pattern:
+                    layThreshod.Visible = false;
+                    layEdge.Visible = false;
+                    lbEdge.Visible = false;
+                    btnPattern.IsCLick = true;
+                    layPattern.Visible = true;
+                    lbPattern.Visible = true;
+                    lbAngle.Visible = true;
+                    trackAngle.Visible = true;
+                    break;
+                case MethodSample.Corner:
+                    layThreshod.Visible = true;
+                    layEdge.Visible = true;
+                    lbEdge.Visible = true;
+                    btnCorner.IsCLick = true;
+                    layPattern.Visible = false;
+                    lbPattern.Visible = false;
+                    lbAngle.Visible = false;
+                    trackAngle.Visible = false;
+                    break;
+                case MethodSample.Edge:
+                    layThreshod.Visible = true;
+                    layEdge.Visible = true;
+                    lbEdge.Visible = true;
+                    btnEdge.IsCLick = true;
+                    layPattern.Visible = false;
+                    lbPattern.Visible = false;
+                    lbAngle.Visible = false;
+                    trackAngle.Visible = false;
+                    break;
+            }
+
+            if (Propety.IsHighSpeed)
+                btnHighSpeed.IsCLick = true;
+            else
+                btnNormal.IsCLick = true;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+
+        }
+        public PositionAdj Propety=new PositionAdj();
+     
         
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.TypeCrop= TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
-           
-          //  G.EditTool.View.imgView.Invalidate();
-          //  G.EditTool.View.imgView.Cursor = Cursors.Default;
 
         }
 
@@ -55,9 +112,6 @@ namespace BeeInterface
         {
           Global.TypeCrop= TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-        
-          //  G.EditTool.View.imgView.Invalidate();
-          //  G.EditTool.View.imgView.Cursor = Cursors.Default;
 
         }
 
@@ -82,105 +136,10 @@ namespace BeeInterface
 
 
         }
-        private void btnCannyMin_Click(object sender, EventArgs e)
-        {
-           
+ 
 
-        }
 
-        private void btnCannyMedium_Click(object sender, EventArgs e)
-        {
-         
-
-        }
-
-        private void btnCannyMax_Click(object sender, EventArgs e)
-        {
-            Propety.threshMin = 0;
-            Propety.threshMax = 255;
-            //if (G.IsLoad)
-            //    if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-
-        }
-
-        private void trackScore_Scroll(object sender, EventArgs e)
-        {
-           
-           
-        }
-      //public void Process()
-      //  {
-      //   //   Propety.rectRotates = new List<RectRotate>();
-      //      if (BeeCore.Common.listCamera[Global. IndexChoose].matRaw == null) return;
-      //      //Mat raw = BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Clone();
-      //      //if (BeeCore.Common.listCamera[Global. IndexChoose].matRaw.Type() == MatType.CV_8UC3)
-      //      //{
-      //      //    raw = raw.CvtColor(ColorConversionCodes.BGR2GRAY);
-      //      //}
-      //  //    Propety.rectArea = new RectangleF(Propety. rotArea._PosCenter.X + Propety. rotArea._rect.Left, Propety. rotArea._PosCenter.Y + Propety. rotArea._rect.Top, Propety. rotArea._rect.Width, Propety. rotArea._rect.Height);
-
-      //      //Propety.Matching(Global.IsRun,BeeCore.Common.listCamera[Global. IndexChoose].matRaw, Propety.indexTool, Propety. rotArea);
-      //      if (Global.IsRun)
-      //      {
-      //          if (Propety.IsOK) 
-      //          {
-      //              if (G.rotOriginAdj == null) return;
-      //              G.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - G.rotOriginAdj._PosCenter.X;
-      //              G.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - G.rotOriginAdj._PosCenter.Y;
-      //              G.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - G.rotOriginAdj._rectRotation;
-      //          }
-      //      }
-      //      else
-      //      {
-      //          if(Propety.IsOK)
-      //          {
-
-      //              if (!Propety.IsOK) return;
-      //              Propety.rotPositionAdjustment = Propety.rectRotates[0].Clone();
-      //              G.rotOriginAdj =new RectRotate(Propety. rotCrop._rect,new PointF (Propety. rotArea._PosCenter.X - Propety. rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety. rotArea._PosCenter.Y - Propety. rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation,AnchorPoint.None);
-                   
-      //          }    
-                
-      //      }    
-
-      //  }
-        Bitmap bmResult;
-        //private void threadProcess_DoWork(object sender, DoWorkEventArgs e)
-        //{
-           
-        //}
-       
-        Mat matClear = new Mat(); Mat matMask = new Mat();
-        public Mat matTrig;
-      
-   
-        //public void GetTemp(RectRotate rotateRect, Mat matRegister)
-        //{
-
-        //    float angle = rotateRect._rectRotation;
-        //    if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-        //    Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-        //    if (matCrop.Type() == MatType.CV_8UC3)
-        //        Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-        //    if (Propety.IsAreaWhite)
-        //        Cv2.BitwiseNot(matTemp, matTemp);
-
-        //}
-
-      
-
-        private void trackScore_ValueChanged(object sender, EventArgs e)
-        {
-            //lbScore.Text = trackScore.Value + " %";
-            
-        }
-
-        private void trackScore_MouseUp(object sender, MouseEventArgs e)
-        {
-          
-        }
-
+     
     
 
        
@@ -245,41 +204,7 @@ namespace BeeInterface
       
         Stopwatch timer = new Stopwatch();
         public BackgroundWorker worker = new BackgroundWorker();
-        public  void LoadPara()
-        {
-           
-                ;
     
-            //Herlo
-            if (Propety.bmRaw != null)
-            {
-                 imgTemp.Image = Propety.bmRaw;
-			}
-			if (Propety.rotPositionAdjustment != null)
-				Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
-
-			trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score ;
-            trackAngle.Value =(int)Propety.Angle;
-            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
-            //txtAngle.Text = (int)Propety.Angle + "";
-            Propety.LimitCounter = 1;
-            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
-            Propety.ckSIMD = Propety.ckSIMD;
-            Propety.ckSubPixel = Propety.ckSubPixel;
-            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
-            ckSIMD.IsCLick = Propety.ckSIMD;
-            ckSubPixel.IsCLick = Propety.ckSubPixel;
-            Propety.TypeMode = Propety.TypeMode;
-         
-            Propety.rotMask = null;
-            Propety.NumObject = 1;
-            if (Propety.IsHighSpeed )
-                btnHighSpeed.IsCLick = true;
-            else
-                btnNormal.IsCLick = true;
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-
-        }
             private void ToolOutLine_Load(object sender, EventArgs e)
         {
             
@@ -370,41 +295,8 @@ namespace BeeInterface
 
         }
 
-        private void btnOutLine_Click(object sender, EventArgs e)
-        {
-            Propety.TypeMode = Mode.OutLine;
-           
-        }
-
-        private void btnPattern_Click(object sender, EventArgs e)
-        {
-            Propety.TypeMode = Mode.Pattern;
-         
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-         //   G.IsCancel = true;
-          //  G.EditTool.RefreshGuiEdit(Step.Step3);
-           
-        }
-
-        private void ckAutoTrigger_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
-
+      
        
-
-        private void trackScore_MouseMove(object sender, MouseEventArgs e)
-        {
-         //   Common.PropetyTools[Global.IndexChoose][Propety. Index].Score = (int)trackScore.Value ;
-        }
-
-        private void trackScore_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void trackScore_ValueChanged(float obj)
         {
@@ -415,11 +307,7 @@ namespace BeeInterface
 
      
 
-        private void btnAutoTrigger_Click(object sender, EventArgs e)
-        {
-          // Propety.IsAutoTrig = btnAutoTrigger.IsCLick;
-        }
-
+     
         private void btnLearning_Click(object sender, EventArgs e)
         {
           
@@ -499,6 +387,115 @@ namespace BeeInterface
             Propety.TypeCrop = Global.TypeCrop;
             Global.StatusDraw = StatusDraw.Edit;
 
+        }
+        private void AdjOpen_ValueChanged(float obj)
+        {
+            Propety.SizeOpen = (int)AdjOpen.Value;
+        }
+
+        private void AdjClearBig_ValueChanged(float obj)
+        {
+            Propety.SizeClearBig = (int)AdjClearBig.Value;
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            Propety.IsOpen = btnOpen.IsCLick;
+            AdjOpen.Enabled = Propety.IsOpen;
+        }
+
+        private void btnIsClearBig_Click(object sender, EventArgs e)
+        {
+            Propety.IsClearNoiseBig = btnIsClearBig.IsCLick;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+
+        }
+
+        private void AdjClearNoise_ValueChanged(float obj)
+        {
+            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Propety.IsClose = btnClose.IsCLick;
+            AdjMorphology.Enabled = Propety.IsClose;
+        }
+
+        private void btnEnableNoise_Click(object sender, EventArgs e)
+        {
+
+            Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+        }
+
+        private void AdjMorphology_ValueChanged(float obj)
+        {
+
+            Propety.SizeClose = (int)AdjMorphology.Value;
+        }
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+            layThreshod.Enabled = true;
+        }
+
+
+
+      
+
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.ThresholdBinary = (int)AdjThreshod.Value;
+        }
+
+        private void btnInvert_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.InvertBinary;
+            layThreshod.Enabled = true;
+        }
+
+        private void btnStrongEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.StrongEdges;
+            layThreshod.Enabled = false;
+        }
+
+        private void btnCloseEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.CloseEdges;
+            layThreshod.Enabled = false;
+        }
+
+        private void btnPattern_Click(object sender, EventArgs e)
+        {
+            Propety.MethodSample=MethodSample.Pattern;
+            layThreshod.Visible =false;
+            layEdge.Visible =false;
+            lbEdge.Visible =false;
+            layPattern.Visible = true;
+            lbPattern.Visible = true;
+            lbAngle.Visible = true;
+            trackAngle.Visible = true;
+        }
+
+        private void btnCorner_Click(object sender, EventArgs e)
+        {
+            Propety.MethodSample = MethodSample.Corner;
+            layThreshod.Visible = true;
+            layEdge.Visible = true;
+            lbEdge.Visible = true;
+            layPattern.Visible = false;
+            lbPattern.Visible = false;
+            lbAngle.Visible = false;
+            trackAngle.Visible = false;
+        }
+
+        private void btnEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethodSample = MethodSample.Edge;
+            layPattern.Visible = false;
+            lbPattern.Visible = false;
         }
     }
 }

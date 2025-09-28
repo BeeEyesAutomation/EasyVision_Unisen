@@ -13,7 +13,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI;
 using System.Windows.Forms;
-using static CvPlus.s_BlockMax;
 using Control = System.Windows.Forms.Control;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;

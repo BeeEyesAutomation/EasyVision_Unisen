@@ -57,11 +57,11 @@ namespace BeeCore
         {
             get
             {
-                return pattern.m_iMinReduceArea;
+                return 0;
             }
             set
             {
-                pattern.m_iMinReduceArea = value;
+              //  pattern.m_iMinReduceArea = value;
             }
         }
       
@@ -81,8 +81,7 @@ namespace BeeCore
           //  pattern.LearnPattern(minArea, indexTool, IndexThead);
 
         }
-        CvPlus.Pattern pattern = new CvPlus.Pattern();
-
+      
     
         public bool IsBitNot { get => isBitNot; set => isBitNot = value; }
        

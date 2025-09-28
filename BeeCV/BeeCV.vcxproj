@@ -427,12 +427,10 @@
   <ItemGroup>
     <ClInclude Include="BarCode.h" />
     <ClInclude Include="CCD.h" />
-    <ClInclude Include="ColorArea.h" />
     <ClInclude Include="ColorMaskWrapper.h" />
     <ClInclude Include="Focus.h" />
     <ClInclude Include="MatchingShape.h" />
     <ClInclude Include="MvCamera.h" />
-    <ClInclude Include="Pattern.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="G.h" />
     <ClInclude Include="pch.h" />
@@ -443,12 +441,10 @@
   <ItemGroup>
     <ClCompile Include="BarCode.cpp" />
     <ClCompile Include="CCD.cpp" />
-    <ClCompile Include="ColorArea.cpp" />
     <ClCompile Include="ColorMaskWrapper.cpp" />
     <ClCompile Include="Focus.cpp" />
     <ClCompile Include="MatchingShape.cpp" />
     <ClCompile Include="MvCamera.cpp" />
-    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="G.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

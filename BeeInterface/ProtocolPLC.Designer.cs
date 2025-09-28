@@ -33,38 +33,22 @@ namespace BeeInterface
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.layIn = new System.Windows.Forms.TableLayoutPanel();
-            this.DI15 = new BeeInterface.RJButton();
             this.cbIn15 = new System.Windows.Forms.ComboBox();
             this.label49 = new System.Windows.Forms.Label();
-            this.DI14 = new BeeInterface.RJButton();
             this.cbIn14 = new System.Windows.Forms.ComboBox();
             this.label48 = new System.Windows.Forms.Label();
-            this.DI13 = new BeeInterface.RJButton();
             this.cbIn13 = new System.Windows.Forms.ComboBox();
             this.label46 = new System.Windows.Forms.Label();
-            this.DI12 = new BeeInterface.RJButton();
             this.cbIn12 = new System.Windows.Forms.ComboBox();
             this.label44 = new System.Windows.Forms.Label();
-            this.DI11 = new BeeInterface.RJButton();
             this.cbIn11 = new System.Windows.Forms.ComboBox();
             this.label42 = new System.Windows.Forms.Label();
-            this.DI10 = new BeeInterface.RJButton();
             this.cbIn10 = new System.Windows.Forms.ComboBox();
             this.label40 = new System.Windows.Forms.Label();
-            this.DI9 = new BeeInterface.RJButton();
             this.cbIn9 = new System.Windows.Forms.ComboBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.DI8 = new BeeInterface.RJButton();
             this.cbIn8 = new System.Windows.Forms.ComboBox();
             this.label21 = new System.Windows.Forms.Label();
-            this.DI7 = new BeeInterface.RJButton();
-            this.DI6 = new BeeInterface.RJButton();
-            this.DI5 = new BeeInterface.RJButton();
-            this.DI4 = new BeeInterface.RJButton();
-            this.DI3 = new BeeInterface.RJButton();
-            this.DI2 = new BeeInterface.RJButton();
-            this.DI1 = new BeeInterface.RJButton();
-            this.DI0 = new BeeInterface.RJButton();
             this.cbIn7 = new System.Windows.Forms.ComboBox();
             this.label30 = new System.Windows.Forms.Label();
             this.cbIn6 = new System.Windows.Forms.ComboBox();
@@ -83,37 +67,22 @@ namespace BeeInterface
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.layOut = new System.Windows.Forms.TableLayoutPanel();
-            this.DO15 = new BeeInterface.RJButton();
             this.cbO15 = new System.Windows.Forms.ComboBox();
             this.label57 = new System.Windows.Forms.Label();
-            this.DO14 = new BeeInterface.RJButton();
             this.cbO14 = new System.Windows.Forms.ComboBox();
             this.label56 = new System.Windows.Forms.Label();
-            this.DO13 = new BeeInterface.RJButton();
             this.cbO13 = new System.Windows.Forms.ComboBox();
             this.label55 = new System.Windows.Forms.Label();
-            this.DO12 = new BeeInterface.RJButton();
             this.cbO12 = new System.Windows.Forms.ComboBox();
             this.label54 = new System.Windows.Forms.Label();
-            this.DO11 = new BeeInterface.RJButton();
             this.cbO11 = new System.Windows.Forms.ComboBox();
             this.label53 = new System.Windows.Forms.Label();
-            this.DO10 = new BeeInterface.RJButton();
             this.cbO10 = new System.Windows.Forms.ComboBox();
             this.label52 = new System.Windows.Forms.Label();
-            this.DO9 = new BeeInterface.RJButton();
             this.cbO9 = new System.Windows.Forms.ComboBox();
             this.label51 = new System.Windows.Forms.Label();
-            this.DO8 = new BeeInterface.RJButton();
             this.cbO8 = new System.Windows.Forms.ComboBox();
             this.label50 = new System.Windows.Forms.Label();
-            this.DO7 = new BeeInterface.RJButton();
-            this.DO6 = new BeeInterface.RJButton();
-            this.DO5 = new BeeInterface.RJButton();
-            this.DO4 = new BeeInterface.RJButton();
-            this.D3 = new BeeInterface.RJButton();
-            this.DO2 = new BeeInterface.RJButton();
-            this.DO1 = new BeeInterface.RJButton();
             this.cbO7 = new System.Windows.Forms.ComboBox();
             this.label33 = new System.Windows.Forms.Label();
             this.cbO6 = new System.Windows.Forms.ComboBox();
@@ -130,44 +99,25 @@ namespace BeeInterface
             this.label45 = new System.Windows.Forms.Label();
             this.cbO0 = new System.Windows.Forms.ComboBox();
             this.label47 = new System.Windows.Forms.Label();
-            this.DO0 = new BeeInterface.RJButton();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnTCP = new BeeInterface.RJButton();
-            this.btnSerial = new BeeInterface.RJButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.txtAddWrite = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
-            this.timerRead = new BeeInterface.CustomNumericEx();
-            this.customNumericEx2 = new BeeInterface.CustomNumericEx();
             this.txtAddRead = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.StatusIObtn = new BeeInterface.RJButton();
-            this.btnConectIO = new BeeInterface.RJButton();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnBypass = new BeeInterface.RJButton();
             this.label6 = new System.Windows.Forms.Label();
             this.layBrand = new System.Windows.Forms.TableLayoutPanel();
-            this.rjButton2 = new BeeInterface.RJButton();
-            this.btnDelta = new BeeInterface.RJButton();
-            this.rjButton7 = new BeeInterface.RJButton();
-            this.rjButton1 = new BeeInterface.RJButton();
-            this.btnKeyence = new BeeInterface.RJButton();
-            this.btnMitsu = new BeeInterface.RJButton();
-            this.btnRtu = new BeeInterface.RJButton();
-            this.ModbusAscii = new BeeInterface.RJButton();
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.layCom = new System.Windows.Forms.TableLayoutPanel();
-            this.numSlaveID = new BeeInterface.CustomNumericEx();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnRtsEnable = new BeeInterface.RJButton();
-            this.btnDtrEnable = new BeeInterface.RJButton();
             this.cbStopBits = new System.Windows.Forms.ComboBox();
             this.cbParity = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -179,13 +129,62 @@ namespace BeeInterface
             this.label9 = new System.Windows.Forms.Label();
             this.cbDataBits = new System.Windows.Forms.ComboBox();
             this.layIP = new System.Windows.Forms.TableLayoutPanel();
-            this.btnReScan = new BeeInterface.RJButton();
             this.lbTCP1 = new System.Windows.Forms.Label();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.lbTCP2 = new System.Windows.Forms.Label();
-            this.tmCheck = new System.Windows.Forms.Timer(this.components);
             this.tmConnect = new System.Windows.Forms.Timer(this.components);
+            this.DI15 = new BeeInterface.RJButton();
+            this.DI14 = new BeeInterface.RJButton();
+            this.DI13 = new BeeInterface.RJButton();
+            this.DI12 = new BeeInterface.RJButton();
+            this.DI11 = new BeeInterface.RJButton();
+            this.DI10 = new BeeInterface.RJButton();
+            this.DI9 = new BeeInterface.RJButton();
+            this.DI8 = new BeeInterface.RJButton();
+            this.DI7 = new BeeInterface.RJButton();
+            this.DI6 = new BeeInterface.RJButton();
+            this.DI5 = new BeeInterface.RJButton();
+            this.DI4 = new BeeInterface.RJButton();
+            this.DI3 = new BeeInterface.RJButton();
+            this.DI2 = new BeeInterface.RJButton();
+            this.DI1 = new BeeInterface.RJButton();
+            this.DI0 = new BeeInterface.RJButton();
+            this.DO15 = new BeeInterface.RJButton();
+            this.DO14 = new BeeInterface.RJButton();
+            this.DO13 = new BeeInterface.RJButton();
+            this.DO12 = new BeeInterface.RJButton();
+            this.DO11 = new BeeInterface.RJButton();
+            this.DO10 = new BeeInterface.RJButton();
+            this.DO9 = new BeeInterface.RJButton();
+            this.DO8 = new BeeInterface.RJButton();
+            this.DO7 = new BeeInterface.RJButton();
+            this.DO6 = new BeeInterface.RJButton();
+            this.DO5 = new BeeInterface.RJButton();
+            this.DO4 = new BeeInterface.RJButton();
+            this.D3 = new BeeInterface.RJButton();
+            this.DO2 = new BeeInterface.RJButton();
+            this.DO1 = new BeeInterface.RJButton();
+            this.DO0 = new BeeInterface.RJButton();
+            this.btnTCP = new BeeInterface.RJButton();
+            this.btnSerial = new BeeInterface.RJButton();
+            this.timerRead = new BeeInterface.CustomNumericEx();
+            this.customNumericEx2 = new BeeInterface.CustomNumericEx();
+            this.StatusIObtn = new BeeInterface.RJButton();
+            this.btnConectIO = new BeeInterface.RJButton();
+            this.btnBypass = new BeeInterface.RJButton();
+            this.rjButton2 = new BeeInterface.RJButton();
+            this.btnDelta = new BeeInterface.RJButton();
+            this.rjButton7 = new BeeInterface.RJButton();
+            this.rjButton1 = new BeeInterface.RJButton();
+            this.btnKeyence = new BeeInterface.RJButton();
+            this.btnMitsu = new BeeInterface.RJButton();
+            this.btnRtu = new BeeInterface.RJButton();
+            this.ModbusAscii = new BeeInterface.RJButton();
+            this.numSlaveID = new BeeInterface.CustomNumericEx();
+            this.btnRtsEnable = new BeeInterface.RJButton();
+            this.btnDtrEnable = new BeeInterface.RJButton();
+            this.btnReScan = new BeeInterface.RJButton();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.layIn.SuspendLayout();
@@ -306,6 +305,1396 @@ namespace BeeInterface
             this.layIn.Size = new System.Drawing.Size(408, 797);
             this.layIn.TabIndex = 18;
             // 
+            // cbIn15
+            // 
+            this.cbIn15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn15.Enabled = false;
+            this.cbIn15.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn15.FormattingEnabled = true;
+            this.cbIn15.Location = new System.Drawing.Point(97, 588);
+            this.cbIn15.Name = "cbIn15";
+            this.cbIn15.Size = new System.Drawing.Size(149, 32);
+            this.cbIn15.TabIndex = 57;
+            this.cbIn15.Text = "None";
+            this.cbIn15.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label49.Location = new System.Drawing.Point(3, 585);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(88, 39);
+            this.label49.TabIndex = 56;
+            this.label49.Text = "Bit 15";
+            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn14
+            // 
+            this.cbIn14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn14.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn14.FormattingEnabled = true;
+            this.cbIn14.Location = new System.Drawing.Point(97, 549);
+            this.cbIn14.Name = "cbIn14";
+            this.cbIn14.Size = new System.Drawing.Size(149, 32);
+            this.cbIn14.TabIndex = 54;
+            this.cbIn14.Text = "None";
+            this.cbIn14.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label48.Location = new System.Drawing.Point(3, 546);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(88, 39);
+            this.label48.TabIndex = 53;
+            this.label48.Text = "Bit 14";
+            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn13
+            // 
+            this.cbIn13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn13.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn13.FormattingEnabled = true;
+            this.cbIn13.Location = new System.Drawing.Point(97, 510);
+            this.cbIn13.Name = "cbIn13";
+            this.cbIn13.Size = new System.Drawing.Size(149, 32);
+            this.cbIn13.TabIndex = 51;
+            this.cbIn13.Text = "None";
+            this.cbIn13.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label46.Location = new System.Drawing.Point(3, 507);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(88, 39);
+            this.label46.TabIndex = 50;
+            this.label46.Text = "Bit 13";
+            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn12
+            // 
+            this.cbIn12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn12.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn12.FormattingEnabled = true;
+            this.cbIn12.Location = new System.Drawing.Point(97, 471);
+            this.cbIn12.Name = "cbIn12";
+            this.cbIn12.Size = new System.Drawing.Size(149, 32);
+            this.cbIn12.TabIndex = 48;
+            this.cbIn12.Text = "None";
+            this.cbIn12.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label44.Location = new System.Drawing.Point(3, 468);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(88, 39);
+            this.label44.TabIndex = 47;
+            this.label44.Text = "Bit 12";
+            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label44.Click += new System.EventHandler(this.label44_Click);
+            // 
+            // cbIn11
+            // 
+            this.cbIn11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn11.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn11.FormattingEnabled = true;
+            this.cbIn11.Location = new System.Drawing.Point(97, 432);
+            this.cbIn11.Name = "cbIn11";
+            this.cbIn11.Size = new System.Drawing.Size(149, 32);
+            this.cbIn11.TabIndex = 45;
+            this.cbIn11.Text = "None";
+            this.cbIn11.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label42.Location = new System.Drawing.Point(3, 429);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(88, 39);
+            this.label42.TabIndex = 44;
+            this.label42.Text = "Bit 11";
+            this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn10
+            // 
+            this.cbIn10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn10.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn10.FormattingEnabled = true;
+            this.cbIn10.Location = new System.Drawing.Point(97, 393);
+            this.cbIn10.Name = "cbIn10";
+            this.cbIn10.Size = new System.Drawing.Size(149, 32);
+            this.cbIn10.TabIndex = 42;
+            this.cbIn10.Text = "None";
+            this.cbIn10.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label40.Location = new System.Drawing.Point(3, 390);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(88, 39);
+            this.label40.TabIndex = 41;
+            this.label40.Text = "Bit 10";
+            this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn9
+            // 
+            this.cbIn9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn9.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn9.FormattingEnabled = true;
+            this.cbIn9.Location = new System.Drawing.Point(97, 354);
+            this.cbIn9.Name = "cbIn9";
+            this.cbIn9.Size = new System.Drawing.Size(149, 32);
+            this.cbIn9.TabIndex = 39;
+            this.cbIn9.Text = "None";
+            this.cbIn9.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label32.Location = new System.Drawing.Point(3, 351);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(88, 39);
+            this.label32.TabIndex = 38;
+            this.label32.Text = "Bit 09";
+            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn8
+            // 
+            this.cbIn8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn8.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn8.FormattingEnabled = true;
+            this.cbIn8.Location = new System.Drawing.Point(97, 315);
+            this.cbIn8.Name = "cbIn8";
+            this.cbIn8.Size = new System.Drawing.Size(149, 32);
+            this.cbIn8.TabIndex = 36;
+            this.cbIn8.Text = "None";
+            this.cbIn8.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.Location = new System.Drawing.Point(3, 312);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(88, 39);
+            this.label21.TabIndex = 35;
+            this.label21.Text = "Bit 08";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn7
+            // 
+            this.cbIn7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn7.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn7.FormattingEnabled = true;
+            this.cbIn7.Location = new System.Drawing.Point(97, 276);
+            this.cbIn7.Name = "cbIn7";
+            this.cbIn7.Size = new System.Drawing.Size(149, 32);
+            this.cbIn7.TabIndex = 25;
+            this.cbIn7.Text = "None";
+            this.cbIn7.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label30.Location = new System.Drawing.Point(3, 273);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(88, 39);
+            this.label30.TabIndex = 24;
+            this.label30.Text = "Bit 07";
+            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn6
+            // 
+            this.cbIn6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn6.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn6.FormattingEnabled = true;
+            this.cbIn6.Location = new System.Drawing.Point(97, 237);
+            this.cbIn6.Name = "cbIn6";
+            this.cbIn6.Size = new System.Drawing.Size(149, 32);
+            this.cbIn6.TabIndex = 22;
+            this.cbIn6.Text = "None";
+            this.cbIn6.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label28.Location = new System.Drawing.Point(3, 234);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(88, 39);
+            this.label28.TabIndex = 21;
+            this.label28.Text = "Bit 06";
+            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn5
+            // 
+            this.cbIn5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn5.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn5.FormattingEnabled = true;
+            this.cbIn5.Location = new System.Drawing.Point(97, 198);
+            this.cbIn5.Name = "cbIn5";
+            this.cbIn5.Size = new System.Drawing.Size(149, 32);
+            this.cbIn5.TabIndex = 19;
+            this.cbIn5.Text = "None";
+            this.cbIn5.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label26.Location = new System.Drawing.Point(3, 195);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(88, 39);
+            this.label26.TabIndex = 18;
+            this.label26.Text = "Bit 05";
+            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn4
+            // 
+            this.cbIn4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn4.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn4.FormattingEnabled = true;
+            this.cbIn4.Location = new System.Drawing.Point(97, 159);
+            this.cbIn4.Name = "cbIn4";
+            this.cbIn4.Size = new System.Drawing.Size(149, 32);
+            this.cbIn4.TabIndex = 16;
+            this.cbIn4.Text = "None";
+            this.cbIn4.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label24.Location = new System.Drawing.Point(3, 156);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(88, 39);
+            this.label24.TabIndex = 15;
+            this.label24.Text = "Bit 04";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn3
+            // 
+            this.cbIn3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn3.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn3.FormattingEnabled = true;
+            this.cbIn3.Location = new System.Drawing.Point(97, 120);
+            this.cbIn3.Name = "cbIn3";
+            this.cbIn3.Size = new System.Drawing.Size(149, 32);
+            this.cbIn3.TabIndex = 13;
+            this.cbIn3.Text = "None";
+            this.cbIn3.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label22.Location = new System.Drawing.Point(3, 117);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(88, 39);
+            this.label22.TabIndex = 12;
+            this.label22.Text = "Bit 03";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn2
+            // 
+            this.cbIn2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn2.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn2.FormattingEnabled = true;
+            this.cbIn2.Location = new System.Drawing.Point(97, 81);
+            this.cbIn2.Name = "cbIn2";
+            this.cbIn2.Size = new System.Drawing.Size(149, 32);
+            this.cbIn2.TabIndex = 10;
+            this.cbIn2.Text = "None";
+            this.cbIn2.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label20.Location = new System.Drawing.Point(3, 78);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(88, 39);
+            this.label20.TabIndex = 9;
+            this.label20.Text = "Bit 02";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn1
+            // 
+            this.cbIn1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn1.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn1.FormattingEnabled = true;
+            this.cbIn1.Location = new System.Drawing.Point(97, 42);
+            this.cbIn1.Name = "cbIn1";
+            this.cbIn1.Size = new System.Drawing.Size(149, 32);
+            this.cbIn1.TabIndex = 7;
+            this.cbIn1.Text = "None";
+            this.cbIn1.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label14.Location = new System.Drawing.Point(3, 39);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(88, 39);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "Bit 01";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbIn0
+            // 
+            this.cbIn0.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIn0.ForeColor = System.Drawing.Color.Blue;
+            this.cbIn0.FormattingEnabled = true;
+            this.cbIn0.Location = new System.Drawing.Point(97, 3);
+            this.cbIn0.Name = "cbIn0";
+            this.cbIn0.Size = new System.Drawing.Size(149, 32);
+            this.cbIn0.TabIndex = 2;
+            this.cbIn0.Text = "None";
+            this.cbIn0.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 39);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Bit 00";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage6.Controls.Add(this.layOut);
+            this.tabPage6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabPage6.Location = new System.Drawing.Point(4, 33);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(5);
+            this.tabPage6.Size = new System.Drawing.Size(414, 803);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "Output";
+            // 
+            // layOut
+            // 
+            this.layOut.BackColor = System.Drawing.SystemColors.Control;
+            this.layOut.ColumnCount = 3;
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.19343F));
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.39525F));
+            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.41132F));
+            this.layOut.Controls.Add(this.DO15, 2, 15);
+            this.layOut.Controls.Add(this.cbO15, 1, 15);
+            this.layOut.Controls.Add(this.label57, 0, 15);
+            this.layOut.Controls.Add(this.DO14, 2, 14);
+            this.layOut.Controls.Add(this.cbO14, 1, 14);
+            this.layOut.Controls.Add(this.label56, 0, 14);
+            this.layOut.Controls.Add(this.DO13, 2, 13);
+            this.layOut.Controls.Add(this.cbO13, 1, 13);
+            this.layOut.Controls.Add(this.label55, 0, 13);
+            this.layOut.Controls.Add(this.DO12, 2, 12);
+            this.layOut.Controls.Add(this.cbO12, 1, 12);
+            this.layOut.Controls.Add(this.label54, 0, 12);
+            this.layOut.Controls.Add(this.DO11, 2, 11);
+            this.layOut.Controls.Add(this.cbO11, 1, 11);
+            this.layOut.Controls.Add(this.label53, 0, 11);
+            this.layOut.Controls.Add(this.DO10, 2, 10);
+            this.layOut.Controls.Add(this.cbO10, 1, 10);
+            this.layOut.Controls.Add(this.label52, 0, 10);
+            this.layOut.Controls.Add(this.DO9, 2, 9);
+            this.layOut.Controls.Add(this.cbO9, 1, 9);
+            this.layOut.Controls.Add(this.label51, 0, 9);
+            this.layOut.Controls.Add(this.DO8, 2, 8);
+            this.layOut.Controls.Add(this.cbO8, 1, 8);
+            this.layOut.Controls.Add(this.label50, 0, 8);
+            this.layOut.Controls.Add(this.DO7, 2, 7);
+            this.layOut.Controls.Add(this.DO6, 2, 6);
+            this.layOut.Controls.Add(this.DO5, 2, 5);
+            this.layOut.Controls.Add(this.DO4, 2, 4);
+            this.layOut.Controls.Add(this.D3, 2, 3);
+            this.layOut.Controls.Add(this.DO2, 2, 2);
+            this.layOut.Controls.Add(this.DO1, 2, 1);
+            this.layOut.Controls.Add(this.cbO7, 1, 7);
+            this.layOut.Controls.Add(this.label33, 0, 7);
+            this.layOut.Controls.Add(this.cbO6, 1, 6);
+            this.layOut.Controls.Add(this.label35, 0, 6);
+            this.layOut.Controls.Add(this.cbO5, 1, 5);
+            this.layOut.Controls.Add(this.label37, 0, 5);
+            this.layOut.Controls.Add(this.cbO4, 1, 4);
+            this.layOut.Controls.Add(this.label39, 0, 4);
+            this.layOut.Controls.Add(this.cbO3, 1, 3);
+            this.layOut.Controls.Add(this.label41, 0, 3);
+            this.layOut.Controls.Add(this.cbO2, 1, 2);
+            this.layOut.Controls.Add(this.label43, 0, 2);
+            this.layOut.Controls.Add(this.cbO1, 1, 1);
+            this.layOut.Controls.Add(this.label45, 0, 1);
+            this.layOut.Controls.Add(this.cbO0, 1, 0);
+            this.layOut.Controls.Add(this.label47, 0, 0);
+            this.layOut.Controls.Add(this.DO0, 2, 0);
+            this.layOut.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layOut.Location = new System.Drawing.Point(5, 5);
+            this.layOut.Name = "layOut";
+            this.layOut.RowCount = 17;
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.layOut.Size = new System.Drawing.Size(404, 793);
+            this.layOut.TabIndex = 56;
+            // 
+            // cbO15
+            // 
+            this.cbO15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO15.Enabled = false;
+            this.cbO15.ForeColor = System.Drawing.Color.Blue;
+            this.cbO15.FormattingEnabled = true;
+            this.cbO15.Location = new System.Drawing.Point(96, 588);
+            this.cbO15.Name = "cbO15";
+            this.cbO15.Size = new System.Drawing.Size(153, 32);
+            this.cbO15.TabIndex = 56;
+            this.cbO15.Text = "None";
+            this.cbO15.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label57.Location = new System.Drawing.Point(3, 585);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(87, 39);
+            this.label57.TabIndex = 55;
+            this.label57.Text = "Bit  15";
+            this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO14
+            // 
+            this.cbO14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO14.ForeColor = System.Drawing.Color.Blue;
+            this.cbO14.FormattingEnabled = true;
+            this.cbO14.Location = new System.Drawing.Point(96, 549);
+            this.cbO14.Name = "cbO14";
+            this.cbO14.Size = new System.Drawing.Size(153, 32);
+            this.cbO14.TabIndex = 53;
+            this.cbO14.Text = "None";
+            this.cbO14.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label56.Location = new System.Drawing.Point(3, 546);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(87, 39);
+            this.label56.TabIndex = 52;
+            this.label56.Text = "Bit  14";
+            this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO13
+            // 
+            this.cbO13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO13.ForeColor = System.Drawing.Color.Blue;
+            this.cbO13.FormattingEnabled = true;
+            this.cbO13.Location = new System.Drawing.Point(96, 510);
+            this.cbO13.Name = "cbO13";
+            this.cbO13.Size = new System.Drawing.Size(153, 32);
+            this.cbO13.TabIndex = 50;
+            this.cbO13.Text = "None";
+            this.cbO13.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label55.Location = new System.Drawing.Point(3, 507);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(87, 39);
+            this.label55.TabIndex = 49;
+            this.label55.Text = "Bit  13";
+            this.label55.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO12
+            // 
+            this.cbO12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO12.ForeColor = System.Drawing.Color.Blue;
+            this.cbO12.FormattingEnabled = true;
+            this.cbO12.Location = new System.Drawing.Point(96, 471);
+            this.cbO12.Name = "cbO12";
+            this.cbO12.Size = new System.Drawing.Size(153, 32);
+            this.cbO12.TabIndex = 47;
+            this.cbO12.Text = "None";
+            this.cbO12.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label54.Location = new System.Drawing.Point(3, 468);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(87, 39);
+            this.label54.TabIndex = 46;
+            this.label54.Text = "Bit  12";
+            this.label54.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO11
+            // 
+            this.cbO11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO11.ForeColor = System.Drawing.Color.Blue;
+            this.cbO11.FormattingEnabled = true;
+            this.cbO11.Location = new System.Drawing.Point(96, 432);
+            this.cbO11.Name = "cbO11";
+            this.cbO11.Size = new System.Drawing.Size(153, 32);
+            this.cbO11.TabIndex = 44;
+            this.cbO11.Text = "None";
+            this.cbO11.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label53.Location = new System.Drawing.Point(3, 429);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(87, 39);
+            this.label53.TabIndex = 43;
+            this.label53.Text = "Bit  11";
+            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO10
+            // 
+            this.cbO10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO10.ForeColor = System.Drawing.Color.Blue;
+            this.cbO10.FormattingEnabled = true;
+            this.cbO10.Location = new System.Drawing.Point(96, 393);
+            this.cbO10.Name = "cbO10";
+            this.cbO10.Size = new System.Drawing.Size(153, 32);
+            this.cbO10.TabIndex = 41;
+            this.cbO10.Text = "None";
+            this.cbO10.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label52.Location = new System.Drawing.Point(3, 390);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(87, 39);
+            this.label52.TabIndex = 40;
+            this.label52.Text = "Bit  10";
+            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO9
+            // 
+            this.cbO9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO9.ForeColor = System.Drawing.Color.Blue;
+            this.cbO9.FormattingEnabled = true;
+            this.cbO9.Location = new System.Drawing.Point(96, 354);
+            this.cbO9.Name = "cbO9";
+            this.cbO9.Size = new System.Drawing.Size(153, 32);
+            this.cbO9.TabIndex = 38;
+            this.cbO9.Text = "None";
+            this.cbO9.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label51.Location = new System.Drawing.Point(3, 351);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(87, 39);
+            this.label51.TabIndex = 37;
+            this.label51.Text = "Bit  09";
+            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbO8
+            // 
+            this.cbO8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO8.ForeColor = System.Drawing.Color.Blue;
+            this.cbO8.FormattingEnabled = true;
+            this.cbO8.Location = new System.Drawing.Point(96, 315);
+            this.cbO8.Name = "cbO8";
+            this.cbO8.Size = new System.Drawing.Size(153, 32);
+            this.cbO8.TabIndex = 35;
+            this.cbO8.Text = "None";
+            this.cbO8.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label50.Location = new System.Drawing.Point(3, 312);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(87, 39);
+            this.label50.TabIndex = 34;
+            this.label50.Text = "Bit  08";
+            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label50.Click += new System.EventHandler(this.label50_Click_1);
+            // 
+            // cbO7
+            // 
+            this.cbO7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO7.ForeColor = System.Drawing.Color.Blue;
+            this.cbO7.FormattingEnabled = true;
+            this.cbO7.Location = new System.Drawing.Point(96, 276);
+            this.cbO7.Name = "cbO7";
+            this.cbO7.Size = new System.Drawing.Size(153, 32);
+            this.cbO7.TabIndex = 25;
+            this.cbO7.Text = "None";
+            this.cbO7.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label33.Location = new System.Drawing.Point(3, 273);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(87, 39);
+            this.label33.TabIndex = 24;
+            this.label33.Text = "Bit  07";
+            this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label33.Click += new System.EventHandler(this.label33_Click);
+            // 
+            // cbO6
+            // 
+            this.cbO6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO6.ForeColor = System.Drawing.Color.Blue;
+            this.cbO6.FormattingEnabled = true;
+            this.cbO6.Location = new System.Drawing.Point(96, 237);
+            this.cbO6.Name = "cbO6";
+            this.cbO6.Size = new System.Drawing.Size(153, 32);
+            this.cbO6.TabIndex = 22;
+            this.cbO6.Text = "None";
+            this.cbO6.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label35.Location = new System.Drawing.Point(3, 234);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(87, 39);
+            this.label35.TabIndex = 21;
+            this.label35.Text = "Bit  06";
+            this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label35.Click += new System.EventHandler(this.label35_Click);
+            // 
+            // cbO5
+            // 
+            this.cbO5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO5.ForeColor = System.Drawing.Color.Blue;
+            this.cbO5.FormattingEnabled = true;
+            this.cbO5.Location = new System.Drawing.Point(96, 198);
+            this.cbO5.Name = "cbO5";
+            this.cbO5.Size = new System.Drawing.Size(153, 32);
+            this.cbO5.TabIndex = 19;
+            this.cbO5.Text = "None";
+            this.cbO5.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label37.Location = new System.Drawing.Point(3, 195);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(87, 39);
+            this.label37.TabIndex = 18;
+            this.label37.Text = "Bit  05";
+            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label37.Click += new System.EventHandler(this.label37_Click);
+            // 
+            // cbO4
+            // 
+            this.cbO4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO4.ForeColor = System.Drawing.Color.Blue;
+            this.cbO4.FormattingEnabled = true;
+            this.cbO4.Location = new System.Drawing.Point(96, 159);
+            this.cbO4.Name = "cbO4";
+            this.cbO4.Size = new System.Drawing.Size(153, 32);
+            this.cbO4.TabIndex = 16;
+            this.cbO4.Text = "None";
+            this.cbO4.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label39.Location = new System.Drawing.Point(3, 156);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(87, 39);
+            this.label39.TabIndex = 15;
+            this.label39.Text = "Bit  04";
+            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label39.Click += new System.EventHandler(this.label39_Click);
+            // 
+            // cbO3
+            // 
+            this.cbO3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO3.ForeColor = System.Drawing.Color.Blue;
+            this.cbO3.FormattingEnabled = true;
+            this.cbO3.Location = new System.Drawing.Point(96, 120);
+            this.cbO3.Name = "cbO3";
+            this.cbO3.Size = new System.Drawing.Size(153, 32);
+            this.cbO3.TabIndex = 13;
+            this.cbO3.Text = "None";
+            this.cbO3.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label41.Location = new System.Drawing.Point(3, 117);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(87, 39);
+            this.label41.TabIndex = 12;
+            this.label41.Text = "Bit  03";
+            this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label41.Click += new System.EventHandler(this.label41_Click);
+            // 
+            // cbO2
+            // 
+            this.cbO2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO2.ForeColor = System.Drawing.Color.Blue;
+            this.cbO2.FormattingEnabled = true;
+            this.cbO2.Location = new System.Drawing.Point(96, 81);
+            this.cbO2.Name = "cbO2";
+            this.cbO2.Size = new System.Drawing.Size(153, 32);
+            this.cbO2.TabIndex = 10;
+            this.cbO2.Text = "None";
+            this.cbO2.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label43.Location = new System.Drawing.Point(3, 78);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(87, 39);
+            this.label43.TabIndex = 9;
+            this.label43.Text = "Bit  02";
+            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label43.Click += new System.EventHandler(this.label43_Click);
+            // 
+            // cbO1
+            // 
+            this.cbO1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO1.ForeColor = System.Drawing.Color.Blue;
+            this.cbO1.FormattingEnabled = true;
+            this.cbO1.Location = new System.Drawing.Point(96, 42);
+            this.cbO1.Name = "cbO1";
+            this.cbO1.Size = new System.Drawing.Size(153, 32);
+            this.cbO1.TabIndex = 7;
+            this.cbO1.Text = "None";
+            this.cbO1.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label45.Location = new System.Drawing.Point(3, 39);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(87, 39);
+            this.label45.TabIndex = 6;
+            this.label45.Text = "Bit  01";
+            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label45.Click += new System.EventHandler(this.label45_Click);
+            // 
+            // cbO0
+            // 
+            this.cbO0.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbO0.ForeColor = System.Drawing.Color.Blue;
+            this.cbO0.FormattingEnabled = true;
+            this.cbO0.Location = new System.Drawing.Point(96, 3);
+            this.cbO0.Name = "cbO0";
+            this.cbO0.Size = new System.Drawing.Size(153, 32);
+            this.cbO0.TabIndex = 2;
+            this.cbO0.Text = "None";
+            this.cbO0.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label47.Location = new System.Drawing.Point(3, 0);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(87, 39);
+            this.label47.TabIndex = 4;
+            this.label47.Text = "Bit 00";
+            this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label47.Click += new System.EventHandler(this.label47_Click);
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.AutoScroll = true;
+            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage7.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage7.Location = new System.Drawing.Point(4, 33);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.tabPage7.Size = new System.Drawing.Size(414, 803);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "Setting";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.layBrand, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 4);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 10);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 146F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 738);
+            this.tableLayoutPanel1.TabIndex = 80;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel4.Controls.Add(this.btnTCP, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnSerial, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 214);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(408, 56);
+            this.tableLayoutPanel4.TabIndex = 3;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.61905F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.38095F));
+            this.tableLayoutPanel2.Controls.Add(this.label1, 1, 8);
+            this.tableLayoutPanel2.Controls.Add(this.txtAddWrite, 1, 7);
+            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label19, 1, 6);
+            this.tableLayoutPanel2.Controls.Add(this.label18, 0, 8);
+            this.tableLayoutPanel2.Controls.Add(this.timerRead, 0, 9);
+            this.tableLayoutPanel2.Controls.Add(this.customNumericEx2, 1, 9);
+            this.tableLayoutPanel2.Controls.Add(this.txtAddRead, 0, 7);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 527);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 20);
+            this.tableLayoutPanel2.RowCount = 11;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(402, 133);
+            this.tableLayoutPanel2.TabIndex = 79;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.LightGray;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.DimGray;
+            this.label1.Location = new System.Drawing.Point(191, 61);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(211, 24);
+            this.label1.TabIndex = 126;
+            this.label1.Text = "Time Out";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtAddWrite
+            // 
+            this.txtAddWrite.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAddWrite.Location = new System.Drawing.Point(194, 29);
+            this.txtAddWrite.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.txtAddWrite.Name = "txtAddWrite";
+            this.txtAddWrite.Size = new System.Drawing.Size(205, 29);
+            this.txtAddWrite.TabIndex = 125;
+            this.txtAddWrite.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAddWrite.TextChanged += new System.EventHandler(this.txtAddWrite_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.LightGray;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DimGray;
+            this.label2.Location = new System.Drawing.Point(3, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(185, 24);
+            this.label2.TabIndex = 73;
+            this.label2.Text = "Add.Read";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.BackColor = System.Drawing.Color.LightGray;
+            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.DimGray;
+            this.label19.Location = new System.Drawing.Point(194, 5);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(205, 24);
+            this.label19.TabIndex = 76;
+            this.label19.Text = "Add.Write";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.BackColor = System.Drawing.Color.LightGray;
+            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.DimGray;
+            this.label18.Location = new System.Drawing.Point(0, 61);
+            this.label18.Margin = new System.Windows.Forms.Padding(0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(191, 24);
+            this.label18.TabIndex = 118;
+            this.label18.Text = "Time Read";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtAddRead
+            // 
+            this.txtAddRead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAddRead.Location = new System.Drawing.Point(3, 29);
+            this.txtAddRead.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.txtAddRead.Name = "txtAddRead";
+            this.txtAddRead.Size = new System.Drawing.Size(185, 29);
+            this.txtAddRead.TabIndex = 124;
+            this.txtAddRead.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAddRead.TextChanged += new System.EventHandler(this.txtAddRead_TextChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.panel5);
+            this.panel1.Controls.Add(this.StatusIObtn);
+            this.panel1.Controls.Add(this.btnConectIO);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.btnBypass);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 673);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(402, 62);
+            this.panel1.TabIndex = 84;
+            // 
+            // panel5
+            // 
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel5.Location = new System.Drawing.Point(128, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(10, 62);
+            this.panel5.TabIndex = 74;
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(261, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(10, 62);
+            this.panel2.TabIndex = 70;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(3, 190);
+            this.label6.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(126, 24);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Comunication";
+            // 
+            // layBrand
+            // 
+            this.layBrand.AutoScroll = true;
+            this.layBrand.ColumnCount = 2;
+            this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layBrand.Controls.Add(this.rjButton2, 1, 2);
+            this.layBrand.Controls.Add(this.btnDelta, 0, 2);
+            this.layBrand.Controls.Add(this.rjButton7, 1, 1);
+            this.layBrand.Controls.Add(this.rjButton1, 0, 1);
+            this.layBrand.Controls.Add(this.btnKeyence, 0, 0);
+            this.layBrand.Controls.Add(this.btnMitsu, 1, 0);
+            this.layBrand.Controls.Add(this.btnRtu, 0, 3);
+            this.layBrand.Controls.Add(this.ModbusAscii, 1, 3);
+            this.layBrand.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layBrand.Location = new System.Drawing.Point(3, 27);
+            this.layBrand.Name = "layBrand";
+            this.layBrand.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.layBrand.RowCount = 5;
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.layBrand.Size = new System.Drawing.Size(402, 150);
+            this.layBrand.TabIndex = 0;
+            this.layBrand.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel3_Paint);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 24);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Brand";
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel5.Controls.Add(this.layCom, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.layIP, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 270);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(408, 254);
+            this.tableLayoutPanel5.TabIndex = 4;
+            // 
+            // layCom
+            // 
+            this.layCom.BackColor = System.Drawing.Color.White;
+            this.layCom.ColumnCount = 2;
+            this.layCom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layCom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layCom.Controls.Add(this.numSlaveID, 1, 6);
+            this.layCom.Controls.Add(this.label4, 0, 6);
+            this.layCom.Controls.Add(this.btnRtsEnable, 1, 5);
+            this.layCom.Controls.Add(this.btnDtrEnable, 1, 4);
+            this.layCom.Controls.Add(this.cbStopBits, 1, 3);
+            this.layCom.Controls.Add(this.cbParity, 0, 3);
+            this.layCom.Controls.Add(this.label8, 0, 2);
+            this.layCom.Controls.Add(this.cbBaurate, 1, 1);
+            this.layCom.Controls.Add(this.lbRTU2, 1, 0);
+            this.layCom.Controls.Add(this.cbCom, 0, 1);
+            this.layCom.Controls.Add(this.lbRTU1, 0, 0);
+            this.layCom.Controls.Add(this.label7, 1, 2);
+            this.layCom.Controls.Add(this.label9, 0, 4);
+            this.layCom.Controls.Add(this.cbDataBits, 0, 5);
+            this.layCom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layCom.Location = new System.Drawing.Point(165, 0);
+            this.layCom.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
+            this.layCom.Name = "layCom";
+            this.layCom.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.layCom.RowCount = 7;
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layCom.Size = new System.Drawing.Size(240, 254);
+            this.layCom.TabIndex = 1;
+            this.layCom.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel7_Paint);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(8, 199);
+            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(112, 55);
+            this.label4.TabIndex = 128;
+            this.label4.Text = "Slave ID";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbStopBits
+            // 
+            this.cbStopBits.BackColor = System.Drawing.Color.Wheat;
+            this.cbStopBits.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbStopBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStopBits.FormattingEnabled = true;
+            this.cbStopBits.Items.AddRange(new object[] {
+            "Bee"});
+            this.cbStopBits.Location = new System.Drawing.Point(123, 85);
+            this.cbStopBits.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.cbStopBits.Name = "cbStopBits";
+            this.cbStopBits.Size = new System.Drawing.Size(112, 32);
+            this.cbStopBits.TabIndex = 124;
+            this.cbStopBits.SelectionChangeCommitted += new System.EventHandler(this.cbStopBits_SelectionChangeCommitted);
+            // 
+            // cbParity
+            // 
+            this.cbParity.BackColor = System.Drawing.Color.Wheat;
+            this.cbParity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbParity.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbParity.FormattingEnabled = true;
+            this.cbParity.Items.AddRange(new object[] {
+            "Bee"});
+            this.cbParity.Location = new System.Drawing.Point(4, 85);
+            this.cbParity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.cbParity.Name = "cbParity";
+            this.cbParity.Size = new System.Drawing.Size(114, 32);
+            this.cbParity.TabIndex = 123;
+            this.cbParity.SelectionChangeCommitted += new System.EventHandler(this.cbParity_SelectionChangeCommitted);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.Black;
+            this.label8.Location = new System.Drawing.Point(8, 61);
+            this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(112, 24);
+            this.label8.TabIndex = 121;
+            this.label8.Text = "Parity";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // cbBaurate
+            // 
+            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
+            this.cbBaurate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBaurate.FormattingEnabled = true;
+            this.cbBaurate.Items.AddRange(new object[] {
+            "4800",
+            "9600",
+            "115200",
+            "230400",
+            "256000"});
+            this.cbBaurate.Location = new System.Drawing.Point(123, 24);
+            this.cbBaurate.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.cbBaurate.Name = "cbBaurate";
+            this.cbBaurate.Size = new System.Drawing.Size(112, 37);
+            this.cbBaurate.TabIndex = 120;
+            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
+            // 
+            // lbRTU2
+            // 
+            this.lbRTU2.AutoSize = true;
+            this.lbRTU2.BackColor = System.Drawing.Color.Transparent;
+            this.lbRTU2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbRTU2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRTU2.ForeColor = System.Drawing.Color.Black;
+            this.lbRTU2.Location = new System.Drawing.Point(120, 0);
+            this.lbRTU2.Margin = new System.Windows.Forms.Padding(0);
+            this.lbRTU2.Name = "lbRTU2";
+            this.lbRTU2.Size = new System.Drawing.Size(118, 24);
+            this.lbRTU2.TabIndex = 119;
+            this.lbRTU2.Text = "Baurate";
+            this.lbRTU2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // cbCom
+            // 
+            this.cbCom.BackColor = System.Drawing.Color.Wheat;
+            this.cbCom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbCom.FormattingEnabled = true;
+            this.cbCom.Items.AddRange(new object[] {
+            "Bee"});
+            this.cbCom.Location = new System.Drawing.Point(4, 24);
+            this.cbCom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.cbCom.Name = "cbCom";
+            this.cbCom.Size = new System.Drawing.Size(114, 32);
+            this.cbCom.TabIndex = 115;
+            this.cbCom.SelectionChangeCommitted += new System.EventHandler(this.comIO_SelectionChangeCommitted);
+            // 
+            // lbRTU1
+            // 
+            this.lbRTU1.AutoSize = true;
+            this.lbRTU1.BackColor = System.Drawing.Color.Transparent;
+            this.lbRTU1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbRTU1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRTU1.ForeColor = System.Drawing.Color.Black;
+            this.lbRTU1.Location = new System.Drawing.Point(2, 0);
+            this.lbRTU1.Margin = new System.Windows.Forms.Padding(0);
+            this.lbRTU1.Name = "lbRTU1";
+            this.lbRTU1.Size = new System.Drawing.Size(118, 24);
+            this.lbRTU1.TabIndex = 114;
+            this.lbRTU1.Text = "COM";
+            this.lbRTU1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // label7
+            // 
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Black;
+            this.label7.Location = new System.Drawing.Point(120, 61);
+            this.label7.Margin = new System.Windows.Forms.Padding(0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(118, 24);
+            this.label7.TabIndex = 118;
+            this.label7.Text = "Stopbits";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.Black;
+            this.label9.Location = new System.Drawing.Point(8, 117);
+            this.label9.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(112, 41);
+            this.label9.TabIndex = 122;
+            this.label9.Text = "DataBits";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // cbDataBits
+            // 
+            this.cbDataBits.BackColor = System.Drawing.Color.Wheat;
+            this.cbDataBits.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbDataBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDataBits.FormattingEnabled = true;
+            this.cbDataBits.Location = new System.Drawing.Point(4, 158);
+            this.cbDataBits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.cbDataBits.Name = "cbDataBits";
+            this.cbDataBits.Size = new System.Drawing.Size(114, 32);
+            this.cbDataBits.TabIndex = 125;
+            this.cbDataBits.SelectionChangeCommitted += new System.EventHandler(this.cbDataBits_SelectionChangeCommitted);
+            // 
+            // layIP
+            // 
+            this.layIP.BackColor = System.Drawing.Color.White;
+            this.layIP.ColumnCount = 1;
+            this.layIP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layIP.Controls.Add(this.btnReScan, 0, 4);
+            this.layIP.Controls.Add(this.lbTCP1, 0, 0);
+            this.layIP.Controls.Add(this.txtPort, 0, 3);
+            this.layIP.Controls.Add(this.txtIP, 0, 1);
+            this.layIP.Controls.Add(this.lbTCP2, 0, 2);
+            this.layIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layIP.Location = new System.Drawing.Point(3, 0);
+            this.layIP.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.layIP.Name = "layIP";
+            this.layIP.Padding = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.layIP.RowCount = 5;
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.layIP.Size = new System.Drawing.Size(157, 254);
+            this.layIP.TabIndex = 0;
+            // 
+            // lbTCP1
+            // 
+            this.lbTCP1.AutoSize = true;
+            this.lbTCP1.BackColor = System.Drawing.Color.LightGray;
+            this.lbTCP1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbTCP1.Enabled = false;
+            this.lbTCP1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTCP1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.lbTCP1.Location = new System.Drawing.Point(3, 5);
+            this.lbTCP1.Margin = new System.Windows.Forms.Padding(0);
+            this.lbTCP1.Name = "lbTCP1";
+            this.lbTCP1.Size = new System.Drawing.Size(151, 24);
+            this.lbTCP1.TabIndex = 117;
+            this.lbTCP1.Text = "IP";
+            this.lbTCP1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtPort
+            // 
+            this.txtPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPort.Enabled = false;
+            this.txtPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPort.Location = new System.Drawing.Point(3, 92);
+            this.txtPort.Margin = new System.Windows.Forms.Padding(0);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(151, 35);
+            this.txtPort.TabIndex = 112;
+            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
+            this.txtPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPort_KeyPress);
+            // 
+            // txtIP
+            // 
+            this.txtIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtIP.Enabled = false;
+            this.txtIP.Location = new System.Drawing.Point(3, 29);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(0);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.Size = new System.Drawing.Size(151, 29);
+            this.txtIP.TabIndex = 111;
+            this.txtIP.Text = "192.168.1.1";
+            this.txtIP.TextChanged += new System.EventHandler(this.txtIP_TextChanged);
+            // 
+            // lbTCP2
+            // 
+            this.lbTCP2.AutoSize = true;
+            this.lbTCP2.BackColor = System.Drawing.Color.LightGray;
+            this.lbTCP2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbTCP2.Enabled = false;
+            this.lbTCP2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTCP2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.lbTCP2.Location = new System.Drawing.Point(3, 68);
+            this.lbTCP2.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.lbTCP2.Name = "lbTCP2";
+            this.lbTCP2.Size = new System.Drawing.Size(151, 24);
+            this.lbTCP2.TabIndex = 65;
+            this.lbTCP2.Text = "Port";
+            this.lbTCP2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbTCP2.Click += new System.EventHandler(this.label50_Click);
+            // 
+            // tmConnect
+            // 
+            this.tmConnect.Enabled = true;
+            this.tmConnect.Interval = 3000;
+            this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
+            // 
             // DI15
             // 
             this.DI15.AutoFont = true;
@@ -358,30 +1747,6 @@ namespace BeeInterface
             this.DI15.Text = "0";
             this.DI15.TextColor = System.Drawing.Color.Black;
             this.DI15.UseVisualStyleBackColor = false;
-            // 
-            // cbIn15
-            // 
-            this.cbIn15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn15.Enabled = false;
-            this.cbIn15.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn15.FormattingEnabled = true;
-            this.cbIn15.Location = new System.Drawing.Point(97, 588);
-            this.cbIn15.Name = "cbIn15";
-            this.cbIn15.Size = new System.Drawing.Size(149, 32);
-            this.cbIn15.TabIndex = 57;
-            this.cbIn15.Text = "None";
-            this.cbIn15.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label49.Location = new System.Drawing.Point(3, 585);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(88, 39);
-            this.label49.TabIndex = 56;
-            this.label49.Text = "Bit 15";
-            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DI14
             // 
@@ -436,29 +1801,6 @@ namespace BeeInterface
             this.DI14.TextColor = System.Drawing.Color.Black;
             this.DI14.UseVisualStyleBackColor = false;
             // 
-            // cbIn14
-            // 
-            this.cbIn14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn14.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn14.FormattingEnabled = true;
-            this.cbIn14.Location = new System.Drawing.Point(97, 549);
-            this.cbIn14.Name = "cbIn14";
-            this.cbIn14.Size = new System.Drawing.Size(149, 32);
-            this.cbIn14.TabIndex = 54;
-            this.cbIn14.Text = "None";
-            this.cbIn14.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label48.Location = new System.Drawing.Point(3, 546);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(88, 39);
-            this.label48.TabIndex = 53;
-            this.label48.Text = "Bit 14";
-            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DI13
             // 
             this.DI13.AutoFont = true;
@@ -511,29 +1853,6 @@ namespace BeeInterface
             this.DI13.Text = "0";
             this.DI13.TextColor = System.Drawing.Color.Black;
             this.DI13.UseVisualStyleBackColor = false;
-            // 
-            // cbIn13
-            // 
-            this.cbIn13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn13.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn13.FormattingEnabled = true;
-            this.cbIn13.Location = new System.Drawing.Point(97, 510);
-            this.cbIn13.Name = "cbIn13";
-            this.cbIn13.Size = new System.Drawing.Size(149, 32);
-            this.cbIn13.TabIndex = 51;
-            this.cbIn13.Text = "None";
-            this.cbIn13.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label46.Location = new System.Drawing.Point(3, 507);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(88, 39);
-            this.label46.TabIndex = 50;
-            this.label46.Text = "Bit 13";
-            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DI12
             // 
@@ -588,30 +1907,6 @@ namespace BeeInterface
             this.DI12.TextColor = System.Drawing.Color.Black;
             this.DI12.UseVisualStyleBackColor = false;
             // 
-            // cbIn12
-            // 
-            this.cbIn12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn12.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn12.FormattingEnabled = true;
-            this.cbIn12.Location = new System.Drawing.Point(97, 471);
-            this.cbIn12.Name = "cbIn12";
-            this.cbIn12.Size = new System.Drawing.Size(149, 32);
-            this.cbIn12.TabIndex = 48;
-            this.cbIn12.Text = "None";
-            this.cbIn12.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label44.Location = new System.Drawing.Point(3, 468);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(88, 39);
-            this.label44.TabIndex = 47;
-            this.label44.Text = "Bit 12";
-            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label44.Click += new System.EventHandler(this.label44_Click);
-            // 
             // DI11
             // 
             this.DI11.AutoFont = true;
@@ -664,29 +1959,6 @@ namespace BeeInterface
             this.DI11.Text = "0";
             this.DI11.TextColor = System.Drawing.Color.Black;
             this.DI11.UseVisualStyleBackColor = false;
-            // 
-            // cbIn11
-            // 
-            this.cbIn11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn11.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn11.FormattingEnabled = true;
-            this.cbIn11.Location = new System.Drawing.Point(97, 432);
-            this.cbIn11.Name = "cbIn11";
-            this.cbIn11.Size = new System.Drawing.Size(149, 32);
-            this.cbIn11.TabIndex = 45;
-            this.cbIn11.Text = "None";
-            this.cbIn11.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label42.Location = new System.Drawing.Point(3, 429);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(88, 39);
-            this.label42.TabIndex = 44;
-            this.label42.Text = "Bit 11";
-            this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DI10
             // 
@@ -741,29 +2013,6 @@ namespace BeeInterface
             this.DI10.TextColor = System.Drawing.Color.Black;
             this.DI10.UseVisualStyleBackColor = false;
             // 
-            // cbIn10
-            // 
-            this.cbIn10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn10.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn10.FormattingEnabled = true;
-            this.cbIn10.Location = new System.Drawing.Point(97, 393);
-            this.cbIn10.Name = "cbIn10";
-            this.cbIn10.Size = new System.Drawing.Size(149, 32);
-            this.cbIn10.TabIndex = 42;
-            this.cbIn10.Text = "None";
-            this.cbIn10.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label40.Location = new System.Drawing.Point(3, 390);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(88, 39);
-            this.label40.TabIndex = 41;
-            this.label40.Text = "Bit 10";
-            this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DI9
             // 
             this.DI9.AutoFont = true;
@@ -817,29 +2066,6 @@ namespace BeeInterface
             this.DI9.TextColor = System.Drawing.Color.Black;
             this.DI9.UseVisualStyleBackColor = false;
             // 
-            // cbIn9
-            // 
-            this.cbIn9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn9.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn9.FormattingEnabled = true;
-            this.cbIn9.Location = new System.Drawing.Point(97, 354);
-            this.cbIn9.Name = "cbIn9";
-            this.cbIn9.Size = new System.Drawing.Size(149, 32);
-            this.cbIn9.TabIndex = 39;
-            this.cbIn9.Text = "None";
-            this.cbIn9.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label32.Location = new System.Drawing.Point(3, 351);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(88, 39);
-            this.label32.TabIndex = 38;
-            this.label32.Text = "Bit 09";
-            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DI8
             // 
             this.DI8.AutoFont = true;
@@ -892,29 +2118,6 @@ namespace BeeInterface
             this.DI8.Text = "0";
             this.DI8.TextColor = System.Drawing.Color.Black;
             this.DI8.UseVisualStyleBackColor = false;
-            // 
-            // cbIn8
-            // 
-            this.cbIn8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn8.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn8.FormattingEnabled = true;
-            this.cbIn8.Location = new System.Drawing.Point(97, 315);
-            this.cbIn8.Name = "cbIn8";
-            this.cbIn8.Size = new System.Drawing.Size(149, 32);
-            this.cbIn8.TabIndex = 36;
-            this.cbIn8.Text = "None";
-            this.cbIn8.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.Location = new System.Drawing.Point(3, 312);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(88, 39);
-            this.label21.TabIndex = 35;
-            this.label21.Text = "Bit 08";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DI7
             // 
@@ -1340,281 +2543,6 @@ namespace BeeInterface
             this.DI0.TextColor = System.Drawing.Color.Black;
             this.DI0.UseVisualStyleBackColor = false;
             // 
-            // cbIn7
-            // 
-            this.cbIn7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn7.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn7.FormattingEnabled = true;
-            this.cbIn7.Location = new System.Drawing.Point(97, 276);
-            this.cbIn7.Name = "cbIn7";
-            this.cbIn7.Size = new System.Drawing.Size(149, 32);
-            this.cbIn7.TabIndex = 25;
-            this.cbIn7.Text = "None";
-            this.cbIn7.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label30.Location = new System.Drawing.Point(3, 273);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(88, 39);
-            this.label30.TabIndex = 24;
-            this.label30.Text = "Bit 07";
-            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn6
-            // 
-            this.cbIn6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn6.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn6.FormattingEnabled = true;
-            this.cbIn6.Location = new System.Drawing.Point(97, 237);
-            this.cbIn6.Name = "cbIn6";
-            this.cbIn6.Size = new System.Drawing.Size(149, 32);
-            this.cbIn6.TabIndex = 22;
-            this.cbIn6.Text = "None";
-            this.cbIn6.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label28.Location = new System.Drawing.Point(3, 234);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(88, 39);
-            this.label28.TabIndex = 21;
-            this.label28.Text = "Bit 06";
-            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn5
-            // 
-            this.cbIn5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn5.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn5.FormattingEnabled = true;
-            this.cbIn5.Location = new System.Drawing.Point(97, 198);
-            this.cbIn5.Name = "cbIn5";
-            this.cbIn5.Size = new System.Drawing.Size(149, 32);
-            this.cbIn5.TabIndex = 19;
-            this.cbIn5.Text = "None";
-            this.cbIn5.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label26.Location = new System.Drawing.Point(3, 195);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(88, 39);
-            this.label26.TabIndex = 18;
-            this.label26.Text = "Bit 05";
-            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn4
-            // 
-            this.cbIn4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn4.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn4.FormattingEnabled = true;
-            this.cbIn4.Location = new System.Drawing.Point(97, 159);
-            this.cbIn4.Name = "cbIn4";
-            this.cbIn4.Size = new System.Drawing.Size(149, 32);
-            this.cbIn4.TabIndex = 16;
-            this.cbIn4.Text = "None";
-            this.cbIn4.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label24.Location = new System.Drawing.Point(3, 156);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(88, 39);
-            this.label24.TabIndex = 15;
-            this.label24.Text = "Bit 04";
-            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn3
-            // 
-            this.cbIn3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn3.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn3.FormattingEnabled = true;
-            this.cbIn3.Location = new System.Drawing.Point(97, 120);
-            this.cbIn3.Name = "cbIn3";
-            this.cbIn3.Size = new System.Drawing.Size(149, 32);
-            this.cbIn3.TabIndex = 13;
-            this.cbIn3.Text = "None";
-            this.cbIn3.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label22.Location = new System.Drawing.Point(3, 117);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(88, 39);
-            this.label22.TabIndex = 12;
-            this.label22.Text = "Bit 03";
-            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn2
-            // 
-            this.cbIn2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn2.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn2.FormattingEnabled = true;
-            this.cbIn2.Location = new System.Drawing.Point(97, 81);
-            this.cbIn2.Name = "cbIn2";
-            this.cbIn2.Size = new System.Drawing.Size(149, 32);
-            this.cbIn2.TabIndex = 10;
-            this.cbIn2.Text = "None";
-            this.cbIn2.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label20.Location = new System.Drawing.Point(3, 78);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(88, 39);
-            this.label20.TabIndex = 9;
-            this.label20.Text = "Bit 02";
-            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn1
-            // 
-            this.cbIn1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn1.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn1.FormattingEnabled = true;
-            this.cbIn1.Location = new System.Drawing.Point(97, 42);
-            this.cbIn1.Name = "cbIn1";
-            this.cbIn1.Size = new System.Drawing.Size(149, 32);
-            this.cbIn1.TabIndex = 7;
-            this.cbIn1.Text = "None";
-            this.cbIn1.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label14.Location = new System.Drawing.Point(3, 39);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(88, 39);
-            this.label14.TabIndex = 6;
-            this.label14.Text = "Bit 01";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cbIn0
-            // 
-            this.cbIn0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIn0.ForeColor = System.Drawing.Color.Blue;
-            this.cbIn0.FormattingEnabled = true;
-            this.cbIn0.Location = new System.Drawing.Point(97, 3);
-            this.cbIn0.Name = "cbIn0";
-            this.cbIn0.Size = new System.Drawing.Size(149, 32);
-            this.cbIn0.TabIndex = 2;
-            this.cbIn0.Text = "None";
-            this.cbIn0.SelectionChangeCommitted += new System.EventHandler(this.cbIn_SelectionChangeCommitted);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 39);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Bit 00";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage6.Controls.Add(this.layOut);
-            this.tabPage6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabPage6.Location = new System.Drawing.Point(4, 33);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage6.Size = new System.Drawing.Size(414, 803);
-            this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "Output";
-            // 
-            // layOut
-            // 
-            this.layOut.BackColor = System.Drawing.SystemColors.Control;
-            this.layOut.ColumnCount = 3;
-            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.19343F));
-            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.39525F));
-            this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.41132F));
-            this.layOut.Controls.Add(this.DO15, 2, 15);
-            this.layOut.Controls.Add(this.cbO15, 1, 15);
-            this.layOut.Controls.Add(this.label57, 0, 15);
-            this.layOut.Controls.Add(this.DO14, 2, 14);
-            this.layOut.Controls.Add(this.cbO14, 1, 14);
-            this.layOut.Controls.Add(this.label56, 0, 14);
-            this.layOut.Controls.Add(this.DO13, 2, 13);
-            this.layOut.Controls.Add(this.cbO13, 1, 13);
-            this.layOut.Controls.Add(this.label55, 0, 13);
-            this.layOut.Controls.Add(this.DO12, 2, 12);
-            this.layOut.Controls.Add(this.cbO12, 1, 12);
-            this.layOut.Controls.Add(this.label54, 0, 12);
-            this.layOut.Controls.Add(this.DO11, 2, 11);
-            this.layOut.Controls.Add(this.cbO11, 1, 11);
-            this.layOut.Controls.Add(this.label53, 0, 11);
-            this.layOut.Controls.Add(this.DO10, 2, 10);
-            this.layOut.Controls.Add(this.cbO10, 1, 10);
-            this.layOut.Controls.Add(this.label52, 0, 10);
-            this.layOut.Controls.Add(this.DO9, 2, 9);
-            this.layOut.Controls.Add(this.cbO9, 1, 9);
-            this.layOut.Controls.Add(this.label51, 0, 9);
-            this.layOut.Controls.Add(this.DO8, 2, 8);
-            this.layOut.Controls.Add(this.cbO8, 1, 8);
-            this.layOut.Controls.Add(this.label50, 0, 8);
-            this.layOut.Controls.Add(this.DO7, 2, 7);
-            this.layOut.Controls.Add(this.DO6, 2, 6);
-            this.layOut.Controls.Add(this.DO5, 2, 5);
-            this.layOut.Controls.Add(this.DO4, 2, 4);
-            this.layOut.Controls.Add(this.D3, 2, 3);
-            this.layOut.Controls.Add(this.DO2, 2, 2);
-            this.layOut.Controls.Add(this.DO1, 2, 1);
-            this.layOut.Controls.Add(this.cbO7, 1, 7);
-            this.layOut.Controls.Add(this.label33, 0, 7);
-            this.layOut.Controls.Add(this.cbO6, 1, 6);
-            this.layOut.Controls.Add(this.label35, 0, 6);
-            this.layOut.Controls.Add(this.cbO5, 1, 5);
-            this.layOut.Controls.Add(this.label37, 0, 5);
-            this.layOut.Controls.Add(this.cbO4, 1, 4);
-            this.layOut.Controls.Add(this.label39, 0, 4);
-            this.layOut.Controls.Add(this.cbO3, 1, 3);
-            this.layOut.Controls.Add(this.label41, 0, 3);
-            this.layOut.Controls.Add(this.cbO2, 1, 2);
-            this.layOut.Controls.Add(this.label43, 0, 2);
-            this.layOut.Controls.Add(this.cbO1, 1, 1);
-            this.layOut.Controls.Add(this.label45, 0, 1);
-            this.layOut.Controls.Add(this.cbO0, 1, 0);
-            this.layOut.Controls.Add(this.label47, 0, 0);
-            this.layOut.Controls.Add(this.DO0, 2, 0);
-            this.layOut.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layOut.Location = new System.Drawing.Point(5, 5);
-            this.layOut.Name = "layOut";
-            this.layOut.RowCount = 17;
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layOut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layOut.Size = new System.Drawing.Size(404, 793);
-            this.layOut.TabIndex = 56;
-            // 
             // DO15
             // 
             this.DO15.AutoFont = true;
@@ -1668,30 +2596,6 @@ namespace BeeInterface
             this.DO15.TextColor = System.Drawing.Color.Black;
             this.DO15.UseVisualStyleBackColor = false;
             this.DO15.Click += new System.EventHandler(this.DOutClick);
-            // 
-            // cbO15
-            // 
-            this.cbO15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO15.Enabled = false;
-            this.cbO15.ForeColor = System.Drawing.Color.Blue;
-            this.cbO15.FormattingEnabled = true;
-            this.cbO15.Location = new System.Drawing.Point(96, 588);
-            this.cbO15.Name = "cbO15";
-            this.cbO15.Size = new System.Drawing.Size(153, 32);
-            this.cbO15.TabIndex = 56;
-            this.cbO15.Text = "None";
-            this.cbO15.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label57.Location = new System.Drawing.Point(3, 585);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(87, 39);
-            this.label57.TabIndex = 55;
-            this.label57.Text = "Bit  15";
-            this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DO14
             // 
@@ -1747,29 +2651,6 @@ namespace BeeInterface
             this.DO14.UseVisualStyleBackColor = false;
             this.DO14.Click += new System.EventHandler(this.DOutClick);
             // 
-            // cbO14
-            // 
-            this.cbO14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO14.ForeColor = System.Drawing.Color.Blue;
-            this.cbO14.FormattingEnabled = true;
-            this.cbO14.Location = new System.Drawing.Point(96, 549);
-            this.cbO14.Name = "cbO14";
-            this.cbO14.Size = new System.Drawing.Size(153, 32);
-            this.cbO14.TabIndex = 53;
-            this.cbO14.Text = "None";
-            this.cbO14.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label56.Location = new System.Drawing.Point(3, 546);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(87, 39);
-            this.label56.TabIndex = 52;
-            this.label56.Text = "Bit  14";
-            this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DO13
             // 
             this.DO13.AutoFont = true;
@@ -1823,29 +2704,6 @@ namespace BeeInterface
             this.DO13.TextColor = System.Drawing.Color.Black;
             this.DO13.UseVisualStyleBackColor = false;
             this.DO13.Click += new System.EventHandler(this.DOutClick);
-            // 
-            // cbO13
-            // 
-            this.cbO13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO13.ForeColor = System.Drawing.Color.Blue;
-            this.cbO13.FormattingEnabled = true;
-            this.cbO13.Location = new System.Drawing.Point(96, 510);
-            this.cbO13.Name = "cbO13";
-            this.cbO13.Size = new System.Drawing.Size(153, 32);
-            this.cbO13.TabIndex = 50;
-            this.cbO13.Text = "None";
-            this.cbO13.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label55
-            // 
-            this.label55.AutoSize = true;
-            this.label55.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label55.Location = new System.Drawing.Point(3, 507);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(87, 39);
-            this.label55.TabIndex = 49;
-            this.label55.Text = "Bit  13";
-            this.label55.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DO12
             // 
@@ -1901,29 +2759,6 @@ namespace BeeInterface
             this.DO12.UseVisualStyleBackColor = false;
             this.DO12.Click += new System.EventHandler(this.DOutClick);
             // 
-            // cbO12
-            // 
-            this.cbO12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO12.ForeColor = System.Drawing.Color.Blue;
-            this.cbO12.FormattingEnabled = true;
-            this.cbO12.Location = new System.Drawing.Point(96, 471);
-            this.cbO12.Name = "cbO12";
-            this.cbO12.Size = new System.Drawing.Size(153, 32);
-            this.cbO12.TabIndex = 47;
-            this.cbO12.Text = "None";
-            this.cbO12.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label54.Location = new System.Drawing.Point(3, 468);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(87, 39);
-            this.label54.TabIndex = 46;
-            this.label54.Text = "Bit  12";
-            this.label54.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DO11
             // 
             this.DO11.AutoFont = true;
@@ -1977,29 +2812,6 @@ namespace BeeInterface
             this.DO11.TextColor = System.Drawing.Color.Black;
             this.DO11.UseVisualStyleBackColor = false;
             this.DO11.Click += new System.EventHandler(this.DOutClick);
-            // 
-            // cbO11
-            // 
-            this.cbO11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO11.ForeColor = System.Drawing.Color.Blue;
-            this.cbO11.FormattingEnabled = true;
-            this.cbO11.Location = new System.Drawing.Point(96, 432);
-            this.cbO11.Name = "cbO11";
-            this.cbO11.Size = new System.Drawing.Size(153, 32);
-            this.cbO11.TabIndex = 44;
-            this.cbO11.Text = "None";
-            this.cbO11.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label53.Location = new System.Drawing.Point(3, 429);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(87, 39);
-            this.label53.TabIndex = 43;
-            this.label53.Text = "Bit  11";
-            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DO10
             // 
@@ -2055,29 +2867,6 @@ namespace BeeInterface
             this.DO10.UseVisualStyleBackColor = false;
             this.DO10.Click += new System.EventHandler(this.DOutClick);
             // 
-            // cbO10
-            // 
-            this.cbO10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO10.ForeColor = System.Drawing.Color.Blue;
-            this.cbO10.FormattingEnabled = true;
-            this.cbO10.Location = new System.Drawing.Point(96, 393);
-            this.cbO10.Name = "cbO10";
-            this.cbO10.Size = new System.Drawing.Size(153, 32);
-            this.cbO10.TabIndex = 41;
-            this.cbO10.Text = "None";
-            this.cbO10.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label52.Location = new System.Drawing.Point(3, 390);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(87, 39);
-            this.label52.TabIndex = 40;
-            this.label52.Text = "Bit  10";
-            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DO9
             // 
             this.DO9.AutoFont = true;
@@ -2132,29 +2921,6 @@ namespace BeeInterface
             this.DO9.UseVisualStyleBackColor = false;
             this.DO9.Click += new System.EventHandler(this.DOutClick);
             // 
-            // cbO9
-            // 
-            this.cbO9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO9.ForeColor = System.Drawing.Color.Blue;
-            this.cbO9.FormattingEnabled = true;
-            this.cbO9.Location = new System.Drawing.Point(96, 354);
-            this.cbO9.Name = "cbO9";
-            this.cbO9.Size = new System.Drawing.Size(153, 32);
-            this.cbO9.TabIndex = 38;
-            this.cbO9.Text = "None";
-            this.cbO9.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label51.Location = new System.Drawing.Point(3, 351);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(87, 39);
-            this.label51.TabIndex = 37;
-            this.label51.Text = "Bit  09";
-            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // DO8
             // 
             this.DO8.AutoFont = true;
@@ -2208,30 +2974,6 @@ namespace BeeInterface
             this.DO8.TextColor = System.Drawing.Color.Black;
             this.DO8.UseVisualStyleBackColor = false;
             this.DO8.Click += new System.EventHandler(this.DOutClick);
-            // 
-            // cbO8
-            // 
-            this.cbO8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO8.ForeColor = System.Drawing.Color.Blue;
-            this.cbO8.FormattingEnabled = true;
-            this.cbO8.Location = new System.Drawing.Point(96, 315);
-            this.cbO8.Name = "cbO8";
-            this.cbO8.Size = new System.Drawing.Size(153, 32);
-            this.cbO8.TabIndex = 35;
-            this.cbO8.Text = "None";
-            this.cbO8.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label50.Location = new System.Drawing.Point(3, 312);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(87, 39);
-            this.label50.TabIndex = 34;
-            this.label50.Text = "Bit  08";
-            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label50.Click += new System.EventHandler(this.label50_Click_1);
             // 
             // DO7
             // 
@@ -2611,198 +3353,6 @@ namespace BeeInterface
             this.DO1.UseVisualStyleBackColor = false;
             this.DO1.Click += new System.EventHandler(this.DOutClick);
             // 
-            // cbO7
-            // 
-            this.cbO7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO7.ForeColor = System.Drawing.Color.Blue;
-            this.cbO7.FormattingEnabled = true;
-            this.cbO7.Location = new System.Drawing.Point(96, 276);
-            this.cbO7.Name = "cbO7";
-            this.cbO7.Size = new System.Drawing.Size(153, 32);
-            this.cbO7.TabIndex = 25;
-            this.cbO7.Text = "None";
-            this.cbO7.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label33.Location = new System.Drawing.Point(3, 273);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(87, 39);
-            this.label33.TabIndex = 24;
-            this.label33.Text = "Bit  07";
-            this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label33.Click += new System.EventHandler(this.label33_Click);
-            // 
-            // cbO6
-            // 
-            this.cbO6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO6.ForeColor = System.Drawing.Color.Blue;
-            this.cbO6.FormattingEnabled = true;
-            this.cbO6.Location = new System.Drawing.Point(96, 237);
-            this.cbO6.Name = "cbO6";
-            this.cbO6.Size = new System.Drawing.Size(153, 32);
-            this.cbO6.TabIndex = 22;
-            this.cbO6.Text = "None";
-            this.cbO6.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label35.Location = new System.Drawing.Point(3, 234);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(87, 39);
-            this.label35.TabIndex = 21;
-            this.label35.Text = "Bit  06";
-            this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label35.Click += new System.EventHandler(this.label35_Click);
-            // 
-            // cbO5
-            // 
-            this.cbO5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO5.ForeColor = System.Drawing.Color.Blue;
-            this.cbO5.FormattingEnabled = true;
-            this.cbO5.Location = new System.Drawing.Point(96, 198);
-            this.cbO5.Name = "cbO5";
-            this.cbO5.Size = new System.Drawing.Size(153, 32);
-            this.cbO5.TabIndex = 19;
-            this.cbO5.Text = "None";
-            this.cbO5.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label37.Location = new System.Drawing.Point(3, 195);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(87, 39);
-            this.label37.TabIndex = 18;
-            this.label37.Text = "Bit  05";
-            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label37.Click += new System.EventHandler(this.label37_Click);
-            // 
-            // cbO4
-            // 
-            this.cbO4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO4.ForeColor = System.Drawing.Color.Blue;
-            this.cbO4.FormattingEnabled = true;
-            this.cbO4.Location = new System.Drawing.Point(96, 159);
-            this.cbO4.Name = "cbO4";
-            this.cbO4.Size = new System.Drawing.Size(153, 32);
-            this.cbO4.TabIndex = 16;
-            this.cbO4.Text = "None";
-            this.cbO4.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label39.Location = new System.Drawing.Point(3, 156);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(87, 39);
-            this.label39.TabIndex = 15;
-            this.label39.Text = "Bit  04";
-            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label39.Click += new System.EventHandler(this.label39_Click);
-            // 
-            // cbO3
-            // 
-            this.cbO3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO3.ForeColor = System.Drawing.Color.Blue;
-            this.cbO3.FormattingEnabled = true;
-            this.cbO3.Location = new System.Drawing.Point(96, 120);
-            this.cbO3.Name = "cbO3";
-            this.cbO3.Size = new System.Drawing.Size(153, 32);
-            this.cbO3.TabIndex = 13;
-            this.cbO3.Text = "None";
-            this.cbO3.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label41.Location = new System.Drawing.Point(3, 117);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(87, 39);
-            this.label41.TabIndex = 12;
-            this.label41.Text = "Bit  03";
-            this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label41.Click += new System.EventHandler(this.label41_Click);
-            // 
-            // cbO2
-            // 
-            this.cbO2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO2.ForeColor = System.Drawing.Color.Blue;
-            this.cbO2.FormattingEnabled = true;
-            this.cbO2.Location = new System.Drawing.Point(96, 81);
-            this.cbO2.Name = "cbO2";
-            this.cbO2.Size = new System.Drawing.Size(153, 32);
-            this.cbO2.TabIndex = 10;
-            this.cbO2.Text = "None";
-            this.cbO2.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label43.Location = new System.Drawing.Point(3, 78);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(87, 39);
-            this.label43.TabIndex = 9;
-            this.label43.Text = "Bit  02";
-            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label43.Click += new System.EventHandler(this.label43_Click);
-            // 
-            // cbO1
-            // 
-            this.cbO1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO1.ForeColor = System.Drawing.Color.Blue;
-            this.cbO1.FormattingEnabled = true;
-            this.cbO1.Location = new System.Drawing.Point(96, 42);
-            this.cbO1.Name = "cbO1";
-            this.cbO1.Size = new System.Drawing.Size(153, 32);
-            this.cbO1.TabIndex = 7;
-            this.cbO1.Text = "None";
-            this.cbO1.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label45.Location = new System.Drawing.Point(3, 39);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(87, 39);
-            this.label45.TabIndex = 6;
-            this.label45.Text = "Bit  01";
-            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label45.Click += new System.EventHandler(this.label45_Click);
-            // 
-            // cbO0
-            // 
-            this.cbO0.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbO0.ForeColor = System.Drawing.Color.Blue;
-            this.cbO0.FormattingEnabled = true;
-            this.cbO0.Location = new System.Drawing.Point(96, 3);
-            this.cbO0.Name = "cbO0";
-            this.cbO0.Size = new System.Drawing.Size(153, 32);
-            this.cbO0.TabIndex = 2;
-            this.cbO0.Text = "None";
-            this.cbO0.SelectionChangeCommitted += new System.EventHandler(this.cbOut_SelectionChangeCommitted);
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label47.Location = new System.Drawing.Point(3, 0);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(87, 39);
-            this.label47.TabIndex = 4;
-            this.label47.Text = "Bit 00";
-            this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label47.Click += new System.EventHandler(this.label47_Click);
-            // 
             // DO0
             // 
             this.DO0.AutoFont = true;
@@ -2856,59 +3406,6 @@ namespace BeeInterface
             this.DO0.TextColor = System.Drawing.Color.Black;
             this.DO0.UseVisualStyleBackColor = false;
             this.DO0.Click += new System.EventHandler(this.DOutClick);
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.AutoScroll = true;
-            this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage7.Controls.Add(this.tableLayoutPanel1);
-            this.tabPage7.Location = new System.Drawing.Point(4, 33);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.tabPage7.Size = new System.Drawing.Size(414, 803);
-            this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "Setting";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.layBrand, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 4);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 10);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 146F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 738);
-            this.tableLayoutPanel1.TabIndex = 80;
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel4.Controls.Add(this.btnTCP, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.btnSerial, 1, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 214);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(408, 56);
-            this.tableLayoutPanel4.TabIndex = 3;
             // 
             // btnTCP
             // 
@@ -3020,108 +3517,6 @@ namespace BeeInterface
             this.btnSerial.UseVisualStyleBackColor = false;
             this.btnSerial.Click += new System.EventHandler(this.btnSerial_Click);
             // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47.61905F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.38095F));
-            this.tableLayoutPanel2.Controls.Add(this.label1, 1, 8);
-            this.tableLayoutPanel2.Controls.Add(this.txtAddWrite, 1, 7);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.label19, 1, 6);
-            this.tableLayoutPanel2.Controls.Add(this.label18, 0, 8);
-            this.tableLayoutPanel2.Controls.Add(this.timerRead, 0, 9);
-            this.tableLayoutPanel2.Controls.Add(this.customNumericEx2, 1, 9);
-            this.tableLayoutPanel2.Controls.Add(this.txtAddRead, 0, 7);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 527);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 20);
-            this.tableLayoutPanel2.RowCount = 11;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(402, 133);
-            this.tableLayoutPanel2.TabIndex = 79;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.LightGray;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DimGray;
-            this.label1.Location = new System.Drawing.Point(191, 61);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(211, 24);
-            this.label1.TabIndex = 126;
-            this.label1.Text = "Time Out";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtAddWrite
-            // 
-            this.txtAddWrite.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAddWrite.Location = new System.Drawing.Point(194, 29);
-            this.txtAddWrite.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.txtAddWrite.Name = "txtAddWrite";
-            this.txtAddWrite.Size = new System.Drawing.Size(205, 29);
-            this.txtAddWrite.TabIndex = 125;
-            this.txtAddWrite.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtAddWrite.TextChanged += new System.EventHandler(this.txtAddWrite_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.LightGray;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.DimGray;
-            this.label2.Location = new System.Drawing.Point(3, 5);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(185, 24);
-            this.label2.TabIndex = 73;
-            this.label2.Text = "Add.Read";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.Color.LightGray;
-            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.DimGray;
-            this.label19.Location = new System.Drawing.Point(194, 5);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(205, 24);
-            this.label19.TabIndex = 76;
-            this.label19.Text = "Add.Write";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.Color.LightGray;
-            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.DimGray;
-            this.label18.Location = new System.Drawing.Point(0, 61);
-            this.label18.Margin = new System.Windows.Forms.Padding(0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(191, 24);
-            this.label18.TabIndex = 118;
-            this.label18.Text = "Time Read";
-            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // timerRead
             // 
             this.timerRead.AutoShowTextbox = false;
@@ -3194,38 +3589,6 @@ namespace BeeInterface
             this.customNumericEx2.UnitText = "";
             this.customNumericEx2.Value = 1F;
             this.customNumericEx2.WheelStep = 1F;
-            // 
-            // txtAddRead
-            // 
-            this.txtAddRead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAddRead.Location = new System.Drawing.Point(3, 29);
-            this.txtAddRead.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.txtAddRead.Name = "txtAddRead";
-            this.txtAddRead.Size = new System.Drawing.Size(185, 29);
-            this.txtAddRead.TabIndex = 124;
-            this.txtAddRead.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtAddRead.TextChanged += new System.EventHandler(this.txtAddRead_TextChanged);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.panel5);
-            this.panel1.Controls.Add(this.StatusIObtn);
-            this.panel1.Controls.Add(this.btnConectIO);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.btnBypass);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 673);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(402, 62);
-            this.panel1.TabIndex = 84;
-            // 
-            // panel5
-            // 
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(128, 0);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(10, 62);
-            this.panel5.TabIndex = 74;
             // 
             // StatusIObtn
             // 
@@ -3336,14 +3699,6 @@ namespace BeeInterface
             this.btnConectIO.UseVisualStyleBackColor = false;
             this.btnConectIO.Click += new System.EventHandler(this.btnConectIO_Click);
             // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(261, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(10, 62);
-            this.panel2.TabIndex = 70;
-            // 
             // btnBypass
             // 
             this.btnBypass.AutoFont = true;
@@ -3397,45 +3752,6 @@ namespace BeeInterface
             this.btnBypass.TextColor = System.Drawing.Color.Black;
             this.btnBypass.UseVisualStyleBackColor = false;
             this.btnBypass.Click += new System.EventHandler(this.btnBypass_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(3, 190);
-            this.label6.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(126, 24);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Comunication";
-            // 
-            // layBrand
-            // 
-            this.layBrand.AutoScroll = true;
-            this.layBrand.ColumnCount = 2;
-            this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layBrand.Controls.Add(this.rjButton2, 1, 2);
-            this.layBrand.Controls.Add(this.btnDelta, 0, 2);
-            this.layBrand.Controls.Add(this.rjButton7, 1, 1);
-            this.layBrand.Controls.Add(this.rjButton1, 0, 1);
-            this.layBrand.Controls.Add(this.btnKeyence, 0, 0);
-            this.layBrand.Controls.Add(this.btnMitsu, 1, 0);
-            this.layBrand.Controls.Add(this.btnRtu, 0, 3);
-            this.layBrand.Controls.Add(this.ModbusAscii, 1, 3);
-            this.layBrand.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layBrand.Location = new System.Drawing.Point(3, 27);
-            this.layBrand.Name = "layBrand";
-            this.layBrand.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.layBrand.RowCount = 5;
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layBrand.Size = new System.Drawing.Size(402, 150);
-            this.layBrand.TabIndex = 0;
-            this.layBrand.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel3_Paint);
             // 
             // rjButton2
             // 
@@ -3874,69 +4190,6 @@ namespace BeeInterface
             this.ModbusAscii.UseVisualStyleBackColor = false;
             this.ModbusAscii.Click += new System.EventHandler(this.btnModbusASII_Click);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(3, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 24);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Brand";
-            // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel5.Controls.Add(this.layCom, 1, 0);
-            this.tableLayoutPanel5.Controls.Add(this.layIP, 0, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 270);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(408, 254);
-            this.tableLayoutPanel5.TabIndex = 4;
-            // 
-            // layCom
-            // 
-            this.layCom.BackColor = System.Drawing.Color.White;
-            this.layCom.ColumnCount = 2;
-            this.layCom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layCom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.layCom.Controls.Add(this.numSlaveID, 1, 6);
-            this.layCom.Controls.Add(this.label4, 0, 6);
-            this.layCom.Controls.Add(this.btnRtsEnable, 1, 5);
-            this.layCom.Controls.Add(this.btnDtrEnable, 1, 4);
-            this.layCom.Controls.Add(this.cbStopBits, 1, 3);
-            this.layCom.Controls.Add(this.cbParity, 0, 3);
-            this.layCom.Controls.Add(this.label8, 0, 2);
-            this.layCom.Controls.Add(this.cbBaurate, 1, 1);
-            this.layCom.Controls.Add(this.lbRTU2, 1, 0);
-            this.layCom.Controls.Add(this.cbCom, 0, 1);
-            this.layCom.Controls.Add(this.lbRTU1, 0, 0);
-            this.layCom.Controls.Add(this.label7, 1, 2);
-            this.layCom.Controls.Add(this.label9, 0, 4);
-            this.layCom.Controls.Add(this.cbDataBits, 0, 5);
-            this.layCom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layCom.Location = new System.Drawing.Point(165, 0);
-            this.layCom.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
-            this.layCom.Name = "layCom";
-            this.layCom.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.layCom.RowCount = 7;
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layCom.Size = new System.Drawing.Size(240, 254);
-            this.layCom.TabIndex = 1;
-            this.layCom.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel7_Paint);
-            // 
             // numSlaveID
             // 
             this.numSlaveID.AutoShowTextbox = false;
@@ -3973,21 +4226,6 @@ namespace BeeInterface
             this.numSlaveID.Value = 1F;
             this.numSlaveID.WheelStep = 1F;
             this.numSlaveID.ValueChanged += new System.Action<float>(this.numSlaveID_ValueChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(8, 199);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(112, 55);
-            this.label4.TabIndex = 128;
-            this.label4.Text = "Slave ID";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnRtsEnable
             // 
@@ -4099,181 +4337,6 @@ namespace BeeInterface
             this.btnDtrEnable.UseVisualStyleBackColor = false;
             this.btnDtrEnable.Click += new System.EventHandler(this.btnDtrEnable_Click);
             // 
-            // cbStopBits
-            // 
-            this.cbStopBits.BackColor = System.Drawing.Color.Wheat;
-            this.cbStopBits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbStopBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbStopBits.FormattingEnabled = true;
-            this.cbStopBits.Items.AddRange(new object[] {
-            "Bee"});
-            this.cbStopBits.Location = new System.Drawing.Point(123, 85);
-            this.cbStopBits.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.cbStopBits.Name = "cbStopBits";
-            this.cbStopBits.Size = new System.Drawing.Size(112, 32);
-            this.cbStopBits.TabIndex = 124;
-            this.cbStopBits.SelectionChangeCommitted += new System.EventHandler(this.cbStopBits_SelectionChangeCommitted);
-            // 
-            // cbParity
-            // 
-            this.cbParity.BackColor = System.Drawing.Color.Wheat;
-            this.cbParity.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbParity.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbParity.FormattingEnabled = true;
-            this.cbParity.Items.AddRange(new object[] {
-            "Bee"});
-            this.cbParity.Location = new System.Drawing.Point(4, 85);
-            this.cbParity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.cbParity.Name = "cbParity";
-            this.cbParity.Size = new System.Drawing.Size(114, 32);
-            this.cbParity.TabIndex = 123;
-            this.cbParity.SelectionChangeCommitted += new System.EventHandler(this.cbParity_SelectionChangeCommitted);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(8, 61);
-            this.label8.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(112, 24);
-            this.label8.TabIndex = 121;
-            this.label8.Text = "Parity";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // cbBaurate
-            // 
-            this.cbBaurate.BackColor = System.Drawing.Color.Wheat;
-            this.cbBaurate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbBaurate.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBaurate.FormattingEnabled = true;
-            this.cbBaurate.Items.AddRange(new object[] {
-            "4800",
-            "9600",
-            "115200",
-            "230400",
-            "256000"});
-            this.cbBaurate.Location = new System.Drawing.Point(123, 24);
-            this.cbBaurate.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.cbBaurate.Name = "cbBaurate";
-            this.cbBaurate.Size = new System.Drawing.Size(112, 37);
-            this.cbBaurate.TabIndex = 120;
-            this.cbBaurate.SelectedIndexChanged += new System.EventHandler(this.cbBaurate_SelectedIndexChanged);
-            // 
-            // lbRTU2
-            // 
-            this.lbRTU2.AutoSize = true;
-            this.lbRTU2.BackColor = System.Drawing.Color.Transparent;
-            this.lbRTU2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbRTU2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRTU2.ForeColor = System.Drawing.Color.Black;
-            this.lbRTU2.Location = new System.Drawing.Point(120, 0);
-            this.lbRTU2.Margin = new System.Windows.Forms.Padding(0);
-            this.lbRTU2.Name = "lbRTU2";
-            this.lbRTU2.Size = new System.Drawing.Size(118, 24);
-            this.lbRTU2.TabIndex = 119;
-            this.lbRTU2.Text = "Baurate";
-            this.lbRTU2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // cbCom
-            // 
-            this.cbCom.BackColor = System.Drawing.Color.Wheat;
-            this.cbCom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbCom.FormattingEnabled = true;
-            this.cbCom.Items.AddRange(new object[] {
-            "Bee"});
-            this.cbCom.Location = new System.Drawing.Point(4, 24);
-            this.cbCom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.cbCom.Name = "cbCom";
-            this.cbCom.Size = new System.Drawing.Size(114, 32);
-            this.cbCom.TabIndex = 115;
-            this.cbCom.SelectionChangeCommitted += new System.EventHandler(this.comIO_SelectionChangeCommitted);
-            // 
-            // lbRTU1
-            // 
-            this.lbRTU1.AutoSize = true;
-            this.lbRTU1.BackColor = System.Drawing.Color.Transparent;
-            this.lbRTU1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbRTU1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRTU1.ForeColor = System.Drawing.Color.Black;
-            this.lbRTU1.Location = new System.Drawing.Point(2, 0);
-            this.lbRTU1.Margin = new System.Windows.Forms.Padding(0);
-            this.lbRTU1.Name = "lbRTU1";
-            this.lbRTU1.Size = new System.Drawing.Size(118, 24);
-            this.lbRTU1.TabIndex = 114;
-            this.lbRTU1.Text = "COM";
-            this.lbRTU1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label7
-            // 
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(120, 61);
-            this.label7.Margin = new System.Windows.Forms.Padding(0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(118, 24);
-            this.label7.TabIndex = 118;
-            this.label7.Text = "Stopbits";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.Black;
-            this.label9.Location = new System.Drawing.Point(8, 117);
-            this.label9.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(112, 41);
-            this.label9.TabIndex = 122;
-            this.label9.Text = "DataBits";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // cbDataBits
-            // 
-            this.cbDataBits.BackColor = System.Drawing.Color.Wheat;
-            this.cbDataBits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbDataBits.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbDataBits.FormattingEnabled = true;
-            this.cbDataBits.Location = new System.Drawing.Point(4, 158);
-            this.cbDataBits.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.cbDataBits.Name = "cbDataBits";
-            this.cbDataBits.Size = new System.Drawing.Size(114, 32);
-            this.cbDataBits.TabIndex = 125;
-            this.cbDataBits.SelectionChangeCommitted += new System.EventHandler(this.cbDataBits_SelectionChangeCommitted);
-            // 
-            // layIP
-            // 
-            this.layIP.BackColor = System.Drawing.Color.White;
-            this.layIP.ColumnCount = 1;
-            this.layIP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layIP.Controls.Add(this.btnReScan, 0, 4);
-            this.layIP.Controls.Add(this.lbTCP1, 0, 0);
-            this.layIP.Controls.Add(this.txtPort, 0, 3);
-            this.layIP.Controls.Add(this.txtIP, 0, 1);
-            this.layIP.Controls.Add(this.lbTCP2, 0, 2);
-            this.layIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layIP.Location = new System.Drawing.Point(3, 0);
-            this.layIP.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this.layIP.Name = "layIP";
-            this.layIP.Padding = new System.Windows.Forms.Padding(3, 5, 3, 0);
-            this.layIP.RowCount = 5;
-            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layIP.Size = new System.Drawing.Size(157, 254);
-            this.layIP.TabIndex = 0;
-            // 
             // btnReScan
             // 
             this.btnReScan.AutoFont = true;
@@ -4328,75 +4391,6 @@ namespace BeeInterface
             this.btnReScan.TextColor = System.Drawing.Color.Black;
             this.btnReScan.UseVisualStyleBackColor = false;
             this.btnReScan.Click += new System.EventHandler(this.btnReScan_Click);
-            // 
-            // lbTCP1
-            // 
-            this.lbTCP1.AutoSize = true;
-            this.lbTCP1.BackColor = System.Drawing.Color.LightGray;
-            this.lbTCP1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbTCP1.Enabled = false;
-            this.lbTCP1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTCP1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.lbTCP1.Location = new System.Drawing.Point(3, 5);
-            this.lbTCP1.Margin = new System.Windows.Forms.Padding(0);
-            this.lbTCP1.Name = "lbTCP1";
-            this.lbTCP1.Size = new System.Drawing.Size(151, 24);
-            this.lbTCP1.TabIndex = 117;
-            this.lbTCP1.Text = "IP";
-            this.lbTCP1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtPort
-            // 
-            this.txtPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPort.Enabled = false;
-            this.txtPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPort.Location = new System.Drawing.Point(3, 92);
-            this.txtPort.Margin = new System.Windows.Forms.Padding(0);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(151, 35);
-            this.txtPort.TabIndex = 112;
-            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
-            this.txtPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPort_KeyPress);
-            // 
-            // txtIP
-            // 
-            this.txtIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtIP.Enabled = false;
-            this.txtIP.Location = new System.Drawing.Point(3, 29);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(0);
-            this.txtIP.Name = "txtIP";
-            this.txtIP.Size = new System.Drawing.Size(151, 29);
-            this.txtIP.TabIndex = 111;
-            this.txtIP.Text = "192.168.1.1";
-            this.txtIP.TextChanged += new System.EventHandler(this.txtIP_TextChanged);
-            // 
-            // lbTCP2
-            // 
-            this.lbTCP2.AutoSize = true;
-            this.lbTCP2.BackColor = System.Drawing.Color.LightGray;
-            this.lbTCP2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbTCP2.Enabled = false;
-            this.lbTCP2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTCP2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.lbTCP2.Location = new System.Drawing.Point(3, 68);
-            this.lbTCP2.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.lbTCP2.Name = "lbTCP2";
-            this.lbTCP2.Size = new System.Drawing.Size(151, 24);
-            this.lbTCP2.TabIndex = 65;
-            this.lbTCP2.Text = "Port";
-            this.lbTCP2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbTCP2.Click += new System.EventHandler(this.label50_Click);
-            // 
-            // tmCheck
-            // 
-            this.tmCheck.Interval = 50;
-            this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
-            // 
-            // tmConnect
-            // 
-            this.tmConnect.Enabled = true;
-            this.tmConnect.Interval = 3000;
-            this.tmConnect.Tick += new System.EventHandler(this.tmConnect_Tick);
             // 
             // ProtocolPLC
             // 
@@ -4482,7 +4476,6 @@ namespace BeeInterface
         private RJButton DO2;
         private RJButton DO1;
         private RJButton DO0;
-        private System.Windows.Forms.Timer tmCheck;
         private System.Windows.Forms.Timer tmConnect;
         private RJButton DI7;
         private RJButton DI6;

@@ -6,7 +6,25 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum ColorGp
+    {
+        HSV,RGB,BGR
+    }
+    public enum Users
+    {
+        User, Leader, Admin
+    }
     //Corner
+    public enum Values
+    {
+        Mean, Median, Min,Max
+    }
+    public enum MethodSample
+    {
+        Pattern,
+        Corner,
+        Edge,
+    }
     public enum LinePairStrategy
     {
         //BothMaxInliers,        // (cũ) 2 line inliers cao & gần 90°

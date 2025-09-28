@@ -595,6 +595,7 @@ namespace BeeCore
             if (!Global.IsHideTool)
                 Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
             int i = 0;
+            if(rectRotates!=null)
             foreach (RectRotate rot in rectRotates)
             {
                 mat = new Matrix();

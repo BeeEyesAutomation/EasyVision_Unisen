@@ -58,8 +58,12 @@ namespace BeeCore
         public StatusProcessing ProcessingAll()
         {
       
-            if (!Global.ParaCommon.Comunication.IO.IsConnected && !Global.ParaCommon.Comunication.IO.IsBypass)
-                return StatusProcessing;
+            if (!Global.ParaCommon.Comunication.Protocol.IsConnected && !Global.ParaCommon.Comunication.Protocol.IsBypass)
+            {
+                Global.PLCStatus= PLCStatus.ErrorConnect;
+                return StatusProcessing.Done;
+            }
+          
             if (BeeCore.Common.PropetyTools[indexThread].Count == 0)
                 return StatusProcessing.Done;
             switch (StatusProcessing)

@@ -30,16 +30,16 @@ namespace BeeUi
       //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
-          //  ConfigPrev =Global.Config;
-          
+            this.Width = Global.EditTool.BtnHeaderBar.Width+1;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width-1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
+
             btnSaveOK.IsCLick =Global.Config.IsSaveOK;
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick =Global.Config.IsSaveRS;
             btnTriggerMulti.IsCLick = !Global.ParaCommon.IsOnlyTrigger;
             btnTriggerOne.IsCLick=Global.ParaCommon.IsOnlyTrigger;
-            //btnIsMultiTrig.IsCLick = Global.ParaCommon.IsMultiTrigger;
-            //  btnIsOneTrig.IsCLick = !Global.ParaCommon.IsMultiTrigger;
+        
             numTrigger.Value = Global.ParaCommon.NumTrig;
             btnMulti.IsCLick = Global.ParaCommon.IsMultiCamera;
             btnSingle.IsCLick = !Global.ParaCommon.IsMultiCamera;
@@ -48,17 +48,10 @@ namespace BeeUi
                 case 2: btnNormal.PerformClick(); break;
                 case 3: btnbig.PerformClick(); break;
             }
-            trackLimitDay.Value =Global.Config.LimitDateSave;
+            AdjLimitDay.Value =Global.Config.LimitDateSave;
         }
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-        //   Global.Config.namePort =cbSerialPort.Text.Trim();
-           // G.Header.ConnectCom();
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config",Global.Config);
-        }
+     
 
         private void btnSaveOK_Click(object sender, EventArgs e)
         {
@@ -70,11 +63,7 @@ namespace BeeUi
            Global.Config.IsSaveNG = btnSaveNG.IsCLick;
         }
 
-        private void trackLimitDay_ValueChanged(float obj)
-        {
-           Global.Config.LimitDateSave = (int)trackLimitDay.Value;
-        }
-
+       
         private void btnSmall_Click(object sender, EventArgs e)
         {
            Global.Config.TypeSave = 1;
@@ -90,24 +79,14 @@ namespace BeeUi
            Global.Config.TypeSave = 3;
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            
-        }
-
+       
         private void btnCancel_Click(object sender, EventArgs e)
         {
-         //  Global.Config = ConfigPrev;
+        
             this.Close();
         }
 
-        private void IOSetting_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (File.Exists("Default.config"))
-                File.Delete("Default.config");
-            Access.SaveConfig("Default.config",Global.Config);
-
-        }
+     
 
         private void btnSaveRaw_Click(object sender, EventArgs e)
         {
@@ -119,37 +98,7 @@ namespace BeeUi
            Global.Config.IsSaveRS = btnSaveRS.IsCLick;
         }
 
-        private void rjButton1_Click(object sender, EventArgs e)
-        {
-            ScanCCD scanCCD = new ScanCCD();
-            scanCCD.Show();
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel8_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel14_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label19_Click(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void btnMulti_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.IsMultiCamera =btnMulti.IsCLick;
@@ -161,16 +110,6 @@ namespace BeeUi
         }
 
 
-
-        private void btnIsMultiTrig_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
-        {
-
-        }
 
       
 
@@ -187,11 +126,7 @@ namespace BeeUi
             this.Close();
         }
 
-        private void rjButton1_Click_1(object sender, EventArgs e)
-        {
-           
-        }
-
+     
         private void btnTriggerOne_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.IsOnlyTrigger = true;
@@ -200,6 +135,16 @@ namespace BeeUi
         private void btnTriggerMulti_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.IsOnlyTrigger = false;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AdjLimitDay_ValueChanged(float obj)
+        {
+            Global.Config.LimitDateSave = (int)AdjLimitDay.Value;
         }
     }
 }

@@ -57,13 +57,37 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
                 AdjThreshod.Value = Propety.ThresholdBinary;
+                AdjGaussianSmooth.Value = Propety.ValueGau;
+                AdjScale.Value = 1/(float)Propety.Scale;
+                numCrestCouter.Value= Propety.NumCrestCouter ;
+                numRootCounter.Value = Propety.NumRootCouter;
+                AdjMagin.Value=Propety.Magin;
 
-                AdjScale.Value = (float)Propety.Scale;
-                trackMaxLine.Value = Propety.MaximumLine;
-                trackMinInlier.Value = Propety.MinInliers;
-             
-                numMinLen.Value = Propety.MinLen;
-                numMaxLen.Value = Propety.MaxLen;
+                lbCrestCount.Text = Propety.TempCountCrest.ToString();
+                lbRootCount.Text = Propety.TempCountRoot.ToString();
+
+                AdjClose.Value = Propety.SizeClose;
+                AdjOpen.Value = Propety.SizeOpen;
+                AdjClearNoise.Value = Propety.SizeClearsmall;
+                AdjClearBig.Value = Propety.SizeClearBig;
+                btnClose.IsCLick = Propety.IsClose;
+                btnOpen.IsCLick = Propety.IsOpen;
+                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+                AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+                AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+                AdjOpen.Enabled = Propety.IsOpen;
+                AdjClose.Enabled = Propety.IsClose;
+
+                btnEnCrestPitch.IsCLick = Propety.IsEnCrestPitch;
+                btnEnCrestHeight.IsCLick= Propety.IsEnCrestHeight;
+               
+                btnEnRootPitch.IsCLick = Propety.IsEnRootPitch;
+                btnEnRootHeight.IsCLick = Propety.IsEnRootHeight;
+
+                btnEnRootCounter.IsCLick = Propety.IsEnRootCounter;
+                btnEnCrestCounter.IsCLick = Propety.IsEnCrestCounter;
+
                 switch (Propety.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
@@ -88,32 +112,183 @@ namespace BeeInterface
                         btnHori.IsCLick = true;
                         break;
                 }
-                switch (Propety.SegmentStatType)
+              
+
+             
+
+              
+                switch (Propety.Values)
                 {
-                    case SegmentStatType.Longest:
-                        btnLong.IsCLick = true;
+                    case Values.Mean:
+                        lbPitchCrestMean.Text = Math.Round(Propety.TempPitchCrest, 3).ToString();
+                        lbHeightRootMean.Text = Math.Round(Propety.TempHeightRoot, 3).ToString();
+                        lbPitchRootMean.Text = Math.Round(Propety.TempPitchRoot, 3).ToString();
+                        lbHeightCrestMean.Text = Math.Round(Propety.TempHeightCrest, 3).ToString();
+                        btnMean.IsCLick = true;
+                        //Mean
+                        lbPitchCrestMean.ForeColor = Color.Black;
+                        lbHeightCrestMean.ForeColor = Color.Black;
+                        lbPitchRootMean.ForeColor = Color.Black;
+                        lbHeightRootMean.ForeColor = Color.Black;
+                        //Median
+                        lbPitchCrestMedian.ForeColor = Color.LightGray;
+                        lbHeightCrestMedian.ForeColor = Color.LightGray;
+                        lbPitchRootMedian.ForeColor = Color.LightGray;
+                        lbHeightRootMedian.ForeColor = Color.LightGray;
+                        //Min
+                        lbPitchCrestMin.ForeColor = Color.LightGray;
+                        lbHeightCrestMin.ForeColor = Color.LightGray;
+                        lbPitchRootMin.ForeColor = Color.LightGray;
+                        lbHeightRootMin.ForeColor = Color.LightGray;
+                        //Max
+                        lbPitchCrestMax.ForeColor = Color.LightGray;
+                        lbHeightCrestMax.ForeColor = Color.LightGray;
+                        lbPitchRootMax.ForeColor = Color.LightGray;
+                        lbHeightRootMax.ForeColor = Color.LightGray;
+
                         break;
-                    case SegmentStatType.Shortest:
-                        btnShort.IsCLick = true;
+                    case Values.Median:
+
+                        lbHeightRootMedian.Text = Math.Round(Propety.TempHeightRoot, 3).ToString();
+                        lbPitchRootMedian.Text = Math.Round(Propety.TempPitchRoot, 3).ToString();
+                        lbHeightCrestMedian.Text = Math.Round(Propety.TempHeightCrest, 3).ToString();
+                        lbPitchCrestMedian.Text = Math.Round(Propety.TempPitchCrest, 3).ToString();
+                        btnMedian.IsCLick = true;
+                        //Mean
+                        lbPitchCrestMean.ForeColor = Color.LightGray;
+                        lbHeightCrestMean.ForeColor = Color.LightGray;
+                        lbPitchRootMean.ForeColor = Color.LightGray;
+                        lbHeightRootMean.ForeColor = Color.LightGray;
+                        //Median
+                        lbPitchCrestMedian.ForeColor = Color.Black;
+                        lbHeightCrestMedian.ForeColor = Color.Black;
+                        lbPitchRootMedian.ForeColor = Color.Black;
+                        lbHeightRootMedian.ForeColor = Color.Black;
+                        //Min
+                        lbPitchCrestMin.ForeColor = Color.LightGray;
+                        lbHeightCrestMin.ForeColor = Color.LightGray;
+                        lbPitchRootMin.ForeColor = Color.LightGray;
+                        lbHeightRootMin.ForeColor = Color.LightGray;
+                        //Max
+                        lbPitchCrestMax.ForeColor = Color.LightGray;
+                        lbHeightCrestMax.ForeColor = Color.LightGray;
+                        lbPitchRootMax.ForeColor = Color.LightGray;
+                        lbHeightRootMax.ForeColor = Color.LightGray;
                         break;
-                    case SegmentStatType.Average:
-                        btnAverage.IsCLick = true;
+                    case Values.Min:
+                        lbHeightRootMin.Text = Math.Round(Propety.TempHeightRoot, 3).ToString();
+                        lbPitchRootMin.Text = Math.Round(Propety.TempPitchRoot, 3).ToString();
+                        lbHeightCrestMin.Text = Math.Round(Propety.TempHeightCrest, 3).ToString();
+                        lbPitchCrestMin.Text = Math.Round(Propety.TempPitchCrest, 3).ToString();
+                        btnMin.IsCLick = true;
+                        //Mean
+                        lbPitchCrestMean.ForeColor = Color.LightGray;
+                        lbHeightCrestMean.ForeColor = Color.LightGray;
+                        lbPitchRootMean.ForeColor = Color.LightGray;
+                        lbHeightRootMean.ForeColor = Color.LightGray;
+                        //Median
+                        lbPitchCrestMedian.ForeColor = Color.LightGray;
+                        lbHeightCrestMedian.ForeColor = Color.LightGray;
+                        lbPitchRootMedian.ForeColor = Color.LightGray;
+                        lbHeightRootMedian.ForeColor = Color.LightGray;
+                        //Min
+                        lbPitchCrestMin.ForeColor = Color.Black;
+                        lbHeightCrestMin.ForeColor = Color.Black;
+                        lbPitchRootMin.ForeColor = Color.Black;
+                        lbHeightRootMin.ForeColor = Color.Black;
+                        //Max
+                        lbPitchCrestMax.ForeColor = Color.LightGray;
+                        lbHeightCrestMax.ForeColor = Color.LightGray;
+                        lbPitchRootMax.ForeColor = Color.LightGray;
+                        lbHeightRootMax.ForeColor = Color.LightGray;
+                        btnMin.PerformClick();
+                        break;
+                    case Values.Max:
+
+                        lbHeightRootMax.Text = Math.Round(Propety.TempHeightRoot, 3).ToString();
+                        lbPitchRootMax.Text = Math.Round(Propety.TempPitchRoot, 3).ToString();
+                        lbHeightCrestMax.Text = Math.Round(Propety.TempHeightCrest, 3).ToString();
+                        lbPitchCrestMax.Text = Math.Round(Propety.TempPitchCrest, 3).ToString();
+                        btnMax.IsCLick = true;
+                        //Mean
+                        lbPitchCrestMean.ForeColor = Color.LightGray;
+                        lbHeightCrestMean.ForeColor = Color.LightGray;
+                        lbPitchRootMean.ForeColor = Color.LightGray;
+                        lbHeightRootMean.ForeColor = Color.LightGray;
+                        //Median
+                        lbPitchCrestMedian.ForeColor = Color.LightGray;
+                        lbHeightCrestMedian.ForeColor = Color.LightGray;
+                        lbPitchRootMedian.ForeColor = Color.LightGray;
+                        lbHeightRootMedian.ForeColor = Color.LightGray;
+                        //Min
+                        lbPitchCrestMin.ForeColor = Color.LightGray;
+                        lbHeightCrestMin.ForeColor = Color.LightGray;
+                        lbPitchRootMin.ForeColor = Color.LightGray;
+                        lbHeightRootMin.ForeColor = Color.LightGray;
+                        //Max
+                        lbPitchCrestMax.ForeColor = Color.Black;
+                        lbHeightCrestMax.ForeColor = Color.Black;
+                        lbPitchRootMax.ForeColor = Color.Black;
+                        lbHeightRootMax.ForeColor = Color.Black;
+                        btnMax.PerformClick();
                         break;
                 }
-                switch (Propety.GapExtremum)
+                if (Propety.IsEnCrestPitch)
                 {
-                    case GapExtremum.Outermost:
-                        btnOutter.IsCLick = true;
-                        break;
-                    case GapExtremum.Middle:
-                        btnMid.IsCLick = true;
-                        break;
-                    case GapExtremum.Nearest:
-                        btnNear.IsCLick = true;
-                        break;
-                    case GapExtremum.Farthest:
-                        btnFar.IsCLick = true;
-                        break;
+                    lbPitchCrestMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchCrestMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchCrestMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchCrestMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+                }
+                else
+                {
+                    lbPitchCrestMax.BackColor = Color.WhiteSmoke;
+                    lbPitchCrestMin.BackColor = Color.WhiteSmoke;
+                    lbPitchCrestMean.BackColor = Color.WhiteSmoke;
+                    lbPitchCrestMedian.BackColor = Color.WhiteSmoke;
+                }
+                if (Propety.IsEnRootPitch)
+                {
+                    lbPitchRootMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchRootMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchRootMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbPitchRootMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+
+                }
+                else
+                {
+                    lbPitchRootMax.BackColor = Color.WhiteSmoke;
+                    lbPitchRootMin.BackColor = Color.WhiteSmoke;
+                    lbPitchRootMean.BackColor = Color.WhiteSmoke;
+                    lbPitchRootMedian.BackColor = Color.WhiteSmoke;
+                }
+                if (Propety.IsEnCrestHeight)
+                {
+                    lbHeightCrestMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightCrestMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightCrestMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightCrestMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+                }
+                else
+                {
+                    lbHeightCrestMax.BackColor = Color.WhiteSmoke;
+                    lbHeightCrestMin.BackColor = Color.WhiteSmoke;
+                    lbHeightCrestMean.BackColor = Color.WhiteSmoke;
+                    lbHeightCrestMedian.BackColor = Color.WhiteSmoke;
+                }
+                if (Propety.IsEnRootHeight)
+                {
+                    lbHeightRootMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightRootMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightRootMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                    lbHeightRootMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+                }
+                else
+                {
+                    lbHeightRootMax.BackColor = Color.WhiteSmoke;
+                    lbHeightRootMin.BackColor = Color.WhiteSmoke;
+                    lbHeightRootMean.BackColor = Color.WhiteSmoke;
+                    lbHeightRootMedian.BackColor = Color.WhiteSmoke;
                 }
             }
             catch (Exception ex)
@@ -130,17 +305,39 @@ namespace BeeInterface
         private void ToolWidth_StatusToolChanged(StatusTool obj)
         {if (Global.IsRun) return;
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
-            {
-                btnTest.Enabled = true;
-                if (Propety.IsCalibs)
+            {if(Propety.IsCalib)
                 {
                     btnCalib.IsCLick = false;
-                    Propety.IsCalibs = false;
                     btnCalib.Enabled = true;
-                    trackMinInlier.Value = Propety.MinInliers;
-                    numMaxLen.Value = Propety.MaxLen;
-                    numMinLen.Value = Propety.MinLen;
+                    Propety.IsCalib = false;
+                    lbCrestCount.Text = Propety.PitchResult.Crests.Length.ToString();
+                    lbRootCount.Text = Propety.PitchResult.Roots.Length.ToString();
+
+                    lbHeightRootMean.Text = Math.Round(Propety.PitchResult.RootHMeanMM, 3).ToString();
+                    lbHeightRootMedian.Text = Math.Round(Propety.PitchResult.RootHMedianMM, 3).ToString();
+                    lbHeightRootMin.Text = Math.Round(Propety.PitchResult.RootHMinMM, 3).ToString();
+                    lbHeightRootMax.Text = Math.Round(Propety.PitchResult.RootHMaxMM, 3).ToString();
+
+                    lbPitchRootMean.Text = Math.Round(Propety.PitchResult.PitchRootMeanMM, 3).ToString();
+                    lbPitchRootMedian.Text = Math.Round(Propety.PitchResult.PitchRootMedianMM, 3).ToString();
+                    lbPitchRootMin.Text = Math.Round(Propety.PitchResult.PitchRootMinMM, 3).ToString();
+                    lbPitchRootMax.Text = Math.Round(Propety.PitchResult.PitchRootMaxMM, 3).ToString();
+
+                    lbHeightCrestMean.Text = Math.Round(Propety.PitchResult.CrestHMeanMM, 3).ToString();
+                    lbHeightCrestMedian.Text = Math.Round(Propety.PitchResult.CrestHMedianMM, 3).ToString();
+                    lbHeightCrestMin.Text = Math.Round(Propety.PitchResult.CrestHMinMM, 3).ToString();
+                    lbHeightCrestMax.Text = Math.Round(Propety.PitchResult.CrestHMaxMM, 3).ToString();
+
+                    lbPitchCrestMean.Text = Math.Round(Propety.PitchResult.PitchMeanMM, 3).ToString();
+                    lbPitchCrestMedian.Text = Math.Round(Propety.PitchResult.PitchMedianMM, 3).ToString();
+                    lbPitchCrestMin.Text = Math.Round(Propety.PitchResult.PitchMinMM, 3).ToString();
+                    lbPitchCrestMax.Text = Math.Round(Propety.PitchResult.PitchMaxMM, 3).ToString();
+                    numCrestCouter.Value = Propety.TempCountCrest;
+                    numRootCounter.Value = Propety.TempCountRoot;
                 }
+              
+                btnTest.Enabled = true;
+              
             }
            
         }
@@ -361,45 +558,8 @@ namespace BeeInterface
           //  G.EditTool.View.imgView.Invalidate();
         }
 
-        private void tableLayoutPanel8_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void btnShort_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Shortest;
-        }
-
-        private void btnAverage_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Average;
-        }
-
-        private void btnLong_Click(object sender, EventArgs e)
-        {
-            Propety.SegmentStatType = SegmentStatType.Longest;
-        }
-
-        private void btnMid_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Middle;
-        }
-
-        private void btnOutter_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Outermost;
-        }
-
-        private void btnNear_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Nearest;
-        }
-
-        private void btnFar_Click(object sender, EventArgs e)
-        {
-            Propety.GapExtremum = GapExtremum.Nearest;
-        }
+        
+    
 
         private void btnVer_Click(object sender, EventArgs e)
         {
@@ -413,26 +573,7 @@ namespace BeeInterface
             Propety.LineOrientation = LineOrientation.Horizontal;
         }
 
-        private void trackMaxLine_ValueChanged(float obj)
-        {
-            Propety.MaximumLine = (int)trackMaxLine.Value;
-        }
-
-        private void trackMinInlier_ValueChanged(float obj)
-        {
-            Propety.MinInliers = (int)trackMinInlier.Value;
-        }
-
-        private void btnCalib_Click(object sender, EventArgs e)
-        {
-            btnCalib.Enabled = false;
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.IsCalibs = true;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                Propety.IsCalibs = false;
-            
-        }
+      
 
         private void trackScore_Load(object sender, EventArgs e)
         {
@@ -447,16 +588,7 @@ namespace BeeInterface
 
       
 
-        private void numMinLen_ValueChanged(float obj)
-        {
-            Propety.MinLen = (int)numMinLen.Value;
-        }
-
-        private void numMaxLen_ValueChanged(float obj)
-        {
-            Propety.MaxLen = (int)numMaxLen.Value;
-        }
-
+     
         private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
         {
 
@@ -493,7 +625,7 @@ namespace BeeInterface
         private void btnEnMorphology_Click(object sender, EventArgs e)
         {
             Propety.IsClose = btnClose.IsCLick;
-            AdjMorphology.Enabled = Propety.IsClose;
+            AdjClose.Enabled = Propety.IsClose;
         }
 
         private void btnEnableNoise_Click(object sender, EventArgs e)
@@ -506,7 +638,7 @@ namespace BeeInterface
         private void AdjMorphology_ValueChanged(float obj)
         {
 
-            Propety.SizeClose = (int)AdjMorphology.Value;
+            Propety.SizeClose = (int)AdjClose.Value;
         }
 
       
@@ -532,18 +664,262 @@ namespace BeeInterface
             AdjClearBig.Enabled = Propety.IsClearNoiseBig;
 
         }
-        private void AdjRANSACIterations_ValueChanged(float obj)
-        {
-            Propety.RansacIterations = (int)AdjRANSACIterations.Value;
-        }
+      
 
-        private void AdjRANSACThreshold_ValueChanged(float obj)
-        {
-            Propety.RansacThreshold = AdjRANSACThreshold.Value;
-        }
+      
         private void AdjScale_ValueChanged(float obj)
         {
-            Propety.Scale = AdjScale.Value;
+            Propety.Scale =1/ AdjScale.Value;
+        }
+
+        private void btnMean_Click(object sender, EventArgs e)
+        {
+            Propety.Values=Values.Mean;
+
+            //Mean
+            lbPitchCrestMean.ForeColor = Color.Black ;
+            lbHeightCrestMean.ForeColor = Color.Black;
+            lbPitchRootMean.ForeColor = Color.Black;
+            lbHeightRootMean.ForeColor = Color.Black;
+            //Median
+            lbPitchCrestMedian.ForeColor = Color.LightGray;
+            lbHeightCrestMedian.ForeColor = Color.LightGray;
+            lbPitchRootMedian.ForeColor = Color.LightGray;
+            lbHeightRootMedian.ForeColor = Color.LightGray;
+            //Min
+            lbPitchCrestMin.ForeColor = Color.LightGray;
+            lbHeightCrestMin.ForeColor = Color.LightGray;
+            lbPitchRootMin.ForeColor = Color.LightGray;
+            lbHeightRootMin.ForeColor = Color.LightGray;
+            //Max
+            lbPitchCrestMax.ForeColor = Color.LightGray;
+            lbHeightCrestMax.ForeColor = Color.LightGray;
+            lbPitchRootMax.ForeColor = Color.LightGray;
+            lbHeightRootMax.ForeColor = Color.LightGray;
+
+        }
+
+        private void btnMedian_Click(object sender, EventArgs e)
+        {
+            Propety.Values = Values.Median;
+            //Mean
+            lbPitchCrestMean.ForeColor = Color.LightGray;
+            lbHeightCrestMean.ForeColor = Color.LightGray;
+            lbPitchRootMean.ForeColor = Color.LightGray;
+            lbHeightRootMean.ForeColor = Color.LightGray;
+            //Median
+            lbPitchCrestMedian.ForeColor = Color.Black;
+            lbHeightCrestMedian.ForeColor = Color.Black;
+            lbPitchRootMedian.ForeColor = Color.Black;
+            lbHeightRootMedian.ForeColor = Color.Black;
+            //Min
+            lbPitchCrestMin.ForeColor = Color.LightGray;
+            lbHeightCrestMin.ForeColor = Color.LightGray;
+            lbPitchRootMin.ForeColor = Color.LightGray;
+            lbHeightRootMin.ForeColor = Color.LightGray;
+            //Max
+            lbPitchCrestMax.ForeColor = Color.LightGray;
+            lbHeightCrestMax.ForeColor = Color.LightGray;
+            lbPitchRootMax.ForeColor = Color.LightGray;
+            lbHeightRootMax.ForeColor = Color.LightGray;
+        }
+
+        private void btnMin_Click(object sender, EventArgs e)
+        {
+            Propety.Values = Values.Min;
+            //Mean
+            lbPitchCrestMean.ForeColor = Color.LightGray;
+            lbHeightCrestMean.ForeColor = Color.LightGray;
+            lbPitchRootMean.ForeColor = Color.LightGray;
+            lbHeightRootMean.ForeColor = Color.LightGray;
+            //Median
+            lbPitchCrestMedian.ForeColor = Color.LightGray;
+            lbHeightCrestMedian.ForeColor = Color.LightGray;
+            lbPitchRootMedian.ForeColor = Color.LightGray;
+            lbHeightRootMedian.ForeColor = Color.LightGray;
+            //Min
+            lbPitchCrestMin.ForeColor = Color.Black;
+            lbHeightCrestMin.ForeColor = Color.Black;
+            lbPitchRootMin.ForeColor = Color.Black;
+            lbHeightRootMin.ForeColor = Color.Black;
+            //Max
+            lbPitchCrestMax.ForeColor = Color.LightGray;
+            lbHeightCrestMax.ForeColor = Color.LightGray;
+            lbPitchRootMax.ForeColor = Color.LightGray;
+            lbHeightRootMax.ForeColor = Color.LightGray;
+        }
+
+        private void btnMax_Click(object sender, EventArgs e)
+        {
+            Propety.Values = Values.Max;
+            //Mean
+            lbPitchCrestMean.ForeColor = Color.LightGray;
+            lbHeightCrestMean.ForeColor = Color.LightGray;
+            lbPitchRootMean.ForeColor = Color.LightGray;
+            lbHeightRootMean.ForeColor = Color.LightGray;
+            //Median
+            lbPitchCrestMedian.ForeColor = Color.LightGray;
+            lbHeightCrestMedian.ForeColor = Color.LightGray;
+            lbPitchRootMedian.ForeColor = Color.LightGray;
+            lbHeightRootMedian.ForeColor = Color.LightGray;
+            //Min
+            lbPitchCrestMin.ForeColor = Color.LightGray;
+            lbHeightCrestMin.ForeColor = Color.LightGray;
+            lbPitchRootMin.ForeColor = Color.LightGray;
+            lbHeightRootMin.ForeColor = Color.LightGray;
+            //Max
+            lbPitchCrestMax.ForeColor = Color.Black;
+            lbHeightCrestMax.ForeColor = Color.Black;
+            lbPitchRootMax.ForeColor = Color.Black;
+            lbHeightRootMax.ForeColor = Color.Black;
+        }
+
+        private void btnEnCrestPitch_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnCrestPitch=btnEnCrestPitch.IsCLick;
+            if (Propety.IsEnCrestPitch)
+            {
+                lbPitchCrestMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchCrestMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchCrestMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchCrestMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+            }
+            else
+            {
+                lbPitchCrestMax.BackColor = Color.WhiteSmoke;
+                lbPitchCrestMin.BackColor = Color.WhiteSmoke;
+                lbPitchCrestMean.BackColor = Color.WhiteSmoke;
+                lbPitchCrestMedian.BackColor = Color.WhiteSmoke;
+            }
+
+          
+
+        }
+
+        private void btnEnRootPitch_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnRootPitch=btnEnRootPitch.IsCLick;
+            if (Propety.IsEnRootPitch)
+            {
+                lbPitchRootMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchRootMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchRootMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbPitchRootMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+             
+            }
+            else
+            {
+                lbPitchRootMax.BackColor = Color.WhiteSmoke;
+                lbPitchRootMin.BackColor = Color.WhiteSmoke;
+                lbPitchRootMean.BackColor = Color.WhiteSmoke;
+                lbPitchRootMedian.BackColor = Color.WhiteSmoke;
+            }
+
+          
+        }
+
+        private void btnEnCreshHeight_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnCrestHeight=btnEnCrestHeight.IsCLick;
+            if (Propety.IsEnCrestHeight)
+            {
+                lbHeightCrestMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightCrestMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightCrestMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightCrestMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+            }
+            else
+            {
+                lbHeightCrestMax.BackColor = Color.WhiteSmoke;
+                lbHeightCrestMin.BackColor = Color.WhiteSmoke;
+                lbHeightCrestMean.BackColor = Color.WhiteSmoke;
+                lbHeightCrestMedian.BackColor = Color.WhiteSmoke;
+            }
+           
+        }
+
+        private void btnEnRootHeight_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnRootHeight=btnEnRootHeight.IsCLick;
+            if (Propety.IsEnRootHeight)
+            {
+                lbHeightRootMax.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightRootMin.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightRootMean.BackColor = Color.FromArgb(150, 247, 211, 139);
+                lbHeightRootMedian.BackColor = Color.FromArgb(150, 247, 211, 139);
+            }
+            else
+            {
+                lbHeightRootMax.BackColor = Color.WhiteSmoke;
+                lbHeightRootMin.BackColor = Color.WhiteSmoke;
+                lbHeightRootMean.BackColor = Color.WhiteSmoke;
+                lbHeightRootMedian.BackColor = Color.WhiteSmoke;
+            }
+        }
+
+        private void btnEnCrestCounter_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnCrestCounter=btnEnCrestCounter.IsCLick;
+            if(Propety.IsEnCrestCounter) 
+            lbCrestCount.BackColor = Color.FromArgb(150, 247, 211, 139);
+            else
+                lbCrestCount.BackColor = Color.WhiteSmoke;
+            numCrestCouter.Enabled = btnEnCrestCounter.IsCLick;
+        }
+
+        private void btnEnRootCounter_Click(object sender, EventArgs e)
+        {
+            Propety.IsEnRootCounter=btnEnRootCounter.IsCLick;
+            if (Propety.IsEnRootCounter)
+                lbRootCount.BackColor = Color.FromArgb(150, 247, 211, 139);
+            else
+                lbRootCount.BackColor = Color.WhiteSmoke;
+        
+            numRootCounter.Enabled = btnEnRootCounter.IsCLick;
+        }
+        private void btnLess_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.Less;
+        }
+
+        private void btnEqual_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.Equal;
+        }
+
+        private void btnMore_Click(object sender, EventArgs e)
+        {
+            Propety.Compare = Compares.More;
+        }
+
+        private void numCrestCouter_ValueChanged(float obj)
+        {
+            Propety.NumCrestCouter = (int)numCrestCouter.Value;
+        }
+
+        private void numRootCounter_ValueChanged(float obj)
+        {
+            Propety.NumRootCouter = (int)numRootCounter.Value;
+        }
+
+        private void AdjGaussianSmooth_ValueChanged(float obj)
+        {
+            Propety.ValueGau=AdjGaussianSmooth.Value;
+        }
+
+        private void AdjMagin_ValueChanged(float obj)
+        {
+            Propety.Magin = (int)AdjMagin.Value;
+        }
+
+        private void btnCalib_Click(object sender, EventArgs e)
+        {
+            btnCalib.Enabled = false;
+            Propety.IsCalib= true;
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            else
+                btnCalib.IsCLick = false;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

@@ -24,25 +24,27 @@ namespace BeeUi.Unit
         {
 
             GeneralSetting IOSetting = new GeneralSetting();
-            IOSetting.Show();
+            IOSetting.ShowDialog();
+            btnSetting.IsCLick = false;
         }
 
         private void btnReport_Click(object sender, EventArgs e)
         {
             FormReport FormReport = new FormReport();
-            FormReport.Show();
+            FormReport.ShowDialog();
+            btnUser.IsCLick = false;
         }
 
         private void btnUser_Click(object sender, EventArgs e)
         {
-            G.account = new Account();
-            G.account.cbUser.SelectedIndex = G.account.cbUser.FindStringExact(Global.Config.nameUser);
+            Account account = new Account();
+            account.cbUser.Text = Global.Config.Users.ToString();
 
 
-            G.account.Location = new Point(G.Main.Location.X + G.Main.Width / 2 - G.account.Width / 2, G.Main.Location.Y + G.Main.Height / 2 - G.account.Height / 2);
-            G.account.Show();
-           btnUser.Text =Global.Config.nameUser;
-
+            account.Location = new Point(G.Main.Location.X + G.Main.Width / 2 - G.account.Width / 2, G.Main.Location.Y + G.Main.Height / 2 - G.account.Height / 2);
+            account.ShowDialog();
+           btnUser.Text =Global.Config.Users.ToString();
+            btnUser.IsCLick = false;
 
         }
 
@@ -129,6 +131,7 @@ namespace BeeUi.Unit
         {
             FormCheckUpdate formCheckUpdate = new FormCheckUpdate();
             formCheckUpdate.ShowDialog();
+            btncheck.IsCLick = false;
         }
 
         private void btnShuttdown_Click(object sender, EventArgs e)

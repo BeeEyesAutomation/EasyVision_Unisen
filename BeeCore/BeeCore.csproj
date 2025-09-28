@@ -136,6 +136,10 @@
     <Compile Include="Algorithm\RansacCircleFitter.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Checking.cs" />
+    <Compile Include="Core\HelpMouseView.cs" />
+    <Compile Include="Core\HsvConvert.cs" />
+    <Compile Include="Core\RGB.cs" />
+    <Compile Include="Core\HSV.cs" />
     <Compile Include="Data\Access.cs" />
     <Compile Include="Data\ClassProject.cs" />
     <Compile Include="Data\LoadData.cs" />
@@ -171,8 +175,10 @@
     </Compile>
     <Compile Include="Unit\OKNG.cs" />
     <Compile Include="Unit\MeasureCorner.cs" />
+    <Compile Include="Unit\PitchGdiPainter.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Pitch.cs" />
+    <Compile Include="Unit\Width2.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">

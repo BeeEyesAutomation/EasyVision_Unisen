@@ -255,7 +255,7 @@ namespace BeeGlobal
                 
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_READ", ex.Message));
              
-                // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                // Global.ParaCommon.Comunication.Protocol.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString() + " " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
@@ -264,7 +264,7 @@ namespace BeeGlobal
                 
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_READ", ex.Message));
             
-                // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                // Global.ParaCommon.Comunication.Protocol.IsConnected = false;
                 Global.ParaCommon.Comunication.IO.LogError("Read - " + Global.StatusProcessing.ToString()+" " + ex.Message);
                 Global.StatusIO = StatusIO.ErrRead;
             }
@@ -320,7 +320,7 @@ namespace BeeGlobal
             {
                 
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_WRITE", op.Message));
-                // Global.ParaCommon.Comunication.IO.IsConnected = false;
+                // Global.ParaCommon.Comunication.Protocol.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
                 Global.ParaCommon.Comunication.IO.LogError("Write- " +Global.StatusProcessing.ToString() +", "+ op.Message);
@@ -329,7 +329,7 @@ namespace BeeGlobal
             {
                 
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO_WRITE", ex.Message));
-                //  Global.ParaCommon.Comunication.IO.IsConnected = false;
+                //  Global.ParaCommon.Comunication.Protocol.IsConnected = false;
 
                 Global.StatusIO = StatusIO.ErrWrite;
                 Global.ParaCommon.Comunication.IO.LogError("Write-" + Global.StatusProcessing.ToString() + ", " + ex.Message);
