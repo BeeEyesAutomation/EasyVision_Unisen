@@ -142,7 +142,7 @@ namespace BeeUi.Common
         {
             // SaveData.Project(Global.Project);
             Global.Step = Step.Run;
-            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
 
         }
     }

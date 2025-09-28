@@ -22,7 +22,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
 using static BeeCore.Algorithm.FilletCornerMeasure;
-using static EasyModbus.ModbusServer;
+
 using Size = OpenCvSharp.Size;
 namespace BeeCore
 {
@@ -1543,7 +1543,7 @@ namespace BeeCore
                     HEROJE.Light(TypeLight, IsOn);
                     break;
                 case TypeCamera.MVS:
-                    Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Light;
+                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     break;
                 default:
                     break;

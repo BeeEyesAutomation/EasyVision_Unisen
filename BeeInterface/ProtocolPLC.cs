@@ -464,7 +464,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbParity.Text = Global.ParaCommon.Comunication.Protocol.Parity.ToString();
                 cbStopBits.Text = Global.ParaCommon.Comunication.Protocol.StopBits.ToString();
                 cbDataBits.Text = Global.ParaCommon.Comunication.Protocol.DataBit.ToString();
-
+                btnIO.IsCLick=! Global.ParaCommon.Comunication.Protocol.IsPLC;
+                btnIsPLC.IsCLick= Global.ParaCommon.Comunication.Protocol.IsPLC;
                 cbO0.Text = nameOut[0];
                 cbO1.Text = nameOut[1];
                 cbO2.Text = nameOut[2];
@@ -568,32 +569,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             {
                 MessageBox.Show(ex.Message);
             }
-            //if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
-            //{
-            //    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-            //    {
-            //        btnConectIO.Text = "Connected";
-            //        btnConectIO.IsCLick = true;
-
-            //        Global.ParaCommon.Comunication.Protocol.IsBypass = false;
-            //        Global.ParaCommon.Comunication.Protocol.StartRead();
-            //    }
-            //    else
-            //    {
-            //        btnConectIO.Text = "Fail Connect";
-            //        Global.ParaCommon.Comunication.Protocol.IsBypass = true;
-            //        MessageBox.Show("Fail Connect to Module I/O");
-
-            //    }
-            //}
-            //// if (Global.ParaCommon.Comunication.Protocol.valueInput == null)
-            //     Global.ParaCommon.Comunication.Protocol.valueInput = new IntArrayWithEvent(16);
-            // if (Global.ParaCommon.Comunication.Protocol.valueOutput == null)
-            //     Global.ParaCommon.Comunication.Protocol.valueOutput = new IntArrayWithEvent(16);
-            // // 2) Subscribe sự kiện
-            // Global.ParaCommon.Comunication.Protocol.valueInput.BulkChanged += ValueInput_BulkChanged;
-            //Global.ParaCommon.Comunication.Protocol.valueOutput.ItemChanged += ValueOutput_ItemChanged;
-            int index = 0;
+          
            foreach(ParaBit paraIO in  Global.ParaCommon.Comunication.Protocol.ParaBits )
             {
                 paraIO.ValueChanged += ParaIO_ValueChanged;
@@ -607,7 +583,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
               //  pComIO.Enabled = false;
-                btnConectIO.Text = "Connected";
+           
                 btnConectIO.IsCLick = true;
                 btnConectIO.Enabled = false;
                // btnBypass.Enabled = true;
@@ -615,7 +591,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             else
             {
              //   pComIO.Enabled = true;
-                btnConectIO.Text = "Fail Connect";
+               
                 btnConectIO.IsCLick = false;
                 btnConectIO.Enabled = true;
              //   btnBypass.Enabled = false;
@@ -624,31 +600,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
           //  Global.ParaCommon.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
         }
 
-        //private void IO_numWriteChanged(int obj)
-        //{
-        //    this.Invoke((Action)(() =>
-        //    {   if(obj>1)
-        //        {
-        //            lbOut.Text = obj.ToString();
-        //            lbOut.Refresh();
-        //        }
-                
-        //    }));
-        //}
-
-        //private void IO_numReadChanged(int obj)
-        //{
-        //    this.Invoke((Action)(() =>
-        //    {
-        //        if (obj > 1)
-        //        {
-        //            lbLog.Text = obj.ToString();
-        //            lbLog.Refresh();
-        //        }
-        //    }));
-        //}
-
-      
+     
 
         private void Global_StatusIOChanged(StatusIO obj)
         {
@@ -657,7 +609,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
               
                 if (obj == StatusIO.NotConnect)
                 {
-                    btnConectIO.Text = "Fail Connect";
+               
                     btnConectIO.IsCLick = false;
                     btnConectIO.Enabled = true;
                   
@@ -744,7 +696,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
            await Global.ParaCommon.Comunication.Protocol.Connect();
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-                btnConectIO.Text = "Connected";
+              
                 btnConectIO.IsCLick = true;
                 //pComIO.Enabled = false;
              
@@ -754,7 +706,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             else
             {
-                btnConectIO.Text = "Fail Connect";
+             
                // pComIO.Enabled = true;
                 Global.ParaCommon.Comunication.Protocol.IsBypass = true;
                 MessageBox.Show("Fail Connect to Module I/O");
@@ -865,9 +817,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Busy;
                 Global.ParaCommon.Comunication.Protocol.Disconnect();
              
-                btnConectIO.Text = "No Connect";
+               
             }
-            Modbus.IsWrite = false; Modbus.IsReading = false;
             btnConectIO.IsCLick = false;
             btnConectIO.Enabled = true;
             btnBypass.IsCLick = true;
@@ -1149,6 +1100,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnDelta_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Delta;
+        }
+
+        private void btnIsPLC_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.IsPLC = btnIsPLC.IsCLick;
+        }
+
+        private void btnIO_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.IsPLC=!btnIO.IsCLick;
         }
     }
 }

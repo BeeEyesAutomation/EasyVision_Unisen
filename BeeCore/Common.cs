@@ -17,7 +17,7 @@ using System.Linq;
 using Size = OpenCvSharp.Size;
 using System.IO;
 using BeeGlobal;
-using static EasyModbus.ModbusServer;
+
 namespace BeeCore
 {
   public   class Common

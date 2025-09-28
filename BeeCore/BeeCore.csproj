@@ -72,9 +72,6 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
-    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
-    </Reference>
     <Reference Include="LibUsbDotNet">
       <HintPath>C:\Lib\LibUsbDotNet.dll</HintPath>
     </Reference>

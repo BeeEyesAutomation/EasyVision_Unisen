@@ -54,14 +54,13 @@ namespace BeeGlobal
         //        }
         //    }, _cts.Token);
         //}
-        //public void StopRead() => _cts.Cancel();
+        public bool IsPLC = false;
         public String AddRead = "D100";
         public String AddWrite = "D102";
         public float DelayTrigger = 1;
         public float DelayOutput= 1;
         public bool IsLight1,IsLight2,IsLight3;
-        [NonSerialized]
-        public ModbusService ModbusService;
+     
         public PlcBrand PlcBrand = PlcBrand.Mitsubishi;
         public ConnectionType ConnectionType = ConnectionType.Serial;
         //private  async Task DoWork()
@@ -238,11 +237,14 @@ namespace BeeGlobal
                     Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
                     IO_Processing = IO_Processing.Reset;
-                  //  Global.PLCStatusChanged += Global_PLCStatusChanged;
-                    timeAlive = new System.Windows.Forms.Timer();
-                    timeAlive.Interval = 1000;
-                    timeAlive.Enabled = true;
-                    timeAlive.Tick += TimeAlive_Tick;
+                 if(IsPLC)
+                    {
+                        timeAlive = new System.Windows.Forms.Timer();
+                        timeAlive.Interval = 1000;
+                        timeAlive.Enabled = true;
+                        timeAlive.Tick += TimeAlive_Tick;
+                    }    
+                  
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
                       
@@ -651,9 +653,12 @@ namespace BeeGlobal
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            if(!IsPLC)
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetLight(true);
                             await WriteOutPut();
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                            if (IsPLC)
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             if (DelayTrigger > 0)
                             {
                                 await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay

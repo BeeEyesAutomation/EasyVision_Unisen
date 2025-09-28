@@ -1588,6 +1588,7 @@ namespace BeeUi
             switch (obj)
             {
                 case CameraStatus.NotConnect:
+                   
                     Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                     Global.EditTool.lbCam.Text = "Camera Not Connect";
                     break;
@@ -1598,6 +1599,7 @@ namespace BeeUi
                 case CameraStatus.ErrorConnect:
                     this.Invoke((Action)(() =>
                     {
+                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Error;
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                         Global.EditTool.lbCam.Text = "Camera Error Connect";
                         G.Main.Hide();
@@ -1693,7 +1695,7 @@ namespace BeeUi
         {
             Global.StatusProcessing = StatusProcessing.None;
             Global.StatusIO = StatusIO.None;
-            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
             if (!obj)
             {
                 //btnTypeTrig.Enabled = false;
@@ -1826,7 +1828,7 @@ namespace BeeUi
 
                         Global.StatusProcessing = StatusProcessing.Checking;
                         if (Global.IsByPassResult)
-                            Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ByPass;
+                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
                     }
                  
@@ -1918,7 +1920,7 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    Global.EditTool.txtCout.Text = Global.NumSend.ToString();
+               
 
 
                     this.Invoke((Action)(() =>
@@ -2910,8 +2912,7 @@ namespace BeeUi
                             
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now,LeveLLog.ERROR, "Data", "Fail Save Data OK"));
                     }
-                       // else
-                           // Global.EditTool.lbEx.Text = "No save ok ";
+                    
                       
                         }
                     else
@@ -2924,8 +2925,7 @@ namespace BeeUi
                              
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Data", "Fail Save Data NG"));
                     }
-                       // else
-                           // Global.EditTool.lbEx.Text = "No save ng ";
+                   
                     }    
                     
             
@@ -3395,7 +3395,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
               
                 Global.StatusProcessing = StatusProcessing.Checking;
                 if (Global.IsByPassResult)
-                    Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ByPass;
+                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
             }
 		}
@@ -3520,33 +3520,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         }
         int numErrPort = 0;
-        private void tmCheckPort_Tick(object sender, EventArgs e)
-        {
-           
-            if (!G.Header.SerialPort1.IsOpen)
-            {
-                try
-                {
-                    Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                    Global.EditTool.toolStripPort.Text = "Port Not Connect";
-                    G.Header.SerialPort1.Close();
-                    G.Header.SerialPort1.Open();
-                }
-                catch (Exception ex)
-                {
-                    numErrPort++;
-                }
-                if(numErrPort>5)
-                {
-                   // Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                   // Global.EditTool.toolStripPort.Text = "Port Not Connect";
-                    // MessageBox.Show("Error connect Port " + G.Header.SerialPort.PortName);
-
-                }
-            }
-        }
-
        
+
+    
        
 
     
@@ -3875,7 +3851,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
-                Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+            
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
             //    Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                    // imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
@@ -3928,7 +3904,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                
             }
 
-            Global.EditTool.lbEx.Text = indexFile + "." + Path.GetFileNameWithoutExtension(Files[indexFile]);
+        
           
            
         }
@@ -4324,6 +4300,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
              // true = pan follows mouse, false = opposite
         }
 
+        private void tmCheckPort_Tick(object sender, EventArgs e)
+        {
+
+        }
+
         private void btnRunSim_Click_1(object sender, EventArgs e)
         {
             if (Files == null) return;
@@ -4342,7 +4323,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
            
             if(indexFile >= Files.Count)
             indexFile = 0;
-            Global.EditTool.lbEx.Text = indexFile+"."+ Path.GetFileNameWithoutExtension(Files[indexFile]);
+     
 
         }
 

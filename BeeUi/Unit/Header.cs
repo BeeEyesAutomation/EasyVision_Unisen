@@ -16,7 +16,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -120,12 +119,12 @@ namespace BeeUi.Common
             {
                 if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {
-                    if (Global.ParaCommon.Comunication.IO.valueOutput[4] == 0)
-                    {
+                    //if (Global.ParaCommon.Comunication.Protocol.valueOutput[4] == 0)
+                    //{
 
-                       // Global.ParaCommon.Comunication.IO.WriteOutPut(4, true);
+                    //   // Global.ParaCommon.Comunication.Protocol.WriteOutPut(4, true);
 
-                    }
+                    //}
                 }
                 SaveData.Config(Global.Config);
                 G.Main.Hide();
@@ -309,8 +308,8 @@ namespace BeeUi.Common
             if (Global.ParaCommon.Comunication == null)
             {
                 Global.ParaCommon.Comunication = new Comunication();
-                Global.ParaCommon.Comunication.IO = new IO();
-                Global.ParaCommon.Comunication.IO.paraIOs = new List<ParaIO>();
+                Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+              
 
             }
             //cbSerialPort.SelectedIndex = cbSerialPort.FindStringExact(Global.Config.namePort);
@@ -445,13 +444,7 @@ namespace BeeUi.Common
         //       // G.IsDone = false;
         //    }
         }
-    private void SerialPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
-        {
-            sRecept =SerialPort1.ReadExisting();
-            //textBox1.Invoke(this.myDelegate, new Object[] { sRecept });
 
-          
-        }
 
         private void btnIO_Click(object sender, EventArgs e)
         {
@@ -794,39 +787,7 @@ txtQrCode.Focus();
         }
 
         int numAlive = 0;
-        private void tmOutAlive_Tick(object sender, EventArgs e)
-        {
-           
-          //  tmOutAlive.Enabled = false;
-            if (!Global.IsRun) return;
-            if (Global.ParaCommon.Comunication.IO.valueInput[3] == 1 )
-            {
-               
-                numAlive++;
-            }
-              
-            else
-            {
-              
-                  
-                numAlive = 0;
-
-            }
-            if (numAlive>30)
-            {
-                if (!G.IsPLCNotAlive)
-                {
-                    ForrmAlarm forrmAlarm = new ForrmAlarm();
-                    forrmAlarm.lbHeader.Text = "PLC not Alive !!";
-                    forrmAlarm.lbContent.Text = "Checking Mode RUN of PLC";
-                    forrmAlarm.Show();
-                   
-                    G.IsPLCNotAlive = true;
-                }
-                
-            }
-        }
-
+        
         private void tmIninitial_Tick(object sender, EventArgs e)
         {
             tmIninitial.Enabled= false;

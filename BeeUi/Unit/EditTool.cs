@@ -341,7 +341,7 @@ namespace BeeUi
 
 
                 //}
-                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.ChangeMode;
+                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
 
                 if (!Global.IsRun)
                 {
@@ -385,7 +385,7 @@ namespace BeeUi
            
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-                Global.ParaCommon.Comunication.IO.IO_Processing = IO_Processing.Close;
+                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Close;
             }
 
           
@@ -505,15 +505,7 @@ namespace BeeUi
            
         }
 
-        private void Global_ExChanged(string obj)
-        {
-            this.Invoke((Action)(() =>
-            {
-                lbEx.Text = obj;
-               
-            }));
-           
-        }
+      
 
         private void outLine_Load(object sender, EventArgs e)
         {
@@ -755,7 +747,6 @@ namespace BeeUi
      
             if (View.indexFile >= View.Files.Count)
                 View.indexFile = 0;
-            Global.EditTool.lbEx.Text = View.indexFile + "." + Path.GetFileNameWithoutExtension(View.Files[View.indexFile]);
         }
 
         private void stopTool_Click(object sender, EventArgs e)

@@ -33,7 +33,6 @@ namespace BeeUi.Common
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.Timer tmOutAlive;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
@@ -49,33 +48,26 @@ namespace BeeUi.Common
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.SerialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.workLoadProgram = new System.ComponentModel.BackgroundWorker();
             this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.workSaveProject = new System.ComponentModel.BackgroundWorker();
             this.pModel = new System.Windows.Forms.TableLayoutPanel();
+            this.btnEnQrCode = new BeeInterface.RJButton();
+            this.btnShowList = new BeeInterface.RJButton();
+            this.txtQrCode = new BeeInterface.TextBoxAuto();
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.tmIninitial = new System.Windows.Forms.Timer(this.components);
             this.split1 = new System.Windows.Forms.Splitter();
             this.split2 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnEnQrCode = new BeeInterface.RJButton();
-            this.btnShowList = new BeeInterface.RJButton();
-            this.txtQrCode = new BeeInterface.TextBoxAuto();
             this.btnMode = new BeeInterface.RJButton();
             this.pEdit = new BeeUi.Unit.EditProg();
-            tmOutAlive = new System.Windows.Forms.Timer(this.components);
             this.pPO.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel13.SuspendLayout();
             this.pModel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tmOutAlive
-            // 
-            tmOutAlive.Interval = 500;
-            tmOutAlive.Tick += new System.EventHandler(this.tmOutAlive_Tick);
             // 
             // workConnect
             // 
@@ -244,11 +236,6 @@ namespace BeeUi.Common
             this.panel8.Size = new System.Drawing.Size(2, 71);
             this.panel8.TabIndex = 29;
             // 
-            // SerialPort1
-            // 
-            this.SerialPort1.BaudRate = 115200;
-            this.SerialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.SerialPort_DataReceived);
-            // 
             // workLoadProgram
             // 
             this.workLoadProgram.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadProgram_DoWork);
@@ -284,45 +271,6 @@ namespace BeeUi.Common
             this.pModel.Size = new System.Drawing.Size(1088, 81);
             this.pModel.TabIndex = 29;
             this.pModel.SizeChanged += new System.EventHandler(this.pModel_SizeChanged);
-            // 
-            // tmShow
-            // 
-            this.tmShow.Interval = 500;
-            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
-            // 
-            // tmIninitial
-            // 
-            this.tmIninitial.Interval = 2000;
-            this.tmIninitial.Tick += new System.EventHandler(this.tmIninitial_Tick);
-            // 
-            // split1
-            // 
-            this.split1.Location = new System.Drawing.Point(200, 0);
-            this.split1.MaximumSize = new System.Drawing.Size(5, 81);
-            this.split1.Name = "split1";
-            this.split1.Size = new System.Drawing.Size(5, 81);
-            this.split1.TabIndex = 31;
-            this.split1.TabStop = false;
-            // 
-            // split2
-            // 
-            this.split2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.split2.Location = new System.Drawing.Point(1689, 0);
-            this.split2.MaximumSize = new System.Drawing.Size(5, 81);
-            this.split2.Name = "split2";
-            this.split2.Size = new System.Drawing.Size(5, 81);
-            this.split2.TabIndex = 32;
-            this.split2.TabStop = false;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnMode);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
-            this.panel1.Size = new System.Drawing.Size(200, 81);
-            this.panel1.TabIndex = 33;
             // 
             // btnEnQrCode
             // 
@@ -447,6 +395,45 @@ namespace BeeUi.Common
             this.txtQrCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtQrCode_KeyDown);
             this.txtQrCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQrCode_KeyPress);
             // 
+            // tmShow
+            // 
+            this.tmShow.Interval = 500;
+            this.tmShow.Tick += new System.EventHandler(this.tmShow_Tick);
+            // 
+            // tmIninitial
+            // 
+            this.tmIninitial.Interval = 2000;
+            this.tmIninitial.Tick += new System.EventHandler(this.tmIninitial_Tick);
+            // 
+            // split1
+            // 
+            this.split1.Location = new System.Drawing.Point(200, 0);
+            this.split1.MaximumSize = new System.Drawing.Size(5, 81);
+            this.split1.Name = "split1";
+            this.split1.Size = new System.Drawing.Size(5, 81);
+            this.split1.TabIndex = 31;
+            this.split1.TabStop = false;
+            // 
+            // split2
+            // 
+            this.split2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.split2.Location = new System.Drawing.Point(1689, 0);
+            this.split2.MaximumSize = new System.Drawing.Size(5, 81);
+            this.split2.Name = "split2";
+            this.split2.Size = new System.Drawing.Size(5, 81);
+            this.split2.TabIndex = 32;
+            this.split2.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnMode);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
+            this.panel1.Size = new System.Drawing.Size(200, 81);
+            this.panel1.TabIndex = 33;
+            // 
             // btnMode
             // 
             this.btnMode.AutoFont = true;
@@ -546,7 +533,6 @@ namespace BeeUi.Common
         #endregion
         private System.ComponentModel.BackgroundWorker workConnect;
         private System.Windows.Forms.SaveFileDialog saveFile;
-        public System.IO.Ports.SerialPort SerialPort1;
         private System.Windows.Forms.Timer tmQrCode;
         public System.ComponentModel.BackgroundWorker workLoadProgram;
         public System.ComponentModel.BackgroundWorker workSaveProject;
