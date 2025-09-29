@@ -1308,7 +1308,7 @@ namespace BeeCore
         {
 
 
-            
+          
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0;
             int matType = MatType.CV_8UC1;
@@ -1395,7 +1395,7 @@ namespace BeeCore
                                       copyBytes);
                 }
               
-                if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+               
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
                 return true;
             }

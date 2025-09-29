@@ -217,7 +217,8 @@ namespace BeeUi
         {
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
-         
+
+            if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
             tmLoad.Interval =500;
             tmLoad.Enabled = true;
 
@@ -234,7 +235,6 @@ namespace BeeUi
         private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Global.Project = Properties.Settings.Default.programCurrent;
-
             DataTool.LoadProject(Global.Project);
         
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)

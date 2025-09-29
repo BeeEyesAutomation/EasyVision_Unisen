@@ -310,7 +310,7 @@ namespace BeeGlobal
             }
         }
 
-        private int _autoSaveDelayMs = 600;
+        private int _autoSaveDelayMs = 1000;
         [Browsable(true), Category("LogsDashboard")]
         public int AutoSaveDelayMs { get { return _autoSaveDelayMs; } set { _autoSaveDelayMs = Math.Max(100, value); if (_saveDebounce != null) _saveDebounce.Interval = _autoSaveDelayMs; } }
 
@@ -424,10 +424,13 @@ namespace BeeGlobal
             };
 
             _saveDebounce.Interval = _autoSaveDelayMs;
-            _saveDebounce.Tick += delegate { _saveDebounce.Stop(); SaveNow(); };
+            _saveDebounce.Tick += delegate {
+                _saveDebounce.Stop(); SaveNow(); };
 
             _saveHeartbeat.Interval = 5000;
-            _saveHeartbeat.Tick += delegate { if (_dirty) SaveNow(); };
+            _saveHeartbeat.Tick += delegate {
+                if (
+                _dirty) SaveNow(); };
             _saveHeartbeat.Start();
 
             try { AppDomain.CurrentDomain.ProcessExit += delegate { try { SaveNow(); } catch { } }; } catch { }
