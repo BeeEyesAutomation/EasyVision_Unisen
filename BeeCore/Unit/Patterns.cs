@@ -581,22 +581,26 @@ namespace BeeCore
 				listScore = new List<double>();
 				listP_Center = new List<System.Drawing.Point>();
 				var ListRS = Pattern.Match(IsHighSpeed, 0, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, NumObject, OverLap, false, -1);
-				foreach (Rotaterectangle rot in ListRS)
+                float scoreRs = 0;
+                foreach (Rotaterectangle rot in ListRS)
 				{
 					PointF pCenter = new PointF((float)rot.Cx, (float)rot.Cy);
 					float angle = (float)rot.AngleDeg;
 					float width = (float)rot.Width;
 					float height = (float)rot.Height;
 					float Score = (float)rot.Score;
-					rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+                    scoreRs += Score;
+
+                    rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
 					listScore.Add(Math.Round(Score, 1));
 					listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
 
 
 				}
+                if (scoreRs != 0)
+                    Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =(int)Math.Round( scoreRs / rectRotates.Count(),1);
 
 
-				
                 matProcess.Dispose();
                 matCrop.Dispose();
 

@@ -3599,10 +3599,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             if (!Global.IsLive)
                 Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
             Shows.Full(imgView, Global.ParaCommon.SizeCCD);
-           Global.Config.imgZoom = imgView.Zoom;
+          
+            Global.Config.imgZoom = imgView.Zoom;
            Global.Config.imgOffSetX = imgView.AutoScrollPosition.X;
            Global.Config.imgOffSetY= imgView.AutoScrollPosition.Y;
-            Global.ZoomMinimum = Global.Config.imgZoom;
+           
         }
 
         private void imgView_Click_1(object sender, EventArgs e)

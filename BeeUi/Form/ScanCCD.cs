@@ -4,7 +4,7 @@ using BeeUi.Commons;
 
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
-using PylonCli;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
