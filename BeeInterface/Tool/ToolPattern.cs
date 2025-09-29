@@ -40,26 +40,49 @@ namespace BeeInterface
             
             if (!workLoadModel.IsBusy)
                 workLoadModel.RunWorkerAsync();
-
+            if (Propety.bmRaw != null)
+            {
+                imgTemp.Image = Propety.bmRaw;
+            }
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
 
+            if (Propety.Angle > 360) Propety.Angle = 360;
+
+            if (Propety.Angle == 0)
+            {
+                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
+                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
+            }
+            else
+            {
+                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
+                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
+            }
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
-            trackNumObject.Value= Propety.NumObject;
-            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
-            //txtAngle.Text = (int)Propety.Angle + "";
             if (Propety.NumObject == 0) Propety.NumObject = 1;
-            Propety.ckBitwiseNot = Propety.ckBitwiseNot;
-            Propety.ckSIMD = Propety.ckSIMD;
-            Propety.ckSubPixel = Propety.ckSubPixel;
+            trackNumObject.Value = Propety.NumObject;
+            AdjLimitCounter.Value= Propety.LimitCounter;
+            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
+           
             ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
             ckSIMD.IsCLick = Propety.ckSIMD;
             ckSubPixel.IsCLick = Propety.ckSubPixel;
-          
+          switch(Propety.Compare)
+            {
+                case Compares.Equal:
+                    btnEqual.IsCLick = true;
+                    break;
+                case Compares.Less:
+                    btnLess.IsCLick = true;
+                    break;
+                case Compares.More:
+                    btnMore.IsCLick = true;
+                    break;
+            }    
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
             else
@@ -415,7 +438,7 @@ namespace BeeInterface
    
         private void numLimitCounter_ValueChanged(float obj)
         {
-            Propety.LimitCounter = (int)numLimitCounter.Value;
+            Propety.LimitCounter = (int)AdjLimitCounter.Value;
         }
 
         //private void btnLimitCounter_Click(object sender, EventArgs e)

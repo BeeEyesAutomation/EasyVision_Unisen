@@ -38,6 +38,7 @@ namespace BeeCore
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
+        [NonSerialized]
         public Mat matTemp;
         public List<Point> Postion=new List<Point>();
        private Mode _TypeMode=Mode.Pattern;
@@ -309,12 +310,12 @@ namespace BeeCore
 					}
 
 					// Giữ sống input đến sau khi native xong
-					GC.KeepAlive(img);
+					//GC.KeepAlive(img);
 				}
 				finally
 				{
-					if (intpr != IntPtr.Zero)
-						ColorPixel.FreeBuffer(intpr); // rất quan trọng
+					//if (intpr != IntPtr.Zero)
+					//	Pattern.fre(intpr); // rất quan trọng
 				}
 
 				return mat;
@@ -402,22 +403,25 @@ namespace BeeCore
                     break;
             }
             if (Common.PropetyTools[IndexThread][Index].Results == Results.OK)
-            {
-                Matrix mat = new Matrix();
-                System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
-                PointF[] pMatrix = { pZero };
-                mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
-                mat.Rotate(rotArea._rectRotation);
-                mat.Translate(rotArea._rect.X, rotArea._rect.Y);
+            {if (rectRotates != null)
+                    if (rectRotates.Count > 0)
+                    {
+                        Matrix mat = new Matrix();
+                        System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
+                        PointF[] pMatrix = { pZero };
+                        mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
+                        mat.Rotate(rotArea._rectRotation);
+                        mat.Translate(rotArea._rect.X, rotArea._rect.Y);
 
-                mat.Translate(rectRotates[0]._PosCenter.X, rectRotates[0]._PosCenter.Y);
-                mat.Rotate(rectRotates[0]._rectRotation);
-                mat.TransformPoints(pMatrix);
+                        mat.Translate(rectRotates[0]._PosCenter.X, rectRotates[0]._PosCenter.Y);
+                        mat.Rotate(rectRotates[0]._rectRotation);
+                        mat.TransformPoints(pMatrix);
 
-                int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
-                int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
-                Global.AngleOrigin = rectRotates[0]._angle;
-                Global.pOrigin = new OpenCvSharp.Point(x, y);
+                        int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
+                        int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
+                        Global.AngleOrigin = rectRotates[0]._angle;
+                        Global.pOrigin = new OpenCvSharp.Point(x, y);
+                    }
             }
             if(Common.PropetyTools[IndexThread][Index].TypeTool==TypeTool.Position_Adjustment)
             if (!Global.IsRun)
@@ -469,24 +473,26 @@ namespace BeeCore
 				int i = 1;
 				foreach (RectRotate rot in rectRotates)
 				{
-					mat = new Matrix();
-					if (!Global.IsRun)
-					{
-						mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-						mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-					}
-					mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-					mat.Rotate(rotA._rectRotation);
-					mat.Translate(rotA._rect.X, rotA._rect.Y);
-					gc.Transform = mat;
-						mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-					mat.Rotate(rot._rectRotation);
-					gc.Transform = mat;
-					//mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-					//mat.Rotate(rot._rectRotation);
-					//gc.Transform = mat;
 
-					Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
+                    mat = new Matrix();
+                    if (!Global.IsRun)
+                    {
+                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                    gc.Transform = mat;
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+
+                    //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    //mat.Rotate(rot._rectRotation);
+                    //gc.Transform = mat;
+
+                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
 					Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) + "% A:" + Math.Round(rot._angle), Global.fontRS, cl, brushText, 16, 2);
 
 
@@ -556,18 +562,18 @@ namespace BeeCore
 
                 // Cv2.ImWrite("Processing.png", matProcess);
                 //   BeeCore.Native.SetImg(matProcess);
-                if (!matCrop.IsContinuous())
+                if (!matProcess.IsContinuous())
                 {
-                    matCrop = matCrop.Clone();
+                    matProcess = matProcess.Clone();
                 }
 
-				if (raw.Empty()) return;
-				if (raw.Type() == MatType.CV_8UC3)
-					Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
+				if (matProcess.Empty()) return;
+				if (matProcess.Type() == MatType.CV_8UC3)
+					Cv2.CvtColor(matProcess, matProcess, ColorConversionCodes.BGR2GRAY);
 
-				Pattern.SetRawNoCrop(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels());
+				Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
 
-				if (raw.Empty()) return;
+				if (matProcess.Empty()) return;
 
 				
 
