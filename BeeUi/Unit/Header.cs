@@ -294,7 +294,7 @@ namespace BeeUi.Common
            // pPO.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
            // pModel.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
          
-            this.myDelegate = new AddDataDelegate(AddDataMethod);
+        
             if (Global.ToolSettings == null)
             {
                 Global.ToolSettings = new ToolSettings();
@@ -398,53 +398,8 @@ namespace BeeUi.Common
         }
       
 
-     
-        String sRecept = "";
-        public delegate void AddDataDelegate(String myString);
-        public AddDataDelegate myDelegate;
-      
-    public void AddDataMethod(String myString)
-    {
-        //Global.EditTool.txtRecept.Text=myString;
-            
-        //    if (sRecept.Contains("IO")&& !IsWaitPort)
-        //    {
-        //        IsWaitPort = true;
-        //        tmScanPort.Tick -= TmScanPort_Tick;
-        //        tmScanPort.Enabled = false;
-             
-        //        Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
-        //        Global.EditTool.toolStripPort.Text = "Port Connected";
-        //        SaveData.Config(Global.Config);
-        //        Global.EditTool.View.tmCheckPort.Enabled = true;
-        //    }
-        //   else if  (sRecept.Contains("Trig"))
-        //        {
-        //        Global.EditTool.View.Cap(false);
-        //        }
-        //    else if (sRecept.Contains("Mod"))
-        //    {
-        //        //SerialPort.WriteLine("Done");
-        //        btnMode.PerformClick();
-        //        if (btnMode.Text=="RUN")
-        //            SerialPort1.WriteLine("Run");
-        //        else
-        //            SerialPort1.WriteLine("Edit");
-        //    }
-        //    else if (sRecept.Contains("Rec"))
-        //    {
-        //      Global.EditTool.View.btnLive.PerformClick();
-        //        if (Global.EditTool.View.btnLive.IsCLick)
-        //            SerialPort1.WriteLine("Live");
-        //        else
-        //            SerialPort1.WriteLine("Cap");
-        //    }
-        //    else if (sRecept.Contains("Done"))
-        //    {
-        //       // G.IsDone = false;
-        //    }
-        }
 
+     
 
         private void btnIO_Click(object sender, EventArgs e)
         {
@@ -732,8 +687,11 @@ txtQrCode.Focus();
                     pEdit.OldWidth = Global.Config.WidthEditProg;
                     stepShow = 0;
                         indexToolShow = 0;
-              
+                    if (BeeCore.Common.listCamera[Global.IndexChoose]!=null)
+                    {
                         Global.EditTool.View.btnFull.PerformClick();
+
+                    }  
                         tmShow.Enabled = false;
                        // Global.ToolSettings.ResumeLayout(true);
 

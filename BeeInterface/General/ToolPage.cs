@@ -1,7 +1,9 @@
 ﻿ using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using BeeInterface;
 using Newtonsoft.Json.Linq;
+using OpenCvSharp.Dnn;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -206,13 +208,55 @@ namespace BeeInterface
         }
         public void CreateNewTool()
         {
+            if(TypeTool==TypeTool.Position_Adjustment)
+            {
+                int ix = BeeCore.Common.PropetyTools[Global.IndexChoose].FindIndex(p => p.TypeTool == TypeTool.Position_Adjustment);
+            if(ix>-1)
+                {
+                    MessageBox.Show("Position Adjustment is Already! ");
+                    return;
+                }
+            else
+                {
+                    if (BeeCore.Common.PropetyTools[Global.IndexChoose].Count>0)
+                    {
+                        int indexName2 = 1;
+                        dynamic control2 = DataTool.NewControl(TypeTool, indexName2 - 1, Global.IndexChoose, TypeTool.ToString() + " " + indexName2, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+                        PropetyTool propetyTool2 = new PropetyTool(control2.Propety, TypeTool, TypeTool.ToString() + " " + indexName2);
+                        propetyTool2.UsedTool = UsedTool.Used;
+                        BeeCore.Common.PropetyTools[Global.IndexChoose].Insert(0,propetyTool2);
+                        ItemTool Itemtool2 = DataTool.CreateItemTool(propetyTool2, indexName2 - 1, Global.IndexChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
+
+                        BeeCore.Common.PropetyTools[Global.IndexChoose][0].ItemTool = Itemtool2;
+                        BeeCore.Common.PropetyTools[Global.IndexChoose][0].Control = control2;
+
+                        propetyTool2.worker = new System.ComponentModel.BackgroundWorker();
+                        propetyTool2.timer = new System.Diagnostics.Stopwatch();
+                        propetyTool2.worker.DoWork += (sender, e) =>
+                        {
+                            propetyTool2.DoWork();
+                        };
+                        propetyTool2.worker.RunWorkerCompleted += (sender, e) =>
+                        {
+                            propetyTool2.Complete();
+                        };
+                        propetyTool2.Propety.SetModel();
+
+                        DataTool.LoadPropety(control2);
+                        Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+
+                        return;
+                    }
+                }    
+
+            }    
             int indexName = BeeCore.Common.PropetyTools[Global.IndexChoose].Count() + 1;
             dynamic control = DataTool.NewControl(TypeTool, indexName - 1, Global.IndexChoose, TypeTool.ToString() + " " + indexName, new Point(Global.pShowTool.X, Global.pShowTool.Y));
             PropetyTool propetyTool = new PropetyTool(control.Propety, TypeTool, TypeTool.ToString() + " " + indexName);
             propetyTool.UsedTool = UsedTool.Used;
             BeeCore.Common.PropetyTools[Global.IndexChoose].Add(propetyTool);
             ItemTool Itemtool = DataTool.CreateItemTool(propetyTool ,indexName - 1, Global.IndexChoose, new Point(Global.pShowTool.X, Global.pShowTool.Y));
-            Itemtool.Width = Global.ToolSettings.Width - 10;
+          
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].ItemTool = Itemtool;
             BeeCore.Common.PropetyTools[Global.IndexChoose][BeeCore.Common.PropetyTools[Global.IndexChoose].Count() - 1].Control = control;
             
@@ -229,9 +273,7 @@ namespace BeeInterface
                 propetyTool.Propety.SetModel();
             
                 DataTool.LoadPropety(control);
-               
-                Global.pShowTool.Y += Itemtool.Height + 10;
-                Global.ToolSettings.pAllTool.Controls.Add(Itemtool);
+            Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
             
 
         }

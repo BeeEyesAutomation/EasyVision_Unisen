@@ -147,11 +147,7 @@ namespace BeeInterface
         bool IsReaded = false;
         private void SettingStep1_Load(object sender, EventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
-            { BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
-                Global.ScanCCD.ShowDialog();
-                return;
-            }
+           
             // if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure = new ValuePara();
             //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Gain = new ValuePara();
             //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift == null) BeeCore.Common.listCamera[Global.IndexChoose].Para.Shift = new ValuePara();

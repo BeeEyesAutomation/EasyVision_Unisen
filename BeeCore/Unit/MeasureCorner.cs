@@ -114,7 +114,8 @@ namespace BeeCore
                   
                     Mat matCrop = Common.CropRotatedRect(raw, rotArea, rotMask);
                     if (matProcess == null) matProcess = new Mat();
-                    if (!matProcess.Empty()) matProcess.Dispose();
+                    if (!matProcess.IsDisposed)
+                        if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
                         Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
                     switch (MethordEdge)

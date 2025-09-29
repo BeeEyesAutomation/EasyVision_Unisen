@@ -124,6 +124,12 @@ namespace BeeUi
         {
             try
             {
+                if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
+                {
+                    BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
+                    Global.ScanCCD.ShowDialog();
+                    return;
+                }
                 View.pMenu.Visible = true;
                 Global.IndexToolSelected = -1;
                 if(Global.EditTool.View.btnLive.IsCLick)

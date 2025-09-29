@@ -72,11 +72,13 @@ namespace BeeUi.Common
         bool IsLoaded = false;
         private void btnStep3_Click(object sender, EventArgs e)
         {
-          
-            if(!Global.ParaCommon.matRegister.IsDisposed())
-            Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
+            if (Global.ParaCommon.matRegister != null)
+            {
+                if (!Global.ParaCommon.matRegister.IsDisposed())
+                    Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
 
-            Global.Step = Step.Step3;
+                Global.Step = Step.Step3;
+            }
           
         }
 

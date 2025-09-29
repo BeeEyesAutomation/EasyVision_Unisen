@@ -37,7 +37,7 @@ namespace BeeInterface
        
       
         public bool IsClear;
-       
+        public bool IsIni = false;
         public void LoadPara( )
         {
          
@@ -239,7 +239,11 @@ namespace BeeInterface
         {
             Propety.Extraction = (int)trackPixel.Value;
 
-            if(Global.Initialed)
+            if(!IsIni)
+            {
+                IsIni = true;
+                return;
+            }    
              Propety.SetColor();
            
         }
