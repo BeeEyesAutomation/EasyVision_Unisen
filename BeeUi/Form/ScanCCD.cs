@@ -675,8 +675,7 @@ namespace BeeUi
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;
             }
-            if (Global.EditTool != null)
-                Global.EditTool.View.tmCheckCCD.Enabled = false;
+         
           
             btnConnect.Enabled = false;
             if (!Global.IsChange)
