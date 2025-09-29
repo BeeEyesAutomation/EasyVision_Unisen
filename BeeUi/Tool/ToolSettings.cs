@@ -59,8 +59,10 @@ namespace BeeUi.Tool
                     foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
                         propetyTool.Propety.Index = index; index++;
-                    }    
-                    Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+                    }
+                   
+                  BeeInterface. Load.ArrangeLogic();
+                    ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
                 }    
             }    
         }
@@ -110,7 +112,8 @@ namespace BeeUi.Tool
                 propetyTools.Complete();
             };
             propetyTools.Propety.SetModel();
-            Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+            BeeInterface.Load.ArrangeLogic();
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
 
         }

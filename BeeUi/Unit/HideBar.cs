@@ -32,7 +32,7 @@ namespace BeeUi.Unit
             btnShowDashBoard.IsCLick = !Global.EditTool.pInfor.Visible;
             btnMenu.IsCLick = !Global.EditTool.View.pBtn.Visible;
               await Task.Delay(100);
-            Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+            ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
 
         private void btnShowTop_Click(object sender, EventArgs e)

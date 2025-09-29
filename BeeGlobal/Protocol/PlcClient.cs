@@ -623,7 +623,7 @@ namespace PlcLib
                 {
                     try
                     {
-                      //  if (Global.IsAllowReadPLC)
+                       if (Global.IsAllowReadPLC)
                         {
                           //  CT.Restart();
                             var values = ReadWordAsBits(addresses);

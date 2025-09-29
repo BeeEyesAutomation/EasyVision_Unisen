@@ -173,13 +173,17 @@ namespace BeeCore
             switch (TypeColor)
             {
                 case ColorGp.HSV:
-                    
+                    if (HSVs == null)
+                        HSVs = new List<HSV>();
+                    if(hSV!=null)
                     HSVs.Add(new HSV(hSV.H, hSV.S, hSV.V));
                 
                     break;
                 case ColorGp.RGB:
-                
-                    RGBs.Add(new RGB(rGB.R, rGB.G, rGB.B));
+                    if (RGBs == null)
+                        RGBs = new List<RGB>();
+                    if (rGB != null)
+                        RGBs.Add(new RGB(rGB.R, rGB.G, rGB.B));
                  
                     break;
             }

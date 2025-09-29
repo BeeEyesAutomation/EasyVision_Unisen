@@ -143,6 +143,7 @@
     <Compile Include="ProtocolPLC.Designer.cs">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShowTool.cs" />
     <Compile Include="Steps\SettingStep1.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -203,7 +203,6 @@
     <Compile Include="Func\Draws.cs" />
     <Compile Include="Func\Init.cs" />
     <Compile Include="Func\Native.cs" />
-    <Compile Include="Func\Shows.cs" />
     <Compile Include="Unit\MatchingShape.cs" />
     <Compile Include="Unit\ColorArea.cs" />
     <Compile Include="Common.cs" />

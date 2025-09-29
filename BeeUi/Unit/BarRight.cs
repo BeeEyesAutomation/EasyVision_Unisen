@@ -45,7 +45,7 @@ namespace BeeUi.Unit
             //}
             Global.EditTool.pEditTool.Show("Tool");
         
-            Shows.ShowAllChart(Global.ToolSettings.pAllTool);
+            ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
 
         }
 

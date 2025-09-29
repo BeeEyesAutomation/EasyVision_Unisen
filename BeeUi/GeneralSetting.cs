@@ -122,7 +122,7 @@ namespace BeeUi
         {
             SaveData.ParaPJ(Global.Project, Global.ParaCommon);
             SaveData.Config(Global.Config);
-            Shows.ShowAllChart(Global.ToolSettings.pAllTool);
+            ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
         }
 

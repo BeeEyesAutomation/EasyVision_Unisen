@@ -20,7 +20,7 @@ using Size = System.Drawing.Size;
 namespace BeeCore.Funtion
 {
   
-        public class Shows
+        public class ShowTool
     {
        
         public static void ShowAllChart(TableLayoutPanel control)
@@ -109,29 +109,33 @@ namespace BeeCore.Funtion
              
                 for (int i = 0; i < Global.ParaCommon.NumTrig; i++)
                 {
-                    
-                 // Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Bold);
-                    if (BeeCore.Common.listCamera[0] == null)
-                        Global.ToolSettings.Labels[i].Text = "Follow Chart "+i+" (No Camera)";
-                    else
-                    {
-                        int Len = BeeCore.Common.listCamera[0].Para.Name.Length;
-                        if (Len > 20)
-                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name.Substring(0, 20)+"...";
-                        else
-                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name;
-                    }    
-                       
 
-                    Global.ToolSettings.Labels[i].Height = 40;
-                 
-                    Global.ToolSettings.Labels[i].Dock = DockStyle.Fill;
-                    Global.ToolSettings.Labels[i].Margin = new Padding(5, 15, 5, 0);
-                    control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-                    control.RowCount = row + 1;
-                  //  Global.ToolSettings.Labels[i].Margin = new Padding(2, 15, 2, 0);
-                    control.Controls.Add(Global.ToolSettings.Labels[i], 0, row);
-                    row++;
+                    if (Global.ParaCommon.NumTrig > 1 || Global.ParaCommon.IsMultiCamera)
+                    {
+
+
+                        if (BeeCore.Common.listCamera[0] == null)
+                            Global.ToolSettings.Labels[i].Text = "Follow Chart " + i + " (No Camera)";
+                        else
+                        {
+                            int Len = BeeCore.Common.listCamera[0].Para.Name.Length;
+                            if (Len > 20)
+                                Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name.Substring(0, 20) + "...";
+                            else
+                                Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[0].Para.Name;
+                        }
+
+
+                        Global.ToolSettings.Labels[i].Height = 40;
+
+                        Global.ToolSettings.Labels[i].Dock = DockStyle.Fill;
+                        Global.ToolSettings.Labels[i].Margin = new Padding(5, 15, 5, 0);
+                        control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+                        control.RowCount = row + 1;
+                        //  Global.ToolSettings.Labels[i].Margin = new Padding(2, 15, 2, 0);
+                        control.Controls.Add(Global.ToolSettings.Labels[i], 0, row);
+                        row++;
+                    }
                     foreach (PropetyTool tool in BeeCore.Common.PropetyTools[0])
                     {
                         switch (i)

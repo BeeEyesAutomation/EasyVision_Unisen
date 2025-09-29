@@ -243,7 +243,7 @@ namespace BeeInterface
                         propetyTool2.Propety.SetModel();
 
                         DataTool.LoadPropety(control2);
-                        Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+                        ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
                         return;
                     }
@@ -273,8 +273,8 @@ namespace BeeInterface
                 propetyTool.Propety.SetModel();
             
                 DataTool.LoadPropety(control);
-            Shows.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
-            
+            ShowTool.ShowChart(Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+            BeeInterface.Load.ArrangeLogic();
 
         }
          private void btnOk_Click(object sender, EventArgs e)

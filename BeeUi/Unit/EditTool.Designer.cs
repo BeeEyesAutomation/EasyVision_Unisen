@@ -134,7 +134,7 @@ namespace BeeUi
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStrip1.Size = new System.Drawing.Size(1110, 33);
+            this.statusStrip1.Size = new System.Drawing.Size(1416, 33);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -302,7 +302,7 @@ namespace BeeUi
             // 
             this.split6.BackColor = System.Drawing.SystemColors.Control;
             this.split6.Dock = System.Windows.Forms.DockStyle.Right;
-            this.split6.Location = new System.Drawing.Point(1495, 0);
+            this.split6.Location = new System.Drawing.Point(1801, 0);
             this.split6.Name = "split6";
             this.split6.Size = new System.Drawing.Size(5, 33);
             this.split6.TabIndex = 4;
@@ -312,9 +312,9 @@ namespace BeeUi
             // 
             this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
             this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.hideBar.Location = new System.Drawing.Point(1500, 0);
+            this.hideBar.Location = new System.Drawing.Point(1806, 0);
             this.hideBar.Name = "hideBar";
-            this.hideBar.Size = new System.Drawing.Size(740, 33);
+            this.hideBar.Size = new System.Drawing.Size(434, 33);
             this.hideBar.TabIndex = 3;
             // 
             // label3
@@ -328,6 +328,7 @@ namespace BeeUi
             this.label3.TabIndex = 2;
             this.label3.Text = " Sensing the future";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label3.Visible = false;
             // 
             // pictureBox1
             // 
@@ -339,6 +340,7 @@ namespace BeeUi
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Visible = false;
             // 
             // button1
             // 

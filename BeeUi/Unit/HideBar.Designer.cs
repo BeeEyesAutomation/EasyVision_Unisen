@@ -32,7 +32,7 @@ namespace BeeUi.Unit
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HideBar));
-            this.tableLayoutPanel1 = new  System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnExit = new BeeInterface.RJButton();
             this.btnShuttdown = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
@@ -54,7 +54,7 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel1.Controls.Add(this.btnExit, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnShuttdown, 6, 0);
@@ -90,6 +90,9 @@ namespace BeeUi.Unit
             this.btnExit.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnExit.BorderRadius = 5;
             this.btnExit.BorderSize = 1;
+            this.btnExit.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnExit.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnExit.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnExit.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnExit.Corner = BeeGlobal.Corner.Both;
             this.btnExit.DebounceResizeMs = 16;
@@ -144,6 +147,9 @@ namespace BeeUi.Unit
             this.btnShuttdown.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnShuttdown.BorderRadius = 5;
             this.btnShuttdown.BorderSize = 1;
+            this.btnShuttdown.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShuttdown.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShuttdown.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShuttdown.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShuttdown.Corner = BeeGlobal.Corner.Both;
             this.btnShuttdown.DebounceResizeMs = 16;
@@ -169,11 +175,11 @@ namespace BeeUi.Unit
             this.btnShuttdown.IsNotChange = true;
             this.btnShuttdown.IsRect = true;
             this.btnShuttdown.IsUnGroup = true;
-            this.btnShuttdown.Location = new System.Drawing.Point(405, 2);
+            this.btnShuttdown.Location = new System.Drawing.Point(415, 2);
             this.btnShuttdown.Margin = new System.Windows.Forms.Padding(10, 2, 2, 2);
             this.btnShuttdown.Multiline = false;
             this.btnShuttdown.Name = "btnShuttdown";
-            this.btnShuttdown.Size = new System.Drawing.Size(98, 42);
+            this.btnShuttdown.Size = new System.Drawing.Size(88, 42);
             this.btnShuttdown.TabIndex = 47;
             this.btnShuttdown.Text = "Shuttdown";
             this.btnShuttdown.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -199,6 +205,9 @@ namespace BeeUi.Unit
             this.rjButton1.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.rjButton1.BorderRadius = 5;
             this.rjButton1.BorderSize = 1;
+            this.rjButton1.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.rjButton1.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.rjButton1.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton1.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton1.Corner = BeeGlobal.Corner.Both;
             this.rjButton1.DebounceResizeMs = 16;
@@ -254,6 +263,9 @@ namespace BeeUi.Unit
             this.btnShowToolBar.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnShowToolBar.BorderRadius = 5;
             this.btnShowToolBar.BorderSize = 1;
+            this.btnShowToolBar.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowToolBar.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowToolBar.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowToolBar.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowToolBar.Corner = BeeGlobal.Corner.Both;
             this.btnShowToolBar.DebounceResizeMs = 16;
@@ -279,11 +291,11 @@ namespace BeeUi.Unit
             this.btnShowToolBar.IsNotChange = false;
             this.btnShowToolBar.IsRect = false;
             this.btnShowToolBar.IsUnGroup = true;
-            this.btnShowToolBar.Location = new System.Drawing.Point(334, 2);
+            this.btnShowToolBar.Location = new System.Drawing.Point(342, 2);
             this.btnShowToolBar.Margin = new System.Windows.Forms.Padding(2);
             this.btnShowToolBar.Multiline = false;
             this.btnShowToolBar.Name = "btnShowToolBar";
-            this.btnShowToolBar.Size = new System.Drawing.Size(59, 42);
+            this.btnShowToolBar.Size = new System.Drawing.Size(61, 42);
             this.btnShowToolBar.TabIndex = 44;
             this.btnShowToolBar.Text = "Tool Bar";
             this.btnShowToolBar.TextColor = System.Drawing.Color.Black;
@@ -307,6 +319,9 @@ namespace BeeUi.Unit
             this.btnMenu.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnMenu.BorderRadius = 5;
             this.btnMenu.BorderSize = 1;
+            this.btnMenu.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnMenu.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnMenu.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnMenu.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnMenu.Corner = BeeGlobal.Corner.Both;
             this.btnMenu.DebounceResizeMs = 16;
@@ -332,11 +347,11 @@ namespace BeeUi.Unit
             this.btnMenu.IsNotChange = false;
             this.btnMenu.IsRect = false;
             this.btnMenu.IsUnGroup = true;
-            this.btnMenu.Location = new System.Drawing.Point(271, 2);
+            this.btnMenu.Location = new System.Drawing.Point(277, 2);
             this.btnMenu.Margin = new System.Windows.Forms.Padding(2);
             this.btnMenu.Multiline = false;
             this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(59, 42);
+            this.btnMenu.Size = new System.Drawing.Size(61, 42);
             this.btnMenu.TabIndex = 43;
             this.btnMenu.Text = "Menu Bar";
             this.btnMenu.TextColor = System.Drawing.Color.Black;
@@ -360,6 +375,9 @@ namespace BeeUi.Unit
             this.btnShowDashBoard.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnShowDashBoard.BorderRadius = 5;
             this.btnShowDashBoard.BorderSize = 1;
+            this.btnShowDashBoard.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowDashBoard.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowDashBoard.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowDashBoard.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowDashBoard.Corner = BeeGlobal.Corner.Both;
             this.btnShowDashBoard.DebounceResizeMs = 16;
@@ -385,11 +403,11 @@ namespace BeeUi.Unit
             this.btnShowDashBoard.IsNotChange = false;
             this.btnShowDashBoard.IsRect = false;
             this.btnShowDashBoard.IsUnGroup = true;
-            this.btnShowDashBoard.Location = new System.Drawing.Point(208, 2);
+            this.btnShowDashBoard.Location = new System.Drawing.Point(212, 2);
             this.btnShowDashBoard.Margin = new System.Windows.Forms.Padding(2);
             this.btnShowDashBoard.Multiline = false;
             this.btnShowDashBoard.Name = "btnShowDashBoard";
-            this.btnShowDashBoard.Size = new System.Drawing.Size(59, 42);
+            this.btnShowDashBoard.Size = new System.Drawing.Size(61, 42);
             this.btnShowDashBoard.TabIndex = 42;
             this.btnShowDashBoard.Text = "DashBoard";
             this.btnShowDashBoard.TextColor = System.Drawing.Color.Black;
@@ -413,6 +431,9 @@ namespace BeeUi.Unit
             this.btnShowTop.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnShowTop.BorderRadius = 5;
             this.btnShowTop.BorderSize = 1;
+            this.btnShowTop.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowTop.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowTop.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowTop.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowTop.Corner = BeeGlobal.Corner.Both;
             this.btnShowTop.DebounceResizeMs = 16;
@@ -438,11 +459,11 @@ namespace BeeUi.Unit
             this.btnShowTop.IsNotChange = false;
             this.btnShowTop.IsRect = false;
             this.btnShowTop.IsUnGroup = true;
-            this.btnShowTop.Location = new System.Drawing.Point(145, 2);
+            this.btnShowTop.Location = new System.Drawing.Point(147, 2);
             this.btnShowTop.Margin = new System.Windows.Forms.Padding(2);
             this.btnShowTop.Multiline = false;
             this.btnShowTop.Name = "btnShowTop";
-            this.btnShowTop.Size = new System.Drawing.Size(59, 42);
+            this.btnShowTop.Size = new System.Drawing.Size(61, 42);
             this.btnShowTop.TabIndex = 41;
             this.btnShowTop.Text = "Top Bar";
             this.btnShowTop.TextColor = System.Drawing.Color.Black;
@@ -466,13 +487,16 @@ namespace BeeUi.Unit
             this.btnfull.BorderColor = System.Drawing.Color.WhiteSmoke;
             this.btnfull.BorderRadius = 5;
             this.btnfull.BorderSize = 1;
+            this.btnfull.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnfull.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnfull.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnfull.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnfull.Corner = BeeGlobal.Corner.Both;
             this.btnfull.DebounceResizeMs = 16;
             this.btnfull.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnfull.FlatAppearance.BorderSize = 0;
             this.btnfull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnfull.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.39063F);
+            this.btnfull.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.10938F);
             this.btnfull.ForeColor = System.Drawing.Color.Black;
             this.btnfull.Image = null;
             this.btnfull.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -495,7 +519,7 @@ namespace BeeUi.Unit
             this.btnfull.Margin = new System.Windows.Forms.Padding(2);
             this.btnfull.Multiline = false;
             this.btnfull.Name = "btnfull";
-            this.btnfull.Size = new System.Drawing.Size(59, 42);
+            this.btnfull.Size = new System.Drawing.Size(61, 42);
             this.btnfull.TabIndex = 40;
             this.btnfull.Text = "Full";
             this.btnfull.TextColor = System.Drawing.Color.Black;

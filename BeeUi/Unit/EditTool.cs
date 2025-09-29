@@ -144,7 +144,7 @@ namespace BeeUi
                    
                     case Step.Run:
                         Global.IsAllowReadPLC = true;
-                        Shows.ShowAllChart(Global.ToolSettings.pAllTool);
+                        ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
                         Global.EditTool.View.btnLive.Enabled = false;
                         BarRight.Visible = true;
                         pHeader.Visible = true;
@@ -168,7 +168,7 @@ namespace BeeUi
                                     Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                                     Global.EditTool.View.imgView.Invalidate();
                                     Global.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                                    ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                    Global.Config.imgZoom = View.imgView.Zoom;
                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                    Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -254,7 +254,7 @@ namespace BeeUi
                                     Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                                     Global.EditTool.View.imgView.Invalidate();
                                     Global.EditTool.View.imgView.Update();
-                                    Shows.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                                    ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                     Global.Config.imgZoom = View.imgView.Zoom;
                                     Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                     Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
@@ -280,7 +280,7 @@ namespace BeeUi
                         pName.Visible = true;
                        
                         pEditTool.Show("Tool");
-                        Shows.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
+                        ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
                         //Global.ToolSettings.Parent = pEditTool;
                         //Global.ToolSettings.Size = pEditTool.Size;
                         //Global.ToolSettings.Location = new Point(0, 0);
@@ -603,7 +603,7 @@ namespace BeeUi
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
             await Task.Delay(100);
-            Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+            ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
         }
 
         private void btnShowTop_Click(object sender, EventArgs e)

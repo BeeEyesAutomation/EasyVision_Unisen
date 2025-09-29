@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,6 +81,10 @@ namespace BeeCore
                     return CCDPlus.ScanCCD().Split('\n'); 
                    
                 case TypeCamera.Pylon:
+                    if(PylonCam==null)
+                    {
+                        PylonCam = new PylonCli.Camera();
+                    }    
                    return PylonCli. Camera.List();
                    
                 case TypeCamera.TinyIV:
@@ -464,6 +469,10 @@ namespace BeeCore
                     return CCDPlus.Connect(IndexConnect, NameCCD);
                     break;
                 case TypeCamera.Pylon:
+                    if (PylonCam == null)
+                    {
+                        PylonCam = new PylonCli.Camera();
+                    }
                     PylonCam.Open(NameCCD);
                     bool IsConnect = PylonCam.IsOpen();
                     if (IsConnect)
@@ -509,6 +518,7 @@ namespace BeeCore
                 }
                 else
                 {
+                    
                     await SetWidth();
                     await SetHeight();
                     await SetOffSetX();
@@ -599,6 +609,7 @@ namespace BeeCore
             Global.IsSetPara = false;
             return true;
         }
+   
         public async Task< bool> GetExpo()
         {
             try
@@ -609,6 +620,7 @@ namespace BeeCore
                 {
                     case TypeCamera.Pylon:
                         PylonCam.GetExposure(out Para.Exposure.Min, out Para.Exposure.Max, out Para.Exposure.Step, out Para.Exposure.Value);
+                        Err= PylonCam.LastError;
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -691,7 +703,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        Para.Shift.Value = PylonCam.SetBlackLevel(Para.Shift.Value);
+                        Para.Shift.Value = PylonCam.SetDigitalShift(Para.Shift.Value);
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
@@ -727,7 +739,7 @@ namespace BeeCore
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
-                        PylonCam.GetBlackLevel(out Para.Shift.Min, out Para.Shift.Max, out Para.Shift.Step, out Para.Shift.Value);
+                        PylonCam.GetDigitalShift(ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value);
                         return true;
                         break;
                     case TypeCamera.MVS:
@@ -1282,8 +1294,13 @@ namespace BeeCore
            
             CCDPlus.TypeCamera = (int)typeCamera;
         }
+        public void GetFpsPylon()
+        {
+            FrameRate = (int)PylonCam.GetMeasuredFps();
+
+        }
         [NonSerialized]
-        public  PylonCli.Camera PylonCam=new PylonCli.Camera();
+        private  PylonCli.Camera PylonCam;
         [NonSerialized]
         Stopwatch stopwatch = new Stopwatch();
         private CameraIOFast cameraIOFast = new CameraIOFast();
@@ -1304,9 +1321,11 @@ namespace BeeCore
                 {
                     case TypeCamera.MVS:
                         intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                        FrameRate = CCDPlus.FPS;
                         break;
                     case TypeCamera.USB:
                         intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                        FrameRate = CCDPlus.FPS;
                         break;
                     case TypeCamera.Pylon:
                         if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType || matRaw.IsDisposed)
@@ -1314,18 +1333,28 @@ namespace BeeCore
                             matRaw?.Dispose();
                             matRaw = new Mat(rows, cols, matType);
                         }
-                        int w=0, h=0, s=0, c = 0;
-                        IntPtr p = PylonCam.GrabOneUcharPtr(500, out w, out h, out s, out c);
-                        if (p == IntPtr.Zero) return false; // timeout hoặc fail
+                        int w = 0, h = 0, s = 0, c = 0;
+                        IntPtr p = PylonCam.GrabOneUcharPtr(1000, out w, out h, out s, out c);
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
-
-                        using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
+                        FrameRate =(int) PylonCam.GetMeasuredFps();
+                        matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
+                        unsafe
                         {
-                            m.CopyTo(matRaw);
-                            FrameRate = (int)PylonCam.GetDeviceFps();
-                            // matRaw = m.Clone();
-                            return true;
+                            Buffer.MemoryCopy(p.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
                         }
+                         if (p == IntPtr.Zero)
+                        {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD",PylonCam. LastError));
+                            return false;
+                        }
+                        return true;
+                        //using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
+                        //{
+                        //    m.CopyTo(matRaw);
+                        //    FrameRate = (int)PylonCam.GetDeviceFps();
+                        //    // matRaw = m.Clone();
+                        //    return true;
+                        //}
                         return true;
                         break;
                 }
@@ -1365,7 +1394,7 @@ namespace BeeCore
                                       dstStep,
                                       copyBytes);
                 }
-                FrameRate = CCDPlus.FPS;
+              
                 if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
                 return true;

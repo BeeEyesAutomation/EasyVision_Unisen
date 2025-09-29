@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,31 @@ namespace BeeInterface
             Global.itemNews.Add(new ItemNew(TypeTool.BarCode, GroupTool.Extra_Tool_2, Properties.Resources.BarCode, Properties.Resources.BarCode, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Crop, GroupTool.Extra_Tool_2, Properties.Resources.Crop, Properties.Resources.contentCrop, "✂️ Cắt vùng quan sát\r\nLựa chọn và cắt chính xác khu vực cần xử lý để tăng tốc độ tính toán và giảm nhiễu.\r\n➡️ Tối ưu hiệu năng và tập trung vào điểm kiểm tra quan trọng."));
 
+        }
+        public static void ArrangeLogic()
+        {
+            Global.ParaCommon.indexLogic1 = new List<int>();
+            Global.ParaCommon.indexLogic2 = new List<int>();
+            Global.ParaCommon.indexLogic3 = new List<int>();
+            Global.ParaCommon.indexLogic4 = new List<int>();
+            Global.ParaCommon.indexLogic5 = new List<int>();
+            Global.ParaCommon.indexLogic6 = new List<int>();
+            foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+            {
+                if (propetyTool.IndexLogics[0] == true)
+                    Global.ParaCommon.indexLogic1.Add(propetyTool.Propety.Index);
+                if (propetyTool.IndexLogics[1] == true)
+                    Global.ParaCommon.indexLogic2.Add(propetyTool.Propety.Index);
+                if (propetyTool.IndexLogics[2] == true)
+                    Global.ParaCommon.indexLogic3.Add(propetyTool.Propety.Index);
+                if (propetyTool.IndexLogics[3] == true)
+                    Global.ParaCommon.indexLogic4.Add(propetyTool.Propety.Index);
+                if (propetyTool.IndexLogics[4] == true)
+                    Global.ParaCommon.indexLogic5.Add(propetyTool.Propety.Index);
+                if (propetyTool.IndexLogics[5] == true)
+                    Global.ParaCommon.indexLogic6.Add(propetyTool.Propety.Index);
+
+            }
         }
     }
 }

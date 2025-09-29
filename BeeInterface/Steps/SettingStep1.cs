@@ -294,7 +294,7 @@ namespace BeeInterface
                 {
                     BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value = 50000;
                 }
-
+                trackExposure.IsInital = true;
                 trackExposure.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Step;
                 trackExposure.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.Exposure.Value;
 
@@ -328,10 +328,10 @@ namespace BeeInterface
                 AdjOffSetY.Max = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Max;
                 AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Step;
                 AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value;
-            } 
-          //  btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX);
-          //  btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY);
-
+            }
+            //  btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX);
+            //  btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY);
+            lbErr.Text = BeeCore.Common.listCamera[Global.IndexChoose].Err;
             btnDownLoadPara.IsCLick = false;
             btnDownLoadPara.Enabled = true;
            

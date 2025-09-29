@@ -8,7 +8,23 @@ using namespace PylonCli;
 using namespace Pylon;
 using namespace GenApi;
 using msclr::interop::marshal_as;
+static long long RoundToStepClamp_I(long long desired, long long vmin, long long vmax, long long inc)
+{
+    if (inc <= 0) inc = 1;
+    if (desired < vmin) desired = vmin;
+    if (desired > vmax) desired = vmax;
+    const long long n = (desired - vmin + inc / 2) / inc; // round to nearest
+    long long val = vmin + n * inc;
+    if (val < vmin) val = vmin;
+    if (val > vmax) val = vmax;
+    return val;
+}
 
+static long long GetIncSafe(CIntegerPtr n)
+{
+    try { return n ? n->GetInc() : 1; }
+    catch (...) { return 1; }
+}
 
 // Mutex cho RetrieveResult (UserLoop)
 static std::mutex g_grabMutex;
@@ -294,78 +310,128 @@ OutputPixel Camera::GetOutputPixel() { return (_activeChannels == 1) ? OutputPix
 
 float Camera::SetWidth(float v)
 {
+    _lastError = System::String::Empty;
+
     try {
-        CIntegerPtr n = _cam->GetNodeMap().GetNode("Width");
-        _cam->StopGrabbing();
-        if (!n)
-            _lastError="Node Width không tồn tại!";
+        INodeMap& nm = _cam->GetNodeMap();
+        CIntegerPtr node = nm.GetNode("Width");
+        // Dừng rồi khôi phục đúng trạng thái ban đầu
+        bool wasGrabbing = _cam->IsGrabbing();
+        if (wasGrabbing) _cam->StopGrabbing();
+        if (!node) { _lastError = "Node Width không tồn tại!"; return 0.0f; }
+        if (!GenApi::IsWritable(node)) { _lastError = "Node Width không cho phép ghi!"; return 0.0f; }
 
-        if (!IsWritable(n))
-            _lastError="Node Width không cho phép ghi!";
+      
 
-       /* long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
-        if (v < mn) v = (int)mn;
-        if (v > mx) v = (int)mx;
-        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);*/
-        n->SetValue(v);
-        _lastError = nullptr;
-        _cam->StartGrabbing();
-        return (int)n->GetValue();
+        long long mn = node->GetMin();
+        long long mx = node->GetMax();
+        long long inc = GetIncSafe(node);
+
+        long long desired = static_cast<long long>(std::llround(v));
+        long long val = RoundToStepClamp_I(desired, mn, mx, inc);
+        node->SetValue(val);
+        long long applied = node->GetValue();
+
+        if (wasGrabbing) _cam->StartGrabbing();
+        return static_cast<float>(applied);
     }
-    catch (const std::exception& ex) {
-        _lastError = gcnew System::String(ex.what()); // chuyển std::string → String^
-        return 1;
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String((std::string("SetWidth failed: ") + e.GetDescription()).c_str());
+        return 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String((std::string("SetWidth failed: ") + e.what()).c_str());
+        return 0.0f;
     }
     catch (...) {
         _lastError = "SetWidth fail: unknown error";
-        return 2;
+        return 0.0f;
     }
 }
 
 float Camera::SetHeight(float v)
 {
+    _lastError = System::String::Empty;
+
     try {
-        CIntegerPtr n = _cam->GetNodeMap().GetNode("Height");
-        _cam->StopGrabbing();
-        if (!n)
-            _lastError = "Node Width không tồn tại!";
+        INodeMap& nm = _cam->GetNodeMap();
+        CIntegerPtr node = nm.GetNode("Height");
+        bool wasGrabbing = _cam->IsGrabbing();
+        if (wasGrabbing) _cam->StopGrabbing();
+        if (!node) { _lastError = "Node Height không tồn tại!"; return 0.0f; }
+        if (!GenApi::IsWritable(node)) { _lastError = "Node Height không cho phép ghi!"; return 0.0f; }
 
-        if (!IsWritable(n))
-            _lastError = "Node Width không cho phép ghi!";
+       
 
-       /* long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
-        if (v < mn) v = (int)mn;
-        if (v > mx) v = (int)mx;
-        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);*/
-        n->SetValue(v);
-        _lastError = nullptr;
-        _cam->StartGrabbing();
-        return (int)n->GetValue();
+        long long mn = node->GetMin();
+        long long mx = node->GetMax();
+        long long inc = GetIncSafe(node);
+
+        long long desired = static_cast<long long>(std::llround(v));
+        long long val = RoundToStepClamp_I(desired, mn, mx, inc);
+        node->SetValue(val);
+        long long applied = node->GetValue();
+
+        if (wasGrabbing) _cam->StartGrabbing();
+        return static_cast<float>(applied);
     }
-    catch (const std::exception& ex) {
-        _lastError = gcnew System::String(ex.what()); // chuyển std::string → String^
-        return 1;
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String((std::string("SetHeight failed: ") + e.GetDescription()).c_str());
+        return 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String((std::string("SetHeight failed: ") + e.what()).c_str());
+        return 0.0f;
     }
     catch (...) {
         _lastError = "SetHeight fail: unknown error";
-        return 2;
+        return 0.0f;
     }
 }
 
 float Camera::SetOffsetX(float v)
 {
+    _lastError = System::String::Empty;
+
     try {
-        CIntegerPtr n = _cam->GetNodeMap().GetNode("OffsetX");
-        if (!n || !IsWritable(n)) throw std::runtime_error("OffsetX not writable");
-        long long mn = n->GetMin(), mx = n->GetMax(), inc = n->GetInc();
-        if (v < mn) v = (int)mn;
-        if (v > mx) v = (int)mx;
-        if (inc > 1) v = (int)(mn + ((v - mn) / inc) * inc);
-        n->SetValue(v);
-        _lastError = nullptr;
-        return (int)n->GetValue();
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // Một số model yêu cầu CenterX = false để set OffsetX
+        CBooleanPtr centerX = nm.GetNode("CenterX");
+        if (centerX && GenApi::IsWritable(centerX)) {
+            try { centerX->SetValue(false); } catch (...) {}
+        }
+
+        CIntegerPtr node = nm.GetNode("OffsetX");
+        if (!node || !GenApi::IsWritable(node)) { _lastError = "OffsetX not writable"; return 0.0f; }
+
+        bool wasGrabbing = _cam->IsGrabbing();
+        if (wasGrabbing) _cam->StopGrabbing();
+
+        long long mn = node->GetMin();
+        long long mx = node->GetMax();
+        long long inc = GetIncSafe(node);
+
+        long long desired = static_cast<long long>(std::llround(v));
+        long long val = RoundToStepClamp_I(desired, mn, mx, inc);
+        node->SetValue(val);
+        long long applied = node->GetValue();
+
+        if (wasGrabbing) _cam->StartGrabbing();
+        return static_cast<float>(applied);
     }
-    catch (...) { _lastError = "SetOffsetX fail"; return 0; }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String((std::string("SetOffsetX failed: ") + e.GetDescription()).c_str());
+        return 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String((std::string("SetOffsetX failed: ") + e.what()).c_str());
+        return 0.0f;
+    }
+    catch (...) {
+        _lastError = "SetOffsetX fail";
+        return 0.0f;
+    }
 }
 
 float Camera::SetOffsetY(float v)
@@ -385,42 +451,463 @@ float Camera::SetOffsetY(float v)
     catch (...) { _lastError = "SetOffsetY fail"; return 0; }
 }
 
+
 float Camera::SetExposure(float us)
 {
-    try {
-        TrySetEnum(_cam->GetNodeMap(), "ExposureAuto", "Off");
-        CFloatPtr n = _cam->GetNodeMap().GetNode("ExposureTime");
-        if (!n || !IsWritable(n)) n = _cam->GetNodeMap().GetNode("ExposureTimeAbs");
-        if (!n || !IsWritable(n)) throw std::runtime_error("Exposure not writable");
+    _lastError = System::String::Empty;
 
-        double mn = n->GetMin(), mx = n->GetMax();
-        if (us < mn) us = mn;
-        if (us > mx) us = mx;
-        n->SetValue(us);
-        _lastError = nullptr;
-        return n->GetValue();
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // ExposureAuto = Off (nếu có)
+        CEnumerationPtr eauto = nm.GetNode("ExposureAuto");
+        if (eauto && GenApi::IsWritable(eauto)) {
+            try { eauto->FromString("Off"); }
+            catch (...) {}
+        }
+
+        // ExposureMode = Timed (nếu có)
+        CEnumerationPtr emode = nm.GetNode("ExposureMode");
+        if (emode && GenApi::IsWritable(emode)) {
+            try { emode->FromString("Timed"); }
+            catch (...) {}
+        }
+
+        // 1) Float: ExposureTime / ExposureTimeAbs
+        CFloatPtr f = nm.GetNode("ExposureTime");
+        if (!(f && GenApi::IsWritable(f))) {
+            f = nm.GetNode("ExposureTimeAbs");
+        }
+        if (f && GenApi::IsWritable(f)) {
+            double mn = f->GetMin();
+            double mx = f->GetMax();
+            double inc = 0.0;
+            try { if (f->HasInc()) inc = f->GetInc(); }
+            catch (...) { inc = 0.0; }
+
+            // clamp + (nếu có inc>0) làm tròn theo bước
+            double val = us;
+            if (val < mn) val = mn;
+            if (val > mx) val = mx;
+            if (inc > 0.0) {
+                double n = std::floor((val - mn) / inc + 0.5);
+                val = mn + n * inc;
+                if (val < mn) val = mn;
+                if (val > mx) val = mx;
+            }
+
+            f->SetValue(val);
+            return static_cast<float>(f->GetValue());
+        }
+
+        // 2) Integer: ExposureTimeRaw (+ factor nếu có)
+        CIntegerPtr i = nm.GetNode("ExposureTimeRaw");
+        if (i && GenApi::IsWritable(i)) {
+            double tickToUs = 0.0;
+            CFloatPtr fac = nm.GetNode("ExposureTimeRawAbsFactor");
+            if (fac && GenApi::IsReadable(fac)) {
+                try { tickToUs = fac->GetValue(); }
+                catch (...) { tickToUs = 0.0; }
+            }
+
+            int64_t vmin = i->GetMin();
+            int64_t vmax = i->GetMax();
+            int64_t vinc = 0;
+            try { vinc = i->GetInc(); }
+            catch (...) { vinc = 0; }
+            if (vinc <= 0) vinc = 1;
+
+            int64_t desiredTicks = (tickToUs > 0.0)
+                ? static_cast<int64_t>(std::llround(us / tickToUs))
+                : static_cast<int64_t>(std::llround(us));
+
+            // clamp + round-to-step
+            if (desiredTicks < vmin) desiredTicks = vmin;
+            if (desiredTicks > vmax) desiredTicks = vmax;
+            int64_t n = (desiredTicks - vmin + vinc / 2) / vinc;
+            int64_t valTicks = vmin + n * vinc;
+            if (valTicks < vmin) valTicks = vmin;
+            if (valTicks > vmax) valTicks = vmax;
+
+            i->SetValue(valTicks);
+            int64_t appliedTicks = i->GetValue();
+            double appliedUs = (tickToUs > 0.0) ? appliedTicks * tickToUs
+                : static_cast<double>(appliedTicks);
+            return static_cast<float>(appliedUs);
+        }
+
+        _lastError = "Exposure not writable/found";
+        return 0.0f;
     }
-    catch (...) { _lastError = "SetExposure fail"; return 0; }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("SetExposure() failed: " + std::string(e.GetDescription())).c_str());
+        return 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("SetExposure() failed: " + std::string(e.what())).c_str());
+        return 0.0f;
+    }
+    catch (...) {
+        _lastError = "SetExposure() unknown error";
+        return 0.0f;
+    }
 }
+
+
+static double RoundToIncClamp_D(double desired, double vmin, double vmax, double inc)
+{
+    if (desired < vmin) desired = vmin;
+    if (desired > vmax) desired = vmax;
+    if (inc > 0.0) {
+        const double n = std::floor((desired - vmin) / inc + 0.5); // làm tròn về bội số inc
+        desired = vmin + n * inc;
+        if (desired < vmin) desired = vmin;
+        if (desired > vmax) desired = vmax;
+    }
+    return desired;
+}
+
 
 float Camera::SetGain(float v)
 {
-    try {
-        TrySetEnum(_cam->GetNodeMap(), "GainAuto", "Off");
-        TrySetEnum(_cam->GetNodeMap(), "GainSelector", "All");
-        CFloatPtr n = _cam->GetNodeMap().GetNode("Gain");
-        if (!n || !IsWritable(n)) throw std::runtime_error("Gain not writable");
+    _lastError = System::String::Empty;
 
-        float mn = n->GetMin(), mx = n->GetMax();
-        if (v < mn) v = mn;
-        if (v > mx) v = mx;
-        n->SetValue(v);
-        _lastError = nullptr;
-        return n->GetValue();
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // Tắt auto nếu có
+        CEnumerationPtr gauto = nm.GetNode("GainAuto");
+        if (gauto && GenApi::IsWritable(gauto)) {
+            try { gauto->FromString("Off"); }
+            catch (...) {}
+        }
+
+        // Chọn selector = All nếu có
+        CEnumerationPtr gsel = nm.GetNode("GainSelector");
+        if (gsel && GenApi::IsWritable(gsel)) {
+            CEnumEntryPtr all = gsel->GetEntryByName("All");
+            if (all && GenApi::IsAvailable(all)) {
+                try { gsel->SetIntValue(all->GetValue()); }
+                catch (...) {}
+            }
+        }
+
+        // ===== 1) Float: Gain (dB) =====
+        {
+            CFloatPtr f = nm.GetNode("Gain");
+            if (f && GenApi::IsWritable(f)) {
+                double mn = f->GetMin();
+                double mx = f->GetMax();
+                double inc = 0.0;
+                try { if (f->HasInc()) inc = f->GetInc(); }
+                catch (...) { inc = 0.0; }
+
+                double val = RoundToIncClamp_D(static_cast<double>(v), mn, mx, inc);
+                f->SetValue(val);
+                return static_cast<float>(f->GetValue()); // trả về dB thực tế
+            }
+        }
+
+        // ===== 2) Float legacy: GainAbs =====
+        {
+            CFloatPtr f = nm.GetNode("GainAbs");
+            if (f && GenApi::IsWritable(f)) {
+                double mn = f->GetMin();
+                double mx = f->GetMax();
+                double inc = 0.0;
+                try { if (f->HasInc()) inc = f->GetInc(); }
+                catch (...) { inc = 0.0; }
+
+                double val = RoundToIncClamp_D(static_cast<double>(v), mn, mx, inc);
+                f->SetValue(val);
+                return static_cast<float>(f->GetValue());
+            }
+        }
+
+        // ===== 3) Integer: GainRaw (ticks) =====
+        {
+            CIntegerPtr i = nm.GetNode("GainRaw");
+            if (i && GenApi::IsWritable(i)) {
+                long long mn = i->GetMin();
+                long long mx = i->GetMax();
+                long long inc = 0;
+                try { inc = i->GetInc(); }
+                catch (...) { inc = 0; }
+                if (inc <= 0) inc = 1;
+
+                long long desired = static_cast<long long>(std::llround(v));
+                long long val = RoundToStepClamp_I(desired, mn, mx, inc);
+                i->SetValue(val);
+
+                // Nếu có hệ số đổi raw->dB (tùy hãng), có thể trả về dB; mặc định trả về raw
+                // Ví dụ (tùy model): CFloatPtr fac = nm.GetNode("GainRawToDbFactor");
+                // if (fac && GenApi::IsReadable(fac)) return static_cast<float>(i->GetValue() * fac->GetValue());
+                return static_cast<float>(i->GetValue());
+            }
+        }
+
+        // ===== 4) Biến thể Basler: BslAnalogGain / BslDigitalGain (float) =====
+        {
+            CFloatPtr fb = nm.GetNode("BslAnalogGain");
+            if (fb && GenApi::IsWritable(fb)) {
+                double mn = fb->GetMin(), mx = fb->GetMax();
+                double inc = 0.0; try { if (fb->HasInc()) inc = fb->GetInc(); }
+                catch (...) { inc = 0.0; }
+                double val = RoundToIncClamp_D(v, mn, mx, inc);
+                fb->SetValue(val);
+                return static_cast<float>(fb->GetValue());
+            }
+        }
+        {
+            CFloatPtr fb = nm.GetNode("BslDigitalGain");
+            if (fb && GenApi::IsWritable(fb)) {
+                double mn = fb->GetMin(), mx = fb->GetMax();
+                double inc = 0.0; try { if (fb->HasInc()) inc = fb->GetInc(); }
+                catch (...) { inc = 0.0; }
+                double val = RoundToIncClamp_D(v, mn, mx, inc);
+                fb->SetValue(val);
+                return static_cast<float>(fb->GetValue());
+            }
+        }
+
+        // ===== 5) Biến thể Basler: GainRaw tương tự =====
+        {
+            CIntegerPtr ib = nm.GetNode("BslGainRaw");
+            if (ib && GenApi::IsWritable(ib)) {
+                long long mn = ib->GetMin();
+                long long mx = ib->GetMax();
+                long long inc = 0; try { inc = ib->GetInc(); }
+                catch (...) { inc = 0; }
+                if (inc <= 0) inc = 1;
+
+                long long desired = static_cast<long long>(std::llround(v));
+                long long val = RoundToStepClamp_I(desired, mn, mx, inc);
+                ib->SetValue(val);
+                return static_cast<float>(ib->GetValue());
+            }
+        }
+
+        _lastError = "Gain not writable/found";
+        return 0.0f;
     }
-    catch (...) { _lastError = "SetGain fail"; return 0; }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("SetGain() failed: " + std::string(e.GetDescription())).c_str());
+        return 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("SetGain() failed: " + std::string(e.what())).c_str());
+        return 0.0f;
+    }
+    catch (...) {
+        _lastError = "SetGain() unknown error";
+        return 0.0f;
+    }
 }
 
+static int64_t RoundToStepClamp(int64_t desired, int64_t vmin, int64_t vmax, int64_t inc)
+{
+    if (inc <= 0) inc = 1;
+    if (desired < vmin) desired = vmin;
+    if (desired > vmax) desired = vmax;
+    // làm tròn về bội số gần nhất của inc tính từ vmin
+    const int64_t n = (desired - vmin + inc / 2) / inc;
+    int64_t val = vmin + n * inc;
+    if (val < vmin) val = vmin;
+    if (val > vmax) val = vmax;
+    return val;
+}
+
+float Camera::SetDigitalShift(float value)
+{
+    _lastError = System::String::Empty;
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // 1) Integer: DigitalShift
+        {
+            CIntegerPtr ishift = nm.GetNode("DigitalShift");
+            if (ishift && GenApi::IsWritable(ishift)) {
+                int64_t vmin = ishift->GetMin();
+                int64_t vmax = ishift->GetMax();
+                int64_t vinc = 0;
+                try { vinc = ishift->GetInc(); }
+                catch (...) { vinc = 0; }
+                if (vinc <= 0) vinc = 1;
+
+                int64_t desired = static_cast<int64_t>(llround(value));
+                int64_t val = RoundToStepClamp(desired, vmin, vmax, vinc);
+                ishift->SetValue(val);
+
+                // đọc lại để biết chắc giá trị thực tế
+                int64_t applied = ishift->GetValue();
+                return static_cast<float>(applied);
+            }
+        }
+
+        // 2) Integer: BslDigitalShift (biến thể Basler)
+        {
+            CIntegerPtr bsl = nm.GetNode("BslDigitalShift");
+            if (bsl && GenApi::IsWritable(bsl)) {
+                int64_t vmin = bsl->GetMin();
+                int64_t vmax = bsl->GetMax();
+                int64_t vinc = 0;
+                try { vinc = bsl->GetInc(); }
+                catch (...) { vinc = 0; }
+                if (vinc <= 0) vinc = 1;
+
+                int64_t desired = static_cast<int64_t>(llround(value));
+                int64_t val = RoundToStepClamp(desired, vmin, vmax, vinc);
+                bsl->SetValue(val);
+
+                int64_t applied = bsl->GetValue();
+                return static_cast<float>(applied);
+            }
+        }
+
+        // 3) Enumeration: DigitalShift (ít gặp)
+        {
+            CEnumerationPtr eshift = nm.GetNode("DigitalShift");
+            if (eshift && GenApi::IsWritable(eshift)) {
+                int64_t desired = static_cast<int64_t>(llround(value));
+
+                // thử set trực tiếp theo int (nhiều model map trực tiếp)
+                try {
+                    eshift->SetIntValue(desired);
+                    int64_t applied = eshift->GetIntValue();
+                    return static_cast<float>(applied);
+                }
+                catch (...) {
+                    // fallback: tìm entry khả dụng gần nhất
+                    GenApi::NodeList_t entries;
+                    eshift->GetEntries(entries);
+                    bool any = false;
+                    CEnumEntryPtr best;
+                    int64_t bestDiff = 0;
+                    for (size_t k = 0; k < entries.size(); ++k) {
+                        CEnumEntryPtr ee = entries[k];
+                        if (ee && GenApi::IsAvailable(ee)) {
+                            int64_t v = ee->GetValue();
+                            int64_t d = llabs(v - desired);
+                            if (!any || d < bestDiff) { best = ee; bestDiff = d; any = true; }
+                        }
+                    }
+                    if (any && best) {
+                        eshift->SetIntValue(best->GetValue());
+                        int64_t applied = eshift->GetIntValue();
+                        return static_cast<float>(applied);
+                    }
+                }
+            }
+        }
+
+        _lastError = "DigitalShift not writable/found";
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("SetDigitalShift() failed: " + std::string(e.GetDescription())).c_str());
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("SetDigitalShift() failed: " + std::string(e.what())).c_str());
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+    catch (...) {
+        _lastError = "SetDigitalShift() unknown error";
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+}
+void Camera::GetDigitalShift(float% min, float% max, float% step, float% current)
+{
+    min = max = step = current = 0.0f;
+    _lastError = System::String::Empty;
+
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // --- 1) Integer: DigitalShift ---
+        CIntegerPtr ishift = nm.GetNode("DigitalShift");
+        if (ishift && GenApi::IsReadable(ishift)) {
+            const int64_t vmin = ishift->GetMin();
+            const int64_t vmax = ishift->GetMax();
+            const int64_t vcur = ishift->GetValue();
+            int64_t vinc = 0;
+            try { vinc = ishift->GetInc(); }
+            catch (...) { vinc = 0; }
+            if (vinc <= 0) vinc = 1;
+
+            min = static_cast<float>(vmin);
+            max = static_cast<float>(vmax);
+            step = static_cast<float>(vinc);   // integer → bước rời rạc (thường = 1)
+            current = static_cast<float>(vcur);
+            return;
+        }
+
+        // --- 2) Integer: BslDigitalShift (đặt riêng của Basler) ---
+        CIntegerPtr bsl = nm.GetNode("BslDigitalShift");
+        if (bsl && GenApi::IsReadable(bsl)) {
+            const int64_t vmin = bsl->GetMin();
+            const int64_t vmax = bsl->GetMax();
+            const int64_t vcur = bsl->GetValue();
+            int64_t vinc = 0;
+            try { vinc = bsl->GetInc(); }
+            catch (...) { vinc = 0; }
+            if (vinc <= 0) vinc = 1;
+
+            min = static_cast<float>(vmin);
+            max = static_cast<float>(vmax);
+            step = static_cast<float>(vinc);
+            current = static_cast<float>(vcur);
+            return;
+        }
+
+        // --- 3) Enumeration: DigitalShift (ít gặp, dự phòng) ---
+        CEnumerationPtr eshift = nm.GetNode("DigitalShift");
+        if (eshift && GenApi::IsReadable(eshift)) {
+            // lấy current
+            int64_t vcur = 0;
+            try { vcur = eshift->GetIntValue(); }
+            catch (...) { vcur = 0; }
+
+            // quét entries để suy ra min/max
+            GenApi::NodeList_t entries;
+            eshift->GetEntries(entries);
+            bool any = false;
+            int64_t vmin = 0, vmax = 0;
+            for (size_t k = 0; k < entries.size(); ++k) {
+                CEnumEntryPtr ee = entries[k];
+                if (ee && GenApi::IsAvailable(ee)) {
+                    const int64_t val = ee->GetValue();
+                    if (!any) { vmin = vmax = val; any = true; }
+                    else {
+                        if (val < vmin) vmin = val;
+                        if (val > vmax) vmax = val;
+                    }
+                }
+            }
+            if (any) {
+                min = static_cast<float>(vmin);
+                max = static_cast<float>(vmax);
+                step = 1.0f;                 // enum → xem như bước 1
+                current = static_cast<float>(vcur);
+                return;
+            }
+        }
+
+        _lastError = "DigitalShift node not found/readable";
+    }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("GetDigitalShift() failed: " + std::string(e.GetDescription())).c_str());
+        min = max = step = current = 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("GetDigitalShift() failed: " + std::string(e.what())).c_str());
+        min = max = step = current = 0.0f;
+    }
+    catch (...) {
+        _lastError = "GetDigitalShift() unknown error";
+        min = max = step = current = 0.0f;
+    }
+}
 float Camera::SetBlackLevel(float v)
 {
     try {
@@ -440,42 +927,152 @@ float Camera::SetBlackLevel(float v)
 }
 void Camera::GetExposure(float% min, float% max, float% step, float% current)
 {
-    try {
-        CFloatPtr n = _cam->GetNodeMap().GetNode("ExposureTime");
-        if (!n || !IsReadable(n)) n = _cam->GetNodeMap().GetNode("ExposureTimeAbs");
-        if (!n || !IsReadable(n)) throw std::runtime_error("Exposure node not readable");
+    min = max = step = current = 0.0f;
+    _lastError = "";
 
-        min = (float)n->GetMin();
-        max = (float)n->GetMax();
-        step = (float)n->GetInc();  // increment, có thể 0.0 nếu liên tục
-        current = (float)n->GetValue();
-        _lastError = nullptr;
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // 1) Tắt auto (nếu có) để đọc/ghi ổn định
+        if (CEnumerationPtr expAuto = nm.GetNode("ExposureAuto")) {
+            if (IsWritable(expAuto)) expAuto->FromString("Off");
+        }
+
+        // 2) Ưu tiên node float chuẩn: ExposureTime (µs)
+        CFloatPtr f = nm.GetNode("ExposureTime");
+        if (f && IsReadable(f)) {
+            min = static_cast<float>(f->GetMin());
+            max = static_cast<float>(f->GetMax());
+            current = static_cast<float>(f->GetValue());
+            step = (f->HasInc() ? static_cast<float>(f->GetInc()) : 0.0f); // 0.0 = liên tục
+            return ;
+        }
+        f = nm.GetNode("ExposureTimeAbs");
+        if (f && IsReadable(f)) {
+            min = static_cast<float>(f->GetMin());
+            max = static_cast<float>(f->GetMax());
+            current = static_cast<float>(f->GetValue());
+            step = (f->HasInc() ? static_cast<float>(f->GetInc()) : 0.0f);
+            return ;
+        }
+
+        f = nm.GetNode("ExposureTimeRaw");
+        if (f && IsReadable(f)) {
+            min = static_cast<float>(f->GetMin());
+            max = static_cast<float>(f->GetMax());
+            current = static_cast<float>(f->GetValue());
+            step = static_cast<float>(f->GetInc()); // integer luôn có inc
+            _lastError = "Using ExposureTimeRaw (ticks), convert to µs if needed";
+            return ;
+        }
+
+        _lastError = "ExposureTime node not found/readable";
+        return ;
     }
-    catch (...) {
-        min = max = step = current = 0.0f;
-        _lastError = "GetExposure(min/max) fail";
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(e.GetDescription()) ;
+        return ;
     }
 }
-
 void Camera::GetGain(float% min, float% max, float% step, float% current)
 {
-    try {
-        TrySetEnum(_cam->GetNodeMap(), "GainSelector", "All");
-        CFloatPtr n = _cam->GetNodeMap().GetNode("Gain");
-        if (!n || !IsReadable(n)) throw std::runtime_error("Gain node not readable");
+    // reset output
+    min = max = step = current = 0.0f;
+    _lastError = System::String::Empty;
 
-        min = (float)n->GetMin();
-        max = (float)n->GetMax();
-        step = (float)n->GetInc();
-        current = (float)n->GetValue();
-        _lastError = nullptr;
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // (tuỳ chọn) tắt auto để đọc/ghi ổn định
+        CEnumerationPtr gainAuto = nm.GetNode("GainAuto");
+        if (gainAuto && IsWritable(gainAuto)) {
+            try { gainAuto->FromString("Off"); }
+            catch (...) {}
+        }
+
+        CEnumerationPtr sel = nm.GetNode("GainSelector");
+        if (sel && GenApi::IsWritable(sel)) {
+            // Cách 1: thử bằng tên "All"
+            CEnumEntryPtr all = sel->GetEntryByName("All");
+            if (all && GenApi::IsAvailable(all)) {
+                sel->SetIntValue(all->GetValue());
+            }
+            else {
+                // Cách 2: duyệt entries, chọn entry khả dụng đầu tiên
+                GenApi::NodeList_t entries;
+                sel->GetEntries(entries);
+                for (size_t k = 0; k < entries.size(); ++k) {
+                    CEnumEntryPtr ee = entries[k];
+                    if (ee && GenApi::IsAvailable(ee)) {
+                        sel->SetIntValue(ee->GetValue());
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 1) Ưu tiên node float chuẩn: Gain (thường là dB)
+        CFloatPtr f = nm.GetNode("Gain");
+        if (f && IsReadable(f)) {
+            min = static_cast<float>(f->GetMin());
+            max = static_cast<float>(f->GetMax());
+            current = static_cast<float>(f->GetValue());
+            step = f->HasInc() ? static_cast<float>(f->GetInc()) : 0.0f; // 0.0 = continuous
+            return;
+        }
+
+        // 2) Fallback legacy: GainAbs (một số thiết bị dùng tên này)
+        CFloatPtr fabs = nm.GetNode("GainAbs");
+        if (fabs && IsReadable(fabs)) {
+            min = static_cast<float>(fabs->GetMin());
+            max = static_cast<float>(fabs->GetMax());
+            current = static_cast<float>(fabs->GetValue());
+            step = fabs->HasInc() ? static_cast<float>(fabs->GetInc()) : 0.0f;
+            return;
+        }
+
+        // 3) Fallback integer: GainRaw (đơn vị "ticks")
+        CIntegerPtr i = nm.GetNode("GainRaw");
+        if (i && IsReadable(i)) {
+            min = static_cast<float>(i->GetMin());
+            max = static_cast<float>(i->GetMax());
+            current = static_cast<float>(i->GetValue());
+
+            int64_t incRaw = 0;
+            try { incRaw = i->GetInc(); }
+            catch (...) { incRaw = 0; }
+            if (incRaw <= 0) incRaw = 1;      // integer nên đảm bảo >= 1
+            step = static_cast<float>(incRaw);
+
+            _lastError = "Using GainRaw (integer steps)";
+            return;
+        }
+
+        // 4) (tuỳ hãng) AnalogGain / DigitalGain
+        CFloatPtr analog = nm.GetNode("AnalogGain");
+        if (analog && IsReadable(analog)) {
+            min = static_cast<float>(analog->GetMin());
+            max = static_cast<float>(analog->GetMax());
+            current = static_cast<float>(analog->GetValue());
+            step = analog->HasInc() ? static_cast<float>(analog->GetInc()) : 0.0f;
+            return;
+        }
+
+        _lastError = "Gain node not found/readable";
+    }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("GetGain() failed: " + std::string(e.GetDescription())).c_str());
+        min = max = step = current = 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("GetGain() failed: " + std::string(e.what())).c_str());
+        min = max = step = current = 0.0f;
     }
     catch (...) {
+        _lastError = "GetGain() unknown error";
         min = max = step = current = 0.0f;
-        _lastError = "GetGain(min/max) fail";
     }
 }
-
 void Camera::GetWidth(float% min, float% max, float% step, float% current)
 {
     try {
@@ -534,29 +1131,112 @@ void Camera::CenterY() {
 
 void Camera::GetBlackLevel(float% min, float% max, float% step, float% current)
 {
+    // reset output
+    min = max = step = current = 0.0f;
+    _lastError = System::String::Empty;
+
     try {
-        TrySetEnum(_cam->GetNodeMap(), "BlackLevelSelector", "All");
+        INodeMap& nm = _cam->GetNodeMap();
 
-        CFloatPtr n = _cam->GetNodeMap().GetNode("BlackLevel");
-        if (!n || !IsReadable(n))
-            n = _cam->GetNodeMap().GetNode("BlackLevelRaw");
-        if (!n || !IsReadable(n))
-            _lastError = "BlackLevel node not readable";
+        // 0) (tuỳ chọn) tắt auto nếu có
+        CEnumerationPtr blAuto = nm.GetNode("BlackLevelAuto");
+        if (blAuto && GenApi::IsWritable(blAuto)) {
+            try { blAuto->FromString("Off"); }
+            catch (...) {}
+        }
 
-        min = (float)n->GetMin();
-        max = (float)n->GetMax();
-        step = (float)n->GetInc();     // thường 0.0 nếu liên tục
-        current = (float)n->GetValue();
+        // 1) (tuỳ chọn) chọn selector = All nếu có
+        CEnumerationPtr sel = nm.GetNode("BlackLevelSelector");
+        if (sel && GenApi::IsWritable(sel)) {
+            // ưu tiên entry "All" nếu có
+            CEnumEntryPtr all = sel->GetEntryByName("All");
+            if (all && GenApi::IsAvailable(all)) {
+                try { sel->SetIntValue(all->GetValue()); }
+                catch (...) {}
+            }
+            // nếu không có "All", để nguyên selector hiện tại
+        }
 
-        _lastError = nullptr;
+        // 2) Ưu tiên node float chuẩn: BlackLevel (đơn vị DN)
+        {
+            CFloatPtr f = nm.GetNode("BlackLevel");
+            if (f && GenApi::IsReadable(f)) {
+                min = static_cast<float>(f->GetMin());
+                max = static_cast<float>(f->GetMax());
+                current = static_cast<float>(f->GetValue());
+                step = f->HasInc() ? static_cast<float>(f->GetInc()) : 0.0f; // 0.0 = continuous
+                return;
+            }
+        }
+
+        // 3) Fallback integer: BlackLevelRaw (đếm thô)
+        {
+            CIntegerPtr iraw = nm.GetNode("BlackLevelRaw");
+            if (iraw && GenApi::IsReadable(iraw)) {
+                const int64_t vmin = iraw->GetMin();
+                const int64_t vmax = iraw->GetMax();
+                const int64_t vcur = iraw->GetValue();
+                int64_t vinc = 0;
+                try { vinc = iraw->GetInc(); }
+                catch (...) { vinc = 0; }
+                if (vinc <= 0) vinc = 1;
+
+                min = static_cast<float>(vmin);
+                max = static_cast<float>(vmax);
+                step = static_cast<float>(vinc); // integer → bước rời rạc
+                current = static_cast<float>(vcur);
+                return;
+            }
+        }
+
+        // 4) Biến thể Basler: BslBlackLevel (float)
+        {
+            CFloatPtr fb = nm.GetNode("BslBlackLevel");
+            if (fb && GenApi::IsReadable(fb)) {
+                min = static_cast<float>(fb->GetMin());
+                max = static_cast<float>(fb->GetMax());
+                current = static_cast<float>(fb->GetValue());
+                step = fb->HasInc() ? static_cast<float>(fb->GetInc()) : 0.0f;
+                return;
+            }
+        }
+
+        // 5) Biến thể Basler: BslBlackLevelRaw (integer)
+        {
+            CIntegerPtr ibr = nm.GetNode("BslBlackLevelRaw");
+            if (ibr && GenApi::IsReadable(ibr)) {
+                const int64_t vmin = ibr->GetMin();
+                const int64_t vmax = ibr->GetMax();
+                const int64_t vcur = ibr->GetValue();
+                int64_t vinc = 0;
+                try { vinc = ibr->GetInc(); }
+                catch (...) { vinc = 0; }
+                if (vinc <= 0) vinc = 1;
+
+                min = static_cast<float>(vmin);
+                max = static_cast<float>(vmax);
+                step = static_cast<float>(vinc);
+                current = static_cast<float>(vcur);
+                return;
+            }
+        }
+
+        _lastError = "BlackLevel node not found/readable";
+        // outputs đã là 0; return không throw
+    }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(("GetBlackLevel() failed: " + std::string(e.GetDescription())).c_str());
+        min = max = step = current = 0.0f;
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew System::String(("GetBlackLevel() failed: " + std::string(e.what())).c_str());
+        min = max = step = current = 0.0f;
     }
     catch (...) {
+        _lastError = "GetBlackLevel() unknown error";
         min = max = step = current = 0.0f;
-        _lastError = "GetBlackLevel(min/max) fail";
     }
 }
-
-
 void Camera::GetOffsetX(float% min, float% max, float% step, float% current)
 {
     try {
@@ -622,45 +1302,80 @@ void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
 }
 
 // ===== UserLoop API (uchar* qua IntPtr) =====
-System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {
-  //  auto t0 = std::chrono::steady_clock::now();
+System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels)
+{
     _frameCount++;
     w = h = stride = channels = 0;
+    _lastError = System::String::Empty;
+
     if (!_cam || !_cam->IsGrabbing()) { _lastError = "Not grabbing"; return System::IntPtr::Zero; }
     if (_mode != GrabMode::UserLoop) { _lastError = "GrabOneUcharPtr only in UserLoop"; return System::IntPtr::Zero; }
 
     std::lock_guard<std::mutex> lock(g_grabMutex);
+
     try {
+        const auto t_start = std::chrono::steady_clock::now();
         CGrabResultPtr res;
-        if (_cam->RetrieveResult(timeoutMs, res, TimeoutHandling_Return)) {
-            if (res && res->GrabSucceeded()) {
-                CPylonImage* dst = NextBuffer();
-                _conv->Convert(*dst, res);
 
-                w = (int)dst->GetWidth();
-                h = (int)dst->GetHeight();
-                channels = _activeChannels;
-                stride = w * channels; // packed
+        // Vòng lặp “chờ trong ngân sách timeout”
+        while (true) {
+            const auto now = std::chrono::steady_clock::now();
+            const int waited = (int)std::chrono::duration_cast<std::chrono::milliseconds>(now - t_start).count();
+            if (waited >= timeoutMs) { _lastError = "Timeout"; return System::IntPtr::Zero; }
 
-                _lastError = nullptr;
-                // --- Update FPS ---
-                // Cập nhật FPS mỗi ~1s
-                auto now = std::chrono::steady_clock::now();
-                std::chrono::duration<double> elapsed = now - _lastFrameTime;
-                if (elapsed.count() >= 1.0) {
-                    _emaFps = _frameCount / elapsed.count();
-                    _frameCount = 0;
-                    _lastFrameTime = now;
+            // dùng phần timeout còn lại cho lần gọi này
+            const int remain = timeoutMs - waited;
+            if (!_cam->RetrieveResult(remain, res, TimeoutHandling_Return)) {
+                // lần này chưa có frame → loop tiếp cho đến hết timeout
+                continue;
+            }
+
+            if (!res || !res->GrabSucceeded()) {
+                // Có kết quả nhưng lỗi – ghi mã lỗi rồi loop tiếp cho đến hết timeout
+                if (res) {
+                    auto code = res->GetErrorCode();
+                    GenICam::gcstring gdesc = res->GetErrorDescription();
+                    _lastError = System::String::Format("Grab failed: {0} - {1}",
+                        (int)code,
+                        gcnew System::String(gdesc.c_str()));
+                   
                 }
-               
-                return System::IntPtr((unsigned char*)dst->GetBuffer()); // uchar*
+                else {
+                    _lastError = "Grab failed: null result";
+                }
+                continue;
             }
-            else {
-                _lastError = "Grab failed";
+
+            CPylonImage* dst = NextBuffer();
+            if (!dst) { _lastError = "NextBuffer() returned null"; return System::IntPtr::Zero; }
+
+            // Convert theo cấu hình OutputPixelFormat/OutputPaddingX đã set
+            _conv->Convert(*dst, res);
+            if (!dst->IsValid() || dst->GetBuffer() == nullptr) {
+                _lastError = "Convert() produced empty buffer";
+                return System::IntPtr::Zero;
             }
-        }
-        else {
-            _lastError = "Timeout";
+
+            const size_t ww = dst->GetWidth();
+            const size_t hh = dst->GetHeight();
+
+            // Vì OutputPaddingX=0 nên stride = w * channels
+            w = static_cast<int>(ww);
+            h = static_cast<int>(hh);
+            channels = _activeChannels;
+            stride = w * channels;
+
+            // --- Update FPS ---
+            auto now2 = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = now2 - _lastFrameTime;
+            if (elapsed.count() >= 1.0) {
+                _emaFps = _frameCount / elapsed.count();
+                _frameCount = 0;
+                _lastFrameTime = now2;
+            }
+
+            _lastError = System::String::Empty;
+            return System::IntPtr((void*)dst->GetBuffer()); // buffer nội bộ
         }
     }
     catch (const GenericException& e) { _lastError = gcnew System::String(e.GetDescription()); }
@@ -669,6 +1384,54 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
 
     return System::IntPtr::Zero;
 }
+
+//System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {
+//  //  auto t0 = std::chrono::steady_clock::now();
+//    _frameCount++;
+//    w = h = stride = channels = 0;
+//    if (!_cam || !_cam->IsGrabbing()) { _lastError = "Not grabbing"; return System::IntPtr::Zero; }
+//    if (_mode != GrabMode::UserLoop) { _lastError = "GrabOneUcharPtr only in UserLoop"; return System::IntPtr::Zero; }
+//
+//    std::lock_guard<std::mutex> lock(g_grabMutex);
+//    try {
+//        CGrabResultPtr res;
+//        if (_cam->RetrieveResult(timeoutMs, res, TimeoutHandling_Return)) {
+//            if (res && res->GrabSucceeded()) {
+//                CPylonImage* dst = NextBuffer();
+//                _conv->Convert(*dst, res);
+//
+//                w = (int)dst->GetWidth();
+//                h = (int)dst->GetHeight();
+//                channels = _activeChannels;
+//                stride = w * channels; // packed
+//
+//                _lastError = nullptr;
+//                // --- Update FPS ---
+//                // Cập nhật FPS mỗi ~1s
+//                auto now = std::chrono::steady_clock::now();
+//                std::chrono::duration<double> elapsed = now - _lastFrameTime;
+//                if (elapsed.count() >= 1.0) {
+//                    _emaFps = _frameCount / elapsed.count();
+//                    _frameCount = 0;
+//                    _lastFrameTime = now;
+//                }
+//               
+//                return System::IntPtr((unsigned char*)dst->GetBuffer()); // uchar*
+//            }
+//            else {
+//                _lastError = "Grab failed";
+//            }
+//        }
+//        else {
+//            _lastError = "Timeout";
+//        }
+//    }
+//    catch (const GenericException& e) { _lastError = gcnew System::String(e.GetDescription()); }
+//    catch (const std::exception& e) { _lastError = gcnew System::String(e.what()); }
+//    catch (...) { _lastError = "GrabOneUcharPtr unknown error"; }
+//
+//    return System::IntPtr::Zero;
+//}
 
 System::IntPtr Camera::GrabLatestUcharPtr(int% w, int% h, int% stride, int% channels) {
     w = h = stride = channels = 0;

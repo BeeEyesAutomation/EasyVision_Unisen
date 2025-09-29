@@ -54,7 +54,7 @@ namespace BeeUi
         public List<string> ScanIDCCD(TypeCamera typeCamera)
         {
             cbCCD.Text = "Waiting Scan";
-          //  String IDCCD =Global.Config.IDCamera;
+     
             List<string> listStringCCD = new List<string>();
             if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
                 if (BeeCore.Common.listCamera[Global.IndexChoose] != null)

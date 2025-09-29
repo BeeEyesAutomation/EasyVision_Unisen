@@ -4,14 +4,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BeeIV2
 {
+    class NativeBootstrap
+    {
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern bool SetDefaultDllDirectories(uint DirectoryFlags);
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern IntPtr AddDllDirectory(string NewDirectory);
+        const uint LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000;
+
+        public static void Init()
+        {
+            var baseDir = AppContext.BaseDirectory;
+            var pylonDir = System.IO.Path.Combine(baseDir, "pylon", "Win64");
+            var ocvDir = System.IO.Path.Combine(baseDir, "opencv");
+
+            SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+            AddDllDirectory(pylonDir);
+            AddDllDirectory(ocvDir);
+
+            // optional: prepend PATH để các thư viện khác (OpenCvSharp, v.v.) cũng thấy
+            var cur = Environment.GetEnvironmentVariable("PATH") ?? "";
+            Environment.SetEnvironmentVariable("PATH", pylonDir + ";" + ocvDir + ";" + cur);
+        }
+    }
     internal static class Program
     {
+       
         public static Process PriorProcess()
         // Returns a System.Diagnostics.Process pointing to
         // a pre-existing process with the same name as the

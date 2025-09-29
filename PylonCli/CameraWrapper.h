@@ -82,6 +82,7 @@ namespace PylonCli {
         float SetExposure(float microseconds);
         float SetGain(float value);
         float SetBlackLevel(float value);
+        float SetDigitalShift(float value);
         void CenterX();    void CenterY();
 
         // ===== Params =====
@@ -120,7 +121,7 @@ namespace PylonCli {
             [System::Runtime::InteropServices::Out] float% step,
             [System::Runtime::InteropServices::Out] float% current);
 
-
+        void GetDigitalShift(float% min, float% max, float% step, float% current);
         // ===== Event (uchar* qua IntPtr) =====
         event FrameReadyHandler^ FrameReady {
             void add(FrameReadyHandler^ d) { _frameReadyHandlers += d; }

@@ -1772,66 +1772,67 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                   
-                    if (!Global.IsRun)
-                    {
-                     
-                        BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
-                            BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                    if (!workReadCCD.IsBusy)
+                        workReadCCD.RunWorkerAsync();
+                    //if (!Global.IsRun)
+                    //{
 
-                    }
-                    else
-                    {
-                        if (Global.ParaCommon.IsMultiCamera)
-                        {
-                            Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
-                            {
-                                if (camera != null)
-                                {
-                                    camera.Read();
-                                    if (camera.Para.TypeCamera == TypeCamera.USB)
-                                        camera.Read();
-                                }    
-                                   
-                            });
-                        }
-                        else
-                        {
-                            BeeCore.Common.listCamera[0].Read();
-                            if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                                BeeCore.Common.listCamera[0].Read();
-                            //switch (Global.TriggerNum)
-                            //{
-                            //    case TriggerNum.Trigger1:
-                            //        BeeCore.Common.listCamera[0].Read();
-                            //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                            //            BeeCore.Common.listCamera[0].Read();
-                            //        break;
-                            //    case TriggerNum.Trigger2:
-                            //        BeeCore.Common.listCamera[1].Read();
-                            //        break;
-                            //    case TriggerNum.Trigger3:
-                            //        BeeCore.Common.listCamera[2].Read();
-                            //        break;
-                            //    case TriggerNum.Trigger4:
-                            //        BeeCore.Common.listCamera[3].Read();
-                            //        break;
+                    //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                    //    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+                    //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
+
+                    //}
+                    //else
+                    //{
+                    //    if (Global.ParaCommon.IsMultiCamera)
+                    //    {
+                    //        Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                    //        {
+                    //            if (camera != null)
+                    //            {
+                    //                camera.Read();
+                    //                if (camera.Para.TypeCamera == TypeCamera.USB)
+                    //                    camera.Read();
+                    //            }    
+
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        BeeCore.Common.listCamera[0].Read();
+                    //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                    //            BeeCore.Common.listCamera[0].Read();
+                    //        //switch (Global.TriggerNum)
+                    //        //{
+                    //        //    case TriggerNum.Trigger1:
+                    //        //        BeeCore.Common.listCamera[0].Read();
+                    //        //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                    //        //            BeeCore.Common.listCamera[0].Read();
+                    //        //        break;
+                    //        //    case TriggerNum.Trigger2:
+                    //        //        BeeCore.Common.listCamera[1].Read();
+                    //        //        break;
+                    //        //    case TriggerNum.Trigger3:
+                    //        //        BeeCore.Common.listCamera[2].Read();
+                    //        //        break;
+                    //        //    case TriggerNum.Trigger4:
+                    //        //        BeeCore.Common.listCamera[3].Read();
+                    //        //        break;
 
 
-                            //}
-                        }
-                    }
+                    //        //}
+                    //    }
+                    //}
 
-                    if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-                    {
+                    //if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+                    //{
 
-                        Global.StatusProcessing = StatusProcessing.Checking;
-                        if (Global.IsByPassResult)
-                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                    //    Global.StatusProcessing = StatusProcessing.Checking;
+                    //    if (Global.IsByPassResult)
+                    //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
-                    }
-                 
+                    //}
+
                     break;
                 case StatusProcessing.Checking:
                     if (timer == null) timer = CycleTimerSplit.Start();
@@ -1863,37 +1864,43 @@ namespace BeeUi
                     Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
                     Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
                     foreach (int ix in Global.ParaCommon.indexLogic1)
+                        if(ix< BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
                             break;
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic2)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
                             break;
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic3)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
                             break;
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic4)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
                             break;
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic5)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
                             break;
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic6)
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
                             Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
                             break;
@@ -2076,7 +2083,7 @@ namespace BeeUi
                 if (!Global.IsLive)
                     Global.ParaCommon.SizeCCD = new Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height);
 
-                Shows.Full(imgView,Global.ParaCommon.SizeCCD);
+                ShowTool.Full(imgView,Global.ParaCommon.SizeCCD);
             }
 
         }
@@ -2893,7 +2900,7 @@ namespace BeeUi
               
                    
                         Global.ParaCommon.SizeCCD = _renderer.szImage;
-                        Shows.Full(imgView, Global.ParaCommon.SizeCCD);
+                        ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
                 
 
                 //_renderer.Render();
@@ -3161,7 +3168,7 @@ namespace BeeUi
                         BeeCore.Common.listCamera[Global.IndexChoose].Read();
                         imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                         Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
-                        Shows.Full(imgView, Global.ParaCommon.SizeCCD);
+                        ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
                     }    
                         
         }
@@ -3286,7 +3293,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             using (var m = new Mat(height, width, matType, buffer, stride))// new OpenCvSharp.Mat(h, w, type, p, s))
             {
                
-                BeeCore.Common.listCamera[Global.IndexChoose].FrameRate = (int)BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.GetMeasuredFps();
+                BeeCore.Common.listCamera[Global.IndexChoose].GetFpsPylon();
                 try
                 {
                     var bmp = BitmapConverter.ToBitmap(m);
@@ -3591,14 +3598,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 if (_renderer.Count() > 0)
                 {
                     Global.ParaCommon.SizeCCD = _renderer.szImage;
-                    Shows.Full(imgView, Global.ParaCommon.SizeCCD);
+                    ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
                     return;
                 }
             }
             if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed) return;
             if (!Global.IsLive)
                 Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
-            Shows.Full(imgView, Global.ParaCommon.SizeCCD);
+            ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
           
             Global.Config.imgZoom = imgView.Zoom;
            Global.Config.imgOffSetX = imgView.AutoScrollPosition.X;

@@ -94,6 +94,7 @@ namespace BeeInterface
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tmShowPara = new System.Windows.Forms.Timer(this.components);
+            this.lbErr = new System.Windows.Forms.Label();
             this.tableLayout1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -116,36 +117,37 @@ namespace BeeInterface
             this.tableLayout1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout1.Controls.Add(this.label19, 0, 1);
-            this.tableLayout1.Controls.Add(this.label13, 0, 6);
-            this.tableLayout1.Controls.Add(this.label12, 0, 20);
-            this.tableLayout1.Controls.Add(this.label11, 0, 18);
-            this.tableLayout1.Controls.Add(this.label10, 0, 16);
-            this.tableLayout1.Controls.Add(this.label5, 0, 14);
-            this.tableLayout1.Controls.Add(this.label15, 0, 13);
-            this.tableLayout1.Controls.Add(this.label3, 0, 11);
-            this.tableLayout1.Controls.Add(this.label2, 0, 9);
-            this.tableLayout1.Controls.Add(this.label4, 0, 7);
-            this.tableLayout1.Controls.Add(this.label18, 0, 4);
-            this.tableLayout1.Controls.Add(this.label14, 0, 2);
+            this.tableLayout1.Controls.Add(this.label19, 0, 2);
+            this.tableLayout1.Controls.Add(this.label13, 0, 7);
+            this.tableLayout1.Controls.Add(this.label12, 0, 21);
+            this.tableLayout1.Controls.Add(this.label11, 0, 19);
+            this.tableLayout1.Controls.Add(this.label10, 0, 17);
+            this.tableLayout1.Controls.Add(this.label5, 0, 15);
+            this.tableLayout1.Controls.Add(this.label15, 0, 14);
+            this.tableLayout1.Controls.Add(this.label3, 0, 12);
+            this.tableLayout1.Controls.Add(this.label2, 0, 10);
+            this.tableLayout1.Controls.Add(this.label4, 0, 8);
+            this.tableLayout1.Controls.Add(this.label18, 0, 5);
+            this.tableLayout1.Controls.Add(this.label14, 0, 3);
             this.tableLayout1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tableLayout1.Controls.Add(this.AdjZoom, 0, 3);
-            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 21);
-            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 19);
-            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 17);
-            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 15);
-            this.tableLayout1.Controls.Add(this.trackShift, 0, 12);
-            this.tableLayout1.Controls.Add(this.trackGain, 0, 10);
-            this.tableLayout1.Controls.Add(this.trackExposure, 0, 8);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 22);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel21, 0, 5);
+            this.tableLayout1.Controls.Add(this.AdjZoom, 0, 4);
+            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 22);
+            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 20);
+            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 18);
+            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 16);
+            this.tableLayout1.Controls.Add(this.trackShift, 0, 13);
+            this.tableLayout1.Controls.Add(this.trackGain, 0, 11);
+            this.tableLayout1.Controls.Add(this.trackExposure, 0, 9);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 23);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel21, 0, 6);
+            this.tableLayout1.Controls.Add(this.lbErr, 0, 1);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayout1.Location = new System.Drawing.Point(3, 3);
             this.tableLayout1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tableLayout1.Name = "tableLayout1";
             this.tableLayout1.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.tableLayout1.RowCount = 24;
+            this.tableLayout1.RowCount = 25;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -169,7 +171,8 @@ namespace BeeInterface
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayout1.Size = new System.Drawing.Size(480, 704);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
@@ -181,7 +184,7 @@ namespace BeeInterface
             this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.ForeColor = System.Drawing.Color.Black;
-            this.label19.Location = new System.Drawing.Point(5, 80);
+            this.label19.Location = new System.Drawing.Point(5, 103);
             this.label19.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(445, 25);
@@ -196,7 +199,7 @@ namespace BeeInterface
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(5, 291);
+            this.label13.Location = new System.Drawing.Point(5, 314);
             this.label13.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(445, 25);
@@ -211,7 +214,7 @@ namespace BeeInterface
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(15, 854);
+            this.label12.Location = new System.Drawing.Point(15, 877);
             this.label12.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(435, 25);
@@ -226,7 +229,7 @@ namespace BeeInterface
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(15, 773);
+            this.label11.Location = new System.Drawing.Point(15, 796);
             this.label11.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(435, 25);
@@ -241,7 +244,7 @@ namespace BeeInterface
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(15, 692);
+            this.label10.Location = new System.Drawing.Point(15, 715);
             this.label10.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(435, 25);
@@ -256,7 +259,7 @@ namespace BeeInterface
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(15, 611);
+            this.label5.Location = new System.Drawing.Point(15, 634);
             this.label5.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(435, 25);
@@ -271,7 +274,7 @@ namespace BeeInterface
             this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.Black;
-            this.label15.Location = new System.Drawing.Point(5, 579);
+            this.label15.Location = new System.Drawing.Point(5, 602);
             this.label15.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(445, 25);
@@ -286,7 +289,7 @@ namespace BeeInterface
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(5, 483);
+            this.label3.Location = new System.Drawing.Point(5, 506);
             this.label3.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(445, 25);
@@ -301,7 +304,7 @@ namespace BeeInterface
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 402);
+            this.label2.Location = new System.Drawing.Point(5, 425);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(445, 25);
@@ -316,7 +319,7 @@ namespace BeeInterface
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(5, 321);
+            this.label4.Location = new System.Drawing.Point(5, 344);
             this.label4.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(445, 25);
@@ -331,7 +334,7 @@ namespace BeeInterface
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(5, 191);
+            this.label18.Location = new System.Drawing.Point(5, 214);
             this.label18.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(445, 25);
@@ -346,7 +349,7 @@ namespace BeeInterface
             this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 110);
+            this.label14.Location = new System.Drawing.Point(5, 133);
             this.label14.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(445, 25);
@@ -529,7 +532,7 @@ namespace BeeInterface
             this.AdjZoom.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjZoom.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjZoom.KeyboardStep = 1F;
-            this.AdjZoom.Location = new System.Drawing.Point(5, 137);
+            this.AdjZoom.Location = new System.Drawing.Point(5, 160);
             this.AdjZoom.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjZoom.MatchTextboxFontToThumb = true;
             this.AdjZoom.Max = 20000F;
@@ -594,7 +597,7 @@ namespace BeeInterface
             this.AdjOffSetY.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjOffSetY.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjOffSetY.KeyboardStep = 1F;
-            this.AdjOffSetY.Location = new System.Drawing.Point(15, 881);
+            this.AdjOffSetY.Location = new System.Drawing.Point(15, 904);
             this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
             this.AdjOffSetY.MatchTextboxFontToThumb = true;
             this.AdjOffSetY.Max = 2000F;
@@ -659,7 +662,7 @@ namespace BeeInterface
             this.AdjOffsetX.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjOffsetX.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjOffsetX.KeyboardStep = 1F;
-            this.AdjOffsetX.Location = new System.Drawing.Point(15, 800);
+            this.AdjOffsetX.Location = new System.Drawing.Point(15, 823);
             this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
             this.AdjOffsetX.MatchTextboxFontToThumb = true;
             this.AdjOffsetX.Max = 2000F;
@@ -724,7 +727,7 @@ namespace BeeInterface
             this.AdjHeight.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjHeight.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjHeight.KeyboardStep = 1F;
-            this.AdjHeight.Location = new System.Drawing.Point(15, 719);
+            this.AdjHeight.Location = new System.Drawing.Point(15, 742);
             this.AdjHeight.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
             this.AdjHeight.MatchTextboxFontToThumb = true;
             this.AdjHeight.Max = 2000F;
@@ -791,7 +794,7 @@ namespace BeeInterface
             this.AdjWidth.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjWidth.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjWidth.KeyboardStep = 1F;
-            this.AdjWidth.Location = new System.Drawing.Point(15, 638);
+            this.AdjWidth.Location = new System.Drawing.Point(15, 661);
             this.AdjWidth.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
             this.AdjWidth.MatchTextboxFontToThumb = true;
             this.AdjWidth.Max = 2000F;
@@ -858,7 +861,7 @@ namespace BeeInterface
             this.trackShift.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackShift.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackShift.KeyboardStep = 1F;
-            this.trackShift.Location = new System.Drawing.Point(5, 510);
+            this.trackShift.Location = new System.Drawing.Point(5, 533);
             this.trackShift.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackShift.MatchTextboxFontToThumb = true;
             this.trackShift.Max = 2000F;
@@ -925,7 +928,7 @@ namespace BeeInterface
             this.trackGain.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackGain.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackGain.KeyboardStep = 1F;
-            this.trackGain.Location = new System.Drawing.Point(5, 429);
+            this.trackGain.Location = new System.Drawing.Point(5, 452);
             this.trackGain.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackGain.MatchTextboxFontToThumb = true;
             this.trackGain.Max = 2000F;
@@ -992,7 +995,7 @@ namespace BeeInterface
             this.trackExposure.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackExposure.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackExposure.KeyboardStep = 1F;
-            this.trackExposure.Location = new System.Drawing.Point(5, 348);
+            this.trackExposure.Location = new System.Drawing.Point(5, 371);
             this.trackExposure.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackExposure.MatchTextboxFontToThumb = true;
             this.trackExposure.Max = 2000F;
@@ -1040,7 +1043,7 @@ namespace BeeInterface
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.btnCenterY, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnCenterX, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 933);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 956);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
@@ -1169,7 +1172,7 @@ namespace BeeInterface
             this.tableLayoutPanel21.Controls.Add(this.btnFocus, 0, 0);
             this.tableLayoutPanel21.Controls.Add(this.AdjFocus, 1, 0);
             this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel21.Location = new System.Drawing.Point(5, 218);
+            this.tableLayoutPanel21.Location = new System.Drawing.Point(5, 241);
             this.tableLayoutPanel21.Margin = new System.Windows.Forms.Padding(5, 0, 3, 3);
             this.tableLayoutPanel21.Name = "tableLayoutPanel21";
             this.tableLayoutPanel21.RowCount = 1;
@@ -2326,6 +2329,15 @@ namespace BeeInterface
             // 
             this.tmShowPara.Tick += new System.EventHandler(this.tmShowPara_Tick);
             // 
+            // lbErr
+            // 
+            this.lbErr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbErr.Location = new System.Drawing.Point(3, 60);
+            this.lbErr.Name = "lbErr";
+            this.lbErr.Size = new System.Drawing.Size(449, 23);
+            this.lbErr.TabIndex = 109;
+            this.lbErr.Text = "..";
+            // 
             // SettingStep1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2424,5 +2436,6 @@ namespace BeeInterface
         private Label label17;
         private Label label13;
         private Label label19;
+        private Label lbErr;
     }
 }

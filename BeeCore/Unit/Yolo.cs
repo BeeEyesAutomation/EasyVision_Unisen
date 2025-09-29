@@ -285,94 +285,87 @@ namespace BeeCore
         {
             if (Global.IsIntialPython)
                 using (Py.GIL())
-            {
-                try
                 {
-                    CropOffSetX = rotCrop._PosCenter.X + rotCrop._rect.X;
-                    CropOffSetY = rotCrop._PosCenter.Y + rotCrop._rect.Y;
-                    if (CropOffSetX > 0) CropOffSetX = 0; else CropOffSetX = -CropOffSetX;
-                    if (CropOffSetY > 0) CropOffSetY = 0; else CropOffSetY = -CropOffSetY;
-                    if (yLine==0)
-                    yLine = 300;
-                    boxList = new List<RectRotate>();
-                     scoreList = new List<float>();
-                     labelList = new List<string>();
-                    Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop,null);
-                    if (matCrop.Type() != MatType.CV_8UC3)
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
-                    if (matCrop.Channels() == 1)
+                    try
                     {
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
+                        // --- offset như cũ ---
+                        CropOffSetX = rotCrop._PosCenter.X + rotCrop._rect.X;
+                        CropOffSetY = rotCrop._PosCenter.Y + rotCrop._rect.Y;
+                        CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
+                        CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
+                        
+                        // --- crop ---
+                        using (var matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
+                        {
+                            // Đưa về CV_8U 1/3 kênh (tránh double-convert)
+                            if (matCrop.Type().Depth != MatType.CV_8U)
+                                Cv2.ConvertScaleAbs(matCrop, matCrop);               // 16-bit -> 8-bit nếu có
+                            if (matCrop.Channels() == 1)
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR); // YOLO thích 3 kênh
+
+                            int h = matCrop.Rows, w = matCrop.Cols, ch = matCrop.Channels();
+                            long stride = matCrop.Step(); // có thể != w*ch, đã hỗ trợ ở Python
+                            IntPtr p = matCrop.Data;
+
+                            float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
+                            string toolName = Common.PropetyTools[IndexThread][Index].Name;
+
+                            dynamic result = G.objYolo.predict((long)p, h, w, ch, (int)stride, conf, toolName);
+
+                            PyObject boxes = result[0], scores = result[1], labels = result[2];
+                            int n = (int)boxes.Length();
+
+                            if (boxList == null) boxList = new List<RectRotate>(n);
+                            else
+                            {
+                                boxList.Clear();
+                                if (boxList.Capacity < n) boxList.Capacity = n; // (tùy chọn) tránh realloc
+                            }
+                            if (scoreList == null) scoreList = new List<float>(n);
+                            else
+                            {
+                                scoreList.Clear();
+                                if (scoreList.Capacity < n) scoreList.Capacity = n;
+                            }
+
+                            if (labelList == null) labelList = new List<string>(n);
+                            else
+                            {
+                                labelList.Clear();
+                                if (labelList.Capacity < n) labelList.Capacity = n;
+                            }
+                            boxList.Clear(); scoreList.Clear(); labelList.Clear();
+
+                            for (int j = 0; j < n; j++)
+                            {
+                                var box = boxes[j];
+                                float x1 = (float)box[0].As<double>();
+                                float y1 = (float)box[1].As<double>();
+                                float x2 = (float)box[2].As<double>();
+                                float y2 = (float)box[3].As<double>();
+
+                                float w2 = x2 - x1, h2 = y2 - y1;
+                                float cx = x1 + w2 * 0.5f, cy = y1 + h2 * 0.5f;
+
+                                var rt = new RectRotate(new RectangleF(-w2 / 2, -h2 / 2, w2, h2), new PointF(cx, cy), 0, AnchorPoint.None, false);
+                                boxList.Add(rt);
+
+                                scoreList.Add((float)scores[j].As<double>() * 100f);
+                                labelList.Add(labels[j].ToString());
+                            }
+                        }
+                    
                     }
-                    if (!matCrop.IsContinuous())
-                    {
-                        matCrop = matCrop.Clone();
-                    }
-                    // Copy dữ liệu sang byte[]
-                    int size = (int)(matCrop.Total() * matCrop.ElemSize());
-                    byte[] buffer = new byte[size];
-                    Marshal.Copy(matCrop.Data, buffer, 0, size);
-                    int height1 = matCrop.Height;
-                    int width1 = matCrop.Width;
-                    int channels = matCrop.Channels();
-                    //dynamic np = Py.Import("numpy");
-                    ////    G.objYolo = Py.Import("Tool.Learning").ObjectDetector(); // khởi tạo trực tiếp
-                    //dynamic mod = Py.Import("Tool.Learning");
-                    //dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                    //dynamic objYolo = cls.Invoke();              // khởi tạo instance
-                    //G.objYolo.load_model(nameTool, nameModel, (int)TypeYolo);
-                    var npArray = G.np.array(buffer).reshape(height1, width1, 3);
-                    dynamic result = G.objYolo.predict(npArray, (float)(Common.PropetyTools[IndexThread][Index]. Score / 100.0), Common.PropetyTools[IndexThread][Index].Name);
-                    PyObject boxes = result[0];
-                    PyObject scores = result[1];
-                    PyObject labels = result[2];
-
-                    int counts = (int)boxes.Length();
-                    for (int j = 0; j < counts; j++)
-                    {
-                        // Lấy box: (x1, y1, x2, y2)
-                        PyObject box = boxes[j];
-                        float x1 = (float)box[0].As<double>();
-                        float y1 = (float)box[1].As<double>();
-                        float x2 = (float)box[2].As<double>();
-                        float y2 = (float)box[3].As<double>();
-
-                        // Tính width, height và center
-                        float w = x2 - x1;
-                        float h = y2 - y1;
-                        float cx = x1 + w / 2;
-                        float cy = y1 + h / 2;
-                        RectRotate rt = new RectRotate(new RectangleF(-w / 2, -h / 2, w, h), new PointF(cx, cy), 0, AnchorPoint.None,false);
-
-                        //// Gán Rect quay góc 0 (vì YOLO box không có góc)
-                        //RotatedRect rect = new RotatedRect(new Point2f(cx, cy), new Size2f(w, h), 0);
-                        boxList.Add(rt);
-
-                        // Score
-                        float score = (float)scores[j].As<double>();
-                        scoreList.Add(score * 100);
-
-                        // Label
-                        string label = labels[j].ToString();
-                        labelList.Add(label);
-                    }
-
-
-                    // result: tuple (boxes, scores, labels) từ Python
-                    // e.Result = result;
-                }
-                catch (PythonException pyEx)
+                    catch (PythonException pyEx)
                     {
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
-                     
-                        //MessageBox.Show("Python Error: " + pyEx.Message);
-                }
-                catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-                        //  MessageBox.Show("Error: " + ex.Message);
                     }
-            }
+                }
+
 
         }
         public ArrangeBox ArrangeBox=new ArrangeBox();
