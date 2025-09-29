@@ -888,7 +888,7 @@ namespace BeeGlobal
             }
             catch (Exception ex)
             {
-               MessageBox.Show("SaveNow error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("SaveNow error: " + ex.Message);
             }
             finally
             {
@@ -1020,9 +1020,7 @@ namespace BeeGlobal
                 _progressiveTimer.Stop();
                 _progressiveTimer.Start();
             }
-            catch(Exception ex) {
-                MessageBox.Show(ex.Message);
-            }
+            catch { }
         }
     }
 }
