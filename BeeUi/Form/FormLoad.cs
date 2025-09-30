@@ -32,30 +32,13 @@ namespace BeeUi
         public Timer tmLoad = new Timer();
         public BackgroundWorker wLoad = new BackgroundWorker();
         Access access=new Access();
-        private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            // progressBar.Value = e.ProgressPercentage;
-        }
-        bool Is64bit = false;
-        private void Completed(object sender, AsyncCompletedEventArgs e)
-        {
-
-        }
-      
+       
        
         public FormLoad()
         {
             InitializeComponent();
            this.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, this.Width, this.Height, 20, 20));
-          //  EDS.GenerateEDS("Visionsensor.eds");
-            //  Disable();
-            //  Enable();
-
-            // listStringCCD;
-
-            // RsDirPermissions rsDirPermissions = new RsDirPermissions();
-            // rsDirPermissions.SetEveryoneAccess(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)+"\\Bee Eyes Automation\\EasyVision");
-            G.Load = this;
+           G.Load = this;
            
             tmActive.Interval = 1000;
             tmLoad.Interval = 1000;
@@ -187,7 +170,8 @@ namespace BeeUi
             if (Global.Config.RoundRad == 0)Global.Config.RoundRad = 10;
             tmLoad.Enabled = false;
             //
-           
+            if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
+
             Global.SizeScreen= Screen.PrimaryScreen.Bounds.Size;
             Global.PerScaleWidth = (float)((Global.SizeScreen.Width * 1.0)/ 2240.0 );
             Global.PerScaleHeight = (float)((Global.SizeScreen.Height * 1.0)/ 1400.0 );
@@ -218,7 +202,6 @@ namespace BeeUi
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
 
-            if (Global.LogsDashboard == null) Global.LogsDashboard = new LogsDashboard();
             tmLoad.Interval =500;
             tmLoad.Enabled = true;
 

@@ -129,12 +129,12 @@ namespace BeeUi
             this.lbCam,
             this.lbFrameRate,
             this.toolStripPort});
-            this.statusStrip1.Location = new System.Drawing.Point(385, 0);
+            this.statusStrip1.Location = new System.Drawing.Point(398, 0);
             this.statusStrip1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStrip1.Size = new System.Drawing.Size(1416, 33);
+            this.statusStrip1.Size = new System.Drawing.Size(1403, 33);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -293,9 +293,9 @@ namespace BeeUi
             this.label1.ForeColor = System.Drawing.Color.DimGray;
             this.label1.Location = new System.Drawing.Point(305, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 33);
+            this.label1.Size = new System.Drawing.Size(93, 33);
             this.label1.TabIndex = 5;
-            this.label1.Text = "ver 1.1";
+            this.label1.Text = "ver 1.1.2";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // split6

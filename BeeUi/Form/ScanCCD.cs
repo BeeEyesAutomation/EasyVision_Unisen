@@ -433,16 +433,25 @@ namespace BeeUi
                     }
                     camera.Init(camera.Para.TypeCamera);
                     String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
+                    indexCCD = -1;
                     if (camera.Para.TypeCamera == TypeCamera.USB)
                     {
                         int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
                         if (index != -1)
                             indexCCD = index;
                     }
-                    camera.IndexConnect = indexCCD;
-                    camera.matRaw = new OpenCvSharp.Mat();
-                    camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
-                    //  index++;
+                    if (indexCCD != -1| camera.Para.TypeCamera != TypeCamera.USB)
+                    {
+                        camera.IndexConnect = indexCCD;
+                        camera.matRaw = new OpenCvSharp.Mat();
+                        camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
+                        if (camera.IsConnected)
+                        {
+                            
+                                await camera.SetFullPara();
+                        }
+
+                    }
                 }
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;
@@ -492,10 +501,18 @@ namespace BeeUi
                         if (index != -1)
                             indexCCD = index;
                     }
-                    camera.IndexConnect = indexCCD;
-                    camera.matRaw = new OpenCvSharp.Mat();
-                    camera.IsConnected = await camera.Connect(camera.Para.Name,camera.Para.TypeCamera);
-                   // index++;
+                   
+                    if (indexCCD != -1 | camera.Para.TypeCamera != TypeCamera.USB)
+                    {
+                        camera.IndexConnect = indexCCD;
+                        camera.matRaw = new OpenCvSharp.Mat();
+                        camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
+                        if (camera.IsConnected)
+                        {
+
+                            await camera.SetFullPara();
+                        }
+                    }
                 }
                 if (Global.ParaCommon.IsMultiCamera == false)
                     break;

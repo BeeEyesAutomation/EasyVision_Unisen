@@ -3161,7 +3161,8 @@ namespace BeeUi
             // Dọn rác còn sót
             var leftover = Interlocked.Exchange(ref _sharedFrame, null);
             leftover?.Dispose();
-           if(BeeCore.Common.listCamera[Global.IndexChoose].matRaw!=null)
+            if (BeeCore.Common.listCamera[Global.IndexChoose]!= null)
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw!=null)
                 if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw .IsDisposed)
                     if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                     {
@@ -3225,16 +3226,16 @@ namespace BeeUi
         private async void btnSer_Click(object sender, EventArgs e)
         {
            
-            btnFull.Enabled = !btnLive.IsCLick;
-            btnZoomIn.Enabled = !btnLive.IsCLick;
-            btnZoomOut.Enabled = !btnLive.IsCLick;
+            //btnFull.Enabled = !btnLive.IsCLick;
+            //btnZoomIn.Enabled = !btnLive.IsCLick;
+            //btnZoomOut.Enabled = !btnLive.IsCLick;
 
             Global.IsLive = btnLive.IsCLick;
          
           
                 numLive = 0;
                 tmOut.Enabled = false;
-            pMenu.Visible = btnLive.IsCLick;
+           // pMenu.Visible = btnLive.IsCLick;
           
             await Task.Delay(300);
           //  tmLive.Enabled = btnLive.IsCLick;
@@ -3257,14 +3258,17 @@ namespace BeeUi
            
             if(Global.IsLive)
             {
-                //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.Pylon)
-                //{
-                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.ChangeGrabLoop(true);
-                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.FrameReady += PylonCam_FrameReady;
-
-                //}
-                //else
-                     if (!workReadCCD.IsBusy)
+                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                    if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                            if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                            {
+                                BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                                imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                                ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
+                            }
+                if (!workReadCCD.IsBusy)
                     workReadCCD.RunWorkerAsync();
                 StartLive();
             }    
@@ -3332,7 +3336,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             IsErrCCD = false;
             if (!Global.IsRun)
             {
-                IsErrCCD= BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                if (BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown) return;
+                    IsErrCCD = BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
             }
             else
@@ -3368,8 +3373,15 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
             if (IsErrCCD)
             {
-                await Task.Delay(5);
-                workReadCCD.RunWorkerAsync();
+                await TimingUtils.DelayAccurateAsync(5);
+                
+                if(!workReadCCD.IsBusy)
+                {
+                    workReadCCD.RunWorkerAsync();
+                    return;
+
+                }    
+               
             }    
          
             if (btnLive.IsCLick)
@@ -3398,7 +3410,10 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                         //}
                     }
 
-
+                if (BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown)
+                    await TimingUtils.DelayAccurateAsync(5);
+                if (BeeCore.Common.listCamera[Global.IndexChoose].IsSetPara)
+                    await TimingUtils.DelayAccurateAsync(5);
                 workReadCCD.RunWorkerAsync();
                 return;
             }
@@ -3598,7 +3613,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             //imgView.Invalidate();
         }
         
-        private void btnFull_Click(object sender, EventArgs e)
+        private async void btnFull_Click(object sender, EventArgs e)
         {if (Global.IsRun)
             {
                 if (_renderer.Count() > 0)
@@ -3608,9 +3623,20 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     return;
                 }
             }
-            if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed) return;
-            if (!Global.IsLive)
+           
+            if(Global.IsLive)
+            {
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed) return;
+                BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown = true;
+                await TimingUtils.DelayAccurateAsync(10);
                 Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                if (Global.IsLive)
+                    BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown = false;
+
+            }
+            else
+                Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+        
             ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
           
             Global.Config.imgZoom = imgView.Zoom;

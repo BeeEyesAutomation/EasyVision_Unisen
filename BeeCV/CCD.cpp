@@ -8,6 +8,145 @@
 
 using namespace CvPlus; 
 using namespace System::Runtime::InteropServices;
+namespace {
+	struct GrabPause {
+		CMvCamera* cam;
+		bool stopped = false;
+		explicit GrabPause(CMvCamera* c) : cam(c) {
+			if (cam) { cam->StopGrabbing(); stopped = true; }
+		}
+		~GrabPause() {
+			if (cam) cam->StartGrabbing();
+		}
+	};
+
+	// Làm tròn theo step (step <= 0 thì bỏ qua)
+	inline double round_to_step(double v, double minV, double step) {
+		if (step <= 0.0) return v;
+		return std::round((v - minV) / step) * step + minV;
+	}
+
+	// Thử tắt Auto nếu tham số liên quan đến Exposure/Gain (không fail toàn bộ nếu không hỗ trợ)
+	inline void try_disable_auto(CMvCamera* cam, const std::string& key) {
+		if (!cam) return;
+		auto contains = [&](const char* s) {
+			return key.find(s) != std::string::npos || key.find(std::string(s) + "Time") != std::string::npos;
+			};
+		// Exposure
+		if (contains("Exposure") || contains("ExposureTime")) {
+			// 0 = Off đối với enum ExposureAuto của HIK/MVS
+			cam->SetEnumValue("ExposureAuto", 0);
+		}
+		// Gain
+		if (contains("Gain")) {
+			cam->SetEnumValue("GainAuto", 0);
+		}
+	}
+	bool probe_float_increment(CMvCamera* cam, const string& key, double& incOut)
+	{
+		if (!cam) return false;
+
+		static const char* SUFFIXES[] = { "Increment", "Inc", "Step", "MinStep" };
+
+		// Thử đọc FLOAT node phụ
+		for (auto suf : SUFFIXES) {
+			string nid = key + suf;
+			MVCC_FLOATVALUE fv{};
+			if (cam->GetFloatValue(nid.c_str(), &fv) == MV_OK) {
+				// Tuỳ model: dùng fCurValue hoặc fMin tuỳ cách SDK công bố
+				double inc = (fv.fCurValue > 0) ? fv.fCurValue : fv.fMin;
+				if (inc > 0) { incOut = inc; return true; }
+			}
+		}
+		// Thử đọc INT node phụ (một số SDK công bố step dạng INT)
+		for (auto suf : SUFFIXES) {
+			string nid = key + suf;
+			MVCC_INTVALUE_EX iv{};
+			if (cam->GetIntValue(nid.c_str(), &iv) == MV_OK) {
+				long long inc = iv.nCurValue ? iv.nCurValue : iv.nInc;
+				if (inc > 0) { incOut = static_cast<double>(inc); return true; }
+			}
+		}
+		return false;
+	}
+	static int ClampI(int v, int lo, int hi)
+	{
+		return v < lo ? lo : (v > hi ? hi : v);
+	}
+}
+
+float CCD::SetPara(int indexCCD, System::String^ nameParaManaged, float valueIn)
+{
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr)
+		return -1.0f;
+	IsWaiting = true;
+
+	CMvCamera* cam = m_pcMyCamera[indexCCD];
+
+	std::string key = marshal_as<std::string>(nameParaManaged);
+
+	// Tự tắt chế độ Auto nếu có (không coi là lỗi nếu không hỗ trợ)
+	try_disable_auto(cam, key);
+
+	// Đảm bảo luôn StartGrabbing lại nhờ RAII
+	GrabPause guard(cam);
+
+	// 1) Thử như FLOAT trước
+	{
+		MVCC_FLOATVALUE fv{}; // min/max/inc dạng double
+		if (cam->GetFloatValue(key.c_str(), &fv) == MV_OK) {
+			double v = (double)valueIn;
+			// clamp min–max
+
+			v =ClampI(v, fv.fMin, fv.fMax);
+			// làm tròn theo step nếu có
+		//	v = round_to_step(v, fv.fMin, fv.fInc);
+
+			if (cam->SetFloatValue(key.c_str(), v) == MV_OK) {
+				// Đọc lại giá trị thực sự áp dụng (nếu muốn chính xác)
+				MVCC_FLOATVALUE fv2{};
+				if (cam->GetFloatValue(key.c_str(), &fv2) == MV_OK) {
+					IsWaiting = false;
+					return (float)fv2.fCurValue;
+				}
+				IsWaiting = false;
+				return (float)v;
+			}
+			// Nếu set float thất bại, đừng vội trả về — thử sang INT bên dưới
+		}
+	}
+
+	// 2) Thử như INT (một số node là integer như Width/Height/OffsetX/OffsetY/Exposure lines trên vài model)
+	{
+		MVCC_INTVALUE_EX iv{};
+		if (cam->GetIntValue(key.c_str(), &iv) == MV_OK) {
+			long long minV = (long long)iv.nMin;
+			long long maxV = (long long)iv.nMax;
+			long long inc = (long long)(iv.nInc > 0 ? iv.nInc : 1);
+
+			double v = ClampI((double)valueIn, (double)minV, (double)maxV);
+			// làm tròn theo step integer
+			long long steps = (long long)std::llround((v - minV) / inc);
+			long long vAdj = minV + steps * inc;
+			vAdj = ClampI(vAdj, minV, maxV);
+
+			if (cam->SetIntValue(key.c_str(), vAdj) == MV_OK) {
+				MVCC_INTVALUE_EX iv2{};
+				if (cam->GetIntValue(key.c_str(), &iv2) == MV_OK) {
+					IsWaiting = false;
+					return (float)iv2.nCurValue;
+				}
+				IsWaiting = false;
+				return (float)vAdj;
+			}
+		}
+	}
+
+	// 3) Không hỗ trợ hoặc set thất bại
+	std::cerr << "❌ Set parameter failed: " << key << std::endl;
+	IsWaiting = false;
+	return -1.0f;
+}
 
 
 void ReadImage()
@@ -264,38 +403,7 @@ std::string DeviceEnumerator::ConvertWCSToMBS(const wchar_t* pstr, long wslen)
 	return dblstr;
 }
 #pragma endregion
-//Pylon::String_t a="";
-//static const size_t c_maxCamerasToUse = 2;
-//DeviceInfoList_t devices;
-//System::String^ ScanBasler()
-//{
-//	
-//	PylonInitialize();
-//	// Get the transport layer factory.
-//	CTlFactory& tlFactory = CTlFactory::GetInstance();
-//
-//	// Get all attached devices and exit application if no device is found.
-//
-//	if (tlFactory.EnumerateDevices(devices) == 0)
-//	{
-//		return "";
-//	}
-//	CInstantCamera camera(CTlFactory::GetInstance().CreateFirstDevice());
-//	// Create an array of instant cameras for the found devices and avoid exceeding a maximum number of devices.
-//	//CInstantCameraArray cameras(min(devices.size(), c_maxCamerasToUse));
-//	std::string list1 = "";
-//	// Create and attach all Pylon Devices.
-//	for (size_t i = 0; i < devices.size(); ++i)
-//	{
-//		//cameras[i].Attach(tlFactory.CreateDevice(devices[i]));
-//		list1.append(devices[i].GetUserDefinedName()).append("$").append(devices[i].GetModelName()).append("$").append(devices[i].GetSerialNumber()).append("\n");
-//		// Print the model name of the camera.
-//		//cout << "Using device " << cameras[i].GetDeviceInfo().GetModelName() << endl;
-//	}
-//
-//	return gcnew  System::String(list1.c_str());;
-//	
-//}
+
 int TypeCCDPlus = 0;
 std::string wchar_to_string(const std::wstring& wstr) {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
@@ -527,303 +635,77 @@ System::String^ CCD::ScanCCD()
 	}
 	return nameCCD;
 }
-// static bool ConnectBasler(int rowCCD, int colCCD, int index)
-//{
-//	if (index == -1)return false;
-//	try
-//	{
-//		
-//		//PylonInitialize();
-//	
-//		CTlFactory& tlFactory = CTlFactory::GetInstance();
-//		if (devices[index].GetFullName() != "")// đã nhận dc tên ccd
-//		{
-//			try
-//			{
-//				baslerGigE.Attach(tlFactory.CreateDevice(devices[index]));//kt quyền điều khiển
-//				baslerGigE.Open();
-//				GenApi::CBooleanPtr ptrAutoPacketSize = baslerGigE.GetStreamGrabberNodeMap().GetNode("AutoPacketSize");
-//				if (GenApi::IsWritable(ptrAutoPacketSize))
-//				{
-//					ptrAutoPacketSize->SetValue(true);
-//				}
-//				baslerGigE.Width.SetValue(colCCD);
-//				baslerGigE.Height.SetValue(rowCCD);
-//				int with = (int)baslerGigE.Width.GetMax();
-//				int height = (int)baslerGigE.Height.GetMax();
-//				baslerGigE.CenterX =true;
-//				baslerGigE.CenterX =true;
-//				
-//				//baslerGigE.ExposureTimeAbs.SetValue(10000);
-//				//_minOffsetX = (int)camera.OffsetX.GetMin();
-//				//baslerGigE.OffsetX.SetValue(_xCenter);
-//				//baslerGigE.OffsetY.SetValue(_yCenter);
-//				//baslerGigE.ExposureTime.SetValue(_exporsure);
-//				//camera.Gamma.SetValue(3.05);
-//				//camera.BlackLevel.SetValue(0);
-//				//Lamp(true);
-//				//IO(true);
-//				//minExplosure = (int)camera.ExposureTimeRaw.GetMin();
-//				//maxGain = (double)camera.Gamma.GetMax()*100.0;
-//				//maxSetX = (int)camera.OffsetX.GetMax();
-//				//maxSetY = (int)camera.OffsetY.GetMax();
-//				//WriteParaCCD();//set thong so ccd
-//
-//				//	_StepExposure = (int)camera.ExposureTime.GetInc();
-//
-//				//_maxblack = (int)camera.BlackLevel.GetMax();
-//				//_minblack = (int)camera.BlackLevel.GetMin();
-//
-//				//_maxGain = (double)camera.Gain.GetMax();
-//				//_minGain = (double)camera.Gain.GetMin();
-//
-//				//_maxExposure = (double)camera.ExposureTime.GetMax();
-//				//_minExposure = (double)camera.ExposureTime.GetMin();
-//
-//				
-//				//_minOffsetY = (int)camera.OffsetY.GetMin();
-//				//_maxOffsetY = (int)camera.OffsetY.GetMax();
-//				//_maxWidth = (int)baslerGigE.Width.GetMax();
-//				//_minWidth = (int)camera.Width.GetMin();
-//
-//				//_maxHeight = (int)camera.Height.GetMax();
-//				//_minHeight = (int)camera.Height.GetMin();
-//				////_StepGamma =(int) camera.Gamma.GetInc();
-//				//_StepWidth = (int)camera.Width.GetInc();
-//				//_StepHeight = (int)camera.Height.GetInc();
-//
-//				//_StepOffsetX = (int)camera.OffsetX.GetInc();
-//				//_StepOffsetY = (int)camera.OffsetY.GetInc();
-//				baslerGigE.StartGrabbing();//Tao luong Doc anh
-//
-//				fc.OutputPixelFormat = PixelType_Mono8;
-//
-//				baslerGigE.RetrieveResult(-1, ptrGrabResult, TimeoutHandling_ThrowException);//Lay Data Camera SAU KHOẢNG THỜI GIAN SẼ THOÁT RA ,(NẾU GIÁ TRỊ BẰNG -1 KHÔNG THOÁT RA)
-//				if (ptrGrabResult->GrabSucceeded())
-//				{
-//					fc.Convert(image, ptrGrabResult);///Chuyen gia tri ma camera qua anh thu viện Pylon Balser
-//					matRaw = cv::Mat(ptrGrabResult->GetHeight(), ptrGrabResult->GetWidth(), CV_8UC1, (uint8_t*)image.GetBuffer(), Mat::AUTO_STEP);///convert anh thu vien pylon thanh Mat			
-//					
-//					
-//
-//				}
-//				ptrGrabResult.Release();//Xoa data
-//				baslerGigE.StopGrabbing();
-//				return true;
-//				//	
-//
-//
-//			}
-//			catch (GenICam::GenericException& e)
-//			{
-//
-//
-//				baslerGigE.StopGrabbing();
-//				baslerGigE.Close();
-//				baslerGigE.DetachDevice();
-//
-//				//PylonTerminate();
-//			}
-//		}
-//	}
-//	catch (GenICam::GenericException& e)
-//	{
-//
-//		baslerGigE.StopGrabbing();
-//		baslerGigE.Close();
-//		baslerGigE.DetachDevice();
-//		PylonTerminate();
-//	}
-//	return false;
-//}
+
 int CCD::GetTypeCCD(int indexCCD)
 {
 	return listTypeCCD[indexCCD];
 }
-float	CCD::SetPara( int indexCCD, System::String^ Namepara, float Value)
+
+bool CCD::GetPara(
+	int indexCCD,
+	System::String^ namePara,
+	float% minVal,
+	float% maxVal,
+	float% stepVal,
+	float% currentVal
+	
+)
 {
-	if (m_pcMyCamera[indexCCD] == nullptr)
-		return -1;
-	IsSetPara = true;
-
-	m_pcMyCamera[indexCCD]->StopGrabbing();
-	//TypeCCD = listTypeCCD[indexCCD];
-	std::string namepara = marshal_as<std::string>(Namepara);
-	MVCC_INTVALUE_EX expInfo = {};
-	if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
-	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();
-		std::cerr << "❌ Không đọc được thông tin ExposureTime" << std::endl;
-		IsSetPara = false;
-		return -1;
-	}
-
-	float minVal = expInfo.nMin;
-	float maxVal = expInfo.nMax;
-	float step = expInfo.nInc > 0 ? expInfo.nInc : 1.0f;  // tránh step = 0
-
-	// Clamp về khoảng hợp lệ
-	Value = std::max(minVal, std::min(maxVal, Value));
-
-	// Làm tròn theo step
-	float adjustedExposure = std::round((Value - minVal) / step) * step + minVal;
-
-	// Set giá trị
-	if (m_pcMyCamera[indexCCD]->SetIntValue(namepara.c_str(), (int)adjustedExposure) == MV_OK)
-	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
-		return Value;
-	}
-	else
-	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
-		std::cerr << "❌ Set ExposureTime thất bại!" << std::endl;
-		return -1;
-		
-	}
-	m_pcMyCamera[indexCCD]->StartGrabbing();	IsSetPara = false;
-	return -1;
-	/*int nRet = MV_CC_SetFloatValue(m_pcMyCamera[indexCCD], namepara.c_str(), Value);
-	if (MV_OK != nRet)
-		return false;
-	else
-		return true;
-
-	return false;*/
-}
-float	CCD::SetParaFloat(int indexCCD, System::String^ Namepara, float Value)
-{
-	if (m_pcMyCamera[indexCCD] == nullptr)
-		return -1;
-
-	std::string namepara = marshal_as<std::string>(Namepara);
-	m_pcMyCamera[indexCCD]->StopGrabbing();
+	// Mặc định
+	minVal = maxVal = stepVal = currentVal = 0.0f;
 	
 
-	// Set giá trị
-	if (m_pcMyCamera[indexCCD]->SetFloatValue(namepara.c_str(), Value) == MV_OK)
-	{
-		m_pcMyCamera[indexCCD]->StartGrabbing();
-		return Value;
-	}
-	else
-	{
-		MVCC_INTVALUE_EX expInfo = {};
-		if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
-		{
-			m_pcMyCamera[indexCCD]->StartGrabbing();
-			std::cerr << "❌ Set Para thất bại!" << std::endl;
-			return -1;
-		}
-
-		float minVal = expInfo.nMin;
-		float maxVal = expInfo.nMax;
-		float step = expInfo.nInc > 0 ? expInfo.nInc : 1.0f;  // tránh step = 0
-
-		// Clamp về khoảng hợp lệ
-		Value = std::max(minVal, std::min(maxVal, Value));
-
-		// Làm tròn theo step
-		float adjustedExposure = std::round((Value - minVal) / step) * step + minVal;
-
-		// Set giá trị
-		if (m_pcMyCamera[indexCCD]->SetIntValue(namepara.c_str(), (int)adjustedExposure) == MV_OK)
-		{
-			m_pcMyCamera[indexCCD]->StartGrabbing();
-			return Value;
-		}
-		else
-		{
-			m_pcMyCamera[indexCCD]->StartGrabbing();
-			std::cerr << "❌ Set Para thất bại!" << std::endl;
-			return -1;
-			
-		}
-		
-	}
-	//m_pcMyCamera[indexCCD]->StartGrabbing();
-	return -1;
-	/*int nRet = MV_CC_SetFloatValue(m_pcMyCamera[indexCCD], namepara.c_str(), Value);
-	if (MV_OK != nRet)
-		return false;
-	else
-		return true;
-
-	return false;*/
-}
-bool	CCD::GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current)
-{
-
-	std::string namepara = marshal_as<std::string>(Namepara);
-	float value = -1;
-	MVCC_FLOATVALUE expInfo = {};
-	if (m_pcMyCamera[indexCCD]->GetFloatValue(namepara.c_str(), &expInfo) != MV_OK)
-	{
-		
-		
-		MVCC_INTVALUE_EX expInfo = {};
-		if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
-		{
-
-			std::cerr << "❌ Không đọc được thông tin Para" << std::endl;
-			return false;
-		}
-		else
-		{
-			current = expInfo.nCurValue;
-			step = expInfo.nInc;
-			min = expInfo.nMin;
-			max = expInfo.nMax;
-		}
-		
-		return true;
-	}
-	else
-	{
-		current = expInfo.fCurValue;
-		step = 1;
-		min = expInfo.fMin;
-		max = expInfo.fMax;
-	}
-
-	/*if (m_pcMyCamera[indexCCD] == nullptr)
-		return -1;
-	MVCC_ENUMVALUE enumVal = {};
-	if (m_pcMyCamera[indexCCD]->GetEnumValue(namepara.c_str(), &enumVal) == MV_OK)
-	{
-		value = static_cast<double>(enumVal.nCurValue);
-	}*/
-	return true;
-}
-
-bool	CCD::GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step, float% current)
-{
-	
-		std::string namepara = marshal_as<std::string>(Namepara);
-	float value = -1;
-	MVCC_INTVALUE_EX expInfo = {};
-	if (m_pcMyCamera[indexCCD]->GetIntValue(namepara.c_str(), &expInfo) != MV_OK)
-	{
-		
-		std::cerr << "❌ Không đọc được thông tin ExposureTime" << std::endl;
+	if (indexCCD < 0 || indexCCD >= (int)m_pcMyCamera.size() || m_pcMyCamera[indexCCD] == nullptr) {
+		std::cerr << "❌ Camera index invalid/null" << std::endl;
 		return false;
 	}
-	else
-	{
-		current =expInfo.nCurValue;
-		step = expInfo.nInc;
-		min = expInfo.nMin;
-		max = expInfo.nMax;
-	}	
+	IsWaiting = true;
+	using msclr::interop::marshal_as;
+	string key = marshal_as<string>(namePara);
+	CMvCamera* cam = m_pcMyCamera[indexCCD];
 
-	/*if (m_pcMyCamera[indexCCD] == nullptr)
-		return -1;
-	MVCC_ENUMVALUE enumVal = {};
-	if (m_pcMyCamera[indexCCD]->GetEnumValue(namepara.c_str(), &enumVal) == MV_OK)
+	// 1) Thử FLOAT trước
 	{
-		value = static_cast<double>(enumVal.nCurValue);	
-	}*/
-	return true;
+		MVCC_FLOATVALUE fv{};
+		if (cam->GetFloatValue(key.c_str(), &fv) == MV_OK) {
+			minVal = static_cast<float>(fv.fMin);
+			maxVal = static_cast<float>(fv.fMax);
+			currentVal = static_cast<float>(fv.fCurValue);
+
+			// Cố gắng dò step; nếu không có → để 0 (UI tuỳ chọn xử lý: free slider / nhập tự do)
+			double inc = 0.0;
+			if (probe_float_increment(cam, key, inc)) {
+				stepVal = static_cast<float>(inc);
+			}
+			else {
+				stepVal = 0.0f; // không công bố step cho FLOAT
+			}
+			IsWaiting = false;
+			//typeName = "Float";
+			return true;
+		}
+	}
+
+	// 2) Nếu không phải FLOAT, thử INT
+	{
+		MVCC_INTVALUE_EX iv{};
+		if (cam->GetIntValue(key.c_str(), &iv) == MV_OK) {
+			minVal = static_cast<float>(iv.nMin);
+			maxVal = static_cast<float>(iv.nMax);
+			currentVal = static_cast<float>(iv.nCurValue);
+
+			// nInc có thể =0 ở vài node; chuẩn hoá về >=1
+			long long inc = (iv.nInc > 0 ? iv.nInc : 1);
+			stepVal = static_cast<float>(inc);
+			IsWaiting = false;
+			//typeName = "Int";
+			return true;
+		}
+	}
+	IsWaiting = false;
+	// 3) Không đọc được
+	std::cerr << "❌ Không đọc được thông tin tham số: " << key << std::endl;
+	return false;
 }
 void CCD::SetFocus(int Focus)
 {
@@ -849,7 +731,8 @@ int CCD::GetExposure()
 {
 	return	camUSB.get(CAP_PROP_EXPOSURE);
 
-}void CCD::SetExposure(int Value)
+}
+void CCD::SetExposure(int Value)
 {
 	camUSB.set(CAP_PROP_AUTO_EXPOSURE, 0);
 	camUSB.set(CAP_PROP_EXPOSURE, Value);
@@ -1061,11 +944,7 @@ bool ConnectHik( int index,int indexCCD)
 {
 
 	int nRet = 0;
-	if ((index < 0) | (index >= MV_MAX_DEVICE_NUM))
-	{
-		
-		return false;
-	}
+	
 
 	// ch:由设备信息创建设备实例 | en:Device instance created by device information
 	if (NULL == m_stDevList.pDeviceInfo[index])
@@ -1100,13 +979,13 @@ bool ConnectHik( int index,int indexCCD)
 				if (nRet != MV_OK)
 				{
 					return false;
-					//ShowErrorMsg(TEXT("Warning: Set Packet Size fail!"), nRet);
+					
 				}
 			}
 			else
 			{
 				return false;
-				//ShowErrorMsg(TEXT("Warning: Get Packet Size fail!"), nRet);
+				
 			}
 		}
 
@@ -1126,32 +1005,14 @@ bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 	{
 		int index = FindCameraIndexByUserName(m_stDevList, nameCCD);
 		IsConnect = ConnectHik(index, indexCCD);
-		/*try
-		{
-
-			StepExposure = (int)baslerGigE.ExposureTimeRaw.GetInc();
-			MinExposure = (int)baslerGigE.ExposureTimeRaw.GetMin();
-			MaxExposure = (int)baslerGigE.ExposureTimeRaw.GetMax();
-			Exposure = (int)baslerGigE.ExposureTimeRaw.GetValue();
-		}
-		catch (exception ex)
-		{
-
-		}*/
+	
 		break;
 	}
 
 	case 0:
 	{
-		//*nt it = 0 std::find(listCCCD.begin(), listCCCD.end(), nameCCD);*/
-
-		/*if (it != listCCCD.end()) {
-			int index = std::distance(listCCCD.begin(), it);*/
+		
 			IsConnect = ConnectUsb(indexCCD);
-	/*	}
-		else {
-			IsConnect = true;
-		}*/
 
 		break;
 	}
@@ -1159,12 +1020,192 @@ bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 
 	return IsConnect;
 }
-auto lastTime = std::chrono::high_resolution_clock::now();
-int frameCount = 0;
-double fps = 0.0;
+
 std::chrono::duration<double> elapsed;
 
 int FormatCCD=0;
+// ====== timing (tuỳ chọn) ======
+static auto lastTime = std::chrono::high_resolution_clock::now();
+static int frameCount = 0;
+static double fps = 0.0;
+//
+//static inline void EnsureSize(cv::Mat& img, int w, int h, int type) {
+//	if (img.empty() || img.cols != w || img.rows != h || img.type() != type)
+//		img.create(h, w, type);
+//}
+//
+//static inline bool ConvertBySDKEx(CMvCamera* camera,
+//	const MV_FRAME_OUT& out,
+//	cv::Mat& dstBGR)
+//{
+//	const unsigned w = out.stFrameInfo.nWidth;
+//	const unsigned h = out.stFrameInfo.nHeight;
+//
+//	EnsureSize(dstBGR, (int)w, (int)h, CV_8UC3);
+//
+//	MV_CC_PIXEL_CONVERT_PARAM_EX prm{};
+//	prm.nWidth = w;
+//	prm.nHeight = h;
+//	prm.enSrcPixelType = (MvGvspPixelType)out.stFrameInfo.enPixelType;
+//	prm.pSrcData = (unsigned char*)out.pBufAddr;
+//	prm.nSrcDataLen = out.stFrameInfo.nFrameLen;
+//	prm.enDstPixelType = PixelType_Gvsp_BGR8_Packed;
+//	prm.pDstBuffer = dstBGR.data;
+//	prm.nDstBufferSize = (unsigned)dstBGR.total() * (unsigned)dstBGR.elemSize();
+//	prm.nDstLen = 0;
+//
+//	int ret = camera->ConvertPixelType(&prm);
+//	if (ret != MV_OK) {
+//		std::cerr << "ConvertPixelTypeEx failed: " << ret
+//			<< " (srcPix=0x" << std::hex << out.stFrameInfo.enPixelType << std::dec << ")\n";
+//		return false;
+//	}
+//	return true;
+//}
+//
+//// (Tuỳ chọn) zero-copy cho BGR8: chỉ dùng trong scope hiện tại
+//struct BorrowedFrame {
+//	cv::Mat view; // KHÔNG sở hữu bộ nhớ
+//	struct Guard {
+//		CMvCamera* cam{ nullptr };
+//		MV_FRAME_OUT* out{ nullptr };
+//		~Guard() { if (cam && out) cam->FreeImageBuffer(out); }
+//	} guard;
+//};
+//
+//static inline bool CaptureFrameView_Borrowed(CMvCamera* camera,
+//	BorrowedFrame& bf,
+//	int timeoutMs = 1000)
+//{
+//	MV_FRAME_OUT out{};
+//	int ret = camera->GetImageBuffer(&out, timeoutMs);
+//	if (ret != MV_OK) return false;
+//
+//	const auto& info = out.stFrameInfo;
+//	if (!out.pBufAddr || info.nWidth == 0 || info.nHeight == 0) {
+//		camera->FreeImageBuffer(&out);
+//		return false;
+//	}
+//	if (info.enPixelType != PixelType_Gvsp_BGR8_Packed) {
+//		camera->FreeImageBuffer(&out);
+//		return false;
+//	}
+//
+//	size_t step = (size_t)info.nWidth * 3;
+//#ifdef MV_FRAME_OUT_INFO_EX_HAS_STRIDE
+//	if (info.nStride) step = info.nStride;
+//#endif
+//
+//	bf.guard.cam = camera;
+//	bf.guard.out = &out;
+//	bf.view = cv::Mat((int)info.nHeight, (int)info.nWidth, CV_8UC3, out.pBufAddr, step);
+//	return true;
+//}
+
+// Chính: lấy frame ra Mat BGR (an toàn, sở hữu bộ nhớ)
+//bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
+//{
+//	
+//	MV_FRAME_OUT out{};
+//	int ret = camera->GetImageBuffer(&out, timeoutMs);
+//	if (ret != MV_OK) return false;
+//
+//	struct Guard {
+//		CMvCamera* cam; MV_FRAME_OUT* o;
+//		~Guard() { if (cam && o) cam->FreeImageBuffer(o); }
+//	} guard{ camera, &out };
+//
+//	const auto& info = out.stFrameInfo;
+//	const unsigned w = info.nWidth;
+//	const unsigned h = info.nHeight;
+//	const unsigned px = info.enPixelType;
+//	unsigned char* p = static_cast<unsigned char*>(out.pBufAddr);
+//	if (!p || w == 0 || h == 0) return false;
+//
+//	size_t step = 0;
+//#ifdef MV_FRAME_OUT_INFO_EX_HAS_STRIDE
+//	step = info.nStride; // nếu SDK có nStride thì dùng
+//#endif
+//
+//	switch (px)
+//	{
+//	case PixelType_Gvsp_BGR8_Packed:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		if (step && step != (size_t)w * 3) {
+//			cv::Mat view((int)h, (int)w, CV_8UC3, p, step);
+//			view.copyTo(imageBGR);
+//		}
+//		else {
+//			cv::Mat view((int)h, (int)w, CV_8UC3, p);
+//			view.copyTo(imageBGR);
+//		}
+//		break;
+//	}
+//
+//	case PixelType_Gvsp_RGB8_Packed:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat rgb((int)h, (int)w, CV_8UC3, p, step ? step : (size_t)w * 3);
+//		const int fromTo[6] = { 2,0, 1,1, 0,2 }; // R,G,B -> B,G,R
+//		cv::mixChannels(&rgb, 1, &imageBGR, 1, fromTo, 3);
+//		break;
+//	}
+//
+//	case PixelType_Gvsp_Mono8:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat mono((int)h, (int)w, CV_8UC1, p, step ? step : (size_t)w);
+//		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
+//		break;
+//	}
+//
+//	// ===== Bayer 8-bit (OpenCV demosaic ra BGR) =====
+//	case PixelType_Gvsp_BayerBG8:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw((int)h, (int)w, CV_8UC1, p, step ? step : (size_t)w);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR); // chuẩn BGR
+//		break;
+//	}
+//	case PixelType_Gvsp_BayerGB8:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw((int)h, (int)w, CV_8UC1, p, step ? step : (size_t)w);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
+//		break;
+//	}
+//	case PixelType_Gvsp_BayerRG8:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw((int)h, (int)w, CV_8UC1, p, step ? step : (size_t)w);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
+//		break;
+//	}
+//	case PixelType_Gvsp_BayerGR8:
+//	{
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw((int)h, (int)w, CV_8UC1, p, step ? step : (size_t)w);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
+//		break;
+//	}
+//
+//	default:
+//		if (!ConvertBySDKEx(camera, out, imageBGR)) return false;
+//		break;
+//	}
+//
+//	// ===== đếm FPS (tuỳ chọn) =====
+//	if (++frameCount >= 30) {
+//		auto now = std::chrono::high_resolution_clock::now();
+//		std::chrono::duration<double> dt = now - lastTime;
+//		fps = frameCount / dt.count();
+//		frameCount = 0;
+//		lastTime = now;
+//		// std::cout << "FPS: " << fps << "\n";
+//	}
+//	return true;
+//}
 static inline void EnsureSize(cv::Mat& img, int w, int h, int type) {
 	if (img.empty() || img.cols != w || img.rows != h || img.type() != type)
 		img.create(h, w, type);
@@ -1368,6 +1409,10 @@ uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 	switch (TypeCamera)
 	{
 	case 1: { // Camera SDK
+		if (IsWaiting)
+		{
+			return nullptr;
+		}
 		if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
 			//DeviceReset(m_pcMyCamera[indexCCD]);
 			*rows = *cols = *Type = 0;

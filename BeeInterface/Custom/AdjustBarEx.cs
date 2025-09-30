@@ -272,6 +272,7 @@ namespace BeeInterface
             MouseMove += AdjustBarEx_MouseMove;
             MouseUp += AdjustBarEx_MouseUp;
             MouseWheel += AdjustBarEx_MouseWheel;
+           
             KeyDown += AdjustBarEx_KeyDown;
             MouseLeave += (s, e) => { TryHideTextboxOnLeave(); };
 
@@ -286,6 +287,8 @@ namespace BeeInterface
             _isInit = true;
             LayoutChildren();
         }
+
+    
 
         protected override void Dispose(bool disposing)
         {
@@ -374,6 +377,7 @@ namespace BeeInterface
         }
         private void TryHideTextboxOnLeave()
         {
+            if (_dragging) { _dragging = false; Capture = false; }
             if (InDesigner()) return;
             if (!AutoShowTextbox) return;
             if (_tb.Focused) return;

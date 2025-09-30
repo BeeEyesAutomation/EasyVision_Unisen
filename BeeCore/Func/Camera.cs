@@ -407,7 +407,7 @@ namespace BeeCore
                             TypeCCD = -1;
 
                     }
-                    if (CCDPlus.Connect(IndexConnect, NameCCD))
+                    if (CCDPlus.Connect(IndexCCD, NameCCD))
                     {
                         if (matRaw != null)
                             if (!matRaw.Empty())
@@ -510,7 +510,7 @@ namespace BeeCore
                 {
                     CCDPlus.SetWidth((int)Para.Width.Value);
                     CCDPlus.SetHeight((int)Para.Height.Value);
-                    await Task.Delay(100);
+                    await TimingUtils.DelayAccurateAsync(100);
                     CCDPlus.SetFocus((int)Para.Focus);
                     CCDPlus.SetZoom((int)Para.Zoom);
                     CCDPlus.SetExposure(-(int)Para.Exposure.Value);
@@ -567,14 +567,15 @@ namespace BeeCore
 
         public int TypeCCD = -1;
         public String Err = "";
+        public bool IsSetPara = false;
         public async Task<  bool> SetExpo()
         {
             try
             {
 
-                Global.IsSetPara = true;
+                IsSetPara = true;
 
-
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -590,7 +591,7 @@ namespace BeeCore
                                
                                 break;
                              case 1://Hik
-                                Para.Exposure.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "ExposureTime", Para.Exposure.Value), cancel.Token);
+                                Para.Exposure.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "ExposureTime", Para.Exposure.Value), cancel.Token);
                                 break;
                         }
                            
@@ -606,7 +607,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+            IsSetPara = false;
             return true;
         }
    
@@ -632,7 +633,7 @@ namespace BeeCore
                                
                                 break;
                             case 1://Hik
-                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "ExposureTime", ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value), cancel.Token);
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "ExposureTime", ref Para.Exposure.Min, ref Para.Exposure.Max, ref Para.Exposure.Step, ref Para.Exposure.Value), cancel.Token);
 
                                 break;
                         }
@@ -659,7 +660,8 @@ namespace BeeCore
             try
             {
 
-                Global.IsSetPara = true;
+                IsSetPara = true;
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -674,7 +676,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-                                Para.Gain.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "Gain", Para.Gain.Value), cancel.Token);
+                                Para.Gain.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "Gain", Para.Gain.Value), cancel.Token);
 
                                 break;
                         }
@@ -689,7 +691,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+            IsSetPara = false;
             return true;
         }
         [NonSerialized]
@@ -699,7 +701,8 @@ namespace BeeCore
             try
             {
 
-                Global.IsSetPara = true;
+               IsSetPara = true;
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -714,7 +717,7 @@ namespace BeeCore
                               //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
                                 break;
                             case 1://Hik
-                                Para.Shift.Value = await Task.Run(() => CCDPlus.SetParaFloat(IndexCCD, "DigitalShift", Para.Shift.Value), cancel.Token);
+                                Para.Shift.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value), cancel.Token);
                                 break;
                         }
                         break;
@@ -728,7 +731,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+           IsSetPara = false;
             return true;
         }
         public async Task< bool> GetShift()
@@ -751,7 +754,7 @@ namespace BeeCore
 
                                 break;
                             case 1://Hik
-                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value), cancel.Token);
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "DigitalShift", ref Para.Shift.Min, ref Para.Shift.Max, ref Para.Shift.Step, ref Para.Shift.Value), cancel.Token);
 
                                 break;
                         }
@@ -787,8 +790,9 @@ namespace BeeCore
         {
             try
             {
-
-                Global.IsSetPara = true;
+               
+                IsSetPara = true;
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -821,7 +825,9 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+           
+            
+           IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetWidth()
@@ -869,9 +875,9 @@ namespace BeeCore
         {
             try
             {
-                Global.IsSetPara = true;
+               IsSetPara = true;
 
-
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -900,7 +906,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+           IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetHeight()
@@ -949,7 +955,8 @@ namespace BeeCore
         {
             try
             {
-                Global.IsSetPara = true;
+                IsSetPara = true;
+                await TimingUtils.DelayAccurateAsync(5);
 
                 switch (Para.TypeCamera)
                 {
@@ -958,8 +965,11 @@ namespace BeeCore
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
+                        CCDPlus.IsWaiting = true;
+                       
                         switch (TypeCCD)
-                        {
+                        {               
+                      
                             case 0://Basler
                                 Para.OffSetX.Value = await Task.Run(() => CCDPlus.SetPara(IndexCCD, "OffsetX", Para.OffSetX.Value), cancel.Token);
                                 //  Para.Shift.Value = CCDPlus.SetPara(IndexCCD, "DigitalShift", Para.Shift.Value);
@@ -979,13 +989,15 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+           
+            IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetOffSetX()
         {
             try
             {
+               
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -1004,16 +1016,11 @@ namespace BeeCore
                                 return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "OffsetX", ref Para.OffSetX.Min, ref Para.OffSetX.Max, ref Para.OffSetX.Step, ref Para.OffSetX.Value), cancel.Token);
                                 break;
                         }
-
+                      
                         return true;
-                        //if (value > 1000)
-                        //{
-                        //    CCDPlus.Exposure = value; CCDPlus.SetPara();
-                        //}
+                      
                         break;
-                        //case TypeCamera.TinyIV:
-                        //    return Convert.ToInt32(HEROJE.GetExposure());
-                        //    break;
+                       
                 }
             }
             catch (Exception ex)
@@ -1021,6 +1028,7 @@ namespace BeeCore
 
                 return false;
             }
+          
             return false;
         }
 
@@ -1028,8 +1036,8 @@ namespace BeeCore
         {
             try
             {
-                Global.IsSetPara = true;
-
+               IsSetPara = true;
+                await TimingUtils.DelayAccurateAsync(5);
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.Pylon:
@@ -1037,6 +1045,8 @@ namespace BeeCore
                         break;
                     case TypeCamera.MVS:
                         cancel = new CancellationTokenSource(2000);
+                        CCDPlus.IsWaiting = true;
+                       
                         switch (TypeCCD)
                         {
                             case 0://Basler
@@ -1058,7 +1068,7 @@ namespace BeeCore
                 Err += ex.Message;
                 return false;// ex.Message;
             }
-            Global.IsSetPara = false;
+           IsSetPara = false;
             return true;// Result.Success.ToString();
         }
         public async Task<bool> GetOffSetY()
@@ -1256,7 +1266,7 @@ namespace BeeCore
                                 return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "GainRaw", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
                                 break;
                             case 1://Hik
-                                return await Task.Run(() => CCDPlus.GetParaFloat(IndexCCD, "Gain", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
+                                return await Task.Run(() => CCDPlus.GetPara(IndexCCD, "Gain", ref Para.Gain.Min, ref Para.Gain.Max, ref Para.Gain.Step, ref Para.Gain.Value), cancel.Token);
                                 break;
                         }
                         
@@ -1278,11 +1288,16 @@ namespace BeeCore
             }
             return false;
         }
+        //public Size Size;
         public  System.Drawing.Size GetSzCCD()
         {
-            if (matRaw == null) return new System.Drawing.Size();
-                if (matRaw.Empty()) return new System.Drawing.Size();
-            return new System.Drawing.Size(matRaw.Width,matRaw.Height);
+            using(var raw = matRaw.Clone())
+            {
+                if (raw == null) return new System.Drawing.Size();
+                if (raw.Empty()) return new System.Drawing.Size();
+                return new System.Drawing.Size(raw.Width, raw.Height);
+            }    
+           
 
         }
         public void SetFormat()
@@ -1429,7 +1444,8 @@ namespace BeeCore
         public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
         {
 
-
+            if (IsSetPara)
+                return true;
 
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0;
@@ -1437,16 +1453,17 @@ namespace BeeCore
 
             try
             {
-                if (Global.IsSetPara)
-                    return true;
+               
                 switch (Para.TypeCamera)
                 {
                     case TypeCamera.MVS:
                         intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                       
                         FrameRate = CCDPlus.FPS;
                         break;
                     case TypeCamera.USB:
                         intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
+                        
                         FrameRate = CCDPlus.FPS;
                         break;
                     case TypeCamera.Pylon:
@@ -1530,13 +1547,16 @@ namespace BeeCore
         }
         public int numTry = 0;
         bool IsReadCCD = false;
+        public bool IsMouseDown = false;
        
         public   bool Read()
         {
-       if(Global.IsSetPara)
+         
+            if (IsSetPara)
+              return false;
+            if (IsMouseDown)
                 return false;
-           
-             if (!TryGrabFast_NoStride(ref matRaw))
+                if (!TryGrabFast_NoStride(ref matRaw))
                 {
                 
                     numTry++;
@@ -1544,6 +1564,7 @@ namespace BeeCore
                
                 if (numTry >= 5)
                 {
+                    numTry = 0;
                     Global.CameraStatus = CameraStatus.ErrorConnect;
                     return true;
 
@@ -1562,10 +1583,7 @@ namespace BeeCore
          
         }
 
-        private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         private Native Native = new Native();
         public  void Light(int TypeLight, bool IsOn)

@@ -43,7 +43,8 @@ namespace CvPlus {
 	public: int numERR = 0;
 	public: int TypeCamera = 0;
 	public: bool  IsErrCCD = false;
-	public: bool  IsSetPara= false;
+	
+	public: bool  IsWaiting = false;
 	//public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;
 	public:uchar* ReadCCD(int indexCCD,  int* rows, int* cols, int* Type);
@@ -51,9 +52,9 @@ namespace CvPlus {
 	public:System::String^ ScanCCD();
 	public:bool	Connect( int indeCCD, System::String^ NameCCD);
 	public:float SetPara(int indexCCD, System::String^ Namepara, float Value);
-	public:float SetParaFloat(int indexCCD, System::String^ Namepara, float Value);
+
 	public:bool GetPara(int indexCCD, System::String^ Namepara, float% min,  float% max,  float% step,  float% current);
-	public:bool GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current);
+	//public:bool GetParaFloat(int indexCCD, System::String^ Namepara, float% min, float% max, float% step, float% current);
 	public:int GetTypeCCD(int indexCCD);
 	public:void	DestroyAll(int indexCCD,int TypeCamera);
 	public:void	ShowSetting();

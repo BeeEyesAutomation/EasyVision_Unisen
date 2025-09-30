@@ -568,12 +568,7 @@ txtQrCode.Focus();
                     Global.CameraStatus = CameraStatus.Ready;
                 }    
             }
-            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-            {if (Global.CameraStatus == CameraStatus.Ready)
-                
-                await BeeCore.Common.listCamera[Global.IndexChoose].SetFullPara();
-            }
-          
+           
             if ( G.listProgram!=null)
 
             G.listProgram.Visible = false;

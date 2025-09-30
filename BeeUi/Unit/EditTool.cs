@@ -55,7 +55,13 @@ namespace BeeUi
 		{
             BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
 			View.btnLive.Enabled = !Global.IsRun;
-            switch(Global.Config.Users)
+        
+            Global.ToolSettings.btnAdd.Enabled = !Global.IsRun;
+            Global.ToolSettings.btnCopy.Enabled = !Global.IsRun;
+            Global.ToolSettings.btnDelect.Enabled = !Global.IsRun;
+            Global.ToolSettings.btnEnEdit.Enabled = Global.IsRun;
+            Global.ToolSettings.btnRename.Enabled = !Global.IsRun;
+            switch (Global.Config.Users)
             {
                 case Users.Admin:
 					G.StatusDashboard.btnReset.Enabled = true;
@@ -104,9 +110,15 @@ namespace BeeUi
 			{
 				Global.EditTool.View.btnCap.Enabled = false;
 				Global.EditTool.View.btnContinuous.Enabled = false;
-			}
+            }
+            else
+            {
+                Global.EditTool.View.btnCap.Enabled = Global.IsRun;
+                Global.EditTool.View.btnContinuous.Enabled = Global.IsRun;
+            }    
+          
 
-			Global.EditTool.BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
+                Global.EditTool.BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
 		}
 		void EnableDoubleBuffer(Control c)
         {
@@ -124,13 +136,14 @@ namespace BeeUi
         {
             try
             {
+            
                 if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
                 {
                     BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
                     Global.ScanCCD.ShowDialog();
                     return;
                 }
-                View.pMenu.Visible = true;
+              
                 Global.IndexToolSelected = -1;
                 if(Global.EditTool.View.btnLive.IsCLick)
                 {
@@ -143,12 +156,13 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                        View.pMenu.Visible = false;
                         Global.IsAllowReadPLC = true;
                         ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
                         Global.EditTool.View.btnLive.Enabled = false;
                         BarRight.Visible = true;
                         pHeader.Visible = true;
-                        Global.IsRun = true;
+                        Global.IsRun = true; Acccess(Global.IsRun);
                         G.Header.btnMode.Text = "Run";
                         G.Header.btnMode.IsCLick = false;
                         pName.Visible = false;
@@ -182,11 +196,13 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
+                        View.pMenu.Visible = true;
                         Global.IsAllowReadPLC = false;
-                        Global.EditTool.View.btnLive.Enabled = true;
+                       
                         pHeader.Visible = false;
                         BarRight.Visible = false;
-                        Global.IsRun = false;
+                        Global.IsRun = false; Acccess(Global.IsRun);
+                        Global.EditTool.View.btnLive.Enabled = true;
                         G.Header.btnMode.Text = "Edit";
                         G.Header.btnMode.IsCLick = true;
                    
@@ -348,28 +364,8 @@ namespace BeeUi
 
                 //}
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
-
-                if (!Global.IsRun)
-                {
-                    Global.ToolSettings.btnAdd.Enabled = true;
-                    Global.ToolSettings.btnCopy.Enabled = true;
-                    Global.ToolSettings.btnDelect.Enabled = true;
-                    Global.ToolSettings.btnEnEdit.Enabled = false;
-                    Global.ToolSettings.btnRename.Enabled = true; 
-                    Global.EditTool.View.btnCap.Enabled = false;
-                    Global.EditTool.View.btnContinuous.Enabled = false;
-                }
-                else
-                {
-                    Global.EditTool.View.btnCap.Enabled = true;
-                    Global.EditTool.View.btnContinuous.Enabled = true;
-                    Global.ToolSettings.btnAdd.Enabled = false;
-                    Global.ToolSettings.btnCopy.Enabled = false;
-                    Global.ToolSettings.btnDelect.Enabled = false;
-                    Global.ToolSettings.btnEnEdit.Enabled = true;
-                    Global.ToolSettings.btnRename.Enabled = false;
-                    Global.EditTool.View.btnTypeTrig.Enabled = Global.IsRun;
-                }
+         
+               
             }
             
             catch (Exception ex)

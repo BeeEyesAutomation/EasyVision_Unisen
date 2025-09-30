@@ -64,6 +64,7 @@ namespace BeeInterface
             this.tableLayoutPanel21 = new BeeInterface.TableLayoutPanel2();
             this.btnFocus = new BeeInterface.RJButton();
             this.AdjFocus = new BeeInterface.AdjustBarEx();
+            this.lbErr = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnNextStep = new BeeInterface.RJButton();
@@ -94,7 +95,6 @@ namespace BeeInterface
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tmShowPara = new System.Windows.Forms.Timer(this.components);
-            this.lbErr = new System.Windows.Forms.Label();
             this.tableLayout1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -632,6 +632,8 @@ namespace BeeInterface
             this.AdjOffSetY.Value = 1F;
             this.AdjOffSetY.WheelStep = 1F;
             this.AdjOffSetY.ValueChanged += new System.Action<float>(this.AdjOffSetY_ValueChanged);
+            this.AdjOffSetY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjOffSetY_MouseDown);
+            this.AdjOffSetY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AdjOffSetY_MouseUp);
             // 
             // AdjOffsetX
             // 
@@ -697,6 +699,8 @@ namespace BeeInterface
             this.AdjOffsetX.Value = 1F;
             this.AdjOffsetX.WheelStep = 1F;
             this.AdjOffsetX.ValueChanged += new System.Action<float>(this.AdjOffsetX_ValueChanged);
+            this.AdjOffsetX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjOffsetX_MouseDown);
+            this.AdjOffsetX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AdjOffsetX_MouseUp);
             // 
             // AdjHeight
             // 
@@ -1105,7 +1109,8 @@ namespace BeeInterface
             this.btnCenterY.TextColor = System.Drawing.Color.Black;
             this.btnCenterY.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCenterY.UseVisualStyleBackColor = false;
-            this.btnCenterY.Click += new System.EventHandler(this.btnCenterY_Click);
+            this.btnCenterY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnCenterY_MouseDown);
+            this.btnCenterY.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnCenterY_MouseUp);
             // 
             // btnCenterX
             // 
@@ -1161,7 +1166,8 @@ namespace BeeInterface
             this.btnCenterX.TextColor = System.Drawing.Color.Black;
             this.btnCenterX.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCenterX.UseVisualStyleBackColor = false;
-            this.btnCenterX.Click += new System.EventHandler(this.btnCenterX_Click);
+            this.btnCenterX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnCenterX_MouseDown);
+            this.btnCenterX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnCenterX_MouseUp);
             // 
             // tableLayoutPanel21
             // 
@@ -1301,6 +1307,15 @@ namespace BeeInterface
             this.AdjFocus.Value = 1F;
             this.AdjFocus.WheelStep = 1F;
             this.AdjFocus.ValueChanged += new System.Action<float>(this.AdjFocus_ValueChanged);
+            // 
+            // lbErr
+            // 
+            this.lbErr.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbErr.Location = new System.Drawing.Point(3, 60);
+            this.lbErr.Name = "lbErr";
+            this.lbErr.Size = new System.Drawing.Size(449, 23);
+            this.lbErr.TabIndex = 109;
+            this.lbErr.Text = "..";
             // 
             // tableLayoutPanel11
             // 
@@ -2301,6 +2316,7 @@ namespace BeeInterface
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(494, 748);
             this.tabControl1.TabIndex = 60;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage4
             // 
@@ -2328,15 +2344,6 @@ namespace BeeInterface
             // tmShowPara
             // 
             this.tmShowPara.Tick += new System.EventHandler(this.tmShowPara_Tick);
-            // 
-            // lbErr
-            // 
-            this.lbErr.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbErr.Location = new System.Drawing.Point(3, 60);
-            this.lbErr.Name = "lbErr";
-            this.lbErr.Size = new System.Drawing.Size(449, 23);
-            this.lbErr.TabIndex = 109;
-            this.lbErr.Text = "..";
             // 
             // SettingStep1
             // 
