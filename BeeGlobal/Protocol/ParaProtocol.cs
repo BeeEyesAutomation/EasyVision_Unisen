@@ -234,6 +234,10 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                    foreach (ParaBit paraIO in ParaBits)
+                    {
+                        paraIO.Value = 0;
+                    }
                     IO_Processing = IO_Processing.None;
                     Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
@@ -465,10 +469,7 @@ namespace BeeGlobal
                     IsConnected = false;
                     return false;
                 }
-                    foreach(ParaBit paraIO in ParaBits)
-                {
-                    paraIO.Value = 0;
-                }
+              
             }
             catch(Exception ex)
             {
@@ -489,6 +490,7 @@ namespace BeeGlobal
         {
             Global.IsAllowReadPLC = false;
             PlcClient.StopOneBitReadLoop();
+            if(timeAlive!=null)
             timeAlive.Enabled = false;
             Global.StatusIO = StatusIO.NotConnect;
             Global.StatusMode = StatusMode.None;
@@ -601,7 +603,7 @@ namespace BeeGlobal
                     {
                         try
                         {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", _IO_Processing.ToString()));
+                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", _IO_Processing.ToString()));
 
                             if (_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
                             await _ioLock.WaitAsync();

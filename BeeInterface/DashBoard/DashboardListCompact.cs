@@ -175,7 +175,7 @@ namespace BeeInterface
                 DrawLine(g, i, 1, baseY, "MinWidth", _items[i], _items[i].IsWidth, _items[i].ValueWidth, Segment.Width, Segment.ValueWidth, w);
                 DrawLine(g, i, 2, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
                 DrawLine(g, i, 3, baseY, "MinX", _items[i], _items[i].IsX, _items[i].ValueX, Segment.X, Segment.ValueX, w);
-                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsX, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
+                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsY, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
 
                 using (var p = new Pen(Color.FromArgb(230, 230, 230))) g.DrawLine(p, rectItem.Left, rectItem.Bottom - 1, rectItem.Right, rectItem.Bottom - 1);
             }

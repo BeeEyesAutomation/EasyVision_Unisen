@@ -542,15 +542,8 @@ namespace BeeCore
                         //}
                         foreach (String label in labelList)
                         {
-                            String labelConvert = label;
-                            if(TypeYolo==TypeYolo.RCNN)
-                            {
-                                int indexLabel = Convert.ToInt32(label);
-
-                                labelConvert = labelItems[indexLabel-1].Name;
-                            }    
-                            int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
-                            if (index>-1)
+                            int index = labelItems.FindIndex(item => string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
+                            if (index > -1)
                             {
                                 LabelItem item = labelItems[index];
                                 if (!item.IsUse)
@@ -562,16 +555,22 @@ namespace BeeCore
                                 if (item.IsWidth)
                                     if (boxList[i]._rect.Width >= item.ValueWidth)
                                         IsOK = true;
+                                if (item.IsX)
+                                    if (boxList[i]._PosCenter.X + boxList[i]._rect.Width / 2 >= item.ValueX)
+                                        IsOK = true;
+                                if (item.IsY)
+                                    if (boxList[i]._PosCenter.Y + boxList[i]._rect.Height / 2 >= item.ValueY)
+                                        IsOK = true;
                                 if (item.IsArea)
                                     if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
                                         IsOK = true;
-                                if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
+                                if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY)
                                     IsOK = true;
                                 if (IsOK)
                                 {
                                     listOK.Add(true);
                                     rectRotates.Add(boxList[i]);
-                                    listLabel.Add(labelConvert);
+                                    listLabel.Add(label);
                                     scoreRS += (int)scoreList[i];
                                     listScore.Add(scoreList[i]);
                                     numOK++;
@@ -580,20 +579,102 @@ namespace BeeCore
                                 {
                                     listOK.Add(false);
                                     rectRotates.Add(boxList[i]);
-                                    listLabel.Add(labelConvert);
+                                    listLabel.Add(label);
                                     scoreRS += (int)scoreList[i];
                                     listScore.Add(scoreList[i]);
 
                                 }
-                           
+                                //if (IsCheckLine)
+                                //{
+                                //    switch (CompareLine)
+                                //    {
+                                //        case Compares.More:
+
+                                //            break;
+                                //        case Compares.Less:
+                                //            if (boxList[i]._rect.Height <= yLine)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+
+                                //            }
+                                //            break;
+                                //    }
+
+
+                                //}
+                                //else if (IsCheckArea)
+                                //{
+                                //    switch (CompareArea)
+                                //    {
+                                //        case Compares.More:
+                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+
+                                //            }
+                                //            break;
+                                //        case Compares.Less:
+                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
+                                //            {
+                                //                listOK.Add(true);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+                                //                numOK++;
+                                //            }
+                                //            else
+                                //            {
+                                //                listOK.Add(false);
+                                //                rectRotates.Add(boxList[i]);
+                                //                listLabel.Add(label);
+                                //                scoreRS += (int)scoreList[i];
+                                //                listScore.Add(scoreList[i]);
+
+                                //            }
+                                //            break;
+                                //    }
+
+
+                                //}
+                                //else
+                                //{
+                                //    listOK.Add(true);
+                                //    Content += label;
+                                //    rectRotates.Add(boxList[i]);
+                                //    listLabel.Add(label);
+                                //    scoreRS += (int)scoreList[i];
+                                //    listScore.Add(scoreList[i]); numOK++;
+                                //}
+
                             }
                             i++;
-                        }
-                        int k = 0; BitsResult = new bool[16];
-                        foreach (bool Iss in listOK)
-                        {
-                            BitsResult[k] = Iss;
-                                k++;
                         }
                         if (IsArrangeBox)
                         {
@@ -665,27 +746,206 @@ namespace BeeCore
                     }
                     catch (Exception ex)
                     {
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+                        // Global.Ex = "Complete_Learning" + ex.Message;
+                        // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.Message));
+                    //  Global.Ex = "Complete_Learning" + ex.Message;
                     // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
                 }
             }
             else
             {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning","No Initial PY"));
-           
+
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", "No Initial"));
+                //  Global.Ex = "No Initial PY";
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-            }    
-               
+            }
+
         }
-       
+        //public void Complete()
+        //{
+        //    if (Global.IsIntialPython)
+        //    {
+        //        try
+        //        {
+
+
+        //            try
+        //            {
+        //                listOK = new List<bool>();
+        //                listLabel = new List<string>();
+        //                rectRotates = new List<RectRotate>();
+        //                listScore = new List<float>();
+        //                // cycleTime = (int)G.YoloPlus.Cycle;
+        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+        //                int i = 0;
+        //                int numOK = 0, numNG = 0;
+        //                int scoreRS = 0;
+        //                List<String> _listLabelCompare = new List<String>();
+        //                if (labelItems == null)
+        //                {
+        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                    return;
+        //                }
+        //                Content = "";
+        //                //foreach (Labels label in listLabelCompare)
+        //                //{
+        //                //    if (label == null) continue;
+        //                //    if (!label.IsEn) continue;
+        //                //    _listLabelCompare.Add(label.label);
+        //                //}
+        //                foreach (String label in labelList)
+        //                {
+        //                    String labelConvert = label;
+        //                    if(TypeYolo==TypeYolo.RCNN)
+        //                    {
+        //                        int indexLabel = Convert.ToInt32(label);
+
+        //                        labelConvert = labelItems[indexLabel-1].Name;
+        //                    }    
+        //                    int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
+        //                    if (index>-1)
+        //                    {
+        //                        LabelItem item = labelItems[index];
+        //                        if (!item.IsUse)
+        //                        { i++; continue; }
+        //                        bool IsOK = false;
+        //                        if (item.IsHeight)
+        //                            if (boxList[i]._rect.Height >= item.ValueHeight)
+        //                                IsOK = true;
+        //                        if (item.IsWidth)
+        //                            if (boxList[i]._rect.Width >= item.ValueWidth)
+        //                                IsOK = true;
+        //                        if (item.IsArea)
+        //                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
+        //                                IsOK = true;
+        //                        if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
+        //                            IsOK = true;
+        //                        if (IsOK)
+        //                        {
+        //                            listOK.Add(true);
+        //                            rectRotates.Add(boxList[i]);
+        //                            listLabel.Add(labelConvert);
+        //                            scoreRS += (int)scoreList[i];
+        //                            listScore.Add(scoreList[i]);
+        //                            numOK++;
+        //                        }
+        //                        else
+        //                        {
+        //                            listOK.Add(false);
+        //                            rectRotates.Add(boxList[i]);
+        //                            listLabel.Add(labelConvert);
+        //                            scoreRS += (int)scoreList[i];
+        //                            listScore.Add(scoreList[i]);
+
+        //                        }
+                           
+        //                    }
+        //                    i++;
+        //                }
+        //                int k = 0; BitsResult = new bool[16];
+        //                foreach (bool Iss in listOK)
+        //                {
+        //                    BitsResult[k] = Iss;
+        //                        k++;
+        //                }
+        //                if (IsArrangeBox)
+        //                {
+        //                    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+
+        //                    for (int j = 0; j < rectRotates.Count; j++)
+        //                    {
+        //                        combined.Add(new RotatedBoxInfo
+        //                        {
+        //                            Box = rectRotates[j],
+        //                            Label = listLabel[j],
+        //                            Score = listScore[j]
+        //                        });
+        //                    }
+        //                    switch (ArrangeBox)
+        //                    {
+        //                        case ArrangeBox.X_Left_Rigth:
+        //                            // Sort theo X tăng dần (trái → phải)
+        //                            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+        //                            break;
+        //                        case ArrangeBox.X_Right_Left:
+        //                            // Sort theo X giảm dần (phải → trái)
+        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
+
+        //                            break;
+        //                        case ArrangeBox.Y_Left_Rigth:
+        //                            // Sort theo Y tăng dần (trên → dưới)
+        //                            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
+        //                            break;
+        //                        case ArrangeBox.Y_Right_Left:
+        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
+        //                            break;
+        //                    }
+        //                    rectRotates = combined.Select(b => b.Box).ToList();
+        //                    listLabel = combined.Select(b => b.Label).ToList();
+        //                    listScore = combined.Select(b => b.Score).ToList();
+        //                    Content = "";
+        //                    foreach (string s in listLabel)
+        //                        Content += s;
+        //                }
+        //                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
+        //                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+        //                switch (Compare)
+        //                {
+        //                    case Compares.Equal:
+        //                        if (numOK != NumObject)
+        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                        break;
+        //                    case Compares.Less:
+        //                        if (numOK >= NumObject)
+        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                        break;
+        //                    case Compares.More:
+        //                        if (numOK <= NumObject)
+        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                        break;
+        //                }
+        //                if (IsEnContent)
+        //                {
+        //                    if (Matching != Content)
+        //                    {
+        //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //                    }
+        //                }
+
+        //                G.IsChecked = true;
+        //                // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+        //            // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning","No Initial PY"));
+           
+        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+        //    }    
+               
+        //}
+
         public Graphics DrawResult(Graphics gc)
         {
-            //Common.PropetyTools[Global.IndexChoose][Index].Percent
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
             gc.ResetTransform();
             RectRotate rotA = rotArea;
@@ -715,7 +975,36 @@ namespace BeeCore
             if (!Global.IsHideTool)
                 Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
             int i = 0;
-            if(rectRotates!=null)
+            if (!Global.IsRun)
+                foreach (LabelItem item in labelItems)
+            {
+               
+                    mat = new Matrix();
+                    if (!Global.IsRun)
+                    {
+                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                    gc.Transform = mat;
+                    mat.Translate(CropOffSetX, CropOffSetY);
+                    gc.Transform = mat;
+                    if (item.IsY)
+                    {
+                        Point p1 = new Point(0, item.ValueY);
+                        Point p2 = new Point(50, item.ValueY);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
+                    if (item.IsX)
+                    {
+                        Point p1 = new Point(item.ValueX, 0);
+                        Point p2 = new Point(item.ValueX, 50);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
+                    gc.ResetTransform();  
+            }    
             foreach (RectRotate rot in rectRotates)
             {
                 mat = new Matrix();
@@ -727,20 +1016,31 @@ namespace BeeCore
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
-   
                 gc.Transform = mat;
+
                 mat.Translate(CropOffSetX, CropOffSetY);
                 gc.Transform = mat;
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
-               Color clShow = Color.LightGray;
+                Color clShow = Color.LightGray;
                 if (listOK[i] == true)
                     clShow = cl;
                 if (index > -1)
                 {
                     LabelItem item = labelItems[index];
-                    
-                   
-                    if (item.IsHeight|| item.IsWidth)
+
+                    if (item.IsY)
+                    {
+                        Point p1 = new Point(0, item.ValueY);
+                        Point p2 = new Point(50, item.ValueY);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
+                    if (item.IsX)
+                    {
+                        Point p1 = new Point(item.ValueX, 0);
+                        Point p2 = new Point(item.ValueX, 50);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                    }
+                    if (item.IsHeight || item.IsWidth)
                     {
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
@@ -759,19 +1059,18 @@ namespace BeeCore
                         Font font = new Font("Arial", 30, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
                         gc.DrawString(content, font, new SolidBrush(clShow), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
-                        
+
                         gc.ResetTransform();
                     }
                     else
                     {
-
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                         Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, clShow, brushText, 30, 3, 10, 1, !Global.IsHideTool);
                         gc.ResetTransform();
-                       
+
                     }
 
 
