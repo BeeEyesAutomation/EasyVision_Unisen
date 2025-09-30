@@ -1304,20 +1304,142 @@ namespace BeeCore
         [NonSerialized]
         Stopwatch stopwatch = new Stopwatch();
         private CameraIOFast cameraIOFast = new CameraIOFast();
+        //public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
+        //{
+        //    IntPtr intPtr = IntPtr.Zero;   // buffer từ native (MVS/USB)
+        //    IntPtr pylonPtr = IntPtr.Zero; // buffer từ Pylon (khác hàm free)
+        //    int rows = 0, cols = 0;
+        //    int matTypeCode = (int)MatType.CV_8UC1; // native trả về code; ta cast về MatType khi tạo Mat
+        //    int srcStride = 0;   // stride (bytes/row) của nguồn nếu có
+
+        //    try
+        //    {
+        //        // Nếu đang ở chế độ chỉ set tham số (không grab), nên return false thay vì true
+        //        // để caller biết chưa có frame mới. Nếu bạn cố tình muốn "OK", giữ true.
+        //        if (Global.IsSetPara)
+        //            return false;
+
+        //        switch (Para.TypeCamera)
+        //        {
+        //            case TypeCamera.MVS:
+        //            case TypeCamera.USB:
+        //                {
+        //                    // Read từ DLL: trả về con trỏ + fill rows/cols/matTypeCode
+        //                    intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matTypeCode));
+        //                    FrameRate = CCDPlus.FPS;
+
+        //                    if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
+        //                        return false;
+
+        //                    // Stride nguồn nếu API có (giả sử CCDPlus có hàm trả stride; nếu không, dùng packed)
+        //                    srcStride = 0;// CCDPlus.GetStride != null ? CCDPlus.GetStride(IndexCCD) : cols * (int)new Mat(rows, cols, (MatType)matTypeCode).ElemSize();
+
+        //                    // Đảm bảo matRaw đúng kích thước & kiểu
+        //                    EnsureMat(ref matRaw, rows, cols, (MatType)matTypeCode);
+
+        //                    // Copy từng dòng, tôn trọng stride nguồn & đích
+        //                    CopyRows((byte*)intPtr, matRaw, rows, cols);
+        //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
+        //                    return true;
+        //                }
+
+        //            case TypeCamera.Pylon:
+        //                {
+        //                    int w = 0, h = 0, s = 0, c = 0;
+        //                    pylonPtr = PylonCam.GrabOneUcharPtr(1000, out w, out h, out s, out c);
+        //                    if (pylonPtr == IntPtr.Zero || w <= 0 || h <= 0)
+        //                    {
+        //                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
+        //                        return false;
+        //                    }
+
+        //                    var mt = (c == 1) ? MatType.CV_8UC1 : MatType.CV_8UC3;
+        //                    FrameRate = (int)PylonCam.GetMeasuredFps();
+
+        //                    // Cấp phát (hoặc reuse) đích đúng size/kiểu
+        //                    EnsureMat(ref matRaw, h, w, mt);
+
+        //                    // Copy theo stride nguồn s và step đích
+        //                    CopyRows((byte*)pylonPtr, matRaw, h, w, s);
+
+        //                    // Nếu SDK yêu cầu trả buffer (tuỳ API của bạn), gọi release ở đây
+        //                    // PylonCam.ReleaseBuffer(); // nếu có
+        //                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
+        //                    return true;
+        //                }
+        //        }
+
+        //        // Nếu rơi ra ngoài switch (loại camera chưa hỗ trợ)
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Global.LogsDashboard = Global.LogsDashboard ?? new LogsDashboard();
+        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
+        //        return false;
+        //    }
+        //    finally
+        //    {
+        //        // Chỉ free buffer thuộc về CCDPlus nếu API yêu cầu bạn giải phóng
+        //        if (intPtr != IntPtr.Zero)
+        //            Native.FreeBuffer(intPtr);
+
+        //        // Với pylonPtr: thường là buffer thuộc SDK; chỉ release nếu SDK yêu cầu.
+        //        // if (pylonPtr != IntPtr.Zero) PylonCam.ReleaseBuffer(pylonPtr);
+        //    }
+        //}
+
+        /// <summary>
+        /// Đảm bảo mat != null, chưa Dispose, và có đúng size/type; nếu khác thì Dispose + tạo mới.
+        /// </summary>
+        private static void EnsureMat(ref Mat m, int rows, int cols, MatType type)
+        {
+            if (m == null || m.IsDisposed || m.Rows != rows || m.Cols != cols || m.Type() != type)
+            {
+                m?.Dispose();
+                m = new Mat(rows, cols, type);
+            }
+        }
+
+        /// <summary>
+        /// Copy theo từng dòng, tôn trọng stride nguồn & step đích.
+        /// Nếu không truyền stride nguồn (srcStride=0), suy ra packed: srcStride = cols * elemSize.
+        /// </summary>
+        private static unsafe void CopyRows(byte* srcBase, Mat dst, int rows, int cols, int srcStride = 0)
+        {
+            int elem = (int)dst.ElemSize();               // bytes per pixel
+            long dstStep = (long)dst.Step();              // bytes per row ở đích
+            long bytesPerRow = (long)cols * elem;
+
+            if (srcStride <= 0) srcStride = (int)bytesPerRow;
+
+            // Không copy quá giới hạn step đích
+            long copyCount = bytesPerRow <= dstStep ? bytesPerRow : dstStep;
+
+            byte* dstBase = (byte*)dst.DataPointer;
+
+            for (int r = 0; r < rows; r++)
+            {
+                byte* src = srcBase + (long)r * srcStride;
+                byte* dstRow = dstBase + (long)r * dstStep;
+                Buffer.MemoryCopy(src, dstRow, dstStep, copyCount);
+            }
+        }
+
         public unsafe bool TryGrabFast_NoStride(ref Mat matRaw)
         {
 
 
-          
+
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0;
             int matType = MatType.CV_8UC1;
-          
+
             try
             {
                 if (Global.IsSetPara)
                     return true;
-                    switch (Para.TypeCamera)
+                switch (Para.TypeCamera)
                 {
                     case TypeCamera.MVS:
                         intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &matType));
@@ -1336,26 +1458,19 @@ namespace BeeCore
                         int w = 0, h = 0, s = 0, c = 0;
                         IntPtr p = PylonCam.GrabOneUcharPtr(1000, out w, out h, out s, out c);
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
-                        FrameRate =(int) PylonCam.GetMeasuredFps();
+                        FrameRate = (int)PylonCam.GetMeasuredFps();
                         matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
                         unsafe
                         {
                             Buffer.MemoryCopy(p.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
                         }
-                         if (p == IntPtr.Zero)
+                        if (p == IntPtr.Zero)
                         {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD",PylonCam. LastError));
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
                             return false;
                         }
                         return true;
-                        //using (var m = new Mat(h, w, matType, p, s))// new OpenCvSharp.Mat(h, w, type, p, s))
-                        //{
-                        //    m.CopyTo(matRaw);
-                        //    FrameRate = (int)PylonCam.GetDeviceFps();
-                        //    // matRaw = m.Clone();
-                        //    return true;
-                        //}
-                        return true;
+                       
                         break;
                 }
 
@@ -1364,7 +1479,7 @@ namespace BeeCore
                 // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
                 if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
                 {
-                  
+
                     return false;
 
                 }
@@ -1394,8 +1509,8 @@ namespace BeeCore
                                       dstStep,
                                       copyBytes);
                 }
-              
-               
+
+
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "ReadCCD", "OK"));
                 return true;
             }
@@ -1415,147 +1530,36 @@ namespace BeeCore
         }
         public int numTry = 0;
         bool IsReadCCD = false;
-        public   void Read()
+       
+        public   bool Read()
         {
        if(Global.IsSetPara)
-                return;
+                return false;
            
-            X: if (!TryGrabFast_NoStride(ref matRaw))
+             if (!TryGrabFast_NoStride(ref matRaw))
                 {
+                
                     numTry++;
-                if (numTry < 3)
-                    goto X;
-                Global.CameraStatus = CameraStatus.ErrorConnect;
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Retry is "+numTry));
+               
+                if (numTry >= 5)
+                {
+                    Global.CameraStatus = CameraStatus.ErrorConnect;
+                    return true;
+
+                }
+                return true;
+
             }
                 else
-                {
-                    numTry = 0;
+            {
+              
+                numTry = 0;
                    // FrameRate = CCDPlus.FPS;
                 }
-          
+            return false;
 
-         //   BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-         //int rows = 0, cols = 0, Type = 0;
-
-            //Mat raw = new Mat();
-            //IntPtr intPtr = IntPtr.Zero;
-
-            //try
-            //{     //  if (matRaw != null)
-            ////            if (!matRaw.Empty())
-            ////            matRaw.Release();
-            //            switch (Para.TypeCamera)
-            //    {
-            //        case TypeCamera.USB:
-
-
-
-
-            //            //CCDPlus.ReadCCD(IndexCCD);
-            //            TryGrabFast_NoStride(ref matRaw);
-            //            //   Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
-
-            //            FrameRate = CCDPlus.FPS;
-            //            //try
-            //            //{
-
-            //            //    unsafe
-            //            //    {
-            //            //        intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &Type));
-            //            //        // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
-            //            //        if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
-            //            //            return;
-
-
-            //            //        raw = new Mat(rows, cols, Type, intPtr);
-
-            //            //        FrameRate = CCDPlus.FPS;
-
-            //            //        matRaw = raw.Clone();
-            //            //        //   Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
-            //            //        stopwatch.Stop();
-            //            //        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-            //            //    }
-            //            //    //    return new Mat();
-            //            //    stopwatch.Stop();
-            //            //    BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-            //            //    FrameRate = CCDPlus.FPS;
-
-            //            //}
-            //            //finally
-            //            //{
-            //            //    raw.Release();
-            //            //    Native.FreeBuffer(intPtr);
-            //            //}
-            //            break;
-            //        case TypeCamera.MVS:
-
-            //            //if (IsHist)
-            //            //    CCDPlus.ReadRaw(true);
-            //            //else
-
-
-            //            TryGrabFast_NoStride(ref matRaw);
-
-            //            // Cv2.ImWrite("Raw" + IndexCCD + ".png", matRaw);
-
-
-            //            FrameRate = CCDPlus.FPS;
-            //            // raw = new Mat();
-
-            //            //try
-            //            //{
-
-            //            //    unsafe
-            //            //    {
-            //            //        intPtr = new IntPtr(CCDPlus.ReadCCD(IndexCCD, &rows, &cols, &Type));
-            //            //        // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
-            //            //        if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
-            //            //            return;
-
-
-            //            //        raw = new Mat(rows, cols, Type, intPtr);
-
-            //            //        FrameRate = CCDPlus.FPS;
-
-            //            //        matRaw = raw.Clone();
-
-            //            //        stopwatch.Stop();
-            //            //        BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-
-            //            //    }
-
-
-            //            //}
-            //            //finally
-            //            //{
-            //            //    raw.Release();
-            //            //    Native.FreeBuffer(intPtr);
-            //            //}
-            //            break;
-            //           case TypeCamera.TinyIV:
-            //            Mat raw2= HEROJE.Read();
-            //            Size SZ = raw2.Size(); 
-            //        if(SZ.Width==0&&SZ.Height==0)
-            //                IsConnected = false;
-            //            BeeCore.Common.CycleCamera = Convert.ToInt32(1000.0 / HEROJE.FrameTime);
-            //             Native.SetImg(matRaw);
-            //            break;
-            //    }
-
-
-            //    stopwatch.Stop();
-            //    BeeCore.Common.CycleCamera = (int)stopwatch.Elapsed.TotalMilliseconds;
-
-            //}
-            //catch (Exception ex) {
-
-            //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", ex.Message));
-            //}
-
-
-
-            // return new Mat();
+         
         }
 
         private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)

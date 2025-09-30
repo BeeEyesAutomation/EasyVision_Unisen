@@ -370,95 +370,294 @@ namespace BeeCore
       Mat   matProcess =new Mat();
         public void DoWork(RectRotate rectRotate)
         {
-          
-            rotAreaAdjustment = rotArea;
-            rectRotate = rotAreaAdjustment;
+         
+             rectRotate = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
+            Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
+            // Clone để không phá hỏng matRaw gốc (ta sẽ convert màu)
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
-
                 if (raw.Empty()) return;
-                if (raw.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
-                float scoreRs = 0;
-                switch (MethodSample)
+
+                // Bảo đảm ảnh xám: dùng biến đích riêng, không in-place vào raw
+                Mat gray = null;
+                try
                 {
-                    case MethodSample.Pattern:
-                        Pattern.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rectRotate._PosCenter.X, rectRotate._PosCenter.Y, rectRotate._rect.Width, rectRotate._rect.Height, rectRotate._rectRotation);
-                        var ListRS = Pattern.Match(IsHighSpeed, 0, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap, false, -1);
-                        foreach (Rotaterectangle rot in ListRS)
-                        {
-                            PointF pCenter = new PointF((float)rot.Cx, (float)rot.Cy);
-                            float angle = (float)rot.AngleDeg;
-                            float width = (float)rot.Width;
-                            float height = (float)rot.Height;
-                            float Score = (float)rot.Score;
-                            scoreRs += Score;
-                            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
-                            listScore.Add(Math.Round(Score, 1));
-                            listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
-                        }
-                        break;
-                    case MethodSample.Corner:
-                        Mat matCrop = Common.CropRotatedRect(raw, rotArea, rotMask);
-                        if (matProcess == null) matProcess = new Mat();
-                        if (!matProcess.Empty()) matProcess.Dispose();
-                        if (matCrop.Type() == MatType.CV_8UC3)
-                            Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                        
-                        switch (MethordEdge)
-                        {
-                            case MethordEdge.CloseEdges:
-                                matProcess = Filters.Edge(matCrop);
+                    if (raw.Type() == MatType.CV_8UC3)
+                    {
+                        gray = new Mat();
+                        Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+                    }
+                    else
+                    {
+                        gray = raw; // reuse backing store (ref-counted)
+                    }
+
+                    float scoreSum = 0f;
+
+                    switch (MethodSample)
+                    {
+                        case MethodSample.Pattern:
+                            {
+                                // Dùng đúng ROI từ THAM SỐ rectRotate (không phải rotArea)
+                                Pattern.SetImgeRaw(
+                                    gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels(),
+                                    rectRotate._PosCenter.X, rectRotate._PosCenter.Y,
+                                    rectRotate._rect.Width, rectRotate._rect.Height,
+                                    rectRotate._rectRotation);
+
+                                var listRS = Pattern.Match(
+                                    IsHighSpeed, 0,
+                                    AngleLower, AngleUper,
+                                    Common.PropetyTools[IndexThread][Index].Score / 100.0,
+                                    ckSIMD, ckBitwiseNot, ckSubPixel,
+                                    1, OverLap, false, -1);
+
+                                foreach (Rotaterectangle rot in listRS)
+                                {
+                                    var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
+                                    float angle = (float)rot.AngleDeg;
+                                    float width = (float)rot.Width;
+                                    float height = (float)rot.Height;
+                                    float score = (float)rot.Score;
+                                    scoreSum += score;
+
+                                    rectRotates.Add(new RectRotate(
+                                        new System.Drawing.RectangleF(-width / 2f, -height / 2f, width, height),
+                                        pCenter, angle, AnchorPoint.None, false));
+
+                                    listScore.Add(Math.Round(score, 1));
+                                    listP_Center.Add(new System.Drawing.Point(
+                                        (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
+                                        (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                                }
                                 break;
-                            case MethordEdge.StrongEdges:
-                                matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                            }
+
+                        case MethodSample.Corner:
+                            {
+                                // Crop theo vùng làm việc hiện tại (nếu bạn thực sự muốn dùng rotArea, giữ như dưới;
+                                // nếu muốn dùng đúng tham số rectRotate, thay 'rotArea' bằng 'rectRotate')
+                                using (Mat matCrop = Common.CropRotatedRect(gray, rotArea, rotMask))
+                                {
+                                    // Ép xám cho pipeline góc
+                                    Mat work = null;
+                                    try
+                                    {
+                                        if (matCrop.Empty()) return;
+
+                                        if (matCrop.Type() == MatType.CV_8UC3)
+                                        {
+                                            work = new Mat();
+                                            Cv2.CvtColor(matCrop, work, ColorConversionCodes.BGR2GRAY);
+                                        }
+                                        else
+                                        {
+                                            work = matCrop; // reuse
+                                        }
+
+                                        // ===== Edge / Binary pipeline =====
+                                        Mat matProcessLocal = null;
+                                        try
+                                        {
+                                            switch (MethordEdge)
+                                            {
+                                                case MethordEdge.CloseEdges:
+                                                    matProcessLocal = Filters.Edge(work);
+                                                    break;
+                                                case MethordEdge.StrongEdges:
+                                                    matProcessLocal = Filters.GetStrongEdgesOnly(work);
+                                                    break;
+                                                case MethordEdge.Binary:
+                                                    matProcessLocal = Filters.Threshold(work, ThresholdBinary, ThresholdTypes.Binary);
+                                                    break;
+                                                case MethordEdge.InvertBinary:
+                                                    matProcessLocal = Filters.Threshold(work, ThresholdBinary, ThresholdTypes.BinaryInv);
+                                                    break;
+                                                default:
+                                                    matProcessLocal = work; // fallback
+                                                    break;
+                                            }
+
+                                            // Hậu xử lý hình thái học / khử nhiễu (mỗi hàm có thể trả Mat mới → nhớ dispose cái cũ)
+                                            if (IsClearNoiseSmall)
+                                            {
+                                                Mat t = Filters.ClearNoise(matProcessLocal, SizeClearsmall);
+                                                if (!object.ReferenceEquals(t, matProcessLocal)) matProcessLocal.Dispose();
+                                                matProcessLocal = t;
+                                            }
+                                            if (IsClose)
+                                            {
+                                                Mat t = Filters.Morphology(matProcessLocal, MorphTypes.Close, new OpenCvSharp.Size(SizeClose, SizeClose));
+                                                if (!object.ReferenceEquals(t, matProcessLocal)) matProcessLocal.Dispose();
+                                                matProcessLocal = t;
+                                            }
+                                            if (IsOpen)
+                                            {
+                                                Mat t = Filters.Morphology(matProcessLocal, MorphTypes.Open, new OpenCvSharp.Size(SizeOpen, SizeOpen));
+                                                if (!object.ReferenceEquals(t, matProcessLocal)) matProcessLocal.Dispose();
+                                                matProcessLocal = t;
+                                            }
+                                            if (IsClearNoiseBig)
+                                            {
+                                                Mat t = Filters.ClearNoise(matProcessLocal, SizeClearBig);
+                                                if (!object.ReferenceEquals(t, matProcessLocal)) matProcessLocal.Dispose();
+                                                matProcessLocal = t;
+                                            }
+
+                                            // === Corner measure ===
+                                            FilletCornerMeasure.MaxLineCandidates = 8;
+                                            FilletCornerMeasure.RansacThreshold = 2;
+                                            FilletCornerMeasure.RansacIterations = 200;
+                                            FilletCornerMeasure.PairStrategy = LinePairStrategy.StrongPlusOrth;
+                                            FilletCornerMeasure.PerpAngleToleranceDeg = 3;
+
+                                            Result = FilletCornerMeasure.Measure(matCrop, matProcessLocal);
+
+                                            // Kết quả vẽ 1 rect bé tại góc phát hiện
+                                            int width1 = 10, height1 = 10;
+                                            float angle1 = (float)Result.AtoB_CCW_Deg;
+                                            angle1 = 270f - angle1;
+
+                                            scoreSum = 100f;
+                                            rectRotates = new List<RectRotate>
+                                {
+                                    new RectRotate(
+                                        new System.Drawing.RectangleF(-width1 / 2f, -height1 / 2f, width1, height1),
+                                        new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y),
+                                        angle1, AnchorPoint.None, false)
+                                };
+                                        }
+                                        finally
+                                        {
+                                            // Giải phóng pipeline mat
+                                            // Chỉ dispose nếu nó khác với work
+                                            // (nếu Filters trả về cùng instance thì ReferenceEquals sẽ true)
+                                            // Ở đây đã dispose từng bước khi thay thế, nên chỉ cần:
+                                            // nothing else to do
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        // Nếu work là matCrop thì không dispose ở đây, vì matCrop đã trong using
+                                        // Nếu work là Mat mới (gray từ BGR), dispose nó:
+                                        if (work != null && !object.ReferenceEquals(work, matCrop))
+                                            work.Dispose();
+                                    }
+                                }
                                 break;
-                            case MethordEdge.Binary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                                break;
-                            case MethordEdge.InvertBinary:
-                                matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                                break;
-                        }
-                        if (IsClearNoiseSmall)
-                            matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
-                        if (IsClose)
-                            matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
-                        if (IsOpen)
-                            matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
-                        if (IsClearNoiseBig)
-                            matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+                            }
+                    }
 
-                        //  SizeMorphology += 2;
-                        FilletCornerMeasure.MaxLineCandidates = 8;
-                        FilletCornerMeasure.RansacThreshold = 2;
-                        FilletCornerMeasure.RansacIterations = 200;
-                        FilletCornerMeasure.PairStrategy = LinePairStrategy.StrongPlusOrth;
-                        FilletCornerMeasure.PerpAngleToleranceDeg = 3;
-                        Result = FilletCornerMeasure.Measure(matCrop, matProcess);//, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
-                    
-                           int width1 = 10;
-                            int height1 = 10;
-                            float angle1 = (float)Result.AtoB_CCW_Deg;
-
-                            angle1 = 270 - angle1;
-                        scoreRs = 100;
-                            rectRotates = new List<RectRotate>();
-                            rectRotates.Add(new RectRotate(new RectangleF(-width1 / 2, -height1 / 2, width1, height1), new PointF(Result.Corner.X, Result.Corner.Y), angle1, AnchorPoint.None, false));
-                        
-                        break;
-                }if(scoreRs!=0)
-                Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = (int)Math.Round(scoreRs / rectRotates.Count(), 1);
-
-
-
+                    if (scoreSum != 0f && rectRotates.Count > 0)
+                    {
+                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
+                            (int)Math.Round(scoreSum / rectRotates.Count, 1);
+                    }
+                }
+                finally
+                {
+                    // Nếu gray trỏ shared tới raw thì không dispose (đã dispose qua using của raw).
+                    if (gray != null && !object.ReferenceEquals(gray, raw))
+                        gray.Dispose();
+                }
             }
-
         }
+
+        //public void DoWork(RectRotate rectRotate)
+        //{
+          
+        //    rotAreaAdjustment = rotArea;
+        //    rectRotate = rotAreaAdjustment;
+
+        //    rectRotates = new List<RectRotate>();
+        //    listScore = new List<double>();
+        //    listP_Center = new List<System.Drawing.Point>();
+        //    using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+        //    {
+
+        //        if (raw.Empty()) return;
+        //        if (raw.Type() == MatType.CV_8UC3)
+        //            Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
+        //        float scoreRs = 0;
+        //        switch (MethodSample)
+        //        {
+        //            case MethodSample.Pattern:
+        //                Pattern.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rectRotate._PosCenter.X, rectRotate._PosCenter.Y, rectRotate._rect.Width, rectRotate._rect.Height, rectRotate._rectRotation);
+        //                var ListRS = Pattern.Match(IsHighSpeed, 0, AngleLower, AngleUper, Common.PropetyTools[IndexThread][Index].Score / 100.0, ckSIMD, ckBitwiseNot, ckSubPixel, 1, OverLap, false, -1);
+        //                foreach (Rotaterectangle rot in ListRS)
+        //                {
+        //                    PointF pCenter = new PointF((float)rot.Cx, (float)rot.Cy);
+        //                    float angle = (float)rot.AngleDeg;
+        //                    float width = (float)rot.Width;
+        //                    float height = (float)rot.Height;
+        //                    float Score = (float)rot.Score;
+        //                    scoreRs += Score;
+        //                    rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+        //                    listScore.Add(Math.Round(Score, 1));
+        //                    listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
+        //                }
+        //                break;
+        //            case MethodSample.Corner:
+        //                Mat matCrop = Common.CropRotatedRect(raw, rotArea, rotMask);
+        //                if (matProcess == null) matProcess = new Mat();
+        //                if (!matProcess.Empty()) matProcess.Dispose();
+        //                if (matCrop.Type() == MatType.CV_8UC3)
+        //                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
+                        
+        //                switch (MethordEdge)
+        //                {
+        //                    case MethordEdge.CloseEdges:
+        //                        matProcess = Filters.Edge(matCrop);
+        //                        break;
+        //                    case MethordEdge.StrongEdges:
+        //                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
+        //                        break;
+        //                    case MethordEdge.Binary:
+        //                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
+        //                        break;
+        //                    case MethordEdge.InvertBinary:
+        //                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
+        //                        break;
+        //                }
+        //                if (IsClearNoiseSmall)
+        //                    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+        //                if (IsClose)
+        //                    matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+        //                if (IsOpen)
+        //                    matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+        //                if (IsClearNoiseBig)
+        //                    matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+
+        //                //  SizeMorphology += 2;
+        //                FilletCornerMeasure.MaxLineCandidates = 8;
+        //                FilletCornerMeasure.RansacThreshold = 2;
+        //                FilletCornerMeasure.RansacIterations = 200;
+        //                FilletCornerMeasure.PairStrategy = LinePairStrategy.StrongPlusOrth;
+        //                FilletCornerMeasure.PerpAngleToleranceDeg = 3;
+        //                Result = FilletCornerMeasure.Measure(matCrop, matProcess);//, matProcess, MaximumLine, GapExtremum, LineOrientation, SegmentStatType, MinInliers);
+                    
+        //                   int width1 = 10;
+        //                    int height1 = 10;
+        //                    float angle1 = (float)Result.AtoB_CCW_Deg;
+
+        //                    angle1 = 270 - angle1;
+        //                scoreRs = 100;
+        //                    rectRotates = new List<RectRotate>();
+        //                    rectRotates.Add(new RectRotate(new RectangleF(-width1 / 2, -height1 / 2, width1, height1), new PointF(Result.Corner.X, Result.Corner.Y), angle1, AnchorPoint.None, false));
+                        
+        //                break;
+        //        }if(scoreRs!=0)
+        //        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = (int)Math.Round(scoreRs / rectRotates.Count(), 1);
+
+
+
+        //    }
+
+        //}
        
         public void Complete()
         {

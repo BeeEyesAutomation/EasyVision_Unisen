@@ -40,8 +40,9 @@ namespace BeeCpp {
         }
     private:
         ColorAreaPP* _ColorPP;
+       
     public:
-        int a = 0;
+        void FreeBuffer(System::IntPtr p);
         void SetImgeRaw(IntPtr data, int width, int height, int stride, int channels);
         void SetImgeCrop(IntPtr data, int width, int height, int stride, int channels, float x, float y, float w, float h, float angle);
 

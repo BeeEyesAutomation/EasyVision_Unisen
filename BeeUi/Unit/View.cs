@@ -3326,13 +3326,13 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         int numLive = 500;
       public CycleTimerSplit timer ;
 
-    
+        bool IsErrCCD = false;
         private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-         
+            IsErrCCD = false;
             if (!Global.IsRun)
             {
-                BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                IsErrCCD= BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
             }
             else
@@ -3343,18 +3343,20 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     {
                         if (camera != null)
                         {
-                            camera.Read();
+                            IsErrCCD= camera.Read();
+                           
                             if (camera.Para.TypeCamera == TypeCamera.USB)
-                                camera.Read();
+                                IsErrCCD= camera.Read();
+                            if (IsErrCCD) return;
                         }
 
                     });
                 }
                 else
                 {
-                    BeeCore.Common.listCamera[0].Read();
+                    IsErrCCD = BeeCore.Common.listCamera[0].Read();
                     if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                        BeeCore.Common.listCamera[0].Read();
+                        IsErrCCD = BeeCore.Common.listCamera[0].Read();
                 }
              }    
                
@@ -3362,9 +3364,13 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
 
         }
-        private void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            if (IsErrCCD)
+            {
+                await Task.Delay(5);
+                workReadCCD.RunWorkerAsync();
+            }    
          
             if (btnLive.IsCLick)
             {

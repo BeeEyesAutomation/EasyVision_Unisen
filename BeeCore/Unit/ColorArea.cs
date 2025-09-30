@@ -331,42 +331,110 @@ namespace BeeCore
         public int CheckColor(RectRotate rotCrop)
         {
             int pxRs = 0;
-            using (Mat mat =  BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+
+            if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
+
+            using (Mat src = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
-                if (mat.Empty()) return -1 ;
-                if (mat.Type() == MatType.CV_8UC1)
+                if (src.Empty()) return -1;
+
+                Mat bgr = null;
+                try
                 {
-                    Cv2.CvtColor(mat, mat, ColorConversionCodes.GRAY2BGR);
-                }
-                ColorAreaPP.SetImgeCrop(mat.Data, mat.Width, mat.Height, (int)mat.Step(), mat.Channels(), rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
-                            rotCrop._rect.Width, rotCrop._rect.Height, 
-                            rotCrop._rectRotation);
-                int w = 0, h, s = 0, c = 0;
-                IntPtr intPtr = IntPtr.Zero;
-                intPtr = ColorAreaPP.Check(  out w, out h, out s, out c);
-                if (intPtr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
-                    matProcess = new Mat();
-                MatType mt = c == 1 ? MatType.CV_8UC1
-                            : c == 3 ? MatType.CV_8UC3
-                            : MatType.CV_8UC4;
-                using (var m = new Mat(h, w, mt, intPtr, s))
-                {
-                    matProcess = m.Clone();
+                    if (src.Type() == MatType.CV_8UC1)
+                    {
+                        bgr = new Mat();
+                        Cv2.CvtColor(src, bgr, ColorConversionCodes.GRAY2BGR);
+                    }
+                    else
+                    {
+                        bgr = src; // reuse
+                    }
+
+                    ColorAreaPP.SetImgeCrop(
+                        bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels(),
+                        rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
+                        rotCrop._rect.Width, rotCrop._rect.Height,
+                        rotCrop._rectRotation);
+
+                    GC.KeepAlive(bgr);
+
+                    int w, h, s, c;
+                    IntPtr ptr = ColorAreaPP.Check(out w, out h, out s, out c);
+
+                    try
+                    {
+                        // Validate trước, nhưng KHÔNG return trước khi FreeBuffer
+                        if (ptr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+                        {
+                            return 0; // finally phía dưới vẫn chạy để FreeBuffer nếu cần
+                        }
+
+                        MatType mt = (c == 1) ? MatType.CV_8UC1
+                                   : (c == 3) ? MatType.CV_8UC3
+                                              : MatType.CV_8UC4;
+
+                        using (var mNative = new Mat(h, w, mt, ptr, s))
+                        {
+                            matProcess = mNative.Clone(); // bây giờ dữ liệu đã thuộc về OpenCV (managed)
+                        }
+                    }
+                    finally
+                    {
+                        // GIẢI PHÓNG BỘ NHỚ DO native CẤP PHÁT — luôn luôn!
+                        if (ptr != IntPtr.Zero)
+                        {
+                            ColorAreaPP.FreeBuffer(ptr);
+                            ptr = IntPtr.Zero;
+                        }
+                    }
+
+                    // Hậu xử lý:
                     if (IsClearNoiseSmall)
-                        matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+                    {
+                        Mat t = Filters.ClearNoise(matProcess, SizeClearsmall);
+                        if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                    }
                     if (IsClose)
-                        matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+                    {
+                        Mat t = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+                        if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                    }
                     if (IsOpen)
-                        matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                    {
+                        Mat t = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                        if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                    }
                     if (IsClearNoiseBig)
-                        matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
-                    pxRs=Cv2.CountNonZero(matProcess);
+                    {
+                        Mat t = Filters.ClearNoise(matProcess, SizeClearBig);
+                        if (!object.ReferenceEquals(t, matProcess)) { matProcess.Dispose(); matProcess = t; }
+                    }
+
+                    if (matProcess.Channels() != 1)
+                    {
+                        using (var gray = new Mat())
+                        {
+                            if (matProcess.Channels() == 3)
+                                Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGR2GRAY);
+                            else
+                                Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGRA2GRAY);
+
+                            matProcess.Dispose();
+                            matProcess = gray.Clone();
+                        }
+                    }
+
+                    pxRs = Cv2.CountNonZero(matProcess);
+                    return pxRs;
                 }
-
-
-                return pxRs;
+                finally
+                {
+                    if (bgr != null && !object.ReferenceEquals(bgr, src))
+                        bgr.Dispose();
+                }
             }
-       
         }
+
     }
 }

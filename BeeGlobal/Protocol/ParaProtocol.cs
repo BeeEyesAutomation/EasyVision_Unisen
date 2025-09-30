@@ -234,6 +234,7 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                    IO_Processing = IO_Processing.None;
                     Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
                     IO_Processing = IO_Processing.Reset;
@@ -600,7 +601,9 @@ namespace BeeGlobal
                     {
                         try
                         {
-                            if(_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", _IO_Processing.ToString()));
+
+                            if (_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
                             await _ioLock.WaitAsync();
                             await WriteIO(value);
                         }

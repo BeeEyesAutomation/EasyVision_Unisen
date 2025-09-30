@@ -298,7 +298,7 @@ namespace BeeCpp
 			[System::Runtime::InteropServices::Out] int% outStride,
 			[System::Runtime::InteropServices::Out] int% outChannels );
         void LearnPattern();
-
+		void FreeBuffer(System::IntPtr p);
         List<Rotaterectangle>^ Match(
             bool m_bStopLayer1,
             double m_dToleranceAngle,

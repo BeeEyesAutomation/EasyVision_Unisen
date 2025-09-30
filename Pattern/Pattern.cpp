@@ -677,356 +677,675 @@ void Pattern::LearnPattern()
 	}
 	templData->bIsPatternLearned = true;
 }
-
+void Pattern::FreeBuffer(System::IntPtr p)
+{
+	if (p != System::IntPtr::Zero)
+		System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+}
 List<Rotaterectangle>^ Pattern::Match(
-    bool   m_bStopLayer1,
-    double m_dToleranceAngle,
-    double m_dTolerance1,
-    double m_dTolerance2,
-    double m_dScore,
-    bool   m_ckSIMD,
-    bool   m_ckBitwiseNot,
-    bool   m_bSubPixel,
-    int    m_iMaxPos,
-    double m_dMaxOverlap,
-    bool   useMultiThread,
-    int    numThreads
+	bool   m_bStopLayer1,
+	double m_dToleranceAngle,
+	double m_dTolerance1,
+	double m_dTolerance2,
+	double m_dScore,
+	bool   m_ckSIMD,
+	bool   m_ckBitwiseNot,
+	bool   m_bSubPixel,
+	int    m_iMaxPos,
+	double m_dMaxOverlap,
+	bool   useMultiThread,
+	int    numThreads
 )
 {
-    auto results = gcnew List<Rotaterectangle>();
- 
+	// Kết quả .NET
+	auto results = gcnew List<Rotaterectangle>(Math::Max(m_iMaxPos, 0));
 
-		System::String^ listMatch = "";
+	// ======= Kiểm tra đầu vào nhanh =======
+	if (img == nullptr) return results;
+	if (img->matSample.empty()) return results;
+	if (img->matRaw.empty())    return results;
+	if (!img->m_TemplData.bIsPatternLearned) return results;
 
-		bool m_bToleranceRange = true;
+	// Chuẩn hoá m_iMaxPos
+	if (m_iMaxPos <= 0) m_iMaxPos = INT_MAX;
 
-		double m_dTolerance3 = 0;
-		double m_dTolerance4 = 0;
-	
-
-	
-		
-		/*if (matDraw.type() != CV_8UC3)
-		{
-			cvtColor(matDraw, matDraw, COLOR_GRAY2BGR);
-		}
-		*/
-		if (img->matSample.empty())
-			return results;
-		if (img->matRaw.empty())
-			return results;
-	
-		if (!img->m_TemplData.bIsPatternLearned)
-			return results;
-		//UpdateData (1);
-		double d1 = clock();
-		//決定金字塔層數 總共為1 + iLayer層
-		int iTopLayer = img->GetTopLayer(&img->matSample, (int)sqrt((double)img->m_iMinReduceArea));
-		//建立金字塔
-		vector<Mat> vecMatSrcPyr;
-		if (m_ckBitwiseNot)//m_ckBitwiseNot
-		{
-			Mat matNewSrc = 255 - img->matRaw;
-			buildPyramid(matNewSrc, vecMatSrcPyr, iTopLayer);
-
-		}
+	// ======= Chuẩn bị pyramid nguồn =======
+	// Dùng bitwise_not thay vì 255 - img để an toàn kiểu (8U)
+	cv::Mat srcForPyr;
+	if (m_ckBitwiseNot) {
+		if (img->matRaw.type() != CV_8U && img->matRaw.type() != CV_8UC1 && img->matRaw.type() != CV_8UC3)
+			cv::convertScaleAbs(img->matRaw, srcForPyr);
 		else
-			buildPyramid(img->matRaw, vecMatSrcPyr, iTopLayer);
-
-		s_TemplData* pTemplData = &img->m_TemplData;
-		double dAngleStep = atan(2.0 / max(pTemplData->vecPyramid[iTopLayer].cols, pTemplData->vecPyramid[iTopLayer].rows)) * R2D;
-
-		vector<double> vecAngles;
-
-		if (m_bToleranceRange)
-		{
-
-			for (double dAngle = m_dTolerance1; dAngle < m_dTolerance2 + dAngleStep; dAngle += dAngleStep)
-				vecAngles.push_back(dAngle);
-			/*for (double dAngle = m_dTolerance3; dAngle < m_dTolerance4 + dAngleStep; dAngle += dAngleStep)
-				vecAngles.push_back(dAngle);*/
-		}
+			srcForPyr = img->matRaw;
+		cv::bitwise_not(srcForPyr, srcForPyr);
+	}
+	else {
+		if (img->matRaw.depth() != CV_8U)
+			cv::convertScaleAbs(img->matRaw, srcForPyr);
 		else
-		{
-			if (m_dToleranceAngle < VISION_TOLERANCE)
-				vecAngles.push_back(0.0);
-			else
-			{
-				for (double dAngle = 0; dAngle < m_dToleranceAngle + dAngleStep; dAngle += dAngleStep)
-					vecAngles.push_back(dAngle);
-				for (double dAngle = -dAngleStep; dAngle > -m_dToleranceAngle - dAngleStep; dAngle -= dAngleStep)
-					vecAngles.push_back(dAngle);
-			}
+			srcForPyr = img->matRaw;
+	}
+
+	int iTopLayer = img->GetTopLayer(&img->matSample, (int)std::sqrt((double)img->m_iMinReduceArea));
+	if (iTopLayer < 0) iTopLayer = 0;
+
+	std::vector<cv::Mat> vecMatSrcPyr;
+	vecMatSrcPyr.reserve((size_t)iTopLayer + 1);
+	cv::buildPyramid(srcForPyr, vecMatSrcPyr, iTopLayer);
+
+	s_TemplData* pTemplData = &img->m_TemplData;
+	if ((int)pTemplData->vecPyramid.size() <= iTopLayer) return results;
+
+	// ======= Góc quét ở top layer =======
+	const double epsTiny = 1e-6;
+	double dAngleStep = std::atan(2.0 / std::max(pTemplData->vecPyramid[iTopLayer].cols, pTemplData->vecPyramid[iTopLayer].rows)) * R2D;
+	if (dAngleStep < epsTiny) dAngleStep = 0.5; // dự phòng
+
+	std::vector<double> vecAngles;
+	vecAngles.reserve(64);
+	if (true /*m_bToleranceRange*/) {
+		// Quét từ m_dTolerance1 -> m_dTolerance2 (bao gồm biên phải)
+		if (m_dTolerance2 < m_dTolerance1) std::swap(m_dTolerance1, m_dTolerance2);
+		for (double a = m_dTolerance1; a <= m_dTolerance2 + 0.5 * dAngleStep; a += dAngleStep)
+			vecAngles.push_back(a);
+	}
+	else {
+		if (m_dToleranceAngle < VISION_TOLERANCE) {
+			vecAngles.push_back(0.0);
 		}
+		else {
+			for (double a = 0.0; a <= m_dToleranceAngle + 0.5 * dAngleStep; a += dAngleStep) vecAngles.push_back(a);
+			for (double a = -dAngleStep; a >= -m_dToleranceAngle - 0.5 * dAngleStep; a -= dAngleStep) vecAngles.push_back(a);
+		}
+	}
+	if (vecAngles.empty()) vecAngles.push_back(0.0);
 
-		int iTopSrcW = vecMatSrcPyr[iTopLayer].cols, iTopSrcH = vecMatSrcPyr[iTopLayer].rows;
-		Point2f ptCenter((iTopSrcW - 1) / 2.0f, (iTopSrcH - 1) / 2.0f);
+	// ======= Chuẩn bị ngưỡng theo tầng =======
+	std::vector<double> vecLayerScore((size_t)iTopLayer + 1, m_dScore);
+	for (int l = 1; l <= iTopLayer; ++l) vecLayerScore[(size_t)l] = vecLayerScore[(size_t)l - 1] * 0.90;
 
-		int iSize = (int)vecAngles.size();
-		//vector<s_MatchParameter> vecMatchParameter (iSize * (m_iMaxPos + MATCH_CANDIDATE_NUM));
-		vector<s_MatchParameter> vecMatchParameter;
-		//Caculate lowest score at every layer
-		vector<double> vecLayerScore(iTopLayer + 1, m_dScore);
-		for (int iLayer = 1; iLayer <= iTopLayer; iLayer++)
-			vecLayerScore[iLayer] = vecLayerScore[iLayer - 1] * 0.9;
+	const int iTopSrcW = vecMatSrcPyr[(size_t)iTopLayer].cols;
+	const int iTopSrcH = vecMatSrcPyr[(size_t)iTopLayer].rows;
+	cv::Point2f ptCenter((iTopSrcW - 1) * 0.5f, (iTopSrcH - 1) * 0.5f);
 
-		cv::Size sizePat = pTemplData->vecPyramid[iTopLayer].size();
-		bool bCalMaxByBlock = (vecMatSrcPyr[iTopLayer].size().area() / sizePat.area() > 500) && m_iMaxPos > 10;
-		for (int i = 0; i < iSize; i++)
-		{
-			try
-			{
-				Mat matRotatedSrc, matR = getRotationMatrix2D(ptCenter, vecAngles[i], 1);
-				Mat matResult;
+	cv::Size sizePatTop = pTemplData->vecPyramid[(size_t)iTopLayer].size();
+	const bool bCalMaxByBlock = (vecMatSrcPyr[(size_t)iTopLayer].size().area() / std::max(1, sizePatTop.area()) > 500) && (m_iMaxPos > 10);
+
+	// ======= Tìm cực đại sơ bộ ở top layer cho mỗi góc =======
+	std::vector<s_MatchParameter> vecMatchParameter;
+	vecMatchParameter.reserve(vecAngles.size() * (size_t)std::min(m_iMaxPos + MATCH_CANDIDATE_NUM, 64));
+
+	// (Có thể song song theo góc nếu cần: dùng OpenMP/TBB; cẩn trọng với C++/CLI)
+	for (size_t ai = 0; ai < vecAngles.size(); ++ai)
+	{
+		try {
+			const double angDeg = vecAngles[ai];
+			cv::Mat matR = cv::getRotationMatrix2D(ptCenter, angDeg, 1.0);
+			const cv::Size sizeBest = img->GetBestRotationSize(vecMatSrcPyr[(size_t)iTopLayer].size(),
+				pTemplData->vecPyramid[(size_t)iTopLayer].size(),
+				angDeg);
+			const float fTx = (sizeBest.width - 1) * 0.5f - ptCenter.x;
+			const float fTy = (sizeBest.height - 1) * 0.5f - ptCenter.y;
+			matR.at<double>(0, 2) += fTx;
+			matR.at<double>(1, 2) += fTy;
+
+			cv::Mat matRotatedSrc;
+			cv::warpAffine(vecMatSrcPyr[(size_t)iTopLayer], matRotatedSrc, matR, sizeBest,
+				cv::INTER_LINEAR, cv::BORDER_CONSTANT, cv::Scalar(pTemplData->iBorderColor));
+
+			cv::Mat matResult;
+			img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iTopLayer, false, m_ckSIMD);
+			// Đảm bảo float32
+			if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
+
+			if (bCalMaxByBlock) {
+				s_BlockMax blockMax(matResult, pTemplData->vecPyramid[(size_t)iTopLayer].size());
+				double dMaxVal = -1.0;
 				cv::Point ptMaxLoc;
-				double dValue, dMaxVal;
-				double dRotate = clock();
-				cv::Size sizeBest = img-> GetBestRotationSize(vecMatSrcPyr[iTopLayer].size(), pTemplData->vecPyramid[iTopLayer].size(), vecAngles[i]);
-
-				float fTranslationX = (sizeBest.width - 1) / 2.0f - ptCenter.x;
-				float fTranslationY = (sizeBest.height - 1) / 2.0f - ptCenter.y;
-				matR.at<double>(0, 2) += fTranslationX;
-				matR.at<double>(1, 2) += fTranslationY;
-				warpAffine(vecMatSrcPyr[iTopLayer], matRotatedSrc, matR, sizeBest, INTER_LINEAR, BORDER_CONSTANT, Scalar(pTemplData->iBorderColor));
-				//imshow("r" + to_string(iSize), matRotatedSrc);
-				img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iTopLayer, false, m_ckSIMD);
-				//	imshow("H" + to_string(iSize), matResult);
-				if (bCalMaxByBlock)
-				{
-					s_BlockMax blockMax(matResult, pTemplData->vecPyramid[iTopLayer].size());
-					blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
-					if (dMaxVal < vecLayerScore[iTopLayer])
-						continue;
-					vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dMaxVal, vecAngles[i]));
-					for (int j = 0; j < m_iMaxPos + MATCH_CANDIDATE_NUM - 1; j++)
-					{
-						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc, pTemplData->vecPyramid[iTopLayer].size(), dValue, m_dMaxOverlap, blockMax);
-						if (dValue < vecLayerScore[iTopLayer])
-							break;
-						vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dValue, vecAngles[i]));
-					}
-				}
-				else
-				{
-
-					minMaxLoc(matResult, 0, &dMaxVal, 0, &ptMaxLoc);
-					if (dMaxVal < vecLayerScore[iTopLayer])
-						continue;
-					vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dMaxVal, vecAngles[i]));
-					for (int j = 0; j < m_iMaxPos + MATCH_CANDIDATE_NUM - 1; j++)
-					{
-						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc, pTemplData->vecPyramid[iTopLayer].size(), dValue, m_dMaxOverlap);
-						if (dValue < vecLayerScore[iTopLayer])
-							break;
-						vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dValue, vecAngles[i]));
+				blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
+				if (dMaxVal >= vecLayerScore[(size_t)iTopLayer]) {
+					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
+					const int want = m_iMaxPos + MATCH_CANDIDATE_NUM - 1;
+					for (int k = 0; k < want; ++k) {
+						double dValue = -1.0;
+						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
+							pTemplData->vecPyramid[(size_t)iTopLayer].size(),
+							dValue, m_dMaxOverlap, blockMax);
+						if (dValue < vecLayerScore[(size_t)iTopLayer]) break;
+						vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dValue, angDeg);
 					}
 				}
 			}
-			catch (exception ex)
-			{
-
+			else {
+				double dMaxVal = -1.0;
+				cv::Point ptMaxLoc;
+				cv::minMaxLoc(matResult, nullptr, &dMaxVal, nullptr, &ptMaxLoc);
+				if (dMaxVal >= vecLayerScore[(size_t)iTopLayer]) {
+					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
+					const int want = m_iMaxPos + MATCH_CANDIDATE_NUM - 1;
+					for (int k = 0; k < want; ++k) {
+						double dValue = -1.0;
+						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
+							pTemplData->vecPyramid[(size_t)iTopLayer].size(),
+							dValue, m_dMaxOverlap);
+						if (dValue < vecLayerScore[(size_t)iTopLayer]) break;
+						vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dValue, angDeg);
+					}
+				}
 			}
 		}
-		std::sort(vecMatchParameter.begin(), vecMatchParameter.end(), compareScoreBig2Small);
+		catch (const std::exception&) { /* có thể log nếu cần */ }
+	}
 
+	std::sort(vecMatchParameter.begin(), vecMatchParameter.end(), compareScoreBig2Small);
+	if (vecMatchParameter.empty()) return results;
 
-		int iMatchSize = (int)vecMatchParameter.size();
-		int iDstW = pTemplData->vecPyramid[iTopLayer].cols, iDstH = pTemplData->vecPyramid[iTopLayer].rows;
+	// ======= Refine xuống các layer dưới =======
+	const int iDstWTop = pTemplData->vecPyramid[(size_t)iTopLayer].cols;
+	const int iDstHTop = pTemplData->vecPyramid[(size_t)iTopLayer].rows;
 
-	
+	const bool bSubPixelEstimation = m_bSubPixel;
+	const int  iStopLayer = m_bStopLayer1 ? 1 : 0;  // 1 = chỉ coarse
 
-		bool bSubPixelEstimation = m_bSubPixel;
-		int iStopLayer = m_bStopLayer1 ? 1 : 0; //设置为1时：粗匹配，牺牲精度提升速度。
-		//int iSearchSize = min (m_iMaxPos + MATCH_CANDIDATE_NUM, (int)vecMatchParameter.size ());//可能不需要搜尋到全部 太浪費時間
-		vector<s_MatchParameter> vecAllResult;
-		for (int i = 0; i < (int)vecMatchParameter.size(); i++)
-			//for (int i = 0; i < iSearchSize; i++)
-		{
-			double dRAngle = -vecMatchParameter[i].dMatchAngle * D2R;
-			Point2f ptLT = img->ptRotatePt2f(vecMatchParameter[i].pt, ptCenter, dRAngle);
+	std::vector<s_MatchParameter> vecAllResult;
+	vecAllResult.reserve(vecMatchParameter.size());
 
-			double dAngleStep = atan(2.0 / max(iDstW, iDstH)) * R2D;//min改為max
-			vecMatchParameter[i].dAngleStart = vecMatchParameter[i].dMatchAngle - dAngleStep;
-			vecMatchParameter[i].dAngleEnd = vecMatchParameter[i].dMatchAngle + dAngleStep;
+	for (size_t mi = 0; mi < vecMatchParameter.size(); ++mi)
+	{
+		double dRAngle = -vecMatchParameter[mi].dMatchAngle * D2R;
+		cv::Point2f ptLT = img->ptRotatePt2f(vecMatchParameter[mi].pt, ptCenter, dRAngle);
 
-			if (iTopLayer <= iStopLayer)
+		double localAngleStep = std::atan(2.0 / std::max(iDstWTop, iDstHTop)) * R2D;
+		if (localAngleStep < epsTiny) localAngleStep = 0.5;
+		vecMatchParameter[mi].dAngleStart = vecMatchParameter[mi].dMatchAngle - localAngleStep;
+		vecMatchParameter[mi].dAngleEnd = vecMatchParameter[mi].dMatchAngle + localAngleStep;
+
+		if (iTopLayer <= iStopLayer) {
+			vecMatchParameter[mi].pt = cv::Point2d(ptLT * ((iTopLayer == 0) ? 1 : 2));
+			vecAllResult.push_back(vecMatchParameter[mi]);
+		}
+		else {
+			for (int iLayer = iTopLayer - 1; iLayer >= iStopLayer; --iLayer)
 			{
-				vecMatchParameter[i].pt = Point2d(ptLT * ((iTopLayer == 0) ? 1 : 2));
-				vecAllResult.push_back(vecMatchParameter[i]);
-			}
-			else
-			{
-				for (int iLayer = iTopLayer - 1; iLayer >= iStopLayer; iLayer--)
+				// danh sách góc quanh góc tốt nhất hiện tại
+				localAngleStep = std::atan(2.0 / std::max(pTemplData->vecPyramid[(size_t)iLayer].cols,
+					pTemplData->vecPyramid[(size_t)iLayer].rows)) * R2D;
+				if (localAngleStep < epsTiny) localAngleStep = 0.5;
+
+				const double dMatchedAngle = vecMatchParameter[mi].dMatchAngle;
+				std::vector<double> localAngles; localAngles.reserve(3);
+				localAngles.push_back(dMatchedAngle - localAngleStep);
+				localAngles.push_back(dMatchedAngle);
+				localAngles.push_back(dMatchedAngle + localAngleStep);
+
+				cv::Point2f ptSrcCenter((vecMatSrcPyr[(size_t)iLayer].cols - 1) * 0.5f,
+					(vecMatSrcPyr[(size_t)iLayer].rows - 1) * 0.5f);
+
+				const size_t nAngles = localAngles.size();
+				std::vector<s_MatchParameter> vecNew(nAngles);
+
+				int bestIdx = 0;
+				double bestVal = -1.0;
+
+				for (size_t j = 0; j < nAngles; ++j)
 				{
-					//搜尋角度
-					dAngleStep = atan(2.0 / max(pTemplData->vecPyramid[iLayer].cols, pTemplData->vecPyramid[iLayer].rows)) * R2D;//min改為max
-					vector<double> vecAngles;
-					//double dAngleS = vecMatchParameter[i].dAngleStart, dAngleE = vecMatchParameter[i].dAngleEnd;
-					double dMatchedAngle = vecMatchParameter[i].dMatchAngle;
-					if (m_bToleranceRange)
-					{
-						for (int i = -1; i <= 1; i++)
-							vecAngles.push_back(dMatchedAngle + dAngleStep * i);
-					}
-					else
-					{
-						if (m_dToleranceAngle < VISION_TOLERANCE)
-							vecAngles.push_back(0.0);
-						else
-							for (int i = -1; i <= 1; i++)
-								vecAngles.push_back(dMatchedAngle + dAngleStep * i);
-					}
-					Point2f ptSrcCenter((vecMatSrcPyr[iLayer].cols - 1) / 2.0f, (vecMatSrcPyr[iLayer].rows - 1) / 2.0f);
-					iSize = (int)vecAngles.size();
-					vector<s_MatchParameter> vecNewMatchParameter(iSize);
-					int iMaxScoreIndex = 0;
-					double dBigValue = -1;
-					for (int j = 0; j < iSize; j++)
-					{
-						Mat matResult, matRotatedSrc;
-						double dMaxValue = 0;
-						cv::Point ptMaxLoc;
-						img->GetRotatedROI(vecMatSrcPyr[iLayer], pTemplData->vecPyramid[iLayer].size(), ptLT * 2, vecAngles[j], matRotatedSrc);
+					cv::Mat matRotatedSrc, matResult;
+					img->GetRotatedROI(vecMatSrcPyr[(size_t)iLayer],
+						pTemplData->vecPyramid[(size_t)iLayer].size(),
+						ptLT * 2, localAngles[j], matRotatedSrc);
 
-						img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, true, m_ckSIMD);
-						//matchTemplate (matRotatedSrc, pTemplData->vecPyramid[iLayer], matResult, CV_TM_CCOEFF_NORMED);
-						minMaxLoc(matResult, 0, &dMaxValue, 0, &ptMaxLoc);
-						vecNewMatchParameter[j] = s_MatchParameter(ptMaxLoc, dMaxValue, vecAngles[j]);
+					img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, true, m_ckSIMD);
+					if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
 
-						if (vecNewMatchParameter[j].dMatchScore > dBigValue)
-						{
-							iMaxScoreIndex = j;
-							dBigValue = vecNewMatchParameter[j].dMatchScore;
-						}
-						//次像素估計
-						if (ptMaxLoc.x == 0 || ptMaxLoc.y == 0 || ptMaxLoc.x == matResult.cols - 1 || ptMaxLoc.y == matResult.rows - 1)
-							vecNewMatchParameter[j].bPosOnBorder = true;
-						if (!vecNewMatchParameter[j].bPosOnBorder)
-						{
-							for (int y = -1; y <= 1; y++)
-								for (int x = -1; x <= 1; x++)
-									vecNewMatchParameter[j].vecResult[x + 1][y + 1] = matResult.at<float>(ptMaxLoc + cv::Point(x, y));
-						}
-						//次像素估計
-					}
-					if (vecNewMatchParameter[iMaxScoreIndex].dMatchScore < vecLayerScore[iLayer])
-						break;
-					//次像素估計
-					if (bSubPixelEstimation
-						&& iLayer == 0
-						&& (!vecNewMatchParameter[iMaxScoreIndex].bPosOnBorder)
-						&& iMaxScoreIndex != 0
-						&& iMaxScoreIndex != 2)
-					{
-						double dNewX = 0, dNewY = 0, dNewAngle = 0;
-						img->SubPixEsimation(&vecNewMatchParameter, &dNewX, &dNewY, &dNewAngle, dAngleStep, iMaxScoreIndex);
-						vecNewMatchParameter[iMaxScoreIndex].pt = Point2d(dNewX, dNewY);
-						vecNewMatchParameter[iMaxScoreIndex].dMatchAngle = dNewAngle;
-					}
-					//次像素估計
+					double dMaxValue = -1.0;
+					cv::Point ptMaxLoc;
+					cv::minMaxLoc(matResult, nullptr, &dMaxValue, nullptr, &ptMaxLoc);
 
-					double dNewMatchAngle = vecNewMatchParameter[iMaxScoreIndex].dMatchAngle;
+					vecNew[j] = s_MatchParameter(ptMaxLoc, dMaxValue, localAngles[j]);
 
-					//讓坐標系回到旋轉時(GetRotatedROI)的(0, 0)
-					Point2f ptPaddingLT = img->ptRotatePt2f(ptLT * 2, ptSrcCenter, dNewMatchAngle * D2R) - Point2f(3, 3);
-					Point2f pt(vecNewMatchParameter[iMaxScoreIndex].pt.x + ptPaddingLT.x, vecNewMatchParameter[iMaxScoreIndex].pt.y + ptPaddingLT.y);
-					//再旋轉
-					pt = img->ptRotatePt2f(pt, ptSrcCenter, -dNewMatchAngle * D2R);
+					if (dMaxValue > bestVal) { bestVal = dMaxValue; bestIdx = (int)j; }
 
-					if (iLayer == iStopLayer)
-					{
-						vecNewMatchParameter[iMaxScoreIndex].pt = pt * (iStopLayer == 0 ? 1 : 2);
-						vecAllResult.push_back(vecNewMatchParameter[iMaxScoreIndex]);
-					}
-					else
-					{
-						//更新MatchAngle ptLT
-						vecMatchParameter[i].dMatchAngle = dNewMatchAngle;
-						vecMatchParameter[i].dAngleStart = vecMatchParameter[i].dMatchAngle - dAngleStep / 2;
-						vecMatchParameter[i].dAngleEnd = vecMatchParameter[i].dMatchAngle + dAngleStep / 2;
-						ptLT = pt;
+					// biên
+					if (ptMaxLoc.x == 0 || ptMaxLoc.y == 0 || ptMaxLoc.x == matResult.cols - 1 || ptMaxLoc.y == matResult.rows - 1)
+						vecNew[j].bPosOnBorder = true;
+
+					if (!vecNew[j].bPosOnBorder) {
+						for (int yy = -1; yy <= 1; ++yy)
+							for (int xx = -1; xx <= 1; ++xx)
+								vecNew[j].vecResult[xx + 1][yy + 1] = matResult.at<float>(ptMaxLoc + cv::Point(xx, yy));
 					}
 				}
 
+				if (vecNew[(size_t)bestIdx].dMatchScore < vecLayerScore[(size_t)iLayer])
+					break;
+
+				if (bSubPixelEstimation && iLayer == 0 && !vecNew[(size_t)bestIdx].bPosOnBorder &&
+					bestIdx != 0 && bestIdx != 2)
+				{
+					double dNewX = 0, dNewY = 0, dNewAngle = 0;
+					img->SubPixEsimation(&vecNew, &dNewX, &dNewY, &dNewAngle, localAngleStep, bestIdx);
+					vecNew[(size_t)bestIdx].pt = cv::Point2d(dNewX, dNewY);
+					vecNew[(size_t)bestIdx].dMatchAngle = dNewAngle;
+				}
+
+				const double dNewMatchAngle = vecNew[(size_t)bestIdx].dMatchAngle;
+
+				// chuyển toạ độ về hệ của ROI quay
+				cv::Point2f ptPaddingLT = img->ptRotatePt2f(ptLT * 2, ptSrcCenter, (float)(dNewMatchAngle * D2R)) - cv::Point2f(3.f, 3.f);
+				cv::Point2f pt((float)(vecNew[(size_t)bestIdx].pt.x + ptPaddingLT.x),
+					(float)(vecNew[(size_t)bestIdx].pt.y + ptPaddingLT.y));
+				// quay ngược về hệ gốc của layer
+				pt = img->ptRotatePt2f(pt, ptSrcCenter, (float)(-dNewMatchAngle * D2R));
+
+				if (iLayer == iStopLayer) {
+					vecNew[(size_t)bestIdx].pt = pt * (iStopLayer == 0 ? 1.f : 2.f);
+					vecAllResult.push_back(vecNew[(size_t)bestIdx]);
+				}
+				else {
+					// cập nhật cho vòng refine tiếp
+					vecMatchParameter[mi].dMatchAngle = dNewMatchAngle;
+					vecMatchParameter[mi].dAngleStart = dNewMatchAngle - localAngleStep * 0.5;
+					vecMatchParameter[mi].dAngleEnd = dNewMatchAngle + localAngleStep * 0.5;
+					ptLT = pt;
+				}
 			}
 		}
-		img->FilterWithScore(&vecAllResult, m_dScore);
+	}
 
-		//最後濾掉重疊
-		iDstW = pTemplData->vecPyramid[iStopLayer].cols * (iStopLayer == 0 ? 1 : 2);
-		iDstH = pTemplData->vecPyramid[iStopLayer].rows * (iStopLayer == 0 ? 1 : 2);
+	// Lọc theo score thô
+	img->FilterWithScore(&vecAllResult, m_dScore);
+	if (vecAllResult.empty()) return results;
 
-		for (int i = 0; i < (int)vecAllResult.size(); i++)
-		{
-			Point2f ptLT, ptRT, ptRB, ptLB;
-			double dRAngle = -vecAllResult[i].dMatchAngle * D2R;
-			ptLT = vecAllResult[i].pt;
-			ptRT = Point2f(ptLT.x + iDstW * (float)cos(dRAngle), ptLT.y - iDstW * (float)sin(dRAngle));
-			ptLB = Point2f(ptLT.x + iDstH * (float)sin(dRAngle), ptLT.y + iDstH * (float)cos(dRAngle));
-			ptRB = Point2f(ptRT.x + iDstH * (float)sin(dRAngle), ptRT.y + iDstH * (float)cos(dRAngle));
-			//紀錄旋轉矩形
-			vecAllResult[i].rectR = RotatedRect(ptLT, ptRT, ptRB);
-		}
-		img->FilterWithRotatedRect(&vecAllResult, CV_TM_CCOEFF_NORMED, m_dMaxOverlap);
-		std::sort(vecAllResult.begin(), vecAllResult.end(), compareScoreBig2Small);
+	// Lọc chồng lắp bằng rotated rect
+	const int iDstW = pTemplData->vecPyramid[(size_t)iStopLayer].cols * (iStopLayer == 0 ? 1 : 2);
+	const int iDstH = pTemplData->vecPyramid[(size_t)iStopLayer].rows * (iStopLayer == 0 ? 1 : 2);
 
-		//m_vecSingleTargetData.clear();
-		iMatchSize = (int)vecAllResult.size();
-		if (vecAllResult.size() == 0)
-		{
-		
+	for (size_t i = 0; i < vecAllResult.size(); ++i)
+	{
+		const double dRAng = -vecAllResult[i].dMatchAngle * D2R;
+		const cv::Point2f ptLT = vecAllResult[i].pt;
+		const cv::Point2f ptRT(ptLT.x + (float)iDstW * (float)std::cos(dRAng),
+			ptLT.y - (float)iDstW * (float)std::sin(dRAng));
+		const cv::Point2f ptRB(ptRT.x + (float)iDstH * (float)std::sin(dRAng),
+			ptRT.y + (float)iDstH * (float)std::cos(dRAng));
+		vecAllResult[i].rectR = cv::RotatedRect(ptLT, ptRT, ptRB);
+	}
 
-			return results;
-		}
+	img->FilterWithRotatedRect(&vecAllResult, CV_TM_CCOEFF_NORMED, m_dMaxOverlap);
+	std::sort(vecAllResult.begin(), vecAllResult.end(), compareScoreBig2Small);
+	if (vecAllResult.empty()) return results;
 
-		int iW = pTemplData->vecPyramid[0].cols, iH = pTemplData->vecPyramid[0].rows;
+	const int iW = pTemplData->vecPyramid[0].cols;
+	const int iH = pTemplData->vecPyramid[0].rows;
 
-		for (int i = 0; i < iMatchSize; i++)
-		{
-			float angle = vecAllResult[i].dMatchAngle;
+	// Xuất kết quả tối đa m_iMaxPos
+	const size_t takeN = std::min((size_t)m_iMaxPos, vecAllResult.size());
+	for (size_t i = 0; i < takeN; ++i)
+	{
+		const double ang = vecAllResult[i].dMatchAngle;
+		const cv::Point2f c = vecAllResult[i].rectR.center;
 
+		Rotaterectangle rr;
+		rr.Cx = c.x; rr.Cy = c.y;
+		rr.AngleDeg = -ang;      // giữ sign như bản gốc
+		rr.Width = (double)iW;
+		rr.Height = (double)iH;
+		rr.Score = vecAllResult[i].dMatchScore * 100.0;
+		results->Add(rr);
+	}
 
-			s_SingleTargetMatch sstm;
-			double dRAngle = -vecAllResult[i].dMatchAngle * D2R;
-
-			sstm.ptLT = vecAllResult[i].pt;
-
-			sstm.ptRT = Point2d(sstm.ptLT.x + iW * cos(dRAngle), sstm.ptLT.y - iW * sin(dRAngle));
-			sstm.ptLB = Point2d(sstm.ptLT.x + iH * sin(dRAngle), sstm.ptLT.y + iH * cos(dRAngle));
-			sstm.ptRB = Point2d(sstm.ptRT.x + iH * sin(dRAngle), sstm.ptRT.y + iH * cos(dRAngle));
-			sstm.ptCenter = Point2d((sstm.ptLT.x + sstm.ptRT.x + sstm.ptRB.x + sstm.ptLB.x) / 4, (sstm.ptLT.y + sstm.ptRT.y + sstm.ptRB.y + sstm.ptLB.y) / 4);
-			sstm.dMatchedAngle = -vecAllResult[i].dMatchAngle;
-			sstm.dMatchScore = vecAllResult[i].dMatchScore;
-
-			if (sstm.dMatchedAngle < -180)
-				sstm.dMatchedAngle += 360;
-			if (sstm.dMatchedAngle > 180)
-				sstm.dMatchedAngle -= 360;
-			//m_vecSingleTargetData.push_back(sstm);
-			Rect rect = vecAllResult[i].rectBounding;
-			listMatch += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() + "," + vecAllResult[i].dMatchScore * 100 + "\n";
-			double score = vecAllResult[i].dMatchScore * 100;
-			
-			if (i + 1 == m_iMaxPos)
-				break;
-		}
-		for (size_t i = 0; i < vecAllResult.size(); ++i)
-		{
-			cv::Point2f c = vecAllResult[i].rectR.center;
-			Rotaterectangle rr;
-			rr.Cx = c.x; rr.Cy = c.y;
-			rr.AngleDeg = -vecAllResult[i].dMatchAngle;
-			rr.Width = (double)iW;
-			rr.Height = (double)iH;
-			rr.Score = vecAllResult[i].dMatchScore * 100.0;
-			results->Add(rr);
-			if ((int)i + 1 == m_iMaxPos) break;
-		}
-
-	
-	
-  
-   
-        return results;
-    
+	return results;
 }
+
+//List<Rotaterectangle>^ Pattern::Match(
+//    bool   m_bStopLayer1,
+//    double m_dToleranceAngle,
+//    double m_dTolerance1,
+//    double m_dTolerance2,
+//    double m_dScore,
+//    bool   m_ckSIMD,
+//    bool   m_ckBitwiseNot,
+//    bool   m_bSubPixel,
+//    int    m_iMaxPos,
+//    double m_dMaxOverlap,
+//    bool   useMultiThread,
+//    int    numThreads
+//)
+//{
+//    auto results = gcnew List<Rotaterectangle>();
+// 
+//
+//		System::String^ listMatch = "";
+//
+//		bool m_bToleranceRange = true;
+//
+//		double m_dTolerance3 = 0;
+//		double m_dTolerance4 = 0;
+//	
+//
+//	
+//		
+//		/*if (matDraw.type() != CV_8UC3)
+//		{
+//			cvtColor(matDraw, matDraw, COLOR_GRAY2BGR);
+//		}
+//		*/
+//		if (img->matSample.empty())
+//			return results;
+//		if (img->matRaw.empty())
+//			return results;
+//	
+//		if (!img->m_TemplData.bIsPatternLearned)
+//			return results;
+//		//UpdateData (1);
+//		double d1 = clock();
+//		//決定金字塔層數 總共為1 + iLayer層
+//		int iTopLayer = img->GetTopLayer(&img->matSample, (int)sqrt((double)img->m_iMinReduceArea));
+//		//建立金字塔
+//		vector<Mat> vecMatSrcPyr;
+//		if (m_ckBitwiseNot)//m_ckBitwiseNot
+//		{
+//			Mat matNewSrc = 255 - img->matRaw;
+//			buildPyramid(matNewSrc, vecMatSrcPyr, iTopLayer);
+//
+//		}
+//		else
+//			buildPyramid(img->matRaw, vecMatSrcPyr, iTopLayer);
+//
+//		s_TemplData* pTemplData = &img->m_TemplData;
+//		double dAngleStep = atan(2.0 / max(pTemplData->vecPyramid[iTopLayer].cols, pTemplData->vecPyramid[iTopLayer].rows)) * R2D;
+//
+//		vector<double> vecAngles;
+//
+//		if (m_bToleranceRange)
+//		{
+//
+//			for (double dAngle = m_dTolerance1; dAngle < m_dTolerance2 + dAngleStep; dAngle += dAngleStep)
+//				vecAngles.push_back(dAngle);
+//			/*for (double dAngle = m_dTolerance3; dAngle < m_dTolerance4 + dAngleStep; dAngle += dAngleStep)
+//				vecAngles.push_back(dAngle);*/
+//		}
+//		else
+//		{
+//			if (m_dToleranceAngle < VISION_TOLERANCE)
+//				vecAngles.push_back(0.0);
+//			else
+//			{
+//				for (double dAngle = 0; dAngle < m_dToleranceAngle + dAngleStep; dAngle += dAngleStep)
+//					vecAngles.push_back(dAngle);
+//				for (double dAngle = -dAngleStep; dAngle > -m_dToleranceAngle - dAngleStep; dAngle -= dAngleStep)
+//					vecAngles.push_back(dAngle);
+//			}
+//		}
+//
+//		int iTopSrcW = vecMatSrcPyr[iTopLayer].cols, iTopSrcH = vecMatSrcPyr[iTopLayer].rows;
+//		Point2f ptCenter((iTopSrcW - 1) / 2.0f, (iTopSrcH - 1) / 2.0f);
+//
+//		int iSize = (int)vecAngles.size();
+//		//vector<s_MatchParameter> vecMatchParameter (iSize * (m_iMaxPos + MATCH_CANDIDATE_NUM));
+//		vector<s_MatchParameter> vecMatchParameter;
+//		//Caculate lowest score at every layer
+//		vector<double> vecLayerScore(iTopLayer + 1, m_dScore);
+//		for (int iLayer = 1; iLayer <= iTopLayer; iLayer++)
+//			vecLayerScore[iLayer] = vecLayerScore[iLayer - 1] * 0.9;
+//
+//		cv::Size sizePat = pTemplData->vecPyramid[iTopLayer].size();
+//		bool bCalMaxByBlock = (vecMatSrcPyr[iTopLayer].size().area() / sizePat.area() > 500) && m_iMaxPos > 10;
+//		for (int i = 0; i < iSize; i++)
+//		{
+//			try
+//			{
+//				Mat matRotatedSrc, matR = getRotationMatrix2D(ptCenter, vecAngles[i], 1);
+//				Mat matResult;
+//				cv::Point ptMaxLoc;
+//				double dValue, dMaxVal;
+//				double dRotate = clock();
+//				cv::Size sizeBest = img-> GetBestRotationSize(vecMatSrcPyr[iTopLayer].size(), pTemplData->vecPyramid[iTopLayer].size(), vecAngles[i]);
+//
+//				float fTranslationX = (sizeBest.width - 1) / 2.0f - ptCenter.x;
+//				float fTranslationY = (sizeBest.height - 1) / 2.0f - ptCenter.y;
+//				matR.at<double>(0, 2) += fTranslationX;
+//				matR.at<double>(1, 2) += fTranslationY;
+//				warpAffine(vecMatSrcPyr[iTopLayer], matRotatedSrc, matR, sizeBest, INTER_LINEAR, BORDER_CONSTANT, Scalar(pTemplData->iBorderColor));
+//				//imshow("r" + to_string(iSize), matRotatedSrc);
+//				img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iTopLayer, false, m_ckSIMD);
+//				//	imshow("H" + to_string(iSize), matResult);
+//				if (bCalMaxByBlock)
+//				{
+//					s_BlockMax blockMax(matResult, pTemplData->vecPyramid[iTopLayer].size());
+//					blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
+//					if (dMaxVal < vecLayerScore[iTopLayer])
+//						continue;
+//					vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dMaxVal, vecAngles[i]));
+//					for (int j = 0; j < m_iMaxPos + MATCH_CANDIDATE_NUM - 1; j++)
+//					{
+//						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc, pTemplData->vecPyramid[iTopLayer].size(), dValue, m_dMaxOverlap, blockMax);
+//						if (dValue < vecLayerScore[iTopLayer])
+//							break;
+//						vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dValue, vecAngles[i]));
+//					}
+//				}
+//				else
+//				{
+//
+//					minMaxLoc(matResult, 0, &dMaxVal, 0, &ptMaxLoc);
+//					if (dMaxVal < vecLayerScore[iTopLayer])
+//						continue;
+//					vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dMaxVal, vecAngles[i]));
+//					for (int j = 0; j < m_iMaxPos + MATCH_CANDIDATE_NUM - 1; j++)
+//					{
+//						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc, pTemplData->vecPyramid[iTopLayer].size(), dValue, m_dMaxOverlap);
+//						if (dValue < vecLayerScore[iTopLayer])
+//							break;
+//						vecMatchParameter.push_back(s_MatchParameter(Point2f(ptMaxLoc.x - fTranslationX, ptMaxLoc.y - fTranslationY), dValue, vecAngles[i]));
+//					}
+//				}
+//			}
+//			catch (exception ex)
+//			{
+//
+//			}
+//		}
+//		std::sort(vecMatchParameter.begin(), vecMatchParameter.end(), compareScoreBig2Small);
+//
+//
+//		int iMatchSize = (int)vecMatchParameter.size();
+//		int iDstW = pTemplData->vecPyramid[iTopLayer].cols, iDstH = pTemplData->vecPyramid[iTopLayer].rows;
+//
+//	
+//
+//		bool bSubPixelEstimation = m_bSubPixel;
+//		int iStopLayer = m_bStopLayer1 ? 1 : 0; //设置为1时：粗匹配，牺牲精度提升速度。
+//		//int iSearchSize = min (m_iMaxPos + MATCH_CANDIDATE_NUM, (int)vecMatchParameter.size ());//可能不需要搜尋到全部 太浪費時間
+//		vector<s_MatchParameter> vecAllResult;
+//		for (int i = 0; i < (int)vecMatchParameter.size(); i++)
+//			//for (int i = 0; i < iSearchSize; i++)
+//		{
+//			double dRAngle = -vecMatchParameter[i].dMatchAngle * D2R;
+//			Point2f ptLT = img->ptRotatePt2f(vecMatchParameter[i].pt, ptCenter, dRAngle);
+//
+//			double dAngleStep = atan(2.0 / max(iDstW, iDstH)) * R2D;//min改為max
+//			vecMatchParameter[i].dAngleStart = vecMatchParameter[i].dMatchAngle - dAngleStep;
+//			vecMatchParameter[i].dAngleEnd = vecMatchParameter[i].dMatchAngle + dAngleStep;
+//
+//			if (iTopLayer <= iStopLayer)
+//			{
+//				vecMatchParameter[i].pt = Point2d(ptLT * ((iTopLayer == 0) ? 1 : 2));
+//				vecAllResult.push_back(vecMatchParameter[i]);
+//			}
+//			else
+//			{
+//				for (int iLayer = iTopLayer - 1; iLayer >= iStopLayer; iLayer--)
+//				{
+//					//搜尋角度
+//					dAngleStep = atan(2.0 / max(pTemplData->vecPyramid[iLayer].cols, pTemplData->vecPyramid[iLayer].rows)) * R2D;//min改為max
+//					vector<double> vecAngles;
+//					//double dAngleS = vecMatchParameter[i].dAngleStart, dAngleE = vecMatchParameter[i].dAngleEnd;
+//					double dMatchedAngle = vecMatchParameter[i].dMatchAngle;
+//					if (m_bToleranceRange)
+//					{
+//						for (int i = -1; i <= 1; i++)
+//							vecAngles.push_back(dMatchedAngle + dAngleStep * i);
+//					}
+//					else
+//					{
+//						if (m_dToleranceAngle < VISION_TOLERANCE)
+//							vecAngles.push_back(0.0);
+//						else
+//							for (int i = -1; i <= 1; i++)
+//								vecAngles.push_back(dMatchedAngle + dAngleStep * i);
+//					}
+//					Point2f ptSrcCenter((vecMatSrcPyr[iLayer].cols - 1) / 2.0f, (vecMatSrcPyr[iLayer].rows - 1) / 2.0f);
+//					iSize = (int)vecAngles.size();
+//					vector<s_MatchParameter> vecNewMatchParameter(iSize);
+//					int iMaxScoreIndex = 0;
+//					double dBigValue = -1;
+//					for (int j = 0; j < iSize; j++)
+//					{
+//						Mat matResult, matRotatedSrc;
+//						double dMaxValue = 0;
+//						cv::Point ptMaxLoc;
+//						img->GetRotatedROI(vecMatSrcPyr[iLayer], pTemplData->vecPyramid[iLayer].size(), ptLT * 2, vecAngles[j], matRotatedSrc);
+//
+//						img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iLayer, true, m_ckSIMD);
+//						//matchTemplate (matRotatedSrc, pTemplData->vecPyramid[iLayer], matResult, CV_TM_CCOEFF_NORMED);
+//						minMaxLoc(matResult, 0, &dMaxValue, 0, &ptMaxLoc);
+//						vecNewMatchParameter[j] = s_MatchParameter(ptMaxLoc, dMaxValue, vecAngles[j]);
+//
+//						if (vecNewMatchParameter[j].dMatchScore > dBigValue)
+//						{
+//							iMaxScoreIndex = j;
+//							dBigValue = vecNewMatchParameter[j].dMatchScore;
+//						}
+//						//次像素估計
+//						if (ptMaxLoc.x == 0 || ptMaxLoc.y == 0 || ptMaxLoc.x == matResult.cols - 1 || ptMaxLoc.y == matResult.rows - 1)
+//							vecNewMatchParameter[j].bPosOnBorder = true;
+//						if (!vecNewMatchParameter[j].bPosOnBorder)
+//						{
+//							for (int y = -1; y <= 1; y++)
+//								for (int x = -1; x <= 1; x++)
+//									vecNewMatchParameter[j].vecResult[x + 1][y + 1] = matResult.at<float>(ptMaxLoc + cv::Point(x, y));
+//						}
+//						//次像素估計
+//					}
+//					if (vecNewMatchParameter[iMaxScoreIndex].dMatchScore < vecLayerScore[iLayer])
+//						break;
+//					//次像素估計
+//					if (bSubPixelEstimation
+//						&& iLayer == 0
+//						&& (!vecNewMatchParameter[iMaxScoreIndex].bPosOnBorder)
+//						&& iMaxScoreIndex != 0
+//						&& iMaxScoreIndex != 2)
+//					{
+//						double dNewX = 0, dNewY = 0, dNewAngle = 0;
+//						img->SubPixEsimation(&vecNewMatchParameter, &dNewX, &dNewY, &dNewAngle, dAngleStep, iMaxScoreIndex);
+//						vecNewMatchParameter[iMaxScoreIndex].pt = Point2d(dNewX, dNewY);
+//						vecNewMatchParameter[iMaxScoreIndex].dMatchAngle = dNewAngle;
+//					}
+//					//次像素估計
+//
+//					double dNewMatchAngle = vecNewMatchParameter[iMaxScoreIndex].dMatchAngle;
+//
+//					//讓坐標系回到旋轉時(GetRotatedROI)的(0, 0)
+//					Point2f ptPaddingLT = img->ptRotatePt2f(ptLT * 2, ptSrcCenter, dNewMatchAngle * D2R) - Point2f(3, 3);
+//					Point2f pt(vecNewMatchParameter[iMaxScoreIndex].pt.x + ptPaddingLT.x, vecNewMatchParameter[iMaxScoreIndex].pt.y + ptPaddingLT.y);
+//					//再旋轉
+//					pt = img->ptRotatePt2f(pt, ptSrcCenter, -dNewMatchAngle * D2R);
+//
+//					if (iLayer == iStopLayer)
+//					{
+//						vecNewMatchParameter[iMaxScoreIndex].pt = pt * (iStopLayer == 0 ? 1 : 2);
+//						vecAllResult.push_back(vecNewMatchParameter[iMaxScoreIndex]);
+//					}
+//					else
+//					{
+//						//更新MatchAngle ptLT
+//						vecMatchParameter[i].dMatchAngle = dNewMatchAngle;
+//						vecMatchParameter[i].dAngleStart = vecMatchParameter[i].dMatchAngle - dAngleStep / 2;
+//						vecMatchParameter[i].dAngleEnd = vecMatchParameter[i].dMatchAngle + dAngleStep / 2;
+//						ptLT = pt;
+//					}
+//				}
+//
+//			}
+//		}
+//		img->FilterWithScore(&vecAllResult, m_dScore);
+//
+//		//最後濾掉重疊
+//		iDstW = pTemplData->vecPyramid[iStopLayer].cols * (iStopLayer == 0 ? 1 : 2);
+//		iDstH = pTemplData->vecPyramid[iStopLayer].rows * (iStopLayer == 0 ? 1 : 2);
+//
+//		for (int i = 0; i < (int)vecAllResult.size(); i++)
+//		{
+//			Point2f ptLT, ptRT, ptRB, ptLB;
+//			double dRAngle = -vecAllResult[i].dMatchAngle * D2R;
+//			ptLT = vecAllResult[i].pt;
+//			ptRT = Point2f(ptLT.x + iDstW * (float)cos(dRAngle), ptLT.y - iDstW * (float)sin(dRAngle));
+//			ptLB = Point2f(ptLT.x + iDstH * (float)sin(dRAngle), ptLT.y + iDstH * (float)cos(dRAngle));
+//			ptRB = Point2f(ptRT.x + iDstH * (float)sin(dRAngle), ptRT.y + iDstH * (float)cos(dRAngle));
+//			//紀錄旋轉矩形
+//			vecAllResult[i].rectR = RotatedRect(ptLT, ptRT, ptRB);
+//		}
+//		img->FilterWithRotatedRect(&vecAllResult, CV_TM_CCOEFF_NORMED, m_dMaxOverlap);
+//		std::sort(vecAllResult.begin(), vecAllResult.end(), compareScoreBig2Small);
+//
+//		//m_vecSingleTargetData.clear();
+//		iMatchSize = (int)vecAllResult.size();
+//		if (vecAllResult.size() == 0)
+//		{
+//		
+//
+//			return results;
+//		}
+//
+//		int iW = pTemplData->vecPyramid[0].cols, iH = pTemplData->vecPyramid[0].rows;
+//
+//		for (int i = 0; i < iMatchSize; i++)
+//		{
+//			float angle = vecAllResult[i].dMatchAngle;
+//
+//
+//			s_SingleTargetMatch sstm;
+//			double dRAngle = -vecAllResult[i].dMatchAngle * D2R;
+//
+//			sstm.ptLT = vecAllResult[i].pt;
+//
+//			sstm.ptRT = Point2d(sstm.ptLT.x + iW * cos(dRAngle), sstm.ptLT.y - iW * sin(dRAngle));
+//			sstm.ptLB = Point2d(sstm.ptLT.x + iH * sin(dRAngle), sstm.ptLT.y + iH * cos(dRAngle));
+//			sstm.ptRB = Point2d(sstm.ptRT.x + iH * sin(dRAngle), sstm.ptRT.y + iH * cos(dRAngle));
+//			sstm.ptCenter = Point2d((sstm.ptLT.x + sstm.ptRT.x + sstm.ptRB.x + sstm.ptLB.x) / 4, (sstm.ptLT.y + sstm.ptRT.y + sstm.ptRB.y + sstm.ptLB.y) / 4);
+//			sstm.dMatchedAngle = -vecAllResult[i].dMatchAngle;
+//			sstm.dMatchScore = vecAllResult[i].dMatchScore;
+//
+//			if (sstm.dMatchedAngle < -180)
+//				sstm.dMatchedAngle += 360;
+//			if (sstm.dMatchedAngle > 180)
+//				sstm.dMatchedAngle -= 360;
+//			//m_vecSingleTargetData.push_back(sstm);
+//			Rect rect = vecAllResult[i].rectBounding;
+//			listMatch += sstm.ptCenter.x.ToString() + "," + sstm.ptCenter.y.ToString() + "," + (-sstm.dMatchedAngle).ToString() + "," + iW.ToString() + "," + iH.ToString() + "," + vecAllResult[i].dMatchScore * 100 + "\n";
+//			double score = vecAllResult[i].dMatchScore * 100;
+//			
+//			if (i + 1 == m_iMaxPos)
+//				break;
+//		}
+//		for (size_t i = 0; i < vecAllResult.size(); ++i)
+//		{
+//			cv::Point2f c = vecAllResult[i].rectR.center;
+//			Rotaterectangle rr;
+//			rr.Cx = c.x; rr.Cy = c.y;
+//			rr.AngleDeg = -vecAllResult[i].dMatchAngle;
+//			rr.Width = (double)iW;
+//			rr.Height = (double)iH;
+//			rr.Score = vecAllResult[i].dMatchScore * 100.0;
+//			results->Add(rr);
+//			if ((int)i + 1 == m_iMaxPos) break;
+//		}
+//
+//	
+//	
+//  
+//   
+//        return results;
+//    
+//}
