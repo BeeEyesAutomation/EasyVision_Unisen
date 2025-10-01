@@ -508,6 +508,31 @@ namespace BeeCore
             }
         }
         bool[] BitsResult=new bool[16];
+        static bool IntersectX(RectRotate r, float valueX)
+        {
+            float w = r._rect.Width, h = r._rect.Height;
+            double th = r._rectRotation * Math.PI / 180.0;
+            double c = Math.Cos(th), s = Math.Sin(th);
+
+            float extX = (float)(Math.Abs(c) * (w * 0.5) + Math.Abs(s) * (h * 0.5));
+            float minX = r._PosCenter.X - extX;
+            float maxX = r._PosCenter.X + extX;
+
+            return maxX>=valueX ;   // cắt đường x = valueX
+        }
+
+        static bool IntersectY(RectRotate r, float valueY)
+        {
+            float w = r._rect.Width, h = r._rect.Height;
+            double th = r._rectRotation * Math.PI / 180.0;
+            double c = Math.Cos(th), s = Math.Sin(th);
+
+            float extY = (float)(Math.Abs(s) * (w * 0.5) + Math.Abs(c) * (h * 0.5));
+            float minY = r._PosCenter.Y - extY;
+            float maxY = r._PosCenter.Y + extY;
+
+            return maxY>=valueY ;   // cắt đường y = valueY
+        }
         public void Complete()
         {
             if (Global.IsIntialPython)
@@ -556,10 +581,11 @@ namespace BeeCore
                                     if (boxList[i]._rect.Width >= item.ValueWidth)
                                         IsOK = true;
                                 if (item.IsX)
-                                    if (boxList[i]._PosCenter.X + boxList[i]._rect.Width / 2 >= item.ValueX)
+                                    if (IntersectX(boxList[i], item.ValueX))// if (boxList[i]._PosCenter.X + boxList[i]._rect.Width / 2 >= item.ValueX)
+
                                         IsOK = true;
                                 if (item.IsY)
-                                    if (boxList[i]._PosCenter.Y + boxList[i]._rect.Height / 2 >= item.ValueY)
+                                    if (IntersectY(boxList[i], item.ValueY)) // [i]._PosCenter.Y + boxList[i]._rect.Height / 2 >= item.ValueY)
                                         IsOK = true;
                                 if (item.IsArea)
                                     if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)

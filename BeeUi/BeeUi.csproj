@@ -271,7 +271,6 @@
     </Compile>
     <Compile Include="Commons\Global.cs" />
     <Compile Include="Commons\KbdListener.cs" />
-    <Compile Include="Commons\MatrixExtension.cs" />
     <Compile Include="Form\ShowEraser.cs">
       <SubType>Form</SubType>
     </Compile>

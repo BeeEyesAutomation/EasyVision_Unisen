@@ -245,6 +245,7 @@ namespace BeeUi
 
 
             FormActive.CheckActive(addMac);
+            Global.ScanCCD.ListCamUSB = Global.ScanCCD.ScanIDCCD(TypeCamera.USB);
             Global.ScanCCD.workConAll.RunWorkerAsync();
 
         }

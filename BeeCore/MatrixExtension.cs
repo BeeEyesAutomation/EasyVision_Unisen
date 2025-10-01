@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BeeUi.Common
+namespace BeeCore
 {
     [Serializable()]
     public static class MatrixExtension
