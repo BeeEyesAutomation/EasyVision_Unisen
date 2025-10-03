@@ -243,6 +243,12 @@
     <Compile Include="Tool\ToolPitch.Designer.cs">
       <DependentUpon>ToolPitch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolEdge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolEdge.Designer.cs">
+      <DependentUpon>ToolEdge.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -344,6 +350,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolPitch.resx">
       <DependentUpon>ToolPitch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolEdge.resx">
+      <DependentUpon>ToolEdge.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>

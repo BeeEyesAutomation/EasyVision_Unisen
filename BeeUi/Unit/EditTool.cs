@@ -16,6 +16,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.UI.WebControls;
@@ -776,6 +777,11 @@ namespace BeeUi
                     Global.TriggerNum = TriggerNum.Trigger1;
                     Global.StatusProcessing = StatusProcessing.Checking;
                 }
+                else
+                {
+                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
+                    View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                }
             }
             }
 
@@ -859,6 +865,179 @@ namespace BeeUi
             mouseLeft.Show(btnLogo, menuPoint);
             //else
             //    mouseLeft.Hide();
+        }
+        Camera CameraLive;
+        private async void btnLiveCam_Click(object sender, EventArgs e)
+        {
+
+            CameraLive = new Camera(new ParaCamera(), 1);
+            CameraLive.IndexConnect = (int)numCam.Value;
+            CameraLive.Para.TypeCamera = TypeCamera.USB;
+           await CameraLive.Connect("", CameraLive.Para.TypeCamera);
+            if(!CameraLive.IsConnected)
+            {
+                btnLive.IsCLick = false;
+                MessageBox.Show("Fail live camera");
+                return;
+            }
+            else
+            {
+                if(btnLive.IsCLick)
+                {
+                    StartLive();
+                    if (!workLive.IsBusy)
+                        workLive.RunWorkerAsync();
+                }
+                else
+                {
+                    StopLive();
+                    CameraLive.DisConnect(TypeCamera.USB);
+                    CameraLive.DestroyAll();
+                }    
+              
+
+            }    
+        }
+        private Thread _displayThread;
+        private readonly AutoResetEvent _frameReady = new AutoResetEvent(false);
+        private Bitmap _sharedFrame;
+        private int _uiPending; // 0: idle, 1: đang đẩy frame lên UI
+        void PublishFrame(Bitmap src)
+        {
+            if (!Global.IsLive) { src.Dispose(); return; }
+            // Clone 1 lần ở producer, không clone trong display thread
+            var clone = (Bitmap)src.Clone();
+            var old = Interlocked.Exchange(ref _sharedFrame, clone); // giữ frame mới nhất, drop cũ
+            old?.Dispose();
+            _frameReady.Set();
+        }
+
+        void StartLive()
+        {
+
+            _displayThread = new Thread(DisplayLoop) { IsBackground = true, Name = "DisplayLoop" };
+            _displayThread.Start();
+        }
+
+        void StopLive()
+        {
+
+            _frameReady.Set();
+            _displayThread?.Join();
+            _displayThread = null;
+
+            // Clear ảnh trên UI
+            if (IsHandleCreated && !IsDisposed)
+                BeginInvoke(new Action(() =>
+                {
+                    var old = imgLive.Image;
+                    imgLive.Image = null;
+                    old?.Dispose();
+                }));
+
+            // Dọn rác còn sót
+            var leftover = Interlocked.Exchange(ref _sharedFrame, null);
+            leftover?.Dispose();
+            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                        {
+                            BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                            imgLive.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                            Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                            ShowTool.Full(imgLive, Global.ParaCommon.SizeCCD);
+                        }
+
+        }
+
+        void DisplayLoop()
+        {
+            while (Global.IsLive)
+            {
+                _frameReady.WaitOne(50);        // chờ tín hiệu có frame (hoặc timeout để thoát nhanh)
+                if (!Global.IsLive) break;
+
+                // Lấy quyền sở hữu frame mới nhất và làm rỗng buffer chung
+                var frame = Interlocked.Exchange(ref _sharedFrame, null);
+                if (frame == null) continue;
+
+                // Chỉ cho phép 1 cập nhật UI pending; nếu UI chưa kịp xử lý → drop frame
+                if (Interlocked.Exchange(ref _uiPending, 1) == 1)
+                {
+                    frame.Dispose();
+                    continue;
+                }
+
+                try
+                {
+                    if (IsHandleCreated && !IsDisposed)
+                    {
+                        BeginInvoke(new Action(() =>
+                        {
+                            try
+                            {
+                                var old = imgLive.Image;
+                                imgLive.Image = frame;   // chuyển quyền sở hữu cho PictureBox
+                                old?.Dispose();          // hủy ảnh cũ sau khi gán
+                            }
+                            finally
+                            {
+                                Interlocked.Exchange(ref _uiPending, 0);
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        frame.Dispose();
+                        Interlocked.Exchange(ref _uiPending, 0);
+                    }
+                }
+                catch
+                {
+                    frame.Dispose();
+                    Interlocked.Exchange(ref _uiPending, 0);
+                }
+            }
+        }
+        private void workLive_DoWork(object sender, DoWorkEventArgs e)
+        {
+            CameraLive.Read();
+        }
+
+        private void workLive_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+           
+
+         
+
+                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                        {
+                            Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                            // matRaw là OpenCvSharp.Mat
+                            var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+
+                            // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
+                            var old = Interlocked.Exchange(ref _sharedFrame, bmp);
+                            old?.Dispose();
+
+                            // (tuỳ chọn) báo cho display thread là có frame mới
+                            _frameReady?.Set();
+                            //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw))
+                            //{
+
+                            //        _sharedFrame?.Dispose();
+                            //        _sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
+
+                            //}
+                        }
+
+              
+                workLive.RunWorkerAsync();
+                return;
+            
         }
 
         private void btnNew_Click(object sender, EventArgs e)

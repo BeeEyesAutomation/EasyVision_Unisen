@@ -511,7 +511,7 @@ namespace BeeCore
                                             // === Corner measure ===
                                             FilletCornerMeasure.MaxLineCandidates = 8;
                                             FilletCornerMeasure.RansacThreshold = 2;
-                                            FilletCornerMeasure.RansacIterations = 200;
+                                            FilletCornerMeasure.RansacIterations = 600;
                                             FilletCornerMeasure.PairStrategy = LinePairStrategy.StrongPlusOrth;
                                             FilletCornerMeasure.PerpAngleToleranceDeg = 3;
 

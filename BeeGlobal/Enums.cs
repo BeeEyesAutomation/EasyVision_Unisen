@@ -215,6 +215,7 @@ namespace BeeGlobal
         Corner=18,
         VisualMatch=19,
         Pitch = 20,//note
+        Edge=21,
     }
     public enum TypeOCR
     {

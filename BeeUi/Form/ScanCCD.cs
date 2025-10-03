@@ -443,7 +443,8 @@ namespace BeeUi
                     else
                     {
                         camera.Init(camera.Para.TypeCamera);
-                       // List<String> listStringCCD = camera.Scan(camera.Para.TypeCamera).ToList();
+                        camera.Scan(camera.Para.TypeCamera);
+                        // List<String> listStringCCD = camera.Scan(camera.Para.TypeCamera).ToList();
                     }    
                        
                    
@@ -500,15 +501,28 @@ namespace BeeUi
 
                         camera.matRaw = new OpenCvSharp.Mat();
                     }
-                    camera.Init(camera.Para.TypeCamera);
-                    
-                    String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
+                   
                     if (camera.Para.TypeCamera == TypeCamera.USB)
                     {
-                        int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
+                        indexCCD = -1;
+                        camera.Init(camera.Para.TypeCamera);
+                        int index = Array.FindIndex(ListCamUSB.ToArray(), s => s.Contains(camera.Para.Name));
                         if (index != -1)
                             indexCCD = index;
                     }
+                    else
+                    {
+                        camera.Init(camera.Para.TypeCamera);
+                        camera.Scan(camera.Para.TypeCamera);
+                        // List<String> listStringCCD = camera.Scan(camera.Para.TypeCamera).ToList();
+                    }
+                    //String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
+                    //if (camera.Para.TypeCamera == TypeCamera.USB)
+                    //{
+                    //    int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
+                    //    if (index != -1)
+                    //        indexCCD = index;
+                    //}
                    
                     if (indexCCD != -1 | camera.Para.TypeCamera != TypeCamera.USB)
                     {

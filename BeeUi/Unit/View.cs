@@ -4345,6 +4345,11 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         }
 
+        private void workLiveWebcam_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
         private void btnRunSim_Click_1(object sender, EventArgs e)
         {
             if (Files == null) return;

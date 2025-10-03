@@ -77,6 +77,7 @@ namespace BeeUi
             this.split1 = new System.Windows.Forms.Splitter();
             this.btnCap = new BeeInterface.RJButton();
             this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
+            this.workLiveWebcam = new System.ComponentModel.BackgroundWorker();
             this.pMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pView.SuspendLayout();
@@ -955,6 +956,10 @@ namespace BeeUi
             this.tmEnableControl.Interval = 200;
             this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
             // 
+            // workLiveWebcam
+            // 
+            this.workLiveWebcam.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLiveWebcam_RunWorkerCompleted);
+            // 
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1023,5 +1028,6 @@ namespace BeeUi
         public System.Windows.Forms.Splitter split2;
         public System.Windows.Forms.Splitter split1;
         private RJButton btnPan;
+        public System.ComponentModel.BackgroundWorker workLiveWebcam;
     }
 }

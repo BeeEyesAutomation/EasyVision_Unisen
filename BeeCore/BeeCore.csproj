@@ -176,6 +176,7 @@
     <Compile Include="Unit\PitchGdiPainter.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Pitch.cs" />
+    <Compile Include="Unit\Edge.cs" />
     <Compile Include="Unit\Width2.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
