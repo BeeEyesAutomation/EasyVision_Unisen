@@ -870,10 +870,11 @@ namespace BeeUi
         private async void btnLiveCam_Click(object sender, EventArgs e)
         {
 
-            CameraLive = new Camera(new ParaCamera(), 1);
+            CameraLive = new Camera(new ParaCamera(), 2);
             CameraLive.IndexConnect = (int)numCam.Value;
             CameraLive.Para.TypeCamera = TypeCamera.USB;
-           await CameraLive.Connect("", CameraLive.Para.TypeCamera);
+            CameraLive.Init(CameraLive.Para.TypeCamera);
+            CameraLive.IsConnected=await CameraLive.Connect("", CameraLive.Para.TypeCamera);
             if(!CameraLive.IsConnected)
             {
                 btnLive.IsCLick = false;
@@ -892,7 +893,7 @@ namespace BeeUi
                 {
                     StopLive();
                     CameraLive.DisConnect(TypeCamera.USB);
-                    CameraLive.DestroyAll();
+                   
                 }    
               
 
@@ -938,25 +939,25 @@ namespace BeeUi
             // Dọn rác còn sót
             var leftover = Interlocked.Exchange(ref _sharedFrame, null);
             leftover?.Dispose();
-            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+            if (CameraLive.matRaw!= null)
+                if (CameraLive.matRaw != null)
+                    if (!CameraLive.matRaw.IsDisposed)
+                        if (!CameraLive.matRaw.Empty())
                         {
-                            BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                            imgLive.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                            Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
-                            ShowTool.Full(imgLive, Global.ParaCommon.SizeCCD);
+                            CameraLive.Read();
+                            imgLive.Image = CameraLive.matRaw.ToBitmap();
+                            
+                            ShowTool.Full(imgLive, CameraLive.GetSzCCD());
                         }
 
         }
 
         void DisplayLoop()
         {
-            while (Global.IsLive)
+            while (btnLive.IsCLick)
             {
                 _frameReady.WaitOne(50);        // chờ tín hiệu có frame (hoặc timeout để thoát nhanh)
-                if (!Global.IsLive) break;
+                if (!btnLive.IsCLick) break;
 
                 // Lấy quyền sở hữu frame mới nhất và làm rỗng buffer chung
                 var frame = Interlocked.Exchange(ref _sharedFrame, null);
@@ -1011,13 +1012,13 @@ namespace BeeUi
 
          
 
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                if (CameraLive.matRaw != null)
+                    if (!CameraLive.matRaw.IsDisposed)
+                        if (!CameraLive.matRaw.Empty())
                         {
-                            Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                           // Global.ParaCommon.SizeCCD = CameraLive.GetSzCCD();
                             // matRaw là OpenCvSharp.Mat
-                            var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+                            var bmp = BitmapConverter.ToBitmap(CameraLive.matRaw);
 
                             // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
                             var old = Interlocked.Exchange(ref _sharedFrame, bmp);
