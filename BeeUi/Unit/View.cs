@@ -1857,23 +1857,23 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
                     foreach (int ix in Global.ParaCommon.indexLogic1)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
                                 break;
                             }
-                            else
+                            else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
                                 break;
                             }
                         }
@@ -1882,12 +1882,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
                                 break;
                             }
-                            else
+                            else if(BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
                                 break;
                             }
                         }
@@ -1896,12 +1896,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
                                 break;
                             }
-                            else
+                            else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic3= true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
                                 break;
                             }
                         }
@@ -1910,12 +1910,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
                                 break;
                             }
-                            else
+                            else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic4= true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
                                 break;
                             }
                         }
@@ -1924,12 +1924,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
                                 break;
                             }
-                            else
+                            else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
                                 break;
                             }
                         }
@@ -1938,12 +1938,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = false ? Global.ParaCommon.IsONNG == false : true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
                                 break;
                             }
-                            else
+                            else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = true ? Global.ParaCommon.IsONNG == false : false;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = t true;
                                 break;
                             }
                         }
