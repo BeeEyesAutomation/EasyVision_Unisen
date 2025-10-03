@@ -43,12 +43,11 @@ namespace BeeUi
             this.pRight = new System.Windows.Forms.Panel();
             this.pEditTool = new BeeUi.ViewHost();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.pCamera = new System.Windows.Forms.Panel();
             this.btnLive = new BeeInterface.RJButton();
             this.numCam = new System.Windows.Forms.NumericUpDown();
             this.imgLive = new Cyotek.Windows.Forms.ImageBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.splitter1 = new System.Windows.Forms.Splitter();
             this.pName = new System.Windows.Forms.Panel();
             this.lbTool = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
@@ -98,6 +97,7 @@ namespace BeeUi
             this.openImageTool = new System.Windows.Forms.ToolStripMenuItem();
             this.playTool = new System.Windows.Forms.ToolStripMenuItem();
             this.stopTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.webCamTool = new System.Windows.Forms.ToolStripMenuItem();
             this.customUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UnlockSpiltter = new System.Windows.Forms.ToolStripMenuItem();
             this.screenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,13 +114,13 @@ namespace BeeUi
             this.split3 = new System.Windows.Forms.Splitter();
             this.tmLoad = new System.Windows.Forms.Timer(this.components);
             this.rjButton1 = new BeeInterface.RJButton();
+            this.workLive = new System.ComponentModel.BackgroundWorker();
             this.pInfor = new BeeUi.ViewHost();
             this.pHeader = new BeeUi.Common.Header();
-            this.workLive = new System.ComponentModel.BackgroundWorker();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pRight.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.pCamera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCam)).BeginInit();
             this.pName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).BeginInit();
@@ -196,7 +196,7 @@ namespace BeeUi
             this.pRight.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pRight.Controls.Add(this.pEditTool);
             this.pRight.Controls.Add(this.splitter2);
-            this.pRight.Controls.Add(this.panel2);
+            this.pRight.Controls.Add(this.pCamera);
             this.pRight.Controls.Add(this.pName);
             this.pRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pRight.Location = new System.Drawing.Point(0, 70);
@@ -212,30 +212,30 @@ namespace BeeUi
             this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pEditTool.Location = new System.Drawing.Point(4, 47);
             this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(495, 775);
+            this.pEditTool.Size = new System.Drawing.Size(495, 773);
             this.pEditTool.TabIndex = 1;
             // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(4, 822);
+            this.splitter2.Location = new System.Drawing.Point(4, 820);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(495, 5);
+            this.splitter2.Size = new System.Drawing.Size(495, 3);
             this.splitter2.TabIndex = 2;
             this.splitter2.TabStop = false;
             // 
-            // panel2
+            // pCamera
             // 
-            this.panel2.Controls.Add(this.btnLive);
-            this.panel2.Controls.Add(this.numCam);
-            this.panel2.Controls.Add(this.imgLive);
-            this.panel2.Controls.Add(this.flowLayoutPanel1);
-            this.panel2.Controls.Add(this.splitter1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(4, 827);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(495, 328);
-            this.panel2.TabIndex = 0;
+            this.pCamera.Controls.Add(this.btnLive);
+            this.pCamera.Controls.Add(this.numCam);
+            this.pCamera.Controls.Add(this.imgLive);
+            this.pCamera.Controls.Add(this.flowLayoutPanel1);
+            this.pCamera.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pCamera.Location = new System.Drawing.Point(4, 823);
+            this.pCamera.Name = "pCamera";
+            this.pCamera.Size = new System.Drawing.Size(495, 332);
+            this.pCamera.TabIndex = 0;
+            this.pCamera.Visible = false;
             // 
             // btnLive
             // 
@@ -291,14 +291,16 @@ namespace BeeUi
             // 
             // numCam
             // 
-            this.numCam.Location = new System.Drawing.Point(232, 14);
+            this.numCam.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numCam.Location = new System.Drawing.Point(270, 7);
             this.numCam.Name = "numCam";
-            this.numCam.Size = new System.Drawing.Size(120, 20);
+            this.numCam.Size = new System.Drawing.Size(82, 31);
             this.numCam.TabIndex = 3;
-            this.numCam.Visible = false;
+            this.numCam.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // imgLive
             // 
+            this.imgLive.GridDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
             this.imgLive.Location = new System.Drawing.Point(2, 44);
             this.imgLive.Name = "imgLive";
             this.imgLive.Size = new System.Drawing.Size(490, 284);
@@ -311,15 +313,6 @@ namespace BeeUi
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 100);
             this.flowLayoutPanel1.TabIndex = 0;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter1.Location = new System.Drawing.Point(0, 327);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(495, 1);
-            this.splitter1.TabIndex = 1;
-            this.splitter1.TabStop = false;
             // 
             // pName
             // 
@@ -413,7 +406,7 @@ namespace BeeUi
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(108, 33);
             this.label1.TabIndex = 5;
-            this.label1.Text = "1.1.3";
+            this.label1.Text = "1.1.4";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // split6
@@ -803,7 +796,8 @@ namespace BeeUi
             this.debugTool,
             this.openImageTool,
             this.playTool,
-            this.stopTool});
+            this.stopTool,
+            this.webCamTool});
             this.Developer.Image = ((System.Drawing.Image)(resources.GetObject("Developer.Image")));
             this.Developer.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.Developer.Name = "Developer";
@@ -841,6 +835,15 @@ namespace BeeUi
             this.stopTool.Size = new System.Drawing.Size(205, 32);
             this.stopTool.Text = "Stop";
             this.stopTool.Click += new System.EventHandler(this.stopTool_Click);
+            // 
+            // webCamTool
+            // 
+            this.webCamTool.CheckOnClick = true;
+            this.webCamTool.Image = global::BeeUi.Properties.Resources.Camera1;
+            this.webCamTool.Name = "webCamTool";
+            this.webCamTool.Size = new System.Drawing.Size(205, 32);
+            this.webCamTool.Text = "WebCam";
+            this.webCamTool.Click += new System.EventHandler(this.webCamTool_Click);
             // 
             // customUIToolStripMenuItem
             // 
@@ -994,6 +997,11 @@ namespace BeeUi
             this.rjButton1.TextColor = System.Drawing.Color.White;
             this.rjButton1.UseVisualStyleBackColor = false;
             // 
+            // workLive
+            // 
+            this.workLive.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLive_DoWork);
+            this.workLive.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLive_RunWorkerCompleted);
+            // 
             // pInfor
             // 
             this.pInfor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -1016,11 +1024,6 @@ namespace BeeUi
             this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.pHeader.Size = new System.Drawing.Size(2240, 80);
             this.pHeader.TabIndex = 22;
-            // 
-            // workLive
-            // 
-            this.workLive.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLive_DoWork);
-            this.workLive.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLive_RunWorkerCompleted);
             // 
             // EditTool
             // 
@@ -1047,7 +1050,7 @@ namespace BeeUi
             this.statusStrip1.PerformLayout();
             this.pEdit.ResumeLayout(false);
             this.pRight.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.pCamera.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numCam)).EndInit();
             this.pName.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).EndInit();
@@ -1138,12 +1141,12 @@ namespace BeeUi
         private System.Windows.Forms.Label label1;
         private RJButton btnLogo;
         private System.Windows.Forms.Splitter splitter2;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel pCamera;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.NumericUpDown numCam;
         private Cyotek.Windows.Forms.ImageBox imgLive;
         private System.ComponentModel.BackgroundWorker workLive;
         private RJButton btnLive;
+        private System.Windows.Forms.ToolStripMenuItem webCamTool;
     }
 }

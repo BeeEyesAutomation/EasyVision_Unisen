@@ -191,6 +191,7 @@ namespace BeeGlobal
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();
         public static bool IsRun=true;
+       
         public static int IndexChoose = 0;
         public static String Project = "";
         public static RectRotate rotOriginAdj;

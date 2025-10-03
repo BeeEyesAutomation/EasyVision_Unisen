@@ -1857,53 +1857,95 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
+                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
                     foreach (int ix in Global.ParaCommon.indexLogic1)
-                        if(ix< BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                        if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic2)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic3)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic3= true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic4)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic4= true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic5)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     foreach (int ix in Global.ParaCommon.indexLogic6)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
                         {
-                            Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
-                            break;
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = false ? Global.ParaCommon.IsONNG == false : true;
+                                break;
+                            }
+                            else
+                            {
+                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = true ? Global.ParaCommon.IsONNG == false : false;
+                                break;
+                            }
                         }
                     Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
 

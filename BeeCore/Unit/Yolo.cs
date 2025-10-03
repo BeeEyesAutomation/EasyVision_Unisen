@@ -295,9 +295,9 @@ namespace BeeCore
                 try
                 {
                     // === Tính offset (như cũ) ===
-                    CropOffSetX = rotCrop._PosCenter.X + rotCrop._rect.X;
-                    CropOffSetY = rotCrop._PosCenter.Y + rotCrop._rect.Y;
-                    CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
+                    CropOffSetX =( rotCrop._PosCenter.X - rotCrop._rect.Width/2);
+                    CropOffSetY =( rotCrop._PosCenter.Y - rotCrop._rect.Height/2);
+                    CropOffSetX = (CropOffSetX > 0) ? 0 :- CropOffSetX;
                     CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
 
                     // === Crop ROI ===
@@ -1015,6 +1015,7 @@ namespace BeeCore
                     mat.Rotate(rotA._rectRotation);
                     mat.Translate(rotA._rect.X, rotA._rect.Y);
                     gc.Transform = mat;
+
                     mat.Translate(CropOffSetX, CropOffSetY);
                     gc.Transform = mat;
                     if (item.IsY)
@@ -1030,7 +1031,7 @@ namespace BeeCore
                         Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
                     }
                     gc.ResetTransform();  
-            }    
+            }
             foreach (RectRotate rot in rectRotates)
             {
                 mat = new Matrix();
@@ -1043,9 +1044,12 @@ namespace BeeCore
                 mat.Rotate(rotA._rectRotation);
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
                 gc.Transform = mat;
-
-                mat.Translate(CropOffSetX, CropOffSetY);
-                gc.Transform = mat;
+                if (CropOffSetX < 0 || CropOffSetY < 0)
+                {
+               
+                    mat.Translate(CropOffSetX, CropOffSetY);
+                    gc.Transform = mat;
+                } 
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
                 Color clShow = Color.LightGray;
                 if (listOK[i] == true)
@@ -1068,8 +1072,12 @@ namespace BeeCore
                     }
                     if (item.IsHeight || item.IsWidth)
                     {
+                        //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        //gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
+                        //mat.Rotate(rot._rectRotation);
+                        //gc.Transform = mat;
                         System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
                         System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
                         System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
@@ -1090,8 +1098,10 @@ namespace BeeCore
                     }
                     else
                     {
+                      //  mat = new Matrix();
+                        //mat = new Matrix();
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                        gc.Transform = mat;
+                      //  gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
                         Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, clShow, brushText, 30, 3, 10, 1, !Global.IsHideTool);

@@ -135,6 +135,8 @@ namespace BeeGlobal
         Light2,
         Light3,
         Alive,
+        Logic5,
+        Logic6,
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }

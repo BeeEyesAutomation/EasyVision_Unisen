@@ -32,7 +32,8 @@ namespace BeeUi
         {
             this.Width = Global.EditTool.BtnHeaderBar.Width+1;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width-1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
-
+             btnNG.IsCLick= Global.ParaCommon.IsONNG ;
+            btnOK.IsCLick =! Global.ParaCommon.IsONNG;
             btnSaveOK.IsCLick =Global.Config.IsSaveOK;
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
@@ -145,6 +146,16 @@ namespace BeeUi
         private void AdjLimitDay_ValueChanged(float obj)
         {
             Global.Config.LimitDateSave = (int)AdjLimitDay.Value;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsONNG = !btnOK.IsCLick;
+        }
+
+        private void btnNG_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsONNG = btnNG.IsCLick;
         }
     }
 }

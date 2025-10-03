@@ -841,38 +841,45 @@ namespace BeeGlobal
                 case IO_Processing.Result:
                   
                         int ix = AddressInput[(int)I_O_Input.ByPass];
-                        if (ix > -1)
+                    bool IsOK = Global.TotalOK;
+                    bool IsByPass = true;
+                    if(Global.ParaCommon.IsONNG)
+                    {
+                        IsOK =! IsOK;
+                        IsByPass = false;
+                    }    
+                    if (ix > -1)
                         {
                             if (valueInput[ix] == true)
                             {
                             switch(Global.TriggerNum)
                             {
                                 case TriggerNum.Trigger1:
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger2:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
                                     }    
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], true); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger3:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
                                     }
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], true); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger4:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], true); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
                                     }
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], true); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsByPass); //NG
                                     break;
                             }    
                           
@@ -884,31 +891,31 @@ namespace BeeGlobal
                             {
                                 case TriggerNum.Trigger1:
 
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger2:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
                                     }
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger3:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
                                     }
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger4:
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
                                     }
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsOK); //NG
                                     break;
                             }
                         }    
@@ -918,34 +925,40 @@ namespace BeeGlobal
                         switch (Global.TriggerNum)
                         {
                             case TriggerNum.Trigger1:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                 break;
                             case TriggerNum.Trigger2:
                                 if (Global.ParaCommon.IsOnlyTrigger)
                                 {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                     break;
                                 }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], Global.TotalOK); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsOK); //NG
                                 break;
                             case TriggerNum.Trigger3:
                                 if (Global.ParaCommon.IsOnlyTrigger)
                                 {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                     break;
                                 }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], Global.TotalOK); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsOK); //NG
                                 break;
                             case TriggerNum.Trigger4:
                                 if (Global.ParaCommon.IsOnlyTrigger)
                                 {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], Global.TotalOK); //NG
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                     break;
                                 }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], Global.TotalOK); //NG
+                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsOK); //NG
                                 break;
                         }
                     }
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], Global.ParaCommon.Comunication.Protocol.IsLogic1); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], Global.ParaCommon.Comunication.Protocol.IsLogic2); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], Global.ParaCommon.Comunication.Protocol.IsLogic3); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], Global.ParaCommon.Comunication.Protocol.IsLogic4); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic5], Global.ParaCommon.Comunication.Protocol.IsLogic5); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic6], Global.ParaCommon.Comunication.Protocol.IsLogic6); //NG
                     switch (Global.TriggerNum)
                     {
                         case TriggerNum.Trigger1:
@@ -1017,37 +1030,37 @@ namespace BeeGlobal
                             if (DelayOutput == 0)
                                 await TimingUtils.DelayAccurateAsync((int)DelayOutput); // thay cho Task.Delay
 
-                        switch (Global.TriggerNum)
-                        {
-                            case TriggerNum.Trigger1:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result],false); //NG
-                                break;
-                            case TriggerNum.Trigger2:
-                                if (Global.ParaCommon.IsOnlyTrigger)
+                                switch (Global.TriggerNum)
                                 {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
-                                break;
-                            case TriggerNum.Trigger3:
-                                if (Global.ParaCommon.IsOnlyTrigger)
-                                {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
-                                break;
-                            case TriggerNum.Trigger4:
-                                if (Global.ParaCommon.IsOnlyTrigger)
-                                {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG
-                                break;
-                        }      
-                        await WriteOutPut();
+                                    case TriggerNum.Trigger1:
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result],false); //NG
+                                        break;
+                                    case TriggerNum.Trigger2:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
+                                        break;
+                                    case TriggerNum.Trigger3:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
+                                        break;
+                                    case TriggerNum.Trigger4:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //NG
+                                        break;
+                                }      
+                             await WriteOutPut();
                             }
 
 

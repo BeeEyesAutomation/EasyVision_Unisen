@@ -869,11 +869,13 @@ namespace BeeUi
         Camera CameraLive;
         private async void btnLiveCam_Click(object sender, EventArgs e)
         {
-
-            CameraLive = new Camera(new ParaCamera(), 2);
+            numCam.Visible = !btnLive.IsCLick;
+            CameraLive = new Camera(new ParaCamera(), 5);
+            CameraLive.IndexCCD = 5;
             CameraLive.IndexConnect = (int)numCam.Value;
             CameraLive.Para.TypeCamera = TypeCamera.USB;
             CameraLive.Init(CameraLive.Para.TypeCamera);
+
             CameraLive.IsConnected=await CameraLive.Connect("", CameraLive.Para.TypeCamera);
             if(!CameraLive.IsConnected)
             {
@@ -1039,6 +1041,11 @@ namespace BeeUi
                 workLive.RunWorkerAsync();
                 return;
             
+        }
+
+        private void webCamTool_Click(object sender, EventArgs e)
+        {
+            pCamera.Visible=webCamTool.Checked;
         }
 
         private void btnNew_Click(object sender, EventArgs e)

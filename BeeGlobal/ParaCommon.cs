@@ -15,7 +15,7 @@ namespace BeeGlobal
     {
         public bool IsOnlyTrigger = false;
         public bool IsMultiCamera = false;
-        //public bool IsMultiTrigger = false;
+        public  bool IsONNG = false;
         public int NumTrig = 1;
         public bool IsAutoReload = false;
         public List<int> indexLogic1 = new List<int>();
