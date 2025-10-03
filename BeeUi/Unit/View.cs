@@ -1943,7 +1943,7 @@ namespace BeeUi
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.ParaCommon.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = t true;
+                                Global.ParaCommon.Comunication.Protocol.IsLogic6 =  true;
                                 break;
                             }
                         }
