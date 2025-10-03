@@ -1250,7 +1250,7 @@ namespace BeeUi
             this.btnNG.IsCLick = false;
             this.btnNG.IsNotChange = false;
             this.btnNG.IsRect = false;
-            this.btnNG.IsUnGroup = true;
+            this.btnNG.IsUnGroup = false;
             this.btnNG.Location = new System.Drawing.Point(206, 8);
             this.btnNG.Multiline = false;
             this.btnNG.Name = "btnNG";
@@ -1307,7 +1307,7 @@ namespace BeeUi
             this.btnOK.IsCLick = true;
             this.btnOK.IsNotChange = false;
             this.btnOK.IsRect = false;
-            this.btnOK.IsUnGroup = true;
+            this.btnOK.IsUnGroup = false;
             this.btnOK.Location = new System.Drawing.Point(8, 8);
             this.btnOK.Multiline = false;
             this.btnOK.Name = "btnOK";
