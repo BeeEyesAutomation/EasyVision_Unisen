@@ -1880,7 +1880,7 @@ namespace BeeUi
                     foreach (int ix in Global.ParaCommon.indexLogic2)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
                                 Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
                                 break;
@@ -1894,7 +1894,7 @@ namespace BeeUi
                     foreach (int ix in Global.ParaCommon.indexLogic3)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
                                 Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
                                 break;
@@ -1908,7 +1908,7 @@ namespace BeeUi
                     foreach (int ix in Global.ParaCommon.indexLogic4)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
                                 Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
                                 break;
@@ -1922,7 +1922,7 @@ namespace BeeUi
                     foreach (int ix in Global.ParaCommon.indexLogic5)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
                                 Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
                                 break;
@@ -1936,7 +1936,7 @@ namespace BeeUi
                     foreach (int ix in Global.ParaCommon.indexLogic6)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG)
+                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.ParaCommon.IsONNG == true)
                             {
                                 Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
                                 break;
