@@ -274,7 +274,7 @@ namespace BeeCore
         var oldTrans = g.Transform.Clone();
         g.SmoothingMode = SmoothingMode.AntiAlias;
             float rH = Global.Config.RadEdit;
-            if (!Global.IsRun)
+            if (!Global.IsRun&& drawHandles)
                 if (rr._dragAnchor == AnchorPoint.Center)
             {
                 
