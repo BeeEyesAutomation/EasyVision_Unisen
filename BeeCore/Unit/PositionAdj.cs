@@ -698,7 +698,7 @@ namespace BeeCore
                             gc.DrawString(sPos, font, brushText, new PointF(5, 5));
 
                         }
-                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i - 1], 1) + "% A:" + Math.Round(rot._rectRotation), font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i - 1], 1) + "%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
 
                     }
                   

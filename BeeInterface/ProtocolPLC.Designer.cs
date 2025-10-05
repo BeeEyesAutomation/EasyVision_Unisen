@@ -3054,7 +3054,7 @@ namespace BeeInterface
             this.tableLayoutPanel4.Controls.Add(this.btnTCP, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.btnSerial, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(1, 293);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(1, 393);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
@@ -3186,7 +3186,7 @@ namespace BeeInterface
             this.tableLayoutPanel2.Controls.Add(this.customNumericEx2, 1, 9);
             this.tableLayoutPanel2.Controls.Add(this.txtAddRead, 0, 7);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 606);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 706);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 20);
@@ -3366,7 +3366,7 @@ namespace BeeInterface
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.btnBypass);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(4, 752);
+            this.panel1.Location = new System.Drawing.Point(4, 852);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(383, 45);
             this.panel1.TabIndex = 84;
@@ -3554,7 +3554,7 @@ namespace BeeInterface
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(4, 269);
+            this.label6.Location = new System.Drawing.Point(4, 369);
             this.label6.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(126, 24);
@@ -3584,8 +3584,8 @@ namespace BeeInterface
             this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layBrand.Size = new System.Drawing.Size(383, 150);
+            this.layBrand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.layBrand.Size = new System.Drawing.Size(383, 250);
             this.layBrand.TabIndex = 0;
             this.layBrand.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel3_Paint);
             // 
@@ -3633,11 +3633,11 @@ namespace BeeInterface
             this.rjButton2.IsNotChange = false;
             this.rjButton2.IsRect = false;
             this.rjButton2.IsUnGroup = false;
-            this.rjButton2.Location = new System.Drawing.Point(188, 126);
+            this.rjButton2.Location = new System.Drawing.Point(196, 126);
             this.rjButton2.Margin = new System.Windows.Forms.Padding(5);
             this.rjButton2.Multiline = false;
             this.rjButton2.Name = "rjButton2";
-            this.rjButton2.Size = new System.Drawing.Size(172, 50);
+            this.rjButton2.Size = new System.Drawing.Size(181, 50);
             this.rjButton2.TabIndex = 107;
             this.rjButton2.Text = "Panasonic";
             this.rjButton2.TextColor = System.Drawing.Color.Teal;
@@ -3691,7 +3691,7 @@ namespace BeeInterface
             this.btnDelta.Margin = new System.Windows.Forms.Padding(5);
             this.btnDelta.Multiline = false;
             this.btnDelta.Name = "btnDelta";
-            this.btnDelta.Size = new System.Drawing.Size(172, 50);
+            this.btnDelta.Size = new System.Drawing.Size(180, 50);
             this.btnDelta.TabIndex = 106;
             this.btnDelta.Text = "Delta";
             this.btnDelta.TextColor = System.Drawing.Color.Teal;
@@ -3742,11 +3742,11 @@ namespace BeeInterface
             this.rjButton7.IsNotChange = false;
             this.rjButton7.IsRect = false;
             this.rjButton7.IsUnGroup = false;
-            this.rjButton7.Location = new System.Drawing.Point(188, 66);
+            this.rjButton7.Location = new System.Drawing.Point(196, 66);
             this.rjButton7.Margin = new System.Windows.Forms.Padding(5);
             this.rjButton7.Multiline = false;
             this.rjButton7.Name = "rjButton7";
-            this.rjButton7.Size = new System.Drawing.Size(172, 50);
+            this.rjButton7.Size = new System.Drawing.Size(181, 50);
             this.rjButton7.TabIndex = 103;
             this.rjButton7.Text = "Seimen";
             this.rjButton7.TextColor = System.Drawing.Color.Teal;
@@ -3800,7 +3800,7 @@ namespace BeeInterface
             this.rjButton1.Margin = new System.Windows.Forms.Padding(5);
             this.rjButton1.Multiline = false;
             this.rjButton1.Name = "rjButton1";
-            this.rjButton1.Size = new System.Drawing.Size(172, 50);
+            this.rjButton1.Size = new System.Drawing.Size(180, 50);
             this.rjButton1.TabIndex = 102;
             this.rjButton1.Text = "Omron";
             this.rjButton1.TextColor = System.Drawing.Color.Teal;
@@ -3854,7 +3854,7 @@ namespace BeeInterface
             this.btnKeyence.Margin = new System.Windows.Forms.Padding(5);
             this.btnKeyence.Multiline = false;
             this.btnKeyence.Name = "btnKeyence";
-            this.btnKeyence.Size = new System.Drawing.Size(172, 50);
+            this.btnKeyence.Size = new System.Drawing.Size(180, 50);
             this.btnKeyence.TabIndex = 99;
             this.btnKeyence.Text = "Keyence";
             this.btnKeyence.TextColor = System.Drawing.Color.Teal;
@@ -3905,11 +3905,11 @@ namespace BeeInterface
             this.btnMitsu.IsNotChange = false;
             this.btnMitsu.IsRect = false;
             this.btnMitsu.IsUnGroup = false;
-            this.btnMitsu.Location = new System.Drawing.Point(188, 6);
+            this.btnMitsu.Location = new System.Drawing.Point(196, 6);
             this.btnMitsu.Margin = new System.Windows.Forms.Padding(5);
             this.btnMitsu.Multiline = false;
             this.btnMitsu.Name = "btnMitsu";
-            this.btnMitsu.Size = new System.Drawing.Size(172, 50);
+            this.btnMitsu.Size = new System.Drawing.Size(181, 50);
             this.btnMitsu.TabIndex = 101;
             this.btnMitsu.Text = "Mitsubishi";
             this.btnMitsu.TextColor = System.Drawing.Color.Teal;
@@ -3964,7 +3964,7 @@ namespace BeeInterface
             this.btnRtu.Margin = new System.Windows.Forms.Padding(5);
             this.btnRtu.Multiline = false;
             this.btnRtu.Name = "btnRtu";
-            this.btnRtu.Size = new System.Drawing.Size(172, 50);
+            this.btnRtu.Size = new System.Drawing.Size(180, 50);
             this.btnRtu.TabIndex = 104;
             this.btnRtu.Text = "Modbus-RTU";
             this.btnRtu.TextColor = System.Drawing.Color.Blue;
@@ -4015,11 +4015,11 @@ namespace BeeInterface
             this.ModbusAscii.IsNotChange = false;
             this.ModbusAscii.IsRect = false;
             this.ModbusAscii.IsUnGroup = false;
-            this.ModbusAscii.Location = new System.Drawing.Point(188, 186);
+            this.ModbusAscii.Location = new System.Drawing.Point(196, 186);
             this.ModbusAscii.Margin = new System.Windows.Forms.Padding(5);
             this.ModbusAscii.Multiline = false;
             this.ModbusAscii.Name = "ModbusAscii";
-            this.ModbusAscii.Size = new System.Drawing.Size(172, 50);
+            this.ModbusAscii.Size = new System.Drawing.Size(181, 50);
             this.ModbusAscii.TabIndex = 105;
             this.ModbusAscii.Text = "Modbus-ASII";
             this.ModbusAscii.TextColor = System.Drawing.Color.Blue;
@@ -4044,7 +4044,7 @@ namespace BeeInterface
             this.tableLayoutPanel5.Controls.Add(this.layCom, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.layIP, 0, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(1, 349);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(1, 449);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;

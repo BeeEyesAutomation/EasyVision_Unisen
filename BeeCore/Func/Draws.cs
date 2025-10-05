@@ -274,7 +274,8 @@ namespace BeeCore
         var oldTrans = g.Transform.Clone();
         g.SmoothingMode = SmoothingMode.AntiAlias;
             float rH = Global.Config.RadEdit;
-            if (rr._dragAnchor == AnchorPoint.Center)
+            if (!Global.IsRun)
+                if (rr._dragAnchor == AnchorPoint.Center)
             {
                 
                 outlinePen = new Pen(Brushes.Blue, outlinePen.Width*2);
@@ -536,7 +537,7 @@ namespace BeeCore
                 using (var path = BuildLocalPath(rr))
                 {
                     // Nếu polygon chưa đóng, không fill ảnh (tránh vẽ sai), chỉ return
-                    if (rr.Shape == ShapeType.Polygon && !rr.IsPolygonClosed)
+                    if (rr.Shape == ShapeType.Polygon && !rr.IsPolygonClosed&&!Global.IsRun)
                     {
                         g.Transform = oldTransform;
                         g.SmoothingMode = oldSmoothing;
