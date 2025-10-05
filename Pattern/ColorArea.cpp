@@ -9,10 +9,10 @@ using namespace System;
 using namespace BeeCpp;
 
 using namespace System::Runtime::InteropServices;
-ColorArea::ColorArea() : _ColorPP(new ColorAreaPP()) {}
+ColorArea::ColorArea() { _ColorPP=new ColorAreaPP(); com = new Common(); }
 ColorArea::~ColorArea() { this->!ColorArea(); }
 ColorArea::!ColorArea() { if (_ColorPP) { delete _ColorPP; _ColorPP = nullptr; } }
-void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
 {
     try
     {
@@ -29,26 +29,26 @@ void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplS
         case 1:  cvtColor(wrapped, bgr, COLOR_GRAY2BGR); break; // 1 -> 3
         case 3:  bgr = wrapped; break;                           // đã 3 kênh
         case 4:  cvtColor(wrapped, bgr, COLOR_BGRA2BGR); break;  // 4 -> 3
-        }
-
-        // 3) Xoay/cắt theo RotatedRect (giả định Common::RotateMat trả Mat mới)
-        RotatedRect rr(Point2f(x, y), Size2f(w, h), angle);
-        Mat rotatedRoi = Common::RotateMat(bgr, rr);
-
-        // 4) Clone để sở hữu bộ nhớ độc lập khỏi buffer .NET
-        _ColorPP->matCrop = rotatedRoi.clone();   // đảm bảo CV_8UC3
-        // Nếu Common::RotateMat có thể thay đổi type, bạn có thể ép lại:
-        // if (_ColorPP->matRaw.type() != CV_8UC3)
-        //     cvtColor(_ColorPP->matRaw, _ColorPP->matRaw, COLOR_BGRA2BGR);
+        }	
+        Nullable<RectRotateCli> mask =
+            rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
+            : Nullable<RectRotateCli>();
+        com->CropRotToMat(
+            tplData, tplW, tplH, tplStride, tplChannels,
+            rr, mask, /*returnMaskOnly*/ false,
+            System::IntPtr(&_ColorPP->matCrop)
+        );
+     //   cv::imwrite("color.png", _ColorPP->matCrop);
     }
     catch (const cv::Exception& ex)
     {
         throw gcnew System::Exception(gcnew System::String(ex.what()));
     }
-	Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-	_ColorPP->matRaw = Common::RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+	//Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
+	//_ColorPP->matRaw = com->RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
 
-}void ColorArea::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
+}
+void ColorArea::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
 {
     try
     {
@@ -67,6 +67,31 @@ void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplS
         case 4:  cvtColor(wrapped, bgr, COLOR_BGRA2BGR); break;  // 4 -> 3
         }
         _ColorPP->matRaw = bgr.clone();
+    }
+    catch (const cv::Exception& ex)
+    {
+        throw gcnew System::Exception(gcnew System::String(ex.what()));
+    }
+}
+void ColorArea::SetImgeNoCrop(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels)
+{
+    try
+    {
+        // 1) Wrap dữ liệu managed bằng Mat với stride (step) tùy ý
+        int type = (tplChannels == 1) ? CV_8UC1 :
+            (tplChannels == 3) ? CV_8UC3 : CV_8UC4;
+
+        Mat wrapped(tplH, tplW, type, tplData.ToPointer(), (size_t)tplStride);
+
+        // 2) Convert sang 8U3 (BGR)
+        Mat bgr;
+        switch (tplChannels)
+        {
+        case 1:  cvtColor(wrapped, bgr, COLOR_GRAY2BGR); break; // 1 -> 3
+        case 3:  bgr = wrapped; break;                           // đã 3 kênh
+        case 4:  cvtColor(wrapped, bgr, COLOR_BGRA2BGR); break;  // 4 -> 3
+        }
+        _ColorPP->matCrop = bgr.clone();
     }
     catch (const cv::Exception& ex)
     {
@@ -326,7 +351,7 @@ System::IntPtr ColorArea::Check(
         //     cv::Mat se = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(k, k));
         //     cv::morphologyEx(mask, mask, cv::MORPH_CLOSE, se, cv::Point(-1,-1), 1);
         // }
-
+        //cv::imwrite("mask.png", mask);
         // 5) Lưu vào matProcess (CV_8UC1)
         _ColorPP->matProcess = mask; // share
         if (!_ColorPP->matProcess.isContinuous())

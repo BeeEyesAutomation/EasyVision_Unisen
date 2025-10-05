@@ -114,7 +114,11 @@ namespace BeeCore
         {
             System.Drawing.Size sz = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
             RectRotate rot = new RectRotate();
-
+            rot.Shape = rotOrigin.Shape;
+            rot.PolyLocalPoints=rotOrigin.PolyLocalPoints;
+            rot.HexVertexOffsets=rotOrigin.HexVertexOffsets;
+            rot.IsWhite = rotOrigin.IsWhite;
+           
             rot._rect = rotOrigin._rect;
             rot._rectRotation = rotOrigin._rectRotation + Global.angle_Adjustment;
             PointF pPos = new PointF(rotTemp._PosCenter.X + Global.X_Adjustment, rotTemp._PosCenter.Y + Global.Y_Adjustment);
@@ -277,7 +281,7 @@ namespace BeeCore
        
         public static void CropRotate( RectRotate rot)
         {
-            G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._angle);
+            G.CommonPlus.CropRotate((int)rot._PosCenter.X, (int)rot._PosCenter.Y, (int)rot._rect.Width, (int)rot._rect.Height, rot._rectRotation);
         }
        
         public static Mat GetCrop()
@@ -483,7 +487,7 @@ namespace BeeCore
                 //    Cv2.CvtColor(mCrop, mCrop, ColorConversionCodes.BGR2GRAY);
                 //}
               
-                if (rot.IsElip)
+                if (rot.Shape==ShapeType.Ellipse)
                 {
                     Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, TypeMat, new Scalar(0));
                     int deltaX = (int)rot._rect.Width / 2;
@@ -507,7 +511,7 @@ namespace BeeCore
                 int deltaY = (int)rot._rect.Height / 2 - (int)(rot._PosCenter.Y - rotMask._PosCenter.Y);
                 RotatedRect retMask = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rotMask._rect.Width, rotMask._rect.Height), rotMask._rectRotation);
 
-                if (rotMask.IsElip)
+                if (rotMask.Shape==ShapeType.Ellipse)
                 {
                     Cv2.Ellipse(matMask, retMask,new Scalar(0), -1);  
                 }

@@ -670,9 +670,9 @@ namespace BeeCore
                         Score = valueScore + "";
                         Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
                         CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
-                        colorTrack = Global.ColorOK;
-                        ClStatus = Global.ColorOK;
-                        ClScore= Global.ColorOK;
+                        colorTrack =  Global.Config.ColorOK;
+                        ClStatus =  Global.Config.ColorOK;
+                        ClScore=  Global.Config.ColorOK;
                     }
                     else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.None)
                     {
@@ -688,9 +688,9 @@ namespace BeeCore
                         Score = valueScore + "";
                         Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
                         CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
-                        colorTrack = Global.ColorNG;
-                        ClStatus = Global.ColorNG;
-                        ClScore = Global.ColorNG;
+                        colorTrack = Global.Config.ColorNG;
+                        ClStatus = Global.Config.ColorNG;
+                        ClScore = Global.Config.ColorNG;
                     }
                         break;
               

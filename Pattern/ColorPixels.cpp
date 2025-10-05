@@ -133,7 +133,7 @@ namespace {
 //    return matRs;
 //}
 // ================= PUBLIC API =================
-System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle, bool NoCrop,
+System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
     [System::Runtime::InteropServices::Out] int% outW,
     [System::Runtime::InteropServices::Out] int% outH,
     [System::Runtime::InteropServices::Out] int% outStride,
@@ -144,9 +144,15 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
         _img->temp = Mat(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride).clone();
     else
     {
-        Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-        _img->temp = Common:: RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
-
+        Nullable<RectRotateCli> mask =
+            rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
+            : Nullable<RectRotateCli>();
+        com->CropRotToMat(
+            tplData, tplW, tplH, tplStride, tplChannels,
+            rr, mask, /*returnMaskOnly*/ false,
+            System::IntPtr(&_img->temp)
+        );
+    
 
     }
  
@@ -160,10 +166,17 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
     
     return mem;
 }
-void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
 {
-    Mat raw(tplH, tplW, CV_8UC3, tplData.ToPointer(), tplStride);
-    _img->raw = Common::RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+  
+    Nullable<RectRotateCli> mask =
+        rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
+        : Nullable<RectRotateCli>();
+    com->CropRotToMat(
+        tplData, tplW, tplH, tplStride, tplChannels,
+        rr, mask, /*returnMaskOnly*/ false,
+        System::IntPtr(&_img->raw)
+    );
    
 }
 

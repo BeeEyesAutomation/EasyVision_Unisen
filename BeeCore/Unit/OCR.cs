@@ -177,7 +177,7 @@ namespace BeeCore
                     {
                         if (raw.Empty()) return;
                         Mat matCrop = new Mat();
-                        matCrop = Common.CropRotatedRectSharp(raw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._angle));
+                        matCrop = Common.CropRotatedRectSharp(raw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._rectRotation));
                         if (Clahe == 0) Clahe = 2;
                         if (Sigma == 0) Sigma = 3;
                         if (Blur == 0) Blur = 3;
@@ -269,7 +269,7 @@ namespace BeeCore
                             }
 
                             RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
-                            RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None, false);
+                            RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None);
                             boxList.Add(rt);
 
                             // Score

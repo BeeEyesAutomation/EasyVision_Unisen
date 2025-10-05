@@ -19,9 +19,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static BeeCore.Algorithm.FilletCornerMeasure;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Size = OpenCvSharp.Size;
-
+using ShapeType = BeeGlobal.ShapeType;
 namespace BeeCore
 {
     [Serializable()]
@@ -292,35 +293,20 @@ namespace BeeCore
 
             if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
             {
-                cl = Global.ColorNG;
+                cl = Global.Config.ColorNG;
             }
             else
             {
-                cl = Global.ColorOK;
+                cl =  Global.Config.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
-            if(matProcess!=null)
-            if (!matProcess.Empty())
-            {
-                gc.ResetTransform();
-                mat = new Matrix();
-                if (!Global.IsRun)
-                {
-                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-                }
-                mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                mat.Rotate(rotA._rectRotation);
-                gc.Transform = mat;
-              
-                Bitmap myBitmap = matProcess.ToBitmap(); ;
-                myBitmap.MakeTransparent(Color.Black);
-                myBitmap = General.ChangeToColor(myBitmap,cl, 0.5f);
-                gc.DrawImage(myBitmap, rotA._rect);
-            }
-
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            
+            Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.pScroll, Global.ScaleZoom * 100, 16, Global.Config.ThicknessLine);
+           if(!Global.IsRun||Global.Config.IsShowDetail)
+            if (matProcess != null && !matProcess.Empty())
+                Draws.DrawMatInRectRotate(gc, matProcess, rotA,  Global.ScaleZoom * 100, Global.pScroll, cl,Global.Config.Opacity/100.0f);
+          
             return gc;
         }
         [NonSerialized]
@@ -328,13 +314,13 @@ namespace BeeCore
         [NonSerialized]
         private Native Native = new Native();
         float ValueColor = 0;
-        public int CheckColor(RectRotate rotCrop)
+        public int CheckColor(RectRotate rot)
         {
             int pxRs = 0;
 
             if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
 
-            using (Mat src = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat src =BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
                 if (src.Empty()) return -1;
 
@@ -350,18 +336,16 @@ namespace BeeCore
                     {
                         bgr = src; // reuse
                     }
+                    var rrCli = Converts.ToCli(rot); // như ở reply trước
+                    RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                     ColorAreaPP.SetImgeCrop(
-                        bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels(),
-                        rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
-                        rotCrop._rect.Width, rotCrop._rect.Height,
-                        rotCrop._rectRotation);
+                        bgr.Data, bgr.Width, bgr.Height, (int)bgr.Step(), bgr.Channels(), rrCli,rrMaskCli);
 
                     GC.KeepAlive(bgr);
 
                     int w, h, s, c;
                     IntPtr ptr = ColorAreaPP.Check(out w, out h, out s, out c);
-
                     try
                     {
                         // Validate trước, nhưng KHÔNG return trước khi FreeBuffer

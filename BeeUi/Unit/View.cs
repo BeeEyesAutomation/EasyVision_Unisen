@@ -377,12 +377,12 @@ namespace BeeUi
           imgView.Invalidate();
             imgView.Update();
         }
-        public PointF RotatePoint(float angle, PointF pt)
-        {
-            var a = angle * System.Math.PI / 180.0;
-            float cosa =(float) Math.Cos(a), sina =(float) Math.Sin(a);
-            return new PointF((float)pt.X * cosa - pt.Y * sina, (float)pt.X * sina + pt.Y * cosa);
-        }
+        //public PointF RotatePoint(float angle, PointF pt)
+        //{
+        //    var a = angle * System.Math.PI / 180.0;
+        //    float cosa =(float) Math.Cos(a), sina =(float) Math.Sin(a);
+        //    return new PointF((float)pt.X * cosa - pt.Y * sina, (float)pt.X * sina + pt.Y * cosa);
+        //}
         RectRotate rotateDraw = new RectRotate();
         bool IsDone = false;
         PointF ptRotatePt2f(PointF ptInput, PointF ptOrg, double dAngle)
@@ -477,7 +477,13 @@ namespace BeeUi
         }
 
         Color clChoose;
-        // ====== Sự kiện đã “full” lại ======
+
+       
+
+        static PointF RotatePoint(float angleDeg, PointF p)
+        {
+            return RectRotate.Rotate(p, angleDeg);
+        }
         //private void imgView_MouseMove(object sender, MouseEventArgs e)
         //{
         //    if (Global.IndexToolSelected == -1) return;
@@ -486,13 +492,11 @@ namespace BeeUi
         //    pMove = e.Location;
         //    if (Global.IsRun) return;
 
-        //    // 1) Xử lý riêng cho Color_Area: đổi cursor + chạy worker lấy màu
         //    if (Global.IndexToolSelected >= 0)
-        //    {
-        //        var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
-        //        if (tool.TypeTool == TypeTool.Color_Area)
+        //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool == TypeTool.Color_Area)
         //        {
-        //            if (tool.Propety.IsGetColor)
+
+        //            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.IsGetColor)
         //            {
         //                imgView.Cursor = new Cursor(Properties.Resources.Color_Dropper.Handle);
         //                imgView.AllowClickZoom = false;
@@ -501,300 +505,434 @@ namespace BeeUi
         //                    workGetColor.RunWorkerAsync();
         //                return;
         //            }
+
         //            else
         //                imgView.Cursor = Cursors.Default;
+
         //        }
-        //    }
-
         //    if (Global.StatusDraw != StatusDraw.Edit) return;
-
         //    try
         //    {
+        //        //  if (toolEdit == null) return;
+
         //        RectRotate rotateRect = new RectRotate();
+        //        //if (toolEdit.IsClear)
+        //        //{
+        //        //    if (_drag)
+        //        //    {
+
+        //        //        rectClear = new Rect(e.Location.X - widthClear/2, e.Location.Y + widthClear / 4, widthClear, widthClear);
+        //        //      Mat  bmp = new Mat(rectClear.Width, rectClear.Height, MatType.CV_8UC1, Scalar.White);
+        //        //        bmp.CopyTo(new Mat(matMaskAdd, rectClear));
+        //        //        bmp.CopyTo(new Mat(bmMask, rectClear));
+
+
+        //        //    }
+
+        //        //}
+
+
         //        pDown = e.Location;
 
-        //        // ====== ĐANG KÉO (đã có _drag) ======
         //        if (_drag)
         //        {
-        //            // Lấy rect đang chỉnh theo TypeCrop
         //            if (Global.TypeCrop == TypeCrop.Area)
         //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
+        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null)
+        //                    return;
+        //                rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea.IsElip);
         //            }
         //            else if (Global.TypeCrop == TypeCrop.Mask)
         //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
+
+        //                // if(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation.Contains(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation))
+        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null)
+        //                    return;
+        //                rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask.IsElip);
         //            }
-        //            else // Crop
+        //            else
         //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
+        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+        //                    return;
+        //                rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop.IsElip);
         //            }
+        //            var mat = new Matrix();
+        //            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        //            mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
 
-        //            // 1) Chuột → Ảnh
-        //            PointF mouseImg = ControlToImage(e.Location);
+        //            mat.Translate(_dragCenter.X, _dragCenter.Y);
+        //            mat.Rotate(rotateRect._rectRotation);
+        //            mat.Invert();
 
-        //            // 2) Ảnh → Local-Rect (quay NGƯỢC góc)
-        //            PointF pointLocal = RotateAround(mouseImg, rotateRect._PosCenter, -rotateRect._rectRotation);
+        //            var point = mat.TransformPoint(new PointF(e.X, e.Y));
 
-        //            SizeF deltaSize = SizeF.Empty;
-        //            float deltaX = 0f, deltaY = 0f;
-
+        //            SizeF deltaSize = new SizeF();
+        //            PointF clamped;
+        //            float deltaX = 0, deltaY = 0;
         //            switch (rotateRect._dragAnchor)
         //            {
         //                case AnchorPoint.TopLeft:
-        //                    {
-        //                        IsDone = true;
-        //                        // clamp vào góc phần tư âm của local-rect
-        //                        var clamped = new PointF(Math.Min(0, pointLocal.X), Math.Min(0, pointLocal.Y));
-        //                        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
 
-        //                        rotateRect._rect = new RectangleF(
-        //                            _dragRect.Left + deltaSize.Width / 2f,
-        //                            _dragRect.Top + deltaSize.Height / 2f,
-        //                            _dragRect.Width - deltaSize.Width,
-        //                            _dragRect.Height - deltaSize.Height);
+        //                    IsDone = true;
+        //                    clamped = new PointF(Math.Min(0, point.X), Math.Min(0, point.Y));
+        //                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
 
-        //                        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-        //                    }
+        //                    rotateRect._rect = new RectangleF(
+        //                           _dragRect.Left + deltaSize.Width / 2,
+        //                           _dragRect.Top + deltaSize.Height / 2,
+        //                           _dragRect.Width - deltaSize.Width,
+        //                           _dragRect.Height - deltaSize.Height);
+        //                    deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
+
         //                    break;
 
         //                case AnchorPoint.TopRight:
-        //                    {
-        //                        var clamped = new PointF(Math.Max(0, pointLocal.X), Math.Min(0, pointLocal.Y));
-        //                        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
 
-        //                        rotateRect._rect = new RectangleF(
-        //                            _dragRect.Left - deltaSize.Width / 2f,
-        //                            _dragRect.Top + deltaSize.Height / 2f,
-        //                            _dragRect.Width + deltaSize.Width,
-        //                            _dragRect.Height - deltaSize.Height);
-
-        //                        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-        //                    }
+        //                    clamped = new PointF(Math.Max(0, point.X), Math.Min(0, point.Y));
+        //                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                    //  if (deltaSize.Width < 2 && deltaSize.Height < 2) return;
+        //                    rotateRect._rect = new RectangleF(
+        //                        _dragRect.Left - deltaSize.Width / 2,
+        //                        _dragRect.Top + deltaSize.Height / 2,
+        //                        _dragRect.Width + deltaSize.Width,
+        //                        _dragRect.Height - deltaSize.Height);
+        //                    deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
         //                    break;
 
         //                case AnchorPoint.BottomLeft:
-        //                    {
-        //                        var clamped = new PointF(Math.Min(0, pointLocal.X), Math.Max(0, pointLocal.Y));
-        //                        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
 
-        //                        rotateRect._rect = new RectangleF(
-        //                            _dragRect.Left + deltaSize.Width / 2f,
-        //                            _dragRect.Top - deltaSize.Height / 2f,
-        //                            _dragRect.Width - deltaSize.Width,
-        //                            _dragRect.Height + deltaSize.Height);
+        //                    clamped = new PointF(Math.Min(0, point.X), Math.Max(0, point.Y));
+        //                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                    rotateRect._rect = new RectangleF(
+        //                        _dragRect.Left + deltaSize.Width / 2,
+        //                        _dragRect.Top - deltaSize.Height / 2,
+        //                        _dragRect.Width - deltaSize.Width,
+        //                        _dragRect.Height + deltaSize.Height);
+        //                    deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
 
-        //                        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-        //                    }
         //                    break;
 
         //                case AnchorPoint.BottomRight:
-        //                    {
-        //                        var clamped = new PointF(Math.Max(0, pointLocal.X), Math.Max(0, pointLocal.Y));
-        //                        deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
 
-        //                        rotateRect._rect = new RectangleF(
-        //                            _dragRect.Left - deltaSize.Width / 2f,
-        //                            _dragRect.Top - deltaSize.Height / 2f,
-        //                            _dragRect.Width + deltaSize.Width,
-        //                            _dragRect.Height + deltaSize.Height);
-
-        //                        deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
-        //                    }
+        //                    clamped = new PointF(Math.Max(0, point.X), Math.Max(0, point.Y));
+        //                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                    rotateRect._rect = new RectangleF(
+        //                        _dragRect.Left - deltaSize.Width / 2,
+        //                        _dragRect.Top - deltaSize.Height / 2,
+        //                        _dragRect.Width + deltaSize.Width,
+        //                        _dragRect.Height + deltaSize.Height);
+        //                    deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
         //                    break;
 
         //                case AnchorPoint.Rotation:
-        //                    {
-        //                        // vector trong local-rect: trục Y lên trên
-        //                        float vecX = pointLocal.X;
-        //                        float vecY = -pointLocal.Y;
-        //                        double len = Math.Sqrt(vecX * vecX + vecY * vecY);
-        //                        if (len > 1e-6)
-        //                        {
-        //                            float nx = (float)(vecX / len);
-        //                            float ny = (float)(vecY / len);
-        //                            // dot với (0,1) => góc so với trục Up
-        //                            double dot = (0 * nx + 1 * ny);
-        //                            dot = Math.Max(-1, Math.Min(1, dot));
-        //                            double angle = Math.Acos(dot); // [0..pi]
-        //                            if (pointLocal.X < 0) angle = -angle;
-        //                            float deltaDeg = (float)(angle * 180.0 / Math.PI);
-        //                            if (!float.IsNaN(deltaDeg) && Math.Abs(deltaDeg) > float.Epsilon)
-        //                            {
-        //                                rotateRect._rectRotation += deltaDeg;
-        //                                if (float.IsNaN(rotateRect._rectRotation))
-        //                                    rotateRect._rectRotation = 0f;
-        //                            }
-        //                        }
-        //                    }
+
+        //                    var vecX = point.X;
+        //                    var vecY = -point.Y;
+
+        //                    var len = Math.Sqrt(vecX * vecX + vecY * vecY);
+
+        //                    var normX = vecX / len;
+        //                    var normY = vecY / len;
+
+        //                    //In rectangles's space, 
+        //                    //compute dot product between, 
+        //                    //Up and mouse-position vector
+        //                    var dotProduct = (0 * normX + 1 * normY);
+        //                    var angle = Math.Acos(dotProduct);
+
+        //                    if (point.X < 0)
+        //                        angle = -angle;
+        //                    float oldAngle = rotateRect._rectRotation;
+        //                    // Add (delta-radians) to rotation as degrees
+        //                    float fAngle = (float)((180 / Math.PI) * angle);
+        //                    if (!float.IsNaN(fAngle) && fAngle != 0)
+        //                        rotateRect._rectRotation += fAngle;
+        //                    if (float.IsNaN(rotateRect._rectRotation))
+        //                        rotateRect._rectRotation = oldAngle;
         //                    break;
 
         //                case AnchorPoint.Center:
-        //                    {
-        //                        // Kéo theo toạ độ Ảnh (không dùng e.X/e.Y)
-        //                        rotateRect._PosCenter = new PointF(
-        //                            ControlToImage(e.Location).X - _dragStartOffset.X,
-        //                            ControlToImage(e.Location).Y - _dragStartOffset.Y);
-        //                    }
+
+        //                    //move this in screen-space
+        //                    rotateRect._PosCenter = new PointF((point.X- _dragStartOffset.X) , (point.Y  - _dragStartOffset.Y) );
         //                    break;
         //            }
 
-        //            // Cập nhật tâm khi scale (delta trong local-rect → quay về ảnh)
-        //            if (rotateRect._dragAnchor != AnchorPoint.None &&
-        //                rotateRect._dragAnchor != AnchorPoint.Center &&
-        //                (Math.Abs(deltaX) > float.Epsilon || Math.Abs(deltaY) > float.Epsilon))
+        //            if (rotateRect._dragAnchor != AnchorPoint.None)
         //            {
-        //                PointF deltaLocal = new PointF(deltaX, deltaY);
-        //                PointF deltaImg = RotateVector(deltaLocal, rotateRect._rectRotation);
-        //                rotateRect._PosCenter = new PointF(_dragCenter.X + deltaImg.X, _dragCenter.Y + deltaImg.Y);
-        //                IsDone = false;
+
+        //                if (rotateRect._dragAnchor != AnchorPoint.Center)
+        //                    if (deltaX != 0 || deltaY != 0)
+        //                    {
+        //                        PointF pDelta = RotatePoint(rotateRect._rectRotation, new PointF(deltaX, deltaY));
+
+        //                        rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
+
+        //                        IsDone = false;
+        //                    }
+        //                if (Global.TypeCrop == TypeCrop.Area)
+        //                {
+        //                    float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2;
+        //                    float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2;
+        //                    float w = rotateRect._rect.Width; float h = rotateRect._rect.Height;
+        //                    if (x < 0)
+        //                    {
+
+        //                        rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
+        //                    }
+        //                    else if (x + w > BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width)
+        //                    {
+
+        //                        rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width), rotateRect._PosCenter.Y);
+        //                    }
+        //                    if (y < 0)
+        //                    {
+
+        //                        rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
+        //                    }
+
+        //                    else if (y + h > BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height)
+        //                    {
+
+        //                        rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height));
+        //                    }
+        //                    //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop != null)
+        //                    //{
+        //                    //    RectRotate rectRotate1 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop;
+        //                    //    RotatedRect rot = new RotatedRect(new Point2f(rectRotate1._PosCenter.X, rectRotate1._PosCenter.Y), new Size2f(rectRotate1._rect.Width, rectRotate1._rect.Height), rectRotate1._rectRotation);
+        //                    //    Rect bound = rot.BoundingRect();
+        //                    //    RectRotate rectRotate2 = rotateRect;
+        //                    //    RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
+
+        //                    //    //if (!rectF.Contains(new PointF(bound.X, bound.Y)) ||
+        //                    //    //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y)) ||
+        //                    //    //   !rectF.Contains(new PointF(bound.X, bound.Y + bound.Height)) ||
+        //                    //    //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)))
+        //                    //    //    return;
+        //                    //    }
+        //                    if (rotateRect == null) return;
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
+
+        //                }
+        //                else if (Global.TypeCrop == TypeCrop.Crop)
+        //                {
+        //                    RotatedRect rot = new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._rectRotation);
+        //                    Rect bound = rot.BoundingRect();
+        //                    // RectRotate rectRotate2 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
+        //                    // RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
+
+        //                    //if(!rectF.Contains(new PointF( bound.X,bound.Y))||
+        //                    //   !rectF.Contains(new PointF(bound.X+bound.Width, bound.Y)) ||
+        //                    //   !rectF.Contains(new PointF(bound.X, bound.Y+bound.Height))||
+        //                    //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)) )
+        //                    //       return;
+
+        //                    if (rotateRect == null) return;
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
+        //                }
+
+        //                else
+        //                {
+        //                    RotatedRect rot = new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._rectRotation);
+        //                    Rect bound = rot.BoundingRect();
+        //                    RectRotate rectRotate2 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
+        //                    RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
+
+        //                    if (!rectF.Contains(new PointF(bound.X, bound.Y)) ||
+        //                       !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y)) ||
+        //                       !rectF.Contains(new PointF(bound.X, bound.Y + bound.Height)) ||
+        //                       !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)))
+        //                        return;
+
+        //                    if (rotateRect == null) return;
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
+        //                }
+        //            }
+        //            if (Global.TypeCrop == TypeCrop.Crop || BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+        //            {
+
+        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool != TypeTool.Color_Area)
+        //                    if (rotateRect != null)
+        //                    {
+        //                        //  toolEdit.matTemp = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Processing(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+
+        //                        // toolEdit.matTemp = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.GetTemp(rotateRect, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, bmMask);
+        //                    }
+        //                //GetTemp(RectRotate rotateRect, Mat BeeCore.Common.listCamera[Global.IndexChoose].matRaw, Mat bmMask,  Mat matClear, ref Mat matMask, ref Mat matTemp)
+
         //            }
 
-        //            // Clamp biên trong ảnh nếu là Area
-        //            if (Global.TypeCrop == TypeCrop.Area)
-        //            {
-        //                float w = rotateRect._rect.Width, h = rotateRect._rect.Height;
-        //                float x = rotateRect._PosCenter.X - w / 2f;
-        //                float y = rotateRect._PosCenter.Y - h / 2f;
 
-        //                int imgW = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
-        //                int imgH = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
 
-        //                if (x < 0)
-        //                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
-        //                else if (x + w > imgW)
-        //                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - imgW), rotateRect._PosCenter.Y);
-
-        //                if (y < 0)
-        //                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
-        //                else if (y + h > imgH)
-        //                    rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - imgH));
-        //            }
-
-        //            // Gán ngược vào prop tương ứng
-        //            if (Global.TypeCrop == TypeCrop.Area)
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea =
-        //                    new RectRotate(rotateRect._rect, rotateRect._PosCenter, rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
-        //            else if (Global.TypeCrop == TypeCrop.Crop)
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop =
-        //                    new RectRotate(rotateRect._rect, rotateRect._PosCenter, rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
-        //            else // Mask
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask =
-        //                    new RectRotate(rotateRect._rect, rotateRect._PosCenter, rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
         //        }
         //        else
         //        {
-        //            // ====== CHƯA KÉO: xác định anchor đang trỏ vào ======
-        //            // Lấy rect theo TypeCrop
-        //            if (Global.TypeCrop == TypeCrop.Area)
+        //            int IsCheck = 0;
+        //            if (!toolEdit.IsClear)
         //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
-        //            }
-        //            else if (Global.TypeCrop == TypeCrop.Mask)
-        //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
-        //            }
-        //            else
-        //            {
-        //                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null) return;
-        //                var r = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop;
-        //                rotateRect = new RectRotate(r._rect, r._PosCenter, r._rectRotation, r._dragAnchor, r.IsElip);
-        //            }
-        //            // ZoomFactor = (float)(imgView.Zoom / 100.0);
-        //            // mouseImg và pointLocal đã tính như trước
-        //            PointF mouseImg = ControlToImage(e.Location);
-        //            PointF pointLocal = RotateAround(mouseImg, rotateRect._PosCenter, -rotateRect._rectRotation);
+        //                //  Global.TypeCrop = TypeCrop.Crop;
 
-        //            RectangleF _rect = rotateRect._rect;
+        //                //X:
+        //                //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+        //                //    Global.TypeCrop = TypeCrop.Area;
+        //                if (Global.TypeCrop == TypeCrop.Area)
+        //                {
 
-        //            // KÍCH THƯỚC NÚT THEO ẢNH (để khớp kích thước nút vẽ theo px màn hình)
-        //            float padImg = Global.RadpEdit / ZoomFactor;
+        //                    if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null) return;
+        //                    rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea.IsElip);
+        //                }
+        //                else if (Global.TypeCrop == TypeCrop.Mask)
+        //                {
 
-        //            // Vùng hit-test cho các anchor: tính theo local-rect (đơn vị ảnh)
-        //            var rectHull = new RectangleF(_rect.X - padImg / 2f, _rect.Y - padImg / 2f, _rect.Width + padImg, _rect.Height + padImg);
-        //            var rectTopLeft = new RectangleF(_rect.Left - padImg / 2f, _rect.Top - padImg / 2f, padImg, padImg);
-        //            var rectTopRight = new RectangleF(_rect.Right - padImg / 2f, _rect.Top - padImg / 2f, padImg, padImg);
-        //            var rectBottomLeft = new RectangleF(_rect.Left - padImg / 2f, _rect.Bottom - padImg / 2f, padImg, padImg);
-        //            var rectBottomRight = new RectangleF(_rect.Right - padImg / 2f, _rect.Bottom - padImg / 2f, padImg, padImg);
+        //                    if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null) return;
+        //                    rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask.IsElip);
+        //                }
+        //                else
+        //                {
+        //                    if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null) return;
+        //                    rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop.IsElip);
+        //                }
+        //                var mat = new Matrix();
+        //                mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        //                mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
 
-        //            // Nút xoay ở giữa cạnh trên: x=0 (tâm ngang), y cao hơn top một khoảng 3*padImg
-        //            var rectRotate = new RectangleF(-padImg / 2f, _rect.Top - padImg * 3f, padImg * 2f, padImg * 2f);
+        //                mat.Translate(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+        //                mat.Rotate(rotateRect._rectRotation);
+        //                mat.Invert();
+        //                // Mouse point in Rectangle's space. 
+        //                var point = mat.TransformPoint(new PointF(e.X, e.Y));
 
-        //            // Lưu tâm local để tính delta khi scale
-        //            _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+        //                RectangleF _rect = rotateRect._rect;
 
-        //            // Chọn anchor
-        //            if (rectTopLeft.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.TopLeft;
-        //                _dragRect = _rect;
-        //            }
-        //            else if (rectTopRight.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.TopRight;
-        //                _dragRect = _rect;
-        //            }
-        //            else if (rectBottomLeft.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.BottomLeft;
-        //                _dragRect = _rect;
-        //            }
-        //            else if (rectBottomRight.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.BottomRight;
-        //                _dragRect = _rect;
-        //            }
-        //            else if (rectRotate.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.Rotation;
-        //                _dragRect = _rect;
-        //                _dragRot = rotateRect._rectRotation;
-        //            }
-        //            else if (rectHull.Contains(pointLocal))
-        //            {
-        //                _dragStart = pointLocal;
-        //                rotateRect._dragAnchor = AnchorPoint.Center;
-        //                _dragRect = _rect;
+        //                var rect = new RectangleF(rotateRect._rect.X - Global.Config.RadEdit / 2, rotateRect._rect.Y - Global.Config.RadEdit / 2, rotateRect._rect.Width + Global.Config.RadEdit, rotateRect._rect.Height + Global.Config.RadEdit);
+        //                // if (Global.TypeCrop == TypeCrop.Area)
+        //                //    rect = new RectangleF(rotateRect._rect.X - 20, rotateRect._rect.Y - 20, rotateRect._rect.Width +40, rotateRect._rect.Height+40);
 
-        //                // offset đo theo ẢNH (để move tâm chuẩn dù zoom/scroll)
-        //                _dragStartOffset = new PointF(mouseImg.X - rotateRect._PosCenter.X,
-        //                                              mouseImg.Y - rotateRect._PosCenter.Y);
-        //            }
-        //            else
-        //            {
-        //                rotateRect._dragAnchor = AnchorPoint.None;
+        //                var rectTopLeft = new RectangleF(_rect.Left - Global.Config.RadEdit / 2, _rect.Top - Global.Config.RadEdit / 2, Global.Config.RadEdit, Global.Config.RadEdit);
+        //                var rectTopRight = new RectangleF(_rect.Left + _rect.Width - Global.Config.RadEdit / 2, _rect.Top - Global.Config.RadEdit / 2, Global.Config.RadEdit, Global.Config.RadEdit);
+        //                var rectBottomLeft = new RectangleF(_rect.Left - Global.Config.RadEdit / 2, _rect.Top + _rect.Height - Global.Config.RadEdit / 2, Global.Config.RadEdit, Global.Config.RadEdit);
+        //                var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - Global.Config.RadEdit / 2, _rect.Top + _rect.Height - Global.Config.RadEdit / 2, Global.Config.RadEdit, Global.Config.RadEdit);
+        //                var rectRotate = new RectangleF(-Global.Config.RadEdit / 2, _rect.Top - Global.Config.RadEdit * 2, Global.Config.RadEdit * 2, Global.Config.RadEdit * 2);
+        //                _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+        //                if (rectTopLeft.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.TopLeft;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+
+        //                }
+        //                else if (rectTopRight.Contains(point))
+        //                {
+
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.TopRight;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+        //                }
+        //                else if (rectBottomLeft.Contains(point))
+        //                {
+
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.BottomLeft;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+        //                }
+        //                else if (rectBottomRight.Contains(point))
+        //                {
+
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.BottomRight;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+        //                }
+        //                else if (rectRotate.Contains(point))
+        //                {
+
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.Rotation;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+        //                    _dragRot = rotateRect._rectRotation;
+        //                }
+        //                else if (rect.Contains(point))
+        //                {
+
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.Center;
+        //                    _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
+        //                    _dragStartOffset = new PointF(_dragStart.X - rotateRect._PosCenter.X, _dragStart.Y - rotateRect._PosCenter.Y);
+        //                }
+
+        //                else
+        //                {
+
+        //                    rotateRect._dragAnchor = AnchorPoint.None;
+        //                    var rectNone = new RectangleF(rotateRect._rect.X + rotateRect._rect.Width / 4, rotateRect._rect.Y + rotateRect._rect.Height / 4, rotateRect._rect.Width + rotateRect._rect.Width / 2, rotateRect._rect.Height + rotateRect._rect.Height / 2);
+
+        //                    //if (IsCheck == 0)
+        //                    //{
+
+
+        //                    //    if (!rectNone.Contains(point))
+        //                    //    {
+        //                    //         if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null|| BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+        //                    //        {
+        //                    //            IsCheck+=2;
+        //                    //            G.IsCheck = false;
+        //                    //          //  Global.TypeCrop = TypeCrop.Area;
+        //                    //            goto X;
+        //                    //        }
+        //                    //        else
+        //                    //        {
+        //                    //            IsCheck++; G.IsCheck = false;
+        //                    //         //   Global.TypeCrop = TypeCrop.Mask;
+        //                    //            goto X;
+        //                    //        }
+        //                    //    }
+        //                    //    else
+        //                    //    {
+
+        //                    //    }
+
+
+        //                    //}
+        //                    //else   if (IsCheck == 1)
+        //                    //{
+
+        //                    //    if (!rectNone.Contains(point))
+        //                    //    {
+        //                    //        IsCheck++; G.IsCheck = false;
+        //                    //     //   Global.TypeCrop = TypeCrop.Area;
+        //                    //        goto X;
+        //                    //    }
+        //                    //}
+        //                    //else
+        //                    //{
+
+        //                    //    ////G.IsCheck = true;
+        //                    //    //if (!toolEdit.threadProcess.IsBusy)
+        //                    //    //    toolEdit.threadProcess.RunWorkerAsync();
+        //                    //    //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+        //                    //    //    Global.TypeCrop = TypeCrop.Area;
+        //                    //    //else
+        //                    //    //Global.TypeCrop = TypeCrop.Crop;
+        //                    //}
+
+        //                }
+
+        //                if (Global.TypeCrop == TypeCrop.Area)
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor = rotateRect._dragAnchor;
+        //                else if (Global.TypeCrop == TypeCrop.Mask)
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor = rotateRect._dragAnchor;
+        //                else
+        //                    BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = rotateRect._dragAnchor;
         //            }
 
-        //            // Gán lại anchor về propety theo TypeCrop
-        //            if (Global.TypeCrop == TypeCrop.Area)
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor = rotateRect._dragAnchor;
-        //            else if (Global.TypeCrop == TypeCrop.Mask)
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor = rotateRect._dragAnchor;
-        //            else
-        //                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = rotateRect._dragAnchor;
         //        }
-
-        //        // Cập nhật trạng thái & tương tác chuột
         //        if (rotateRect._dragAnchor != AnchorPoint.None)
         //        {
         //            if (Global.StatusDraw != StatusDraw.Color)
         //                Global.StatusDraw = StatusDraw.Edit;
+        //        }
 
+        //        if (rotateRect._dragAnchor != AnchorPoint.None)
+        //        {
         //            imgView.PanMode = ImageBoxPanMode.None;
         //            imgView.AllowClickZoom = false;
         //            imgView.AllowDoubleClick = false;
@@ -806,14 +944,308 @@ namespace BeeUi
         //            imgView.AllowClickZoom = true;
         //            imgView.AllowDoubleClick = true;
         //        }
-
         //        imgView.Invalidate();
         //    }
-        //    catch (Exception)
+        //    catch (Exception ex)
         //    {
-        //        // Log nếu cần
+
         //    }
         //}
+
+      
+
+      
+        //private void imgView_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    if (toolEdit == null) return;
+        //    pDown = e.Location;
+        //    _drag = true;
+        //    if (toolEdit.IsClear)
+        //        return;
+
+        //    if (Global.StatusDraw == StatusDraw.Color)
+        //        BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.AddColor();
+
+        //    // }
+
+
+        //    imgView.Invalidate();
+        //    // Lấy rr hiện hành theo Area/Mask/Crop (giống bạn đang làm)
+        //    RectRotate rr = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]?.Propety?.rotArea;
+        //    if (rr == null) return;
+
+        //    // … nếu đang dùng rotMask/rotCrop thì lấy tương ứng
+
+        //    // Ma trận screen->local
+        //    using (var inv = BuildLocalInverseMatrixFor(rr, (float)imgView.Zoom, imgView.AutoScrollPosition,
+        //                                               false, PointF.Empty, 0f))
+        //    {
+        //        PointF pLocal = TransformPoint(inv, e.Location);
+
+        //        if (rr.Shape == ShapeType.Polygon)
+        //        {
+        //            float handle = Global.Config.RadEdit;
+        //            float closeTol = handle * 1.25f; // ngưỡng chạm để đóng đa giác
+
+        //            if (!rr.IsPolygonClosed)
+        //            {
+        //                // Thử đóng nếu chạm điểm đầu (khi đủ >=3 cạnh)
+        //                if (!rr.PolygonTryCloseIfNearFirst(pLocal, closeTol))
+        //                {
+        //                    // Chưa đóng: thêm điểm mới
+        //                    rr.PolygonAddPointLocal(pLocal);
+        //                }
+
+        //                // khi đang dựng chưa đóng, không bật _drag
+        //                _drag = false;
+        //                imgView.Invalidate();
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                // Đa giác đã đóng: hit-test các đỉnh để kéo
+        //                rr.ActiveVertexIndex = -1;
+        //                for (int i = rr.PolyLocalPoints.Count - 1; i >= 0; i--)
+        //                {
+        //                    // lưu ý: điểm cuối == điểm đầu, cho phép kéo cả hai hay chỉ một? -> kéo điểm cuối sẽ sync về điểm đầu.
+        //                    PointF v = rr.PolyLocalPoints[i];
+        //                    RectangleF handleRect = new RectangleF(v.X - handle / 2f, v.Y - handle / 2f, handle, handle);
+        //                    if (handleRect.Contains(pLocal))
+        //                    {
+        //                        rr.ActiveVertexIndex = i;
+        //                        rr._dragAnchor = AnchorPoint.Vertex;
+        //                        _drag = true;
+
+        //                        // Lưu thông tin phục vụ nhánh _drag trong MouseMove
+        //                        _dragRect = rr._rect;
+        //                        _dragCenter = rr._PosCenter;
+        //                        _dragStart = pLocal;
+        //                        _dragStartOffset = new PointF(_dragStart.X - v.X, _dragStart.Y - v.Y);
+        //                        _dragRot = rr._rectRotation;
+        //                        break;
+        //                    }
+        //                }
+        //                imgView.Invalidate();
+        //                return;
+        //            }
+        //        }
+
+        //        // ===== Shapes khác (rectangle/ellipse/hexagon) vẫn xử lý như cũ của bạn =====
+        //        // Ở đây bạn giữ nguyên code MouseDown trước đó (nếu có).
+        //    }
+        //}
+
+
+      
+    // ====== PHẦN EDITOR: MouseDown/Move/Up (kèm tạo mới khi Clear) ======
+  
+        
+
+        // ---- Thêm trạng thái tạo mới ----
+        private bool _maybeCreate = false;
+        private bool _creatingNew = false;
+        private PointF _createStartImg;
+        private PointF _createEndImg;
+        private RectRotate _previewNew;
+
+        // ====== Bạn đã có imgView, Global, BeeCore.* ======
+        // imgView: control hiển thị ảnh (có AutoScrollPosition, Zoom, Pan, ...)
+
+        // ====== Helpers ======
+        private static PointF TransformPoint(Matrix m, PointF p)
+        {
+            var pts = new[] { p };
+            m.TransformPoints(pts);
+            return pts[0];
+        }
+
+        private static Matrix BuildLocalInverseMatrixFor(RectRotate rr, float zoomPercent, Point scroll,
+                                                        bool useDragCenter, PointF dragCenter, float angleWhenDrag)
+        {
+            var m = new Matrix();
+            m.Translate(scroll.X, scroll.Y);
+            float s = zoomPercent / 100f;
+            m.Scale(s, s);
+            if (useDragCenter) m.Translate(dragCenter.X, dragCenter.Y);
+            else m.Translate(rr._PosCenter.X, rr._PosCenter.Y);
+            if (useDragCenter) m.Rotate(angleWhenDrag);
+            else m.Rotate(rr._rectRotation);
+            m.Invert();
+            return m;
+        }
+
+        private static RectangleF GetPolygonBoundsLocal(RectRotate rr)
+        {
+            var pts = rr == null ? null : rr.PolyLocalPoints;
+            if (pts == null || pts.Count == 0)
+                return rr != null ? rr._rect : RectangleF.Empty;
+
+            float minX = float.MaxValue, minY = float.MaxValue;
+            float maxX = float.MinValue, maxY = float.MinValue;
+            for (int i = 0; i < pts.Count; i++)
+            {
+                var p = pts[i];
+                if (p.X < minX) minX = p.X;
+                if (p.Y < minY) minY = p.Y;
+                if (p.X > maxX) maxX = p.X;
+                if (p.Y > maxY) maxY = p.Y;
+            }
+            return new RectangleF(minX, minY, Math.Max(0, maxX - minX), Math.Max(0, maxY - minY));
+        }
+
+        private PointF ScreenToImage(PointF pScreen)
+        {
+            using (var m = new Matrix())
+            {
+                m.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                float s = (float)(imgView.Zoom / 100.0);
+                m.Scale(s, s);
+                m.Invert();
+                var pts = new[] { pScreen };
+                m.TransformPoints(pts);
+                return pts[0];
+            }
+        }
+
+        // Lấy/đặt rr theo TypeCrop (giống nguyên tác)
+        private RectRotate GetCurrentRR()
+        {
+            var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
+            if (tool == null || tool.Propety == null) return null;
+            if (Global.TypeCrop == TypeCrop.Area) return tool.Propety.rotArea;
+            else if (Global.TypeCrop == TypeCrop.Mask) return tool.Propety.rotMask;
+            else return tool.Propety.rotCrop;
+        }
+        private void SetCurrentRR(RectRotate rr)
+        {
+            var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
+            if (tool == null) return;
+            if (Global.TypeCrop == TypeCrop.Area) tool.Propety.rotArea = rr;
+            else if (Global.TypeCrop == TypeCrop.Mask) tool.Propety.rotMask = rr;
+            else tool.Propety.rotCrop = rr;
+        }
+
+  
+        private static bool BoundsContainAll(RectangleF r, IList<PointF> pts)
+        {
+            if (pts == null || pts.Count == 0) return true;
+            for (int i = 0; i < pts.Count; i++)
+                if (!r.Contains(pts[i])) return false;
+            return true;
+        }
+
+        private static bool HexBoundsContainAll(RectRotate rr)
+        {
+            var r = rr._rect;
+            var verts = rr.GetHexagonVerticesLocal(); // 6 đỉnh local (đã gồm offsets)
+            for (int i = 0; i < verts.Length; i++)
+                if (!r.Contains(verts[i])) return false;
+            return true;
+        }
+        // ====== MouseDown ======
+        // ===================== FORM / CONTROL: Mouse handlers =====================
+
+        // ====== MouseDown ======
+        // ⬇️ CỜ MỚI: Polygon bẩn trong lúc kéo (hoãn update center/bounds/angle)
+        private bool _polyDirtyDuringDrag = false;
+
+
+        // ====== MouseDown ======
+        private void imgView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (toolEdit == null) return;
+            if (Global.IsRun) return;
+            pDown = e.Location;
+            _drag = true;
+
+            if (Global.StatusDraw == StatusDraw.Color)
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.AddColor();
+
+            imgView.Invalidate();
+
+            RectRotate rr = GetCurrentRR();
+            if (rr == null) return;
+
+            // Reset tạo mới
+            _maybeCreate = false;
+            _creatingNew = false;
+            _previewNew = null;
+
+            if (rr.IsEmptyForCreate())
+            {
+                // cho phép tạo mới: Rect/Ellipse/Hexagon (thêm Hexagon)
+                if (rr.Shape == ShapeType.Rectangle || rr.Shape == ShapeType.Ellipse || rr.Shape == ShapeType.Hexagon)
+                {
+                    _maybeCreate = true;
+                    _createStartImg = ScreenToImage(e.Location);
+                }
+            }
+
+            // ===== Polygon: thêm điểm / chọn vertex =====
+            using (var inv = BuildLocalInverseMatrixFor(rr, (float)imgView.Zoom, imgView.AutoScrollPosition, false, PointF.Empty, 0f))
+            {
+                PointF pLocal = TransformPoint(inv, e.Location);
+
+                if (rr.Shape == ShapeType.Polygon)
+                {
+                    float handle = Global.Config.RadEdit;
+                    float closeTol = handle * 1.25f;
+
+                    // Nếu polygon đang rỗng -> reset sạch khung + xoá điểm cũ
+                    if (!rr.IsPolygonClosed && (rr.PolyLocalPoints == null || rr.PolyLocalPoints.Count == 0))
+                    {  // 2) Reset cờ thao tác/UI
+                       
+                        _maybeCreate = false;
+                        _creatingNew = false;
+                        _previewNew = null;
+                        _polyDirtyDuringDrag = false;
+
+                        imgView.PanMode = btnPan.IsCLick ? ImageBoxPanMode.Left : ImageBoxPanMode.None;
+                        imgView.AllowClickZoom = true;
+                        imgView.AllowDoubleClick = true;
+                        rr.ResetFrameForNewPolygonHard();
+                    }
+
+                    if (!rr.IsPolygonClosed)
+                    {
+                        if (!rr.PolygonTryCloseIfNearFirst(pLocal, closeTol))
+                            rr.PolygonAddPointLocal(pLocal);
+
+                        _polyDirtyDuringDrag = true; // hoãn chuẩn hoá
+                        _drag = false;
+                        imgView.Invalidate();
+                        return;
+                    }
+                    else
+                    {
+                        rr.ActiveVertexIndex = -1;
+                        for (int i = rr.PolyLocalPoints.Count - 1; i >= 0; i--)
+                        {
+                            PointF v = rr.PolyLocalPoints[i];
+                            RectangleF handleRect = new RectangleF(v.X - handle / 2f, v.Y - handle / 2f, handle, handle);
+                            if (handleRect.Contains(pLocal))
+                            {
+                                rr.ActiveVertexIndex = i;
+                                rr._dragAnchor = AnchorPoint.Vertex;
+                                _drag = true;
+
+                                _dragRect = rr._rect;
+                                _dragCenter = rr._PosCenter;
+                                _dragStart = pLocal;
+                                _dragStartOffset = new PointF(_dragStart.X - v.X, _dragStart.Y - v.Y);
+                                _dragRot = rr._rectRotation;
+                                break;
+                            }
+                        }
+                        imgView.Invalidate();
+                        return;
+                    }
+                }
+            }
+            // các shape khác: hit-test ở MouseMove
+        }
+
+        // ====== MouseMove ======
         private void imgView_MouseMove(object sender, MouseEventArgs e)
         {
             if (Global.IndexToolSelected == -1) return;
@@ -822,484 +1254,1081 @@ namespace BeeUi
             pMove = e.Location;
             if (Global.IsRun) return;
 
+            // ===== Color picker =====
             if (Global.IndexToolSelected >= 0)
-                if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool == TypeTool.Color_Area)
+            {
+                var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
+                if (tool.TypeTool == TypeTool.Color_Area)
                 {
-
-                    if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.IsGetColor)
+                    if (tool.Propety.IsGetColor)
                     {
                         imgView.Cursor = new Cursor(Properties.Resources.Color_Dropper.Handle);
                         imgView.AllowClickZoom = false;
                         imgView.PanMode = ImageBoxPanMode.None;
-                        if (!workGetColor.IsBusy)
-                            workGetColor.RunWorkerAsync();
+                        if (!workGetColor.IsBusy) workGetColor.RunWorkerAsync();
                         return;
                     }
-
-                    else
-                        imgView.Cursor = Cursors.Default;
-
+                    else imgView.Cursor = Cursors.Default;
                 }
+            }
+
             if (Global.StatusDraw != StatusDraw.Edit) return;
+
             try
             {
-                //  if (toolEdit == null) return;
+                Func<RectRotate> getCurrentRR = GetCurrentRR;
+                Action<RectRotate> setCurrentRR = SetCurrentRR;
 
-                RectRotate rotateRect = new RectRotate();
-                //if (toolEdit.IsClear)
-                //{
-                //    if (_drag)
-                //    {
-
-                //        rectClear = new Rect(e.Location.X - widthClear/2, e.Location.Y + widthClear / 4, widthClear, widthClear);
-                //      Mat  bmp = new Mat(rectClear.Width, rectClear.Height, MatType.CV_8UC1, Scalar.White);
-                //        bmp.CopyTo(new Mat(matMaskAdd, rectClear));
-                //        bmp.CopyTo(new Mat(bmMask, rectClear));
-
-
-                //    }
-
-                //}
-
-
-                pDown = e.Location;
-
-                if (_drag)
+                // ====== NHÁNH TẠO MỚI (sau Clear) ======
+                if (_drag && _maybeCreate &&
+                    ((getCurrentRR() != null ? getCurrentRR()._dragAnchor : AnchorPoint.None) == AnchorPoint.None))
                 {
-                    if (Global.TypeCrop == TypeCrop.Area)
-                    {
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null)
-                            return;
-                        rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea.IsElip);
-                    }
-                    else if (Global.TypeCrop == TypeCrop.Mask)
-                    {
+                    _createEndImg = ScreenToImage(e.Location);
 
-                        // if(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation.Contains(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation))
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null)
-                            return;
-                        rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask.IsElip);
+                    // chỉ tạo khi kéo trái -> phải
+                    if (_createEndImg.X > _createStartImg.X)
+                    {
+                        float w = Math.Max(1f, _createEndImg.X - _createStartImg.X);
+                        float yTop = Math.Min(_createStartImg.Y, _createEndImg.Y);
+                        float yBot = Math.Max(_createStartImg.Y, _createEndImg.Y);
+                        float hReal = Math.Max(1f, yBot - yTop);
+                        var center = new PointF(_createStartImg.X + w / 2f, yTop + hReal / 2f);
+
+                        var rrSrc = getCurrentRR();
+                        ShapeType shape = rrSrc != null ? rrSrc.Shape : ShapeType.Rectangle;
+                        if (shape != ShapeType.Rectangle && shape != ShapeType.Ellipse && shape != ShapeType.Hexagon)
+                            shape = ShapeType.Rectangle;
+
+                        var rrNew = new RectRotate(
+                            new RectangleF(-w / 2f, -hReal / 2f, w, hReal),
+                            center,
+                            0f,
+                            AnchorPoint.None
+                        );
+                        rrNew.Shape = shape; // có thể là Hexagon
+
+                        _previewNew = rrNew;
+                        _creatingNew = true;
+                        setCurrentRR(rrNew);
+                        imgView.Invalidate();
+                        return;
                     }
                     else
                     {
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
-                            return;
-                        rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop.IsElip);
+                        _previewNew = null;
+                        _creatingNew = false;
                     }
+                }
+
+                // ====== NHÁNH ĐANG KÉO ======
+                if (_drag)
+                {
+                    var rrSrc = getCurrentRR();
+                    if (rrSrc == null) return;
+
+                    // clone rrSrc
+                    RectRotate rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+                    rotateRect.Shape = rrSrc.Shape;
+                    if (rrSrc.HexVertexOffsets != null)
+                        for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
+                    rotateRect.PolyLocalPoints.Clear();
+                    if (rrSrc.PolyLocalPoints != null)
+                        for (int i = 0; i < rrSrc.PolyLocalPoints.Count; i++) rotateRect.PolyLocalPoints.Add(rrSrc.PolyLocalPoints[i]);
+                    rotateRect.IsPolygonClosed = rrSrc.IsPolygonClosed;
+                    rotateRect.ActiveVertexIndex = rrSrc.ActiveVertexIndex;
+                    rotateRect.AutoExpandBounds = rrSrc.AutoExpandBounds;
+                    rotateRect.AutoOrientPolygon = rrSrc.AutoOrientPolygon;
+
+                    // screen->local dùng tâm/góc lúc bắt đầu kéo
                     var mat = new Matrix();
                     mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                    mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
+                    float s = (float)(imgView.Zoom / 100.0);
+                    mat.Scale(s, s);
                     mat.Translate(_dragCenter.X, _dragCenter.Y);
                     mat.Rotate(rotateRect._rectRotation);
                     mat.Invert();
 
-                    var point = mat.TransformPoint(new PointF(e.X, e.Y));
+                    var point = TransformPoint(mat, new PointF(e.X, e.Y)); // local-space
 
-                    SizeF deltaSize = new SizeF();
-                    PointF clamped;
-                    float deltaX = 0, deltaY = 0;
-                    switch (rotateRect._dragAnchor)
+                    SizeF deltaSize = SizeF.Empty;
+                    float deltaX = 0f, deltaY = 0f;
+
+                    // Không resize bbox cho Polygon
+                    bool isPolygonBBoxResize = false;
+
+                    if (!isPolygonBBoxResize)
                     {
-                        case AnchorPoint.TopLeft:
-
-                            IsDone = true;
-                            clamped = new PointF(Math.Min(0, point.X), Math.Min(0, point.Y));
-                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-
-                            rotateRect._rect = new RectangleF(
-                                   _dragRect.Left + deltaSize.Width / 2,
-                                   _dragRect.Top + deltaSize.Height / 2,
-                                   _dragRect.Width - deltaSize.Width,
-                                   _dragRect.Height - deltaSize.Height);
-                            deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
-
-                            break;
-
-                        case AnchorPoint.TopRight:
-
-                            clamped = new PointF(Math.Max(0, point.X), Math.Min(0, point.Y));
-                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                            //  if (deltaSize.Width < 2 && deltaSize.Height < 2) return;
-                            rotateRect._rect = new RectangleF(
-                                _dragRect.Left - deltaSize.Width / 2,
-                                _dragRect.Top + deltaSize.Height / 2,
-                                _dragRect.Width + deltaSize.Width,
-                                _dragRect.Height - deltaSize.Height);
-                            deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
-                            break;
-
-                        case AnchorPoint.BottomLeft:
-
-                            clamped = new PointF(Math.Min(0, point.X), Math.Max(0, point.Y));
-                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                            rotateRect._rect = new RectangleF(
-                                _dragRect.Left + deltaSize.Width / 2,
-                                _dragRect.Top - deltaSize.Height / 2,
-                                _dragRect.Width - deltaSize.Width,
-                                _dragRect.Height + deltaSize.Height);
-                            deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
-
-                            break;
-
-                        case AnchorPoint.BottomRight:
-
-                            clamped = new PointF(Math.Max(0, point.X), Math.Max(0, point.Y));
-                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
-                            rotateRect._rect = new RectangleF(
-                                _dragRect.Left - deltaSize.Width / 2,
-                                _dragRect.Top - deltaSize.Height / 2,
-                                _dragRect.Width + deltaSize.Width,
-                                _dragRect.Height + deltaSize.Height);
-                            deltaX = deltaSize.Width / 2; deltaY = deltaSize.Height / 2;
-                            break;
-
-                        case AnchorPoint.Rotation:
-
-                            var vecX = point.X;
-                            var vecY = -point.Y;
-
-                            var len = Math.Sqrt(vecX * vecX + vecY * vecY);
-
-                            var normX = vecX / len;
-                            var normY = vecY / len;
-
-                            //In rectangles's space, 
-                            //compute dot product between, 
-                            //Up and mouse-position vector
-                            var dotProduct = (0 * normX + 1 * normY);
-                            var angle = Math.Acos(dotProduct);
-
-                            if (point.X < 0)
-                                angle = -angle;
-                            float oldAngle = rotateRect._rectRotation;
-                            // Add (delta-radians) to rotation as degrees
-                            float fAngle = (float)((180 / Math.PI) * angle);
-                            if (!float.IsNaN(fAngle) && fAngle != 0)
-                                rotateRect._rectRotation += fAngle;
-                            if (float.IsNaN(rotateRect._rectRotation))
-                                rotateRect._rectRotation = oldAngle;
-                            break;
-
-                        case AnchorPoint.Center:
-
-                            //move this in screen-space
-                            rotateRect._PosCenter = new PointF((point.X- _dragStartOffset.X) , (point.Y  - _dragStartOffset.Y) );
-                            break;
-                    }
-
-                    if (rotateRect._dragAnchor != AnchorPoint.None)
-                    {
-
-                        if (rotateRect._dragAnchor != AnchorPoint.Center)
-                            if (deltaX != 0 || deltaY != 0)
-                            {
-                                PointF pDelta = RotatePoint(rotateRect._rectRotation, new PointF(deltaX, deltaY));
-
-                                rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
-
-                                IsDone = false;
-                            }
-                        if (Global.TypeCrop == TypeCrop.Area)
+                        switch (rotateRect._dragAnchor)
                         {
-                            float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2;
-                            float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2;
-                            float w = rotateRect._rect.Width; float h = rotateRect._rect.Height;
-                            if (x < 0)
-                            {
+                            case AnchorPoint.TopLeft:
+                                {
+                                    var clamped = new PointF(Math.Min(0f, point.X), Math.Min(0f, point.Y));
+                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                                    rotateRect._rect = new RectangleF(
+                                        _dragRect.Left + deltaSize.Width / 2f,
+                                        _dragRect.Top + deltaSize.Height / 2f,
+                                        _dragRect.Width - deltaSize.Width,
+                                        _dragRect.Height - deltaSize.Height);
+                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                                    break;
+                                }
+                            case AnchorPoint.TopRight:
+                                {
+                                    var clamped = new PointF(Math.Max(0f, point.X), Math.Min(0f, point.Y));
+                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                                    rotateRect._rect = new RectangleF(
+                                        _dragRect.Left - deltaSize.Width / 2f,
+                                        _dragRect.Top + deltaSize.Height / 2f,
+                                        _dragRect.Width + deltaSize.Width,
+                                        _dragRect.Height - deltaSize.Height);
+                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                                    break;
+                                }
+                            case AnchorPoint.BottomLeft:
+                                {
+                                    var clamped = new PointF(Math.Min(0f, point.X), Math.Max(0f, point.Y));
+                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                                    rotateRect._rect = new RectangleF(
+                                        _dragRect.Left + deltaSize.Width / 2f,
+                                        _dragRect.Top - deltaSize.Height / 2f,
+                                        _dragRect.Width - deltaSize.Width,
+                                        _dragRect.Height + deltaSize.Height);
+                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                                    break;
+                                }
+                            case AnchorPoint.BottomRight:
+                                {
+                                    var clamped = new PointF(Math.Max(0f, point.X), Math.Max(0f, point.Y));
+                                    deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+                                    rotateRect._rect = new RectangleF(
+                                        _dragRect.Left - deltaSize.Width / 2f,
+                                        _dragRect.Top - deltaSize.Height / 2f,
+                                        _dragRect.Width + deltaSize.Width,
+                                        _dragRect.Height + deltaSize.Height);
+                                    deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+                                    break;
+                                }
+                            case AnchorPoint.Rotation:
+                                {
+                                    float vx = point.X, vy = -point.Y;
+                                    double len = Math.Sqrt(vx * vx + vy * vy);
+                                    if (len > 1e-6)
+                                    {
+                                        double nx = vx / len, ny = vy / len;
+                                        double dot = Math.Max(-1.0, Math.Min(1.0, ny));
+                                        double ang = Math.Acos(dot);
+                                        if (point.X < 0) ang = -ang;
+                                        float old = rotateRect._rectRotation;
+                                        float deg = (float)(ang * 180.0 / Math.PI);
+                                        if (!float.IsNaN(deg) && Math.Abs(deg) > float.Epsilon) rotateRect._rectRotation += deg;
+                                        if (float.IsNaN(rotateRect._rectRotation)) rotateRect._rectRotation = old;
+                                    }
+                                    break;
+                                }
+                            case AnchorPoint.Center:
+                                {
+                                    if (rotateRect.Shape == ShapeType.Polygon)
+                                    {
+                                        float dx = point.X - _dragStart.X;
+                                        float dy = point.Y - _dragStart.Y;
+                                        rotateRect.TranslatePolygonLocal(dx, dy);
 
-                                rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
-                            }
-                            else if (x + w > BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width)
-                            {
+                                        _polyDirtyDuringDrag = true;   // hoãn chuẩn hoá
+                                        _dragStart = point;            // kéo mượt
+                                    }
+                                    else
+                                    {
+                                        rotateRect._PosCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
+                                    }
+                                    break;
+                                }
+                            case AnchorPoint.V0:
+                            case AnchorPoint.V1:
+                            case AnchorPoint.V2:
+                            case AnchorPoint.V3:
+                            case AnchorPoint.V4:
+                            case AnchorPoint.V5:
+                                {
+                                    if (rotateRect.Shape == ShapeType.Hexagon)
+                                    {
+                                        int idx = (int)rotateRect._dragAnchor - (int)AnchorPoint.V0;
+                                        var pLocal = new PointF(point.X, point.Y);
+                                        rotateRect.SetHexVertexByLocalPoint(idx, pLocal);
 
-                                rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width), rotateRect._PosCenter.Y);
-                            }
-                            if (y < 0)
-                            {
+                                        if (rotateRect.AutoExpandBounds)
+                                            rotateRect.RefitBoundsToHexagon();
+                                        else
+                                            rotateRect._rect = GetPolygonBoundsLocal(rotateRect); // nếu có
+                                    }
+                                    break;
+                                }
+                            case AnchorPoint.Vertex:
+                                {
+                                    if (rotateRect.Shape == ShapeType.Polygon && rotateRect.ActiveVertexIndex >= 0)
+                                    {
+                                        int idx = rotateRect.ActiveVertexIndex;
+                                        var pLocal = new PointF(point.X, point.Y);
 
-                                rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
-                            }
+                                        if (idx >= 0 && idx < rotateRect.PolyLocalPoints.Count)
+                                        {
+                                            rotateRect.PolyLocalPoints[idx] = pLocal;
 
-                            else if (y + h > BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height)
-                            {
+                                            if (rotateRect.IsPolygonClosed && rotateRect.PolyLocalPoints.Count >= 2)
+                                            {
+                                                if (idx == 0)
+                                                    rotateRect.PolyLocalPoints[rotateRect.PolyLocalPoints.Count - 1] = pLocal;
+                                                else if (idx == rotateRect.PolyLocalPoints.Count - 1)
+                                                    rotateRect.PolyLocalPoints[0] = pLocal;
+                                            }
+                                        }
 
-                                rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height));
-                            }
-                            //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop != null)
-                            //{
-                            //    RectRotate rectRotate1 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop;
-                            //    RotatedRect rot = new RotatedRect(new Point2f(rectRotate1._PosCenter.X, rectRotate1._PosCenter.Y), new Size2f(rectRotate1._rect.Width, rectRotate1._rect.Height), rectRotate1._rectRotation);
-                            //    Rect bound = rot.BoundingRect();
-                            //    RectRotate rectRotate2 = rotateRect;
-                            //    RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
-
-                            //    //if (!rectF.Contains(new PointF(bound.X, bound.Y)) ||
-                            //    //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y)) ||
-                            //    //   !rectF.Contains(new PointF(bound.X, bound.Y + bound.Height)) ||
-                            //    //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)))
-                            //    //    return;
-                            //    }
-                            if (rotateRect == null) return;
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
-
-                        }
-                        else if (Global.TypeCrop == TypeCrop.Crop)
-                        {
-                            RotatedRect rot = new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._rectRotation);
-                            Rect bound = rot.BoundingRect();
-                            // RectRotate rectRotate2 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
-                            // RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
-
-                            //if(!rectF.Contains(new PointF( bound.X,bound.Y))||
-                            //   !rectF.Contains(new PointF(bound.X+bound.Width, bound.Y)) ||
-                            //   !rectF.Contains(new PointF(bound.X, bound.Y+bound.Height))||
-                            //   !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)) )
-                            //       return;
-
-                            if (rotateRect == null) return;
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
-                        }
-
-                        else
-                        {
-                            RotatedRect rot = new RotatedRect(new Point2f(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), rotateRect._rectRotation);
-                            Rect bound = rot.BoundingRect();
-                            RectRotate rectRotate2 = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
-                            RectangleF rectF = new RectangleF(rectRotate2._PosCenter.X + rectRotate2._rect.X, rectRotate2._PosCenter.Y + rectRotate2._rect.Y, rectRotate2._rect.Width, rectRotate2._rect.Height);
-
-                            if (!rectF.Contains(new PointF(bound.X, bound.Y)) ||
-                               !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y)) ||
-                               !rectF.Contains(new PointF(bound.X, bound.Y + bound.Height)) ||
-                               !rectF.Contains(new PointF(bound.X + bound.Width, bound.Y + bound.Height)))
-                                return;
-
-                            if (rotateRect == null) return;
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask = new RectRotate(new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height), new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y), rotateRect._rectRotation, rotateRect._dragAnchor, rotateRect.IsElip);
+                                        _polyDirtyDuringDrag = true;   // hoãn chuẩn hoá
+                                    }
+                                    break;
+                                }
                         }
                     }
-                    if (Global.TypeCrop == TypeCrop.Crop || BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
+
+                    // cập nhật _PosCenter theo delta cho resize góc (không áp cho center/rotation/vertex/hex-vertex)
+                    if (rotateRect._dragAnchor != AnchorPoint.None &&
+                        rotateRect._dragAnchor != AnchorPoint.Center &&
+                        rotateRect._dragAnchor != AnchorPoint.Rotation &&
+                        rotateRect._dragAnchor < AnchorPoint.V0)
                     {
-
-                        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool != TypeTool.Color_Area)
-                            if (rotateRect != null)
-                            {
-                                //  toolEdit.matTemp = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Processing(BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
-
-                                // toolEdit.matTemp = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.GetTemp(rotateRect, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, bmMask);
-                            }
-                        //GetTemp(RectRotate rotateRect, Mat BeeCore.Common.listCamera[Global.IndexChoose].matRaw, Mat bmMask,  Mat matClear, ref Mat matMask, ref Mat matTemp)
-
+                        if (deltaX != 0f || deltaY != 0f)
+                        {
+                            PointF pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), rotateRect._rectRotation);
+                            rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
+                            IsDone = false;
+                        }
                     }
 
+                    // Clamp theo ảnh — BỎ CHO POLYGON
+                    if (Global.TypeCrop == TypeCrop.Area && rotateRect.Shape != ShapeType.Polygon)
+                    {
+                        float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2f;
+                        float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2f;
+                        float w = rotateRect._rect.Width, h = rotateRect._rect.Height;
+                        int maxW = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
+                        int maxH = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
 
+                        if (x < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
+                        else if (x + w > maxW) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - maxW), rotateRect._PosCenter.Y);
+                        if (y < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
+                        else if (y + h > maxH) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - maxH));
+                    }
 
+                    // Ghi về Propety
+                    var rrNew = new RectRotate(
+                        new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height),
+                        new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y),
+                        rotateRect._rectRotation,
+                        rotateRect._dragAnchor
+                    );
+                    rrNew.Shape = rotateRect.Shape;
+                    for (int i = 0; i < 6; i++) rrNew.HexVertexOffsets[i] = rotateRect.HexVertexOffsets[i];
+                    rrNew.PolyLocalPoints.Clear();
+                    for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++) rrNew.PolyLocalPoints.Add(rotateRect.PolyLocalPoints[i]);
+                    rrNew.IsPolygonClosed = rotateRect.IsPolygonClosed;
+                    rrNew.ActiveVertexIndex = rotateRect.ActiveVertexIndex;
+                    rrNew.AutoExpandBounds = rotateRect.AutoExpandBounds;
+                    rrNew.AutoOrientPolygon = rotateRect.AutoOrientPolygon;
+
+                    setCurrentRR(rrNew);
                 }
+                // ====== NHÁNH HIT-TEST (không kéo) ======
                 else
                 {
-                    int IsCheck = 0;
-                    if (!toolEdit.IsClear)
+                    var rrSrc = getCurrentRR();
+                    if (rrSrc == null) return;
+
+                    RectRotate rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+                    rotateRect.Shape = rrSrc.Shape;
+                    if (rrSrc.HexVertexOffsets != null)
+                        for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
+                    rotateRect.PolyLocalPoints.Clear();
+                    if (rrSrc.PolyLocalPoints != null)
+                        for (int i = 0; i < rrSrc.PolyLocalPoints.Count; i++) rotateRect.PolyLocalPoints.Add(rrSrc.PolyLocalPoints[i]);
+                    rotateRect.IsPolygonClosed = rrSrc.IsPolygonClosed;
+                    rotateRect.ActiveVertexIndex = rrSrc.ActiveVertexIndex;
+                    rotateRect.AutoExpandBounds = rrSrc.AutoExpandBounds;
+                    rotateRect.AutoOrientPolygon = rrSrc.AutoOrientPolygon;
+
+                    var mat = new Matrix();
+                    mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+                    float s = (float)(imgView.Zoom / 100.0);
+                    mat.Scale(s, s);
+                    mat.Translate(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+                    mat.Rotate(rotateRect._rectRotation);
+                    mat.Invert();
+
+                    var point = TransformPoint(mat, new PointF(e.X, e.Y)); // local
+
+                    RectangleF baseRect = rotateRect._rect;
+                    RectangleF polyBounds = baseRect; // chỉ để đặt handle xoay
+
+                    // tính bbox tạm từ polygon (không ghi vào rr)
+                    if (rotateRect.Shape == ShapeType.Polygon && rotateRect.PolyLocalPoints != null && rotateRect.PolyLocalPoints.Count >= 3)
+                        polyBounds = BboxOf(rotateRect.PolyLocalPoints);
+
+                    float r = Global.Config.RadEdit;
+
+                    RectangleF rectOuter = new RectangleF(polyBounds.X - r / 2f, polyBounds.Y - r / 2f, polyBounds.Width + r, polyBounds.Height + r);
+                    RectangleF rectTopLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Top - r / 2f, r, r);
+                    RectangleF rectTopRight = new RectangleF(polyBounds.Right - r / 2f, polyBounds.Top - r / 2f, r, r);
+                    RectangleF rectBottomLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Bottom - r / 2f, r, r);
+                    RectangleF rectBottomRight = new RectangleF(polyBounds.Right - r / 2f, polyBounds.Bottom - r / 2f, r, r);
+                    RectangleF rectRotate = new RectangleF(-r / 2f, polyBounds.Top - 2f * r, 2f * r, 2f * r);
+
+                    _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+
+                    bool anchored = false;
+
+                    // 1) Polygon
+                    if (rotateRect.Shape == ShapeType.Polygon)
                     {
-                        //  Global.TypeCrop = TypeCrop.Crop;
-
-                        //X:
-                        //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
-                        //    Global.TypeCrop = TypeCrop.Area;
-                        if (Global.TypeCrop == TypeCrop.Area)
+                        // ⬇️ polygon CHƯA ĐÓNG: KHÔNG cho bắt anchor nào (chỉ click thêm điểm ở MouseDown)
+                        if (!rotateRect.IsPolygonClosed)
                         {
-
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea == null) return;
-                            rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea.IsElip);
-                        }
-                        else if (Global.TypeCrop == TypeCrop.Mask)
-                        {
-
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null) return;
-                            rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask.IsElip);
-                        }
-                        else
-                        {
-                            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null) return;
-                            rotateRect = new RectRotate(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rect, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._PosCenter, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._rectRotation, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop.IsElip);
-                        }
-                        var mat = new Matrix();
-                        mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-                        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-
-                        mat.Translate(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
-                        mat.Rotate(rotateRect._rectRotation);
-                        mat.Invert();
-                        // Mouse point in Rectangle's space. 
-                        var point = mat.TransformPoint(new PointF(e.X, e.Y));
-
-                        RectangleF _rect = rotateRect._rect;
-
-                        var rect = new RectangleF(rotateRect._rect.X - Global.RadpEdit / 2, rotateRect._rect.Y - Global.RadpEdit / 2, rotateRect._rect.Width + Global.RadpEdit, rotateRect._rect.Height + Global.RadpEdit);
-                        // if (Global.TypeCrop == TypeCrop.Area)
-                        //    rect = new RectangleF(rotateRect._rect.X - 20, rotateRect._rect.Y - 20, rotateRect._rect.Width +40, rotateRect._rect.Height+40);
-
-                        var rectTopLeft = new RectangleF(_rect.Left - Global.RadpEdit / 2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
-                        var rectTopRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
-                        var rectBottomLeft = new RectangleF(_rect.Left - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
-                        var rectBottomRight = new RectangleF(_rect.Left + _rect.Width - Global.RadpEdit / 2, _rect.Top + _rect.Height - Global.RadpEdit / 2, Global.RadpEdit, Global.RadpEdit);
-                        var rectRotate = new RectangleF(-Global.RadpEdit / 2, _rect.Top - Global.RadpEdit * 2, Global.RadpEdit * 2, Global.RadpEdit * 2);
-                        _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
-                        if (rectTopLeft.Contains(point))
-                        {
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.TopLeft;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-
-                        }
-                        else if (rectTopRight.Contains(point))
-                        {
-
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.TopRight;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-                        }
-                        else if (rectBottomLeft.Contains(point))
-                        {
-
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.BottomLeft;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-                        }
-                        else if (rectBottomRight.Contains(point))
-                        {
-
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.BottomRight;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-                        }
-                        else if (rectRotate.Contains(point))
-                        {
-
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.Rotation;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-                            _dragRot = rotateRect._rectRotation;
-                        }
-                        else if (rect.Contains(point))
-                        {
-
-                            _dragStart = new PointF(point.X, point.Y);
-                            rotateRect._dragAnchor = AnchorPoint.Center;
-                            _dragRect = new RectangleF(_rect.Left, _rect.Top, _rect.Width, _rect.Height);
-                            _dragStartOffset = new PointF(_dragStart.X - rotateRect._PosCenter.X, _dragStart.Y - rotateRect._PosCenter.Y);
-                        }
-
-                        else
-                        {
-
                             rotateRect._dragAnchor = AnchorPoint.None;
-                            var rectNone = new RectangleF(rotateRect._rect.X + rotateRect._rect.Width / 4, rotateRect._rect.Y + rotateRect._rect.Height / 4, rotateRect._rect.Width + rotateRect._rect.Width / 2, rotateRect._rect.Height + rotateRect._rect.Height / 2);
-
-                            //if (IsCheck == 0)
-                            //{
-
-
-                            //    if (!rectNone.Contains(point))
-                            //    {
-                            //         if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask == null|| BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
-                            //        {
-                            //            IsCheck+=2;
-                            //            G.IsCheck = false;
-                            //          //  Global.TypeCrop = TypeCrop.Area;
-                            //            goto X;
-                            //        }
-                            //        else
-                            //        {
-                            //            IsCheck++; G.IsCheck = false;
-                            //         //   Global.TypeCrop = TypeCrop.Mask;
-                            //            goto X;
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-
-                            //    }
-
-
-                            //}
-                            //else   if (IsCheck == 1)
-                            //{
-
-                            //    if (!rectNone.Contains(point))
-                            //    {
-                            //        IsCheck++; G.IsCheck = false;
-                            //     //   Global.TypeCrop = TypeCrop.Area;
-                            //        goto X;
-                            //    }
-                            //}
-                            //else
-                            //{
-
-                            //    ////G.IsCheck = true;
-                            //    //if (!toolEdit.threadProcess.IsBusy)
-                            //    //    toolEdit.threadProcess.RunWorkerAsync();
-                            //    //if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop == null)
-                            //    //    Global.TypeCrop = TypeCrop.Area;
-                            //    //else
-                            //    //Global.TypeCrop = TypeCrop.Crop;
-                            //}
-
+                            rotateRect.ActiveVertexIndex = -1;
+                            // không set anchored -> để các shape khác cũng không bắt
                         }
-
-                        if (Global.TypeCrop == TypeCrop.Area)
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea._dragAnchor = rotateRect._dragAnchor;
-                        else if (Global.TypeCrop == TypeCrop.Mask)
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask._dragAnchor = rotateRect._dragAnchor;
                         else
-                            BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = rotateRect._dragAnchor;
+                        {
+                            // ===== polygon đã đóng: bắt đỉnh / xoay / move =====
+                            for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++)
+                            {
+                                RectangleF h = new RectangleF(rotateRect.PolyLocalPoints[i].X - r / 2f,
+                                                              rotateRect.PolyLocalPoints[i].Y - r / 2f, r, r);
+                                if (h.Contains(point))
+                                {
+                                    _dragStart = new PointF(point.X, point.Y);
+                                    rotateRect._dragAnchor = AnchorPoint.Vertex;
+                                    rotateRect.ActiveVertexIndex = i;
+                                    _dragRect = polyBounds;
+                                    anchored = true;
+                                    break;
+                                }
+                            }
+                            if (!anchored)
+                            {
+                                if (rectRotate.Contains(point))
+                                {
+                                    _dragStart = new PointF(point.X, point.Y);
+                                    rotateRect._dragAnchor = AnchorPoint.Rotation;
+                                    _dragRect = polyBounds;
+                                    _dragRot = rotateRect._rectRotation;
+                                    anchored = true;
+                                }
+                                else if (RectRotate.PointInPolygon(rotateRect.PolyLocalPoints, point))
+                                {
+                                    _dragStart = new PointF(point.X, point.Y);
+                                    rotateRect._dragAnchor = AnchorPoint.Center;
+                                    _dragRect = RectangleF.Empty;
+                                    _dragStartOffset = new PointF(0, 0);
+                                    anchored = true;
+                                }
+                            }
+                        }
                     }
 
-                }
-                if (rotateRect._dragAnchor != AnchorPoint.None)
-                {
-                    if (Global.StatusDraw != StatusDraw.Color)
-                        Global.StatusDraw = StatusDraw.Edit;
+                    // 2) Hexagon: ưu tiên 6 đỉnh
+                    if (!anchored && rotateRect.Shape == ShapeType.Hexagon)
+                    {
+                        var verts = rotateRect.GetHexagonVerticesLocal();
+                        for (int i = 0; i < 6; i++)
+                        {
+                            var h = new RectangleF(verts[i].X - r / 2f, verts[i].Y - r / 2f, r, r);
+                            if (h.Contains(point))
+                            {
+                                _dragStart = new PointF(point.X, point.Y);
+                                rotateRect._dragAnchor = (AnchorPoint)((int)AnchorPoint.V0 + i);
+                                _dragRect = baseRect; // reference
+                                anchored = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // 3) Rectangle/Ellipse (hoặc Hexagon không trúng đỉnh)
+                    if (!anchored && rotateRect.Shape != ShapeType.Polygon)
+                    {
+                        if (rectTopLeft.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.TopLeft; _dragRect = baseRect; }
+                        else if (rectTopRight.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.TopRight; _dragRect = baseRect; }
+                        else if (rectBottomLeft.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.BottomLeft; _dragRect = baseRect; }
+                        else if (rectBottomRight.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.BottomRight; _dragRect = baseRect; }
+                        else if (rectRotate.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.Rotation; _dragRect = baseRect; _dragRot = rotateRect._rectRotation; }
+                        else if (rectOuter.Contains(point))
+                        { _dragStart = new PointF(point.X, point.Y); rotateRect._dragAnchor = AnchorPoint.Center; _dragRect = baseRect; _dragStartOffset = new PointF(_dragStart.X - rotateRect._PosCenter.X, _dragStart.Y - rotateRect._PosCenter.Y); }
+                        else
+                        {
+                            rotateRect._dragAnchor = AnchorPoint.None;
+                        }
+                    }
+
+                    // Ghi lại anchor & active index về rrSrc (không đụng dữ liệu khác)
+                    var rrSet = getCurrentRR();
+                    if (rrSet != null)
+                    {
+                        rrSet._dragAnchor = rotateRect._dragAnchor;
+                        rrSet.ActiveVertexIndex = rotateRect.ActiveVertexIndex;
+                    }
                 }
 
-                if (rotateRect._dragAnchor != AnchorPoint.None)
+                // ===== Khoá pan/zoom khi có anchor =====
+                var cur = GetCurrentRR();
+                if (cur != null && cur._dragAnchor != AnchorPoint.None)
                 {
+                    if (Global.StatusDraw != StatusDraw.Color) Global.StatusDraw = StatusDraw.Edit;
                     imgView.PanMode = ImageBoxPanMode.None;
                     imgView.AllowClickZoom = false;
                     imgView.AllowDoubleClick = false;
                 }
                 else
                 {
-                    if (btnPan.IsCLick)
-                        imgView.PanMode = ImageBoxPanMode.Left;
+                    if (btnPan.IsCLick) imgView.PanMode = ImageBoxPanMode.Left;
                     imgView.AllowClickZoom = true;
                     imgView.AllowDoubleClick = true;
                 }
+
                 imgView.Invalidate();
             }
-            catch (Exception ex)
+            catch
             {
-
+                // log nếu cần
             }
         }
 
-
-
-        private void imgView_MouseDown(object sender, MouseEventArgs e)
+        // ====== MouseUp ======
+        private void imgView_MouseUp(object sender, MouseEventArgs e)
         {
-            if (toolEdit == null) return;
-            pDown = e.Location;
-            _drag = true;
-            if (toolEdit.IsClear)
-                return;
+            if (Global.IndexToolSelected == -1) return;
+            if (Global.IsRun) return;
+            // Chốt nhánh tạo mới
+            if (_creatingNew)
+            {
+                float minSize = 3f;
+                var rr = GetCurrentRR();
+                if (rr != null && rr._rect.Width >= minSize && rr._rect.Height >= minSize)
+                {
+                    rr._dragAnchor = AnchorPoint.None;
+                    rr.ActiveVertexIndex = -1;
+                    SetCurrentRR(rr);
+                }
+                else
+                {
+                    _previewNew = null;
+                    _creatingNew = false;
+                }
 
-            if (Global.StatusDraw == StatusDraw.Color)
-                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.AddColor();
-          
-           // }
-         
-              
+                _maybeCreate = false;
+                _creatingNew = false;
+                _previewNew = null;
+                _drag = false;
+
+                imgView.Invalidate();
+                return;
+            }
+
+            _drag = false;
+
+            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop != null)
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = AnchorPoint.None;
+
+            ToolMouseUp();
+
+            try
+            {
+                var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+                if (prop == null) return;
+
+                RectRotate rr = null;
+                if (Global.TypeCrop == TypeCrop.Area) rr = prop.rotArea;
+                else if (Global.TypeCrop == TypeCrop.Mask) rr = prop.rotMask;
+                else rr = prop.rotCrop;
+
+                if (rr != null)
+                {
+                    // CHỈ chuẩn hoá khi polygon ĐÃ ĐÓNG
+                    if (rr.Shape == ShapeType.Polygon && _polyDirtyDuringDrag)
+                    {
+                        if (rr.IsPolygonClosed)
+                            rr.UpdateFromPolygon(updateAngle: rr.AutoOrientPolygon);
+
+                        _polyDirtyDuringDrag = false;
+                    }
+
+                    rr._dragAnchor = AnchorPoint.None;
+                    rr.ActiveVertexIndex = -1;
+                }
+
+                _drag = false;
+                imgView.Invalidate();
+            }
+            catch { }
+
             imgView.Invalidate();
         }
+
+        // ===== Helper bbox tạm cho polygon (không ghi vào rr._rect) =====
+        private static RectangleF BboxOf(System.Collections.Generic.IList<PointF> pts)
+        {
+            if (pts == null || pts.Count == 0) return RectangleF.Empty;
+            float minX = float.MaxValue, minY = float.MaxValue;
+            float maxX = float.MinValue, maxY = float.MinValue;
+            int n = pts.Count;
+            int m = (n >= 2 && pts[0].Equals(pts[n - 1])) ? n - 1 : n;
+            for (int i = 0; i < m; i++)
+            {
+                var p = pts[i];
+                if (p.X < minX) minX = p.X;
+                if (p.Y < minY) minY = p.Y;
+                if (p.X > maxX) maxX = p.X;
+                if (p.Y > maxY) maxY = p.Y;
+            }
+            return new RectangleF(minX, minY, Math.Max(1f, maxX - minX), Math.Max(1f, maxY - minY));
+        }
+
+
+        // ===== MAIN =====
+
+
+        //private void imgView_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (Global.IndexToolSelected == -1) return;
+        //    if (Global.StatusDraw == StatusDraw.Check) Global.StatusDraw = StatusDraw.Edit;
+
+        //    // lưu vị trí chuột để OnPaint vẽ preview (điểm chuột + đường từ điểm cuối polygon)
+        //    pMove = e.Location;
+
+        //    if (Global.IsRun) return;
+
+        //    // Color picker
+        //    if (Global.IndexToolSelected >= 0)
+        //    {
+        //        if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool == TypeTool.Color_Area)
+        //        {
+        //            if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.IsGetColor)
+        //            {
+        //                imgView.Cursor = new Cursor(Properties.Resources.Color_Dropper.Handle);
+        //                imgView.AllowClickZoom = false;
+        //                imgView.PanMode = ImageBoxPanMode.None;
+        //                if (!workGetColor.IsBusy) workGetColor.RunWorkerAsync();
+        //                return;
+        //            }
+        //            else imgView.Cursor = Cursors.Default;
+        //        }
+        //    }
+
+        //    if (Global.StatusDraw != StatusDraw.Edit) return;
+
+        //    try
+        //    {
+        //        RectRotate rotateRect = new RectRotate();
+
+        //        // lấy RectRotate hiện hành theo TypeCrop
+        //        Func<RectRotate> getCurrentRR = () =>
+        //        {
+        //            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+        //            if (Global.TypeCrop == TypeCrop.Area) return prop.rotArea;
+        //            else if (Global.TypeCrop == TypeCrop.Mask) return prop.rotMask;
+        //            else return prop.rotCrop;
+        //        };
+        //        Action<RectRotate> setCurrentRR = (rrNew) =>
+        //        {
+        //            var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+        //            if (Global.TypeCrop == TypeCrop.Area) prop.rotArea = rrNew;
+        //            else if (Global.TypeCrop == TypeCrop.Mask) prop.rotMask = rrNew;
+        //            else prop.rotCrop = rrNew;
+        //        };
+
+        //        // ======== _drag == true: đang kéo ========
+        //        if (_drag)
+        //        {
+        //            var rrSrc = getCurrentRR();
+        //            if (rrSrc == null) return;
+
+        //            // clone rrSrc
+        //            rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+        //            rotateRect.Shape = rrSrc.Shape;
+        //            if(rrSrc.HexVertexOffsets!=null)
+        //            for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
+        //            rotateRect.PolyLocalPoints.Clear();
+        //            if(rrSrc.PolyLocalPoints!=null)
+        //            for (int i = 0; i < rrSrc.PolyLocalPoints.Count; i++) rotateRect.PolyLocalPoints.Add(rrSrc.PolyLocalPoints[i]);
+        //            rotateRect.IsPolygonClosed = rrSrc.IsPolygonClosed;
+        //            rotateRect.ActiveVertexIndex = rrSrc.ActiveVertexIndex;
+
+        //            // screen->local dùng tâm/góc tại lúc bắt đầu kéo
+        //            var mat = new Matrix();
+        //            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        //            float s = (float)(imgView.Zoom / 100.0);
+        //            mat.Scale(s, s);
+        //            mat.Translate(_dragCenter.X, _dragCenter.Y);
+        //            mat.Rotate(rotateRect._rectRotation);
+        //            mat.Invert();
+
+        //            var point = TransformPoint(mat, new PointF(e.X, e.Y)); // local-space
+
+        //            SizeF deltaSize = SizeF.Empty;
+        //            float deltaX = 0f, deltaY = 0f;
+
+        //            // nếu đang resize Polygon qua bounding-rect corners, _dragRect là bounding cũ
+        //            bool isPolygonBBoxResize =
+        //                (rotateRect.Shape == ShapeType.Polygon) &&
+        //                (rotateRect._dragAnchor == AnchorPoint.TopLeft ||
+        //                 rotateRect._dragAnchor == AnchorPoint.TopRight ||
+        //                 rotateRect._dragAnchor == AnchorPoint.BottomLeft ||
+        //                 rotateRect._dragAnchor == AnchorPoint.BottomRight);
+
+        //            if (isPolygonBBoxResize)
+        //            {
+        //                // Scale toàn bộ PolyLocalPoints theo góc đối diện
+        //                RectangleF oldB = _dragRect; // đã set khi hit-test
+        //                if (oldB.Width < 1e-6f || oldB.Height < 1e-6f) goto APPLY_BACK;
+
+        //                // Xác định clamp theo anchor
+        //                PointF clamped = point;
+        //                if (rotateRect._dragAnchor == AnchorPoint.TopLeft)
+        //                    clamped = new PointF(Math.Min(oldB.Right, point.X), Math.Min(oldB.Bottom, point.Y));
+        //                else if (rotateRect._dragAnchor == AnchorPoint.TopRight)
+        //                    clamped = new PointF(Math.Max(oldB.Left, point.X), Math.Min(oldB.Bottom, point.Y));
+        //                else if (rotateRect._dragAnchor == AnchorPoint.BottomLeft)
+        //                    clamped = new PointF(Math.Min(oldB.Right, point.X), Math.Max(oldB.Top, point.Y));
+        //                else if (rotateRect._dragAnchor == AnchorPoint.BottomRight)
+        //                    clamped = new PointF(Math.Max(oldB.Left, point.X), Math.Max(oldB.Top, point.Y));
+
+        //                // góc cố định (đối diện) và new bounds
+        //                PointF fixedOpp, newTL, newBR;
+        //                if (rotateRect._dragAnchor == AnchorPoint.TopLeft)
+        //                { fixedOpp = new PointF(oldB.Right, oldB.Bottom); newTL = clamped; newBR = new PointF(oldB.Right, oldB.Bottom); }
+        //                else if (rotateRect._dragAnchor == AnchorPoint.TopRight)
+        //                { fixedOpp = new PointF(oldB.Left, oldB.Bottom); newTL = new PointF(oldB.Left, clamped.Y); newBR = new PointF(clamped.X, oldB.Bottom); }
+        //                else if (rotateRect._dragAnchor == AnchorPoint.BottomLeft)
+        //                { fixedOpp = new PointF(oldB.Right, oldB.Top); newTL = new PointF(clamped.X, oldB.Top); newBR = new PointF(oldB.Right, clamped.Y); }
+        //                else // BottomRight
+        //                { fixedOpp = new PointF(oldB.Left, oldB.Top); newTL = new PointF(oldB.Left, oldB.Top); newBR = clamped; }
+
+        //                float newW = Math.Max(1f, Math.Abs(newBR.X - newTL.X));
+        //                float newH = Math.Max(1f, Math.Abs(newBR.Y - newTL.Y));
+
+        //                // scale theo fixedOpp
+        //                float oldW = oldB.Width;
+        //                float oldH = oldB.Height;
+        //                float sx = (newW / oldW);
+        //                float sy = (newH / oldH);
+        //                if (sx < 1e-6f) sx = 1e-6f;
+        //                if (sy < 1e-6f) sy = 1e-6f;
+
+        //                // hướng vector: khi cố định fixedOpp, vector p-oldOpp scale rồi cộng lại
+        //                // lưu ý: oldB.Left/Top có thể > fixedOpp.X/Y tuỳ anchor, nhưng công thức vector vẫn đúng.
+        //                for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++)
+        //                {
+        //                    var p = rotateRect.PolyLocalPoints[i];
+        //                    var v = new PointF(p.X - fixedOpp.X, p.Y - fixedOpp.Y);
+        //                    var vScaled = new PointF(v.X * sx, v.Y * sy);
+        //                    rotateRect.PolyLocalPoints[i] = new PointF(fixedOpp.X + vScaled.X, fixedOpp.Y + vScaled.Y);
+        //                }
+
+        //                // cập nhật _rect = new bounding (để hiện handles)
+        //                rotateRect._rect = new RectangleF(
+        //                    Math.Min(newTL.X, newBR.X),
+        //                    Math.Min(newTL.Y, newBR.Y),
+        //                    newW, newH
+        //                );
+
+        //                // center di chuyển tương tự nhánh rectangle: lấy deltaX/Y để đẩy tâm
+        //                // deltaX/Y lấy theo half thay đổi (như code cũ)
+        //                deltaX = ((clamped.X - _dragStart.X)) / 2f;
+        //                deltaY = ((clamped.Y - _dragStart.Y)) / 2f;
+        //            }
+        //            else
+        //            {
+        //                // ===== các case bình thường: rectangle/ellipse/hexagon/center/rotation/vertex =====
+        //                switch (rotateRect._dragAnchor)
+        //                {
+        //                    case AnchorPoint.TopLeft:
+        //                        {
+        //                            var clamped = new PointF(Math.Min(0f, point.X), Math.Min(0f, point.Y));
+        //                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                            rotateRect._rect = new RectangleF(
+        //                                _dragRect.Left + deltaSize.Width / 2f,
+        //                                _dragRect.Top + deltaSize.Height / 2f,
+        //                                _dragRect.Width - deltaSize.Width,
+        //                                _dragRect.Height - deltaSize.Height);
+        //                            deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.TopRight:
+        //                        {
+        //                            var clamped = new PointF(Math.Max(0f, point.X), Math.Min(0f, point.Y));
+        //                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                            rotateRect._rect = new RectangleF(
+        //                                _dragRect.Left - deltaSize.Width / 2f,
+        //                                _dragRect.Top + deltaSize.Height / 2f,
+        //                                _dragRect.Width + deltaSize.Width,
+        //                                _dragRect.Height - deltaSize.Height);
+        //                            deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.BottomLeft:
+        //                        {
+        //                            var clamped = new PointF(Math.Min(0f, point.X), Math.Max(0f, point.Y));
+        //                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                            rotateRect._rect = new RectangleF(
+        //                                _dragRect.Left + deltaSize.Width / 2f,
+        //                                _dragRect.Top - deltaSize.Height / 2f,
+        //                                _dragRect.Width - deltaSize.Width,
+        //                                _dragRect.Height + deltaSize.Height);
+        //                            deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.BottomRight:
+        //                        {
+        //                            var clamped = new PointF(Math.Max(0f, point.X), Math.Max(0f, point.Y));
+        //                            deltaSize = new SizeF(clamped.X - _dragStart.X, clamped.Y - _dragStart.Y);
+        //                            rotateRect._rect = new RectangleF(
+        //                                _dragRect.Left - deltaSize.Width / 2f,
+        //                                _dragRect.Top - deltaSize.Height / 2f,
+        //                                _dragRect.Width + deltaSize.Width,
+        //                                _dragRect.Height + deltaSize.Height);
+        //                            deltaX = deltaSize.Width / 2f; deltaY = deltaSize.Height / 2f;
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.Rotation:
+        //                        {
+        //                            float vx = point.X, vy = -point.Y;
+        //                            double len = Math.Sqrt(vx * vx + vy * vy);
+        //                            if (len > 1e-6)
+        //                            {
+        //                                double nx = vx / len, ny = vy / len;
+        //                                double dot = Math.Max(-1.0, Math.Min(1.0, ny)); // dot with Up(0,1)
+        //                                double ang = Math.Acos(dot);
+        //                                if (point.X < 0) ang = -ang;
+        //                                float old = rotateRect._rectRotation;
+        //                                float deg = (float)(ang * 180.0 / Math.PI);
+        //                                if (!float.IsNaN(deg) && Math.Abs(deg) > float.Epsilon) rotateRect._rectRotation += deg;
+        //                                if (float.IsNaN(rotateRect._rectRotation)) rotateRect._rectRotation = old;
+        //                            }
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.Center:
+        //                        {
+        //                            rotateRect._PosCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.V0:
+        //                    case AnchorPoint.V1:
+        //                    case AnchorPoint.V2:
+        //                    case AnchorPoint.V3:
+        //                    case AnchorPoint.V4:
+        //                    case AnchorPoint.V5:
+        //                        {
+        //                            if (rotateRect.Shape == ShapeType.Hexagon)
+        //                            {
+        //                                int idx = (int)rotateRect._dragAnchor - (int)AnchorPoint.V0;
+        //                                float halfW = _dragRect.Width / 2f, halfH = _dragRect.Height / 2f;
+        //                                var pLocal = new PointF(
+        //                                    Math.Max(-halfW, Math.Min(halfW, point.X)),
+        //                                    Math.Max(-halfH, Math.Min(halfH, point.Y))
+        //                                );
+        //                                rotateRect.SetHexVertexByLocalPoint(idx, pLocal);
+        //                            }
+        //                            break;
+        //                        }
+        //                    case AnchorPoint.Vertex:
+        //                        {
+        //                            if (rotateRect.Shape == ShapeType.Polygon && rotateRect.ActiveVertexIndex >= 0)
+        //                            {
+        //                                int idx = rotateRect.ActiveVertexIndex;
+        //                                float halfW = _dragRect.Width / 2f, halfH = _dragRect.Height / 2f;
+        //                                var pLocal = new PointF(
+        //                                    Math.Max(-halfW, Math.Min(halfW, point.X)),
+        //                                    Math.Max(-halfH, Math.Min(halfH, point.Y))
+        //                                );
+        //                                if (idx >= 0 && idx < rotateRect.PolyLocalPoints.Count)
+        //                                {
+        //                                    rotateRect.PolyLocalPoints[idx] = pLocal;
+        //                                    if (rotateRect.IsPolygonClosed && rotateRect.PolyLocalPoints.Count >= 2)
+        //                                    {
+        //                                        if (idx == 0) rotateRect.PolyLocalPoints[rotateRect.PolyLocalPoints.Count - 1] = pLocal;
+        //                                        else if (idx == rotateRect.PolyLocalPoints.Count - 1) rotateRect.PolyLocalPoints[0] = pLocal;
+        //                                    }
+        //                                }
+        //                                // cập nhật _rect = bounds mới để vẽ handles đúng
+        //                                rotateRect._rect = GetPolygonBoundsLocal(rotateRect);
+        //                            }
+        //                            break;
+        //                        }
+        //                }
+        //            }
+
+        //            // sau resize 4 góc: cập nhật PosCenter y như code cũ (dịch theo delta, có quay)
+        //            if (rotateRect._dragAnchor != AnchorPoint.None &&
+        //                rotateRect._dragAnchor != AnchorPoint.Center &&
+        //                rotateRect._dragAnchor != AnchorPoint.Rotation &&
+        //                rotateRect._dragAnchor < AnchorPoint.V0)
+        //            {
+        //                if (deltaX != 0f || deltaY != 0f)
+        //                {
+        //                    PointF pDelta = RectRotate.Rotate(new PointF(deltaX, deltaY), rotateRect._rectRotation);
+        //                    rotateRect._PosCenter = new PointF(_dragCenter.X + pDelta.X, _dragCenter.Y + pDelta.Y);
+        //                    IsDone = false;
+        //                }
+        //            }
+
+        //        APPLY_BACK:
+        //            // chặn biên (Area)
+        //            if (Global.TypeCrop == TypeCrop.Area)
+        //            {
+        //                float x = rotateRect._PosCenter.X - rotateRect._rect.Width / 2f;
+        //                float y = rotateRect._PosCenter.Y - rotateRect._rect.Height / 2f;
+        //                float w = rotateRect._rect.Width, h = rotateRect._rect.Height;
+        //                int maxW = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
+        //                int maxH = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
+
+        //                if (x < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - x, rotateRect._PosCenter.Y);
+        //                else if (x + w > maxW) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X - (x + w - maxW), rotateRect._PosCenter.Y);
+        //                if (y < 0f) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - y);
+        //                else if (y + h > maxH) rotateRect._PosCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y - (y + h - maxH));
+        //            }
+
+        //            // push về Propety
+        //            var rrNew = new RectRotate(
+        //                new RectangleF(rotateRect._rect.X, rotateRect._rect.Y, rotateRect._rect.Width, rotateRect._rect.Height),
+        //                new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y),
+        //                rotateRect._rectRotation,
+        //                rotateRect._dragAnchor
+        //            );
+        //            rrNew.Shape = rotateRect.Shape;
+        //            for (int i = 0; i < 6; i++) rrNew.HexVertexOffsets[i] = rotateRect.HexVertexOffsets[i];
+        //            rrNew.PolyLocalPoints.Clear();
+        //            for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++) rrNew.PolyLocalPoints.Add(rotateRect.PolyLocalPoints[i]);
+        //            rrNew.IsPolygonClosed = rotateRect.IsPolygonClosed;
+        //            rrNew.ActiveVertexIndex = rotateRect.ActiveVertexIndex;
+
+        //            setCurrentRR(rrNew);
+        //        }
+        //        // ======== _drag == false: hit-test ========
+        //        else
+        //        {
+        //            var rrSrc = getCurrentRR();
+        //            if (rrSrc == null) return;
+
+        //            rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
+        //            rotateRect.Shape = rrSrc.Shape;
+        //            if (rrSrc.HexVertexOffsets!=null)
+        //            for (int i = 0; i < 6; i++) rotateRect.HexVertexOffsets[i] = rrSrc.HexVertexOffsets[i];
+        //            rotateRect.PolyLocalPoints.Clear();
+        //            if(rrSrc.PolyLocalPoints!=null)
+        //            for (int i = 0; i < rrSrc.PolyLocalPoints.Count; i++) rotateRect.PolyLocalPoints.Add(rrSrc.PolyLocalPoints[i]);
+        //            rotateRect.IsPolygonClosed = rrSrc.IsPolygonClosed;
+        //            rotateRect.ActiveVertexIndex = rrSrc.ActiveVertexIndex;
+
+        //            var mat = new Matrix();
+        //            mat.Translate(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
+        //            float s = (float)(imgView.Zoom / 100.0);
+        //            mat.Scale(s, s);
+        //            mat.Translate(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+        //            mat.Rotate(rotateRect._rectRotation);
+        //            mat.Invert();
+
+        //            var point = TransformPoint(mat, new PointF(e.X, e.Y)); // local
+
+        //            RectangleF baseRect = rotateRect._rect;
+        //            // nếu Polygon thì bounding-rect theo điểm (để có handles)
+        //            RectangleF polyBounds = (rotateRect.Shape == ShapeType.Polygon) ? GetPolygonBoundsLocal(rotateRect) : baseRect;
+
+        //            float r = Global.Config.RadEdit;
+
+        //            RectangleF rectOuter = new RectangleF(polyBounds.X - r / 2f, polyBounds.Y - r / 2f, polyBounds.Width + r, polyBounds.Height + r);
+        //            RectangleF rectTopLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Top - r / 2f, r, r);
+        //            RectangleF rectTopRight = new RectangleF(polyBounds.Right - r / 2f, polyBounds.Top - r / 2f, r, r);
+        //            RectangleF rectBottomLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Bottom - r / 2f, r, r);
+        //            RectangleF rectBottomRight = new RectangleF(polyBounds.Right - r / 2f, polyBounds.Bottom - r / 2f, r, r);
+        //            RectangleF rectRotate = new RectangleF(-r / 2f, polyBounds.Top - 2f * r, 2f * r, 2f * r);
+
+        //            _dragCenter = new PointF(rotateRect._PosCenter.X, rotateRect._PosCenter.Y);
+
+        //            bool anchored = false;
+
+        //            // 1) Polygon: ưu tiên chọn đỉnh
+        //            if (rotateRect.Shape == ShapeType.Polygon)
+        //            {
+        //                for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++)
+        //                {
+        //                    RectangleF h = new RectangleF(rotateRect.PolyLocalPoints[i].X - r / 2f,
+        //                                                  rotateRect.PolyLocalPoints[i].Y - r / 2f, r, r);
+        //                    if (h.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.Vertex;
+        //                        rotateRect.ActiveVertexIndex = i;
+        //                        _dragRect = polyBounds; // để clamp khi kéo
+        //                        anchored = true;
+        //                        break;
+        //                    }
+        //                }
+        //                // 2) Nếu không vào đỉnh: cho phép resize bằng 4 góc của bounding-rect
+        //                if (!anchored)
+        //                {
+        //                    if (rectTopLeft.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.TopLeft;
+        //                        _dragRect = polyBounds;
+        //                        anchored = true;
+        //                    }
+        //                    else if (rectTopRight.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.TopRight;
+        //                        _dragRect = polyBounds;
+        //                        anchored = true;
+        //                    }
+        //                    else if (rectBottomLeft.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.BottomLeft;
+        //                        _dragRect = polyBounds;
+        //                        anchored = true;
+        //                    }
+        //                    else if (rectBottomRight.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.BottomRight;
+        //                        _dragRect = polyBounds;
+        //                        anchored = true;
+        //                    }
+        //                }
+        //                // 3) Center/Rotation
+        //                if (!anchored)
+        //                {
+        //                    if (rectRotate.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.Rotation;
+        //                        _dragRect = polyBounds;
+        //                        _dragRot = rotateRect._rectRotation;
+        //                        anchored = true;
+        //                    }
+        //                    else if (rectOuter.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = AnchorPoint.Center;
+        //                        _dragRect = polyBounds;
+        //                        _dragStartOffset = new PointF(_dragStart.X - rotateRect._PosCenter.X, _dragStart.Y - rotateRect._PosCenter.Y);
+        //                        anchored = true;
+        //                    }
+        //                }
+        //            }
+
+        //            // 4) Hexagon: chọn 6 đỉnh trước rồi tới 4 góc/rotation
+        //            if (!anchored && rotateRect.Shape == ShapeType.Hexagon)
+        //            {
+        //                var verts = rotateRect.GetHexagonVerticesLocal();
+        //                for (int i = 0; i < 6; i++)
+        //                {
+        //                    var h = new RectangleF(verts[i].X - r / 2f, verts[i].Y - r / 2f, r, r);
+        //                    if (h.Contains(point))
+        //                    {
+        //                        _dragStart = new PointF(point.X, point.Y);
+        //                        rotateRect._dragAnchor = (AnchorPoint)((int)AnchorPoint.V0 + i);
+        //                        _dragRect = baseRect;
+        //                        anchored = true;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+
+        //            // 5) Rectangle/Ellipse (hoặc Hexagon không trúng đỉnh): 4 góc/rotation/center
+        //            if (!anchored)
+        //            {
+        //                if (rectTopLeft.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.TopLeft;
+        //                    _dragRect = baseRect;
+        //                }
+        //                else if (rectTopRight.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.TopRight;
+        //                    _dragRect = baseRect;
+        //                }
+        //                else if (rectBottomLeft.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.BottomLeft;
+        //                    _dragRect = baseRect;
+        //                }
+        //                else if (rectBottomRight.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.BottomRight;
+        //                    _dragRect = baseRect;
+        //                }
+        //                else if (rectRotate.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.Rotation;
+        //                    _dragRect = baseRect;
+        //                    _dragRot = rotateRect._rectRotation;
+        //                }
+        //                else if (rectOuter.Contains(point))
+        //                {
+        //                    _dragStart = new PointF(point.X, point.Y);
+        //                    rotateRect._dragAnchor = AnchorPoint.Center;
+        //                    _dragRect = baseRect;
+        //                    _dragStartOffset = new PointF(_dragStart.X - rotateRect._PosCenter.X, _dragStart.Y - rotateRect._PosCenter.Y);
+        //                }
+        //                else
+        //                {
+        //                    rotateRect._dragAnchor = AnchorPoint.None;
+        //                }
+        //            }
+
+        //            // Lưu anchor & active index trở lại rrSrc
+        //            var rrSet = getCurrentRR();
+        //            if (rrSet != null)
+        //            {
+        //                rrSet._dragAnchor = rotateRect._dragAnchor;
+        //                rrSet.ActiveVertexIndex = rotateRect.ActiveVertexIndex;
+        //            }
+        //        }
+
+        //        // khóa pan/zoom khi đang có anchor
+        //        if ((getCurrentRR()?._dragAnchor ?? AnchorPoint.None) != AnchorPoint.None)
+        //        {
+        //            if (Global.StatusDraw != StatusDraw.Color) Global.StatusDraw = StatusDraw.Edit;
+        //            imgView.PanMode = ImageBoxPanMode.None;
+        //            imgView.AllowClickZoom = false;
+        //            imgView.AllowDoubleClick = false;
+        //        }
+        //        else
+        //        {
+        //            if (btnPan.IsCLick) imgView.PanMode = ImageBoxPanMode.Left;
+        //            imgView.AllowClickZoom = true;
+        //            imgView.AllowDoubleClick = true;
+        //        }
+
+        //        // BẮT BUỘC gọi Invalidate để:
+        //        // - OnPaint vẽ điểm chuột hiện tại (marker)
+        //        // - Vẽ đường từ điểm Polygon cuối -> chuột (khi chưa đóng)
+        //        imgView.Invalidate();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // log nếu cần
+        //    }
+        //}
+
         bool _isPaint;
         float _thiness = 2;
       public   bool IsLoad = false;
@@ -1491,19 +2520,19 @@ namespace BeeUi
                     case TypeCrop.Crop:
                         Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, Properties.Resources.Rotate2, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
                         break;
                     case TypeCrop.Area:
 
                         Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, Properties.Resources.Rotate2, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
                         break;
                     case TypeCrop.Mask:
                         Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, Properties.Resources.Rotate2, Global.RadpEdit, imgView.AutoScrollPosition, imgView.Zoom, 4);
+                        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
                         break;
 
@@ -1772,8 +2801,8 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    if (!workReadCCD.IsBusy)
-                        workReadCCD.RunWorkerAsync();
+                    //if (!workReadCCD.IsBusy)
+                    //    workReadCCD.RunWorkerAsync();
                     //if (!Global.IsRun)
                     //{
 
@@ -1784,54 +2813,54 @@ namespace BeeUi
                     //}
                     //else
                     //{
-                    //    if (Global.ParaCommon.IsMultiCamera)
-                    //    {
-                    //        Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
-                    //        {
-                    //            if (camera != null)
-                    //            {
-                    //                camera.Read();
-                    //                if (camera.Para.TypeCamera == TypeCamera.USB)
-                    //                    camera.Read();
-                    //            }    
+                    if (Global.ParaCommon.IsMultiCamera)
+                    {
+                        Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                        {
+                            if (camera != null)
+                            {
+                                camera.Read();
+                                if (camera.Para.TypeCamera == TypeCamera.USB)
+                                    camera.Read();
+                            }
 
-                    //        });
-                    //    }
-                    //    else
-                    //    {
-                    //        BeeCore.Common.listCamera[0].Read();
-                    //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                    //            BeeCore.Common.listCamera[0].Read();
-                    //        //switch (Global.TriggerNum)
-                    //        //{
-                    //        //    case TriggerNum.Trigger1:
-                    //        //        BeeCore.Common.listCamera[0].Read();
-                    //        //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                    //        //            BeeCore.Common.listCamera[0].Read();
-                    //        //        break;
-                    //        //    case TriggerNum.Trigger2:
-                    //        //        BeeCore.Common.listCamera[1].Read();
-                    //        //        break;
-                    //        //    case TriggerNum.Trigger3:
-                    //        //        BeeCore.Common.listCamera[2].Read();
-                    //        //        break;
-                    //        //    case TriggerNum.Trigger4:
-                    //        //        BeeCore.Common.listCamera[3].Read();
-                    //        //        break;
+                        });
+                    }
+                    else
+                    {
+                        BeeCore.Common.listCamera[0].Read();
+                        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                            BeeCore.Common.listCamera[0].Read();
+                        //switch (Global.TriggerNum)
+                        //{
+                        //    case TriggerNum.Trigger1:
+                        //        BeeCore.Common.listCamera[0].Read();
+                        //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                        //            BeeCore.Common.listCamera[0].Read();
+                        //        break;
+                        //    case TriggerNum.Trigger2:
+                        //        BeeCore.Common.listCamera[1].Read();
+                        //        break;
+                        //    case TriggerNum.Trigger3:
+                        //        BeeCore.Common.listCamera[2].Read();
+                        //        break;
+                        //    case TriggerNum.Trigger4:
+                        //        BeeCore.Common.listCamera[3].Read();
+                        //        break;
 
 
-                    //        //}
-                    //    }
+                        //}
+                    }
                     //}
 
-                    //if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-                    //{
+                    if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+                    {
 
-                    //    Global.StatusProcessing = StatusProcessing.Checking;
-                    //    if (Global.IsByPassResult)
-                    //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                        Global.StatusProcessing = StatusProcessing.Checking;
+                        if (Global.IsByPassResult)
+                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
-                    //}
+                    }
 
                     break;
                 case StatusProcessing.Checking:
@@ -3565,12 +4594,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
            
         }
 
-        private void ckProcess_CheckedChanged(object sender, EventArgs e)
-        {
-           Global.IsHideTool=ckHideTool.Checked;
-
-
-        }
+    
 
         private void rjButton1_Click(object sender, EventArgs e)
         {
@@ -4414,37 +5438,53 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         }
 
-        private void pView_MouseLeave(object sender, EventArgs e)
-        {
-            //G.IsCheck = true;
-           // imgView.Invalidate();
-        }
-
-        private void pView_MouseMove(object sender, MouseEventArgs e)
-        {
-
-          //  G.IsCheck = false;
-          //  imgView.Invalidate();
-        }
-
-        private void View_MouseHover(object sender, EventArgs e)
-        {
-
-        }
-
+ 
        
 
-        private void imgView_MouseUp(object sender, MouseEventArgs e)
-        {
+        //private void imgView_MouseUp(object sender, MouseEventArgs e)
+        //{
 
-            if (Global.IndexToolSelected == -1) return;
-            _drag = false;
-            if(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop!=null)
-                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = AnchorPoint.None;
+        //    if (Global.IndexToolSelected == -1) return;
+        //    _drag = false;
+        //    if(BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop!=null)
+        //        BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop._dragAnchor = AnchorPoint.None;
           
-                ToolMouseUp();
-            imgView.Invalidate();
-            
-        }
+        //        ToolMouseUp();
+         
+        //    try
+        //    {
+        //        var prop = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]?.Propety;
+        //        if (prop == null) return;
+
+        //        RectRotate rr = null;
+        //        if (Global.TypeCrop == TypeCrop.Area) rr = prop.rotArea;
+        //        else if (Global.TypeCrop == TypeCrop.Mask) rr = prop.rotMask;
+        //        else rr = prop.rotCrop;
+
+        //        if (rr != null)
+        //        {
+        //            // Kết thúc kéo: bỏ anchor, bỏ active vertex
+        //            rr._dragAnchor = AnchorPoint.None;
+        //            rr.ActiveVertexIndex = -1;
+        //        }
+
+        //        // Reset cờ kéo
+        //        _drag = false;
+
+        //        //// Trả quyền pan/zoom
+        //        //if (btnPan.IsCLick)
+        //        //    imgView.PanMode = ImageBoxPanMode.Left;
+        //        //imgView.AllowClickZoom = true;
+        //        //imgView.AllowDoubleClick = true;
+
+        //        // Vẽ lại (để mất highlight kéo)
+        //        imgView.Invalidate();
+        //    }
+        //    catch
+        //    {
+        //        // log nếu cần
+        //    }
+        //    imgView.Invalidate();
+        //}
     }
 }

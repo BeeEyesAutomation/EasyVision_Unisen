@@ -40,12 +40,12 @@ namespace BeeCpp {
         }
     private:
         ColorAreaPP* _ColorPP;
-       
+        Common* com;
     public:
         void FreeBuffer(System::IntPtr p);
         void SetImgeRaw(IntPtr data, int width, int height, int stride, int channels);
-        void SetImgeCrop(IntPtr data, int width, int height, int stride, int channels, float x, float y, float w, float h, float angle);
-
+        void SetImgeCrop(IntPtr data, int width, int height, int stride, int channels, RectRotateCli rr, Nullable<RectRotateCli> rrMask);
+        void SetImgeNoCrop(IntPtr data, int width, int height, int stride, int channels);
         HSVCli^ GetHSV(int x, int y);
         RGBCli^ GetRGB(int x, int y);
         void SetTempHSV(cli::array<HSVCli^>^ listHSV, int Extraction);

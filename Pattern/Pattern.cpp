@@ -575,12 +575,17 @@ void Img::SortPtWithCenter(vector<Point2f>& vecSort)
 // anonymous namespace
 
 // ===== Pattern wrapper =====
-Pattern::Pattern() : img(new Img()) {}
+Pattern::Pattern() { 
+	img = new Img(); com = new Common(); }
 Pattern::~Pattern() { this->!Pattern(); }
 Pattern::!Pattern() { if (img) { delete img; img = nullptr; } }
+void Pattern::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
+{
+	img->matSample = Mat(h, w, CV_8UC1, data.ToPointer(), stride);
 
+}
 // ================= PUBLIC API =================
-System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle,bool NoCrop,
+System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,bool NoCrop,
 	[System::Runtime::InteropServices::Out] int% outW,
 	[System::Runtime::InteropServices::Out] int% outH,
 	[System::Runtime::InteropServices::Out] int% outStride,
@@ -589,10 +594,23 @@ System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH
    
 	if (NoCrop)img->matSample = Mat(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
 	else
-	{
-		Mat raw(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
-		img->matSample =Common:: RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
-		
+	{// img->matSample là cv::Mat
+		Nullable<RectRotateCli> mask =
+			rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
+			: Nullable<RectRotateCli>();
+
+		com->CropRotToMat(
+			tplData, tplW, tplH, tplStride, tplChannels,
+			rr, mask, /*returnMaskOnly*/ false,
+			System::IntPtr(&img->matSample)
+		);
+		/*Mat raw(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
+		cv::Mat result;
+
+		if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; com->RunCrop(raw, rr, &m, false, result); }
+		else { com->RunCrop(raw, rr, nullptr, false, result); }
+		img->matSample = result.clone();
+		*/
 
 	}
 	if (!img->matSample.isContinuous()) img->matSample = img->matSample.clone();
@@ -606,11 +624,19 @@ System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH
 	outW = W; outH = H; outStride = S; outChannels = C;
 	return mem;
   }
-void Pattern::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle)
+void Pattern::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
 {
-    Mat raw(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
-    img->matRaw =Common:: RotateMat(raw, RotatedRect(cv::Point2f(x, y), cv::Size2f(w, h), angle));
+	Nullable<RectRotateCli> mask =
+		rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
+		: Nullable<RectRotateCli>();
 
+	com->CropRotToMat(
+		tplData, tplW, tplH, tplStride, tplChannels,
+		rr, mask, /*returnMaskOnly*/ false,
+		System::IntPtr(&img->matRaw)
+	);
+   
+	//cv::imwrite("Pos.png", img->matRaw);
 }
 void Pattern::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
 {
@@ -682,9 +708,10 @@ void Pattern::FreeBuffer(System::IntPtr p)
 	if (p != System::IntPtr::Zero)
 		System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
 }
+
 List<Rotaterectangle>^ Pattern::Match(
 	bool   m_bStopLayer1,
-	double m_dToleranceAngle,
+	double m_dToleranceAngle,   // NEW: nếu > 0 dùng làm bước quét góc (độ)
 	double m_dTolerance1,
 	double m_dTolerance2,
 	double m_dScore,
@@ -697,7 +724,7 @@ List<Rotaterectangle>^ Pattern::Match(
 	int    numThreads
 )
 {
-	// Kết quả .NET
+	// ======= Kết quả .NET =======
 	auto results = gcnew List<Rotaterectangle>(Math::Max(m_iMaxPos, 0));
 
 	// ======= Kiểm tra đầu vào nhanh =======
@@ -706,29 +733,49 @@ List<Rotaterectangle>^ Pattern::Match(
 	if (img->matRaw.empty())    return results;
 	if (!img->m_TemplData.bIsPatternLearned) return results;
 
-	// Chuẩn hoá m_iMaxPos
-	if (m_iMaxPos <= 0) m_iMaxPos = INT_MAX;
+	// ======= Kẹp tham số nguy hiểm =======
+	if (m_iMaxPos <= 0) m_iMaxPos = 1;
+	if (m_iMaxPos > 256) m_iMaxPos = 256;
+	const int    MAX_NEXT_MAX = 128;
+	const int    MAX_ANGLES = 361;
+	const double MAX_PIXELS = 80e6;
+	const double epsTiny = 1e-6;
+	const double MIN_ANGLE_STEP = 0.05; // độ; tránh bước quá nhỏ
 
-	// ======= Chuẩn bị pyramid nguồn =======
-	// Dùng bitwise_not thay vì 255 - img để an toàn kiểu (8U)
+	// ======= Chuẩn hoá nguồn về GRAY 8U =======
 	cv::Mat srcForPyr;
-	if (m_ckBitwiseNot) {
-		if (img->matRaw.type() != CV_8U && img->matRaw.type() != CV_8UC1 && img->matRaw.type() != CV_8UC3)
-			cv::convertScaleAbs(img->matRaw, srcForPyr);
-		else
-			srcForPyr = img->matRaw;
-		cv::bitwise_not(srcForPyr, srcForPyr);
-	}
-	else {
-		if (img->matRaw.depth() != CV_8U)
-			cv::convertScaleAbs(img->matRaw, srcForPyr);
-		else
-			srcForPyr = img->matRaw;
+	{
+		cv::Mat src = img->matRaw;
+
+		if (src.channels() == 3) {
+			cv::cvtColor(src, srcForPyr, cv::COLOR_BGR2GRAY);
+		}
+		else if (src.channels() == 1) {
+			srcForPyr = src;
+		}
+		else {
+			cv::Mat tmp; cv::convertScaleAbs(src, tmp);
+			if (tmp.channels() == 3) cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
+			else if (tmp.channels() == 1) srcForPyr = tmp;
+			else cv::cvtColor(tmp, srcForPyr, cv::COLOR_BGR2GRAY);
+		}
+		if (srcForPyr.depth() != CV_8U) cv::convertScaleAbs(srcForPyr, srcForPyr);
+		if (m_ckBitwiseNot) cv::bitwise_not(srcForPyr, srcForPyr);
 	}
 
+	// ======= Xác định top layer với “ngân sách” =======
 	int iTopLayer = img->GetTopLayer(&img->matSample, (int)std::sqrt((double)img->m_iMinReduceArea));
 	if (iTopLayer < 0) iTopLayer = 0;
+	{
+		// xấp xỉ 1 + 1/4 + 1/16 + 1/64
+		double est = (double)srcForPyr.total() * (1.0 + 0.25 + 0.0625 + 0.015625);
+		while (iTopLayer > 0 && est > MAX_PIXELS) {
+			--iTopLayer;
+			est = (double)srcForPyr.total() * (1.0 + 0.25 + 0.0625 + 0.015625);
+		}
+	}
 
+	// ======= Pyramid nguồn =======
 	std::vector<cv::Mat> vecMatSrcPyr;
 	vecMatSrcPyr.reserve((size_t)iTopLayer + 1);
 	cv::buildPyramid(srcForPyr, vecMatSrcPyr, iTopLayer);
@@ -737,53 +784,62 @@ List<Rotaterectangle>^ Pattern::Match(
 	if ((int)pTemplData->vecPyramid.size() <= iTopLayer) return results;
 
 	// ======= Góc quét ở top layer =======
-	const double epsTiny = 1e-6;
-	double dAngleStep = std::atan(2.0 / std::max(pTemplData->vecPyramid[iTopLayer].cols, pTemplData->vecPyramid[iTopLayer].rows)) * R2D;
-	if (dAngleStep < epsTiny) dAngleStep = 0.5; // dự phòng
+	double dAngleStepAuto = std::atan(2.0 / std::max(pTemplData->vecPyramid[(size_t)iTopLayer].cols,
+		pTemplData->vecPyramid[(size_t)iTopLayer].rows)) * R2D;
+	if (dAngleStepAuto < epsTiny) dAngleStepAuto = 0.5;
 
+	const double userStep = std::fabs(m_dToleranceAngle);
+	const bool   useFixedStep = (userStep > epsTiny);
+	double dAngleStep = useFixedStep ? std::max(userStep, MIN_ANGLE_STEP) : dAngleStepAuto;
+
+	// ======= Dải góc ở top layer =======
 	std::vector<double> vecAngles;
 	vecAngles.reserve(64);
-	if (true /*m_bToleranceRange*/) {
-		// Quét từ m_dTolerance1 -> m_dTolerance2 (bao gồm biên phải)
+	{
+		// Dải [m_dTolerance1, m_dTolerance2]
 		if (m_dTolerance2 < m_dTolerance1) std::swap(m_dTolerance1, m_dTolerance2);
 		for (double a = m_dTolerance1; a <= m_dTolerance2 + 0.5 * dAngleStep; a += dAngleStep)
 			vecAngles.push_back(a);
-	}
-	else {
-		if (m_dToleranceAngle < VISION_TOLERANCE) {
-			vecAngles.push_back(0.0);
-		}
-		else {
-			for (double a = 0.0; a <= m_dToleranceAngle + 0.5 * dAngleStep; a += dAngleStep) vecAngles.push_back(a);
-			for (double a = -dAngleStep; a >= -m_dToleranceAngle - 0.5 * dAngleStep; a -= dAngleStep) vecAngles.push_back(a);
-		}
-	}
-	if (vecAngles.empty()) vecAngles.push_back(0.0);
+		if (vecAngles.empty()) vecAngles.push_back(0.0);
 
-	// ======= Chuẩn bị ngưỡng theo tầng =======
+		// Kẹp số góc
+		if ((int)vecAngles.size() > MAX_ANGLES) {
+			std::vector<double> trimmed; trimmed.reserve(MAX_ANGLES);
+			double stepA = (vecAngles.back() - vecAngles.front()) / (MAX_ANGLES - 1);
+			for (int i = 0; i < MAX_ANGLES; ++i)
+				trimmed.push_back(vecAngles.front() + i * stepA);
+			vecAngles.swap(trimmed);
+		}
+	}
+
+	// ======= Ngưỡng theo tầng =======
 	std::vector<double> vecLayerScore((size_t)iTopLayer + 1, m_dScore);
-	for (int l = 1; l <= iTopLayer; ++l) vecLayerScore[(size_t)l] = vecLayerScore[(size_t)l - 1] * 0.90;
+	for (int l = 1; l <= iTopLayer; ++l)
+		vecLayerScore[(size_t)l] = vecLayerScore[(size_t)l - 1] * 0.90;
 
 	const int iTopSrcW = vecMatSrcPyr[(size_t)iTopLayer].cols;
 	const int iTopSrcH = vecMatSrcPyr[(size_t)iTopLayer].rows;
 	cv::Point2f ptCenter((iTopSrcW - 1) * 0.5f, (iTopSrcH - 1) * 0.5f);
 
 	cv::Size sizePatTop = pTemplData->vecPyramid[(size_t)iTopLayer].size();
-	const bool bCalMaxByBlock = (vecMatSrcPyr[(size_t)iTopLayer].size().area() / std::max(1, sizePatTop.area()) > 500) && (m_iMaxPos > 10);
+	const bool bCalMaxByBlock =
+		(vecMatSrcPyr[(size_t)iTopLayer].size().area() / std::max(1, sizePatTop.area()) > 500) &&
+		(m_iMaxPos > 10);
 
 	// ======= Tìm cực đại sơ bộ ở top layer cho mỗi góc =======
 	std::vector<s_MatchParameter> vecMatchParameter;
 	vecMatchParameter.reserve(vecAngles.size() * (size_t)std::min(m_iMaxPos + MATCH_CANDIDATE_NUM, 64));
 
-	// (Có thể song song theo góc nếu cần: dùng OpenMP/TBB; cẩn trọng với C++/CLI)
 	for (size_t ai = 0; ai < vecAngles.size(); ++ai)
 	{
 		try {
 			const double angDeg = vecAngles[ai];
 			cv::Mat matR = cv::getRotationMatrix2D(ptCenter, angDeg, 1.0);
-			const cv::Size sizeBest = img->GetBestRotationSize(vecMatSrcPyr[(size_t)iTopLayer].size(),
+			const cv::Size sizeBest = img->GetBestRotationSize(
+				vecMatSrcPyr[(size_t)iTopLayer].size(),
 				pTemplData->vecPyramid[(size_t)iTopLayer].size(),
 				angDeg);
+
 			const float fTx = (sizeBest.width - 1) * 0.5f - ptCenter.x;
 			const float fTy = (sizeBest.height - 1) * 0.5f - ptCenter.y;
 			matR.at<double>(0, 2) += fTx;
@@ -795,24 +851,33 @@ List<Rotaterectangle>^ Pattern::Match(
 
 			cv::Mat matResult;
 			img->MatchTemplate(matRotatedSrc, pTemplData, matResult, iTopLayer, false, m_ckSIMD);
-			// Đảm bảo float32
 			if (matResult.type() != CV_32F) matResult.convertTo(matResult, CV_32F);
+
+			const double layerThresh = vecLayerScore[(size_t)iTopLayer];
+			const int want = std::min(m_iMaxPos + MATCH_CANDIDATE_NUM - 1, MAX_NEXT_MAX);
 
 			if (bCalMaxByBlock) {
 				s_BlockMax blockMax(matResult, pTemplData->vecPyramid[(size_t)iTopLayer].size());
+
 				double dMaxVal = -1.0;
 				cv::Point ptMaxLoc;
 				blockMax.GetMaxValueLoc(dMaxVal, ptMaxLoc);
-				if (dMaxVal >= vecLayerScore[(size_t)iTopLayer]) {
+
+				if (dMaxVal >= layerThresh) {
 					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
-					const int want = m_iMaxPos + MATCH_CANDIDATE_NUM - 1;
+
 					for (int k = 0; k < want; ++k) {
-						double dValue = -1.0;
+						double valueF = -1.f;
+						const double overlapF = (float)m_dMaxOverlap;
+
 						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
-							pTemplData->vecPyramid[(size_t)iTopLayer].size(),
-							dValue, m_dMaxOverlap, blockMax);
-						if (dValue < vecLayerScore[(size_t)iTopLayer]) break;
-						vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dValue, angDeg);
+							cv::Size(sizePatTop.width, sizePatTop.height),
+							valueF, overlapF, blockMax);
+
+						if ((double)valueF < layerThresh) break;
+						vecMatchParameter.emplace_back(
+							cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
+							(double)valueF, angDeg);
 					}
 				}
 			}
@@ -820,16 +885,22 @@ List<Rotaterectangle>^ Pattern::Match(
 				double dMaxVal = -1.0;
 				cv::Point ptMaxLoc;
 				cv::minMaxLoc(matResult, nullptr, &dMaxVal, nullptr, &ptMaxLoc);
-				if (dMaxVal >= vecLayerScore[(size_t)iTopLayer]) {
+
+				if (dMaxVal >= layerThresh) {
 					vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dMaxVal, angDeg);
-					const int want = m_iMaxPos + MATCH_CANDIDATE_NUM - 1;
+
 					for (int k = 0; k < want; ++k) {
-						double dValue = -1.0;
+						double valueF = -1.f;
+						const double overlapF = (float)m_dMaxOverlap;
+
 						ptMaxLoc = img->GetNextMaxLoc(matResult, ptMaxLoc,
-							pTemplData->vecPyramid[(size_t)iTopLayer].size(),
-							dValue, m_dMaxOverlap);
-						if (dValue < vecLayerScore[(size_t)iTopLayer]) break;
-						vecMatchParameter.emplace_back(cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy), dValue, angDeg);
+							cv::Size(sizePatTop.width, sizePatTop.height),
+							valueF, overlapF);
+
+						if ((double)valueF < layerThresh) break;
+						vecMatchParameter.emplace_back(
+							cv::Point2f(ptMaxLoc.x - fTx, ptMaxLoc.y - fTy),
+							(double)valueF, angDeg);
 					}
 				}
 			}
@@ -855,8 +926,11 @@ List<Rotaterectangle>^ Pattern::Match(
 		double dRAngle = -vecMatchParameter[mi].dMatchAngle * D2R;
 		cv::Point2f ptLT = img->ptRotatePt2f(vecMatchParameter[mi].pt, ptCenter, dRAngle);
 
-		double localAngleStep = std::atan(2.0 / std::max(iDstWTop, iDstHTop)) * R2D;
-		if (localAngleStep < epsTiny) localAngleStep = 0.5;
+		// bước góc local ở top (dùng fixed nếu có)
+		double localAngleStepAuto = std::atan(2.0 / std::max(iDstWTop, iDstHTop)) * R2D;
+		if (localAngleStepAuto < epsTiny) localAngleStepAuto = 0.5;
+		double localAngleStep = useFixedStep ? std::max(userStep, MIN_ANGLE_STEP) : localAngleStepAuto;
+
 		vecMatchParameter[mi].dAngleStart = vecMatchParameter[mi].dMatchAngle - localAngleStep;
 		vecMatchParameter[mi].dAngleEnd = vecMatchParameter[mi].dMatchAngle + localAngleStep;
 
@@ -868,26 +942,27 @@ List<Rotaterectangle>^ Pattern::Match(
 			for (int iLayer = iTopLayer - 1; iLayer >= iStopLayer; --iLayer)
 			{
 				// danh sách góc quanh góc tốt nhất hiện tại
-				localAngleStep = std::atan(2.0 / std::max(pTemplData->vecPyramid[(size_t)iLayer].cols,
+				double localAngleStepAuto2 = std::atan(2.0 / std::max(pTemplData->vecPyramid[(size_t)iLayer].cols,
 					pTemplData->vecPyramid[(size_t)iLayer].rows)) * R2D;
-				if (localAngleStep < epsTiny) localAngleStep = 0.5;
+				if (localAngleStepAuto2 < epsTiny) localAngleStepAuto2 = 0.5;
+				double localAngleStep = useFixedStep ? std::max(userStep, MIN_ANGLE_STEP) : localAngleStepAuto2;
 
 				const double dMatchedAngle = vecMatchParameter[mi].dMatchAngle;
-				std::vector<double> localAngles; localAngles.reserve(3);
-				localAngles.push_back(dMatchedAngle - localAngleStep);
-				localAngles.push_back(dMatchedAngle);
-				localAngles.push_back(dMatchedAngle + localAngleStep);
+				double localAngles[3] = {
+					dMatchedAngle - localAngleStep,
+					dMatchedAngle,
+					dMatchedAngle + localAngleStep
+				};
 
 				cv::Point2f ptSrcCenter((vecMatSrcPyr[(size_t)iLayer].cols - 1) * 0.5f,
 					(vecMatSrcPyr[(size_t)iLayer].rows - 1) * 0.5f);
 
-				const size_t nAngles = localAngles.size();
-				std::vector<s_MatchParameter> vecNew(nAngles);
+				s_MatchParameter vecNew[3];
 
-				int bestIdx = 0;
+				int    bestIdx = 0;
 				double bestVal = -1.0;
 
-				for (size_t j = 0; j < nAngles; ++j)
+				for (int j = 0; j < 3; ++j)
 				{
 					cv::Mat matRotatedSrc, matResult;
 					img->GetRotatedROI(vecMatSrcPyr[(size_t)iLayer],
@@ -903,16 +978,18 @@ List<Rotaterectangle>^ Pattern::Match(
 
 					vecNew[j] = s_MatchParameter(ptMaxLoc, dMaxValue, localAngles[j]);
 
-					if (dMaxValue > bestVal) { bestVal = dMaxValue; bestIdx = (int)j; }
+					if (dMaxValue > bestVal) { bestVal = dMaxValue; bestIdx = j; }
 
 					// biên
-					if (ptMaxLoc.x == 0 || ptMaxLoc.y == 0 || ptMaxLoc.x == matResult.cols - 1 || ptMaxLoc.y == matResult.rows - 1)
+					if (ptMaxLoc.x == 0 || ptMaxLoc.y == 0 ||
+						ptMaxLoc.x == matResult.cols - 1 || ptMaxLoc.y == matResult.rows - 1)
 						vecNew[j].bPosOnBorder = true;
 
 					if (!vecNew[j].bPosOnBorder) {
 						for (int yy = -1; yy <= 1; ++yy)
 							for (int xx = -1; xx <= 1; ++xx)
-								vecNew[j].vecResult[xx + 1][yy + 1] = matResult.at<float>(ptMaxLoc + cv::Point(xx, yy));
+								vecNew[j].vecResult[xx + 1][yy + 1] =
+								matResult.at<float>(ptMaxLoc + cv::Point(xx, yy));
 					}
 				}
 
@@ -923,7 +1000,9 @@ List<Rotaterectangle>^ Pattern::Match(
 					bestIdx != 0 && bestIdx != 2)
 				{
 					double dNewX = 0, dNewY = 0, dNewAngle = 0;
-					img->SubPixEsimation(&vecNew, &dNewX, &dNewY, &dNewAngle, localAngleStep, bestIdx);
+					std::vector<s_MatchParameter> tmpV(3);
+					tmpV[0] = vecNew[0]; tmpV[1] = vecNew[1]; tmpV[2] = vecNew[2];
+					img->SubPixEsimation(&tmpV, &dNewX, &dNewY, &dNewAngle, localAngleStep, bestIdx);
 					vecNew[(size_t)bestIdx].pt = cv::Point2d(dNewX, dNewY);
 					vecNew[(size_t)bestIdx].dMatchAngle = dNewAngle;
 				}
@@ -931,7 +1010,9 @@ List<Rotaterectangle>^ Pattern::Match(
 				const double dNewMatchAngle = vecNew[(size_t)bestIdx].dMatchAngle;
 
 				// chuyển toạ độ về hệ của ROI quay
-				cv::Point2f ptPaddingLT = img->ptRotatePt2f(ptLT * 2, ptSrcCenter, (float)(dNewMatchAngle * D2R)) - cv::Point2f(3.f, 3.f);
+				cv::Point2f ptPaddingLT =
+					img->ptRotatePt2f(ptLT * 2, ptSrcCenter, (float)(dNewMatchAngle * D2R)) -
+					cv::Point2f(3.f, 3.f);
 				cv::Point2f pt((float)(vecNew[(size_t)bestIdx].pt.x + ptPaddingLT.x),
 					(float)(vecNew[(size_t)bestIdx].pt.y + ptPaddingLT.y));
 				// quay ngược về hệ gốc của layer
@@ -956,19 +1037,51 @@ List<Rotaterectangle>^ Pattern::Match(
 	img->FilterWithScore(&vecAllResult, m_dScore);
 	if (vecAllResult.empty()) return results;
 
-	// Lọc chồng lắp bằng rotated rect
+	// Lọc chồng lắp bằng rotated rect (KHÔNG khai báo lại iStopLayer)
 	const int iDstW = pTemplData->vecPyramid[(size_t)iStopLayer].cols * (iStopLayer == 0 ? 1 : 2);
 	const int iDstH = pTemplData->vecPyramid[(size_t)iStopLayer].rows * (iStopLayer == 0 ? 1 : 2);
-
-	for (size_t i = 0; i < vecAllResult.size(); ++i)
+	try
 	{
-		const double dRAng = -vecAllResult[i].dMatchAngle * D2R;
-		const cv::Point2f ptLT = vecAllResult[i].pt;
-		const cv::Point2f ptRT(ptLT.x + (float)iDstW * (float)std::cos(dRAng),
-			ptLT.y - (float)iDstW * (float)std::sin(dRAng));
-		const cv::Point2f ptRB(ptRT.x + (float)iDstH * (float)std::sin(dRAng),
-			ptRT.y + (float)iDstH * (float)std::cos(dRAng));
-		vecAllResult[i].rectR = cv::RotatedRect(ptLT, ptRT, ptRB);
+		for (size_t i = 0; i < vecAllResult.size(); ++i)
+		{
+			// 1) Guard cơ bản
+			if (iDstW <= 0 || iDstH <= 0) continue;
+			const double angDeg = vecAllResult[i].dMatchAngle;
+			if (!std::isfinite(angDeg)) continue;
+
+			// 2) Tính vector cạnh bằng double tránh tràn/NaN sớm
+			const double angRad = -angDeg * D2R;
+			const double c = std::cos(angRad);
+			const double s = std::sin(angRad);
+
+			const cv::Point2f ptLT = vecAllResult[i].pt;
+
+			// vector theo chiều rộng & chiều cao
+			const cv::Point2f vW((float)(iDstW * c), (float)(-iDstW * s));
+			const cv::Point2f vH((float)(iDstH * s), (float)(iDstH * c));
+
+			// 3) Ba đỉnh liên tiếp
+			const cv::Point2f ptRT(ptLT.x + vW.x, ptLT.y + vW.y);
+			const cv::Point2f ptRB(ptRT.x + vH.x, ptRT.y + vH.y);
+
+			// 4b) Cách 2 (khuyên dùng): ctor (center, size, angle) an toàn hơn
+			const cv::Point2f center(
+				ptLT.x + 0.5f * (vW.x + vH.x),
+				ptLT.y + 0.5f * (vW.y + vH.y)
+			);
+			vecAllResult[i].rectR = cv::RotatedRect(
+				center,
+				cv::Size2f((float)iDstW, (float)iDstH),
+				(float)angDeg  // góc theo định nghĩa OpenCV (độ)
+			);
+		}
+
+	}
+	catch (const cv::Exception& e) {
+		throw gcnew System::InvalidOperationException(gcnew System::String(e.what()));
+	}
+	catch (const std::exception& e) {
+		throw gcnew System::InvalidOperationException(gcnew System::String(e.what()));
 	}
 
 	img->FilterWithRotatedRect(&vecAllResult, CV_TM_CCOEFF_NORMED, m_dMaxOverlap);
@@ -987,7 +1100,7 @@ List<Rotaterectangle>^ Pattern::Match(
 
 		Rotaterectangle rr;
 		rr.Cx = c.x; rr.Cy = c.y;
-		rr.AngleDeg = -ang;      // giữ sign như bản gốc
+		rr.AngleDeg = ang;      // giữ sign như bản gốc
 		rr.Width = (double)iW;
 		rr.Height = (double)iH;
 		rr.Score = vecAllResult[i].dMatchScore * 100.0;
@@ -996,6 +1109,7 @@ List<Rotaterectangle>^ Pattern::Match(
 
 	return results;
 }
+
 
 //List<Rotaterectangle>^ Pattern::Match(
 //    bool   m_bStopLayer1,

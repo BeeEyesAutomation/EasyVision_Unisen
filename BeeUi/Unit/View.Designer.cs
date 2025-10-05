@@ -34,7 +34,6 @@ namespace BeeUi
         {
             this.components = new System.ComponentModel.Container();
             this.imgView = new Cyotek.Windows.Forms.ImageBox();
-            this.ckHideTool = new System.Windows.Forms.CheckBox();
             this.pMenu = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnZoomOut = new BeeInterface.RJButton();
@@ -113,23 +112,6 @@ namespace BeeUi
             this.imgView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseDown);
             this.imgView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseMove);
             this.imgView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseUp);
-            // 
-            // ckHideTool
-            // 
-            this.ckHideTool.AutoSize = true;
-            this.ckHideTool.BackColor = System.Drawing.Color.Transparent;
-            this.ckHideTool.Checked = true;
-            this.ckHideTool.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckHideTool.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ckHideTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckHideTool.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ckHideTool.Location = new System.Drawing.Point(409, 5);
-            this.ckHideTool.Name = "ckHideTool";
-            this.ckHideTool.Size = new System.Drawing.Size(106, 47);
-            this.ckHideTool.TabIndex = 13;
-            this.ckHideTool.Text = "Hide Detail";
-            this.ckHideTool.UseVisualStyleBackColor = false;
-            this.ckHideTool.CheckedChanged += new System.EventHandler(this.ckProcess_CheckedChanged);
             // 
             // pMenu
             // 
@@ -549,8 +531,6 @@ namespace BeeUi
             this.pView.Size = new System.Drawing.Size(1429, 697);
             this.pView.TabIndex = 6;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
-            this.pView.MouseLeave += new System.EventHandler(this.pView_MouseLeave);
-            this.pView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pView_MouseMove);
             // 
             // workPlay
             // 
@@ -647,7 +627,6 @@ namespace BeeUi
             // pBtn
             // 
             this.pBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.pBtn.Controls.Add(this.ckHideTool);
             this.pBtn.Controls.Add(this.split4);
             this.pBtn.Controls.Add(this.btnTypeTrig);
             this.pBtn.Controls.Add(this.btnMenu);
@@ -973,12 +952,10 @@ namespace BeeUi
             this.Name = "View";
             this.Size = new System.Drawing.Size(1494, 759);
             this.Load += new System.EventHandler(this.View_Load);
-            this.MouseHover += new System.EventHandler(this.View_MouseHover);
             this.pMenu.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pView.ResumeLayout(false);
             this.pBtn.ResumeLayout(false);
-            this.pBtn.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -993,7 +970,6 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workGetColor;
         public RJButton btnCap;
         public RJButton btnContinuous;
-        private System.Windows.Forms.CheckBox ckHideTool;
         public RJButton btnLive;
         private System.ComponentModel.BackgroundWorker workInsert;
         private System.Windows.Forms.OpenFileDialog openFile;

@@ -20,6 +20,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms.VisualStyles;
 using static BeeCore.Algorithm.FilletCornerMeasure;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
@@ -351,50 +352,35 @@ namespace BeeCore
             switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl = Global.ColorOK;
+                    cl =  Global.Config.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.ColorNG;
+                    cl = Global.Config.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            if (!Global.IsHideTool)
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
             {
-                String crest = "", root="";
+                String crest = "", root = "";
                 try { crest = $"P={CurPitchCrest:0.###} mm"; } catch { }
                 try { root = $"P={CurPitchRoot:0.###} mm"; } catch { }
-               
+
                 int nC = PitchResult.Crests?.Length ?? 0;
                 int nR = PitchResult.Roots?.Length ?? 0;
 
-                String Content= $"Crest N={nC}  {crest} | Root N={nR}  {root} ";
-                Draws.Box2Label(gc, rotA._rect, nameTool, Content, Global.fontRS, cl, brushText, 30, 3, 10, 1, false);
+                String Content = $"Crest N={nC}  {crest} | Root N={nR}  {root} ";
+                Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText, Global.pScroll, Global.ScaleZoom * 100, 16, Global.Config.ThicknessLine);
 
             }
-         
-            if (!Global.IsRun||! Global.IsHideTool)
+
+            if (!Global.IsRun || Global.Config.IsShowDetail)
             {
-                if (!matProcess.IsDisposed)
-                if (!matProcess.Empty())
-                {
-                    gc.ResetTransform();
-                    mat = new Matrix();
-                    if (!Global.IsRun)
-                    {
-                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-                    }
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-             
-                    gc.Transform = mat;
-                    Bitmap myBitmap = matProcess.ToBitmap();
-                    myBitmap.MakeTransparent(Color.Black);
-                    myBitmap = General.ChangeToColor(myBitmap, Color.Red, 0.7f);
-                    gc.DrawImage(myBitmap, rotA._rect);
-                }
+                if (matProcess != null && !matProcess.Empty())
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
             }
+         
             gc.ResetTransform();
            
             mat = new Matrix();

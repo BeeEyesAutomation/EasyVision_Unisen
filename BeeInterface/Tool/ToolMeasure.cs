@@ -375,7 +375,7 @@ namespace BeeInterface
             //        Propety.rotAreaAdjustment = G.EditTool.View.GetPositionAdjustment(Propety.rotArea, G.rotOriginAdj);
             //    else
             //        Propety.rotAreaAdjustment = Propety.rotArea;
-            //    Propety.rotAreaAdjustment._angle = 0;
+            //    Propety.rotAreaAdjustment._rectRotation = 0;
             //    Propety.Matching(Global.IsRun, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, indexTool, Propety.rotAreaAdjustment);
 
             //}

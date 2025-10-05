@@ -203,6 +203,9 @@ namespace BeeInterface
                 case TypeTool.Pitch:
                     control = new ToolPitch();
                     break;
+                case TypeTool.Edge:
+                    control = new ToolEdge();
+                    break;
                 default:
                     return null;
                     break;
@@ -216,13 +219,13 @@ namespace BeeInterface
             switch (TypeCrop)
             {
                 case TypeCrop.Crop:
-                 return  new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                 return  new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                     break;
                 case TypeCrop.Area:
-                 return   new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                 return   new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                     break;
                 case TypeCrop.Mask:
-                    return new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    return new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                     break;
 
             }
@@ -290,13 +293,13 @@ namespace BeeInterface
                       TypeTool != TypeTool.Circle &&
                       TypeTool != TypeTool.Width &&
                       TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
-                        control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                        control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                     else
                         control.Propety.rotCrop = null;
                 if (control.Propety.rotArea == null)
-                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                 if (control.Propety.rotMask == null)
-                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
 
                
 
@@ -337,13 +340,13 @@ namespace BeeInterface
                   TypeTool != TypeTool.Circle &&
                   TypeTool != TypeTool.Width &&
                   TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
-                    control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None,false);
+                    control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                 else
                     control.Propety.rotCrop = null;
                 if (PropetyTool.Propety.rotArea == null)
-                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
                 if (PropetyTool.Propety.rotMask== null)
-                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None, false);
+                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
               
                // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";

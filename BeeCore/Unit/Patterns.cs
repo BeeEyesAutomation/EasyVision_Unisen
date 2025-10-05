@@ -40,11 +40,22 @@ namespace BeeCore
         public RectRotate rotAreaTemp = new RectRotate();
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
+
+        public bool IsClose = false;
+        public bool IsOpen = false;
+        public bool IsClearNoiseBig = false;
+        public bool IsClearNoiseSmall = false;
+        public int SizeClearsmall = 1;
+        public int SizeClearBig = 1;
+        public int SizeClose = 1;
+        public int SizeOpen = 1;
+
         [NonSerialized]
         public Mat matTemp;
         public List<Point> Postion=new List<Point>();
        private Mode _TypeMode=Mode.Pattern;
         public List<double> listScore = new List<double>();
+
         public Mode TypeMode
         {
             get
@@ -255,72 +266,81 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-		public Mat LearnPattern(Mat raw, bool IsNoCrop)
+        public int MaxObject = 0;
+        public int StepAngle = 0;
+
+        public Mat LearnPattern(Mat raw, bool IsNoCrop)
 		{
 
 			using (Mat img = raw.Clone())
 			{
-				// Chuẩn hóa góc
-				if (rotCrop._rectRotation < 0)
-					rotCrop._rectRotation += 360;
+				//// Chuẩn hóa góc
+				//if (rotCrop._rectRotation < 0)
+				//	rotCrop._rectRotation += 360;
 
 				// Chuẩn hóa kênh về BGR 3 kênh
 				if (img.Channels() == 3)
 					Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
 				else if (img.Channels() == 4)
 					Cv2.CvtColor(img, img, ColorConversionCodes.BGRA2GRAY);
+                Mat mat = new Mat();
+                if (!IsNoCrop)
+                    mat = Cropper.CropRotatedRect(img, rotCrop, rotMask);
+                else
+                    mat = img;
+                    Pattern.SetImgeSampleNoCrop(mat.Data, mat.Width, mat.Height, (int)mat.Step(), mat.Channels());
+                Pattern.LearnPattern();
+                return mat;
+               
+    //            try
+				//{
+    //                int w = 0, h = 0, s = 0, c = 0;
+    //                IntPtr intpr = IntPtr.Zero;
+    //                // Gọi native – chú ý truyền đúng kích thước crop
+    //                if (IsNoCrop)
+				//	{
+				//		intpr = Pattern.SetImgeSample(
+				//			img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
+				//			rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
+				//			img.Width, img.Height,              // size giữ nguyên
+				//			rotCrop._rectRotation, IsNoCrop,
+				//			out w, out h, out s, out c);
+				//	}
+				//	else
+				//	{
+				//		intpr = Pattern.SetImgeSample(
+				//			img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
+				//			rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
+				//			rotCrop._rect.Width, rotCrop._rect.Height,   // size crop
+				//			rotCrop._rectRotation, IsNoCrop,
+				//			out w, out h, out s, out c);
+				//	}
 
-				int w = 0, h = 0, s = 0, c = 0;
-				IntPtr intpr = IntPtr.Zero;
-				Mat mat = new Mat();
+				//	if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+				//		return mat; // trả Mat rỗng
+				//	Pattern.LearnPattern();
+				//	// Map kênh trả về
+				//	MatType mt = c == 1 ? MatType.CV_8UC1
+				//				: c == 3 ? MatType.CV_8UC3
+				//				: MatType.CV_8UC4;
 
-				try
-				{
-					// Gọi native – chú ý truyền đúng kích thước crop
-					if (IsNoCrop)
-					{
-						intpr = Pattern.SetImgeSample(
-							img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
-							rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
-							img.Width, img.Height,              // size giữ nguyên
-							rotCrop._rectRotation, IsNoCrop,
-							out w, out h, out s, out c);
-					}
-					else
-					{
-						intpr = Pattern.SetImgeSample(
-							img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
-							rotCrop._PosCenter.X, rotCrop._PosCenter.Y,
-							rotCrop._rect.Width, rotCrop._rect.Height,   // size crop
-							rotCrop._rectRotation, IsNoCrop,
-							out w, out h, out s, out c);
-					}
+				//	// Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
+				//	using (var m = new Mat(h, w, mt, intpr, s))
+				//	{
+				//		// CopyTo hoặc Clone đều OK; Clone gọn hơn:
+				//		mat = m.Clone();
+				//	}
 
-					if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
-						return mat; // trả Mat rỗng
-					Pattern.LearnPattern();
-					// Map kênh trả về
-					MatType mt = c == 1 ? MatType.CV_8UC1
-								: c == 3 ? MatType.CV_8UC3
-								: MatType.CV_8UC4;
+				//	// Giữ sống input đến sau khi native xong
+				//	//GC.KeepAlive(img);
+				//}
+				//finally
+				//{
+				//	//if (intpr != IntPtr.Zero)
+				//	//	Pattern.fre(intpr); // rất quan trọng
+				//}
 
-					// Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-					using (var m = new Mat(h, w, mt, intpr, s))
-					{
-						// CopyTo hoặc Clone đều OK; Clone gọn hơn:
-						mat = m.Clone();
-					}
-
-					// Giữ sống input đến sau khi native xong
-					//GC.KeepAlive(img);
-				}
-				finally
-				{
-					//if (intpr != IntPtr.Zero)
-					//	Pattern.fre(intpr); // rất quan trọng
-				}
-
-				return mat;
+				//return mat;
 			}
 
 
@@ -376,7 +396,7 @@ namespace BeeCore
 
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
-    
+    public  List<float>list_AngleCenter =new List<float>();
 
         public bool IsLimitCouter = true;
         public void DoWork(RectRotate rectRotate)
@@ -386,40 +406,69 @@ namespace BeeCore
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
+            list_AngleCenter = new List<float>();
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
-                Mat matCrop = null;
+               
                 Mat matProcess = null;
                 byte[] rentedBuffer = null;
 
                 try
                 {
                     // 1) Crop ROI
-                    matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
-
+                   
+                  //  matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                   
                     // 2) Tiền xử lý theo chế độ
                     switch (TypeMode)
                     {
                         case Mode.Pattern:
-                            if (matCrop.Type() == MatType.CV_8UC3)
+                            if (raw.Type() == MatType.CV_8UC3)
                             {
                                 matProcess = new Mat();
-                                Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
+                                Cv2.CvtColor(raw, matProcess, ColorConversionCodes.BGR2GRAY);
                             }
                             else
                             {
-                                matProcess = matCrop; // reuse backing store
+                                matProcess = raw; // reuse backing store
                             }
+                            var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                            RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+
+                            Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
+
                             break;
 
                         case Mode.OutLine:
-                            matProcess = Common.CannyWithMorph(matCrop);
+                            matProcess = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+
+                            if (raw.Type() == MatType.CV_8UC3)
+                            {
+                               
+                                Cv2.CvtColor(matProcess, matProcess, ColorConversionCodes.BGR2GRAY);
+                            }
+                            //else
+                            //{
+                            //    matProcess = matCrop; // reuse backing store
+                            //}
+                            if (IsClearNoiseSmall)
+                                matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+                            if (IsClose)
+                                matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+                            if (IsOpen)
+                                matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                            if (IsClearNoiseBig)
+                                matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+                            Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
+
                             break;
 
                         case Mode.Edge:
-                            using (Mat bgr = EnsureBgr(matCrop))
+                            matProcess = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+
+                            using (Mat bgr = EnsureBgr(matProcess))
                             {
                                 int h = bgr.Rows, w = bgr.Cols, ch = bgr.Channels();
                                 if (!bgr.IsContinuous())
@@ -434,35 +483,36 @@ namespace BeeCore
                                     CopyToPythonAndDetect(bgr, h, w, ch, ref matProcess, ref rentedBuffer);
                                 }
                             }
+                            Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
+
                             break;
                     }
 
                     if (matProcess == null || matProcess.Empty()) return;
 
                     // Bảo đảm grayscale cho Pattern engine
-                    if (matProcess.Type() == MatType.CV_8UC3)
-                    {
-                        using (Mat gray = new Mat())
-                        {
-                            Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGR2GRAY);
-                            matProcess = gray.Clone(); // own memory
-                        }
-                    }
+                    //if (matProcess.Type() == MatType.CV_8UC3)
+                    //{
+                    //    using (Mat gray = new Mat())
+                    //    {
+                    //        Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGR2GRAY);
+                    //        matProcess = gray.Clone(); // own memory
+                    //    }
+                    //}
 
                     // 3) Nạp ảnh vào Pattern (con trỏ phải còn sống đến sau khi Match)
-                    Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
                     GC.KeepAlive(matProcess);
                 
                    var listRS = Pattern.Match(
                         IsHighSpeed,                 // m_bStopLayer1
-                        0,                           // m_dToleranceAngle (bỏ, vì bạn dùng range dưới)
+                        StepAngle,                           // m_dToleranceAngle (bỏ, vì bạn dùng range dưới)
                         AngleLower,                  // m_dTolerance1
                         AngleUper,                   // m_dTolerance2
                         Common.PropetyTools[IndexThread][Index].Score / 100.0, // m_dScore
                         ckSIMD,                      // m_ckSIMD
                         ckBitwiseNot,                // m_ckBitwiseNot
                         ckSubPixel,                  // m_bSubPixel
-                        NumObject,                   // m_iMaxPos
+                        MaxObject,                   // m_iMaxPos
                         OverLap,                     // m_dMaxOverlap
                         false,              // useMultiThread  <-- MỚI
                         -1                   // numThreads      <-- MỚI
@@ -485,10 +535,10 @@ namespace BeeCore
 
                             rectRotates.Add(new RectRotate(
                                 new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
-                                pCenter, angle, AnchorPoint.None, false));
+                                pCenter, angle, AnchorPoint.None));
 
                             listScore.Add(Math.Round(score, 1));
-
+                            list_AngleCenter.Add(rotArea._rectRotation + angle);
                             listP_Center.Add(new System.Drawing.Point(
                                 (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
                                 (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
@@ -506,143 +556,13 @@ namespace BeeCore
                     if (rentedBuffer != null)
                         System.Buffers.ArrayPool<byte>.Shared.Return(rentedBuffer);
 
-                    if (matProcess != null && !object.ReferenceEquals(matProcess, matCrop))
+                    if (matProcess != null )
                         matProcess.Dispose();
 
-                    if (matCrop != null)
-                        matCrop.Dispose();
+                   
                 }
             }
         }
-
-        //public void DoWork(RectRotate rectRotate)
-        //{
-
-
-        //    using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
-        //    {
-        //        if (raw.Empty()) return;
-
-        //        Mat matCrop = null;
-        //        Mat matProcess = null;
-        //        byte[] rentedBuffer = null;
-
-        //        try
-        //        {
-        //            matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
-
-        //            switch (TypeMode)
-        //            {
-        //                case Mode.Pattern:
-        //                    if (matCrop.Type() == MatType.CV_8UC3)
-        //                    {
-        //                        matProcess = new Mat();
-        //                        Cv2.CvtColor(matCrop, matProcess, ColorConversionCodes.BGR2GRAY);
-        //                    }
-        //                    else
-        //                    {
-        //                        // tái dùng cùng backing store để tránh copy
-        //                        matProcess = matCrop;
-        //                    }
-        //                    break;
-
-        //                case Mode.OutLine:
-        //                    matProcess = Common.CannyWithMorph(matCrop);
-        //                    break;
-
-        //                case Mode.Edge:
-        //                    // chuyển về BGR 3 kênh cho pipeline Python
-        //                    using (Mat bgr = EnsureBgr(matCrop))
-        //                    {
-        //                        int height = bgr.Rows;
-        //                        int width = bgr.Cols;
-        //                        int channels = bgr.Channels(); // 3
-
-        //                        if (!bgr.IsContinuous())
-        //                        {
-        //                            // đảm bảo dữ liệu liên tục trong bộ nhớ
-        //                            using (Mat tmp = bgr.Clone())
-        //                            {
-        //                                CopyToPythonAndDetect(tmp, height, width, channels, ref matProcess, ref rentedBuffer);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            CopyToPythonAndDetect(bgr, height, width, channels, ref matProcess, ref rentedBuffer);
-        //                        }
-        //                    }
-        //                    break;
-        //            }
-
-        //            if (matProcess == null || matProcess.Empty()) return;
-
-        //            if (matProcess.Type() == MatType.CV_8UC3)
-        //            {
-        //                using (Mat gray = new Mat())
-        //                {
-        //                    Cv2.CvtColor(matProcess, gray, ColorConversionCodes.BGR2GRAY);
-        //                    // cần một bản sở hữu riêng để giữ lifetime khi pass con trỏ
-        //                    matProcess = gray.Clone();
-        //                }
-        //            }
-
-        //            // === MATCHING ===
-        //            Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
-        //            GC.KeepAlive(matProcess);
-
-        //            rectRotates = new List<RectRotate>();
-        //            listScore = new List<double>();
-        //            listP_Center = new List<System.Drawing.Point>();
-
-        //            var listRS = Pattern.Match(
-        //                IsHighSpeed, 0,
-        //                AngleLower, AngleUper,
-        //                Common.PropetyTools[IndexThread][Index].Score / 100.0,
-        //                ckSIMD, ckBitwiseNot, ckSubPixel,
-        //                NumObject, OverLap, false, -1);
-
-        //            float scoreSum = 0f;
-
-        //            foreach (Rotaterectangle rot in listRS)
-        //            {
-        //                float w = (float)rot.Width;
-        //                float h = (float)rot.Height;
-        //                var pCenter = new System.Drawing.PointF((float)rot.Cx, (float)rot.Cy);
-        //                float angle = (float)rot.AngleDeg;
-        //                float score = (float)rot.Score;
-        //                scoreSum += score;
-
-        //                rectRotates.Add(new RectRotate(
-        //                    new System.Drawing.RectangleF(-w / 2f, -h / 2f, w, h),
-        //                    pCenter, angle, AnchorPoint.None, false));
-
-        //                listScore.Add(Math.Round(score, 1));
-
-        //                listP_Center.Add(new System.Drawing.Point(
-        //                    (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-        //                    (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
-        //            }
-
-        //            if (scoreSum != 0 && rectRotates.Count > 0)
-        //            {
-        //                Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
-        //                    (int)Math.Round(scoreSum / rectRotates.Count, 1);
-        //            }
-        //        }
-        //        finally
-        //        {
-        //            if (rentedBuffer != null)
-        //                ArrayPool<byte>.Shared.Return(rentedBuffer);
-
-        //            if (matProcess != null && !object.ReferenceEquals(matProcess, matCrop))
-        //                matProcess.Dispose();
-
-        //            if (matCrop != null)
-        //                matCrop.Dispose();
-        //        }
-        //    }
-
-        //}
         public void Complete()
         {
             Common.PropetyTools[IndexThread][Index].Results = Results.OK;
@@ -678,7 +598,7 @@ namespace BeeCore
 
                         int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
                         int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
-                        Global.AngleOrigin = rectRotates[0]._angle;
+                        Global.AngleOrigin = rectRotates[0]._rectRotation;
                         Global.pOrigin = new OpenCvSharp.Point(x, y);
                     }
             }
@@ -689,7 +609,7 @@ namespace BeeCore
                 if (Common.PropetyTools[Global.IndexChoose][Index].Results==Results.OK)
                 {
                     rotPositionAdjustment = rectRotates[0].Clone();
-                    Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X -rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X,rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
+                    Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X -rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X,rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None);
                 }    
             }
          
@@ -713,23 +633,29 @@ namespace BeeCore
 			gc.Transform = mat;
 			Brush brushText = Brushes.White;
 			Color cl = Color.LimeGreen;
-
-			if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
+            //int OffSetX = (int)(rotA._PosCenter.X - rotA._rect.Width / 2);
+            //int OffSetY = (int)(rotA._PosCenter.Y - rotA._rect.Height / 2);
+            //OffSetX = (OffSetX > 0) ? 0 : -OffSetX;
+            //OffSetY = (OffSetY > 0) ? 0 : -OffSetY;
+            if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
 			{
-				cl = Global.ColorNG;
+				cl = Global.Config.ColorNG;
 			}
 			else
 			{
-				cl = Global.ColorOK;
+				cl =  Global.Config.ColorOK;
 			}
 			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-			if (!Global.IsHideTool)
-				Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom*100, Global.Config.ThicknessLine);
 			gc.ResetTransform();
 			if (listScore == null) return gc;
 			if (rectRotates.Count > 0)
 			{
-				int i = 1;
+                // === Tính offset (như cũ) ===
+              
+                int i = 1;
 				foreach (RectRotate rot in rectRotates)
 				{
 
@@ -743,16 +669,26 @@ namespace BeeCore
                     mat.Rotate(rotA._rectRotation);
                     mat.Translate(rotA._rect.X, rotA._rect.Y);
                     gc.Transform = mat;
+                    //if (OffSetX < 0 || OffSetY < 0)
+                    //{
+
+                    //    mat.Translate(OffSetX, OffSetY);
+                    //    gc.Transform = mat;
+                    //}
+
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    //  gc.Transform = mat;
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
+                     if(Global.Config.IsShowPostion)
+                    {
+                        int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
+                        Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
+                        String sPos = "X,Y,A - " + listP_Center[i - 1].X + "," + listP_Center[i - 1].Y + " , " + Math.Round(list_AngleCenter[i - 1], 1);
+                        gc.DrawString(sPos, font, brushText, new PointF(5, 5));
 
-                    //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                    //mat.Rotate(rot._rectRotation);
-                    //gc.Transform = mat;
-
-                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 2, cl, 2);
-					Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) + "% A:" + Math.Round(rot._angle), Global.fontRS, cl, brushText, 16, 2);
+                    }
+                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) +"%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
 
 
 					gc.ResetTransform();
@@ -902,7 +838,7 @@ namespace BeeCore
 				//	float Score = (float)rot.Score;
     //                scoreRs += Score;
 
-    //                rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+    //                rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
 				//	listScore.Add(Math.Round(Score, 1));
 				//	listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
 

@@ -248,16 +248,17 @@ namespace BeeCore
             switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl = Global.ColorOK;
+                    cl =  Global.Config.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.ColorNG;
+                    cl = Global.Config.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
 
             if (!Global.IsRun)
             {

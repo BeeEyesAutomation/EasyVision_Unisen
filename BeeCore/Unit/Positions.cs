@@ -418,7 +418,7 @@ namespace BeeCore
             //            float angle = Convert.ToSingle(sSp[2]);
             //            float width = Convert.ToSingle(sSp[3]);
             //            float height =Convert.ToSingle(sSp[4]);
-            //            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None,false));
+            //            rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
             //        }
             //        if (rectRotates.Count == 0) return;
             //        RectRotate rot = rectRotates[0];

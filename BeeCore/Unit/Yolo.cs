@@ -378,7 +378,7 @@ namespace BeeCore
                             var rt = new RectRotate(
                                 new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
                                 new System.Drawing.PointF(cx, cy),
-                                0f, AnchorPoint.None, false);
+                                0f, AnchorPoint.None);
 
                             boxList.Add(rt);
                             scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
@@ -474,7 +474,7 @@ namespace BeeCore
         //                        float w2 = x2 - x1, h2 = y2 - y1;
         //                        float cx = x1 + w2 * 0.5f, cy = y1 + h2 * 0.5f;
 
-        //                        var rt = new RectRotate(new RectangleF(-w2 / 2, -h2 / 2, w2, h2), new PointF(cx, cy), 0, AnchorPoint.None, false);
+        //                        var rt = new RectRotate(new RectangleF(-w2 / 2, -h2 / 2, w2, h2), new PointF(cx, cy), 0, AnchorPoint.None);
         //                        boxList.Add(rt);
 
         //                        scoreList.Add((float)scores[j].As<double>() * 100f);
@@ -990,16 +990,17 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl = Global.ColorOK;
+                    cl =  Global.Config.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.ColorNG;
+                    cl = Global.Config.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
             int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
@@ -1090,7 +1091,7 @@ namespace BeeCore
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         gc.Transform = mat;
                         String content = rot._rect.Height + " px";
-                        Font font = new Font("Arial", 30, FontStyle.Bold);
+                         font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
                         gc.DrawString(content, font, new SolidBrush(clShow), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
 
@@ -1104,7 +1105,8 @@ namespace BeeCore
                       //  gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
-                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", Global.fontRS, clShow, brushText, 30, 3, 10, 1, !Global.IsHideTool);
+                        font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", font, clShow, brushText, 30, 3, 10, 1, Global.Config.IsShowDetail);
                         gc.ResetTransform();
 
                     }

@@ -34,7 +34,7 @@ namespace BeeInterface
                 imgTemp.Image = Propety.bmRaw;
             }
             if (Propety.rotPositionAdjustment != null)
-               Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None, false);
+               Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             trackAngle.Value = (int)Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
@@ -57,7 +57,9 @@ namespace BeeInterface
             AdjClearBig.Enabled = Propety.IsClearNoiseBig;
             AdjOpen.Enabled = Propety.IsOpen;
             AdjMorphology.Enabled = Propety.IsClose;
-            switch(Propety.MethodSample)
+            AdjStepAngle.Value = Propety.StepAngle;
+            AdjMaximumObj.Value = Propety.MaxObject;
+            switch (Propety.MethodSample)
             {
                 case MethodSample.Pattern:
                     layThreshod.Visible = false;
@@ -96,8 +98,25 @@ namespace BeeInterface
             else
                 btnNormal.IsCLick = true;
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPosition_Adjustment_StatusToolChanged;
+            btnCropArea.IsCLick = true;
+            Global.TypeCrop = TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
 
+          
         }
+
+        private void ToolPosition_Adjustment_StatusToolChanged(StatusTool obj)
+        {
+            if (Global.IsRun) return;
+           
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            {
+                btnTest.Enabled = true; btnTest.IsCLick = false;
+            }
+           
+        }
+
         public PositionAdj Propety=new PositionAdj();
      
         
@@ -324,8 +343,14 @@ namespace BeeInterface
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+          
             if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
+            {
+                btnTest.Enabled = false;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
+
+            }    
+               
             else
                 btnTest.IsCLick = false;
         }
@@ -382,7 +407,7 @@ namespace BeeInterface
             Global.StatusDraw = StatusDraw.None;
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None, false);
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
             Global.StatusDraw = StatusDraw.Edit;
@@ -496,6 +521,16 @@ namespace BeeInterface
             Propety.MethodSample = MethodSample.Edge;
             layPattern.Visible = false;
             lbPattern.Visible = false;
+        }
+
+        private void AdjMaximumObj_ValueChanged(float obj)
+        {
+            Propety.MaxObject = (int)AdjMaximumObj.Value;
+        }
+
+        private void AdjStepAngle_ValueChanged(float obj)
+        {
+            Propety.StepAngle = (int)AdjStepAngle.Value;
         }
     }
 }

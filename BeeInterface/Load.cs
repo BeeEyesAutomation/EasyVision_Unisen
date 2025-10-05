@@ -23,6 +23,7 @@ namespace BeeInterface
             Global.itemNews.Add(new ItemNew(TypeTool.Circle, GroupTool.Extra_Tool_1, Properties.Resources.Circle, Properties.Resources.Circle, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Corner, GroupTool.Extra_Tool_1, Properties.Resources.Width, Properties.Resources.Width, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.Measure, GroupTool.Extra_Tool_1, Properties.Resources.Measure, Properties.Resources.Measure, "Content.."));
+            Global.itemNews.Add(new ItemNew(TypeTool.Edge, GroupTool.Extra_Tool_1, Properties.Resources.Edge, Properties.Resources.Edge, "Content.."));
             Global.itemNews.Add(new ItemNew(TypeTool.MatchingShape, GroupTool.Extra_Tool_1, Properties.Resources.MatchingShape, Properties.Resources.contentMatchingShape, "📏 Đối sánh hình dạng\r\nNhận diện và phân tích hình dáng của vật thể dù bị xoay, phóng to/thu nhỏ hoặc nhiễu nền.\r\n➡️ Giải pháp mạnh cho kiểm tra ngoại quan, phát hiện sai hình dạng, thiếu chi tiết."));
 
             Global.itemNews.Add(new ItemNew(TypeTool.Learning, GroupTool.Extra_Tool_2, Properties.Resources.Learning, Properties.Resources.Learning, "Content.."));

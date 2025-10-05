@@ -12,7 +12,19 @@ namespace BeeGlobal
     [Serializable()]
     public class Config
     {
-        
+        public int FontSize = 16;
+        public int Opacity = 100;
+        public int RadEdit = 40;
+        public Color ColorOK;
+        public Color ColorNG;
+        public Color ColorNone;
+        public Color TextColor;
+
+        public int ThicknessLine = 4;
+        public bool IsShowDetail = true;
+        public bool IsShowBox = true;
+        public bool IsShowPostion = true;
+
         public  float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;
         public  Color colorGui = Color.FromArgb(100, 114, 114, 114);

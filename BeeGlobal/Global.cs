@@ -106,13 +106,12 @@ namespace BeeGlobal
         public static LogsDashboard LogsDashboard;
         public static List<ItemNew> itemNews = new List<ItemNew>();
         public static bool IsLoadProgFist = false;
-        public static bool IsHideTool = true;
+       
         public static System.Drawing.Point pShowTool=new Point(10,10);
         public static float ScaleZoom;
         public static Point pScroll;
         public static dynamic ToolSettings;
-        public static Font fontTool = new Font("Arial", 22, FontStyle.Regular);
-        public static Font fontRS = new Font("Arial", 32, FontStyle.Bold);
+    
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
         public static Config Config;
@@ -166,8 +165,7 @@ namespace BeeGlobal
         public static bool Initialed = false;
        
         public static float Scale = 1, AngleOrigin;
-        public static  Color ColorOK = Color.FromArgb(0, 172, 73);
-        public static Color ColorNG = Color.DarkRed;
+     
         public static Color ColorRead = Color.SkyBlue;
         public static Color ColorProssing = Color.Blue;
         public static Color ColorTrigger = Color.LightBlue;
@@ -200,7 +198,7 @@ namespace BeeGlobal
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();
         private static int _IndexToolSelected=-1;
         public static bool IsEditTool = false;
-        public static int RadpEdit = 40;
+
         public static event Action<int> IndexToolChanged;
         public static dynamic OldPropetyTool = null;
        

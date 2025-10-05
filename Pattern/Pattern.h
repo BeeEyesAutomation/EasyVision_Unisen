@@ -271,9 +271,7 @@ namespace BeeCpp
 		cv::Point GetNextMaxLoc(Mat& matResult, cv::Point ptMaxLoc, cv::Size sizeTemplate, double& dMaxValue, double dMaxOverlap, s_BlockMax& blockMax);
 		void SortPtWithCenter(vector<Point2f>& vecSort);
 		bool SubPixEsimation(vector<s_MatchParameter>* vec, double* dX, double* dY, double* dAngle, double dAngleStep, int iMaxScoreIndex);
-		void DrawDashLine(Mat& matDraw, cv::Point ptStart, cv::Point ptEnd, Scalar color1, Scalar color2);//= Scalar(0, 0, 255)  = Scalar::all(255)
-		void DrawMarkCross(Mat& matDraw, int iX, int iY, int iLength, Scalar color, int iThickness);
-
+		
     };
 
     // ===== Kiểu trả cho C# =====
@@ -289,10 +287,9 @@ namespace BeeCpp
         ~Pattern();
         !Pattern();
 		void SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch);
-        void SetImgeRaw(IntPtr data, int w, int h, int stride, int ch,
-            float x, float y, float ww, float hh, float angle);
-		System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch,
-            float x, float y, float ww, float hh, float angle, bool NoCrop, 
+        void SetImgeRaw(IntPtr data, int w, int h, int stride, int ch, RectRotateCli rr, Nullable<RectRotateCli> rrMask);
+		void SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch);
+		System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch,  RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
 			[System::Runtime::InteropServices::Out] int% outW,
 			[System::Runtime::InteropServices::Out] int% outH,
 			[System::Runtime::InteropServices::Out] int% outStride,
@@ -313,8 +310,9 @@ namespace BeeCpp
             bool useMultiThread,
             int numThreads
         );
-
+	
     private:
+		Common* com;
         Img* img;
     };
 }

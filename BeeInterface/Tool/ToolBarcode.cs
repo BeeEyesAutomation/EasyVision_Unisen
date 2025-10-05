@@ -380,7 +380,7 @@ namespace BeeInterface
             Global.StatusDraw = StatusDraw.None;
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2), 0, AnchorPoint.None, false);
+            Propety.rotArea = new RectRotate(new RectangleF(-BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, -BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height), new PointF(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width / 2, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height / 2), 0, AnchorPoint.None);
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
             Global.StatusDraw = StatusDraw.Edit;
@@ -420,7 +420,7 @@ namespace BeeInterface
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None, false);
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
 
          
             Global.TypeCrop = TypeCrop.Area;

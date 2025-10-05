@@ -180,7 +180,7 @@ namespace BeeInterface
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None,false);
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
 
             
            Global.TypeCrop= TypeCrop.Area;
@@ -240,13 +240,14 @@ namespace BeeInterface
             switch (Global.TypeCrop)
             {
                 case TypeCrop.Crop:
-                    Propety.rotCrop.IsElip = false;
+
+                    Propety.rotCrop.Shape=ShapeType.Rectangle;
                     break;
                 case TypeCrop.Area:
-                    Propety.rotArea.IsElip = false;
+                    Propety.rotArea.Shape = ShapeType.Rectangle;
                     break;
                 case TypeCrop.Mask:
-                    Propety.rotMask.IsElip = false;
+                    Propety.rotMask.Shape = ShapeType.Rectangle;
                     break;
 
             }
@@ -263,13 +264,14 @@ namespace BeeInterface
             switch (Global. TypeCrop)
             {
                 case TypeCrop.Crop:
-                    Propety.rotCrop.IsElip = false;
+                   
+                    Propety.rotCrop.Shape = ShapeType.Rectangle;
                     break;
                 case TypeCrop.Area:
-                    Propety.rotArea.IsElip = false;
+                    Propety.rotArea.Shape = ShapeType.Rectangle;
                     break;
                 case TypeCrop.Mask:
-                    Propety.rotMask.IsElip = false;
+                    Propety.rotMask.Shape = ShapeType.Rectangle;
                     break;
 
             }
@@ -283,10 +285,10 @@ namespace BeeInterface
             switch (Global. TypeCrop)
             {
                 //case TypeCrop.Crop:
-                //    Propety.rotCrop.IsElip = btnElip.IsCLick;
+                //    Propety.rotCrop.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
                 //    break;
                 //case TypeCrop.Area:
-                //    Propety.rotArea.IsElip = btnElip.IsCLick;
+                //    Propety.rotArea.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
                 //    break;
                 case TypeCrop.Mask:
                     Propety.rotMask = null;// = btnElip.IsCLick;

@@ -229,8 +229,11 @@ namespace BeeInterface
                 mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                 mat.Rotate(rotA._rectRotation);
                 gc.Transform = mat;
-                String sContent = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
-                Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool, brushText, cl);
+                String nameTool = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
+                Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+                if (Global.Config.IsShowBox)
+                    Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+
                 int i = 0;
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
                     return gc;
@@ -254,7 +257,7 @@ namespace BeeInterface
                     //String sDraw = "";
                     //foreach (String ss in Propety.listContent)
                     //    sDraw += ss;
-                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i], Math.Round(Propety.listScore[i], 1) + "%", Global.fontRS, cl, brushText, 50, 8, 50);
+                    Draws.Box2Label(gc, rot._rect, Propety.listLabelResult[i], Math.Round(Propety.listScore[i], 1) + "%", font, cl, brushText, 50, 8, 50);
 
                     //gc.DrawRectangle(new Pen(cl, 4), new Rectangle((int)rot._rect.X, (int)rot._rect.Y, (int)rot._rect.Width, (int)rot._rect.Height));
 
@@ -639,7 +642,7 @@ namespace BeeInterface
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None,false);
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
 
          
            Global.TypeCrop= TypeCrop.Area;

@@ -255,10 +255,10 @@ namespace BeeInterface
         // ===== ctor =====
         public RJButton()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint |
-                     ControlStyles.UserPaint |
-                     ControlStyles.OptimizedDoubleBuffer |
-                     ControlStyles.ResizeRedraw, true);
+            //SetStyle(ControlStyles.AllPaintingInWmPaint |
+            //         ControlStyles.UserPaint |
+            //         ControlStyles.OptimizedDoubleBuffer |
+            //         ControlStyles.ResizeRedraw, true);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderSize = 0;

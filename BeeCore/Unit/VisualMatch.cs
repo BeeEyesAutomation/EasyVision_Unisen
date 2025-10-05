@@ -68,9 +68,7 @@ namespace BeeCore
 
             using (Mat img = raw.Clone())
             {
-                // Chuẩn hóa góc
-                if (rotArea._rectRotation < 0)
-                    rotArea._rectRotation += 360;
+              
 
                 // Chuẩn hóa kênh về BGR 3 kênh
                 if (img.Channels() == 1)
@@ -84,26 +82,16 @@ namespace BeeCore
 
                 try
                 {
-                    // Gọi native – chú ý truyền đúng kích thước crop
-                    if (IsNoCrop)
-                    {
-                        intpr = ColorPixel.SetImgeSample(
-                            img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
-                            rotArea._PosCenter.X, rotArea._PosCenter.Y,
-                            img.Width, img.Height,              // size giữ nguyên
-                            rotArea._rectRotation, IsNoCrop,
-                            out w, out h, out s, out c);
-                    }
-                    else
-                    {
-                        intpr = ColorPixel.SetImgeSample(
-                            img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(),
-                            rotArea._PosCenter.X, rotArea._PosCenter.Y,
-                            rotArea._rect.Width, rotArea._rect.Height,   // size crop
-                            rotArea._rectRotation, IsNoCrop,
-                            out w, out h, out s, out c);
-                    }
+                    var rrCli = Converts.ToCli(rotArea); // như ở reply trước
+                    RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
+                    intpr = ColorPixel.SetImgeSample(
+                             img.Data, img.Width, img.Height, (int)img.Step(), img.Channels()
+                        , rrCli, rrMaskCli,IsNoCrop,
+                            out w, out h, out s, out c);
+
+                    // Gọi native – chú ý truyền đúng kích thước crop
+               
                     if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
                         return mat; // trả Mat rỗng
 
@@ -172,7 +160,10 @@ namespace BeeCore
               
                 using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
-                    ColorPixel.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rectRotate._PosCenter.X, rectRotate._PosCenter.Y, rectRotate._rect.Width, rectRotate._rect.Height, rectRotate._rectRotation);
+                    var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+
+                    ColorPixel.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rrCli,rrMaskCli);
 
                     if (raw.Empty()) return;
 
@@ -252,8 +243,10 @@ namespace BeeCore
                 //    cl = Color.Red;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+
             gc.ResetTransform();
           
             {if(matProcess!=null)

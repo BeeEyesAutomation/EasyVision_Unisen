@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -120,16 +121,24 @@ namespace BeeCore
         }
 
         public static Config LoadConfig(string path)
-        {
-            return LoadBase64<Config>(path, defaultFactory: () => new Config());
-            //return LoadBase64(path, defaultFactory: () =>
-            //{
-            //    var cfg = new Config();
-            //    cfg.nameUser = "Admin";
-            //    cfg.IsByPass = true;
-            //    cfg.ConditionOK = ConditionOK.Logic;
-            //    return cfg;
-            //});
+        {Config config = new Config();
+            config= LoadBase64<Config>(path, defaultFactory: () => new Config());
+            if (config.ColorOK.Name == "0")
+                config.ColorOK = Color.FromArgb(0, 172, 73);
+            if (config.ColorNG.Name == "0")
+                config.ColorNG = Color.DarkRed;
+            if (config.RadEdit==0)
+                config.RadEdit = 40;
+            if (config.FontSize == 0)
+                config.FontSize = 12;
+            if (config.ThicknessLine == 0)
+                config.ThicknessLine = 4;
+            if (config.Opacity == 0)
+                config.Opacity = 50;
+          
+            return config;
+
+
         }
 
         // ----- ParaCommon -----

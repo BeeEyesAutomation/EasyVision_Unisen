@@ -289,11 +289,12 @@ namespace BeeCore
               
                         xf.Scale(s, s);
                         g.Transform = xf;
-                        g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", 16), Brushes.DarkGray, new PointF(10, 10));
+                        SizeF sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize));
+                        g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
                         if (Global.TotalOK)
-                            g.DrawString("OK", new Font("Arial", 24), Brushes.Green, new PointF(10,30));
+                            g.DrawString("OK", new Font("Arial", Global.Config.FontSize), Brushes.Green, new PointF(10, sz.Height+5));
                         else
-                            g.DrawString("NG", new Font("Arial", 24), Brushes.Red, new PointF(10, 30));
+                            g.DrawString("NG", new Font("Arial", Global.Config.FontSize), Brushes.Red, new PointF(10, sz.Height + 5));
                         var tools = BeeCore.Common.PropetyTools[IndexCCD];
                         foreach (var tool in tools)
                             if (tool.UsedTool != UsedTool.NotUsed)

@@ -14,6 +14,7 @@ namespace BeeCpp
     };
     public ref class ColorPixel sealed
     {
+    private:Common* com = new Common();
     private:ColorPx* _img = new ColorPx();   // native pointer
     public:
         // So khớp ảnh (BGR8) từ bytes nén (PNG/JPG), trả RAW BGR (AllocHGlobal).
@@ -40,9 +41,9 @@ namespace BeeCpp
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
-        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, float x, float y, float w, float h, float angle);
-        System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch,
-            float x, float y, float ww, float hh, float angle, bool NoCrop,
+        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels , RectRotateCli rr, Nullable<RectRotateCli> rrMask);
+        System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch
+            , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
             [System::Runtime::InteropServices::Out] int% outW,
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,

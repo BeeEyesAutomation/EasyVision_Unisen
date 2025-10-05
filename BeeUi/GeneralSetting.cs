@@ -50,6 +50,17 @@ namespace BeeUi
                 case 3: btnbig.PerformClick(); break;
             }
             AdjLimitDay.Value =Global.Config.LimitDateSave;
+            AdjFontSize.Value = Global.Config.FontSize;
+            AdjRadEdit.Value = Global.Config.RadEdit;
+            btnShowBox.IsCLick = Global.Config.IsShowBox;
+            btnShowDetail.IsCLick = Global.Config.IsShowDetail;
+            btnShowPositon.IsCLick = Global.Config.IsShowPostion;
+            lbClOK.BackColor = Global.Config.ColorOK;
+            btnClOK.ForeColor = Global.Config.ColorOK;
+            lbCLNG.BackColor = Global.Config.ColorNG;
+            btnClNG.ForeColor = Global.Config.ColorNG;
+            AdjOpacity.Value=Global.Config.Opacity;
+            AdjThicknessLine.Value=Global.Config.ThicknessLine;
         }
 
      
@@ -156,6 +167,75 @@ namespace BeeUi
         private void btnNG_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.IsONNG = btnNG.IsCLick;
+        }
+
+        private void AdjRadEdit_ValueChanged(float obj)
+        {
+            Global.Config.RadEdit = (int)AdjRadEdit.Value;
+        }
+
+        private void btnShowBox_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowBox = btnShowBox.IsCLick;
+        }
+
+        private void btnShowDetail_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowDetail = btnShowDetail.IsCLick;
+        }
+
+        private void btnShowPositon_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowPostion = btnShowPositon.IsCLick;
+        }
+
+        private void AdjFontSize_ValueChanged(float obj)
+        {
+            Global.Config.FontSize = (int)AdjFontSize.Value;
+        }
+
+        private void btnChooseCLOK_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.ColorOK = colorChoose.Color;
+                lbClOK.BackColor = Global.Config.ColorOK;
+                btnClOK.ForeColor = Global.Config.ColorOK;
+            }
+        }
+
+        private void btnChooseNG_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.ColorNG = colorChoose.Color;
+                lbCLNG.BackColor = Global.Config.ColorNG;
+                btnClNG.ForeColor = Global.Config.ColorNG;
+            }
+        }
+
+        private void btnDefault_Click(object sender, EventArgs e)
+        {
+            Global.Config.ColorOK= Color.FromArgb(0, 172, 73);
+            lbClOK.BackColor = Global.Config.ColorOK;
+            btnClOK.ForeColor = Global.Config.ColorOK;
+        }
+
+        private void btnDefaultNg_Click(object sender, EventArgs e)
+        {
+            Global.Config.ColorNG = Color.DarkRed;
+            lbCLNG.BackColor = Global.Config.ColorNG;
+            btnClNG.ForeColor = Global.Config.ColorNG;
+        }
+
+        private void AdjOpacity_ValueChanged(float obj)
+        {
+            Global.Config.Opacity = (int)AdjOpacity.Value;
+        }
+
+        private void AdjThinkness_ValueChanged(float obj)
+        {
+            Global.Config.ThicknessLine=(int)AdjThicknessLine.Value;
         }
     }
 }

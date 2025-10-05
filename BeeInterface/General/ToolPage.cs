@@ -26,10 +26,10 @@ namespace BeeInterface
             InitializeComponent();
         }
         //23
-        public RJButton NewRadioButton(String name,int y)
+        public RJButton NewRadioButton(ItemNew item, int y)
         {
             RJButton btn = new RJButton();
-            btn.Name = "btn" + name;
+            btn.Name = item.TypeTool.ToString();
           btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             btn.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             if (IsRect)
@@ -53,21 +53,14 @@ namespace BeeInterface
            btn.FlatAppearance.BorderSize = 0;
            btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
            btn.ForeColor = System.Drawing.Color.White;
+
+            btn.Image = item.Icon;
           
-            btn.Image = (Image)Properties.Resources.ResourceManager.GetObject(name.Trim());
-          
-                name = name.Replace("_", " ");
-            if (name.Length < lenMax)
-            {
-                int numLen = lenMax - name.Length;
-                for ( int i= 0;i<numLen;i++)
-                    name += " ";
-                name += ".";
-            }
            
-                btn.Text = name;
-          
-                btn.Location = new System.Drawing.Point(25, y);
+           
+                btn.Text = item.TypeTool.ToString();
+
+            btn.Location = new System.Drawing.Point(25, y);
           //  if (!btn.Text.Contains("Color Area"))
             //    btn.Enabled = false;
            btn.Size = new System.Drawing.Size(277, 50);
@@ -85,15 +78,15 @@ namespace BeeInterface
         private void Btn_Click(object sender, EventArgs e)
         {
             RJButton btn = sender as RJButton;
-            String nameBtn = btn.Name.Replace("btn", "");
-
-            TypeTool = (TypeTool)Enum.Parse(typeof(TypeTool), nameBtn, true);
-         int index=   Global.itemNews.FindIndex(a => a.TypeTool == TypeTool);
+      
+         int index=   Global.itemNews.FindIndex(a => a.btn == btn);
             if(index>-1)
-            { String name = nameBtn.Replace("_", " ");
-                lbName.Text = name;
+            {
+                TypeTool = Global.itemNews[index].TypeTool;// (TypeTool)Enum.Parse(typeof(TypeTool), , true);
+              
+                lbName.Text = TypeTool.ToString();
                 lbContent.Text = Global.itemNews[index].Content;
-                img.Image= (Image)Properties.Resources.ResourceManager.GetObject("content"+ nameBtn);
+                img.Image = Global.itemNews[index].IconContent;// (Image)Properties.Resources.ResourceManager.GetObject("content"+ nameBtn);
             }
         }
 
@@ -122,14 +115,14 @@ namespace BeeInterface
                 {
                     case GroupTool.Basic_Tool:
 
-                        btn = NewRadioButton(name, y);
+                        btn = NewRadioButton(itemNew, y);
                         y += space;
                         btn.Parent = Basic_Tool;
                         //if (tool.TypeTool != TypeTool.Position_Adjustment&& tool.TypeTool != TypeTool.Pattern && tool.TypeTool != TypeTool.MatchingShape)
                         //    btn.Enabled = false;
                         break;
                     case GroupTool.Extra_Tool_1:
-                        btn = NewRadioButton(name, y2);
+                        btn = NewRadioButton(itemNew, y2);
                         // btn.Enabled = false;
                         y2 += space;
                         btn.Parent = Extra_Tool_1;
@@ -137,7 +130,7 @@ namespace BeeInterface
                         break;
                     case GroupTool.Extra_Tool_2:
 
-                        btn = NewRadioButton(name, y3);
+                        btn = NewRadioButton(itemNew, y3);
                         //btn.Enabled = false;
                         y3 += space;
                         btn.Parent = Extra_Tool_2;

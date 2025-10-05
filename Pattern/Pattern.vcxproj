@@ -118,6 +118,7 @@
       <PreprocessorDefinitions>COLORPIXELSCPP_EXPORTS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencv_world455.lib;%(AdditionalDependencies)</AdditionalDependencies>

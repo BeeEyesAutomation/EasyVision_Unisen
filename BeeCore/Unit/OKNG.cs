@@ -368,7 +368,7 @@ namespace BeeCore
                 //                       out int modelId, out int x, out int y, out int w, out int hgt))
                 //{
                 //    PointF pCenter = new PointF(x+w/2, y+hgt/2);
-                //    rectRotates.Add(new RectRotate(new RectangleF(-w / 2, -hgt / 2, w, hgt), pCenter, 0, AnchorPoint.None, false));
+                //    rectRotates.Add(new RectRotate(new RectangleF(-w / 2, -hgt / 2, w, hgt), pCenter, 0, AnchorPoint.None));
                 //    listScore.Add(score);
 
                 //    if (label > 0)
@@ -495,12 +495,14 @@ namespace BeeCore
                 //    cl = Color.Red;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 2);
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
-                Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , Global.fontRS, cl, brushText, 16, 2);
+                Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , font, cl, brushText, 16, Global.Config.ThicknessLine);
             else
-                Draws.Box2Label(gc, rotA._rect, ScoreNG + "% NG ", ScoreOK + "% OK", Global.fontRS, cl, brushText, 16, 2);
+                Draws.Box2Label(gc, rotA._rect, ScoreNG + "% NG ", ScoreOK + "% OK", font, cl, brushText, 16, Global.Config.ThicknessLine);
             gc.ResetTransform();
             //if (listScore == null) return gc;
             //if (rectRotates.Count > 0)

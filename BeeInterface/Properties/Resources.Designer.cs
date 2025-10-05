@@ -443,9 +443,9 @@ namespace BeeInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Edge_Pixels {
+        internal static System.Drawing.Bitmap Edge {
             get {
-                object obj = ResourceManager.GetObject("Edge_Pixels", resourceCulture);
+                object obj = ResourceManager.GetObject("Edge", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

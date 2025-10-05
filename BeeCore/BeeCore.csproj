@@ -148,6 +148,8 @@
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\CameraIOFast.cs" />
     <Compile Include="Func\ComboBoxExtensions.cs" />
+    <Compile Include="Func\Converts.cs" />
+    <Compile Include="Func\Crop.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
@@ -213,7 +215,6 @@
     <Compile Include="Unit\PositionAdj.cs" />
     <Compile Include="dataMat.cs" />
     <Compile Include="Parameter\G.cs" />
-    <Compile Include="Unit\EdgePixel.cs" />
     <Compile Include="LocalTool.cs" />
     <Compile Include="Unit\Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

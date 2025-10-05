@@ -315,9 +315,8 @@ namespace BeeCore.Funtion
             float ScaleW = (float)(withBox * 1.0 / szImg.Width);
             float ScaleH = (float)(heightBox * 1.0 / szImg.Height);
             float Scale = Math.Min(ScaleW, ScaleH);
-
-            image.Zoom = (int)(Scale * 100.0);
-
+            Global.ZoomMinimum = (int)(Scale * 100.0);
+            image.Zoom = (int)Global.ZoomMinimum;
             image.Invalidate();
         }
     }

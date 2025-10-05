@@ -357,7 +357,7 @@ namespace BeeInterface
             this.imgOK.Name = "imgOK";
             this.imgOK.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.None;
             this.imgOK.ShortcutsEnabled = false;
-            this.imgOK.Size = new System.Drawing.Size(395, 86);
+            this.imgOK.Size = new System.Drawing.Size(395, 103);
             this.imgOK.TabIndex = 1;
             this.imgOK.TextBackColor = System.Drawing.Color.White;
             this.imgOK.TextDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
@@ -767,7 +767,7 @@ namespace BeeInterface
             this.imgNG.Name = "imgNG";
             this.imgNG.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.None;
             this.imgNG.ShortcutsEnabled = false;
-            this.imgNG.Size = new System.Drawing.Size(393, 86);
+            this.imgNG.Size = new System.Drawing.Size(393, 100);
             this.imgNG.TabIndex = 2;
             this.imgNG.TextBackColor = System.Drawing.Color.White;
             this.imgNG.TextDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;

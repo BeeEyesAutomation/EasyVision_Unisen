@@ -177,9 +177,18 @@ namespace BeeGlobal
         Left,
         Right, None, Bottom, Top
     }
+    public enum ShapeType
+    {
+        Rectangle,
+        Ellipse,Hexagon,Polygon
+    }
+
     public enum AnchorPoint
     {
-        TopLeft, TopRight, BottomLeft, BottomRight, Rotation, Center, None
+        None,
+        TopLeft, TopRight, BottomLeft, BottomRight,
+        Rotation, Center,
+        V0, V1, V2, V3, V4, V5 , Vertex// 6 đỉnh lục giác
     }
     public enum Result
     {

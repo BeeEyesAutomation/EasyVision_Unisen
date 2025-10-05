@@ -102,7 +102,7 @@ namespace BeeCore
                     using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
-                    Mat matCrop = Common.CropRotatedRect(raw, rectRotate, rotMask);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
                     if(matProcess==null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();
@@ -138,7 +138,7 @@ namespace BeeCore
                         float width = Convert.ToSingle(radius * 2);
                         float height = Convert.ToSingle(radius * 2);
                         //float Score = Convert.ToSingle(100);
-                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None, false));
+                        rectRotates.Add(new RectRotate(new RectangleF(-width / 2, -height / 2, width, height), pCenter, angle, AnchorPoint.None));
                         
                         listP_Center.Add(new System.Drawing.Point((int)rotAreaAdjustment._PosCenter.X - (int)rotAreaAdjustment._rect.Width / 2 + (int)pCenter.X, (int)rotAreaAdjustment._PosCenter.Y - (int)rotAreaAdjustment._rect.Height / 2 + (int)pCenter.Y));
                         RadiusResult = (float)((radius) / Scale);
@@ -185,36 +185,21 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl = Global.ColorOK;
+                    cl =  Global.Config.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.ColorNG;
+                    cl = Global.Config.ColorNG;
                     break;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            if (!Global.IsHideTool)
-                Draws.Box1Label(gc, rotA._rect, nameTool, Global.fontTool, brushText, cl, 1);
-           
-            if (!Global.IsRun)
+            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+
+            if (!Global.IsRun || Global.Config.IsShowDetail)
             {
-                if (!matProcess.IsDisposed)
-                    if (!matProcess.Empty())
-                {
-                    gc.ResetTransform();
-                    mat = new Matrix();
-                    if (!Global.IsRun)
-                    {
-                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-                    }
-                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                    mat.Rotate(rotA._rectRotation);
-                    gc.Transform = mat;
-                    Bitmap myBitmap = matProcess.ToBitmap();
-                    myBitmap.MakeTransparent(Color.Black);
-                    myBitmap = General.ChangeToColor(myBitmap, Color.Red, 0.7f);
-                    gc.DrawImage(myBitmap, rotA._rect);
-                }
+                if (matProcess != null && !matProcess.Empty())
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
             }
             if (rectRotates.Count > 0)
             {
@@ -234,9 +219,11 @@ namespace BeeCore
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                    Draws.Plus(gc, 0, 0, (int)rot._rect.Width / 6, cl, 2);
-                    gc.DrawEllipse(new Pen(cl, 2), rot._rect);
-                    gc.DrawString("D:" + RadiusResult, new Font("Arial", 24, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
+                    int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height /4);
+                    Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
+
+                    gc.DrawEllipse(new Pen(cl, Global.Config.ThicknessLine), rot._rect);
+                    gc.DrawString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
                     gc.ResetTransform();
                     i++;
                 }
