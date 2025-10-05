@@ -273,8 +273,13 @@ namespace BeeCore
         var oldSmoothing = g.SmoothingMode;
         var oldTrans = g.Transform.Clone();
         g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        using (var m = new Matrix())
+            float rH = Global.Config.RadEdit;
+            if (rr._dragAnchor == AnchorPoint.Center)
+            {
+                
+                outlinePen = new Pen(Brushes.Blue, outlinePen.Width*2);
+            }
+            using (var m = new Matrix())
         {
                 if(!Global.IsRun)
                 {
@@ -341,7 +346,7 @@ namespace BeeCore
                 AnchorPoint hoverAnchor = AnchorPoint.None;
                 int hoverVertexIndex = -1;
 
-                float rH = Global.Config.RadEdit;
+             
                 RectangleF rect = rr._rect;
                 float centerXLocal = rect.X + rect.Width / 2f; // <-- luôn căn giữa bbox
 
@@ -371,7 +376,7 @@ namespace BeeCore
                         var tr = new RectangleF(rect.Right - rH / 2f, rect.Top - rH / 2f, rH, rH);
                         var bl = new RectangleF(rect.Left - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
                         var br = new RectangleF(rect.Right - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
-                        var rot = new RectangleF(centerXLocal - rH, rect.Top - 2f * rH, 2f * rH, 2f * rH);
+                        var rot = new RectangleF(centerXLocal - rH / 2f, rect.Top - rH,rH, rH);
 
                         if (tl.Contains(pLocal)) hoverAnchor = AnchorPoint.TopLeft;
                         else if (tr.Contains(pLocal)) hoverAnchor = AnchorPoint.TopRight;
@@ -380,15 +385,18 @@ namespace BeeCore
                         else if (rot.Contains(pLocal)) hoverAnchor = AnchorPoint.Rotation;
                     }
                 }
-
-                using (var brSel = new SolidBrush(Color.Blue))
+                    
+                      
+                    using (var brSel = new SolidBrush(Color.Blue))
                 using (var brHover = new SolidBrush(Color.Orange))
                 using (var brNone = new SolidBrush(Color.OrangeRed))
-                {
-                    Brush Pick(bool sel, bool hov) => sel ? (Brush)brSel : (hov ? (Brush)brHover : (Brush)brNone);
+                    {
+                       
+                        Brush Pick(bool sel, bool hov) => sel ? (Brush)brSel : (hov ? (Brush)brHover : (Brush)brNone);
 
                     if (rr.Shape == ShapeType.Hexagon)
-                    {
+                        {
+                           
                         var verts = rr.GetHexagonVerticesLocal();
                         for (int i = 0; i < 6; i++)
                         {
@@ -402,57 +410,62 @@ namespace BeeCore
                         var tr = new RectangleF(rect.Right - rH / 2f, rect.Top - rH / 2f, rH, rH);
                         var bl = new RectangleF(rect.Left - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
                         var br = new RectangleF(rect.Right - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
-                        var rot = new RectangleF(centerXLocal - rH, rect.Top - 2f * rH, 2f * rH, 2f * rH);
+                        var rot = new RectangleF(centerXLocal - rH / 2f, rect.Top -  rH,  rH,  rH);
+                         
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopLeft, hoverAnchor == AnchorPoint.TopLeft), tl);
+                                g.DrawRectangle(Pens.Black, tl.X, tl.Y, tl.Width, tl.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopLeft, hoverAnchor == AnchorPoint.TopLeft), tl);
-                        g.DrawRectangle(Pens.Black, tl.X, tl.Y, tl.Width, tl.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopRight, hoverAnchor == AnchorPoint.TopRight), tr);
+                                g.DrawRectangle(Pens.Black, tr.X, tr.Y, tr.Width, tr.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopRight, hoverAnchor == AnchorPoint.TopRight), tr);
-                        g.DrawRectangle(Pens.Black, tr.X, tr.Y, tr.Width, tr.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomLeft, hoverAnchor == AnchorPoint.BottomLeft), bl);
+                                g.DrawRectangle(Pens.Black, bl.X, bl.Y, bl.Width, bl.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomLeft, hoverAnchor == AnchorPoint.BottomLeft), bl);
-                        g.DrawRectangle(Pens.Black, bl.X, bl.Y, bl.Width, bl.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomRight, hoverAnchor == AnchorPoint.BottomRight), br);
+                                g.DrawRectangle(Pens.Black, br.X, br.Y, br.Width, br.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomRight, hoverAnchor == AnchorPoint.BottomRight), br);
-                        g.DrawRectangle(Pens.Black, br.X, br.Y, br.Width, br.Height);
-
-                        g.FillEllipse(Pick(rr._dragAnchor == AnchorPoint.Rotation, hoverAnchor == AnchorPoint.Rotation), rot);
-                        g.DrawEllipse(Pens.Black, rot);
+                                g.FillEllipse(Pick(rr._dragAnchor == AnchorPoint.Rotation, hoverAnchor == AnchorPoint.Rotation), rot);
+                                g.DrawEllipse(Pens.Black, rot);
+                            
                     }
                     else if (rr.Shape == ShapeType.Polygon)
-                    {
-                        var verts = rr.GetPolygonVerticesLocal();
-                        for (int i = 0; i < verts.Length; i++)
                         {
-                            var h = new RectangleF(verts[i].X - rH / 2f, verts[i].Y - rH / 2f, rH, rH);
-                            bool sel = (rr._dragAnchor == AnchorPoint.Vertex && rr.ActiveVertexIndex == i);
-                            bool hov = (hoverAnchor == AnchorPoint.Vertex && hoverVertexIndex == i);
-                            g.FillRectangle(Pick(sel, hov), h);
-                            g.DrawRectangle(Pens.Black, h.X, h.Y, h.Width, h.Height);
-                        }
+                          
+                                var verts = rr.GetPolygonVerticesLocal();
+                                for (int i = 0; i < verts.Length; i++)
+                                {
+                                    var h = new RectangleF(verts[i].X - rH / 2f, verts[i].Y - rH / 2f, rH, rH);
+                                    bool sel = (rr._dragAnchor == AnchorPoint.Vertex && rr.ActiveVertexIndex == i);
+                                    bool hov = (hoverAnchor == AnchorPoint.Vertex && hoverVertexIndex == i);
+                                    g.FillRectangle(Pick(sel, hov), h);
+                                    g.DrawRectangle(Pens.Black, h.X, h.Y, h.Width, h.Height);
+                                }
+                            
                     }
                     else
-                    {
-                        var tl = new RectangleF(rect.Left - rH / 2f, rect.Top - rH / 2f, rH, rH);
-                        var tr = new RectangleF(rect.Right - rH / 2f, rect.Top - rH / 2f, rH, rH);
-                        var bl = new RectangleF(rect.Left - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
-                        var br = new RectangleF(rect.Right - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
-                        var rot = new RectangleF(centerXLocal - rH, rect.Top - 2f * rH, 2f * rH, 2f * rH);
+                        {
+                          
+                                      var tl = new RectangleF(rect.Left - rH / 2f, rect.Top - rH / 2f, rH, rH);
+                                var tr = new RectangleF(rect.Right - rH / 2f, rect.Top - rH / 2f, rH, rH);
+                                var bl = new RectangleF(rect.Left - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
+                                var br = new RectangleF(rect.Right - rH / 2f, rect.Bottom - rH / 2f, rH, rH);
+                                var rot = new RectangleF(centerXLocal - rH / 2f, rect.Top - rH, rH, rH);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopLeft, hoverAnchor == AnchorPoint.TopLeft), tl);
-                        g.DrawRectangle(Pens.Black, tl.X, tl.Y, tl.Width, tl.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopLeft, hoverAnchor == AnchorPoint.TopLeft), tl);
+                                g.DrawRectangle(Pens.Black, tl.X, tl.Y, tl.Width, tl.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopRight, hoverAnchor == AnchorPoint.TopRight), tr);
-                        g.DrawRectangle(Pens.Black, tr.X, tr.Y, tr.Width, tr.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.TopRight, hoverAnchor == AnchorPoint.TopRight), tr);
+                                g.DrawRectangle(Pens.Black, tr.X, tr.Y, tr.Width, tr.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomLeft, hoverAnchor == AnchorPoint.BottomLeft), bl);
-                        g.DrawRectangle(Pens.Black, bl.X, bl.Y, bl.Width, bl.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomLeft, hoverAnchor == AnchorPoint.BottomLeft), bl);
+                                g.DrawRectangle(Pens.Black, bl.X, bl.Y, bl.Width, bl.Height);
 
-                        g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomRight, hoverAnchor == AnchorPoint.BottomRight), br);
-                        g.DrawRectangle(Pens.Black, br.X, br.Y, br.Width, br.Height);
+                                g.FillRectangle(Pick(rr._dragAnchor == AnchorPoint.BottomRight, hoverAnchor == AnchorPoint.BottomRight), br);
+                                g.DrawRectangle(Pens.Black, br.X, br.Y, br.Width, br.Height);
 
-                        g.FillEllipse(Pick(rr._dragAnchor == AnchorPoint.Rotation, hoverAnchor == AnchorPoint.Rotation), rot);
-                        g.DrawEllipse(Pens.Black, rot);
+                                g.FillEllipse(Pick(rr._dragAnchor == AnchorPoint.Rotation, hoverAnchor == AnchorPoint.Rotation), rot);
+                                g.DrawEllipse(Pens.Black, rot);
+                            
                     }
                 }
             }
