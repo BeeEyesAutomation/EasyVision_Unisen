@@ -55,7 +55,7 @@
             this.btnEntire = new BeeInterface.RJButton();
             this.btnTest = new BeeInterface.RJButton();
             this.btnLearning = new BeeInterface.RJButton();
-            this.trackScore = new BeeInterface.TrackBar2();
+            this.trackScore = new BeeInterface.AdjustBarEx();
             this.rjButton3 = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
@@ -475,7 +475,7 @@
             this.trackScore.Step = 1;
             this.trackScore.TabIndex = 28;
             this.trackScore.Value = 0;
-            this.trackScore.ValueScore = 0;
+            this.trackScore.Value = 0;
             this.trackScore.ValueChanged +=  new System.Action<float>(this.trackScore_ValueChanged);
             // 
             // rjButton3
@@ -883,7 +883,7 @@
         private RJButton btnHighSpeed;
         private RJButton btnNormal;
         private System.Windows.Forms.Label label1;
-        public TrackBar2 trackScore;
+        public AdjustBarEx trackScore;
         private System.Windows.Forms.PictureBox imgTemp;
         private RJButton btnLearning;
         private RJButton btnTest;

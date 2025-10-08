@@ -14,7 +14,7 @@ namespace BeeCore
     public struct G
     {
       
-        public static dynamic objYolo,np,objOCR,Classic;
+        public static dynamic objYolo,np,objOCR,objCraftOCR,Classic;
         public static bool IsChecked = false, IniEdge;
         public static bool IsSimulation = false,InitYolo=false,IniOCR;
         public static Common Common = new Common();

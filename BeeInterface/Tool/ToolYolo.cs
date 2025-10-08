@@ -1337,17 +1337,17 @@ namespace BeeInterface
 
         private void txtAddPLC_TextChanged(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].AddPLC =txtAddPLC.Text.Trim();
+            Propety.AddPLC =txtAddPLC.Text.Trim();
         }
 
         private void btnBits_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
+           // Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.Bits;
         }
 
         private void btnString_Click(object sender, EventArgs e)
         {
-            Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+           // Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
         }
     }
 }

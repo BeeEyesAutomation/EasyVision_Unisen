@@ -127,6 +127,10 @@ namespace BeeCore
                 config.ColorOK = Color.FromArgb(0, 172, 73);
             if (config.ColorNG.Name == "0")
                 config.ColorNG = Color.DarkRed;
+            if (config.ColorInfor.Name == "0")
+                config.ColorNG = Color.Blue;
+            if (config.ColorNone.Name == "0")
+                config.ColorNG = Color.Gray;
             if (config.RadEdit==0)
                 config.RadEdit = 40;
             if (config.FontSize == 0)

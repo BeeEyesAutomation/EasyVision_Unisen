@@ -202,12 +202,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SettingDevice.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingDevice.Designer.cs">
-      <DependentUpon>SettingDevice.cs</DependentUpon>
-    </Compile>
     <Compile Include="UiPerf.cs" />
     <Compile Include="Unit\AddFilters.cs">
       <SubType>UserControl</SubType>
@@ -360,9 +354,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GeneralSetting.resx">
       <DependentUpon>GeneralSetting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingDevice.resx">
-      <DependentUpon>SettingDevice.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\AddFilters.resx">
       <DependentUpon>AddFilters.cs</DependentUpon>

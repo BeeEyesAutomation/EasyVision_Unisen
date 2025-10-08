@@ -88,12 +88,6 @@
     <Compile Include="Custom\RoundedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Custom\TrackBar2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Custom\TrackBar2.Designer.cs">
-      <DependentUpon>TrackBar2.cs</DependentUpon>
-    </Compile>
     <Compile Include="DashBoard\DashboardImages.cs" />
     <Compile Include="DashBoard\DashboardListCompact.cs">
       <SubType>Component</SubType>
@@ -171,12 +165,6 @@
     <Compile Include="Custom\TextBoxAuto.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tool\ToolBarcode.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tool\ToolBarcode.Designer.cs">
-      <DependentUpon>ToolBarcode.cs</DependentUpon>
-    </Compile>
     <Compile Include="Tool\ToolCircle.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -189,11 +177,23 @@
     <Compile Include="Tool\ToolColorArea.Designer.cs">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolBarcode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolBarcode.Designer.cs">
+      <DependentUpon>ToolBarcode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolCrop.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tool\ToolCrop.Designer.cs">
       <DependentUpon>ToolCrop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolCraftOCR.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCraftOCR.Designer.cs">
+      <DependentUpon>ToolCraftOCR.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolMatchingShape.cs">
       <SubType>UserControl</SubType>
@@ -243,6 +243,12 @@
     <Compile Include="Tool\ToolPitch.Designer.cs">
       <DependentUpon>ToolPitch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolEdgePixel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolEdgePixel.Designer.cs">
+      <DependentUpon>ToolEdgePixel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolEdge.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -281,9 +287,6 @@
     <EmbeddedResource Include="CameraForm.resx">
       <DependentUpon>CameraForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Custom\TrackBar2.resx">
-      <DependentUpon>TrackBar2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="General\InforGroup.resx">
       <DependentUpon>InforGroup.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,17 +318,20 @@
     <EmbeddedResource Include="DashBoard\StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tool\ToolBarcode.resx">
-      <DependentUpon>ToolBarcode.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolCircle.resx">
       <DependentUpon>ToolCircle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolColorArea.resx">
       <DependentUpon>ToolColorArea.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolBarcode.resx">
+      <DependentUpon>ToolBarcode.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolCrop.resx">
       <DependentUpon>ToolCrop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolCraftOCR.resx">
+      <DependentUpon>ToolCraftOCR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
       <DependentUpon>ToolMatchingShape.cs</DependentUpon>
@@ -350,6 +356,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolPitch.resx">
       <DependentUpon>ToolPitch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolEdgePixel.resx">
+      <DependentUpon>ToolEdgePixel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolEdge.resx">
       <DependentUpon>ToolEdge.cs</DependentUpon>
@@ -642,6 +651,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Hand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Barcode.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

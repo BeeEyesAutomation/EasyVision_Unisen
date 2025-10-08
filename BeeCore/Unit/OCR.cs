@@ -410,8 +410,11 @@ namespace BeeCore
             {
                 
          G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
+                Common.PropetyTools[IndexThread][Index].StepValue = 1;
+                Common.PropetyTools[IndexThread][Index].MinValue = 0;
+
+                Common.PropetyTools[IndexThread][Index].MaxValue = 100;
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-           
             }
             return true;
         }

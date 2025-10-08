@@ -59,6 +59,12 @@ namespace BeeUi
             btnClOK.ForeColor = Global.Config.ColorOK;
             lbCLNG.BackColor = Global.Config.ColorNG;
             btnClNG.ForeColor = Global.Config.ColorNG;
+
+            lbCLInfor.BackColor = Global.Config.ColorInfor;
+            btnCLInfor.ForeColor = Global.Config.ColorInfor;
+            lbCLNone.BackColor = Global.Config.ColorNone;
+            btnCLNone.ForeColor = Global.Config.ColorNone;
+
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
         }
@@ -236,6 +242,40 @@ namespace BeeUi
         private void AdjThinkness_ValueChanged(float obj)
         {
             Global.Config.ThicknessLine=(int)AdjThicknessLine.Value;
+        }
+
+        private void btnChooseCLInfor_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.ColorInfor = colorChoose.Color;
+                lbCLInfor.BackColor = Global.Config.ColorInfor;
+                btnCLInfor.ForeColor = Global.Config.ColorInfor;
+            }
+        }
+
+        private void btnDefInfor_Click(object sender, EventArgs e)
+        {
+            Global.Config.ColorInfor = Color.Blue;
+            lbCLInfor.BackColor = Global.Config.ColorInfor;
+            btnCLInfor.ForeColor = Global.Config.ColorInfor;
+        }
+
+        private void btnChooseNone_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.ColorNone = colorChoose.Color;
+                lbCLNone.BackColor = Global.Config.ColorNone;
+                btnCLNone. ForeColor = Global.Config.ColorNone;
+            }
+        }
+
+        private void btnDefNone_Click(object sender, EventArgs e)
+        {
+            Global.Config.ColorNone = Color.LightGray;
+            lbCLNone.BackColor = Global.Config.ColorNone;
+            btnCLNone.ForeColor = Global.Config.ColorNone;
         }
     }
 }

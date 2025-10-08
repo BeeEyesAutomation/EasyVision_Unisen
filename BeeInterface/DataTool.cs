@@ -203,8 +203,14 @@ namespace BeeInterface
                 case TypeTool.Pitch:
                     control = new ToolPitch();
                     break;
+                case TypeTool.EdgePixel:
+                    control = new ToolEdgePixel();
+                    break;
                 case TypeTool.Edge:
                     control = new ToolEdge();
+                    break;
+                case TypeTool.CraftOCR:
+                    control = new ToolCraftOCR();
                     break;
                 default:
                     return null;
@@ -252,7 +258,7 @@ namespace BeeInterface
                 itemTool.IndexTool = Index;
                 itemTool.IndexThread = IndexThread;
                 PropetyTool.Propety.Index = Index;
-                itemTool.IconTool = (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
+                itemTool.IconTool = Global.itemNews[Global.itemNews.FindIndex(a => a.TypeTool == TypeTool)].Icon;// (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                 itemTool.Anchor= AnchorStyles.Top|AnchorStyles.Left|AnchorStyles.Right;
               
               
@@ -285,23 +291,8 @@ namespace BeeInterface
                
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
-                if (control.Propety.rotCrop == null)
-                    if (
-                       TypeTool != TypeTool.BarCode &&
-                      TypeTool != TypeTool.Learning &&
-                      TypeTool != TypeTool.OCR &&
-                      TypeTool != TypeTool.Circle &&
-                      TypeTool != TypeTool.Width &&
-                      TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
-                        control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-                    else
-                        control.Propety.rotCrop = null;
-                if (control.Propety.rotArea == null)
-                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-                if (control.Propety.rotMask == null)
-                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-
-               
+              
+              
 
 
                 control.Name =Nametool;
@@ -332,22 +323,7 @@ namespace BeeInterface
                 control.Propety = PropetyTool.Propety;
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
-                if(PropetyTool.Propety.rotCrop==null)
-                if (
-                   TypeTool != TypeTool.BarCode &&
-                  TypeTool != TypeTool.Learning &&
-                  TypeTool != TypeTool.OCR &&
-                  TypeTool != TypeTool.Circle &&
-                  TypeTool != TypeTool.Width &&
-                  TypeTool != TypeTool.Color_Area && TypeTool != TypeTool.MatchingShape && TypeTool != TypeTool.Measure)
-                    control.Propety.rotCrop = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-                else
-                    control.Propety.rotCrop = null;
-                if (PropetyTool.Propety.rotArea == null)
-                    control.Propety.rotArea = new RectRotate(new RectangleF(-szImg.Width / 2 + szImg.Width / 10, -szImg.Height / 2 + szImg.Width / 10, szImg.Width - szImg.Width / 5, szImg.Height - szImg.Width / 5), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-                if (PropetyTool.Propety.rotMask== null)
-                    control.Propety.rotMask = new RectRotate(new RectangleF(-with / 2, -height / 2, with, height), new PointF(szImg.Width / 2, szImg.Height / 2), 0, AnchorPoint.None);
-              
+               
                // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";
                 control.Name = PropetyTool.Name;

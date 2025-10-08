@@ -41,7 +41,7 @@ namespace BeeCppCli {
     public ref class PitchCliResult sealed {
     public:
         int Status;
-        System::String^ Message;
+        System:: String^ Message;
 
         // đơn vị
         double ScaleMmPerPx;

@@ -40,7 +40,7 @@ namespace BeeCpp {
         }
     private:
         ColorAreaPP* _ColorPP;
-        Common* com;
+        CommonPlus* com;
     public:
         void FreeBuffer(System::IntPtr p);
         void SetImgeRaw(IntPtr data, int width, int height, int stride, int channels);

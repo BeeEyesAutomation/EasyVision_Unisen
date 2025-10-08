@@ -64,7 +64,9 @@ namespace BeeUi
             }
                 else
                 {
-                    return new List<string>();
+                    BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
+                    BeeCore.Common.listCamera[Global.IndexChoose].Init(typeCamera);
+                    listStringCCD = BeeCore.Common.listCamera[Global.IndexChoose].Scan(typeCamera).ToList();
                 }
 
 

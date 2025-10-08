@@ -14,7 +14,7 @@ namespace BeeCpp
     };
     public ref class ColorPixel sealed
     {
-    private:Common* com = new Common();
+    private:CommonPlus* com = new CommonPlus();
     private:ColorPx* _img = new ColorPx();   // native pointer
     public:
         // So khớp ảnh (BGR8) từ bytes nén (PNG/JPG), trả RAW BGR (AllocHGlobal).

@@ -302,7 +302,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             
-            Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.pScroll, Global.ScaleZoom * 100, 16, Global.Config.ThicknessLine);
+            Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, 16, Global.Config.ThicknessLine);
            if(!Global.IsRun||Global.Config.IsShowDetail)
             if (matProcess != null && !matProcess.Empty())
                 Draws.DrawMatInRectRotate(gc, matProcess, rotA,  Global.ScaleZoom * 100, Global.pScroll, cl,Global.Config.Opacity/100.0f);

@@ -7,7 +7,6 @@ using namespace BeeCpp;
 using namespace std; 
 
 using namespace System;
-using namespace System::Runtime::InteropServices;
 inline int _mm_hsum_epi32(__m128i V)      // V3 V2 V1 V0
 {
 	// 實測這個速度要快些，_mm_extract_epi32最慢。
@@ -576,7 +575,7 @@ void Img::SortPtWithCenter(vector<Point2f>& vecSort)
 
 // ===== Pattern wrapper =====
 Pattern::Pattern() { 
-	img = new Img(); com = new Common(); }
+	img = new Img(); com = new CommonPlus(); }
 Pattern::~Pattern() { this->!Pattern(); }
 Pattern::!Pattern() { if (img) { delete img; img = nullptr; } }
 void Pattern::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
@@ -618,7 +617,7 @@ System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH
 	const int S = (int)img->matSample.step;
 	const size_t bytes = (size_t)S * H;
 
-	IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+	IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
 	if (mem == IntPtr::Zero) return IntPtr::Zero;
 	std::memcpy(mem.ToPointer(), img->matSample.data, bytes);
 	outW = W; outH = H; outStride = S; outChannels = C;
@@ -1129,7 +1128,7 @@ List<Rotaterectangle>^ Pattern::Match(
 //    auto results = gcnew List<Rotaterectangle>();
 // 
 //
-//		System::String^ listMatch = "";
+//		System:: String^ listMatch = "";
 //
 //		bool m_bToleranceRange = true;
 //

@@ -153,6 +153,7 @@
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
+    <Compile Include="Func\PolyOffset.cs" />
     <Compile Include="Items\ItemTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -161,6 +162,7 @@
     </Compile>
     <Compile Include="LabelItem.cs" />
     <Compile Include="MatrixExtension.cs" />
+    <Compile Include="Unit\Barcode.cs" />
     <Compile Include="Unit\Crop.cs" />
     <Compile Include="Unit\OKNGAPI.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -178,8 +180,8 @@
     <Compile Include="Unit\PitchGdiPainter.cs" />
     <Compile Include="Unit\VisualMatch.cs" />
     <Compile Include="Unit\Pitch.cs" />
+    <Compile Include="Unit\EdgePixel.cs" />
     <Compile Include="Unit\Edge.cs" />
-    <Compile Include="Unit\Width2.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">
@@ -219,8 +221,8 @@
     <Compile Include="Unit\Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropetyTool.cs" />
-    <Compile Include="Unit\BarCode.cs" />
     <Compile Include="Unit\OCR.cs" />
+    <Compile Include="Unit\CraftOCR.cs" />
     <Compile Include="Unit\Yolo.cs" />
   </ItemGroup>
   <ItemGroup>

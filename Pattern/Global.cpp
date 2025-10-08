@@ -5,7 +5,7 @@ using namespace cv;
 using namespace BeeCpp;
 using namespace std;
 /* ================= Raw buffer utils ================= */
-int Common::CvTypeFromChannels(int ch)
+int CommonPlus::CvTypeFromChannels(int ch)
 {
     switch (ch)
     {
@@ -15,14 +15,14 @@ int Common::CvTypeFromChannels(int ch)
     default: throw gcnew System::ArgumentOutOfRangeException("ch", "Only 1/3/4 channels supported");
     }
 }
-size_t Common::SafeStep(int w, int ch, int stride)
+size_t CommonPlus::SafeStep(int w, int ch, int stride)
 {
     if (stride > 0) return static_cast<size_t>(stride);
     return static_cast<size_t>(w) * static_cast<size_t>(ch); // 8-bit/channel giả định
 }
 
 /* ================= API cho C# ================= */
-IntPtr Common::CropRotatedRect(
+IntPtr CommonPlus::CropRotatedRect(
     IntPtr srcMatCvPtr, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly)
 {
     try
@@ -42,7 +42,7 @@ IntPtr Common::CropRotatedRect(
     }
 }
 
-void Common::CropTo(
+void CommonPlus::CropTo(
     IntPtr srcMatCvPtr, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly, IntPtr dstMatCvPtr)
 {
     try
@@ -62,21 +62,40 @@ void Common::CropTo(
         throw gcnew System::InvalidOperationException(gcnew System::String(e.what()));
     }
 }
+CropPlus::CropPlus() {
+   com = new CommonPlus();
+}
+void CropPlus::FreeBuffer(System::IntPtr p)
+{
+    if (p != System::IntPtr::Zero)
+        System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+}
 
-IntPtr Common::SetImgeRaw(
+CropPlus::~CropPlus() { this->!CropPlus(); }
+CropPlus::!CropPlus() { if (com) { delete com; com = nullptr; } }
+IntPtr CropPlus::CropRotatedInt(
     IntPtr data, int w, int h, int stride, int ch,
-    RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly)
+    RectRotateCli rr, Nullable<RectRotateCli> rrMask, 
+     int% outW,
+     int% outH,
+     int% outStride,
+     int% outChannels)
 {
     if (data == IntPtr::Zero || w <= 0 || h <= 0) return IntPtr::Zero;
     try
     {
-        const int type = CvTypeFromChannels(ch);
-        const size_t step = SafeStep(w, ch, stride);
+        const int type =com-> CvTypeFromChannels(ch);
+        const size_t step = com->SafeStep(w, ch, stride);
         cv::Mat src(h, w, type, data.ToPointer(), step); // header non-owning
 
         cv::Mat result;
-        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(src, rr, &m, returnMaskOnly, result); }
-        else { RunCrop(src, rr, nullptr, returnMaskOnly, result); }
+        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; com->RunCrop(src, rr, &m, false, result); }
+        else { com->RunCrop(src, rr, nullptr, false, result); }
+      
+        outW = result.cols;
+        outH = result.rows;
+        outChannels  = result.channels();    // =1
+        outStride = static_cast<int>(result.step);
 
         return IntPtr(new cv::Mat(result));
     }
@@ -86,7 +105,7 @@ IntPtr Common::SetImgeRaw(
     }
 }
 
-void Common::CropRotToMat(
+void CommonPlus::CropRotToMat(
     IntPtr data, int w, int h, int stride, int ch,
     RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly, IntPtr dstMatCvPtr)
 {
@@ -110,7 +129,7 @@ void Common::CropRotToMat(
     }
 }
 
-void Common::FreeMat(IntPtr p)
+void CommonPlus::FreeMat(IntPtr p)
 {
     auto* m = reinterpret_cast<cv::Mat*>(p.ToPointer());
     delete m;
@@ -118,7 +137,7 @@ void Common::FreeMat(IntPtr p)
 
 /* ================= Helpers lõi ================= */
 
-cv::Mat Common::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
+cv::Mat CommonPlus::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
 {
     cv::Mat matRs, matR = cv::getRotationMatrix2D(rot.center, rot.angle, 1);
     float tx = (rot.size.width - 1) / 2.0f - rot.center.x;
@@ -129,7 +148,7 @@ cv::Mat Common::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
     return matRs;
 }
 
-cv::Point2f Common::RotatePoint(const cv::Point2f& p, float degree)
+cv::Point2f CommonPlus::RotatePoint(const cv::Point2f& p, float degree)
 {
     const double rad = degree * CV_PI / 180.0;
     const double c = std::cos(rad), s = std::sin(rad);
@@ -139,7 +158,7 @@ cv::Point2f Common::RotatePoint(const cv::Point2f& p, float degree)
     );
 }
 
-void Common::GetPolygonBounds(const std::vector<cv::Point2f>& pts,
+void CommonPlus::GetPolygonBounds(const std::vector<cv::Point2f>& pts,
     float& minX, float& minY, float& maxX, float& maxY)
 {
     minX = std::numeric_limits<float>::max();
@@ -162,7 +181,7 @@ void Common::GetPolygonBounds(const std::vector<cv::Point2f>& pts,
     }
 }
 
-std::vector<cv::Point2f> Common::BuildHexLocalVertices(
+std::vector<cv::Point2f> CommonPlus::BuildHexLocalVertices(
     float w, float h, cli::array<PointF32>^ hexOffsets)
 {
     const float halfW = w * 0.5f;
@@ -191,7 +210,7 @@ std::vector<cv::Point2f> Common::BuildHexLocalVertices(
     return v;
 }
 
-void Common::GetAnchorSizeFor(
+void CommonPlus::GetAnchorSizeFor(
     const RectRotateCli% rr,
     cv::Point2f& worldAnchor,
     cv::Size2f& size,
@@ -254,7 +273,7 @@ void Common::GetAnchorSizeFor(
     localCenterForShape = { 0.f, 0.f };
 }
 
-std::vector<cv::Point> Common::AxisAlignedRectCorners(const cv::Point2f& c, int W, int H)
+std::vector<cv::Point> CommonPlus::AxisAlignedRectCorners(const cv::Point2f& c, int W, int H)
 {
     const float hx = 0.5f * W, hy = 0.5f * H;
     std::vector<cv::Point> pts(4);
@@ -265,7 +284,7 @@ std::vector<cv::Point> Common::AxisAlignedRectCorners(const cv::Point2f& c, int 
     return pts;
 }
 
-std::vector<cv::Point> Common::RegularHexFallback(
+std::vector<cv::Point> CommonPlus::RegularHexFallback(
     const cv::Point2f& centerInMask, float angleInPatch, int W, int H)
 {
     std::vector<cv::Point> pts;
@@ -285,7 +304,7 @@ std::vector<cv::Point> Common::RegularHexFallback(
     return pts;
 }
 
-std::vector<cv::Point> Common::PolyFromLocalPoints(
+std::vector<cv::Point> CommonPlus::PolyFromLocalPoints(
     const std::vector<cv::Point2f>& localPts,
     const cv::Point2f& centerInMask,
     float angleInPatch,
@@ -324,7 +343,7 @@ std::vector<cv::Point> Common::PolyFromLocalPoints(
     return out;
 }
 
-void Common::DrawShapeMaskIntoWithSize(
+void CommonPlus::DrawShapeMaskIntoWithSize(
     const RectRotateCli% rr,
     cv::Mat& mask,
     const cv::Point2f& centerInMask,
@@ -390,7 +409,7 @@ void Common::DrawShapeMaskIntoWithSize(
     }
 }
 
-void Common::RunCrop(
+void CommonPlus::RunCrop(
     const cv::Mat& src,
     const RectRotateCli% rr,
     const RectRotateCli* rrMask,

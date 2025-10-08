@@ -85,7 +85,7 @@ namespace BeeInterface
             this.btnCropHalt = new BeeInterface.RJButton();
             this.rjButton2 = new BeeInterface.RJButton();
             this.rjButton5 = new BeeInterface.RJButton();
-            this.trackBar21 = new BeeInterface.TrackBar2();
+            this.trackBar21 = new BeeInterface.AdjustBarEx();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.AdjClearBig = new BeeInterface.AdjustBarEx();
@@ -867,7 +867,7 @@ namespace BeeInterface
             this.layThreshod.RowCount = 1;
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.layThreshod.Size = new System.Drawing.Size(464, 50);
+            this.layThreshod.Size = new System.Drawing.Size(462, 50);
             this.layThreshod.TabIndex = 94;
             // 
             // label16
@@ -929,7 +929,7 @@ namespace BeeInterface
             this.AdjThreshod.Name = "AdjThreshod";
             this.AdjThreshod.Radius = 8;
             this.AdjThreshod.ShowValueOnThumb = true;
-            this.AdjThreshod.Size = new System.Drawing.Size(359, 40);
+            this.AdjThreshod.Size = new System.Drawing.Size(357, 40);
             this.AdjThreshod.SnapToStep = true;
             this.AdjThreshod.StartWithTextboxHidden = true;
             this.AdjThreshod.Step = 1F;
@@ -968,7 +968,7 @@ namespace BeeInterface
             this.layEdge.Padding = new System.Windows.Forms.Padding(5);
             this.layEdge.RowCount = 1;
             this.layEdge.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layEdge.Size = new System.Drawing.Size(464, 54);
+            this.layEdge.Size = new System.Drawing.Size(462, 54);
             this.layEdge.TabIndex = 93;
             // 
             // btnInvert
@@ -1019,7 +1019,7 @@ namespace BeeInterface
             this.btnInvert.Margin = new System.Windows.Forms.Padding(0);
             this.btnInvert.Multiline = false;
             this.btnInvert.Name = "btnInvert";
-            this.btnInvert.Size = new System.Drawing.Size(115, 44);
+            this.btnInvert.Size = new System.Drawing.Size(113, 44);
             this.btnInvert.TabIndex = 5;
             this.btnInvert.Text = "Invert";
             this.btnInvert.TextColor = System.Drawing.Color.Black;
@@ -1205,7 +1205,7 @@ namespace BeeInterface
             this.lbEdge.Location = new System.Drawing.Point(6, 306);
             this.lbEdge.Margin = new System.Windows.Forms.Padding(5, 15, 5, 0);
             this.lbEdge.Name = "lbEdge";
-            this.lbEdge.Size = new System.Drawing.Size(464, 32);
+            this.lbEdge.Size = new System.Drawing.Size(462, 32);
             this.lbEdge.TabIndex = 92;
             this.lbEdge.Text = "Extract Edge";
             this.lbEdge.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1227,7 +1227,7 @@ namespace BeeInterface
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(464, 55);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(462, 55);
             this.tableLayoutPanel2.TabIndex = 77;
             // 
             // btnEdge
@@ -1275,7 +1275,7 @@ namespace BeeInterface
             this.btnEdge.IsNotChange = false;
             this.btnEdge.IsRect = false;
             this.btnEdge.IsUnGroup = false;
-            this.btnEdge.Location = new System.Drawing.Point(307, 5);
+            this.btnEdge.Location = new System.Drawing.Point(305, 5);
             this.btnEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnEdge.Multiline = false;
             this.btnEdge.Name = "btnEdge";
@@ -1337,7 +1337,7 @@ namespace BeeInterface
             this.btnPattern.Margin = new System.Windows.Forms.Padding(0);
             this.btnPattern.Multiline = false;
             this.btnPattern.Name = "btnPattern";
-            this.btnPattern.Size = new System.Drawing.Size(151, 45);
+            this.btnPattern.Size = new System.Drawing.Size(150, 45);
             this.btnPattern.TabIndex = 2;
             this.btnPattern.Text = "Pattern";
             this.btnPattern.TextColor = System.Drawing.Color.Black;
@@ -1390,11 +1390,11 @@ namespace BeeInterface
             this.btnCorner.IsNotChange = false;
             this.btnCorner.IsRect = false;
             this.btnCorner.IsUnGroup = false;
-            this.btnCorner.Location = new System.Drawing.Point(156, 5);
+            this.btnCorner.Location = new System.Drawing.Point(155, 5);
             this.btnCorner.Margin = new System.Windows.Forms.Padding(0);
             this.btnCorner.Multiline = false;
             this.btnCorner.Name = "btnCorner";
-            this.btnCorner.Size = new System.Drawing.Size(151, 45);
+            this.btnCorner.Size = new System.Drawing.Size(150, 45);
             this.btnCorner.TabIndex = 3;
             this.btnCorner.Text = "Corner";
             this.btnCorner.TextColor = System.Drawing.Color.Black;
@@ -1411,7 +1411,7 @@ namespace BeeInterface
             this.label5.Location = new System.Drawing.Point(6, 204);
             this.label5.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(464, 32);
+            this.label5.Size = new System.Drawing.Size(462, 32);
             this.label5.TabIndex = 76;
             this.label5.Text = "Method Sample";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1461,7 +1461,7 @@ namespace BeeInterface
             this.trackAngle.Name = "trackAngle";
             this.trackAngle.Radius = 8;
             this.trackAngle.ShowValueOnThumb = true;
-            this.trackAngle.Size = new System.Drawing.Size(464, 50);
+            this.trackAngle.Size = new System.Drawing.Size(462, 50);
             this.trackAngle.SnapToStep = true;
             this.trackAngle.StartWithTextboxHidden = true;
             this.trackAngle.Step = 1F;
@@ -1490,7 +1490,7 @@ namespace BeeInterface
             this.lbAngle.Location = new System.Drawing.Point(6, 452);
             this.lbAngle.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.lbAngle.Name = "lbAngle";
-            this.lbAngle.Size = new System.Drawing.Size(464, 32);
+            this.lbAngle.Size = new System.Drawing.Size(462, 32);
             this.lbAngle.TabIndex = 74;
             this.lbAngle.Text = "Angle Range";
             this.lbAngle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1504,7 +1504,7 @@ namespace BeeInterface
             this.label13.Location = new System.Drawing.Point(6, 786);
             this.label13.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(464, 32);
+            this.label13.Size = new System.Drawing.Size(462, 32);
             this.label13.TabIndex = 73;
             this.label13.Text = "Score";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1518,7 +1518,7 @@ namespace BeeInterface
             this.lbPattern.Location = new System.Drawing.Point(6, 544);
             this.lbPattern.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.lbPattern.Name = "lbPattern";
-            this.lbPattern.Size = new System.Drawing.Size(464, 32);
+            this.lbPattern.Size = new System.Drawing.Size(462, 32);
             this.lbPattern.TabIndex = 72;
             this.lbPattern.Text = "Training Sample";
             this.lbPattern.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1532,7 +1532,7 @@ namespace BeeInterface
             this.label9.Location = new System.Drawing.Point(6, 107);
             this.label9.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(464, 32);
+            this.label9.Size = new System.Drawing.Size(462, 32);
             this.label9.TabIndex = 71;
             this.label9.Text = "Choose Area";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1546,7 +1546,7 @@ namespace BeeInterface
             this.label8.Location = new System.Drawing.Point(6, 10);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(464, 32);
+            this.label8.Size = new System.Drawing.Size(462, 32);
             this.label8.TabIndex = 70;
             this.label8.Text = "Search Range";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1596,7 +1596,7 @@ namespace BeeInterface
             this.trackScore.Name = "trackScore";
             this.trackScore.Radius = 8;
             this.trackScore.ShowValueOnThumb = true;
-            this.trackScore.Size = new System.Drawing.Size(464, 49);
+            this.trackScore.Size = new System.Drawing.Size(462, 49);
             this.trackScore.SnapToStep = true;
             this.trackScore.StartWithTextboxHidden = true;
             this.trackScore.Step = 1F;
@@ -1631,7 +1631,7 @@ namespace BeeInterface
             this.layPattern.Padding = new System.Windows.Forms.Padding(5);
             this.layPattern.RowCount = 1;
             this.layPattern.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layPattern.Size = new System.Drawing.Size(464, 200);
+            this.layPattern.Size = new System.Drawing.Size(462, 200);
             this.layPattern.TabIndex = 43;
             // 
             // imgTemp
@@ -1641,7 +1641,7 @@ namespace BeeInterface
             this.imgTemp.Location = new System.Drawing.Point(10, 10);
             this.imgTemp.Margin = new System.Windows.Forms.Padding(5);
             this.imgTemp.Name = "imgTemp";
-            this.imgTemp.Size = new System.Drawing.Size(281, 180);
+            this.imgTemp.Size = new System.Drawing.Size(280, 180);
             this.imgTemp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgTemp.TabIndex = 31;
             this.imgTemp.TabStop = false;
@@ -1690,11 +1690,11 @@ namespace BeeInterface
             this.btnLearning.IsNotChange = true;
             this.btnLearning.IsRect = false;
             this.btnLearning.IsUnGroup = true;
-            this.btnLearning.Location = new System.Drawing.Point(306, 15);
+            this.btnLearning.Location = new System.Drawing.Point(305, 15);
             this.btnLearning.Margin = new System.Windows.Forms.Padding(10);
             this.btnLearning.Multiline = false;
             this.btnLearning.Name = "btnLearning";
-            this.btnLearning.Size = new System.Drawing.Size(143, 170);
+            this.btnLearning.Size = new System.Drawing.Size(142, 170);
             this.btnLearning.TabIndex = 5;
             this.btnLearning.Text = "Teach Sample";
             this.btnLearning.TextColor = System.Drawing.Color.Black;
@@ -1718,7 +1718,7 @@ namespace BeeInterface
             this.lay2.Padding = new System.Windows.Forms.Padding(5);
             this.lay2.RowCount = 1;
             this.lay2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay2.Size = new System.Drawing.Size(464, 55);
+            this.lay2.Size = new System.Drawing.Size(462, 55);
             this.lay2.TabIndex = 41;
             // 
             // btnCrop
@@ -1771,7 +1771,7 @@ namespace BeeInterface
             this.btnCrop.Margin = new System.Windows.Forms.Padding(0);
             this.btnCrop.Multiline = false;
             this.btnCrop.Name = "btnCrop";
-            this.btnCrop.Size = new System.Drawing.Size(227, 45);
+            this.btnCrop.Size = new System.Drawing.Size(226, 45);
             this.btnCrop.TabIndex = 2;
             this.btnCrop.Text = "Area Temp";
             this.btnCrop.TextColor = System.Drawing.Color.Black;
@@ -1824,11 +1824,11 @@ namespace BeeInterface
             this.btnCropArea.IsNotChange = false;
             this.btnCropArea.IsRect = false;
             this.btnCropArea.IsUnGroup = false;
-            this.btnCropArea.Location = new System.Drawing.Point(232, 5);
+            this.btnCropArea.Location = new System.Drawing.Point(231, 5);
             this.btnCropArea.Margin = new System.Windows.Forms.Padding(0);
             this.btnCropArea.Multiline = false;
             this.btnCropArea.Name = "btnCropArea";
-            this.btnCropArea.Size = new System.Drawing.Size(227, 45);
+            this.btnCropArea.Size = new System.Drawing.Size(226, 45);
             this.btnCropArea.TabIndex = 3;
             this.btnCropArea.Text = "Area Check";
             this.btnCropArea.TextColor = System.Drawing.Color.Black;
@@ -1850,7 +1850,7 @@ namespace BeeInterface
             this.lay1.Name = "lay1";
             this.lay1.RowCount = 1;
             this.lay1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.lay1.Size = new System.Drawing.Size(464, 55);
+            this.lay1.Size = new System.Drawing.Size(462, 55);
             this.lay1.TabIndex = 39;
             // 
             // btnCropFull
@@ -1897,11 +1897,11 @@ namespace BeeInterface
             this.btnCropFull.IsNotChange = false;
             this.btnCropFull.IsRect = false;
             this.btnCropFull.IsUnGroup = false;
-            this.btnCropFull.Location = new System.Drawing.Point(232, 5);
+            this.btnCropFull.Location = new System.Drawing.Point(231, 5);
             this.btnCropFull.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.btnCropFull.Multiline = false;
             this.btnCropFull.Name = "btnCropFull";
-            this.btnCropFull.Size = new System.Drawing.Size(227, 45);
+            this.btnCropFull.Size = new System.Drawing.Size(226, 45);
             this.btnCropFull.TabIndex = 3;
             this.btnCropFull.Text = "Partial";
             this.btnCropFull.TextColor = System.Drawing.Color.Black;
@@ -1958,7 +1958,7 @@ namespace BeeInterface
             this.btnCropHalt.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnCropHalt.Multiline = false;
             this.btnCropHalt.Name = "btnCropHalt";
-            this.btnCropHalt.Size = new System.Drawing.Size(227, 45);
+            this.btnCropHalt.Size = new System.Drawing.Size(226, 45);
             this.btnCropHalt.TabIndex = 2;
             this.btnCropHalt.Text = "Entire";
             this.btnCropHalt.TextColor = System.Drawing.Color.Black;
@@ -2078,17 +2078,66 @@ namespace BeeInterface
             // 
             // trackBar21
             // 
+            this.trackBar21.AutoRepeatAccelDeltaMs = -5;
+            this.trackBar21.AutoRepeatAccelerate = true;
+            this.trackBar21.AutoRepeatEnabled = true;
+            this.trackBar21.AutoRepeatInitialDelay = 400;
+            this.trackBar21.AutoRepeatInterval = 60;
+            this.trackBar21.AutoRepeatMinInterval = 20;
+            this.trackBar21.AutoShowTextbox = false;
+            this.trackBar21.AutoSizeTextbox = true;
+            this.trackBar21.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.trackBar21.BarLeftGap = 10;
+            this.trackBar21.BarRightGap = 6;
+            this.trackBar21.ChromeGap = 10;
+            this.trackBar21.ChromeWidthRatio = 0.14F;
+            this.trackBar21.ColorBorder = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.trackBar21.ColorFill = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(213)))), ((int)(((byte)(143)))));
+            this.trackBar21.ColorScale = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.trackBar21.ColorThumb = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
+            this.trackBar21.ColorThumbBorder = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(201)))), ((int)(((byte)(110)))));
             this.trackBar21.ColorTrack = System.Drawing.Color.Gray;
+            this.trackBar21.Decimals = 0;
+            this.trackBar21.DisabledDesaturateMix = 0.3F;
+            this.trackBar21.DisabledDimFactor = 0.9F;
+            this.trackBar21.EdgePadding = 2;
+            this.trackBar21.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.trackBar21.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.trackBar21.KeyboardStep = 1F;
             this.trackBar21.Location = new System.Drawing.Point(129, 1934);
             this.trackBar21.Margin = new System.Windows.Forms.Padding(21, 28, 21, 28);
+            this.trackBar21.MatchTextboxFontToThumb = false;
             this.trackBar21.Max = 100F;
+            this.trackBar21.MaxTextboxWidth = 0;
+            this.trackBar21.MaxThumb = 1000;
+            this.trackBar21.MaxTrackHeight = 1000;
             this.trackBar21.Min = 0F;
+            this.trackBar21.MinChromeWidth = 64;
+            this.trackBar21.MinimumSize = new System.Drawing.Size(140, 36);
+            this.trackBar21.MinTextboxWidth = 16;
+            this.trackBar21.MinThumb = 24;
+            this.trackBar21.MinTrackHeight = 8;
             this.trackBar21.Name = "trackBar21";
+            this.trackBar21.Radius = 8;
+            this.trackBar21.ShowValueOnThumb = true;
             this.trackBar21.Size = new System.Drawing.Size(1647, 397);
-            this.trackBar21.Step = 0F;
+            this.trackBar21.SnapToStep = true;
+            this.trackBar21.StartWithTextboxHidden = true;
+            this.trackBar21.Step = 1E-06F;
             this.trackBar21.TabIndex = 22;
+            this.trackBar21.TextboxFontSize = 20F;
+            this.trackBar21.TextboxSidePadding = 12;
+            this.trackBar21.TextboxWidth = 56;
+            this.trackBar21.ThumbDiameterRatio = 1.15F;
+            this.trackBar21.ThumbValueBold = true;
+            this.trackBar21.ThumbValueFontScale = 1F;
+            this.trackBar21.ThumbValuePadding = -1;
+            this.trackBar21.TightEdges = true;
+            this.trackBar21.TrackHeightRatio = 0.4F;
+            this.trackBar21.TrackWidthRatio = 1F;
+            this.trackBar21.UnitText = "";
             this.trackBar21.Value = 10F;
-            this.trackBar21.ValueScore = 0F;
+            this.trackBar21.WheelStep = 1F;
             // 
             // tabPage1
             // 
@@ -2880,7 +2929,7 @@ namespace BeeInterface
         private System.Windows.Forms.TabPage tabPage3;
         private RJButton rjButton2;
         private RJButton rjButton5;
-        private TrackBar2 trackBar21;
+        private AdjustBarEx trackBar21;
         private System.Windows.Forms.Label label4;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private  System.Windows.Forms.TableLayoutPanel layPattern;

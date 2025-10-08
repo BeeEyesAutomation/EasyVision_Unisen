@@ -312,7 +312,7 @@ namespace BeeCpp
         );
 	
     private:
-		Common* com;
+		CommonPlus* com;
         Img* img;
     };
 }

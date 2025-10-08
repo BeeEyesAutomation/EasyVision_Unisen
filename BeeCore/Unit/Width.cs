@@ -243,13 +243,17 @@ namespace BeeCore
 
 
         }
+        public string AddPLC = "";
+        public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
+        public bool IsSendResult;
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (IsSendResult)
             {
                 if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {
-                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   
+                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
                 }
             }
         }
@@ -286,7 +290,7 @@ namespace BeeCore
 
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
             if (!Global.IsRun||Global.Config.IsShowDetail)
             {

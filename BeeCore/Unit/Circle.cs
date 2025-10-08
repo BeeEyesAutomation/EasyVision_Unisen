@@ -194,7 +194,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
             if (!Global.IsRun || Global.Config.IsShowDetail)
             {
@@ -240,8 +240,8 @@ namespace BeeCore
             {
                 if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {   
-                    if(listP_Center.Count>0)
-                        await Global.ParaCommon.Comunication.Protocol.WriteResultString(Common.PropetyTools[IndexThread][Index].AddPLC,  listP_Center[0].X+ "," + listP_Center[0].Y + "," + RadiusResult);
+                   // if(listP_Center.Count>0)
+                     //   await Global.ParaCommon.Comunication.Protocol.WriteResultString(Common.PropetyTools[IndexThread][Index].AddPLC,  listP_Center[0].X+ "," + listP_Center[0].Y + "," + RadiusResult);
                 }
             }
         }

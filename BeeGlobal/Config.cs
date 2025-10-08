@@ -18,6 +18,7 @@ namespace BeeGlobal
         public Color ColorOK;
         public Color ColorNG;
         public Color ColorNone;
+        public Color ColorInfor;
         public Color TextColor;
 
         public int ThicknessLine = 4;

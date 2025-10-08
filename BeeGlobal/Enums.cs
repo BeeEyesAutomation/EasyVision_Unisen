@@ -144,7 +144,7 @@ namespace BeeGlobal
     {
         Edit,
         Check,
-        Color,None
+        Color,None,Choose
     }
     public enum StatusIO
     {
@@ -226,7 +226,9 @@ namespace BeeGlobal
         Corner=18,
         VisualMatch=19,
         Pitch = 20,//note
-        Edge=21,
+        EdgePixel= 21, 
+        Edge=22,
+        CraftOCR = 23,
     }
     public enum TypeOCR
     {

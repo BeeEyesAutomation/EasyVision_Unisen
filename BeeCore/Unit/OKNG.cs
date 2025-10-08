@@ -497,7 +497,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
                 Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , font, cl, brushText, 16, Global.Config.ThicknessLine);

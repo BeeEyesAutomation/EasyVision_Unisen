@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCpp;
+using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -6,22 +7,170 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO.Ports;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using Point = OpenCvSharp.Point;
+using ShapeType = BeeGlobal.ShapeType;
 using Size = System.Drawing.Size;
 
 namespace BeeCore
 {
     public class Draws
     {
-     
+        public static void DrawLineDebug(
+       Graphics g,
+       Line2DCli r,
+       float thresholdPx = 1.5f,
+       IEnumerable<PointF> samples = null,   // tập điểm (edge non-zero) để tô inlier/outlier; có thể null
+       bool drawInliers = true,
+       bool drawOutliers = false,
+       Matrix worldToScreen = null,          // null = vẽ theo toạ độ ảnh 1:1
+       int lineThickness = 2,
+       int bandThickness = 1,
+       int pointRadius = 1,
+       string infoTextTop = null            // override text; null = auto
+   )
+        {
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.CompositingQuality = CompositingQuality.HighQuality;
+            g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            g.PixelOffsetMode = PixelOffsetMode.Half;
+
+            if (!r.Found)
+            {
+                 var font = new Font("Segoe UI", 10f, FontStyle.Regular);
+                 var br = new SolidBrush(Color.White);
+                g.DrawString("No line found", font, br, 10, 10);
+                return;
+            }
+
+            // Endpoints
+            var P1 = new PointF(r.X1, r.Y1);
+            var P2 = new PointF(r.X2, r.Y2);
+
+            // Hướng đơn vị v (từ fitLine)
+            var v = new PointF(r.Vx, r.Vy);
+            // Pháp tuyến đơn vị n = (-vy, vx)
+            var n = new PointF(-v.Y, v.X);
+
+            // 1) Band (±threshold): dựng 4 điểm polygon: P1+off, P2+off, P2-off, P1-off
+            var off = new PointF(n.X * thresholdPx, n.Y * thresholdPx);
+            var p1p = Add(P1, off);
+            var p2p = Add(P2, off);
+            var p1m = Sub(P1, off);
+            var p2m = Sub(P2, off);
+
+            var poly = new[] { p1p, p2p, p2m, p1m };
+            Transform(worldToScreen, poly);
+
+            // tô băng mờ
+            using (var bandBrush = new SolidBrush(Color.FromArgb(60, 50, 150, 255))) // xanh dương mờ
+                g.FillPolygon(bandBrush, poly);
+
+            // viền băng
+            using (var bandPen = new Pen(Color.FromArgb(160, 50, 150, 255), bandThickness))
+            {
+                g.DrawLine(bandPen, poly[0], poly[1]);
+                g.DrawLine(bandPen, poly[2], poly[3]);
+            }
+
+            // 2) Vẽ line chính + endpoint
+            var sP1 = P1; var sP2 = P2;
+            Transform(worldToScreen, ref sP1);
+            Transform(worldToScreen, ref sP2);
+
+            using (var linePen = new Pen(Color.Gold, lineThickness))
+                g.DrawLine(linePen, sP1, sP2);
+
+            using (var endBrush = new SolidBrush(Color.LimeGreen))
+            {
+                FillCircle(g, endBrush, sP1, Math.Max(2, lineThickness + 1));
+                FillCircle(g, endBrush, sP2, Math.Max(2, lineThickness + 1));
+            }
+
+            // 3) Inlier/Outlier (nếu có sample)
+            if ((drawInliers || drawOutliers) && samples != null)
+            {
+                // ax + by + c = 0 từ (v, p0) với n = (vy, -vx)
+                double a = v.Y;
+                double b = -v.X;
+                double c = -(a * r.X0 + b * r.Y0);
+                double invDen = 1.0 / Math.Sqrt(a * a + b * b);
+
+                 var brIn = new SolidBrush(Color.FromArgb(220, 0, 180, 0));
+                 var brOut = new SolidBrush(Color.FromArgb(220, 220, 0, 0));
+
+                int step = 1; // nếu nhiều điểm quá, tăng step
+                int i = 0;
+                foreach (var pt in samples)
+                {
+                    if ((i++ % step) != 0) continue;
+
+                    double d = Math.Abs(a * pt.X + b * pt.Y + c) * invDen;
+                    bool isIn = d < thresholdPx;
+
+                    if ((isIn && drawInliers) || (!isIn && drawOutliers))
+                    {
+                        var sp = pt;
+                        Transform(worldToScreen, ref sp);
+                        FillCircle(g, isIn ? brIn : brOut, sp, pointRadius);
+                    }
+                }
+            }
+
+            // 4) Text info
+             var fontInfo = new Font("Segoe UI", 9f, FontStyle.Regular);
+             var brText = new SolidBrush(Color.White);
+             var outline = new Pen(Color.FromArgb(120, 0, 0, 0), 3f)
+            { LineJoin = LineJoin.Round, StartCap = LineCap.Round, EndCap = LineCap.Round };
+
+            string ln = infoTextTop ??
+                        $"len={r.LengthPx:F2}px / {r.LengthMm:F3}mm | score={r.Score:F2} | inliers={r.Inliers}";
+            string th = $"threshold={thresholdPx:F2}px";
+
+            DrawTextWithOutline(g, ln, fontInfo, new PointF(10, 10), brText, outline);
+            DrawTextWithOutline(g, th, fontInfo, new PointF(10, 28), brText, outline);
+        }
+
+        // ===== Utils =====
+        private static PointF Add(PointF a, PointF b) => new PointF(a.X + b.X, a.Y + b.Y);
+        private static PointF Sub(PointF a, PointF b) => new PointF(a.X - b.X, a.Y - b.Y);
+
+        private static void Transform(Matrix m, ref PointF p)
+        {
+            if (m == null) return;
+            var arr = new[] { p };
+            m.TransformPoints(arr);
+            p = arr[0];
+        }
+        private static void Transform(Matrix m, PointF[] pts)
+        {
+            if (m == null) return;
+            m.TransformPoints(pts);
+        }
+
+        private static void FillCircle(Graphics g, Brush br, PointF center, int radius)
+        {
+            float d = radius * 2f;
+            g.FillEllipse(br, center.X - radius, center.Y - radius, d, d);
+        }
+
+        private static void DrawTextWithOutline(Graphics g, string text, Font font, PointF p, Brush fill, Pen outline)
+        {
+             var gp = new GraphicsPath();
+            gp.AddString(text, font.FontFamily, (int)font.Style, g.DpiY * font.SizeInPoints / 72f, p, StringFormat.GenericDefault);
+            g.DrawPath(outline, gp);
+            g.FillPath(fill, gp);
+        }
+
         public static void DrawTicks(Graphics gc,System.Drawing. PointF p, LineOrientation ori,Pen pen)
         {
-            int tickLen = 10;
+            int tickLen = 50;
             if (ori == LineOrientation.Any || ori == LineOrientation.Vertical)
             {
                 // Vertical ticks
@@ -110,10 +259,10 @@ namespace BeeCore
             // Vẽ text (trong rectangle, có padding)
             graphics.DrawString(text, font, textBrush, labelX + padding, labelY + padding);
         }
-        public static void Box1Label(Graphics graphics, RectRotate rot, string text, Font font, Brush textBrush, Color backgroundBrush,System.Drawing. Point pScroll,float Zoom, int thiness = 4, bool alignRight = false)
+        public static void Box1Label(Graphics graphics, RectRotate rot, string text, Font font, Brush textBrush, Color backgroundBrush, int thiness = 4, bool alignRight = false)
         {
-            DrawRectRotate(graphics, rot, Zoom, pScroll, new Pen(backgroundBrush, thiness),false);
-           
+            DrawRectRotate(graphics, rot, new Pen(backgroundBrush, thiness));
+            
             // Đo kích thước vùng text
             SizeF textSize = graphics.MeasureString(text, font);
 
@@ -202,9 +351,9 @@ namespace BeeCore
             }
         }
 
-        public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, System.Drawing.Point pScroll, float Zoom, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
+        public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
-            DrawRectRotate(graphics, baseRect, Zoom, pScroll, new Pen(baseBackColor, thiness), false);
+            DrawRectRotate(graphics, baseRect, new Pen(baseBackColor, thiness));
             float fontSize = baseFont.Size;
 
             Font currentFont;
@@ -261,7 +410,7 @@ namespace BeeCore
             }
         }
 
-        static void DrawRectRotate(
+    public    static void DrawRectRotate(
     Graphics g, RectRotate rr,
     float zoomPercent, System.Drawing.Point scroll,
     Pen outlinePen,
@@ -476,7 +625,76 @@ namespace BeeCore
         g.SmoothingMode = oldSmoothing;
         oldTrans.Dispose();
     }
+        static void DrawRectRotate(Graphics g, RectRotate rr,
+                          
+                           Color edge, float penWidth = 2f,
+                           bool fill = false, float fillAlpha = 64)
+        {
+           
+             
+                //mat.Translate(rr._PosCenter.X, rr._PosCenter.Y);
+                //mat.Rotate(rr._rectRotation);
 
+                //var old = g.Transform;
+                //g.Transform = mat;
+
+                // Vẽ polygon local
+                var pts = rr.PolyLocalPoints;
+                if (pts != null && pts.Count >= 2)
+                {
+                    using (var pen = new Pen(edge, penWidth )) // giữ độ dày tương đối khi zoom
+                    {
+                        if (fill)
+                        {
+                            using (var br = new SolidBrush(Color.FromArgb((int)fillAlpha, edge)))
+                            {
+                                g.FillPolygon(br, pts.ToArray());
+                            }
+                        }
+                        g.DrawPolygon(pen, pts.ToArray());
+                    }
+                }
+
+                // Vẽ bounding rect local nếu muốn
+                // g.DrawRectangle(Pens.Yellow, rr._rect.X, rr._rect.Y, rr._rect.Width, rr._rect.Height);
+
+               // g.Transform = old;
+            
+        }
+
+        public static void DrawRectRotate(
+Graphics g, RectRotate rr,
+Pen outlinePen)
+        {
+            if (rr == null) return;
+
+            var oldSmoothing = g.SmoothingMode;
+            var oldTrans = g.Transform.Clone();
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+          
+                using (var path = new GraphicsPath())
+                {
+                    switch (rr.Shape)
+                    {
+                        case ShapeType.Rectangle: path.AddRectangle(rr._rect); break;
+                        case ShapeType.Ellipse: path.AddEllipse(rr._rect); break;
+                        case ShapeType.Hexagon: path.AddPolygon(rr.GetHexagonVerticesLocal()); break;
+                        case ShapeType.Polygon:
+                            var poly = rr.GetPolygonVerticesLocal();
+                            if (poly != null && poly.Length >= 2)
+                            {
+                                if (rr.IsPolygonClosed) path.AddPolygon(poly);
+                                else path.AddLines(poly);
+                            }
+                            break;
+                    }
+                    if (outlinePen != null) g.DrawPath(outlinePen, path);
+                }
+
+              
+
+      
+        }
         static GraphicsPath BuildLocalPath(RectRotate rr)
         {
             var p = new GraphicsPath();

@@ -104,7 +104,7 @@ namespace BeeInterface
         public void LoadGuiAllTool()
         {
             int y= 23; int y2 = 23; int y3 = 23;
-            int space = 70;
+            int space = 60;
          
             foreach(ItemNew itemNew in Global.itemNews)
             {

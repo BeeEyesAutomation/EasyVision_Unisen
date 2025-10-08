@@ -5,7 +5,6 @@
 #include <atomic>
 
 using namespace System;
-using namespace System::Runtime::InteropServices;
 using namespace BeeCpp;
 using namespace cv;
 
@@ -159,7 +158,7 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
     const int W = _img->temp.cols, H = _img->temp.rows, C = _img->temp.channels();
     const int S = (int)_img->temp.step;
     const size_t bytes = (size_t)S * H;
-    IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+    IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
     if (mem == IntPtr::Zero) return IntPtr::Zero;
     std::memcpy(mem.ToPointer(), _img->temp.data, bytes);
     outW = W; outH = H; outStride = S; outChannels = C;
@@ -205,7 +204,7 @@ IntPtr ColorPixel::CheckImageFromBytes(
     const int S = (int)annotated.step;
     const size_t bytes = (size_t)S * H;
 
-    IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+    IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
     if (mem == IntPtr::Zero) return IntPtr::Zero;
     std::memcpy(mem.ToPointer(), annotated.data, bytes);
 
@@ -240,7 +239,7 @@ IntPtr ColorPixel::CheckImageFromMat(
     const int S = (int)annotated.step;
     const size_t bytes = (size_t)S * H;
 
-    IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+    IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
     if (mem == IntPtr::Zero) 
         return IntPtr::Zero;
     std::memcpy(mem.ToPointer(), annotated.data, bytes);
@@ -252,5 +251,5 @@ IntPtr ColorPixel::CheckImageFromMat(
 
 void ColorPixel::FreeBuffer(IntPtr p)
 {
-    if (p != IntPtr::Zero) Marshal::FreeHGlobal(p);
+    if (p != IntPtr::Zero) System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
 }

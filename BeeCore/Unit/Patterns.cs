@@ -49,7 +49,8 @@ namespace BeeCore
         public int SizeClearBig = 1;
         public int SizeClose = 1;
         public int SizeOpen = 1;
-
+        public string AddPLC = "";
+        public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         [NonSerialized]
         public Mat matTemp;
         public List<Point> Postion=new List<Point>();
@@ -102,8 +103,26 @@ namespace BeeCore
         public RectangleF rectArea;
         public Compares Compare = Compares.Equal;
         public int LimitCounter = 0;
+        public bool IsSendResult;
         public async Task SendResult()
         {
+            if (IsSendResult)
+            {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {
+                    int i = 0; 
+                    int Add=(int)Converts.StringtoDouble(AddPLC);
+                    String sAdd = Converts.BeforeFirstDigit(AddPLC);
+                    foreach (System.Drawing.Point point in listP_Center)
+                    {
+                        String Address = sAdd + Add;
+                        float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i],(float) listScore[i] };
+                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
+                        Add += 8;
+                         i++;
+                    }
+                }
+            }
         }
         public bool IsAreaWhite=false;
       
@@ -396,7 +415,7 @@ namespace BeeCore
 
         //IsProcess,Convert.ToBoolean((int) TypeMode)
         public List<RectRotate> rectRotates = new List<RectRotate>();
-    public  List<float>list_AngleCenter =new List<float>();
+         public  List<float>list_AngleCenter =new List<float>();
 
         public bool IsLimitCouter = true;
         public void DoWork(RectRotate rectRotate)
@@ -648,7 +667,7 @@ namespace BeeCore
 			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom*100, Global.Config.ThicknessLine);
+				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
 			gc.ResetTransform();
 			if (listScore == null) return gc;
 			if (rectRotates.Count > 0)

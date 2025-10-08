@@ -495,15 +495,18 @@ namespace BeeCore
 
 
         //}
+        public string AddPLC = "";
+        public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
+        public bool IsSendResult;
         public ArrangeBox ArrangeBox=new ArrangeBox();
         public bool IsArrangeBox = false;
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (IsSendResult)
             {
                if( Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {
-                  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(Common.PropetyTools[IndexThread][Index].AddPLC, BitsResult);
+                  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
                 }
             }
         }
@@ -1000,7 +1003,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
             int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
@@ -1052,7 +1055,7 @@ namespace BeeCore
                     gc.Transform = mat;
                 } 
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
-                Color clShow = Color.LightGray;
+                Color clShow = Global.Config.ColorNone;
                 if (listOK[i] == true)
                     clShow = cl;
                 if (index > -1)

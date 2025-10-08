@@ -12,7 +12,6 @@
 #using <System.Windows.Forms.dll> 
 #using <System.Drawing.dll> 
 using namespace System;
-
 namespace BeeCpp
 {
     public enum class ShapeType : int
@@ -48,8 +47,7 @@ namespace BeeCpp
        cli:: array<PointF32>^ PolyLocalPoints;   // chỉ cho Polygon (local, không xoay)
        cli::array<PointF32>^ HexVertexOffsets;  // chỉ cho Hexagon (offset so với hex mặc định theo RectWH)
     };
-
-      class Common 
+      class CommonPlus 
     {
     public:
         // ==== API gọi từ C# với OpenCvSharp ====
@@ -68,11 +66,7 @@ namespace BeeCpp
             IntPtr dstMatCvPtr
         );
 
-         IntPtr SetImgeRaw(       // từ buffer raw → crop → trả về Mat*
-            IntPtr data, int w, int h, int stride, int ch,
-            RectRotateCli rr, Nullable<RectRotateCli> rrMask,
-            bool returnMaskOnly
-        );
+        
 
          void CropRotToMat(       // từ buffer raw → crop → ghi dst
             IntPtr data, int w, int h, int stride, int ch,
@@ -127,7 +121,7 @@ namespace BeeCpp
             int W, int H,
             const cv::Point2f& localCenterForShape);
 
-    private:
+    public:
         // === tiện ích nội bộ ===
         static inline std::vector<cv::Point2f> ToVec(cli::array<PointF32>^ a)
         {
@@ -151,5 +145,22 @@ namespace BeeCpp
 
          int    CvTypeFromChannels(int ch);
          size_t SafeStep(int w, int ch, int stride);
+    };
+    public ref class CropPlus
+    {
+    public:
+        CropPlus();
+        ~CropPlus();
+        !CropPlus();
+        void FreeBuffer(System::IntPtr p);
+        IntPtr CropRotatedInt(
+            IntPtr data, int w, int h, int stride, int ch,
+            RectRotateCli rr, Nullable<RectRotateCli> rrMask,
+             int% outW,
+             int% outH,
+            int% outStride,
+            int% outChannels);
+    private:
+        CommonPlus* com = new CommonPlus();
     };
 }

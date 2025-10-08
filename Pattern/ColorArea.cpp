@@ -8,8 +8,7 @@ using namespace std;
 using namespace System;
 using namespace BeeCpp;
 
-using namespace System::Runtime::InteropServices;
-ColorArea::ColorArea() { _ColorPP=new ColorAreaPP(); com = new Common(); }
+ColorArea::ColorArea() { _ColorPP=new ColorAreaPP(); com = new CommonPlus(); }
 ColorArea::~ColorArea() { this->!ColorArea(); }
 ColorArea::!ColorArea() { if (_ColorPP) { delete _ColorPP; _ColorPP = nullptr; } }
 void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
@@ -232,21 +231,19 @@ RGBCli^ ColorArea::GetRGB(int x, int y)
 
 }
 // C++/CLI
-#include <opencv2/opencv.hpp>
-using namespace System;
-using namespace System::Runtime::InteropServices;
+
 
 static inline int clampi(int v, int lo, int hi) { return (v < lo) ? lo : (v > hi) ? hi : v; }
 void ColorArea::FreeBuffer(System::IntPtr p)
 {
     if (p != System::IntPtr::Zero)
-        System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+       System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
 }
 System::IntPtr ColorArea::Check(
-    [Out] int% outW,
-    [Out] int% outH,
-    [Out] int% outStride,
-    [Out] int% outChannels)
+     int% outW,
+     int% outH,
+     int% outStride,
+     int% outChannels)
 {
     outW = outH = outStride = outChannels = 0;
 
@@ -367,7 +364,7 @@ System::IntPtr ColorArea::Check(
         const size_t bytes = static_cast<size_t>(S) * static_cast<size_t>(H);
 
         // 6) Cấp phát HGlobal + copy dữ liệu ra ngoài
-        IntPtr mem = Marshal::AllocHGlobal(static_cast<IntPtr>((long long)bytes));
+        IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal(static_cast<IntPtr>((long long)bytes));
         if (mem == IntPtr::Zero) return IntPtr::Zero;
 
         std::memcpy(mem.ToPointer(), _ColorPP->matProcess.data, bytes);
@@ -445,7 +442,7 @@ System::IntPtr ColorArea::Check(
 //    const int W = _ColorPP->matProcess.cols, H = _ColorPP->matProcess.rows, C = _ColorPP->matProcess.channels();
 //    const int S = (int)_ColorPP->matProcess.step;
 //    const size_t bytes = (size_t)S * H;
-//    IntPtr mem = Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+//    IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
 //    if (mem == IntPtr::Zero) return IntPtr::Zero;
 //    std::memcpy(mem.ToPointer(), _ColorPP->matProcess.data, bytes);
 //    outW = W; outH = H; outStride = S; outChannels = C;

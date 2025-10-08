@@ -119,19 +119,10 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="BarCode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Qr Code.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\Barcode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BID_SLIDER_HANDLE_NON_ACTIVE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_SLIDER_HANDLE_NON_ACTIVE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_HANDLE_NON_NORMAL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_HANDLE_NON_NORMAL.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_HANDLE_NON_ROLLOVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_HANDLE_NON_ROLLOVER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_HANDLE_NON_THRESHOLD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_HANDLE_NON_THRESHOLD.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BID_SLIDER_HANDLE_OFF_DISABLE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_SLIDER_HANDLE_OFF_DISABLE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,24 +148,6 @@
   <data name="BID_SLIDER_HANDLE_ON_ROLLOVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_SLIDER_HANDLE_ON_ROLLOVER.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BID_SLIDER_SCALE_8PIX_W101" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_SCALE_8PIX_W101.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_SCALE_8PIX_W202" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_SCALE_8PIX_W202.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_SCALE_8PIX_W303" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_SCALE_8PIX_W303.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_SLIDER_SCALE_8PIX_WHITE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_SLIDER_SCALE_8PIX_WHITE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_TOOL_HELPIMAGE_EDGE_PRESENCE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BID_TOOL_HELPIMAGE_EDGE_WIDTH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Camera" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Camera.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -193,8 +166,20 @@
   <data name="Color_Dropper_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Color Dropper_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="contentCircle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_DIAMETOR.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="contentColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_COLOR_AREA.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="contentCrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Resize File_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="contentEdge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PRESENCE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="contentEdgePx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PIXElCOUNT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentMatchingShape" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_OUTLINE.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -209,13 +194,16 @@
     <value>..\Resources\contentPattern.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentPitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_ICON_PITCH_TOOL_LARGE_E_32BIT1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_PITCH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentPosition_Adjustment" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_TOOL_HELPIMAGE_POSITION.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="contentVisualMatch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\contentVisualMatch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ContentWidth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_TOOL_HELPIMAGE_EDGE_WIDTH.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Corner" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Rounded Corner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -234,6 +222,9 @@
   </data>
   <data name="Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_ICON_EDGE_PRESENCE_W_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EdgePixel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BID_ICON_EDGE_PIXEL_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Erase" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Erase.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -255,9 +246,6 @@
   </data>
   <data name="OKNG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ok_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OutLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BID_ICON_EDGE_PIXEL_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Pattern" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_ICON_SHAPE_TOOL_LARGE_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

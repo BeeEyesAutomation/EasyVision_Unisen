@@ -114,6 +114,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            txtAddPLC.Text = Propety.AddPLC;
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
@@ -763,6 +764,19 @@ namespace BeeInterface
         {
 
             Propety.StepAngle = (int)AdjStepAngle.Value;
+        }
+
+        private void txtAddPLC_KeyPress(object sender, KeyPressEventArgs e)
+        {
+           
+        }
+
+        private void txtAddPLC_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode ==Keys.Enter)
+            {
+                Propety.AddPLC=txtAddPLC.Text;
+            }    
         }
     }
 }

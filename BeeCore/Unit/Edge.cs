@@ -1,6 +1,7 @@
 ﻿using BeeCore.Algorithm;
 using BeeCore.Func;
 using BeeCore.Funtion;
+using BeeCpp;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -18,9 +19,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Caching;
 using System.Windows.Forms.VisualStyles;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Point = OpenCvSharp.Point;
 using Size = OpenCvSharp.Size;
 
@@ -37,7 +36,14 @@ namespace BeeCore
         }
         public bool IsIni = false;
         public int Index = -1;
-      
+        [NonSerialized]
+        public Line2DCli Line2DCli = new Line2DCli();
+        [NonSerialized]
+        public RansacLine RansacLine;
+        [NonSerialized]
+        public FilterCLi FilterCLi;
+        [NonSerialized]
+        public EdgePipelineOptionsCli EdgePipelineOptionsCli;
         [NonSerialized]
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
@@ -48,10 +54,20 @@ namespace BeeCore
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
         public List<RectRotate> rectRotates = new List<RectRotate>();
 
-      
+     
+        public int MaximumLine = 4;
+        public GapExtremum GapExtremum = GapExtremum.Middle;
+        public LineOrientation LineOrientation = LineOrientation.Vertical;
+        public SegmentStatType SegmentStatType = SegmentStatType.Average;
+        public int MinInliers = 2;
+        public float WidthResult = 0;
+        public float WidthTemp = 0;
+        public int MinLen = 0, MaxLen = 10000;
+        public bool IsCalibs = false;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
         public int ThresholdBinary;
-     
+        public double RansacThreshold = 2.0; // px
+        public int RansacIterations = 200;
         public bool IsClose = false;
         public bool IsOpen = false;
         public bool IsClearNoiseBig = false;
@@ -62,15 +78,21 @@ namespace BeeCore
         public int SizeOpen = 1;
         public void Default()
         {
-           
-          
+            GapExtremum = GapExtremum.Middle;
+            LineOrientation = LineOrientation.Vertical;
+            SegmentStatType = SegmentStatType.Average;
+            MinLen = 0;
+            MaxLen = 10000;
+            WidthTemp = 0;
+            RansacIterations = 200;
+            RansacThreshold = 2;
             ThresholdBinary = 150;
             MethordEdge = MethordEdge.StrongEdges;
             SizeClearsmall = 100;
             SizeClearBig = 1000;
             SizeClose = 3;
             SizeOpen = 3;
-        
+            MaximumLine = 10;
 
             IsClearNoiseBig = false;
             IsClearNoiseSmall = false;
@@ -86,148 +108,224 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-
-
-
-        public int PxResult;
-        sealed class FillCache
-        {
-            public Mat Mask;      // (h+2, w+2), CV_8UC1
-            public Mat Inv;       // scratch CV_8UC1
-            public Mat Tmp;       // scratch CV_8UC1
-            public Mat KernClose; // kernel close
-            public Mat KernOpen;  // kernel open
-        }
-
-         void EnsureCache(FillCache cache, Size sz, int kClose, int kOpen)
-        {
-            if (cache.Mask == null || cache.Mask.Rows != sz.Height + 2 || cache.Mask.Cols != sz.Width + 2)
-                cache.Mask = new Mat(new Size(sz.Width + 2, sz.Height + 2), MatType.CV_8UC1, Scalar.Black);
-
-            if (cache.Inv == null || cache.Inv.Rows != sz.Height || cache.Inv.Cols != sz.Width)
-                cache.Inv = new Mat(sz, MatType.CV_8UC1);
-
-            if (cache.Tmp == null || cache.Tmp.Rows != sz.Height || cache.Tmp.Cols != sz.Width)
-                cache.Tmp = new Mat(sz, MatType.CV_8UC1);
-
-            if (cache.KernClose == null || cache.KernClose.Rows != kClose || cache.KernClose.Cols != kClose)
-                cache.KernClose = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(kClose, kClose));
-
-            if (cache.KernOpen == null || cache.KernOpen.Rows != kOpen || cache.KernOpen.Cols != kOpen)
-                cache.KernOpen = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(kOpen, kOpen));
-        }
-
-         void ForceBinary(Mat src)
-        {
-            Cv2.Compare(src, new Scalar(0), src, OpenCvSharp.CmpType.GT);
-            // Biến mọi >0 thành 255 (in-place), kết quả 0/255 CV_8UC1
-            //Cv2.Compare(src, 0, src, CmpTypes.GT);
-        }
-
-        static Mat FillHoles(Mat binary)
-        {
-            //Mat bin = EnsureBinaryU8(binary);
-
-            // Tạo mask cho FloodFill: kích thước (w+2,h+2)
-            Mat mask = new Mat(new Size(binary.Cols + 2, binary.Rows + 2), MatType.CV_8UC1, Scalar.Black);
-
-            // Invert để flood từ nền đen hay nền trắng đều ổn
-            Mat inv = new Mat();
-            Cv2.BitwiseNot(binary, inv);
-
-            // FloodFill từ biên (0,0) – giả định nền chạm biên
-            Mat flood = inv.Clone();
-            Cv2.FloodFill(flood, mask, new Point(0, 0), new Scalar(255));
-
-            // Vùng lỗ = phần chưa được flood ở inv -> invert lại để lấy “lỗ”
-            Mat floodInv = new Mat();
-            Cv2.BitwiseNot(flood, floodInv);
-
-            // Kết hợp lỗ đã tô với ảnh gốc để ra ảnh fill-holes
-            Mat filled = new Mat();
-            Cv2.BitwiseOr(binary, floodInv, filled);
-
-            return filled;
-        }
+        [NonSerialized]
+        private CropPlus CropPlus = new CropPlus();
+        
+   
+        
+       
         public void DoWork( RectRotate rectRotate)
         {
-            try
+          
+                if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
-
-
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                if (raw.Empty()) return;
+              
+                Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                if (matProcess == null) matProcess = new Mat();
+                if (!matProcess.Empty()) matProcess.Dispose();
+                if (matCrop.Type() == MatType.CV_8UC3)
+                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
+                switch (MethordEdge)
                 {
-                    if (raw.Empty()) return;
-
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
-                    if (matProcess == null) matProcess = new Mat();
-                    if (!matProcess.Empty()) matProcess.Dispose();
-                    if (matCrop.Type() == MatType.CV_8UC3)
-                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
-                    switch (MethordEdge)
-                    {
-                        case MethordEdge.CloseEdges:
-                            matProcess = Filters.Edge(matCrop);
-                            break;
-                        case MethordEdge.StrongEdges:
-                            matProcess = Filters.GetStrongEdgesOnly(matCrop);
-                            break;
-                        case MethordEdge.Binary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
-                            break;
-                        case MethordEdge.InvertBinary:
-                            matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
-                            break;
-                    }
-                    if (IsClearNoiseSmall)
-                        matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
-                    if (IsClose)
-                        matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
-                    if (IsOpen)
-                        matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
-                    if (IsClearNoiseBig)
-                        matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
-                    // matProcess đã tạo từ các bước Filters.*
-                //    ForceBinary(matProcess);
-
-                   //  FillCache _cache = new FillCache();
-                    FillHoles(matProcess);
-
-                    // PxResult= (int)(Cv2.CountNonZero(matProcess) / 100.0);
-                    PxResult = (int)(Cv2.CountNonZero(matProcess) / 100.0);
+                    case MethordEdge.CloseEdges:
+                        matProcess = Filters.Edge(matCrop);
+                        break;
+                    case MethordEdge.StrongEdges:
+                        matProcess = Filters.GetStrongEdgesOnly(matCrop);
+                        break;
+                    case MethordEdge.Binary:
+                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.Binary);
+                        break;
+                    case MethordEdge.InvertBinary:
+                        matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
+                        break;
                 }
-                
+                if (IsClearNoiseSmall)
+                    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+                if (IsClose)
+                    matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+                if (IsOpen)
+                    matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                if (IsClearNoiseBig)
+                    matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+               
+
+              
+                Line2DCli =  RansacLine.FindBestLine(
+                    matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                    iterations: RansacIterations,
+                    threshold: (float)RansacThreshold,
+                    maxPoints: 120000,
+                    seed: Index,
+                    mmPerPixel: 1/Scale
+
+                  
+                );
+
+            
+
             }
+            //using (Mat src = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            //    {
+            //        if (src.Empty()) return;
 
-            catch (Exception ex)
-            {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Edge", ex.Message));
+            //        Mat gray = null;
+            //        try
+            //        {
+            //            if (src.Channels() != 1)
+            //            {
 
-            }
+            //                if (src.Channels() == 3)
+            //                    Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            //                else
+            //                    Cv2.CvtColor(src, gray, ColorConversionCodes.BGRA2GRAY);
 
+
+
+            //            }
+            //            else
+            //                gray = src;
+
+            //            var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+            //            RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+            //            int w, h, s, c;
+            //            IntPtr ptr = CropPlus.CropRotatedInt(
+            //                gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels(), rrCli, rrMaskCli, out w, out h, out s, out c);
+            //            GC.KeepAlive(gray);
+
+
+
+            //            try
+            //            {
+            //                // Validate trước, nhưng KHÔNG return trước khi FreeBuffer
+            //                if (ptr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+            //                {
+            //                    return; // finally phía dưới vẫn chạy để FreeBuffer nếu cần
+            //                }
+                         
+            //                MatType mt = (c == 1) ? MatType.CV_8UC1
+            //                           : (c == 3) ? MatType.CV_8UC3
+            //                                      : MatType.CV_8UC4;
+            //                EdgePipelineOptionsCli = new EdgePipelineOptionsCli
+            //                {
+            //                    SizeClose = 0,
+            //                    ClearNoiseSmallArea = 0,
+            //                    ClearNoiseBigArea = 0,
+            //                    SizeOpen = 0,
+            //                    ThresholdBinary = 0,
+            //                    Method = (MethordEdgeCli)MethordEdge
+            //                }; 
+            //             var dst = new Mat(h, w, MatType.CV_8UC1);
+            //            long sDst = dst.Step();
+
+                     
+                   
+            //            FilterCLi.RunEdgePipeline(ptr, w, h, mt, (ulong)s, EdgePipelineOptionsCli, dst.Data, dst.Type(), (ulong)sDst);
+            //            Line2DCli = RansacLine.FindBestLine(dst.Data, dst.Width, dst.Height,(int) dst.Step(), RansacIterations, (float)RansacThreshold, 1000, 0, Scale);
+            //            matProcess = dst.Clone();
+            //            //using (var mNative = new Mat(h, w, dstType, intPtrOut, (int)dstStep))
+            //            //    {
+            //            //        matProcess = mNative.Clone(); // bây giờ dữ liệu đã thuộc về OpenCV (managed)
+            //            //    }
+            //            }
+            //            finally
+            //            {
+            //                // GIẢI PHÓNG BỘ NHỚ DO native CẤP PHÁT — luôn luôn!
+            //                if (ptr != IntPtr.Zero)
+            //                {
+            //                    CropPlus.FreeBuffer(ptr);
+            //                    ptr = IntPtr.Zero;
+            //                }
+            //            }
+
+
+
+
+
+            //        }
+
+            //        catch (Exception ex)
+            //        {
+            //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Width", ex.Message));
+
+            //        }
+
+            //    }
+            
         
         }
         public void Complete()
+        {
+            //switch (SegmentStatType)
+            //{
+            //    case SegmentStatType.Average:
+            //        WidthResult = (float)GapResult.GapMedium /Scale;
+            //        break;
+            //    case SegmentStatType.Shortest:
+            //        WidthResult = (float)GapResult.GapMin / Scale;
+            //        break;
+            //    case SegmentStatType.Longest:
+            //        WidthResult = (float)GapResult.GapMax / Scale;
+            //        break;
+            //}
+            if(Line2DCli.Found == true)
+            WidthResult = Line2DCli.LengthMm;
+            if (IsCalibs&& Line2DCli.Found==true)
             {
-
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)(PxResult );
-         
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0)
-                Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-            Common.PropetyTools[IndexThread][Index].ScoreResult = (float)Math.Round(Common.PropetyTools[IndexThread][Index].ScoreResult);
-            if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
-                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-            else
+                MinInliers = Line2DCli.Inliers;
+                WidthTemp = WidthResult;
+            }
+            Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+            if (Line2DCli.Found==false)
+            {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            }
+            else if (Common.PropetyTools[IndexThread][Index].ScoreResult <= Common.PropetyTools[IndexThread][Index].Score)
+            {
+                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+                if (!Global.IsRun)
+                {
+
+
+                    WidthTemp = WidthResult;
+                }
+            }
+            else
+            {
+                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            }
+            //  IsOK = true;
+            //switch (Compare)
+            //{
+            //    case Compares.Equal:
+            //        if (rectRotates.Count() != LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //    case Compares.Less:
+            //        if (rectRotates.Count() >= LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //    case Compares.More:
+            //        if (rectRotates.Count() <= LimitCounter)
+            //            IsOK = false;
+            //        break;
+            //}
+
 
         }
+        public string AddPLC = "";
+        public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
+        public bool IsSendResult;
         public async Task SendResult()
         {
-            if (Common.PropetyTools[IndexThread][Index].IsSendResult)
+            if (IsSendResult)
             {
                 if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                 {
-                   // await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   
+                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
                 }
             }
         }
@@ -250,24 +348,60 @@ namespace BeeCore
             gc.Transform = mat;
             Brush brushText = Brushes.White;
             Color cl = Color.LimeGreen;
+            switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
+            {
+                case Results.OK:
+                    cl =  Global.Config.ColorOK;
+                    break;
+                case Results.NG:
+                    cl = Global.Config.ColorNG;
+                    break;
+            }
+            Pen pen = new Pen(Global.Config.ColorInfor,Global.Config.ThicknessLine);
+            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
 
-            if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
-            {
-                cl = Global.Config.ColorNG;
-            }
-            else
-            {
-                cl =  Global.Config.ColorOK;
-            }
-            String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            
-            Draws.Box2Label(gc, rotA, nameTool,PxResult+ " Px", font, cl, brushText, Global.pScroll, Global.ScaleZoom * 100, 16, Global.Config.ThicknessLine);
+            if (Global.Config.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
 
-
-            if (!Global.IsRun || Global.Config.IsShowDetail)
+            if (!Global.IsRun||Global.Config.IsShowDetail)
+            {
                 if (matProcess != null && !matProcess.Empty())
-                Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+            }
+            gc.ResetTransform();
+            if (Line2DCli.Found == false) return gc;
+
+            mat = new Matrix();
+            if (!Global.IsRun)
+            {
+                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            }
+            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            mat.Rotate(rotA._rectRotation);
+            mat.Translate(rotA._rect.X, rotA._rect.Y);
+            gc.Transform = mat;
+
+            //   Draws.DrawInfiniteLine(gc,new Line2D( Line2DCli.Vx, Line2DCli.Vy, Line2DCli.X1, Line2DCli.Y1), new Pen(cl, 2));
+         
+            PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
+            PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
+             Draws.DrawTicks(gc, p1,LineOrientation, pen);
+            Draws.DrawTicks(gc, p2,LineOrientation, pen);
+            gc.DrawLine(pen, p1, p2);
+            gc.DrawString($"{Line2DCli.LengthMm:F2}mm", new Font("Arial", Global.Config.FontSize), new SolidBrush(Global.Config.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+            // gc.ResetTransform();
+            //mat = new Matrix();
+            //if (!Global.IsRun)
+            //{
+            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            //    gc.Transform = mat;
+            //}
+            //gc.DrawString("X:" + listP_Center[0].X + ":" + listP_Center[0].X, new Font("Arial", 24, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
+
+            //gc.DrawEllipse(new Pen(Brushes.Red, 4), new Rectangle(listP_Center[0].X, listP_Center[0].Y, 10, 10));
 
             return gc;
         }
@@ -276,15 +410,16 @@ namespace BeeCore
         public void SetModel()
         {
             rotMask = null;
-            rotCrop = null;
-           
-            Common.PropetyTools[IndexThread][Index].StepValue =1f;
+            if (RansacLine == null) RansacLine = new RansacLine();
+            if (FilterCLi == null) FilterCLi = new FilterCLi();
+            CropPlus=new CropPlus();
+            Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
           
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100000;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 20;
             Common.PropetyTools[IndexThread][Index]. StatusTool = StatusTool.WaitCheck;
         }
-      
+        public float Scale = 1;
         public int IndexThread = 0;
   
     }

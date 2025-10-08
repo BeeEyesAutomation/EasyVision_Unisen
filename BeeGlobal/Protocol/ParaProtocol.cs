@@ -1232,6 +1232,10 @@ namespace BeeGlobal
         {
             PlcClient.WriteFloat(Address,Value);
         }
+        public async Task WriteResultFloatArr(String Address, float[] Value)
+        {
+            PlcClient.WriteFloatArray(Address, Value);
+        }
         public async Task WriteResultString(String Address, string Value)
         {
             PlcClient.WriteString(Address, Value,100);

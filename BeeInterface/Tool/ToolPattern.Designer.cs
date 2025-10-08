@@ -114,6 +114,14 @@ namespace BeeInterface
             this.label17 = new System.Windows.Forms.Label();
             this.btnClose = new BeeInterface.RJButton();
             this.AdjMorphology = new BeeInterface.AdjustBarEx();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
+            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtAddPLC = new BeeInterface.TextBoxAuto();
+            this.label20 = new System.Windows.Forms.Label();
             this.workLoadModel = new System.ComponentModel.BackgroundWorker();
             this.pInspect = new System.Windows.Forms.Panel();
             this.btnTest = new BeeInterface.RJButton();
@@ -142,6 +150,9 @@ namespace BeeInterface
             this.tableLayoutPanel10.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tableLayoutPanel17.SuspendLayout();
+            this.tableLayoutPanel18.SuspendLayout();
             this.pInspect.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -151,6 +162,7 @@ namespace BeeInterface
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage1);
             this.tabControl2.Controls.Add(this.tabPage2);
+            this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
@@ -3182,6 +3194,119 @@ namespace BeeInterface
             this.AdjMorphology.WheelStep = 1F;
             this.AdjMorphology.ValueChanged += new System.Action<float>(this.AdjClearNoise_ValueChanged);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage3.Controls.Add(this.tableLayoutPanel17);
+            this.tabPage3.Location = new System.Drawing.Point(4, 34);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(516, 749);
+            this.tabPage3.TabIndex = 4;
+            this.tabPage3.Text = "Communication";
+            // 
+            // tableLayoutPanel17
+            // 
+            this.tableLayoutPanel17.BackColor = System.Drawing.SystemColors.Control;
+            this.tableLayoutPanel17.ColumnCount = 1;
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel17.Controls.Add(this.autoFontLabel1, 0, 2);
+            this.tableLayoutPanel17.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel17.Controls.Add(this.tableLayoutPanel18, 0, 1);
+            this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel17.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel17.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.tableLayoutPanel17.Name = "tableLayoutPanel17";
+            this.tableLayoutPanel17.RowCount = 5;
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel17.Size = new System.Drawing.Size(510, 743);
+            this.tableLayoutPanel17.TabIndex = 2;
+            // 
+            // autoFontLabel1
+            // 
+            this.autoFontLabel1.AutoFont = true;
+            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 99.61328F);
+            this.autoFontLabel1.Location = new System.Drawing.Point(3, 97);
+            this.autoFontLabel1.Name = "autoFontLabel1";
+            this.autoFontLabel1.Size = new System.Drawing.Size(504, 743);
+            this.autoFontLabel1.TabIndex = 81;
+            this.autoFontLabel1.Text = "...";
+            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Transparent;
+            this.label1.Location = new System.Drawing.Point(5, 10);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(500, 32);
+            this.label1.TabIndex = 79;
+            this.label1.Text = "Address Write";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanel18
+            // 
+            this.tableLayoutPanel18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.tableLayoutPanel18.ColumnCount = 3;
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel18.Controls.Add(this.label21, 2, 0);
+            this.tableLayoutPanel18.Controls.Add(this.txtAddPLC, 1, 0);
+            this.tableLayoutPanel18.Controls.Add(this.label20, 0, 0);
+            this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(5, 42);
+            this.tableLayoutPanel18.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.tableLayoutPanel18.Name = "tableLayoutPanel18";
+            this.tableLayoutPanel18.Padding = new System.Windows.Forms.Padding(5);
+            this.tableLayoutPanel18.RowCount = 1;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(500, 55);
+            this.tableLayoutPanel18.TabIndex = 48;
+            // 
+            // label21
+            // 
+            this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label21.Location = new System.Drawing.Point(334, 5);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(158, 45);
+            this.label21.TabIndex = 36;
+            this.label21.Text = "----";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtAddPLC
+            // 
+            this.txtAddPLC.AutoFont = true;
+            this.txtAddPLC.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAddPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.04297F);
+            this.txtAddPLC.Location = new System.Drawing.Point(171, 8);
+            this.txtAddPLC.Name = "txtAddPLC";
+            this.txtAddPLC.Size = new System.Drawing.Size(157, 39);
+            this.txtAddPLC.TabIndex = 34;
+            this.txtAddPLC.Text = "D100";
+            this.txtAddPLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAddPLC.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAddPLC_KeyDown);
+            this.txtAddPLC.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAddPLC_KeyPress);
+            // 
+            // label20
+            // 
+            this.label20.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label20.Location = new System.Drawing.Point(8, 5);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(157, 45);
+            this.label20.TabIndex = 35;
+            this.label20.Text = "Address Write";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // workLoadModel
             // 
             this.workLoadModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadModel_DoWork);
@@ -3300,6 +3425,9 @@ namespace BeeInterface
             this.tableLayoutPanel10.ResumeLayout(false);
             this.tableLayoutPanel11.ResumeLayout(false);
             this.tableLayoutPanel12.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tableLayoutPanel17.ResumeLayout(false);
+            this.tableLayoutPanel18.ResumeLayout(false);
             this.pInspect.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -3392,5 +3520,13 @@ namespace BeeInterface
         private AdjustBarEx AdjMaximumObj;
         private System.Windows.Forms.Label label19;
         private AdjustBarEx AdjStepAngle;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel17;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
+        private System.Windows.Forms.Label label21;
+        private TextBoxAuto txtAddPLC;
+        private System.Windows.Forms.Label label20;
+        private AutoFontLabel autoFontLabel1;
+        private System.Windows.Forms.Label label1;
     }
 }

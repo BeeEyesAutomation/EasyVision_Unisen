@@ -207,15 +207,30 @@ namespace BeeCore
                             }
                             if (Global.IsOCR)
                             {
-                                dynamic mod2 = Py.Import("Tool.OCR");
-                                dynamic cls2 = mod2.GetAttr("OCR"); // class
-                                G.objOCR = cls2.Invoke();              // khởi tạo instance
-                                dynamic mod3 = Py.Import("Tool.Classic");
-                                dynamic cls3 = mod3.GetAttr("Filter"); // class
-                                G.Classic = cls3.Invoke();              // khởi tạo instance
-                                G.IniEdge = true;
-                                // khởi tạo instance
-                                G.Classic.LoadEdge();
+                                //dynamic sys = Py.Import("sys");
+                                //dynamic os = Py.Import("os");
+                                //sys.path.insert(0, @"E:\Code\EasyVision_Unisen\bin\Release\Tool");
+                                //Console.WriteLine($"sys.path[0]: {sys.path[0]}");
+                                //Console.WriteLine(os.listdir(sys.path[0]).ToString()); // liệt kê file trong Tool
+
+                                //// tìm spec cho module
+                                //dynamic importlib = Py.Import("importlib.util");
+                                //dynamic module = importlib.find_spec("craft_ocr_detector");
+                                //Console.WriteLine($"spec is None? {spec == null}");
+                                //dynamic sys = Py.Import("sys");
+                                //sys.path.insert(0, "E:\\Code\\EasyVision_Unisen\\bin\\Release\\Tool");
+
+                                ////// import module & tạo detector
+                                
+                                dynamic module = Py.Import("Tool.Craft_OCR");
+                                dynamic cls2 = module.GetAttr("CraftOCRDetector"); // class
+                                G.objCraftOCR = cls2.Invoke();              // khởi tạo instance
+                                //dynamic mod3 = Py.Import("Tool.Classic");
+                                //dynamic cls3 = mod3.GetAttr("Filter"); // class
+                                //G.Classic = cls3.Invoke();              // khởi tạo instance
+                                //G.IniEdge = true;
+                                //// khởi tạo instance
+                          //      G.Classic.LoadEdge();
                             }
 
 

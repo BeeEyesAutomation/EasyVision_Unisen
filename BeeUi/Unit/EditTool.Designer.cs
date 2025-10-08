@@ -598,7 +598,7 @@ namespace BeeUi
             this.btnLogo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogo.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.734375F);
             this.btnLogo.ForeColor = System.Drawing.Color.Black;
-            this.btnLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
+            this.btnLogo.Image = global::BeeUi.Properties.Resources.LogoAHSo;
             this.btnLogo.ImageDisabled = null;
             this.btnLogo.ImageHover = null;
             this.btnLogo.ImageNormal = null;

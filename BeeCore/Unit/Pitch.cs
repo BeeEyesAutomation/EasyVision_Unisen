@@ -371,7 +371,7 @@ namespace BeeCore
                 int nR = PitchResult.Roots?.Length ?? 0;
 
                 String Content = $"Crest N={nC}  {crest} | Root N={nR}  {root} ";
-                Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText, Global.pScroll, Global.ScaleZoom * 100, 16, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText,16, Global.Config.ThicknessLine);
 
             }
 

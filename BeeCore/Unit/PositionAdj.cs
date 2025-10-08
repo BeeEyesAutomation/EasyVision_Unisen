@@ -315,11 +315,30 @@ namespace BeeCore
 
 
         }
-       
+
+        public bool IsSendResult;
+        public String AddPLC;
         public async Task SendResult()
         {
+            if (IsSendResult)
+            {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                {
+                    int i = 0;
+                    int Add = (int)Converts.StringtoDouble(AddPLC);
+                    String sAdd = Converts.BeforeFirstDigit(AddPLC);
+                    foreach (System.Drawing.Point point in listP_Center)
+                    {
+                        String Address = sAdd + Add;
+                        float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i], (float)listScore[i] };
+                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
+                        Add += 8;
+                        i++;
+                    }
+                }
+            }
         }
-            int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
+        int getMaxAreaContourId(OpenCvSharp.Point[][] contours)
         {
             double maxArea = 0;
             int maxAreaContourId = -1;
@@ -622,7 +641,7 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText = Brushes.White;
+            Brush brushText =new SolidBrush( Global.Config.ColorInfor);
             Color cl = Color.LimeGreen;
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
@@ -636,7 +655,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
             if (MethodSample==MethodSample.Corner)
             {

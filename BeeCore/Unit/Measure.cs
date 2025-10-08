@@ -215,7 +215,7 @@ namespace BeeCore
                 {
                     if (TypeMeasure == TypeMeasure.Angle)
                     {
-                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
+                      //  await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
                     }
                 }
             }

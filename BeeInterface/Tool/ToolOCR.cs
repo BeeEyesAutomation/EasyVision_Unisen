@@ -124,8 +124,16 @@ namespace BeeInterface
          
             Global.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
-           
+
+            trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
+            trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
+            trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
+
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolOCR_StatusToolChanged;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolOCR_ScoreChanged;
+
             btnEnLimitArea.IsCLick = Propety.IsEnLimitArea ;
             layoutLineLimit.Enabled = Propety.IsEnLimitArea;
             numCLAHE.Value = Propety.Clahe;
@@ -148,6 +156,17 @@ namespace BeeInterface
      
           
         }
+
+        private void ToolOCR_StatusToolChanged(StatusTool obj)
+        {
+          
+        }
+
+        private void ToolOCR_ScoreChanged(float obj)
+        {
+            trackScore.Value = obj;
+        }
+
         private void trackScore_ValueChanged(float obj)
         {
            
@@ -232,7 +251,7 @@ namespace BeeInterface
                 String nameTool = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
                 Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
                 if (Global.Config.IsShowBox)
-                    Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.pScroll, Global.ScaleZoom * 100, Global.Config.ThicknessLine);
+                    Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
                 int i = 0;
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())

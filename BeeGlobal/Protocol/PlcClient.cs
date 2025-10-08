@@ -416,8 +416,10 @@ namespace PlcLib
                 }
             }, "WriteWord");
         }
-        public void WriteFloat(string startAddr, float value)
+        public void WriteFloatArray(string startAddr, float[] values)
         {
+            if (values == null || values.Length == 0) return;
+
             WithRetry(() =>
             {
                 lock (_commLock)
@@ -425,27 +427,76 @@ namespace PlcLib
                     EnsureConnected();
                     dynamic d = _plc;
 
-                    // Convert float -> 4 byte (little endian của .NET)
-                    byte[] bytes = BitConverter.GetBytes(value);
+                    // Nếu driver hỗ trợ, đây là one-shot write thật sự, không cần for
+                    OperateResult w = d.Write(startAddr, values);
 
-                    // Tùy PLC: có thể phải đảo ngược thứ tự byte
-                    // Ví dụ Modbus big-endian: swap 2 byte trong mỗi word hoặc đảo cả 4 byte
-                    // Ở đây demo Little Endian (lo-hi, lo-hi)
-                    short low = BitConverter.ToInt16(bytes, 0);
-                    short high = BitConverter.ToInt16(bytes, 2);
-
-                    OperateResult w = d.Write(startAddr, new short[] { low, high });
                     if (!w.IsSuccess)
                     {
                         IsConnect = false;
                         Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
-                            "WriteIO", startAddr + ": " + w.Message));
+                            "WriteFloatArray_OneShot", $"{startAddr} (N={values.Length}): {w.Message}"));
+                    }
+                    else IsConnect = true;
+                }
+            }, "WriteFloatArray_OneShot");
+        }
+        public void WriteFloat(string startAddr, float value)
+        {
+       
+
+            WithRetry(() =>
+            {
+                lock (_commLock)
+                {
+                    EnsureConnected();
+                    dynamic d = _plc;
+
+                    // Nếu driver hỗ trợ, đây là one-shot write thật sự, không cần for
+                    OperateResult w = d.Write(startAddr, value);
+
+                    if (!w.IsSuccess)
+                    {
+                        IsConnect = false;
+                        Global.LogsDashboard.AddLog(
+                            new LogEntry(DateTime.Now, LeveLLog.ERROR,
+                            "WriteFloatArray_OneShot", $"{startAddr} : {w.Message}"));
                     }
                     else IsConnect = true;
                 }
             }, "WriteFloat");
         }
+
+        //public void WriteFloat(string startAddr, float value)
+        //{
+        //    WithRetry(() =>
+        //    {
+        //        lock (_commLock)
+        //        {
+        //            EnsureConnected();
+        //            dynamic d = _plc;
+
+        //            // Convert float -> 4 byte (little endian của .NET)
+        //            byte[] bytes = BitConverter.GetBytes(value);
+
+        //            // Tùy PLC: có thể phải đảo ngược thứ tự byte
+        //            // Ví dụ Modbus big-endian: swap 2 byte trong mỗi word hoặc đảo cả 4 byte
+        //            // Ở đây demo Little Endian (lo-hi, lo-hi)
+        //            short low = BitConverter.ToInt16(bytes, 0);
+        //            short high = BitConverter.ToInt16(bytes, 2);
+
+        //            OperateResult w = d.Write(startAddr, new short[] { low, high });
+        //            if (!w.IsSuccess)
+        //            {
+        //                IsConnect = false;
+        //                Global.LogsDashboard.AddLog(
+        //                    new LogEntry(DateTime.Now, LeveLLog.ERROR,
+        //                    "WriteIO", startAddr + ": " + w.Message));
+        //            }
+        //            else IsConnect = true;
+        //        }
+        //    }, "WriteFloat");
+        //}
         public void WriteString(string startAddr, string text, int maxLength)
         {
             WithRetry(() =>
