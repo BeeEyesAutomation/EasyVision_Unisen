@@ -124,7 +124,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddTool.cs" />
+    <Compile Include="Algorithm\DetectIntersect.cs" />
     <Compile Include="Algorithm\FilletCornerMeasure.cs" />
+    <Compile Include="Algorithm\FilletCornerMeasure2.cs" />
     <Compile Include="Algorithm\FilterItem.cs" />
     <Compile Include="Algorithm\Filters.cs" />
     <Compile Include="Algorithm\Gap.cs" />
@@ -147,10 +149,12 @@
     <Compile Include="EtherNetIP\EIPScanner.cs" />
     <Compile Include="Func\Cal.cs" />
     <Compile Include="Func\CameraIOFast.cs" />
+    <Compile Include="Func\CodeSymbologyCliExtensions.cs" />
     <Compile Include="Func\ComboBoxExtensions.cs" />
     <Compile Include="Func\Converts.cs" />
     <Compile Include="Func\Crop.cs" />
     <Compile Include="Func\General.cs" />
+    <Compile Include="Func\ImageUtils.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
     <Compile Include="Func\PolyOffset.cs" />

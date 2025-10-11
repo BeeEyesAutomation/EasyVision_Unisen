@@ -137,7 +137,8 @@ namespace BeeUi
         {
             try
             {
-            
+                
+             
                 if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
                 {
                     BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
@@ -151,12 +152,14 @@ namespace BeeUi
                     Global.EditTool.View. btnLive.PerformClick();
 
                 }
+                layInforTool.Visible = false;
                 BarRight.btnFlowChart.IsCLick = true;
                 Global.StatusDraw = StatusDraw.None;
             X: switch (Step)
                 {
                    
                     case Step.Run:
+                        Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
                         Global.IsAllowReadPLC = true;
                         ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
@@ -197,6 +200,8 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
+                        layInforTool.Visible = false;
+                        Global.EditTool.View.imgView.AutoCenter = false;
                         View.pMenu.Visible = true;
                         Global.IsAllowReadPLC = false;
                        
@@ -207,41 +212,21 @@ namespace BeeUi
                         G.Header.btnMode.Text = "Edit";
                         G.Header.btnMode.IsCLick = true;
                    
-                        G.StepEdit.btnStep1.IsCLick = true;
+                        Global.StepEdit.btnStep1.IsCLick = true;
 
                         
                        
                        
                       
 
-                        //G.StepEdit.SettingStep1.Size = Global.EditTool.pEditTool.Size;
-                        //G.StepEdit.Visible = true;
+                        //Global.StepEdit.SettingStep1.Size = Global.EditTool.pEditTool.Size;
+                        //Global.StepEdit.Visible = true;
                         //G.StatusDashboard.Visible = false;
                         pEditTool.Show("Step1");
                         pInfor.Show("StepEdit");
-                        //G.StepEdit.SettingStep1.Visible = true;
-                        //foreach (Control child in G.StepEdit.SettingStep1.Controls)
-                        //{
-                        //    child.Visible = true;
-                        //}
-
-                        //Global.ToolSettings.Visible = false;
-                        //G.StepEdit.SettingStep1.Visible = true;
-                        //G.StepEdit.SettingStep1.Parent = pEditTool;
-                        //G.StepEdit.SettingStep1.BringToFront();
-
-                        //foreach (Tools tool in G.listAlltool[Global.IndexChoose])
-                        //{
-                        //    tool.ItemTool.Score.Enabled = false;
-                        //}
-
-                        //G.StepEdit.Parent = Global.EditTool.View.pHeader;
-
-                        //G.StepEdit.Size = Global.EditTool.View.pHeader.Size;
-                        //G.StepEdit.BringToFront();
-
-                        //iconTool.BackgroundImage = Properties.Resources._1;
-                        lbTool.Text = "Setup Camera";
+                       iconTool.Visible = false;
+                      
+                        lbTool.Text = "1.Setup Camera";
 
                       ///  pName.Visible = true;
                        
@@ -249,16 +234,20 @@ namespace BeeUi
                        //this.ResumeLayout();
                         break;
                     case Step.Step2:
+                        iconTool.Visible = false;
+                        lbTool.Text = "STEP 2";
+                        layInforTool.Visible = false;
+                        Global.EditTool.View.imgView.AutoCenter = false;
                         Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
-                        G.StepEdit.btnStep2.IsCLick = true;
+                        Global.StepEdit.btnStep2.IsCLick = true;
                         //   pName.Visible = true;
                         G.IsCalib = false;
 
                         pEditTool.Show("Step2");
 
                         //iconTool.BackgroundImage = Properties.Resources._2;
-                        lbTool.Text = "Register Image";
+                        lbTool.Text = "2.Register Image";
                         try
                         {
                             if (Global.ParaCommon.matRegister != null)
@@ -269,7 +258,8 @@ namespace BeeUi
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                     G.IsCalib = false;
                                     Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                    Global.EditTool.View.imgView.Invalidate();
+                                 
+                                        Global.EditTool.View.imgView.Invalidate();
                                     Global.EditTool.View.imgView.Update();
                                     ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                                     Global.Config.imgZoom = View.imgView.Zoom;
@@ -291,55 +281,63 @@ namespace BeeUi
                         //Global.EditTool.View.imgView.Update();
                         break;
                     case Step.Step3:
+                        iconTool.Visible = false;
+                        lbTool.Text = "3.Tools Setting";
+                        layInforTool.Visible = false;
+                        Global.EditTool.View.imgView.AutoCenter = false;
                         Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
-                        G.StepEdit.btnStep3.IsCLick = true;
+                        Global.StepEdit.btnStep3.IsCLick = true;
                         pName.Visible = true;
                        
                         pEditTool.Show("Tool");
                         ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
-                        //Global.ToolSettings.Parent = pEditTool;
-                        //Global.ToolSettings.Size = pEditTool.Size;
-                        //Global.ToolSettings.Location = new Point(0, 0);
-                        //Global.ToolSettings.pAllTool.Visible = true;
-                        //Global.ToolSettings.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-                        if (Global.ParaCommon.matRegister != null)
-                            if (!Global.ParaCommon.matRegister .IsDisposed())
-                        {
-                            G.IsCalib = false;
-                            pEditTool.Visible = true;
-                           
-                                if (Global.ParaCommon.matRegister.Width != 0)
+                     
+                    
+                            if (Global.ParaCommon.matRegister != null)
+                                if (!Global.ParaCommon.matRegister.IsDisposed())
                                 {
+                                    if (Global.ParaCommon.matRegister.Width != 0)
+                                    {
+                                    G.IsCalib = false;
+                                    pEditTool.Visible = true;
                                     BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
+                                        G.IsCalib = false;
+                                        Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                        Global.EditTool.View.imgView.Invalidate();
+                                        Global.EditTool.View.imgView.Update();
+                                        ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                                        Global.Config.imgZoom = View.imgView.Zoom;
+                                        Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                        Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                    }
                                 }
-                                    // iconTool.BackgroundImage = Properties.Resources._3;
-                                    lbTool.Text = " Add tool and Modify  Tool";
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please,Register Image!");
-                            G.StepEdit.btnStep2.IsCLick = true;
-                            Step = Step.Step2;
-                            goto X;
-                        }
+                                else
+                                {
+                                MessageBox.Show("Please,Register Image!");
+                                Global.StepEdit.btnStep2.IsCLick = true;
+                                Step = Step.Step2; pEditTool.Show("Step2");
+                                goto X;
+                                }
+                        
+                      
                         if (Global.ToolSettings.btnEnEdit.IsCLick)
                             Global.ToolSettings.btnEnEdit.PerformClick();
 
                         break;
                     case Step.Step4:
+                        iconTool.Visible = false;
+                        layInforTool.Visible = false;
                         Global.IsAllowReadPLC = false;
                         Global.EditTool.View.btnLive.Enabled = false;
-                        G.StepEdit.btnStep4.IsCLick = true;
+                        Global.StepEdit.btnStep4.IsCLick = true;
                         pName.Visible = true;
                         G.IsCalib = false;
 
                         pEditTool.Show("Step4");
 
-                        //   iconTool.BackgroundImage = Properties.Resources._4;
-                        lbTool.Text = "Setup Status OutPut";
-                        G.StepEdit.SettingStep4.RefreshLogic();
+                        lbTool.Text = "4.Setup Status OutPut";
+                        Global.StepEdit.SettingStep4.RefreshLogic();
                         break;
                 }
                 //if (Global.IsRun)
@@ -459,17 +457,17 @@ namespace BeeUi
                 G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(Global.Config.AlphaBar - 50, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                 G.StatusDashboard.MidHeaderBackColor = Color.FromArgb(Global.Config.AlphaBar, Global.Config.colorGui.R, Global.Config.colorGui.G, Global.Config.colorGui.B);
                   }
-           
 
+            Global.StepEdit=new StepEdit();
             pEditTool.Register("Tool", () => Global.ToolSettings);
-            pEditTool.Register("Step1", () => G.StepEdit.SettingStep1);
-            pEditTool.Register("Step2", () => G.StepEdit.SettingStep2);
+            pEditTool.Register("Step1", () => Global.StepEdit.SettingStep1);
+            pEditTool.Register("Step2", () => Global.StepEdit.SettingStep2);
             pEditTool.Register("PLC", () => G.SettingPLC);
-            pEditTool.Register("Step4", () => G.StepEdit.SettingStep4);
+            pEditTool.Register("Step4", () => Global.StepEdit.SettingStep4);
             pEditTool.Register("Images", () => DashboardImages);
             pEditTool.Register("Logs", () => Global.LogsDashboard);
             pInfor.Register("Dashboard", () => G.StatusDashboard);
-            pInfor.Register("StepEdit", () => G.StepEdit);
+            pInfor.Register("StepEdit", () => Global.StepEdit);
 
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
@@ -1046,6 +1044,11 @@ namespace BeeUi
         private void webCamTool_Click(object sender, EventArgs e)
         {
             pCamera.Visible=webCamTool.Checked;
+        }
+
+        private void autoFontLabel2_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnNew_Click(object sender, EventArgs e)

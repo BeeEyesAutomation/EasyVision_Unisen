@@ -290,7 +290,7 @@ namespace BeeCore.Funtion
     }));        }
         private static int frameCounter=0;
         public static Cyotek.Windows.Forms.ImageBox imgTemp;
-        public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg)
+        public static void Full(Cyotek.Windows.Forms.ImageBox image,Size szImg,bool IsSet=true)
             {
             if (image == null) return;
             imgTemp= image;
@@ -300,9 +300,17 @@ namespace BeeCore.Funtion
                 float ScaleW = (float)(withBox * 1.0 / szImg.Width);
                 float ScaleH = (float)(heightBox * 1.0 / szImg.Height);
                 float Scale = Math.Min(ScaleW, ScaleH);
-            Global.ZoomMinimum = (int)(Scale * 100.0);
-            image.Zoom =(int) Global.ZoomMinimum;
+            if (IsSet)
+            {
 
+                Global.ZoomMinimum = (int)(Scale * 100.0);
+                image.Zoom = (int)Global.ZoomMinimum;
+            }
+            else
+            {
+                image.Zoom = (int)(Scale * 100.0);
+
+            }    
                 image.Invalidate();
             }
         public static void Full(Cyotek.Windows.Forms.ImageBox image, OpenCvSharp.Size szImg)

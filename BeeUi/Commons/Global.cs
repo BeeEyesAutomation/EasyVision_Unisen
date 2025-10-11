@@ -64,7 +64,7 @@ namespace BeeUi
         public static bool IsCCD;
         public static RectRotate rotOriginAdj;
       
-        public static StepEdit StepEdit=new StepEdit();
+       
         public static float angle_Adjustment=0, X_Adjustment=0, Y_Adjustment=0;
 
 

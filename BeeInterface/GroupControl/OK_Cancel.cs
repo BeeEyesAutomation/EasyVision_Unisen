@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +23,7 @@ namespace BeeInterface.GroupControl
         private void btnOK_Click(object sender, EventArgs e)
         {
             Global.EditTool.pEditTool.Show("Tool");
-
+            Global.StepEdit.Enabled = true;
             Global.StatusDraw = StatusDraw.None;
 
          //   Global.IndexToolSelected = -1;
@@ -35,6 +36,7 @@ namespace BeeInterface.GroupControl
             Global.StatusDraw = StatusDraw.None;
             if (Global.OldPropetyTool != null)
             {
+                Global.StepEdit.Enabled = true;
                 BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety = Global.OldPropetyTool.Clone();
             }
            // Global.IndexToolSelected = -1;

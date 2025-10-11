@@ -50,6 +50,11 @@ namespace BeeUi
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pName = new System.Windows.Forms.Panel();
             this.lbTool = new BeeInterface.AutoFontLabel();
+            this.layInforTool = new System.Windows.Forms.TableLayoutPanel();
+            this.lbRsTool = new BeeInterface.AutoFontLabel();
+            this.autoFontLabel3 = new BeeInterface.AutoFontLabel();
+            this.lbCTTool = new BeeInterface.AutoFontLabel();
+            this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.split5 = new System.Windows.Forms.Splitter();
             this.BarRight = new BeeUi.Unit.Cameras();
@@ -123,6 +128,7 @@ namespace BeeUi
             this.pCamera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCam)).BeginInit();
             this.pName.SuspendLayout();
+            this.layInforTool.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).BeginInit();
             this.LayoutEnd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -318,6 +324,7 @@ namespace BeeUi
             // 
             this.pName.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pName.Controls.Add(this.lbTool);
+            this.pName.Controls.Add(this.layInforTool);
             this.pName.Controls.Add(this.iconTool);
             this.pName.Dock = System.Windows.Forms.DockStyle.Top;
             this.pName.Location = new System.Drawing.Point(4, 3);
@@ -333,9 +340,85 @@ namespace BeeUi
             this.lbTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 29.23047F);
             this.lbTool.Location = new System.Drawing.Point(54, 0);
             this.lbTool.Name = "lbTool";
-            this.lbTool.Size = new System.Drawing.Size(441, 44);
+            this.lbTool.Size = new System.Drawing.Size(262, 44);
             this.lbTool.TabIndex = 1;
             this.lbTool.Text = "Tool";
+            // 
+            // layInforTool
+            // 
+            this.layInforTool.ColumnCount = 2;
+            this.layInforTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.11173F));
+            this.layInforTool.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 79.88827F));
+            this.layInforTool.Controls.Add(this.lbRsTool, 1, 1);
+            this.layInforTool.Controls.Add(this.autoFontLabel3, 0, 1);
+            this.layInforTool.Controls.Add(this.lbCTTool, 1, 0);
+            this.layInforTool.Controls.Add(this.autoFontLabel2, 0, 0);
+            this.layInforTool.Dock = System.Windows.Forms.DockStyle.Right;
+            this.layInforTool.Location = new System.Drawing.Point(316, 0);
+            this.layInforTool.Name = "layInforTool";
+            this.layInforTool.RowCount = 2;
+            this.layInforTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layInforTool.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layInforTool.Size = new System.Drawing.Size(179, 44);
+            this.layInforTool.TabIndex = 2;
+            // 
+            // lbRsTool
+            // 
+            this.lbRsTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbRsTool.AutoFont = true;
+            this.lbRsTool.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbRsTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.lbRsTool.ForeColor = System.Drawing.Color.White;
+            this.lbRsTool.Location = new System.Drawing.Point(38, 22);
+            this.lbRsTool.Name = "lbRsTool";
+            this.lbRsTool.Size = new System.Drawing.Size(138, 22);
+            this.lbRsTool.TabIndex = 3;
+            this.lbRsTool.Text = "NC";
+            this.lbRsTool.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // autoFontLabel3
+            // 
+            this.autoFontLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.autoFontLabel3.AutoFont = true;
+            this.autoFontLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.05469F);
+            this.autoFontLabel3.Location = new System.Drawing.Point(3, 22);
+            this.autoFontLabel3.Name = "autoFontLabel3";
+            this.autoFontLabel3.Size = new System.Drawing.Size(29, 22);
+            this.autoFontLabel3.TabIndex = 2;
+            this.autoFontLabel3.Text = "RS";
+            // 
+            // lbCTTool
+            // 
+            this.lbCTTool.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCTTool.AutoFont = true;
+            this.lbCTTool.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbCTTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60156F);
+            this.lbCTTool.Location = new System.Drawing.Point(38, 0);
+            this.lbCTTool.Name = "lbCTTool";
+            this.lbCTTool.Size = new System.Drawing.Size(138, 22);
+            this.lbCTTool.TabIndex = 1;
+            this.lbCTTool.Text = "---";
+            this.lbCTTool.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // autoFontLabel2
+            // 
+            this.autoFontLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.autoFontLabel2.AutoFont = true;
+            this.autoFontLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.82813F);
+            this.autoFontLabel2.Location = new System.Drawing.Point(3, 0);
+            this.autoFontLabel2.Name = "autoFontLabel2";
+            this.autoFontLabel2.Size = new System.Drawing.Size(29, 22);
+            this.autoFontLabel2.TabIndex = 0;
+            this.autoFontLabel2.Text = "CT";
+            this.autoFontLabel2.Click += new System.EventHandler(this.autoFontLabel2_Click);
             // 
             // iconTool
             // 
@@ -554,7 +637,7 @@ namespace BeeUi
             this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
             this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
-            this.autoFontLabel1.Location = new System.Drawing.Point(89, 0);
+            this.autoFontLabel1.Location = new System.Drawing.Point(96, 0);
             this.autoFontLabel1.Name = "autoFontLabel1";
             this.autoFontLabel1.Size = new System.Drawing.Size(309, 51);
             this.autoFontLabel1.TabIndex = 9;
@@ -579,7 +662,7 @@ namespace BeeUi
             this.btnLogo.AutoFontMin = 6F;
             this.btnLogo.AutoFontWidthRatio = 0.92F;
             this.btnLogo.AutoImage = true;
-            this.btnLogo.AutoImageMaxRatio = 1F;
+            this.btnLogo.AutoImageMaxRatio = 1.4F;
             this.btnLogo.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnLogo.AutoImageTint = true;
             this.btnLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -587,9 +670,9 @@ namespace BeeUi
             this.btnLogo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnLogo.BorderRadius = 2;
             this.btnLogo.BorderSize = 1;
-            this.btnLogo.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.btnLogo.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.btnLogo.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btnLogo.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnLogo.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnLogo.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnLogo.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnLogo.Corner = BeeGlobal.Corner.Both;
             this.btnLogo.DebounceResizeMs = 16;
@@ -617,7 +700,7 @@ namespace BeeUi
             this.btnLogo.Location = new System.Drawing.Point(0, 0);
             this.btnLogo.Multiline = false;
             this.btnLogo.Name = "btnLogo";
-            this.btnLogo.Size = new System.Drawing.Size(89, 51);
+            this.btnLogo.Size = new System.Drawing.Size(96, 51);
             this.btnLogo.TabIndex = 12;
             this.btnLogo.TextColor = System.Drawing.Color.Black;
             this.btnLogo.UseVisualStyleBackColor = false;
@@ -1053,6 +1136,7 @@ namespace BeeUi
             this.pCamera.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numCam)).EndInit();
             this.pName.ResumeLayout(false);
+            this.layInforTool.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.iconTool)).EndInit();
             this.LayoutEnd.ResumeLayout(false);
             this.LayoutEnd.PerformLayout();
@@ -1148,5 +1232,10 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workLive;
         private RJButton btnLive;
         private System.Windows.Forms.ToolStripMenuItem webCamTool;
+        private AutoFontLabel autoFontLabel2;
+        private AutoFontLabel autoFontLabel3;
+        public AutoFontLabel lbCTTool;
+        public AutoFontLabel lbRsTool;
+        public System.Windows.Forms.TableLayoutPanel layInforTool;
     }
 }

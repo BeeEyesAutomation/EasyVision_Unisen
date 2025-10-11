@@ -138,6 +138,12 @@
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
     </Compile>
     <Compile Include="ShowTool.cs" />
+    <Compile Include="StepEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StepEdit.Designer.cs">
+      <DependentUpon>StepEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Steps\SettingStep1.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -305,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProtocolPLC.resx">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StepEdit.resx">
+      <DependentUpon>StepEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\SettingStep1.resx">
       <DependentUpon>SettingStep1.cs</DependentUpon>
@@ -654,6 +663,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Barcode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sort Right_2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

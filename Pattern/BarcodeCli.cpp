@@ -1,22 +1,20 @@
-﻿#include "BarcodeCli.h"
+﻿
+#include "BarcodeCli.h"
 #include <opencv2/core.hpp>
-#include <cmath>
+
+
 using namespace cv;
+
 namespace BeeCpp {
 
     static inline float Deg2Rad(float d) { return d * 3.14159265358979323846f / 180.f; }
 
     BarcodeCoreCli::BarcodeCoreCli() { _core = new BeeCpp::BarcodeCore(); com = new BeeCpp::CommonPlus(); }
     BarcodeCoreCli::~BarcodeCoreCli() { this->!BarcodeCoreCli(); }
-    BarcodeCoreCli::!BarcodeCoreCli() { if (_core) { delete _core; _core = nullptr; } }
+    BarcodeCoreCli::!BarcodeCoreCli() { if (_core) { delete _core; _core = nullptr; } if (com) { delete com; com = nullptr; } }
 
-    PointF32 BarcodeCoreCli::ToPtF32(float x, float y) {
-        PointF32 p; p.X = x; p.Y = y; return p;
-    }
+    PointF32 BarcodeCoreCli::ToPtF32(float x, float y) { PointF32 p; p.X = x; p.Y = y; return p; }
 
-    // Convert các điểm polygon từ world → local (tâm 0, không xoay):
-    // 1) dịch về tâm (pt - center)
-    // 2) "un-rotate" theo -angleDeg để local không xoay
     void BarcodeCoreCli::WorldPolygonToLocalUnrotated(
         const std::vector<cv::Point2f>& worldPts,
         const cv::Point2f& center,
@@ -25,12 +23,8 @@ namespace BeeCpp {
     {
         int n = (int)worldPts.size();
         outLocal = gcnew cli::array<PointF32>(n);
-
-        // OpenCV RotatedRect.angle quy ước [ -90 , 0 ), chiều xoay (CW) lịch sử.
-        // Ta giữ nguyên angleDeg cho RectRotationDeg, còn local thì "un-rotate": rot(-angleDeg)
         float a = Deg2Rad(-angleDeg);
         float c = std::cos(a), s = std::sin(a);
-
         for (int i = 0; i < n; ++i) {
             float dx = worldPts[i].x - center.x;
             float dy = worldPts[i].y - center.y;
@@ -40,47 +34,66 @@ namespace BeeCpp {
         }
     }
 
-    static BeeCpp::CodeSymbologyCli MapCli(BeeCpp::CodeSymbology s)
+    // mapping trực tiếp theo thứ tự enum
+    static inline BeeCpp::CodeSymbologyCli MapCli(BeeCpp::Symbology s)
     {
         return static_cast<BeeCpp::CodeSymbologyCli>(static_cast<int>(s));
     }
 
+    BeeCpp::FilterParams BarcodeCoreCli::ToNative(FilterParamsCli c)
+    {
+        BeeCpp::FilterParams f;
+        f.MinArea = c.MinArea;
+      
+        f.CloseKernelWDiv = c.CloseKernelWDiv;
+        f.CloseKernelH = c.CloseKernelH;
+        f.UseNoRotateMask = c.UseNoRotateMask;
+        return f;
+    }
+
+    BeeCpp::DetectOptions BarcodeCoreCli::ToNative(DetectOptionsCli c)
+    {
+        BeeCpp::DetectOptions o;
+        o.enablePreprocess = c.EnablePreprocess;
+        o.findBoxes = c.FindBoxes;
+        o.cropFirst = c.CropFirst;
+        o.debugDraw = c.DebugDraw;
+        o.debugSave = c.DebugSave;
+        if (c.DebugDir != nullptr) {
+            IntPtr p = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(c.DebugDir);
+            o.debugDir = static_cast<const char*>(p.ToPointer());
+            System::Runtime::InteropServices::Marshal::FreeHGlobal(p);
+        }
+        o.filter = ToNative(c.Filter);
+        return o;
+    }
+
     void BarcodeCoreCli::DetectAll(
-        IntPtr data, int width, int height, int stride, int channels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,
+        IntPtr data, int width, int height, int stride, int channels,
+        RectRotateCli rr, Nullable<RectRotateCli> rrMask,
+        DetectOptionsCli opts,
         List<RectRotateCli>^% rects,
-        List<System:: String^>^% payloads,
+        List<System::String^>^% payloads,
         List<CodeSymbologyCli>^% types)
     {
         rects = gcnew List<RectRotateCli>();
-        payloads = gcnew List<System:: String^>();
+        payloads = gcnew List<System::String^>();
         types = gcnew List<CodeSymbologyCli>();
-        cv::Mat src =  Mat();
+
         if (data == IntPtr::Zero || width <= 0 || height <= 0) return;
+
+        cv::Mat src;
         try
         {
-            // 1) Wrap dữ liệu managed bằng Mat với stride (step) tùy ý
-            int type = (channels == 1) ? CV_8UC1 :
-                (channels == 3) ? CV_8UC3 : CV_8UC4;
-
-            Mat wrapped(height, width, type, data.ToPointer(), (size_t)stride);
-
-            // 2) Convert sang 8U3 (BGR)
-            Mat bgr;
-            switch (channels)
-            {
-            case 1:  cvtColor(wrapped, bgr, COLOR_GRAY2BGR); break; // 1 -> 3
-            case 3:  bgr = wrapped; break;                           // đã 3 kênh
-            case 4:  cvtColor(wrapped, bgr, COLOR_BGRA2BGR); break;  // 4 -> 3
-            }
             Nullable<RectRotateCli> mask =
                 rrMask.HasValue ? Nullable<RectRotateCli>(rrMask.Value)
                 : Nullable<RectRotateCli>();
+
             com->CropRotToMat(
                 data, width, height, stride, channels,
-                rr, mask,false,
+                rr, mask, false,
                 System::IntPtr(&src)
             );
-            //   cv::imwrite("color.png", _ColorPP->matCrop);
         }
         catch (const cv::Exception& ex)
         {
@@ -88,51 +101,57 @@ namespace BeeCpp {
         }
 
         std::vector<BeeCpp::CodeResult> results;
-        _core->DetectAll(src, results);
+        BeeCpp::DetectOptions nativeOpt = ToNative(opts);
+        _core->DetectAll(src, results, nativeOpt);
 
         rects->Capacity = (int)results.size();
         payloads->Capacity = (int)results.size();
         types->Capacity = (int)results.size();
 
         for (const auto& r : results) {
-            RectRotateCli rr;
-            // Shape: nếu ZXing trả polygon (thường 4 đỉnh), coi là Polygon
-            rr.Shape = (r.corners.size() >= 3) ? ShapeType::Polygon : ShapeType::Rectangle;
-
-            rr.PosCenter = ToPtF32(r.rrect.center.x, r.rrect.center.y);
-            RectF32 wh;
-            wh.Width = static_cast<float>(r.rrect.size.width);
-            wh.Height = static_cast<float>(r.rrect.size.height);
-            rr.RectWH = wh;
-          
-            rr.RectRotationDeg = r.rrect.angle;   // giữ đúng quy ước OpenCV ([-90,0))
-            rr.IsWhite = false;                   // mặc định
-
-            // PolyLocalPoints (nếu có polygon)
+            RectRotateCli rrOut;
+            rrOut.Shape = (r.corners.size() >= 3) ? ShapeType::Polygon : ShapeType::Rectangle;
+            rrOut.PosCenter = ToPtF32(r.rrect.center.x, r.rrect.center.y);
+            RectF32 wh; wh.Width = (float)r.rrect.size.width; wh.Height = (float)r.rrect.size.height;
+            rrOut.RectWH = wh;
+            rrOut.RectRotationDeg = r.rrect.angle;
+            rrOut.IsWhite = false;
             if (!r.corners.empty()) {
-                WorldPolygonToLocalUnrotated(r.corners, r.rrect.center, (float)rr.RectRotationDeg, rr.PolyLocalPoints);
+                WorldPolygonToLocalUnrotated(r.corners, r.rrect.center, (float)rrOut.RectRotationDeg, rrOut.PolyLocalPoints);
             }
             else {
-                rr.PolyLocalPoints = nullptr;
+                rrOut.PolyLocalPoints = nullptr;
             }
+            rrOut.HexVertexOffsets = nullptr;
 
-            // Hexagon: không áp dụng ở đây
-            rr.HexVertexOffsets = nullptr;
-
-            rects->Add(rr);
+            rects->Add(rrOut);
             payloads->Add(gcnew System::String(r.text.c_str()));
             types->Add(MapCli(r.symbology));
         }
     }
 
-    void BarcodeCoreCli::DetectAllWithCorners(
-        IntPtr data, int width, int height, int stride, int channels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,
-        List<RectRotateCli>^% rects,
-        List<System:: String^>^% payloads,
-        List<CodeSymbologyCli>^% types)
+  
+
+    bool BarcodeCoreCli::ReadMatGray8(IntPtr p, IntPtr dstData, int dstStride, int width, int height)
     {
-        // hiện tại logic giống DetectAll (đã trả PolyLocalPoints). Giữ API riêng để sau mở rộng.
-        DetectAll(data, width, height, stride,channels,rr,rrMask, rects, payloads, types);
+        if (p == IntPtr::Zero || dstData == IntPtr::Zero) return false;
+        cv::Mat* m = reinterpret_cast<cv::Mat*>(p.ToPointer());
+        if (!m || m->empty() || m->type() != CV_8UC1) return false;
+        if (m->cols != width || m->rows != height) return false;
+
+        unsigned char* dst = reinterpret_cast<unsigned char*>(dstData.ToPointer());
+        for (int y = 0; y < height; ++y) {
+            const unsigned char* srcRow = m->ptr<unsigned char>(y);
+            std::memcpy(dst + (size_t)y * (size_t)dstStride, srcRow, (size_t)width);
+        }
+        return true;
+    }
+
+    void BarcodeCoreCli::FreeMat(IntPtr p)
+    {
+        if (p == IntPtr::Zero) return;
+        cv::Mat* m = reinterpret_cast<cv::Mat*>(p.ToPointer());
+        delete m;
     }
 
 } // namespace BeeCpp

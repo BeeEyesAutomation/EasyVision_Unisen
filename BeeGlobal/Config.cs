@@ -18,6 +18,7 @@ namespace BeeGlobal
         public Color ColorOK;
         public Color ColorNG;
         public Color ColorNone;
+        public Color ColorChoose;
         public Color ColorInfor;
         public Color TextColor;
 
@@ -25,8 +26,11 @@ namespace BeeGlobal
         public bool IsShowDetail = true;
         public bool IsShowBox = true;
         public bool IsShowPostion = true;
+        public bool IsShowResult = true;
+        public bool IsShowNotMatching = true;
+        public bool IsShowMatProcess = false;
 
-        public  float TotalTime = 0, Percent = 0;
+        public float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;
         public  Color colorGui = Color.FromArgb(100, 114, 114, 114);
         public int WidthEditProg = 0;

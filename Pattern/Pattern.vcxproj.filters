@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="BarcodeCli.cpp" />
+    <ClCompile Include="BarcodeCore.cpp" />
+    <ClCompile Include="ColorArea.cpp" />
+    <ClCompile Include="ColorPixels.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="FiltersCli.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Pattern.cpp" />
+    <ClCompile Include="PitchCli.cpp" />
+    <ClCompile Include="PitchCore.cpp" />
+    <ClCompile Include="RansacLineCli.cpp" />
+    <ClCompile Include="RansacLineCore.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BarcodeCli.h" />
+    <ClInclude Include="BarcodeCore.h" />
+    <ClInclude Include="ColorArea.h" />
+    <ClInclude Include="ColorPixel.h" />
+    <ClInclude Include="DebugDraw.h" />
+    <ClInclude Include="FiltersCli.h" />
+    <ClInclude Include="FiltersCore.hpp" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Pattern.h" />
+    <ClInclude Include="PitchCli.h" />
+    <ClInclude Include="PitchCore.h" />
+    <ClInclude Include="RansacLineCli.h" />
+    <ClInclude Include="RansacLineCore.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="version.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BeeCpp.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Backup">
+      <UniqueIdentifier>{7fbc3956-84ab-43e3-be5a-11fa549c3ff9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

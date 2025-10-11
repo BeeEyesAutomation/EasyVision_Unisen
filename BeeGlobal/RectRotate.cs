@@ -7,6 +7,12 @@ namespace BeeGlobal
     [Serializable()]
     public class RectRotate
     {
+
+        public int TypeValue;
+        public bool IsOK = false;
+        public float Score = 0;
+        public float Value = 0;
+        public String Name = "";
         public RectangleF _rect { get; set; }                 // ALWAYS: (-w/2,-h/2,w,h)
         public PointF _PosCenter { get; set; }                // world center
         private float _angle = 0f;
@@ -61,6 +67,7 @@ namespace BeeGlobal
             ActiveVertexIndex = clone.ActiveVertexIndex;
             AutoExpandBounds = clone.AutoExpandBounds;
             AutoOrientPolygon = clone.AutoOrientPolygon;
+            Name=clone.Name;
         }
 
         public RectRotate()

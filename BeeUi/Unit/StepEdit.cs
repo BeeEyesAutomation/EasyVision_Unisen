@@ -33,7 +33,7 @@ namespace BeeUi.Common
             //this.SetStyle(ControlStyles.UserPaint, true);
             this.AutoScaleMode = AutoScaleMode.Dpi; // hoặc AutoScaleMode.Font
             // this.Visible = false;
-            G.StepEdit = this;
+            Global.StepEdit = this;
 
 
         }
@@ -55,7 +55,7 @@ namespace BeeUi.Common
             //  if(G.Header!=null)
             // this.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
 
-            //   G.StepEdit = this;
+            //   Global.StepEdit = this;
         }
         public SettingStep2 SettingStep2 = new SettingStep2();
         public SettingStep1 SettingStep1=new SettingStep1();

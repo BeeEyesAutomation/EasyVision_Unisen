@@ -47,7 +47,7 @@ namespace BeeCore
                 matTemp = bmRaw.ToMat();
                 LearnPattern(matTemp, true);
             }
-            FilletCornerMeasure = new FilletCornerMeasure();
+            DetectIntersect = new DetectIntersect();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
@@ -368,9 +368,9 @@ namespace BeeCore
 
         public bool IsLimitCouter = true;
         [NonSerialized]
-        FilletCornerMeasure FilletCornerMeasure = new FilletCornerMeasure();
+        DetectIntersect DetectIntersect = new DetectIntersect();
         [NonSerialized]
-        FilletCornerMeasure. Result Result = new FilletCornerMeasure.Result();
+        CornerResult Result = new CornerResult();
         [NonSerialized]
       Mat   matProcess =new Mat();
         public void DoWork(RectRotate rectRotate)
@@ -383,13 +383,12 @@ namespace BeeCore
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
-           
+            matProcess=new Mat();
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
                 if (raw.Empty()) 
                     return;
 
-                // Bảo đảm ảnh xám: dùng biến đích riêng, không in-place vào raw
                 Mat gray = null;
                 try
                 {
@@ -516,19 +515,25 @@ namespace BeeCore
                                                 matProcess = t;
                                             }
 
-                                            // === Corner measure ===
-                                            FilletCornerMeasure.MaxLineCandidates = 8;
-                                            FilletCornerMeasure.RansacThreshold = 2;
-                                            FilletCornerMeasure.RansacIterations = 600;
-                                            FilletCornerMeasure.PairStrategy = LinePairStrategy.StrongPlusOrth;
-                                            FilletCornerMeasure.PerpAngleToleranceDeg = 3;
+                                      
+                                       
+                                            try
+                                            {
+                                               
+                                                Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess);
+                                               
+                                              //  Cv2.ImWrite("RS.png", Result.Debug);
 
-                                            Result = FilletCornerMeasure.Measure(matCrop, matProcess);
 
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.ToString());
+                                            }
                                             // Kết quả vẽ 1 rect bé tại góc phát hiện
                                             int width1 = 10, height1 = 10;
-                                            float angle1 = (float)Result.AtoB_CCW_Deg;
-                                            angle1 = 270f - angle1;
+                                            float angle1 = (float)Result.AngleDeg;
+                                            //   angle1 = 270f - angle1;
 
                                             scoreSum = 100f;
                                             PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
@@ -641,7 +646,7 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText =new SolidBrush( Global.Config.ColorInfor);
+            Brush brushText =new SolidBrush( Global.Config.TextColor);
             Color cl = Color.LimeGreen;
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
@@ -657,20 +662,66 @@ namespace BeeCore
             if (Global.Config.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
 
-            if (MethodSample==MethodSample.Corner)
+            if (!Global.IsRun && Global.Config.IsShowMatProcess||Global.IsRun&&Global.Config.IsShowDetail)
             {
-                if (!Global.IsRun || Global.Config.IsShowDetail)
-                {
-                    if (matProcess != null && !matProcess.Empty())
-                        Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
-                }
+                if (matProcess != null && !matProcess.Empty())
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
             }
-           
-            gc.ResetTransform();
-            if (listScore == null) return gc;
-            if (rectRotates.Count > 0)
+
+            if (MethodSample == MethodSample.Corner && Result.Found)
             {
-                int i = 1;
+               
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+           
+                gc.Transform = mat;
+                var flags = DrawFlags.None;
+                if (Global.IsRun)
+                    flags = DrawFlags.BestCorner | DrawFlags.BestLines ;
+                else
+                {
+                    if (Global.Config.IsShowDetail)
+                    {
+                        flags = flags | DrawFlags.Inliers ;
+
+                    }
+                    if (Global.Config.IsShowNotMatching)
+                    {
+                        flags=flags|DrawFlags.RansacRejected | DrawFlags.Runs;
+
+                    }
+                    if (Global.Config.IsShowResult)
+                    {
+                        flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
+
+                    }
+
+                }
+              
+                DrawStyle drawStyle = new DrawStyle
+                    {
+                        Inlier = Color.Red,
+                    LineChoose = Global.Config.ColorChoose,
+                    LineResult = Global.Config.ColorInfor,
+                    LineNone = Global.Config.ColorNone,
+                    
+                        LineDash = DashStyle.Solid,
+                        InlierSize = Global.Config.ThicknessLine / 2,
+                        Thickness = Global.Config.ThicknessLine,
+                    };
+
+                DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.DebugState, flags, drawStyle);
+
+             
+            }
+
+            if (MethodSample == MethodSample.Pattern)
+            {
+                gc.ResetTransform();
+            if (listScore == null) return gc;
+                if (listScore.Count != rectRotates.Count) return gc;
+                if (rectRotates.Count > 0)
+            {
+                int i = 0;
                 foreach (RectRotate rot in rectRotates)
                 {
                     mat = new Matrix();
@@ -684,27 +735,7 @@ namespace BeeCore
                     mat.Rotate(rotA._rectRotation);
                     mat.Translate(rotA._rect.X, rotA._rect.Y);
                     gc.Transform = mat;
-                    if(MethodSample==MethodSample.Corner)
-                    {
-                        Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineH), new Pen(Brushes.Blue, 2));
-                        Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineV), new Pen(Brushes.Blue, 2));
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                        mat.Rotate(rot._rectRotation);
-                        gc.Transform = mat;
-
-
-                        if (Global.Config.IsShowPostion)
-                        {
-                            int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
-                            Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
-                            String sPos = "X,Y,A - " + listP_Center[i - 1].X + "," + listP_Center[i - 1].Y + " , " + Math.Round(list_AngleCenter[i - 1], 1);
-                            gc.DrawString(sPos, font, brushText, new PointF(5, 5));
-
-                        }
-                    }
-                  
-                    else if (MethodSample == MethodSample.Pattern)
-                    {
+                 
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
@@ -713,11 +744,11 @@ namespace BeeCore
                         {
                             int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
                             Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
-                            String sPos = "X,Y,A - " + listP_Center[i - 1].X + "," + listP_Center[i - 1].Y + " , " + Math.Round(list_AngleCenter[i - 1], 1);
+                            String sPos = "X,Y,A - " + listP_Center[i ].X + "," + listP_Center[ i].Y + " , " + Math.Round(list_AngleCenter[i ], 1);
                             gc.DrawString(sPos, font, brushText, new PointF(5, 5));
 
                         }
-                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i - 1], 1) + "%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i], 1) + "%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
 
                     }
                   

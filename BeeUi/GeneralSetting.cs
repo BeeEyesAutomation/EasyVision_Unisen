@@ -64,9 +64,13 @@ namespace BeeUi
             btnCLInfor.ForeColor = Global.Config.ColorInfor;
             lbCLNone.BackColor = Global.Config.ColorNone;
             btnCLNone.ForeColor = Global.Config.ColorNone;
-
+            lbCLText.BackColor = Global.Config.TextColor;
+            btnCLText.ForeColor = Global.Config.TextColor;
+            lbClChoose.BackColor = Global.Config.ColorChoose;
+            btnClChoose.ForeColor = Global.Config.ColorChoose;
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
+
         }
 
      
@@ -276,6 +280,40 @@ namespace BeeUi
             Global.Config.ColorNone = Color.LightGray;
             lbCLNone.BackColor = Global.Config.ColorNone;
             btnCLNone.ForeColor = Global.Config.ColorNone;
+        }
+
+        private void btnChooseCLChoose_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.ColorChoose = colorChoose.Color;
+                lbClChoose.BackColor = Global.Config.ColorChoose;
+                btnClChoose.ForeColor = Global.Config.ColorChoose;
+            }
+        }
+
+        private void btnDefaultChoose_Click(object sender, EventArgs e)
+        {
+            Global.Config.ColorChoose = Color.FromArgb(246, 204, 120);
+            lbClChoose.BackColor = Global.Config.ColorChoose;
+            btnClChoose.ForeColor = Global.Config.ColorChoose;
+        }
+
+        private void btnChooseCLText_Click(object sender, EventArgs e)
+        {
+            if (colorChoose.ShowDialog() == DialogResult.OK)
+            {
+                Global.Config.TextColor = colorChoose.Color;
+                lbCLText.BackColor = Global.Config.TextColor;
+                btnCLText.ForeColor = Global.Config.TextColor;
+            }
+        }
+
+        private void btnDefaultCLText_Click(object sender, EventArgs e)
+        {
+            Global.Config.TextColor = Color.White;
+            lbCLText.BackColor = Global.Config.TextColor;
+            btnCLText.ForeColor = Global.Config.TextColor;
         }
     }
 }

@@ -405,6 +405,8 @@ namespace BeeCore
 				matTemp = bmRaw.ToMat();
 				LearnPattern(matTemp, true);
 			}
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if(rotArea == null) rotArea = new RectRotate();
 			
 			Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;

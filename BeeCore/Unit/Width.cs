@@ -339,6 +339,8 @@ namespace BeeCore
 
         public void SetModel()
         {
+            
+            if (rotArea == null) rotArea = new RectRotate();
             rotMask = null;
             ParallelGapDetector = new ParallelGapDetector();
             Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;

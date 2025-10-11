@@ -99,7 +99,7 @@ namespace BeeCore
         {
             Results=Results.None;
           
-            StatusTool = StatusTool.Processing;
+              StatusTool = StatusTool.Processing;
             timer.Restart();
             if (UsedTool == UsedTool.NotUsed&&Global.IsRun)
                 return;

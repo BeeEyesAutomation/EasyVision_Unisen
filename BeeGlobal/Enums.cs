@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum ModeCheck
+    {
+       Single,Multi
+    }
     public enum ColorGp
     {
         HSV,RGB,BGR
@@ -144,7 +148,7 @@ namespace BeeGlobal
     {
         Edit,
         Check,
-        Color,None,Choose
+        Color,None,Choose,Scan
     }
     public enum StatusIO
     {

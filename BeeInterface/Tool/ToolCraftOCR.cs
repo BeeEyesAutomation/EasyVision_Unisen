@@ -51,9 +51,9 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
-              
 
-               
+
+                imgTemp.Image = Propety.bmRaw;
                 btnCrop.IsCLick = true;
                 Global.TypeCrop = TypeCrop.Crop;
                 Propety.TypeCrop = Global.TypeCrop;
@@ -64,6 +64,15 @@ namespace BeeInterface
                 btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
                 btnWhite.IsCLick = Propety.rotArea.IsWhite;
                 btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+                btnModeSingle.IsCLick = Propety.ModeCheck == ModeCheck.Single ? true : false;
+                btnModeMulti.IsCLick = Propety.ModeCheck == ModeCheck.Multi ? true : false;
+                AdjIndexChoose.Value = Propety.IndexChoose + 1;
+                AdjOffSetArea.IsInital = true;
+                AdjOffSetArea.Value = Propety.OffSetArea;
+                AdjOffSetSample.Value = Propety.OffSetSample;
+                AdjMinArea.Value = Propety.MinArea;
+
+                AdjIndexChoose.Enabled = Propety.ModeCheck == ModeCheck.Single ? true : false;
             }
             catch (Exception ex)
             {
@@ -78,14 +87,22 @@ namespace BeeInterface
 
         private void ToolWidth_StatusToolChanged(StatusTool obj)
         {if (Global.IsRun) return;
-            btnScanOCR.Enabled = true;
+            btnScan.Enabled = true;
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
-                //btnChooseOCR.IsCLick = true;
+                if (Propety.IsScan)
+                {
+                    AdjIndexChoose.Value = Propety.IndexChoose+1;
+                    btnChoose.IsCLick = true;
+                    Propety.TypeCrop = TypeCrop.Crop;
+                    imgTemp.Image = Propety.bmRaw;
+                    int withBox = imgTemp.Width;
+                    float ScaleW = (float)(withBox * 1.0 / Propety.bmRaw.Width);
+                    imgTemp.Zoom = (int)(ScaleW * 100);
+                    imgTemp.AutoScrollPosition = new System.Drawing.Point(0, 0);
+                    layTemp.Height = Propety.bmRaw.Height * (imgTemp.Zoom / 100) +10;
+                }
 
-                //Global.EditTool.View.listChoose = Propety.listRotScan;
-               
-                //Global.StatusDraw = StatusDraw.Choose;
                 btnTest.Enabled = true;
                 imgTemp.Image = Propety.bmRaw;
                
@@ -141,6 +158,9 @@ namespace BeeInterface
    
         private void btnTest_Click(object sender, EventArgs e)
         {
+            btnChoose.IsCLick = false;
+
+            Global.StatusDraw = StatusDraw.Edit;
             btnTest.Enabled = false;
             if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]. worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
@@ -187,6 +207,7 @@ namespace BeeInterface
         }
         private void btnCropRect_Click(object sender, EventArgs e)
         {
+          
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
             btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
@@ -195,7 +216,8 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotCrop.IsWhite;
             btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-
+            Global.StatusDraw = StatusDraw.Edit;
+            btnChoose.IsCLick = false;
         }
 
         private void btnCropArea_Click(object sender, EventArgs e)
@@ -209,6 +231,8 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            Global.StatusDraw = StatusDraw.Edit;
+            btnChoose.IsCLick = false;
         }
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -224,7 +248,8 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-
+            Global.StatusDraw = StatusDraw.Edit;
+            btnChoose.IsCLick = false;
 
         }
         private void btnNone_Click(object sender, EventArgs e)
@@ -430,14 +455,14 @@ namespace BeeInterface
 
         private void btnScanOCR_Click(object sender, EventArgs e)
         {
-            btnScanOCR.Enabled = false;
-            Propety.IsScanOCR = true;
-         Propety.ScanOCR();
-           
+            btnChoose.IsCLick = false;
+            Propety.IsScan = true;
+            Propety.Scan();
+
         }
 
         private void rjButton2_Click(object sender, EventArgs e)
-        {if(btnChooseOCR.IsCLick)
+        {if(btnChoose.IsCLick)
             {
                 Global.EditTool.View.listChoose = Propety.listRotScan;
                 Global.StatusDraw = StatusDraw.Choose;
@@ -453,6 +478,47 @@ namespace BeeInterface
         private void AdjOffSetArea_ValueChanged(float obj)
         {
             Propety.OffSetArea =(int) AdjOffSetArea.Value;
+            Propety.UpdateOffSet();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnChoose_Click(object sender, EventArgs e)
+        {
+            if (btnChoose.IsCLick)
+            {
+                Global.TypeCrop = TypeCrop.Crop;
+                Global.StatusDraw = StatusDraw.Scan;
+            }
+            else
+            {
+                Global.StatusDraw = StatusDraw.Edit;
+                Global.TypeCrop = TypeCrop.Area;
+            }
+        }
+
+        private void btnModeSingle_Click(object sender, EventArgs e)
+        {
+            Propety.ModeCheck = ModeCheck.Single;
+            AdjIndexChoose.Enabled = Propety.ModeCheck == ModeCheck.Single ? true : false;
+        }
+
+        private void AdjIndexChoose_ValueChanged(float obj)
+        {
+            Propety.IndexChoose = (int)AdjIndexChoose.Value-1;
+        }
+
+        private void AdjMinArea_ValueChanged(float obj)
+        {
+            Propety.MinArea = (int)AdjMinArea.Value;
+        }
+
+        private void AdjOffSetSample_ValueChanged(float obj)
+        {
+            Propety.OffSetSample =(int) AdjOffSetSample.Value;
         }
     }
 }

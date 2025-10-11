@@ -31,7 +31,7 @@ namespace BeeUi.Commons
             G.StatusDashboard.InfoBlockBackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
             G.StatusDashboard.StatusBlockBackColor= Color.FromArgb(AlphaBar-50, color.R, color.G, color.B);
             G.StatusDashboard.MidHeaderBackColor= Color.FromArgb(AlphaBar, color.R, color.G, color.B);
-            //G.StepEdit.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
+            //Global.StepEdit.BackColor = Color.FromArgb(AlphaBar, color.R, color.G, color.B);
           //   G.StatusDashboard.picChart.BackColor = Color.FromArgb(AlphaText, color.R, color.G, color.B);
            // Global.EditTool.View.pTool.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);
             Global.ToolSettings.pBtn.BackColor = Color.FromArgb(AlphaMenu, color.R, color.G, color.B);

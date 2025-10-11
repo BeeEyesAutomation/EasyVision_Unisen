@@ -50,7 +50,7 @@ namespace BeeInterface
             //btnNextStep.Enabled = false;
             //this.Parent.Controls.Remove(this);
             Global.EditTool.RefreshGuiEdit(Step.Step2);
-            //G.StepEdit.btnStep2.PerformClick();
+            //Global.StepEdit.btnStep2.PerformClick();
 
         }
    

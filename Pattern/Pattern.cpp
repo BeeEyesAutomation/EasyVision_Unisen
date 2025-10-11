@@ -667,7 +667,7 @@ void Pattern::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
 void Pattern::LearnPattern()
 {
 	Mat raw = img->matSample.clone();
-
+	
 	int iTopLayer = img->GetTopLayer(&raw, (int)sqrt((double)img->m_iMinReduceArea));
 	buildPyramid(raw, img->m_TemplData.vecPyramid, iTopLayer);
 	s_TemplData* templData = &img->m_TemplData;

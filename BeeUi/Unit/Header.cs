@@ -286,8 +286,8 @@ namespace BeeUi.Common
             //if (G.IsLoad) return;
             //  pMenu.Region = BeeCore.CustomGui.RoundRg(pMenu,Global.Config.RoundRad);
    //         BeeCore.CustomGui.RoundRg(pModel, Global.Config.RoundRad);
-   if (Global.Config!=null)
-            BeeCore.CustomGui.RoundRg(pPO, Global.Config.RoundRad);
+   //if (Global.Config!=null)
+   //         BeeCore.CustomGui.RoundRg(pPO, Global.Config.RoundRad);
 
 
             //   pMenu.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
@@ -759,6 +759,11 @@ txtQrCode.Focus();
         private void editProg1_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnTraining_Click(object sender, EventArgs e)
+        {
+            Global.IsAutoTemp = btnTraining.IsCLick;
         }
 
         bool IsKeyEnter = false;

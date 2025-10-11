@@ -103,6 +103,7 @@ namespace BeeGlobal
         //        }
         //    }
         //}
+        public static dynamic  StepEdit;
         public static LogsDashboard LogsDashboard;
         public static List<ItemNew> itemNews = new List<ItemNew>();
         public static bool IsLoadProgFist = false;
@@ -111,7 +112,7 @@ namespace BeeGlobal
         public static float ScaleZoom;
         public static Point pScroll;
         public static dynamic ToolSettings;
-    
+        public static bool IsAutoTemp= false;
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
         public static Config Config;

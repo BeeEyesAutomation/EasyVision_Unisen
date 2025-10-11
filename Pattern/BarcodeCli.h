@@ -1,18 +1,59 @@
-﻿#include "Global.h"
-#include "BarcodeCore.h" // core ZXing của bạn
+﻿
+#pragma once
+#include "Global.h"
+#include "BarcodeCore.h"
 
 using namespace System;
 using namespace System::Collections::Generic;
 
 namespace BeeCpp {
+
+    // Map gần 1-1 với Symbology (giữ nguyên thứ tự để cast trực tiếp)
     public enum class CodeSymbologyCli
     {
         Unknown = 0,
-        QR_CODE,
-        EAN_13, EAN_8, UPC_A, UPC_E,
-        CODE_128, CODE_39, ITF, CODABAR,
-        PDF417, AZTEC, DATA_MATRIX
+        EAN8, EAN13, UPC_A, UPC_E,
+        Code39, Code93, Code128, ITF,
+        QR, DataMatrix, PDF417, Aztec,
+        MaxiCode, Codabar, MicroQR, MicroPDF417, RSS14, RSSExpanded
     };
+
+    // Tham số filter cho 1D (mặc định đúng như bạn đang set)
+    public value struct FilterParamsCli {
+        int   MinArea;
+    
+        int   CloseKernelWDiv;
+        int   CloseKernelH;
+        bool  UseNoRotateMask;
+        static FilterParamsCli Defaults() {
+            FilterParamsCli f;
+            f.MinArea = 700;  f.CloseKernelWDiv = 15; f.CloseKernelH = 3; f.UseNoRotateMask = true;
+            return f;
+        }
+    };
+
+    // Tuỳ chọn detect
+    public value struct DetectOptionsCli {
+        bool        EnablePreprocess;
+        bool        FindBoxes;      // thay cho tham số FindBox rời
+        bool        CropFirst;
+        bool        DebugDraw;
+        bool        DebugSave;
+        System::String^ DebugDir;
+        FilterParamsCli Filter;
+        static DetectOptionsCli Defaults() {
+            DetectOptionsCli o;
+            o.EnablePreprocess = false;
+            o.FindBoxes = true;
+            o.CropFirst = true;
+            o.DebugDraw = false;
+            o.DebugSave = false;
+            o.DebugDir = gcnew System::String("");
+            o.Filter = FilterParamsCli::Defaults();
+            return o;
+        }
+    };
+
     public ref class BarcodeCoreCli
     {
     public:
@@ -20,33 +61,37 @@ namespace BeeCpp {
         ~BarcodeCoreCli();
         !BarcodeCoreCli();
 
-        // KHÔNG dùng [Out]; dùng % (tracking reference) như bạn yêu cầu
+        // Detect nhiều mã trong ROI rr (có thể có rrMask). Output qua % (tracking reference)
         void DetectAll(
-            IntPtr data, int width, int height, int stride, int channels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,
+            IntPtr data, int width, int height, int stride, int channels,
+            RectRotateCli rr, Nullable<RectRotateCli> rrMask,
+            DetectOptionsCli opts,
             List<RectRotateCli>^% rects,
-            List<System:: String^>^% payloads,
+            List<System::String^>^% payloads,
             List<CodeSymbologyCli>^% types
         );
 
-        // Nếu muốn lấy cả polygon local
-        void DetectAllWithCorners(
-            IntPtr data, int width, int height, int stride, int channels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,
-            List<RectRotateCli>^% rects,
-            List<System:: String^>^% payloads,
-            List<CodeSymbologyCli>^% types
-        );
+        
+        // Copy dữ liệu CV_8U (grayscale) từ cv::Mat* về buffer managed (stride tuỳ ý).
+        // Trả false nếu type không phải CV_8UC1 hoặc kích thước không khớp.
+        bool ReadMatGray8(IntPtr matPtr, IntPtr dstData, int dstStride, int width, int height);
+
+        // Giải phóng cv::Mat* đã trả về từ GetMask1D
+        void FreeMat(IntPtr matPtr);
 
     private:
         BeeCpp::BarcodeCore* _core;
         CommonPlus* com;
-        // tiện ích: xoay điểm (deg), và convert polygon world -> local (un-rotate)
         static PointF32 ToPtF32(float x, float y);
         static void WorldPolygonToLocalUnrotated(
             const std::vector<cv::Point2f>& worldPts,
             const cv::Point2f& center,
-            float angleDeg, // OpenCV angle
-            cli::array<PointF32>^% outLocal // alloc & fill
+            float angleDeg,
+            cli::array<PointF32>^% outLocal
         );
+
+        static BeeCpp::FilterParams ToNative(FilterParamsCli c);
+        static BeeCpp::DetectOptions ToNative(DetectOptionsCli c);
     };
 
 } // namespace BeeCpp

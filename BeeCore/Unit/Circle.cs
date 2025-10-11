@@ -66,6 +66,8 @@ namespace BeeCore
         }
         public void SetModel()
         {
+          
+            if (rotArea == null) rotArea = new RectRotate();
             rotMask = null;
             Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;

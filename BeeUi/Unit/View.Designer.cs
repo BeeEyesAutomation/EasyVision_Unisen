@@ -34,6 +34,20 @@ namespace BeeUi
         {
             this.components = new System.ComponentModel.Container();
             this.imgView = new Cyotek.Windows.Forms.ImageBox();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showImageFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.showResultTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDetailTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDetailWrong = new System.Windows.Forms.ToolStripMenuItem();
+            this.chooseAreaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chooseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.newShapeTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.shapeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.elipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hexagonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.polygonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMenu = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnZoomOut = new BeeInterface.RJButton();
@@ -55,7 +69,6 @@ namespace BeeUi
             this.workInsert = new System.ComponentModel.BackgroundWorker();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.tmRefresh = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tmOut = new System.Windows.Forms.Timer(this.components);
             this.tmContinuous = new System.Windows.Forms.Timer(this.components);
             this.workTrig = new System.ComponentModel.BackgroundWorker();
@@ -77,6 +90,7 @@ namespace BeeUi
             this.btnCap = new BeeInterface.RJButton();
             this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
             this.workLiveWebcam = new System.ComponentModel.BackgroundWorker();
+            this.contextMenuStrip2.SuspendLayout();
             this.pMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pView.SuspendLayout();
@@ -94,6 +108,8 @@ namespace BeeUi
             this.imgView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.imgView.AutoCenter = false;
+            this.imgView.ContextMenuStrip = this.contextMenuStrip2;
             this.imgView.GridColor = System.Drawing.Color.Transparent;
             this.imgView.GridScale = Cyotek.Windows.Forms.ImageBoxGridScale.None;
             this.imgView.Location = new System.Drawing.Point(0, 0);
@@ -112,6 +128,115 @@ namespace BeeUi
             this.imgView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseDown);
             this.imgView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseMove);
             this.imgView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.imgView_MouseUp);
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showImageFilter,
+            this.showResultTool,
+            this.showDetailTool,
+            this.showDetailWrong,
+            this.chooseAreaToolStripMenuItem,
+            this.chooseToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.newShapeTool,
+            this.shapeToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(184, 224);
+            // 
+            // showImageFilter
+            // 
+            this.showImageFilter.CheckOnClick = true;
+            this.showImageFilter.Name = "showImageFilter";
+            this.showImageFilter.Size = new System.Drawing.Size(183, 22);
+            this.showImageFilter.Text = "Show Image Filter";
+            this.showImageFilter.Click += new System.EventHandler(this.showImageFilter_Click);
+            // 
+            // showResultTool
+            // 
+            this.showResultTool.CheckOnClick = true;
+            this.showResultTool.Name = "showResultTool";
+            this.showResultTool.Size = new System.Drawing.Size(183, 22);
+            this.showResultTool.Text = "Show Result";
+            this.showResultTool.Click += new System.EventHandler(this.showResultTool_Click);
+            // 
+            // showDetailTool
+            // 
+            this.showDetailTool.CheckOnClick = true;
+            this.showDetailTool.Name = "showDetailTool";
+            this.showDetailTool.Size = new System.Drawing.Size(183, 22);
+            this.showDetailTool.Text = "Show Detail";
+            this.showDetailTool.Click += new System.EventHandler(this.showDetailTool_Click);
+            // 
+            // showDetailWrong
+            // 
+            this.showDetailWrong.CheckOnClick = true;
+            this.showDetailWrong.Name = "showDetailWrong";
+            this.showDetailWrong.Size = new System.Drawing.Size(183, 22);
+            this.showDetailWrong.Text = "Show More Detail ";
+            this.showDetailWrong.Click += new System.EventHandler(this.showDetailWrong_Click);
+            // 
+            // chooseAreaToolStripMenuItem
+            // 
+            this.chooseAreaToolStripMenuItem.Name = "chooseAreaToolStripMenuItem";
+            this.chooseAreaToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.chooseAreaToolStripMenuItem.Text = "Choose Area Check";
+            // 
+            // chooseToolStripMenuItem
+            // 
+            this.chooseToolStripMenuItem.Name = "chooseToolStripMenuItem";
+            this.chooseToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.chooseToolStripMenuItem.Text = "Choose Area Sample";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(183, 22);
+            this.toolStripMenuItem2.Text = "Choose Area Mask";
+            // 
+            // newShapeTool
+            // 
+            this.newShapeTool.Image = global::BeeUi.Properties.Resources.Cursor;
+            this.newShapeTool.Name = "newShapeTool";
+            this.newShapeTool.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newShapeTool.Size = new System.Drawing.Size(183, 22);
+            this.newShapeTool.Text = "New Shape";
+            this.newShapeTool.Click += new System.EventHandler(this.newShapeTool_Click);
+            // 
+            // shapeToolStripMenuItem
+            // 
+            this.shapeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rectangleToolStripMenuItem,
+            this.elipToolStripMenuItem,
+            this.hexagonToolStripMenuItem,
+            this.polygonToolStripMenuItem});
+            this.shapeToolStripMenuItem.Name = "shapeToolStripMenuItem";
+            this.shapeToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.shapeToolStripMenuItem.Text = "Shape";
+            // 
+            // rectangleToolStripMenuItem
+            // 
+            this.rectangleToolStripMenuItem.Name = "rectangleToolStripMenuItem";
+            this.rectangleToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.rectangleToolStripMenuItem.Text = "Rectangle";
+            // 
+            // elipToolStripMenuItem
+            // 
+            this.elipToolStripMenuItem.Name = "elipToolStripMenuItem";
+            this.elipToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.elipToolStripMenuItem.Text = "Elip";
+            // 
+            // hexagonToolStripMenuItem
+            // 
+            this.hexagonToolStripMenuItem.Name = "hexagonToolStripMenuItem";
+            this.hexagonToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.hexagonToolStripMenuItem.Text = "Hexagon";
+            // 
+            // polygonToolStripMenuItem
+            // 
+            this.polygonToolStripMenuItem.Name = "polygonToolStripMenuItem";
+            this.polygonToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.polygonToolStripMenuItem.Text = "Polygon";
             // 
             // pMenu
             // 
@@ -576,11 +701,6 @@ namespace BeeUi
             this.tmRefresh.Interval = 30000;
             this.tmRefresh.Tick += new System.EventHandler(this.tmRefresh_Tick);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // tmOut
             // 
             this.tmOut.Tick += new System.EventHandler(this.tmOut_Tick);
@@ -952,6 +1072,7 @@ namespace BeeUi
             this.Name = "View";
             this.Size = new System.Drawing.Size(1494, 759);
             this.Load += new System.EventHandler(this.View_Load);
+            this.contextMenuStrip2.ResumeLayout(false);
             this.pMenu.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pView.ResumeLayout(false);
@@ -976,7 +1097,6 @@ namespace BeeUi
         public System.ComponentModel.BackgroundWorker workReadCCD;
         public Cyotek.Windows.Forms.ImageBox imgView;
         private System.Windows.Forms.Timer tmRefresh;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         public System.Windows.Forms.Timer tmOut;
         public System.Windows.Forms.Panel pMenu;
         public System.Windows.Forms.Button btnMenu;
@@ -1005,5 +1125,19 @@ namespace BeeUi
         public System.Windows.Forms.Splitter split1;
         private RJButton btnPan;
         public System.ComponentModel.BackgroundWorker workLiveWebcam;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem showImageFilter;
+        private System.Windows.Forms.ToolStripMenuItem showResultTool;
+        private System.Windows.Forms.ToolStripMenuItem showDetailTool;
+        private System.Windows.Forms.ToolStripMenuItem chooseAreaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newShapeTool;
+        private System.Windows.Forms.ToolStripMenuItem shapeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rectangleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem elipToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hexagonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem polygonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chooseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem showDetailWrong;
     }
 }

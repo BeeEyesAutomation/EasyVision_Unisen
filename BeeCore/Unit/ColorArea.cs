@@ -99,6 +99,8 @@ namespace BeeCore
         public Color clShow;
         public void SetModel()
         {
+           
+            if (rotArea == null) rotArea = new RectRotate();
 
             rotMask = null;
             rotCrop = null;
