@@ -59,9 +59,10 @@ namespace BeeInterface
                 AdjThreshod.Value = Propety.ThresholdBinary;
 
                 AdjScale.Value = (float)Propety.Scale;
-                trackMaxLine.Value = Propety.MaximumLine;
                 trackMinInlier.Value = Propety.MinInliers;
-             
+                trackMaxLine.Value = Propety.MaximumLine;
+                AdjRANSACIterations.Value = Propety.RansacIterations;
+                AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
                 numMinLen.Value = Propety.MinLen;
                 numMaxLen.Value = Propety.MaxLen;
                 switch (Propety.MethordEdge)

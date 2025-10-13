@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="AddTool.cs" />
     <Compile Include="Algorithm\DetectIntersect.cs" />
+    <Compile Include="Algorithm\EdgePoints.cs" />
     <Compile Include="Algorithm\FilletCornerMeasure.cs" />
     <Compile Include="Algorithm\FilletCornerMeasure2.cs" />
     <Compile Include="Algorithm\FilterItem.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
     <Compile Include="Algorithm\RansacCircleFitter.cs" />
+    <Compile Include="Algorithm\RansacFitLine.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="Checking.cs" />
     <Compile Include="Core\HelpMouseView.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Unit\Pitch.cs" />
     <Compile Include="Unit\EdgePixel.cs" />
     <Compile Include="Unit\Edge.cs" />
+    <Compile Include="Unit\Intersect.cs" />
     <Compile Include="Unit\Width.cs" />
     <Compile Include="Unit\Measure.cs" />
     <Compile Include="Camera\About.cs">

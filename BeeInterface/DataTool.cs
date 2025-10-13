@@ -212,6 +212,9 @@ namespace BeeInterface
                 case TypeTool.CraftOCR:
                     control = new ToolCraftOCR();
                     break;
+                case TypeTool.Intersect:
+                    control = new ToolIntersect();
+                    break;
                 default:
                     return null;
                     break;

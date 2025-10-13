@@ -554,6 +554,7 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Menubar_1.png" />
     <None Include="Resources\Change_1.png" />
     <None Include="Resources\Sort Right_21.png" />
     <None Include="Resources\Hand.png" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace BeeGlobal
 {
@@ -224,8 +225,9 @@ namespace BeeGlobal
             PointF p0 = PolyLocalPoints[0];
             if (DistanceSquared(pLocal, p0) <= closeTolerance * closeTolerance)
             {
-                PolyLocalPoints.Add(p0);
+                //PolyLocalPoints.Add(p0);
                 IsPolygonClosed = true;
+             //   PolyLocalPoints = UniquePolygonPoints(PolyLocalPoints.ToArray(), true).ToList();
                 return true;
             }
             return false;
@@ -271,7 +273,20 @@ namespace BeeGlobal
             for (int i = 0; i < PolyLocalPoints.Count; i++)
                 PolyLocalPoints[i] = RotateLocal(PolyLocalPoints[i], deg);
         }
+        private static PointF[] UniquePolygonPoints(PointF[] poly, bool isClosed)
+        {
+            if (poly == null) return null;
+            int n = poly.Length;
+            if (n == 0) return poly;
 
+            // Nếu polygon đóng và phần tử cuối trùng hệt phần tử đầu → bỏ phần tử cuối
+            bool hasDupClose = isClosed && n >= 2 && poly[n - 1].Equals(poly[0]);
+            if (!hasDupClose) return poly;
+
+            var pts = new PointF[n - 1];
+            Array.Copy(poly, pts, n - 1);
+            return pts;
+        }
         /// <summary>
         /// Cập nhật _PosCenter, _rect theo polygon hiện tại.
         /// Nếu updateAngle = true: ước lượng hướng chính (PCA thô) rồi cộng vào _rectRotation
@@ -281,7 +296,7 @@ namespace BeeGlobal
         {
             if (Shape != ShapeType.Polygon || PolyLocalPoints == null || PolyLocalPoints.Count < 1)
                 return;
-
+            PolyLocalPoints= UniquePolygonPoints(PolyLocalPoints.ToArray(), true).ToList();
             // 1) bbox local hiện tại
             float minX = float.MaxValue, minY = float.MaxValue;
             float maxX = float.MinValue, maxY = float.MinValue;
@@ -545,7 +560,91 @@ namespace BeeGlobal
             if (Shape != ShapeType.Hexagon) return;
             ConvertToPolygonAutoBounds(ellipseSegments: 32, close: closed, autoOrient: autoOrient);
         }
+        private  RectangleF BboxOfNoClose(IList<PointF> pts)
+        {
+            int n = pts?.Count ?? 0;
+            if (n == 0) return RectangleF.Empty;
 
+            // Bỏ điểm cuối nếu đã close
+            int end = IsPolygonClosed ? n - 1 : n;
+
+            float minx = float.PositiveInfinity, miny = float.PositiveInfinity;
+            float maxx = float.NegativeInfinity, maxy = float.NegativeInfinity;
+            for (int i = 0; i < end; i++)
+            {
+                var p = pts[i];
+                if (p.X < minx) minx = p.X;
+                if (p.Y < miny) miny = p.Y;
+                if (p.X > maxx) maxx = p.X;
+                if (p.Y > maxy) maxy = p.Y;
+            }
+            if (float.IsNaN(minx) || float.IsInfinity(minx)) return RectangleF.Empty;
+            return RectangleF.FromLTRB(minx, miny, maxx, maxy);
+        }
+
+        // Tính PCA angle (độ) từ điểm local (bạn đã có bản cho C++).
+        private  float PCAAngleDeg(IList<PointF> pts)
+        {
+            // Bản tối giản, dùng cov xy; nếu bạn đã có phiên bản chính xác hơn thì dùng lại bản đó.
+            int n = pts?.Count ?? 0;
+            if (n < 2) return 0f;
+            int end = IsPolygonClosed ? n - 1 : n;
+
+            double mx = 0, my = 0;
+            for (int i = 0; i < end; i++) { mx += pts[i].X; my += pts[i].Y; }
+            mx /= end; my /= end;
+
+            double sxx = 0, sxy = 0, syy = 0;
+            for (int i = 0; i < end; i++)
+            {
+                double dx = pts[i].X - mx, dy = pts[i].Y - my;
+                sxx += dx * dx; sxy += dx * dy; syy += dy * dy;
+            }
+            // góc trục chính
+            double ang = 0.5 * Math.Atan2(2 * sxy, (sxx - syy)); // rad
+            return (float)(ang * 180.0 / Math.PI);
+        }
+        //public  void NormalizePolygonFrame( bool recomputeAngle)
+        //{
+        //    if ( this.PolyLocalPoints == null || this.PolyLocalPoints.Count < 3) return;
+        //   PolyLocalPoints = UniquePolygonPoints(PolyLocalPoints.ToArray(), true).ToList();
+        //    if (recomputeAngle)
+        //    {
+        //        float a = PCAAngleDeg(this.PolyLocalPoints); // độ
+        //        this._rectRotation = a;
+        //    }
+
+        //    // Bbox theo local
+        //    var bb = BboxOfNoClose(this.PolyLocalPoints);
+        //    if (bb.IsEmpty) return;
+
+        //    // Tâm local của polygon
+        //    var cLocal = new PointF(bb.Left + bb.Width * 0.5f, bb.Top + bb.Height * 0.5f);
+
+        //    // Dời tâm thế giới theo cLocal đã xoay theo _rectRotation
+        //    if (Math.Abs(cLocal.X) > 1e-6f || Math.Abs(cLocal.Y) > 1e-6f)
+        //    {
+        //        var dcWorld = RectRotate.Rotate(cLocal,this._rectRotation);
+        //       this._PosCenter = new PointF(this._PosCenter.X + dcWorld.X,this._PosCenter.Y + dcWorld.Y);
+
+        //        // Kéo toàn bộ điểm về tâm (0,0)
+        //        int end = IsPolygonClosed ?this.PolyLocalPoints.Count - 1 :this.PolyLocalPoints.Count;
+        //        //for (int i = 0; i < end; i++)
+        //        //{
+        //        //    var p =this.PolyLocalPoints[i];
+        //        //   this.PolyLocalPoints[i] = new PointF(p.X - cLocal.X, p.Y - cLocal.Y);
+        //        //}
+        //        // Nếu closed, đồng bộ điểm cuối = điểm đầu
+        //        //if (IsPolygonClosed)
+        //        //   this.PolyLocalPoints[this.PolyLocalPoints.Count - 1] =this.PolyLocalPoints[0];
+
+        //        // Bbox mới quanh (0,0)
+        //        bb = BboxOfNoClose(this.PolyLocalPoints);
+        //    }
+
+        //    // _rect luôn tâm tại (0,0) trong local
+        //   this._rect = new RectangleF(-bb.Width * 0.5f, -bb.Height * 0.5f, bb.Width, bb.Height);
+        //}
         public static bool PointInPolygon(IList<PointF> poly, PointF p)
         {
             if (poly == null || poly.Count < 3) return false;

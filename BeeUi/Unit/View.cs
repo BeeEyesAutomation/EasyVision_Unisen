@@ -601,8 +601,7 @@ namespace BeeUi
             if (Global.IndexToolSelected == -1) return;
                 if (toolEdit == null) return;
             if (Global.IsRun) return;
-            if (Global.StatusDraw == StatusDraw.Check&&e.Button==MouseButtons.Left) 
-                Global.StatusDraw = StatusDraw.Edit;
+         
             //if (Global.StatusDraw == StatusDraw.Scan && e.Button == MouseButtons.Left)
             //    Global.StatusDraw = StatusDraw.Choose;
             pDown = e.Location;
@@ -655,7 +654,8 @@ namespace BeeUi
             
             RectRotate rr = GetCurrentRR();
             if (rr == null) return;
-
+            if (Global.StatusDraw == StatusDraw.Check && rr._dragAnchor != AnchorPoint.None)
+                Global.StatusDraw = StatusDraw.Edit;
             // Reset tạo mới
             _maybeCreate = false;
             _creatingNew = false;
@@ -734,6 +734,10 @@ namespace BeeUi
             }
             // các shape khác: hit-test ở MouseMove
         }
+  
+
+        // CHÍNH: đưa polygon về tâm local (0,0), cập nhật _PosCenter, _rect & (tuỳ chọn) _rectRotation
+    
 
         // ====== MouseMove ======
         private float _rotStartAngleLocal = 0f; // góc local lúc bắt đầu xoay (radian)
@@ -880,9 +884,10 @@ namespace BeeUi
                 // ====== NHÁNH ĐANG KÉO (drag/resize/rotate/move) ======
                 if (_drag)
                 {
+                    
                     var rrSrc = getCurrentRR();
                     if (rrSrc == null) return;
-
+                  
                     // clone rrSrc
                     RectRotate rotateRect = new RectRotate(rrSrc._rect, rrSrc._PosCenter, rrSrc._rectRotation, rrSrc._dragAnchor);
                     rotateRect.Shape = rrSrc.Shape;
@@ -967,42 +972,67 @@ namespace BeeUi
 
                             case AnchorPoint.Rotation:
                                 {
-                                    // === XOAY MƯỢT VỚI ATAN2 & DELTA ANGLE ===
-                                    float angNow = (float)Math.Atan2(point.Y, point.X);
-
+                                    if (rotateRect.Shape == ShapeType.Polygon)
+                                        return;
+                                        float angNow = (float)Math.Atan2(point.Y, point.X);
                                     float deltaDeg = (float)((angNow - _rotStartAngleLocal) * 180.0 / Math.PI);
-
-                                    // chuẩn hoá về [-180, 180] để tránh "quay vòng"
                                     while (deltaDeg > 180f) deltaDeg -= 360f;
                                     while (deltaDeg < -180f) deltaDeg += 360f;
 
                                     rotateRect._rectRotation = _rotBase + deltaDeg;
-
-                                    // (tuỳ chọn) snap khi giữ Shift
                                     if ((ModifierKeys & Keys.Shift) == Keys.Shift)
                                     {
                                         float snap = 15f;
                                         rotateRect._rectRotation = (float)Math.Round(rotateRect._rectRotation / snap) * snap;
                                     }
+
+                                  
+                                    if (rotateRect.Shape == ShapeType.Polygon)
+                                        rotateRect.UpdateFromPolygon(  false); // KHÔNG đè lại góc vừa xoay
                                     break;
+                                    //// === XOAY MƯỢT VỚI ATAN2 & DELTA ANGLE ===
+                                    //float angNow = (float)Math.Atan2(point.Y, point.X);
+
+                                    //float deltaDeg = (float)((angNow - _rotStartAngleLocal) * 180.0 / Math.PI);
+
+                                    //// chuẩn hoá về [-180, 180] để tránh "quay vòng"
+                                    //while (deltaDeg > 180f) deltaDeg -= 360f;
+                                    //while (deltaDeg < -180f) deltaDeg += 360f;
+
+                                    //rotateRect._rectRotation = _rotBase + deltaDeg;
+
+                                    //// (tuỳ chọn) snap khi giữ Shift
+                                    //if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                    //{
+                                    //    float snap = 15f;
+                                    //    rotateRect._rectRotation = (float)Math.Round(rotateRect._rectRotation / snap) * snap;
+                                    //}
+                                 
                                 }
 
                             case AnchorPoint.Center:
                                 {
+                                    var localNewCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
+                                    var worldDelta = RectRotate.Rotate(localNewCenter, _dragRot);
+                                    rotateRect._PosCenter = new PointF(_dragCenter.X + worldDelta.X, _dragCenter.Y + worldDelta.Y);
+
                                     if (rotateRect.Shape == ShapeType.Polygon)
-                                    {
-                                        float dx = point.X - _dragStart.X;
-                                        float dy = point.Y - _dragStart.Y;
-                                        rotateRect.TranslatePolygonLocal(dx, dy);
-                                        _dragStart = point;
-                                    }
-                                    else
-                                    {
-                                        // local → world với góc cố định _dragRot
-                                        var localNewCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
-                                        var worldDelta = RectRotate.Rotate(localNewCenter, _dragRot);
-                                        rotateRect._PosCenter = new PointF(_dragCenter.X + worldDelta.X, _dragCenter.Y + worldDelta.Y);
-                                    }
+                                        rotateRect.UpdateFromPolygon(false); // chỉ để sync _rect/handles
+                                    break;
+                                    //if (rotateRect.Shape == ShapeType.Polygon)
+                                    //{
+                                    //    float dx = point.X - _dragStart.X;
+                                    //    float dy = point.Y - _dragStart.Y;
+                                    //    rotateRect.TranslatePolygonLocal(dx, dy);
+                                    //    _dragStart = point;
+                                    //}
+                                    //else
+                                    //{
+                                    //    // local → world với góc cố định _dragRot
+                                    //    var localNewCenter = new PointF(point.X - _dragStartOffset.X, point.Y - _dragStartOffset.Y);
+                                    //    var worldDelta = RectRotate.Rotate(localNewCenter, _dragRot);
+                                    //    rotateRect._PosCenter = new PointF(_dragCenter.X + worldDelta.X, _dragCenter.Y + worldDelta.Y);
+                                    //}
                                     break;
                                 }
 
@@ -1035,15 +1065,37 @@ namespace BeeUi
                                         {
                                             rotateRect.PolyLocalPoints[idx] = pLocal;
 
-                                            if (rotateRect.IsPolygonClosed && rotateRect.PolyLocalPoints.Count >= 2)
-                                            {
-                                                if (idx == 0)
-                                                    rotateRect.PolyLocalPoints[rotateRect.PolyLocalPoints.Count - 1] = pLocal;
-                                                else if (idx == rotateRect.PolyLocalPoints.Count - 1)
-                                                    rotateRect.PolyLocalPoints[0] = pLocal;
-                                            }
+                                            //if (rotateRect.IsPolygonClosed && rotateRect.PolyLocalPoints.Count >= 2)
+                                            //{
+                                            //    if (idx == 0)
+                                            //        rotateRect.PolyLocalPoints[rotateRect.PolyLocalPoints.Count - 1] = pLocal;
+                                            //    //else if (idx == rotateRect.PolyLocalPoints.Count - 1)
+                                            //    //    rotateRect.PolyLocalPoints[0] = pLocal;
+                                            //}
+
+                                            // >>> NEW: chuẩn hoá lại frame polygon
+                                          rotateRect.UpdateFromPolygon(false);
                                         }
                                     }
+                                    //if (rotateRect.Shape == ShapeType.Polygon && rotateRect.ActiveVertexIndex >= 0)
+                                    //if (rotateRect.Shape == ShapeType.Polygon && rotateRect.ActiveVertexIndex >= 0)
+                                    //{
+                                    //    int idx = rotateRect.ActiveVertexIndex;
+                                    //    var pLocal = new PointF(point.X, point.Y);
+
+                                    //    if (idx >= 0 && idx < rotateRect.PolyLocalPoints.Count)
+                                    //    {
+                                    //        rotateRect.PolyLocalPoints[idx] = pLocal;
+
+                                    //        if (rotateRect.IsPolygonClosed && rotateRect.PolyLocalPoints.Count >= 2)
+                                    //        {
+                                    //            if (idx == 0)
+                                    //                rotateRect.PolyLocalPoints[rotateRect.PolyLocalPoints.Count - 1] = pLocal;
+                                    //            else if (idx == rotateRect.PolyLocalPoints.Count - 1)
+                                    //                rotateRect.PolyLocalPoints[0] = pLocal;
+                                    //        }
+                                    //    }
+                                    //}
                                     break;
                                 }
                         }
@@ -1150,7 +1202,7 @@ namespace BeeUi
                         }
                         else
                         {
-                           
+                            
                             for (int i = 0; i < rotateRect.PolyLocalPoints.Count; i++)
                             {
                                 RectangleF h = new RectangleF(rotateRect.PolyLocalPoints[i].X - r / 2f,
@@ -1232,7 +1284,7 @@ namespace BeeUi
                         }
                         else if (rectOuter.Contains(point))
                         {
-                           
+                            
                             _dragStart = new PointF(point.X, point.Y);
                             rotateRect._dragAnchor = AnchorPoint.Center;
                             _dragRect = baseRect;
@@ -5385,6 +5437,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void pView_SizeChanged(object sender, EventArgs e)
         {
+            if(imgView!=null)
             imgView.Size = pView.Size;
         }
 
@@ -5484,6 +5537,55 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             ApplyStep(-1);
             BeginRepeat(-1);
         }
+
+        private void btnClick_Click(object sender, EventArgs e)
+        {
+            if (btnClick.IsCLick)
+            {   btnPan.IsCLick = false;
+                imgView.Cursor = Cursors.Hand;
+                imgView.AllowClickZoom = true;
+                imgView.AllowDoubleClick = true;
+                imgView.PanMode = ImageBoxPanMode.None;
+
+                imgView.InvertMouse = false;
+            }
+            else
+            {
+                btnPan.IsCLick = true;
+                imgView.AllowClickZoom = false;
+                imgView.AllowDoubleClick = false;
+
+                imgView.Cursor = Cursors.Default;
+                imgView.PanMode = ImageBoxPanMode.Left;
+
+
+            }
+        }
+
+        private void btnMouseRight_Click(object sender, EventArgs e)
+        {
+            if (btnMouseRight.IsCLick)
+            {
+                btnClick.IsCLick = false;
+                btnClick.Enabled = false;
+                btnPan.IsCLick = true;
+                imgView.AllowClickZoom = false;
+                imgView.AllowDoubleClick = false;
+                imgView.AllowZoom = false;
+                imgView.ContextMenuStrip = contextMenu;
+                imgView.Cursor = Cursors.Default;
+                imgView.PanMode = ImageBoxPanMode.Left;
+              
+            }
+            else
+            {
+                btnClick.Enabled = true;
+                imgView.AllowZoom = true;
+                imgView.ContextMenuStrip = null;
+            }    
+               
+        }
+
         private void NewShape()
         {
             // 1) Chốt shape hiện tại
@@ -5570,6 +5672,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
            if(btnPan.IsCLick)
             {
+                btnClick.IsCLick = false;
+                imgView.AllowClickZoom = false;
+                imgView.AllowDoubleClick = false;
                 imgView.Cursor = Cursors.Hand;
              
                 imgView.PanMode = ImageBoxPanMode.Left;
@@ -5578,7 +5683,9 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else
             {
-              
+                btnClick.IsCLick = true;
+                imgView.AllowClickZoom = true;
+                imgView.AllowDoubleClick = true;
                 imgView.Cursor = Cursors.Default;
                 imgView.PanMode = ImageBoxPanMode.None;
                

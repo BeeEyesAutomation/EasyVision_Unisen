@@ -109,6 +109,26 @@ namespace BeeCore
             }
 
         }
+        public void UpdateOffSetSample()
+        {
+            if (rotOrigin == null) return;
+            List<PointF> points = PolyOffset.OffsetRadial(rotOrigin.PolyLocalPoints, OffSetSample);
+            RectRotate rectRotate = new RectRotate(rotOrigin._rect, rotOrigin._PosCenter, rotOrigin._rectRotation, rotOrigin._dragAnchor);
+            rectRotate.Shape = ShapeType.Polygon;
+            rectRotate.PolyLocalPoints = points;
+            rectRotate.IsPolygonClosed = true;
+            rotTemp = rectRotate.Clone();
+            rotTemp.UpdateFromPolygon(false);
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            {
+                matTemp = Cropper.CropRotatedRect(raw, rotTemp, null);
+                LearnPattern(matTemp, true);
+                bmRaw = matTemp.ToBitmap();
+
+                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
+            }
+        }
         public int OffSetArea
         {
             get
@@ -121,21 +141,23 @@ namespace BeeCore
               
             }
         }
+        public RectRotate rotOrigin;
         public void SetTemp( RectRotate rot)
         {
-          
-            List<PointF> points = PolyOffset.OffsetRadial(rot.PolyLocalPoints, OffSetSample);
-            RectRotate rectRotate = new RectRotate(rot._rect, rot._PosCenter, rot._rectRotation, rot._dragAnchor);
+            rotOrigin = rot.Clone();
+            List<PointF> points = PolyOffset.OffsetRadial(rotOrigin.PolyLocalPoints, OffSetSample);
+            RectRotate rectRotate = new RectRotate(rotOrigin._rect, rotOrigin._PosCenter, rotOrigin._rectRotation, rotOrigin._dragAnchor);
             rectRotate.Shape = ShapeType.Polygon;
             rectRotate.PolyLocalPoints = points;
             rectRotate.IsPolygonClosed = true;
             rotTemp = rectRotate.Clone();
             rotTemp.UpdateFromPolygon(false);
-            points = PolyOffset.OffsetAxisPercent(rot.PolyLocalPoints, OffSetArea, OffSetArea);
-            RectRotate rectRotate2 = new RectRotate(rot._rect, rot._PosCenter, rot._rectRotation, rot._dragAnchor);
+            points = PolyOffset.OffsetAxisPercent(rotOrigin.PolyLocalPoints, OffSetArea, OffSetArea);
+            RectRotate rectRotate2 = new RectRotate(rotOrigin._rect, rotOrigin._PosCenter, rotOrigin._rectRotation, rotOrigin._dragAnchor);
             rectRotate2.Shape = ShapeType.Polygon;
             rectRotate2.PolyLocalPoints = points;
             rectRotate2.IsPolygonClosed = true;
+          
             rotArea = rectRotate2.Clone();
             rotArea.UpdateFromPolygon(false);
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
@@ -288,7 +310,7 @@ namespace BeeCore
                    
                         var pyNone = PyObject.FromManagedObject(null);
                         // Gọi load_model()
-                        G.objCraftOCR.load_model_positional(true, 1280, null, null, true, 0.7, 0.4, 0.4);
+                        G.objCraftOCR.load_modelNet( 1280, null, null, true, 0.7, 0.4, 0.4);
 
 
                     }
@@ -296,11 +318,11 @@ namespace BeeCore
             }
                 catch (PythonException pyEx)
                 {
-                       MessageBox.Show("Python Error: " + pyEx.Message);
+                       MessageBox.Show("Python OCR " + pyEx.Message);
                 }
                 catch (Exception ex)
                 {
-                      MessageBox.Show("Error: " + ex.Message);
+                      MessageBox.Show("Error OCR " + ex.Message);
                 }
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
 
@@ -433,6 +455,7 @@ namespace BeeCore
                     if (result != null) result.Dispose();
                 }
             }
+            if(rectRotates!=null)
             rectRotates.RemoveAll(rot => rot._rect.Width * rot._rect.Height < MinArea*10);
             listRotScan = new List<RectRotate>(); ;
             foreach (RectRotate rot in rectRotates)
@@ -531,8 +554,9 @@ namespace BeeCore
                     {
                         matProcess = raw; // reuse backing store
                     }
-                   
-                      var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    Mat crop1 = Cropper.CropRotatedRect(matProcess, rectRotate,null);
+                    Cv2.ImWrite("crop1.png", crop1);
+                    var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                     Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
@@ -712,6 +736,7 @@ namespace BeeCore
              
             gc.ResetTransform();
             int i = 0;
+            if(rectRotates!=null)
             foreach (RectRotate rot in rectRotates)
             {
                 if (IsScan)
@@ -759,7 +784,6 @@ namespace BeeCore
                     mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                     mat.Rotate(rotA._rectRotation);
                     mat.Translate(rotA._rect.X, rotA._rect.Y);
-                    gc.Transform = mat;
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
@@ -768,11 +792,13 @@ namespace BeeCore
                     if (Global.Config.IsShowNotMatching)
                     {
                         Rectangle rect = new Rectangle(0, 0, (int)rot._rect.Width, (int)rot._rect.Height);
-
+                        mat.Translate(rot._rect.X, rot._rect.Y);
+                      
+                        gc.Transform = mat;
 
                         int Area = (rect.Width * rect.Height) / 10;
                         String sArea = Area + "";
-                        gc.DrawString(sArea, new Font("Arial", 6), new SolidBrush(Global.Config.ColorInfor), new PointF(0, rect.Y + rect.Height + 10));
+                        gc.DrawString(sArea, new Font("Arial", 6), new SolidBrush(Global.Config.ColorInfor), new PointF(0, rect.Y + rect.Height -2));
                     }
                 }
                 gc.ResetTransform();

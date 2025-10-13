@@ -287,7 +287,6 @@ namespace BeeCore
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
@@ -299,7 +298,6 @@ namespace BeeCore
             }
             gc.ResetTransform();
             if (GapResult.line2Ds == null) return gc;
-
             mat = new Matrix();
             if (!Global.IsRun)
             {
@@ -312,7 +310,7 @@ namespace BeeCore
             gc.Transform = mat;
             if (!Global.IsRun)
                 foreach (var l in GapResult.line2Ds)
-                    Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2));
+                Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2));
             Draws.DrawInfiniteLine(gc,GapResult.LineA, new Pen(cl, 2));
             Draws.DrawInfiniteLine(gc,GapResult.LineB, new Pen(cl, 2));
             PointF p1 = new PointF(GapResult.lineMid[0].X,GapResult.lineMid[0].Y);
@@ -320,19 +318,8 @@ namespace BeeCore
             Draws.DrawTicks(gc, p1,LineOrientation, pen);
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
             gc.DrawLine(new Pen(Color.Blue, 4), p1, p2);          
-           gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", Global.Config.FontSize), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+            gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", Global.Config.FontSize), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
             gc.ResetTransform();
-            //mat = new Matrix();
-            //if (!Global.IsRun)
-            //{
-            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-            //    gc.Transform = mat;
-            //}
-            //gc.DrawString("X:" + listP_Center[0].X + ":" + listP_Center[0].X, new Font("Arial", 24, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
-
-            //gc.DrawEllipse(new Pen(Brushes.Red, 4), new Rectangle(listP_Center[0].X, listP_Center[0].Y, 10, 10));
-
             return gc;
         }
 

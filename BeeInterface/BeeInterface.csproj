@@ -261,6 +261,12 @@
     <Compile Include="Tool\ToolEdge.Designer.cs">
       <DependentUpon>ToolEdge.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolIntersect.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolIntersect.Designer.cs">
+      <DependentUpon>ToolIntersect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolWidth.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -371,6 +377,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolEdge.resx">
       <DependentUpon>ToolEdge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolIntersect.resx">
+      <DependentUpon>ToolIntersect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolWidth.resx">
       <DependentUpon>ToolWidth.cs</DependentUpon>
@@ -666,6 +675,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Sort Right_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Collect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

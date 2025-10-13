@@ -3,7 +3,6 @@ using BeeCore.Algorithm;
 using BeeCore.Func;
 using BeeGlobal;
 using BeeInterface;
-using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.ML;
@@ -27,15 +26,21 @@ using Size = OpenCvSharp.Size;
 namespace BeeInterface
 {
     [Serializable()]
-    public partial class ToolCraftOCR : UserControl
+    public partial class ToolIntersect : UserControl
     {
         
-        public ToolCraftOCR( )
+        public ToolIntersect( )
         {
             InitializeComponent();
         
         }
-        
+        Stopwatch timer = new Stopwatch();
+        public BackgroundWorker worker = new BackgroundWorker();
+        int ThresholdValue = 100;
+        double MmPerPixel = 0.05;
+        Line2D line1, line2;
+        double gapPx=0;
+        Mat annotated = new Mat();
         public void LoadPara()
         {
 
@@ -51,165 +56,59 @@ namespace BeeInterface
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolWidth_StatusToolChanged;
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].ScoreChanged += ToolWidth_ScoreChanged;
+                AdjThreshod.Value = Propety.ThresholdBinary;
 
-
-                imgTemp.Image = Propety.bmRaw;
-                btnCrop.IsCLick = true;
-                Global.TypeCrop = TypeCrop.Crop;
+              
+                trackMaxLine.Value = Propety.MaximumLine;
+                trackMinInlier.Value = Propety.MinInliers;
+                btnCloseEdge.IsCLick = Propety.MethordEdge == MethordEdge.CloseEdges ? true : false;
+                btnStrongEdge.IsCLick = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+                btnBinary.IsCLick = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+                btnInvert.IsCLick = Propety.MethordEdge == MethordEdge.InvertBinary ? true : false;
+          
+                AdjMorphology.Value = Propety.SizeClose;
+                AdjOpen.Value = Propety.SizeOpen;
+                AdjClearNoise.Value = Propety.SizeClearsmall;
+                AdjClearBig.Value = Propety.SizeClearBig;
+               
+                btnClose.IsCLick = Propety.IsClose;
+                btnOpen.IsCLick = Propety.IsOpen;
+                btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
+                btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
+                AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+                AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+                AdjOpen.Enabled = Propety.IsOpen;
+                AdjMorphology.Enabled = Propety.IsClose;
+                btnArea.IsCLick = true;
+                Global.TypeCrop = TypeCrop.Area;
                 Propety.TypeCrop = Global.TypeCrop;
 
                 btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
                 btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
                 btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
                 btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
+               
                 btnWhite.IsCLick = Propety.rotArea.IsWhite;
                 btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-                btnModeSingle.IsCLick = Propety.ModeCheck == ModeCheck.Single ? true : false;
-                btnModeMulti.IsCLick = Propety.ModeCheck == ModeCheck.Multi ? true : false;
-                AdjIndexChoose.Value = Propety.IndexChoose + 1;
-                AdjOffSetArea.IsInital = true;
-                AdjOffSetArea.Value = Propety.OffSetArea;
-                AdjOffSetSample.Value = Propety.OffSetSample;
-                AdjMinArea.Value = Propety.MinArea;
+                btnAutoMean.IsCLick = Propety.AutoMean == true ? true : false;
+                btnFixedMean.IsCLick = Propety.AutoMean == false ? true : false;
+                AdjContinuityGapFactor.Value = Propety.ContinuityGapFactor;
+                AdjFixedMean.Value=Propety.FixMean;
+                AdjAngleTargetDeg.Value = Propety.AngleTargetDeg;
+                AdjAngleToleranceDeg.Value = Propety.AngleToleranceDeg;
 
-                AdjIndexChoose.Enabled = Propety.ModeCheck == ModeCheck.Single ? true : false;
+                trackMinInlier.Value = Propety.MinInliers;
+                trackMaxLine.Value = Propety.MaximumLine;
+                AdjRANSACIterations.Value = Propety.RansacIterations;
+                AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
             }
             catch (Exception ex)
             {
                 String s = ex.Message;
             }
         }
-
-        private void ToolWidth_ScoreChanged(float obj)
-        {
-           trackScore.Value = obj;
-        }
-
-        private void ToolWidth_StatusToolChanged(StatusTool obj)
-        {if (Global.IsRun) return;
-            btnScan.Enabled = true;
-            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
-            {
-                if (Propety.IsScan)
-                {
-                    AdjIndexChoose.Value = Propety.IndexChoose+1;
-                    btnChoose.IsCLick = true;
-                    Propety.TypeCrop = TypeCrop.Crop;
-                   
-                    int withBox = imgTemp.Width;
-                    float ScaleW = (float)(withBox * 1.0 / Propety.bmRaw.Width);
-                    imgTemp.Zoom = (int)(ScaleW * 100);
-                    imgTemp.AutoScrollPosition = new System.Drawing.Point(0, 0);
-                    layTemp.Height = Propety.bmRaw.Height * (imgTemp.Zoom / 100) +10;
-                }
-
-                btnTest.Enabled = true;
-                imgTemp.Image = Propety.bmRaw;
-               
-            }
-           
-        }
-
-        private void trackScore_ValueChanged(float obj)
-        {
-            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
-         }
-        public bool IsClear = false;
-        public CraftOCR Propety=new CraftOCR();
-      
-
-    
-       
-        private void rjButton3_Click(object sender, EventArgs e)
-        {
-
-          
-          //  cv3.Pattern();
-        }
-
-        private void rjButton8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-      
-       
-        private void btnCannyMin_Click(object sender, EventArgs e)
-        {
-        
-
-        }
-
-        private void btnCannyMedium_Click(object sender, EventArgs e)
-        {
-         
-        }
-
-        private void btnCannyMax_Click(object sender, EventArgs e)
-        {
-        
-
-        }
-
-    
-        
-      
-    
-   
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            btnChoose.IsCLick = false;
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = TypeCrop.Area;
-            btnArea.IsCLick = true;
-            Global.StatusDraw = StatusDraw.Edit;
-            btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]. worker.IsBusy)
-                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
-            else
-                btnTest.IsCLick = false;
-        }
-        bool IsFullSize = false;
-        private void btnCropHalt_Click(object sender, EventArgs e)
-        {
-           Global.TypeCrop= TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-            IsFullSize = false;
-            Propety.rotArea = Propety.rotAreaTemp.Clone();
-            Global.StatusDraw = StatusDraw.Check;
-            
-        }
-
-        private void btnCropFull_Click(object sender, EventArgs e)
-        {
-            IsFullSize = true;
-            Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
-
-            
-           Global.TypeCrop= TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            Global.StatusDraw = StatusDraw.Check;
-           
-        }
-
-     
-        
-
-    
-
-       
-
-      
-        private void btnStartPoylogon_Click(object sender, EventArgs e)
-        {
-            Propety.rotArea.Shape = ShapeType.Polygon;
-            Propety.rotArea.PolygonClear();
-        }
         private void btnCropRect_Click(object sender, EventArgs e)
         {
-          
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
             btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
@@ -218,8 +117,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotCrop.IsWhite;
             btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-            Global.StatusDraw = StatusDraw.Edit;
-            btnChoose.IsCLick = false;
+
         }
 
         private void btnCropArea_Click(object sender, EventArgs e)
@@ -233,8 +131,6 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-            Global.StatusDraw = StatusDraw.Edit;
-            btnChoose.IsCLick = false;
         }
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -250,8 +146,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-            Global.StatusDraw = StatusDraw.Edit;
-            btnChoose.IsCLick = false;
+
 
         }
         private void btnNone_Click(object sender, EventArgs e)
@@ -455,77 +350,367 @@ namespace BeeInterface
 
         }
 
-        private void btnScanOCR_Click(object sender, EventArgs e)
+        private void ToolWidth_ScoreChanged(float obj)
         {
-            btnChoose.IsCLick = false;
-            Propety.IsScan = true;
-            Propety.Scan();
+           trackScore.Value = obj;
+        }
+
+        private void ToolWidth_StatusToolChanged(StatusTool obj)
+        {if (Global.IsRun) return;
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
+            {
+                btnTest.Enabled = true;
+              
+            }
+           
+        }
+
+        private void trackScore_ValueChanged(float obj)
+        {
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Score=trackScore.Value;
+         }
+     
+        public Intersect Propety =new Intersect();
+     
+    
+       
+        private void rjButton3_Click(object sender, EventArgs e)
+        {
+
+          
+          //  cv3.Pattern();
+        }
+
+        private void rjButton8_Click(object sender, EventArgs e)
+        {
 
         }
 
-        private void rjButton2_Click(object sender, EventArgs e)
-        {if(btnChoose.IsCLick)
-            {
-                Global.EditTool.View.listChoose = Propety.listRotScan;
-                Global.StatusDraw = StatusDraw.Choose;
-            }
+      
+       
+        private void btnCannyMin_Click(object sender, EventArgs e)
+        {
+        
+
+        }
+
+        private void btnCannyMedium_Click(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void btnCannyMax_Click(object sender, EventArgs e)
+        {
+        
+
+        }
+
+    
+        
+      
+    
+        Bitmap bmResult ;
+        
+        public int indexTool = 0;
+        private void threadProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+            btnTest.IsCLick = false;
+         //   G.EditTool.View.imgView.Invalidate();
+
+        //    G.ResultBar.lbCycleTrigger.Text = "[" + Propety.cycleTime + "ms]";
+        }
+
+        private void trackScore_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackScore_MouseUp(object sender, MouseEventArgs e)
+        {
+           
+
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
+        }
+
+       
+      
+      
+        private void ToolOutLine_Load(object sender, EventArgs e)
+        {
+           // Loads();
+            //this.tabP1.BackColor = CustomGui.BackColor(TypeCtr.BG, G.Config.colorGui);
+           // this.trackNumObject.BackColor = CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+           // layScore.BackColor = CustomGui.BackColor(TypeCtr.Bar, G.Config.colorGui);
+
+        }
+
+        private void ToolOutLine_VisibleChanged(object sender, EventArgs e)
+        {
+
+        }
+      
+
+        private void trackBar21_Load(object sender, EventArgs e)
+        {
+
+        }
+
+    
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            btnTest.Enabled = false;
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]. worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
-            {
-                Global.StatusDraw = StatusDraw.Edit;
-                Global.TypeCrop = TypeCrop.Area;
-            }    
-               
+                btnTest.IsCLick = false;
         }
-
-        private void AdjOffSetArea_ValueChanged(float obj)
+        bool IsFullSize = false;
+        private void btnCropHalt_Click(object sender, EventArgs e)
         {
-            Propety.OffSetArea =(int) AdjOffSetArea.Value;
-            Propety.UpdateOffSet();
+           Global.TypeCrop= TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
+            IsFullSize = false;
+            Propety.rotArea = Propety.rotAreaTemp.Clone();
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+            
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void btnCropFull_Click(object sender, EventArgs e)
+        {
+            IsFullSize = true;
+            Propety.rotAreaTemp = Propety.rotArea.Clone();
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
+
+            
+           Global.TypeCrop= TypeCrop.Area;
+            Propety.TypeCrop = Global.TypeCrop;
+            Global.StatusDraw = StatusDraw.None;
+            Global.StatusDraw = StatusDraw.Edit;
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
 
-        private void btnChoose_Click(object sender, EventArgs e)
+    
+        private void rjButton3_Click_1(object sender, EventArgs e)
         {
-            if (btnChoose.IsCLick)
-            {
-                Global.TypeCrop = TypeCrop.Crop;
-                Global.StatusDraw = StatusDraw.Scan;
-            }
-            else
-            {
-                Global.StatusDraw = StatusDraw.Edit;
-                Global.TypeCrop = TypeCrop.Area;
-            }
+
         }
 
-        private void btnModeSingle_Click(object sender, EventArgs e)
+       
+
+        private void rjButton5_Click(object sender, EventArgs e)
         {
-            Propety.ModeCheck = ModeCheck.Single;
-            AdjIndexChoose.Enabled = Propety.ModeCheck == ModeCheck.Single ? true : false;
+
         }
 
-        private void AdjIndexChoose_ValueChanged(float obj)
+        private void trackAngle_ValueChanged(float obj)
         {
-            Propety.IndexChoose = (int)AdjIndexChoose.Value-1;
+           
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
         }
 
-        private void AdjMinArea_ValueChanged(float obj)
+        private void numAngle_ValueChanged(object sender, EventArgs e)
         {
-            Propety.MinArea = (int)AdjMinArea.Value;
+          
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
         }
 
-        private void AdjOffSetSample_ValueChanged(float obj)
+      
+
+        private void trackNumObject_Load(object sender, EventArgs e)
         {
-            Propety.OffSetSample =(int) AdjOffSetSample.Value;
+
         }
 
-        private void AdjOffSetSample_MouseUp(object sender, MouseEventArgs e)
+     
+
+      
+   
+     
+      
+  
+        
+
+        private void btnModeEdge_Click(object sender, EventArgs e)
         {
-            Propety.UpdateOffSetSample();
+          
         }
+
+        private void btnModeCany_Click(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void btnModePattern_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
+        {
+          //  OutLine.LoadEdge();
+          
+        }
+
+      
+
+        private void tableLayoutPanel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+      
+
+        private void trackMaxLine_ValueChanged(float obj)
+        {
+            Propety.MaximumLine = (int)trackMaxLine.Value;
+        }
+
+        private void trackMinInlier_ValueChanged(float obj)
+        {
+            Propety.MinInliers = (int)trackMinInlier.Value;
+        }
+
+       
+        private void trackScore_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+            layThreshod.Enabled = true;
+        }
+
+      
+
+        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+       
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.ThresholdBinary = (int)AdjThreshod.Value;
+        }
+
+        private void btnInvert_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.InvertBinary;
+            layThreshod.Enabled = true;
+        }
+
+        private void btnStrongEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.StrongEdges;
+            layThreshod.Enabled = false;
+        }
+
+        private void btnCloseEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.CloseEdges;
+            layThreshod.Enabled = false;
+        }
+        private void AdjClearNoise_ValueChanged(float obj)
+        {
+            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
+        }
+
+        private void btnEnMorphology_Click(object sender, EventArgs e)
+        {
+            Propety.IsClose = btnClose.IsCLick;
+            AdjMorphology.Enabled = Propety.IsClose;
+        }
+
+        private void btnEnableNoise_Click(object sender, EventArgs e)
+        {
+
+            Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
+            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
+        }
+
+        private void AdjMorphology_ValueChanged(float obj)
+        {
+
+            Propety.SizeClose = (int)AdjMorphology.Value;
+        }
+
+      
+        private void AdjOpen_ValueChanged(float obj)
+        {
+            Propety.SizeOpen = (int)AdjOpen.Value;
+        }
+
+        private void AdjClearBig_ValueChanged(float obj)
+        {
+            Propety.SizeClearBig = (int)AdjClearBig.Value;
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            Propety.IsOpen = btnOpen.IsCLick;
+            AdjOpen.Enabled = Propety.IsOpen;
+        }
+
+        private void btnIsClearBig_Click(object sender, EventArgs e)
+        {
+            Propety.IsClearNoiseBig = btnIsClearBig.IsCLick;
+            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
+
+        }
+        private void AdjRANSACIterations_ValueChanged(float obj)
+        {
+            Propety.RansacIterations = (int)AdjRANSACIterations.Value;
+        }
+
+        private void AdjRANSACThreshold_ValueChanged(float obj)
+        {
+            Propety.RansacThreshold = AdjRANSACThreshold.Value;
+        }
+
+        private void AdjAngleTargetDeg_ValueChanged(float obj)
+        {
+            Propety.AngleTargetDeg =(int) AdjAngleTargetDeg.Value;
+        }
+
+        private void AdjAngleToleranceDeg_ValueChanged(float obj)
+        {
+            Propety.AngleToleranceDeg =(int)AdjAngleToleranceDeg.Value;
+        }
+
+        private void btnAutoMean_Click(object sender, EventArgs e)
+        {
+            Propety.AutoMean = btnAutoMean.IsCLick;
+            AdjFixedMean.Enabled = !btnAutoMean.IsCLick;
+        }
+
+        private void AdjContinuityGapFactor_ValueChanged(float obj)
+        {
+            Propety.ContinuityGapFactor = AdjContinuityGapFactor.Value;
+        }
+
+        private void AdjFixedMean_ValueChanged(float obj)
+        {
+            Propety.FixMean = (int)AdjFixedMean.Value;
+        }
+
+        private void btnFixedMean_Click(object sender, EventArgs e)
+        {
+            Propety.AutoMean =! btnFixedMean.IsCLick;
+            AdjFixedMean.Enabled=btnFixedMean.IsCLick;
+        }
+
+      
     }
 }

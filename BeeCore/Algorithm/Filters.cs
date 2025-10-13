@@ -108,7 +108,7 @@ namespace BeeCore.Algorithm
                 if (raw.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
                 else
-                    gray = raw;
+                    gray = raw.Clone();
 
                 // 1. Histogram truncation để giảm vùng trắng chói
                 Cv2.Threshold(gray, gray, 245, 245, ThresholdTypes.Trunc);

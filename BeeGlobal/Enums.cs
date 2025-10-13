@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,40 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public struct Seg
+    {
+        public Line2D Line;
+        public Point2f P0, P1;
+        public double T0, T1;
+        public double Len;
+        public int Count;
+        public List<Point2f> RunPts;
+    }
+    public struct CornerResult
+    {
+        public bool Found;
+        public Line2D L1, L2;
+        public Point2f Corner;
+        public double AngleDeg;
+        public int Inliers1, Inliers2;
+        public double Score;
+
+    }
+    public sealed class LineEdge
+    {
+        public List<(Line2D ln, List<Point2f> inl, int totalInl)> RansacAcceptedRaw
+            = new List<(Line2D, List<Point2f>, int)>();
+        public List<(Line2D ln, int totalInl, string reason)> RansacRejectedRaw
+            = new List<(Line2D, int, string)>();
+        public List<(Line2D ln, List<Point2f> contiguous)> ContinuityAccepted
+            = new List<(Line2D, List<Point2f>)>();
+        public List<(Line2D ln, List<Point2f> rawInl, string reason)> ContinuityRejected
+            = new List<(Line2D, List<Point2f>, string)>();
+        public List<Seg> RunsKept = new List<Seg>();
+        public List<(Seg A, Seg B, string reason, double ang, Point2f P, bool hasP)> PairRejected
+            = new List<(Seg, Seg, string, double, Point2f, bool)>();
+        public CornerResult Best;
+    }
     public enum ModeCheck
     {
        Single,Multi
@@ -233,6 +268,7 @@ namespace BeeGlobal
         EdgePixel= 21, 
         Edge=22,
         CraftOCR = 23,
+        Intersect = 24
     }
     public enum TypeOCR
     {

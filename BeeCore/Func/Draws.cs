@@ -671,7 +671,7 @@ Pen outlinePen)
             var oldSmoothing = g.SmoothingMode;
             var oldTrans = g.Transform.Clone();
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            rr.Shape = ShapeType.Rectangle;
+
                 using (var path = new GraphicsPath())
                 {
                     switch (rr.Shape)

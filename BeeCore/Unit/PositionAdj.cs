@@ -709,7 +709,7 @@ namespace BeeCore
                         Thickness = Global.Config.ThicknessLine,
                     };
 
-                DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.DebugState, flags, drawStyle);
+                DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
 
              
             }
