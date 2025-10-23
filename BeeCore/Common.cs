@@ -198,42 +198,41 @@ namespace BeeCore
 
 
                            
-                            if(Global.IsLearning)
+                                try
+                                {
+                                    Global.IsIntialPython = true;
+                                    G.np = Py.Import("numpy");
+                                    dynamic mod = Py.Import("Tool.Learning");
+                                    dynamic cls = mod.GetAttr("ObjectDetector"); // class
+                                    G.objYolo = cls.Invoke();
+                                    Global.IsLearning = true;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Global.IsLearning = false;
+                                }
+                            
+                            if(Directory.Exists( pythonHome+ "\\Lib\\site-packages\\craft_text_detector"))//
+                             
                             {
-                                Global.IsIntialPython = true;
-                                G.np = Py.Import("numpy");
-                                dynamic mod = Py.Import("Tool.Learning");
-                                dynamic cls = mod.GetAttr("ObjectDetector"); // class
-                                G.objYolo = cls.Invoke();              // khởi tạo instance
+                                try
+                                {
+
+                                    dynamic module = Py.Import("Tool.Craft_OCR");
+                                    dynamic cls2 = module.GetAttr("CraftOCRDetector"); // class
+                                    G.objCraftOCR = cls2.Invoke();              // khởi tạo instance
+                                    Global.IsOCR = true;
+                                    //dynamic module3 = Py.Import("Tool.OCR");
+                                    //dynamic cls3 = module.GetAttr("OCR"); // class
+                                    //G.objOCR = cls3.Invoke();  
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+
                             }
-                            if (Global.IsOCR)
-                            {
-                                //dynamic sys = Py.Import("sys");
-                                //dynamic os = Py.Import("os");
-                                //sys.path.insert(0, @"E:\Code\EasyVision_Unisen\bin\Release\Tool");
-                                //Console.WriteLine($"sys.path[0]: {sys.path[0]}");
-                                //Console.WriteLine(os.listdir(sys.path[0]).ToString()); // liệt kê file trong Tool
-
-                                //// tìm spec cho module
-                                //dynamic importlib = Py.Import("importlib.util");
-                                //dynamic module = importlib.find_spec("craft_ocr_detector");
-                                //Console.WriteLine($"spec is None? {spec == null}");
-                                //dynamic sys = Py.Import("sys");
-                                //sys.path.insert(0, "E:\\Code\\EasyVision_Unisen\\bin\\Release\\Tool");
-
-                                ////// import module & tạo detector
-                                
-                                dynamic module = Py.Import("Tool.Craft_OCR");
-                                dynamic cls2 = module.GetAttr("CraftOCRDetector"); // class
-                                G.objCraftOCR = cls2.Invoke();              // khởi tạo instance
-                                //dynamic mod3 = Py.Import("Tool.Classic");
-                                //dynamic cls3 = mod3.GetAttr("Filter"); // class
-                                //G.Classic = cls3.Invoke();              // khởi tạo instance
-                                //G.IniEdge = true;
-                                //// khởi tạo instance
-                          //      G.Classic.LoadEdge();
-                            }
-
+                            else
+                                Global.IsOCR = false;
 
                             Global.IsIntialPython = true;
 

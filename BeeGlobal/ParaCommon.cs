@@ -13,6 +13,10 @@ namespace BeeGlobal
     [Serializable()]
     public class ParaCommon
     {
+        public int NumRetryCamera = 0;
+        public int NumRetryPLC = 0;
+        public bool IsResetReady = false;
+        public bool IsForceByPassRS = false;
         public bool IsOnlyTrigger = false;
         public bool IsMultiCamera = false;
         public  bool IsONNG = false;

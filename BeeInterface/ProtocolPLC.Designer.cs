@@ -164,7 +164,7 @@ namespace BeeInterface
             this.btnKeyence = new BeeInterface.RJButton();
             this.btnMitsu = new BeeInterface.RJButton();
             this.btnRtu = new BeeInterface.RJButton();
-            this.ModbusAscii = new BeeInterface.RJButton();
+            this.btnModbusAscii = new BeeInterface.RJButton();
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.layCom = new System.Windows.Forms.TableLayoutPanel();
@@ -233,6 +233,7 @@ namespace BeeInterface
             // 
             // layIn
             // 
+            this.layIn.AutoScroll = true;
             this.layIn.BackColor = System.Drawing.SystemColors.Control;
             this.layIn.ColumnCount = 3;
             this.layIn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.1986F));
@@ -1542,6 +1543,7 @@ namespace BeeInterface
             // 
             // layOut
             // 
+            this.layOut.AutoScroll = true;
             this.layOut.BackColor = System.Drawing.SystemColors.Control;
             this.layOut.ColumnCount = 3;
             this.layOut.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.19343F));
@@ -2863,7 +2865,6 @@ namespace BeeInterface
             // 
             // tabPage7
             // 
-            this.tabPage7.AutoScroll = true;
             this.tabPage7.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage7.Controls.Add(this.tableLayoutPanel1);
             this.tabPage7.Location = new System.Drawing.Point(4, 33);
@@ -2887,7 +2888,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.Controls.Add(this.layBrand, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 6);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 10);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(1);
@@ -2902,7 +2903,7 @@ namespace BeeInterface
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 738);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 790);
             this.tableLayoutPanel1.TabIndex = 80;
             // 
             // tableLayoutPanel3
@@ -3563,7 +3564,6 @@ namespace BeeInterface
             // 
             // layBrand
             // 
-            this.layBrand.AutoScroll = true;
             this.layBrand.ColumnCount = 2;
             this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.layBrand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -3574,7 +3574,7 @@ namespace BeeInterface
             this.layBrand.Controls.Add(this.btnKeyence, 0, 0);
             this.layBrand.Controls.Add(this.btnMitsu, 1, 0);
             this.layBrand.Controls.Add(this.btnRtu, 0, 3);
-            this.layBrand.Controls.Add(this.ModbusAscii, 1, 3);
+            this.layBrand.Controls.Add(this.btnModbusAscii, 1, 3);
             this.layBrand.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layBrand.Location = new System.Drawing.Point(4, 106);
             this.layBrand.Name = "layBrand";
@@ -3612,6 +3612,7 @@ namespace BeeInterface
             this.rjButton2.Corner = BeeGlobal.Corner.Both;
             this.rjButton2.DebounceResizeMs = 16;
             this.rjButton2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton2.Enabled = false;
             this.rjButton2.FlatAppearance.BorderSize = 0;
             this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
@@ -3721,6 +3722,7 @@ namespace BeeInterface
             this.rjButton7.Corner = BeeGlobal.Corner.Both;
             this.rjButton7.DebounceResizeMs = 16;
             this.rjButton7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton7.Enabled = false;
             this.rjButton7.FlatAppearance.BorderSize = 0;
             this.rjButton7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton7.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
@@ -3775,6 +3777,7 @@ namespace BeeInterface
             this.rjButton1.Corner = BeeGlobal.Corner.Both;
             this.rjButton1.DebounceResizeMs = 16;
             this.rjButton1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rjButton1.Enabled = false;
             this.rjButton1.FlatAppearance.BorderSize = 0;
             this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rjButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
@@ -3971,60 +3974,60 @@ namespace BeeInterface
             this.btnRtu.UseVisualStyleBackColor = false;
             this.btnRtu.Click += new System.EventHandler(this.btnRS485_Click);
             // 
-            // ModbusAscii
+            // btnModbusAscii
             // 
-            this.ModbusAscii.AutoFont = true;
-            this.ModbusAscii.AutoFontHeightRatio = 0.75F;
-            this.ModbusAscii.AutoFontMax = 100F;
-            this.ModbusAscii.AutoFontMin = 6F;
-            this.ModbusAscii.AutoFontWidthRatio = 0.92F;
-            this.ModbusAscii.AutoImage = true;
-            this.ModbusAscii.AutoImageMaxRatio = 0.75F;
-            this.ModbusAscii.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.ModbusAscii.AutoImageTint = true;
-            this.ModbusAscii.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ModbusAscii.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.ModbusAscii.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.ModbusAscii.BorderRadius = 5;
-            this.ModbusAscii.BorderSize = 1;
-            this.ModbusAscii.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.ModbusAscii.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.ModbusAscii.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.ModbusAscii.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.ModbusAscii.Corner = BeeGlobal.Corner.Both;
-            this.ModbusAscii.DebounceResizeMs = 16;
-            this.ModbusAscii.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ModbusAscii.FlatAppearance.BorderSize = 0;
-            this.ModbusAscii.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ModbusAscii.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
-            this.ModbusAscii.ForeColor = System.Drawing.Color.Blue;
-            this.ModbusAscii.Image = null;
-            this.ModbusAscii.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ModbusAscii.ImageDisabled = null;
-            this.ModbusAscii.ImageHover = null;
-            this.ModbusAscii.ImageNormal = null;
-            this.ModbusAscii.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.ModbusAscii.ImagePressed = null;
-            this.ModbusAscii.ImageTextSpacing = 6;
-            this.ModbusAscii.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.ModbusAscii.ImageTintHover = System.Drawing.Color.Empty;
-            this.ModbusAscii.ImageTintNormal = System.Drawing.Color.Empty;
-            this.ModbusAscii.ImageTintOpacity = 0.5F;
-            this.ModbusAscii.ImageTintPressed = System.Drawing.Color.Empty;
-            this.ModbusAscii.IsCLick = false;
-            this.ModbusAscii.IsNotChange = false;
-            this.ModbusAscii.IsRect = false;
-            this.ModbusAscii.IsUnGroup = false;
-            this.ModbusAscii.Location = new System.Drawing.Point(198, 186);
-            this.ModbusAscii.Margin = new System.Windows.Forms.Padding(5);
-            this.ModbusAscii.Multiline = false;
-            this.ModbusAscii.Name = "ModbusAscii";
-            this.ModbusAscii.Size = new System.Drawing.Size(182, 50);
-            this.ModbusAscii.TabIndex = 105;
-            this.ModbusAscii.Text = "Modbus-ASII";
-            this.ModbusAscii.TextColor = System.Drawing.Color.Blue;
-            this.ModbusAscii.UseVisualStyleBackColor = false;
-            this.ModbusAscii.Click += new System.EventHandler(this.btnModbusASII_Click);
+            this.btnModbusAscii.AutoFont = true;
+            this.btnModbusAscii.AutoFontHeightRatio = 0.75F;
+            this.btnModbusAscii.AutoFontMax = 100F;
+            this.btnModbusAscii.AutoFontMin = 6F;
+            this.btnModbusAscii.AutoFontWidthRatio = 0.92F;
+            this.btnModbusAscii.AutoImage = true;
+            this.btnModbusAscii.AutoImageMaxRatio = 0.75F;
+            this.btnModbusAscii.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnModbusAscii.AutoImageTint = true;
+            this.btnModbusAscii.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnModbusAscii.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnModbusAscii.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnModbusAscii.BorderRadius = 5;
+            this.btnModbusAscii.BorderSize = 1;
+            this.btnModbusAscii.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnModbusAscii.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnModbusAscii.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnModbusAscii.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnModbusAscii.Corner = BeeGlobal.Corner.Both;
+            this.btnModbusAscii.DebounceResizeMs = 16;
+            this.btnModbusAscii.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnModbusAscii.FlatAppearance.BorderSize = 0;
+            this.btnModbusAscii.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnModbusAscii.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.28125F);
+            this.btnModbusAscii.ForeColor = System.Drawing.Color.Blue;
+            this.btnModbusAscii.Image = null;
+            this.btnModbusAscii.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnModbusAscii.ImageDisabled = null;
+            this.btnModbusAscii.ImageHover = null;
+            this.btnModbusAscii.ImageNormal = null;
+            this.btnModbusAscii.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnModbusAscii.ImagePressed = null;
+            this.btnModbusAscii.ImageTextSpacing = 6;
+            this.btnModbusAscii.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnModbusAscii.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnModbusAscii.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnModbusAscii.ImageTintOpacity = 0.5F;
+            this.btnModbusAscii.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnModbusAscii.IsCLick = false;
+            this.btnModbusAscii.IsNotChange = false;
+            this.btnModbusAscii.IsRect = false;
+            this.btnModbusAscii.IsUnGroup = false;
+            this.btnModbusAscii.Location = new System.Drawing.Point(198, 186);
+            this.btnModbusAscii.Margin = new System.Windows.Forms.Padding(5);
+            this.btnModbusAscii.Multiline = false;
+            this.btnModbusAscii.Name = "btnModbusAscii";
+            this.btnModbusAscii.Size = new System.Drawing.Size(182, 50);
+            this.btnModbusAscii.TabIndex = 105;
+            this.btnModbusAscii.Text = "Modbus-ASII";
+            this.btnModbusAscii.TextColor = System.Drawing.Color.Blue;
+            this.btnModbusAscii.UseVisualStyleBackColor = false;
+            this.btnModbusAscii.Click += new System.EventHandler(this.btnModbusASII_Click);
             // 
             // label5
             // 
@@ -4407,7 +4410,7 @@ namespace BeeInterface
             this.layIP.BackColor = System.Drawing.Color.White;
             this.layIP.ColumnCount = 1;
             this.layIP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layIP.Controls.Add(this.btnReScan, 0, 4);
+            this.layIP.Controls.Add(this.btnReScan, 0, 6);
             this.layIP.Controls.Add(this.lbTCP1, 0, 0);
             this.layIP.Controls.Add(this.txtPort, 0, 3);
             this.layIP.Controls.Add(this.txtIP, 0, 1);
@@ -4417,7 +4420,9 @@ namespace BeeInterface
             this.layIP.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.layIP.Name = "layIP";
             this.layIP.Padding = new System.Windows.Forms.Padding(3, 5, 3, 0);
-            this.layIP.RowCount = 5;
+            this.layIP.RowCount = 7;
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -4730,7 +4735,7 @@ namespace BeeInterface
         private RJButton btnRtu;
         private CustomNumericEx numSlaveID;
         private Label label4;
-        private RJButton ModbusAscii;
+        private RJButton btnModbusAscii;
         private RJButton btnDelta;
         private RJButton rjButton2;
         private TableLayoutPanel tableLayoutPanel4;

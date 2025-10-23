@@ -446,9 +446,10 @@ namespace BeeCore
             }
             combined = combined.OrderBy(b => b._PosCenter.X).ToList();
             rectRotates = combined.Select(b => b).ToList();
-            if (ModeCheck==ModeCheck.Single)
+            if (ModeCheck==ModeCheck.Single&& listRotScan.Count()>0)
             {
-                if(IndexChoose==0) IndexChoose = 1;
+                if(IndexChoose>= listRotScan.Count()) IndexChoose = 0;
+
                 listRotScan[IndexChoose]._dragAnchor = AnchorPoint.Center;
                 SetTemp(listRotScan[IndexChoose]);
             }
@@ -489,7 +490,7 @@ namespace BeeCore
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                     var cli = new BarcodeCoreCli();
                     var opts = DetectOptionsCli.Defaults();
-                    opts.FindBoxes = ModeCheck== ModeCheck.Single? false:true;
+                    opts.FindBoxes = true;// ModeCheck== ModeCheck.Single? false:true;
                     BarcodeCoreCli.DetectAll(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli,opts, ref listRectBarcode,ref listContentBarcode,ref listTypeBarcode);
 
 
@@ -559,6 +560,11 @@ namespace BeeCore
                 IsScan = false;
                 
             }
+            if(!Global.IsRun&&ModeCheck==ModeCheck.Single&&rectRotates.Count>0)
+            {
+                ListTempBarcode = new List<string>();
+                ListTempBarcode.Add(rectRotates[0].Name);
+            }
             if(rectRotates.Count()==0)
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             else
@@ -576,6 +582,12 @@ namespace BeeCore
                 if (rectRotates.Count() > 0)
                     AutoTemp(rectRotates);
                 DoWork(rotAreaAdjustment);
+                //if (rectRotates.Count() > 0)
+                //{
+
+                //    ListTempBarcode = new List<string>();
+                //    ListTempBarcode.Add(rectRotates[0].Name);
+                //}
                 if (rectRotates.Count() == 0)
                     Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 else

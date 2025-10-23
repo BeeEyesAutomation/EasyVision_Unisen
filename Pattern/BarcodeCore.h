@@ -27,9 +27,9 @@ namespace BeeCpp {
     // ===== Tham số lọc (Filter) cho 1D =====
     struct FilterParams {
         // Mặc định đúng như bạn đang set
-        int   MinArea = 700;
+        int   MinArea = 500;
 
-        int   CloseKernelWDiv = 15;  // width / 60
+        int   CloseKernelWDiv = 30;  // width / 60
         int   CloseKernelH = 3;      // 3 px
         bool  UseNoRotateMask = true;
     };

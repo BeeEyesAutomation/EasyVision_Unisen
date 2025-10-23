@@ -18,13 +18,15 @@ namespace BeeGlobal
         public TypeTool TypeTool;
         public GroupTool GroupTool;
         public dynamic btn;
-        public ItemNew(TypeTool typeTool, GroupTool groupTool, Image icon, Image iconContent, string content)
+        public bool IsEn = true;
+        public ItemNew(TypeTool typeTool, GroupTool groupTool, Image icon, Image iconContent, string content, bool isEn=true)
         {
-            GroupTool= groupTool;
+            GroupTool = groupTool;
             Icon = icon;
             IconContent = iconContent;
             Content = content;
             TypeTool = typeTool;
+            IsEn = isEn;
         }
     }
 }

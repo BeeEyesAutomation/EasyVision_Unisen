@@ -234,6 +234,7 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
+                  
                     foreach (ParaBit paraIO in ParaBits)
                     {
                         paraIO.Value = 0;
@@ -270,10 +271,22 @@ namespace BeeGlobal
                                 ParaBits[ix].Value =Convert.ToInt32( valueInput[i]);
                             }
                         }
-
-
-                        if (Global.IsRun && Global.ParaCommon.IsExternal )
+                        if (Global.IsByPassResult|| Global.ParaCommon.IsForceByPassRS)
                         {
+                           
+                            Global.EditTool.lbBypass.Visible = true;
+                          
+
+                        }
+                        else
+                        {
+                            Global.EditTool.lbBypass.Visible = false;
+                       
+                        }
+
+                        if (Global.IsRun && Global.ParaCommon.IsExternal)
+                        {
+
                             if (AddressInput[(int)I_O_Input.Trigger4] != -1)
                             {
                                 if (valueInput[AddressInput[(int)I_O_Input.Trigger4]] == true && Global.StatusProcessing == StatusProcessing.None)
@@ -284,8 +297,6 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger4;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
                                 }
                             }
@@ -299,8 +310,7 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger3;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+
 
                                 }
                             }
@@ -314,8 +324,7 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger2;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
+
 
                                 }
                             }
@@ -326,7 +335,7 @@ namespace BeeGlobal
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                     Global.TriggerInternal = false;
                                     Global.IsAllowReadPLC = false;
-                                    if(Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.ParaCommon.IsOnlyTrigger)
                                     {
                                         switch (Global.TriggerNum)
                                         {
@@ -342,7 +351,7 @@ namespace BeeGlobal
                                             case TriggerNum.Trigger3:
                                                 Global.TriggerNum = TriggerNum.Trigger4;
                                                 break;
-                                         
+
                                         }
                                     }
                                     else
@@ -350,18 +359,16 @@ namespace BeeGlobal
 
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
 
                                 }
                             }
-                        
-                            
-                           
+
+
+
                         }
-                        else if(Global.IsRun && Global.TriggerInternal)
+                        else if (Global.IsRun && Global.TriggerInternal)
                         {
-                            switch(Global.TriggerNum)
+                            switch (Global.TriggerNum)
                             {
                                 case TriggerNum.Trigger0:
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
@@ -370,8 +377,6 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger1;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
                                     break;
                                 case TriggerNum.Trigger1:
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
@@ -380,8 +385,6 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger2;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
                                     break;
                                 case TriggerNum.Trigger2:
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
@@ -390,8 +393,6 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger3;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
                                     break;
                                 case TriggerNum.Trigger3:
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
@@ -400,8 +401,6 @@ namespace BeeGlobal
                                     Global.TriggerNum = TriggerNum.Trigger4;
                                     Global.StatusProcessing = StatusProcessing.Trigger;
                                     IO_Processing = IO_Processing.Trigger;
-                                    if (Global.IsByPassResult)
-                                        Global.EditTool.lbBypass.ForeColor = Color.White;
                                     break;
                             }
 
@@ -462,8 +461,11 @@ namespace BeeGlobal
                         IsConnected = false;
                     TimingUtils.EnableHighResolutionTimer();
                 }
-              
-               
+              else
+                {
+                  //  Global.PLCStatus = PLCStatus.ErrorConnect;
+                }
+
                     if (valueInput.Length < 16)
                 {
                     IsConnected = false;
@@ -840,18 +842,16 @@ namespace BeeGlobal
                     break;
                 case IO_Processing.Result:
                   
-                        int ix = AddressInput[(int)I_O_Input.ByPass];
+                   
                     bool IsOK = Global.TotalOK;
                     bool IsByPass = true;
                     if(Global.ParaCommon.IsONNG)
                     {
                         IsOK =! IsOK;
                         IsByPass = false;
-                    }    
-                    if (ix > -1)
-                        {
-                            if (valueInput[ix] == true)
-                            {
+                    }   
+                    if (Global.IsByPassResult||Global.ParaCommon.IsForceByPassRS)
+                      {
                             switch(Global.TriggerNum)
                             {
                                 case TriggerNum.Trigger1:
@@ -882,11 +882,10 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsByPass); //NG
                                     break;
                             }    
-                          
-                        
-                             }
-                            else
-                            {
+                           
+                      }
+                      else
+                      {
                             switch (Global.TriggerNum)
                             {
                                 case TriggerNum.Trigger1:
@@ -918,41 +917,9 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsOK); //NG
                                     break;
                             }
-                        }    
-                        }
-                        else
-                        {
-                        switch (Global.TriggerNum)
-                        {
-                            case TriggerNum.Trigger1:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
-                                break;
-                            case TriggerNum.Trigger2:
-                                if (Global.ParaCommon.IsOnlyTrigger)
-                                {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsOK); //NG
-                                break;
-                            case TriggerNum.Trigger3:
-                                if (Global.ParaCommon.IsOnlyTrigger)
-                                {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsOK); //NG
-                                break;
-                            case TriggerNum.Trigger4:
-                                if (Global.ParaCommon.IsOnlyTrigger)
-                                {
-                                    SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
-                                    break;
-                                }
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsOK); //NG
-                                break;
-                        }
-                    }
+                      }    
+                        
+                     
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], Global.ParaCommon.Comunication.Protocol.IsLogic1); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], Global.ParaCommon.Comunication.Protocol.IsLogic2); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], Global.ParaCommon.Comunication.Protocol.IsLogic3); //NG

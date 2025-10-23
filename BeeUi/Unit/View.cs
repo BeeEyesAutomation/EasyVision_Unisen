@@ -794,9 +794,6 @@ namespace BeeUi
                         {
                             IndexRotChoose = j;
                             break;
-                         
-                           
-
                         }
                         else
                         {
@@ -2752,10 +2749,12 @@ namespace BeeUi
                         Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Error;
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                         Global.EditTool.lbCam.Text = "Camera Error Connect";
-                        G.Main.Hide();
+                        //G.Main.Hide();
                         ForrmAlarm forrmAlarm = new ForrmAlarm();
                         forrmAlarm.lbHeader.Text = "Camera Error Connect !!";
                         forrmAlarm.lbContent.Text = "Checking Connect Camera";
+                        forrmAlarm.lbCode.Text = "0x001";
+                        forrmAlarm.btnCancel.Text = "OK";
                         forrmAlarm.BringToFront();
                         forrmAlarm.TopMost = true;
                         forrmAlarm.ShowDialog();
@@ -2788,15 +2787,17 @@ namespace BeeUi
                         Global.EditTool.toolStripPort.Text = "PLC Error Connect";
                         Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
                         Global.ParaCommon.Comunication.Protocol.IsBypass = true;
-                        G.Main.Hide();
+                      //  G.Main.Hide();
                         ForrmAlarm forrmAlarm = new ForrmAlarm();
                         forrmAlarm.lbHeader.Text = "PLC not Alive !!";
                         forrmAlarm.lbContent.Text = "Checking Mode RUN of PLC";
                         forrmAlarm.BringToFront();
+                        forrmAlarm.lbCode.Text = "0x002";
+                        forrmAlarm.btnCancel.Text = "Retry";
                         forrmAlarm.TopMost = true;
 
                         forrmAlarm.ShowDialog();
-                        G.Main.Show();
+                      //  G.Main.Show();
                     }));
                   
                    

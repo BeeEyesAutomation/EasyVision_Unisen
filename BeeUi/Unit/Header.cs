@@ -131,6 +131,8 @@ namespace BeeUi.Common
                 ForrmAlarm ForrmAlarm = new ForrmAlarm();
                 ForrmAlarm.lbHeader.Text = "Camera Disconnect !!";
                 ForrmAlarm.lbContent.Text = "Turn off the Camera and reconnect it.";
+                ForrmAlarm.lbCode.Text = "0x001";
+                ForrmAlarm.btnCancel.Text = "OK";
                 ForrmAlarm.ShowDialog();
                 G.Main.Close();
                 //G.IsReConnectCCD = true;

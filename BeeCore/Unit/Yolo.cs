@@ -57,6 +57,8 @@ namespace BeeCore
         public String pathFullModel = "";
         public  void SetModel()
         {
+           
+            if (rotArea == null) rotArea = new RectRotate();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
@@ -988,7 +990,7 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText = Brushes.White;
+            Brush brushText = new SolidBrush(Global.Config.TextColor);
             Color cl = Color.LimeGreen;
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
@@ -1003,7 +1005,9 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA, nameTool,"Count: "+ rectRotates.Count , font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+
+          //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
             int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)

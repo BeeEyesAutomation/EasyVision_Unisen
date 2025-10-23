@@ -59,7 +59,7 @@ namespace BeeInterface
             }
                 //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
                 BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
-
+           
 
             if (BeeCore.Common.PropetyTools.Count == 0)
             {
@@ -67,6 +67,22 @@ namespace BeeInterface
                 //  G.listAlltool = new List<List<Tools>> { new List<Tools>(), new List<Tools>(), new List<Tools>(), new List<Tools>() };
 
             }
+
+            for (int i = 0; i < BeeCore.Common.PropetyTools.Count; i++)
+            {   if(BeeCore.Common.PropetyTools[i]!=null)
+                    for (int j = 0; j< BeeCore.Common.PropetyTools[i].Count; j++)
+                    {
+                        TypeTool TypeTool= BeeCore.Common.PropetyTools[i][j].TypeTool;
+                        int ix = Global.itemNews.FindIndex(a => a.TypeTool == TypeTool);
+                        if (ix >= 0)
+                            if (!Global.itemNews[ix].IsEn)
+                            {
+                                BeeCore.Common.PropetyTools[i].RemoveAt(j);
+                                j--;
+                            }
+                          
+                    } 
+            }    
             //else
             //    G.listAlltool = new List<List<Tools>>();
 

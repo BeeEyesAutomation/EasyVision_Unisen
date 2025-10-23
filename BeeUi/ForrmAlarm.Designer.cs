@@ -20,11 +20,12 @@ namespace BeeUi
             }
             base.Dispose(disposing);
         }
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnCancel;
         public System.Windows.Forms.Label lbHeader;
         public System.Windows.Forms.Label lbContent;
+        public System.Windows.Forms.Label lbCode;
+        public System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Button btnClose;
     }
 }

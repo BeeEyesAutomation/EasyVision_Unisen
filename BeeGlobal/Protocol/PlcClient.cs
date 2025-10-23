@@ -138,6 +138,9 @@ namespace PlcLib
                         var mc = new MelsecMcNet(_ip, _port);
                         TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
                         TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+
+                       //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
+                      //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
                         return mc;
                     }
                     else
@@ -299,7 +302,7 @@ namespace PlcLib
         public bool Connect()
         {
             _plc = CreateDriver();
-
+            Global.PLCStatus = PLCStatus.NotConnect;
             for (int i = 0; i < _retry; i++)
             {
                 try

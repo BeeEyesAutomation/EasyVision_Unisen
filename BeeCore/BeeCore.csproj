@@ -166,6 +166,7 @@
     <Compile Include="Items\ItemTool.Designer.cs">
       <DependentUpon>ItemTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="KeepLargestAuto.cs" />
     <Compile Include="LabelItem.cs" />
     <Compile Include="MatrixExtension.cs" />
     <Compile Include="Unit\Barcode.cs" />

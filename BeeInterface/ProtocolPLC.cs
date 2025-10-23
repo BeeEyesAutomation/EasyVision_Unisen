@@ -275,7 +275,7 @@ namespace BeeInterface
         public void ChangeDatasourceOut(int ix, String i_O_Output)
         {
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 15; i++)
             {
                 if (ix == i) continue;
                 if (i_O_Output.ToString() == nameOut[i])
@@ -562,8 +562,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     lbRTU2.Enabled = true;
                     lbTCP1.Enabled = false;
                     lbTCP2.Enabled = false;
-                }    
-                    
+                }
+                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC?false:true;
+                btnModbusAscii.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? false : true;
+                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
+                btnMitsu.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
+                btnDelta.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
             }
             catch(Exception ex)
             {
@@ -693,10 +697,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private async void btnConectIO_Click(object sender, EventArgs e)
         {
-           await Global.ParaCommon.Comunication.Protocol.Connect();
+            Global.PLCStatus = PLCStatus.NotConnect;
+            await Global.ParaCommon.Comunication.Protocol.Connect();
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-              
+                Global.PLCStatus = PLCStatus.Ready;
+
                 btnConectIO.IsCLick = true;
                 //pComIO.Enabled = false;
              
@@ -706,8 +712,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             else
             {
-             
-               // pComIO.Enabled = true;
+               Global.PLCStatus = PLCStatus.ErrorConnect;
+                // pComIO.Enabled = true;
                 Global.ParaCommon.Comunication.Protocol.IsBypass = true;
                 MessageBox.Show("Fail Connect to Module I/O");
                
@@ -1105,11 +1111,30 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnIsPLC_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.IsPLC = btnIsPLC.IsCLick;
+            btnRtu.Enabled = false;
+            btnModbusAscii.Enabled = false;
+            btnKeyence.Enabled = true;
+            btnMitsu.Enabled = true;
+            btnDelta.Enabled = true;
+            btnMitsu.PerformClick();
+            Global.ParaCommon.IsResetReady = true;
         }
 
         private void btnIO_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.IsPLC=!btnIO.IsCLick;
+            Global.ParaCommon.IsResetReady = false;
+            btnRtu.Enabled = true;
+            btnModbusAscii.Enabled = true;
+            btnKeyence.Enabled = false;
+            btnMitsu.Enabled = false;
+            btnDelta.Enabled = false;
+            btnRtu.PerformClick();
+        }
+
+        private void numSlaveID2_ValueChanged(float obj)
+        {
+
         }
     }
 }

@@ -451,7 +451,7 @@ namespace BeeUi
                        
                    
                   
-                    if (indexCCD != -1| camera.Para.TypeCamera != TypeCamera.USB)
+                    if (indexCCD != -1 && camera.Para.Name.Trim() != "" | camera.Para.TypeCamera != TypeCamera.USB)
                     {
                         camera.IndexConnect = indexCCD;
                         camera.matRaw = new OpenCvSharp.Mat();
@@ -526,7 +526,7 @@ namespace BeeUi
                     //        indexCCD = index;
                     //}
                    
-                    if (indexCCD != -1 | camera.Para.TypeCamera != TypeCamera.USB)
+                    if (indexCCD != -1&&camera.Para.Name.Trim()!="" | camera.Para.TypeCamera != TypeCamera.USB)
                     {
                         camera.IndexConnect = indexCCD;
                         camera.matRaw = new OpenCvSharp.Mat();

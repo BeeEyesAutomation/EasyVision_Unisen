@@ -70,8 +70,27 @@ namespace BeeUi
             btnClChoose.ForeColor = Global.Config.ColorChoose;
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
-
+            btnByPassResult.IsCLick=Global.ParaCommon.IsForceByPassRS;
+            if (Global.ParaCommon.IsForceByPassRS)
+                btnByPassResult.Text = "ON";
+            else
+                btnByPassResult.Text = "OFF";
+            if (Global.ParaCommon.IsForceByPassRS)
+            {
+                Global.EditTool.lbBypass.Visible = true;
+              
+            }
+            else
+            {
+                Global.EditTool.lbBypass.Visible = false;
+               
+            }
+            btnResetReady.IsCLick = Global.ParaCommon.IsResetReady;
+            numRetryCam.Value = Global.ParaCommon.NumRetryCamera;
+            numRetryPLC.Value = Global.ParaCommon.NumRetryPLC;
+        
         }
+
 
      
 
@@ -314,6 +333,41 @@ namespace BeeUi
             Global.Config.TextColor = Color.White;
             lbCLText.BackColor = Global.Config.TextColor;
             btnCLText.ForeColor = Global.Config.TextColor;
+        }
+
+        private void btnByPassResult_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsForceByPassRS = btnByPassResult.IsCLick;
+            if (Global.ParaCommon.IsForceByPassRS)
+                btnByPassResult.Text = "ON";
+            else
+                btnByPassResult.Text = "OFF";
+            if ( Global.ParaCommon.IsForceByPassRS)
+            {
+                Global.EditTool.lbBypass.Visible = true;
+               
+               
+            }
+            else
+            {
+                Global.EditTool.lbBypass.Visible = false;
+              
+            }
+        }
+
+        private void numRetryCam_ValueChanged(float obj)
+        {
+            Global.ParaCommon.NumRetryCamera =(int) numRetryCam.Value;
+        }
+
+        private void numRetryPLC_ValueChanged(float obj)
+        {
+            Global.ParaCommon.NumRetryPLC = (int)numRetryPLC.Value;
+        }
+
+        private void btnResetReady_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.IsResetReady = btnResetReady.IsCLick;
         }
     }
 }

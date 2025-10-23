@@ -138,13 +138,8 @@ namespace BeeInterface
                         break;
 
                 }
-                if (!Global.IsIntialPython)
-                {
-                    if (itemNew.TypeTool == TypeTool.Learning)
-                        btn.Enabled = false;
-                    if (itemNew.TypeTool == TypeTool.OCR)
-                        btn.Enabled = false;
-                }
+                btn.Enabled = itemNew.IsEn;
+             
                 itemNew.btn = btn;
 
             }

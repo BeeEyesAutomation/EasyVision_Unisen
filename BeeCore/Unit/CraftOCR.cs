@@ -145,7 +145,7 @@ namespace BeeCore
         public void SetTemp( RectRotate rot)
         {
             rotOrigin = rot.Clone();
-            List<PointF> points = PolyOffset.OffsetRadial(rotOrigin.PolyLocalPoints, OffSetSample);
+            List<PointF> points = PolyOffset.OffsetAxisPercent(rotOrigin.PolyLocalPoints, OffSetSample, OffSetSample);
             RectRotate rectRotate = new RectRotate(rotOrigin._rect, rotOrigin._PosCenter, rotOrigin._rectRotation, rotOrigin._dragAnchor);
             rectRotate.Shape = ShapeType.Polygon;
             rectRotate.PolyLocalPoints = points;
@@ -157,114 +157,133 @@ namespace BeeCore
             rectRotate2.Shape = ShapeType.Polygon;
             rectRotate2.PolyLocalPoints = points;
             rectRotate2.IsPolygonClosed = true;
-          
             rotArea = rectRotate2.Clone();
             rotArea.UpdateFromPolygon(false);
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
-                matTemp = Cropper.CropRotatedRect(raw,rotTemp, null);
+                matTemp = Cropper.CropRotatedRect(raw, rotTemp, null);
+                //    var dbg = new DebugOptions
+                //    {
+                //        Enable = true,
+                //        Dir = "debug",   // để trống = tự tạo thư mục theo timestamp
+                //        SaveProbes = true,             // lưu cả ảnh thử ở bước chọn phương pháp
+                //        Prefix = "case1"
+                //    };
+                //    RectRotate rotMask = KeepLargestCrop.RunCrop(
+                //    matTemp,
+                //    borderPolicy: BorderPolicy.RemoveExceptLargest,
+                //    method: BinarizeMethod.Auto,
+
+
+                //    dbg: new DebugOptions { Enable = false }     // bật true nếu muốn log debug
+                //);
+
+                //Mat crop = Cropper.CropRotatedRect(matTemp, rotMask, null);
                 LearnPattern(matTemp, true);
                 bmRaw = matTemp.ToBitmap();
+
+            }
+               
                
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
-            }
+            
 
         }
         public void AutoTemp()
         {
             if (ModeCheck == ModeCheck.Single)
             {
-                RectRotate rotAdj = BeeCore.Common.GetPositionAdjustment(rotTemp, Global.rotOriginAdj);
+                RectRotate rotAdj = BeeCore.Common.GetPositionAdjustment(rotArea, Global.rotOriginAdj);
 
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
-                {
-                    matTemp = Cropper.CropRotatedRect(raw, rotAdj, null);
-                    LearnPattern(matTemp, true);
-                    bmRaw = matTemp.ToBitmap();
-
-                   // Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
-                }
-                //using (Py.GIL())
+                //using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 //{
-                //    PyObject result = null;
+                //    matTemp = Cropper.CropRotatedRect(raw, rotAdj, null);
+                //    LearnPattern(matTemp, true);
+                //    bmRaw = matTemp.ToBitmap();
 
-
-                //    try
-                //    {
-                  
-
-                //        // === Crop ROI ===
-                //        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAdj, null))
-                //        {
-                //            if (matCrop.Empty()) return;
-
-                //            if (matCrop.Type().Depth != MatType.CV_8U)
-                //            {
-                //                using (var tmp8u = new Mat())
-                //                {
-                //                    Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
-                //                    matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
-                //                }
-                //            }
-
-                //            // 2) đảm bảo đúng số kênh
-                //            if (matCrop.Channels() == 1)
-                //            {
-                //                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
-                //            }
-                //            else if (matCrop.Channels() == 4)
-                //            {
-                //                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
-                //            }
-
-                //            int h = matCrop.Rows, w = matCrop.Cols, c = matCrop.Channels();
-                //            int stride = (int)matCrop.Step();
-                //            long addr = matCrop.Data.ToInt64();
-
-                //            using (Py.GIL())
-                //            {
-                //                result = G.objCraftOCR.predict_from_pointer(addr, h, w, c, stride);
-                //                rectRotates = Converts.PyToRectRotates(result["payloads"]);
-                //            }
-                //            if(rectRotates != null)
-                //                if (rectRotates.Count()>0)
-                //                {
-                //                    RectRotate rot = rectRotates[0];
-                //                    List<PointF> points = PolyOffset.OffsetAxisPercent(rot.PolyLocalPoints, OffSetSample, OffSetSample);
-                //                    RectRotate rectRotate = new RectRotate(rot._rect, rot._PosCenter, rot._rectRotation, rot._dragAnchor);
-                //                    rectRotate.Shape = ShapeType.Polygon;
-                //                    rectRotate.PolyLocalPoints = points;
-                //                    rectRotate.IsPolygonClosed = true;
-
-                //                    rectRotate.UpdateFromPolygon(false);
-                //                    matTemp = Cropper.CropRotatedRect(matCrop, rectRotate, null);
-                //                     LearnPattern(matTemp, true);
-                //            bmRaw = matTemp.ToBitmap();
-                //                }    
-                                  
-                           
-                //            // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
-                //            GC.KeepAlive(matCrop);
-                //        }
-                //    }
-                //    catch (PythonException pyEx)
-                //    {
-                //        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-                //    }
-                //    finally
-                //    {
-
-                //        if (result != null) result.Dispose();
-                //    }
+                //   // Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.Done;
                 //}
-              
+                using (Py.GIL())
+                {
+                    PyObject result = null;
 
-              
+
+                    try
+                    {
+
+
+                        // === Crop ROI ===
+                        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAdj, null))
+                        {
+                            if (matCrop.Empty()) return;
+
+                            if (matCrop.Type().Depth != MatType.CV_8U)
+                            {
+                                using (var tmp8u = new Mat())
+                                {
+                                    Cv2.ConvertScaleAbs(matCrop, tmp8u); // 16U/32F -> 8U
+                                    matCrop.AssignTo(tmp8u);             // ghi đè dữ liệu (OpenCvSharp: AssignTo giữ shape/type mới)
+                                }
+                            }
+
+                            // 2) đảm bảo đúng số kênh
+                            if (matCrop.Channels() == 1)
+                            {
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR);
+                            }
+                            else if (matCrop.Channels() == 4)
+                            {
+                                Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
+                            }
+
+                            int h = matCrop.Rows, w = matCrop.Cols, c = matCrop.Channels();
+                            int stride = (int)matCrop.Step();
+                            long addr = matCrop.Data.ToInt64();
+
+                            using (Py.GIL())
+                            {
+                                result = G.objCraftOCR.predict_from_pointer(addr, h, w, c, stride);
+                                rectRotates = Converts.PyToRectRotates(result["payloads"]);
+                            }
+                            if (rectRotates != null)
+                                if (rectRotates.Count() > 0)
+                                {
+                                    RectRotate rot = rectRotates[0];
+                                    List<PointF> points = PolyOffset.OffsetAxisPercent(rot.PolyLocalPoints, OffSetSample, OffSetSample);
+                                    RectRotate rectRotate = new RectRotate(rot._rect, rot._PosCenter, rot._rectRotation, rot._dragAnchor);
+                                    rectRotate.Shape = ShapeType.Polygon;
+                                    rectRotate.PolyLocalPoints = points;
+                                    rectRotate.IsPolygonClosed = true;
+
+                                    rectRotate.UpdateFromPolygon(false);
+                                    matTemp = Cropper.CropRotatedRect(matCrop, rectRotate, null);
+                                    LearnPattern(matTemp, true);
+                                    bmRaw = matTemp.ToBitmap();
+                                }
+
+
+                            // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
+                            GC.KeepAlive(matCrop);
+                        }
+                    }
+                    catch (PythonException pyEx)
+                    {
+                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
+                    }
+                    finally
+                    {
+
+                        if (result != null) result.Dispose();
+                    }
+                }
+
+
+
             }
             else
             {
@@ -555,7 +574,7 @@ namespace BeeCore
                         matProcess = raw; // reuse backing store
                     }
                     Mat crop1 = Cropper.CropRotatedRect(matProcess, rectRotate,null);
-                    Cv2.ImWrite("crop1.png", crop1);
+                  //  Cv2.ImWrite("crop1.png", crop1);
                     var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
