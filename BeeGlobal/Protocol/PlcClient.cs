@@ -832,29 +832,17 @@ namespace PlcLib
                                 NumErr++;
                                 if (NumErr > Global.ParaCommon.NumRetryPLC)
                                 {
-                                    bool ok = false;
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Reconnect  " + _retry));
-                                    if (Reconnect())
-                                    {
-                                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Reconnect sucess "));
-
-                                        ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                    if (!ok)
-                                    {
-                                       
-                                       
-                                        NumErr = 0;
+                                    NumErr = 0;
                                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
                                         IsConnect = false;
                                  
                                         Global.PLCStatus = PLCStatus.ErrorConnect;
                                         Global.IsAllowReadPLC = false;
-                                    }
-                                    else
-                                        NumErr = 0;
                                 }
                                 else
                                 {
+                                    Thread.Sleep(100);
+                                    Reconnect();
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Retry  " + NumErr));
                                     goto X;
                                 }
