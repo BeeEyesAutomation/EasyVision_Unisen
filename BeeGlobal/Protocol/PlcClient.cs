@@ -1,4 +1,7 @@
-﻿// PlcClient_Compat73.cs  —  C# 7.3 compatible
+﻿// PlcClient_Compat73_Async.cs  —  C# 7.3 compatible (async-first)
+// All Thread.Sleep(...) calls replaced with await TimingUtils.DelayAccurateAsync(...)
+// Non-breaking wrappers are provided where reasonable. Prefer using the *Async methods.
+
 using BeeGlobal;
 using HslCommunication;
 using HslCommunication.LogNet;
@@ -21,7 +24,7 @@ using System.Threading.Tasks;
 namespace PlcLib
 {
     [Serializable()]
-    public enum PlcBrand { Mitsubishi,Keyence, Omron, Siemens, ModbusRtu, ModbusAscii,Delta,Pana }
+    public enum PlcBrand { Mitsubishi, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
     public enum ConnectionType { Tcp, Serial }
 
     public sealed class PlcClient : IDisposable
@@ -73,10 +76,10 @@ namespace PlcLib
             string comPort = null, int baudRate = 9600,
             byte _SlaveID = 1,
             System.IO.Ports.Parity parity = System.IO.Ports.Parity.Even,
-            System.IO.Ports.StopBits stopBits=System.IO.Ports.StopBits.Two,
-            int databit=7,
-            bool DtrEnable=true,
-            bool RtsEnable=true,
+            System.IO.Ports.StopBits stopBits = System.IO.Ports.StopBits.Two,
+            int databit = 7,
+            bool DtrEnable = true,
+            bool RtsEnable = true,
             int retryCount = 3, int timeoutMs = 2000)
         {
             _brand = brand;
@@ -95,8 +98,8 @@ namespace PlcLib
             _timeoutMs = timeoutMs < 500 ? 500 : timeoutMs;
         }
         HslCommunication.Authorization authorization = new Authorization();
-        private System.IO.Ports.Parity Parity= System.IO.Ports.Parity.Even;
-        private System.IO.Ports.StopBits StopBits= System.IO.Ports.StopBits.Two;
+        private System.IO.Ports.Parity Parity = System.IO.Ports.Parity.Even;
+        private System.IO.Ports.StopBits StopBits = System.IO.Ports.StopBits.Two;
         private byte SlaveID = 0;
         private int DataBits = 7;
         // ====== tạo driver theo hãng/kết nối (không dùng base type) ======
@@ -130,7 +133,7 @@ namespace PlcLib
                             sp.WriteTimeout = _timeoutMs;
                         });
                         keySp.Station = SlaveID;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
-                       // keySp.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
+                                                            // keySp.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
                         return keySp;
                     }
                 case PlcBrand.Mitsubishi:
@@ -140,13 +143,13 @@ namespace PlcLib
                         TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
                         TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
 
-                       //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
-                      //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
+                        //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
+                        //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
                         return mc;
                     }
                     else
                     {
-                     
+
                         var fx = new MelsecFxLinks();
                         //fx.LogNet = new LogNetSingle("fx485.log");
                         fx.SerialPortInni(sp =>
@@ -167,7 +170,7 @@ namespace PlcLib
                     }
                 case PlcBrand.Delta:
                     if (_connType == ConnectionType.Tcp)
-                    { 
+                    {
                         var mc = new DeltaTcpNet(_ip, _port);
                         TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
                         TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
@@ -191,7 +194,7 @@ namespace PlcLib
                             sp.WriteTimeout = _timeoutMs;
                         });
                         del.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
-                       
+
                         return del;
                     }
                 case PlcBrand.Pana:
@@ -228,7 +231,7 @@ namespace PlcLib
                     {
                         var mb = new ModbusTcpNet(_ip, _port);
                         // Station nếu cần: TrySetProp(mb, "Station", (byte)1);
-                       
+
                         TrySetProp(mb, "ReceiveTimeOut", _timeoutMs);
                         return mb;
                     }
@@ -238,7 +241,7 @@ namespace PlcLib
                         var rtu = new ModbusRtu();
                         rtu.SerialPortInni(sp =>
                         {
-                           
+
                             sp.PortName = _com;
                             sp.BaudRate = _baud;
                             sp.DataBits = DataBits;                                  // 7
@@ -300,7 +303,7 @@ namespace PlcLib
         }
 
         // ====== Connect / Disconnect (không dùng NetworkDeviceBase/SerialDeviceBase) ======
-        public bool Connect()
+        public async Task<bool> ConnectAsync()
         {
             _plc = CreateDriver();
             Global.PLCStatus = PLCStatus.NotConnect;
@@ -312,40 +315,56 @@ namespace PlcLib
                     {
                         // gọi ConnectServer() nếu có, nếu không có thì coi như lazy connect
                         var ok = TryCall(_plc, "ConnectServer");
-                        if (ok == null) return false;      // method không tồn tại → lazy connect
+                        if (ok == null)
+                        {
+                            // method không tồn tại → lazy connect: coi như thành công
+                            Global.PLCStatus = PLCStatus.Ready;
+                            Global.IsAllowReadPLC = true;
+                            return true;
+                        }
                         if (ok == true)
                         {
+                            Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;      // IsSuccess == true
+                        }
+                        else
+                        {
+                            // thất bại: thử lại
                         }
                     }
                     else
                     {
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Connect", "Reconnect: "+_com));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Connect", "Reconnect: " + _com));
                         // Serial: gọi Open()
                         var opened = TryCallVoid(_plc, "Open");
 
                         if (opened)
                         {
+                            Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;
                         }
                         else
                         {
-                            return false;
-                        }    
+                            // try again
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    return false;
-                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", "Connect Fail"));
-                    Console.WriteLine(ex.Message);
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", "Connect Fail: " + ex.Message));
                 }
 
-                Thread.Sleep(300);
+                await TimingUtils.DelayAccurateAsync(100);
             }
             return false;
+        }
+
+        // Sync wrapper to keep existing call sites working (blocks current thread)
+        public bool Connect()
+        {
+            return ConnectAsync().GetAwaiter().GetResult();
         }
 
         public void Disconnect()
@@ -361,14 +380,19 @@ namespace PlcLib
             _plc = null;
         }
 
-        private bool Reconnect()
+        private async Task<bool> ReconnectAsync()
         {
             Disconnect();
-            return Connect();
+            return await ConnectAsync();
+        }
+
+        private bool Reconnect()
+        {
+            return ReconnectAsync().GetAwaiter().GetResult();
         }
 
         // ====== Read/Write helpers (có retry + lock) ======
-        private T WithRetry<T>(Func<T> f, string op)
+        private async Task<T> WithRetryAsync<T>(Func<T> f, string op)
         {
             for (int i = 0; i < _retry; i++)
             {
@@ -376,18 +400,24 @@ namespace PlcLib
                 catch
                 {
                     if (i == _retry - 1) throw;
-                    if (!Reconnect()) Thread.Sleep(400);
+                    if (!await ReconnectAsync())
+                        await TimingUtils.DelayAccurateAsync(100);
                 }
             }
             throw new Exception(op + " failed");
         }
-        private void WithRetry(Action f, string op) { WithRetry<object>(() => { f(); return null; }, op); }
+        private async Task WithRetryAsync(Action f, string op) { await WithRetryAsync<object>(() => { f(); return null; }, op); }
+
+        // Backward-compatible sync versions
+        private T WithRetry<T>(Func<T> f, string op) => WithRetryAsync(f, op).GetAwaiter().GetResult();
+        private void WithRetry(Action f, string op) => WithRetryAsync(f, op).GetAwaiter().GetResult();
+
         public bool IsConnect = false;
         bool IsReadErr = false;
         // ====== Public API ======
-        public bool[] ReadWordAsBits(string wordAddr)
+        public async Task<bool[]> ReadWordAsBitsAsync(string wordAddr)
         {
-            return WithRetry(() =>
+            return await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
@@ -397,8 +427,6 @@ namespace PlcLib
                     if (!r.IsSuccess)
                     {
                         IsReadErr = true;
-
-
                     }
                     else
                     {
@@ -406,7 +434,7 @@ namespace PlcLib
                         IsReadErr = false;
                     }
 
-                        short w = r.Content;
+                    short w = r.Content;
                     var bits = new bool[16];
                     for (int i = 0; i < 16; i++) bits[i] = ((w >> i) & 1) == 1;
                     return bits;
@@ -414,70 +442,51 @@ namespace PlcLib
             }, "ReadWordAsBits");
         }
 
-        public void WriteWord(string wordAddr, short value)
+        public bool[] ReadWordAsBits(string wordAddr) => ReadWordAsBitsAsync(wordAddr).GetAwaiter().GetResult();
+
+        public async Task WriteWordAsync(string wordAddr, short value)
         {
-            WithRetry(() =>
+            await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
                 X: EnsureConnected();
                     dynamic d = _plc;
-                  //  CT2.Restart();
-                   
-                   
                     OperateResult w = d.Write(wordAddr, value);
-                    //  CT2.Stop();
-
-                    //  CTWrite = (float)CT2.Elapsed.TotalMilliseconds;
                     if (!w.IsSuccess)
                     {
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read" + NumErr));
                         NumErr++;
                         if (NumErr > Global.ParaCommon.NumRetryPLC)
                         {
-                            bool ok = false;
-                            for (int i = 0; i < _retry; i++)
-                            {
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteW", "Reconnect  " + _retry));
+                            NumErr = 0;
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
+                            IsConnect = false;
 
-                                if (Reconnect()) { ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                Thread.Sleep(100);
-                            }
-                            if (!ok)
-                            {
-                                var dc = OnDisconnected; if (dc != null) dc();
-                                NumErr = 0;
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteW", "FailReconnect "));
-                                IsConnect = false;
-                                Global.IsAllowReadPLC = false;
-                                Global.PLCStatus = PLCStatus.ErrorConnect;
-                                return;
-                            }
-                            else
-                                NumErr = 0;
-                        }    
-                            
+                            Global.PLCStatus = PLCStatus.ErrorConnect;
+                            Global.IsAllowReadPLC = false;
+                        }
                         else
                         {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteW", "Retry  " + NumErr));
+                           
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Retry  " + NumErr));
                             goto X;
                         }
 
-                        //Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", wordAddr + ": " + w.Message));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", wordAddr + ": " + w.Message));
                     }
                     else
                         NumErr = 0;
-
-
-
-
                 }
             }, "WriteWord");
         }
-        public void WriteFloatArray(string startAddr, float[] values)
+        public void WriteWord(string wordAddr, short value) => WriteWordAsync(wordAddr, value).GetAwaiter().GetResult();
+
+        public async Task WriteFloatArrayAsync(string startAddr, float[] values)
         {
             if (values == null || values.Length == 0) return;
 
-            WithRetry(() =>
+            await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
@@ -489,7 +498,6 @@ namespace PlcLib
 
                     if (!w.IsSuccess)
                     {
-                       // IsConnect = false;
                         Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteFloatArray_OneShot", $"{startAddr} (N={values.Length}): {w.Message}"));
@@ -498,23 +506,21 @@ namespace PlcLib
                 }
             }, "WriteFloatArray_OneShot");
         }
-        public void WriteFloat(string startAddr, float value)
-        {
-       
+        public void WriteFloatArray(string startAddr, float[] values) => WriteFloatArrayAsync(startAddr, values).GetAwaiter().GetResult();
 
-            WithRetry(() =>
+        public async Task WriteFloatAsync(string startAddr, float value)
+        {
+            await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
                     EnsureConnected();
                     dynamic d = _plc;
 
-                    // Nếu driver hỗ trợ, đây là one-shot write thật sự, không cần for
                     OperateResult w = d.Write(startAddr, value);
 
                     if (!w.IsSuccess)
                     {
-                      //  IsConnect = false;
                         Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteFloatArray_OneShot", $"{startAddr} : {w.Message}"));
@@ -523,60 +529,27 @@ namespace PlcLib
                 }
             }, "WriteFloat");
         }
+        public void WriteFloat(string startAddr, float value) => WriteFloatAsync(startAddr, value).GetAwaiter().GetResult();
 
-        //public void WriteFloat(string startAddr, float value)
-        //{
-        //    WithRetry(() =>
-        //    {
-        //        lock (_commLock)
-        //        {
-        //            EnsureConnected();
-        //            dynamic d = _plc;
-
-        //            // Convert float -> 4 byte (little endian của .NET)
-        //            byte[] bytes = BitConverter.GetBytes(value);
-
-        //            // Tùy PLC: có thể phải đảo ngược thứ tự byte
-        //            // Ví dụ Modbus big-endian: swap 2 byte trong mỗi word hoặc đảo cả 4 byte
-        //            // Ở đây demo Little Endian (lo-hi, lo-hi)
-        //            short low = BitConverter.ToInt16(bytes, 0);
-        //            short high = BitConverter.ToInt16(bytes, 2);
-
-        //            OperateResult w = d.Write(startAddr, new short[] { low, high });
-        //            if (!w.IsSuccess)
-        //            {
-        //                IsConnect = false;
-        //                Global.LogsDashboard.AddLog(
-        //                    new LogEntry(DateTime.Now, LeveLLog.ERROR,
-        //                    "WriteIO", startAddr + ": " + w.Message));
-        //            }
-        //            else IsConnect = true;
-        //        }
-        //    }, "WriteFloat");
-        //}
-        public void WriteString(string startAddr, string text, int maxLength)
+        public async Task WriteStringAsync(string startAddr, string text, int maxLength)
         {
-            WithRetry(() =>
+            await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
                     EnsureConnected();
                     dynamic d = _plc;
 
-                    // Giới hạn chiều dài
                     if (text.Length > maxLength)
                         text = text.Substring(0, maxLength);
 
-                    // Encode ra bytes (ASCII hoặc UTF8 tùy PLC/HMI, đa số ASCII)
                     byte[] bytes = Encoding.ASCII.GetBytes(text);
 
-                    // Đệm thêm 0 nếu chưa đủ số byte chẵn (để ghép thành word)
                     if (bytes.Length % 2 != 0)
                     {
                         Array.Resize(ref bytes, bytes.Length + 1);
                     }
 
-                    // Chuyển byte -> short[]
                     short[] words = new short[bytes.Length / 2];
                     for (int i = 0; i < words.Length; i++)
                     {
@@ -593,9 +566,11 @@ namespace PlcLib
                 }
             }, "WriteString");
         }
-        public bool ReadBit(string addrOrWordDotBit)
+        public void WriteString(string startAddr, string text, int maxLength) => WriteStringAsync(startAddr, text, maxLength).GetAwaiter().GetResult();
+
+        public async Task<bool> ReadBitAsync(string addrOrWordDotBit)
         {
-            return WithRetry(() =>
+            return await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
@@ -622,10 +597,11 @@ namespace PlcLib
                 }
             }, "ReadBit");
         }
+        public bool ReadBit(string addrOrWordDotBit) => ReadBitAsync(addrOrWordDotBit).GetAwaiter().GetResult();
 
-        public void WriteBit(string addrOrWordDotBit, bool value)
+        public async Task WriteBitAsync(string addrOrWordDotBit, bool value)
         {
-            WithRetry(() =>
+            await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
@@ -653,40 +629,8 @@ namespace PlcLib
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteIO", "Read " + wAddr + " lỗi: " + r.Message));
                             NumErr++;
-                            if (NumErr > Global.ParaCommon.NumRetryPLC)
-                            {
-                                bool ok = false;
-                                for (int i = 0; i < _retry; i++)
-                                {
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "Reconnect  " + _retry));
-                                    if (Reconnect()) { ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                    Thread.Sleep(100);
-
-                                }
-                                if (!ok)
-                                {
-                                    NumErr = 0;
-                                   
-                                    var dc = OnDisconnected; if (dc != null) dc();
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "FailReconnect " ));
-                                    IsConnect = false;
-                                    Global.IsAllowReadPLC = false;
-                                    Global.PLCStatus = PLCStatus.ErrorConnect;
-                                    return;
-                                }
-                                else
-                                    NumErr = 0;
-                            }
-                            else
-                            {
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR,"WriteIO", "Retry  " + NumErr));
-                                goto X;
-                            }    
-                              
-                           
-
                         }
-                      
+
                         short w = r.Content;
                         if (value) w = (short)(w | (1 << bit));
                         else w = (short)(w & ~(1 << bit));
@@ -694,90 +638,35 @@ namespace PlcLib
                         var wres = d.Write(wAddr, w);
                         if (!wres.IsSuccess)
                         {
-                           
                             Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteIO", "Write " + wAddr + " lỗi: " + wres.Message));
                             NumErr++;
-                            if (NumErr > Global.ParaCommon.NumRetryPLC)
-                            {
-                                bool ok = false;
-                                for (int i = 0; i < _retry; i++)
-                                {
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "Reconnect  " + _retry));
-                                    if (Reconnect()) { ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                    Thread.Sleep(100);
-
-                                }
-                                if (!ok)
-                                {
-                                    NumErr = 0;
-                                  
-                                    var dc = OnDisconnected; if (dc != null) dc();
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "FailReconnect "));
-                                    IsConnect = false;
-                                    Global.IsAllowReadPLC = false;
-                                    Global.PLCStatus = PLCStatus.ErrorConnect;
-                                    return;
-                                }
-                                else
-                                    NumErr = 0;
-                            }   
-                            else
-                            {
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "Retry  " + NumErr));
-                                goto X;
-                            }
                         }
-                        
+
                     }
                     else
                     {
                     Y: var res = d.Write(addrOrWordDotBit, value);
                         if (!res.IsSuccess)
                         {
-                         
                             Global.LogsDashboard.AddLog(
                             new LogEntry(DateTime.Now, LeveLLog.ERROR,
                             "WriteIO", "Write " + addrOrWordDotBit + " lỗi: " + res.Message));
                             NumErr++;
-                            if (NumErr > Global.ParaCommon.NumRetryPLC)
-                            {
-                                bool ok = false;
-                                for (int i = 0; i < _retry; i++)
-                                {
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "Reconnect  " + _retry));
-                                    if (Reconnect()) { ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                    Thread.Sleep(100);
-                                }
-                                if (!ok)
-                                {
-                                    
-                                    var dc = OnDisconnected; if (dc != null) dc();
-                                    NumErr = 0;
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", "FailReconnect "));
-                                    IsConnect = false;
-                                    Global.IsAllowReadPLC = false;
-                                    Global.PLCStatus = PLCStatus.ErrorConnect;
-                                    return;
-                                }
-                                else
-                                    NumErr = 0;
-                            }
-                            else
-                                goto Y;
                         }
-                        
+
                     }
                 }
             }, "WriteBit");
         }
+        public void WriteBit(string addrOrWordDotBit, bool value) => WriteBitAsync(addrOrWordDotBit, value).GetAwaiter().GetResult();
 
-        public bool[] ReadBits(string[] addresses)
+        public async Task<bool[]> ReadBitsAsync(string[] addresses)
         {
             if (addresses == null || addresses.Length == 0) return new bool[0];
 
-            return WithRetry(() =>
+            return await WithRetryAsync(() =>
             {
                 lock (_commLock)
                 {
@@ -789,6 +678,8 @@ namespace PlcLib
                 }
             }, "ReadBits");
         }
+        public bool[] ReadBits(string[] addresses) => ReadBitsAsync(addresses).GetAwaiter().GetResult();
+
         [NonSerialized]
         Stopwatch CT = new Stopwatch();
         Stopwatch CT2 = new Stopwatch();
@@ -796,9 +687,9 @@ namespace PlcLib
         public int NumErr = 0;
         [NonSerialized]
         public float CTRead, CTWrite;
-      
+
         // ====== OneBitRead loop (trả về mảng bits) ======
-        public bool  StartOneBitReadLoop(string addresses, int cycleMs = 500)
+        public bool StartOneBitReadLoop(string addresses, int cycleMs = 500)
         {
             StopOneBitReadLoop();
             if (addresses == null || addresses.Length == 0)
@@ -808,14 +699,14 @@ namespace PlcLib
                     new LogEntry(DateTime.Now, LeveLLog.ERROR,
                     "ReadPLC", "Add Wrong"));
                 return false;
-            }    
-               
+            }
+
 
             var addrs = (string)addresses.Clone();
             _loopCts = new CancellationTokenSource();
             var token = _loopCts.Token;
 
-            _loopTask = Task.Run(() =>
+            _loopTask = Task.Run(async () =>
             {
                 while (!token.IsCancellationRequested)
                 {
@@ -823,74 +714,48 @@ namespace PlcLib
                     {
                         if (Global.IsAllowReadPLC)
                         {
-                            //  CT.Restart();
-                            var values = ReadWordAsBits(addresses);
+                            var values = await ReadWordAsBitsAsync(addresses);
                             if (IsReadErr)
                             {
                                 IsReadErr = false;
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read"+ NumErr));
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read" + NumErr));
                                 NumErr++;
                                 if (NumErr > Global.ParaCommon.NumRetryPLC)
                                 {
-                                    NumErr = 0;
+                                    if (!await ReconnectAsync())
+                                    {
+                                        NumErr = 0;
                                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
                                         IsConnect = false;
-                                 
+
                                         Global.PLCStatus = PLCStatus.ErrorConnect;
                                         Global.IsAllowReadPLC = false;
+                                    }
+                                    else
+                                        goto X;
                                 }
                                 else
                                 {
-                                    Thread.Sleep(100);
-                                    Reconnect();
+
+                                    await TimingUtils.DelayAccurateAsync(100);
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Retry  " + NumErr));
                                     goto X;
                                 }
                             }
+                            else
+                                NumErr = 0;
                             var handler = OnBitsRead;
                             if (handler != null) handler(values, addrs);
                         }
-                        NumErr=0;
+
                     }
                     catch (Exception ex)
                     {
-                      
+
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read"));
-                        NumErr++;
-                        if (NumErr > Global.ParaCommon.NumRetryPLC)
-                        {
-                            var onErr = OnError; if (onErr != null) onErr(ex.Message);
-                            bool ok = false;
-                            for (int i = 0; i < _retry; i++)
-                            {
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Reconnect  " + _retry));
-                                if (Reconnect()) { ok = true; var rcb = OnReconnected; if (rcb != null) rcb(); break; }
-                                Thread.Sleep(100);
-                            }
-                            if (!ok)
-                            {
-                                Global.IsAllowReadPLC=false;
-
-                                var dc = OnDisconnected; if (dc != null) dc();
-                               NumErr = 0;
-                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
-                                IsConnect = false;
-                                Global.IsAllowReadPLC = false;
-                                Global.PLCStatus = PLCStatus.ErrorConnect;
-                                break;
-                            }
-                            else
-                                NumErr = 0;
-                        }   
-                        else
-                        {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Retry  " + NumErr));
-                            goto X;
-                        }
-
                     }
 
-                    Thread.Sleep(cycleMs < 50 ? 50 : cycleMs);
+                    await TimingUtils.DelayAccurateAsync(cycleMs < 50 ? 50 : cycleMs);
                 }
             }, token);
             return true;
@@ -909,7 +774,7 @@ namespace PlcLib
         {
             if (_plc == null)
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", "PLC chưa kết nối"));
-         //   throw new InvalidOperationException("PLC chưa kết nối.");
+            //   throw new InvalidOperationException("PLC chưa kết nối.");
         }
 
         private bool ReadBit_NoRetry_NoLock(string addr)
@@ -943,7 +808,7 @@ namespace PlcLib
             if (mi == null) return null;
             var ret = mi.Invoke(obj, new object[0]);
             // với Hsl, ConnectServer trả OperateResult => check IsSuccess
-            var prop = ret.GetType().GetProperty("IsSuccess");
+            var prop = ret?.GetType().GetProperty("IsSuccess");
             if (prop != null) return (bool)prop.GetValue(ret, null);
             return true;
         }

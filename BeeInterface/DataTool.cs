@@ -231,6 +231,7 @@ namespace BeeInterface
                 case TypeTool.Intersect:
                     control = new ToolIntersect();
                     break;
+
                 default:
                     return null;
                     break;

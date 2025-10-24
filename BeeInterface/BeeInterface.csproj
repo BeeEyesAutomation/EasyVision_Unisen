@@ -171,6 +171,12 @@
     <Compile Include="Custom\TextBoxAuto.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Tool\CounterInfor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\CounterInfor.Designer.cs">
+      <DependentUpon>CounterInfor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolCircle.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -332,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DashBoard\StatusDashboard.resx">
       <DependentUpon>StatusDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\CounterInfor.resx">
+      <DependentUpon>CounterInfor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolCircle.resx">
       <DependentUpon>ToolCircle.cs</DependentUpon>

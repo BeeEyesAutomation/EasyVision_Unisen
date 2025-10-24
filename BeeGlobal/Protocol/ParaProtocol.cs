@@ -613,7 +613,7 @@ namespace BeeGlobal
                         }
                         catch (Exception ex)
                         {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "WriteIO", ex.Message));
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, _IO_Processing.ToString(), ex.Message));
                         }
                         finally
                         {

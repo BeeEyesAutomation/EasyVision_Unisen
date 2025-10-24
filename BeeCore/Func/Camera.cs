@@ -1563,7 +1563,7 @@ namespace BeeCore
                     numTry++;
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Retry is "+numTry));
                
-                if (numTry >= 5)
+                if (numTry >= Global.ParaCommon.NumRetryCamera)
                 {
                     numTry = 0;
                     Global.CameraStatus = CameraStatus.ErrorConnect;
