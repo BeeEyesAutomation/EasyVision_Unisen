@@ -403,7 +403,7 @@ namespace BeeGlobal
             _cbLevel.SelectedIndexChanged += delegate { RebuildView(); };
             _tbFind.TextChanged += delegate { RebuildView(); };
             _chkSaveLog.CheckedChanged += _chkSaveLog_CheckedChanged;
-            _chkAutoScroll.CheckedChanged += delegate { AutoScrollToEnd = _chkAutoScroll.Checked; };
+            _chkAutoScroll.CheckedChanged += delegate { OnlySaveErr = _chkAutoScroll.Checked; };
             _chkAutoReload.CheckedChanged += delegate {   AutoReloadOnChange = _chkAutoReload.Checked; Global.ParaCommon.IsAutoReload = AutoReloadOnChange; };
 
             _btnToday.Click += delegate { SetRangeToday(); };
@@ -555,12 +555,23 @@ namespace BeeGlobal
                     ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogWorkItem),
                 new State { self = this, level = level, message = message, source = source });
         }
+        public bool OnlySaveErr = true;
         public void AddLog(LogEntry entry)
         {
             if (Global.ParaCommon != null)
                 if (Global.ParaCommon.IsSaveLog)
-            ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
-                new StateEntry { self = this, entry = entry });
+                {
+                    if(OnlySaveErr)
+                    {
+                        if(entry.Level == "ERROR")
+                            ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
+             new StateEntry { self = this, entry = entry });
+                    }
+                    else
+                        ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
+             new StateEntry { self = this, entry = entry });
+                }
+         
         }
 
         private struct State { public LogsDashboard self; public LeveLLog level; public string message; public string source; }
@@ -638,7 +649,7 @@ namespace BeeGlobal
                 _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = _autoReloadOnChange, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
             AutoReloadOnChange = Global.ParaCommon.IsAutoReload;
-            _chkAutoScroll = new CheckBox { Text = "AutoScroll", Checked = _autoScrollToEnd, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+            _chkAutoScroll = new CheckBox { Text = "OnlyError", Checked = OnlySaveErr, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
           
             _filter.Controls.Add(Pair("From:", _dtpFrom, 140));
             _filter.Controls.Add(Pair("To:", _dtpTo, 140));
