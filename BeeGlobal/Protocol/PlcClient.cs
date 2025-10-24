@@ -324,6 +324,9 @@ namespace PlcLib
                         }
                         if (ok == true)
                         {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _ip));
+
+
                             Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;      // IsSuccess == true
@@ -335,12 +338,13 @@ namespace PlcLib
                     }
                     else
                     {
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Connect", "Reconnect: " + _com));
                         // Serial: gọi Open()
                         var opened = TryCallVoid(_plc, "Open");
 
                         if (opened)
                         {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _com));
+
                             Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;
