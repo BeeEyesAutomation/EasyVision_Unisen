@@ -503,12 +503,11 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbIn14.Text = nameInput[14];
                 cbIn15.Text = nameInput[15];
 
-                  timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
+            timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
-           
             cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
-                numSlaveID.Value= Global.ParaCommon.Comunication.Protocol.SlaveID ;
-                txtAddRead.Text=Global.ParaCommon.Comunication.Protocol.AddRead;
+            numSlaveID.Value= Global.ParaCommon.Comunication.Protocol.SlaveID ;
+            txtAddRead.Text=Global.ParaCommon.Comunication.Protocol.AddRead;
             txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
                 listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 , DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
                 listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
@@ -587,7 +586,6 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
               //  pComIO.Enabled = false;
-           
                 btnConectIO.IsCLick = true;
                 btnConectIO.Enabled = false;
                // btnBypass.Enabled = true;
@@ -595,7 +593,6 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             else
             {
              //   pComIO.Enabled = true;
-               
                 btnConectIO.IsCLick = false;
                 btnConectIO.Enabled = true;
              //   btnBypass.Enabled = false;
@@ -740,6 +737,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         public String[] nameInput =new String[] {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbIn_SelectionChangeCommitted(object sender, EventArgs e)
         {
+          
             ComboBox cb = sender as ComboBox;
             String name = cb.SelectedValue.ToString();
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
@@ -756,11 +754,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             }
             nameInput[value] = name;
             ChangeDatasource(value, name);
+            Global.ParaCommon.Comunication.Protocol.Arrange();
         }
         public String[] nameOut = new String[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbOut_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            ComboBox cb=  sender  as ComboBox;
+           
+            ComboBox cb =  sender  as ComboBox;
             String name = cb.SelectedValue.ToString();
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
@@ -776,7 +776,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             OldOut[value] = name;
             nameOut[value] = name;
             ChangeDatasourceOut(value, name);
-
+            Global.ParaCommon.Comunication.Protocol.Arrange();
         }
 
         private async void DOutClick(object sender, EventArgs e)

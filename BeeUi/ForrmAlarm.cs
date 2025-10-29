@@ -170,6 +170,28 @@ namespace BeeUi
 
                 }
             }
+            else if (lbCode.Text.Contains("0x001"))
+            {
+                Global.CameraStatus = CameraStatus.Reconnect;
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Retry", "Reconnect CCD"));
+                if ( BeeCore.Common.listCamera[Global.IndexChoose].ReConnect2())
+                {
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Retry", "Success"));
+
+                    Global.CameraStatus = CameraStatus.Ready;
+                    this.TopMost = false;
+                    this.Close();
+
+                }
+                else
+                {
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Retry", "Fail"));
+                    this.TopMost = false;
+                    this.Close();
+                    Global.CameraStatus = CameraStatus.ErrorConnect;
+                 
+                }
+            }
             else
             {
                 this.TopMost = false;

@@ -26,7 +26,7 @@ using Point = System.Drawing.Point;
 namespace BeeCore
 {
     [Serializable()]
-    public class Yolo
+    public class Counter
     {
         public int _Percent = 0;//note
         [field: NonSerialized]
@@ -50,10 +50,7 @@ namespace BeeCore
             return this.MemberwiseClone();
         }
         
-        public void InitialYolo()
-        {
-           
-        }
+      
         public String pathFullModel = "";
         public  void SetModel()
         {
@@ -552,7 +549,6 @@ namespace BeeCore
                         listLabel = new List<string>();
                         rectRotates = new List<RectRotate>();
                         listScore = new List<float>();
-                        // cycleTime = (int)G.YoloPlus.Cycle;
                         Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                         int i = 0;
                         int numOK = 0, numNG = 0;
@@ -564,12 +560,7 @@ namespace BeeCore
                             return;
                         }
                         Content = "";
-                        //foreach (Labels label in listLabelCompare)
-                        //{
-                        //    if (label == null) continue;
-                        //    if (!label.IsEn) continue;
-                        //    _listLabelCompare.Add(label.label);
-                        //}
+                      
                         foreach (String label in labelList)
                         {
                             int index = labelItems.FindIndex(item => string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
@@ -615,95 +606,7 @@ namespace BeeCore
                                     listScore.Add(scoreList[i]);
 
                                 }
-                                //if (IsCheckLine)
-                                //{
-                                //    switch (CompareLine)
-                                //    {
-                                //        case Compares.More:
-
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (boxList[i]._rect.Height <= yLine)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else if (IsCheckArea)
-                                //{
-                                //    switch (CompareArea)
-                                //    {
-                                //        case Compares.More:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //        case Compares.Less:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
-                                //            {
-                                //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-                                //                numOK++;
-                                //            }
-                                //            else
-                                //            {
-                                //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
-                                //                listLabel.Add(label);
-                                //                scoreRS += (int)scoreList[i];
-                                //                listScore.Add(scoreList[i]);
-
-                                //            }
-                                //            break;
-                                //    }
-
-
-                                //}
-                                //else
-                                //{
-                                //    listOK.Add(true);
-                                //    Content += label;
-                                //    rectRotates.Add(boxList[i]);
-                                //    listLabel.Add(label);
-                                //    scoreRS += (int)scoreList[i];
-                                //    listScore.Add(scoreList[i]); numOK++;
-                                //}
-
+                               
                             }
                             i++;
                         }
@@ -800,181 +703,7 @@ namespace BeeCore
             }
 
         }
-        //public void Complete()
-        //{
-        //    if (Global.IsIntialPython)
-        //    {
-        //        try
-        //        {
-
-
-        //            try
-        //            {
-        //                listOK = new List<bool>();
-        //                listLabel = new List<string>();
-        //                rectRotates = new List<RectRotate>();
-        //                listScore = new List<float>();
-        //                // cycleTime = (int)G.YoloPlus.Cycle;
-        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-        //                int i = 0;
-        //                int numOK = 0, numNG = 0;
-        //                int scoreRS = 0;
-        //                List<String> _listLabelCompare = new List<String>();
-        //                if (labelItems == null)
-        //                {
-        //                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                    return;
-        //                }
-        //                Content = "";
-        //                //foreach (Labels label in listLabelCompare)
-        //                //{
-        //                //    if (label == null) continue;
-        //                //    if (!label.IsEn) continue;
-        //                //    _listLabelCompare.Add(label.label);
-        //                //}
-        //                foreach (String label in labelList)
-        //                {
-        //                    String labelConvert = label;
-        //                    if(TypeYolo==TypeYolo.RCNN)
-        //                    {
-        //                        int indexLabel = Convert.ToInt32(label);
-
-        //                        labelConvert = labelItems[indexLabel-1].Name;
-        //                    }    
-        //                    int index = labelItems.FindIndex(item =>string.Equals(item.Name, labelConvert, StringComparison.OrdinalIgnoreCase));
-        //                    if (index>-1)
-        //                    {
-        //                        LabelItem item = labelItems[index];
-        //                        if (!item.IsUse)
-        //                        { i++; continue; }
-        //                        bool IsOK = false;
-        //                        if (item.IsHeight)
-        //                            if (boxList[i]._rect.Height >= item.ValueHeight)
-        //                                IsOK = true;
-        //                        if (item.IsWidth)
-        //                            if (boxList[i]._rect.Width >= item.ValueWidth)
-        //                                IsOK = true;
-        //                        if (item.IsArea)
-        //                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
-        //                                IsOK = true;
-        //                        if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
-        //                            IsOK = true;
-        //                        if (IsOK)
-        //                        {
-        //                            listOK.Add(true);
-        //                            rectRotates.Add(boxList[i]);
-        //                            listLabel.Add(labelConvert);
-        //                            scoreRS += (int)scoreList[i];
-        //                            listScore.Add(scoreList[i]);
-        //                            numOK++;
-        //                        }
-        //                        else
-        //                        {
-        //                            listOK.Add(false);
-        //                            rectRotates.Add(boxList[i]);
-        //                            listLabel.Add(labelConvert);
-        //                            scoreRS += (int)scoreList[i];
-        //                            listScore.Add(scoreList[i]);
-
-        //                        }
-                           
-        //                    }
-        //                    i++;
-        //                }
-        //                int k = 0; BitsResult = new bool[16];
-        //                foreach (bool Iss in listOK)
-        //                {
-        //                    BitsResult[k] = Iss;
-        //                        k++;
-        //                }
-        //                if (IsArrangeBox)
-        //                {
-        //                    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
-
-        //                    for (int j = 0; j < rectRotates.Count; j++)
-        //                    {
-        //                        combined.Add(new RotatedBoxInfo
-        //                        {
-        //                            Box = rectRotates[j],
-        //                            Label = listLabel[j],
-        //                            Score = listScore[j]
-        //                        });
-        //                    }
-        //                    switch (ArrangeBox)
-        //                    {
-        //                        case ArrangeBox.X_Left_Rigth:
-        //                            // Sort theo X tăng dần (trái → phải)
-        //                            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-        //                            break;
-        //                        case ArrangeBox.X_Right_Left:
-        //                            // Sort theo X giảm dần (phải → trái)
-        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
-
-        //                            break;
-        //                        case ArrangeBox.Y_Left_Rigth:
-        //                            // Sort theo Y tăng dần (trên → dưới)
-        //                            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-        //                            break;
-        //                        case ArrangeBox.Y_Right_Left:
-        //                            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-        //                            break;
-        //                    }
-        //                    rectRotates = combined.Select(b => b.Box).ToList();
-        //                    listLabel = combined.Select(b => b.Label).ToList();
-        //                    listScore = combined.Select(b => b.Score).ToList();
-        //                    Content = "";
-        //                    foreach (string s in listLabel)
-        //                        Content += s;
-        //                }
-        //                Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
-        //                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-        //                Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-        //                switch (Compare)
-        //                {
-        //                    case Compares.Equal:
-        //                        if (numOK != NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                    case Compares.Less:
-        //                        if (numOK >= NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                    case Compares.More:
-        //                        if (numOK <= NumObject)
-        //                            Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                        break;
-        //                }
-        //                if (IsEnContent)
-        //                {
-        //                    if (Matching != Content)
-        //                    {
-        //                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //                    }
-        //                }
-
-        //                G.IsChecked = true;
-        //                // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-        //            // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning","No Initial PY"));
-           
-        //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
-        //    }    
-               
-        //}
-
+       
         public Graphics DrawResult(Graphics gc)
         {
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
@@ -1123,58 +852,9 @@ namespace BeeCore
                 }
                 i++;
 
-                //else
-                //{
-
-
-                //    int index = i + 1;
-                //    Color clShow = Color.Red;
-                //    if (!listOK[i])
-                //        clShow = Color.LightGray;
-                //    else
-                //        clShow = cl;
-                //    //String content = "(" + listLabel[i] + ") \n" + Math.Round(listScore[i], 1) + "%";
-                //    //if (IsCheckArea)
-                //    //    content = rot._rect.Height + " px";
-                //    //  Font font = new Font("Arial", 30, FontStyle.Bold);
-                //    //  SizeF sz2 = gc.MeasureString(content, font);
-
-                //    //  Draws.Box1Label(gc, rot._rect, Math.Round(listScore[i], 1) + "%", Global.fontRS, brushText, Brushes.Transparent, true);
-                //    i++;
-                //    //gc.FillEllipse(Brushes.Black, -3, -3, 6, 6);
-                //    gc.ResetTransform();
-                //}
 
             }
-            //if (rectRotates != null)
-            //{
-            //    gc.ResetTransform();
-            //    var mat2 = new Matrix();
-            //    if (!Global.IsRun)
-            //    {
-            //        mat2.Translate(Global.pScroll.X, Global.pScroll.Y);
-            //        mat2.Global.ScaleZoom(Global.ScaleZoom, Global.ScaleZoom);
-            //    }
-            //    mat2.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //    mat2.Rotate(rotA._rectRotation);
-            //    gc.Transform = mat2;
-            //    gc.DrawString("Count: " + rectRotates.Count() + "", new Font("Arial", 16, FontStyle.Bold), Brushes.White, new System.Drawing.Point((int)rotA._rect.X + 20, (int)rotA._rect.Y + 20));
-
-            //}
-            //gc.ResetTransform();
-            //mat = new Matrix();
-            //if (!Global.IsRun)
-            //{
-            //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
-            //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
-            //}
-            //mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-            //mat.Rotate(rotA._rectRotation);
-            //gc.Transform = mat;
-            //String sContent = (int)(Index + 1) + "." + nameTool;
-            //Draws.Box1Label(gc, rotA._rect, sContent, Global.fontTool, brushText, cl);
-            //  Draws.Box1Label(gc, rotA._rect, sContent,Global.fontTool, Brushes.Black, Brushes.White);
-
+            
             return gc;
         }
 

@@ -231,6 +231,7 @@
     <Compile Include="PropetyTool.cs" />
     <Compile Include="Unit\OCR.cs" />
     <Compile Include="Unit\CraftOCR.cs" />
+    <Compile Include="Unit\Counter.cs" />
     <Compile Include="Unit\Yolo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bee.ico" />
+    <None Include="Resources\UNISEN_icon1.png" />
     <None Include="Resources\BID_SLIDER_SCALE_8PIX_W303.jpg" />
     <None Include="Resources\BID_SLIDER_SCALE_8PIX_W202.jpg" />
     <None Include="Resources\BID_SLIDER_SCALE_8PIX_W101.jpg" />

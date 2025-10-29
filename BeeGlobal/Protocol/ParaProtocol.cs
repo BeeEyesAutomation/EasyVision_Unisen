@@ -605,8 +605,6 @@ namespace BeeGlobal
                     {
                         try
                         {
-                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", _IO_Processing.ToString()));
-
                             if (_ioLock==null) _ioLock = new SemaphoreSlim(1, 1);
                             await _ioLock.WaitAsync();
                             await WriteIO(value);
@@ -642,11 +640,9 @@ namespace BeeGlobal
 
             if (_IO_Processing == IO_Processing.None)
             {
-
                 return false;
             }
             Global.StatusIO = StatusIO.Writing;
-
             switch (_IO_Processing)
             {
                 case IO_Processing.Trigger:

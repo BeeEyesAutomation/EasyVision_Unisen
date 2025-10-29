@@ -445,9 +445,7 @@ namespace PlcLib
                 }
             }, "ReadWordAsBits");
         }
-
         public bool[] ReadWordAsBits(string wordAddr) => ReadWordAsBitsAsync(wordAddr).GetAwaiter().GetResult();
-
         public async Task WriteWordAsync(string wordAddr, short value)
         {
             await WithRetryAsync(() =>
@@ -485,7 +483,6 @@ namespace PlcLib
             }, "WriteWord");
         }
         public void WriteWord(string wordAddr, short value) => WriteWordAsync(wordAddr, value).GetAwaiter().GetResult();
-
         public async Task WriteFloatArrayAsync(string startAddr, float[] values)
         {
             if (values == null || values.Length == 0) return;
@@ -511,7 +508,6 @@ namespace PlcLib
             }, "WriteFloatArray_OneShot");
         }
         public void WriteFloatArray(string startAddr, float[] values) => WriteFloatArrayAsync(startAddr, values).GetAwaiter().GetResult();
-
         public async Task WriteFloatAsync(string startAddr, float value)
         {
             await WithRetryAsync(() =>
@@ -534,7 +530,6 @@ namespace PlcLib
             }, "WriteFloat");
         }
         public void WriteFloat(string startAddr, float value) => WriteFloatAsync(startAddr, value).GetAwaiter().GetResult();
-
         public async Task WriteStringAsync(string startAddr, string text, int maxLength)
         {
             await WithRetryAsync(() =>
@@ -571,7 +566,6 @@ namespace PlcLib
             }, "WriteString");
         }
         public void WriteString(string startAddr, string text, int maxLength) => WriteStringAsync(startAddr, text, maxLength).GetAwaiter().GetResult();
-
         public async Task<bool> ReadBitAsync(string addrOrWordDotBit)
         {
             return await WithRetryAsync(() =>
@@ -602,7 +596,6 @@ namespace PlcLib
             }, "ReadBit");
         }
         public bool ReadBit(string addrOrWordDotBit) => ReadBitAsync(addrOrWordDotBit).GetAwaiter().GetResult();
-
         public async Task WriteBitAsync(string addrOrWordDotBit, bool value)
         {
             await WithRetryAsync(() =>
@@ -665,7 +658,6 @@ namespace PlcLib
             }, "WriteBit");
         }
         public void WriteBit(string addrOrWordDotBit, bool value) => WriteBitAsync(addrOrWordDotBit, value).GetAwaiter().GetResult();
-
         public async Task<bool[]> ReadBitsAsync(string[] addresses)
         {
             if (addresses == null || addresses.Length == 0) return new bool[0];

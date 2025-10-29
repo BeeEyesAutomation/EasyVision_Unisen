@@ -47,9 +47,9 @@ namespace BeeGlobal
         private int _firstVisibleIndex;
         private bool _autoScroll = true;
 
-        private int _colTime = 170;
-        private int _colLevel = 64;
-        private int _colSource = 160;
+        private int _colTime = 180;
+        private int _colLevel = 70;
+        private int _colSource = 170;
 
         public bool AutoScrollToEnd
         {

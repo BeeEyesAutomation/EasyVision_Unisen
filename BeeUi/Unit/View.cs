@@ -2740,6 +2740,7 @@ namespace BeeUi
                     Global.EditTool.lbCam.Text = "Camera Not Connect";
                     break;
                 case CameraStatus.Ready:
+                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.NoneErr;
                     Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                     Global.EditTool.lbCam.Text = "Camera Connected";
                     break;
@@ -2749,19 +2750,16 @@ namespace BeeUi
                         Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Error;
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                         Global.EditTool.lbCam.Text = "Camera Error Connect";
-                        //G.Main.Hide();
                         ForrmAlarm forrmAlarm = new ForrmAlarm();
                         forrmAlarm.lbHeader.Text = "Camera Error Connect !!";
                         forrmAlarm.lbContent.Text = "Checking Connect Camera";
                         forrmAlarm.lbCode.Text = "0x001";
-                        forrmAlarm.btnCancel.Text = "OK";
+                        forrmAlarm.btnCancel.Text = "Retry";
                         forrmAlarm.BringToFront();
                         forrmAlarm.TopMost = true;
                         forrmAlarm.ShowDialog();
-                        Global.ScanCCD.Show();
+                       
                     }));
-
-
                     break;
 
             }
@@ -2783,7 +2781,6 @@ namespace BeeUi
                     this.Invoke((Action)(() =>
                     {
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PLC", "PLC Error Connect"));
-                        
                         Global.EditTool.toolStripPort.Text = "PLC Error Connect";
                         Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
                         Global.ParaCommon.Comunication.Protocol.IsBypass = true;
@@ -2923,19 +2920,19 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    //if (!workReadCCD.IsBusy)
-                    //    workReadCCD.RunWorkerAsync();
-                    //if (!Global.IsRun)
-                    //{
+                //if (!workReadCCD.IsBusy)
+                //    workReadCCD.RunWorkerAsync();
+                //if (!Global.IsRun)
+                //{
 
-                    //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                    //    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
-                    //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                //    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+                //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
-                    //}
-                    //else
-                    //{
-                    if (Global.ParaCommon.IsMultiCamera)
+                //}
+                //else
+                //{
+                 if (Global.ParaCommon.IsMultiCamera)
                     {
                         Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
                         {
@@ -2943,16 +2940,16 @@ namespace BeeUi
                             {
                                 camera.Read();
                                 if (camera.Para.TypeCamera == TypeCamera.USB)
-                                    camera.Read();
+                                   camera.Read();
                             }
 
                         });
                     }
                     else
                     {
-                        BeeCore.Common.listCamera[0].Read();
+                      BeeCore.Common.listCamera[0].Read();
                         if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                            BeeCore.Common.listCamera[0].Read();
+                           BeeCore.Common.listCamera[0].Read();
                         //switch (Global.TriggerNum)
                         //{
                         //    case TriggerNum.Trigger1:
@@ -2974,7 +2971,7 @@ namespace BeeUi
                         //}
                     }
                     //}
-
+                    
                     if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
                     {
 
@@ -3292,10 +3289,12 @@ namespace BeeUi
         private void KeyboardListener_s_KeyEventHandler1(object sender, EventArgs e)
         {
             KeyboardListener.UniversalKeyEventArgs eventArgs = (KeyboardListener.UniversalKeyEventArgs)e;
-                if ( IsKeyDown(Keys.Alt))
+                if ( IsKeyDown(Keys.Control))
                 {
-                    if (eventArgs.KeyCode == Keys.Enter)
+                    if (eventArgs.KeyCode == Keys.S)
                     {
+                    SaveData.Project(Global.Project);
+                    
                     }
                 }
             
@@ -4531,14 +4530,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         int numLive = 500;
       public CycleTimerSplit timer ;
 
-        bool IsErrCCD = false;
+       
         private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-            IsErrCCD = false;
+          
             if (!Global.IsRun)
             {
                 if (BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown) return;
-                    IsErrCCD = BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                    BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
             }
             else
@@ -4549,20 +4548,20 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     {
                         if (camera != null)
                         {
-                            IsErrCCD= camera.Read();
+                           camera.Read();
                            
                             if (camera.Para.TypeCamera == TypeCamera.USB)
-                                IsErrCCD= camera.Read();
-                            if (IsErrCCD) return;
+                               camera.Read();
+                          
                         }
 
                     });
                 }
                 else
                 {
-                    IsErrCCD = BeeCore.Common.listCamera[0].Read();
+                    BeeCore.Common.listCamera[0].Read();
                     if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                        IsErrCCD = BeeCore.Common.listCamera[0].Read();
+                       BeeCore.Common.listCamera[0].Read();
                 }
              }    
                
@@ -4572,18 +4571,18 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         }
         private async void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (IsErrCCD)
-            {
-                await TimingUtils.DelayAccurateAsync(5);
+            //if (IsErrCCD)
+            //{
+            //    await TimingUtils.DelayAccurateAsync(5);
                 
-                if(!workReadCCD.IsBusy)
-                {
-                    workReadCCD.RunWorkerAsync();
-                    return;
+            //    if(!workReadCCD.IsBusy)
+            //    {
+            //        workReadCCD.RunWorkerAsync();
+            //        return;
 
-                }    
+            //    }    
                
-            }    
+            //}    
          
             if (btnLive.IsCLick)
             {

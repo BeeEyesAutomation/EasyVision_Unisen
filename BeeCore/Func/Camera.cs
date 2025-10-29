@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Web.UI;
 using System.Web.UI.WebControls.WebParts;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static BeeCore.Algorithm.FilletCornerMeasure;
 
 using Size = OpenCvSharp.Size;
@@ -1549,42 +1550,98 @@ namespace BeeCore
         public int numTry = 0;
         bool IsReadCCD = false;
         public bool IsMouseDown = false;
-       
-        public   bool Read()
+        public bool ConnectNoAwait(string Name, TypeCamera typeCam) => Connect(Name, typeCam).GetAwaiter().GetResult();
+        public  async Task< bool> ReadAwait()
         {
          
             if (IsSetPara)
               return false;
             if (IsMouseDown)
                 return false;
-                if (!TryGrabFast_NoStride(ref matRaw))
-                {
-                
-                    numTry++;
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Retry is "+numTry));
-               
+            X: if (!TryGrabFast_NoStride(ref matRaw))
+            {
+
+                numTry++;
+
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Retry is " + numTry));
+
                 if (numTry >= Global.ParaCommon.NumRetryCamera)
                 {
-                    numTry = 0;
-                    Global.CameraStatus = CameraStatus.ErrorConnect;
-                    return true;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Reconnect.."));
+                    Global.CameraStatus = CameraStatus.NotConnect;
+                   
+                    if (!ReConnect())
+                    {
+                        await TimingUtils.DelayAccurateAsync(1000);
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Reconnect 2.."));
+                        if (!ReConnect())
+                        {
+                            numTry = 0;
+
+                            Global.CameraStatus = CameraStatus.ErrorConnect;
+                            return true;
+                        }
+                        else
+                        {
+                            numTry = 0;
+                            Global.CameraStatus = CameraStatus.Ready;
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));
+                            return false;
+                        }    
+                    }
+                    else
+                    {
+                        numTry = 0;
+                        Global.CameraStatus = CameraStatus.Ready;
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Success"));
+                        return false;
+                    }
+
 
                 }
-                return true;
+                await TimingUtils.DelayAccurateAsync(5);
+                goto X;
 
             }
-                else
+            else
             {
-              
+
                 numTry = 0;
-                   // FrameRate = CCDPlus.FPS;
-                }
+                // FrameRate = CCDPlus.FPS;
+            }
             return false;
 
          
         }
+        public bool Read() => ReadAwait().GetAwaiter().GetResult();
+        public async Task<bool> ReConnectAwait()
+        {
+            await TimingUtils.DelayAccurateAsync(200);
+            DisConnect(Para.TypeCamera);
+            await TimingUtils.DelayAccurateAsync(200);
+            if (!ConnectNoAwait(Para.Name, Para.TypeCamera))
+            {
+                return false;
+            }
+            else
+                { return true; }
 
-     
+
+        }
+       
+        public bool ReConnect() => ReConnectAwait().GetAwaiter().GetResult();
+        public bool ReConnect2()
+        {
+            
+            DisConnect(Para.TypeCamera);
+          
+            if (!ConnectNoAwait(Para.Name, Para.TypeCamera))
+            {
+                return false;
+            }
+            else
+            { return true; }
+        }
 
         private Native Native = new Native();
         public  void Light(int TypeLight, bool IsOn)

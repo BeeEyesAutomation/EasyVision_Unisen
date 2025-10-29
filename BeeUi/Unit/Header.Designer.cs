@@ -86,7 +86,7 @@ namespace BeeUi.Common
             // 
             // pModel
             // 
-            this.pModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.pModel.BackColor = System.Drawing.Color.Transparent;
             this.pModel.ColumnCount = 4;
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -395,7 +395,7 @@ namespace BeeUi.Common
             // 
             // pEdit
             // 
-            this.pEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pEdit.BackColor = System.Drawing.Color.Transparent;
             this.pEdit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pEdit.Location = new System.Drawing.Point(1635, 0);
             this.pEdit.Name = "pEdit";

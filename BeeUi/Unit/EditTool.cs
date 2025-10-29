@@ -425,11 +425,47 @@ namespace BeeUi
 			Global.ToolSettings.split1.Enabled = !IsLock;
 			G.StatusDashboard.IsLockSplit = IsLock;
 		}
-
-		private void EditTool_Load(object sender, EventArgs e)
+        public void ChangeCLBG()
         {
-           
+            this.BackColor = Global.Config.ColorBG;
+            split0.BackColor = Global.Config.ColorBG;
+            split1 .BackColor = Global.Config.ColorBG;
+            split2 .BackColor = Global.Config.ColorBG;
+            split3.BackColor = Global.Config.ColorBG;
+            pLeft.BackColor = Global.Config.ColorBG;
+            split31.BackColor = Global.Config.ColorBG;
+            View.split5 .BackColor = Global.Config.ColorBG;
 
+        }
+        public void ChangeCLRight()
+        {
+            pRight.BackColor = Global.Config.ColorRight;
+            pEditTool.BackColor = Global.Config.ColorRight;
+            Global.ToolSettings.BackColor = Global.Config.ColorRight;
+            split5.BackColor = Global.Config.ColorRight;
+            BarRight.btnFlowChart.ClickBotColor = Global.Config.ColorRight;
+            BarRight.btnHardware.ClickBotColor = Global.Config.ColorRight;
+            BarRight.btnHistory.ClickBotColor = Global.Config.ColorRight;
+            BarRight.btnLog.ClickBotColor = Global.Config.ColorRight;
+            BarRight.btnFlowChart.Invalidate();
+            BarRight.btnHardware.Invalidate();
+            BarRight.btnHistory.Invalidate();
+            BarRight.btnLog.Invalidate();
+        }
+        public void ChangeCLBar()
+        {
+            pHeader.BackColor = Global.Config.ColorBar2;
+            View.pBtn.BackColor = Global.Config.ColorBar2;
+        }
+        private void EditTool_Load(object sender, EventArgs e)
+        {
+            //ChangeCLBar();
+            //ChangeCLRight();
+            ////pEdit.BackColor = Global.Config.ColorRight;
+            //ChangeCLBG();
+            //this.LayoutEnd.BackColor= Global.Config.ColorEnd;
+            //this.hideBar.BackColor = Global.Config.ColorEnd;
+            //pTop.BackColor = Global.Config.ColorBar1;
 			tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             //   this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
@@ -483,6 +519,18 @@ namespace BeeUi
             else
             {
                 btnShowToolBar.Checked = true;
+            }
+            if (Global.ParaCommon.IsForceByPassRS)
+            {
+
+                Global.EditTool.lbBypass.Visible = true;
+
+
+            }
+            else
+            {
+                Global.EditTool.lbBypass.Visible = false;
+
             }
             //  Global.ExChanged += Global_ExChanged;
             if (BeeCore.Common.listCamera[Global.IndexChoose] != null)

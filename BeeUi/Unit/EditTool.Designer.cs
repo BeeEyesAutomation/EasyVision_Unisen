@@ -32,6 +32,7 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTool));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbLicence = new System.Windows.Forms.ToolStripStatusLabel();
@@ -40,6 +41,7 @@ namespace BeeUi
             this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pRight = new System.Windows.Forms.Panel();
+            this.pEditTool = new BeeUi.ViewHost();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.pCamera = new System.Windows.Forms.Panel();
             this.numCam = new System.Windows.Forms.NumericUpDown();
@@ -49,10 +51,13 @@ namespace BeeUi
             this.layInforTool = new System.Windows.Forms.TableLayoutPanel();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.split5 = new System.Windows.Forms.Splitter();
+            this.BarRight = new BeeUi.Unit.Cameras();
+            this.split31 = new System.Windows.Forms.Splitter();
             this.split2 = new System.Windows.Forms.Splitter();
             this.LayoutEnd = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.split6 = new System.Windows.Forms.Splitter();
+            this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -66,9 +71,11 @@ namespace BeeUi
             this.pTop = new System.Windows.Forms.Panel();
             this.lbBypass = new System.Windows.Forms.Label();
             this.split4 = new System.Windows.Forms.Splitter();
+            this.BtnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.split1 = new System.Windows.Forms.Splitter();
             this.pView = new System.Windows.Forms.Panel();
-            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip();
+            this.mouseLeft = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnNew = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,24 +108,20 @@ namespace BeeUi
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.workLoadFile = new System.ComponentModel.BackgroundWorker();
-            this.tmReLoadSplit = new System.Windows.Forms.Timer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.tmReLoadSplit = new System.Windows.Forms.Timer(this.components);
+            this.pLeft = new System.Windows.Forms.Panel();
             this.split3 = new System.Windows.Forms.Splitter();
-            this.tmLoad = new System.Windows.Forms.Timer();
+            this.tmLoad = new System.Windows.Forms.Timer(this.components);
             this.workLive = new System.ComponentModel.BackgroundWorker();
             this.pInfor = new BeeUi.ViewHost();
-            this.pEditTool = new BeeUi.ViewHost();
+            this.pHeader = new BeeUi.Common.Header();
             this.btnLive = new BeeInterface.RJButton();
             this.lbTool = new BeeInterface.AutoFontLabel();
             this.lbRsTool = new BeeInterface.AutoFontLabel();
             this.autoFontLabel3 = new BeeInterface.AutoFontLabel();
             this.lbCTTool = new BeeInterface.AutoFontLabel();
             this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
-            this.BarRight = new BeeUi.Unit.Cameras();
-            this.hideBar = new BeeUi.Unit.HideBar();
-            this.pHeader = new BeeUi.Common.Header();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
-            this.BtnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
             this.btnLogo = new BeeInterface.RJButton();
             this.rjButton1 = new BeeInterface.RJButton();
             this.statusStrip1.SuspendLayout();
@@ -149,7 +152,7 @@ namespace BeeUi
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStrip1.Size = new System.Drawing.Size(1388, 33);
+            this.statusStrip1.Size = new System.Drawing.Size(1312, 33);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -184,32 +187,41 @@ namespace BeeUi
             // pEdit
             // 
             this.pEdit.AutoScroll = true;
-            this.pEdit.BackColor = System.Drawing.Color.White;
+            this.pEdit.BackColor = System.Drawing.SystemColors.Control;
             this.pEdit.Controls.Add(this.pRight);
             this.pEdit.Controls.Add(this.split5);
             this.pEdit.Controls.Add(this.BarRight);
+            this.pEdit.Controls.Add(this.split31);
             this.pEdit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pEdit.Location = new System.Drawing.Point(1740, 136);
             this.pEdit.MaximumSize = new System.Drawing.Size(1000, 0);
             this.pEdit.Name = "pEdit";
-            this.pEdit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.pEdit.Size = new System.Drawing.Size(500, 1231);
             this.pEdit.TabIndex = 14;
             // 
             // pRight
             // 
-            this.pRight.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pRight.BackColor = System.Drawing.SystemColors.Control;
             this.pRight.Controls.Add(this.pEditTool);
             this.pRight.Controls.Add(this.splitter2);
             this.pRight.Controls.Add(this.pCamera);
             this.pRight.Controls.Add(this.pName);
             this.pRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pRight.Location = new System.Drawing.Point(0, 70);
+            this.pRight.Location = new System.Drawing.Point(0, 75);
             this.pRight.Name = "pRight";
             this.pRight.Padding = new System.Windows.Forms.Padding(4, 3, 1, 1);
             this.pRight.Size = new System.Drawing.Size(500, 1156);
             this.pRight.TabIndex = 5;
             this.pRight.SizeChanged += new System.EventHandler(this.pRight_SizeChanged);
+            // 
+            // pEditTool
+            // 
+            this.pEditTool.BackColor = System.Drawing.Color.Transparent;
+            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pEditTool.Location = new System.Drawing.Point(4, 47);
+            this.pEditTool.Name = "pEditTool";
+            this.pEditTool.Size = new System.Drawing.Size(495, 773);
+            this.pEditTool.TabIndex = 1;
             // 
             // splitter2
             // 
@@ -222,6 +234,7 @@ namespace BeeUi
             // 
             // pCamera
             // 
+            this.pCamera.BackColor = System.Drawing.Color.Transparent;
             this.pCamera.Controls.Add(this.btnLive);
             this.pCamera.Controls.Add(this.numCam);
             this.pCamera.Controls.Add(this.imgLive);
@@ -260,7 +273,7 @@ namespace BeeUi
             // 
             // pName
             // 
-            this.pName.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pName.BackColor = System.Drawing.Color.Transparent;
             this.pName.Controls.Add(this.lbTool);
             this.pName.Controls.Add(this.layInforTool);
             this.pName.Controls.Add(this.iconTool);
@@ -305,11 +318,32 @@ namespace BeeUi
             // 
             this.split5.BackColor = System.Drawing.Color.WhiteSmoke;
             this.split5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.split5.Location = new System.Drawing.Point(0, 67);
+            this.split5.Location = new System.Drawing.Point(0, 72);
             this.split5.Name = "split5";
             this.split5.Size = new System.Drawing.Size(500, 3);
             this.split5.TabIndex = 4;
             this.split5.TabStop = false;
+            // 
+            // BarRight
+            // 
+            this.BarRight.BackColor = System.Drawing.Color.White;
+            this.BarRight.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BarRight.Location = new System.Drawing.Point(0, 5);
+            this.BarRight.Margin = new System.Windows.Forms.Padding(0);
+            this.BarRight.Name = "BarRight";
+            this.BarRight.Size = new System.Drawing.Size(500, 67);
+            this.BarRight.TabIndex = 3;
+            // 
+            // split31
+            // 
+            this.split31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.split31.Dock = System.Windows.Forms.DockStyle.Top;
+            this.split31.Enabled = false;
+            this.split31.Location = new System.Drawing.Point(0, 0);
+            this.split31.Name = "split31";
+            this.split31.Size = new System.Drawing.Size(500, 5);
+            this.split31.TabIndex = 25;
+            this.split31.TabStop = false;
             // 
             // split2
             // 
@@ -355,11 +389,20 @@ namespace BeeUi
             // 
             this.split6.BackColor = System.Drawing.SystemColors.Control;
             this.split6.Dock = System.Windows.Forms.DockStyle.Right;
-            this.split6.Location = new System.Drawing.Point(1801, 0);
+            this.split6.Location = new System.Drawing.Point(1725, 0);
             this.split6.Name = "split6";
             this.split6.Size = new System.Drawing.Size(5, 33);
             this.split6.TabIndex = 4;
             this.split6.TabStop = false;
+            // 
+            // hideBar
+            // 
+            this.hideBar.BackColor = System.Drawing.Color.White;
+            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.hideBar.Location = new System.Drawing.Point(1730, 0);
+            this.hideBar.Name = "hideBar";
+            this.hideBar.Size = new System.Drawing.Size(510, 33);
+            this.hideBar.TabIndex = 3;
             // 
             // label3
             // 
@@ -449,6 +492,7 @@ namespace BeeUi
             this.pTop.Controls.Add(this.split4);
             this.pTop.Controls.Add(this.autoFontLabel1);
             this.pTop.Controls.Add(this.BtnHeaderBar);
+            this.pTop.Controls.Add(this.splitter1);
             this.pTop.Controls.Add(this.btnLogo);
             this.pTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pTop.Location = new System.Drawing.Point(0, 0);
@@ -480,6 +524,24 @@ namespace BeeUi
             this.split4.Size = new System.Drawing.Size(5, 51);
             this.split4.TabIndex = 10;
             this.split4.TabStop = false;
+            // 
+            // BtnHeaderBar
+            // 
+            this.BtnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.BtnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.BtnHeaderBar.Location = new System.Drawing.Point(1735, 0);
+            this.BtnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnHeaderBar.Name = "BtnHeaderBar";
+            this.BtnHeaderBar.Size = new System.Drawing.Size(505, 51);
+            this.BtnHeaderBar.TabIndex = 8;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(72, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 51);
+            this.splitter1.TabIndex = 13;
+            this.splitter1.TabStop = false;
             // 
             // split1
             // 
@@ -781,13 +843,13 @@ namespace BeeUi
             this.tmReLoadSplit.Interval = 1000;
             this.tmReLoadSplit.Tick += new System.EventHandler(this.tmReLoadSplit_Tick);
             // 
-            // panel1
+            // pLeft
             // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 141);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(5, 1226);
-            this.panel1.TabIndex = 29;
+            this.pLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pLeft.Location = new System.Drawing.Point(0, 141);
+            this.pLeft.Name = "pLeft";
+            this.pLeft.Size = new System.Drawing.Size(5, 1226);
+            this.pLeft.TabIndex = 29;
             // 
             // split3
             // 
@@ -820,14 +882,17 @@ namespace BeeUi
             this.pInfor.TabIndex = 25;
             this.pInfor.SizeChanged += new System.EventHandler(this.pInfor_SizeChanged);
             // 
-            // pEditTool
+            // pHeader
             // 
-            this.pEditTool.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(4, 47);
-            this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(495, 773);
-            this.pEditTool.TabIndex = 1;
+            this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.pHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pHeader.Location = new System.Drawing.Point(0, 56);
+            this.pHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.pHeader.MaximumSize = new System.Drawing.Size(3000, 90);
+            this.pHeader.Name = "pHeader";
+            this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.pHeader.Size = new System.Drawing.Size(2240, 80);
+            this.pHeader.TabIndex = 22;
             // 
             // btnLive
             // 
@@ -950,59 +1015,18 @@ namespace BeeUi
             this.autoFontLabel2.Text = "CT";
             this.autoFontLabel2.Click += new System.EventHandler(this.autoFontLabel2_Click);
             // 
-            // BarRight
-            // 
-            this.BarRight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.BarRight.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BarRight.Location = new System.Drawing.Point(0, 0);
-            this.BarRight.Margin = new System.Windows.Forms.Padding(0);
-            this.BarRight.Name = "BarRight";
-            this.BarRight.Size = new System.Drawing.Size(500, 67);
-            this.BarRight.TabIndex = 3;
-            // 
-            // hideBar
-            // 
-            this.hideBar.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.hideBar.Location = new System.Drawing.Point(1806, 0);
-            this.hideBar.Name = "hideBar";
-            this.hideBar.Size = new System.Drawing.Size(434, 33);
-            this.hideBar.TabIndex = 3;
-            // 
-            // pHeader
-            // 
-            this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.pHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pHeader.Location = new System.Drawing.Point(0, 56);
-            this.pHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.pHeader.MaximumSize = new System.Drawing.Size(3000, 90);
-            this.pHeader.Name = "pHeader";
-            this.pHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.pHeader.Size = new System.Drawing.Size(2240, 80);
-            this.pHeader.TabIndex = 22;
-            // 
             // autoFontLabel1
             // 
             this.autoFontLabel1.AutoFont = true;
             this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 31.9375F, System.Drawing.FontStyle.Bold);
             this.autoFontLabel1.ForeColor = System.Drawing.Color.White;
-            this.autoFontLabel1.Location = new System.Drawing.Point(96, 0);
+            this.autoFontLabel1.Location = new System.Drawing.Point(75, 0);
             this.autoFontLabel1.Name = "autoFontLabel1";
             this.autoFontLabel1.Size = new System.Drawing.Size(309, 51);
             this.autoFontLabel1.TabIndex = 9;
             this.autoFontLabel1.Text = "Vision Sensor ";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // BtnHeaderBar
-            // 
-            this.BtnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.BtnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.BtnHeaderBar.Location = new System.Drawing.Point(1735, 0);
-            this.BtnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnHeaderBar.Name = "BtnHeaderBar";
-            this.BtnHeaderBar.Size = new System.Drawing.Size(505, 51);
-            this.BtnHeaderBar.TabIndex = 8;
             // 
             // btnLogo
             // 
@@ -1050,7 +1074,7 @@ namespace BeeUi
             this.btnLogo.Location = new System.Drawing.Point(0, 0);
             this.btnLogo.Multiline = false;
             this.btnLogo.Name = "btnLogo";
-            this.btnLogo.Size = new System.Drawing.Size(96, 51);
+            this.btnLogo.Size = new System.Drawing.Size(72, 51);
             this.btnLogo.TabIndex = 12;
             this.btnLogo.TextColor = System.Drawing.Color.Black;
             this.btnLogo.UseVisualStyleBackColor = false;
@@ -1115,7 +1139,7 @@ namespace BeeUi
             this.Controls.Add(this.pView);
             this.Controls.Add(this.split3);
             this.Controls.Add(this.pInfor);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pLeft);
             this.Controls.Add(this.split1);
             this.Controls.Add(this.split2);
             this.Controls.Add(this.pEdit);
@@ -1216,8 +1240,7 @@ namespace BeeUi
         private System.ComponentModel.BackgroundWorker workLoadFile;
         public Unit.Cameras BarRight;
         public System.Windows.Forms.Timer tmReLoadSplit;
-        private System.Windows.Forms.Panel pRight;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pLeft;
         public ViewHost pInfor;
         private System.Windows.Forms.Splitter split3;
         private System.Windows.Forms.Timer tmLoad;
@@ -1236,5 +1259,8 @@ namespace BeeUi
         public AutoFontLabel lbCTTool;
         public AutoFontLabel lbRsTool;
         public System.Windows.Forms.TableLayoutPanel layInforTool;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.Splitter split31;
+        public System.Windows.Forms.Panel pRight;
     }
 }

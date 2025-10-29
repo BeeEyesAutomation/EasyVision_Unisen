@@ -123,6 +123,19 @@ namespace BeeCore
         public static Config LoadConfig(string path)
         {Config config = new Config();
             config= LoadBase64<Config>(path, defaultFactory: () => new Config());
+            //if (config.icon==null)
+            //    config.icon=Properties.Resources.icon;
+            if (config.ColorEnd.Name == "0")
+                config.ColorEnd = Color.WhiteSmoke;
+            if (config.ColorRight.Name == "0")
+                config.ColorRight = Color.WhiteSmoke;
+            if (config.ColorBG.Name == "0")
+                config.ColorBG = Color.FromArgb(223, 223, 223);
+            if (config.ColorBar1.Name == "0")
+                config.ColorBar1 = Color.FromArgb(114, 114, 114);
+            if (config.ColorBar2.Name == "0")
+                config.ColorBar2 = Color.FromArgb(100, 114, 114, 114);
+
             if (config.ColorOK.Name == "0")
                 config.ColorOK = Color.FromArgb(0, 172, 73);
             if (config.ColorNG.Name == "0")
