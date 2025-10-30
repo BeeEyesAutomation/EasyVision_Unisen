@@ -5,6 +5,7 @@ using BeeGlobal;
 using BeeInterface;
 using BeeUi.Common;
 using BeeUi.Commons;
+using BeeUi.Unit;
 using Cyotek.Windows.Forms;
 using Google.Apis.Drive.v3.Data;
 using Microsoft.VisualBasic;
@@ -3244,7 +3245,7 @@ namespace BeeUi
             if (Global.StatusDraw == StatusDraw.Edit)
             {
                 Global.StepEdit.Enabled = false;
-             
+                  btnChangeImg.Visible = true;
                 Global.OldPropetyTool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Clone();
                 String name = "Tools" + BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Name;
                 //   if (Score.Enabled||Global.IsRun) return;
@@ -5579,11 +5580,23 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }
             else
             {
+             
                 btnClick.Enabled = true;
                 imgView.AllowZoom = true;
                 imgView.ContextMenuStrip = null;
             }    
                
+        }
+         public    RegisterImgs RegisterImgs = new RegisterImgs();
+        private void btnChangeImg_Click(object sender, EventArgs e)
+        {
+            btnChangeImg.Enabled = false;
+            RegisterImgs.Visible = true;
+            RegisterImgs.Parent = this;
+            RegisterImgs.Height = imgView.Height;
+            RegisterImgs.BringToFront();
+
+           
         }
 
         private void NewShape()

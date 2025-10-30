@@ -98,7 +98,7 @@ namespace BeeCore
                 if (IsCalibs)
                 {
                     MinInliers = 2;
-                    MinRadius = 1;
+                    MinRadius = 0;
                     MaxRadius = 10000;
                 }
                     using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())

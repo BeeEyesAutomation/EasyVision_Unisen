@@ -28,6 +28,7 @@ namespace BeeGlobal
         public List<int> indexLogic4 = new List<int>();
         public List<int> indexLogic5 = new List<int>();
         public List<int> indexLogic6 = new List<int>();
+        public List<ItemRegsImg> listRegsImg= new List<ItemRegsImg>();
         private bool _IsExternal = false;
         [field: NonSerialized]
         public event Action<bool> ExternalChange;

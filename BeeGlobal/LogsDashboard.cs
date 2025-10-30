@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -35,9 +36,6 @@ namespace BeeGlobal
         }
     }
 
-    /// <summary>
-    /// LogCanvas: control vẽ tay + ảo hoá (không DataGridView)
-    /// </summary>
     internal class LogCanvas : Control
     {
         private readonly VScrollBar _vscroll = new VScrollBar();
@@ -84,42 +82,29 @@ namespace BeeGlobal
                 UpdateScroll();
                 Invalidate();
             };
-            // tự lấy focus khi trỏ chuột vào / click để nhận MouseWheel
             MouseEnter += (s, e) => { if (!Focused) Focus(); };
             MouseDown += (s, e) => { if (!Focused) Focus(); };
         }
+
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-
-            // Chỉ cho cuộn khi AutoScrollToEnd đang tắt (manual scroll)
             if (_autoScroll) return;
             if (_items.Count == 0) return;
 
-            // số dòng cuộn mỗi "nấc" theo setting của Windows
             int linesPerNotch = SystemInformation.MouseWheelScrollLines;
             if (linesPerNotch <= 0) linesPerNotch = 3;
 
-            // giữ Ctrl để cuộn theo "trang"
-            int step = (ModifierKeys & Keys.Control) == Keys.Control
-                ? PageSize()
-                : linesPerNotch;
+            int step = (ModifierKeys & Keys.Control) == Keys.Control ? PageSize() : linesPerNotch;
 
-            // e.Delta dương = cuộn lên; âm = cuộn xuống
             int notches = e.Delta / 120;
-            int deltaRows = -notches * step; // đảo dấu vì Value tăng nghĩa là xuống dưới
+            int deltaRows = -notches * step;
 
             int page = PageSize();
             int maxFirst = Math.Max(0, _items.Count - page);
 
-            int newVal = _vscroll.Value + deltaRows;
-            if (newVal < _vscroll.Minimum) newVal = _vscroll.Minimum;
-            if (newVal > maxFirst) newVal = maxFirst;
-
-            if (newVal != _vscroll.Value)
-            {
-                _vscroll.Value = newVal;   // sẽ kích hoạt ValueChanged và Invalidate()
-            }
+            int newVal = Math.Max(_vscroll.Minimum, Math.Min(_vscroll.Value + deltaRows, maxFirst));
+            if (newVal != _vscroll.Value) _vscroll.Value = newVal;
         }
 
         public void SetRowHeight(int h)
@@ -187,7 +172,8 @@ namespace BeeGlobal
             int page = PageSize();
             return _firstVisibleIndex >= Math.Max(0, _items.Count - (page + 2));
         }
-        private int _bottomPadding = 10; // khoảng cách dưới cùng (px)
+
+        private int _bottomPadding = 10;
         public void SetBottomPadding(int px)
         {
             _bottomPadding = Math.Max(0, px);
@@ -196,7 +182,6 @@ namespace BeeGlobal
         }
         private int PageSize()
         {
-            // trừ chiều cao header và khoảng cách dưới cùng
             int usable = ClientSize.Height - _rowHeight - _bottomPadding;
             if (usable < 1) usable = 1;
             return Math.Max(1, usable / _rowHeight);
@@ -211,14 +196,9 @@ namespace BeeGlobal
             _vscroll.LargeChange = Math.Max(1, page);
             _vscroll.SmallChange = 1;
 
-            // số index đầu tiên lớn nhất có thể hiển thị
             int maxFirst = Math.Max(0, total - page);
-
-            // QUAN TRỌNG: công thức dành cho WinForms scrollbar
-            // để có thể set Value = maxFirst
             _vscroll.Maximum = maxFirst + _vscroll.LargeChange - 1;
 
-            // giữ nguyên trạng thái/auto scroll
             int desired = _vscroll.Value;
             if (_autoScroll && IsNearBottom()) desired = maxFirst;
             desired = Math.Max(_vscroll.Minimum, Math.Min(desired, maxFirst));
@@ -226,7 +206,6 @@ namespace BeeGlobal
 
             _firstVisibleIndex = _vscroll.Value;
         }
-
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -283,15 +262,9 @@ namespace BeeGlobal
 
                 y += _rowHeight;
             }
-            // Thêm margin cho dòng cuối
-            y += 10;
-         //   AutoScrollMinSize = new Size(0, y);
         }
     }
 
-    /// <summary>
-    /// LogsDashboard owner-draw: Filter + Canvas + autosave/load + autoreload on/off + ingest queue
-    /// </summary>
     public class LogsDashboard : UserControl
     {
         // ===== Config =====
@@ -304,7 +277,6 @@ namespace BeeGlobal
             {
                 if (string.Equals(_storagePath, value, StringComparison.OrdinalIgnoreCase)) return;
                 _storagePath = value ?? "";
-                // rebuild watcher theo state hiện tại
                 StopWatcher();
                 if (_autoReloadOnChange) StartWatcher();
             }
@@ -322,15 +294,23 @@ namespace BeeGlobal
             set { _autoScrollToEnd = value; if (_canvas != null) _canvas.AutoScrollToEnd = value; if (value) _canvas.ScrollToEnd(); }
         }
 
-        private int _maxLogCount = 10000;
+        private int _maxLogCount = 100000; // trần an toàn khi hiển thị full
         [Browsable(true), Category("LogsDashboard")]
-        public int MaxLogCount { get { return _maxLogCount; } set { _maxLogCount = Math.Max(1, value); } }
+        public int MaxLogCount { get { return _maxLogCount; } set { _maxLogCount = Math.Max(1000, value); } }
 
         // ===== Data =====
-        private readonly BindingList<LogEntry> _all = new BindingList<LogEntry>(); // nguồn đầy đủ
-        private readonly List<LogEntry> _view = new List<LogEntry>();              // dữ liệu đã lọc để vẽ
+        private readonly BindingList<LogEntry> _all = new BindingList<LogEntry>(); // cửa sổ hiển thị (1000 hoặc full khi ON)
+        private readonly List<LogEntry> _view = new List<LogEntry>();              // dữ liệu sau filter để vẽ
         private volatile bool _dirty;
         private readonly object _ioLock = new object();
+
+        // Kho FULL luôn tăng để lọc & save full
+        private List<LogEntry> _allRawFromDisk = new List<LogEntry>();
+        private const int MaxVisibleLogs = 1000;           // hiển thị thường khi ON (không filter)
+        private const int FilterVisibleLimitWhenOn = 100;  // hiển thị khi CÓ FILTER và ON
+
+        // Snapshot “đóng băng” cho UI khi OFF
+        private List<LogEntry> _frozenAllForView = null;
 
         // ===== Progressive loading =====
         private List<LogEntry> _pendingLoad;
@@ -339,7 +319,7 @@ namespace BeeGlobal
         private int _progressiveBatchSize = 800;
         private bool _progressiveLoading;
 
-        // ===== Ingest từ luồng khác =====
+        // ===== Ingest từ luồng khác (nội bộ app) =====
         private readonly ConcurrentQueue<LogEntry> _ingestQueue = new ConcurrentQueue<LogEntry>();
         private readonly Timer _ingestTimer = new Timer();
         private int _ingestBatchSize = 400;
@@ -347,11 +327,15 @@ namespace BeeGlobal
         // ===== Auto reload watcher =====
         private FileSystemWatcher _fsw;
         private readonly Timer _reloadDebounce = new Timer();
-        private bool _autoReloadOnChange = false;
+        private bool _autoReloadOnChange = false; // ON: hiển thị động, OFF: đóng băng UI
         private volatile bool _suppressWatcher;
         private DateTime _suppressUntilUtc;
 
-        [Browsable(true), Category("LogsDashboard"), Description("Tự reload khi file logs.json bị thay đổi.")]
+        // ===== Background FULL-load control =====
+        private CancellationTokenSource _fullLoadCts;
+        private Task _fullLoadTask;
+
+        [Browsable(true), Category("LogsDashboard"), Description("ON: 1000 mới nhất + theo dõi file; OFF: FULL từ file ở luồng nền rồi đóng băng UI, autosave FULL.")]
         public bool AutoReloadOnChange
         {
             get { return _autoReloadOnChange; }
@@ -363,11 +347,25 @@ namespace BeeGlobal
 
                 if (!value)
                 {
-                    StopWatcher(); // dispose hẳn
+                    // OFF ⇒ nạp FULL từ file ở luồng nền rồi đóng băng UI
+                    StopWatcher();
+                    StartFullReloadAsync(); // chạy background, không block UI
+                    return;
                 }
-                else
+
+                // ON ⇒ bỏ snapshot, bật watcher, hiển thị 1000 mới nhất
+                _frozenAllForView = null;
+                CancelFullReload(); // nếu OFF vừa chạy full-load dở, hủy
+                StartWatcher();
+
+                if (_allRawFromDisk != null && _allRawFromDisk.Count > 0)
                 {
-                    StartWatcher(); // tạo lại mới tinh
+                    _all.Clear();
+                    int take = Math.Min(_allRawFromDisk.Count, MaxVisibleLogs);
+                    int start = _allRawFromDisk.Count - take;
+                    for (int i = start; i < _allRawFromDisk.Count; i++)
+                        _all.Add(_allRawFromDisk[i]);
+                    RebuildView();
                 }
             }
         }
@@ -384,6 +382,8 @@ namespace BeeGlobal
         // ===== Timers =====
         private readonly Timer _saveDebounce = new Timer();
         private readonly Timer _saveHeartbeat = new Timer();
+
+        public bool OnlySaveErr = true;
 
         public LogsDashboard()
         {
@@ -404,7 +404,11 @@ namespace BeeGlobal
             _tbFind.TextChanged += delegate { RebuildView(); };
             _chkSaveLog.CheckedChanged += _chkSaveLog_CheckedChanged;
             _chkAutoScroll.CheckedChanged += delegate { OnlySaveErr = _chkAutoScroll.Checked; };
-            _chkAutoReload.CheckedChanged += delegate {   AutoReloadOnChange = _chkAutoReload.Checked; Global.ParaCommon.IsAutoReload = AutoReloadOnChange; };
+            _chkAutoReload.CheckedChanged += delegate
+            {
+                AutoReloadOnChange = _chkAutoReload.Checked;
+                if (Global.ParaCommon != null) Global.ParaCommon.IsAutoReload = AutoReloadOnChange;
+            };
 
             _btnToday.Click += delegate { SetRangeToday(); };
             _btn7d.Click += delegate { SetRangeDays(7); };
@@ -418,19 +422,18 @@ namespace BeeGlobal
                     _all.Clear();
                     _view.Clear();
                     _canvas.Clear();
+                    _allRawFromDisk.Clear();
+                    if (_frozenAllForView != null) _frozenAllForView.Clear();
                     _dirty = true;
                     _saveDebounce.Stop(); _saveDebounce.Start();
                 }
             };
 
             _saveDebounce.Interval = _autoSaveDelayMs;
-            _saveDebounce.Tick += delegate {
-                _saveDebounce.Stop(); SaveNow(); };
+            _saveDebounce.Tick += delegate { _saveDebounce.Stop(); SaveNow(); };
 
             _saveHeartbeat.Interval = 5000;
-            _saveHeartbeat.Tick += delegate {
-                if (
-                _dirty) SaveNow(); };
+            _saveHeartbeat.Tick += delegate { if (_dirty) SaveNow(); };
             _saveHeartbeat.Start();
 
             try { AppDomain.CurrentDomain.ProcessExit += delegate { try { SaveNow(); } catch { } }; } catch { }
@@ -446,12 +449,11 @@ namespace BeeGlobal
             _reloadDebounce.Tick += delegate
             {
                 _reloadDebounce.Stop();
-                if (!_autoReloadOnChange) return;                             // guard
+                if (!_autoReloadOnChange) return; // OFF: không reload
                 if (_suppressWatcher || DateTime.UtcNow < _suppressUntilUtc) return;
                 if (IsHandleCreated) BeginInvoke((Action)TryReloadFromDiskExternal);
             };
 
-            // khởi tạo watcher theo state
             if (_autoReloadOnChange) StartWatcher();
 
             SetRangeToday();
@@ -459,13 +461,13 @@ namespace BeeGlobal
 
         private void _chkSaveLog_CheckedChanged(object sender, EventArgs e)
         {
-           Global.ParaCommon.IsSaveLog=_chkSaveLog.Checked;
+            if (Global.ParaCommon != null) Global.ParaCommon.IsSaveLog = _chkSaveLog.Checked;
         }
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            TryLoadFromDisk();
+            TryLoadFromDisk();    // load initial (có progressive UI)
             RebuildView();
         }
 
@@ -474,20 +476,19 @@ namespace BeeGlobal
             if (disposing)
             {
                 try { SaveNow(); } catch { }
+                CancelFullReload();
                 _saveDebounce.Dispose();
                 _saveHeartbeat.Dispose();
                 _progressiveTimer.Dispose();
                 _ingestTimer.Dispose();
-                StopWatcher(); // đảm bảo dispose
+                StopWatcher();
                 _reloadDebounce.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        // ===== Watcher lifecycle (dứt điểm khi OFF) =====
         private void StopWatcher()
         {
-            _ingestTimer.Stop();
             _reloadDebounce.Stop();
             _suppressWatcher = false;
             _suppressUntilUtc = DateTime.MinValue;
@@ -518,7 +519,6 @@ namespace BeeGlobal
             if (!_autoReloadOnChange) return;
             try
             {
-                _ingestTimer.Start();
                 _reloadDebounce.Start();
                 var dir = Path.GetDirectoryName(_storagePath);
                 var file = Path.GetFileName(_storagePath);
@@ -541,37 +541,34 @@ namespace BeeGlobal
             OnLogFileChanged(sender, e);
         }
 
-        // ===== Public tuning =====
         [Browsable(true), Category("LogsDashboard")] public int ProgressiveBatchSize { get { return _progressiveBatchSize; } set { _progressiveBatchSize = Math.Max(50, value); } }
         [Browsable(true), Category("LogsDashboard")] public int ProgressiveIntervalMs { get { return _progressiveTimer.Interval; } set { _progressiveTimer.Interval = Math.Max(1, value); } }
         [Browsable(true), Category("LogsDashboard")] public int IngestBatchSize { get { return _ingestBatchSize; } set { _ingestBatchSize = Math.Max(50, value); } }
         [Browsable(true), Category("LogsDashboard")] public int IngestIntervalMs { get { return _ingestTimer.Interval; } set { _ingestTimer.Interval = Math.Max(5, value); } }
 
-        // ===== Public API (offload ThreadPool) =====
         public void AddLog(LeveLLog level, string message, string source = "")
         {
-            if (Global.ParaCommon != null)
-                if (Global.ParaCommon.IsSaveLog)
-                    ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogWorkItem),
-                new State { self = this, level = level, message = message, source = source });
+            if (Global.ParaCommon != null && Global.ParaCommon.IsSaveLog)
+                ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogWorkItem),
+                    new State { self = this, level = level, message = message, source = source });
         }
-        public bool OnlySaveErr = true;
+
         public void AddLog(LogEntry entry)
         {
-            if (Global.ParaCommon != null)
-                if (Global.ParaCommon.IsSaveLog)
+            if (Global.ParaCommon != null && Global.ParaCommon.IsSaveLog)
+            {
+                if (OnlySaveErr)
                 {
-                    if(OnlySaveErr)
-                    {
-                        if(entry.Level == "ERROR")
-                            ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
-             new StateEntry { self = this, entry = entry });
-                    }
-                    else
+                    if ((entry.Level ?? "").Equals("ERROR", StringComparison.OrdinalIgnoreCase))
                         ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
-             new StateEntry { self = this, entry = entry });
+                            new StateEntry { self = this, entry = entry });
                 }
-         
+                else
+                {
+                    ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogEntryWorkItem),
+                        new StateEntry { self = this, entry = entry });
+                }
+            }
         }
 
         private struct State { public LogsDashboard self; public LeveLLog level; public string message; public string source; }
@@ -592,7 +589,6 @@ namespace BeeGlobal
             s.self._ingestQueue.Enqueue(e);
         }
 
-        // ===== UI build =====
         private void BuildFilterBar()
         {
             _filter = new FlowLayoutPanel
@@ -618,7 +614,7 @@ namespace BeeGlobal
                     Margin = new Padding(2, 2, 8, 2),
                     Padding = Padding.Empty
                 };
-                var lbl = new Label { Text = labelText, AutoSize = true, Margin = new Padding(0, 6, 4, 0) , Font =new Font("Arial", 14) };
+                var lbl = new Label { Text = labelText, AutoSize = true, Margin = new Padding(0, 6, 4, 0), Font = new Font("Arial", 14) };
                 ctl.Margin = new Padding(0, 2, 0, 2);
                 ctl.Width = ctlWidth;
                 pair.Controls.Add(lbl);
@@ -629,7 +625,7 @@ namespace BeeGlobal
             _dtpFrom = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm", Font = new Font("Arial", 14) };
             _dtpTo = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH:mm", Font = new Font("Arial", 14) };
             _cbLevel = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = new Font("Arial", 14) };
-            _cbLevel.Items.AddRange(new object[] { "All", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"});
+            _cbLevel.Items.AddRange(new object[] { "All", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" });
             _cbLevel.SelectedIndex = 0;
             _tbFind = new TextBox { Width = 240, Font = new Font("Arial", 14) };
 
@@ -637,20 +633,22 @@ namespace BeeGlobal
             _btn7d = new Button { Text = "7d", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
             _btn30d = new Button { Text = "30d", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
             _btnExport = new Button { Text = "Export CSV", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
-            _btnImport = new Button { Text = "Import JSON", AutoSize = true, Margin = new Padding(6, 3, 0, 3),Font = new Font("Arial", 14) };
+            _btnImport = new Button { Text = "Import JSON", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
             _btnClear = new Button { Text = "Clear", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
-            if(Global.ParaCommon!=null)
-            _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.ParaCommon.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
-           else
+
+            if (Global.ParaCommon != null)
+                _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.ParaCommon.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+            else
                 _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = false, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+
             if (Global.ParaCommon != null)
                 _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = Global.ParaCommon.IsAutoReload, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
             else
                 _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = _autoReloadOnChange, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
-            AutoReloadOnChange = Global.ParaCommon.IsAutoReload;
+            AutoReloadOnChange = (Global.ParaCommon != null) ? Global.ParaCommon.IsAutoReload : _autoReloadOnChange;
             _chkAutoScroll = new CheckBox { Text = "OnlyError", Checked = OnlySaveErr, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
-          
+
             _filter.Controls.Add(Pair("From:", _dtpFrom, 140));
             _filter.Controls.Add(Pair("To:", _dtpTo, 140));
             _filter.Controls.Add(Pair("Level:", _cbLevel, 110));
@@ -671,7 +669,7 @@ namespace BeeGlobal
 
         private void BuildCanvas()
         {
-            _canvas.SetBottomPadding(10);  // mặc định 10px đúng nhu cầu của bạn
+            _canvas.SetBottomPadding(10);
             _canvas.Dock = DockStyle.Fill;
             _canvas.SetRowHeight(24);
             _canvas.SetColumns(130, 50, 50);
@@ -702,21 +700,68 @@ namespace BeeGlobal
             return true;
         }
 
+        private bool IsKeywordOrLevelFiltering()
+        {
+            bool levelFiltered = _cbLevel != null && _cbLevel.SelectedIndex > 0;
+            bool findFiltered = _tbFind != null && !string.IsNullOrWhiteSpace(_tbFind.Text);
+            return levelFiltered || findFiltered;
+        }
+
+        private bool IsDateFiltering()
+        {
+            var now = DateTime.Now;
+            var startToday = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+            var endToday = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+            return _dtpFrom.Value != startToday || _dtpTo.Value != endToday;
+        }
+
         private void RebuildView()
         {
             _view.Clear();
+            bool hasFilter = IsKeywordOrLevelFiltering() || IsDateFiltering();
+
+            // ----- OFF: filter FULL, không giới hạn; không filter thì giữ snapshot đang hiển thị -----
+            if (!_autoReloadOnChange)
+            {
+                if (hasFilter)
+                {
+                    foreach (var it in _allRawFromDisk)
+                        if (PassFilter(it)) _view.Add(it);
+
+                    _view.Sort((a, b) => a.Time.CompareTo(b.Time)); // full theo thời gian tăng dần
+                    _canvas.ReplaceAll(_view);
+                    return;
+                }
+                else
+                {
+                    foreach (var it in _all)
+                        if (PassFilter(it)) _view.Add(it);
+                    _canvas.ReplaceAll(_view);
+                    return;
+                }
+            }
+
+            // ----- ON: filter chỉ 100 dòng mới nhất; không filter thì dùng cửa sổ 1000 -----
+            if (hasFilter)
+            {
+                var filtered = new List<LogEntry>();
+                foreach (var it in _allRawFromDisk)
+                    if (PassFilter(it)) filtered.Add(it);
+
+                var lastN = filtered
+                    .OrderByDescending(z => z.Time)
+                    .Take(FilterVisibleLimitWhenOn) // 100
+                    .OrderBy(z => z.Time)
+                    .ToList();
+
+                _view.AddRange(lastN);
+                _canvas.ReplaceAll(_view);
+                return;
+            }
+
             foreach (var it in _all)
                 if (PassFilter(it)) _view.Add(it);
             _canvas.ReplaceAll(_view);
-        }
-
-        private void AppendFiltered(LogEntry it)
-        {
-            if (PassFilter(it))
-            {
-                _view.Add(it);
-                _canvas.AppendOne(it);
-            }
         }
 
         private void AppendFilteredBatch(IList<LogEntry> batch)
@@ -780,15 +825,27 @@ namespace BeeGlobal
                 }
                 if (list == null) list = new List<LogEntry>();
 
-                int take = Math.Min(list.Count, _maxLogCount);
-                int start = list.Count - take;
-                _pendingLoad = take > 0 ? list.GetRange(start, take) : new List<LogEntry>();
-                _pendingIndex = 0;
+                _allRawFromDisk = list;
 
                 _all.Clear();
                 _view.Clear();
                 _canvas.Clear();
 
+                if (AutoReloadOnChange)
+                {
+                    int take = Math.Min(list.Count, MaxVisibleLogs);
+                    int start = list.Count - take;
+                    _pendingLoad = take > 0 ? list.GetRange(start, take) : new List<LogEntry>();
+                }
+                else
+                {
+                    int copy = Math.Min(list.Count, _maxLogCount);
+                    int start = list.Count - copy;
+                    _pendingLoad = copy > 0 ? list.GetRange(start, copy) : new List<LogEntry>();
+                    _frozenAllForView = list.ToList();
+                }
+
+                _pendingIndex = 0;
                 _progressiveLoading = true;
                 _progressiveTimer.Stop();
                 _progressiveTimer.Start();
@@ -825,18 +882,12 @@ namespace BeeGlobal
                 addedAll.Add(it);
             }
 
-            AppendFilteredBatch(addedAll);
+            _canvas.AppendBatch(addedAll);
         }
 
         // ingest từ queue về UI
         private void IngestTimer_Tick(object sender, EventArgs e)
         {
-            if (!_autoReloadOnChange)
-            {
-                _ingestTimer.Stop();
-                return;
-            }    
-               
             if (!IsHandleCreated || _ingestQueue.IsEmpty) return;
 
             int taken = 0;
@@ -845,22 +896,111 @@ namespace BeeGlobal
             LogEntry it;
             while (taken < _ingestBatchSize && _ingestQueue.TryDequeue(out it))
             {
-                _all.Add(it);
-                addedAll.Add(it);
+                // luôn cập nhật kho FULL để autosave
+                _allRawFromDisk.Add(it);
                 taken++;
+                addedAll.Add(it);
             }
 
             if (taken > 0)
             {
-                EnforceMaxLogCount();
+                // Autosave luôn chạy khi có log mới
                 _dirty = true;
                 _saveDebounce.Stop(); _saveDebounce.Start();
-                AppendFilteredBatch(addedAll);
-                if (_autoScrollToEnd) _canvas.ScrollToEnd();
+
+                if (_autoReloadOnChange)
+                {
+                    // ON: UI cập nhật
+                    foreach (var x in addedAll) _all.Add(x);
+
+                    while (_all.Count > MaxVisibleLogs)
+                        _all.RemoveAt(0);
+
+                    AppendFilteredBatch(addedAll);
+                    if (_autoScrollToEnd) _canvas.ScrollToEnd();
+                    EnforceMaxLogCount();
+                }
+                else
+                {
+                    // OFF: UI đóng băng — không cập nhật _all/_view/_canvas
+                }
             }
         }
 
-        // ===== Save ngay (public) =====
+        // ===== Background FULL reload when OFF =====
+        private void StartFullReloadAsync()
+        {
+            CancelFullReload(); // hủy job cũ nếu còn
+            _all.Clear(); _view.Clear(); _canvas.Clear(); // dọn UI trước khi nạp lại
+
+            var cts = new CancellationTokenSource();
+            _fullLoadCts = cts;
+
+            _fullLoadTask = Task.Run(() =>
+            {
+                var token = cts.Token;
+                List<LogEntry> list = null;
+                try
+                {
+                    if (File.Exists(_storagePath))
+                    {
+                        using (var fs = File.Open(_storagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            var ser = new DataContractJsonSerializer(typeof(List<LogEntry>));
+                            list = ser.ReadObject(fs) as List<LogEntry>;
+                        }
+                    }
+                }
+                catch
+                {
+                    // swallow to avoid crashing background
+                }
+                if (token.IsCancellationRequested) return null;
+                if (list == null) list = new List<LogEntry>();
+                return list;
+            }, cts.Token).ContinueWith(t =>
+            {
+                // chạy trên threadpool; marshal về UI
+                if (cts.IsCancellationRequested || t.IsFaulted) return;
+                var list = t.Result ?? new List<LogEntry>();
+                if (!IsHandleCreated) return;
+
+                BeginInvoke((Action)(() =>
+                {
+                    // cập nhật kho FULL
+                    _allRawFromDisk = list;
+
+                    // chuẩn bị progressive UI (không block)
+                    int copy = Math.Min(list.Count, _maxLogCount);
+                    int start = list.Count - copy;
+                    _pendingLoad = copy > 0 ? list.GetRange(start, copy) : new List<LogEntry>();
+                    _pendingIndex = 0;
+                    _progressiveLoading = true;
+                    _progressiveTimer.Stop();
+                    _progressiveTimer.Start();
+
+                    // snapshot đóng băng sau khi đã nạp full
+                    _frozenAllForView = list.ToList();
+                }));
+            }, TaskScheduler.Default);
+        }
+
+        private void CancelFullReload()
+        {
+            try
+            {
+                var c = _fullLoadCts;
+                _fullLoadCts = null;
+                if (c != null)
+                {
+                    c.Cancel();
+                    c.Dispose();
+                }
+            }
+            catch { }
+        }
+
+        // ===== Save ngay (public) — LUÔN LƯU FULL (read-merge-write) =====
         public void SaveNow()
         {
             try
@@ -874,12 +1014,34 @@ namespace BeeGlobal
                     var dir = Path.GetDirectoryName(_storagePath);
                     if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-                    var list = _all.ToList();
+                    // Đọc file hiện tại để merge trước khi ghi
+                    List<LogEntry> listOnDisk = null;
+                    try
+                    {
+                        if (File.Exists(_storagePath))
+                        {
+                            using (var fs = File.Open(_storagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                            {
+                                var ser = new DataContractJsonSerializer(typeof(List<LogEntry>));
+                                listOnDisk = ser.ReadObject(fs) as List<LogEntry>;
+                            }
+                        }
+                    }
+                    catch { /* tránh crash nếu file đang lock tạm thời */ }
+
+                    if (listOnDisk == null) listOnDisk = new List<LogEntry>();
+                    if (_allRawFromDisk == null) _allRawFromDisk = new List<LogEntry>();
+
+                    DateTime lastMem = _allRawFromDisk.Count > 0 ? _allRawFromDisk[_allRawFromDisk.Count - 1].Time : DateTime.MinValue;
+                    var extras = listOnDisk.Where(x => x != null && x.Time > lastMem).ToList();
+                    if (extras.Count > 0) _allRawFromDisk.AddRange(extras);
+
+                    var listToSave = _allRawFromDisk.ToList(); // LUÔN FULL
 
                     using (var ms = new MemoryStream())
                     {
                         var ser = new DataContractJsonSerializer(typeof(List<LogEntry>));
-                        ser.WriteObject(ms, list);
+                        ser.WriteObject(ms, listToSave);
                         ms.Position = 0;
 
                         string tmp = _storagePath + ".tmp";
@@ -920,7 +1082,6 @@ namespace BeeGlobal
             }
         }
 
-        // ===== Import/Export =====
         private void ExportCsv()
         {
             try
@@ -969,15 +1130,24 @@ namespace BeeGlobal
                     var addedAll = new List<LogEntry>(list.Count);
                     foreach (var it in list)
                     {
-                        _all.Add(it);
+                        _all.Add(it);             // hiển thị hiện tại
+                        _allRawFromDisk.Add(it);  // kho full
                         addedAll.Add(it);
                     }
 
                     _dirty = true;
-                    EnforceMaxLogCount();
                     _saveDebounce.Stop(); _saveDebounce.Start();
 
-                    AppendFilteredBatch(addedAll);
+                    if (_autoReloadOnChange)
+                    {
+                        while (_all.Count > MaxVisibleLogs)
+                            _all.RemoveAt(0);
+                        AppendFilteredBatch(addedAll);
+                    }
+                    else
+                    {
+                        // OFF: UI đóng băng — vẫn có thể đang ở trạng thái freeze
+                    }
                 }
             }
             catch (Exception ex)
@@ -986,7 +1156,6 @@ namespace BeeGlobal
             }
         }
 
-        // ===== Helpers =====
         private static string EscapeCsv(string s)
         {
             if (s == null) return "";
@@ -1000,7 +1169,7 @@ namespace BeeGlobal
 
         private void OnLogFileChanged(object sender, EventArgs e)
         {
-            if (!_autoReloadOnChange) return;                             // guard
+            if (!_autoReloadOnChange) return; // OFF: bỏ qua
             if (_suppressWatcher || DateTime.UtcNow < _suppressUntilUtc) return;
             _reloadDebounce.Stop();
             _reloadDebounce.Start();
@@ -1008,7 +1177,7 @@ namespace BeeGlobal
 
         private void TryReloadFromDiskExternal()
         {
-            if (!_autoReloadOnChange) return;                             // guard
+            if (!_autoReloadOnChange) return;
             try
             {
                 if (!File.Exists(_storagePath)) return;
@@ -1021,14 +1190,16 @@ namespace BeeGlobal
                 }
                 if (list == null) list = new List<LogEntry>();
 
-                int take = Math.Min(list.Count, _maxLogCount);
-                int start = list.Count - take;
-                _pendingLoad = take > 0 ? list.GetRange(start, take) : new List<LogEntry>();
-                _pendingIndex = 0;
+                _allRawFromDisk = list;
 
                 _all.Clear();
                 _view.Clear();
                 _canvas.Clear();
+
+                int take = Math.Min(list.Count, MaxVisibleLogs);
+                int start = list.Count - take;
+                _pendingLoad = take > 0 ? list.GetRange(start, take) : new List<LogEntry>();
+                _pendingIndex = 0;
 
                 _progressiveLoading = true;
                 _progressiveTimer.Stop();
@@ -1036,5 +1207,43 @@ namespace BeeGlobal
             }
             catch { }
         }
+
+        // Sync full reload (giữ lại để tương thích, nhưng OFF dùng bản async)
+        private void ReloadFullFromDisk()
+        {
+            try
+            {
+                _all.Clear();
+                _view.Clear();
+                _canvas.Clear();
+
+                if (!File.Exists(_storagePath))
+                {
+                    _allRawFromDisk = new List<LogEntry>();
+                    RebuildView();
+                    return;
+                }
+
+                List<LogEntry> list;
+                using (var fs = File.Open(_storagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    var ser = new DataContractJsonSerializer(typeof(List<LogEntry>));
+                    list = ser.ReadObject(fs) as List<LogEntry>;
+                }
+                if (list == null) list = new List<LogEntry>();
+
+                _allRawFromDisk = list;
+
+                int copy = Math.Min(list.Count, _maxLogCount);
+                int start = list.Count - copy;
+                for (int i = start; i < list.Count; i++)
+                    _all.Add(list[i]);
+
+                RebuildView();
+            }
+            catch { }
+        }
     }
+
+   
 }

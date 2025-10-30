@@ -25,14 +25,20 @@ namespace BeeInterface.GroupControl
             Global.EditTool.pEditTool.Show("Tool");
             Global.StepEdit.Enabled = true;
             Global.StatusDraw = StatusDraw.None;
+            Global.EditTool.View.btnChangeImg.Visible = false;
+            Global.EditTool.View.btnChangeImg.Enabled = true;
+            Global.EditTool.View.RegisterImgs.Visible = false;
 
-         //   Global.IndexToolSelected = -1;
+            //   Global.IndexToolSelected = -1;
 
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Global.EditTool.pEditTool.Show("Tool");
+            Global.EditTool.View.btnChangeImg.Visible = false;
+            Global.EditTool.View.btnChangeImg.Enabled = true;
+            Global.EditTool.View.RegisterImgs.Visible = false;
             Global.StatusDraw = StatusDraw.None;
             if (Global.OldPropetyTool != null)
             {

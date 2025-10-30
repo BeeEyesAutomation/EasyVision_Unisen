@@ -285,7 +285,7 @@ namespace BeeCore
                     cl = Global.Config.ColorNG;
                     break;
             }
-            Pen pen = new Pen(Color.Blue, 2);
+            Pen pen = new Pen(Global.Config.ColorInfor, Global.Config.ThicknessLine);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
@@ -308,17 +308,18 @@ namespace BeeCore
             mat.Rotate(rotA._rectRotation);
             mat.Translate(rotA._rect.X, rotA._rect.Y);
             gc.Transform = mat;
+            RectangleF rectClient =   new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height);
             if (!Global.IsRun)
                 foreach (var l in GapResult.line2Ds)
-                Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2));
-            Draws.DrawInfiniteLine(gc,GapResult.LineA, new Pen(cl, 2));
-            Draws.DrawInfiniteLine(gc,GapResult.LineB, new Pen(cl, 2));
+                Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2), rectClient);
+            Draws.DrawInfiniteLine(gc,GapResult.LineA, new Pen(cl, Global.Config.ThicknessLine), rectClient);
+            Draws.DrawInfiniteLine(gc,GapResult.LineB, new Pen(cl, Global.Config.ThicknessLine), rectClient);
             PointF p1 = new PointF(GapResult.lineMid[0].X,GapResult.lineMid[0].Y);
             PointF p2 = new PointF(GapResult.lineMid[1].X,GapResult.lineMid[1].Y);
             Draws.DrawTicks(gc, p1,LineOrientation, pen);
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
-            gc.DrawLine(new Pen(Color.Blue, 4), p1, p2);          
-            gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", Global.Config.FontSize), Brushes.Blue, p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+            gc.DrawLine(pen, p1, p2);          
+            gc.DrawString($"{WidthResult:F2}mm", new Font("Arial", Global.Config.FontSize), new SolidBrush(Global.Config.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
             gc.ResetTransform();
             return gc;
         }

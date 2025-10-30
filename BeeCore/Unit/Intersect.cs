@@ -221,14 +221,22 @@ namespace BeeCore
         }
         public void Complete()
         {
-           
-          
-           
-            Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
-         if(Result.Found)
+
+
+          //  Common.PropetyTools[IndexThread][Index].ScoreResult= (int)((Math.Abs(WidthResult - WidthTemp) / (WidthTemp * 1.0))*100);
+         if (Result.Found)
+            {
+                Common.PropetyTools[IndexThread][Index].Location = listP_Center[0].X + "," + listP_Center[0].Y;
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
+            }
+         
          else
+            {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                Common.PropetyTools[IndexThread][Index].Location = "";
+                Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+            }    
+              
             
         }
         public string AddPLC = "";

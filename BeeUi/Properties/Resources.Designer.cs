@@ -553,6 +553,16 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Gallery {
+            get {
+                object obj = ResourceManager.GetObject("Image_Gallery", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Installing_Updates {
             get {
                 object obj = ResourceManager.GetObject("Installing_Updates", resourceCulture);

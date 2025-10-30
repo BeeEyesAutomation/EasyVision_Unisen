@@ -26,6 +26,7 @@ namespace BeeCore {
                 ParaCam = Access.LoadParaComon("Program\\" + Project + "\\" + Project + ".para");
             else
                 ParaCam=new ParaCommon();
+            if(ParaCam.listRegsImg==null) ParaCam.listRegsImg = new List<ItemRegsImg>();
             return ParaCam;
         }
         public static List<ParaCamera> ParaCamera(String Project)

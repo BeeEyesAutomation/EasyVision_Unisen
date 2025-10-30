@@ -217,7 +217,12 @@ namespace BeeInterface
 
                         BeeCore.Common.PropetyTools[Global.IndexChoose][0].ItemTool = Itemtool2;
                         BeeCore.Common.PropetyTools[Global.IndexChoose][0].Control = control2;
-
+                        int i = 0;
+                        foreach(PropetyTool propety in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                        {
+                            propety.ItemTool.IndexTool = i;
+                            propety.Propety.Index = i;i++;
+                        }    
                         propetyTool2.worker = new System.ComponentModel.BackgroundWorker();
                         propetyTool2.timer = new System.Diagnostics.Stopwatch();
                         propetyTool2.worker.DoWork += (sender, e) =>

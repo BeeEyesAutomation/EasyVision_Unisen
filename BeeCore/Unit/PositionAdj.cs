@@ -47,11 +47,12 @@ namespace BeeCore
                 matTemp = bmRaw.ToMat();
                 LearnPattern(matTemp, true);
             }
+            if (rotArea == null) rotArea = new RectRotate();
+            if (rotCrop == null) rotCrop = new RectRotate();
             DetectIntersect = new DetectIntersect();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
         public object Clone()
@@ -548,6 +549,10 @@ namespace BeeCore
                                (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
                                (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
                                             list_AngleCenter.Add(rotArea._rectRotation + angle1);
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Position Adj", ex.Message));
                                         }
                                         finally
                                         {

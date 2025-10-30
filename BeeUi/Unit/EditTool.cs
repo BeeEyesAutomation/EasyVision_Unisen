@@ -159,6 +159,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                        Global.EditTool.View.btnChangeImg.Visible = false;
                         Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
                         Global.IsAllowReadPLC = true;
@@ -281,6 +282,7 @@ namespace BeeUi
                         //Global.EditTool.View.imgView.Update();
                         break;
                     case Step.Step3:
+                      
                         iconTool.Visible = false;
                         lbTool.Text = "3.Tools Setting";
                         layInforTool.Visible = false;
@@ -541,6 +543,7 @@ namespace BeeUi
 
         private void Global_StepModeChanged(Step obj)
         {
+      
             RefreshGuiEdit(obj);
         }
 

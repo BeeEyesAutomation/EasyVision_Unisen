@@ -79,7 +79,22 @@ namespace BeeInterface
 
                 Global.Step = Step.Step3;
             }
+            else
+            {
+                btnStep2.IsCLick = true;
+                ForrmAlarm forrmAlarm = new ForrmAlarm();
+                forrmAlarm.lbHeader.Text = "Image Emtry";
+                forrmAlarm.lbContent.Text = "Please Reagister Image!";
+                forrmAlarm.lbCode.Text = "Warming";
+                forrmAlarm.btnCancel.Visible = false;
+                forrmAlarm.BringToFront();
+                forrmAlarm.TopMost = true;
+                forrmAlarm.ShowDialog();
+             
+            }
+               
           
+
         }
 
         private void btnStep1_Click(object sender, EventArgs e)

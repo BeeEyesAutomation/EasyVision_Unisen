@@ -26,12 +26,23 @@ namespace BeeInterface
 
         private void btnNextStep_Click(object sender, EventArgs e)
         {
-            Global.EditTool.RefreshGuiEdit(Step.Step3);
+            if (Global.ParaCommon.matRegister != null)
+            {
+                if (!Global.ParaCommon.matRegister.IsDisposed())
+                    Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
+
+                Global.Step = Step.Step3;
+            }
+            else
+            {
+                Global.StepEdit.btnStep2.IsCLick = true;
+            }    
+               
         }
 
         private void SettingStep2_Load(object sender, EventArgs e)
         {
-          
+            RegisterImg.LoadAllItem();
 
         }
         public void SaveParaPJ()
@@ -110,9 +121,43 @@ namespace BeeInterface
 
         private void tmNotPress_Tick(object sender, EventArgs e)
         {
-            btnCapCamera.IsCLick =!btnCapCamera.IsCLick;
+           // btnCapCamera.IsCLick =!btnCapCamera.IsCLick;
            // btnNextStep.Enabled = true;
             tmNotPress.Enabled = false;
+        }
+
+        private void RegisterImg_SelectedItemChanged(object sender, RegisterImgSelectionChangedEventArgs e)
+        {
+            using (Mat clone = e.Image?.Clone())
+            {if(clone==null)
+                {
+                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();
+                    Global.ParaCommon.matRegister = null;
+                  //  Global.EditTool.View.imgView.Image.Dispose();
+                    BeginInvoke(new Action(() =>
+                    {
+                        var old = Global.EditTool.View.imgView.Image;
+                        Global.EditTool.View.imgView.Image = null;
+                        old?.Dispose();
+                    }));
+                    return;
+                }    
+                // phần Global của bạn — giữ nguyên
+                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = clone.Clone();
+                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+                Global.ParaCommon.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
+                Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
+                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                btnNextStep.Enabled = true;
+            }
+
+           // Text = "Đang chọn: " + e.Name;
+        }
+
+        private void RegisterImg_ItemsChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

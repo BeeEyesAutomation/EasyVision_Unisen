@@ -71,6 +71,7 @@
     <Compile Include="HistoryCheck.cs" />
     <Compile Include="IntArrayWithEvent.cs" />
     <Compile Include="ItemNew.cs" />
+    <Compile Include="ItemRegsImg.cs" />
     <Compile Include="Protocol\ParaBit.cs" />
     <Compile Include="Protocol\ParaProtocol.cs" />
     <Compile Include="Labels.cs" />

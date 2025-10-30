@@ -665,14 +665,34 @@ namespace BeeCore
                 case StatusTool.Done:
                   
                     if(Common.PropetyTools[IndexThread][IndexTool].Results==Results.OK)
-                    {
-                        valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
-                        Score = valueScore + "";
+                    {   if (Common.PropetyTools[IndexThread][IndexTool].Location != "")
+                            Score = Common.PropetyTools[IndexThread][IndexTool].Location;
+                        else
+                        {
+                            valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
+                            Score = valueScore + "";
+                        }    
+                         
                         Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
                         CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
                         colorTrack =  Global.Config.ColorOK;
                         ClStatus =  Global.Config.ColorOK;
                         ClScore=  Global.Config.ColorOK;
+                    }
+                    else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.NG)
+                    {
+                        if (Common.PropetyTools[IndexThread][IndexTool].Location != "")
+                            Score = Common.PropetyTools[IndexThread][IndexTool].Location;
+                        else
+                        {
+                            valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
+                            Score = valueScore + "";
+                        }
+                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
+                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
+                        colorTrack = Global.Config.ColorNG;
+                        ClStatus = Global.Config.ColorNG;
+                        ClScore = Global.Config.ColorNG;
                     }
                     else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.None)
                     {
@@ -682,16 +702,7 @@ namespace BeeCore
                         ClStatus = Global.ColorNone;
                         ClScore = Global.ColorNone;
                     }
-                    else
-                    {
-                        valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
-                        Score = valueScore + "";
-                        Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
-                        CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
-                        colorTrack = Global.Config.ColorNG;
-                        ClStatus = Global.Config.ColorNG;
-                        ClScore = Global.Config.ColorNG;
-                    }
+                   
                         break;
               
 

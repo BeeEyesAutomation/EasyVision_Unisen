@@ -1,6 +1,6 @@
 ﻿using BeeCore;
 using BeeGlobal;
-using BeeUi.Commons;
+
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BeeUi
+namespace BeeInterface
 {
     public partial class ForrmAlarm : Form
     {
@@ -47,7 +47,7 @@ namespace BeeUi
             this.lbCode.AutoSize = true;
             this.lbCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbCode.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lbCode.Location = new System.Drawing.Point(130, 18);
+            this.lbCode.Location = new System.Drawing.Point(141, 22);
             this.lbCode.Name = "lbCode";
             this.lbCode.Size = new System.Drawing.Size(136, 25);
             this.lbCode.TabIndex = 0;
@@ -79,8 +79,8 @@ namespace BeeUi
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::BeeUi.Properties.Resources.Warning_1;
-            this.pictureBox1.Location = new System.Drawing.Point(72, 3);
+            this.pictureBox1.Image = Properties.Resources.Warning_1;
+            this.pictureBox1.Location = new System.Drawing.Point(83, 8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(52, 50);
             this.pictureBox1.TabIndex = 3;

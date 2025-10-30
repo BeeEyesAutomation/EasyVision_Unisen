@@ -387,6 +387,7 @@ namespace PlcLib
         private async Task<bool> ReconnectAsync()
         {
             Disconnect();
+            await TimingUtils.DelayAccurateAsync(100);
             return await ConnectAsync();
         }
 
@@ -720,15 +721,29 @@ namespace PlcLib
                                 {
                                     if (!await ReconnectAsync())
                                     {
-                                        NumErr = 0;
-                                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
-                                        IsConnect = false;
+                                        await TimingUtils.DelayAccurateAsync(1000);
+                                        if (!await ReconnectAsync())
+                                        {
+                                            NumErr = 0;
+                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
+                                            IsConnect = false;
 
-                                        Global.PLCStatus = PLCStatus.ErrorConnect;
-                                        Global.IsAllowReadPLC = false;
+                                            Global.PLCStatus = PLCStatus.ErrorConnect;
+                                            Global.IsAllowReadPLC = false;
+                                        }
+                                        else
+                                        {
+                                            NumErr = 0;
+                                            goto X;
+
+                                        }    
                                     }
                                     else
+                                    {
+                                        NumErr = 0;
                                         goto X;
+                                    }    
+                                       
                                 }
                                 else
                                 {

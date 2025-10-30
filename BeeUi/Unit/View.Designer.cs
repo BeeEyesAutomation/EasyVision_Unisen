@@ -81,6 +81,8 @@ namespace BeeUi
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.split5 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.Panel();
+            this.btnChangeImg = new BeeInterface.RJButton();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.split4 = new System.Windows.Forms.Splitter();
             this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnMenu = new System.Windows.Forms.Button();
@@ -853,6 +855,8 @@ namespace BeeUi
             // pBtn
             // 
             this.pBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.pBtn.Controls.Add(this.btnChangeImg);
+            this.pBtn.Controls.Add(this.splitter1);
             this.pBtn.Controls.Add(this.split4);
             this.pBtn.Controls.Add(this.btnTypeTrig);
             this.pBtn.Controls.Add(this.btnMenu);
@@ -870,6 +874,75 @@ namespace BeeUi
             this.pBtn.TabIndex = 31;
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
             this.pBtn.Paint += new System.Windows.Forms.PaintEventHandler(this.pBtn_Paint_1);
+            // 
+            // btnChangeImg
+            // 
+            this.btnChangeImg.AutoFont = true;
+            this.btnChangeImg.AutoFontHeightRatio = 0.75F;
+            this.btnChangeImg.AutoFontMax = 100F;
+            this.btnChangeImg.AutoFontMin = 8F;
+            this.btnChangeImg.AutoFontWidthRatio = 1F;
+            this.btnChangeImg.AutoImage = true;
+            this.btnChangeImg.AutoImageMaxRatio = 0.75F;
+            this.btnChangeImg.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnChangeImg.AutoImageTint = true;
+            this.btnChangeImg.BackColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BackgroundColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BorderColor = System.Drawing.Color.Silver;
+            this.btnChangeImg.BorderRadius = 5;
+            this.btnChangeImg.BorderSize = 1;
+            this.btnChangeImg.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnChangeImg.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnChangeImg.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnChangeImg.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnChangeImg.Corner = BeeGlobal.Corner.Both;
+            this.btnChangeImg.DebounceResizeMs = 16;
+            this.btnChangeImg.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnChangeImg.FlatAppearance.BorderSize = 0;
+            this.btnChangeImg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangeImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.btnChangeImg.ForeColor = System.Drawing.Color.Black;
+            this.btnChangeImg.Image = global::BeeUi.Properties.Resources.Image_Gallery;
+            this.btnChangeImg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnChangeImg.ImageDisabled = null;
+            this.btnChangeImg.ImageHover = null;
+            this.btnChangeImg.ImageNormal = null;
+            this.btnChangeImg.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnChangeImg.ImagePressed = null;
+            this.btnChangeImg.ImageTextSpacing = 0;
+            this.btnChangeImg.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnChangeImg.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnChangeImg.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnChangeImg.ImageTintOpacity = 0.5F;
+            this.btnChangeImg.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnChangeImg.IsCLick = false;
+            this.btnChangeImg.IsNotChange = true;
+            this.btnChangeImg.IsRect = false;
+            this.btnChangeImg.IsUnGroup = true;
+            this.btnChangeImg.Location = new System.Drawing.Point(1297, 5);
+            this.btnChangeImg.Margin = new System.Windows.Forms.Padding(5);
+            this.btnChangeImg.Multiline = false;
+            this.btnChangeImg.Name = "btnChangeImg";
+            this.btnChangeImg.Size = new System.Drawing.Size(122, 47);
+            this.btnChangeImg.TabIndex = 42;
+            this.btnChangeImg.Text = "Change Image";
+            this.btnChangeImg.TextColor = System.Drawing.Color.Black;
+            this.btnChangeImg.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnChangeImg.UseVisualStyleBackColor = false;
+            this.btnChangeImg.Visible = false;
+            this.btnChangeImg.Click += new System.EventHandler(this.btnChangeImg_Click);
+            // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(1419, 5);
+            this.splitter1.MinExtra = 1;
+            this.splitter1.MinSize = 10;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(10, 47);
+            this.splitter1.TabIndex = 41;
+            this.splitter1.TabStop = false;
             // 
             // split4
             // 
@@ -1252,5 +1325,7 @@ namespace BeeUi
         private RJButton btnClick;
         private RJButton btnMouseRight;
         private System.Windows.Forms.Timer tmKeys;
+        public RJButton btnChangeImg;
+        public System.Windows.Forms.Splitter splitter1;
     }
 }

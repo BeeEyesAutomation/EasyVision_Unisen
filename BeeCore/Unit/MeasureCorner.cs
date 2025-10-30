@@ -299,10 +299,11 @@ namespace BeeCore
             //if (!Global.IsRun)
             //    foreach (var l in GapResult.line2Ds)
             //        Draws.DrawInfiniteLine(gc, l, new Pen(Color.Gray, 2));
-          
-          
-            Draws.DrawInfiniteLine(gc, FilletCornerMeasure. ToLine2D (Result.LineH), new Pen(Brushes.Blue, 2));
-            Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineV), new Pen(Brushes.Blue, 2));
+
+            RectangleF rectClient = new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height);
+
+            Draws.DrawInfiniteLine(gc, FilletCornerMeasure. ToLine2D (Result.LineH), new Pen(Global.Config.ColorInfor, Global.Config.ThicknessLine), rectClient);
+            Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineV), new Pen(Global.Config.ColorInfor,  Global.Config.ThicknessLine), rectClient);
          
             //Draws.DrawTicks(gc, p1, LineOrientation, pen);
             //Draws.DrawTicks(gc, p2, LineOrientation, pen);

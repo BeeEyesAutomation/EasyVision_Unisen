@@ -1448,7 +1448,7 @@ namespace BeeCore
 
             if (IsSetPara)
                 return true;
-
+            if (matRaw.IsDisposed) matRaw = new Mat();
             IntPtr intPtr = IntPtr.Zero;
             int rows = 0, cols = 0;
             int matType = MatType.CV_8UC1;

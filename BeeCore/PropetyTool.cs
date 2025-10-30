@@ -34,7 +34,7 @@ namespace BeeCore
         [NonSerialized]
         public dynamic Control;
         public bool IsSendResult = false;
-     
+        public int IndexImgRegis=0;
         private float _Score = 0;
         [field: NonSerialized]
         public event Action<float> ScoreChanged;
@@ -68,7 +68,7 @@ namespace BeeCore
             }
         }
 
-
+        public String Location = "";
         public float CycleTime = 0;
         public float ScoreResult = 0;
         public float MinValue = 0;

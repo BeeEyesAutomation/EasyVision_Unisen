@@ -34,6 +34,7 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.2.0.0-beta.2\lib\net472\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -92,11 +93,18 @@
     <Compile Include="DashBoard\DashboardListCompact.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DashBoard\RegisterImgDashboard.cs" />
     <Compile Include="DataTool.cs" />
     <Compile Include="Custom\DbTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileName.cs" />
+    <Compile Include="ForrmAlarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ForrmAlarm.Designer.cs">
+      <DependentUpon>ForrmAlarm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrameRenderer.cs" />
     <Compile Include="General\InforGroup.cs">
       <SubType>UserControl</SubType>
@@ -292,6 +300,12 @@
       <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools.cs" />
+    <Compile Include="Tool\ToolCounter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolCounter.Designer.cs">
+      <DependentUpon>ToolCounter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolYolo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -304,6 +318,9 @@
   <ItemGroup>
     <EmbeddedResource Include="CameraForm.resx">
       <DependentUpon>CameraForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForrmAlarm.resx">
+      <DependentUpon>ForrmAlarm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="General\InforGroup.resx">
       <DependentUpon>InforGroup.cs</DependentUpon>
@@ -398,6 +415,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolPosition_Adjustment.resx">
       <DependentUpon>ToolPosition_Adjustment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolCounter.resx">
+      <DependentUpon>ToolCounter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolYolo.resx">
       <DependentUpon>ToolYolo.cs</DependentUpon>
@@ -687,6 +707,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Collect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BID_ICON_TOOL_ADD_E_32BIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning_1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

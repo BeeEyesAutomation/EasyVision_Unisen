@@ -170,7 +170,7 @@ namespace BeeCore
 
         public static void DrawTicks(Graphics gc,System.Drawing. PointF p, LineOrientation ori,Pen pen)
         {
-            int tickLen = 50;
+            int tickLen = 10;
             if (ori == LineOrientation.Any || ori == LineOrientation.Vertical)
             {
                 // Vertical ticks
@@ -207,15 +207,69 @@ namespace BeeCore
             gc.DrawLine(pen, centerX - lineLength / 2, centerY, centerX + lineLength / 2, centerY);
             gc.DrawLine(pen, centerX, centerY - lineLength / 2, centerX, centerY + lineLength / 2);
         }
-        public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen)
+        private static void DrawLineClipped(Graphics g, Line2D ln, RectangleF clip, Pen pen)
         {
-            float vx =(float) ln.Vx;
-            float vy = (float)ln.Vy;
-            float x0 = (float)ln.X1;
-            float y0 = (float)ln.Y1;
-            System.Drawing.PointF pt1 = new System.Drawing.PointF(x0 + vx * 1000, y0 + vy * 1000);
-            System.Drawing.PointF pt2 = new System.Drawing.PointF(x0 - vx * 1000, y0 - vy * 1000);
-            g.DrawLine(pen, pt1, pt2);
+          
+        }
+        private static bool TryDrawLineWithRect(Line2D ln, RectangleF rc, out PointF A, out PointF B)
+        {
+            const float EPS = 1e-6f;
+            A = default(PointF);
+            B = default(PointF);
+
+            if (ln == null) return false;
+            float vx = (float)ln.Vx, vy = (float)ln.Vy, x0 = (float)ln.X1, y0 = (float)ln.Y1;
+            if (Math.Abs(vx) < EPS && Math.Abs(vy) < EPS) return false;
+
+            // Tìm trực tiếp tMin/tMax của 2 giao điểm nằm TRONG biên
+            // Không cần mảng/Sort — chỉ theo dõi 2 đầu mút
+            float tMin = float.PositiveInfinity, tMax = float.NegativeInfinity;
+            int hit = 0;
+
+            // x = L
+            if (Math.Abs(vx) >= EPS)
+            {
+                float t = (rc.Left - x0) / vx;
+                float y = y0 + t * vy;
+                if (y >= rc.Top - 1 && y <= rc.Bottom + 1) { if (t < tMin) tMin = t; if (t > tMax) tMax = t; hit++; }
+                // x = R
+                t = (rc.Right - x0) / vx;
+                y = y0 + t * vy;
+                if (y >= rc.Top - 1 && y <= rc.Bottom + 1) { if (t < tMin) tMin = t; if (t > tMax) tMax = t; hit++; }
+            }
+            // y = T
+            if (Math.Abs(vy) >= EPS)
+            {
+                float t = (rc.Top - y0) / vy;
+                float x = x0 + t * vx;
+                if (x >= rc.Left - 1 && x <= rc.Right + 1) { if (t < tMin) tMin = t; if (t > tMax) tMax = t; hit++; }
+                // y = B
+                t = (rc.Bottom - y0) / vy;
+                x = x0 + t * vx;
+                if (x >= rc.Left - 1 && x <= rc.Right + 1) { if (t < tMin) tMin = t; if (t > tMax) tMax = t; hit++; }
+            }
+
+            if (hit < 2 || float.IsInfinity(tMin) || float.IsInfinity(tMax)) return false;
+
+            A = new PointF(x0 + tMin * vx, y0 + tMin * vy);
+            B = new PointF(x0 + tMax * vx, y0 + tMax * vy);
+            return true;
+        }
+
+        public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen, RectangleF rectClient)
+        {
+            PointF a, b;
+            if (!TryDrawLineWithRect(ln, rectClient, out a, out b))
+                return; // line không cắt vùng vẽ
+            g.DrawLine(pen, a, b);
+            g.DrawLine(pen, a, b);
+            //float vx =(float) ln.Vx;
+            //float vy = (float)ln.Vy;
+            //float x0 = (float)ln.X1;
+            //float y0 = (float)ln.Y1;
+            //System.Drawing.PointF pt1 = new System.Drawing.PointF(x0 + vx * 1000, y0 + vy * 1000);
+            //System.Drawing.PointF pt2 = new System.Drawing.PointF(x0 - vx * 1000, y0 - vy * 1000);
+            //g.DrawLine(pen, pt1, pt2);
         }
         public static void DrawInfiniteLine(Mat img, Line2D ln, Scalar col, int thickness)
         {
