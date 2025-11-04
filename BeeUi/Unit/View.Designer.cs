@@ -50,15 +50,6 @@ namespace BeeUi
             this.polygonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMenu = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnMouseRight = new BeeInterface.RJButton();
-            this.btnClick = new BeeInterface.RJButton();
-            this.btnZoomOut = new BeeInterface.RJButton();
-            this.btnZoomIn = new BeeInterface.RJButton();
-            this.btnFull = new BeeInterface.RJButton();
-            this.btnPan = new BeeInterface.RJButton();
-            this.btnShowCenter = new BeeInterface.RJButton();
-            this.btnGird = new BeeInterface.RJButton();
-            this.btnShowArea = new BeeInterface.RJButton();
             this.pView = new System.Windows.Forms.Panel();
             this.workUndo = new System.ComponentModel.BackgroundWorker();
             this.tmTool = new System.Windows.Forms.Timer(this.components);
@@ -81,20 +72,29 @@ namespace BeeUi
             this.tmShow = new System.Windows.Forms.Timer(this.components);
             this.split5 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.Panel();
-            this.btnChangeImg = new BeeInterface.RJButton();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.split4 = new System.Windows.Forms.Splitter();
-            this.btnTypeTrig = new BeeInterface.RJButton();
             this.btnMenu = new System.Windows.Forms.Button();
             this.split3 = new System.Windows.Forms.Splitter();
-            this.btnLive = new BeeInterface.RJButton();
             this.split2 = new System.Windows.Forms.Splitter();
-            this.btnContinuous = new BeeInterface.RJButton();
             this.split1 = new System.Windows.Forms.Splitter();
-            this.btnCap = new BeeInterface.RJButton();
             this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
             this.workLiveWebcam = new System.ComponentModel.BackgroundWorker();
             this.tmKeys = new System.Windows.Forms.Timer(this.components);
+            this.btnMouseRight = new BeeInterface.RJButton();
+            this.btnClick = new BeeInterface.RJButton();
+            this.btnZoomOut = new BeeInterface.RJButton();
+            this.btnZoomIn = new BeeInterface.RJButton();
+            this.btnFull = new BeeInterface.RJButton();
+            this.btnPan = new BeeInterface.RJButton();
+            this.btnShowCenter = new BeeInterface.RJButton();
+            this.btnGird = new BeeInterface.RJButton();
+            this.btnShowArea = new BeeInterface.RJButton();
+            this.btnChangeImg = new BeeInterface.RJButton();
+            this.btnTypeTrig = new BeeInterface.RJButton();
+            this.btnLive = new BeeInterface.RJButton();
+            this.btnContinuous = new BeeInterface.RJButton();
+            this.btnCap = new BeeInterface.RJButton();
             this.contextMenu.SuspendLayout();
             this.pMenu.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -281,478 +281,6 @@ namespace BeeUi
             this.tableLayoutPanel1.Size = new System.Drawing.Size(65, 470);
             this.tableLayoutPanel1.TabIndex = 37;
             // 
-            // btnMouseRight
-            // 
-            this.btnMouseRight.AutoFont = false;
-            this.btnMouseRight.AutoFontHeightRatio = 0.75F;
-            this.btnMouseRight.AutoFontMax = 100F;
-            this.btnMouseRight.AutoFontMin = 6F;
-            this.btnMouseRight.AutoFontWidthRatio = 0.92F;
-            this.btnMouseRight.AutoImage = true;
-            this.btnMouseRight.AutoImageMaxRatio = 0.75F;
-            this.btnMouseRight.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnMouseRight.AutoImageTint = true;
-            this.btnMouseRight.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnMouseRight.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnMouseRight.BorderColor = System.Drawing.Color.Gray;
-            this.btnMouseRight.BorderRadius = 0;
-            this.btnMouseRight.BorderSize = 0;
-            this.btnMouseRight.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnMouseRight.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnMouseRight.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnMouseRight.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnMouseRight.Corner = BeeGlobal.Corner.Both;
-            this.btnMouseRight.DebounceResizeMs = 16;
-            this.btnMouseRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMouseRight.FlatAppearance.BorderSize = 0;
-            this.btnMouseRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMouseRight.ForeColor = System.Drawing.Color.White;
-            this.btnMouseRight.Image = global::BeeUi.Properties.Resources.Menubar_1;
-            this.btnMouseRight.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMouseRight.ImageDisabled = null;
-            this.btnMouseRight.ImageHover = null;
-            this.btnMouseRight.ImageNormal = null;
-            this.btnMouseRight.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnMouseRight.ImagePressed = null;
-            this.btnMouseRight.ImageTextSpacing = 6;
-            this.btnMouseRight.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnMouseRight.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnMouseRight.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnMouseRight.ImageTintOpacity = 0.5F;
-            this.btnMouseRight.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnMouseRight.IsCLick = false;
-            this.btnMouseRight.IsNotChange = false;
-            this.btnMouseRight.IsRect = false;
-            this.btnMouseRight.IsUnGroup = true;
-            this.btnMouseRight.Location = new System.Drawing.Point(3, 171);
-            this.btnMouseRight.Multiline = false;
-            this.btnMouseRight.Name = "btnMouseRight";
-            this.btnMouseRight.Size = new System.Drawing.Size(59, 50);
-            this.btnMouseRight.TabIndex = 45;
-            this.btnMouseRight.TextColor = System.Drawing.Color.White;
-            this.btnMouseRight.UseVisualStyleBackColor = false;
-            this.btnMouseRight.Click += new System.EventHandler(this.btnMouseRight_Click);
-            // 
-            // btnClick
-            // 
-            this.btnClick.AutoFont = false;
-            this.btnClick.AutoFontHeightRatio = 0.75F;
-            this.btnClick.AutoFontMax = 100F;
-            this.btnClick.AutoFontMin = 6F;
-            this.btnClick.AutoFontWidthRatio = 0.92F;
-            this.btnClick.AutoImage = true;
-            this.btnClick.AutoImageMaxRatio = 0.75F;
-            this.btnClick.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnClick.AutoImageTint = true;
-            this.btnClick.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnClick.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnClick.BorderColor = System.Drawing.Color.Gray;
-            this.btnClick.BorderRadius = 0;
-            this.btnClick.BorderSize = 0;
-            this.btnClick.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnClick.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnClick.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnClick.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnClick.Corner = BeeGlobal.Corner.Both;
-            this.btnClick.DebounceResizeMs = 16;
-            this.btnClick.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnClick.FlatAppearance.BorderSize = 0;
-            this.btnClick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClick.ForeColor = System.Drawing.Color.White;
-            this.btnClick.Image = global::BeeUi.Properties.Resources.Cursor;
-            this.btnClick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClick.ImageDisabled = null;
-            this.btnClick.ImageHover = null;
-            this.btnClick.ImageNormal = null;
-            this.btnClick.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnClick.ImagePressed = null;
-            this.btnClick.ImageTextSpacing = 6;
-            this.btnClick.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnClick.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnClick.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnClick.ImageTintOpacity = 0.5F;
-            this.btnClick.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnClick.IsCLick = false;
-            this.btnClick.IsNotChange = false;
-            this.btnClick.IsRect = false;
-            this.btnClick.IsUnGroup = true;
-            this.btnClick.Location = new System.Drawing.Point(3, 227);
-            this.btnClick.Multiline = false;
-            this.btnClick.Name = "btnClick";
-            this.btnClick.Size = new System.Drawing.Size(59, 50);
-            this.btnClick.TabIndex = 44;
-            this.btnClick.TextColor = System.Drawing.Color.White;
-            this.btnClick.UseVisualStyleBackColor = false;
-            this.btnClick.Click += new System.EventHandler(this.btnClick_Click);
-            // 
-            // btnZoomOut
-            // 
-            this.btnZoomOut.AutoFont = false;
-            this.btnZoomOut.AutoFontHeightRatio = 0.75F;
-            this.btnZoomOut.AutoFontMax = 100F;
-            this.btnZoomOut.AutoFontMin = 6F;
-            this.btnZoomOut.AutoFontWidthRatio = 0.92F;
-            this.btnZoomOut.AutoImage = true;
-            this.btnZoomOut.AutoImageMaxRatio = 0.75F;
-            this.btnZoomOut.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnZoomOut.AutoImageTint = true;
-            this.btnZoomOut.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnZoomOut.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnZoomOut.BorderColor = System.Drawing.Color.Gray;
-            this.btnZoomOut.BorderRadius = 0;
-            this.btnZoomOut.BorderSize = 0;
-            this.btnZoomOut.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnZoomOut.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnZoomOut.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnZoomOut.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnZoomOut.Corner = BeeGlobal.Corner.Both;
-            this.btnZoomOut.DebounceResizeMs = 16;
-            this.btnZoomOut.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnZoomOut.FlatAppearance.BorderSize = 0;
-            this.btnZoomOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnZoomOut.ForeColor = System.Drawing.Color.White;
-            this.btnZoomOut.Image = global::BeeUi.Properties.Resources.Zoom_Out;
-            this.btnZoomOut.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnZoomOut.ImageDisabled = null;
-            this.btnZoomOut.ImageHover = null;
-            this.btnZoomOut.ImageNormal = null;
-            this.btnZoomOut.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnZoomOut.ImagePressed = null;
-            this.btnZoomOut.ImageTextSpacing = 6;
-            this.btnZoomOut.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnZoomOut.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnZoomOut.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnZoomOut.ImageTintOpacity = 0.5F;
-            this.btnZoomOut.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnZoomOut.IsCLick = false;
-            this.btnZoomOut.IsNotChange = true;
-            this.btnZoomOut.IsRect = false;
-            this.btnZoomOut.IsUnGroup = true;
-            this.btnZoomOut.Location = new System.Drawing.Point(3, 115);
-            this.btnZoomOut.Multiline = false;
-            this.btnZoomOut.Name = "btnZoomOut";
-            this.btnZoomOut.Size = new System.Drawing.Size(59, 50);
-            this.btnZoomOut.TabIndex = 39;
-            this.btnZoomOut.TextColor = System.Drawing.Color.White;
-            this.btnZoomOut.UseVisualStyleBackColor = false;
-            this.btnZoomOut.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnZoomOut_MouseDown);
-            this.btnZoomOut.MouseLeave += new System.EventHandler(this.btnZoomOut_MouseLeave);
-            this.btnZoomOut.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnZoomOut_MouseUp);
-            // 
-            // btnZoomIn
-            // 
-            this.btnZoomIn.AutoFont = false;
-            this.btnZoomIn.AutoFontHeightRatio = 0.75F;
-            this.btnZoomIn.AutoFontMax = 100F;
-            this.btnZoomIn.AutoFontMin = 6F;
-            this.btnZoomIn.AutoFontWidthRatio = 0.92F;
-            this.btnZoomIn.AutoImage = true;
-            this.btnZoomIn.AutoImageMaxRatio = 0.75F;
-            this.btnZoomIn.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnZoomIn.AutoImageTint = true;
-            this.btnZoomIn.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnZoomIn.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnZoomIn.BorderColor = System.Drawing.Color.Gray;
-            this.btnZoomIn.BorderRadius = 0;
-            this.btnZoomIn.BorderSize = 0;
-            this.btnZoomIn.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnZoomIn.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnZoomIn.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnZoomIn.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnZoomIn.Corner = BeeGlobal.Corner.Both;
-            this.btnZoomIn.DebounceResizeMs = 16;
-            this.btnZoomIn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnZoomIn.FlatAppearance.BorderSize = 0;
-            this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnZoomIn.ForeColor = System.Drawing.Color.White;
-            this.btnZoomIn.Image = global::BeeUi.Properties.Resources.Zoom_In;
-            this.btnZoomIn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnZoomIn.ImageDisabled = null;
-            this.btnZoomIn.ImageHover = null;
-            this.btnZoomIn.ImageNormal = null;
-            this.btnZoomIn.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnZoomIn.ImagePressed = null;
-            this.btnZoomIn.ImageTextSpacing = 6;
-            this.btnZoomIn.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnZoomIn.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnZoomIn.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnZoomIn.ImageTintOpacity = 0.5F;
-            this.btnZoomIn.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnZoomIn.IsCLick = false;
-            this.btnZoomIn.IsNotChange = true;
-            this.btnZoomIn.IsRect = false;
-            this.btnZoomIn.IsUnGroup = true;
-            this.btnZoomIn.Location = new System.Drawing.Point(3, 59);
-            this.btnZoomIn.Multiline = false;
-            this.btnZoomIn.Name = "btnZoomIn";
-            this.btnZoomIn.Size = new System.Drawing.Size(59, 50);
-            this.btnZoomIn.TabIndex = 38;
-            this.btnZoomIn.TextColor = System.Drawing.Color.White;
-            this.btnZoomIn.UseVisualStyleBackColor = false;
-            this.btnZoomIn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnZoomIn_MouseDown);
-            this.btnZoomIn.MouseLeave += new System.EventHandler(this.btnZoomIn_MouseLeave);
-            this.btnZoomIn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnZoomIn_MouseUp);
-            // 
-            // btnFull
-            // 
-            this.btnFull.AutoFont = false;
-            this.btnFull.AutoFontHeightRatio = 0.75F;
-            this.btnFull.AutoFontMax = 100F;
-            this.btnFull.AutoFontMin = 6F;
-            this.btnFull.AutoFontWidthRatio = 0.92F;
-            this.btnFull.AutoImage = true;
-            this.btnFull.AutoImageMaxRatio = 0.75F;
-            this.btnFull.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnFull.AutoImageTint = true;
-            this.btnFull.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnFull.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnFull.BorderColor = System.Drawing.Color.Gray;
-            this.btnFull.BorderRadius = 0;
-            this.btnFull.BorderSize = 0;
-            this.btnFull.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnFull.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnFull.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnFull.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnFull.Corner = BeeGlobal.Corner.Both;
-            this.btnFull.DebounceResizeMs = 16;
-            this.btnFull.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFull.FlatAppearance.BorderSize = 0;
-            this.btnFull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFull.ForeColor = System.Drawing.Color.White;
-            this.btnFull.Image = global::BeeUi.Properties.Resources.Full_Screen;
-            this.btnFull.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnFull.ImageDisabled = null;
-            this.btnFull.ImageHover = null;
-            this.btnFull.ImageNormal = null;
-            this.btnFull.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnFull.ImagePressed = null;
-            this.btnFull.ImageTextSpacing = 6;
-            this.btnFull.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnFull.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnFull.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnFull.ImageTintOpacity = 0.5F;
-            this.btnFull.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnFull.IsCLick = false;
-            this.btnFull.IsNotChange = true;
-            this.btnFull.IsRect = false;
-            this.btnFull.IsUnGroup = true;
-            this.btnFull.Location = new System.Drawing.Point(3, 3);
-            this.btnFull.Multiline = false;
-            this.btnFull.Name = "btnFull";
-            this.btnFull.Size = new System.Drawing.Size(59, 50);
-            this.btnFull.TabIndex = 37;
-            this.btnFull.TextColor = System.Drawing.Color.White;
-            this.btnFull.UseVisualStyleBackColor = false;
-            this.btnFull.Click += new System.EventHandler(this.btnFull_Click);
-            // 
-            // btnPan
-            // 
-            this.btnPan.AutoFont = false;
-            this.btnPan.AutoFontHeightRatio = 0.75F;
-            this.btnPan.AutoFontMax = 100F;
-            this.btnPan.AutoFontMin = 6F;
-            this.btnPan.AutoFontWidthRatio = 0.92F;
-            this.btnPan.AutoImage = true;
-            this.btnPan.AutoImageMaxRatio = 0.75F;
-            this.btnPan.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnPan.AutoImageTint = true;
-            this.btnPan.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnPan.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnPan.BorderColor = System.Drawing.Color.Gray;
-            this.btnPan.BorderRadius = 0;
-            this.btnPan.BorderSize = 0;
-            this.btnPan.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnPan.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnPan.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnPan.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnPan.Corner = BeeGlobal.Corner.Both;
-            this.btnPan.DebounceResizeMs = 16;
-            this.btnPan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnPan.FlatAppearance.BorderSize = 0;
-            this.btnPan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPan.ForeColor = System.Drawing.Color.White;
-            this.btnPan.Image = global::BeeUi.Properties.Resources.Hand;
-            this.btnPan.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnPan.ImageDisabled = null;
-            this.btnPan.ImageHover = null;
-            this.btnPan.ImageNormal = null;
-            this.btnPan.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnPan.ImagePressed = null;
-            this.btnPan.ImageTextSpacing = 6;
-            this.btnPan.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnPan.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnPan.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnPan.ImageTintOpacity = 0.5F;
-            this.btnPan.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnPan.IsCLick = true;
-            this.btnPan.IsNotChange = false;
-            this.btnPan.IsRect = false;
-            this.btnPan.IsUnGroup = true;
-            this.btnPan.Location = new System.Drawing.Point(3, 283);
-            this.btnPan.Multiline = false;
-            this.btnPan.Name = "btnPan";
-            this.btnPan.Size = new System.Drawing.Size(59, 50);
-            this.btnPan.TabIndex = 43;
-            this.btnPan.TextColor = System.Drawing.Color.White;
-            this.btnPan.UseVisualStyleBackColor = false;
-            this.btnPan.Click += new System.EventHandler(this.btnPan_Click);
-            // 
-            // btnShowCenter
-            // 
-            this.btnShowCenter.AutoFont = false;
-            this.btnShowCenter.AutoFontHeightRatio = 0.75F;
-            this.btnShowCenter.AutoFontMax = 100F;
-            this.btnShowCenter.AutoFontMin = 6F;
-            this.btnShowCenter.AutoFontWidthRatio = 0.92F;
-            this.btnShowCenter.AutoImage = true;
-            this.btnShowCenter.AutoImageMaxRatio = 0.75F;
-            this.btnShowCenter.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnShowCenter.AutoImageTint = true;
-            this.btnShowCenter.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnShowCenter.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnShowCenter.BorderColor = System.Drawing.Color.Gray;
-            this.btnShowCenter.BorderRadius = 0;
-            this.btnShowCenter.BorderSize = 0;
-            this.btnShowCenter.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnShowCenter.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnShowCenter.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnShowCenter.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnShowCenter.Corner = BeeGlobal.Corner.Both;
-            this.btnShowCenter.DebounceResizeMs = 16;
-            this.btnShowCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnShowCenter.FlatAppearance.BorderSize = 0;
-            this.btnShowCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowCenter.ForeColor = System.Drawing.Color.White;
-            this.btnShowCenter.Image = global::BeeUi.Properties.Resources.Center_of_Gravity_1;
-            this.btnShowCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShowCenter.ImageDisabled = null;
-            this.btnShowCenter.ImageHover = null;
-            this.btnShowCenter.ImageNormal = null;
-            this.btnShowCenter.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnShowCenter.ImagePressed = null;
-            this.btnShowCenter.ImageTextSpacing = 6;
-            this.btnShowCenter.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnShowCenter.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnShowCenter.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnShowCenter.ImageTintOpacity = 0.5F;
-            this.btnShowCenter.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnShowCenter.IsCLick = false;
-            this.btnShowCenter.IsNotChange = false;
-            this.btnShowCenter.IsRect = false;
-            this.btnShowCenter.IsUnGroup = true;
-            this.btnShowCenter.Location = new System.Drawing.Point(3, 339);
-            this.btnShowCenter.Multiline = false;
-            this.btnShowCenter.Name = "btnShowCenter";
-            this.btnShowCenter.Size = new System.Drawing.Size(59, 50);
-            this.btnShowCenter.TabIndex = 40;
-            this.btnShowCenter.TextColor = System.Drawing.Color.White;
-            this.btnShowCenter.UseVisualStyleBackColor = false;
-            this.btnShowCenter.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // btnGird
-            // 
-            this.btnGird.AutoFont = false;
-            this.btnGird.AutoFontHeightRatio = 0.75F;
-            this.btnGird.AutoFontMax = 100F;
-            this.btnGird.AutoFontMin = 6F;
-            this.btnGird.AutoFontWidthRatio = 0.92F;
-            this.btnGird.AutoImage = true;
-            this.btnGird.AutoImageMaxRatio = 0.75F;
-            this.btnGird.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnGird.AutoImageTint = true;
-            this.btnGird.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnGird.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnGird.BorderColor = System.Drawing.Color.Gray;
-            this.btnGird.BorderRadius = 0;
-            this.btnGird.BorderSize = 0;
-            this.btnGird.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnGird.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnGird.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnGird.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnGird.Corner = BeeGlobal.Corner.Both;
-            this.btnGird.DebounceResizeMs = 16;
-            this.btnGird.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGird.FlatAppearance.BorderSize = 0;
-            this.btnGird.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGird.ForeColor = System.Drawing.Color.White;
-            this.btnGird.Image = global::BeeUi.Properties.Resources.Prison_1;
-            this.btnGird.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGird.ImageDisabled = null;
-            this.btnGird.ImageHover = null;
-            this.btnGird.ImageNormal = null;
-            this.btnGird.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnGird.ImagePressed = null;
-            this.btnGird.ImageTextSpacing = 6;
-            this.btnGird.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnGird.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnGird.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnGird.ImageTintOpacity = 0.5F;
-            this.btnGird.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnGird.IsCLick = false;
-            this.btnGird.IsNotChange = false;
-            this.btnGird.IsRect = false;
-            this.btnGird.IsUnGroup = true;
-            this.btnGird.Location = new System.Drawing.Point(3, 395);
-            this.btnGird.Multiline = false;
-            this.btnGird.Name = "btnGird";
-            this.btnGird.Size = new System.Drawing.Size(59, 50);
-            this.btnGird.TabIndex = 41;
-            this.btnGird.TextColor = System.Drawing.Color.White;
-            this.btnGird.UseVisualStyleBackColor = false;
-            this.btnGird.Click += new System.EventHandler(this.btnGird_Click_1);
-            // 
-            // btnShowArea
-            // 
-            this.btnShowArea.AutoFont = false;
-            this.btnShowArea.AutoFontHeightRatio = 0.75F;
-            this.btnShowArea.AutoFontMax = 100F;
-            this.btnShowArea.AutoFontMin = 6F;
-            this.btnShowArea.AutoFontWidthRatio = 0.92F;
-            this.btnShowArea.AutoImage = true;
-            this.btnShowArea.AutoImageMaxRatio = 0.75F;
-            this.btnShowArea.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnShowArea.AutoImageTint = true;
-            this.btnShowArea.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btnShowArea.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            this.btnShowArea.BorderColor = System.Drawing.Color.Gray;
-            this.btnShowArea.BorderRadius = 0;
-            this.btnShowArea.BorderSize = 0;
-            this.btnShowArea.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnShowArea.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnShowArea.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnShowArea.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnShowArea.Corner = BeeGlobal.Corner.Both;
-            this.btnShowArea.DebounceResizeMs = 16;
-            this.btnShowArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnShowArea.FlatAppearance.BorderSize = 0;
-            this.btnShowArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowArea.ForeColor = System.Drawing.Color.White;
-            this.btnShowArea.Image = global::BeeUi.Properties.Resources.Rectangular_1;
-            this.btnShowArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShowArea.ImageDisabled = null;
-            this.btnShowArea.ImageHover = null;
-            this.btnShowArea.ImageNormal = null;
-            this.btnShowArea.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnShowArea.ImagePressed = null;
-            this.btnShowArea.ImageTextSpacing = 6;
-            this.btnShowArea.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnShowArea.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnShowArea.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnShowArea.ImageTintOpacity = 0.5F;
-            this.btnShowArea.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnShowArea.IsCLick = false;
-            this.btnShowArea.IsNotChange = false;
-            this.btnShowArea.IsRect = false;
-            this.btnShowArea.IsUnGroup = true;
-            this.btnShowArea.Location = new System.Drawing.Point(3, 451);
-            this.btnShowArea.Multiline = false;
-            this.btnShowArea.Name = "btnShowArea";
-            this.btnShowArea.Size = new System.Drawing.Size(59, 50);
-            this.btnShowArea.TabIndex = 42;
-            this.btnShowArea.TextColor = System.Drawing.Color.White;
-            this.btnShowArea.UseVisualStyleBackColor = false;
-            this.btnShowArea.Click += new System.EventHandler(this.btnShowArea_Click);
-            // 
             // pView
             // 
             this.pView.AutoScroll = true;
@@ -875,6 +403,569 @@ namespace BeeUi
             this.pBtn.SizeChanged += new System.EventHandler(this.pBtn_SizeChanged);
             this.pBtn.Paint += new System.Windows.Forms.PaintEventHandler(this.pBtn_Paint_1);
             // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(1419, 5);
+            this.splitter1.MinExtra = 1;
+            this.splitter1.MinSize = 10;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(10, 47);
+            this.splitter1.TabIndex = 41;
+            this.splitter1.TabStop = false;
+            // 
+            // split4
+            // 
+            this.split4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.split4.Location = new System.Drawing.Point(399, 5);
+            this.split4.MinExtra = 1;
+            this.split4.MinSize = 10;
+            this.split4.Name = "split4";
+            this.split4.Size = new System.Drawing.Size(10, 47);
+            this.split4.TabIndex = 40;
+            this.split4.TabStop = false;
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenu.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
+            this.btnMenu.Image = global::BeeUi.Properties.Resources.Menu;
+            this.btnMenu.Location = new System.Drawing.Point(1429, 5);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(60, 47);
+            this.btnMenu.TabIndex = 38;
+            this.btnMenu.UseVisualStyleBackColor = false;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
+            // 
+            // split3
+            // 
+            this.split3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.split3.Location = new System.Drawing.Point(291, 5);
+            this.split3.MinExtra = 1;
+            this.split3.MinSize = 10;
+            this.split3.Name = "split3";
+            this.split3.Size = new System.Drawing.Size(5, 47);
+            this.split3.TabIndex = 12;
+            this.split3.TabStop = false;
+            // 
+            // split2
+            // 
+            this.split2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.split2.Location = new System.Drawing.Point(176, 5);
+            this.split2.MinExtra = 1;
+            this.split2.MinSize = 10;
+            this.split2.Name = "split2";
+            this.split2.Size = new System.Drawing.Size(5, 47);
+            this.split2.TabIndex = 11;
+            this.split2.TabStop = false;
+            // 
+            // split1
+            // 
+            this.split1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
+            this.split1.Location = new System.Drawing.Point(80, 5);
+            this.split1.MinExtra = 1;
+            this.split1.MinSize = 10;
+            this.split1.Name = "split1";
+            this.split1.Size = new System.Drawing.Size(5, 47);
+            this.split1.TabIndex = 10;
+            this.split1.TabStop = false;
+            // 
+            // tmEnableControl
+            // 
+            this.tmEnableControl.Interval = 200;
+            this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
+            // 
+            // workLiveWebcam
+            // 
+            this.workLiveWebcam.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLiveWebcam_RunWorkerCompleted);
+            // 
+            // tmKeys
+            // 
+            this.tmKeys.Interval = 300;
+            // 
+            // btnMouseRight
+            // 
+            this.btnMouseRight.AutoFont = false;
+            this.btnMouseRight.AutoFontHeightRatio = 0.75F;
+            this.btnMouseRight.AutoFontMax = 100F;
+            this.btnMouseRight.AutoFontMin = 6F;
+            this.btnMouseRight.AutoFontWidthRatio = 0.92F;
+            this.btnMouseRight.AutoImage = true;
+            this.btnMouseRight.AutoImageMaxRatio = 0.75F;
+            this.btnMouseRight.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnMouseRight.AutoImageTint = true;
+            this.btnMouseRight.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnMouseRight.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnMouseRight.BorderColor = System.Drawing.Color.Gray;
+            this.btnMouseRight.BorderRadius = 0;
+            this.btnMouseRight.BorderSize = 0;
+            this.btnMouseRight.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnMouseRight.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnMouseRight.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnMouseRight.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnMouseRight.Corner = BeeGlobal.Corner.Both;
+            this.btnMouseRight.DebounceResizeMs = 16;
+            this.btnMouseRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMouseRight.FlatAppearance.BorderSize = 0;
+            this.btnMouseRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMouseRight.ForeColor = System.Drawing.Color.White;
+            this.btnMouseRight.Image = global::BeeUi.Properties.Resources.Menubar_1;
+            this.btnMouseRight.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMouseRight.ImageDisabled = null;
+            this.btnMouseRight.ImageHover = null;
+            this.btnMouseRight.ImageNormal = null;
+            this.btnMouseRight.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnMouseRight.ImagePressed = null;
+            this.btnMouseRight.ImageTextSpacing = 6;
+            this.btnMouseRight.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnMouseRight.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnMouseRight.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnMouseRight.ImageTintOpacity = 0.5F;
+            this.btnMouseRight.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnMouseRight.IsCLick = false;
+            this.btnMouseRight.IsNotChange = false;
+            this.btnMouseRight.IsRect = false;
+            this.btnMouseRight.IsTouch = false;
+            this.btnMouseRight.IsUnGroup = true;
+            this.btnMouseRight.Location = new System.Drawing.Point(3, 171);
+            this.btnMouseRight.Multiline = false;
+            this.btnMouseRight.Name = "btnMouseRight";
+            this.btnMouseRight.Size = new System.Drawing.Size(59, 50);
+            this.btnMouseRight.TabIndex = 45;
+            this.btnMouseRight.TextColor = System.Drawing.Color.White;
+            this.btnMouseRight.UseVisualStyleBackColor = false;
+            this.btnMouseRight.Click += new System.EventHandler(this.btnMouseRight_Click);
+            // 
+            // btnClick
+            // 
+            this.btnClick.AutoFont = false;
+            this.btnClick.AutoFontHeightRatio = 0.75F;
+            this.btnClick.AutoFontMax = 100F;
+            this.btnClick.AutoFontMin = 6F;
+            this.btnClick.AutoFontWidthRatio = 0.92F;
+            this.btnClick.AutoImage = true;
+            this.btnClick.AutoImageMaxRatio = 0.75F;
+            this.btnClick.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnClick.AutoImageTint = true;
+            this.btnClick.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnClick.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnClick.BorderColor = System.Drawing.Color.Gray;
+            this.btnClick.BorderRadius = 0;
+            this.btnClick.BorderSize = 0;
+            this.btnClick.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnClick.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnClick.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnClick.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnClick.Corner = BeeGlobal.Corner.Both;
+            this.btnClick.DebounceResizeMs = 16;
+            this.btnClick.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnClick.FlatAppearance.BorderSize = 0;
+            this.btnClick.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClick.ForeColor = System.Drawing.Color.White;
+            this.btnClick.Image = global::BeeUi.Properties.Resources.Cursor;
+            this.btnClick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClick.ImageDisabled = null;
+            this.btnClick.ImageHover = null;
+            this.btnClick.ImageNormal = null;
+            this.btnClick.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnClick.ImagePressed = null;
+            this.btnClick.ImageTextSpacing = 6;
+            this.btnClick.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnClick.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnClick.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnClick.ImageTintOpacity = 0.5F;
+            this.btnClick.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnClick.IsCLick = false;
+            this.btnClick.IsNotChange = false;
+            this.btnClick.IsRect = false;
+            this.btnClick.IsTouch = false;
+            this.btnClick.IsUnGroup = true;
+            this.btnClick.Location = new System.Drawing.Point(3, 227);
+            this.btnClick.Multiline = false;
+            this.btnClick.Name = "btnClick";
+            this.btnClick.Size = new System.Drawing.Size(59, 50);
+            this.btnClick.TabIndex = 44;
+            this.btnClick.TextColor = System.Drawing.Color.White;
+            this.btnClick.UseVisualStyleBackColor = false;
+            this.btnClick.Click += new System.EventHandler(this.btnClick_Click);
+            // 
+            // btnZoomOut
+            // 
+            this.btnZoomOut.AutoFont = false;
+            this.btnZoomOut.AutoFontHeightRatio = 0.75F;
+            this.btnZoomOut.AutoFontMax = 100F;
+            this.btnZoomOut.AutoFontMin = 6F;
+            this.btnZoomOut.AutoFontWidthRatio = 0.92F;
+            this.btnZoomOut.AutoImage = true;
+            this.btnZoomOut.AutoImageMaxRatio = 0.75F;
+            this.btnZoomOut.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnZoomOut.AutoImageTint = true;
+            this.btnZoomOut.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnZoomOut.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnZoomOut.BorderColor = System.Drawing.Color.Gray;
+            this.btnZoomOut.BorderRadius = 0;
+            this.btnZoomOut.BorderSize = 0;
+            this.btnZoomOut.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnZoomOut.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnZoomOut.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnZoomOut.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnZoomOut.Corner = BeeGlobal.Corner.Both;
+            this.btnZoomOut.DebounceResizeMs = 16;
+            this.btnZoomOut.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnZoomOut.FlatAppearance.BorderSize = 0;
+            this.btnZoomOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnZoomOut.ForeColor = System.Drawing.Color.White;
+            this.btnZoomOut.Image = global::BeeUi.Properties.Resources.Zoom_Out;
+            this.btnZoomOut.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnZoomOut.ImageDisabled = null;
+            this.btnZoomOut.ImageHover = null;
+            this.btnZoomOut.ImageNormal = null;
+            this.btnZoomOut.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnZoomOut.ImagePressed = null;
+            this.btnZoomOut.ImageTextSpacing = 6;
+            this.btnZoomOut.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnZoomOut.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnZoomOut.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnZoomOut.ImageTintOpacity = 0.5F;
+            this.btnZoomOut.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnZoomOut.IsCLick = false;
+            this.btnZoomOut.IsNotChange = true;
+            this.btnZoomOut.IsRect = false;
+            this.btnZoomOut.IsTouch = false;
+            this.btnZoomOut.IsUnGroup = true;
+            this.btnZoomOut.Location = new System.Drawing.Point(3, 115);
+            this.btnZoomOut.Multiline = false;
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(59, 50);
+            this.btnZoomOut.TabIndex = 39;
+            this.btnZoomOut.TextColor = System.Drawing.Color.White;
+            this.btnZoomOut.UseVisualStyleBackColor = false;
+            this.btnZoomOut.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnZoomOut_MouseDown);
+            this.btnZoomOut.MouseLeave += new System.EventHandler(this.btnZoomOut_MouseLeave);
+            this.btnZoomOut.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnZoomOut_MouseUp);
+            // 
+            // btnZoomIn
+            // 
+            this.btnZoomIn.AutoFont = false;
+            this.btnZoomIn.AutoFontHeightRatio = 0.75F;
+            this.btnZoomIn.AutoFontMax = 100F;
+            this.btnZoomIn.AutoFontMin = 6F;
+            this.btnZoomIn.AutoFontWidthRatio = 0.92F;
+            this.btnZoomIn.AutoImage = true;
+            this.btnZoomIn.AutoImageMaxRatio = 0.75F;
+            this.btnZoomIn.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnZoomIn.AutoImageTint = true;
+            this.btnZoomIn.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnZoomIn.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnZoomIn.BorderColor = System.Drawing.Color.Gray;
+            this.btnZoomIn.BorderRadius = 0;
+            this.btnZoomIn.BorderSize = 0;
+            this.btnZoomIn.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnZoomIn.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnZoomIn.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnZoomIn.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnZoomIn.Corner = BeeGlobal.Corner.Both;
+            this.btnZoomIn.DebounceResizeMs = 16;
+            this.btnZoomIn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnZoomIn.FlatAppearance.BorderSize = 0;
+            this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnZoomIn.ForeColor = System.Drawing.Color.White;
+            this.btnZoomIn.Image = global::BeeUi.Properties.Resources.Zoom_In;
+            this.btnZoomIn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnZoomIn.ImageDisabled = null;
+            this.btnZoomIn.ImageHover = null;
+            this.btnZoomIn.ImageNormal = null;
+            this.btnZoomIn.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnZoomIn.ImagePressed = null;
+            this.btnZoomIn.ImageTextSpacing = 6;
+            this.btnZoomIn.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnZoomIn.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnZoomIn.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnZoomIn.ImageTintOpacity = 0.5F;
+            this.btnZoomIn.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnZoomIn.IsCLick = false;
+            this.btnZoomIn.IsNotChange = true;
+            this.btnZoomIn.IsRect = false;
+            this.btnZoomIn.IsTouch = false;
+            this.btnZoomIn.IsUnGroup = true;
+            this.btnZoomIn.Location = new System.Drawing.Point(3, 59);
+            this.btnZoomIn.Multiline = false;
+            this.btnZoomIn.Name = "btnZoomIn";
+            this.btnZoomIn.Size = new System.Drawing.Size(59, 50);
+            this.btnZoomIn.TabIndex = 38;
+            this.btnZoomIn.TextColor = System.Drawing.Color.White;
+            this.btnZoomIn.UseVisualStyleBackColor = false;
+            this.btnZoomIn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnZoomIn_MouseDown);
+            this.btnZoomIn.MouseLeave += new System.EventHandler(this.btnZoomIn_MouseLeave);
+            this.btnZoomIn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnZoomIn_MouseUp);
+            // 
+            // btnFull
+            // 
+            this.btnFull.AutoFont = false;
+            this.btnFull.AutoFontHeightRatio = 0.75F;
+            this.btnFull.AutoFontMax = 100F;
+            this.btnFull.AutoFontMin = 6F;
+            this.btnFull.AutoFontWidthRatio = 0.92F;
+            this.btnFull.AutoImage = true;
+            this.btnFull.AutoImageMaxRatio = 0.75F;
+            this.btnFull.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnFull.AutoImageTint = true;
+            this.btnFull.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnFull.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnFull.BorderColor = System.Drawing.Color.Gray;
+            this.btnFull.BorderRadius = 0;
+            this.btnFull.BorderSize = 0;
+            this.btnFull.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnFull.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnFull.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnFull.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnFull.Corner = BeeGlobal.Corner.Both;
+            this.btnFull.DebounceResizeMs = 16;
+            this.btnFull.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFull.FlatAppearance.BorderSize = 0;
+            this.btnFull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFull.ForeColor = System.Drawing.Color.White;
+            this.btnFull.Image = global::BeeUi.Properties.Resources.Full_Screen;
+            this.btnFull.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFull.ImageDisabled = null;
+            this.btnFull.ImageHover = null;
+            this.btnFull.ImageNormal = null;
+            this.btnFull.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnFull.ImagePressed = null;
+            this.btnFull.ImageTextSpacing = 6;
+            this.btnFull.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnFull.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnFull.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnFull.ImageTintOpacity = 0.5F;
+            this.btnFull.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnFull.IsCLick = false;
+            this.btnFull.IsNotChange = true;
+            this.btnFull.IsRect = false;
+            this.btnFull.IsTouch = false;
+            this.btnFull.IsUnGroup = true;
+            this.btnFull.Location = new System.Drawing.Point(3, 3);
+            this.btnFull.Multiline = false;
+            this.btnFull.Name = "btnFull";
+            this.btnFull.Size = new System.Drawing.Size(59, 50);
+            this.btnFull.TabIndex = 37;
+            this.btnFull.TextColor = System.Drawing.Color.White;
+            this.btnFull.UseVisualStyleBackColor = false;
+            this.btnFull.Click += new System.EventHandler(this.btnFull_Click);
+            // 
+            // btnPan
+            // 
+            this.btnPan.AutoFont = false;
+            this.btnPan.AutoFontHeightRatio = 0.75F;
+            this.btnPan.AutoFontMax = 100F;
+            this.btnPan.AutoFontMin = 6F;
+            this.btnPan.AutoFontWidthRatio = 0.92F;
+            this.btnPan.AutoImage = true;
+            this.btnPan.AutoImageMaxRatio = 0.75F;
+            this.btnPan.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnPan.AutoImageTint = true;
+            this.btnPan.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnPan.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnPan.BorderColor = System.Drawing.Color.Gray;
+            this.btnPan.BorderRadius = 0;
+            this.btnPan.BorderSize = 0;
+            this.btnPan.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnPan.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnPan.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnPan.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnPan.Corner = BeeGlobal.Corner.Both;
+            this.btnPan.DebounceResizeMs = 16;
+            this.btnPan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPan.FlatAppearance.BorderSize = 0;
+            this.btnPan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPan.ForeColor = System.Drawing.Color.White;
+            this.btnPan.Image = global::BeeUi.Properties.Resources.Hand;
+            this.btnPan.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnPan.ImageDisabled = null;
+            this.btnPan.ImageHover = null;
+            this.btnPan.ImageNormal = null;
+            this.btnPan.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnPan.ImagePressed = null;
+            this.btnPan.ImageTextSpacing = 6;
+            this.btnPan.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnPan.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnPan.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnPan.ImageTintOpacity = 0.5F;
+            this.btnPan.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnPan.IsCLick = true;
+            this.btnPan.IsNotChange = false;
+            this.btnPan.IsRect = false;
+            this.btnPan.IsTouch = false;
+            this.btnPan.IsUnGroup = true;
+            this.btnPan.Location = new System.Drawing.Point(3, 283);
+            this.btnPan.Multiline = false;
+            this.btnPan.Name = "btnPan";
+            this.btnPan.Size = new System.Drawing.Size(59, 50);
+            this.btnPan.TabIndex = 43;
+            this.btnPan.TextColor = System.Drawing.Color.White;
+            this.btnPan.UseVisualStyleBackColor = false;
+            this.btnPan.Click += new System.EventHandler(this.btnPan_Click);
+            // 
+            // btnShowCenter
+            // 
+            this.btnShowCenter.AutoFont = false;
+            this.btnShowCenter.AutoFontHeightRatio = 0.75F;
+            this.btnShowCenter.AutoFontMax = 100F;
+            this.btnShowCenter.AutoFontMin = 6F;
+            this.btnShowCenter.AutoFontWidthRatio = 0.92F;
+            this.btnShowCenter.AutoImage = true;
+            this.btnShowCenter.AutoImageMaxRatio = 0.75F;
+            this.btnShowCenter.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnShowCenter.AutoImageTint = true;
+            this.btnShowCenter.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnShowCenter.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnShowCenter.BorderColor = System.Drawing.Color.Gray;
+            this.btnShowCenter.BorderRadius = 0;
+            this.btnShowCenter.BorderSize = 0;
+            this.btnShowCenter.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowCenter.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowCenter.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnShowCenter.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnShowCenter.Corner = BeeGlobal.Corner.Both;
+            this.btnShowCenter.DebounceResizeMs = 16;
+            this.btnShowCenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnShowCenter.FlatAppearance.BorderSize = 0;
+            this.btnShowCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowCenter.ForeColor = System.Drawing.Color.White;
+            this.btnShowCenter.Image = global::BeeUi.Properties.Resources.Center_of_Gravity_1;
+            this.btnShowCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShowCenter.ImageDisabled = null;
+            this.btnShowCenter.ImageHover = null;
+            this.btnShowCenter.ImageNormal = null;
+            this.btnShowCenter.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnShowCenter.ImagePressed = null;
+            this.btnShowCenter.ImageTextSpacing = 6;
+            this.btnShowCenter.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnShowCenter.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnShowCenter.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnShowCenter.ImageTintOpacity = 0.5F;
+            this.btnShowCenter.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnShowCenter.IsCLick = false;
+            this.btnShowCenter.IsNotChange = false;
+            this.btnShowCenter.IsRect = false;
+            this.btnShowCenter.IsTouch = false;
+            this.btnShowCenter.IsUnGroup = true;
+            this.btnShowCenter.Location = new System.Drawing.Point(3, 339);
+            this.btnShowCenter.Multiline = false;
+            this.btnShowCenter.Name = "btnShowCenter";
+            this.btnShowCenter.Size = new System.Drawing.Size(59, 50);
+            this.btnShowCenter.TabIndex = 40;
+            this.btnShowCenter.TextColor = System.Drawing.Color.White;
+            this.btnShowCenter.UseVisualStyleBackColor = false;
+            this.btnShowCenter.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // btnGird
+            // 
+            this.btnGird.AutoFont = false;
+            this.btnGird.AutoFontHeightRatio = 0.75F;
+            this.btnGird.AutoFontMax = 100F;
+            this.btnGird.AutoFontMin = 6F;
+            this.btnGird.AutoFontWidthRatio = 0.92F;
+            this.btnGird.AutoImage = true;
+            this.btnGird.AutoImageMaxRatio = 0.75F;
+            this.btnGird.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnGird.AutoImageTint = true;
+            this.btnGird.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnGird.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnGird.BorderColor = System.Drawing.Color.Gray;
+            this.btnGird.BorderRadius = 0;
+            this.btnGird.BorderSize = 0;
+            this.btnGird.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnGird.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnGird.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnGird.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnGird.Corner = BeeGlobal.Corner.Both;
+            this.btnGird.DebounceResizeMs = 16;
+            this.btnGird.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnGird.FlatAppearance.BorderSize = 0;
+            this.btnGird.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGird.ForeColor = System.Drawing.Color.White;
+            this.btnGird.Image = global::BeeUi.Properties.Resources.Prison_1;
+            this.btnGird.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGird.ImageDisabled = null;
+            this.btnGird.ImageHover = null;
+            this.btnGird.ImageNormal = null;
+            this.btnGird.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnGird.ImagePressed = null;
+            this.btnGird.ImageTextSpacing = 6;
+            this.btnGird.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnGird.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnGird.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnGird.ImageTintOpacity = 0.5F;
+            this.btnGird.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnGird.IsCLick = false;
+            this.btnGird.IsNotChange = false;
+            this.btnGird.IsRect = false;
+            this.btnGird.IsTouch = false;
+            this.btnGird.IsUnGroup = true;
+            this.btnGird.Location = new System.Drawing.Point(3, 395);
+            this.btnGird.Multiline = false;
+            this.btnGird.Name = "btnGird";
+            this.btnGird.Size = new System.Drawing.Size(59, 50);
+            this.btnGird.TabIndex = 41;
+            this.btnGird.TextColor = System.Drawing.Color.White;
+            this.btnGird.UseVisualStyleBackColor = false;
+            this.btnGird.Click += new System.EventHandler(this.btnGird_Click_1);
+            // 
+            // btnShowArea
+            // 
+            this.btnShowArea.AutoFont = false;
+            this.btnShowArea.AutoFontHeightRatio = 0.75F;
+            this.btnShowArea.AutoFontMax = 100F;
+            this.btnShowArea.AutoFontMin = 6F;
+            this.btnShowArea.AutoFontWidthRatio = 0.92F;
+            this.btnShowArea.AutoImage = true;
+            this.btnShowArea.AutoImageMaxRatio = 0.75F;
+            this.btnShowArea.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnShowArea.AutoImageTint = true;
+            this.btnShowArea.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnShowArea.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnShowArea.BorderColor = System.Drawing.Color.Gray;
+            this.btnShowArea.BorderRadius = 0;
+            this.btnShowArea.BorderSize = 0;
+            this.btnShowArea.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowArea.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowArea.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnShowArea.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnShowArea.Corner = BeeGlobal.Corner.Both;
+            this.btnShowArea.DebounceResizeMs = 16;
+            this.btnShowArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnShowArea.FlatAppearance.BorderSize = 0;
+            this.btnShowArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowArea.ForeColor = System.Drawing.Color.White;
+            this.btnShowArea.Image = global::BeeUi.Properties.Resources.Rectangular_1;
+            this.btnShowArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShowArea.ImageDisabled = null;
+            this.btnShowArea.ImageHover = null;
+            this.btnShowArea.ImageNormal = null;
+            this.btnShowArea.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnShowArea.ImagePressed = null;
+            this.btnShowArea.ImageTextSpacing = 6;
+            this.btnShowArea.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnShowArea.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnShowArea.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnShowArea.ImageTintOpacity = 0.5F;
+            this.btnShowArea.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnShowArea.IsCLick = false;
+            this.btnShowArea.IsNotChange = false;
+            this.btnShowArea.IsRect = false;
+            this.btnShowArea.IsTouch = false;
+            this.btnShowArea.IsUnGroup = true;
+            this.btnShowArea.Location = new System.Drawing.Point(3, 451);
+            this.btnShowArea.Multiline = false;
+            this.btnShowArea.Name = "btnShowArea";
+            this.btnShowArea.Size = new System.Drawing.Size(59, 50);
+            this.btnShowArea.TabIndex = 42;
+            this.btnShowArea.TextColor = System.Drawing.Color.White;
+            this.btnShowArea.UseVisualStyleBackColor = false;
+            this.btnShowArea.Click += new System.EventHandler(this.btnShowArea_Click);
+            // 
             // btnChangeImg
             // 
             this.btnChangeImg.AutoFont = true;
@@ -916,8 +1007,9 @@ namespace BeeUi
             this.btnChangeImg.ImageTintOpacity = 0.5F;
             this.btnChangeImg.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnChangeImg.IsCLick = false;
-            this.btnChangeImg.IsNotChange = true;
+            this.btnChangeImg.IsNotChange = false;
             this.btnChangeImg.IsRect = false;
+            this.btnChangeImg.IsTouch = false;
             this.btnChangeImg.IsUnGroup = true;
             this.btnChangeImg.Location = new System.Drawing.Point(1297, 5);
             this.btnChangeImg.Margin = new System.Windows.Forms.Padding(5);
@@ -931,29 +1023,6 @@ namespace BeeUi
             this.btnChangeImg.UseVisualStyleBackColor = false;
             this.btnChangeImg.Visible = false;
             this.btnChangeImg.Click += new System.EventHandler(this.btnChangeImg_Click);
-            // 
-            // splitter1
-            // 
-            this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(1419, 5);
-            this.splitter1.MinExtra = 1;
-            this.splitter1.MinSize = 10;
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(10, 47);
-            this.splitter1.TabIndex = 41;
-            this.splitter1.TabStop = false;
-            // 
-            // split4
-            // 
-            this.split4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.split4.Location = new System.Drawing.Point(399, 5);
-            this.split4.MinExtra = 1;
-            this.split4.MinSize = 10;
-            this.split4.Name = "split4";
-            this.split4.Size = new System.Drawing.Size(10, 47);
-            this.split4.TabIndex = 40;
-            this.split4.TabStop = false;
             // 
             // btnTypeTrig
             // 
@@ -998,6 +1067,7 @@ namespace BeeUi
             this.btnTypeTrig.IsCLick = false;
             this.btnTypeTrig.IsNotChange = true;
             this.btnTypeTrig.IsRect = false;
+            this.btnTypeTrig.IsTouch = false;
             this.btnTypeTrig.IsUnGroup = true;
             this.btnTypeTrig.Location = new System.Drawing.Point(296, 5);
             this.btnTypeTrig.Margin = new System.Windows.Forms.Padding(5);
@@ -1009,30 +1079,6 @@ namespace BeeUi
             this.btnTypeTrig.TextColor = System.Drawing.Color.Black;
             this.btnTypeTrig.UseVisualStyleBackColor = false;
             this.btnTypeTrig.Click += new System.EventHandler(this.btnTypeTrig_Click);
-            // 
-            // btnMenu
-            // 
-            this.btnMenu.BackColor = System.Drawing.Color.Transparent;
-            this.btnMenu.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(173)))), ((int)(((byte)(245)))));
-            this.btnMenu.Image = global::BeeUi.Properties.Resources.Menu;
-            this.btnMenu.Location = new System.Drawing.Point(1429, 5);
-            this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(60, 47);
-            this.btnMenu.TabIndex = 38;
-            this.btnMenu.UseVisualStyleBackColor = false;
-            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click_1);
-            // 
-            // split3
-            // 
-            this.split3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.split3.Location = new System.Drawing.Point(291, 5);
-            this.split3.MinExtra = 1;
-            this.split3.MinSize = 10;
-            this.split3.Name = "split3";
-            this.split3.Size = new System.Drawing.Size(5, 47);
-            this.split3.TabIndex = 12;
-            this.split3.TabStop = false;
             // 
             // btnLive
             // 
@@ -1078,6 +1124,7 @@ namespace BeeUi
             this.btnLive.IsCLick = false;
             this.btnLive.IsNotChange = false;
             this.btnLive.IsRect = false;
+            this.btnLive.IsTouch = false;
             this.btnLive.IsUnGroup = true;
             this.btnLive.Location = new System.Drawing.Point(181, 5);
             this.btnLive.Margin = new System.Windows.Forms.Padding(5);
@@ -1092,17 +1139,6 @@ namespace BeeUi
             this.btnLive.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnLive.UseVisualStyleBackColor = false;
             this.btnLive.Click += new System.EventHandler(this.btnSer_Click);
-            // 
-            // split2
-            // 
-            this.split2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.split2.Location = new System.Drawing.Point(176, 5);
-            this.split2.MinExtra = 1;
-            this.split2.MinSize = 10;
-            this.split2.Name = "split2";
-            this.split2.Size = new System.Drawing.Size(5, 47);
-            this.split2.TabIndex = 11;
-            this.split2.TabStop = false;
             // 
             // btnContinuous
             // 
@@ -1147,6 +1183,7 @@ namespace BeeUi
             this.btnContinuous.IsCLick = false;
             this.btnContinuous.IsNotChange = false;
             this.btnContinuous.IsRect = false;
+            this.btnContinuous.IsTouch = false;
             this.btnContinuous.IsUnGroup = true;
             this.btnContinuous.Location = new System.Drawing.Point(85, 5);
             this.btnContinuous.Margin = new System.Windows.Forms.Padding(5);
@@ -1160,17 +1197,6 @@ namespace BeeUi
             this.btnContinuous.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnContinuous.UseVisualStyleBackColor = false;
             this.btnContinuous.Click += new System.EventHandler(this.btnRecord_Click);
-            // 
-            // split1
-            // 
-            this.split1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(162)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
-            this.split1.Location = new System.Drawing.Point(80, 5);
-            this.split1.MinExtra = 1;
-            this.split1.MinSize = 10;
-            this.split1.Name = "split1";
-            this.split1.Size = new System.Drawing.Size(5, 47);
-            this.split1.TabIndex = 10;
-            this.split1.TabStop = false;
             // 
             // btnCap
             // 
@@ -1215,6 +1241,7 @@ namespace BeeUi
             this.btnCap.IsCLick = false;
             this.btnCap.IsNotChange = false;
             this.btnCap.IsRect = false;
+            this.btnCap.IsTouch = false;
             this.btnCap.IsUnGroup = true;
             this.btnCap.Location = new System.Drawing.Point(5, 5);
             this.btnCap.Margin = new System.Windows.Forms.Padding(5);
@@ -1228,19 +1255,6 @@ namespace BeeUi
             this.btnCap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCap.UseVisualStyleBackColor = false;
             this.btnCap.Click += new System.EventHandler(this.btnCap_Click);
-            // 
-            // tmEnableControl
-            // 
-            this.tmEnableControl.Interval = 200;
-            this.tmEnableControl.Tick += new System.EventHandler(this.tmEnableControl_Tick);
-            // 
-            // workLiveWebcam
-            // 
-            this.workLiveWebcam.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLiveWebcam_RunWorkerCompleted);
-            // 
-            // tmKeys
-            // 
-            this.tmKeys.Interval = 300;
             // 
             // View
             // 

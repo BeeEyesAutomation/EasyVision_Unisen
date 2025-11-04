@@ -775,5 +775,82 @@ namespace BeeInterface
             //    BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown = false;
             //}
         }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            AdjZoom.Visible = !btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            lay2.Visible = !btn2.IsCLick;
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            trackExposure.Visible = !btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            trackGain.Visible = !btn4.IsCLick;
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            trackShift.Visible = !btn5.IsCLick;
+        }
+
+        private void btn6_Click(object sender, EventArgs e)
+        {
+            AdjWidth.Visible = !btn6.IsCLick;
+        }
+
+        private void btn7_Click(object sender, EventArgs e)
+        {
+            AdjHeight.Visible = !btn7.IsCLick;
+        }
+
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            AdjOffsetX.Visible = !btn8.IsCLick;
+        }
+
+        private void btn9_Click(object sender, EventArgs e)
+        {
+            AdjOffSetY.Visible = !btn9.IsCLick;
+        }
+
+        private void btn21_Click(object sender, EventArgs e)
+        {
+            lay21.Visible=!btn21.IsCLick;
+        }
+
+        private void btn22_Click(object sender, EventArgs e)
+        {
+           AdDelayTrig.Visible = !btn22.IsCLick;
+        }
+
+        private void btn23_Click(object sender, EventArgs e)
+        {
+            lay23.Visible = !btn23.IsCLick;
+            layoutDelay.Visible=!btn23.IsCLick;
+        }
+
+        private void btn24_Click(object sender, EventArgs e)
+        {
+            lay241.Visible = !btn24.IsCLick;
+            lay242.Visible = !btn24.IsCLick;
+        }
+
+        private void tableLayoutPanel10_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

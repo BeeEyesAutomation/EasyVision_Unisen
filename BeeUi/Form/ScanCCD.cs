@@ -15,6 +15,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -450,7 +451,7 @@ namespace BeeUi
                     }    
                        
                    
-                  
+                 if(!camera.IsSkip)
                     if (indexCCD != -1 && camera.Para.Name.Trim() != "" | camera.Para.TypeCamera != TypeCamera.USB)
                     {
                         camera.IndexConnect = indexCCD;
@@ -573,7 +574,7 @@ namespace BeeUi
             {
                 if (camera != null)
                 {
-                    if (!camera.IsConnected)
+                    if (!camera.IsConnected&&!camera.IsSkip)
                         IsConnect = false;
                 }
                 else 
@@ -793,6 +794,148 @@ namespace BeeUi
         {
             NameCCDChoose = cbCCD.SelectedValue.ToString();
             lbCamera.Text = NameCCDChoose;
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnSkip_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+            foreach (Camera camera in BeeCore.Common.listCamera)
+            {
+                if (camera != null)
+                {
+                    camera.matRaw = new OpenCvSharp.Mat();
+                    camera.IsConnected = true;
+                    camera.IsSkip = true;
+
+
+                     index++;
+                }
+                if (Global.ParaCommon.IsMultiCamera == false)
+                    break;
+            }
+
+
+            btnConnect.Enabled = false;
+
+            G.Load.FormActive.CheckActive(G.Load.addMac);
+            if (G.IsActive)
+            {
+                bool IsConnect = true;
+                int numNull = 0;
+                foreach (Camera camera in BeeCore.Common.listCamera)
+                {
+                    if (camera != null)
+                    {
+                        if (!camera.IsConnected)
+                            IsConnect = false;
+                    }
+                    else
+                        numNull++;
+
+                }
+
+                if (numNull == 4) IsConnect = false;
+                if (IsConnect)
+                {
+                    if (NumNoneNull == 1)
+                    {
+                        Global.ParaCommon.IsMultiCamera = false;
+                    }
+                    else
+                    {
+                        Global.ParaCommon.IsMultiCamera = true;
+
+                    }
+                    if (Global.ParaCommon.NumTrig < 1) Global.ParaCommon.NumTrig = 1;
+                    Global.CameraStatus = CameraStatus.Ready;
+                    SaveData.Camera(Global.Project, Global.listParaCamera);
+
+                    if (G.Main == null)
+                    {
+                        G.Load.FormActive.CheckActive(G.Load.addMac);
+                        if (G.IsActive)
+                        {
+                            Main Main = new Main();
+                            Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
+                            Global.EditTool.lbCam.Text = "Camera Connected";
+
+                            String sProgram = Properties.Settings.Default.programCurrent;
+                            G.Load.lb.Text = "Loading program.. (" + sProgram + ")";
+
+                            G.Load.Hide();
+
+                            Main.Show();
+                            this.Hide();
+                            //  Main.WindowState = FormWindowState.Minimized;
+
+
+                        }
+                        else
+                        {
+                            if (G.Load.IsLockTrial)
+                            {
+                                G.Load.IsLockTrial = false;
+
+
+                                G.Load.FormActive.txtLicence.Text = "Locked Trial";
+
+                            }
+                            String ID = G.Load.FormActive.KeyActive + "*" + BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
+                            G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
+                            G.Load.FormActive.Show();
+
+                        }
+                    }
+                    else
+                    {
+                        this.Hide();
+                        G.Main.Show();
+
+                        //if (G.IsReConnectCCD)
+                        //{
+                        //    G.IsReConnectCCD = false;
+                        //    G.Header.tmReadPLC.Enabled = true;
+                        //}
+
+                        BeeCore.Common.listCamera[Global.IndexChoose].Read();
+
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Camera connect Fail " + Global.Ex);
+                    btnConnect.Enabled = true;
+                    if (G.Load != null)
+                        G.Load.Hide();
+                    this.Show();
+                }
+
+
+            }
+            else
+            {
+                G.Load.addMac = Decompile.GetMacAddress();
+
+                if (G.Load.IsLockTrial)
+                {
+                    G.Load.IsLockTrial = false;
+
+
+                    G.Load.FormActive.txtLicence.Text = "Locked Trial";
+
+                }
+                String ID = G.Load.addMac + "*" + BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
+                G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
+                G.Load.FormActive.Show();
+
+            }
+
         }
     }
 }

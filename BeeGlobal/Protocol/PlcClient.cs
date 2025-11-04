@@ -139,10 +139,12 @@ namespace PlcLib
                 case PlcBrand.Mitsubishi:
                     if (_connType == ConnectionType.Tcp)
                     {
-                        var mc = new MelsecMcNet(_ip, _port);
+                        //var mc = new MelsecMcNet(_ip, _port);
+                        //TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        //TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        var mc = new MelsecA1ENet(_ip, _port);
                         TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
                         TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
-
                         //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
                         //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
                         return mc;

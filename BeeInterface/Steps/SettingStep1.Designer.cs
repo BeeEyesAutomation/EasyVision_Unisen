@@ -34,18 +34,18 @@ namespace BeeInterface
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.tableLayout1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel22 = new BeeInterface.TableLayoutPanel2();
+            this.lbErr = new BeeInterface.AutoFontLabel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
+            this.btn9 = new BeeInterface.RJButton();
+            this.btn8 = new BeeInterface.RJButton();
+            this.btn7 = new BeeInterface.RJButton();
+            this.btn6 = new BeeInterface.RJButton();
+            this.btn5 = new BeeInterface.RJButton();
+            this.btn4 = new BeeInterface.RJButton();
+            this.btn3 = new BeeInterface.RJButton();
+            this.btn2 = new BeeInterface.RJButton();
+            this.btn1 = new BeeInterface.RJButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label17 = new System.Windows.Forms.Label();
             this.btnChnageCamera = new BeeInterface.RJButton();
@@ -61,54 +61,53 @@ namespace BeeInterface
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCenterY = new BeeInterface.RJButton();
             this.btnCenterX = new BeeInterface.RJButton();
-            this.tableLayoutPanel21 = new BeeInterface.TableLayoutPanel2();
+            this.lay2 = new BeeInterface.TableLayoutPanel2();
             this.btnFocus = new BeeInterface.RJButton();
             this.AdjFocus = new BeeInterface.AdjustBarEx();
-            this.lbErr = new System.Windows.Forms.Label();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new BeeInterface.RJButton();
             this.btnNextStep = new BeeInterface.RJButton();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
-            this.label16 = new System.Windows.Forms.Label();
+            this.btn24 = new BeeInterface.RJButton();
+            this.btn23 = new BeeInterface.RJButton();
+            this.btn22 = new BeeInterface.RJButton();
+            this.btn21 = new BeeInterface.RJButton();
             this.AdDelayTrig = new BeeInterface.AdjustBarEx();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.lay242 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOn = new BeeInterface.RJButton();
             this.btnOFF = new BeeInterface.RJButton();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.lay241 = new System.Windows.Forms.TableLayoutPanel();
             this.btnLight3 = new BeeInterface.RJButton();
             this.btnLight1 = new BeeInterface.RJButton();
             this.btnLight2 = new BeeInterface.RJButton();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.layoutDelay = new System.Windows.Forms.TableLayoutPanel();
             this.AdDelayOutput = new BeeInterface.AdjustBarEx();
             this.label7 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.lay23 = new System.Windows.Forms.TableLayoutPanel();
             this.btnAllTime = new BeeInterface.RJButton();
             this.btnBlink = new BeeInterface.RJButton();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.lay21 = new System.Windows.Forms.TableLayoutPanel();
             this.btnExternal = new BeeInterface.RJButton();
             this.btnInternal = new BeeInterface.RJButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tmShowPara = new System.Windows.Forms.Timer(this.components);
             this.tableLayout1.SuspendLayout();
+            this.tableLayoutPanel22.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
-            this.tableLayoutPanel21.SuspendLayout();
+            this.lay2.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
+            this.lay242.SuspendLayout();
+            this.lay241.SuspendLayout();
             this.layoutDelay.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
+            this.lay23.SuspendLayout();
+            this.lay21.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage4.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayout1
@@ -117,40 +116,34 @@ namespace BeeInterface
             this.tableLayout1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayout1.ColumnCount = 1;
             this.tableLayout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout1.Controls.Add(this.label19, 0, 2);
-            this.tableLayout1.Controls.Add(this.label13, 0, 7);
-            this.tableLayout1.Controls.Add(this.label12, 0, 21);
-            this.tableLayout1.Controls.Add(this.label11, 0, 19);
-            this.tableLayout1.Controls.Add(this.label10, 0, 17);
-            this.tableLayout1.Controls.Add(this.label5, 0, 15);
-            this.tableLayout1.Controls.Add(this.label15, 0, 14);
-            this.tableLayout1.Controls.Add(this.label3, 0, 12);
-            this.tableLayout1.Controls.Add(this.label2, 0, 10);
-            this.tableLayout1.Controls.Add(this.label4, 0, 8);
-            this.tableLayout1.Controls.Add(this.label18, 0, 5);
-            this.tableLayout1.Controls.Add(this.label14, 0, 3);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel22, 0, 1);
+            this.tableLayout1.Controls.Add(this.btn9, 0, 18);
+            this.tableLayout1.Controls.Add(this.btn8, 0, 16);
+            this.tableLayout1.Controls.Add(this.btn7, 0, 14);
+            this.tableLayout1.Controls.Add(this.btn6, 0, 12);
+            this.tableLayout1.Controls.Add(this.btn5, 0, 10);
+            this.tableLayout1.Controls.Add(this.btn4, 0, 8);
+            this.tableLayout1.Controls.Add(this.btn3, 0, 6);
+            this.tableLayout1.Controls.Add(this.btn2, 0, 4);
+            this.tableLayout1.Controls.Add(this.btn1, 0, 2);
             this.tableLayout1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tableLayout1.Controls.Add(this.AdjZoom, 0, 4);
-            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 22);
-            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 20);
-            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 18);
-            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 16);
-            this.tableLayout1.Controls.Add(this.trackShift, 0, 13);
-            this.tableLayout1.Controls.Add(this.trackGain, 0, 11);
-            this.tableLayout1.Controls.Add(this.trackExposure, 0, 9);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 23);
-            this.tableLayout1.Controls.Add(this.tableLayoutPanel21, 0, 6);
-            this.tableLayout1.Controls.Add(this.lbErr, 0, 1);
+            this.tableLayout1.Controls.Add(this.AdjZoom, 0, 3);
+            this.tableLayout1.Controls.Add(this.AdjOffSetY, 0, 19);
+            this.tableLayout1.Controls.Add(this.AdjOffsetX, 0, 17);
+            this.tableLayout1.Controls.Add(this.AdjHeight, 0, 15);
+            this.tableLayout1.Controls.Add(this.AdjWidth, 0, 13);
+            this.tableLayout1.Controls.Add(this.trackShift, 0, 11);
+            this.tableLayout1.Controls.Add(this.trackGain, 0, 9);
+            this.tableLayout1.Controls.Add(this.trackExposure, 0, 7);
+            this.tableLayout1.Controls.Add(this.tableLayoutPanel5, 0, 20);
+            this.tableLayout1.Controls.Add(this.lay2, 0, 5);
             this.tableLayout1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayout1.Location = new System.Drawing.Point(3, 3);
             this.tableLayout1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.tableLayout1.Name = "tableLayout1";
             this.tableLayout1.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.tableLayout1.RowCount = 25;
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayout1.RowCount = 22;
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -173,208 +166,597 @@ namespace BeeInterface
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayout1.Size = new System.Drawing.Size(480, 704);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
             // 
-            // label19
+            // tableLayoutPanel22
             // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.SystemColors.Control;
-            this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.ForeColor = System.Drawing.Color.Black;
-            this.label19.Location = new System.Drawing.Point(5, 103);
-            this.label19.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(445, 25);
-            this.label19.TabIndex = 108;
-            this.label19.Text = "Zoom / Focus";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tableLayoutPanel22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.tableLayoutPanel22.ColumnCount = 2;
+            this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel22.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel22.Controls.Add(this.lbErr, 1, 0);
+            this.tableLayoutPanel22.Controls.Add(this.label2, 0, 0);
+            this.tableLayoutPanel22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel22.Location = new System.Drawing.Point(5, 55);
+            this.tableLayoutPanel22.Margin = new System.Windows.Forms.Padding(5, 0, 5, 10);
+            this.tableLayoutPanel22.Name = "tableLayoutPanel22";
+            this.tableLayoutPanel22.RowCount = 1;
+            this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel22.Size = new System.Drawing.Size(445, 40);
+            this.tableLayoutPanel22.TabIndex = 119;
             // 
-            // label13
+            // lbErr
             // 
-            this.label13.AutoSize = true;
-            this.label13.BackColor = System.Drawing.SystemColors.Control;
-            this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.Black;
-            this.label13.Location = new System.Drawing.Point(5, 314);
-            this.label13.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(445, 25);
-            this.label13.TabIndex = 107;
-            this.label13.Text = "Analog";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(15, 877);
-            this.label12.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(435, 25);
-            this.label12.TabIndex = 106;
-            this.label12.Text = "OffSet Y";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(15, 796);
-            this.label11.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(435, 25);
-            this.label11.TabIndex = 105;
-            this.label11.Text = "OffSet X";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(15, 715);
-            this.label10.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(435, 25);
-            this.label10.TabIndex = 104;
-            this.label10.Text = "Height";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(15, 634);
-            this.label5.Margin = new System.Windows.Forms.Padding(15, 5, 5, 2);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(435, 25);
-            this.label5.TabIndex = 103;
-            this.label5.Text = "Width";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.BackColor = System.Drawing.SystemColors.Control;
-            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.Black;
-            this.label15.Location = new System.Drawing.Point(5, 602);
-            this.label15.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(445, 25);
-            this.label15.TabIndex = 102;
-            this.label15.Text = "ReSolution";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(5, 506);
-            this.label3.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(445, 25);
-            this.label3.TabIndex = 101;
-            this.label3.Text = "Digital Shift";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lbErr.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbErr.AutoFont = true;
+            this.lbErr.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lbErr.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbErr.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.91016F);
+            this.lbErr.Location = new System.Drawing.Point(102, 2);
+            this.lbErr.Margin = new System.Windows.Forms.Padding(2);
+            this.lbErr.Name = "lbErr";
+            this.lbErr.Size = new System.Drawing.Size(341, 36);
+            this.lbErr.TabIndex = 92;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(5, 425);
-            this.label2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(445, 25);
-            this.label2.TabIndex = 100;
-            this.label2.Text = "Gain";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label2.Size = new System.Drawing.Size(100, 40);
+            this.label2.TabIndex = 93;
+            this.label2.Text = "Infor";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // btn9
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(5, 344);
-            this.label4.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(445, 25);
-            this.label4.TabIndex = 99;
-            this.label4.Text = "Exposue Time";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn9.AutoFont = true;
+            this.btn9.AutoFontHeightRatio = 0.75F;
+            this.btn9.AutoFontMax = 100F;
+            this.btn9.AutoFontMin = 14F;
+            this.btn9.AutoFontWidthRatio = 0.92F;
+            this.btn9.AutoImage = true;
+            this.btn9.AutoImageMaxRatio = 0.75F;
+            this.btn9.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn9.AutoImageTint = true;
+            this.btn9.BackColor = System.Drawing.Color.White;
+            this.btn9.BackgroundColor = System.Drawing.Color.White;
+            this.btn9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn9.BorderColor = System.Drawing.Color.White;
+            this.btn9.BorderRadius = 10;
+            this.btn9.BorderSize = 1;
+            this.btn9.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn9.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn9.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn9.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn9.Corner = BeeGlobal.Corner.None;
+            this.btn9.DebounceResizeMs = 16;
+            this.btn9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn9.FlatAppearance.BorderSize = 0;
+            this.btn9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn9.ForeColor = System.Drawing.Color.White;
+            this.btn9.Image = null;
+            this.btn9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn9.ImageDisabled = null;
+            this.btn9.ImageHover = null;
+            this.btn9.ImageNormal = null;
+            this.btn9.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn9.ImagePressed = null;
+            this.btn9.ImageTextSpacing = 6;
+            this.btn9.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn9.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn9.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn9.ImageTintOpacity = 0.5F;
+            this.btn9.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn9.IsCLick = true;
+            this.btn9.IsNotChange = false;
+            this.btn9.IsRect = false;
+            this.btn9.IsTouch = true;
+            this.btn9.IsUnGroup = true;
+            this.btn9.Location = new System.Drawing.Point(5, 871);
+            this.btn9.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn9.Multiline = false;
+            this.btn9.Name = "btn9";
+            this.btn9.Size = new System.Drawing.Size(445, 35);
+            this.btn9.TabIndex = 118;
+            this.btn9.Text = "9.OffSet Y";
+            this.btn9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn9.TextColor = System.Drawing.Color.White;
+            this.btn9.UseVisualStyleBackColor = false;
+            this.btn9.Click += new System.EventHandler(this.btn9_Click);
             // 
-            // label18
+            // btn8
             // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(5, 214);
-            this.label18.Margin = new System.Windows.Forms.Padding(5, 5, 5, 2);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(445, 25);
-            this.label18.TabIndex = 98;
-            this.label18.Text = "Focus";
-            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn8.AutoFont = true;
+            this.btn8.AutoFontHeightRatio = 0.75F;
+            this.btn8.AutoFontMax = 100F;
+            this.btn8.AutoFontMin = 14F;
+            this.btn8.AutoFontWidthRatio = 0.92F;
+            this.btn8.AutoImage = true;
+            this.btn8.AutoImageMaxRatio = 0.75F;
+            this.btn8.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn8.AutoImageTint = true;
+            this.btn8.BackColor = System.Drawing.Color.White;
+            this.btn8.BackgroundColor = System.Drawing.Color.White;
+            this.btn8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn8.BorderColor = System.Drawing.Color.White;
+            this.btn8.BorderRadius = 10;
+            this.btn8.BorderSize = 1;
+            this.btn8.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn8.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn8.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn8.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn8.Corner = BeeGlobal.Corner.None;
+            this.btn8.DebounceResizeMs = 16;
+            this.btn8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn8.FlatAppearance.BorderSize = 0;
+            this.btn8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn8.ForeColor = System.Drawing.Color.White;
+            this.btn8.Image = null;
+            this.btn8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn8.ImageDisabled = null;
+            this.btn8.ImageHover = null;
+            this.btn8.ImageNormal = null;
+            this.btn8.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn8.ImagePressed = null;
+            this.btn8.ImageTextSpacing = 6;
+            this.btn8.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn8.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn8.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn8.ImageTintOpacity = 0.5F;
+            this.btn8.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn8.IsCLick = true;
+            this.btn8.IsNotChange = false;
+            this.btn8.IsRect = false;
+            this.btn8.IsTouch = true;
+            this.btn8.IsUnGroup = true;
+            this.btn8.Location = new System.Drawing.Point(5, 777);
+            this.btn8.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn8.Multiline = false;
+            this.btn8.Name = "btn8";
+            this.btn8.Size = new System.Drawing.Size(445, 35);
+            this.btn8.TabIndex = 117;
+            this.btn8.Text = "8.OffSet X";
+            this.btn8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn8.TextColor = System.Drawing.Color.White;
+            this.btn8.UseVisualStyleBackColor = false;
+            this.btn8.Click += new System.EventHandler(this.btn8_Click);
             // 
-            // label14
+            // btn7
             // 
-            this.label14.AutoSize = true;
-            this.label14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(5, 133);
-            this.label14.Margin = new System.Windows.Forms.Padding(5, 3, 5, 2);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(445, 25);
-            this.label14.TabIndex = 97;
-            this.label14.Text = "Zoom";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn7.AutoFont = true;
+            this.btn7.AutoFontHeightRatio = 0.75F;
+            this.btn7.AutoFontMax = 100F;
+            this.btn7.AutoFontMin = 14F;
+            this.btn7.AutoFontWidthRatio = 0.92F;
+            this.btn7.AutoImage = true;
+            this.btn7.AutoImageMaxRatio = 0.75F;
+            this.btn7.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn7.AutoImageTint = true;
+            this.btn7.BackColor = System.Drawing.Color.White;
+            this.btn7.BackgroundColor = System.Drawing.Color.White;
+            this.btn7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn7.BorderColor = System.Drawing.Color.White;
+            this.btn7.BorderRadius = 10;
+            this.btn7.BorderSize = 1;
+            this.btn7.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn7.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn7.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn7.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn7.Corner = BeeGlobal.Corner.None;
+            this.btn7.DebounceResizeMs = 16;
+            this.btn7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn7.FlatAppearance.BorderSize = 0;
+            this.btn7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn7.ForeColor = System.Drawing.Color.White;
+            this.btn7.Image = null;
+            this.btn7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn7.ImageDisabled = null;
+            this.btn7.ImageHover = null;
+            this.btn7.ImageNormal = null;
+            this.btn7.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn7.ImagePressed = null;
+            this.btn7.ImageTextSpacing = 6;
+            this.btn7.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn7.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn7.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn7.ImageTintOpacity = 0.5F;
+            this.btn7.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn7.IsCLick = true;
+            this.btn7.IsNotChange = false;
+            this.btn7.IsRect = false;
+            this.btn7.IsTouch = true;
+            this.btn7.IsUnGroup = true;
+            this.btn7.Location = new System.Drawing.Point(5, 683);
+            this.btn7.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn7.Multiline = false;
+            this.btn7.Name = "btn7";
+            this.btn7.Size = new System.Drawing.Size(445, 35);
+            this.btn7.TabIndex = 116;
+            this.btn7.Text = "7.Height";
+            this.btn7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn7.TextColor = System.Drawing.Color.White;
+            this.btn7.UseVisualStyleBackColor = false;
+            this.btn7.Click += new System.EventHandler(this.btn7_Click);
+            // 
+            // btn6
+            // 
+            this.btn6.AutoFont = true;
+            this.btn6.AutoFontHeightRatio = 0.75F;
+            this.btn6.AutoFontMax = 100F;
+            this.btn6.AutoFontMin = 14F;
+            this.btn6.AutoFontWidthRatio = 0.92F;
+            this.btn6.AutoImage = true;
+            this.btn6.AutoImageMaxRatio = 0.75F;
+            this.btn6.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn6.AutoImageTint = true;
+            this.btn6.BackColor = System.Drawing.Color.White;
+            this.btn6.BackgroundColor = System.Drawing.Color.White;
+            this.btn6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn6.BorderColor = System.Drawing.Color.White;
+            this.btn6.BorderRadius = 10;
+            this.btn6.BorderSize = 1;
+            this.btn6.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn6.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn6.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn6.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn6.Corner = BeeGlobal.Corner.None;
+            this.btn6.DebounceResizeMs = 16;
+            this.btn6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn6.FlatAppearance.BorderSize = 0;
+            this.btn6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn6.ForeColor = System.Drawing.Color.White;
+            this.btn6.Image = null;
+            this.btn6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn6.ImageDisabled = null;
+            this.btn6.ImageHover = null;
+            this.btn6.ImageNormal = null;
+            this.btn6.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn6.ImagePressed = null;
+            this.btn6.ImageTextSpacing = 6;
+            this.btn6.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn6.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn6.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn6.ImageTintOpacity = 0.5F;
+            this.btn6.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn6.IsCLick = true;
+            this.btn6.IsNotChange = false;
+            this.btn6.IsRect = false;
+            this.btn6.IsTouch = true;
+            this.btn6.IsUnGroup = true;
+            this.btn6.Location = new System.Drawing.Point(5, 589);
+            this.btn6.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn6.Multiline = false;
+            this.btn6.Name = "btn6";
+            this.btn6.Size = new System.Drawing.Size(445, 35);
+            this.btn6.TabIndex = 115;
+            this.btn6.Text = "6.Width";
+            this.btn6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn6.TextColor = System.Drawing.Color.White;
+            this.btn6.UseVisualStyleBackColor = false;
+            this.btn6.Click += new System.EventHandler(this.btn6_Click);
+            // 
+            // btn5
+            // 
+            this.btn5.AutoFont = true;
+            this.btn5.AutoFontHeightRatio = 0.75F;
+            this.btn5.AutoFontMax = 100F;
+            this.btn5.AutoFontMin = 14F;
+            this.btn5.AutoFontWidthRatio = 0.92F;
+            this.btn5.AutoImage = true;
+            this.btn5.AutoImageMaxRatio = 0.75F;
+            this.btn5.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn5.AutoImageTint = true;
+            this.btn5.BackColor = System.Drawing.Color.White;
+            this.btn5.BackgroundColor = System.Drawing.Color.White;
+            this.btn5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn5.BorderColor = System.Drawing.Color.White;
+            this.btn5.BorderRadius = 10;
+            this.btn5.BorderSize = 1;
+            this.btn5.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn5.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn5.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn5.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn5.Corner = BeeGlobal.Corner.None;
+            this.btn5.DebounceResizeMs = 16;
+            this.btn5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn5.FlatAppearance.BorderSize = 0;
+            this.btn5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn5.ForeColor = System.Drawing.Color.White;
+            this.btn5.Image = null;
+            this.btn5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn5.ImageDisabled = null;
+            this.btn5.ImageHover = null;
+            this.btn5.ImageNormal = null;
+            this.btn5.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn5.ImagePressed = null;
+            this.btn5.ImageTextSpacing = 6;
+            this.btn5.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn5.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn5.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn5.ImageTintOpacity = 0.5F;
+            this.btn5.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn5.IsCLick = true;
+            this.btn5.IsNotChange = false;
+            this.btn5.IsRect = false;
+            this.btn5.IsTouch = true;
+            this.btn5.IsUnGroup = true;
+            this.btn5.Location = new System.Drawing.Point(5, 495);
+            this.btn5.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn5.Multiline = false;
+            this.btn5.Name = "btn5";
+            this.btn5.Size = new System.Drawing.Size(445, 35);
+            this.btn5.TabIndex = 114;
+            this.btn5.Text = "5.Digital Shift";
+            this.btn5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn5.TextColor = System.Drawing.Color.White;
+            this.btn5.UseVisualStyleBackColor = false;
+            this.btn5.Click += new System.EventHandler(this.btn5_Click);
+            // 
+            // btn4
+            // 
+            this.btn4.AutoFont = true;
+            this.btn4.AutoFontHeightRatio = 0.75F;
+            this.btn4.AutoFontMax = 100F;
+            this.btn4.AutoFontMin = 14F;
+            this.btn4.AutoFontWidthRatio = 0.92F;
+            this.btn4.AutoImage = true;
+            this.btn4.AutoImageMaxRatio = 0.75F;
+            this.btn4.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn4.AutoImageTint = true;
+            this.btn4.BackColor = System.Drawing.Color.White;
+            this.btn4.BackgroundColor = System.Drawing.Color.White;
+            this.btn4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn4.BorderColor = System.Drawing.Color.White;
+            this.btn4.BorderRadius = 10;
+            this.btn4.BorderSize = 1;
+            this.btn4.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn4.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn4.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn4.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn4.Corner = BeeGlobal.Corner.None;
+            this.btn4.DebounceResizeMs = 16;
+            this.btn4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn4.FlatAppearance.BorderSize = 0;
+            this.btn4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn4.ForeColor = System.Drawing.Color.White;
+            this.btn4.Image = null;
+            this.btn4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn4.ImageDisabled = null;
+            this.btn4.ImageHover = null;
+            this.btn4.ImageNormal = null;
+            this.btn4.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn4.ImagePressed = null;
+            this.btn4.ImageTextSpacing = 6;
+            this.btn4.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn4.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn4.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn4.ImageTintOpacity = 0.5F;
+            this.btn4.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn4.IsCLick = true;
+            this.btn4.IsNotChange = false;
+            this.btn4.IsRect = false;
+            this.btn4.IsTouch = true;
+            this.btn4.IsUnGroup = true;
+            this.btn4.Location = new System.Drawing.Point(5, 401);
+            this.btn4.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn4.Multiline = false;
+            this.btn4.Name = "btn4";
+            this.btn4.Size = new System.Drawing.Size(445, 35);
+            this.btn4.TabIndex = 113;
+            this.btn4.Text = "4.Gain";
+            this.btn4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn4.TextColor = System.Drawing.Color.White;
+            this.btn4.UseVisualStyleBackColor = false;
+            this.btn4.Click += new System.EventHandler(this.btn4_Click);
+            // 
+            // btn3
+            // 
+            this.btn3.AutoFont = true;
+            this.btn3.AutoFontHeightRatio = 0.75F;
+            this.btn3.AutoFontMax = 100F;
+            this.btn3.AutoFontMin = 14F;
+            this.btn3.AutoFontWidthRatio = 0.92F;
+            this.btn3.AutoImage = true;
+            this.btn3.AutoImageMaxRatio = 0.75F;
+            this.btn3.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn3.AutoImageTint = true;
+            this.btn3.BackColor = System.Drawing.Color.White;
+            this.btn3.BackgroundColor = System.Drawing.Color.White;
+            this.btn3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn3.BorderColor = System.Drawing.Color.White;
+            this.btn3.BorderRadius = 10;
+            this.btn3.BorderSize = 1;
+            this.btn3.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn3.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn3.Corner = BeeGlobal.Corner.None;
+            this.btn3.DebounceResizeMs = 16;
+            this.btn3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn3.FlatAppearance.BorderSize = 0;
+            this.btn3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn3.ForeColor = System.Drawing.Color.White;
+            this.btn3.Image = null;
+            this.btn3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn3.ImageDisabled = null;
+            this.btn3.ImageHover = null;
+            this.btn3.ImageNormal = null;
+            this.btn3.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn3.ImagePressed = null;
+            this.btn3.ImageTextSpacing = 6;
+            this.btn3.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn3.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn3.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn3.ImageTintOpacity = 0.5F;
+            this.btn3.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn3.IsCLick = false;
+            this.btn3.IsNotChange = false;
+            this.btn3.IsRect = false;
+            this.btn3.IsTouch = true;
+            this.btn3.IsUnGroup = true;
+            this.btn3.Location = new System.Drawing.Point(5, 307);
+            this.btn3.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn3.Multiline = false;
+            this.btn3.Name = "btn3";
+            this.btn3.Size = new System.Drawing.Size(445, 35);
+            this.btn3.TabIndex = 112;
+            this.btn3.Text = "3.Exposue Time(us)";
+            this.btn3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn3.TextColor = System.Drawing.Color.White;
+            this.btn3.UseVisualStyleBackColor = false;
+            this.btn3.Click += new System.EventHandler(this.btn3_Click);
+            // 
+            // btn2
+            // 
+            this.btn2.AutoFont = true;
+            this.btn2.AutoFontHeightRatio = 0.75F;
+            this.btn2.AutoFontMax = 100F;
+            this.btn2.AutoFontMin = 14F;
+            this.btn2.AutoFontWidthRatio = 0.92F;
+            this.btn2.AutoImage = true;
+            this.btn2.AutoImageMaxRatio = 0.75F;
+            this.btn2.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn2.AutoImageTint = true;
+            this.btn2.BackColor = System.Drawing.Color.White;
+            this.btn2.BackgroundColor = System.Drawing.Color.White;
+            this.btn2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn2.BorderColor = System.Drawing.Color.White;
+            this.btn2.BorderRadius = 10;
+            this.btn2.BorderSize = 1;
+            this.btn2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn2.Corner = BeeGlobal.Corner.None;
+            this.btn2.DebounceResizeMs = 16;
+            this.btn2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn2.FlatAppearance.BorderSize = 0;
+            this.btn2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn2.ForeColor = System.Drawing.Color.White;
+            this.btn2.Image = null;
+            this.btn2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn2.ImageDisabled = null;
+            this.btn2.ImageHover = null;
+            this.btn2.ImageNormal = null;
+            this.btn2.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn2.ImagePressed = null;
+            this.btn2.ImageTextSpacing = 6;
+            this.btn2.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn2.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn2.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn2.ImageTintOpacity = 0.5F;
+            this.btn2.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn2.IsCLick = true;
+            this.btn2.IsNotChange = false;
+            this.btn2.IsRect = false;
+            this.btn2.IsTouch = true;
+            this.btn2.IsUnGroup = true;
+            this.btn2.Location = new System.Drawing.Point(5, 209);
+            this.btn2.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn2.Multiline = false;
+            this.btn2.Name = "btn2";
+            this.btn2.Size = new System.Drawing.Size(445, 35);
+            this.btn2.TabIndex = 111;
+            this.btn2.Text = "2.Focus Camera";
+            this.btn2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn2.TextColor = System.Drawing.Color.White;
+            this.btn2.UseVisualStyleBackColor = false;
+            this.btn2.Click += new System.EventHandler(this.btn2_Click);
+            // 
+            // btn1
+            // 
+            this.btn1.AutoFont = true;
+            this.btn1.AutoFontHeightRatio = 0.75F;
+            this.btn1.AutoFontMax = 100F;
+            this.btn1.AutoFontMin = 14F;
+            this.btn1.AutoFontWidthRatio = 0.92F;
+            this.btn1.AutoImage = true;
+            this.btn1.AutoImageMaxRatio = 0.75F;
+            this.btn1.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn1.AutoImageTint = true;
+            this.btn1.BackColor = System.Drawing.Color.White;
+            this.btn1.BackgroundColor = System.Drawing.Color.White;
+            this.btn1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn1.BorderColor = System.Drawing.Color.White;
+            this.btn1.BorderRadius = 10;
+            this.btn1.BorderSize = 1;
+            this.btn1.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn1.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn1.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn1.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn1.Corner = BeeGlobal.Corner.None;
+            this.btn1.DebounceResizeMs = 16;
+            this.btn1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn1.FlatAppearance.BorderSize = 0;
+            this.btn1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn1.ForeColor = System.Drawing.Color.White;
+            this.btn1.Image = null;
+            this.btn1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn1.ImageDisabled = null;
+            this.btn1.ImageHover = null;
+            this.btn1.ImageNormal = null;
+            this.btn1.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn1.ImagePressed = null;
+            this.btn1.ImageTextSpacing = 6;
+            this.btn1.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn1.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn1.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn1.ImageTintOpacity = 0.5F;
+            this.btn1.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn1.IsCLick = true;
+            this.btn1.IsNotChange = false;
+            this.btn1.IsRect = false;
+            this.btn1.IsTouch = true;
+            this.btn1.IsUnGroup = true;
+            this.btn1.Location = new System.Drawing.Point(5, 115);
+            this.btn1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn1.Multiline = false;
+            this.btn1.Name = "btn1";
+            this.btn1.Size = new System.Drawing.Size(445, 35);
+            this.btn1.TabIndex = 110;
+            this.btn1.Text = "1.Zoom Camera";
+            this.btn1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn1.TextColor = System.Drawing.Color.White;
+            this.btn1.UseVisualStyleBackColor = false;
+            this.btn1.Click += new System.EventHandler(this.btn1_Click);
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 114F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 97F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.label17, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnChnageCamera, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnDownLoadPara, 2, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 5);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(445, 50);
             this.tableLayoutPanel2.TabIndex = 95;
             // 
@@ -388,7 +770,7 @@ namespace BeeInterface
             this.label17.Location = new System.Drawing.Point(0, 0);
             this.label17.Margin = new System.Windows.Forms.Padding(0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(114, 50);
+            this.label17.Size = new System.Drawing.Size(97, 50);
             this.label17.TabIndex = 97;
             this.label17.Text = "Camera";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -404,8 +786,8 @@ namespace BeeInterface
             this.btnChnageCamera.AutoImageMaxRatio = 0.75F;
             this.btnChnageCamera.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnChnageCamera.AutoImageTint = true;
-            this.btnChnageCamera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnChnageCamera.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnChnageCamera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btnChnageCamera.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.btnChnageCamera.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnChnageCamera.BorderRadius = 5;
             this.btnChnageCamera.BorderSize = 1;
@@ -436,11 +818,12 @@ namespace BeeInterface
             this.btnChnageCamera.IsCLick = false;
             this.btnChnageCamera.IsNotChange = true;
             this.btnChnageCamera.IsRect = false;
-            this.btnChnageCamera.IsUnGroup = false;
-            this.btnChnageCamera.Location = new System.Drawing.Point(117, 3);
+            this.btnChnageCamera.IsTouch = false;
+            this.btnChnageCamera.IsUnGroup = true;
+            this.btnChnageCamera.Location = new System.Drawing.Point(100, 3);
             this.btnChnageCamera.Multiline = false;
             this.btnChnageCamera.Name = "btnChnageCamera";
-            this.btnChnageCamera.Size = new System.Drawing.Size(159, 44);
+            this.btnChnageCamera.Size = new System.Drawing.Size(168, 44);
             this.btnChnageCamera.TabIndex = 88;
             this.btnChnageCamera.Text = "Change";
             this.btnChnageCamera.TextColor = System.Drawing.Color.Black;
@@ -459,8 +842,8 @@ namespace BeeInterface
             this.btnDownLoadPara.AutoImageMaxRatio = 0.75F;
             this.btnDownLoadPara.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
             this.btnDownLoadPara.AutoImageTint = true;
-            this.btnDownLoadPara.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnDownLoadPara.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnDownLoadPara.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btnDownLoadPara.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.btnDownLoadPara.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.btnDownLoadPara.BorderRadius = 5;
             this.btnDownLoadPara.BorderSize = 1;
@@ -491,11 +874,12 @@ namespace BeeInterface
             this.btnDownLoadPara.IsCLick = false;
             this.btnDownLoadPara.IsNotChange = true;
             this.btnDownLoadPara.IsRect = false;
-            this.btnDownLoadPara.IsUnGroup = false;
-            this.btnDownLoadPara.Location = new System.Drawing.Point(282, 3);
+            this.btnDownLoadPara.IsTouch = false;
+            this.btnDownLoadPara.IsUnGroup = true;
+            this.btnDownLoadPara.Location = new System.Drawing.Point(274, 3);
             this.btnDownLoadPara.Multiline = false;
             this.btnDownLoadPara.Name = "btnDownLoadPara";
-            this.btnDownLoadPara.Size = new System.Drawing.Size(160, 44);
+            this.btnDownLoadPara.Size = new System.Drawing.Size(168, 44);
             this.btnDownLoadPara.TabIndex = 79;
             this.btnDownLoadPara.Text = "Parameter";
             this.btnDownLoadPara.TextColor = System.Drawing.Color.Black;
@@ -513,7 +897,7 @@ namespace BeeInterface
             this.AdjZoom.AutoRepeatMinInterval = 20;
             this.AdjZoom.AutoShowTextbox = true;
             this.AdjZoom.AutoSizeTextbox = true;
-            this.AdjZoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdjZoom.BackColor = System.Drawing.Color.White;
             this.AdjZoom.BarLeftGap = 20;
             this.AdjZoom.BarRightGap = 6;
             this.AdjZoom.ChromeGap = 8;
@@ -532,7 +916,7 @@ namespace BeeInterface
             this.AdjZoom.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjZoom.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjZoom.KeyboardStep = 1F;
-            this.AdjZoom.Location = new System.Drawing.Point(5, 160);
+            this.AdjZoom.Location = new System.Drawing.Point(5, 150);
             this.AdjZoom.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjZoom.MatchTextboxFontToThumb = true;
             this.AdjZoom.Max = 20000F;
@@ -565,6 +949,7 @@ namespace BeeInterface
             this.AdjZoom.TrackWidthRatio = 1F;
             this.AdjZoom.UnitText = "";
             this.AdjZoom.Value = 1F;
+            this.AdjZoom.Visible = false;
             this.AdjZoom.WheelStep = 1F;
             this.AdjZoom.ValueChanged += new System.Action<float>(this.AdjZoom_ValueChanged);
             // 
@@ -578,7 +963,7 @@ namespace BeeInterface
             this.AdjOffSetY.AutoRepeatMinInterval = 20;
             this.AdjOffSetY.AutoShowTextbox = true;
             this.AdjOffSetY.AutoSizeTextbox = true;
-            this.AdjOffSetY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdjOffSetY.BackColor = System.Drawing.Color.White;
             this.AdjOffSetY.BarLeftGap = 20;
             this.AdjOffSetY.BarRightGap = 6;
             this.AdjOffSetY.ChromeGap = 8;
@@ -597,8 +982,8 @@ namespace BeeInterface
             this.AdjOffSetY.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjOffSetY.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjOffSetY.KeyboardStep = 1F;
-            this.AdjOffSetY.Location = new System.Drawing.Point(15, 904);
-            this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
+            this.AdjOffSetY.Location = new System.Drawing.Point(5, 906);
+            this.AdjOffSetY.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjOffSetY.MatchTextboxFontToThumb = true;
             this.AdjOffSetY.Max = 2000F;
             this.AdjOffSetY.MaxTextboxWidth = 0;
@@ -613,7 +998,7 @@ namespace BeeInterface
             this.AdjOffSetY.Name = "AdjOffSetY";
             this.AdjOffSetY.Radius = 8;
             this.AdjOffSetY.ShowValueOnThumb = true;
-            this.AdjOffSetY.Size = new System.Drawing.Size(435, 49);
+            this.AdjOffSetY.Size = new System.Drawing.Size(445, 49);
             this.AdjOffSetY.SnapToStep = true;
             this.AdjOffSetY.StartWithTextboxHidden = true;
             this.AdjOffSetY.Step = 1F;
@@ -630,6 +1015,7 @@ namespace BeeInterface
             this.AdjOffSetY.TrackWidthRatio = 1F;
             this.AdjOffSetY.UnitText = "";
             this.AdjOffSetY.Value = 1F;
+            this.AdjOffSetY.Visible = false;
             this.AdjOffSetY.WheelStep = 1F;
             this.AdjOffSetY.ValueChanged += new System.Action<float>(this.AdjOffSetY_ValueChanged);
             this.AdjOffSetY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjOffSetY_MouseDown);
@@ -645,7 +1031,7 @@ namespace BeeInterface
             this.AdjOffsetX.AutoRepeatMinInterval = 20;
             this.AdjOffsetX.AutoShowTextbox = true;
             this.AdjOffsetX.AutoSizeTextbox = true;
-            this.AdjOffsetX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdjOffsetX.BackColor = System.Drawing.Color.White;
             this.AdjOffsetX.BarLeftGap = 20;
             this.AdjOffsetX.BarRightGap = 6;
             this.AdjOffsetX.ChromeGap = 8;
@@ -664,8 +1050,8 @@ namespace BeeInterface
             this.AdjOffsetX.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjOffsetX.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjOffsetX.KeyboardStep = 1F;
-            this.AdjOffsetX.Location = new System.Drawing.Point(15, 823);
-            this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
+            this.AdjOffsetX.Location = new System.Drawing.Point(5, 812);
+            this.AdjOffsetX.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjOffsetX.MatchTextboxFontToThumb = true;
             this.AdjOffsetX.Max = 2000F;
             this.AdjOffsetX.MaxTextboxWidth = 0;
@@ -680,7 +1066,7 @@ namespace BeeInterface
             this.AdjOffsetX.Name = "AdjOffsetX";
             this.AdjOffsetX.Radius = 8;
             this.AdjOffsetX.ShowValueOnThumb = true;
-            this.AdjOffsetX.Size = new System.Drawing.Size(435, 49);
+            this.AdjOffsetX.Size = new System.Drawing.Size(445, 49);
             this.AdjOffsetX.SnapToStep = true;
             this.AdjOffsetX.StartWithTextboxHidden = true;
             this.AdjOffsetX.Step = 1F;
@@ -697,6 +1083,7 @@ namespace BeeInterface
             this.AdjOffsetX.TrackWidthRatio = 1F;
             this.AdjOffsetX.UnitText = "";
             this.AdjOffsetX.Value = 1F;
+            this.AdjOffsetX.Visible = false;
             this.AdjOffsetX.WheelStep = 1F;
             this.AdjOffsetX.ValueChanged += new System.Action<float>(this.AdjOffsetX_ValueChanged);
             this.AdjOffsetX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjOffsetX_MouseDown);
@@ -712,7 +1099,7 @@ namespace BeeInterface
             this.AdjHeight.AutoRepeatMinInterval = 20;
             this.AdjHeight.AutoShowTextbox = true;
             this.AdjHeight.AutoSizeTextbox = true;
-            this.AdjHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdjHeight.BackColor = System.Drawing.Color.White;
             this.AdjHeight.BarLeftGap = 20;
             this.AdjHeight.BarRightGap = 6;
             this.AdjHeight.ChromeGap = 8;
@@ -731,8 +1118,8 @@ namespace BeeInterface
             this.AdjHeight.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjHeight.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjHeight.KeyboardStep = 1F;
-            this.AdjHeight.Location = new System.Drawing.Point(15, 742);
-            this.AdjHeight.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
+            this.AdjHeight.Location = new System.Drawing.Point(5, 718);
+            this.AdjHeight.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjHeight.MatchTextboxFontToThumb = true;
             this.AdjHeight.Max = 2000F;
             this.AdjHeight.MaxTextboxWidth = 0;
@@ -747,7 +1134,7 @@ namespace BeeInterface
             this.AdjHeight.Name = "AdjHeight";
             this.AdjHeight.Radius = 8;
             this.AdjHeight.ShowValueOnThumb = true;
-            this.AdjHeight.Size = new System.Drawing.Size(435, 49);
+            this.AdjHeight.Size = new System.Drawing.Size(445, 49);
             this.AdjHeight.SnapToStep = true;
             this.AdjHeight.StartWithTextboxHidden = true;
             this.AdjHeight.Step = 1F;
@@ -764,6 +1151,7 @@ namespace BeeInterface
             this.AdjHeight.TrackWidthRatio = 1F;
             this.AdjHeight.UnitText = "";
             this.AdjHeight.Value = 1F;
+            this.AdjHeight.Visible = false;
             this.AdjHeight.WheelStep = 1F;
             this.AdjHeight.ValueChanged += new System.Action<float>(this.AdjHeight_ValueChanged);
             this.AdjHeight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjHeight_MouseDown);
@@ -779,7 +1167,7 @@ namespace BeeInterface
             this.AdjWidth.AutoRepeatMinInterval = 20;
             this.AdjWidth.AutoShowTextbox = true;
             this.AdjWidth.AutoSizeTextbox = true;
-            this.AdjWidth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdjWidth.BackColor = System.Drawing.Color.White;
             this.AdjWidth.BarLeftGap = 20;
             this.AdjWidth.BarRightGap = 6;
             this.AdjWidth.ChromeGap = 8;
@@ -798,8 +1186,8 @@ namespace BeeInterface
             this.AdjWidth.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjWidth.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjWidth.KeyboardStep = 1F;
-            this.AdjWidth.Location = new System.Drawing.Point(15, 661);
-            this.AdjWidth.Margin = new System.Windows.Forms.Padding(15, 0, 5, 0);
+            this.AdjWidth.Location = new System.Drawing.Point(5, 624);
+            this.AdjWidth.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjWidth.MatchTextboxFontToThumb = true;
             this.AdjWidth.Max = 2000F;
             this.AdjWidth.MaxTextboxWidth = 0;
@@ -814,7 +1202,7 @@ namespace BeeInterface
             this.AdjWidth.Name = "AdjWidth";
             this.AdjWidth.Radius = 8;
             this.AdjWidth.ShowValueOnThumb = true;
-            this.AdjWidth.Size = new System.Drawing.Size(435, 49);
+            this.AdjWidth.Size = new System.Drawing.Size(445, 49);
             this.AdjWidth.SnapToStep = true;
             this.AdjWidth.StartWithTextboxHidden = true;
             this.AdjWidth.Step = 1F;
@@ -831,6 +1219,7 @@ namespace BeeInterface
             this.AdjWidth.TrackWidthRatio = 1F;
             this.AdjWidth.UnitText = "";
             this.AdjWidth.Value = 1F;
+            this.AdjWidth.Visible = false;
             this.AdjWidth.WheelStep = 1F;
             this.AdjWidth.ValueChanged += new System.Action<float>(this.AdjWidth_ValueChanged);
             this.AdjWidth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AdjWidth_MouseDown);
@@ -846,7 +1235,7 @@ namespace BeeInterface
             this.trackShift.AutoRepeatMinInterval = 20;
             this.trackShift.AutoShowTextbox = true;
             this.trackShift.AutoSizeTextbox = true;
-            this.trackShift.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.trackShift.BackColor = System.Drawing.Color.White;
             this.trackShift.BarLeftGap = 20;
             this.trackShift.BarRightGap = 6;
             this.trackShift.ChromeGap = 8;
@@ -865,7 +1254,7 @@ namespace BeeInterface
             this.trackShift.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackShift.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackShift.KeyboardStep = 1F;
-            this.trackShift.Location = new System.Drawing.Point(5, 533);
+            this.trackShift.Location = new System.Drawing.Point(5, 530);
             this.trackShift.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackShift.MatchTextboxFontToThumb = true;
             this.trackShift.Max = 2000F;
@@ -898,6 +1287,7 @@ namespace BeeInterface
             this.trackShift.TrackWidthRatio = 1F;
             this.trackShift.UnitText = "";
             this.trackShift.Value = 1F;
+            this.trackShift.Visible = false;
             this.trackShift.WheelStep = 1F;
             this.trackShift.ValueChanged += new System.Action<float>(this.trackShift_ValueChanged);
             this.trackShift.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackShift_MouseDown);
@@ -913,7 +1303,7 @@ namespace BeeInterface
             this.trackGain.AutoRepeatMinInterval = 20;
             this.trackGain.AutoShowTextbox = true;
             this.trackGain.AutoSizeTextbox = true;
-            this.trackGain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.trackGain.BackColor = System.Drawing.Color.White;
             this.trackGain.BarLeftGap = 20;
             this.trackGain.BarRightGap = 6;
             this.trackGain.ChromeGap = 8;
@@ -932,7 +1322,7 @@ namespace BeeInterface
             this.trackGain.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackGain.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackGain.KeyboardStep = 1F;
-            this.trackGain.Location = new System.Drawing.Point(5, 452);
+            this.trackGain.Location = new System.Drawing.Point(5, 436);
             this.trackGain.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackGain.MatchTextboxFontToThumb = true;
             this.trackGain.Max = 2000F;
@@ -965,6 +1355,7 @@ namespace BeeInterface
             this.trackGain.TrackWidthRatio = 1F;
             this.trackGain.UnitText = "";
             this.trackGain.Value = 1F;
+            this.trackGain.Visible = false;
             this.trackGain.WheelStep = 1F;
             this.trackGain.ValueChanged += new System.Action<float>(this.trackGain_ValueChanged);
             this.trackGain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackGain_MouseDown);
@@ -980,7 +1371,7 @@ namespace BeeInterface
             this.trackExposure.AutoRepeatMinInterval = 20;
             this.trackExposure.AutoShowTextbox = true;
             this.trackExposure.AutoSizeTextbox = true;
-            this.trackExposure.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.trackExposure.BackColor = System.Drawing.Color.White;
             this.trackExposure.BarLeftGap = 20;
             this.trackExposure.BarRightGap = 6;
             this.trackExposure.ChromeGap = 8;
@@ -999,7 +1390,7 @@ namespace BeeInterface
             this.trackExposure.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.trackExposure.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.trackExposure.KeyboardStep = 1F;
-            this.trackExposure.Location = new System.Drawing.Point(5, 371);
+            this.trackExposure.Location = new System.Drawing.Point(5, 342);
             this.trackExposure.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.trackExposure.MatchTextboxFontToThumb = true;
             this.trackExposure.Max = 2000F;
@@ -1047,7 +1438,7 @@ namespace BeeInterface
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.btnCenterY, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnCenterX, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 956);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(20, 958);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(20, 3, 3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
@@ -1099,6 +1490,7 @@ namespace BeeInterface
             this.btnCenterY.IsCLick = false;
             this.btnCenterY.IsNotChange = true;
             this.btnCenterY.IsRect = false;
+            this.btnCenterY.IsTouch = false;
             this.btnCenterY.IsUnGroup = true;
             this.btnCenterY.Location = new System.Drawing.Point(219, 3);
             this.btnCenterY.Multiline = false;
@@ -1156,6 +1548,7 @@ namespace BeeInterface
             this.btnCenterX.IsCLick = false;
             this.btnCenterX.IsNotChange = true;
             this.btnCenterX.IsRect = false;
+            this.btnCenterX.IsTouch = false;
             this.btnCenterX.IsUnGroup = true;
             this.btnCenterX.Location = new System.Drawing.Point(3, 3);
             this.btnCenterX.Multiline = false;
@@ -1169,22 +1562,23 @@ namespace BeeInterface
             this.btnCenterX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnCenterX_MouseDown);
             this.btnCenterX.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnCenterX_MouseUp);
             // 
-            // tableLayoutPanel21
+            // lay2
             // 
-            this.tableLayoutPanel21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.tableLayoutPanel21.ColumnCount = 2;
-            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel21.Controls.Add(this.btnFocus, 0, 0);
-            this.tableLayoutPanel21.Controls.Add(this.AdjFocus, 1, 0);
-            this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel21.Location = new System.Drawing.Point(5, 241);
-            this.tableLayoutPanel21.Margin = new System.Windows.Forms.Padding(5, 0, 3, 3);
-            this.tableLayoutPanel21.Name = "tableLayoutPanel21";
-            this.tableLayoutPanel21.RowCount = 1;
-            this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel21.Size = new System.Drawing.Size(447, 50);
-            this.tableLayoutPanel21.TabIndex = 93;
+            this.lay2.BackColor = System.Drawing.Color.White;
+            this.lay2.ColumnCount = 2;
+            this.lay2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.lay2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay2.Controls.Add(this.btnFocus, 0, 0);
+            this.lay2.Controls.Add(this.AdjFocus, 1, 0);
+            this.lay2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay2.Location = new System.Drawing.Point(5, 244);
+            this.lay2.Margin = new System.Windows.Forms.Padding(5, 0, 3, 3);
+            this.lay2.Name = "lay2";
+            this.lay2.RowCount = 1;
+            this.lay2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay2.Size = new System.Drawing.Size(447, 50);
+            this.lay2.TabIndex = 93;
+            this.lay2.Visible = false;
             // 
             // btnFocus
             // 
@@ -1230,6 +1624,7 @@ namespace BeeInterface
             this.btnFocus.IsCLick = false;
             this.btnFocus.IsNotChange = false;
             this.btnFocus.IsRect = false;
+            this.btnFocus.IsTouch = false;
             this.btnFocus.IsUnGroup = true;
             this.btnFocus.Location = new System.Drawing.Point(5, 5);
             this.btnFocus.Margin = new System.Windows.Forms.Padding(5);
@@ -1308,15 +1703,6 @@ namespace BeeInterface
             this.AdjFocus.WheelStep = 1F;
             this.AdjFocus.ValueChanged += new System.Action<float>(this.AdjFocus_ValueChanged);
             // 
-            // lbErr
-            // 
-            this.lbErr.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbErr.Location = new System.Drawing.Point(3, 60);
-            this.lbErr.Name = "lbErr";
-            this.lbErr.Size = new System.Drawing.Size(449, 23);
-            this.lbErr.TabIndex = 109;
-            this.lbErr.Text = "..";
-            // 
             // tableLayoutPanel11
             // 
             this.tableLayoutPanel11.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -1377,7 +1763,8 @@ namespace BeeInterface
             this.btnCancel.IsCLick = false;
             this.btnCancel.IsNotChange = true;
             this.btnCancel.IsRect = false;
-            this.btnCancel.IsUnGroup = false;
+            this.btnCancel.IsTouch = false;
+            this.btnCancel.IsUnGroup = true;
             this.btnCancel.Location = new System.Drawing.Point(330, 3);
             this.btnCancel.Multiline = false;
             this.btnCancel.Name = "btnCancel";
@@ -1433,7 +1820,8 @@ namespace BeeInterface
             this.btnNextStep.IsCLick = true;
             this.btnNextStep.IsNotChange = true;
             this.btnNextStep.IsRect = false;
-            this.btnNextStep.IsUnGroup = false;
+            this.btnNextStep.IsTouch = false;
+            this.btnNextStep.IsUnGroup = true;
             this.btnNextStep.Location = new System.Drawing.Point(3, 3);
             this.btnNextStep.Multiline = false;
             this.btnNextStep.Name = "btnNextStep";
@@ -1452,51 +1840,268 @@ namespace BeeInterface
             this.tableLayoutPanel10.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tableLayoutPanel10.ColumnCount = 1;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Controls.Add(this.label16, 0, 9);
+            this.tableLayoutPanel10.Controls.Add(this.btn24, 0, 7);
+            this.tableLayoutPanel10.Controls.Add(this.btn23, 0, 4);
+            this.tableLayoutPanel10.Controls.Add(this.btn22, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.btn21, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.AdDelayTrig, 0, 3);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel4, 0, 10);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel3, 0, 8);
-            this.tableLayoutPanel10.Controls.Add(this.label9, 0, 7);
-            this.tableLayoutPanel10.Controls.Add(this.label8, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.lay242, 0, 10);
+            this.tableLayoutPanel10.Controls.Add(this.lay241, 0, 8);
             this.tableLayoutPanel10.Controls.Add(this.layoutDelay, 0, 6);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel1, 0, 5);
-            this.tableLayoutPanel10.Controls.Add(this.label6, 0, 4);
-            this.tableLayoutPanel10.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel6, 0, 1);
+            this.tableLayoutPanel10.Controls.Add(this.lay23, 0, 5);
+            this.tableLayoutPanel10.Controls.Add(this.lay21, 0, 1);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 12;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel10.Size = new System.Drawing.Size(480, 704);
             this.tableLayoutPanel10.TabIndex = 53;
+            this.tableLayoutPanel10.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel10_Paint);
             // 
-            // label16
+            // btn24
             // 
-            this.label16.AutoSize = true;
-            this.label16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(5, 482);
-            this.label16.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(470, 32);
-            this.label16.TabIndex = 76;
-            this.label16.Text = "ON Light";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn24.AutoFont = true;
+            this.btn24.AutoFontHeightRatio = 0.75F;
+            this.btn24.AutoFontMax = 100F;
+            this.btn24.AutoFontMin = 14F;
+            this.btn24.AutoFontWidthRatio = 0.92F;
+            this.btn24.AutoImage = true;
+            this.btn24.AutoImageMaxRatio = 0.75F;
+            this.btn24.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn24.AutoImageTint = true;
+            this.btn24.BackColor = System.Drawing.Color.White;
+            this.btn24.BackgroundColor = System.Drawing.Color.White;
+            this.btn24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn24.BorderColor = System.Drawing.Color.White;
+            this.btn24.BorderRadius = 10;
+            this.btn24.BorderSize = 1;
+            this.btn24.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn24.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn24.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn24.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn24.Corner = BeeGlobal.Corner.None;
+            this.btn24.DebounceResizeMs = 16;
+            this.btn24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn24.FlatAppearance.BorderSize = 0;
+            this.btn24.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn24.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn24.ForeColor = System.Drawing.Color.White;
+            this.btn24.Image = null;
+            this.btn24.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn24.ImageDisabled = null;
+            this.btn24.ImageHover = null;
+            this.btn24.ImageNormal = null;
+            this.btn24.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn24.ImagePressed = null;
+            this.btn24.ImageTextSpacing = 6;
+            this.btn24.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn24.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn24.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn24.ImageTintOpacity = 0.5F;
+            this.btn24.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn24.IsCLick = false;
+            this.btn24.IsNotChange = false;
+            this.btn24.IsRect = false;
+            this.btn24.IsTouch = true;
+            this.btn24.IsUnGroup = true;
+            this.btn24.Location = new System.Drawing.Point(5, 363);
+            this.btn24.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn24.Multiline = false;
+            this.btn24.Name = "btn24";
+            this.btn24.Size = new System.Drawing.Size(470, 42);
+            this.btn24.TabIndex = 114;
+            this.btn24.Text = "4.Light source";
+            this.btn24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn24.TextColor = System.Drawing.Color.White;
+            this.btn24.UseVisualStyleBackColor = false;
+            this.btn24.Click += new System.EventHandler(this.btn24_Click);
+            // 
+            // btn23
+            // 
+            this.btn23.AutoFont = true;
+            this.btn23.AutoFontHeightRatio = 0.75F;
+            this.btn23.AutoFontMax = 100F;
+            this.btn23.AutoFontMin = 14F;
+            this.btn23.AutoFontWidthRatio = 0.92F;
+            this.btn23.AutoImage = true;
+            this.btn23.AutoImageMaxRatio = 0.75F;
+            this.btn23.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn23.AutoImageTint = true;
+            this.btn23.BackColor = System.Drawing.Color.White;
+            this.btn23.BackgroundColor = System.Drawing.Color.White;
+            this.btn23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn23.BorderColor = System.Drawing.Color.White;
+            this.btn23.BorderRadius = 10;
+            this.btn23.BorderSize = 1;
+            this.btn23.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn23.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn23.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn23.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn23.Corner = BeeGlobal.Corner.None;
+            this.btn23.DebounceResizeMs = 16;
+            this.btn23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn23.FlatAppearance.BorderSize = 0;
+            this.btn23.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn23.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn23.ForeColor = System.Drawing.Color.White;
+            this.btn23.Image = null;
+            this.btn23.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn23.ImageDisabled = null;
+            this.btn23.ImageHover = null;
+            this.btn23.ImageNormal = null;
+            this.btn23.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn23.ImagePressed = null;
+            this.btn23.ImageTextSpacing = 6;
+            this.btn23.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn23.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn23.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn23.ImageTintOpacity = 0.5F;
+            this.btn23.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn23.IsCLick = true;
+            this.btn23.IsNotChange = false;
+            this.btn23.IsRect = false;
+            this.btn23.IsTouch = true;
+            this.btn23.IsUnGroup = true;
+            this.btn23.Location = new System.Drawing.Point(5, 211);
+            this.btn23.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn23.Multiline = false;
+            this.btn23.Name = "btn23";
+            this.btn23.Size = new System.Drawing.Size(470, 42);
+            this.btn23.TabIndex = 113;
+            this.btn23.Text = "3. Mode Ouyput";
+            this.btn23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn23.TextColor = System.Drawing.Color.White;
+            this.btn23.UseVisualStyleBackColor = false;
+            this.btn23.Click += new System.EventHandler(this.btn23_Click);
+            // 
+            // btn22
+            // 
+            this.btn22.AutoFont = true;
+            this.btn22.AutoFontHeightRatio = 0.75F;
+            this.btn22.AutoFontMax = 100F;
+            this.btn22.AutoFontMin = 14F;
+            this.btn22.AutoFontWidthRatio = 0.92F;
+            this.btn22.AutoImage = true;
+            this.btn22.AutoImageMaxRatio = 0.75F;
+            this.btn22.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn22.AutoImageTint = true;
+            this.btn22.BackColor = System.Drawing.Color.White;
+            this.btn22.BackgroundColor = System.Drawing.Color.White;
+            this.btn22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn22.BorderColor = System.Drawing.Color.White;
+            this.btn22.BorderRadius = 10;
+            this.btn22.BorderSize = 1;
+            this.btn22.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn22.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn22.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn22.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn22.Corner = BeeGlobal.Corner.None;
+            this.btn22.DebounceResizeMs = 16;
+            this.btn22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn22.FlatAppearance.BorderSize = 0;
+            this.btn22.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn22.ForeColor = System.Drawing.Color.White;
+            this.btn22.Image = null;
+            this.btn22.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn22.ImageDisabled = null;
+            this.btn22.ImageHover = null;
+            this.btn22.ImageNormal = null;
+            this.btn22.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn22.ImagePressed = null;
+            this.btn22.ImageTextSpacing = 6;
+            this.btn22.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn22.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn22.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn22.ImageTintOpacity = 0.5F;
+            this.btn22.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn22.IsCLick = false;
+            this.btn22.IsNotChange = false;
+            this.btn22.IsRect = false;
+            this.btn22.IsTouch = true;
+            this.btn22.IsUnGroup = true;
+            this.btn22.Location = new System.Drawing.Point(5, 110);
+            this.btn22.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn22.Multiline = false;
+            this.btn22.Name = "btn22";
+            this.btn22.Size = new System.Drawing.Size(470, 42);
+            this.btn22.TabIndex = 112;
+            this.btn22.Text = "2.Delay Capture After Trigger";
+            this.btn22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn22.TextColor = System.Drawing.Color.White;
+            this.btn22.UseVisualStyleBackColor = false;
+            this.btn22.Click += new System.EventHandler(this.btn22_Click);
+            // 
+            // btn21
+            // 
+            this.btn21.AutoFont = true;
+            this.btn21.AutoFontHeightRatio = 0.75F;
+            this.btn21.AutoFontMax = 100F;
+            this.btn21.AutoFontMin = 14F;
+            this.btn21.AutoFontWidthRatio = 0.92F;
+            this.btn21.AutoImage = true;
+            this.btn21.AutoImageMaxRatio = 0.75F;
+            this.btn21.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btn21.AutoImageTint = true;
+            this.btn21.BackColor = System.Drawing.Color.White;
+            this.btn21.BackgroundColor = System.Drawing.Color.White;
+            this.btn21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn21.BorderColor = System.Drawing.Color.White;
+            this.btn21.BorderRadius = 10;
+            this.btn21.BorderSize = 1;
+            this.btn21.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn21.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn21.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.btn21.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btn21.Corner = BeeGlobal.Corner.None;
+            this.btn21.DebounceResizeMs = 16;
+            this.btn21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn21.FlatAppearance.BorderSize = 0;
+            this.btn21.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn21.ForeColor = System.Drawing.Color.White;
+            this.btn21.Image = null;
+            this.btn21.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn21.ImageDisabled = null;
+            this.btn21.ImageHover = null;
+            this.btn21.ImageNormal = null;
+            this.btn21.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btn21.ImagePressed = null;
+            this.btn21.ImageTextSpacing = 6;
+            this.btn21.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btn21.ImageTintHover = System.Drawing.Color.Empty;
+            this.btn21.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btn21.ImageTintOpacity = 0.5F;
+            this.btn21.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btn21.IsCLick = true;
+            this.btn21.IsNotChange = false;
+            this.btn21.IsRect = false;
+            this.btn21.IsTouch = true;
+            this.btn21.IsUnGroup = true;
+            this.btn21.Location = new System.Drawing.Point(5, 10);
+            this.btn21.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
+            this.btn21.Multiline = false;
+            this.btn21.Name = "btn21";
+            this.btn21.Size = new System.Drawing.Size(470, 35);
+            this.btn21.TabIndex = 111;
+            this.btn21.Text = "1.Mode Trigger";
+            this.btn21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn21.TextColor = System.Drawing.Color.White;
+            this.btn21.UseVisualStyleBackColor = false;
+            this.btn21.Click += new System.EventHandler(this.btn21_Click);
             // 
             // AdDelayTrig
             // 
@@ -1508,7 +2113,7 @@ namespace BeeInterface
             this.AdDelayTrig.AutoRepeatMinInterval = 20;
             this.AdDelayTrig.AutoShowTextbox = true;
             this.AdDelayTrig.AutoSizeTextbox = true;
-            this.AdDelayTrig.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdDelayTrig.BackColor = System.Drawing.Color.White;
             this.AdDelayTrig.BarLeftGap = 20;
             this.AdDelayTrig.BarRightGap = 6;
             this.AdDelayTrig.ChromeGap = 8;
@@ -1527,7 +2132,7 @@ namespace BeeInterface
             this.AdDelayTrig.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdDelayTrig.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdDelayTrig.KeyboardStep = 1F;
-            this.AdDelayTrig.Location = new System.Drawing.Point(5, 159);
+            this.AdDelayTrig.Location = new System.Drawing.Point(5, 152);
             this.AdDelayTrig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdDelayTrig.MatchTextboxFontToThumb = true;
             this.AdDelayTrig.Max = 2000F;
@@ -1563,22 +2168,22 @@ namespace BeeInterface
             this.AdDelayTrig.WheelStep = 1F;
             this.AdDelayTrig.ValueChanged += new System.Action<float>(this.AdDelayTrig_ValueChanged);
             // 
-            // tableLayoutPanel4
+            // lay242
             // 
-            this.tableLayoutPanel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.btnOn, 1, 0);
-            this.tableLayoutPanel4.Controls.Add(this.btnOFF, 0, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 514);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(470, 50);
-            this.tableLayoutPanel4.TabIndex = 74;
+            this.lay242.BackColor = System.Drawing.Color.White;
+            this.lay242.ColumnCount = 2;
+            this.lay242.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay242.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay242.Controls.Add(this.btnOn, 1, 0);
+            this.lay242.Controls.Add(this.btnOFF, 0, 0);
+            this.lay242.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay242.Location = new System.Drawing.Point(5, 455);
+            this.lay242.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lay242.Name = "lay242";
+            this.lay242.RowCount = 1;
+            this.lay242.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay242.Size = new System.Drawing.Size(470, 50);
+            this.lay242.TabIndex = 74;
             // 
             // btnOn
             // 
@@ -1605,7 +2210,7 @@ namespace BeeInterface
             this.btnOn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOn.FlatAppearance.BorderSize = 0;
             this.btnOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.34375F);
+            this.btnOn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.14063F);
             this.btnOn.ForeColor = System.Drawing.Color.Black;
             this.btnOn.Image = null;
             this.btnOn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1623,12 +2228,13 @@ namespace BeeInterface
             this.btnOn.IsCLick = false;
             this.btnOn.IsNotChange = false;
             this.btnOn.IsRect = false;
+            this.btnOn.IsTouch = false;
             this.btnOn.IsUnGroup = false;
-            this.btnOn.Location = new System.Drawing.Point(235, 2);
-            this.btnOn.Margin = new System.Windows.Forms.Padding(0, 2, 2, 2);
+            this.btnOn.Location = new System.Drawing.Point(235, 5);
+            this.btnOn.Margin = new System.Windows.Forms.Padding(0, 5, 2, 5);
             this.btnOn.Multiline = false;
             this.btnOn.Name = "btnOn";
-            this.btnOn.Size = new System.Drawing.Size(233, 46);
+            this.btnOn.Size = new System.Drawing.Size(233, 40);
             this.btnOn.TabIndex = 3;
             this.btnOn.Text = "ON";
             this.btnOn.TextColor = System.Drawing.Color.Black;
@@ -1662,7 +2268,7 @@ namespace BeeInterface
             this.btnOFF.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOFF.FlatAppearance.BorderSize = 0;
             this.btnOFF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOFF.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.34375F);
+            this.btnOFF.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.14063F);
             this.btnOFF.ForeColor = System.Drawing.Color.Black;
             this.btnOFF.Image = null;
             this.btnOFF.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1680,12 +2286,13 @@ namespace BeeInterface
             this.btnOFF.IsCLick = true;
             this.btnOFF.IsNotChange = false;
             this.btnOFF.IsRect = false;
+            this.btnOFF.IsTouch = false;
             this.btnOFF.IsUnGroup = false;
-            this.btnOFF.Location = new System.Drawing.Point(2, 2);
-            this.btnOFF.Margin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.btnOFF.Location = new System.Drawing.Point(5, 5);
+            this.btnOFF.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnOFF.Multiline = false;
             this.btnOFF.Name = "btnOFF";
-            this.btnOFF.Size = new System.Drawing.Size(233, 46);
+            this.btnOFF.Size = new System.Drawing.Size(230, 40);
             this.btnOFF.TabIndex = 2;
             this.btnOFF.Text = "OFF";
             this.btnOFF.TextColor = System.Drawing.Color.Black;
@@ -1693,26 +2300,24 @@ namespace BeeInterface
             this.btnOFF.UseVisualStyleBackColor = false;
             this.btnOFF.Click += new System.EventHandler(this.btnOFF_Click);
             // 
-            // tableLayoutPanel3
+            // lay241
             // 
-            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.tableLayoutPanel3.ColumnCount = 3;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.35294F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.29412F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.35294F));
-            this.tableLayoutPanel3.Controls.Add(this.btnLight3, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnLight1, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnLight2, 1, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(5, 412);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 1;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(472, 50);
-            this.tableLayoutPanel3.TabIndex = 73;
+            this.lay241.BackColor = System.Drawing.Color.White;
+            this.lay241.ColumnCount = 3;
+            this.lay241.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.35294F));
+            this.lay241.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.29412F));
+            this.lay241.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.35294F));
+            this.lay241.Controls.Add(this.btnLight3, 2, 0);
+            this.lay241.Controls.Add(this.btnLight1, 0, 0);
+            this.lay241.Controls.Add(this.btnLight2, 1, 0);
+            this.lay241.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay241.Location = new System.Drawing.Point(5, 405);
+            this.lay241.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
+            this.lay241.Name = "lay241";
+            this.lay241.RowCount = 1;
+            this.lay241.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay241.Size = new System.Drawing.Size(472, 50);
+            this.lay241.TabIndex = 73;
             // 
             // btnLight3
             // 
@@ -1758,6 +2363,7 @@ namespace BeeInterface
             this.btnLight3.IsCLick = false;
             this.btnLight3.IsNotChange = false;
             this.btnLight3.IsRect = false;
+            this.btnLight3.IsTouch = false;
             this.btnLight3.IsUnGroup = true;
             this.btnLight3.Location = new System.Drawing.Point(318, 2);
             this.btnLight3.Margin = new System.Windows.Forms.Padding(0, 2, 5, 2);
@@ -1815,6 +2421,7 @@ namespace BeeInterface
             this.btnLight1.IsCLick = true;
             this.btnLight1.IsNotChange = false;
             this.btnLight1.IsRect = false;
+            this.btnLight1.IsTouch = false;
             this.btnLight1.IsUnGroup = true;
             this.btnLight1.Location = new System.Drawing.Point(5, 2);
             this.btnLight1.Margin = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -1872,6 +2479,7 @@ namespace BeeInterface
             this.btnLight2.IsCLick = false;
             this.btnLight2.IsNotChange = false;
             this.btnLight2.IsRect = false;
+            this.btnLight2.IsTouch = false;
             this.btnLight2.IsUnGroup = true;
             this.btnLight2.Location = new System.Drawing.Point(152, 2);
             this.btnLight2.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
@@ -1885,52 +2493,23 @@ namespace BeeInterface
             this.btnLight2.UseVisualStyleBackColor = false;
             this.btnLight2.Click += new System.EventHandler(this.btnLight2_Click);
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(5, 380);
-            this.label9.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(470, 32);
-            this.label9.TabIndex = 72;
-            this.label9.Text = "Choose Light";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(5, 20);
-            this.label8.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(470, 32);
-            this.label8.TabIndex = 71;
-            this.label8.Text = "Methord Trigger";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // layoutDelay
             // 
-            this.layoutDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.layoutDelay.BackColor = System.Drawing.Color.White;
             this.layoutDelay.ColumnCount = 2;
             this.layoutDelay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.26667F));
             this.layoutDelay.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.73333F));
             this.layoutDelay.Controls.Add(this.AdDelayOutput, 1, 0);
             this.layoutDelay.Controls.Add(this.label7, 0, 0);
             this.layoutDelay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutDelay.Location = new System.Drawing.Point(5, 310);
+            this.layoutDelay.Location = new System.Drawing.Point(5, 303);
             this.layoutDelay.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.layoutDelay.Name = "layoutDelay";
             this.layoutDelay.RowCount = 1;
             this.layoutDelay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layoutDelay.Size = new System.Drawing.Size(472, 50);
             this.layoutDelay.TabIndex = 70;
+            this.layoutDelay.Visible = false;
             // 
             // AdDelayOutput
             // 
@@ -1942,7 +2521,7 @@ namespace BeeInterface
             this.AdDelayOutput.AutoRepeatMinInterval = 20;
             this.AdDelayOutput.AutoShowTextbox = true;
             this.AdDelayOutput.AutoSizeTextbox = true;
-            this.AdDelayOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.AdDelayOutput.BackColor = System.Drawing.Color.White;
             this.AdDelayOutput.BarLeftGap = 20;
             this.AdDelayOutput.BarRightGap = 6;
             this.AdDelayOutput.ChromeGap = 8;
@@ -2010,25 +2589,25 @@ namespace BeeInterface
             this.label7.TabIndex = 69;
             this.label7.Text = "Delay";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
-            // tableLayoutPanel1
+            // lay23
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.btnAllTime, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnBlink, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 260);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(472, 50);
-            this.tableLayoutPanel1.TabIndex = 69;
+            this.lay23.BackColor = System.Drawing.Color.White;
+            this.lay23.ColumnCount = 2;
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay23.Controls.Add(this.btnAllTime, 1, 0);
+            this.lay23.Controls.Add(this.btnBlink, 0, 0);
+            this.lay23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay23.Location = new System.Drawing.Point(5, 253);
+            this.lay23.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
+            this.lay23.Name = "lay23";
+            this.lay23.RowCount = 1;
+            this.lay23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay23.Size = new System.Drawing.Size(472, 50);
+            this.lay23.TabIndex = 69;
+            this.lay23.Visible = false;
             // 
             // btnAllTime
             // 
@@ -2073,6 +2652,7 @@ namespace BeeInterface
             this.btnAllTime.IsCLick = false;
             this.btnAllTime.IsNotChange = false;
             this.btnAllTime.IsRect = false;
+            this.btnAllTime.IsTouch = false;
             this.btnAllTime.IsUnGroup = false;
             this.btnAllTime.Location = new System.Drawing.Point(236, 5);
             this.btnAllTime.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
@@ -2130,6 +2710,7 @@ namespace BeeInterface
             this.btnBlink.IsCLick = true;
             this.btnBlink.IsNotChange = false;
             this.btnBlink.IsRect = false;
+            this.btnBlink.IsTouch = false;
             this.btnBlink.IsUnGroup = false;
             this.btnBlink.Location = new System.Drawing.Point(5, 5);
             this.btnBlink.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
@@ -2143,54 +2724,23 @@ namespace BeeInterface
             this.btnBlink.UseVisualStyleBackColor = false;
             this.btnBlink.Click += new System.EventHandler(this.btnBlink_Click);
             // 
-            // label6
+            // lay21
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(5, 228);
-            this.label6.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(470, 32);
-            this.label6.TabIndex = 68;
-            this.label6.Text = "Methord OutPut";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(5, 127);
-            this.label1.Margin = new System.Windows.Forms.Padding(5, 20, 5, 2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(470, 30);
-            this.label1.TabIndex = 66;
-            this.label1.Text = "Delay Trigger (ms)";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.tableLayoutPanel6.ColumnCount = 2;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Controls.Add(this.btnExternal, 1, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnInternal, 0, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(5, 52);
-            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(470, 50);
-            this.tableLayoutPanel6.TabIndex = 44;
+            this.lay21.BackColor = System.Drawing.Color.White;
+            this.lay21.ColumnCount = 2;
+            this.lay21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay21.Controls.Add(this.btnExternal, 1, 0);
+            this.lay21.Controls.Add(this.btnInternal, 0, 0);
+            this.lay21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lay21.Location = new System.Drawing.Point(5, 45);
+            this.lay21.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
+            this.lay21.Name = "lay21";
+            this.lay21.RowCount = 1;
+            this.lay21.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.lay21.Size = new System.Drawing.Size(470, 50);
+            this.lay21.TabIndex = 44;
+            this.lay21.Visible = false;
             // 
             // btnExternal
             // 
@@ -2235,6 +2785,7 @@ namespace BeeInterface
             this.btnExternal.IsCLick = false;
             this.btnExternal.IsNotChange = false;
             this.btnExternal.IsRect = false;
+            this.btnExternal.IsTouch = false;
             this.btnExternal.IsUnGroup = false;
             this.btnExternal.Location = new System.Drawing.Point(235, 5);
             this.btnExternal.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
@@ -2292,6 +2843,7 @@ namespace BeeInterface
             this.btnInternal.IsCLick = true;
             this.btnInternal.IsNotChange = false;
             this.btnInternal.IsRect = false;
+            this.btnInternal.IsTouch = false;
             this.btnInternal.IsUnGroup = false;
             this.btnInternal.Location = new System.Drawing.Point(5, 5);
             this.btnInternal.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
@@ -2307,8 +2859,8 @@ namespace BeeInterface
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
@@ -2317,18 +2869,6 @@ namespace BeeInterface
             this.tabControl1.Size = new System.Drawing.Size(494, 748);
             this.tabControl1.TabIndex = 60;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage4.Controls.Add(this.tableLayoutPanel10);
-            this.tabPage4.Location = new System.Drawing.Point(4, 34);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(486, 710);
-            this.tabPage4.TabIndex = 1;
-            this.tabPage4.Text = "Input";
             // 
             // tabPage3
             // 
@@ -2340,6 +2880,18 @@ namespace BeeInterface
             this.tabPage3.Size = new System.Drawing.Size(486, 710);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Camera";
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage4.Controls.Add(this.tableLayoutPanel10);
+            this.tabPage4.Location = new System.Drawing.Point(4, 34);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(486, 710);
+            this.tabPage4.TabIndex = 1;
+            this.tabPage4.Text = "Hardware";
             // 
             // tmShowPara
             // 
@@ -2359,51 +2911,46 @@ namespace BeeInterface
             this.Load += new System.EventHandler(this.SettingStep1_Load);
             this.VisibleChanged += new System.EventHandler(this.SettingStep1_VisibleChanged);
             this.tableLayout1.ResumeLayout(false);
-            this.tableLayout1.PerformLayout();
+            this.tableLayoutPanel22.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel21.ResumeLayout(false);
+            this.lay2.ResumeLayout(false);
             this.tableLayoutPanel11.ResumeLayout(false);
             this.tableLayoutPanel10.ResumeLayout(false);
-            this.tableLayoutPanel10.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel3.ResumeLayout(false);
+            this.lay242.ResumeLayout(false);
+            this.lay241.ResumeLayout(false);
             this.layoutDelay.ResumeLayout(false);
             this.layoutDelay.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel6.ResumeLayout(false);
+            this.lay23.ResumeLayout(false);
+            this.lay21.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private  System.Windows.Forms.TableLayoutPanel tableLayout1;
-        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private  System.Windows.Forms.TableLayoutPanel lay21;
         private RJButton btnExternal;
         private RJButton btnInternal;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private RJButton btnCancel;
         private RJButton btnNextStep;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label6;
-        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private  System.Windows.Forms.TableLayoutPanel lay23;
         private RJButton btnAllTime;
         private RJButton btnBlink;
         private  System.Windows.Forms.TableLayoutPanel layoutDelay;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private  System.Windows.Forms.TableLayoutPanel lay241;
         private RJButton btnLight3;
         private RJButton btnLight1;
         private RJButton btnLight2;
-        private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private  System.Windows.Forms.TableLayoutPanel lay242;
         private RJButton btnOn;
         private RJButton btnOFF;
         private System.Windows.Forms.TabControl tabControl1;
@@ -2426,23 +2973,25 @@ namespace BeeInterface
         private RJButton btnChnageCamera;
         private AdjustBarEx AdjFocus;
         private AdjustBarEx AdjZoom;
-        private TableLayoutPanel2 tableLayoutPanel21;
+        private TableLayoutPanel2 lay2;
         private RJButton btnFocus;
-        private Label label16;
         private TableLayoutPanel tableLayoutPanel2;
-        private Label label14;
-        private Label label18;
-        private Label label4;
-        private Label label2;
-        private Label label3;
-        private Label label15;
-        private Label label10;
-        private Label label5;
-        private Label label12;
-        private Label label11;
         private Label label17;
-        private Label label13;
-        private Label label19;
-        private Label lbErr;
+        private RJButton btn1;
+        private RJButton btn2;
+        private RJButton btn3;
+        private RJButton btn4;
+        private RJButton btn5;
+        private RJButton btn6;
+        private RJButton btn7;
+        private RJButton btn9;
+        private RJButton btn8;
+        private TableLayoutPanel2 tableLayoutPanel22;
+        private AutoFontLabel lbErr;
+        private Label label2;
+        private RJButton btn21;
+        private RJButton btn22;
+        private RJButton btn23;
+        private RJButton btn24;
     }
 }

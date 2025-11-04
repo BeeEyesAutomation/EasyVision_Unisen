@@ -30,6 +30,7 @@ namespace BeeCore
 {
     public class Camera
     {
+        public bool IsSkip = false; 
         public int IndexCCD=0;
         public Camera( ParaCamera paraCamera,int index)
         {
@@ -1553,7 +1554,11 @@ namespace BeeCore
         public bool ConnectNoAwait(string Name, TypeCamera typeCam) => Connect(Name, typeCam).GetAwaiter().GetResult();
         public  async Task< bool> ReadAwait()
         {
-         
+         if(IsSkip)
+            {
+                matRaw = new Mat();
+                return false;
+            }
             if (IsSetPara)
               return false;
             if (IsMouseDown)

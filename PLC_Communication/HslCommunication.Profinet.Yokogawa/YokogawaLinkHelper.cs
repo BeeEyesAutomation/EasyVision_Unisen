@@ -1,0 +1,34 @@
+namespace HslCommunication.Profinet.Yokogawa;
+
+public class YokogawaLinkHelper
+{
+	public static string GetErrorMsg(byte code)
+	{
+		if (1 == 0)
+		{
+		}
+		string result = code switch
+		{
+			1 => StringResources.Language.YokogawaLinkError01, 
+			2 => StringResources.Language.YokogawaLinkError02, 
+			3 => StringResources.Language.YokogawaLinkError03, 
+			4 => StringResources.Language.YokogawaLinkError04, 
+			5 => StringResources.Language.YokogawaLinkError05, 
+			6 => StringResources.Language.YokogawaLinkError06, 
+			7 => StringResources.Language.YokogawaLinkError07, 
+			8 => StringResources.Language.YokogawaLinkError08, 
+			65 => StringResources.Language.YokogawaLinkError41, 
+			66 => StringResources.Language.YokogawaLinkError42, 
+			67 => StringResources.Language.YokogawaLinkError43, 
+			68 => StringResources.Language.YokogawaLinkError44, 
+			81 => StringResources.Language.YokogawaLinkError51, 
+			82 => StringResources.Language.YokogawaLinkError52, 
+			241 => StringResources.Language.YokogawaLinkErrorF1, 
+			_ => StringResources.Language.UnknownError, 
+		};
+		if (1 == 0)
+		{
+		}
+		return result;
+	}
+}

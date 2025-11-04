@@ -5590,8 +5590,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
          public    RegisterImgs RegisterImgs = new RegisterImgs();
         private void btnChangeImg_Click(object sender, EventArgs e)
         {
-            btnChangeImg.Enabled = false;
-            RegisterImgs.Visible = true;
+           
+            RegisterImgs.Visible = btnChangeImg.IsCLick;
             RegisterImgs.Parent = this;
             RegisterImgs.Height = imgView.Height;
             RegisterImgs.BringToFront();

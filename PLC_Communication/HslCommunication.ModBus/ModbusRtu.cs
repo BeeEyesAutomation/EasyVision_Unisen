@@ -1,0 +1,435 @@
+using System;
+using System.Threading.Tasks;
+using HslCommunication.Core;
+using HslCommunication.Core.Device;
+using HslCommunication.Core.IMessage;
+using HslCommunication.Reflection;
+
+namespace HslCommunication.ModBus;
+
+public class ModbusRtu : DeviceSerialPort, IModbus, IReadWriteDevice, IReadWriteNet
+{
+	private byte station = 1;
+
+	private bool isAddressStartWithZero = true;
+
+	private Func<string, byte, OperateResult<string>> addressMapping = (string address, byte modbusCode) => OperateResult.CreateSuccessResult(address);
+
+	public bool AddressStartWithZero
+	{
+		get
+		{
+			return isAddressStartWithZero;
+		}
+		set
+		{
+			isAddressStartWithZero = value;
+		}
+	}
+
+	public byte Station
+	{
+		get
+		{
+			return station;
+		}
+		set
+		{
+			station = value;
+		}
+	}
+
+	public DataFormat DataFormat
+	{
+		get
+		{
+			return base.ByteTransform.DataFormat;
+		}
+		set
+		{
+			base.ByteTransform.DataFormat = value;
+		}
+	}
+
+	public bool IsStringReverse
+	{
+		get
+		{
+			return base.ByteTransform.IsStringReverseByteWord;
+		}
+		set
+		{
+			base.ByteTransform.IsStringReverseByteWord = value;
+		}
+	}
+
+	public bool EnableWriteMaskCode { get; set; } = true;
+
+	public int BroadcastStation { get; set; } = -1;
+
+	public bool StationCheckMacth { get; set; } = true;
+
+	public bool Crc16CheckEnable { get; set; } = true;
+
+	public int WordReadBatchLength { get; set; } = 120;
+
+	public ModbusRtu()
+	{
+		base.ByteTransform = new RegularByteTransform(DataFormat.CDAB);
+		base.ReceiveEmptyDataCount = 8;
+	}
+
+	public ModbusRtu(byte station = 1)
+		: this()
+	{
+		this.station = station;
+	}
+
+	protected override INetMessage GetNewNetMessage()
+	{
+		return new ModbusRtuMessage(StationCheckMacth);
+	}
+
+	public virtual OperateResult<string> TranslateToModbusAddress(string address, byte modbusCode)
+	{
+		if (addressMapping != null)
+		{
+			return addressMapping(address, modbusCode);
+		}
+		return OperateResult.CreateSuccessResult(address);
+	}
+
+	public void RegisteredAddressMapping(Func<string, byte, OperateResult<string>> mapping)
+	{
+		addressMapping = mapping;
+	}
+
+	public override byte[] PackCommandWithHeader(byte[] command)
+	{
+		return ModbusInfo.PackCommandToRtu(command);
+	}
+
+	public override OperateResult<byte[]> UnpackResponseContent(byte[] send, byte[] response)
+	{
+		return ModbusHelper.ExtraRtuResponseContent(send, response, Crc16CheckEnable, BroadcastStation);
+	}
+
+	public override OperateResult<byte[]> ReadFromCoreServer(byte[] send)
+	{
+		if (BroadcastStation >= 0 && send[0] == BroadcastStation)
+		{
+			return ReadFromCoreServer(send, hasResponseData: false, usePackAndUnpack: true);
+		}
+		return base.ReadFromCoreServer(send);
+	}
+
+	public override async Task<OperateResult<byte[]>> ReadFromCoreServerAsync(byte[] send)
+	{
+		if (BroadcastStation >= 0 && send[0] == BroadcastStation)
+		{
+			return ReadFromCoreServer(send, hasResponseData: false, usePackAndUnpack: true);
+		}
+		return await base.ReadFromCoreServerAsync(send);
+	}
+
+	public OperateResult<bool> ReadCoil(string address)
+	{
+		return ReadBool(address);
+	}
+
+	public OperateResult<bool[]> ReadCoil(string address, ushort length)
+	{
+		return ReadBool(address, length);
+	}
+
+	public OperateResult<bool> ReadDiscrete(string address)
+	{
+		return ByteTransformHelper.GetResultFromArray(ReadDiscrete(address, 1));
+	}
+
+	public OperateResult<bool[]> ReadDiscrete(string address, ushort length)
+	{
+		return ModbusHelper.ReadBoolHelper(this, address, length, 2);
+	}
+
+	[HslMqttApi("ReadByteArray", "")]
+	public override OperateResult<byte[]> Read(string address, ushort length)
+	{
+		return ModbusHelper.Read(this, address, length);
+	}
+
+	[HslMqttApi("ReadWrite", "Use 0x17 function code to write and read data at the same time, and use a message to implement it")]
+	public OperateResult<byte[]> ReadWrite(string readAddress, ushort length, string writeAddress, byte[] value)
+	{
+		return ModbusHelper.ReadWrite(this, readAddress, length, writeAddress, value);
+	}
+
+	[HslMqttApi("WriteByteArray", "")]
+	public override OperateResult Write(string address, byte[] value)
+	{
+		return ModbusHelper.Write(this, address, value);
+	}
+
+	[HslMqttApi("WriteInt16", "")]
+	public override OperateResult Write(string address, short value)
+	{
+		return ModbusHelper.Write(this, address, value);
+	}
+
+	[HslMqttApi("WriteUInt16", "")]
+	public override OperateResult Write(string address, ushort value)
+	{
+		return ModbusHelper.Write(this, address, value);
+	}
+
+	[HslMqttApi("WriteMask", "")]
+	public OperateResult WriteMask(string address, ushort andMask, ushort orMask)
+	{
+		return ModbusHelper.WriteMask(this, address, andMask, orMask);
+	}
+
+	[HslMqttApi("ReadFile", "")]
+	public OperateResult<byte[]> ReadFile(ushort fileNumber, ushort address, ushort length)
+	{
+		return ModbusHelper.ReadFile(this, Station, fileNumber, address, length);
+	}
+
+	[HslMqttApi("WriteFile", "")]
+	public OperateResult WriteFile(ushort fileNumber, ushort address, byte[] data)
+	{
+		return ModbusHelper.WriteFile(this, Station, fileNumber, address, data);
+	}
+
+	public OperateResult WriteOneRegister(string address, short value)
+	{
+		return Write(address, value);
+	}
+
+	public OperateResult WriteOneRegister(string address, ushort value)
+	{
+		return Write(address, value);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, short value)
+	{
+		return await Task.Run(() => Write(address, value));
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, ushort value)
+	{
+		return await Task.Run(() => Write(address, value));
+	}
+
+	public async Task<OperateResult<bool>> ReadCoilAsync(string address)
+	{
+		return await Task.Run(() => ReadCoil(address));
+	}
+
+	public async Task<OperateResult<bool[]>> ReadCoilAsync(string address, ushort length)
+	{
+		return await Task.Run(() => ReadCoil(address, length));
+	}
+
+	public async Task<OperateResult<bool>> ReadDiscreteAsync(string address)
+	{
+		return await Task.Run(() => ReadDiscrete(address));
+	}
+
+	public async Task<OperateResult<bool[]>> ReadDiscreteAsync(string address, ushort length)
+	{
+		return await Task.Run(() => ReadDiscrete(address, length));
+	}
+
+	public async Task<OperateResult> WriteOneRegisterAsync(string address, short value)
+	{
+		return await Task.Run(() => WriteOneRegister(address, value));
+	}
+
+	public async Task<OperateResult> WriteOneRegisterAsync(string address, ushort value)
+	{
+		return await Task.Run(() => WriteOneRegister(address, value));
+	}
+
+	public async Task<OperateResult> WriteMaskAsync(string address, ushort andMask, ushort orMask)
+	{
+		return await Task.Run(() => WriteMask(address, andMask, orMask));
+	}
+
+	[HslMqttApi("ReadBoolArray", "")]
+	public override OperateResult<bool[]> ReadBool(string address, ushort length)
+	{
+		return ModbusHelper.ReadBoolHelper(this, address, length, 1);
+	}
+
+	[HslMqttApi("WriteBoolArray", "")]
+	public override OperateResult Write(string address, bool[] values)
+	{
+		return ModbusHelper.Write(this, address, values);
+	}
+
+	[HslMqttApi("WriteBool", "")]
+	public override OperateResult Write(string address, bool value)
+	{
+		return ModbusHelper.Write(this, address, value);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, bool value)
+	{
+		return await Task.Run(() => Write(address, value));
+	}
+
+	[HslMqttApi("ReadInt32Array", "")]
+	public override OperateResult<int[]> ReadInt32(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransInt32(m, 0, length));
+	}
+
+	[HslMqttApi("ReadUInt32Array", "")]
+	public override OperateResult<uint[]> ReadUInt32(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransUInt32(m, 0, length));
+	}
+
+	[HslMqttApi("ReadFloatArray", "")]
+	public override OperateResult<float[]> ReadFloat(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransSingle(m, 0, length));
+	}
+
+	[HslMqttApi("ReadInt64Array", "")]
+	public override OperateResult<long[]> ReadInt64(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransInt64(m, 0, length));
+	}
+
+	[HslMqttApi("ReadUInt64Array", "")]
+	public override OperateResult<ulong[]> ReadUInt64(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransUInt64(m, 0, length));
+	}
+
+	[HslMqttApi("ReadDoubleArray", "")]
+	public override OperateResult<double[]> ReadDouble(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(Read(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransDouble(m, 0, length));
+	}
+
+	[HslMqttApi("WriteInt32Array", "")]
+	public override OperateResult Write(string address, int[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	[HslMqttApi("WriteUInt32Array", "")]
+	public override OperateResult Write(string address, uint[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	[HslMqttApi("WriteFloatArray", "")]
+	public override OperateResult Write(string address, float[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	[HslMqttApi("WriteInt64Array", "")]
+	public override OperateResult Write(string address, long[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	[HslMqttApi("WriteUInt64Array", "")]
+	public override OperateResult Write(string address, ulong[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	[HslMqttApi("WriteDoubleArray", "")]
+	public override OperateResult Write(string address, double[] values)
+	{
+		IByteTransform byteTransform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return Write(address, byteTransform.TransByte(values));
+	}
+
+	public override async Task<OperateResult<int[]>> ReadInt32Async(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransInt32(m, 0, length));
+	}
+
+	public override async Task<OperateResult<uint[]>> ReadUInt32Async(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransUInt32(m, 0, length));
+	}
+
+	public override async Task<OperateResult<float[]>> ReadFloatAsync(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 2)), (byte[] m) => transform.TransSingle(m, 0, length));
+	}
+
+	public override async Task<OperateResult<long[]>> ReadInt64Async(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransInt64(m, 0, length));
+	}
+
+	public override async Task<OperateResult<ulong[]>> ReadUInt64Async(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransUInt64(m, 0, length));
+	}
+
+	public override async Task<OperateResult<double[]>> ReadDoubleAsync(string address, ushort length)
+	{
+		IByteTransform transform = HslHelper.ExtractTransformParameter(ref address, base.ByteTransform);
+		return ByteTransformHelper.GetResultFromBytes(await ReadAsync(address, (ushort)(length * base.WordLength * 4)), (byte[] m) => transform.TransDouble(m, 0, length));
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, int[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, uint[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, float[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, long[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, ulong[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override async Task<OperateResult> WriteAsync(string address, double[] values)
+	{
+		return await WriteAsync(value: HslHelper.ExtractTransformParameter(ref address, base.ByteTransform).TransByte(values), address: address);
+	}
+
+	public override string ToString()
+	{
+		return $"ModbusRtu[{base.PortName}:{base.BaudRate}]";
+	}
+}

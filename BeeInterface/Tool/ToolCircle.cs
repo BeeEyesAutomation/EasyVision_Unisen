@@ -91,16 +91,16 @@ namespace BeeInterface
             switch (Propety.MethordEdge)
             {
                 case MethordEdge.StrongEdges:
-                    btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
+                    btnStrongEdge.IsCLick = true; lay32.Enabled = false;
                     break;
                 case MethordEdge.CloseEdges:
-                    btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
+                    btnCloseEdge.IsCLick = true; lay32.Enabled = false;
                     break;
                 case MethordEdge.Binary:
-                    btnBinary.IsCLick = true; layThreshod.Enabled = true;
+                    btnBinary.IsCLick = true; lay32.Enabled = true;
                     break;
                 case MethordEdge.InvertBinary:
-                    btnInvert.IsCLick = true; layThreshod.Enabled = true;
+                    btnInvert.IsCLick = true; lay32.Enabled = true;
                     break;
             }
             switch (Propety.CircleScanDirection)
@@ -122,6 +122,9 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            btn1.IsCLick = true;
+            btn2.IsCLick = true;
+            btn3.IsCLick = true;
         }
         
 
@@ -501,12 +504,12 @@ private void ToolCircle_ScoreChanged(float obj)
 
         private void btnCloseEdge_Click(object sender, EventArgs e)
         {
-            Propety.MethordEdge = MethordEdge.CloseEdges; layThreshod.Enabled = false;
+            Propety.MethordEdge = MethordEdge.CloseEdges; lay32.Enabled = false;
         }
 
         private void btnStrongEdge_Click(object sender, EventArgs e)
         {
-            Propety.MethordEdge = MethordEdge.StrongEdges; layThreshod.Enabled = false;
+            Propety.MethordEdge = MethordEdge.StrongEdges; lay32.Enabled = false;
         }
 
         private void btnCalib_Click(object sender, EventArgs e)
@@ -522,7 +525,7 @@ private void ToolCircle_ScoreChanged(float obj)
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
-            layThreshod.Enabled = true;
+            lay32.Enabled = true;
         }
 
         private void btnMask_Click(object sender, EventArgs e)
@@ -556,7 +559,7 @@ private void ToolCircle_ScoreChanged(float obj)
         private void btnInvert_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.InvertBinary;
-            layThreshod.Enabled = true;
+            lay32.Enabled = true;
         }
 
         private void AdjThreshod_ValueChanged(float obj)
@@ -616,6 +619,42 @@ private void ToolCircle_ScoreChanged(float obj)
         private void AdjScale_ValueChanged(float obj)
         {
             Propety.Scale=AdjScale.Value;
+        }
+
+        private void lb1_Click(object sender, EventArgs e)
+        {
+            //Lay1.Visible=lb1
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            Lay1.Visible = !btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            Lay2.Visible = !btn2.IsCLick;
+            Lay21.Visible = !btn2.IsCLick;
+            Lay22.Visible = !btn2.IsCLick;
+            Lay23.Visible = !btn2.IsCLick;
+            Lay24.Visible = !btn2.IsCLick;
+
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            lay31.Visible=!btn3.IsCLick;
+            lay32.Visible=!btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            AdjScale.Visible = !btn4.IsCLick;
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn5.IsCLick;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace BeeInterface
         private bool _isHovered = false;
         private bool _isPressed = false;
         private bool _isNotChange = false;
-        private bool _isUnGroup = false;
+        private bool _isUnGroup = true;
         private bool _isRect = false;
 
         // Layout rects
@@ -210,7 +210,13 @@ namespace BeeInterface
                 Invalidate();
             }
         }
-
+        private bool _isTouch = false;
+        [Category("IsTouch")]
+        public bool IsTouch
+        {
+            get => _isTouch;
+            set { _isTouch = value;this.Invalidate(); }
+        }
         // Wrap Image/ImageList/ImageIndex để trigger layout
         public new Image Image
         {
@@ -730,7 +736,7 @@ namespace BeeInterface
                 mid = ClickMidColor;
                 bot = ClickBotColor;
             }
-            else if (_isHovered) { top = Color.FromArgb(208, 211, 213); mid = Color.FromArgb(193, 197, 199); bot = Color.FromArgb(179, 182, 185); }
+            else if (_isHovered|| _isTouch) { top = Color.FromArgb(208, 211, 213); mid = Color.FromArgb(193, 197, 199); bot = Color.FromArgb(179, 182, 185); }
             else { top = Color.FromArgb(245, 248, 251); mid = Color.FromArgb(218, 221, 224); bot = Color.FromArgb(199, 203, 206); }
 
             using (var brush = new LinearGradientBrush(bounds, top, bot, LinearGradientMode.Vertical))
