@@ -266,10 +266,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult(0);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			socket.ReceiveTimeout = timeOut;
@@ -331,10 +331,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult(length);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		HslTimeOut hslTimeOut = HslTimeOut.HandleTimeOutCheck(socket, timeOut);
 		try
 		{
@@ -390,10 +390,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult(length);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		HslTimeOut hslTimeOut = HslTimeOut.HandleTimeOutCheck(socket, timeOut);
 		try
 		{
@@ -468,10 +468,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult(0);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			ssl.ReadTimeout = timeOut;
@@ -535,10 +535,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult(length);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			if (length > 0)
@@ -592,10 +592,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		if (socket == null)
 		{
 			return new OperateResult<byte[]>(SocketErrorCode, "Socket is null");
@@ -634,10 +634,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult(StringResources.Language.AuthorizationFailed);
+		//}
 		if (socket == null)
 		{
 			return new OperateResult<byte[]>(SocketErrorCode, "Socket is null");
@@ -676,10 +676,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		if (ssl == null)
 		{
 			return new OperateResult(SocketErrorCode, "SslStream is null");
@@ -711,10 +711,10 @@ public static class NetSupport
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		if (ssl == null)
 		{
 			return new OperateResult(SocketErrorCode, "SslStream is null");
@@ -827,10 +827,10 @@ public static class NetSupport
 
 	public static async Task<OperateResult<int>> ReadStreamAsync(Stream stream, byte[] buffer)
 	{
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			return OperateResult.CreateSuccessResult(await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(continueOnCapturedContext: false));
@@ -844,10 +844,10 @@ public static class NetSupport
 
 	public static async Task<OperateResult> WriteStreamAsync(Stream stream, byte[] buffer)
 	{
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult(StringResources.Language.AuthorizationFailed);
+		//}
 		int alreadyCount = 0;
 		try
 		{

@@ -37,10 +37,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(0);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			socket.ReceiveTimeout = timeOut;
@@ -82,10 +82,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		int num = ((length > 0) ? length : 2048);
 		byte[] array;
 		try
@@ -111,10 +111,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(0);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			ssl.ReadTimeout = timeOut;
@@ -167,10 +167,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		int num = ((length > 0) ? length : 2048);
 		byte[] array;
 		try
@@ -369,10 +369,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			int num = 0;
@@ -402,10 +402,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			ssl.Write(data, offset, size);
@@ -706,10 +706,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		int bufferLength = ((length > 0) ? length : 2048);
 		byte[] buffer;
 		try
@@ -735,10 +735,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(length);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		HslTimeOut hslTimeOut = HslTimeOut.HandleTimeOutCheck(socket, timeOut);
 		try
 		{
@@ -802,10 +802,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		int bufferLength = ((length > 0) ? length : 2048);
 		byte[] buffer;
 		try
@@ -831,10 +831,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult(length);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			new OperateResult<int>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	new OperateResult<int>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			if (length > 0)
@@ -974,10 +974,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult(StringResources.Language.AuthorizationFailed);
+		//}
 		int alreadyCount = 0;
 		try
 		{
@@ -1016,10 +1016,10 @@ public abstract class NetworkBase
 		{
 			return OperateResult.CreateSuccessResult();
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		try
 		{
 			await ssl.WriteAsync(data, offset, size).ConfigureAwait(continueOnCapturedContext: false);

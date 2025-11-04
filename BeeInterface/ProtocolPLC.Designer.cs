@@ -29,7 +29,6 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.layIn = new System.Windows.Forms.TableLayoutPanel();
@@ -188,7 +187,7 @@ namespace BeeInterface
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.lbTCP2 = new System.Windows.Forms.Label();
-            this.tmConnect = new System.Windows.Forms.Timer(this.components);
+            this.tmConnect = new System.Windows.Forms.Timer();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.layIn.SuspendLayout();

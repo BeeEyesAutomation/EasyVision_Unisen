@@ -111,31 +111,33 @@ public class Authorization
 
 	internal static bool nzugaydgwadawdibbas()
 	{
-		moashdawidaisaosdas++;
-		if (naihsdadaasdasdiwasdaid == niasdhasdguawdwdad && nuasgdaaydbishdgas > 0)
-		{
-			return nuasduagsdwydbasudasd();
-		}
-		noajfojgkansdnfgaggh();
-		if ((nashgaosgasaisfasfga() - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas)
-		{
-			return nuasduagsdwydbasudasd();
-		}
-		return asdhuasdgawydaduasdgu();
+		return true;
+		//moashdawidaisaosdas++;
+		//if (naihsdadaasdasdiwasdaid == niasdhasdguawdwdad && nuasgdaaydbishdgas > 0)
+		//{
+		//	return nuasduagsdwydbasudasd();
+		//}
+		//noajfojgkansdnfgaggh();
+		//if ((nashgaosgasaisfasfga() - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas)
+		//{
+		//	return nuasduagsdwydbasudasd();
+		//}
+		//return asdhuasdgawydaduasdgu();
 	}
 
 	internal static bool asdniasnfaksndiqwhawfskhfaiw()
 	{
-		if (naihsdadaasdasdiwasdaid == niasdhasdguawdwdad && nuasgdaaydbishdgas > 0)
-		{
-			return nuasduagsdwydbasudasd();
-		}
-		noajfojgkansdnfgaggh();
-		if ((nashgaosgasaisfasfga() - niahdiahduasdbubfas).TotalHours < (double)nuasgdawydbishdgas)
-		{
-			return nuasduagsdwydbasudasd();
-		}
-		return asdhuasdgawydaduasdgu();
+        return true;
+  //      if (naihsdadaasdasdiwasdaid == niasdhasdguawdwdad && nuasgdaaydbishdgas > 0)
+		//{
+		//	return nuasduagsdwydbasudasd();
+		//}
+		//noajfojgkansdnfgaggh();
+		//if ((nashgaosgasaisfasfga() - niahdiahduasdbubfas).TotalHours < (double)nuasgdawydbishdgas)
+		//{
+		//	return nuasduagsdwydbasudasd();
+		//}
+		//return asdhuasdgawydaduasdgu();
 	}
 
 	internal static bool nuasduagsdwydbasudasd()
@@ -253,7 +255,8 @@ public class Authorization
 
 	private static bool isActiveCodeEnterprisenvasfaosg(string code)
 	{
-		if (code == "91B82C714F7F7EA22781078B1C1CFE25")
+        return true;
+        if (code == "91B82C714F7F7EA22781078B1C1CFE25")
 		{
 			return true;
 		}

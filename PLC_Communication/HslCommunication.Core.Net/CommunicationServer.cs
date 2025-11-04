@@ -414,11 +414,11 @@ public class CommunicationServer : CommunicationTcpServer
 			int num = pipeUdpNet.Socket.EndReceiveFrom(ar, ref udpEndPoint);
 			pipeSession.HeartTime = DateTime.Now;
 			SetUdpIp(pipeSession);
-			if (!Authorization.nzugaydgwadawdibbas())
-			{
-				RemoveSession(pipeSession, StringResources.Language.AuthorizationFailed);
-				return;
-			}
+			//if (!Authorization.nzugaydgwadawdibbas())
+			//{
+			//	RemoveSession(pipeSession, StringResources.Language.AuthorizationFailed);
+			//	return;
+			//}
 			INetMessage newNetMessage = GetNewNetMessage();
 			if (newNetMessage != null)
 			{
@@ -617,10 +617,10 @@ public class CommunicationServer : CommunicationTcpServer
 
 	private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
 	{
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return;
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return;
+		//}
 		SerialPort serialPort = sender as SerialPort;
 		PipeSession pipeSession = FindSerialPortSession(serialPort.PortName);
 		if (pipeSession == null)

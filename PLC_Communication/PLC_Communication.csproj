@@ -12,10 +12,9 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
+ 
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\EasyVision_Unisen\bin\Release\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+   
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Net.Http" />

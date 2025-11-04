@@ -97,7 +97,7 @@ namespace PlcLib
             _retry = retryCount < 1 ? 1 : retryCount;
             _timeoutMs = timeoutMs < 500 ? 500 : timeoutMs;
         }
-        HslCommunication.Authorization authorization = new Authorization();
+   //     HslCommunication.Authorization authorization = new Authorization();
         private System.IO.Ports.Parity Parity = System.IO.Ports.Parity.Even;
         private System.IO.Ports.StopBits StopBits = System.IO.Ports.StopBits.Two;
         private byte SlaveID = 0;

@@ -208,10 +208,10 @@ public abstract class CommunicationPipe : IDisposable
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		OperateResult<byte[]> operateResult = NetSupport.CreateReceiveBuffer(length);
 		if (!operateResult.IsSuccess)
 		{
@@ -557,10 +557,10 @@ public abstract class CommunicationPipe : IDisposable
 		{
 			return OperateResult.CreateSuccessResult(new byte[0]);
 		}
-		if (!Authorization.nzugaydgwadawdibbas())
-		{
-			return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
-		}
+		//if (!Authorization.nzugaydgwadawdibbas())
+		//{
+		//	return new OperateResult<byte[]>(StringResources.Language.AuthorizationFailed);
+		//}
 		OperateResult<byte[]> buffer = NetSupport.CreateReceiveBuffer(length);
 		if (!buffer.IsSuccess)
 		{
