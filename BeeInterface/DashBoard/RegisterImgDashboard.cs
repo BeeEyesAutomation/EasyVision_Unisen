@@ -78,7 +78,7 @@ namespace BeeInterface
 
         public event EventHandler NameCommitted;
 
-        public ImageThumbControl(ImgItem item, Font font, int W = 240, int H = 260)
+        public ImageThumbControl(ImgItem item, Font font,bool UpdateGlobal, int W = 240, int H = 260)
         {
             Item = item ?? throw new ArgumentNullException(nameof(item));
             DoubleBuffered = true;
@@ -86,7 +86,7 @@ namespace BeeInterface
             Cursor = Cursors.Hand;
             Margin = new Padding(8);
             TabStop = true;
-
+            this.UpdateGlobal= UpdateGlobal;
             _editBox = new TextBox();
             _editBox.Visible = false;
             _editBox.BorderStyle = BorderStyle.FixedSingle;
@@ -200,7 +200,7 @@ namespace BeeInterface
             _editBox.SelectAll();
             _editBox.Focus();
         }
-
+        public bool UpdateGlobal;
         private void CommitRename(bool cancel = false)
         {
             if (!_editBox.Visible) return;
@@ -211,9 +211,12 @@ namespace BeeInterface
                 if (txt.Length == 0) txt = "Image";
                 if (Item != null)
                 {
-                    int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
-                    if(id>-1)
-                    Global.ParaCommon.listRegsImg[id].Name = txt;
+                    if (UpdateGlobal)
+                    {
+                        int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
+                        if (id > -1)
+                            Global.ParaCommon.listRegsImg[id].Name = txt;
+                    }
                     Item.Name = txt;
                 }    
                    
@@ -228,7 +231,7 @@ namespace BeeInterface
         {
             if (e.KeyCode == Keys.Enter)
             {
-                CommitRename(false);
+                CommitRename( false);
                 e.Handled = true;
             }
             else if (e.KeyCode == Keys.Escape)
@@ -254,12 +257,56 @@ namespace BeeInterface
                 _hideTopBar = value;
                 _topTL.Visible=!_hideTopBar;
                 _topTL2.Visible = !_hideTopBar;
+                _topTL3.Visible = !_hideTopBar;
             } }
-       
+        private bool _updateGlobal = true;
+        [Category("UpdateGlobal")]
+        public bool UpdateGlobal
+        {
+            get => _updateGlobal; set
+            {
+                _updateGlobal = value;
+               
+            }
+        }
+        private int _heightTopBar1 = 50;
+        [Category("HeightTopBar1")]
+        public int HeightTopBar1
+        {
+            get => _heightTopBar1; set
+            {
+                _heightTopBar1 = value;
+              
+                _topTL2.Height= _heightTopBar1;
+            }
+        }
+        private int _heightTopBar2 = 70;
+        [Category("HeightTopBar1")]
+        public int HeightTopBar2
+        {
+            get => _heightTopBar2; set
+            {
+                _heightTopBar2 = value;
+
+                _topTL.Height = _heightTopBar2;
+            }
+        }
+
+        private int _heightTopBar3 = 40;
+        [Category("HeightTopBar3")]
+        public int HeightTopBar3
+        {
+            get => _heightTopBar3; set
+            {
+                _heightTopBar3 = value;
+
+                _topTL3.Height = _heightTopBar3;
+            }
+        }
         private FlowLayoutPanel _flow;
-        private RJButton _btnAddFile, _btnAddCam,btnChange,btnDeleteAll;
+        private RJButton _btnAddFile, _btnAddCam,btnChange, btnNew, btnDeleteAll,btnDelete,btnUp,btndown;
         private ContextMenuStrip _ctx;
-        private readonly List<ImgItem> _items = new List<ImgItem>();
+        public  List<ImgItem> _items = new List<ImgItem>();
         private ImageThumbControl _selectedThumb;
         private bool IsChange = true;
         private const int THUMB_MARGIN_HORIZONTAL = 16;
@@ -277,38 +324,57 @@ namespace BeeInterface
         public event EventHandler ItemsChanged;
       public  TableLayoutPanel _topTL;
         public TableLayoutPanel _topTL2;
+        public TableLayoutPanel _topTL3;
         public RegisterImgDashboard()
         {
             DoubleBuffered = true;
             Dock = DockStyle.Fill;
-
-             _topTL = new TableLayoutPanel
+            Color bgTL2 = Color.FromArgb(50, 114, 114, 114);
+            _topTL = new TableLayoutPanel
             {
                 Dock = DockStyle.Top,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               
-                ColumnCount = 2,
+                AutoSize = false,
+         Height=HeightTopBar2,
+                 BackColor = bgTL2,
+                 ColumnCount = 3,
+                Padding = new Padding(5, 0, 5, 0),
                 RowCount = 1,
             };
-            Color bgTL2 = Color.FromArgb(50, 114, 114, 114);
+           
             _topTL2 = new TableLayoutPanel
             {
                 Dock = DockStyle.Top,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-             BackColor= bgTL2,
-             Padding=new Padding(5,0,5,0),
+                AutoSize = false,
+                Height = HeightTopBar1,
+                BackColor = bgTL2,
+             Padding=new Padding(5,5,5,5),
                 ColumnCount = 3,
                 RowCount = 1,
             };
+            _topTL3 = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = false,
+                Height = HeightTopBar3,
+                BackColor = bgTL2,
+                Padding = new Padding(5, 0, 5, 0),
+                ColumnCount = 4,
+                RowCount = 1,
+            };
+            _topTL.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
             _topTL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             _topTL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             _topTL.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110));
-            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
-            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
+            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            _topTL2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             _topTL2.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+            _topTL3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            _topTL3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            _topTL3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            _topTL3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            _topTL3.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             RJButton lb = new RJButton
             {
                 AutoFontMin=9,
@@ -321,26 +387,57 @@ namespace BeeInterface
                 AutoSize=false,
                 TextColor=Color.Black,
                 TextAlign=ContentAlignment.MiddleLeft,
-                Margin = new Padding(0, 5, 0, 5)
+                Margin = new Padding(0,0, 0, 0)
             };
-            _btnAddFile = new RJButton {AutoFontMin=9,ImageTextSpacing=1,  IsUnGroup = true, IsNotChange = true, Text = "Register  from File", TextImageRelation = TextImageRelation.ImageAboveText, Dock = DockStyle.Fill, Image = Properties.Resources.Folder, Height = 70, Margin = new Padding(5, 20, 5, 20) };
-            _btnAddCam = new RJButton { AutoFontMin = 9, ImageTextSpacing = 1, IsUnGroup = true, IsNotChange = true, Text = "Register  from Camera", TextImageRelation = TextImageRelation.ImageAboveText, Dock = DockStyle.Fill, Image = Properties.Resources.Camera, Height = 70, Margin = new Padding(5, 20, 5, 20) };
-            btnChange = new RJButton { BorderColor = bgTL2,Corner=Corner.Right,BorderRadius=10, BorderSize=0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = false, Text = "Change Image",IsCLick=IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh25, Height = 50, Margin = new Padding(0, 5, 5, 5) };
-            btnDeleteAll = new RJButton {BorderColor= bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Delete All", IsCLick = false, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Delete, Height = 50, Margin = new Padding(15, 5, 5, 5) };
+            RJButton lb2 = new RJButton
+            {
+                AutoFontMin = 9,
+
+                Text = "Image From",
+                Corner = Corner.Left,
+                BorderRadius = 10,
+                Enabled = false,
+                Dock = DockStyle.Fill,
+                AutoSize = false,
+                TextColor = Color.Black,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = new Padding(0, 0, 0, 0)
+            };
+            btnChange = new RJButton { BorderColor = bgTL2, Corner = Corner.None, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Change", IsCLick = IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Refresh25, Margin = new Padding(0, 0, 0, 0) };
+            btnNew = new RJButton { BorderColor = bgTL2, Corner = Corner.Right, BorderRadius = 10, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = false, IsNotChange = false, Text = "Add", IsCLick =! IsChange, TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Add, Margin = new Padding(0, 0, 5, 0) };
+            btnUp = new RJButton {BorderRadius=5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Up", IsCLick = false,Dock = DockStyle.Fill, Margin = new Padding(0, 5, 5, 5)};
+            btndown = new RJButton { BorderRadius = 5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Down", IsCLick = false,  Dock = DockStyle.Fill, Margin = new Padding(5, 5, 5, 5) };
+            btnDelete= new RJButton { BorderRadius = 5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Delete", IsCLick = false,  Dock = DockStyle.Fill,  Margin = new Padding(5, 5, 5, 5) };
+            btnDeleteAll = new RJButton { BorderRadius = 5, BorderColor = bgTL2, BorderSize = 0, AutoFontMin = 9, ImageTextSpacing = 5, IsUnGroup = true, IsNotChange = true, Text = "Delete All", IsCLick = false,  Dock = DockStyle.Fill, Margin = new Padding(5, 5, 5, 5)};
+            _btnAddCam = new RJButton {Corner=Corner.None, AutoFontMin = 9, ImageTextSpacing = 1, IsUnGroup = true, IsNotChange = true, Text = "Camera", TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Camera, Margin = new Padding(0, 0, 0, 0) };
+            _btnAddFile = new RJButton { Corner = Corner.Right, AutoFontMin = 9,ImageTextSpacing=1,  IsUnGroup = true, IsNotChange = true, Text = "Files", TextImageRelation = TextImageRelation.ImageBeforeText, Dock = DockStyle.Fill, Image = Properties.Resources.Folder,  Margin = new Padding(0, 0, 5, 0) };
             btnDeleteAll.Click += BtnDeleteAll_Click;
+            btnNew.Click += BtnNew_Click;
             btnChange.Click += BtnChange_Click;
-            _topTL.Controls.Add(_btnAddCam, 0, 0);
-            _topTL.Controls.Add(_btnAddFile, 1, 0);
+            btnUp.Click += BtnUp_Click;
+            btndown.Click += Btndown_Click;
+            btnDelete.Click += BtnDelete_Click;
+            _topTL.Controls.Add(lb2, 0, 0);
+            _topTL.Controls.Add(_btnAddCam, 1, 0);
+            _topTL.Controls.Add(_btnAddFile, 2, 0);
             _topTL2.Controls.Add(lb, 0, 0);
             _topTL2.Controls.Add(btnChange, 1, 0);
-            _topTL2.Controls.Add(btnDeleteAll, 2, 0);
+
+            _topTL2.Controls.Add(btnNew, 2, 0);
+
+            _topTL3.Controls.Add(btnUp, 0, 0);
+            _topTL3.Controls.Add(btndown, 1, 0);
+            _topTL3.Controls.Add(btnDelete, 2, 0);
+            _topTL3.Controls.Add(btnDeleteAll, 3, 0);
             _flow = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 WrapContents = true
             };
+
             Controls.Add(_flow);
+            Controls.Add(_topTL3);
             Controls.Add(_topTL);
             Controls.Add(_topTL2);
             _ctx = new ContextMenuStrip();
@@ -372,6 +469,26 @@ namespace BeeInterface
             UpdateCameraButtonState();
         }
 
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            DeleteSelected();
+        }
+
+        private void Btndown_Click(object sender, EventArgs e)
+        {
+            MoveSelected(+1);
+        }
+
+        private void BtnUp_Click(object sender, EventArgs e)
+        {
+            MoveSelected(-1);
+        }
+
+        private void BtnNew_Click(object sender, EventArgs e)
+        {
+            IsChange = !btnNew.IsCLick;
+        }
+
         private void BtnDeleteAll_Click(object sender, EventArgs e)
         {
           if(MessageBox.Show("Warming","Delete All Images",MessageBoxButtons.YesNo)==DialogResult.Yes)
@@ -391,6 +508,7 @@ namespace BeeInterface
             _selectedThumb = null;
 
             // 4. Xóa trong global (nếu bạn muốn đồng bộ luôn)
+            if(UpdateGlobal)
             if (Global.ParaCommon != null && Global.ParaCommon.listRegsImg != null)
                 Global.ParaCommon.listRegsImg.Clear();
 
@@ -409,17 +527,17 @@ namespace BeeInterface
         private void BtnChange_Click(object sender, EventArgs e)
         {
             IsChange = btnChange.IsCLick;
-            if(!IsChange)
-            {
-                btnChange.Image = Properties.Resources.Add;
-                btnChange.Text = "Add Image";
-            }
-            else
-            {
-                btnChange.Image = Properties.Resources.Refresh25;
-                btnChange.Text = "Change Image";
+            //if(!IsChange)
+            //{
+            //    btnChange.Image = Properties.Resources.Add;
+            //    btnChange.Text = "Add Image";
+            //}
+            //else
+            //{
+            //    btnChange.Image = Properties.Resources.Refresh25;
+            //    btnChange.Text = "Change Image";
 
-            }    
+            //}    
         }
 
         private void UpdateCameraButtonState()
@@ -429,15 +547,15 @@ namespace BeeInterface
             _btnAddCam.Enabled = _showCamDefault;
         }
         private bool _showCamDefault = true;
-        public bool ShowCameraButton
-        {
-            get => _btnAddCam?.Visible ?? _showCamDefault;
-            set
-            {
-                _showCamDefault = value;
-                if (_btnAddCam != null) _btnAddCam.Visible = value;
-            }
-        }
+        //public bool ShowCameraButton
+        //{
+        //    get => _btnAddCam?.Visible ?? _showCamDefault;
+        //    set
+        //    {
+        //        _showCamDefault = value;
+        //        if (_btnAddCam != null) _btnAddCam.Visible = value;
+        //    }
+        //}
 
         private string NextAutoName()
         {
@@ -505,7 +623,7 @@ namespace BeeInterface
                 MessageBox.Show("Lấy ảnh từ camera thất bại: " + ex.Message);
             }
         }
-        public void LoadAllItem(int indexItem = 0)
+        public void LoadAllItem(List<ItemRegsImg> ItemRegsImgs,int indexItem = 0)
         {
             // xóa dữ liệu cũ
             _items.Clear();
@@ -514,7 +632,7 @@ namespace BeeInterface
             // lưu tạm các thumb để lát chọn
             var createdThumbs = new List<ImageThumbControl>();
 
-            foreach (ItemRegsImg regsImg in Global.ParaCommon.listRegsImg)
+            foreach (ItemRegsImg regsImg in ItemRegsImgs)
             {
                 // tạo model
                 ImgItem item = new ImgItem(regsImg.Name, regsImg.Image.ToMat());
@@ -528,7 +646,7 @@ namespace BeeInterface
                 int targetH = CalcHeightFromImage(item, targetW);
 
                 // tạo thumb (bạn đang có ctor có Font)
-                var thumb = new ImageThumbControl(item, this.Font, targetW, targetH);
+                var thumb = new ImageThumbControl(item, this.Font,UpdateGlobal, targetW, targetH);
                 thumb.Click += (s, e) => SelectThumb(thumb);
                 thumb.NameCommitted += (s, e) => ItemsChanged?.Invoke(this, EventArgs.Empty);
                 thumb.MouseUp += (s, e) =>
@@ -565,6 +683,7 @@ namespace BeeInterface
         private void AddItem(ImgItem item)
         {
             _items.Add(item);
+            if(UpdateGlobal)
             Global.ParaCommon.listRegsImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
             int clientW = _flow.ClientSize.Width;
             if (clientW <= 0) clientW = this.Width;
@@ -572,7 +691,7 @@ namespace BeeInterface
             int targetW = Math.Max(60, clientW - THUMB_MARGIN_HORIZONTAL);
             int targetH = CalcHeightFromImage(item, targetW);
 
-            var thumb = new ImageThumbControl(item,this.Font, targetW, targetH);
+            var thumb = new ImageThumbControl(item,this.Font, UpdateGlobal, targetW, targetH);
             thumb.Click += (s, e) => SelectThumb(thumb);
             thumb.NameCommitted += (s, e) => ItemsChanged?.Invoke(this, EventArgs.Empty);
             thumb.MouseUp += (s, e) =>
@@ -597,9 +716,13 @@ namespace BeeInterface
 
             // 1. cập nhật Mat trong model
             _selectedThumb.Item.SetImage(newMat);
-            int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
-            if (id > -1)
-                Global.ParaCommon.listRegsImg[id].Image = newMat.ToBitmap();
+            if (UpdateGlobal)
+            {
+                int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
+                if (id > -1)
+                    Global.ParaCommon.listRegsImg[id].Image = newMat.ToBitmap();
+            }
+            
             // 2. tính lại size của thumb theo ảnh mới
             int clientW = _flow.ClientSize.Width;
             if (clientW <= 0) clientW = this.Width;
@@ -705,7 +828,7 @@ namespace BeeInterface
 
             var item = _selectedThumb.Item;
             _flow.Controls.RemoveAt(idx);
-           
+            if (UpdateGlobal)
                 Global.ParaCommon.listRegsImg.RemoveAt(idx);
             _items.Remove(item);
             _selectedThumb.Dispose();

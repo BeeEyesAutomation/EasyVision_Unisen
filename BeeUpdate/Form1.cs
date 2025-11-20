@@ -20,6 +20,9 @@ namespace BeeUpdate
             InitializeComponent();
             path = Properties.Settings.Default.path;
             textBox1.Text = path;
+            pathUpdate = Properties.Settings.Default.pathUpdate;
+            label1.Text = pathUpdate;
+         
         }
         String path = "";
         private void btnfolder_Click(object sender, EventArgs e)
@@ -69,31 +72,43 @@ namespace BeeUpdate
             {
                String name= Path.GetFileName(s);
                 name = name.Replace(".dll", ".bin");
-                String pathDir = "G:\\My Drive\\EasyVision\\v2\\" + name;
+                String pathDir = pathUpdate +"\\"+ name;
               
                 
                 File.Copy(s, pathDir, true);
               
              
             }
-            await Task.Delay(10000);
-            foreach (String s in pathName)
-            {
-                String name = Path.GetFileName(s);
-                name = name.Replace(".dll", ".bin");
+            //await Task.Delay(10000);
+            //foreach (String s in pathName)
+            //{
+            //    String name = Path.GetFileName(s);
+            //    name = name.Replace(".dll", ".bin");
              
-                String pathDirOld = "G:\\My Drive\\EasyVision\\v2\\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
-                if (!Directory.Exists(pathDirOld)) Directory.CreateDirectory(pathDirOld);
+            //    String pathDirOld = pathUpdate + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+            //    if (!Directory.Exists(pathDirOld)) Directory.CreateDirectory(pathDirOld);
               
              
-                File.Copy(s, pathDirOld + "\\" + name, true);
-            }
+            //    File.Copy(s, pathDirOld + "\\" + name, true);
+            //}
             MessageBox.Show("Complete!");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        String pathUpdate = "G:\\My Drive\\EasyVision\\v2";
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (folder.ShowDialog() == DialogResult.OK)
+            {
+                pathUpdate = folder.SelectedPath;
+                label1.Text = pathUpdate;
+                Properties.Settings.Default.pathUpdate = pathUpdate;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

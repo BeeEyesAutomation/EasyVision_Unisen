@@ -137,7 +137,7 @@ namespace BeeCore
                 {
                     if (raw.Empty()) return;
 
-                    Mat matCrop = Common.CropRotatedRect(raw, rectRotate, null);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, null);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)

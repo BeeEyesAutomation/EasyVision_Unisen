@@ -308,17 +308,17 @@ namespace BeeInterface
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
-            if (InDesigner())
-            {
-                AutoShowTextbox = false;         // design-time: luôn hiện textbox
-                _textboxVisible = true;
-                if (_tb != null) _tb.Visible = true;
-                if (_btnMinus != null) _btnMinus.Visible = true;
-                if (_btnPlus != null) _btnPlus.Visible = true;
-                MinimumSize = new Size(140, 36);
-                LayoutChildren();
-                Invalidate();
-            }
+            //if (InDesigner())
+            //{
+            //    AutoShowTextbox = false;         // design-time: luôn hiện textbox
+            //    _textboxVisible = true;
+            //    if (_tb != null) _tb.Visible = true;
+            //    if (_btnMinus != null) _btnMinus.Visible = true;
+            //    if (_btnPlus != null) _btnPlus.Visible = true;
+            //    MinimumSize = new Size(140, 36);
+            //    LayoutChildren();
+            //    Invalidate();
+            //}
         }
 
         protected override void OnFontChanged(EventArgs e)

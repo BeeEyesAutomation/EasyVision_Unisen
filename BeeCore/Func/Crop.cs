@@ -8,6 +8,211 @@ namespace BeeCore
 {
     public static class Cropper
     {
+        public sealed class PatchCropContext : IDisposable
+        {
+            public Mat Patch;                  // patch sau bước 1 (bạn có thể chỉnh sửa/edge process)
+            public SD.PointF WorldAnchor;      // tâm neo trong world
+            public Size2f RectSize;            // kích thước (đã hoán đổi nếu cần) dùng để cut patch
+            public Point2f PatchCenter;        // tâm patch (W/2,H/2)
+            public float AngleUsed;            // góc đã dùng để warp (đã normalize -45 logic)
+            public SD.PointF LocalCenterForShape; // (0,0) non-polygon; (cx,cy) polygon
+            public int PatchW, PatchH;
+
+            // Tuỳ chọn: lưu Ma trận warp nếu bạn cần debug (không cần cho masking lần 2)
+            public Mat M;
+
+            public void Dispose()
+            {
+                if (M != null) { M.Dispose(); M = null; }
+                if (Patch != null) { Patch.Dispose(); Patch = null; }
+            }
+        }
+        // (1) Cắt outer rotated bounding patch — trả về Mat patch
+        public static Mat CropOuterPatch(Mat source, RectRotate rot, out PatchCropContext ctx)
+        {
+            ctx = null;
+            if (source == null || source.Empty()) return new Mat();
+
+            // 1) Neo & size theo shape
+            Size2f rectSize;
+            SD.PointF localCenterForShape;
+            GetAnchorSizeFor(rot, out SD.PointF worldAnchor, out rectSize, out localCenterForShape);
+
+            // 2) Chuẩn hoá góc & có thể hoán đổi W/H
+            double angleUsed = rot._rectRotation;
+            if (angleUsed < -45.0)
+            {
+                angleUsed += 90.0;
+                float tmp = rectSize.Width; rectSize.Width = rectSize.Height; rectSize.Height = tmp;
+            }
+
+            var anchor = new Point2f(worldAnchor.X, worldAnchor.Y);
+
+            Mat M = null, warped = null, patch = null;
+            try
+            {
+                // 3) Warp quanh anchor
+                M = Cv2.GetRotationMatrix2D(anchor, angleUsed, 1.0);
+                warped = new Mat();
+                Cv2.WarpAffine(
+                    src: source, dst: warped, m: M, dsize: source.Size(),
+                    flags: InterpolationFlags.Cubic,
+                    borderMode: BorderTypes.Constant,
+                    borderValue: new Scalar(0, 0, 0)
+                );
+
+                // 4) Lấy patch theo size đã chuẩn hoá
+                patch = new Mat();
+                Cv2.GetRectSubPix(
+                    image: warped,
+                    patchSize: new OpenCvSharp.Size(rectSize.Width, rectSize.Height),
+                    center: anchor,
+                    patch: patch
+                );
+                if (patch.Empty())
+                {
+                    patch.Dispose();
+                    return new Mat();
+                }
+
+                // Tạo ctx để dùng cho bước 2 (mask)
+                ctx = new PatchCropContext
+                {
+                    Patch = null, // chủ đích: quyền sở hữu patch trả về cho caller
+                    WorldAnchor = worldAnchor,
+                    RectSize = rectSize,
+                    PatchW = patch.Cols,
+                    PatchH = patch.Rows,
+                    PatchCenter = new Point2f(patch.Cols * 0.5f, patch.Rows * 0.5f),
+                    AngleUsed = (float)angleUsed,
+                    LocalCenterForShape = localCenterForShape,
+                    M = M // giữ nếu bạn cần debug; nếu không, có thể bỏ để tiết kiệm RAM
+                };
+
+                // có thể giải phóng warped
+                warped.Dispose(); warped = null;
+
+                // LƯU Ý sở hữu:
+                // - Trả về 'patch' cho caller. ctx không giữ patch để tránh dispose trùng.
+                M = null; // đã chuyển cho ctx; tránh dispose 2 lần
+                return patch;
+            }
+            catch
+            {
+                if (patch != null) patch.Dispose();
+                if (warped != null) warped.Dispose();
+                if (M != null) M.Dispose();
+                ctx = null;
+                return new Mat();
+            }
+        }
+        public static Mat ApplyShapeMaskAndCompose(
+                    Mat patchInput,
+                    PatchCropContext ctx,
+                    RectRotate rot,
+                    RectRotate rotMask,          // có thể null
+                    bool returnMaskOnly = false,
+                    bool whiteBackground = false // nếu bạn muốn ép nền trắng/đen thay vì dùng rot.IsWhite
+                )
+        {
+            if (patchInput == null || patchInput.Empty() || ctx == null) return new Mat();
+
+            // Góc DƯ trong hệ patch
+            float angleInPatchCrop = (float)(rot._rectRotation - ctx.AngleUsed);
+            if (angleInPatchCrop > 180f) angleInPatchCrop -= 360f;
+            if (angleInPatchCrop < -180f) angleInPatchCrop += 360f;
+
+            Mat cropMask = null, mask2 = null, finalMask = null, bgMat = null, result = null;
+            try
+            {
+                int patchH = patchInput.Rows;
+                int patchW = patchInput.Cols;
+
+                cropMask = new Mat(patchH, patchW, MatType.CV_8UC1, new Scalar(0));
+
+                // VẼ MASK chính xác theo shape của rot, đặt giữa patch bằng cách dùng localCenterForShape
+                DrawShapeMaskIntoWithSize(
+                    rot,
+                    cropMask,
+                    ctx.PatchCenter,
+                    angleInPatchCrop,
+                    255,
+                    (int)Math.Round(ctx.RectSize.Width),
+                    (int)Math.Round(ctx.RectSize.Height),
+                    ctx.LocalCenterForShape
+                );
+
+                // Nếu có mask loại trừ
+                if (rotMask != null)
+                {
+                    mask2 = new Mat(patchH, patchW, MatType.CV_8UC1, new Scalar(255));
+
+                    // Tính neo/size riêng của mask
+                    Size2f maskSize;
+                    SD.PointF maskLocalCenter;
+                    GetAnchorSizeFor(rotMask, out SD.PointF worldAnchorMask, out maskSize, out maskLocalCenter);
+
+                    // Delta neo giữa worldAnchorMask và ctx.WorldAnchor → chuyển về hệ patch
+                    Point2f deltaWorld = new Point2f(
+                        (float)(worldAnchorMask.X - ctx.WorldAnchor.X),
+                        (float)(worldAnchorMask.Y - ctx.WorldAnchor.Y)
+                    );
+                    Point2f deltaInPatch = RotatePoint(deltaWorld, -ctx.AngleUsed);
+                    Point2f maskCenterInPatch = new Point2f(
+                        ctx.PatchCenter.X + deltaInPatch.X,
+                        ctx.PatchCenter.Y + deltaInPatch.Y
+                    );
+
+                    float maskAngleInPatch = (float)(rotMask._rectRotation - ctx.AngleUsed);
+
+                    // Vẽ vùng cần loại trừ (0) vào mask2
+                    DrawShapeMaskIntoWithSize(
+                        rotMask,
+                        mask2,
+                        maskCenterInPatch,
+                        maskAngleInPatch,
+                        0,
+                        (int)Math.Round(maskSize.Width),
+                        (int)Math.Round(maskSize.Height),
+                        maskLocalCenter
+                    );
+
+                    finalMask = new Mat();
+                    Cv2.BitwiseAnd(cropMask, mask2, finalMask);
+                }
+                else
+                {
+                    finalMask = cropMask.Clone();
+                }
+
+                if (returnMaskOnly)
+                {
+                    return finalMask.Clone();
+                }
+
+                // Nền (trắng/đen) — giữ tương thích tham số IsWhite cũ
+                bool isWhite = whiteBackground ? true : rot.IsWhite;
+                Scalar bg = isWhite
+                    ? new Scalar(255, 255, 255, 255)
+                    : new Scalar(0, 0, 0, 0);
+
+                bgMat = new Mat(patchInput.Size(), patchInput.Type(), bg);
+                result = bgMat.Clone();
+                patchInput.CopyTo(result, finalMask);
+                return result;
+            }
+            catch
+            {
+                return new Mat();
+            }
+            finally
+            {
+                if (cropMask != null) cropMask.Dispose();
+                if (mask2 != null) mask2.Dispose();
+                if (finalMask != null && result == null) finalMask.Dispose();
+                if (bgMat != null) bgMat.Dispose();
+            }
+        }
         public static Mat CropRotatedRect(
             Mat source, RectRotate rot, RectRotate rotMask,
             bool returnMaskOnly = false)
@@ -123,6 +328,131 @@ namespace BeeCore
                 if (finalMask != null && result == null) finalMask.Dispose();
                 if (bgMat != null) bgMat.Dispose();
             }
+        }
+        public static void Swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+        public static Mat CropRect(Mat source, RectRotate rot)
+        {
+
+            MatType TypeMat = source.Type();
+            Mat matResult = new Mat();
+
+            Point2f pCenter = new Point2f(rot._PosCenter.X, rot._PosCenter.Y);
+            Size2f rect_size = new Size2f(rot._rect.Size.Width, rot._rect.Size.Height);
+            RotatedRect rot2 = new RotatedRect(pCenter, rect_size, rot._rectRotation);
+            double angle = rot._rectRotation;
+            if (angle < -45)
+            {
+                angle += 90.0;
+
+                Swap(ref rect_size.Width, ref rect_size.Height);
+            }
+            InputArray M = Cv2.GetRotationMatrix2D(rot2.Center, angle, 1.0);
+            Mat mCrop = new Mat();
+            Mat crop1 = new Mat();
+            try
+            {
+
+                Cv2.WarpAffine(source, crop1, M, source.Size(), InterpolationFlags.Cubic);
+
+                Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, mCrop);
+
+            }
+            catch (Exception ex)
+            {
+                //  MessageBox.Show(ex.Message);
+            }
+            return mCrop;
+        }
+        public static Mat CropRect(Mat source, RectRotate rot, RectRotate rotMask)
+        {
+            MatType TypeMat = source.Type();
+            Mat matResult = new Mat();
+
+            Point2f pCenter = new Point2f(rot._PosCenter.X, rot._PosCenter.Y);
+            Size2f rect_size = new Size2f(rot._rect.Size.Width, rot._rect.Size.Height);
+            RotatedRect rot2 = new RotatedRect(pCenter, rect_size, rot._rectRotation);
+            double angle = rot._rectRotation;
+            if (angle < -45)
+            {
+                angle += 90.0;
+
+                Swap(ref rect_size.Width, ref rect_size.Height);
+            }
+
+
+
+            InputArray M = Cv2.GetRotationMatrix2D(rot2.Center, angle, 1.0);
+
+            Mat crop1 = new Mat();
+            try
+            {
+                Mat mCrop = new Mat();
+                Cv2.WarpAffine(source, crop1, M, source.Size(), InterpolationFlags.Cubic);
+
+                Cv2.GetRectSubPix(crop1, new OpenCvSharp.Size(rect_size.Width, rect_size.Height), rot2.Center, mCrop);
+                //if (TypeMat == MatType.CV_8UC3)
+                //{
+                //    Cv2.CvtColor(mCrop, mCrop, ColorConversionCodes.BGR2GRAY);
+                //}
+
+                if (rot.Shape == ShapeType.Ellipse)
+                {
+                    Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, TypeMat, new Scalar(0));
+                    int deltaX = (int)rot._rect.Width / 2;
+                    int deltaY = (int)rot._rect.Height / 2;
+                    RotatedRect rectElip = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rot._rect.Width, rot._rect.Height), rot._rectRotation);
+                    Cv2.Ellipse(matMask, rectElip, new Scalar(255), -1);
+                    Cv2.BitwiseAnd(mCrop, matMask, matResult);
+                }
+                else
+                    matResult = mCrop;
+                //  return matResult;
+            }
+            catch (Exception ex)
+            {
+                //  MessageBox.Show(ex.Message);
+            }
+            if (rotMask != null)
+            {
+                Mat matMask = new Mat((int)rot._rect.Height, (int)rot._rect.Width, TypeMat, new Scalar(255));
+                int deltaX = (int)rot._rect.Width / 2 - (int)(rot._PosCenter.X - rotMask._PosCenter.X);
+                int deltaY = (int)rot._rect.Height / 2 - (int)(rot._PosCenter.Y - rotMask._PosCenter.Y);
+                RotatedRect retMask = new RotatedRect(new Point2f(deltaX, deltaY), new Size2f(rotMask._rect.Width, rotMask._rect.Height), rotMask._rectRotation);
+
+                if (rotMask.Shape == ShapeType.Ellipse)
+                {
+                    Cv2.Ellipse(matMask, retMask, new Scalar(0), -1);
+                }
+                else
+                {
+                    // Lấy ra các điểm góc sau khi xoay
+                    Point2f[] vertices = new Point2f[4];
+                    vertices = retMask.Points();
+
+                    // Chuyển Point2f sang Point để vẽ
+                    Point[] pts = Array.ConvertAll(vertices, v => new Point((int)v.X, (int)v.Y));
+
+                    // Tô hình chữ nhật xoay (dùng fillPoly)
+                    Cv2.FillPoly(matMask, new[] { pts }, new Scalar(0)); // Đỏ
+
+                }
+                //if (matResult.Type() == MatType.CV_8UC3)
+                //{
+                //    Cv2.CvtColor(matResult, matResult, ColorConversionCodes.BGR2GRAY);
+
+                //}
+                Mat matAnd = new Mat();
+                Cv2.BitwiseAnd(matResult, matMask, matAnd);
+
+                return matAnd;
+
+            }
+            return matResult;
         }
 
         // ====================== Helpers cho neo/size theo shape ======================

@@ -817,7 +817,7 @@ namespace BeeInterface
                 Propety.rotCrop._rectRotation
             );
 
-            Mat matCrop = BeeCore.Common.CropRotatedRect(
+            Mat matCrop = BeeCore.Cropper.CropRotatedRect(
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw,
                 Propety.rotCrop, null
             );

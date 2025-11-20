@@ -459,7 +459,7 @@ namespace BeeCore
                             {
                                 // Crop theo vùng làm việc hiện tại (nếu bạn thực sự muốn dùng rotArea, giữ như dưới;
                                 // nếu muốn dùng đúng tham số rectRotate, thay 'rotArea' bằng 'rectRotate')
-                                using (Mat matCrop = Common.CropRotatedRect(gray, rotArea, rotMask))
+                                using (Mat matCrop = Cropper.CropRotatedRect(gray, rotArea, rotMask))
                                 {
                                     if (matProcess == null) matProcess = new Mat();
                                     if (!matProcess.IsDisposed)
@@ -623,7 +623,7 @@ namespace BeeCore
                
             }
             if (!Global.IsRun)
-                {
+             {
                     Global.StatusDraw = StatusDraw.Check;
                     if (results == Results.OK)
                     {

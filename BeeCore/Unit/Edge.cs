@@ -163,7 +163,15 @@ namespace BeeCore
 
                   
                 );
-
+                PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
+                PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
+                System.Drawing.Point pCenter = new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)p1.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)p1.Y);
+                System.Drawing.Point pCenter2 = new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)p2.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)p2.Y);
+                listP_Center = new List<System.Drawing.Point>();
+                rectRotates = new List<RectRotate>();
+                listP_Center.Add(pCenter);
+                listP_Center.Add(pCenter2);
+                rectRotates.Add(new RectRotate(new RectangleF(pCenter.X, pCenter.Y, pCenter2.X, pCenter2.Y), new PointF(0, 0), 0,0));
             
 
             }
@@ -409,6 +417,7 @@ namespace BeeCore
 
         public void SetModel()
         {
+            if (rotArea == null) rotArea = new RectRotate();
             rotMask = null;
             if (RansacLine == null) RansacLine = new RansacLine();
             if (FilterCLi == null) FilterCLi = new FilterCLi();

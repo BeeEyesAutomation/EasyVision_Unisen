@@ -34,5 +34,17 @@ namespace BeeUpdate.Properties {
                 this["path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string pathUpdate {
+            get {
+                return ((string)(this["pathUpdate"]));
+            }
+            set {
+                this["pathUpdate"] = value;
+            }
+        }
     }
 }

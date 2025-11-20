@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppRestart.cs" />
+    <Compile Include="ControlStylePersistence.cs" />
     <Compile Include="Custom\AutoLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -113,6 +114,7 @@
       <DependentUpon>InforGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="Global.cs" />
+    <Compile Include="GlobalIconManager.cs" />
     <Compile Include="GroupControl\OK_Cancel.cs">
       <SubType>UserControl</SubType>
     </Compile>

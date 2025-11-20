@@ -189,8 +189,8 @@ namespace BeeCore
                         Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
 
 
-                       
 
+                      
                         PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
                        
                         listP_Center.Add(new System.Drawing.Point(

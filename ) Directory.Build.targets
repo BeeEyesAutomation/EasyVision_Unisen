@@ -1,0 +1,19 @@
+<Project>
+  <!-- Chỉ áp dụng cho Class Library C# -->
+  <PropertyGroup Condition="'$(OutputType)'=='Library' And '$(Language)'=='C#'">
+    <DllUsesSharedRc>true</DllUsesSharedRc>
+  </PropertyGroup>
+
+  <!-- Biên dịch .rc -> .res trước khi build (cần rc.exe của Windows SDK/VS) -->
+  <Target Name="CompileSharedRc" BeforeTargets="BeforeBuild"
+          Condition="'$(DllUsesSharedRc)'=='true'">
+    <Message Text="Compiling shared appicon.rc for $(MSBuildProjectName)..." Importance="high" />
+    <Exec Command="rc.exe /nologo /fo &quot;$(ProjectDir)appicon.res&quot; &quot;$(BrandingDir)appicon.rc&quot;"
+          IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <!-- Gắn .res làm Win32Resource để embed ICON + VERSIONINFO vào DLL -->
+  <PropertyGroup Condition="'$(DllUsesSharedRc)'=='true'">
+    <Win32Resource>$(ProjectDir)appicon.res</Win32Resource>
+  </PropertyGroup>
+</Project>

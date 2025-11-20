@@ -42,7 +42,7 @@ namespace BeeInterface
 
         private void SettingStep2_Load(object sender, EventArgs e)
         {
-            RegisterImg.LoadAllItem();
+            RegisterImg.LoadAllItem(Global.ParaCommon.listRegsImg);
 
         }
         public void SaveParaPJ()

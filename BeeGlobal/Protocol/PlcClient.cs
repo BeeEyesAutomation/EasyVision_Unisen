@@ -139,12 +139,14 @@ namespace PlcLib
                 case PlcBrand.Mitsubishi:
                     if (_connType == ConnectionType.Tcp)
                     {
-                        //var mc = new MelsecMcNet(_ip, _port);
-                        //TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
-                        //TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
-                        var mc = new MelsecA1ENet(_ip, _port);
+                        //F5U
+                        var mc = new MelsecMcNet(_ip, _port);
                         TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
                         TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        //FX3U
+                        //var mc = new MelsecA1ENet(_ip, _port);
+                        //TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        //TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
                         //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
                         //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
                         return mc;
@@ -233,7 +235,6 @@ namespace PlcLib
                     {
                         var mb = new ModbusTcpNet(_ip, _port);
                         // Station nếu cần: TrySetProp(mb, "Station", (byte)1);
-
                         TrySetProp(mb, "ReceiveTimeOut", _timeoutMs);
                         return mb;
                     }
@@ -243,7 +244,6 @@ namespace PlcLib
                         var rtu = new ModbusRtu();
                         rtu.SerialPortInni(sp =>
                         {
-
                             sp.PortName = _com;
                             sp.BaudRate = _baud;
                             sp.DataBits = DataBits;                                  // 7
@@ -263,7 +263,6 @@ namespace PlcLib
                     {
                         var mb = new ModbusTcpNet(_ip, _port);
                         // Station nếu cần: TrySetProp(mb, "Station", (byte)1);
-
                         TrySetProp(mb, "ReceiveTimeOut", _timeoutMs);
                         return mb;
                     }
@@ -273,7 +272,6 @@ namespace PlcLib
                         var rtu = new ModbusAscii();
                         rtu.SerialPortInni(sp =>
                         {
-
                             sp.PortName = _com;
                             sp.BaudRate = _baud;
                             sp.DataBits = DataBits;                                  // 7
@@ -292,18 +290,15 @@ namespace PlcLib
                     var fins = new OmronFinsNet(_ip, _port);
                     TrySetProp(fins, "ReceiveTimeOut", _timeoutMs);
                     return fins;
-
                 case PlcBrand.Siemens:
                     var s7 = new SiemensS7Net(SiemensPLCS.S1200, _ip);
                     if (_port > 0) TrySetProp(s7, "Port", _port);
                     TrySetProp(s7, "ReceiveTimeOut", _timeoutMs);
                     return s7;
-
                 default:
                     throw new NotSupportedException("PLC brand chưa hỗ trợ.");
             }
         }
-
         // ====== Connect / Disconnect (không dùng NetworkDeviceBase/SerialDeviceBase) ======
         public async Task<bool> ConnectAsync()
         {
@@ -327,8 +322,6 @@ namespace PlcLib
                         if (ok == true)
                         {
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _ip));
-
-
                             Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;      // IsSuccess == true
@@ -342,18 +335,16 @@ namespace PlcLib
                     {
                         // Serial: gọi Open()
                         var opened = TryCallVoid(_plc, "Open");
-
                         if (opened)
                         {
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _com));
-
                             Global.PLCStatus = PLCStatus.Ready;
                             Global.IsAllowReadPLC = true;
                             return true;
                         }
                         else
                         {
-                            // try again
+                        // try again
                         }
                     }
                 }
@@ -361,18 +352,15 @@ namespace PlcLib
                 {
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", "Connect Fail: " + ex.Message));
                 }
-
                 await TimingUtils.DelayAccurateAsync(100);
             }
             return false;
         }
-
         // Sync wrapper to keep existing call sites working (blocks current thread)
         public bool Connect()
         {
             return ConnectAsync().GetAwaiter().GetResult();
         }
-
         public void Disconnect()
         {
             try
@@ -385,7 +373,6 @@ namespace PlcLib
             catch { }
             _plc = null;
         }
-
         private async Task<bool> ReconnectAsync()
         {
             Disconnect();

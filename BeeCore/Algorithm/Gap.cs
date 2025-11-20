@@ -239,18 +239,13 @@ namespace BeeCore
                 return new GapResult();
 
             // 3. Lọc theo orientation
-            var filtered = orientation == LineOrientation.Any
-                ? lines
-                : lines.Where(l =>
-                {
-                    double vx = l.Vx;
-                    double vy = l.Vy;
-                    if (orientation == LineOrientation.Horizontal)
-                        return Math.Abs(vy) < Math.Abs(vx);
-                    else // Vertical
-                        return Math.Abs(vx) < Math.Abs(vy);
-                })
-                .ToList();
+
+            var filtered = ((lines ?? Enumerable.Empty<Line2D>()).Where(l => l != null))
+     .Where(l => orientation == LineOrientation.Any
+         || (orientation == LineOrientation.Horizontal
+                 ? Math.Abs(l.Vy) <= Math.Abs(l.Vx)
+                 : Math.Abs(l.Vx) <= Math.Abs(l.Vy)))
+     .ToList();
 
             //      throw new InvalidOperationException("Không tìm đủ lines với orientation yêu cầu.");
             lines = filtered;

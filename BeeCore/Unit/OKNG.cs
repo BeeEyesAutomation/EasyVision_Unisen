@@ -174,7 +174,7 @@ namespace BeeCore
 
                 if (raw.Empty()) return;
                
-                Mat matCrop = Common.CropRotatedRect(raw, rotCrop,null);
+                Mat matCrop = Cropper.CropRotatedRect(raw, rotCrop,null);
                 bmOK.Add(matCrop.ToBitmap());
              }
          
@@ -187,7 +187,7 @@ namespace BeeCore
 
                 if (raw.Empty()) return;
 
-                Mat matCrop = Common.CropRotatedRect(raw, rotCrop, null);
+                Mat matCrop = Cropper.CropRotatedRect(raw, rotCrop, null);
                 bmNG.Add(matCrop.ToBitmap());
             }
 
@@ -331,7 +331,7 @@ namespace BeeCore
 
                 if (raw.Empty()) return;
 
-                Mat matCrop = Common.CropRotatedRect(raw, rectRotate, null);
+                Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, null);
                 rectRotates = new List<RectRotate>();
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>(); 
@@ -396,7 +396,7 @@ namespace BeeCore
 
                 if (raw.Empty()) return;
 
-                Mat scene = Common.CropRotatedRect(raw, rotArea, null);
+                Mat scene = Cropper.CropRotatedRect(raw, rotArea, null);
                 // Thử các cấu hình số luồng
                 foreach (int th in new[] { 1, 2, 4, 8 })
                 {

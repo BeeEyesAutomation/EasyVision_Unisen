@@ -252,7 +252,7 @@ namespace BeeCore
                     break;
                 case Mode.OutLine:
                     matTemp = Common.CannyWithMorph(matCrop);
-                    //crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+                    //crop = Cropper.CropRotatedRect(bmMask, rotCrop, rotMask);
                     //Cv2.BitwiseNot(crop, matClear);
                     //Cv2.BitwiseAnd(matClear, matOut, matTemp);
                     //Cv2.BitwiseAnd(crop, matOut, matMask1);
@@ -283,7 +283,7 @@ namespace BeeCore
                         byte[] edgeBytes = result.As<byte[]>();
                         matTemp = new Mat(height, width, MatType.CV_8UC1, edgeBytes);
                     }
-                    // crop = Common.CropRotatedRect(bmMask, rotCrop, rotMask);
+                    // crop = Cropper.CropRotatedRect(bmMask, rotCrop, rotMask);
 
                     //Cv2.BitwiseNot(crop, matClear);
 
@@ -357,7 +357,7 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAreaAdjustment, rotMask);
+            Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAreaAdjustment, rotMask);
             Mat matProcess = new Mat();
             switch (TypeMode)
             {

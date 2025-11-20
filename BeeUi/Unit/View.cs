@@ -2681,8 +2681,9 @@ namespace BeeUi
      
         private void View_Load(object sender, EventArgs e)
         {
-           
 
+            pImg.Register("Res", () => RegisterImgs);
+            pImg.Register("Sim", () =>SimImgs);
             if (G.Header == null) return;
             //  this.pBtn.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar,Global.Config.colorGui);
             Global.Config.IsShowArea = false;
@@ -3337,16 +3338,11 @@ namespace BeeUi
                         //Global.StatusDraw = StatusDraw.Check;
                     break;
             }
-            //if (G.IsCheck)
-            //    if (!toolEdit.threadProcess.IsBusy)
-            //        toolEdit.threadProcess.RunWorkerAsync();
+          
         }
         private void cbView_SelectedIndexChanged(object sender, EventArgs e)
         {
-          //BeeCore.G.WindowView= (WindowView)Enum.Parse(typeof(WindowView), cbView.Text.Trim(), true);
-
-          //  IsProcess = Convert.ToBoolean( (int)BeeCore.G.WindowView);
-          //  CurrentTool();
+          
         }
        public  String pathRaw;
        public bool IsProcess;
@@ -5062,22 +5058,20 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void tmSimulation_Tick(object sender, EventArgs e)
         {
-            Global.StatusMode = Global.EditTool.IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
+            Global.StatusMode = Global.IsSim ? StatusMode.SimContinuous : StatusMode.None;
          
             tmSimulation.Enabled = false;
 
         X: indexFile++;
-                if (indexFile < Files.Count())
+                if (indexFile < listMat.Count())
             {
                 Global.TriggerNum = TriggerNum.Trigger1;
 
                 if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
                         BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
-                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(Files[indexFile]);
-            
+                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = listMat[indexFile].Clone();
+
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) goto X;
-            //    Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                   // imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 timer = CycleTimerSplit.Start();
                 Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;
@@ -5588,15 +5582,37 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                
         }
          public    RegisterImgs RegisterImgs = new RegisterImgs();
+        public SimImgs SimImgs = new SimImgs();
         private void btnChangeImg_Click(object sender, EventArgs e)
         {
+         
            
-            RegisterImgs.Visible = btnChangeImg.IsCLick;
-            RegisterImgs.Parent = this;
-            RegisterImgs.Height = imgView.Height;
-            RegisterImgs.BringToFront();
+            
+            
+            if (!Global.IsRun)
+            {
+                RegisterImgs.Dock = DockStyle.Fill;
+               
+                pImg.Show("Res");
+                RegisterImgs.LoadData();
 
-           
+            }
+            else
+            {
+                SimImgs.Dock = DockStyle.Fill;
+                pImg.Show("Sim");
+
+
+            }
+            pImg.Visible = btnChangeImg.IsCLick;
+            spImgs.Visible = btnChangeImg.IsCLick;
+            if (btnChangeImg.IsCLick)
+            {
+                pImg.BringToFront();
+                spImgs.BringToFront();
+                pView.BringToFront();
+
+            }
         }
 
         private void NewShape()

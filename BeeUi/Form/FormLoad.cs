@@ -32,11 +32,12 @@ namespace BeeUi
         public Timer tmLoad = new Timer();
         public BackgroundWorker wLoad = new BackgroundWorker();
         Access access=new Access();
-       
-       
+
+        public ControlStylePersistence _styles;
         public FormLoad()
         {
             InitializeComponent();
+           
            this.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, this.Width, this.Height, 20, 20));
            G.Load = this;
            
@@ -199,6 +200,10 @@ namespace BeeUi
 
         private void FormLoad_Load(object sender, EventArgs e)
         {
+            //_styles = new ControlStylePersistence(this, "LoadTheme")
+            //{
+            //    LoadImmediately = true
+            //};
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
 

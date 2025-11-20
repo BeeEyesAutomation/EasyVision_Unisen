@@ -93,6 +93,26 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AHSO {
+            get {
+                object obj = ResourceManager.GetObject("AHSO", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AHSO1 {
+            get {
+                object obj = ResourceManager.GetObject("AHSO1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Aperture {
             get {
                 object obj = ResourceManager.GetObject("Aperture", resourceCulture);
@@ -643,6 +663,26 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LogoBlueSmall {
+            get {
+                object obj = ResourceManager.GetObject("LogoBlueSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LogoTeamRound {
+            get {
+                object obj = ResourceManager.GetObject("LogoTeamRound", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Logout_3 {
             get {
                 object obj = ResourceManager.GetObject("Logout_3", resourceCulture);
@@ -996,6 +1036,26 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Support {
             get {
                 object obj = ResourceManager.GetObject("Support", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TeamLong {
+            get {
+                object obj = ResourceManager.GetObject("TeamLong", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TeamSmall {
+            get {
+                object obj = ResourceManager.GetObject("TeamSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

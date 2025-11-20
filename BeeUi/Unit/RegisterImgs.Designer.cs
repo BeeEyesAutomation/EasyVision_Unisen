@@ -40,7 +40,7 @@
             this.registerImgDashboard1.HideTopBar = true;
             this.registerImgDashboard1.Location = new System.Drawing.Point(0, 0);
             this.registerImgDashboard1.Name = "registerImgDashboard1";
-            this.registerImgDashboard1.ShowCameraButton = false;
+            
             this.registerImgDashboard1.Size = new System.Drawing.Size(350, 497);
             this.registerImgDashboard1.TabIndex = 1;
             // 
@@ -52,7 +52,7 @@
             this.registerImg.HideTopBar = true;
             this.registerImg.Location = new System.Drawing.Point(0, 0);
             this.registerImg.Name = "registerImg";
-            this.registerImg.ShowCameraButton = false;
+         
             this.registerImg.Size = new System.Drawing.Size(350, 497);
             this.registerImg.TabIndex = 2;
             this.registerImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.registerImg_SelectedItemChanged);

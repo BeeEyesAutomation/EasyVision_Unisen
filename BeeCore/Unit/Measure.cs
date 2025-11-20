@@ -160,6 +160,7 @@ namespace BeeCore
                         {
                             listLine2Point[0] = PropetyTool3.Propety.listP_Center[index];
                             listRot[2] = PropetyTool3.Propety.rectRotates[index];
+
                         }
 
                         else
@@ -180,11 +181,30 @@ namespace BeeCore
                         IsDone4 = true;
                         if (PropetyTool4.Results == Results.OK)
                         {
+                               
                             int index = listPointChoose[3].Item2;
                             if (index < PropetyTool4.Propety.listP_Center.Count)
-                            {
-                                listRot[3] = PropetyTool4.Propety.rectRotates[index];
-                                listLine2Point[1] = PropetyTool4.Propety.listP_Center[index];
+                                {
+                                    if (PropetyTool4.Name.Contains("Edge"))
+                                    {
+                                        RectRotate rot = PropetyTool4.Propety.rectRotates[index];
+                                        Line2D line = new Line2D(rot._rect.Left, rot._rect.Top, rot._rect.Right, rot._rect.Bottom);
+                                        // Tìm giao điểm vuông góc với line vô hạn (không clamp)
+                                        Point2d foot;
+                                        double t;
+                                        Point2d pCenter = new Point2d(listLine2Point[0].X, listLine2Point[0].Y);
+                                        Point2d pLine1 = new Point2d(PropetyTool4.Propety.listP_Center[0].X, PropetyTool4.Propety.listP_Center[0].Y);
+                                        Point2d pLine2 = new Point2d(PropetyTool4.Propety.listP_Center[1].X, PropetyTool4.Propety.listP_Center[1].Y);
+                                        Geometry2D.TryPerpendicularFoot(pCenter, pLine1, pLine2, out foot, out t, clampToSegment: false);
+                                        // foot là giao điểm cần tìm; t cho biết vị trí tương đối dọc theo (a->b)
+                                        listLine2Point[1] = new Point((int)foot.X,(int) foot.Y);
+                                    }
+                                    else
+                                    {
+                                        listRot[3] = PropetyTool4.Propety.rectRotates[index];
+                                        listLine2Point[1] = PropetyTool4.Propety.listP_Center[index];
+                                    }    
+                                       
                             }
 
                             else

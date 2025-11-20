@@ -30,6 +30,7 @@ namespace BeeUi
     public partial class EditTool : UserControl
     {
         private LayoutPersistence _layout;
+        private ControlStylePersistence _styles;
         public EditTool()
         {
           
@@ -48,9 +49,7 @@ namespace BeeUi
             _layout.LoadDelayMs = 300;        // trễ 500ms sau Form.Shown
             _layout.SplitterLocked = true;   // tuỳ chọn
             _layout.EnableAuto();
-            ///  _layout.EnableAuto(); // tự load sau Shown, tự save khi Closing
-            // BeeCore.CustomGui.RoundControl(picLogo,Global.Config.RoundRad);
-
+           
         }
 		public void Acccess(bool IsRun)
 		{
@@ -88,7 +87,7 @@ namespace BeeUi
 					BarRight.btnHistory.Enabled = true;
 					BarRight.btnHardware.Enabled = false;
 					BarRight.btnLog.Enabled = false;
-					btnLogo.Enabled = false;
+                    btnLogo.Enabled = false;
 					break;
 				case Users.User:
 					Global.EditTool.View.btnContinuous.Enabled = false;
@@ -101,7 +100,7 @@ namespace BeeUi
 					BarRight.btnHistory.Enabled = false;
 					BarRight.btnHardware.Enabled = false;
 					BarRight.btnLog.Enabled = false;
-					btnLogo.Enabled = false;
+                    btnLogo.Enabled = false;
 					break;
 			
 			}
@@ -159,7 +158,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
-                        Global.EditTool.View.btnChangeImg.Visible = false;
+                        Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
                         Global.IsAllowReadPLC = true;
@@ -192,6 +191,11 @@ namespace BeeUi
                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                    Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                 }
+                            foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                            {
+                                propetyTool.ItemTool.IsCLick = false;
+                                
+                            }    
                         }
                         catch (Exception ex)
                         {
@@ -201,6 +205,9 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
+                       View.pImg.Visible = false;
+                       View.btnChangeImg.IsCLick = false;
+                        View.btnChangeImg.Visible = false;
                         layInforTool.Visible = false;
                         Global.EditTool.View.imgView.AutoCenter = false;
                         View.pMenu.Visible = true;
@@ -427,48 +434,14 @@ namespace BeeUi
 			Global.ToolSettings.split1.Enabled = !IsLock;
 			G.StatusDashboard.IsLockSplit = IsLock;
 		}
-        public void ChangeCLBG()
-        {
-            this.BackColor = Global.Config.ColorBG;
-            split0.BackColor = Global.Config.ColorBG;
-            split1 .BackColor = Global.Config.ColorBG;
-            split2 .BackColor = Global.Config.ColorBG;
-            split3.BackColor = Global.Config.ColorBG;
-            pLeft.BackColor = Global.Config.ColorBG;
-            split31.BackColor = Global.Config.ColorBG;
-            View.split5 .BackColor = Global.Config.ColorBG;
-
-        }
-        public void ChangeCLRight()
-        {
-            pRight.BackColor = Global.Config.ColorRight;
-            pEditTool.BackColor = Global.Config.ColorRight;
-            Global.ToolSettings.BackColor = Global.Config.ColorRight;
-            split5.BackColor = Global.Config.ColorRight;
-            BarRight.btnFlowChart.ClickBotColor = Global.Config.ColorRight;
-            BarRight.btnHardware.ClickBotColor = Global.Config.ColorRight;
-            BarRight.btnHistory.ClickBotColor = Global.Config.ColorRight;
-            BarRight.btnLog.ClickBotColor = Global.Config.ColorRight;
-            BarRight.btnFlowChart.Invalidate();
-            BarRight.btnHardware.Invalidate();
-            BarRight.btnHistory.Invalidate();
-            BarRight.btnLog.Invalidate();
-        }
-        public void ChangeCLBar()
-        {
-            pHeader.BackColor = Global.Config.ColorBar2;
-            View.pBtn.BackColor = Global.Config.ColorBar2;
-        }
+       
         private void EditTool_Load(object sender, EventArgs e)
         {
-            //ChangeCLBar();
-            //ChangeCLRight();
-            ////pEdit.BackColor = Global.Config.ColorRight;
-            //ChangeCLBG();
-            //this.LayoutEnd.BackColor= Global.Config.ColorEnd;
-            //this.hideBar.BackColor = Global.Config.ColorEnd;
-            //pTop.BackColor = Global.Config.ColorBar1;
-			tmReLoadSplit.Enabled = true;
+            //_styles = new ControlStylePersistence(this, "MyPanelTheme")
+            //{
+            //    LoadImmediately = true
+            //};
+            tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             //   this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);
             pInfor.Height = (int)(pInfor.Height * Global.PerScaleHeight);
@@ -758,21 +731,30 @@ namespace BeeUi
                 View.indexFile = 0;
               View.  Files = new List<string>();
                 View.Files = Directory.GetFiles(folderBrowserDialog1.SelectedPath).ToList(); ;
+                if (View.Files.Count > 0)
+                {
+                    View.listMat = new List<Mat>();
+                    foreach (string file in View.Files)
+                    {
+                        View.listMat.Add(new Mat(file));
+                    }
 
-               
+                }
+
 
             }
             if (!Global.IsRun)
             {
                 View.indexFile = 0;
                 View.pathFileSeleted = View.Files[View.indexFile];
+
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile]; ;// Cv2.ImRead(Files[indexFile]);
               Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
             }
         }
 
-     public   bool IsRunSim = false;
+  
         private void playTool_Click(object sender, EventArgs e)
         {
             if (View.Files == null)
@@ -784,8 +766,8 @@ namespace BeeUi
             playTool.Enabled = false;
             openFileTool.Enabled = false;
             openImageTool.Enabled = false;
-            stopTool.Enabled = true; IsRunSim = true;
-            Global.StatusMode = IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
+            stopTool.Enabled = true; Global.IsSim = true;
+            Global.StatusMode = Global.IsSim ? StatusMode.SimContinuous : StatusMode.None;
          
          
 
@@ -805,9 +787,9 @@ namespace BeeUi
         {
             openFileTool.Enabled = true;
             openImageTool.Enabled = true;
-          
-            IsRunSim = false; 
-            Global.StatusMode = IsRunSim ? StatusMode.SimContinuous : StatusMode.None;
+
+            Global.IsSim = false; 
+            Global.StatusMode = Global.IsSim ? StatusMode.SimContinuous : StatusMode.None;
 
             stopTool.Enabled = false;
             playTool.Enabled = true;
@@ -1099,6 +1081,31 @@ namespace BeeUi
 
         private void autoFontLabel2_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void customGuiTool_Click(object sender, EventArgs e)
+        {
+            _styles.ShowEditor();
+        }
+
+        private void Logo_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnLogo_Click_1(object sender, EventArgs e)
+        {
+            Point menuPoint = new Point(0, btnLogo.Height);
+
+            //if(btnLogo.IsCLick)
+            mouseLeft.Show(btnLogo, menuPoint);
+        }
+
+        private void customFormLoadTool_Click(object sender, EventArgs e)
+        {
+            G.Load.Show();
+            G.Load._styles.ShowEditor();
 
         }
 

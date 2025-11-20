@@ -228,6 +228,7 @@ namespace BeeInterface
             this.btnTest.IsCLick = false;
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
+            this.btnTest.IsTouch = false;
             this.btnTest.IsUnGroup = true;
             this.btnTest.Location = new System.Drawing.Point(10, 556);
             this.btnTest.Margin = new System.Windows.Forms.Padding(10);
@@ -383,6 +384,7 @@ namespace BeeInterface
             this.rjButton10.IsCLick = false;
             this.rjButton10.IsNotChange = false;
             this.rjButton10.IsRect = false;
+            this.rjButton10.IsTouch = false;
             this.rjButton10.IsUnGroup = false;
             this.rjButton10.Location = new System.Drawing.Point(0, 0);
             this.rjButton10.Margin = new System.Windows.Forms.Padding(0);
@@ -470,6 +472,7 @@ namespace BeeInterface
             this.rjButton3.IsCLick = false;
             this.rjButton3.IsNotChange = false;
             this.rjButton3.IsRect = false;
+            this.rjButton3.IsTouch = false;
             this.rjButton3.IsUnGroup = false;
             this.rjButton3.Location = new System.Drawing.Point(0, 0);
             this.rjButton3.Margin = new System.Windows.Forms.Padding(0);
@@ -556,6 +559,7 @@ namespace BeeInterface
             this.rjButton2.IsCLick = false;
             this.rjButton2.IsNotChange = false;
             this.rjButton2.IsRect = false;
+            this.rjButton2.IsTouch = false;
             this.rjButton2.IsUnGroup = false;
             this.rjButton2.Location = new System.Drawing.Point(0, 0);
             this.rjButton2.Margin = new System.Windows.Forms.Padding(0);
@@ -646,6 +650,7 @@ namespace BeeInterface
             this.rjButton1.IsCLick = false;
             this.rjButton1.IsNotChange = false;
             this.rjButton1.IsRect = false;
+            this.rjButton1.IsTouch = false;
             this.rjButton1.IsUnGroup = false;
             this.rjButton1.Location = new System.Drawing.Point(5, 5);
             this.rjButton1.Margin = new System.Windows.Forms.Padding(0);
@@ -746,6 +751,7 @@ namespace BeeInterface
             this.rjButton13.IsCLick = true;
             this.rjButton13.IsNotChange = false;
             this.rjButton13.IsRect = false;
+            this.rjButton13.IsTouch = false;
             this.rjButton13.IsUnGroup = false;
             this.rjButton13.Location = new System.Drawing.Point(5, 5);
             this.rjButton13.Margin = new System.Windows.Forms.Padding(0);
@@ -847,6 +853,7 @@ namespace BeeInterface
             this.rjButton12.IsCLick = false;
             this.rjButton12.IsNotChange = false;
             this.rjButton12.IsRect = false;
+            this.rjButton12.IsTouch = false;
             this.rjButton12.IsUnGroup = false;
             this.rjButton12.Location = new System.Drawing.Point(5, 5);
             this.rjButton12.Margin = new System.Windows.Forms.Padding(0);
@@ -947,6 +954,7 @@ namespace BeeInterface
             this.rjButton11.IsCLick = true;
             this.rjButton11.IsNotChange = false;
             this.rjButton11.IsRect = false;
+            this.rjButton11.IsTouch = false;
             this.rjButton11.IsUnGroup = false;
             this.rjButton11.Location = new System.Drawing.Point(5, 5);
             this.rjButton11.Margin = new System.Windows.Forms.Padding(0);
@@ -1039,6 +1047,7 @@ namespace BeeInterface
             this.btnAreaBlack.IsCLick = true;
             this.btnAreaBlack.IsNotChange = false;
             this.btnAreaBlack.IsRect = false;
+            this.btnAreaBlack.IsTouch = false;
             this.btnAreaBlack.IsUnGroup = false;
             this.btnAreaBlack.Location = new System.Drawing.Point(3, 5);
             this.btnAreaBlack.Multiline = false;
@@ -1093,6 +1102,7 @@ namespace BeeInterface
             this.btnAreaWhite.IsCLick = false;
             this.btnAreaWhite.IsNotChange = false;
             this.btnAreaWhite.IsRect = false;
+            this.btnAreaWhite.IsTouch = false;
             this.btnAreaWhite.IsUnGroup = false;
             this.btnAreaWhite.Location = new System.Drawing.Point(195, 5);
             this.btnAreaWhite.Multiline = false;

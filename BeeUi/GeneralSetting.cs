@@ -71,15 +71,7 @@ namespace BeeUi
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
             btnByPassResult.IsCLick=Global.ParaCommon.IsForceByPassRS;
-            //Gui
-            lbCLTop.BackColor = Global.Config.ColorBar1;
-            btnCLTop.ForeColor = Global.Config.ColorBar1;
-            lbCLBG.BackColor = Global.Config.ColorBG;
-            btnCLBG.ForeColor = Global.Config.ColorBG;
-            lbCLEnd.BackColor = Global.Config.ColorEnd;
-            btnCLEnd.ForeColor = Global.Config.ColorEnd;
-            lbCLRight.BackColor = Global.Config.ColorRight;
-            btnCLRight.ForeColor = Global.Config.ColorRight;
+           
             if (Global.ParaCommon.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
@@ -379,62 +371,6 @@ namespace BeeUi
             Global.ParaCommon.IsResetReady = btnResetReady.IsCLick;
         }
 
-        private void btnBar_Click(object sender, EventArgs e)
-        {
-            colorChoose.Color = Global.Config.ColorBar1;
-            if (colorChoose.ShowDialog() == DialogResult.OK)
-            {
-                Global.Config.ColorBar1 = colorChoose.Color;
-                lbCLTop.BackColor = Global.Config.ColorBar1;
-                btnCLTop.ForeColor = Global.Config.ColorBar1;
-                Global.EditTool.pTop.BackColor = Global.Config.ColorBar1;
-            }
-        }
-
-        private void btnBG_Click(object sender, EventArgs e)
-        {
-            colorChoose.Color = Global.Config.ColorBG;
-            if (colorChoose.ShowDialog() == DialogResult.OK)
-            {
-                Global.Config.ColorBG = colorChoose.Color;
-                lbCLBG.BackColor = Global.Config.ColorBG;
-                btnCLBG.ForeColor = Global.Config.ColorBG;
-                Global.EditTool.BackColor = Global.Config.ColorBG;
-            }
-        }
-
-        private void btnEnd_Click(object sender, EventArgs e)
-        {
-            colorChoose.Color = Global.Config.ColorEnd;
-            if (colorChoose.ShowDialog() == DialogResult.OK)
-            {
-                Global.Config.ColorEnd = colorChoose.Color;
-                lbCLEnd.BackColor = Global.Config.ColorEnd;
-                btnCLEnd.ForeColor = Global.Config.ColorEnd;
-                Global.EditTool.LayoutEnd.BackColor = Global.Config.ColorEnd;
-            }
-        }
-
-        private void btnRight_Click(object sender, EventArgs e)
-        {
-            if (colorChoose.ShowDialog() == DialogResult.OK)
-            {
-                Global.Config.ColorRight = colorChoose.Color;
-                lbCLRight.BackColor = Global.Config.ColorRight;
-                btnCLRight.ForeColor = Global.Config.ColorRight;
-                Global.EditTool.ChangeCLRight();
-            }
-        }
-
-        private void btnBar_Click_1(object sender, EventArgs e)
-        {
-            if (colorChoose.ShowDialog() == DialogResult.OK)
-            {
-                Global.Config.ColorBar2 = colorChoose.Color;
-                lbCLBar.BackColor = Global.Config.ColorBar2;
-                btnCLBar.ForeColor = Global.Config.ColorBar2;
-                Global.EditTool.ChangeCLBar();
-            }
-        }
+       
     }
 }

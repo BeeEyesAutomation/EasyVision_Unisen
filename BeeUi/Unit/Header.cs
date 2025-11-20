@@ -581,7 +581,7 @@ txtQrCode.Focus();
            
            
             IsIntialProgram = true;
-            Global.EditTool. Acccess(Global.IsRun);
+         
            
             tmIninitial.Enabled = true;
         
@@ -667,7 +667,7 @@ txtQrCode.Focus();
                 Global.EditTool.View.imgView.Visible = true;
                 Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
                     stepShow++;
-                    tmShow.Interval = 100;
+                    tmShow.Interval = 500;
                     Global.ToolSettings.Size = Global.EditTool.pEditTool.Size;
                   //  Global.ToolSettings.ResumeLayout(true);
                     break;
@@ -690,8 +690,7 @@ txtQrCode.Focus();
 
                     }  
                         tmShow.Enabled = false;
-                       // Global.ToolSettings.ResumeLayout(true);
-
+                    //Global.EditTool.Acccess(Global.IsRun);
                     break;
             } 
            

@@ -271,6 +271,12 @@
     <Compile Include="Unit\Header.Designer.cs">
       <DependentUpon>Header.cs</DependentUpon>
     </Compile>
+    <Compile Include="Unit\SimImgs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\SimImgs.Designer.cs">
+      <DependentUpon>SimImgs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Unit\RegisterImgs.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -382,6 +388,9 @@
     <EmbeddedResource Include="Unit\Header.resx">
       <DependentUpon>Header.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\SimImgs.resx">
+      <DependentUpon>SimImgs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\RegisterImgs.resx">
       <DependentUpon>RegisterImgs.cs</DependentUpon>
@@ -545,6 +554,13 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\AHSO1.png" />
+    <None Include="Resources\AHSO.png" />
+    <None Include="Resources\LogoBlueSmall.png" />
+    <None Include="Resources\LogoBlue.png" />
+    <None Include="Resources\LogoTeamRound2.png" />
+    <None Include="Resources\TeamLong.png" />
+    <None Include="Resources\TeamSmall.png" />
     <None Include="Resources\Image Gallery.png" />
     <None Include="Resources\Menubar_1.png" />
     <None Include="Resources\Change_1.png" />

@@ -68,16 +68,16 @@ namespace BeeInterface
                 switch (Propety.MethordEdge)
                 {
                     case MethordEdge.StrongEdges:
-                        btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
+                        btnStrongEdge.IsCLick = true; lay62.Enabled = false;
                         break;
                     case MethordEdge.CloseEdges:
-                        btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
+                        btnCloseEdge.IsCLick = true; lay62.Enabled = false;
                         break;
                     case MethordEdge.Binary:
-                        btnBinary.IsCLick = true; layThreshod.Enabled = true;
+                        btnBinary.IsCLick = true; lay62.Enabled = true;
                         break;
                     case MethordEdge.InvertBinary:
-                        btnInvert.IsCLick = true; layThreshod.Enabled = true;
+                        btnInvert.IsCLick = true; lay62.Enabled = true;
                         break;
                 }
                 switch (Propety.LineOrientation)
@@ -693,7 +693,7 @@ namespace BeeInterface
         private void btnBinary_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.Binary;
-            layThreshod.Enabled = true;
+            lay62.Enabled = true;
         }
 
       
@@ -722,19 +722,19 @@ namespace BeeInterface
         private void btnInvert_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.InvertBinary;
-            layThreshod.Enabled = true;
+            lay62.Enabled = true;
         }
 
         private void btnStrongEdge_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.StrongEdges;
-            layThreshod.Enabled = false;
+            lay62.Enabled = false;
         }
 
         private void btnCloseEdge_Click(object sender, EventArgs e)
         {
             Propety.MethordEdge = MethordEdge.CloseEdges;
-            layThreshod.Enabled = false;
+            lay62.Enabled = false;
         }
         private void AdjClearNoise_ValueChanged(float obj)
         {
@@ -795,6 +795,58 @@ namespace BeeInterface
         private void AdjScale_ValueChanged(float obj)
         {
             Propety.Scale = AdjScale.Value;
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            lay1.Visible = !btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            lay21.Visible = !btn2.IsCLick;
+            lay22.Visible = !btn2.IsCLick;
+            lay23.Visible = !btn2.IsCLick;
+            lay24.Visible=!btn2.IsCLick;
+            lay25.Visible=!btn2.IsCLick;
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            lay3.Visible = !btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            lay4.Visible=!btn4.IsCLick;
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            lay5.Visible = !btn5.IsCLick;
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void btn6_Click(object sender, EventArgs e)
+        {
+            lay61.Visible = !btn6.IsCLick;
+            lay62.Visible=!btn6.IsCLick;
+        }
+
+        private void btn7_Click(object sender, EventArgs e)
+        {
+            AdjScale.Visible = !btn7.IsCLick;
+        }
+
+       
+
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn8.IsCLick;
         }
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

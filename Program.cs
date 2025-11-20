@@ -1,4 +1,5 @@
-﻿using BeeUi;
+﻿using BeeInterface;
+using BeeUi;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -75,6 +76,7 @@ namespace BeeIV2
             //Parallel.For(0, 1000, options, i => { ... });
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            GlobalIconManager.Init("logo.ico",true); // tìm trong thư mục exe
             if (PriorProcess() == null)
             {
                 Application.Run(new BeeUi.FormLoad());

@@ -53,6 +53,10 @@ namespace BeeGlobal
     {
         User, Leader, Admin
     }
+    public enum ZeroPos
+    {
+        Zero,ZeroADJ
+    }
     //Corner
     public enum Values
     {

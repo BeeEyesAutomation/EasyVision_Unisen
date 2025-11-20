@@ -8,6 +8,8 @@ using Python.Runtime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -19,6 +21,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using static BeeCore.Cropper;
 using static LibUsbDotNet.Main.UsbTransferQueue;
 using Point = System.Drawing.Point;
 using Size = OpenCvSharp.Size;
@@ -104,7 +107,13 @@ namespace BeeCore
                     using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                    Mat matCrop = new Mat();
+                    PatchCropContext ctx=new PatchCropContext();
+                   
+                    if (rectRotate.Shape == ShapeType.Ellipse)
+                        matCrop = Cropper.CropOuterPatch(raw, rectRotate, out ctx);
+                    else
+                        matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
                     if(matProcess==null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();
@@ -123,7 +132,9 @@ namespace BeeCore
                             matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
                             break;
                     }
-
+                    if (rectRotate.Shape == ShapeType.Ellipse)
+                        matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rectRotate, rotMask, returnMaskOnly: false);
+                    //Cv2.ImWrite("CropCircle.png", matProcess);
                     var circles = RansacCircleFitter.DetectCircles(
                    matProcess,
                    maxCircles: 3,
@@ -203,6 +214,7 @@ namespace BeeCore
                 if (matProcess != null && !matProcess.Empty())
                     Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
             }
+            if(Global.Config.IsShowResult)
             if (rectRotates.Count > 0)
             {
                 int i = 1;
@@ -225,8 +237,13 @@ namespace BeeCore
                     Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
 
                     gc.DrawEllipse(new Pen(cl, Global.Config.ThicknessLine), rot._rect);
-                    gc.DrawString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(cl), new PointF(0, 0));
-                    gc.ResetTransform();
+                        SizeF sz = gc.MeasureString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold));
+                    if(Global.Config.IsShowDetail)
+                    gc.DrawString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(Global.Config.ColorInfor), new PointF(0, 0));
+                    if(Global.Config.IsShowPostion)
+                      gc.DrawString("X,Y - " + listP_Center[i].X+","+ listP_Center[i].Y, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(Global.Config.ColorInfor), new PointF(0, sz.Height+1));
+
+                        gc.ResetTransform();
                     i++;
                 }
                

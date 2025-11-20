@@ -1,4 +1,5 @@
-﻿using BeeCore.Funtion;
+﻿using BeeCore;
+using BeeCore.Funtion;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -21,18 +22,19 @@ namespace BeeUi.Unit
         {
             InitializeComponent();
         }
+        public void LoadData()
+        {
+            registerImg.LoadAllItem(Global.ParaCommon.listRegsImg, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis);
 
+        }
         private void RegisterImgs_Load(object sender, EventArgs e)
         {
-            this.Location = new Point( Global.EditTool.View.Width - this.Width,Global.EditTool.View.pBtn.Height + 1);
-
-            registerImg.LoadAllItem((BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis));
           
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
+         
           
             Global.EditTool.View.btnChangeImg.Enabled = true;
          
@@ -56,13 +58,6 @@ namespace BeeUi.Unit
 
         private void RegisterImgs_VisibleChanged(object sender, EventArgs e)
         {
-            if(this.Visible)
-            {
-                this.Location = new Point(Global.EditTool.View.Width - this.Width, Global.EditTool.View.pBtn.Height + 1);
-
-                registerImg.LoadAllItem((BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis));
-
-            }
         }
     }
 }

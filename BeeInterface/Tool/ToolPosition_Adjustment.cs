@@ -37,6 +37,15 @@ namespace BeeInterface
                Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             trackAngle.Value = (int)Propety.Angle;
+            if (Propety.Angle > 360) Propety.Angle = 360;
+
+            if (Propety.Angle == 0)
+            {
+                Propety.Angle = 1;
+            }
+            float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
+            Propety.AngleLower = angle - Propety.Angle;
+            Propety.AngleUper = angle + Propety.Angle;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
             Propety.ckBitwiseNot = Propety.ckBitwiseNot;
             Propety.ckSIMD = Propety.ckSIMD;
@@ -365,20 +374,17 @@ namespace BeeInterface
         private void trackAngle_ValueChanged(float obj)
         {
             Propety.Angle = trackAngle.Value;
-          
+
             if (Propety.Angle > 360) Propety.Angle = 360;
 
             if (Propety.Angle == 0)
             {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
+                Propety.Angle = 1;
             }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
-        
+            float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
+            Propety.AngleLower = angle - Propety.Angle;
+            Propety.AngleUper = angle + Propety.Angle;
+            
         }
 
    
@@ -531,6 +537,38 @@ namespace BeeInterface
         private void AdjStepAngle_ValueChanged(float obj)
         {
             Propety.StepAngle = (int)AdjStepAngle.Value;
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            lay1.Visible = !btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            lay2.Visible=!btn2.IsCLick;
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            lay3.Visible=!btn3.IsCLick;
+            lbAngle.Visible = !btn3.IsCLick;
+            trackAngle.Visible= !btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            trackAngle.Visible = !lbAngle.IsCLick;
+        }
+
+        private void btn4_Click_1(object sender, EventArgs e)
+        {
+            layPattern.Visible = !btn4.IsCLick;
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible=!lbPattern.IsCLick;
         }
     }
 }

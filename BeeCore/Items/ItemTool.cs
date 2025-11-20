@@ -665,9 +665,10 @@ namespace BeeCore
                 case StatusTool.Done:
                   
                     if(Common.PropetyTools[IndexThread][IndexTool].Results==Results.OK)
-                    {   if (Common.PropetyTools[IndexThread][IndexTool].Location != "")
+                    {   
+                        if (Common.PropetyTools[IndexThread][IndexTool].Location != null&&Common.PropetyTools[IndexThread][IndexTool].Location != "")
                             Score = Common.PropetyTools[IndexThread][IndexTool].Location;
-                        else
+                        else 
                         {
                             valueScore = Common.PropetyTools[IndexThread][IndexTool].ScoreResult;
                             Score = valueScore + "";

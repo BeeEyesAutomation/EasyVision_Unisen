@@ -1,5 +1,6 @@
 ﻿using BeeCore;
 using BeeGlobal;
+using BeeInterface;
 using BeeUi.Commons;
 using BeeUi.Tool;
 using System;

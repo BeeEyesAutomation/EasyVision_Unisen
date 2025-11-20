@@ -39,27 +39,26 @@ namespace BeeInterface
         {
 
             
-            if (!workLoadModel.IsBusy)
-                workLoadModel.RunWorkerAsync();
+            //if (!workLoadModel.IsBusy)
+            //    workLoadModel.RunWorkerAsync();
             if (Propety.bmRaw != null)
             {
                 imgTemp.Image = Propety.bmRaw;
             }
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value =(int) Propety.Angle;
+           
 
             if (Propety.Angle > 360) Propety.Angle = 360;
 
             if (Propety.Angle == 0)
             {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
+                Propety.Angle = 1;
             }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
+            float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
+            Propety.AngleLower = angle - Propety.Angle;
+            Propety.AngleUper = angle + Propety.Angle;
+
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick =! Propety.rotArea.IsWhite;
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
@@ -115,6 +114,11 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             txtAddPLC.Text = Propety.AddPLC;
+            adjScale.Value = Propety.Scale;
+
+            btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
+            btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
+
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
         }
 
@@ -141,13 +145,13 @@ namespace BeeInterface
         public void GetTemp(RectRotate rotateRect, Mat matRegister)
         {
            
-                float angle = rotateRect._rectRotation;
-                if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
-                if (matCrop.Type() == MatType.CV_8UC3)
-                    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
-                if (Propety.IsAreaWhite)
-                    Cv2.BitwiseNot(matTemp, matTemp);
+                //float angle = rotateRect._rectRotation;
+                //if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
+                //Mat matCrop =BeeCore.Cropper.CropRotatedRect(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
+                //if (matCrop.Type() == MatType.CV_8UC3)
+                //    Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
+                //if (Propety.IsAreaWhite)
+                //    Cv2.BitwiseNot(matTemp, matTemp);
            
         }
        
@@ -374,19 +378,14 @@ namespace BeeInterface
             Propety.Angle = trackAngle.Value;
           
             if (Propety.Angle > 360) Propety.Angle = 360;
-         
             if (Propety.Angle == 0)
             {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
+                Propety.Angle = 1;
             }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
+            float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
+            Propety.AngleLower = angle - Propety.Angle;
+            Propety.AngleUper = angle + Propety.Angle;
+
         }
 
   
@@ -550,19 +549,43 @@ namespace BeeInterface
         {
             Propety.TypeMode = Mode.Edge;
         }
-        private void btnModeCany_Click(object sender, EventArgs e)
-        {
-            Propety.TypeMode = Mode.OutLine;
-        }
+     
 
         private void btnModePattern_Click(object sender, EventArgs e)
         {
             Propety.TypeMode = Mode.Pattern;
         }
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.ThresholdBinary = (int)AdjThreshod.Value;
+        }
+
+        private void btnInvert_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.InvertBinary;
+            layThreshod.Enabled = true;
+        }
+
+        private void btnStrongEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.StrongEdges;
+            layThreshod.Enabled = false;
+        }
+
+        private void btnCloseEdge_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.CloseEdges;
+            layThreshod.Enabled = false;
+        }
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+            layThreshod.Enabled = true;
+        }
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-            Patterns.LoadEdge();
+          //  Patterns.LoadEdge();
           
         }
 
@@ -586,13 +609,13 @@ namespace BeeInterface
 
         private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (Propety.TypeMode == Mode.Edge)
-                if(!G.IniEdge)
-                {
-                    workLoadModel.RunWorkerAsync();
-                    return;
+            //if (Propety.TypeMode == Mode.Edge)
+            //    if(!G.IniEdge)
+            //    {
+            //        workLoadModel.RunWorkerAsync();
+            //        return;
 
-                }    
+            //    }    
           
           
         }
@@ -607,23 +630,7 @@ namespace BeeInterface
 
         }
 
-        private void trackAngle_Click(object sender, EventArgs e)
-        {
-            Propety.Angle = trackAngle.Value;
-
-            if (Propety.Angle > 360) Propety.Angle = 360;
-
-            if (Propety.Angle == 0)
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - 1;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + 1;
-            }
-            else
-            {
-                Propety.AngleLower = Propety.rotCrop._rectRotation - Propety.Angle;
-                Propety.AngleUper = Propety.rotCrop._rectRotation + Propety.Angle;
-            }
-        }
+   
         private void btnCropRect_Click(object sender, EventArgs e)
         {
             Global.TypeCrop = TypeCrop.Crop;
@@ -777,6 +784,70 @@ namespace BeeInterface
             {
                 Propety.AddPLC=txtAddPLC.Text;
             }    
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            lay1.Visible =! btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            lay2.Visible = !btn2.IsCLick;
+            lb2.Visible = !btn2.IsCLick;
+            lay21.Visible=!btn2.IsCLick;
+            lay22.Visible=!btn2.IsCLick;
+            lay23.Visible = !btn2.IsCLick;
+            
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            lay3.Visible = !btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            trackAngle.Visible = !btn4.IsCLick;
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+            lay5.Visible =! btn5.IsCLick;
+        }
+
+      
+
+        private void btn6_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn6.IsCLick;
+        }
+
+        private void btn7_Click(object sender, EventArgs e)
+        {
+            layLimitCouter.Visible = !btn8.IsCLick;
+            AdjLimitCounter.Visible = !btn8.IsCLick;
+        }
+
+        private void btnZeroAdj_Click(object sender, EventArgs e)
+        {
+            Propety.ZeroPos = ZeroPos.ZeroADJ;
+        }
+
+        private void adjScale_ValueChanged(float obj)
+        {
+            Propety.Scale =(float)adjScale.Value;
+        }
+
+        private void btn7_Click_1(object sender, EventArgs e)
+        {
+            lay71.Visible = !btn7.IsCLick;
+            lay72.Visible = !btn7.IsCLick;
+        }
+
+        private void btnZero0_Click(object sender, EventArgs e)
+        {
+            Propety.ZeroPos = ZeroPos.Zero;
         }
     }
 }

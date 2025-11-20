@@ -1,0 +1,29 @@
+// branding/appicon.rc
+#include <winres.h>
+IDI_ICON1 ICON "logo.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x2L   // DLL
+ FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "CompanyName",      "Bee Eyes Automation\0"
+      VALUE "ProductName",      "EasyVision_Unisen\0"
+      VALUE "FileDescription",  "Bee Library\0"
+      VALUE "FileVersion",      "1.0.0.0\0"
+      VALUE "ProductVersion",   "1.0.0.0\0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1200
+  END
+END

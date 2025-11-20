@@ -3936,8 +3936,7 @@ namespace BeeUi
             this.btnBar.TextColor = System.Drawing.Color.Black;
             this.btnBar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnBar.UseVisualStyleBackColor = false;
-            this.btnBar.Click += new System.EventHandler(this.btnBar_Click_1);
-            // 
+          
             // btnCLBar
             // 
             this.btnCLBar.AutoFont = true;
@@ -4135,8 +4134,7 @@ namespace BeeUi
             this.btnRight.TextColor = System.Drawing.Color.Black;
             this.btnRight.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRight.UseVisualStyleBackColor = false;
-            this.btnRight.Click += new System.EventHandler(this.btnRight_Click);
-            // 
+           
             // btnCLRight
             // 
             this.btnCLRight.AutoFont = true;
@@ -4335,8 +4333,7 @@ namespace BeeUi
             this.btnEnd.TextColor = System.Drawing.Color.Black;
             this.btnEnd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEnd.UseVisualStyleBackColor = false;
-            this.btnEnd.Click += new System.EventHandler(this.btnEnd_Click);
-            // 
+           
             // btnCLEnd
             // 
             this.btnCLEnd.AutoFont = true;
@@ -4690,8 +4687,7 @@ namespace BeeUi
             this.btnBG.TextColor = System.Drawing.Color.Black;
             this.btnBG.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnBG.UseVisualStyleBackColor = false;
-            this.btnBG.Click += new System.EventHandler(this.btnBG_Click);
-            // 
+          
             // btnCLBG
             // 
             this.btnCLBG.AutoFont = true;
@@ -4889,8 +4885,7 @@ namespace BeeUi
             this.btnTop.TextColor = System.Drawing.Color.Black;
             this.btnTop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnTop.UseVisualStyleBackColor = false;
-            this.btnTop.Click += new System.EventHandler(this.btnBar_Click);
-            // 
+           
             // btnCLTop
             // 
             this.btnCLTop.AutoFont = true;

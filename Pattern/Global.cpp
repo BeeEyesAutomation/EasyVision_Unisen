@@ -408,6 +408,19 @@ void CommonPlus::DrawShapeMaskIntoWithSize(
     }
     }
 }
+// Đặt true nếu RectRotationDeg của RectRotateCli là CW (thuận chiều kim)
+static constexpr bool ANGLE_CW = false;
+
+// Chuẩn hoá: đưa width thành cạnh ngang, góc về (-180,180]
+static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
+{
+    if (s.width < s.height) {
+        std::swap(s.width, s.height);
+        angDeg += 90.0;
+    }
+    while (angDeg <= -180.0) angDeg += 360.0;
+    while (angDeg > 180.0) angDeg -= 360.0;
+}
 
 void CommonPlus::RunCrop(
     const cv::Mat& src,
@@ -416,45 +429,57 @@ void CommonPlus::RunCrop(
     bool returnMaskOnly,
     cv::Mat& out)
 {
-    // 1) Anchor & size theo shape
+    // 1) Anchor & size theo shape (hàm của bạn)
     cv::Point2f worldAnchor, localCenter;
     cv::Size2f  rectSize;
     GetAnchorSizeFor(rr, worldAnchor, rectSize, localCenter);
 
-    double angleUsed = rr.RectRotationDeg;
-    if (angleUsed < -45.0) {
-        angleUsed += 90.0;
-        float tmp = rectSize.width; rectSize.width = rectSize.height; rectSize.height = tmp;
-    }
-    float angleInPatchCrop = (float)(rr.RectRotationDeg - angleUsed);
+    // --- GÓC SỬ DỤNG ĐỂ XOAY ẢNH ---
+    // Chuyển sang CCW nếu dữ liệu đầu vào là CW
+    double angleUsed = rr.RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0);
+
+    // Luôn đưa patch ra ngang theo width
+    NormalizeSizeAndAngle(rectSize, angleUsed);
+
+    // Góc của shape bên trong patch (sau khi đã xoay ảnh)
+    float angleInPatchCrop = static_cast<float>(
+        rr.RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0) - angleUsed
+        );
     if (angleInPatchCrop > 180.f)  angleInPatchCrop -= 360.f;
     if (angleInPatchCrop < -180.f) angleInPatchCrop += 360.f;
 
     const cv::Point2f anchor(worldAnchor.x, worldAnchor.y);
 
-    // 2) Warp quanh anchor
+    // 2) Warp quanh anchor (xoay CCW theo OpenCV)
     cv::Mat M = cv::getRotationMatrix2D(anchor, angleUsed, 1.0);
     cv::Mat warped;
-    cv::warpAffine(src, warped, M, src.size(),
-        cv::INTER_CUBIC, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    cv::warpAffine(
+        src, warped, M, src.size(),
+        cv::INTER_CUBIC,
+        cv::BORDER_REPLICATE,   // tránh viền đen cắt cụt
+        cv::Scalar()
+    );
 
-    // 3) Cắt patch
+    // 3) Cắt patch đúng W×H đã chuẩn hoá (nằm ngang)
     cv::Mat patch;
-    cv::getRectSubPix(warped,
+    cv::getRectSubPix(
+        warped,
         cv::Size((int)std::round(rectSize.width), (int)std::round(rectSize.height)),
-        anchor, patch);
+        anchor, patch
+    );
     if (patch.empty()) { out.release(); return; }
 
-    const int patchH = patch.rows;
-    const int patchW = patch.cols;
-    const cv::Point2f patchCenter((float)patchW * 0.5f, (float)patchH * 0.5f);
+    const int patchH = patch.rows, patchW = patch.cols;
+    const cv::Point2f patchCenter(0.5f * patchW, 0.5f * patchH);
 
-    // 4) Mask theo shape
+    // 4) Mask theo shape gốc, nhưng ở hệ patch
     cv::Mat cropMask(patchH, patchW, CV_8UC1, cv::Scalar(0));
-    DrawShapeMaskIntoWithSize(rr, cropMask, patchCenter, angleInPatchCrop, 255,
+    DrawShapeMaskIntoWithSize(
+        rr, cropMask, patchCenter, angleInPatchCrop, 255,
         (int)std::round(rectSize.width),
         (int)std::round(rectSize.height),
-        localCenter);
+        localCenter
+    );
 
     // 5) Mask loại trừ (nếu có)
     cv::Mat finalMask;
@@ -466,15 +491,30 @@ void CommonPlus::RunCrop(
         cv::Size2f  maskSize;
         GetAnchorSizeFor(*rrMask, worldAnchorMask, maskSize, maskLocalCenter);
 
-        cv::Point2f deltaWorld(worldAnchorMask.x - worldAnchor.x, worldAnchorMask.y - worldAnchor.y);
+        // Toạ độ mask trong patch = quay ngược lại đúng góc đã warp
+        cv::Point2f deltaWorld(
+            worldAnchorMask.x - worldAnchor.x,
+            worldAnchorMask.y - worldAnchor.y
+        );
         cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)(-angleUsed));
-        cv::Point2f maskCenterInPatch(patchCenter.x + deltaInPatch.x, patchCenter.y + deltaInPatch.y);
-        float maskAngleInPatch = (float)(rrMask->RectRotationDeg - angleUsed);
+        cv::Point2f maskCenterInPatch(
+            patchCenter.x + deltaInPatch.x,
+            patchCenter.y + deltaInPatch.y
+        );
 
-        DrawShapeMaskIntoWithSize(*rrMask, mask2, maskCenterInPatch, maskAngleInPatch, 0,
+        double maskAng = rrMask->RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0);
+        float maskAngleInPatch = (float)(maskAng - angleUsed);
+
+        // Nếu muốn mask phụ cũng nằm ngang theo width của nó:
+        NormalizeSizeAndAngle(maskSize, maskAng);
+        maskAngleInPatch = (float)(maskAng - angleUsed);
+
+        DrawShapeMaskIntoWithSize(
+            *rrMask, mask2, maskCenterInPatch, maskAngleInPatch, 0,
             (int)std::round(maskSize.width),
             (int)std::round(maskSize.height),
-            maskLocalCenter);
+            maskLocalCenter
+        );
 
         cv::bitwise_and(cropMask, mask2, finalMask);
     }
@@ -482,14 +522,97 @@ void CommonPlus::RunCrop(
         finalMask = cropMask.clone();
     }
 
-    if (returnMaskOnly) {
-        out = finalMask.clone();
-        return;
-    }
+    if (returnMaskOnly) { out = finalMask.clone(); return; }
 
     // 6) Áp mask lên nền
-    cv::Scalar bg = rr.IsWhite ? cv::Scalar(255, 255, 255, 255) : cv::Scalar(0, 0, 0, 0);
-    cv::Mat bgMat(patch.size(), patch.type(), bg);
-    out = bgMat.clone();
+    const cv::Scalar bg = rr.IsWhite ? cv::Scalar(255, 255, 255, 255)
+        : cv::Scalar(0, 0, 0, 0);
+    out.create(patch.size(), patch.type());
+    out.setTo(bg);
     patch.copyTo(out, finalMask);
 }
+
+//void CommonPlus::RunCrop(
+//    const cv::Mat& src,
+//    const RectRotateCli% rr,
+//    const RectRotateCli* rrMask,
+//    bool returnMaskOnly,
+//    cv::Mat& out)
+//{
+//    // 1) Anchor & size theo shape
+//    cv::Point2f worldAnchor, localCenter;
+//    cv::Size2f  rectSize;
+//    GetAnchorSizeFor(rr, worldAnchor, rectSize, localCenter);
+//
+//    double angleUsed = rr.RectRotationDeg;
+//    if (angleUsed < -45.0) {
+//        angleUsed += 90.0;
+//        float tmp = rectSize.width; rectSize.width = rectSize.height; rectSize.height = tmp;
+//    }
+//    float angleInPatchCrop = (float)(rr.RectRotationDeg - angleUsed);
+//    if (angleInPatchCrop > 180.f)  angleInPatchCrop -= 360.f;
+//    if (angleInPatchCrop < -180.f) angleInPatchCrop += 360.f;
+//
+//    const cv::Point2f anchor(worldAnchor.x, worldAnchor.y);
+//
+//    // 2) Warp quanh anchor
+//    cv::Mat M = cv::getRotationMatrix2D(anchor, angleUsed, 1.0);
+//    cv::Mat warped;
+//    cv::warpAffine(src, warped, M, src.size(),
+//        cv::INTER_CUBIC, cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+//
+//    // 3) Cắt patch
+//    cv::Mat patch;
+//    cv::getRectSubPix(warped,
+//        cv::Size((int)std::round(rectSize.width), (int)std::round(rectSize.height)),
+//        anchor, patch);
+//    if (patch.empty()) { out.release(); return; }
+//
+//    const int patchH = patch.rows;
+//    const int patchW = patch.cols;
+//    const cv::Point2f patchCenter((float)patchW * 0.5f, (float)patchH * 0.5f);
+//
+//    // 4) Mask theo shape
+//    cv::Mat cropMask(patchH, patchW, CV_8UC1, cv::Scalar(0));
+//    DrawShapeMaskIntoWithSize(rr, cropMask, patchCenter, angleInPatchCrop, 255,
+//        (int)std::round(rectSize.width),
+//        (int)std::round(rectSize.height),
+//        localCenter);
+//
+//    // 5) Mask loại trừ (nếu có)
+//    cv::Mat finalMask;
+//    if (rrMask)
+//    {
+//        cv::Mat mask2(patchH, patchW, CV_8UC1, cv::Scalar(255));
+//
+//        cv::Point2f worldAnchorMask, maskLocalCenter;
+//        cv::Size2f  maskSize;
+//        GetAnchorSizeFor(*rrMask, worldAnchorMask, maskSize, maskLocalCenter);
+//
+//        cv::Point2f deltaWorld(worldAnchorMask.x - worldAnchor.x, worldAnchorMask.y - worldAnchor.y);
+//        cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)(-angleUsed));
+//        cv::Point2f maskCenterInPatch(patchCenter.x + deltaInPatch.x, patchCenter.y + deltaInPatch.y);
+//        float maskAngleInPatch = (float)(rrMask->RectRotationDeg - angleUsed);
+//
+//        DrawShapeMaskIntoWithSize(*rrMask, mask2, maskCenterInPatch, maskAngleInPatch, 0,
+//            (int)std::round(maskSize.width),
+//            (int)std::round(maskSize.height),
+//            maskLocalCenter);
+//
+//        cv::bitwise_and(cropMask, mask2, finalMask);
+//    }
+//    else {
+//        finalMask = cropMask.clone();
+//    }
+//
+//    if (returnMaskOnly) {
+//        out = finalMask.clone();
+//        return;
+//    }
+//
+//    // 6) Áp mask lên nền
+//    cv::Scalar bg = rr.IsWhite ? cv::Scalar(255, 255, 255, 255) : cv::Scalar(0, 0, 0, 0);
+//    cv::Mat bgMat(patch.size(), patch.type(), bg);
+//    out = bgMat.clone();
+//    patch.copyTo(out, finalMask);
+//}

@@ -82,8 +82,10 @@
     <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>UNISEN_icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -149,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bee.ico" />
-    <Content Include="UNISEN_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -164,6 +165,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="BeeInterface\BeeInterface.csproj">
+      <Project>{371880B0-E9F2-464B-A521-DC6D4F4A6C0D}</Project>
+      <Name>BeeInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="BeeUi\BeeUi.csproj">
       <Project>{1adaceb7-cb42-4600-adab-d5223651fe9a}</Project>
       <Name>BeeUi</Name>

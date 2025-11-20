@@ -108,6 +108,7 @@ namespace BeeInterface
             this.btnNextStep.IsCLick = true;
             this.btnNextStep.IsNotChange = true;
             this.btnNextStep.IsRect = false;
+            this.btnNextStep.IsTouch = false;
             this.btnNextStep.IsUnGroup = false;
             this.btnNextStep.Location = new System.Drawing.Point(0, 0);
             this.btnNextStep.Multiline = false;
@@ -163,6 +164,7 @@ namespace BeeInterface
             this.btnCancel.IsCLick = false;
             this.btnCancel.IsNotChange = true;
             this.btnCancel.IsRect = false;
+            this.btnCancel.IsTouch = false;
             this.btnCancel.IsUnGroup = false;
             this.btnCancel.Location = new System.Drawing.Point(200, 0);
             this.btnCancel.Multiline = false;
@@ -190,11 +192,15 @@ namespace BeeInterface
             this.RegisterImg.AutoNamePrefix = "Img";
             this.RegisterImg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RegisterImg.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RegisterImg.HeightTopBar1 = 60;
+            this.RegisterImg.HeightTopBar2 = 50;
+            this.RegisterImg.HeightTopBar3 = 38;
+            this.RegisterImg.HideTopBar = false;
             this.RegisterImg.Location = new System.Drawing.Point(0, 0);
             this.RegisterImg.Name = "RegisterImg";
-            this.RegisterImg.ShowCameraButton = true;
             this.RegisterImg.Size = new System.Drawing.Size(371, 498);
             this.RegisterImg.TabIndex = 11;
+            this.RegisterImg.UpdateGlobal = true;
             this.RegisterImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.RegisterImg_SelectedItemChanged);
             this.RegisterImg.ItemsChanged += new System.EventHandler(this.RegisterImg_ItemsChanged);
             // 

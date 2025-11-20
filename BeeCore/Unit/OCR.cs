@@ -177,7 +177,7 @@ namespace BeeCore
                     {
                         if (raw.Empty()) return;
                         Mat matCrop = new Mat();
-                        matCrop = Common.CropRotatedRectSharp(raw, new RotatedRect(new Point2f(rotCrop._PosCenter.X, rotCrop._PosCenter.Y), new Size2f(rotCrop._rect.Size.Width, rotCrop._rect.Size.Height), rotCrop._rectRotation));
+                        matCrop = Cropper.CropRotatedRect(raw, rotCrop ,null);
                         if (Clahe == 0) Clahe = 2;
                         if (Sigma == 0) Sigma = 3;
                         if (Blur == 0) Blur = 3;

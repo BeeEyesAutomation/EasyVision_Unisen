@@ -86,7 +86,7 @@ namespace BeeUi.Common
             // 
             // pModel
             // 
-            this.pModel.BackColor = System.Drawing.Color.Transparent;
+            this.pModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
             this.pModel.ColumnCount = 4;
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -97,11 +97,11 @@ namespace BeeUi.Common
             this.pModel.Controls.Add(this.btnEnQrCode, 1, 0);
             this.pModel.Controls.Add(this.btnShowList, 3, 0);
             this.pModel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pModel.Location = new System.Drawing.Point(315, 0);
+            this.pModel.Location = new System.Drawing.Point(305, 0);
             this.pModel.Name = "pModel";
             this.pModel.RowCount = 1;
             this.pModel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pModel.Size = new System.Drawing.Size(1320, 81);
+            this.pModel.Size = new System.Drawing.Size(1330, 81);
             this.pModel.TabIndex = 29;
             this.pModel.SizeChanged += new System.EventHandler(this.pModel_SizeChanged);
             // 
@@ -112,7 +112,7 @@ namespace BeeUi.Common
             this.txtQrCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 46.24609F);
             this.txtQrCode.Location = new System.Drawing.Point(73, 3);
             this.txtQrCode.Name = "txtQrCode";
-            this.txtQrCode.Size = new System.Drawing.Size(1163, 75);
+            this.txtQrCode.Size = new System.Drawing.Size(1173, 75);
             this.txtQrCode.TabIndex = 28;
             this.txtQrCode.Text = "Prog no";
             this.txtQrCode.TextChanged += new System.EventHandler(this.txtQrCode_TextChanged);
@@ -163,6 +163,7 @@ namespace BeeUi.Common
             this.btnEnQrCode.IsCLick = false;
             this.btnEnQrCode.IsNotChange = false;
             this.btnEnQrCode.IsRect = false;
+            this.btnEnQrCode.IsTouch = false;
             this.btnEnQrCode.IsUnGroup = true;
             this.btnEnQrCode.Location = new System.Drawing.Point(10, 8);
             this.btnEnQrCode.Margin = new System.Windows.Forms.Padding(10, 8, 0, 8);
@@ -217,8 +218,9 @@ namespace BeeUi.Common
             this.btnShowList.IsCLick = false;
             this.btnShowList.IsNotChange = true;
             this.btnShowList.IsRect = false;
+            this.btnShowList.IsTouch = false;
             this.btnShowList.IsUnGroup = false;
-            this.btnShowList.Location = new System.Drawing.Point(1242, 3);
+            this.btnShowList.Location = new System.Drawing.Point(1252, 3);
             this.btnShowList.Multiline = false;
             this.btnShowList.Name = "btnShowList";
             this.btnShowList.Size = new System.Drawing.Size(75, 75);
@@ -243,7 +245,7 @@ namespace BeeUi.Common
             this.split1.Location = new System.Drawing.Point(200, 0);
             this.split1.MaximumSize = new System.Drawing.Size(20, 81);
             this.split1.Name = "split1";
-            this.split1.Size = new System.Drawing.Size(15, 81);
+            this.split1.Size = new System.Drawing.Size(5, 81);
             this.split1.TabIndex = 31;
             this.split1.TabStop = false;
             // 
@@ -312,6 +314,7 @@ namespace BeeUi.Common
             this.btnMode.IsCLick = false;
             this.btnMode.IsNotChange = false;
             this.btnMode.IsRect = false;
+            this.btnMode.IsTouch = false;
             this.btnMode.IsUnGroup = true;
             this.btnMode.Location = new System.Drawing.Point(2, 3);
             this.btnMode.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
@@ -328,7 +331,7 @@ namespace BeeUi.Common
             // 
             this.panel2.Controls.Add(this.btnTraining);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(215, 0);
+            this.panel2.Location = new System.Drawing.Point(205, 0);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
             this.panel2.Size = new System.Drawing.Size(100, 81);
@@ -379,6 +382,7 @@ namespace BeeUi.Common
             this.btnTraining.IsCLick = false;
             this.btnTraining.IsNotChange = false;
             this.btnTraining.IsRect = false;
+            this.btnTraining.IsTouch = false;
             this.btnTraining.IsUnGroup = true;
             this.btnTraining.Location = new System.Drawing.Point(2, 3);
             this.btnTraining.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
@@ -395,7 +399,7 @@ namespace BeeUi.Common
             // 
             // pEdit
             // 
-            this.pEdit.BackColor = System.Drawing.Color.Transparent;
+            this.pEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
             this.pEdit.Dock = System.Windows.Forms.DockStyle.Right;
             this.pEdit.Location = new System.Drawing.Point(1635, 0);
             this.pEdit.Name = "pEdit";

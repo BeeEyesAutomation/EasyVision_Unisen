@@ -624,7 +624,7 @@ namespace BeeInterface
             //PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1];
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool1];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
 
 
             cb2.DataSource = null;
@@ -643,7 +643,7 @@ namespace BeeInterface
             indexTool2 = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb4.DataSource = null;
             cb4.DataSource = propetyTool.Propety.listP_Center;
 
@@ -657,7 +657,7 @@ namespace BeeInterface
             indexTool3 = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb6.DataSource = null;
             cb6.DataSource = propetyTool.Propety.listP_Center;
         }
@@ -668,7 +668,7 @@ namespace BeeInterface
             indexTool4 = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool4];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb8.DataSource = null;
             cb8.DataSource = propetyTool.Propety.listP_Center;
             //switch (propetyTool.TypeTool)
@@ -701,7 +701,7 @@ namespace BeeInterface
             indexTool2 = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool2];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern&&propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb4.DataSource = null;
             cb4.DataSource = propetyTool.Propety.listP_Center;
 
@@ -766,7 +766,7 @@ namespace BeeInterface
             indexTool3 = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == nameTool);
             PropetyTool propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][indexTool3];
             if (propetyTool == null) return;
-            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width) return;
+            if (propetyTool.TypeTool != TypeTool.Pattern && propetyTool.TypeTool != TypeTool.Circle && propetyTool.TypeTool != TypeTool.Width && propetyTool.TypeTool != TypeTool.Edge) return;
             cb6.DataSource = null;
             cb6.DataSource = propetyTool.Propety.listP_Center;
 

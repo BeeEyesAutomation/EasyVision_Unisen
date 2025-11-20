@@ -112,7 +112,7 @@ namespace BeeCore
                 {
                     if (raw.Empty()) return;
                   
-                    Mat matCrop = Common.CropRotatedRect(raw, rotArea, rotMask);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();

@@ -73,7 +73,7 @@ namespace BeeCore
                             matProcess.Release();
                     if (rectRotate != null)
                     {
-                        matProcess = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rectRotate, null);
+                        matProcess = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rectRotate, null);
                         String path = PathSaveImage + "\\" + Global.Project + "\\" + Common.PropetyTools[Global.IndexChoose][Index].Name + "_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + ".png";
                         string dir = PathSaveImage + "\\" + Global.Project;
                         if (!Directory.Exists(dir))

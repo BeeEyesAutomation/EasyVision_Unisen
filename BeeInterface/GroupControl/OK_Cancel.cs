@@ -27,8 +27,8 @@ namespace BeeInterface.GroupControl
             Global.StatusDraw = StatusDraw.None;
             Global.EditTool.View.btnChangeImg.Visible = false;
             Global.EditTool.View.btnChangeImg.Enabled = true;
-            Global.EditTool.View.RegisterImgs.Visible = false;
-
+            Global.EditTool.View.btnChangeImg.IsCLick = false;
+            Global.EditTool.View.pImg.Visible = false;
             //   Global.IndexToolSelected = -1;
 
         }
@@ -38,7 +38,8 @@ namespace BeeInterface.GroupControl
             Global.EditTool.pEditTool.Show("Tool");
             Global.EditTool.View.btnChangeImg.Visible = false;
             Global.EditTool.View.btnChangeImg.Enabled = true;
-            Global.EditTool.View.RegisterImgs.Visible = false;
+            Global.EditTool.View.pImg.Visible = false;
+            Global.EditTool.View.btnChangeImg.IsCLick = false;
             Global.StatusDraw = StatusDraw.None;
             if (Global.OldPropetyTool != null)
             {

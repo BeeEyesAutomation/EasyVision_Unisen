@@ -751,6 +751,7 @@ namespace BeeInterface
             this.btnHori.IsCLick = false;
             this.btnHori.IsNotChange = false;
             this.btnHori.IsRect = false;
+            this.btnHori.IsTouch = false;
             this.btnHori.IsUnGroup = false;
             this.btnHori.Location = new System.Drawing.Point(194, 5);
             this.btnHori.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -808,6 +809,7 @@ namespace BeeInterface
             this.btnVer.IsCLick = true;
             this.btnVer.IsNotChange = false;
             this.btnVer.IsRect = false;
+            this.btnVer.IsTouch = false;
             this.btnVer.IsUnGroup = false;
             this.btnVer.Location = new System.Drawing.Point(8, 5);
             this.btnVer.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -886,6 +888,7 @@ namespace BeeInterface
             this.btnInvert.IsCLick = false;
             this.btnInvert.IsNotChange = false;
             this.btnInvert.IsRect = false;
+            this.btnInvert.IsTouch = false;
             this.btnInvert.IsUnGroup = false;
             this.btnInvert.Location = new System.Drawing.Point(287, 5);
             this.btnInvert.Margin = new System.Windows.Forms.Padding(0);
@@ -942,6 +945,7 @@ namespace BeeInterface
             this.btnBinary.IsCLick = false;
             this.btnBinary.IsNotChange = false;
             this.btnBinary.IsRect = false;
+            this.btnBinary.IsTouch = false;
             this.btnBinary.IsUnGroup = false;
             this.btnBinary.Location = new System.Drawing.Point(193, 5);
             this.btnBinary.Margin = new System.Windows.Forms.Padding(0);
@@ -998,6 +1002,7 @@ namespace BeeInterface
             this.btnStrongEdge.IsCLick = false;
             this.btnStrongEdge.IsNotChange = false;
             this.btnStrongEdge.IsRect = false;
+            this.btnStrongEdge.IsTouch = false;
             this.btnStrongEdge.IsUnGroup = false;
             this.btnStrongEdge.Location = new System.Drawing.Point(99, 5);
             this.btnStrongEdge.Margin = new System.Windows.Forms.Padding(0);
@@ -1055,6 +1060,7 @@ namespace BeeInterface
             this.btnCloseEdge.IsCLick = true;
             this.btnCloseEdge.IsNotChange = false;
             this.btnCloseEdge.IsRect = false;
+            this.btnCloseEdge.IsTouch = false;
             this.btnCloseEdge.IsUnGroup = false;
             this.btnCloseEdge.Location = new System.Drawing.Point(5, 5);
             this.btnCloseEdge.Margin = new System.Windows.Forms.Padding(0);
@@ -1129,6 +1135,7 @@ namespace BeeInterface
             this.btnCropFull.IsCLick = false;
             this.btnCropFull.IsNotChange = false;
             this.btnCropFull.IsRect = false;
+            this.btnCropFull.IsTouch = false;
             this.btnCropFull.IsUnGroup = false;
             this.btnCropFull.Location = new System.Drawing.Point(194, 5);
             this.btnCropFull.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -1186,6 +1193,7 @@ namespace BeeInterface
             this.btnCropHalt.IsCLick = true;
             this.btnCropHalt.IsNotChange = false;
             this.btnCropHalt.IsRect = false;
+            this.btnCropHalt.IsTouch = false;
             this.btnCropHalt.IsUnGroup = false;
             this.btnCropHalt.Location = new System.Drawing.Point(8, 5);
             this.btnCropHalt.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -1302,6 +1310,7 @@ namespace BeeInterface
             this.btnCalib.IsCLick = false;
             this.btnCalib.IsNotChange = true;
             this.btnCalib.IsRect = false;
+            this.btnCalib.IsTouch = false;
             this.btnCalib.IsUnGroup = true;
             this.btnCalib.Location = new System.Drawing.Point(11, 632);
             this.btnCalib.Margin = new System.Windows.Forms.Padding(10);
@@ -1380,6 +1389,7 @@ namespace BeeInterface
             this.btnMore.IsCLick = false;
             this.btnMore.IsNotChange = false;
             this.btnMore.IsRect = false;
+            this.btnMore.IsTouch = false;
             this.btnMore.IsUnGroup = false;
             this.btnMore.Location = new System.Drawing.Point(263, 5);
             this.btnMore.Margin = new System.Windows.Forms.Padding(0);
@@ -1437,6 +1447,7 @@ namespace BeeInterface
             this.btnEqual.IsCLick = true;
             this.btnEqual.IsNotChange = false;
             this.btnEqual.IsRect = false;
+            this.btnEqual.IsTouch = false;
             this.btnEqual.IsUnGroup = false;
             this.btnEqual.Location = new System.Drawing.Point(134, 5);
             this.btnEqual.Margin = new System.Windows.Forms.Padding(0);
@@ -1494,6 +1505,7 @@ namespace BeeInterface
             this.btnLess.IsCLick = false;
             this.btnLess.IsNotChange = false;
             this.btnLess.IsRect = false;
+            this.btnLess.IsTouch = false;
             this.btnLess.IsUnGroup = false;
             this.btnLess.Location = new System.Drawing.Point(5, 5);
             this.btnLess.Margin = new System.Windows.Forms.Padding(0);
@@ -1610,6 +1622,7 @@ namespace BeeInterface
             this.btnEnRootCounter.IsCLick = false;
             this.btnEnRootCounter.IsNotChange = false;
             this.btnEnRootCounter.IsRect = false;
+            this.btnEnRootCounter.IsTouch = false;
             this.btnEnRootCounter.IsUnGroup = true;
             this.btnEnRootCounter.Location = new System.Drawing.Point(5, 5);
             this.btnEnRootCounter.Margin = new System.Windows.Forms.Padding(0);
@@ -1722,6 +1735,7 @@ namespace BeeInterface
             this.btnEnCrestHeight.IsCLick = false;
             this.btnEnCrestHeight.IsNotChange = false;
             this.btnEnCrestHeight.IsRect = false;
+            this.btnEnCrestHeight.IsTouch = false;
             this.btnEnCrestHeight.IsUnGroup = true;
             this.btnEnCrestHeight.Location = new System.Drawing.Point(5, 5);
             this.btnEnCrestHeight.Margin = new System.Windows.Forms.Padding(0);
@@ -1867,6 +1881,7 @@ namespace BeeInterface
             this.btnEnRootHeight.IsCLick = false;
             this.btnEnRootHeight.IsNotChange = false;
             this.btnEnRootHeight.IsRect = false;
+            this.btnEnRootHeight.IsTouch = false;
             this.btnEnRootHeight.IsUnGroup = true;
             this.btnEnRootHeight.Location = new System.Drawing.Point(5, 5);
             this.btnEnRootHeight.Margin = new System.Windows.Forms.Padding(0);
@@ -2076,6 +2091,7 @@ namespace BeeInterface
             this.btnEnRootPitch.IsCLick = false;
             this.btnEnRootPitch.IsNotChange = false;
             this.btnEnRootPitch.IsRect = false;
+            this.btnEnRootPitch.IsTouch = false;
             this.btnEnRootPitch.IsUnGroup = true;
             this.btnEnRootPitch.Location = new System.Drawing.Point(5, 5);
             this.btnEnRootPitch.Margin = new System.Windows.Forms.Padding(0);
@@ -2247,6 +2263,7 @@ namespace BeeInterface
             this.btnEnCrestPitch.IsCLick = false;
             this.btnEnCrestPitch.IsNotChange = false;
             this.btnEnCrestPitch.IsRect = false;
+            this.btnEnCrestPitch.IsTouch = false;
             this.btnEnCrestPitch.IsUnGroup = true;
             this.btnEnCrestPitch.Location = new System.Drawing.Point(5, 5);
             this.btnEnCrestPitch.Margin = new System.Windows.Forms.Padding(0);
@@ -2343,6 +2360,7 @@ namespace BeeInterface
             this.btnMax.IsCLick = false;
             this.btnMax.IsNotChange = false;
             this.btnMax.IsRect = false;
+            this.btnMax.IsTouch = false;
             this.btnMax.IsUnGroup = false;
             this.btnMax.Location = new System.Drawing.Point(313, 5);
             this.btnMax.Margin = new System.Windows.Forms.Padding(0);
@@ -2400,6 +2418,7 @@ namespace BeeInterface
             this.btnMin.IsCLick = false;
             this.btnMin.IsNotChange = false;
             this.btnMin.IsRect = false;
+            this.btnMin.IsTouch = false;
             this.btnMin.IsUnGroup = false;
             this.btnMin.Location = new System.Drawing.Point(236, 5);
             this.btnMin.Margin = new System.Windows.Forms.Padding(0);
@@ -2457,6 +2476,7 @@ namespace BeeInterface
             this.btnMean.IsCLick = true;
             this.btnMean.IsNotChange = false;
             this.btnMean.IsRect = false;
+            this.btnMean.IsTouch = false;
             this.btnMean.IsUnGroup = false;
             this.btnMean.Location = new System.Drawing.Point(82, 5);
             this.btnMean.Margin = new System.Windows.Forms.Padding(0);
@@ -2514,6 +2534,7 @@ namespace BeeInterface
             this.btnMedian.IsCLick = false;
             this.btnMedian.IsNotChange = false;
             this.btnMedian.IsRect = false;
+            this.btnMedian.IsTouch = false;
             this.btnMedian.IsUnGroup = false;
             this.btnMedian.Location = new System.Drawing.Point(159, 5);
             this.btnMedian.Margin = new System.Windows.Forms.Padding(0);
@@ -2675,6 +2696,7 @@ namespace BeeInterface
             this.btnEnCrestCounter.IsCLick = false;
             this.btnEnCrestCounter.IsNotChange = false;
             this.btnEnCrestCounter.IsRect = false;
+            this.btnEnCrestCounter.IsTouch = false;
             this.btnEnCrestCounter.IsUnGroup = true;
             this.btnEnCrestCounter.Location = new System.Drawing.Point(5, 5);
             this.btnEnCrestCounter.Margin = new System.Windows.Forms.Padding(0);
@@ -2868,6 +2890,7 @@ namespace BeeInterface
             this.btnIsClearBig.IsCLick = false;
             this.btnIsClearBig.IsNotChange = false;
             this.btnIsClearBig.IsRect = false;
+            this.btnIsClearBig.IsTouch = false;
             this.btnIsClearBig.IsUnGroup = true;
             this.btnIsClearBig.Location = new System.Drawing.Point(202, 5);
             this.btnIsClearBig.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -3021,6 +3044,7 @@ namespace BeeInterface
             this.btnOpen.IsCLick = false;
             this.btnOpen.IsNotChange = false;
             this.btnOpen.IsRect = false;
+            this.btnOpen.IsTouch = false;
             this.btnOpen.IsUnGroup = true;
             this.btnOpen.Location = new System.Drawing.Point(202, 5);
             this.btnOpen.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -3109,6 +3133,7 @@ namespace BeeInterface
             this.btnIsClearSmall.IsCLick = false;
             this.btnIsClearSmall.IsNotChange = false;
             this.btnIsClearSmall.IsRect = false;
+            this.btnIsClearSmall.IsTouch = false;
             this.btnIsClearSmall.IsUnGroup = true;
             this.btnIsClearSmall.Location = new System.Drawing.Point(202, 5);
             this.btnIsClearSmall.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -3262,6 +3287,7 @@ namespace BeeInterface
             this.btnClose.IsCLick = false;
             this.btnClose.IsNotChange = false;
             this.btnClose.IsRect = false;
+            this.btnClose.IsTouch = false;
             this.btnClose.IsUnGroup = true;
             this.btnClose.Location = new System.Drawing.Point(202, 5);
             this.btnClose.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -3393,6 +3419,7 @@ namespace BeeInterface
             this.btnTest.IsCLick = false;
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
+            this.btnTest.IsTouch = false;
             this.btnTest.IsUnGroup = true;
             this.btnTest.Location = new System.Drawing.Point(10, 10);
             this.btnTest.Margin = new System.Windows.Forms.Padding(10);

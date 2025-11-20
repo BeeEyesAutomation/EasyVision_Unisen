@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <!-- centralize 1 icon cho toàn solution -->
+    <BrandingDir>$(MSBuildThisFileDirectory)branding\</BrandingDir>
+    <AppLogoIco>$(BrandingDir)logo.ico</AppLogoIco>
+  </PropertyGroup>
+
+  <!-- chỉ áp dụng cho project OutputType=Exe -->
+  <PropertyGroup Condition="'$(OutputType)'=='Exe'">
+    <ApplicationIcon>$(AppLogoIco)</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- copy ra output (nếu bạn muốn dùng lại icon ở runtime) -->
+  <ItemGroup>
+    <None Include="$(AppLogoIco)" Link="logo.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

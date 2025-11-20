@@ -300,7 +300,7 @@ namespace BeeCore
                     CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
 
                     // === Crop ROI ===
-                    using (Mat matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
+                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
                     {
                         if (matCrop.Empty()) return;
 
@@ -421,7 +421,7 @@ namespace BeeCore
         //                CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
 
         //                // --- crop ---
-        //                using (var matCrop = Common.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
+        //                using (var matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
         //                {
         //                    // Đưa về CV_8U 1/3 kênh (tránh double-convert)
         //                    if (matCrop.Type().Depth != MatType.CV_8U)

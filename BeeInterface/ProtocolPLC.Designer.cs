@@ -29,6 +29,7 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.layIn = new System.Windows.Forms.TableLayoutPanel();
@@ -187,7 +188,7 @@ namespace BeeInterface
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.lbTCP2 = new System.Windows.Forms.Label();
-            this.tmConnect = new System.Windows.Forms.Timer();
+            this.tmConnect = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.layIn.SuspendLayout();
@@ -353,6 +354,7 @@ namespace BeeInterface
             this.DI15.IsCLick = false;
             this.DI15.IsNotChange = false;
             this.DI15.IsRect = false;
+            this.DI15.IsTouch = false;
             this.DI15.IsUnGroup = true;
             this.DI15.Location = new System.Drawing.Point(252, 588);
             this.DI15.Multiline = false;
@@ -430,6 +432,7 @@ namespace BeeInterface
             this.DI14.IsCLick = false;
             this.DI14.IsNotChange = false;
             this.DI14.IsRect = false;
+            this.DI14.IsTouch = false;
             this.DI14.IsUnGroup = true;
             this.DI14.Location = new System.Drawing.Point(252, 549);
             this.DI14.Multiline = false;
@@ -506,6 +509,7 @@ namespace BeeInterface
             this.DI13.IsCLick = false;
             this.DI13.IsNotChange = false;
             this.DI13.IsRect = false;
+            this.DI13.IsTouch = false;
             this.DI13.IsUnGroup = true;
             this.DI13.Location = new System.Drawing.Point(252, 510);
             this.DI13.Multiline = false;
@@ -582,6 +586,7 @@ namespace BeeInterface
             this.DI12.IsCLick = false;
             this.DI12.IsNotChange = false;
             this.DI12.IsRect = false;
+            this.DI12.IsTouch = false;
             this.DI12.IsUnGroup = true;
             this.DI12.Location = new System.Drawing.Point(252, 471);
             this.DI12.Multiline = false;
@@ -659,6 +664,7 @@ namespace BeeInterface
             this.DI11.IsCLick = false;
             this.DI11.IsNotChange = false;
             this.DI11.IsRect = false;
+            this.DI11.IsTouch = false;
             this.DI11.IsUnGroup = true;
             this.DI11.Location = new System.Drawing.Point(252, 432);
             this.DI11.Multiline = false;
@@ -735,6 +741,7 @@ namespace BeeInterface
             this.DI10.IsCLick = false;
             this.DI10.IsNotChange = false;
             this.DI10.IsRect = false;
+            this.DI10.IsTouch = false;
             this.DI10.IsUnGroup = true;
             this.DI10.Location = new System.Drawing.Point(252, 393);
             this.DI10.Multiline = false;
@@ -811,6 +818,7 @@ namespace BeeInterface
             this.DI9.IsCLick = false;
             this.DI9.IsNotChange = false;
             this.DI9.IsRect = false;
+            this.DI9.IsTouch = false;
             this.DI9.IsUnGroup = true;
             this.DI9.Location = new System.Drawing.Point(252, 354);
             this.DI9.Multiline = false;
@@ -887,6 +895,7 @@ namespace BeeInterface
             this.DI8.IsCLick = false;
             this.DI8.IsNotChange = false;
             this.DI8.IsRect = false;
+            this.DI8.IsTouch = false;
             this.DI8.IsUnGroup = true;
             this.DI8.Location = new System.Drawing.Point(252, 315);
             this.DI8.Multiline = false;
@@ -963,6 +972,7 @@ namespace BeeInterface
             this.DI7.IsCLick = false;
             this.DI7.IsNotChange = false;
             this.DI7.IsRect = false;
+            this.DI7.IsTouch = false;
             this.DI7.IsUnGroup = true;
             this.DI7.Location = new System.Drawing.Point(252, 276);
             this.DI7.Multiline = false;
@@ -1016,6 +1026,7 @@ namespace BeeInterface
             this.DI6.IsCLick = false;
             this.DI6.IsNotChange = false;
             this.DI6.IsRect = false;
+            this.DI6.IsTouch = false;
             this.DI6.IsUnGroup = true;
             this.DI6.Location = new System.Drawing.Point(252, 237);
             this.DI6.Multiline = false;
@@ -1069,6 +1080,7 @@ namespace BeeInterface
             this.DI5.IsCLick = false;
             this.DI5.IsNotChange = false;
             this.DI5.IsRect = false;
+            this.DI5.IsTouch = false;
             this.DI5.IsUnGroup = true;
             this.DI5.Location = new System.Drawing.Point(252, 198);
             this.DI5.Multiline = false;
@@ -1122,6 +1134,7 @@ namespace BeeInterface
             this.DI4.IsCLick = false;
             this.DI4.IsNotChange = false;
             this.DI4.IsRect = false;
+            this.DI4.IsTouch = false;
             this.DI4.IsUnGroup = true;
             this.DI4.Location = new System.Drawing.Point(252, 159);
             this.DI4.Multiline = false;
@@ -1175,6 +1188,7 @@ namespace BeeInterface
             this.DI3.IsCLick = false;
             this.DI3.IsNotChange = false;
             this.DI3.IsRect = false;
+            this.DI3.IsTouch = false;
             this.DI3.IsUnGroup = true;
             this.DI3.Location = new System.Drawing.Point(252, 120);
             this.DI3.Multiline = false;
@@ -1228,6 +1242,7 @@ namespace BeeInterface
             this.DI2.IsCLick = false;
             this.DI2.IsNotChange = false;
             this.DI2.IsRect = false;
+            this.DI2.IsTouch = false;
             this.DI2.IsUnGroup = true;
             this.DI2.Location = new System.Drawing.Point(252, 81);
             this.DI2.Multiline = false;
@@ -1281,6 +1296,7 @@ namespace BeeInterface
             this.DI1.IsCLick = false;
             this.DI1.IsNotChange = false;
             this.DI1.IsRect = false;
+            this.DI1.IsTouch = false;
             this.DI1.IsUnGroup = true;
             this.DI1.Location = new System.Drawing.Point(252, 42);
             this.DI1.Multiline = false;
@@ -1334,6 +1350,7 @@ namespace BeeInterface
             this.DI0.IsCLick = false;
             this.DI0.IsNotChange = false;
             this.DI0.IsRect = false;
+            this.DI0.IsTouch = false;
             this.DI0.IsUnGroup = true;
             this.DI0.Location = new System.Drawing.Point(252, 3);
             this.DI0.Multiline = false;
@@ -1663,6 +1680,7 @@ namespace BeeInterface
             this.DO15.IsCLick = false;
             this.DO15.IsNotChange = false;
             this.DO15.IsRect = false;
+            this.DO15.IsTouch = false;
             this.DO15.IsUnGroup = true;
             this.DO15.Location = new System.Drawing.Point(255, 588);
             this.DO15.Multiline = false;
@@ -1741,6 +1759,7 @@ namespace BeeInterface
             this.DO14.IsCLick = false;
             this.DO14.IsNotChange = false;
             this.DO14.IsRect = false;
+            this.DO14.IsTouch = false;
             this.DO14.IsUnGroup = true;
             this.DO14.Location = new System.Drawing.Point(255, 549);
             this.DO14.Multiline = false;
@@ -1818,6 +1837,7 @@ namespace BeeInterface
             this.DO13.IsCLick = false;
             this.DO13.IsNotChange = false;
             this.DO13.IsRect = false;
+            this.DO13.IsTouch = false;
             this.DO13.IsUnGroup = true;
             this.DO13.Location = new System.Drawing.Point(255, 510);
             this.DO13.Multiline = false;
@@ -1895,6 +1915,7 @@ namespace BeeInterface
             this.DO12.IsCLick = false;
             this.DO12.IsNotChange = false;
             this.DO12.IsRect = false;
+            this.DO12.IsTouch = false;
             this.DO12.IsUnGroup = true;
             this.DO12.Location = new System.Drawing.Point(255, 471);
             this.DO12.Multiline = false;
@@ -1972,6 +1993,7 @@ namespace BeeInterface
             this.DO11.IsCLick = false;
             this.DO11.IsNotChange = false;
             this.DO11.IsRect = false;
+            this.DO11.IsTouch = false;
             this.DO11.IsUnGroup = true;
             this.DO11.Location = new System.Drawing.Point(255, 432);
             this.DO11.Multiline = false;
@@ -2049,6 +2071,7 @@ namespace BeeInterface
             this.DO10.IsCLick = false;
             this.DO10.IsNotChange = false;
             this.DO10.IsRect = false;
+            this.DO10.IsTouch = false;
             this.DO10.IsUnGroup = true;
             this.DO10.Location = new System.Drawing.Point(255, 393);
             this.DO10.Multiline = false;
@@ -2126,6 +2149,7 @@ namespace BeeInterface
             this.DO9.IsCLick = false;
             this.DO9.IsNotChange = false;
             this.DO9.IsRect = false;
+            this.DO9.IsTouch = false;
             this.DO9.IsUnGroup = true;
             this.DO9.Location = new System.Drawing.Point(255, 354);
             this.DO9.Multiline = false;
@@ -2203,6 +2227,7 @@ namespace BeeInterface
             this.DO8.IsCLick = false;
             this.DO8.IsNotChange = false;
             this.DO8.IsRect = false;
+            this.DO8.IsTouch = false;
             this.DO8.IsUnGroup = true;
             this.DO8.Location = new System.Drawing.Point(255, 315);
             this.DO8.Multiline = false;
@@ -2281,6 +2306,7 @@ namespace BeeInterface
             this.DO7.IsCLick = false;
             this.DO7.IsNotChange = false;
             this.DO7.IsRect = false;
+            this.DO7.IsTouch = false;
             this.DO7.IsUnGroup = true;
             this.DO7.Location = new System.Drawing.Point(255, 276);
             this.DO7.Multiline = false;
@@ -2335,6 +2361,7 @@ namespace BeeInterface
             this.DO6.IsCLick = false;
             this.DO6.IsNotChange = false;
             this.DO6.IsRect = false;
+            this.DO6.IsTouch = false;
             this.DO6.IsUnGroup = true;
             this.DO6.Location = new System.Drawing.Point(255, 237);
             this.DO6.Multiline = false;
@@ -2389,6 +2416,7 @@ namespace BeeInterface
             this.DO5.IsCLick = false;
             this.DO5.IsNotChange = false;
             this.DO5.IsRect = false;
+            this.DO5.IsTouch = false;
             this.DO5.IsUnGroup = true;
             this.DO5.Location = new System.Drawing.Point(255, 198);
             this.DO5.Multiline = false;
@@ -2443,6 +2471,7 @@ namespace BeeInterface
             this.DO4.IsCLick = false;
             this.DO4.IsNotChange = false;
             this.DO4.IsRect = false;
+            this.DO4.IsTouch = false;
             this.DO4.IsUnGroup = true;
             this.DO4.Location = new System.Drawing.Point(255, 159);
             this.DO4.Multiline = false;
@@ -2497,6 +2526,7 @@ namespace BeeInterface
             this.D3.IsCLick = false;
             this.D3.IsNotChange = false;
             this.D3.IsRect = false;
+            this.D3.IsTouch = false;
             this.D3.IsUnGroup = true;
             this.D3.Location = new System.Drawing.Point(255, 120);
             this.D3.Multiline = false;
@@ -2551,6 +2581,7 @@ namespace BeeInterface
             this.DO2.IsCLick = false;
             this.DO2.IsNotChange = false;
             this.DO2.IsRect = false;
+            this.DO2.IsTouch = false;
             this.DO2.IsUnGroup = true;
             this.DO2.Location = new System.Drawing.Point(255, 81);
             this.DO2.Multiline = false;
@@ -2605,6 +2636,7 @@ namespace BeeInterface
             this.DO1.IsCLick = false;
             this.DO1.IsNotChange = false;
             this.DO1.IsRect = false;
+            this.DO1.IsTouch = false;
             this.DO1.IsUnGroup = true;
             this.DO1.Location = new System.Drawing.Point(255, 42);
             this.DO1.Multiline = false;
@@ -2851,6 +2883,7 @@ namespace BeeInterface
             this.DO0.IsCLick = false;
             this.DO0.IsNotChange = false;
             this.DO0.IsRect = false;
+            this.DO0.IsTouch = false;
             this.DO0.IsUnGroup = true;
             this.DO0.Location = new System.Drawing.Point(255, 3);
             this.DO0.Multiline = false;
@@ -2966,6 +2999,7 @@ namespace BeeInterface
             this.btnIO.IsCLick = false;
             this.btnIO.IsNotChange = false;
             this.btnIO.IsRect = false;
+            this.btnIO.IsTouch = false;
             this.btnIO.IsUnGroup = false;
             this.btnIO.Location = new System.Drawing.Point(191, 5);
             this.btnIO.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -3023,6 +3057,7 @@ namespace BeeInterface
             this.btnIsPLC.IsCLick = true;
             this.btnIsPLC.IsNotChange = false;
             this.btnIsPLC.IsRect = false;
+            this.btnIsPLC.IsTouch = false;
             this.btnIsPLC.IsUnGroup = false;
             this.btnIsPLC.Location = new System.Drawing.Point(8, 5);
             this.btnIsPLC.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -3105,6 +3140,7 @@ namespace BeeInterface
             this.btnTCP.IsCLick = false;
             this.btnTCP.IsNotChange = false;
             this.btnTCP.IsRect = false;
+            this.btnTCP.IsTouch = false;
             this.btnTCP.IsUnGroup = false;
             this.btnTCP.Location = new System.Drawing.Point(3, 5);
             this.btnTCP.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
@@ -3160,6 +3196,7 @@ namespace BeeInterface
             this.btnSerial.IsCLick = true;
             this.btnSerial.IsNotChange = false;
             this.btnSerial.IsRect = false;
+            this.btnSerial.IsTouch = false;
             this.btnSerial.IsUnGroup = false;
             this.btnSerial.Location = new System.Drawing.Point(158, 5);
             this.btnSerial.Margin = new System.Windows.Forms.Padding(2, 5, 3, 0);
@@ -3422,6 +3459,7 @@ namespace BeeInterface
             this.StatusIObtn.IsCLick = false;
             this.StatusIObtn.IsNotChange = false;
             this.StatusIObtn.IsRect = false;
+            this.StatusIObtn.IsTouch = false;
             this.StatusIObtn.IsUnGroup = false;
             this.StatusIObtn.Location = new System.Drawing.Point(0, 0);
             this.StatusIObtn.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
@@ -3477,6 +3515,7 @@ namespace BeeInterface
             this.btnConectIO.IsCLick = false;
             this.btnConectIO.IsNotChange = false;
             this.btnConectIO.IsRect = false;
+            this.btnConectIO.IsTouch = false;
             this.btnConectIO.IsUnGroup = false;
             this.btnConectIO.Location = new System.Drawing.Point(122, 0);
             this.btnConectIO.Multiline = false;
@@ -3539,6 +3578,7 @@ namespace BeeInterface
             this.btnBypass.IsCLick = false;
             this.btnBypass.IsNotChange = false;
             this.btnBypass.IsRect = false;
+            this.btnBypass.IsTouch = false;
             this.btnBypass.IsUnGroup = false;
             this.btnBypass.Location = new System.Drawing.Point(255, 0);
             this.btnBypass.Multiline = false;
@@ -3632,6 +3672,7 @@ namespace BeeInterface
             this.rjButton2.IsCLick = false;
             this.rjButton2.IsNotChange = false;
             this.rjButton2.IsRect = false;
+            this.rjButton2.IsTouch = false;
             this.rjButton2.IsUnGroup = false;
             this.rjButton2.Location = new System.Drawing.Point(198, 126);
             this.rjButton2.Margin = new System.Windows.Forms.Padding(5);
@@ -3686,6 +3727,7 @@ namespace BeeInterface
             this.btnDelta.IsCLick = false;
             this.btnDelta.IsNotChange = false;
             this.btnDelta.IsRect = false;
+            this.btnDelta.IsTouch = false;
             this.btnDelta.IsUnGroup = false;
             this.btnDelta.Location = new System.Drawing.Point(6, 126);
             this.btnDelta.Margin = new System.Windows.Forms.Padding(5);
@@ -3742,6 +3784,7 @@ namespace BeeInterface
             this.rjButton7.IsCLick = false;
             this.rjButton7.IsNotChange = false;
             this.rjButton7.IsRect = false;
+            this.rjButton7.IsTouch = false;
             this.rjButton7.IsUnGroup = false;
             this.rjButton7.Location = new System.Drawing.Point(198, 66);
             this.rjButton7.Margin = new System.Windows.Forms.Padding(5);
@@ -3797,6 +3840,7 @@ namespace BeeInterface
             this.rjButton1.IsCLick = false;
             this.rjButton1.IsNotChange = false;
             this.rjButton1.IsRect = false;
+            this.rjButton1.IsTouch = false;
             this.rjButton1.IsUnGroup = false;
             this.rjButton1.Location = new System.Drawing.Point(6, 66);
             this.rjButton1.Margin = new System.Windows.Forms.Padding(5);
@@ -3851,6 +3895,7 @@ namespace BeeInterface
             this.btnKeyence.IsCLick = false;
             this.btnKeyence.IsNotChange = false;
             this.btnKeyence.IsRect = false;
+            this.btnKeyence.IsTouch = false;
             this.btnKeyence.IsUnGroup = false;
             this.btnKeyence.Location = new System.Drawing.Point(6, 6);
             this.btnKeyence.Margin = new System.Windows.Forms.Padding(5);
@@ -3906,6 +3951,7 @@ namespace BeeInterface
             this.btnMitsu.IsCLick = true;
             this.btnMitsu.IsNotChange = false;
             this.btnMitsu.IsRect = false;
+            this.btnMitsu.IsTouch = false;
             this.btnMitsu.IsUnGroup = false;
             this.btnMitsu.Location = new System.Drawing.Point(198, 6);
             this.btnMitsu.Margin = new System.Windows.Forms.Padding(5);
@@ -3961,6 +4007,7 @@ namespace BeeInterface
             this.btnRtu.IsCLick = false;
             this.btnRtu.IsNotChange = false;
             this.btnRtu.IsRect = false;
+            this.btnRtu.IsTouch = false;
             this.btnRtu.IsUnGroup = false;
             this.btnRtu.Location = new System.Drawing.Point(6, 186);
             this.btnRtu.Margin = new System.Windows.Forms.Padding(5);
@@ -4016,6 +4063,7 @@ namespace BeeInterface
             this.btnModbusAscii.IsCLick = false;
             this.btnModbusAscii.IsNotChange = false;
             this.btnModbusAscii.IsRect = false;
+            this.btnModbusAscii.IsTouch = false;
             this.btnModbusAscii.IsUnGroup = false;
             this.btnModbusAscii.Location = new System.Drawing.Point(198, 186);
             this.btnModbusAscii.Margin = new System.Windows.Forms.Padding(5);
@@ -4186,6 +4234,7 @@ namespace BeeInterface
             this.btnRtsEnable.IsCLick = true;
             this.btnRtsEnable.IsNotChange = false;
             this.btnRtsEnable.IsRect = false;
+            this.btnRtsEnable.IsTouch = false;
             this.btnRtsEnable.IsUnGroup = true;
             this.btnRtsEnable.Location = new System.Drawing.Point(120, 163);
             this.btnRtsEnable.Margin = new System.Windows.Forms.Padding(5);
@@ -4241,6 +4290,7 @@ namespace BeeInterface
             this.btnDtrEnable.IsCLick = true;
             this.btnDtrEnable.IsNotChange = false;
             this.btnDtrEnable.IsRect = false;
+            this.btnDtrEnable.IsTouch = false;
             this.btnDtrEnable.IsUnGroup = true;
             this.btnDtrEnable.Location = new System.Drawing.Point(120, 122);
             this.btnDtrEnable.Margin = new System.Windows.Forms.Padding(5);
@@ -4473,6 +4523,7 @@ namespace BeeInterface
             this.btnReScan.IsCLick = false;
             this.btnReScan.IsNotChange = true;
             this.btnReScan.IsRect = false;
+            this.btnReScan.IsTouch = false;
             this.btnReScan.IsUnGroup = false;
             this.btnReScan.Location = new System.Drawing.Point(8, 132);
             this.btnReScan.Margin = new System.Windows.Forms.Padding(5);

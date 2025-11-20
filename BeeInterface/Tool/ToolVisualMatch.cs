@@ -334,7 +334,7 @@ namespace BeeInterface
            
                 float angle = rotateRect._rectRotation;
                 if (rotateRect._rectRotation < 0) angle = 360 + rotateRect._rectRotation;
-                Mat matCrop =BeeCore.Common.CropRotatedRectSharp(matRegister, new RotatedRect(new Point2f(rotateRect._PosCenter.X + (rotateRect._rect.Width / 2 + rotateRect._rect.X), rotateRect._PosCenter.Y + (rotateRect._rect.Height / 2 + rotateRect._rect.Y)), new Size2f(rotateRect._rect.Width, rotateRect._rect.Height), angle));
+                Mat matCrop =BeeCore.Cropper.CropRotatedRect(matRegister, rotateRect,null);
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matTemp, ColorConversionCodes.BGR2GRAY);
                
