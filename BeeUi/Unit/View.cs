@@ -2922,66 +2922,66 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                //if (!workReadCCD.IsBusy)
-                //    workReadCCD.RunWorkerAsync();
-                //if (!Global.IsRun)
-                //{
+                    if (!workReadCCD.IsBusy)
+                        workReadCCD.RunWorkerAsync();
+                    //if (!Global.IsRun)
+                    //{
 
-                //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                //    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
-                //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                    //    BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                    //    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
+                    //        BeeCore.Common.listCamera[Global.IndexChoose].Read();
 
-                //}
-                //else
-                //{
-                 if (Global.ParaCommon.IsMultiCamera)
-                    {
-                        Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
-                        {
-                            if (camera != null)
-                            {
-                                camera.Read();
-                                if (camera.Para.TypeCamera == TypeCamera.USB)
-                                   camera.Read();
-                            }
-
-                        });
-                    }
-                    else
-                    {
-                      BeeCore.Common.listCamera[0].Read();
-                        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                           BeeCore.Common.listCamera[0].Read();
-                        //switch (Global.TriggerNum)
-                        //{
-                        //    case TriggerNum.Trigger1:
-                        //        BeeCore.Common.listCamera[0].Read();
-                        //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
-                        //            BeeCore.Common.listCamera[0].Read();
-                        //        break;
-                        //    case TriggerNum.Trigger2:
-                        //        BeeCore.Common.listCamera[1].Read();
-                        //        break;
-                        //    case TriggerNum.Trigger3:
-                        //        BeeCore.Common.listCamera[2].Read();
-                        //        break;
-                        //    case TriggerNum.Trigger4:
-                        //        BeeCore.Common.listCamera[3].Read();
-                        //        break;
-
-
-                        //}
-                    }
                     //}
+                    //else
+                    //{
+                    //if (Global.ParaCommon.IsMultiCamera)
+                    //{
+                    //    Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                    //    {
+                    //        if (camera != null)
+                    //        {
+                    //            camera.Read();
+                    //            if (camera.Para.TypeCamera == TypeCamera.USB)
+                    //               camera.Read();
+                    //        }
+
+                    //    });
+                    //}
+                    //else
+                    //{
+                    //  BeeCore.Common.listCamera[0].Read();
+                    //    if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                    //       BeeCore.Common.listCamera[0].Read();
+                    //    //switch (Global.TriggerNum)
+                    //    //{
+                    //    //    case TriggerNum.Trigger1:
+                    //    //        BeeCore.Common.listCamera[0].Read();
+                    //    //        if (BeeCore.Common.listCamera[0].Para.TypeCamera == TypeCamera.USB)
+                    //    //            BeeCore.Common.listCamera[0].Read();
+                    //    //        break;
+                    //    //    case TriggerNum.Trigger2:
+                    //    //        BeeCore.Common.listCamera[1].Read();
+                    //    //        break;
+                    //    //    case TriggerNum.Trigger3:
+                    //    //        BeeCore.Common.listCamera[2].Read();
+                    //    //        break;
+                    //    //    case TriggerNum.Trigger4:
+                    //    //        BeeCore.Common.listCamera[3].Read();
+                    //    //        break;
+
+
+                    //    //}
+                    //}
+                    ////}
                     
-                    if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-                    {
+                    //if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+                    //{
 
-                        Global.StatusProcessing = StatusProcessing.Checking;
-                        if (Global.IsByPassResult)
-                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                    //    Global.StatusProcessing = StatusProcessing.Checking;
+                    //    if (Global.IsByPassResult)
+                    //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
-                    }
+                    //}
 
                     break;
                 case StatusProcessing.Checking:

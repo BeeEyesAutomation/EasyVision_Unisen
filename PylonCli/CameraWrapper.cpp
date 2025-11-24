@@ -118,7 +118,10 @@ CPylonImage* Camera::NextBuffer() { _bufIndex = (_bufIndex + 1) & 1; return _buf
 CPylonImage* Camera::CurrentBuffer() { return _bufIndex ? _bufB : _bufA; }
 
 // ===== Lifecycle =====
-Camera::Camera() {}
+Camera::Camera() { _latestImageMutex = gcnew System::Threading::Mutex();
+if (!_latestImage)
+_latestImage = new CPylonImage();
+}
 Camera::~Camera() { this->!Camera(); }
 
 
@@ -143,7 +146,9 @@ void Camera::Open(System::String^ name) {
     try {
         if (!s_pylonInited) { PylonInitialize(); s_pylonInited = true; }
         if (_opened) { _lastError = "Already open"; return; }
-
+        _bufA = new CPylonImage();
+        _bufB = new CPylonImage();
+        _bufIndex = 0;
         std::string want = marshal_as<std::string>(name);
         CTlFactory& tl = CTlFactory::GetInstance();
         DeviceInfoList_t devs; tl.EnumerateDevices(devs);
@@ -176,8 +181,7 @@ void Camera::Open(System::String^ name) {
 }
 
 void Camera::Start() { Start(GrabMode::InternalLoop); }
-void Camera::Start(GrabMode mode)
-{
+void Camera::Start(GrabMode mode) {
     try {
         if (!_cam) { _lastError = "Not open"; return; }
         _mode = mode;
@@ -185,16 +189,13 @@ void Camera::Start(GrabMode mode)
         if (_cam->IsGrabbing())
             _cam->StopGrabbing();
 
-        if (mode == GrabMode::InternalLoop)
-        {
-            // Gỡ handler cũ nếu có
+        if (mode == GrabMode::InternalLoop) {
             if (_imgHandlerPtr) {
                 _cam->DeregisterImageEventHandler(_imgHandlerPtr);
                 delete _imgHandlerPtr;
                 _imgHandlerPtr = nullptr;
             }
 
-            // Tạo mới handler và register
             _imgHandlerPtr = new ImageHandler(this);
             _cam->RegisterImageEventHandler(_imgHandlerPtr,
                 Pylon::RegistrationMode_ReplaceAll,
@@ -203,8 +204,7 @@ void Camera::Start(GrabMode mode)
             _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
                 Pylon::GrabLoop_ProvidedByInstantCamera);
         }
-        else // UserLoop
-        {
+        else {
             if (_imgHandlerPtr) {
                 _cam->DeregisterImageEventHandler(_imgHandlerPtr);
                 delete _imgHandlerPtr;
@@ -214,13 +214,58 @@ void Camera::Start(GrabMode mode)
                 Pylon::GrabLoop_ProvidedByUser);
         }
 
-        ConfigureConverterForOutput();
         _lastError = nullptr;
     }
     catch (const GenericException& e) {
         _lastError = gcnew String(e.GetDescription());
     }
 }
+
+//void Camera::Start(GrabMode mode)
+//{
+//    try {
+//        if (!_cam) { _lastError = "Not open"; return; }
+//        _mode = mode;
+//
+//        if (_cam->IsGrabbing())
+//           Stop();
+//
+//        if (mode == GrabMode::InternalLoop)
+//        {
+//            // Gỡ handler cũ nếu có
+//            if (_imgHandlerPtr) {
+//                _cam->DeregisterImageEventHandler(_imgHandlerPtr);
+//                delete _imgHandlerPtr;
+//                _imgHandlerPtr = nullptr;
+//            }
+//
+//            // Tạo mới handler và register
+//            _imgHandlerPtr = new ImageHandler(this);
+//            _cam->RegisterImageEventHandler(_imgHandlerPtr,
+//                Pylon::RegistrationMode_ReplaceAll,
+//                Pylon::Cleanup_None);
+//
+//            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+//                Pylon::GrabLoop_ProvidedByInstantCamera);
+//        }
+//        else // UserLoop
+//        {
+//            if (_imgHandlerPtr) {
+//                _cam->DeregisterImageEventHandler(_imgHandlerPtr);
+//                delete _imgHandlerPtr;
+//                _imgHandlerPtr = nullptr;
+//            }
+//            _cam->StartGrabbing(Pylon::GrabStrategy_LatestImageOnly,
+//                Pylon::GrabLoop_ProvidedByUser);
+//        }
+//
+//        ConfigureConverterForOutput();
+//        _lastError = nullptr;
+//    }
+//    catch (const GenericException& e) {
+//        _lastError = gcnew String(e.GetDescription());
+//    }
+//}
 void Camera::ChangeGrabLoop(bool useInternal)
 {
     try {
@@ -280,7 +325,7 @@ void Camera::Close()
                 delete _imgHandlerPtr;
                 _imgHandlerPtr = nullptr;
             }
-            if (_cam->IsGrabbing()) _cam->StopGrabbing();
+            if (_cam->IsGrabbing())_cam->StopGrabbing();
             if (_cam->IsOpen())     _cam->Close();
             delete _cam;
             _cam = nullptr;
@@ -317,7 +362,7 @@ float Camera::SetWidth(float v)
         CIntegerPtr node = nm.GetNode("Width");
         // Dừng rồi khôi phục đúng trạng thái ban đầu
         bool wasGrabbing = _cam->IsGrabbing();
-        if (wasGrabbing) _cam->StopGrabbing();
+        if (wasGrabbing)_cam->StopGrabbing();
         if (!node) { _lastError = "Node Width không tồn tại!"; return 0.0f; }
         if (!GenApi::IsWritable(node)) { _lastError = "Node Width không cho phép ghi!"; return 0.0f; }
 
@@ -332,7 +377,7 @@ float Camera::SetWidth(float v)
         node->SetValue(val);
         long long applied = node->GetValue();
 
-        if (wasGrabbing) _cam->StartGrabbing();
+        if (wasGrabbing)Start();
         return static_cast<float>(applied);
     }
     catch (const GenICam::GenericException& e) {
@@ -357,7 +402,7 @@ float Camera::SetHeight(float v)
         INodeMap& nm = _cam->GetNodeMap();
         CIntegerPtr node = nm.GetNode("Height");
         bool wasGrabbing = _cam->IsGrabbing();
-        if (wasGrabbing) _cam->StopGrabbing();
+        if (wasGrabbing)_cam->StopGrabbing();
         if (!node) { _lastError = "Node Height không tồn tại!"; return 0.0f; }
         if (!GenApi::IsWritable(node)) { _lastError = "Node Height không cho phép ghi!"; return 0.0f; }
 
@@ -372,7 +417,7 @@ float Camera::SetHeight(float v)
         node->SetValue(val);
         long long applied = node->GetValue();
 
-        if (wasGrabbing) _cam->StartGrabbing();
+        if (wasGrabbing) Start();
         return static_cast<float>(applied);
     }
     catch (const GenICam::GenericException& e) {
@@ -406,7 +451,7 @@ float Camera::SetOffsetX(float v)
         if (!node || !GenApi::IsWritable(node)) { _lastError = "OffsetX not writable"; return 0.0f; }
 
         bool wasGrabbing = _cam->IsGrabbing();
-        if (wasGrabbing) _cam->StopGrabbing();
+        if (wasGrabbing)_cam->StopGrabbing();
 
         long long mn = node->GetMin();
         long long mx = node->GetMax();
@@ -417,7 +462,7 @@ float Camera::SetOffsetX(float v)
         node->SetValue(val);
         long long applied = node->GetValue();
 
-        if (wasGrabbing) _cam->StartGrabbing();
+        if (wasGrabbing) Start();
         return static_cast<float>(applied);
     }
     catch (const GenICam::GenericException& e) {
@@ -1275,30 +1320,51 @@ void Camera::GetOffsetY(float% min, float% max, float% step, float% current)
 
 // ===== InternalLoop bridge =====
 void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
+   
     try {
-        CPylonImage* dst = NextBuffer();
-        _conv->Convert(*dst, ptr);
-
-        int w = (int)dst->GetWidth();
-        int h = (int)dst->GetHeight();
-        int ch = _activeChannels;
-        int stride = w * ch; // packed Mono8/BGR8
-
-        if (_frameReadyHandlers != nullptr) {
-            _frameCount++;
-            System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
-            FrameReady(buffer, w, h, stride, ch);
-            auto now = std::chrono::steady_clock::now();
-            std::chrono::duration<double> elapsed = now - _lastFrameTime;
-            if (elapsed.count() >= 1.0) {
-                _emaFps = _frameCount / elapsed.count();
-                _frameCount = 0;
-                _lastFrameTime = now;
-            }
-        }
-        _lastError = nullptr;
+        int next = (_bufIndex == 0) ? 1 : 0;
+        CPylonImage* target = (next == 0) ? _bufA : _bufB;
+        _conv->Convert(*target, ptr);
+        _bufIndex = next;  // Atomic nếu cần thread-safe tuyệt đối
+        _frameCount++;
+        auto now = std::chrono::steady_clock::now();
+                std::chrono::duration<double> elapsed = now - _lastFrameTime;
+                if (elapsed.count() >= 1.0) {
+                    _emaFps = _frameCount / elapsed.count();
+                    _frameCount = 0;
+                    _lastFrameTime = now;
+                }
     }
-    catch (...) { _lastError = "ProcessGrabbed error"; }
+    catch (...) {
+        _lastError = "ProcessGrabbed error";
+    }
+   
+   
+    //_latestImageMutex->WaitOne();
+    //try {
+    //    CPylonImage* dst = NextBuffer();
+    //    _conv->Convert(*dst, ptr);
+
+    //    int w = (int)dst->GetWidth();
+    //    int h = (int)dst->GetHeight();
+    //    int ch = _activeChannels;
+    //    int stride = w * ch; // packed Mono8/BGR8
+
+    //    if (_frameReadyHandlers != nullptr) {
+    //        _frameCount++;
+    //        System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
+    //        FrameReady(buffer, w, h, stride, ch);
+    //        auto now = std::chrono::steady_clock::now();
+    //        std::chrono::duration<double> elapsed = now - _lastFrameTime;
+    //        if (elapsed.count() >= 1.0) {
+    //            _emaFps = _frameCount / elapsed.count();
+    //            _frameCount = 0;
+    //            _lastFrameTime = now;
+    //        }
+    //    }
+    //    _lastError = nullptr;
+    //}
+    //catch (...) { _lastError = "ProcessGrabbed error"; }
 }
 
 // ===== UserLoop API (uchar* qua IntPtr) =====
@@ -1383,6 +1449,58 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
     catch (...) { _lastError = "GrabOneUcharPtr unknown error"; }
 
     return System::IntPtr::Zero;
+}
+System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
+{
+    w = h = stride = channels = 0;
+    CPylonImage* src = (_bufIndex == 0) ? _bufB : _bufA; // lấy ảnh vừa hoàn tất
+    if (!src || !src->IsValid()) {
+        _lastError = "No valid image";
+        return System::IntPtr::Zero;
+    }
+
+    size_t imgSize = src->GetImageSize();
+    unsigned char* clone = new unsigned char[imgSize];
+    memcpy(clone, src->GetBuffer(), imgSize);
+
+    w = (int)src->GetWidth();
+    h = (int)src->GetHeight();
+    channels = _activeChannels;
+    stride = w * channels;
+
+    return System::IntPtr(clone);
+    //_latestImageMutex->WaitOne();
+    //if (!_latestImage || !_latestImage->IsValid()) {
+    //    _lastError = "No latest image";
+    //    return System::IntPtr::Zero;
+    //}
+
+    //try {
+    //    size_t imgSize = _latestImage->GetImageSize();
+    //    if (imgSize == 0 || !_latestImage->GetBuffer()) {
+    //        _lastError = "Empty or null image buffer";
+    //        return System::IntPtr::Zero;
+    //    }
+
+    //    // Allocate memory for copy
+    //    unsigned char* clone = new unsigned char[imgSize];
+    //    memcpy(clone, _latestImage->GetBuffer(), imgSize);
+
+    //    w = (int)_latestImage->GetWidth();
+    //    h = (int)_latestImage->GetHeight();
+    //    channels = _activeChannels;
+    //    stride = w * channels;
+
+    //    _lastError = nullptr;
+    //    return System::IntPtr(clone); // Caller must manage memory if needed
+    //}
+    //catch (...) {
+    //    _lastError = "CopyLatestImage failed";
+    //    return System::IntPtr::Zero;
+    //}
+    //finally {
+    //    _latestImageMutex->ReleaseMutex();
+    //}
 }
 
 //System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {

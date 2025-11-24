@@ -1476,7 +1476,7 @@ namespace BeeCore
                             matRaw = new Mat(rows, cols, matType);
                         }
                         int w = 0, h = 0, s = 0, c = 0;
-                        IntPtr p = PylonCam.GrabOneUcharPtr(1000, out w, out h, out s, out c);
+                        IntPtr p = PylonCam.CopyLatestImage(out w, out h, out s, out c);
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
                         FrameRate = (int)PylonCam.GetMeasuredFps();
                         matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono

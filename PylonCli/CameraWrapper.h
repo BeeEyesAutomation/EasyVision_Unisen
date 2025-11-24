@@ -26,10 +26,7 @@ namespace PylonCli {
         Pylon::CInstantCamera* _cam = nullptr;
         Pylon::CImageFormatConverter* _conv = nullptr;
 
-        // Double-buffer (để con trỏ luôn hợp lệ đến frame kế tiếp)
-        Pylon::CPylonImage* _bufA = nullptr;
-        Pylon::CPylonImage* _bufB = nullptr;
-        int _bufIndex = 0;
+
 
         // ImageEventHandler native (quản lý thủ công)
         Pylon::CImageEventHandler* _imgHandlerPtr = nullptr; // giữ handler
@@ -41,6 +38,11 @@ namespace PylonCli {
         int _activeChannels = 3;           // 1 (Mono8) hoặc 3 (BGR8)
         System::String^ _lastError;
 
+        Pylon::CPylonImage* _bufA = nullptr;
+        Pylon::CPylonImage* _bufB = nullptr;
+        Pylon::CPylonImage* _latestImage = nullptr;
+        int _bufIndex = 0;
+        System::Threading::Mutex^ _latestImageMutex;
         // backing delegate cho custom event
         FrameReadyHandler^ _frameReadyHandlers = nullptr;
 
@@ -144,7 +146,11 @@ namespace PylonCli {
             [System::Runtime::InteropServices::Out] int% h,
             [System::Runtime::InteropServices::Out] int% stride,
             [System::Runtime::InteropServices::Out] int% channels);
-
+        System::IntPtr CopyLatestImage(
+            [System::Runtime::InteropServices::Out] int% w,
+            [System::Runtime::InteropServices::Out] int% h,
+            [System::Runtime::InteropServices::Out] int% stride,
+            [System::Runtime::InteropServices::Out] int% channels);
         // Bridge cho handler nội bộ (InternalLoop)
         void ProcessGrabbed(const Pylon::CGrabResultPtr& ptr);
 
