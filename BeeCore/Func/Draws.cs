@@ -404,6 +404,66 @@ namespace BeeCore
                 graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
             }
         }
+        public static void Box3Label(Graphics graphics, RectangleF baseRect, string leftText, string rightText, string Area , Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
+        {
+            graphics.DrawRectangle(new Pen(baseBackColor, thiness), new Rectangle((int)baseRect.X, (int)baseRect.Y, (int)baseRect.Width, (int)baseRect.Height));
+
+            float fontSize = baseFont.Size;
+
+            Font currentFont;
+            SizeF leftSize, rightSize;
+            int totalTextWidth;
+
+            // Tìm font size phù hợp
+            do
+            {
+                currentFont = new Font(baseFont.FontFamily, fontSize, baseFont.Style);
+                leftSize = graphics.MeasureString(leftText, currentFont);
+                rightSize = graphics.MeasureString(rightText, currentFont);
+                totalTextWidth = (int)(leftSize.Width + rightSize.Width + 3 * padding);
+                fontSize--;
+            }
+            while (totalTextWidth > baseRect.Width && fontSize >= minFontSize);
+
+            // Tính kích thước label
+            int labelHeight = (int)Math.Max(leftSize.Height, rightSize.Height) + 2 * padding;
+            int labelY = (int)baseRect.Top - labelHeight;
+
+            // LEFT LABEL
+            int leftWidth = (int)leftSize.Width + 2 * padding;
+            Rectangle leftRect = new Rectangle((int)baseRect.Left, labelY, leftWidth, labelHeight);
+            if (ShowArea)
+            {
+               // double Area2 = Math.Round(baseRect.Width * baseRect.Height / 100);
+
+                graphics.DrawString(Area, currentFont, new SolidBrush(Color.Gray), baseRect.X, (int)baseRect.Y + (int)baseRect.Height - labelHeight - 5);
+            }
+
+            using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))
+            {
+                graphics.FillRectangle(leftBgBrush, leftRect);
+                graphics.DrawString(leftText, currentFont, textBrush, leftRect.Left + padding, leftRect.Top + padding);
+            }
+
+            // RIGHT LABEL background: kéo từ sau left đến hết box, nhưng text phải căn phải
+            int rightStartX = leftRect.Right;
+            int rightEndX = (int)baseRect.Right;
+            int rightWidth = rightEndX - rightStartX;
+
+            Rectangle rightRect = new Rectangle(rightStartX, labelY, rightWidth, labelHeight);
+
+            Color transparentColor = Color.FromArgb(opacity, baseBackColor.R, baseBackColor.G, baseBackColor.B);
+            using (SolidBrush rightBgBrush = new SolidBrush(transparentColor))
+            {
+                graphics.FillRectangle(rightBgBrush, rightRect);
+
+                // Vị trí chữ: căn phải bên trong rightRect
+                float textX = rightRect.Right - rightSize.Width - padding;
+                float textY = rightRect.Top + padding;
+
+                graphics.DrawString(rightText, currentFont, textBrush, textX, textY);
+            }
+        }
 
         public static void Box2Label(Graphics graphics, RectRotate baseRect, string leftText, string rightText, Font baseFont, Color baseBackColor, Brush textBrush, int opacity = 128, int thiness = 4, int minFontSize = 10, int padding = 1, bool ShowArea = false)
         {
@@ -864,6 +924,80 @@ Pen outlinePen)
             g.Transform = oldTransform;
             g.SmoothingMode = oldSmoothing;
             oldClip?.Dispose();
+        }
+        public static void DrawMatInRectRotateNotMatrix(
+      Graphics g,
+      Mat matProcess,
+      RectRotate rr,
+      Color tint,
+      float alpha = 0.5f,
+      bool blackAsTransparent = true
+  )
+        {
+            if (matProcess == null || matProcess.Empty() || rr == null) return;
+
+            var oldSmoothing = g.SmoothingMode;
+            var oldTransform = g.Transform;
+            var oldClip = g.Clip; // có thể null
+
+            g.SmoothingMode = SmoothingMode.HighQuality;
+
+         
+
+                using (var path = BuildLocalPath(rr))
+                {
+                    // Nếu polygon chưa đóng, không fill ảnh (tránh vẽ sai), chỉ return
+                    if (rr.Shape == ShapeType.Polygon && !rr.IsPolygonClosed && !Global.IsRun)
+                    {
+                        g.Transform = oldTransform;
+                        g.SmoothingMode = oldSmoothing;
+                        oldClip?.Dispose();
+                        return;
+                    }
+
+                    // Bbox THỰC theo hình
+                    var bounds = path.GetBounds();
+                    // Trường hợp degenerate (rất mỏng): fallback sang _rect
+                    if (bounds.Width < 1f || bounds.Height < 1f)
+                        bounds = rr._rect;
+
+                    using (var bmp = matProcess.ToBitmap())
+                    using (var ia = new ImageAttributes())
+                    {
+                        float tr = tint.R / 255f;
+                        float tg = tint.G / 255f;
+                        float tb = tint.B / 255f;
+
+                        ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                          {
+                 new float[] {0, 0, 0, 0, 0},
+                 new float[] {0, 0, 0, 0, 0},
+                 new float[] {0, 0, 0, 0, 0},
+                 new float[] {0, 0, 0, alpha, 0},
+                 new float[] {tr, tg, tb, 0, 1}  // kudos to OP!
+                          });
+                        ia.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                        if (blackAsTransparent)
+                            ia.SetColorKey(Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), ColorAdjustType.Bitmap);
+                        else
+                            ia.SetColorKey(Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), ColorAdjustType.Bitmap);
+                        // Clip đúng hình để ảnh không tràn ra ngoài
+                        g.SetClip(path, CombineMode.Intersect);
+
+                        // Vẽ khít vào bbox của path (nếu muốn giữ tỉ lệ ảnh, có thể fit theo chiều ngắn)
+                        g.DrawImage(
+                            bmp,
+                            Rectangle.Round(bounds),
+                            0, 0, bmp.Width, bmp.Height,
+                            GraphicsUnit.Pixel,
+                            ia
+                        );
+
+                        // Bỏ clip
+                        g.ResetClip();
+                    }
+                }
+           
         }
 
         static GraphicsPath BuildPathLocal(RectRotate rr)

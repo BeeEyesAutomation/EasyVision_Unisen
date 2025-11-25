@@ -957,7 +957,7 @@ namespace BeeInterface
                         string lb = SaveYoloRects(
                             Propety.rectTrain,
                             BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width,
-                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height, Propety.listLabel,
+                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height, new List<string>(),
                             Propety.labelItems
                                     );
 
@@ -1041,8 +1041,8 @@ namespace BeeInterface
             listLabelTrainYolo.Clear();
             if(Propety.rectTrain != null)
             Propety.rectTrain.Clear();
-            else if(Propety.listLabel != null)
-            Propety.listLabel.Clear();
+            //else if(Propety.listLabel != null)
+            //Propety.listLabel.Clear();
         }
         private void btnSave_Click(object sender, EventArgs e)
         {

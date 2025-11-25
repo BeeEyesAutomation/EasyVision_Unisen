@@ -1004,6 +1004,8 @@ bool CCD::Connect(int indexCCD, System::String^ NameCamera)
 	case 1:
 	{
 		int index = FindCameraIndexByUserName(m_stDevList, nameCCD);
+		if (index <= -1)
+			return false;
 		IsConnect = ConnectHik(index, indexCCD);
 	
 		break;

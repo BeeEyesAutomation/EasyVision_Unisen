@@ -21,6 +21,7 @@ using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using static LibUsbDotNet.Main.UsbTransferQueue;
 using static OpenCvSharp.ML.DTrees;
+using static System.Windows.Forms.MonthCalendar;
 using Point = System.Drawing.Point;
 
 namespace BeeCore
@@ -260,12 +261,14 @@ namespace BeeCore
         [NonSerialized]
         public List<RectRotate> rectTrain = new List<RectRotate>();
         String[] sSplit;
-        [NonSerialized]
-        public List<float> listScore = new List<float>();
-        [NonSerialized]
-        public List<bool> listOK = new List<bool>();
-        [NonSerialized]
-        public List<string> listLabel = new List<string>();
+        //[NonSerialized]
+        //public List<float> listScore = new List<float>();
+        //[NonSerialized]
+        //public List<double> listArea = new List<double>();
+        //[NonSerialized]
+        //public List<bool> listOK = new List<bool>();
+        //[NonSerialized]
+        //public List<string> listLabel = new List<string>();
         public List<string> listModels = new List<string>();
         String listMatch;
         public bool IsCheckLine = false;
@@ -283,6 +286,8 @@ namespace BeeCore
         List<string> labelList = new List<string>();
         public int IndexThread = 0;
         public float CropOffSetX, CropOffSetY=0;
+        [NonSerialized]
+        private Mat matCropTemp;
         public void DoWork(RectRotate rotCrop)
         {
             if (!Global.IsIntialPython) return;
@@ -306,7 +311,7 @@ namespace BeeCore
                     using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
                     {
                         if (matCrop.Empty()) return;
-
+                      
                         // --- Chuẩn hoá về 8-bit, 3 kênh BGR ---
                         // 1) nếu depth != 8U => scale về 8U
                         if (matCrop.Type().Depth != MatType.CV_8U)
@@ -327,6 +332,10 @@ namespace BeeCore
                         {
                             Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
                         }
+                        if (matCropTemp != null)
+                            if (!matCropTemp.IsDisposed)
+                                matCropTemp = new Mat();
+                         matCropTemp = matCrop.Clone();
                         // nếu đã 3 kênh BGR thì giữ nguyên
 
                         int h = matCrop.Rows;
@@ -538,6 +547,58 @@ namespace BeeCore
 
             return maxY>=valueY ;   // cắt đường y = valueY
         }
+        public static double CalcMissingPercent_AutoMinMax(ref Mat src, Rect bbox, double brightRatio = 0.25)
+        {
+            // brightRatio = phần trăm "vùng sáng nhất" muốn lấy (0.2–0.4 thường ok)
+            if (brightRatio <= 0) brightRatio = 0.25;
+            if (brightRatio >= 1) brightRatio = 0.9;
+
+            // 1. Crop ROI từ YOLO box
+            using (var roi = new Mat(src, bbox))
+            using (var gray = new Mat())
+            using (var mask = new Mat())
+            {
+                // 2. BGR -> Gray
+                if (roi.Channels() == 3 || roi.Channels() == 4)
+                    Cv2.CvtColor(roi, gray, ColorConversionCodes.BGR2GRAY);
+                else
+                    roi.CopyTo(gray);
+               // Cv2.ImWrite("cropyolo.png", gray);
+                // 3. Lấy min / max trong ROI
+                double minVal, maxVal;
+               OpenCvSharp. Point minLoc, maxLoc;
+                Cv2.MinMaxLoc(gray, out minVal, out maxVal, out minLoc, out maxLoc);
+
+                // Trường hợp phẳng màu (không có gì khác biệt)
+                if (Math.Abs(maxVal - minVal) < 1e-6)
+                    return 0.0;
+
+                // 4. Tính ngưỡng t dựa trên khoảng [min, max]
+                // Ví dụ brightRatio = 0.25 => lấy vùng sáng nhất 25% gần max
+                // tương đương: t = min + (max-min)*(1 - brightRatio)
+                double t = minVal + (maxVal - minVal) * (1.0 - brightRatio);
+
+                // 5. Threshold vùng sáng (thiếu chì)
+                Cv2.Threshold(gray, mask, t, 255, ThresholdTypes.Binary);
+                src = mask.Clone();
+                // (tuỳ chọn) làm sạch mask một chút
+                // var kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+                // Cv2.MorphologyEx(mask, mask, MorphTypes.Open, kernel);
+
+                // 6. Đếm pixel trắng = vùng thiếu chì
+                int missingPixels = Cv2.CountNonZero(mask);
+                int totalPixels = bbox.Width * bbox.Height;
+
+                if (totalPixels <= 0)
+                    return 0.0;
+
+                double percent = missingPixels * 100.0 / totalPixels;
+                return percent;
+            }
+        }
+        double percent = 0;
+        [NonSerialized]
+        public List< ResultItem> ResultItem=new List<ResultItem>() ;
         public void Complete()
         {
             if (Global.IsIntialPython)
@@ -548,10 +609,12 @@ namespace BeeCore
 
                     try
                     {
-                        listOK = new List<bool>();
-                        listLabel = new List<string>();
+                        ResultItem = new List<ResultItem>();
+                        //listArea = new List<double>();
+                        //listOK = new List<bool>();
+                        //listLabel = new List<string>();
                         rectRotates = new List<RectRotate>();
-                        listScore = new List<float>();
+                       // listScore = new List<float>();
                         // cycleTime = (int)G.YoloPlus.Cycle;
                         Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                         int i = 0;
@@ -572,6 +635,7 @@ namespace BeeCore
                         //}
                         foreach (String label in labelList)
                         {
+                            ResultItem.Add(new ResultItem(label));
                             int index = labelItems.FindIndex(item => string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
                             if (index > -1)
                             {
@@ -592,29 +656,64 @@ namespace BeeCore
                                 if (item.IsY)
                                     if (IntersectY(boxList[i], item.ValueY)) // [i]._PosCenter.Y + boxList[i]._rect.Height / 2 >= item.ValueY)
                                         IsOK = true;
+                               
+                                    double Area = 0;
                                 if (item.IsArea)
-                                    if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
+                                {
+                                    if(item.Name=="T_CHI")
+                                    {
+                                      
+                                        Rect rect=  new Rect((int)boxList[i]._PosCenter.X+(int)boxList[i]._rect.X, (int)boxList[i]._PosCenter.Y + (int)boxList[i]._rect.Y, (int)boxList[i]._rect.Width, (int)boxList[i]._rect.Height);
+                                        ResultItem[i].matProcess = matCropTemp.Clone();
+                                        percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
+                                        Area = percent * boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height / 100;
+                                        if (Area >= item.ValueArea * 100)
+                                            IsOK = true;
+                                      
+                                    }
+                                    else
+                                    {
+                                        Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
+                                        if (Area >= item.ValueArea * 100)
+                                            IsOK = true;
+                                      
+                                    }
+                                    
+                                }
+                                if (item.IsCounter)
+                                {
+                                    int count = labelList.Count(l => l == label);
+                                    if (count >= item.ValueCounter)
                                         IsOK = true;
+                                    else
+                                        IsOK = false;
+                                }
                                 if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY)
                                     IsOK = true;
+                                ResultItem[i].IsOK = IsOK;
+                                ResultItem[i].rot = boxList[i];
+                                ResultItem[i].Score = scoreList[i];
+                                ResultItem[i].Area =(float) Area;
+                                ResultItem[i].Percent = (float)percent;
+                                rectRotates.Add(boxList[i]);
                                 if (IsOK)
                                 {
-                                    listOK.Add(true);
-                                    rectRotates.Add(boxList[i]);
-                                    listLabel.Add(label);
-                                    scoreRS += (int)scoreList[i];
-                                    listScore.Add(scoreList[i]);
+                                    //listOK.Add(true);
+                                    //rectRotates.Add(boxList[i]);
+                                    //listLabel.Add(label);
+                                    //scoreRS += (int)scoreList[i];
+                                    //listScore.Add(scoreList[i]);
                                     numOK++;
                                 }
-                                else
-                                {
-                                    listOK.Add(false);
-                                    rectRotates.Add(boxList[i]);
-                                    listLabel.Add(label);
-                                    scoreRS += (int)scoreList[i];
-                                    listScore.Add(scoreList[i]);
+                                //else
+                                //{
+                                //    listOK.Add(false);
+                                //    rectRotates.Add(boxList[i]);
+                                //    listLabel.Add(label);
+                                //    scoreRS += (int)scoreList[i];
+                                //    listScore.Add(scoreList[i]);
 
-                                }
+                                //}
                                 //if (IsCheckLine)
                                 //{
                                 //    switch (CompareLine)
@@ -707,45 +806,45 @@ namespace BeeCore
                             }
                             i++;
                         }
-                        if (IsArrangeBox)
-                        {
-                            List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
+                        //if (IsArrangeBox)
+                        //{
+                        //    List<RotatedBoxInfo> combined = new List<RotatedBoxInfo>();
 
-                            for (int j = 0; j < rectRotates.Count; j++)
-                            {
-                                combined.Add(new RotatedBoxInfo
-                                {
-                                    Box = rectRotates[j],
-                                    Label = listLabel[j],
-                                    Score = listScore[j]
-                                });
-                            }
-                            switch (ArrangeBox)
-                            {
-                                case ArrangeBox.X_Left_Rigth:
-                                    // Sort theo X tăng dần (trái → phải)
-                                    combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
-                                    break;
-                                case ArrangeBox.X_Right_Left:
-                                    // Sort theo X giảm dần (phải → trái)
-                                    combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
+                        //    for (int j = 0; j < rectRotates.Count; j++)
+                        //    {
+                        //        combined.Add(new RotatedBoxInfo
+                        //        {
+                        //            Box = rectRotates[j],
+                        //            Label = ResultItem[j].Name,
+                        //            Score = ResultItem[j].Score
+                        //        });
+                        //    }
+                        //    switch (ArrangeBox)
+                        //    {
+                        //        case ArrangeBox.X_Left_Rigth:
+                        //            // Sort theo X tăng dần (trái → phải)
+                        //            combined = combined.OrderBy(b => b.Box._PosCenter.X).ToList();
+                        //            break;
+                        //        case ArrangeBox.X_Right_Left:
+                        //            // Sort theo X giảm dần (phải → trái)
+                        //            combined = combined.OrderByDescending(b => b.Box._PosCenter.X).ToList();
 
-                                    break;
-                                case ArrangeBox.Y_Left_Rigth:
-                                    // Sort theo Y tăng dần (trên → dưới)
-                                    combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
-                                    break;
-                                case ArrangeBox.Y_Right_Left:
-                                    combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
-                                    break;
-                            }
-                            rectRotates = combined.Select(b => b.Box).ToList();
-                            listLabel = combined.Select(b => b.Label).ToList();
-                            listScore = combined.Select(b => b.Score).ToList();
-                            Content = "";
-                            foreach (string s in listLabel)
-                                Content += s;
-                        }
+                        //            break;
+                        //        case ArrangeBox.Y_Left_Rigth:
+                        //            // Sort theo Y tăng dần (trên → dưới)
+                        //            combined = combined.OrderBy(b => b.Box._PosCenter.Y).ToList();
+                        //            break;
+                        //        case ArrangeBox.Y_Right_Left:
+                        //            combined = combined.OrderByDescending(b => b.Box._PosCenter.Y).ToList();
+                        //            break;
+                        //    }
+                        //    rectRotates = combined.Select(b => b.Box).ToList();
+                        //    listLabel = combined.Select(b => b.Label).ToList();
+                        //    listScore = combined.Select(b => b.Score).ToList();
+                        //    Content = "";
+                        //    foreach (string s in listLabel)
+                        //        Content += s;
+                        //}
                         Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(scoreRS / (rectRotates.Count() * 1.0));
                         if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
                         Common.PropetyTools[IndexThread][Index].Results = Results.OK;
@@ -1042,6 +1141,10 @@ namespace BeeCore
             }
             foreach (RectRotate rot in rectRotates)
             {
+                Color clShow = Global.Config.ColorNone;
+                if (ResultItem[i].IsOK == true)
+                    clShow = cl;
+              
                 mat = new Matrix();
                 if (!Global.IsRun)
                 {
@@ -1057,11 +1160,12 @@ namespace BeeCore
                
                     mat.Translate(CropOffSetX, CropOffSetY);
                     gc.Transform = mat;
-                } 
-                int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
-                Color clShow = Global.Config.ColorNone;
-                if (listOK[i] == true)
-                    clShow = cl;
+                }
+                
+                      
+
+                int index = labelItems.FindIndex(item => string.Equals(item.Name, ResultItem[i].Name, StringComparison.OrdinalIgnoreCase));
+               
                 if (index > -1)
                 {
                     LabelItem item = labelItems[index];
@@ -1106,14 +1210,21 @@ namespace BeeCore
                     }
                     else
                     {
-                      //  mat = new Matrix();
+                      
+                        //  mat = new Matrix();
                         //mat = new Matrix();
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                       //  gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
+                        if (!Global.IsRun || Global.Config.IsShowDetail)
+                            if (ResultItem[i].matProcess != null && !ResultItem[i].matProcess.Empty())
+                            {
+                                Draws.DrawMatInRectRotateNotMatrix(gc, ResultItem[i].matProcess, rot, clShow, Global.Config.Opacity / 100.0f);
+
+                            }
                         font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", font, clShow, brushText, 30,Global.Config.ThicknessLine, Global.Config.FontSize, 1, Global.Config.IsShowDetail);
+                        Draws.Box3Label(gc, rot._rect, ResultItem[i].Name, Math.Round(ResultItem[i].Score, 1) + "%", (int)(ResultItem[i].Area/100) + " px ("+Math.Round( ResultItem[i].Percent) + "%)", font, clShow, brushText, 30,Global.Config.ThicknessLine, Global.Config.FontSize, 1, Global.Config.IsShowDetail);
                         gc.ResetTransform();
 
                     }

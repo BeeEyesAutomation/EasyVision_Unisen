@@ -481,7 +481,7 @@ namespace BeeCore
                     if (IsConnect)
                     {
                         PylonCam.SetOutputPixel(PylonCli. OutputPixel.Auto);
-                        PylonCam.Start(PylonCli.GrabMode.UserLoop);
+                        PylonCam.Start(PylonCli.GrabMode.InternalLoop);
 
 
 

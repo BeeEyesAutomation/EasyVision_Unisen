@@ -14,6 +14,7 @@ namespace BeeCore
         public bool IsUse { get; set; }
         public bool IsWidth { get; set; }
             public bool IsHeight { get; set; }
+        public bool IsCounter { get; set; }
         //public bool IsLine { get; set; }
 
         public bool IsX { get; set; }//HAU
@@ -25,6 +26,7 @@ namespace BeeCore
         //public int ValueLine { get; set; }
         public int ValueX { get; set; }//HAU
         public int ValueY { get; set; }//HAU
+        public int ValueCounter { get; set; }//HAU
     }
     
 }
