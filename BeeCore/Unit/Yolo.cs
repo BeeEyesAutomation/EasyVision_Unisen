@@ -332,10 +332,10 @@ namespace BeeCore
                         {
                             Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGRA2BGR);
                         }
-                        if (matCropTemp != null)
-                            if (!matCropTemp.IsDisposed)
-                                matCropTemp = new Mat();
-                         matCropTemp = matCrop.Clone();
+                       
+                        if (matCropTemp == null) matCropTemp = new Mat();
+                        if (!matCropTemp.Empty()) matCropTemp.Dispose();
+                        matCropTemp = matCrop.Clone();
                         // nếu đã 3 kênh BGR thì giữ nguyên
 
                         int h = matCrop.Rows;
@@ -664,6 +664,8 @@ namespace BeeCore
                                     {
                                       
                                         Rect rect=  new Rect((int)boxList[i]._PosCenter.X+(int)boxList[i]._rect.X, (int)boxList[i]._PosCenter.Y + (int)boxList[i]._rect.Y, (int)boxList[i]._rect.Width, (int)boxList[i]._rect.Height);
+                                        if (ResultItem[i].matProcess == null) ResultItem[i].matProcess = new Mat();
+                                        if (!ResultItem[i].matProcess.Empty()) ResultItem[i].matProcess.Dispose();
                                         ResultItem[i].matProcess = matCropTemp.Clone();
                                         percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
                                         Area = percent * boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height / 100;

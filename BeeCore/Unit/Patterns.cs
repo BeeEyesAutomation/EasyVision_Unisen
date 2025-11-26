@@ -438,11 +438,13 @@ namespace BeeCore
             if (Scale == 0) Scale = 1;
             if (rotCrop == null) rotCrop = new RectRotate();
             if(rotArea == null) rotArea = new RectRotate();
-			
-			Common.PropetyTools[IndexThread][Index].StepValue = 1;
+           
+            Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            if (Common.PropetyTools[IndexThread][Index].Score == 0)
+                Common.PropetyTools[IndexThread][Index].Score = 80;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
 
@@ -605,6 +607,12 @@ namespace BeeCore
                         Common.PropetyTools[Global.IndexChoose][Index].ScoreResult =
                             (int)Math.Round(scoreSum / rectRotates.Count, 1);
                     }
+                }
+                catch(Exception ex)
+                {
+
+                    Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern", ex.ToString()));
+
                 }
                 finally
                 {
