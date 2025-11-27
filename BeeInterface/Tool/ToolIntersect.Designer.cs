@@ -435,7 +435,6 @@ namespace BeeInterface
             this.btnBlack.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnBlack.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnBlack.Corner = BeeGlobal.Corner.Right;
-            this.btnBlack.DebounceResizeMs = 16;
             this.btnBlack.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnBlack.FlatAppearance.BorderSize = 0;
             this.btnBlack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -492,7 +491,6 @@ namespace BeeInterface
             this.btnWhite.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnWhite.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnWhite.Corner = BeeGlobal.Corner.Left;
-            this.btnWhite.DebounceResizeMs = 16;
             this.btnWhite.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnWhite.FlatAppearance.BorderSize = 0;
             this.btnWhite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -566,7 +564,6 @@ namespace BeeInterface
             this.btnNewShape.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnNewShape.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNewShape.Corner = BeeGlobal.Corner.Both;
-            this.btnNewShape.DebounceResizeMs = 16;
             this.btnNewShape.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnNewShape.FlatAppearance.BorderSize = 0;
             this.btnNewShape.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -648,7 +645,6 @@ namespace BeeInterface
             this.btnPolygon.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnPolygon.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnPolygon.Corner = BeeGlobal.Corner.None;
-            this.btnPolygon.DebounceResizeMs = 16;
             this.btnPolygon.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPolygon.FlatAppearance.BorderSize = 0;
             this.btnPolygon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -705,7 +701,6 @@ namespace BeeInterface
             this.btnHexagon.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnHexagon.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnHexagon.Corner = BeeGlobal.Corner.None;
-            this.btnHexagon.DebounceResizeMs = 16;
             this.btnHexagon.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnHexagon.FlatAppearance.BorderSize = 0;
             this.btnHexagon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -762,7 +757,6 @@ namespace BeeInterface
             this.btnElip.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnElip.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnElip.Corner = BeeGlobal.Corner.None;
-            this.btnElip.DebounceResizeMs = 16;
             this.btnElip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnElip.FlatAppearance.BorderSize = 0;
             this.btnElip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -820,7 +814,6 @@ namespace BeeInterface
             this.btnRect.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnRect.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnRect.Corner = BeeGlobal.Corner.Left;
-            this.btnRect.DebounceResizeMs = 16;
             this.btnRect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRect.FlatAppearance.BorderSize = 0;
             this.btnRect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -877,7 +870,6 @@ namespace BeeInterface
             this.rjButton3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton3.Corner = BeeGlobal.Corner.Right;
-            this.rjButton3.DebounceResizeMs = 16;
             this.rjButton3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton3.FlatAppearance.BorderSize = 0;
             this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -969,7 +961,6 @@ namespace BeeInterface
             this.btnMask.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnMask.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnMask.Corner = BeeGlobal.Corner.Right;
-            this.btnMask.DebounceResizeMs = 16;
             this.btnMask.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMask.FlatAppearance.BorderSize = 0;
             this.btnMask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1028,7 +1019,6 @@ namespace BeeInterface
             this.btnCrop.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCrop.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCrop.Corner = BeeGlobal.Corner.Left;
-            this.btnCrop.DebounceResizeMs = 16;
             this.btnCrop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCrop.Enabled = false;
             this.btnCrop.FlatAppearance.BorderSize = 0;
@@ -1086,7 +1076,6 @@ namespace BeeInterface
             this.btnArea.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnArea.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnArea.Corner = BeeGlobal.Corner.None;
-            this.btnArea.DebounceResizeMs = 16;
             this.btnArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnArea.FlatAppearance.BorderSize = 0;
             this.btnArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1386,7 +1375,6 @@ namespace BeeInterface
             this.btnInvert.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnInvert.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnInvert.Corner = BeeGlobal.Corner.Right;
-            this.btnInvert.DebounceResizeMs = 16;
             this.btnInvert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnInvert.FlatAppearance.BorderSize = 0;
             this.btnInvert.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1443,7 +1431,6 @@ namespace BeeInterface
             this.btnBinary.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnBinary.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnBinary.Corner = BeeGlobal.Corner.None;
-            this.btnBinary.DebounceResizeMs = 16;
             this.btnBinary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnBinary.FlatAppearance.BorderSize = 0;
             this.btnBinary.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1500,7 +1487,6 @@ namespace BeeInterface
             this.btnStrongEdge.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnStrongEdge.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnStrongEdge.Corner = BeeGlobal.Corner.None;
-            this.btnStrongEdge.DebounceResizeMs = 16;
             this.btnStrongEdge.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStrongEdge.FlatAppearance.BorderSize = 0;
             this.btnStrongEdge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1558,7 +1544,6 @@ namespace BeeInterface
             this.btnCloseEdge.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCloseEdge.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCloseEdge.Corner = BeeGlobal.Corner.Left;
-            this.btnCloseEdge.DebounceResizeMs = 16;
             this.btnCloseEdge.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCloseEdge.FlatAppearance.BorderSize = 0;
             this.btnCloseEdge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1633,7 +1618,6 @@ namespace BeeInterface
             this.btnCropFull.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCropFull.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCropFull.Corner = BeeGlobal.Corner.Right;
-            this.btnCropFull.DebounceResizeMs = 16;
             this.btnCropFull.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCropFull.FlatAppearance.BorderSize = 0;
             this.btnCropFull.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1691,7 +1675,6 @@ namespace BeeInterface
             this.btnCropHalt.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCropHalt.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCropHalt.Corner = BeeGlobal.Corner.Left;
-            this.btnCropHalt.DebounceResizeMs = 16;
             this.btnCropHalt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCropHalt.FlatAppearance.BorderSize = 0;
             this.btnCropHalt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2015,7 +1998,6 @@ namespace BeeInterface
             this.btnFixedMean.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnFixedMean.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnFixedMean.Corner = BeeGlobal.Corner.Right;
-            this.btnFixedMean.DebounceResizeMs = 16;
             this.btnFixedMean.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnFixedMean.FlatAppearance.BorderSize = 0;
             this.btnFixedMean.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2073,7 +2055,6 @@ namespace BeeInterface
             this.btnAutoMean.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnAutoMean.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnAutoMean.Corner = BeeGlobal.Corner.Left;
-            this.btnAutoMean.DebounceResizeMs = 16;
             this.btnAutoMean.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAutoMean.FlatAppearance.BorderSize = 0;
             this.btnAutoMean.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2597,7 +2578,6 @@ namespace BeeInterface
             this.btnIsClearBig.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnIsClearBig.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnIsClearBig.Corner = BeeGlobal.Corner.Right;
-            this.btnIsClearBig.DebounceResizeMs = 16;
             this.btnIsClearBig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnIsClearBig.FlatAppearance.BorderSize = 0;
             this.btnIsClearBig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2751,7 +2731,6 @@ namespace BeeInterface
             this.btnOpen.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnOpen.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnOpen.Corner = BeeGlobal.Corner.Right;
-            this.btnOpen.DebounceResizeMs = 16;
             this.btnOpen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOpen.FlatAppearance.BorderSize = 0;
             this.btnOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2840,7 +2819,6 @@ namespace BeeInterface
             this.btnIsClearSmall.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnIsClearSmall.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnIsClearSmall.Corner = BeeGlobal.Corner.Right;
-            this.btnIsClearSmall.DebounceResizeMs = 16;
             this.btnIsClearSmall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnIsClearSmall.FlatAppearance.BorderSize = 0;
             this.btnIsClearSmall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2994,7 +2972,6 @@ namespace BeeInterface
             this.btnClose.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnClose.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnClose.Corner = BeeGlobal.Corner.Right;
-            this.btnClose.DebounceResizeMs = 16;
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3134,7 +3111,6 @@ namespace BeeInterface
             this.btnTest.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnTest.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnTest.Corner = BeeGlobal.Corner.Both;
-            this.btnTest.DebounceResizeMs = 16;
             this.btnTest.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTest.FlatAppearance.BorderSize = 0;
             this.btnTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

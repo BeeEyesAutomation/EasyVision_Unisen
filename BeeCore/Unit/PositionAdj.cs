@@ -1,10 +1,10 @@
 ﻿using BeeCore.Algorithm;
 using BeeCore.Func;
 using BeeCore.Funtion;
+using BeeCpp;
 using BeeGlobal;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using BeeCpp;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using static BeeCore.Cropper;
 using static LibUsbDotNet.Main.UsbTransferQueue;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Point = OpenCvSharp.Point;
@@ -205,6 +206,17 @@ namespace BeeCore
 
             }
         }
+        public void ReSetAngle()
+        {
+            if (Angle > 360) Angle = 360;
+            if (Angle == 0)
+            {
+                Angle = 1;
+            }
+            float angle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+            AngleLower = angle - Angle;
+            AngleUper = angle + Angle;
+        }
         private bool isAutoTrig;
         private int numOK;
         private int delayTrig;
@@ -275,32 +287,38 @@ namespace BeeCore
                 int w = 0, h = 0, s = 0, c = 0;
                 IntPtr intpr = IntPtr.Zero;
                 Mat mat = new Mat();
+              
 
                 try
                 {
-                    var rrCli = Converts.ToCli(rotCrop); // như ở reply trước
-                    RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
-
-                    intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
-                            out w, out h, out s, out c);
                    
-                    if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
-                        return mat; // trả Mat rỗng
-                    Pattern.LearnPattern();
-                    // Map kênh trả về
-                    MatType mt = c == 1 ? MatType.CV_8UC1
-                                : c == 3 ? MatType.CV_8UC3
-                                : MatType.CV_8UC4;
 
-                    // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
-                    using (var m = new Mat(h, w, mt, intpr, s))
-                    {
-                        // CopyTo hoặc Clone đều OK; Clone gọn hơn:
-                        mat = m.Clone();
-                    }
 
-                    // Giữ sống input đến sau khi native xong
-                    GC.KeepAlive(img);
+                        var rrCli = Converts.ToCli(rotCrop); // như ở reply trước
+                        RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+
+                        intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
+                                out w, out h, out s, out c);
+
+                        if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+                            return mat; // trả Mat rỗng
+                        Pattern.LearnPattern();
+                        // Map kênh trả về
+                        MatType mt = c == 1 ? MatType.CV_8UC1
+                                    : c == 3 ? MatType.CV_8UC3
+                                    : MatType.CV_8UC4;
+
+                        // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
+                        using (var m = new Mat(h, w, mt, intpr, s))
+                        {
+                            // CopyTo hoặc Clone đều OK; Clone gọn hơn:
+                            mat = m.Clone();
+                        }
+
+                        // Giữ sống input đến sau khi native xong
+                        GC.KeepAlive(img);
+                    
+
                 }
                 finally
                 {
@@ -316,6 +334,65 @@ namespace BeeCore
 
 
         }
+        //public Mat LearnPattern(Mat raw, bool IsNoCrop)
+        //{
+
+        //    using (Mat img = raw.Clone())
+        //    {
+        //        // Chuẩn hóa góc
+        //        //if (rotCrop._rectRotation < 0)
+        //        //    rotCrop._rectRotation += 360;
+
+        //        // Chuẩn hóa kênh về BGR 3 kênh
+        //        if (img.Channels() == 3)
+        //            Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
+        //        else if (img.Channels() == 4)
+        //            Cv2.CvtColor(img, img, ColorConversionCodes.BGRA2GRAY);
+
+        //        int w = 0, h = 0, s = 0, c = 0;
+        //        IntPtr intpr = IntPtr.Zero;
+        //        Mat mat = new Mat();
+
+        //        try
+        //        {
+        //            var rrCli = Converts.ToCli(rotCrop); // như ở reply trước
+        //            RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
+
+        //            intpr = Pattern.SetImgeSample(img.Data, img.Width, img.Height, (int)img.Step(), img.Channels(), rrCli, rrMaskCli, IsNoCrop,
+        //                    out w, out h, out s, out c);
+                   
+        //            if (intpr == IntPtr.Zero || w <= 0 || h <= 0 || s <= 0 || (c != 1 && c != 3 && c != 4))
+        //                return mat; // trả Mat rỗng
+        //            Pattern.LearnPattern();
+        //            // Map kênh trả về
+        //            MatType mt = c == 1 ? MatType.CV_8UC1
+        //                        : c == 3 ? MatType.CV_8UC3
+        //                        : MatType.CV_8UC4;
+
+        //            // Wrap con trỏ rồi copy/clone để sở hữu bộ nhớ managed
+        //            using (var m = new Mat(h, w, mt, intpr, s))
+        //            {
+        //                // CopyTo hoặc Clone đều OK; Clone gọn hơn:
+        //                mat = m.Clone();
+        //            }
+
+        //            // Giữ sống input đến sau khi native xong
+        //            GC.KeepAlive(img);
+        //        }
+        //        finally
+        //        {
+        //            if (intpr != IntPtr.Zero)
+        //                Pattern.FreeBuffer(intpr); // rất quan trọng
+        //        }
+
+        //        return mat;
+        //    }
+
+
+
+
+
+        //}
 
         public bool IsSendResult;
         public String AddPLC;

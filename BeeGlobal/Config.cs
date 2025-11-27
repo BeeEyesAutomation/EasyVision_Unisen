@@ -31,6 +31,8 @@ namespace BeeGlobal
         public int ThicknessLine = 4;
         public bool IsShowDetail = true;
         public bool IsShowBox = true;
+        public bool IsShowScore = false;
+        public bool IsShowLabel = true;
         public bool IsShowPostion = true;
         public bool IsShowResult = true;
         public bool IsShowNotMatching = true;

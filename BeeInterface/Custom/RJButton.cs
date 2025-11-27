@@ -1,6 +1,7 @@
 ﻿using BeeGlobal; // Corner enum
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -27,18 +28,20 @@ namespace BeeInterface
         private bool _isNotChange = false;
         private bool _isUnGroup = true;
         private bool _isRect = false;
+        private bool _isTouch = false;
 
         // Layout rects
         private Rectangle _imgRect = Rectangle.Empty;
         private Rectangle _textRect = Rectangle.Empty;
 
-        // Region/path cache (FLOAT để viền nét)
+        // Region/path cache
         private GraphicsPath _pathSurface;
         private GraphicsPath _pathBorder;
 
-        // Debounce layout
-        private System.Windows.Forms.Timer _layoutTimer; // lazy-init
-        private int _layoutDebounceMs = 16;
+        // ===== Global layout queue (batch theo Application.Idle) =====
+        private static readonly object _layoutQueueLock = new object();
+        private static readonly HashSet<RJButton> _layoutQueue = new HashSet<RJButton>();
+        private static bool _layoutIdleAttached;
         private bool _layoutPending;
 
         // ===== Auto Font =====
@@ -72,18 +75,25 @@ namespace BeeInterface
         // ===== Căn giữa icon + text như một khối =====
         [Category("Behavior")] public Padding ContentPadding { get; set; } = new Padding(8, 6, 8, 6);
         [Category("Behavior")] public int ImageTextSpacing { get; set; } = 6;
+
         // ===== Click Gradient Colors =====
         [Category("Click Gradient Colors")]
         public Color ClickTopColor { get; set; } = Color.FromArgb(244, 192, 89);
-
         [Category("Click Gradient Colors")]
         public Color ClickMidColor { get; set; } = Color.FromArgb(246, 204, 120);
-
         [Category("Click Gradient Colors")]
         public Color ClickBotColor { get; set; } = Color.FromArgb(247, 211, 139);
-        // ===== Helpers =====
-        private bool InDesignMode =>
-            LicenseManager.UsageMode == LicenseUsageMode.Designtime || (Site?.DesignMode ?? false);
+
+        // ===== Others =====
+        private bool InDesignMode
+        {
+            get
+            {
+                if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return true;
+                if (Site != null && Site.DesignMode) return true;
+                return false;
+            }
+        }
 
         protected override CreateParams CreateParams
         {
@@ -97,16 +107,18 @@ namespace BeeInterface
         }
 
         // ===== Public API =====
+
         public new TextImageRelation TextImageRelation
         {
-            get => base.TextImageRelation;
+            get { return base.TextImageRelation; }
             set
             {
                 if (_textImageRelation == value) return;
                 _textImageRelation = value;
                 base.TextImageRelation = value;
                 RequestLayout();
-                TextImageRelationChanged?.Invoke(this, EventArgs.Empty);
+                if (TextImageRelationChanged != null)
+                    TextImageRelationChanged(this, EventArgs.Empty);
             }
         }
         public event EventHandler TextImageRelationChanged;
@@ -114,89 +126,108 @@ namespace BeeInterface
         [Category("RJ Code Advance")]
         public int BorderSize
         {
-            get => borderSize;
-            set { if (borderSize == value) return; borderSize = Math.Max(0, value); UpdateRegionPaths(); Invalidate(); }
+            get { return borderSize; }
+            set
+            {
+                if (borderSize == value) return;
+                borderSize = Math.Max(0, value);
+                UpdateRegionPaths();
+                Invalidate();
+            }
         }
 
         [Category("RJ Code Advance")]
         public int BorderRadius
         {
-            get => borderRadius;
-            set { if (borderRadius == value) return; borderRadius = Math.Max(0, value); UpdateRegionPaths(); Invalidate(); }
+            get { return borderRadius; }
+            set
+            {
+                if (borderRadius == value) return;
+                borderRadius = Math.Max(0, value);
+                UpdateRegionPaths();
+                Invalidate();
+            }
         }
 
         [Category("RJ Code Advance")]
         public Color BorderColor
         {
-            get => borderColor;
-            set { //if (borderColor == value) return;
-                // if (this.Parent == null) return;
-                borderColor = value;//this.Parent.BackColor;
-                Invalidate(); }
+            get { return borderColor; }
+            set
+            {
+                borderColor = value;
+                Invalidate();
+            }
         }
 
         [Category("RJ Code Advance")]
         public Color BackgroundColor
         {
-            get => BackColor;
+            get { return BackColor; }
             set
             {
-                BackColor = value;  Invalidate(); }//if (BackColor == value) return; if (this.Parent == null) return;
-               // BackColor = this.Parent.BackColor;
+                BackColor = value;
+                Invalidate();
+            }
         }
 
         [Category("RJ Code Advance")]
         public Color TextColor
         {
-            get => ForeColor;
-            set { if (ForeColor == value) return; ForeColor = value; Invalidate(); }
+            get { return ForeColor; }
+            set
+            {
+                if (ForeColor == value) return;
+                ForeColor = value;
+                Invalidate();
+            }
         }
 
         [Category("_Corner")]
         public Corner Corner
         {
-            get => _corner;
-            set { if (_corner == value) return; _corner = value; UpdateRegionPaths(); Invalidate(); }
+            get { return _corner; }
+            set
+            {
+                if (_corner == value) return;
+                _corner = value;
+                UpdateRegionPaths();
+                Invalidate();
+            }
         }
 
         [Category("Bool Button Rect")]
         public bool IsRect
         {
-            get => _isRect;
-            set { if (_isRect == value) return; _isRect = value; Invalidate(); }
+            get { return _isRect; }
+            set
+            {
+                if (_isRect == value) return;
+                _isRect = value;
+                UpdateRegionPaths();
+                Invalidate();
+            }
         }
 
         [Category("Bool Button State")]
         public bool IsNotChange
         {
-            get => _isNotChange;
+            get { return _isNotChange; }
             set { _isNotChange = value; }
         }
 
         [Category("Bool Button State")]
         public bool IsUnGroup
         {
-            get => _isUnGroup;
+            get { return _isUnGroup; }
             set { _isUnGroup = value; }
-        }
-
-        [Category("Behavior")]
-        public int DebounceResizeMs
-        {
-            get => _layoutDebounceMs;
-            set
-            {
-                _layoutDebounceMs = Math.Max(0, value);
-                if (!InDesignMode) { EnsureLayoutTimer(); _layoutTimer.Interval = _layoutDebounceMs; }
-            }
         }
 
         public bool IsCLick
         {
-            get => _isClick;
+            get { return _isClick; }
             set
             {
-              //  if (!Global.Initialed) return;
                 if (_isNotChange) return;
                 if (_isClick == value) return;
                 _isClick = value;
@@ -204,26 +235,30 @@ namespace BeeInterface
                 if (_isClick && !_isUnGroup && Parent != null)
                 {
                     foreach (Control c in Parent.Controls)
-                        if (c is RJButton btn && !ReferenceEquals(btn, this))
+                    {
+                        RJButton btn = c as RJButton;
+                        if (btn != null && !object.ReferenceEquals(btn, this))
                             btn.IsCLick = false;
+                    }
                 }
                 Invalidate();
             }
         }
-        private bool _isTouch = false;
+
         [Category("IsTouch")]
         public bool IsTouch
         {
-            get => _isTouch;
-            set { _isTouch = value;this.Invalidate(); }
+            get { return _isTouch; }
+            set { _isTouch = value; Invalidate(); }
         }
+
         // Wrap Image/ImageList/ImageIndex để trigger layout
         public new Image Image
         {
-            get => base.Image;
+            get { return base.Image; }
             set
             {
-                if (!ReferenceEquals(base.Image, value))
+                if (!object.ReferenceEquals(base.Image, value))
                 {
                     base.Image = value;
                     RequestLayout();
@@ -231,12 +266,13 @@ namespace BeeInterface
                 }
             }
         }
+
         public new ImageList ImageList
         {
-            get => base.ImageList;
+            get { return base.ImageList; }
             set
             {
-                if (!ReferenceEquals(base.ImageList, value))
+                if (!object.ReferenceEquals(base.ImageList, value))
                 {
                     base.ImageList = value;
                     RequestLayout();
@@ -244,9 +280,10 @@ namespace BeeInterface
                 }
             }
         }
+
         public new int ImageIndex
         {
-            get => base.ImageIndex;
+            get { return base.ImageIndex; }
             set
             {
                 if (base.ImageIndex != value)
@@ -261,19 +298,14 @@ namespace BeeInterface
         // ===== ctor =====
         public RJButton()
         {
-            //SetStyle(ControlStyles.AllPaintingInWmPaint |
-            //         ControlStyles.UserPaint |
-            //         ControlStyles.OptimizedDoubleBuffer |
-            //         ControlStyles.ResizeRedraw, true);
-
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderSize = 0;
             Size = new Size(180, 60);
-             if (this.Parent != null)
+
+            if (this.Parent != null)
             {
                 borderColor = this.Parent.BackColor;
                 BackColor = this.Parent.BackColor;
-
             }
             else
             {
@@ -281,15 +313,11 @@ namespace BeeInterface
                 borderColor = SystemColors.Control;
             }
 
-
-               
             ForeColor = Color.Black;
-
             _textImageRelation = base.TextImageRelation;
-
-            if (!InDesignMode) EnsureLayoutTimer();
         }
 
+        // ===== Handle / Parent =====
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -297,25 +325,24 @@ namespace BeeInterface
             {
                 if (Parent != null && (BackColor.A < 255 || BackColor == Color.Transparent))
                     BackColor = Parent.BackColor;
+
                 UpdateRegionPaths();
-                RequestLayout();
-                SmoothAncestors(); // auto bật double-buffer cho cha
-            }
-            catch { }
-        }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+                if (_layoutPending)
+                {
+                    _layoutPending = false;
+                    RequestLayout();
+                }
+                else
+                {
+                    RequestLayout();
+                }
+
+                SmoothAncestors();
+            }
+            catch
             {
-                _layoutTimer?.Stop();
-                _layoutTimer?.Dispose();
-                _layoutTimer = null;
-
-                _pathSurface?.Dispose();
-                _pathBorder?.Dispose();
             }
-            base.Dispose(disposing);
         }
 
         protected override void OnCreateControl()
@@ -331,103 +358,142 @@ namespace BeeInterface
             base.OnParentChanged(e);
             SmoothAncestors();
         }
+
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
             if (Visible) SmoothAncestors();
         }
 
-        // ===== Timer =====
-        private void EnsureLayoutTimer()
+        protected override void Dispose(bool disposing)
         {
-            if (_layoutTimer != null) return;
-            _layoutTimer = new System.Windows.Forms.Timer { Interval = _layoutDebounceMs };
-            _layoutTimer.Tick += (s, e) =>
+            if (disposing)
             {
-                _layoutTimer.Stop();
-                _layoutPending = false;
-                if (!IsDisposed) UpdateTextImageLayoutCore();
-            };
+                if (_pathSurface != null) _pathSurface.Dispose();
+                if (_pathBorder != null) _pathBorder.Dispose();
+
+                // Bỏ khỏi queue nếu còn
+                lock (_layoutQueueLock)
+                {
+                    _layoutQueue.Remove(this);
+                }
+            }
+            base.Dispose(disposing);
         }
 
-        // ===== Region/Path (float) =====
+        // ======================= Region & Border Path ===========================
         private void UpdateRegionPaths()
         {
-            var rect = ClientRectangle;
-            if (rect.Width <= 0 || rect.Height <= 0) return;
+            if (_pathSurface != null) { _pathSurface.Dispose(); _pathSurface = null; }
+            if (_pathBorder != null) { _pathBorder.Dispose(); _pathBorder = null; }
 
-            _pathSurface?.Dispose();
-            _pathBorder?.Dispose();
-
-            // ⬇️ bán kính không vượt quá (cạnh ngắn - độ dày viền)/2
-            float maxR = 0.5f * (Math.Min(rect.Width, rect.Height) - BorderSize);
-            float radius = Math.Max(0f, Math.Min(BorderRadius, maxR));
-
-            RectangleF rf = new RectangleF(rect.X, rect.Y, rect.Width, rect.Height);
-            _pathSurface = BuildPath(rf, radius, _corner);
-            Region = new Region(_pathSurface);
-
-            // viền: inset nửa nét
-            float inset = Math.Max(0.5f, BorderSize / 2f);
-            RectangleF rb = RectangleF.Inflate(rf, -inset, -inset);
-            float radiusBorder = Math.Max(0f, radius - inset);
-            _pathBorder = BuildPath(rb, radiusBorder, _corner);
-          
-        }
-
-        private static GraphicsPath BuildPath(RectangleF rect, float radius, Corner corner)
-        {
-            var path = new GraphicsPath();
-            if (radius <= 0f || corner == Corner.None)
+            Rectangle rect = this.ClientRectangle;
+            if (rect.Width <= 0 || rect.Height <= 0)
             {
-                path.AddRectangle(rect);
-                path.CloseFigure();
-                return path;
+                this.Region = null;
+                return;
             }
 
-            float d = radius * 2f;
+            // ⬅  THÊM: _corner == Corner.None coi như góc vuông
+            if (_isRect || borderRadius <= 0 || _corner == Corner.None)
+            {
+                _pathSurface = new GraphicsPath();
+                _pathSurface.AddRectangle(rect);
 
-            switch (corner)
+                Rectangle b = Rectangle.Inflate(rect, -1, -1);
+                _pathBorder = new GraphicsPath();
+                _pathBorder.AddRectangle(b);
+
+                this.Region = new Region(_pathSurface);
+                return;
+            }
+
+            _pathSurface = CreateRoundedPath(rect, borderRadius, _corner);
+
+            Rectangle innerRect = Rectangle.Inflate(rect, -borderSize, -borderSize);
+            int innerRadius = borderRadius - borderSize;
+            if (innerRadius < 1) innerRadius = 1;
+            _pathBorder = CreateRoundedPath(innerRect, innerRadius, _corner);
+
+            this.Region = new Region(_pathSurface);
+        }
+        public int DebounceResizeMs = 0;
+
+        private GraphicsPath CreateRoundedPath(Rectangle rect, int radius, Corner corners)
+        {
+            GraphicsPath path = new GraphicsPath();
+            int d = radius * 2;
+
+            bool tl = false;
+            bool tr = false;
+            bool bl = false;
+            bool br = false;
+
+            // Map theo enum Corner của bạn
+            switch (corners)
             {
                 case Corner.Both:
-                    path.AddArc(rect.X, rect.Y, d, d, 180, 90);
-                    path.AddLine(rect.X + radius, rect.Y, rect.Right - radius, rect.Y);
-                    path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-                    path.AddLine(rect.Right, rect.Y + radius, rect.Right, rect.Bottom - radius);
-                    path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-                    path.AddLine(rect.Right - radius, rect.Bottom, rect.X + radius, rect.Bottom);
-                    path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-                    path.AddLine(rect.X, rect.Bottom - radius, rect.X, rect.Y + radius);
+                    tl = tr = bl = br = true;
                     break;
 
                 case Corner.Left:
-                    path.AddArc(rect.X, rect.Y, d, d, 180, 90);
-                    path.AddLine(rect.X + radius, rect.Y, rect.Right, rect.Y);
-                    path.AddLine(rect.Right, rect.Y, rect.Right, rect.Bottom);
-                    path.AddLine(rect.Right, rect.Bottom, rect.X + radius, rect.Bottom);
-                    path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-                    path.AddLine(rect.X, rect.Bottom - radius, rect.X, rect.Y + radius);
+                    tl = bl = true;
                     break;
 
                 case Corner.Right:
-                    path.AddLine(rect.X, rect.Y, rect.Right - radius, rect.Y);
-                    path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-                    path.AddLine(rect.Right, rect.Y + radius, rect.Right, rect.Bottom - radius);
-                    path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-                    path.AddLine(rect.Right - radius, rect.Bottom, rect.X, rect.Bottom);
-                    path.AddLine(rect.X, rect.Bottom, rect.X, rect.Y);
+                    tr = br = true;
                     break;
+
+                case Corner.Top:
+                    tl = tr = true;
+                    break;
+
+                case Corner.Bottom:
+                    bl = br = true;
+                    break;
+
+                case Corner.None:
+                default:
+                    // Không bo góc, chỉ vẽ rectangle
+                    path.AddRectangle(rect);
+                    path.CloseFigure();
+                    return path;
             }
+
+            // Top-left
+            if (tl)
+                path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+            else
+                path.AddLine(rect.X, rect.Y, rect.X + radius, rect.Y);
+
+            // Top-right
+            if (tr)
+                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+            else
+                path.AddLine(rect.Right - radius, rect.Y, rect.Right, rect.Y);
+
+            // Bottom-right
+            if (br)
+                path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+            else
+                path.AddLine(rect.Right, rect.Bottom - radius, rect.Right, rect.Bottom);
+
+            // Bottom-left
+            if (bl)
+                path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+            else
+                path.AddLine(rect.X, rect.Bottom, rect.X, rect.Bottom - radius);
 
             path.CloseFigure();
             return path;
         }
 
-        // ===== Layout =====
+        // ===== Layout scheduling: global queue + Application.Idle =====
         private void RequestLayout()
         {
             if (IsDisposed) return;
 
+            // Design mode: layout trực tiếp
             if (InDesignMode)
             {
                 UpdateTextImageLayoutCore();
@@ -435,45 +501,78 @@ namespace BeeInterface
                 return;
             }
 
-            EnsureLayoutTimer();
-
-            if (!IsHandleCreated || !Visible)
+            // Handle chưa tạo → đánh dấu chờ
+            if (!IsHandleCreated)
             {
                 _layoutPending = true;
-                _layoutTimer.Stop();
-                _layoutTimer.Start();
                 return;
             }
 
-            if (_layoutDebounceMs > 0)
+            // Thêm vào queue
+            lock (_layoutQueueLock)
             {
-                _layoutPending = true;
-                _layoutTimer.Stop();
-                _layoutTimer.Interval = _layoutDebounceMs;
-                _layoutTimer.Start();
-            }
-            else
-            {
-                UpdateTextImageLayoutCore();
+                _layoutQueue.Add(this);
+
+                if (!_layoutIdleAttached)
+                {
+                    _layoutIdleAttached = true;
+                    Application.Idle += OnGlobalLayoutIdle;
+                }
             }
         }
 
+        private static void OnGlobalLayoutIdle(object sender, EventArgs e)
+        {
+            RJButton[] buttons;
+
+            lock (_layoutQueueLock)
+            {
+                if (_layoutQueue.Count == 0)
+                {
+                    Application.Idle -= OnGlobalLayoutIdle;
+                    _layoutIdleAttached = false;
+                    return;
+                }
+
+                buttons = new RJButton[_layoutQueue.Count];
+                _layoutQueue.CopyTo(buttons);
+                _layoutQueue.Clear();
+            }
+
+            // Đang ở UI thread
+            foreach (RJButton btn in buttons)
+            {
+                if (btn == null || btn.IsDisposed) continue;
+                if (!btn.IsHandleCreated)
+                {
+                    btn._layoutPending = true;
+                    continue;
+                }
+                btn.UpdateTextImageLayoutCore();
+            }
+        }
+
+        // ===== Text+Image layout core =====
         private void UpdateTextImageLayoutCore()
         {
             _layoutPending = false;
 
-            var bounds = ClientRectangle;
-            if (bounds.Width <= 0 || bounds.Height <= 0) { Invalidate(); return; }
+            Rectangle bounds = ClientRectangle;
+            if (bounds.Width <= 0 || bounds.Height <= 0)
+            {
+                Invalidate();
+                return;
+            }
 
-            var inner = Rectangle.Inflate(bounds,
+            Rectangle inner = Rectangle.Inflate(bounds,
                 -ContentPadding.Horizontal / 2,
                 -ContentPadding.Vertical / 2);
 
-            var img = GetCurrentImage();
+            Image img = GetCurrentImage();
             _imgRect = Rectangle.Empty;
             _textRect = Rectangle.Empty;
 
-            int gap = string.IsNullOrEmpty(Text) || img == null ? 0 : ImageTextSpacing;
+            int gap = (string.IsNullOrEmpty(Text) || img == null) ? 0 : ImageTextSpacing;
 
             if (img != null && !string.IsNullOrEmpty(Text))
             {
@@ -481,8 +580,8 @@ namespace BeeInterface
                 {
                     case TextImageRelation.ImageAboveText:
                         {
-                            var imgSize = FitRect(img.Size, inner).Size;
-                            var txtSize = MeasureTextSize(Text, Font, inner.Width);
+                            Size imgSize = FitRect(img.Size, inner).Size;
+                            Size txtSize = MeasureTextSize(Text, Font, inner.Width);
 
                             int totalH = imgSize.Height + gap + txtSize.Height;
                             int startY = inner.Y + Math.Max(0, (inner.Height - totalH) / 2);
@@ -502,8 +601,8 @@ namespace BeeInterface
 
                     case TextImageRelation.TextAboveImage:
                         {
-                            var imgSize = FitRect(img.Size, inner).Size;
-                            var txtSize = MeasureTextSize(Text, Font, inner.Width);
+                            Size imgSize = FitRect(img.Size, inner).Size;
+                            Size txtSize = MeasureTextSize(Text, Font, inner.Width);
 
                             int totalH = txtSize.Height + gap + imgSize.Height;
                             int startY = inner.Y + Math.Max(0, (inner.Height - totalH) / 2);
@@ -520,9 +619,9 @@ namespace BeeInterface
 
                     case TextImageRelation.ImageBeforeText:
                         {
-                            var imgSize = FitRect(img.Size, inner).Size;
+                            Size imgSize = FitRect(img.Size, inner).Size;
                             int txtMaxW = Math.Max(1, inner.Width - imgSize.Width - gap);
-                            var txtSize = MeasureTextSize(Text, Font, txtMaxW);
+                            Size txtSize = MeasureTextSize(Text, Font, txtMaxW);
 
                             int totalW = imgSize.Width + gap + txtSize.Width;
                             int startX = inner.X + Math.Max(0, (inner.Width - totalW) / 2);
@@ -537,9 +636,9 @@ namespace BeeInterface
 
                     case TextImageRelation.TextBeforeImage:
                         {
-                            var imgSize = FitRect(img.Size, inner).Size;
+                            Size imgSize = FitRect(img.Size, inner).Size;
                             int txtMaxW = Math.Max(1, inner.Width - imgSize.Width - gap);
-                            var txtSize = MeasureTextSize(Text, Font, txtMaxW);
+                            Size txtSize = MeasureTextSize(Text, Font, txtMaxW);
 
                             int totalW = txtSize.Width + gap + imgSize.Width;
                             int startX = inner.X + Math.Max(0, (inner.Width - totalW) / 2);
@@ -575,17 +674,22 @@ namespace BeeInterface
             }
 
             Invalidate();
-            Parent?.Invalidate(Bounds, true);
+            if (Parent != null)
+                Parent.Invalidate(Bounds, true);
         }
 
         // ===== đo chữ & auto-font =====
         private Size MeasureTextSize(string text, Font font, int maxWidth)
         {
-            var flags = TextFormatFlags.NoPadding |
-                        (Multiline ? (TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl)
-                                   : TextFormatFlags.SingleLine);
-            var s = TextRenderer.MeasureText(text, font, new Size(Math.Max(1, maxWidth), int.MaxValue), flags);
-            if (!Multiline) s.Height = Math.Max(font.Height, s.Height);
+            TextFormatFlags flags = TextFormatFlags.NoPadding;
+            if (Multiline)
+                flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+            else
+                flags |= TextFormatFlags.SingleLine;
+
+            Size s = TextRenderer.MeasureText(text, font, new Size(Math.Max(1, maxWidth), int.MaxValue), flags);
+            if (!Multiline)
+                s.Height = Math.Max(font.Height, s.Height);
             return s;
         }
 
@@ -597,9 +701,11 @@ namespace BeeInterface
             int maxW = Math.Max(1, (int)(area.Width * AutoFontWidthRatio));
             int maxH = Math.Max(1, (int)(area.Height * AutoFontHeightRatio));
 
-            var flags = TextFormatFlags.NoPadding |
-                        (Multiline ? (TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl)
-                                   : TextFormatFlags.SingleLine);
+            TextFormatFlags flags = TextFormatFlags.NoPadding;
+            if (Multiline)
+                flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+            else
+                flags |= TextFormatFlags.SingleLine;
 
             float best = FindMaxFontSizeGDI(Text, this.Font, maxW, maxH, AutoFontMin, AutoFontMax, flags);
             if (Math.Abs(this.Font.Size - best) > 0.5f)
@@ -610,17 +716,26 @@ namespace BeeInterface
                                                 float min, float max, TextFormatFlags flags)
         {
             if (string.IsNullOrEmpty(text)) return baseFont.Size;
-            float lo = Math.Max(1f, min), hi = Math.Max(lo, max), best = lo;
-            var proposed = new Size(Math.Max(1, maxW), int.MaxValue);
+            float lo = Math.Max(1f, min);
+            float hi = Math.Max(lo, max);
+            float best = lo;
+            Size proposed = new Size(Math.Max(1, maxW), int.MaxValue);
 
             while (hi - lo > 0.5f)
             {
                 float mid = (lo + hi) / 2f;
-                using (var f = new Font(baseFont.FontFamily, mid, baseFont.Style))
+                using (Font f = new Font(baseFont.FontFamily, mid, baseFont.Style))
                 {
                     Size sz = TextRenderer.MeasureText(text, f, proposed, flags);
-                    if (sz.Width <= maxW && sz.Height <= maxH) { best = mid; lo = mid; }
-                    else hi = mid;
+                    if (sz.Width <= maxW && sz.Height <= maxH)
+                    {
+                        best = mid;
+                        lo = mid;
+                    }
+                    else
+                    {
+                        hi = mid;
+                    }
                 }
             }
             return best;
@@ -629,10 +744,22 @@ namespace BeeInterface
         // ===== Auto Image helpers =====
         private Image GetCurrentImage()
         {
-            if (!Enabled) return ImageDisabled ?? base.Image ?? ImageNormal;
-            if (_isPressed && MouseButtons == MouseButtons.Left) return ImagePressed ?? ImageHover ?? ImageNormal ?? base.Image;
-            if (_isHovered) return ImageHover ?? ImageNormal ?? base.Image;
-            return ImageNormal ?? base.Image;
+            if (!Enabled) return (ImageDisabled != null) ? ImageDisabled : (base.Image ?? ImageNormal);
+            if (_isPressed && MouseButtons == MouseButtons.Left)
+            {
+                if (ImagePressed != null) return ImagePressed;
+                if (ImageHover != null) return ImageHover;
+                if (ImageNormal != null) return ImageNormal;
+                return base.Image;
+            }
+            if (_isHovered)
+            {
+                if (ImageHover != null) return ImageHover;
+                if (ImageNormal != null) return ImageNormal;
+                return base.Image;
+            }
+            if (ImageNormal != null) return ImageNormal;
+            return base.Image;
         }
 
         private Color GetCurrentTintColor()
@@ -647,10 +774,14 @@ namespace BeeInterface
         {
             if (!AutoImageTint || tint.IsEmpty) return null;
 
-            float r = tint.R / 255f, g = tint.G / 255f, b = tint.B / 255f;
-            float a = Math.Max(0f, Math.Min(1f, opacity));
+            float r = tint.R / 255f;
+            float g = tint.G / 255f;
+            float b = tint.B / 255f;
+            float a = opacity;
+            if (a < 0f) a = 0f;
+            if (a > 1f) a = 1f;
 
-            var cm = new ColorMatrix(new float[][]
+            ColorMatrix cm = new ColorMatrix(new float[][]
             {
                 new float[] {0, 0, 0, 0, r},
                 new float[] {0, 0, 0, 0, g},
@@ -659,7 +790,7 @@ namespace BeeInterface
                 new float[] {0, 0, 0, 0, 1}
             });
 
-            var ia = new ImageAttributes();
+            ImageAttributes ia = new ImageAttributes();
             ia.SetColorMatrix(cm, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             ia.SetWrapMode(WrapMode.TileFlipXY);
             return ia;
@@ -670,39 +801,50 @@ namespace BeeInterface
             if (!AutoImage || src.Width <= 0 || src.Height <= 0 || area.Width <= 0 || area.Height <= 0)
                 return Rectangle.Empty;
 
-            var a = Rectangle.Inflate(area, -ImagePadding.Horizontal / 2, -ImagePadding.Vertical / 2);
+            Rectangle a = Rectangle.Inflate(area, -ImagePadding.Horizontal / 2, -ImagePadding.Vertical / 2);
             int maxW = (int)Math.Round(a.Width * AutoImageMaxRatio);
             int maxH = (int)Math.Round(a.Height * AutoImageMaxRatio);
             if (maxW <= 0 || maxH <= 0) return Rectangle.Empty;
 
             Size target;
-            double rw = (double)maxW / src.Width;
-            double rh = (double)maxH / src.Height;
+            double rw = (double)maxW / (double)src.Width;
+            double rh = (double)maxH / (double)src.Height;
 
             switch (AutoImageMode)
             {
                 case ImageFitMode.Contain:
                     {
-                        double r = Math.Min(rw, rh);
-                        target = new Size(Math.Max(1, (int)Math.Round(src.Width * r)),
-                                          Math.Max(1, (int)Math.Round(src.Height * r)));
+                        double r = rw < rh ? rw : rh;
+                        target = new Size(
+                            Math.Max(1, (int)Math.Round(src.Width * r)),
+                            Math.Max(1, (int)Math.Round(src.Height * r)));
                         break;
                     }
                 case ImageFitMode.Cover:
                     {
-                        double r = Math.Max(rw, rh);
-                        target = new Size(Math.Max(1, (int)Math.Round(src.Width * r)),
-                                          Math.Max(1, (int)Math.Round(src.Height * r)));
+                        double r = rw > rh ? rw : rh;
+                        target = new Size(
+                            Math.Max(1, (int)Math.Round(src.Width * r)),
+                            Math.Max(1, (int)Math.Round(src.Height * r)));
                         if (target.Width > maxW) target.Width = maxW;
                         if (target.Height > maxH) target.Height = maxH;
                         break;
                     }
                 case ImageFitMode.Fill:
-                    target = new Size(maxW, maxH); break;
+                    {
+                        target = new Size(maxW, maxH);
+                        break;
+                    }
                 case ImageFitMode.FitWidth:
-                    target = new Size(maxW, Math.Max(1, (int)Math.Round(src.Height * rw))); break;
+                    {
+                        target = new Size(maxW, Math.Max(1, (int)Math.Round(src.Height * rw)));
+                        break;
+                    }
                 case ImageFitMode.FitHeight:
-                    target = new Size(Math.Max(1, (int)Math.Round(src.Width * rh)), maxH); break;
+                    {
+                        target = new Size(Math.Max(1, (int)Math.Round(src.Width * rh)), maxH);
+                        break;
+                    }
                 default:
                     return Rectangle.Empty;
             }
@@ -713,102 +855,130 @@ namespace BeeInterface
         }
 
         // ===== Painting =====
-        protected override void OnPaintBackground(PaintEventArgs e)
+        protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            using (var b = new SolidBrush(this.BackColor))
-                e.Graphics.FillRectangle(b, this.ClientRectangle);
+            using (SolidBrush b = new SolidBrush(this.BackColor))
+            {
+                pevent.Graphics.FillRectangle(b, this.ClientRectangle);
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            var g = e.Graphics;
+            Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            var bounds = ClientRectangle;
+            Rectangle bounds = ClientRectangle;
             if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
             // Gradient theo state
-            Color top, mid, bot;
-            if (!Enabled) top = mid = bot = BackColor;
+            Color top;
+            Color mid;
+            Color bot;
+
+            if (!Enabled)
+            {
+                top = BackColor;
+                mid = BackColor;
+                bot = BackColor;
+            }
             else if (_isClick)
             {
                 top = ClickTopColor;
                 mid = ClickMidColor;
                 bot = ClickBotColor;
             }
-            else if (_isHovered|| _isTouch) { top = Color.FromArgb(208, 211, 213); mid = Color.FromArgb(193, 197, 199); bot = Color.FromArgb(179, 182, 185); }
-            else { top = Color.FromArgb(245, 248, 251); mid = Color.FromArgb(218, 221, 224); bot = Color.FromArgb(199, 203, 206); }
-
-            using (var brush = new LinearGradientBrush(bounds, top, bot, LinearGradientMode.Vertical))
+            else if (_isHovered || _isTouch)
             {
-                var cb = new ColorBlend
-                {
-                    Colors = new[] { top, mid, bot },
-                    Positions = new[] { 0f, 0.5f, 1f }
-                };
+                top = Color.FromArgb(208, 211, 213);
+                mid = Color.FromArgb(193, 197, 199);
+                bot = Color.FromArgb(179, 182, 185);
+            }
+            else
+            {
+                top = Color.FromArgb(245, 248, 251);
+                mid = Color.FromArgb(218, 221, 224);
+                bot = Color.FromArgb(199, 203, 206);
+            }
+
+            using (LinearGradientBrush brush = new LinearGradientBrush(bounds, top, bot, LinearGradientMode.Vertical))
+            {
+                ColorBlend cb = new ColorBlend();
+                cb.Colors = new Color[] { top, mid, bot };
+                cb.Positions = new float[] { 0f, 0.5f, 1f };
                 brush.InterpolationColors = cb;
 
-                if (_pathSurface != null) g.FillPath(brush, _pathSurface);
-                else g.FillRectangle(brush, bounds);
+                if (_pathSurface != null)
+                    g.FillPath(brush, _pathSurface);
+                else
+                    g.FillRectangle(brush, bounds);
             }
 
             // Image
-            var img = GetCurrentImage();
+            Image img = GetCurrentImage();
             if (img != null && _imgRect.Width > 0 && _imgRect.Height > 0)
             {
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                var tintColor = GetCurrentTintColor();
-                using (var ia = GetTintAttributes(tintColor, ImageTintOpacity))
+                Color tintColor = GetCurrentTintColor();
+                using (ImageAttributes ia = GetTintAttributes(tintColor, ImageTintOpacity))
                 {
                     if (ia == null)
+                    {
                         g.DrawImage(img, _imgRect);
+                    }
                     else
-                        g.DrawImage(img, _imgRect, 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, ia);
+                    {
+                        g.DrawImage(img, _imgRect,
+                            0, 0, img.Width, img.Height,
+                            GraphicsUnit.Pixel, ia);
+                    }
                 }
             }
 
             // Text
             if (_textRect.Width > 0 && _textRect.Height > 0 && !string.IsNullOrEmpty(Text))
             {
-                var baseFlags = TextFormatFlags.NoPadding |
-                                (Multiline ? (TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl)
-                                           : TextFormatFlags.SingleLine) |
-                                TextFormatFlags.EndEllipsis;
+                TextFormatFlags baseFlags = TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis;
+                if (Multiline)
+                    baseFlags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+                else
+                    baseFlags |= TextFormatFlags.SingleLine;
 
-                var alignFlags = MapTextAlign(TextAlign);
+                TextFormatFlags alignFlags = MapTextAlign(TextAlign);
                 Rectangle drawRect = _textRect;
 
                 if (Multiline)
                 {
-                    Size measured = TextRenderer.MeasureText(Text, Font, new Size(_textRect.Width, int.MaxValue),
-                                                             TextFormatFlags.NoPadding | TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
-                    int h = Math.Min(measured.Height, _textRect.Height);
-                    if (IsMiddle(TextAlign)) drawRect = new Rectangle(_textRect.X, _textRect.Y + (_textRect.Height - h) / 2, _textRect.Width, h);
-                    else if (IsBottom(TextAlign)) drawRect = new Rectangle(_textRect.X, _textRect.Bottom - h, _textRect.Width, h);
-                    else drawRect = new Rectangle(_textRect.X, _textRect.Y, _textRect.Width, h);
+                    Size measured = TextRenderer.MeasureText(
+                        Text, Font,
+                        new Size(_textRect.Width, int.MaxValue),
+                        TextFormatFlags.NoPadding | TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
+
+                    int h = measured.Height;
+                    if (h > _textRect.Height) h = _textRect.Height;
+
+                    if (IsMiddle(TextAlign))
+                        drawRect = new Rectangle(_textRect.X, _textRect.Y + (_textRect.Height - h) / 2, _textRect.Width, h);
+                    else if (IsBottom(TextAlign))
+                        drawRect = new Rectangle(_textRect.X, _textRect.Bottom - h, _textRect.Width, h);
+                    else
+                        drawRect = new Rectangle(_textRect.X, _textRect.Y, _textRect.Width, h);
                 }
 
                 TextRenderer.DrawText(g, Text, Font, drawRect, ForeColor, baseFlags | alignFlags);
             }
+
+            // Border
             if (borderSize > 0 && _pathBorder != null)
             {
-                g.PixelOffsetMode = PixelOffsetMode.Half;           // ⬅ nét 1px sắc
-                using (var pen = new Pen(borderColor, borderSize))
+                g.PixelOffsetMode = PixelOffsetMode.Half;
+                using (Pen pen = new Pen(borderColor, borderSize))
                 {
                     pen.Alignment = PenAlignment.Inset;
-                    pen.LineJoin = LineJoin.Round;                 // ⬅ bo chỗ nối path
+                    pen.LineJoin = LineJoin.Round;
                     g.DrawPath(pen, _pathBorder);
                 }
             }
-            //// Border
-            //if (borderSize > 0 && _pathBorder != null)
-            //{
-            //    using (var pen = new Pen(borderColor, borderSize))
-            //    {
-            //        pen.Alignment = PenAlignment.Inset;
-            //        g.DrawPath(pen, _pathBorder);
-            //    }
-            //}
         }
 
         // ===== Overrides =====
@@ -818,61 +988,71 @@ namespace BeeInterface
             UpdateRegionPaths();
             RequestLayout();
         }
+
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
             RequestLayout();
             Invalidate();
-            Parent?.Invalidate(Bounds, true);
-            Parent?.PerformLayout();
+            if (Parent != null)
+            {
+                Parent.Invalidate(Bounds, true);
+                Parent.PerformLayout();
+            }
         }
-        //protected override void OnVisibleChanged(EventArgs e)
-        //{
-        //    base.OnVisibleChanged(e);
-        //    if (Visible)
-        //    {
-        //        RequestLayout();
-        //        Invalidate();
-        //        Parent?.Invalidate(Bounds, true);
-        //        Parent?.PerformLayout();
-        //    }
-        //}
+
         protected override void OnMarginChanged(EventArgs e)
         {
             base.OnMarginChanged(e);
             Invalidate();
         }
+
         protected override void OnClick(EventArgs e)
         {
-          //  if (!Global.Initialed) return;
-            if (IsUnGroup) IsCLick = !IsCLick; else IsCLick = true;
+            // if (!Global.Initialed) return;
+            if (IsUnGroup)
+                IsCLick = !IsCLick;
+            else
+                IsCLick = true;
+
             base.OnClick(e);
         }
+
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             base.OnMouseDown(mevent);
-            _isPressed = true; Invalidate();
+            _isPressed = true;
+            Invalidate();
         }
+
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
             base.OnMouseUp(mevent);
-            _isPressed = false; Invalidate();
+            _isPressed = false;
+            Invalidate();
         }
+
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            _isPressed = false; _isHovered = false; Invalidate();
+            _isPressed = false;
+            _isHovered = false;
+            Invalidate();
         }
+
         protected override void OnMouseMove(MouseEventArgs mevent)
         {
             base.OnMouseMove(mevent);
-            _isHovered = true; Invalidate();
+            _isHovered = true;
+            Invalidate();
         }
+
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
             RequestLayout();
         }
+
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
@@ -887,40 +1067,61 @@ namespace BeeInterface
                 case ContentAlignment.TopLeft: return TextFormatFlags.Top | TextFormatFlags.Left;
                 case ContentAlignment.TopCenter: return TextFormatFlags.Top | TextFormatFlags.HorizontalCenter;
                 case ContentAlignment.TopRight: return TextFormatFlags.Top | TextFormatFlags.Right;
+
                 case ContentAlignment.MiddleLeft: return TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
                 case ContentAlignment.MiddleCenter: return TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
                 case ContentAlignment.MiddleRight: return TextFormatFlags.VerticalCenter | TextFormatFlags.Right;
+
                 case ContentAlignment.BottomLeft: return TextFormatFlags.Bottom | TextFormatFlags.Left;
                 case ContentAlignment.BottomCenter: return TextFormatFlags.Bottom | TextFormatFlags.HorizontalCenter;
                 case ContentAlignment.BottomRight: return TextFormatFlags.Bottom | TextFormatFlags.Right;
-                default: return TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
             }
+            return TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter;
         }
-        private static bool IsMiddle(ContentAlignment a) =>
-            a == ContentAlignment.MiddleLeft || a == ContentAlignment.MiddleCenter || a == ContentAlignment.MiddleRight;
-        private static bool IsBottom(ContentAlignment a) =>
-            a == ContentAlignment.BottomLeft || a == ContentAlignment.BottomCenter || a == ContentAlignment.BottomRight;
 
-        // ==== Auto enable double-buffer cho CHA (Panel/TLP/...) ====
+        private static bool IsMiddle(ContentAlignment a)
+        {
+            return a == ContentAlignment.MiddleLeft ||
+                   a == ContentAlignment.MiddleCenter ||
+                   a == ContentAlignment.MiddleRight;
+        }
+
+        private static bool IsBottom(ContentAlignment a)
+        {
+            return a == ContentAlignment.BottomLeft ||
+                   a == ContentAlignment.BottomCenter ||
+                   a == ContentAlignment.BottomRight;
+        }
+
         private static void TryEnableDoubleBuffer(Control c)
         {
             try
             {
-                var t = c.GetType();
-                t.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)
-                 ?.SetValue(c, true, null);
-                t.GetProperty("ResizeRedraw", BindingFlags.Instance | BindingFlags.NonPublic)
-                 ?.SetValue(c, true, null);
+                Type t = c.GetType();
+                PropertyInfo pDb = t.GetProperty("DoubleBuffered",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                if (pDb != null) pDb.SetValue(c, true, null);
+
+                PropertyInfo pRr = t.GetProperty("ResizeRedraw",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                if (pRr != null) pRr.SetValue(c, true, null);
 
                 if (c.BackColor == Color.Transparent && c.Parent != null)
                     c.BackColor = c.Parent.BackColor;
             }
-            catch { /* ignore */ }
+            catch
+            {
+            }
         }
+
         private void SmoothAncestors()
         {
-            for (Control p = this.Parent; p != null; p = p.Parent)
+            Control p = this.Parent;
+            while (p != null)
+            {
                 TryEnableDoubleBuffer(p);
+                p = p.Parent;
+            }
         }
     }
 }

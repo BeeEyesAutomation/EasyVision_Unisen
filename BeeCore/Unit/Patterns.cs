@@ -34,6 +34,17 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public void ReSetAngle()
+        {
+            if (Angle > 360) Angle = 360;
+            if (Angle == 0)
+            {
+                Angle = 1;
+            }
+            float angle = (rotCrop._rectRotation) - (rotArea._rectRotation);
+            AngleLower = angle - Angle;
+            AngleUper = angle + Angle;
+        }
         public bool IsIni = false;
         public int Index = -1;
        

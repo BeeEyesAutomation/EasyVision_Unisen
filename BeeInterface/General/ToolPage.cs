@@ -139,7 +139,8 @@ namespace BeeInterface
 
                 }
                 btn.Enabled = itemNew.IsEn;
-             
+                btn.IsUnGroup = false;
+                btn.IsTouch = false;
                 itemNew.btn = btn;
 
             }

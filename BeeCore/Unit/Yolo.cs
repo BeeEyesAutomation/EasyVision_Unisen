@@ -675,14 +675,40 @@ namespace BeeCore
                                     }
                                     else
                                     {
-                                        Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
-                                        if (Area >= item.ValueArea * 100)
-                                            IsOK = true;
+                                        if (item.Name == "BI_CHI")
+                                        {
+                                            Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
+                                            if (Area >= item.ValueArea * 100)
+                                            {
+                                                IsOK = true;
+                                            }    
+                                            else
+                                            {
+                                                if (item.IsCounter)
+                                                {
+                                                    int count = labelList.Count(l => l == label);
+                                                    if (count >= item.ValueCounter)
+                                                        IsOK = true;
+                                                    else
+                                                        IsOK = false;
+                                                }
+
+                                            }    
+                                        }
+                                        else
+                                        {
+                                            Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
+                                            if (Area >= item.ValueArea * 100)
+                                                IsOK = true;
+                                        }    
+                                          
                                       
                                     }
-                                    
+
                                 }
-                                if (item.IsCounter)
+                                
+                                if (item.Name != "BI_CHI")
+                                    if (item.IsCounter)
                                 {
                                     int count = labelList.Count(l => l == label);
                                     if (count >= item.ValueCounter)
@@ -1219,14 +1245,18 @@ namespace BeeCore
                       //  gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
-                        if (!Global.IsRun || Global.Config.IsShowDetail)
+                        if (!Global.IsRun  || Global.Config.IsShowDetail)
                             if (ResultItem[i].matProcess != null && !ResultItem[i].matProcess.Empty())
                             {
                                 Draws.DrawMatInRectRotateNotMatrix(gc, ResultItem[i].matProcess, rot, clShow, Global.Config.Opacity / 100.0f);
 
                             }
                         font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-                        Draws.Box3Label(gc, rot._rect, ResultItem[i].Name, Math.Round(ResultItem[i].Score, 1) + "%", (int)(ResultItem[i].Area/100) + " px ("+Math.Round( ResultItem[i].Percent) + "%)", font, clShow, brushText, 30,Global.Config.ThicknessLine, Global.Config.FontSize, 1, Global.Config.IsShowDetail);
+                        String label = ResultItem[i].Name;
+                        String valueScore = Math.Round(ResultItem[i].Score, 1) + "%";
+                        if (!Global.Config.IsShowScore) valueScore = "";
+                        if (!Global.Config.IsShowLabel) label = "";
+                        Draws.Box3Label(gc, rot._rect, label, valueScore, (int)(ResultItem[i].Area/100) + "px", font, clShow, brushText, 30,Global.Config.ThicknessLine, Global.Config.FontSize, 1, Global.Config.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }

@@ -1,6 +1,6 @@
 #define VER_MAJOR 1
 #define VER_MINOR 1
-#define VER_BUILD 232
+#define VER_BUILD 233
 #define VER_REVISION 251126
 
 #define VER_FILEVERSION_STR "1.1.0.1"

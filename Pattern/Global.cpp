@@ -409,19 +409,39 @@ void CommonPlus::DrawShapeMaskIntoWithSize(
     }
 }
 // Đặt true nếu RectRotationDeg của RectRotateCli là CW (thuận chiều kim)
-static constexpr bool ANGLE_CW = false;
+//static constexpr bool ANGLE_CW = false;
 
 // Chuẩn hoá: đưa width thành cạnh ngang, góc về (-180,180]
-static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
+//static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
+//{
+//    if (s.width < s.height) {
+//        std::swap(s.width, s.height);
+//        angDeg += 90.0;
+//    }
+//    while (angDeg <= -180.0) angDeg += 360.0;
+//    while (angDeg > 180.0) angDeg -= 360.0;
+//}
+// ---- Góc của RectRotationDeg là CW (camera) -> OpenCV cần CCW ----
+// -> BẮT BUỘC phải đảo dấu khi dùng warpAffine
+static inline double ConvertCWtoCCW(double degCW)
 {
-    if (s.width < s.height) {
-        std::swap(s.width, s.height);
-        angDeg += 90.0;
-    }
-    while (angDeg <= -180.0) angDeg += 360.0;
-    while (angDeg > 180.0) angDeg -= 360.0;
+    return -degCW;
 }
 
+// ---- Chuẩn hoá góc về [-90..90] nhưng KHÔNG swap width/height ----
+static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
+{
+    // đưa về [-180 .. 180]
+    while (angDeg <= -180.0) angDeg += 360.0;
+    while (angDeg > 180.0)   angDeg -= 360.0;
+
+    // đưa về [-90 .. 90] nhưng không swap size
+    if (angDeg > 90)      angDeg -= 180;
+    else if (angDeg < -90) angDeg += 180;
+}
+
+
+// ---- RUN CROP CHUẨN KHÔNG BAO GIỜ XOAY SAI ----
 void CommonPlus::RunCrop(
     const cv::Mat& src,
     const RectRotateCli% rr,
@@ -429,50 +449,50 @@ void CommonPlus::RunCrop(
     bool returnMaskOnly,
     cv::Mat& out)
 {
-    // 1) Anchor & size theo shape (hàm của bạn)
+    // 1) Lấy anchor, size
     cv::Point2f worldAnchor, localCenter;
     cv::Size2f  rectSize;
     GetAnchorSizeFor(rr, worldAnchor, rectSize, localCenter);
 
-    // --- GÓC SỬ DỤNG ĐỂ XOAY ẢNH ---
-    // Chuyển sang CCW nếu dữ liệu đầu vào là CW
-    double angleUsed = rr.RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0);
+    // 2) Convert góc CW -> CCW cho OpenCV
+    double angleUsed = ConvertCWtoCCW(rr.RectRotationDeg);
 
-    // Luôn đưa patch ra ngang theo width
+    // 3) Normalize góc để patch nằm ngang
     NormalizeSizeAndAngle(rectSize, angleUsed);
 
-    // Góc của shape bên trong patch (sau khi đã xoay ảnh)
+    // 4) Góc shape bên trong patch (sau khi ảnh xoay ngược lại)
     float angleInPatchCrop = static_cast<float>(
-        rr.RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0) - angleUsed
+        ConvertCWtoCCW(rr.RectRotationDeg) - angleUsed
         );
-    if (angleInPatchCrop > 180.f)  angleInPatchCrop -= 360.f;
-    if (angleInPatchCrop < -180.f) angleInPatchCrop += 360.f;
+   /* if (angleInPatchCrop > 180)  angleInPatchCrop -= 360;
+    if (angleInPatchCrop < -180) angleInPatchCrop += 360;*/
 
     const cv::Point2f anchor(worldAnchor.x, worldAnchor.y);
 
-    // 2) Warp quanh anchor (xoay CCW theo OpenCV)
+    // 5) Warp ảnh theo anchor
     cv::Mat M = cv::getRotationMatrix2D(anchor, angleUsed, 1.0);
     cv::Mat warped;
     cv::warpAffine(
         src, warped, M, src.size(),
         cv::INTER_CUBIC,
-        cv::BORDER_REPLICATE,   // tránh viền đen cắt cụt
-        cv::Scalar()
+        cv::BORDER_REPLICATE
     );
 
-    // 3) Cắt patch đúng W×H đã chuẩn hoá (nằm ngang)
+    // 6) Crop patch nằm ngang
     cv::Mat patch;
     cv::getRectSubPix(
         warped,
-        cv::Size((int)std::round(rectSize.width), (int)std::round(rectSize.height)),
+        cv::Size((int)std::round(rectSize.width),
+            (int)std::round(rectSize.height)),
         anchor, patch
     );
     if (patch.empty()) { out.release(); return; }
 
-    const int patchH = patch.rows, patchW = patch.cols;
-    const cv::Point2f patchCenter(0.5f * patchW, 0.5f * patchH);
+    const int patchW = patch.cols;
+    const int patchH = patch.rows;
+    const cv::Point2f patchCenter(patchW * 0.5f, patchH * 0.5f);
 
-    // 4) Mask theo shape gốc, nhưng ở hệ patch
+    // 7) Mask shape chính
     cv::Mat cropMask(patchH, patchW, CV_8UC1, cv::Scalar(0));
     DrawShapeMaskIntoWithSize(
         rr, cropMask, patchCenter, angleInPatchCrop, 255,
@@ -481,7 +501,7 @@ void CommonPlus::RunCrop(
         localCenter
     );
 
-    // 5) Mask loại trừ (nếu có)
+    // 8) Mask loại trừ (nếu có)
     cv::Mat finalMask;
     if (rrMask)
     {
@@ -491,26 +511,26 @@ void CommonPlus::RunCrop(
         cv::Size2f  maskSize;
         GetAnchorSizeFor(*rrMask, worldAnchorMask, maskSize, maskLocalCenter);
 
-        // Toạ độ mask trong patch = quay ngược lại đúng góc đã warp
+        // Tính vị trí mask trong patch
         cv::Point2f deltaWorld(
             worldAnchorMask.x - worldAnchor.x,
             worldAnchorMask.y - worldAnchor.y
         );
-        cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)(-angleUsed));
+        cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)-angleUsed);
+
         cv::Point2f maskCenterInPatch(
             patchCenter.x + deltaInPatch.x,
             patchCenter.y + deltaInPatch.y
         );
 
-        double maskAng = rrMask->RectRotationDeg * (ANGLE_CW ? -1.0 : 1.0);
+        double maskAng = ConvertCWtoCCW(rrMask->RectRotationDeg);
+        NormalizeSizeAndAngle(maskSize, maskAng);
+
         float maskAngleInPatch = (float)(maskAng - angleUsed);
 
-        // Nếu muốn mask phụ cũng nằm ngang theo width của nó:
-        NormalizeSizeAndAngle(maskSize, maskAng);
-        maskAngleInPatch = (float)(maskAng - angleUsed);
-
         DrawShapeMaskIntoWithSize(
-            *rrMask, mask2, maskCenterInPatch, maskAngleInPatch, 0,
+            *rrMask, mask2,
+            maskCenterInPatch, maskAngleInPatch, 0,
             (int)std::round(maskSize.width),
             (int)std::round(maskSize.height),
             maskLocalCenter
@@ -524,13 +544,16 @@ void CommonPlus::RunCrop(
 
     if (returnMaskOnly) { out = finalMask.clone(); return; }
 
-    // 6) Áp mask lên nền
-    const cv::Scalar bg = rr.IsWhite ? cv::Scalar(255, 255, 255, 255)
-        : cv::Scalar(0, 0, 0, 0);
+    // 9) Áp mask lên patch
+    const cv::Scalar bg = rr.IsWhite ?
+        cv::Scalar(255, 255, 255, 255) :
+        cv::Scalar(0, 0, 0, 0);
+
     out.create(patch.size(), patch.type());
     out.setTo(bg);
     patch.copyTo(out, finalMask);
 }
+
 
 //void CommonPlus::RunCrop(
 //    const cv::Mat& src,

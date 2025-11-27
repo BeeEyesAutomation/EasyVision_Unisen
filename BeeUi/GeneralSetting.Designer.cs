@@ -124,6 +124,8 @@ namespace BeeUi
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnShowLabel = new BeeInterface.RJButton();
+            this.btnShowScore = new BeeInterface.RJButton();
             this.btnShowPositon = new BeeInterface.RJButton();
             this.btnShowDetail = new BeeInterface.RJButton();
             this.btnShowBox = new BeeInterface.RJButton();
@@ -304,7 +306,6 @@ namespace BeeUi
             this.btnbig.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnbig.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnbig.Corner = BeeGlobal.Corner.Both;
-            this.btnbig.DebounceResizeMs = 16;
             this.btnbig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnbig.FlatAppearance.BorderSize = 0;
             this.btnbig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -326,6 +327,7 @@ namespace BeeUi
             this.btnbig.IsCLick = false;
             this.btnbig.IsNotChange = false;
             this.btnbig.IsRect = false;
+            this.btnbig.IsTouch = false;
             this.btnbig.IsUnGroup = false;
             this.btnbig.Location = new System.Drawing.Point(272, 8);
             this.btnbig.Multiline = false;
@@ -361,7 +363,6 @@ namespace BeeUi
             this.btnSmall.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSmall.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSmall.Corner = BeeGlobal.Corner.Both;
-            this.btnSmall.DebounceResizeMs = 16;
             this.btnSmall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSmall.FlatAppearance.BorderSize = 0;
             this.btnSmall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -383,6 +384,7 @@ namespace BeeUi
             this.btnSmall.IsCLick = true;
             this.btnSmall.IsNotChange = false;
             this.btnSmall.IsRect = false;
+            this.btnSmall.IsTouch = false;
             this.btnSmall.IsUnGroup = false;
             this.btnSmall.Location = new System.Drawing.Point(8, 8);
             this.btnSmall.Multiline = false;
@@ -418,7 +420,6 @@ namespace BeeUi
             this.btnNormal.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnNormal.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNormal.Corner = BeeGlobal.Corner.Both;
-            this.btnNormal.DebounceResizeMs = 16;
             this.btnNormal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnNormal.FlatAppearance.BorderSize = 0;
             this.btnNormal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -440,6 +441,7 @@ namespace BeeUi
             this.btnNormal.IsCLick = false;
             this.btnNormal.IsNotChange = false;
             this.btnNormal.IsRect = false;
+            this.btnNormal.IsTouch = false;
             this.btnNormal.IsUnGroup = false;
             this.btnNormal.Location = new System.Drawing.Point(140, 8);
             this.btnNormal.Multiline = false;
@@ -571,7 +573,6 @@ namespace BeeUi
             this.btnSaveRS.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveRS.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveRS.Corner = BeeGlobal.Corner.Both;
-            this.btnSaveRS.DebounceResizeMs = 16;
             this.btnSaveRS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveRS.FlatAppearance.BorderSize = 0;
             this.btnSaveRS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -593,6 +594,7 @@ namespace BeeUi
             this.btnSaveRS.IsCLick = false;
             this.btnSaveRS.IsNotChange = false;
             this.btnSaveRS.IsRect = false;
+            this.btnSaveRS.IsTouch = false;
             this.btnSaveRS.IsUnGroup = true;
             this.btnSaveRS.Location = new System.Drawing.Point(206, 8);
             this.btnSaveRS.Multiline = false;
@@ -628,7 +630,6 @@ namespace BeeUi
             this.btnSaveRaw.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveRaw.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveRaw.Corner = BeeGlobal.Corner.Both;
-            this.btnSaveRaw.DebounceResizeMs = 16;
             this.btnSaveRaw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveRaw.FlatAppearance.BorderSize = 0;
             this.btnSaveRaw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -650,6 +651,7 @@ namespace BeeUi
             this.btnSaveRaw.IsCLick = true;
             this.btnSaveRaw.IsNotChange = false;
             this.btnSaveRaw.IsRect = false;
+            this.btnSaveRaw.IsTouch = false;
             this.btnSaveRaw.IsUnGroup = true;
             this.btnSaveRaw.Location = new System.Drawing.Point(8, 8);
             this.btnSaveRaw.Multiline = false;
@@ -745,7 +747,6 @@ namespace BeeUi
             this.btnSaveNG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveNG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveNG.Corner = BeeGlobal.Corner.Both;
-            this.btnSaveNG.DebounceResizeMs = 16;
             this.btnSaveNG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveNG.FlatAppearance.BorderSize = 0;
             this.btnSaveNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -767,6 +768,7 @@ namespace BeeUi
             this.btnSaveNG.IsCLick = false;
             this.btnSaveNG.IsNotChange = false;
             this.btnSaveNG.IsRect = false;
+            this.btnSaveNG.IsTouch = false;
             this.btnSaveNG.IsUnGroup = true;
             this.btnSaveNG.Location = new System.Drawing.Point(206, 8);
             this.btnSaveNG.Multiline = false;
@@ -802,7 +804,6 @@ namespace BeeUi
             this.btnSaveOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSaveOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSaveOK.Corner = BeeGlobal.Corner.Both;
-            this.btnSaveOK.DebounceResizeMs = 16;
             this.btnSaveOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveOK.FlatAppearance.BorderSize = 0;
             this.btnSaveOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -824,6 +825,7 @@ namespace BeeUi
             this.btnSaveOK.IsCLick = true;
             this.btnSaveOK.IsNotChange = false;
             this.btnSaveOK.IsRect = false;
+            this.btnSaveOK.IsTouch = false;
             this.btnSaveOK.IsUnGroup = true;
             this.btnSaveOK.Location = new System.Drawing.Point(8, 8);
             this.btnSaveOK.Multiline = false;
@@ -929,7 +931,6 @@ namespace BeeUi
             this.btnTriggerMulti.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnTriggerMulti.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnTriggerMulti.Corner = BeeGlobal.Corner.Both;
-            this.btnTriggerMulti.DebounceResizeMs = 16;
             this.btnTriggerMulti.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTriggerMulti.FlatAppearance.BorderSize = 0;
             this.btnTriggerMulti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -951,6 +952,7 @@ namespace BeeUi
             this.btnTriggerMulti.IsCLick = true;
             this.btnTriggerMulti.IsNotChange = false;
             this.btnTriggerMulti.IsRect = false;
+            this.btnTriggerMulti.IsTouch = false;
             this.btnTriggerMulti.IsUnGroup = false;
             this.btnTriggerMulti.Location = new System.Drawing.Point(206, 8);
             this.btnTriggerMulti.Multiline = false;
@@ -985,7 +987,6 @@ namespace BeeUi
             this.btnTriggerOne.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnTriggerOne.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnTriggerOne.Corner = BeeGlobal.Corner.Both;
-            this.btnTriggerOne.DebounceResizeMs = 16;
             this.btnTriggerOne.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTriggerOne.FlatAppearance.BorderSize = 0;
             this.btnTriggerOne.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1007,6 +1008,7 @@ namespace BeeUi
             this.btnTriggerOne.IsCLick = false;
             this.btnTriggerOne.IsNotChange = false;
             this.btnTriggerOne.IsRect = false;
+            this.btnTriggerOne.IsTouch = false;
             this.btnTriggerOne.IsUnGroup = false;
             this.btnTriggerOne.Location = new System.Drawing.Point(8, 8);
             this.btnTriggerOne.Multiline = false;
@@ -1166,7 +1168,6 @@ namespace BeeUi
             this.btnMulti.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnMulti.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnMulti.Corner = BeeGlobal.Corner.Both;
-            this.btnMulti.DebounceResizeMs = 16;
             this.btnMulti.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnMulti.FlatAppearance.BorderSize = 0;
             this.btnMulti.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1188,6 +1189,7 @@ namespace BeeUi
             this.btnMulti.IsCLick = true;
             this.btnMulti.IsNotChange = false;
             this.btnMulti.IsRect = false;
+            this.btnMulti.IsTouch = false;
             this.btnMulti.IsUnGroup = false;
             this.btnMulti.Location = new System.Drawing.Point(206, 8);
             this.btnMulti.Multiline = false;
@@ -1222,7 +1224,6 @@ namespace BeeUi
             this.btnSingle.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSingle.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSingle.Corner = BeeGlobal.Corner.Both;
-            this.btnSingle.DebounceResizeMs = 16;
             this.btnSingle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSingle.FlatAppearance.BorderSize = 0;
             this.btnSingle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1244,6 +1245,7 @@ namespace BeeUi
             this.btnSingle.IsCLick = false;
             this.btnSingle.IsNotChange = false;
             this.btnSingle.IsRect = false;
+            this.btnSingle.IsTouch = false;
             this.btnSingle.IsUnGroup = false;
             this.btnSingle.Location = new System.Drawing.Point(8, 8);
             this.btnSingle.Multiline = false;
@@ -1335,7 +1337,6 @@ namespace BeeUi
             this.btnResetReady.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnResetReady.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnResetReady.Corner = BeeGlobal.Corner.Both;
-            this.btnResetReady.DebounceResizeMs = 16;
             this.btnResetReady.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnResetReady.FlatAppearance.BorderSize = 0;
             this.btnResetReady.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1357,6 +1358,7 @@ namespace BeeUi
             this.btnResetReady.IsCLick = false;
             this.btnResetReady.IsNotChange = false;
             this.btnResetReady.IsRect = false;
+            this.btnResetReady.IsTouch = false;
             this.btnResetReady.IsUnGroup = true;
             this.btnResetReady.Location = new System.Drawing.Point(208, 5);
             this.btnResetReady.Margin = new System.Windows.Forms.Padding(5);
@@ -1570,7 +1572,6 @@ namespace BeeUi
             this.btnByPassResult.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnByPassResult.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnByPassResult.Corner = BeeGlobal.Corner.Both;
-            this.btnByPassResult.DebounceResizeMs = 16;
             this.btnByPassResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnByPassResult.FlatAppearance.BorderSize = 0;
             this.btnByPassResult.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1592,6 +1593,7 @@ namespace BeeUi
             this.btnByPassResult.IsCLick = false;
             this.btnByPassResult.IsNotChange = false;
             this.btnByPassResult.IsRect = false;
+            this.btnByPassResult.IsTouch = false;
             this.btnByPassResult.IsUnGroup = true;
             this.btnByPassResult.Location = new System.Drawing.Point(208, 5);
             this.btnByPassResult.Margin = new System.Windows.Forms.Padding(5);
@@ -1658,7 +1660,6 @@ namespace BeeUi
             this.btnNG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnNG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnNG.Corner = BeeGlobal.Corner.Both;
-            this.btnNG.DebounceResizeMs = 16;
             this.btnNG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnNG.FlatAppearance.BorderSize = 0;
             this.btnNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1680,6 +1681,7 @@ namespace BeeUi
             this.btnNG.IsCLick = false;
             this.btnNG.IsNotChange = false;
             this.btnNG.IsRect = false;
+            this.btnNG.IsTouch = false;
             this.btnNG.IsUnGroup = false;
             this.btnNG.Location = new System.Drawing.Point(206, 8);
             this.btnNG.Multiline = false;
@@ -1714,7 +1716,6 @@ namespace BeeUi
             this.btnOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnOK.Corner = BeeGlobal.Corner.Both;
-            this.btnOK.DebounceResizeMs = 16;
             this.btnOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOK.FlatAppearance.BorderSize = 0;
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1736,6 +1737,7 @@ namespace BeeUi
             this.btnOK.IsCLick = true;
             this.btnOK.IsNotChange = false;
             this.btnOK.IsRect = false;
+            this.btnOK.IsTouch = false;
             this.btnOK.IsUnGroup = false;
             this.btnOK.Location = new System.Drawing.Point(8, 8);
             this.btnOK.Multiline = false;
@@ -1826,7 +1828,7 @@ namespace BeeUi
             this.tableLayoutPanel19.Controls.Add(this.btnCLText, 0, 0);
             this.tableLayoutPanel19.Controls.Add(this.lbCLText, 1, 0);
             this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel19.Location = new System.Drawing.Point(5, 339);
+            this.tableLayoutPanel19.Location = new System.Drawing.Point(5, 394);
             this.tableLayoutPanel19.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel19.Name = "tableLayoutPanel19";
             this.tableLayoutPanel19.Padding = new System.Windows.Forms.Padding(2);
@@ -1857,7 +1859,6 @@ namespace BeeUi
             this.btnDefaultCLText.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefaultCLText.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefaultCLText.Corner = BeeGlobal.Corner.Both;
-            this.btnDefaultCLText.DebounceResizeMs = 16;
             this.btnDefaultCLText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefaultCLText.FlatAppearance.BorderSize = 0;
             this.btnDefaultCLText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1879,6 +1880,7 @@ namespace BeeUi
             this.btnDefaultCLText.IsCLick = false;
             this.btnDefaultCLText.IsNotChange = true;
             this.btnDefaultCLText.IsRect = false;
+            this.btnDefaultCLText.IsTouch = false;
             this.btnDefaultCLText.IsUnGroup = true;
             this.btnDefaultCLText.Location = new System.Drawing.Point(305, 5);
             this.btnDefaultCLText.Multiline = false;
@@ -1913,7 +1915,6 @@ namespace BeeUi
             this.btnChooseCLText.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseCLText.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseCLText.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseCLText.DebounceResizeMs = 16;
             this.btnChooseCLText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseCLText.FlatAppearance.BorderSize = 0;
             this.btnChooseCLText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1935,6 +1936,7 @@ namespace BeeUi
             this.btnChooseCLText.IsCLick = false;
             this.btnChooseCLText.IsNotChange = false;
             this.btnChooseCLText.IsRect = false;
+            this.btnChooseCLText.IsTouch = false;
             this.btnChooseCLText.IsUnGroup = true;
             this.btnChooseCLText.Location = new System.Drawing.Point(205, 5);
             this.btnChooseCLText.Multiline = false;
@@ -1969,7 +1971,6 @@ namespace BeeUi
             this.btnCLText.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLText.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLText.Corner = BeeGlobal.Corner.Both;
-            this.btnCLText.DebounceResizeMs = 16;
             this.btnCLText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLText.FlatAppearance.BorderSize = 0;
             this.btnCLText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1991,6 +1992,7 @@ namespace BeeUi
             this.btnCLText.IsCLick = false;
             this.btnCLText.IsNotChange = false;
             this.btnCLText.IsRect = false;
+            this.btnCLText.IsTouch = false;
             this.btnCLText.IsUnGroup = true;
             this.btnCLText.Location = new System.Drawing.Point(5, 5);
             this.btnCLText.Multiline = false;
@@ -2026,7 +2028,7 @@ namespace BeeUi
             this.tableLayoutPanel18.Controls.Add(this.btnClChoose, 0, 0);
             this.tableLayoutPanel18.Controls.Add(this.lbClChoose, 1, 0);
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel18.Location = new System.Drawing.Point(5, 299);
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(5, 354);
             this.tableLayoutPanel18.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
             this.tableLayoutPanel18.Padding = new System.Windows.Forms.Padding(2);
@@ -2057,7 +2059,6 @@ namespace BeeUi
             this.btnDefaultChoose.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefaultChoose.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefaultChoose.Corner = BeeGlobal.Corner.Both;
-            this.btnDefaultChoose.DebounceResizeMs = 16;
             this.btnDefaultChoose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefaultChoose.FlatAppearance.BorderSize = 0;
             this.btnDefaultChoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2079,6 +2080,7 @@ namespace BeeUi
             this.btnDefaultChoose.IsCLick = false;
             this.btnDefaultChoose.IsNotChange = true;
             this.btnDefaultChoose.IsRect = false;
+            this.btnDefaultChoose.IsTouch = false;
             this.btnDefaultChoose.IsUnGroup = true;
             this.btnDefaultChoose.Location = new System.Drawing.Point(305, 5);
             this.btnDefaultChoose.Multiline = false;
@@ -2113,7 +2115,6 @@ namespace BeeUi
             this.btnChooseCLChoose.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseCLChoose.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseCLChoose.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseCLChoose.DebounceResizeMs = 16;
             this.btnChooseCLChoose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseCLChoose.FlatAppearance.BorderSize = 0;
             this.btnChooseCLChoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2135,6 +2136,7 @@ namespace BeeUi
             this.btnChooseCLChoose.IsCLick = false;
             this.btnChooseCLChoose.IsNotChange = false;
             this.btnChooseCLChoose.IsRect = false;
+            this.btnChooseCLChoose.IsTouch = false;
             this.btnChooseCLChoose.IsUnGroup = true;
             this.btnChooseCLChoose.Location = new System.Drawing.Point(205, 5);
             this.btnChooseCLChoose.Multiline = false;
@@ -2169,7 +2171,6 @@ namespace BeeUi
             this.btnClChoose.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnClChoose.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnClChoose.Corner = BeeGlobal.Corner.Both;
-            this.btnClChoose.DebounceResizeMs = 16;
             this.btnClChoose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClChoose.FlatAppearance.BorderSize = 0;
             this.btnClChoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2191,6 +2192,7 @@ namespace BeeUi
             this.btnClChoose.IsCLick = false;
             this.btnClChoose.IsNotChange = false;
             this.btnClChoose.IsRect = false;
+            this.btnClChoose.IsTouch = false;
             this.btnClChoose.IsUnGroup = true;
             this.btnClChoose.Location = new System.Drawing.Point(5, 5);
             this.btnClChoose.Multiline = false;
@@ -2226,7 +2228,7 @@ namespace BeeUi
             this.tableLayoutPanel17.Controls.Add(this.btnCLNone, 0, 0);
             this.tableLayoutPanel17.Controls.Add(this.lbCLNone, 1, 0);
             this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel17.Location = new System.Drawing.Point(5, 259);
+            this.tableLayoutPanel17.Location = new System.Drawing.Point(5, 314);
             this.tableLayoutPanel17.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel17.Name = "tableLayoutPanel17";
             this.tableLayoutPanel17.Padding = new System.Windows.Forms.Padding(2);
@@ -2257,7 +2259,6 @@ namespace BeeUi
             this.btnDefNone.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefNone.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefNone.Corner = BeeGlobal.Corner.Both;
-            this.btnDefNone.DebounceResizeMs = 16;
             this.btnDefNone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefNone.FlatAppearance.BorderSize = 0;
             this.btnDefNone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2279,6 +2280,7 @@ namespace BeeUi
             this.btnDefNone.IsCLick = false;
             this.btnDefNone.IsNotChange = true;
             this.btnDefNone.IsRect = false;
+            this.btnDefNone.IsTouch = false;
             this.btnDefNone.IsUnGroup = true;
             this.btnDefNone.Location = new System.Drawing.Point(305, 5);
             this.btnDefNone.Multiline = false;
@@ -2313,7 +2315,6 @@ namespace BeeUi
             this.btnChooseNone.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseNone.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseNone.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseNone.DebounceResizeMs = 16;
             this.btnChooseNone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseNone.FlatAppearance.BorderSize = 0;
             this.btnChooseNone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2335,6 +2336,7 @@ namespace BeeUi
             this.btnChooseNone.IsCLick = false;
             this.btnChooseNone.IsNotChange = false;
             this.btnChooseNone.IsRect = false;
+            this.btnChooseNone.IsTouch = false;
             this.btnChooseNone.IsUnGroup = true;
             this.btnChooseNone.Location = new System.Drawing.Point(205, 5);
             this.btnChooseNone.Multiline = false;
@@ -2369,7 +2371,6 @@ namespace BeeUi
             this.btnCLNone.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLNone.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLNone.Corner = BeeGlobal.Corner.Both;
-            this.btnCLNone.DebounceResizeMs = 16;
             this.btnCLNone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLNone.FlatAppearance.BorderSize = 0;
             this.btnCLNone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2391,6 +2392,7 @@ namespace BeeUi
             this.btnCLNone.IsCLick = false;
             this.btnCLNone.IsNotChange = false;
             this.btnCLNone.IsRect = false;
+            this.btnCLNone.IsTouch = false;
             this.btnCLNone.IsUnGroup = true;
             this.btnCLNone.Location = new System.Drawing.Point(5, 5);
             this.btnCLNone.Multiline = false;
@@ -2426,7 +2428,7 @@ namespace BeeUi
             this.tableLayoutPanel16.Controls.Add(this.btnCLInfor, 0, 0);
             this.tableLayoutPanel16.Controls.Add(this.lbCLInfor, 1, 0);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel16.Location = new System.Drawing.Point(5, 219);
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(5, 274);
             this.tableLayoutPanel16.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
             this.tableLayoutPanel16.Padding = new System.Windows.Forms.Padding(2);
@@ -2458,7 +2460,6 @@ namespace BeeUi
             this.btnDefInfor.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefInfor.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefInfor.Corner = BeeGlobal.Corner.Both;
-            this.btnDefInfor.DebounceResizeMs = 16;
             this.btnDefInfor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefInfor.FlatAppearance.BorderSize = 0;
             this.btnDefInfor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2480,6 +2481,7 @@ namespace BeeUi
             this.btnDefInfor.IsCLick = false;
             this.btnDefInfor.IsNotChange = true;
             this.btnDefInfor.IsRect = false;
+            this.btnDefInfor.IsTouch = false;
             this.btnDefInfor.IsUnGroup = true;
             this.btnDefInfor.Location = new System.Drawing.Point(305, 5);
             this.btnDefInfor.Multiline = false;
@@ -2514,7 +2516,6 @@ namespace BeeUi
             this.btnChooseCLInfor.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseCLInfor.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseCLInfor.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseCLInfor.DebounceResizeMs = 16;
             this.btnChooseCLInfor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseCLInfor.FlatAppearance.BorderSize = 0;
             this.btnChooseCLInfor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2536,6 +2537,7 @@ namespace BeeUi
             this.btnChooseCLInfor.IsCLick = false;
             this.btnChooseCLInfor.IsNotChange = false;
             this.btnChooseCLInfor.IsRect = false;
+            this.btnChooseCLInfor.IsTouch = false;
             this.btnChooseCLInfor.IsUnGroup = true;
             this.btnChooseCLInfor.Location = new System.Drawing.Point(205, 5);
             this.btnChooseCLInfor.Multiline = false;
@@ -2570,7 +2572,6 @@ namespace BeeUi
             this.btnCLInfor.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLInfor.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLInfor.Corner = BeeGlobal.Corner.Both;
-            this.btnCLInfor.DebounceResizeMs = 16;
             this.btnCLInfor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLInfor.FlatAppearance.BorderSize = 0;
             this.btnCLInfor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2592,6 +2593,7 @@ namespace BeeUi
             this.btnCLInfor.IsCLick = false;
             this.btnCLInfor.IsNotChange = false;
             this.btnCLInfor.IsRect = false;
+            this.btnCLInfor.IsTouch = false;
             this.btnCLInfor.IsUnGroup = true;
             this.btnCLInfor.Location = new System.Drawing.Point(5, 5);
             this.btnCLInfor.Multiline = false;
@@ -2643,7 +2645,7 @@ namespace BeeUi
             this.AdjThicknessLine.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjThicknessLine.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjThicknessLine.KeyboardStep = 1F;
-            this.AdjThicknessLine.Location = new System.Drawing.Point(5, 611);
+            this.AdjThicknessLine.Location = new System.Drawing.Point(5, 666);
             this.AdjThicknessLine.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjThicknessLine.MatchTextboxFontToThumb = true;
             this.AdjThicknessLine.Max = 30F;
@@ -2685,7 +2687,7 @@ namespace BeeUi
             this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Transparent;
-            this.label14.Location = new System.Drawing.Point(5, 579);
+            this.label14.Location = new System.Drawing.Point(5, 634);
             this.label14.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(406, 32);
@@ -2722,7 +2724,7 @@ namespace BeeUi
             this.AdjOpacity.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjOpacity.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjOpacity.KeyboardStep = 1F;
-            this.AdjOpacity.Location = new System.Drawing.Point(5, 421);
+            this.AdjOpacity.Location = new System.Drawing.Point(5, 476);
             this.AdjOpacity.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjOpacity.MatchTextboxFontToThumb = true;
             this.AdjOpacity.Max = 100F;
@@ -2764,7 +2766,7 @@ namespace BeeUi
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.ForeColor = System.Drawing.Color.Transparent;
-            this.label13.Location = new System.Drawing.Point(5, 389);
+            this.label13.Location = new System.Drawing.Point(5, 444);
             this.label13.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(406, 32);
@@ -2785,7 +2787,7 @@ namespace BeeUi
             this.tableLayoutPanel15.Controls.Add(this.btnClNG, 0, 0);
             this.tableLayoutPanel15.Controls.Add(this.lbCLNG, 1, 0);
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel15.Location = new System.Drawing.Point(5, 179);
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(5, 234);
             this.tableLayoutPanel15.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
             this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(2);
@@ -2816,7 +2818,6 @@ namespace BeeUi
             this.btnDefaultNg.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefaultNg.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefaultNg.Corner = BeeGlobal.Corner.Both;
-            this.btnDefaultNg.DebounceResizeMs = 16;
             this.btnDefaultNg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefaultNg.FlatAppearance.BorderSize = 0;
             this.btnDefaultNg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2838,6 +2839,7 @@ namespace BeeUi
             this.btnDefaultNg.IsCLick = false;
             this.btnDefaultNg.IsNotChange = true;
             this.btnDefaultNg.IsRect = false;
+            this.btnDefaultNg.IsTouch = false;
             this.btnDefaultNg.IsUnGroup = true;
             this.btnDefaultNg.Location = new System.Drawing.Point(305, 5);
             this.btnDefaultNg.Multiline = false;
@@ -2872,7 +2874,6 @@ namespace BeeUi
             this.btnChooseNG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseNG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseNG.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseNG.DebounceResizeMs = 16;
             this.btnChooseNG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseNG.FlatAppearance.BorderSize = 0;
             this.btnChooseNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2894,6 +2895,7 @@ namespace BeeUi
             this.btnChooseNG.IsCLick = false;
             this.btnChooseNG.IsNotChange = false;
             this.btnChooseNG.IsRect = false;
+            this.btnChooseNG.IsTouch = false;
             this.btnChooseNG.IsUnGroup = true;
             this.btnChooseNG.Location = new System.Drawing.Point(205, 5);
             this.btnChooseNG.Multiline = false;
@@ -2928,7 +2930,6 @@ namespace BeeUi
             this.btnClNG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnClNG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnClNG.Corner = BeeGlobal.Corner.Both;
-            this.btnClNG.DebounceResizeMs = 16;
             this.btnClNG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClNG.FlatAppearance.BorderSize = 0;
             this.btnClNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -2950,6 +2951,7 @@ namespace BeeUi
             this.btnClNG.IsCLick = false;
             this.btnClNG.IsNotChange = false;
             this.btnClNG.IsRect = false;
+            this.btnClNG.IsTouch = false;
             this.btnClNG.IsUnGroup = true;
             this.btnClNG.Location = new System.Drawing.Point(5, 5);
             this.btnClNG.Multiline = false;
@@ -2985,7 +2987,7 @@ namespace BeeUi
             this.tableLayoutPanel14.Controls.Add(this.btnClOK, 0, 0);
             this.tableLayoutPanel14.Controls.Add(this.lbClOK, 1, 0);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(5, 139);
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(5, 194);
             this.tableLayoutPanel14.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
             this.tableLayoutPanel14.Padding = new System.Windows.Forms.Padding(2);
@@ -3016,7 +3018,6 @@ namespace BeeUi
             this.btnDefaultCLOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDefaultCLOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDefaultCLOK.Corner = BeeGlobal.Corner.Both;
-            this.btnDefaultCLOK.DebounceResizeMs = 16;
             this.btnDefaultCLOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDefaultCLOK.FlatAppearance.BorderSize = 0;
             this.btnDefaultCLOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3038,6 +3039,7 @@ namespace BeeUi
             this.btnDefaultCLOK.IsCLick = false;
             this.btnDefaultCLOK.IsNotChange = true;
             this.btnDefaultCLOK.IsRect = false;
+            this.btnDefaultCLOK.IsTouch = false;
             this.btnDefaultCLOK.IsUnGroup = true;
             this.btnDefaultCLOK.Location = new System.Drawing.Point(305, 5);
             this.btnDefaultCLOK.Multiline = false;
@@ -3072,7 +3074,6 @@ namespace BeeUi
             this.btnChooseCLOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnChooseCLOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnChooseCLOK.Corner = BeeGlobal.Corner.Both;
-            this.btnChooseCLOK.DebounceResizeMs = 16;
             this.btnChooseCLOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnChooseCLOK.FlatAppearance.BorderSize = 0;
             this.btnChooseCLOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3094,6 +3095,7 @@ namespace BeeUi
             this.btnChooseCLOK.IsCLick = false;
             this.btnChooseCLOK.IsNotChange = false;
             this.btnChooseCLOK.IsRect = false;
+            this.btnChooseCLOK.IsTouch = false;
             this.btnChooseCLOK.IsUnGroup = true;
             this.btnChooseCLOK.Location = new System.Drawing.Point(205, 5);
             this.btnChooseCLOK.Multiline = false;
@@ -3128,7 +3130,6 @@ namespace BeeUi
             this.btnClOK.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnClOK.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnClOK.Corner = BeeGlobal.Corner.Both;
-            this.btnClOK.DebounceResizeMs = 16;
             this.btnClOK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClOK.FlatAppearance.BorderSize = 0;
             this.btnClOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3150,6 +3151,7 @@ namespace BeeUi
             this.btnClOK.IsCLick = false;
             this.btnClOK.IsNotChange = false;
             this.btnClOK.IsRect = false;
+            this.btnClOK.IsTouch = false;
             this.btnClOK.IsUnGroup = true;
             this.btnClOK.Location = new System.Drawing.Point(5, 5);
             this.btnClOK.Multiline = false;
@@ -3178,7 +3180,7 @@ namespace BeeUi
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.Color.Transparent;
-            this.label11.Location = new System.Drawing.Point(5, 107);
+            this.label11.Location = new System.Drawing.Point(5, 162);
             this.label11.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(406, 32);
@@ -3215,7 +3217,7 @@ namespace BeeUi
             this.AdjFontSize.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjFontSize.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjFontSize.KeyboardStep = 1F;
-            this.AdjFontSize.Location = new System.Drawing.Point(5, 516);
+            this.AdjFontSize.Location = new System.Drawing.Point(5, 571);
             this.AdjFontSize.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjFontSize.MatchTextboxFontToThumb = true;
             this.AdjFontSize.Max = 100F;
@@ -3257,7 +3259,7 @@ namespace BeeUi
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.Transparent;
-            this.label6.Location = new System.Drawing.Point(5, 484);
+            this.label6.Location = new System.Drawing.Point(5, 539);
             this.label6.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(406, 32);
@@ -3294,7 +3296,7 @@ namespace BeeUi
             this.AdjRadEdit.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjRadEdit.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjRadEdit.KeyboardStep = 1F;
-            this.AdjRadEdit.Location = new System.Drawing.Point(5, 706);
+            this.AdjRadEdit.Location = new System.Drawing.Point(5, 761);
             this.AdjRadEdit.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjRadEdit.MatchTextboxFontToThumb = true;
             this.AdjRadEdit.Max = 100F;
@@ -3336,7 +3338,7 @@ namespace BeeUi
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(5, 674);
+            this.label5.Location = new System.Drawing.Point(5, 729);
             this.label5.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(406, 32);
@@ -3365,6 +3367,8 @@ namespace BeeUi
             this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel12.Controls.Add(this.btnShowLabel, 1, 1);
+            this.tableLayoutPanel12.Controls.Add(this.btnShowScore, 0, 1);
             this.tableLayoutPanel12.Controls.Add(this.btnShowPositon, 2, 0);
             this.tableLayoutPanel12.Controls.Add(this.btnShowDetail, 1, 0);
             this.tableLayoutPanel12.Controls.Add(this.btnShowBox, 0, 0);
@@ -3373,10 +3377,123 @@ namespace BeeUi
             this.tableLayoutPanel12.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.Padding = new System.Windows.Forms.Padding(5);
-            this.tableLayoutPanel12.RowCount = 1;
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(406, 55);
+            this.tableLayoutPanel12.RowCount = 2;
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(406, 110);
             this.tableLayoutPanel12.TabIndex = 39;
+            // 
+            // btnShowLabel
+            // 
+            this.btnShowLabel.AutoFont = true;
+            this.btnShowLabel.AutoFontHeightRatio = 0.75F;
+            this.btnShowLabel.AutoFontMax = 100F;
+            this.btnShowLabel.AutoFontMin = 6F;
+            this.btnShowLabel.AutoFontWidthRatio = 0.92F;
+            this.btnShowLabel.AutoImage = true;
+            this.btnShowLabel.AutoImageMaxRatio = 0.75F;
+            this.btnShowLabel.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnShowLabel.AutoImageTint = true;
+            this.btnShowLabel.BackColor = System.Drawing.Color.White;
+            this.btnShowLabel.BackgroundColor = System.Drawing.Color.White;
+            this.btnShowLabel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnShowLabel.BorderColor = System.Drawing.Color.White;
+            this.btnShowLabel.BorderRadius = 5;
+            this.btnShowLabel.BorderSize = 1;
+            this.btnShowLabel.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowLabel.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowLabel.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnShowLabel.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnShowLabel.Corner = BeeGlobal.Corner.Both;
+            this.btnShowLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnShowLabel.FlatAppearance.BorderSize = 0;
+            this.btnShowLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnShowLabel.ForeColor = System.Drawing.Color.Black;
+            this.btnShowLabel.Image = null;
+            this.btnShowLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShowLabel.ImageDisabled = null;
+            this.btnShowLabel.ImageHover = null;
+            this.btnShowLabel.ImageNormal = null;
+            this.btnShowLabel.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnShowLabel.ImagePressed = null;
+            this.btnShowLabel.ImageTextSpacing = 6;
+            this.btnShowLabel.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnShowLabel.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnShowLabel.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnShowLabel.ImageTintOpacity = 0.5F;
+            this.btnShowLabel.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnShowLabel.IsCLick = true;
+            this.btnShowLabel.IsNotChange = false;
+            this.btnShowLabel.IsRect = false;
+            this.btnShowLabel.IsTouch = false;
+            this.btnShowLabel.IsUnGroup = true;
+            this.btnShowLabel.Location = new System.Drawing.Point(140, 58);
+            this.btnShowLabel.Multiline = false;
+            this.btnShowLabel.Name = "btnShowLabel";
+            this.btnShowLabel.Size = new System.Drawing.Size(126, 44);
+            this.btnShowLabel.TabIndex = 12;
+            this.btnShowLabel.Text = "Labels";
+            this.btnShowLabel.TextColor = System.Drawing.Color.Black;
+            this.btnShowLabel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnShowLabel.UseVisualStyleBackColor = false;
+            this.btnShowLabel.Click += new System.EventHandler(this.btnShowLabel_Click);
+            // 
+            // btnShowScore
+            // 
+            this.btnShowScore.AutoFont = true;
+            this.btnShowScore.AutoFontHeightRatio = 0.75F;
+            this.btnShowScore.AutoFontMax = 100F;
+            this.btnShowScore.AutoFontMin = 6F;
+            this.btnShowScore.AutoFontWidthRatio = 0.92F;
+            this.btnShowScore.AutoImage = true;
+            this.btnShowScore.AutoImageMaxRatio = 0.75F;
+            this.btnShowScore.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnShowScore.AutoImageTint = true;
+            this.btnShowScore.BackColor = System.Drawing.Color.White;
+            this.btnShowScore.BackgroundColor = System.Drawing.Color.White;
+            this.btnShowScore.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnShowScore.BorderColor = System.Drawing.Color.White;
+            this.btnShowScore.BorderRadius = 5;
+            this.btnShowScore.BorderSize = 1;
+            this.btnShowScore.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowScore.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowScore.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnShowScore.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnShowScore.Corner = BeeGlobal.Corner.Both;
+            this.btnShowScore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnShowScore.FlatAppearance.BorderSize = 0;
+            this.btnShowScore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnShowScore.ForeColor = System.Drawing.Color.Black;
+            this.btnShowScore.Image = null;
+            this.btnShowScore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShowScore.ImageDisabled = null;
+            this.btnShowScore.ImageHover = null;
+            this.btnShowScore.ImageNormal = null;
+            this.btnShowScore.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnShowScore.ImagePressed = null;
+            this.btnShowScore.ImageTextSpacing = 6;
+            this.btnShowScore.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnShowScore.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnShowScore.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnShowScore.ImageTintOpacity = 0.5F;
+            this.btnShowScore.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnShowScore.IsCLick = false;
+            this.btnShowScore.IsNotChange = false;
+            this.btnShowScore.IsRect = false;
+            this.btnShowScore.IsTouch = false;
+            this.btnShowScore.IsUnGroup = true;
+            this.btnShowScore.Location = new System.Drawing.Point(8, 58);
+            this.btnShowScore.Multiline = false;
+            this.btnShowScore.Name = "btnShowScore";
+            this.btnShowScore.Size = new System.Drawing.Size(126, 44);
+            this.btnShowScore.TabIndex = 11;
+            this.btnShowScore.Text = "Score";
+            this.btnShowScore.TextColor = System.Drawing.Color.Black;
+            this.btnShowScore.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnShowScore.UseVisualStyleBackColor = false;
+            this.btnShowScore.Click += new System.EventHandler(this.btnShowScore_Click);
             // 
             // btnShowPositon
             // 
@@ -3399,11 +3516,10 @@ namespace BeeUi
             this.btnShowPositon.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowPositon.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowPositon.Corner = BeeGlobal.Corner.Both;
-            this.btnShowPositon.DebounceResizeMs = 16;
             this.btnShowPositon.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowPositon.FlatAppearance.BorderSize = 0;
             this.btnShowPositon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowPositon.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.btnShowPositon.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
             this.btnShowPositon.ForeColor = System.Drawing.Color.Black;
             this.btnShowPositon.Image = null;
             this.btnShowPositon.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3421,11 +3537,12 @@ namespace BeeUi
             this.btnShowPositon.IsCLick = false;
             this.btnShowPositon.IsNotChange = false;
             this.btnShowPositon.IsRect = false;
+            this.btnShowPositon.IsTouch = false;
             this.btnShowPositon.IsUnGroup = true;
             this.btnShowPositon.Location = new System.Drawing.Point(272, 8);
             this.btnShowPositon.Multiline = false;
             this.btnShowPositon.Name = "btnShowPositon";
-            this.btnShowPositon.Size = new System.Drawing.Size(126, 39);
+            this.btnShowPositon.Size = new System.Drawing.Size(126, 44);
             this.btnShowPositon.TabIndex = 10;
             this.btnShowPositon.Text = "Position";
             this.btnShowPositon.TextColor = System.Drawing.Color.Black;
@@ -3454,11 +3571,10 @@ namespace BeeUi
             this.btnShowDetail.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowDetail.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowDetail.Corner = BeeGlobal.Corner.Both;
-            this.btnShowDetail.DebounceResizeMs = 16;
             this.btnShowDetail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowDetail.FlatAppearance.BorderSize = 0;
             this.btnShowDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.btnShowDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
             this.btnShowDetail.ForeColor = System.Drawing.Color.Black;
             this.btnShowDetail.Image = null;
             this.btnShowDetail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3476,11 +3592,12 @@ namespace BeeUi
             this.btnShowDetail.IsCLick = false;
             this.btnShowDetail.IsNotChange = false;
             this.btnShowDetail.IsRect = false;
+            this.btnShowDetail.IsTouch = false;
             this.btnShowDetail.IsUnGroup = true;
             this.btnShowDetail.Location = new System.Drawing.Point(140, 8);
             this.btnShowDetail.Multiline = false;
             this.btnShowDetail.Name = "btnShowDetail";
-            this.btnShowDetail.Size = new System.Drawing.Size(126, 39);
+            this.btnShowDetail.Size = new System.Drawing.Size(126, 44);
             this.btnShowDetail.TabIndex = 9;
             this.btnShowDetail.Text = "Detail";
             this.btnShowDetail.TextColor = System.Drawing.Color.Black;
@@ -3510,11 +3627,10 @@ namespace BeeUi
             this.btnShowBox.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnShowBox.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnShowBox.Corner = BeeGlobal.Corner.Both;
-            this.btnShowBox.DebounceResizeMs = 16;
             this.btnShowBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShowBox.FlatAppearance.BorderSize = 0;
             this.btnShowBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.60938F);
+            this.btnShowBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
             this.btnShowBox.ForeColor = System.Drawing.Color.Black;
             this.btnShowBox.Image = null;
             this.btnShowBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3532,11 +3648,12 @@ namespace BeeUi
             this.btnShowBox.IsCLick = true;
             this.btnShowBox.IsNotChange = false;
             this.btnShowBox.IsRect = false;
+            this.btnShowBox.IsTouch = false;
             this.btnShowBox.IsUnGroup = true;
             this.btnShowBox.Location = new System.Drawing.Point(8, 8);
             this.btnShowBox.Multiline = false;
             this.btnShowBox.Name = "btnShowBox";
-            this.btnShowBox.Size = new System.Drawing.Size(126, 39);
+            this.btnShowBox.Size = new System.Drawing.Size(126, 44);
             this.btnShowBox.TabIndex = 7;
             this.btnShowBox.Text = "Box";
             this.btnShowBox.TextColor = System.Drawing.Color.Black;
@@ -3651,7 +3768,6 @@ namespace BeeUi
             this.rjButton1.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton1.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton1.Corner = BeeGlobal.Corner.Both;
-            this.rjButton1.DebounceResizeMs = 16;
             this.rjButton1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton1.FlatAppearance.BorderSize = 0;
             this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3673,6 +3789,7 @@ namespace BeeUi
             this.rjButton1.IsCLick = false;
             this.rjButton1.IsNotChange = true;
             this.rjButton1.IsRect = false;
+            this.rjButton1.IsTouch = false;
             this.rjButton1.IsUnGroup = true;
             this.rjButton1.Location = new System.Drawing.Point(305, 5);
             this.rjButton1.Multiline = false;
@@ -3706,7 +3823,6 @@ namespace BeeUi
             this.rjButton2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton2.Corner = BeeGlobal.Corner.Both;
-            this.rjButton2.DebounceResizeMs = 16;
             this.rjButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton2.FlatAppearance.BorderSize = 0;
             this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3728,6 +3844,7 @@ namespace BeeUi
             this.rjButton2.IsCLick = false;
             this.rjButton2.IsNotChange = false;
             this.rjButton2.IsRect = false;
+            this.rjButton2.IsTouch = false;
             this.rjButton2.IsUnGroup = true;
             this.rjButton2.Location = new System.Drawing.Point(205, 5);
             this.rjButton2.Multiline = false;
@@ -3761,7 +3878,6 @@ namespace BeeUi
             this.rjButton3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton3.Corner = BeeGlobal.Corner.Both;
-            this.rjButton3.DebounceResizeMs = 16;
             this.rjButton3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton3.FlatAppearance.BorderSize = 0;
             this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3783,6 +3899,7 @@ namespace BeeUi
             this.rjButton3.IsCLick = false;
             this.rjButton3.IsNotChange = false;
             this.rjButton3.IsRect = false;
+            this.rjButton3.IsTouch = false;
             this.rjButton3.IsUnGroup = true;
             this.rjButton3.Location = new System.Drawing.Point(5, 5);
             this.rjButton3.Multiline = false;
@@ -3849,7 +3966,6 @@ namespace BeeUi
             this.rjButton4.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton4.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton4.Corner = BeeGlobal.Corner.Both;
-            this.rjButton4.DebounceResizeMs = 16;
             this.rjButton4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton4.FlatAppearance.BorderSize = 0;
             this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3871,6 +3987,7 @@ namespace BeeUi
             this.rjButton4.IsCLick = false;
             this.rjButton4.IsNotChange = true;
             this.rjButton4.IsRect = false;
+            this.rjButton4.IsTouch = false;
             this.rjButton4.IsUnGroup = true;
             this.rjButton4.Location = new System.Drawing.Point(305, 5);
             this.rjButton4.Multiline = false;
@@ -3904,7 +4021,6 @@ namespace BeeUi
             this.btnBar.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnBar.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnBar.Corner = BeeGlobal.Corner.Both;
-            this.btnBar.DebounceResizeMs = 16;
             this.btnBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnBar.FlatAppearance.BorderSize = 0;
             this.btnBar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3926,6 +4042,7 @@ namespace BeeUi
             this.btnBar.IsCLick = false;
             this.btnBar.IsNotChange = false;
             this.btnBar.IsRect = false;
+            this.btnBar.IsTouch = false;
             this.btnBar.IsUnGroup = true;
             this.btnBar.Location = new System.Drawing.Point(205, 5);
             this.btnBar.Multiline = false;
@@ -3936,7 +4053,7 @@ namespace BeeUi
             this.btnBar.TextColor = System.Drawing.Color.Black;
             this.btnBar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnBar.UseVisualStyleBackColor = false;
-          
+            // 
             // btnCLBar
             // 
             this.btnCLBar.AutoFont = true;
@@ -3959,7 +4076,6 @@ namespace BeeUi
             this.btnCLBar.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLBar.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLBar.Corner = BeeGlobal.Corner.Both;
-            this.btnCLBar.DebounceResizeMs = 16;
             this.btnCLBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLBar.FlatAppearance.BorderSize = 0;
             this.btnCLBar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -3981,6 +4097,7 @@ namespace BeeUi
             this.btnCLBar.IsCLick = false;
             this.btnCLBar.IsNotChange = false;
             this.btnCLBar.IsRect = false;
+            this.btnCLBar.IsTouch = false;
             this.btnCLBar.IsUnGroup = true;
             this.btnCLBar.Location = new System.Drawing.Point(5, 5);
             this.btnCLBar.Multiline = false;
@@ -4047,7 +4164,6 @@ namespace BeeUi
             this.rjButton7.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton7.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton7.Corner = BeeGlobal.Corner.Both;
-            this.rjButton7.DebounceResizeMs = 16;
             this.rjButton7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton7.FlatAppearance.BorderSize = 0;
             this.rjButton7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4069,6 +4185,7 @@ namespace BeeUi
             this.rjButton7.IsCLick = false;
             this.rjButton7.IsNotChange = true;
             this.rjButton7.IsRect = false;
+            this.rjButton7.IsTouch = false;
             this.rjButton7.IsUnGroup = true;
             this.rjButton7.Location = new System.Drawing.Point(305, 5);
             this.rjButton7.Multiline = false;
@@ -4102,7 +4219,6 @@ namespace BeeUi
             this.btnRight.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnRight.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnRight.Corner = BeeGlobal.Corner.Both;
-            this.btnRight.DebounceResizeMs = 16;
             this.btnRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRight.FlatAppearance.BorderSize = 0;
             this.btnRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4124,6 +4240,7 @@ namespace BeeUi
             this.btnRight.IsCLick = false;
             this.btnRight.IsNotChange = false;
             this.btnRight.IsRect = false;
+            this.btnRight.IsTouch = false;
             this.btnRight.IsUnGroup = true;
             this.btnRight.Location = new System.Drawing.Point(205, 5);
             this.btnRight.Multiline = false;
@@ -4134,7 +4251,7 @@ namespace BeeUi
             this.btnRight.TextColor = System.Drawing.Color.Black;
             this.btnRight.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRight.UseVisualStyleBackColor = false;
-           
+            // 
             // btnCLRight
             // 
             this.btnCLRight.AutoFont = true;
@@ -4157,7 +4274,6 @@ namespace BeeUi
             this.btnCLRight.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLRight.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLRight.Corner = BeeGlobal.Corner.Both;
-            this.btnCLRight.DebounceResizeMs = 16;
             this.btnCLRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLRight.FlatAppearance.BorderSize = 0;
             this.btnCLRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4179,6 +4295,7 @@ namespace BeeUi
             this.btnCLRight.IsCLick = false;
             this.btnCLRight.IsNotChange = false;
             this.btnCLRight.IsRect = false;
+            this.btnCLRight.IsTouch = false;
             this.btnCLRight.IsUnGroup = true;
             this.btnCLRight.Location = new System.Drawing.Point(5, 5);
             this.btnCLRight.Multiline = false;
@@ -4246,7 +4363,6 @@ namespace BeeUi
             this.rjButton10.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton10.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton10.Corner = BeeGlobal.Corner.Both;
-            this.rjButton10.DebounceResizeMs = 16;
             this.rjButton10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton10.FlatAppearance.BorderSize = 0;
             this.rjButton10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4268,6 +4384,7 @@ namespace BeeUi
             this.rjButton10.IsCLick = false;
             this.rjButton10.IsNotChange = true;
             this.rjButton10.IsRect = false;
+            this.rjButton10.IsTouch = false;
             this.rjButton10.IsUnGroup = true;
             this.rjButton10.Location = new System.Drawing.Point(305, 5);
             this.rjButton10.Multiline = false;
@@ -4301,7 +4418,6 @@ namespace BeeUi
             this.btnEnd.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnEnd.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnEnd.Corner = BeeGlobal.Corner.Both;
-            this.btnEnd.DebounceResizeMs = 16;
             this.btnEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEnd.FlatAppearance.BorderSize = 0;
             this.btnEnd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4323,6 +4439,7 @@ namespace BeeUi
             this.btnEnd.IsCLick = false;
             this.btnEnd.IsNotChange = false;
             this.btnEnd.IsRect = false;
+            this.btnEnd.IsTouch = false;
             this.btnEnd.IsUnGroup = true;
             this.btnEnd.Location = new System.Drawing.Point(205, 5);
             this.btnEnd.Multiline = false;
@@ -4333,7 +4450,7 @@ namespace BeeUi
             this.btnEnd.TextColor = System.Drawing.Color.Black;
             this.btnEnd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEnd.UseVisualStyleBackColor = false;
-           
+            // 
             // btnCLEnd
             // 
             this.btnCLEnd.AutoFont = true;
@@ -4356,7 +4473,6 @@ namespace BeeUi
             this.btnCLEnd.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLEnd.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLEnd.Corner = BeeGlobal.Corner.Both;
-            this.btnCLEnd.DebounceResizeMs = 16;
             this.btnCLEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLEnd.FlatAppearance.BorderSize = 0;
             this.btnCLEnd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4378,6 +4494,7 @@ namespace BeeUi
             this.btnCLEnd.IsCLick = false;
             this.btnCLEnd.IsNotChange = false;
             this.btnCLEnd.IsRect = false;
+            this.btnCLEnd.IsTouch = false;
             this.btnCLEnd.IsUnGroup = true;
             this.btnCLEnd.Location = new System.Drawing.Point(5, 5);
             this.btnCLEnd.Multiline = false;
@@ -4600,7 +4717,6 @@ namespace BeeUi
             this.rjButton13.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton13.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton13.Corner = BeeGlobal.Corner.Both;
-            this.rjButton13.DebounceResizeMs = 16;
             this.rjButton13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton13.FlatAppearance.BorderSize = 0;
             this.rjButton13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4622,6 +4738,7 @@ namespace BeeUi
             this.rjButton13.IsCLick = false;
             this.rjButton13.IsNotChange = true;
             this.rjButton13.IsRect = false;
+            this.rjButton13.IsTouch = false;
             this.rjButton13.IsUnGroup = true;
             this.rjButton13.Location = new System.Drawing.Point(305, 5);
             this.rjButton13.Multiline = false;
@@ -4655,7 +4772,6 @@ namespace BeeUi
             this.btnBG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnBG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnBG.Corner = BeeGlobal.Corner.Both;
-            this.btnBG.DebounceResizeMs = 16;
             this.btnBG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnBG.FlatAppearance.BorderSize = 0;
             this.btnBG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4677,6 +4793,7 @@ namespace BeeUi
             this.btnBG.IsCLick = false;
             this.btnBG.IsNotChange = false;
             this.btnBG.IsRect = false;
+            this.btnBG.IsTouch = false;
             this.btnBG.IsUnGroup = true;
             this.btnBG.Location = new System.Drawing.Point(205, 5);
             this.btnBG.Multiline = false;
@@ -4687,7 +4804,7 @@ namespace BeeUi
             this.btnBG.TextColor = System.Drawing.Color.Black;
             this.btnBG.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnBG.UseVisualStyleBackColor = false;
-          
+            // 
             // btnCLBG
             // 
             this.btnCLBG.AutoFont = true;
@@ -4710,7 +4827,6 @@ namespace BeeUi
             this.btnCLBG.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLBG.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLBG.Corner = BeeGlobal.Corner.Both;
-            this.btnCLBG.DebounceResizeMs = 16;
             this.btnCLBG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLBG.FlatAppearance.BorderSize = 0;
             this.btnCLBG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4732,6 +4848,7 @@ namespace BeeUi
             this.btnCLBG.IsCLick = false;
             this.btnCLBG.IsNotChange = false;
             this.btnCLBG.IsRect = false;
+            this.btnCLBG.IsTouch = false;
             this.btnCLBG.IsUnGroup = true;
             this.btnCLBG.Location = new System.Drawing.Point(5, 5);
             this.btnCLBG.Multiline = false;
@@ -4798,7 +4915,6 @@ namespace BeeUi
             this.rjButton16.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.rjButton16.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.rjButton16.Corner = BeeGlobal.Corner.Both;
-            this.rjButton16.DebounceResizeMs = 16;
             this.rjButton16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rjButton16.FlatAppearance.BorderSize = 0;
             this.rjButton16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4820,6 +4936,7 @@ namespace BeeUi
             this.rjButton16.IsCLick = false;
             this.rjButton16.IsNotChange = true;
             this.rjButton16.IsRect = false;
+            this.rjButton16.IsTouch = false;
             this.rjButton16.IsUnGroup = true;
             this.rjButton16.Location = new System.Drawing.Point(305, 5);
             this.rjButton16.Multiline = false;
@@ -4853,7 +4970,6 @@ namespace BeeUi
             this.btnTop.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnTop.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnTop.Corner = BeeGlobal.Corner.Both;
-            this.btnTop.DebounceResizeMs = 16;
             this.btnTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTop.FlatAppearance.BorderSize = 0;
             this.btnTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4875,6 +4991,7 @@ namespace BeeUi
             this.btnTop.IsCLick = false;
             this.btnTop.IsNotChange = false;
             this.btnTop.IsRect = false;
+            this.btnTop.IsTouch = false;
             this.btnTop.IsUnGroup = true;
             this.btnTop.Location = new System.Drawing.Point(205, 5);
             this.btnTop.Multiline = false;
@@ -4885,7 +5002,7 @@ namespace BeeUi
             this.btnTop.TextColor = System.Drawing.Color.Black;
             this.btnTop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnTop.UseVisualStyleBackColor = false;
-           
+            // 
             // btnCLTop
             // 
             this.btnCLTop.AutoFont = true;
@@ -4908,7 +5025,6 @@ namespace BeeUi
             this.btnCLTop.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCLTop.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCLTop.Corner = BeeGlobal.Corner.Both;
-            this.btnCLTop.DebounceResizeMs = 16;
             this.btnCLTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCLTop.FlatAppearance.BorderSize = 0;
             this.btnCLTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -4930,6 +5046,7 @@ namespace BeeUi
             this.btnCLTop.IsCLick = false;
             this.btnCLTop.IsNotChange = false;
             this.btnCLTop.IsRect = false;
+            this.btnCLTop.IsTouch = false;
             this.btnCLTop.IsUnGroup = true;
             this.btnCLTop.Location = new System.Drawing.Point(5, 5);
             this.btnCLTop.Multiline = false;
@@ -5208,7 +5325,6 @@ namespace BeeUi
             this.btnClose.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnClose.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnClose.Corner = BeeGlobal.Corner.Both;
-            this.btnClose.DebounceResizeMs = 16;
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -5229,6 +5345,7 @@ namespace BeeUi
             this.btnClose.IsCLick = false;
             this.btnClose.IsNotChange = false;
             this.btnClose.IsRect = false;
+            this.btnClose.IsTouch = false;
             this.btnClose.IsUnGroup = false;
             this.btnClose.Location = new System.Drawing.Point(304, 3);
             this.btnClose.Multiline = false;
@@ -5263,7 +5380,6 @@ namespace BeeUi
             this.btnSave.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnSave.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnSave.Corner = BeeGlobal.Corner.Both;
-            this.btnSave.DebounceResizeMs = 16;
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -5285,6 +5401,7 @@ namespace BeeUi
             this.btnSave.IsCLick = false;
             this.btnSave.IsNotChange = false;
             this.btnSave.IsRect = false;
+            this.btnSave.IsTouch = false;
             this.btnSave.IsUnGroup = false;
             this.btnSave.Location = new System.Drawing.Point(3, 3);
             this.btnSave.Multiline = false;
@@ -5518,5 +5635,7 @@ namespace BeeUi
         private System.Windows.Forms.Label label28;
         private AdjustBarEx adjustBarEx4;
         private System.Windows.Forms.Label label29;
+        private RJButton btnShowScore;
+        private RJButton btnShowLabel;
     }
 }

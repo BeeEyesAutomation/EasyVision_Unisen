@@ -569,6 +569,10 @@ namespace BeeUi
             if (Global.TypeCrop == TypeCrop.Area) tool.Propety.rotArea = rr;
             else if (Global.TypeCrop == TypeCrop.Mask) tool.Propety.rotMask = rr;
             else tool.Propety.rotCrop = rr;
+            if(tool.TypeTool==TypeTool.Position_Adjustment|| tool.TypeTool == TypeTool.Pattern)
+            {
+                tool.Propety.ReSetAngle();
+            }    
         }
 
   

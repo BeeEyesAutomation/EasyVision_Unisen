@@ -436,7 +436,7 @@ namespace BeeCore
             {
                // double Area2 = Math.Round(baseRect.Width * baseRect.Height / 100);
 
-                graphics.DrawString(Area, currentFont, new SolidBrush(Color.Gray), baseRect.X, (int)baseRect.Y + (int)baseRect.Height - labelHeight - 5);
+                graphics.DrawString(Area, currentFont, textBrush, baseRect.X, (int)baseRect.Y + (int)baseRect.Height - labelHeight - 5);
             }
 
             using (SolidBrush leftBgBrush = new SolidBrush(baseBackColor))

@@ -55,6 +55,9 @@ namespace BeeUi
             btnShowBox.IsCLick = Global.Config.IsShowBox;
             btnShowDetail.IsCLick = Global.Config.IsShowDetail;
             btnShowPositon.IsCLick = Global.Config.IsShowPostion;
+            btnShowScore.IsCLick = Global.Config.IsShowScore;
+            btnShowLabel.IsCLick= Global.Config.IsShowLabel;
+
             lbClOK.BackColor = Global.Config.ColorOK;
             btnClOK.ForeColor = Global.Config.ColorOK;
             lbCLNG.BackColor = Global.Config.ColorNG;
@@ -371,6 +374,14 @@ namespace BeeUi
             Global.ParaCommon.IsResetReady = btnResetReady.IsCLick;
         }
 
-       
+        private void btnShowLabel_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowLabel=btnShowLabel.IsCLick;
+        }
+
+        private void btnShowScore_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowScore = btnShowScore.IsCLick;
+        }
     }
 }
