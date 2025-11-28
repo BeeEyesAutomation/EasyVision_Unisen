@@ -58,7 +58,18 @@ namespace BeeUi.Tool
                     int index = 0;
                     foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
-                        propetyTool.Propety.Index = index; index++;
+                       
+                        propetyTool.Propety.Index = index;
+                        propetyTool.ItemTool.IndexTool = index;
+                        if(propetyTool.ItemTool2!=null)
+                            propetyTool.ItemTool2.IndexTool = index;
+                        if (propetyTool.ItemTool3 != null)
+                            propetyTool.ItemTool3.IndexTool = index;
+                        if (propetyTool.ItemTool4!= null)
+                            propetyTool.ItemTool4.IndexTool = index;
+                        index++;
+                       
+
                     }
                    
                   BeeInterface. Load.ArrangeLogic();

@@ -20,7 +20,7 @@ namespace BeeInterface
         private Corner _corner = Corner.Both;
         private Color borderColor = Color.Gray;
         private TextImageRelation _textImageRelation;
-
+      
         // State
         private bool _isClick = false;
         private bool _isHovered = false;
@@ -75,7 +75,8 @@ namespace BeeInterface
         // ===== Căn giữa icon + text như một khối =====
         [Category("Behavior")] public Padding ContentPadding { get; set; } = new Padding(8, 6, 8, 6);
         [Category("Behavior")] public int ImageTextSpacing { get; set; } = 6;
-
+        [Category("DebounceResizeMs")] public int DebounceResizeMs { get; set; } = 6;
+    
         // ===== Click Gradient Colors =====
         [Category("Click Gradient Colors")]
         public Color ClickTopColor { get; set; } = Color.FromArgb(244, 192, 89);
@@ -417,7 +418,7 @@ namespace BeeInterface
 
             this.Region = new Region(_pathSurface);
         }
-        public int DebounceResizeMs = 0;
+    
 
         private GraphicsPath CreateRoundedPath(Rectangle rect, int radius, Corner corners)
         {

@@ -60,11 +60,16 @@ namespace BeeCore.Funtion
                     row++;
                     foreach (PropetyTool tool in ListPropety)
                     {
-                        control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50));
+                        control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                         control.RowCount = row + 1;
                         tool.ItemTool.Dock = DockStyle.Fill;
                         tool.ItemTool.Margin = new Padding(5, 0, 10, 5);
                         control.Controls.Add(tool.ItemTool, 0, row);
+                        //control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50));
+                        //control.RowCount = row + 1;
+                        //tool.ItemTool.Dock = DockStyle.Fill;
+                        //tool.ItemTool.Margin = new Padding(5, 0, 10, 5);
+                        //control.Controls.Add(tool.ItemTool, 0, row);
                         row++;
                     }
                     i++;

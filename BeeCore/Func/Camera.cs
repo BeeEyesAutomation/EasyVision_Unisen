@@ -291,10 +291,22 @@ namespace BeeCore
               
                         xf.Scale(s, s);
                         g.Transform = xf;
-                        SizeF sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize));
-                        g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
-                        if (Global.TotalOK)
-                            g.DrawString("OK", new Font("Arial", Global.Config.FontSize), Brushes.Green, new PointF(10, sz.Height+5));
+                        SizeF sz = new SizeF();
+                        if (Global.ParaCommon.IsMultiCamera)
+                        {
+                             sz = g.MeasureString(Para.Name, new Font("Arial", Global.Config.FontSize));
+
+                            g.DrawString(Para.Name, new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
+                        }
+                        else
+                        {
+                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize));
+
+                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
+                        }
+
+                        if (Results == Results.OK)
+                            g.DrawString("OK", new Font("Arial", Global.Config.FontSize), Brushes.Green, new PointF(10, sz.Height + 5));
                         else
                             g.DrawString("NG", new Font("Arial", Global.Config.FontSize), Brushes.Red, new PointF(10, sz.Height + 5));
                         var tools = BeeCore.Common.PropetyTools[IndexCCD];

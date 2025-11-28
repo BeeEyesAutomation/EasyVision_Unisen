@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +35,25 @@ namespace BeeUi
 
         private GoogleDriveDllManager _manager = new GoogleDriveDllManager();
         private List<(string FileName, string FileId, Version NewVersion, Version OldVersion)> _pendingUpdates;
-
+        public static async Task<bool> HasInternetByHttpAsync(
+    string url = "https://www.google.com")
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(3);
+                    using (var response = await client.GetAsync(url))
+                    {
+                        return response.IsSuccessStatusCode;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private async void btnCheckUpdate_Click(object sender, EventArgs e)
         {
             try
@@ -42,7 +61,11 @@ namespace BeeUi
                 lbStatus.Text = "Đang kiểm tra DLL...";
                 progressBar.Value = 0;
                 lbList.Items.Clear();
-
+                if(! await HasInternetByHttpAsync())
+                {
+                    MessageBox.Show("Please Check Internet !");
+                    return;
+                }    
                 var progress = new Progress<(int percent, string status)>(p =>
                 {
                     progressBar.Value = p.percent;
@@ -74,68 +97,76 @@ namespace BeeUi
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
             }
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (_pendingUpdates == null || _pendingUpdates.Count == 0) return;
-
-            lbStatus.Text = "Đang cập nhật DLL...";
-            progressBar.Value = 0;
-
-            var progress = new Progress<(int percent, string status)>(p =>
+            try
             {
-                progressBar.Value = p.percent;
-                lbStatus.Text = p.status;
-            });
+                if (_pendingUpdates == null || _pendingUpdates.Count == 0) return;
 
-            string localFolder = Path.Combine(Environment.CurrentDirectory, "Update");
-            await Task.Run(() => _manager.UpdateDllsAsync(_pendingUpdates, localFolder, progress));
-            string updateFolder = Path.Combine(Environment.CurrentDirectory, "Update");
-            string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+                lbStatus.Text = "Đang cập nhật DLL...";
+                progressBar.Value = 0;
 
-             progress = new Progress<(int percent, string status)>(p =>
-            {
-                progressBar.Value = p.percent;
-                lbStatus.Text = p.status;
-            });
-
-            bool needRestart = true;
-
-            List<string> updatedDlls = new List<string>();
-
-            await Task.Run(() =>
-            {
-                _manager.UpdateDllsWithRestart(updateFolder, appFolder, out needRestart, updatedDlls);
-            });
-
-            // Nếu cần restart
-            if (needRestart)
-            {
-                _manager.CreateRestartBatch(appFolder);
-                lbStatus.Text = "Một số DLL cần restart để update.";
-                MessageBox.Show("Ứng dụng sẽ khởi động lại để hoàn tất update.");
-
-                // Chạy batch trước khi thoát
-                string batchPath = Path.Combine(appFolder, "update_and_restart.bat");
-                Process.Start(new ProcessStartInfo
+                var progress = new Progress<(int percent, string status)>(p =>
                 {
-                    FileName = batchPath,
-                    WorkingDirectory = appFolder,
-                    UseShellExecute = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
+                    progressBar.Value = p.percent;
+                    lbStatus.Text = p.status;
                 });
 
-                // Thoát sau khi chạy batch
-                Application.Exit();
-            }
-            else
-            {
-                lbStatus.Text = "Update DLL hoàn tất (không cần restart).";
-            }
+                string localFolder = Path.Combine(Environment.CurrentDirectory, "Update");
+                await Task.Run(() => _manager.UpdateDllsAsync(_pendingUpdates, localFolder, progress));
+                string updateFolder = Path.Combine(Environment.CurrentDirectory, "Update");
+                string appFolder = AppDomain.CurrentDomain.BaseDirectory;
 
-            btnUpdate.Enabled = false;
+                progress = new Progress<(int percent, string status)>(p =>
+               {
+                   progressBar.Value = p.percent;
+                   lbStatus.Text = p.status;
+               });
+
+                bool needRestart = true;
+
+                List<string> updatedDlls = new List<string>();
+
+                await Task.Run(() =>
+                {
+                    _manager.UpdateDllsWithRestart(updateFolder, appFolder, out needRestart, updatedDlls);
+                });
+
+                // Nếu cần restart
+                if (needRestart)
+                {
+                    _manager.CreateRestartBatch(appFolder);
+                    lbStatus.Text = "Một số DLL cần restart để update.";
+                    MessageBox.Show("Ứng dụng sẽ khởi động lại để hoàn tất update.");
+
+                    // Chạy batch trước khi thoát
+                    string batchPath = Path.Combine(appFolder, "update_and_restart.bat");
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = batchPath,
+                        WorkingDirectory = appFolder,
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    });
+
+                    // Thoát sau khi chạy batch
+                    Application.Exit();
+                }
+                else
+                {
+                    lbStatus.Text = "Update DLL hoàn tất (không cần restart).";
+                }
+
+                btnUpdate.Enabled = false;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)

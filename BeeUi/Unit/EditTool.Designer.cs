@@ -507,7 +507,7 @@ namespace BeeUi
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 33);
             this.label1.TabIndex = 5;
-            this.label1.Text = "1.1.7";
+            this.label1.Text = "1.1.8";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // split6
@@ -553,6 +553,7 @@ namespace BeeUi
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Visible = false;
             // 
             // button1
             // 
@@ -660,7 +661,7 @@ namespace BeeUi
             this.autoFontLabel1.Name = "autoFontLabel1";
             this.autoFontLabel1.Size = new System.Drawing.Size(309, 51);
             this.autoFontLabel1.TabIndex = 9;
-            this.autoFontLabel1.Text = "Vision Sensor ";
+            this.autoFontLabel1.Text = "EasyVision";
             this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // BtnHeaderBar
@@ -684,7 +685,7 @@ namespace BeeUi
             // btnLogo
             // 
             this.btnLogo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnLogo.Image = global::BeeUi.Properties.Resources.UNISEN_icon1;
+            this.btnLogo.Image = global::BeeUi.Properties.Resources.LogoAHSo;
             this.btnLogo.Location = new System.Drawing.Point(0, 0);
             this.btnLogo.Name = "btnLogo";
             this.btnLogo.Size = new System.Drawing.Size(60, 51);

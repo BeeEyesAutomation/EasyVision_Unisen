@@ -4545,18 +4545,23 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             {
                 if (Global.ParaCommon.IsMultiCamera)
                 {
-                    Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                    foreach(Camera camera in BeeCore.Common.listCamera)
                     {
-                        if (camera != null)
-                        {
-                           camera.Read();
-                           
-                            if (camera.Para.TypeCamera == TypeCamera.USB)
-                               camera.Read();
-                          
-                        }
+                        if (camera == null) continue;
+                        camera.Read();
 
-                    });
+                        if (camera.Para.TypeCamera == TypeCamera.USB)
+                            camera.Read();
+                    }    
+                    //Parallel.ForEach(BeeCore.Common.listCamera, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, camera =>
+                    //{
+                    //    if (camera != null)
+                    //    {
+                          
+                          
+                    //    }
+
+                    //});
                 }
                 else
                 {

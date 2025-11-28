@@ -675,7 +675,7 @@ namespace BeeCore
                                     }
                                     else
                                     {
-                                        if (item.Name == "BI_CHI")
+                                        if (item.Name == "B_CHI")
                                         {
                                             Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
                                             if (Area >= item.ValueArea * 100)
@@ -707,7 +707,7 @@ namespace BeeCore
 
                                 }
                                 
-                                if (item.Name != "BI_CHI")
+                                if (item.Name != "B_CHI")
                                     if (item.IsCounter)
                                 {
                                     int count = labelList.Count(l => l == label);

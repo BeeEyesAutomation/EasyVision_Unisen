@@ -461,7 +461,7 @@ namespace BeeUi
                         if (camera.IsConnected)
                         {
                             
-                                await camera.SetFullPara();
+                                 camera.SetFullPara();
                         }
 
                     }
@@ -565,7 +565,7 @@ namespace BeeUi
             return IsConnect;
         }
 
-        private async  void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private   void workConAll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
           
 

@@ -200,7 +200,7 @@ namespace BeeInterface
             this.btnOk.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnOk.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnOk.Corner = BeeGlobal.Corner.Both;
-            this.btnOk.DebounceResizeMs = 16;
+          
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnOk.FlatAppearance.BorderSize = 0;
             this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
