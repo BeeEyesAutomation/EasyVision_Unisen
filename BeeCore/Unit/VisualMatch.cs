@@ -134,6 +134,8 @@ namespace BeeCore
             ColorPixel = new ColorPixel();
             rotCrop = null;
             rotMask = null;
+            if (rotArea == null)
+                rotArea = new RectRotate();
             if(bmRaw != null)
             {
                 matTemp = bmRaw.ToMat();

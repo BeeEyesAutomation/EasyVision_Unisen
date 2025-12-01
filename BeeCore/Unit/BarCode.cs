@@ -490,7 +490,7 @@ namespace BeeCore
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                     var cli = new BarcodeCoreCli();
                     var opts = DetectOptionsCli.Defaults();
-                    opts.FindBoxes = true;// ModeCheck== ModeCheck.Single? false:true;
+                    opts.FindBoxes = false;// ModeCheck== ModeCheck.Single? false:true;
                     BarcodeCoreCli.DetectAll(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli,opts, ref listRectBarcode,ref listContentBarcode,ref listTypeBarcode);
 
 
@@ -569,13 +569,13 @@ namespace BeeCore
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             else
                 Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-            foreach (String s in ListTempBarcode)
-            {
-                int index = rectRotates.FindIndex(a => a.Name.Contains(s));
-               if(index < 0)
-                    Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+            //foreach (String s in ListTempBarcode)
+            //{
+            //    int index = rectRotates.FindIndex(a => a.Name.Contains(s));
+            //   if(index < 0)
+            //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
-            }
+            //}
               
                 if (Global.IsAutoTemp)
                 {
@@ -592,13 +592,13 @@ namespace BeeCore
                     Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 else
                     Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                foreach (String s in ListTempBarcode)
-                {
-                    int index = rectRotates.FindIndex(a => a.Name.Contains(s));
-                    if (index < 0)
-                        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                //foreach (String s in ListTempBarcode)
+                //{
+                //    int index = rectRotates.FindIndex(a => a.Name.Contains(s));
+                //    if (index < 0)
+                //        Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
-                }
+                //}
 
             }
 

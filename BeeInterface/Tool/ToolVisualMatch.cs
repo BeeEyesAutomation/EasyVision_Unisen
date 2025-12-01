@@ -19,6 +19,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.MonthCalendar;
 
 namespace BeeInterface
 {
@@ -49,7 +50,8 @@ namespace BeeInterface
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
-
+            if (Propety.rotArea == null)
+                Propety.rotArea = new RectRotate();
 
             AdjColorTolerance.Value = Propety.ColorTolerance;
             AdjMaxDiffPixels.Value=Propety.MaxDiffPixels;
