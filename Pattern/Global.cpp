@@ -423,10 +423,10 @@ void CommonPlus::DrawShapeMaskIntoWithSize(
 //}
 // ---- Góc của RectRotationDeg là CW (camera) -> OpenCV cần CCW ----
 // -> BẮT BUỘC phải đảo dấu khi dùng warpAffine
-static inline double ConvertCWtoCCW(double degCW)
-{
-    return -degCW;
-}
+//static inline double ConvertCWtoCCW(double degCW)
+//{
+//    return -degCW;
+//}
 
 // ---- Chuẩn hoá góc về [-90..90] nhưng KHÔNG swap width/height ----
 static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
@@ -435,9 +435,11 @@ static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
     while (angDeg <= -180.0) angDeg += 360.0;
     while (angDeg > 180.0)   angDeg -= 360.0;
 
-    // đưa về [-90 .. 90] nhưng không swap size
-    if (angDeg > 90)      angDeg -= 180;
-    else if (angDeg < -90) angDeg += 180;
+    //// đưa về [-90 .. 90] nhưng không swap size
+    //if (angDeg > 90)
+    //    angDeg -= 180;
+    //else if (angDeg < -90)
+    //    angDeg += 180;
 }
 
 
@@ -455,15 +457,15 @@ void CommonPlus::RunCrop(
     GetAnchorSizeFor(rr, worldAnchor, rectSize, localCenter);
 
     // 2) Convert góc CW -> CCW cho OpenCV
-    double angleUsed = ConvertCWtoCCW(rr.RectRotationDeg);
+    double angleUsed = rr.RectRotationDeg;// ConvertCWtoCCW(rr.RectRotationDeg);
 
     // 3) Normalize góc để patch nằm ngang
     NormalizeSizeAndAngle(rectSize, angleUsed);
 
     // 4) Góc shape bên trong patch (sau khi ảnh xoay ngược lại)
-    float angleInPatchCrop = static_cast<float>(
-        ConvertCWtoCCW(rr.RectRotationDeg) - angleUsed
-        );
+    float angleInPatchCrop = angleUsed;// static_cast<float>(
+       /* ConvertCWtoCCW(rr.RectRotationDeg) - angleUsed
+        );*/
    /* if (angleInPatchCrop > 180)  angleInPatchCrop -= 360;
     if (angleInPatchCrop < -180) angleInPatchCrop += 360;*/
 
@@ -523,7 +525,7 @@ void CommonPlus::RunCrop(
             patchCenter.y + deltaInPatch.y
         );
 
-        double maskAng = ConvertCWtoCCW(rrMask->RectRotationDeg);
+        double maskAng = rrMask->RectRotationDeg;// ConvertCWtoCCW(rrMask->RectRotationDeg);
         NormalizeSizeAndAngle(maskSize, maskAng);
 
         float maskAngleInPatch = (float)(maskAng - angleUsed);

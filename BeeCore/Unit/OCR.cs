@@ -406,6 +406,7 @@ namespace BeeCore
 
         public  bool SetModel()
         {
+            if (!Global.IsOCR) return false;
             using (Py.GIL())
             {
                 

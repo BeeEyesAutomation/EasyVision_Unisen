@@ -381,7 +381,7 @@ namespace BeeInterface
             }
             base.Dispose(disposing);
         }
-
+     
         // ======================= Region & Border Path ===========================
         private void UpdateRegionPaths()
         {
@@ -389,105 +389,152 @@ namespace BeeInterface
             if (_pathBorder != null) { _pathBorder.Dispose(); _pathBorder = null; }
 
             Rectangle rect = this.ClientRectangle;
-            if (rect.Width <= 0 || rect.Height <= 0)
+            if (rect.Width <= 1 || rect.Height <= 1)
             {
                 this.Region = null;
                 return;
             }
 
-            // ⬅  THÊM: _corner == Corner.None coi như góc vuông
+            // === OFFSET 0.5 PX CHUẨN ĐỂ BORDER KHÔNG LỆCH ===
+            float offset = 0.5f;
+            RectangleF rf = new RectangleF(
+                rect.X + offset,
+                rect.Y + offset,
+                rect.Width - 1f,
+                rect.Height - 1f
+            );
+
+            // Nút vuông
             if (_isRect || borderRadius <= 0 || _corner == Corner.None)
             {
                 _pathSurface = new GraphicsPath();
-                _pathSurface.AddRectangle(rect);
+                _pathSurface.AddRectangle(rf);
 
-                Rectangle b = Rectangle.Inflate(rect, -1, -1);
                 _pathBorder = new GraphicsPath();
-                _pathBorder.AddRectangle(b);
+                _pathBorder.AddRectangle(rf);
 
                 this.Region = new Region(_pathSurface);
                 return;
             }
 
-            _pathSurface = CreateRoundedPath(rect, borderRadius, _corner);
+            // Nút bo góc
+            float rad = borderRadius;
 
-            Rectangle innerRect = Rectangle.Inflate(rect, -borderSize, -borderSize);
-            int innerRadius = borderRadius - borderSize;
-            if (innerRadius < 1) innerRadius = 1;
-            _pathBorder = CreateRoundedPath(innerRect, innerRadius, _corner);
+            _pathSurface = CreateRoundedPath(rf, rad, _corner);
+            _pathBorder = CreateRoundedPath(rf, rad, _corner);
 
             this.Region = new Region(_pathSurface);
         }
-    
-
-        private GraphicsPath CreateRoundedPath(Rectangle rect, int radius, Corner corners)
+        private GraphicsPath CreateRoundedPath(RectangleF rect, float radius, Corner corners)
         {
             GraphicsPath path = new GraphicsPath();
-            int d = radius * 2;
 
-            bool tl = false;
-            bool tr = false;
-            bool bl = false;
-            bool br = false;
+            float d = radius * 2f;
 
-            // Map theo enum Corner của bạn
+            bool tl = false, tr = false, bl = false, br = false;
+
             switch (corners)
             {
                 case Corner.Both:
-                    tl = tr = bl = br = true;
-                    break;
-
+                    tl = tr = bl = br = true; break;
                 case Corner.Left:
-                    tl = bl = true;
-                    break;
-
+                    tl = bl = true; break;
                 case Corner.Right:
-                    tr = br = true;
-                    break;
-
+                    tr = br = true; break;
                 case Corner.Top:
-                    tl = tr = true;
-                    break;
-
+                    tl = tr = true; break;
                 case Corner.Bottom:
-                    bl = br = true;
-                    break;
-
-                case Corner.None:
+                    bl = br = true; break;
                 default:
-                    // Không bo góc, chỉ vẽ rectangle
                     path.AddRectangle(rect);
                     path.CloseFigure();
                     return path;
             }
 
-            // Top-left
-            if (tl)
-                path.AddArc(rect.X, rect.Y, d, d, 180, 90);
-            else
-                path.AddLine(rect.X, rect.Y, rect.X + radius, rect.Y);
+            if (tl) path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+            else path.AddLine(rect.X, rect.Y, rect.X + radius, rect.Y);
 
-            // Top-right
-            if (tr)
-                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-            else
-                path.AddLine(rect.Right - radius, rect.Y, rect.Right, rect.Y);
+            if (tr) path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+            else path.AddLine(rect.Right - radius, rect.Y, rect.Right, rect.Y);
 
-            // Bottom-right
-            if (br)
-                path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-            else
-                path.AddLine(rect.Right, rect.Bottom - radius, rect.Right, rect.Bottom);
+            if (br) path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+            else path.AddLine(rect.Right, rect.Bottom - radius, rect.Right, rect.Bottom);
 
-            // Bottom-left
-            if (bl)
-                path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-            else
-                path.AddLine(rect.X, rect.Bottom, rect.X, rect.Bottom - radius);
+            if (bl) path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+            else path.AddLine(rect.X, rect.Bottom, rect.X, rect.Bottom - radius);
 
             path.CloseFigure();
             return path;
         }
+
+        //private GraphicsPath CreateRoundedPath(Rectangle rect, float radius, Corner corners)
+        //{
+        //    GraphicsPath path = new GraphicsPath();
+        //    int d = radius * 2;
+
+        //    bool tl = false;
+        //    bool tr = false;
+        //    bool bl = false;
+        //    bool br = false;
+
+        //    // Map theo enum Corner của bạn
+        //    switch (corners)
+        //    {
+        //        case Corner.Both:
+        //            tl = tr = bl = br = true;
+        //            break;
+
+        //        case Corner.Left:
+        //            tl = bl = true;
+        //            break;
+
+        //        case Corner.Right:
+        //            tr = br = true;
+        //            break;
+
+        //        case Corner.Top:
+        //            tl = tr = true;
+        //            break;
+
+        //        case Corner.Bottom:
+        //            bl = br = true;
+        //            break;
+
+        //        case Corner.None:
+        //        default:
+        //            // Không bo góc, chỉ vẽ rectangle
+        //            path.AddRectangle(rect);
+        //            path.CloseFigure();
+        //            return path;
+        //    }
+
+        //    // Top-left
+        //    if (tl)
+        //        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+        //    else
+        //        path.AddLine(rect.X, rect.Y, rect.X + radius, rect.Y);
+
+        //    // Top-right
+        //    if (tr)
+        //        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+        //    else
+        //        path.AddLine(rect.Right - radius, rect.Y, rect.Right, rect.Y);
+
+        //    // Bottom-right
+        //    if (br)
+        //        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+        //    else
+        //        path.AddLine(rect.Right, rect.Bottom - radius, rect.Right, rect.Bottom);
+
+        //    // Bottom-left
+        //    if (bl)
+        //        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+        //    else
+        //        path.AddLine(rect.X, rect.Bottom, rect.X, rect.Bottom - radius);
+
+        //    path.CloseFigure();
+        //    return path;
+        //}
 
         // ===== Layout scheduling: global queue + Application.Idle =====
         private void RequestLayout()
@@ -969,14 +1016,16 @@ namespace BeeInterface
                 TextRenderer.DrawText(g, Text, Font, drawRect, ForeColor, baseFlags | alignFlags);
             }
 
+
             // Border
             if (borderSize > 0 && _pathBorder != null)
             {
-                g.PixelOffsetMode = PixelOffsetMode.Half;
                 using (Pen pen = new Pen(borderColor, borderSize))
                 {
-                    pen.Alignment = PenAlignment.Inset;
+                    pen.Alignment = PenAlignment.Center;  // FIX: border không bị đẩy vào trong
                     pen.LineJoin = LineJoin.Round;
+
+                    g.PixelOffsetMode = PixelOffsetMode.None; // FIX: không lệch 0.5px
                     g.DrawPath(pen, _pathBorder);
                 }
             }

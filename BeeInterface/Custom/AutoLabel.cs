@@ -8,6 +8,8 @@ namespace BeeInterface
     public class AutoFontLabel : Label
     {
         private bool autoFont = true;
+        private bool _adjusting = false;      // Chặn vòng lặp
+        private Control _oldParent = null;    // Để unsubscribe event
 
         [Category("Behavior")]
         public bool AutoFont
@@ -19,19 +21,29 @@ namespace BeeInterface
         public AutoFontLabel()
         {
             this.AutoSize = false;
-            
-           // this.TextAlign = ContentAlignment.MiddleCenter;
+            //this.TextAlign = ContentAlignment.MiddleCenter;
         }
+
+        //===============================
+        // XỬ LÝ PARENT
+        //===============================
         protected override void OnParentChanged(EventArgs e)
         {
+            // Gỡ bỏ event cũ
+            if (_oldParent != null)
+                _oldParent.SizeChanged -= Parent_SizeChanged;
+
             base.OnParentChanged(e);
-            // Subscribe to parent's SizeChanged to auto-stretch height
+
+            // Gắn event mới
             if (this.Parent != null)
             {
                 this.Parent.SizeChanged += Parent_SizeChanged;
-                // Initial sync
+                _oldParent = this.Parent;
+
                 this.Height = this.Parent.ClientSize.Height;
             }
+
             if (autoFont) AdjustFont();
         }
 
@@ -40,10 +52,15 @@ namespace BeeInterface
             if (this.Parent != null)
             {
                 this.Height = this.Parent.ClientSize.Height;
-                if (autoFont) AdjustFont();
+
+                if (autoFont)
+                    AdjustFont();
             }
         }
 
+        //===============================
+        // TEXT / SIZE CHANGE
+        //===============================
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
@@ -55,44 +72,60 @@ namespace BeeInterface
         {
             base.OnSizeChanged(e);
 
-            if (autoFont)
+            if (!_adjusting && autoFont)
                 AdjustFont();
-
         }
 
+        //===============================
+        // TÍNH TOÁN FONT
+        //===============================
         private void AdjustFont()
         {
-            if (string.IsNullOrEmpty(this.Text) || this.ClientSize.Width <= 0 || this.ClientSize.Height <= 0)
-                return;
+            if (_adjusting) return;  // CHẶN VÒNG LẶP
+            if (!autoFont) return;
+            if (string.IsNullOrEmpty(Text)) return;
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
 
-            using (Graphics g = this.CreateGraphics())
+            _adjusting = true;
+
+            try
             {
-                float minFont = 1f;
-                float maxFont = 100f;
-                float best = minFont;
-
-                while (maxFont - minFont > 0.5f)
+                using (Graphics g = this.CreateGraphics())
                 {
-                    float mid = (minFont + maxFont) / 2;
-                    using (Font testFont = new Font(this.Font.FontFamily, mid, this.Font.Style))
-                    {
-                        Size proposedSize = this.ClientSize;
-                        TextFormatFlags flags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
-                        Size measured = TextRenderer.MeasureText(g, this.Text, testFont, proposedSize, flags);
+                    float minF = 1f;
+                    float maxF = 300f;
+                    float best = minF;
 
-                        if (measured.Height <= this.ClientSize.Height && measured.Width <= this.ClientSize.Width)
+                    var flags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+                    var box = this.ClientSize;
+
+                    while (maxF - minF > 0.5f)
+                    {
+                        float mid = (minF + maxF) / 2;
+                        using (Font test = new Font(this.Font.FontFamily, mid, this.Font.Style))
                         {
-                            best = mid;
-                            minFont = mid;
-                        }
-                        else
-                        {
-                            maxFont = mid;
+                            Size measured = TextRenderer.MeasureText(g, this.Text, test, box, flags);
+
+                            if (measured.Width <= box.Width &&
+                                measured.Height <= box.Height)
+                            {
+                                best = mid;
+                                minF = mid;
+                            }
+                            else
+                            {
+                                maxF = mid;
+                            }
                         }
                     }
-                }
 
-                this.Font = new Font(this.Font.FontFamily, best, this.Font.Style);
+                    // Set font 1 lần (KHÔNG gây lặp vì đã khóa _adjusting)
+                    this.Font = new Font(this.Font.FontFamily, best, this.Font.Style);
+                }
+            }
+            finally
+            {
+                _adjusting = false;
             }
         }
     }

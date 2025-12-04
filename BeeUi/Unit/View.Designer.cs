@@ -32,9 +32,8 @@ namespace BeeUi
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.imgView = new Cyotek.Windows.Forms.ImageBox();
-            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip();
             this.showImageFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.showResultTool = new System.Windows.Forms.ToolStripMenuItem();
             this.showDetailTool = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,24 +60,24 @@ namespace BeeUi
             this.btnShowArea = new BeeInterface.RJButton();
             this.pView = new System.Windows.Forms.Panel();
             this.workUndo = new System.ComponentModel.BackgroundWorker();
-            this.tmTool = new System.Windows.Forms.Timer(this.components);
+            this.tmTool = new System.Windows.Forms.Timer();
             this.workPlay = new System.ComponentModel.BackgroundWorker();
-            this.tmPlay = new System.Windows.Forms.Timer(this.components);
+            this.tmPlay = new System.Windows.Forms.Timer();
             this.workReadCCD = new System.ComponentModel.BackgroundWorker();
             this.workShow = new System.ComponentModel.BackgroundWorker();
-            this.tmTrig = new System.Windows.Forms.Timer(this.components);
+            this.tmTrig = new System.Windows.Forms.Timer();
             this.workGetColor = new System.ComponentModel.BackgroundWorker();
             this.workInsert = new System.ComponentModel.BackgroundWorker();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
-            this.tmRefresh = new System.Windows.Forms.Timer(this.components);
-            this.tmOut = new System.Windows.Forms.Timer(this.components);
-            this.tmContinuous = new System.Windows.Forms.Timer(this.components);
+            this.tmRefresh = new System.Windows.Forms.Timer();
+            this.tmOut = new System.Windows.Forms.Timer();
+            this.tmContinuous = new System.Windows.Forms.Timer();
             this.workTrig = new System.ComponentModel.BackgroundWorker();
-            this.tmPress = new System.Windows.Forms.Timer(this.components);
+            this.tmPress = new System.Windows.Forms.Timer();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.tmSimulation = new System.Windows.Forms.Timer(this.components);
-            this.tmLive = new System.Windows.Forms.Timer(this.components);
-            this.tmShow = new System.Windows.Forms.Timer(this.components);
+            this.tmSimulation = new System.Windows.Forms.Timer();
+            this.tmLive = new System.Windows.Forms.Timer();
+            this.tmShow = new System.Windows.Forms.Timer();
             this.split5 = new System.Windows.Forms.Splitter();
             this.pBtn = new System.Windows.Forms.Panel();
             this.btnChangeImg = new BeeInterface.RJButton();
@@ -92,9 +91,9 @@ namespace BeeUi
             this.btnContinuous = new BeeInterface.RJButton();
             this.split1 = new System.Windows.Forms.Splitter();
             this.btnCap = new BeeInterface.RJButton();
-            this.tmEnableControl = new System.Windows.Forms.Timer(this.components);
+            this.tmEnableControl = new System.Windows.Forms.Timer();
             this.workLiveWebcam = new System.ComponentModel.BackgroundWorker();
-            this.tmKeys = new System.Windows.Forms.Timer(this.components);
+            this.tmKeys = new System.Windows.Forms.Timer();
             this.spImgs = new System.Windows.Forms.Splitter();
             this.pImg = new BeeUi.ViewHost();
             this.contextMenu.SuspendLayout();
@@ -144,7 +143,7 @@ namespace BeeUi
             this.newShapeTool,
             this.shapeToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip2";
-            this.contextMenu.Size = new System.Drawing.Size(184, 202);
+            this.contextMenu.Size = new System.Drawing.Size(184, 224);
             // 
             // showImageFilter
             // 
@@ -183,18 +182,21 @@ namespace BeeUi
             this.chooseAreaToolStripMenuItem.Name = "chooseAreaToolStripMenuItem";
             this.chooseAreaToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.chooseAreaToolStripMenuItem.Text = "Choose Area Check";
+            this.chooseAreaToolStripMenuItem.Click += new System.EventHandler(this.chooseAreaToolStripMenuItem_Click);
             // 
             // chooseToolStripMenuItem
             // 
             this.chooseToolStripMenuItem.Name = "chooseToolStripMenuItem";
             this.chooseToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.chooseToolStripMenuItem.Text = "Choose Area Sample";
+            this.chooseToolStripMenuItem.Click += new System.EventHandler(this.chooseToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(183, 22);
             this.toolStripMenuItem2.Text = "Choose Area Mask";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // newShapeTool
             // 

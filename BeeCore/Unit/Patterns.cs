@@ -84,7 +84,7 @@ namespace BeeCore
                 
             }
         }
-        int _NumObject = 0;
+        int _NumObject = 1;
         public int NumObject
         {
             get
@@ -117,7 +117,7 @@ namespace BeeCore
         public int cycleTime = 0;
         public RectangleF rectArea;
         public Compares Compare = Compares.Equal;
-        public int LimitCounter = 0;
+        public int LimitCounter =1;
         public bool IsSendResult;
         public async Task SendResult()
         {
@@ -300,7 +300,7 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-        public int MaxObject = 0;
+        public int MaxObject = 1;
         public int StepAngle = 0;
         [NonSerialized]
         Mat matProcess = new Mat();

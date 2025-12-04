@@ -598,7 +598,7 @@ namespace BeeUi
         // ====== MouseDown ======
         // ⬇️ CỜ MỚI: Polygon bẩn trong lúc kéo (hoãn update center/bounds/angle)
         private bool _polyDirtyDuringDrag = false;
-
+        bool  IsNewShape = false;
 
         // ====== MouseDown ======
         private void imgView_MouseDown(object sender, MouseEventArgs e)
@@ -671,6 +671,7 @@ namespace BeeUi
                 // cho phép tạo mới: Rect/Ellipse/Hexagon (thêm Hexagon)
                 if (rr.Shape == ShapeType.Rectangle || rr.Shape == ShapeType.Ellipse || rr.Shape == ShapeType.Hexagon)
                 {
+                    IsNewShape = true;
                     _maybeCreate = true;
                     _createStartImg = ScreenToImage(e.Location);
                 }
@@ -1310,7 +1311,7 @@ namespace BeeUi
 
                 // ===== Khoá pan/zoom khi có anchor =====
                 var cur = GetCurrentRR();
-                if (cur != null && cur._dragAnchor != AnchorPoint.None)
+                if (cur != null && cur._dragAnchor != AnchorPoint.None|| IsNewShape||cur._rect.Width==0)
                 {
                     //if (Global.StatusDraw != StatusDraw.Color) Global.StatusDraw = StatusDraw.Edit;
                     imgView.PanMode = ImageBoxPanMode.None;
@@ -1812,7 +1813,7 @@ namespace BeeUi
                     _previewNew = null;
                     _creatingNew = false;
                 }
-
+                IsNewShape = false;
                 _maybeCreate = false;
                 _creatingNew = false;
                 _previewNew = null;
@@ -4868,7 +4869,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 imgView.Zoom =(int) Global.ZoomMinimum;
             Global.ScaleZoom = (float)(imgView.Zoom / 100.0);
             Global.pScroll = new Point(imgView.AutoScrollPosition.X, imgView.AutoScrollPosition.Y);
-           
+            imgView.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             //if(Global.IsRun)
             // {
             //     DrawTotalResult();
@@ -5622,6 +5623,24 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 pView.BringToFront();
 
             }
+        }
+
+        private void chooseAreaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Global._TypeCrop = TypeCrop.Area;
+            imgView.Invalidate();
+        }
+
+        private void chooseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Global._TypeCrop = TypeCrop.Crop;
+            imgView.Invalidate();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Global._TypeCrop = TypeCrop.Mask;
+            imgView.Invalidate();
         }
 
         private void NewShape()

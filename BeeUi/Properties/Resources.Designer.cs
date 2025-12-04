@@ -693,6 +693,16 @@ namespace BeeUi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Long {
+            get {
+                object obj = ResourceManager.GetObject("Long", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Menu {
             get {
                 object obj = ResourceManager.GetObject("Menu", resourceCulture);
@@ -1016,6 +1026,26 @@ namespace BeeUi.Properties {
         internal static System.Drawing.Bitmap Simmulation {
             get {
                 object obj = ResourceManager.GetObject("Simmulation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Small4 {
+            get {
+                object obj = ResourceManager.GetObject("Small4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Small5 {
+            get {
+                object obj = ResourceManager.GetObject("Small5", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

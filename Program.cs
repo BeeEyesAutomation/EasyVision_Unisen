@@ -69,16 +69,22 @@ namespace BeeIV2
 
             // Bắt lỗi từ thread
             // Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
-            ThreadPool.SetMaxThreads(100, 100);
-            int cores = Environment.ProcessorCount;
-            Console.WriteLine($"Số lõi CPU: {cores}");
+            //ThreadPool.SetMaxThreads(100, 100);
+            //int cores = Environment.ProcessorCount;
+            //Console.WriteLine($"Số lõi CPU: {cores}");
             //var options = new ParallelOptions { MaxDegreeOfParallelism = cores };
             //Parallel.For(0, 1000, options, i => { ... });
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             GlobalIconManager.Init("logo.ico",true); // tìm trong thư mục exe
             if (PriorProcess() == null)
-            {
+            { // --- Set priority process lên High ---
+                Process current = Process.GetCurrentProcess();
+                current.PriorityClass = ProcessPriorityClass.High;   // hoặc RealTime nhưng nên cẩn thận
+
+                // (tuỳ chọn) tăng ưu tiên cho thread UI
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
                 Application.Run(new BeeUi.FormLoad());
             }
            

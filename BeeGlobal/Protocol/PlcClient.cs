@@ -17,6 +17,7 @@ using System;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ using System.Threading.Tasks;
 namespace PlcLib
 {
     [Serializable()]
-    public enum PlcBrand { Mitsubishi, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
+    public enum PlcBrand { Mitsubishi, Mitsubishi2, Keyence, Omron, Siemens, ModbusRtu, ModbusAscii, Delta, Pana }
     public enum ConnectionType { Tcp, Serial }
 
     public sealed class PlcClient : IDisposable
@@ -172,6 +173,41 @@ namespace PlcLib
                         fx.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
                         return fx;
                     }
+                case PlcBrand.Mitsubishi2:
+                    if (_connType == ConnectionType.Tcp)
+                    {
+                        //var mc = new MelsecMcNet(_ip, _port);
+                        //TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        //TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        var mc = new MelsecA1ENet(_ip, _port);
+                        TrySetProp(mc, "ReceiveTimeOut", _timeoutMs);
+                        TrySetProp(mc, "ConnectTimeOut", _timeoutMs);
+                        //  mc.NetworkNumber = 0x00;        // mạng nội bộ = 0
+                        //  mc.NetworkStationNumber = 0xFF;   // thiết bị ngoài truy cập PLC qua ENET-ADP
+                        return mc;
+                    }
+                    else
+                    {
+
+                        var fx = new MelsecFxLinks();
+                        //fx.LogNet = new LogNetSingle("fx485.log");
+                        fx.SerialPortInni(sp =>
+                        {
+                            sp.PortName = _com;
+                            sp.BaudRate = _baud;
+                            sp.DataBits = DataBits;                                  // 7
+                            sp.Parity = Parity;        // Even
+                            sp.StopBits = StopBits;       // 2   <-- đổi từ One -> Two
+                            sp.RtsEnable = rtsEnable;
+                            sp.DtrEnable = dtrEnable;
+                            sp.ReadTimeout = _timeoutMs;
+                            sp.WriteTimeout = _timeoutMs;
+                        });
+                        fx.Station = 0;            // đúng “PC No.” / Station no. đã set trong PLC (0..31)
+                        fx.SumCheck = false;        // thử cả true/false (tùy PLC cấu hình checksum)
+                        return fx;
+                    }
+
                 case PlcBrand.Delta:
                     if (_connType == ConnectionType.Tcp)
                     {
@@ -311,7 +347,7 @@ namespace PlcLib
                     if (_connType == ConnectionType.Tcp)
                     {
                         // gọi ConnectServer() nếu có, nếu không có thì coi như lazy connect
-                        var ok = TryCall(_plc, "ConnectServer");
+                        var ok = TryCall(_plc, "ConnectServer", Global.ParaCommon.Comunication.Protocol.timeOut);
                         if (ok == null)
                         {
                             // method không tồn tại → lazy connect: coi như thành công
@@ -328,14 +364,15 @@ namespace PlcLib
                         }
                         else
                         {
+                            return false;
                             // thất bại: thử lại
                         }
                     }
                     else
                     {
                         // Serial: gọi Open()
-                        var opened = TryCallVoid(_plc, "Open");
-                        if (opened)
+                        var opened = TryCall(_plc, "Open", Global.ParaCommon.Comunication.Protocol.timeOut);
+                        if (opened==true)
                         {
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _com));
                             Global.PLCStatus = PLCStatus.Ready;
@@ -344,7 +381,8 @@ namespace PlcLib
                         }
                         else
                         {
-                        // try again
+                            return false;
+                            // try again
                         }
                     }
                 }
@@ -366,9 +404,9 @@ namespace PlcLib
             try
             {
                 if (_connType == ConnectionType.Tcp)
-                    TryCallVoid(_plc, "ConnectClose");
+                    TryCall(_plc, "ConnectClose", Global.ParaCommon.Comunication.Protocol.timeOut);
                 else
-                    TryCallVoid(_plc, "Close");
+                    TryCall(_plc, "Close", Global.ParaCommon.Comunication.Protocol.timeOut);
             }
             catch { }
             _plc = null;
@@ -719,9 +757,12 @@ namespace PlcLib
 
                                             Global.PLCStatus = PLCStatus.ErrorConnect;
                                             Global.IsAllowReadPLC = false;
+                                            StopOneBitReadLoop();
                                         }
                                         else
                                         {
+                                           
+
                                             NumErr = 0;
                                             goto X;
 
@@ -800,27 +841,115 @@ namespace PlcLib
             }
         }
 
-        // gọi ConnectServer() trả về bool? (null nếu method không tồn tại)
-        private bool? TryCall(object obj, string method)
+
+private bool? TryCall(object obj, string method, int timeoutMs = 300)
+    {
+        if (obj == null) return null;
+
+        var mi = obj.GetType().GetMethod(method, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (mi == null) return null;
+
+        object ret = null;
+        Exception invokeException = null;
+
+        // Chạy Invoke trên thread pool để có thể chờ với timeout
+        var task = Task.Run(() =>
         {
-            if (obj == null) return null;
-            var mi = obj.GetType().GetMethod(method);
-            if (mi == null) return null;
-            var ret = mi.Invoke(obj, new object[0]);
-            // với Hsl, ConnectServer trả OperateResult => check IsSuccess
-            var prop = ret?.GetType().GetProperty("IsSuccess");
-            if (prop != null) return (bool)prop.GetValue(ret, null);
-            return true;
+            try
+            {
+                ret = mi.Invoke(obj, new object[0]);
+            }
+            catch (Exception ex)
+            {
+                invokeException = ex;
+            }
+        });
+
+        // Nếu quá timeout => coi như gọi thất bại / không trả về
+        if (!task.Wait(timeoutMs))
+        {
+            // Timeout: tuỳ bạn muốn trả về gì
+             return false;  // nếu muốn coi timeout là thất bại
+           // return null;      // giữ kiểu cũ: null = không gọi được / lỗi
         }
 
-        private bool TryCallVoid(object obj, string method)
+        // Nếu hàm ném exception
+        if (invokeException != null)
+        {
+            // tuỳ ý log ra
+            // Console.WriteLine(invokeException);
+            return null;
+        }
+
+        // với Hsl, ConnectServer trả OperateResult => check IsSuccess
+        var prop = ret?.GetType().GetProperty("IsSuccess");
+        if (prop != null)
+            return (bool)prop.GetValue(ret, null);
+
+        return true;
+    }
+        private bool TryCallVoid(object obj, string method, int timeoutMs = 3000)
         {
             if (obj == null) return false;
-            var mi = obj.GetType().GetMethod(method);
+
+            var mi = obj.GetType().GetMethod(
+                method,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (mi == null) return false;
-            mi.Invoke(obj, new object[0]);
+
+            Exception invokeException = null;
+
+            // Chạy Invoke trên thread pool để có thể chờ timeout
+            var task = Task.Run(() =>
+            {
+                try
+                {
+                    mi.Invoke(obj, new object[0]);
+                }
+                catch (Exception ex)
+                {
+                    invokeException = ex;
+                }
+            });
+
+            // Quá thời gian => coi như thất bại
+            if (!task.Wait(timeoutMs))
+            {
+                // timeout: hàm bên trong vẫn tiếp tục chạy ngầm, chỉ có TryCallVoid trả về sớm
+                return false;
+            }
+
+            // Nếu có exception trong Invoke
+            if (invokeException != null)
+            {
+                // có thể log ra ở đây nếu cần
+                // Console.WriteLine(invokeException);
+                return false;
+            }
+
             return true;
         }
+        // gọi ConnectServer() trả về bool? (null nếu method không tồn tại)
+        //private bool? TryCall(object obj, string method)
+        //    {
+        //        if (obj == null) return null;
+        //        var mi = obj.GetType().GetMethod(method);
+        //        if (mi == null) return null;
+        //        var ret = mi.Invoke(obj, new object[0]);
+        //        // với Hsl, ConnectServer trả OperateResult => check IsSuccess
+        //        var prop = ret?.GetType().GetProperty("IsSuccess");
+        //        if (prop != null) return (bool)prop.GetValue(ret, null);
+        //        return true;
+        //    }
+
+        //private bool TryCallVoid(object obj, string method)
+        //{
+        //    if (obj == null) return false;
+        //    var mi = obj.GetType().GetMethod(method);
+        //    if (mi == null) return false;
+        //    mi.Invoke(obj, new object[0]);
+        //    return true;
+        //}
 
         private void TrySetProp(object obj, string propName, object value)
         {

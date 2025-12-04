@@ -121,6 +121,7 @@ namespace BeeUi.Tool
             this.btnRename.IsCLick = false;
             this.btnRename.IsNotChange = false;
             this.btnRename.IsRect = false;
+            this.btnRename.IsTouch = false;
             this.btnRename.IsUnGroup = true;
             this.btnRename.Location = new System.Drawing.Point(161, 5);
             this.btnRename.Multiline = false;
@@ -178,6 +179,7 @@ namespace BeeUi.Tool
             this.btnCopy.IsCLick = false;
             this.btnCopy.IsNotChange = true;
             this.btnCopy.IsRect = false;
+            this.btnCopy.IsTouch = false;
             this.btnCopy.IsUnGroup = true;
             this.btnCopy.Location = new System.Drawing.Point(240, 5);
             this.btnCopy.Multiline = false;
@@ -234,6 +236,7 @@ namespace BeeUi.Tool
             this.btnEnEdit.IsCLick = false;
             this.btnEnEdit.IsNotChange = false;
             this.btnEnEdit.IsRect = false;
+            this.btnEnEdit.IsTouch = false;
             this.btnEnEdit.IsUnGroup = true;
             this.btnEnEdit.Location = new System.Drawing.Point(82, 5);
             this.btnEnEdit.Multiline = false;
@@ -291,6 +294,7 @@ namespace BeeUi.Tool
             this.btnAdd.IsCLick = false;
             this.btnAdd.IsNotChange = true;
             this.btnAdd.IsRect = false;
+            this.btnAdd.IsTouch = false;
             this.btnAdd.IsUnGroup = true;
             this.btnAdd.Location = new System.Drawing.Point(3, 5);
             this.btnAdd.Multiline = false;
@@ -348,6 +352,7 @@ namespace BeeUi.Tool
             this.btnDelect.IsCLick = false;
             this.btnDelect.IsNotChange = true;
             this.btnDelect.IsRect = false;
+            this.btnDelect.IsTouch = false;
             this.btnDelect.IsUnGroup = true;
             this.btnDelect.Location = new System.Drawing.Point(319, 5);
             this.btnDelect.Multiline = false;
@@ -379,7 +384,7 @@ namespace BeeUi.Tool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.pAllTool);
             this.Controls.Add(this.split1);
             this.Controls.Add(this.pBtn);

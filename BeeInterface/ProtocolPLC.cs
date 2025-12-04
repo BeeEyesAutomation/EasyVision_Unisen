@@ -502,7 +502,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbIn13.Text = nameInput[13];
                 cbIn14.Text = nameInput[14];
                 cbIn15.Text = nameInput[15];
-
+                tmOut.Value = Global.ParaCommon.Comunication.Protocol.timeOut;
             timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
             cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
             cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
@@ -530,6 +530,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 btnKeyence.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
                     btnMitsu.IsCLick = true;
+                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi2)
+                    btnMitsu2.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
                     btnRtu.IsCLick = true;
                
@@ -1135,6 +1137,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void numSlaveID2_ValueChanged(float obj)
         {
 
+        }
+
+        private void tmOut_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.Protocol.timeOut = (int)tmOut.Value;
+        }
+
+        private void btnMitsu2_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi2;
         }
     }
 }

@@ -176,8 +176,8 @@ namespace BeeInterface
 
             bool drawPlaceholders = (_layoutPreset != CollageLayout.AutoWeighted);
 
-            var newBitmap = BuildCollageBitmap(
-                _items, _pb.ClientSize, _gutter, _bg, _layoutPreset,
+            var newBitmap = BuildCollageBitmapAuto(
+                _items,  _gutter, _bg, _layoutPreset,
                 highlightIndex: _lastModifiedIndex,
                 drawPlaceholders: drawPlaceholders,
                 placeholderText: "Empty"
@@ -324,6 +324,102 @@ namespace BeeInterface
             return outBmp;
         }
 
+        public static Bitmap BuildCollageBitmapAuto(
+    IList<ImageItem> items,
+    int gutter = 6,
+    Color? bg = null,
+    CollageLayout preset = CollageLayout.AutoWeighted,
+    int highlightIndex = -1,
+    bool drawPlaceholders = false,
+    string placeholderText = "Empty",
+    Color? placeholderBack = null,
+    Color? placeholderBorder = null,
+    Color? placeholderTextColor = null)
+        {
+            int count = items?.Count ?? 0;
+            if (count == 0)
+                return new Bitmap(1, 1);
+
+            // -----------------------------------------------------------
+            // 1) Tính kích thước canvas tự động theo kích thước ảnh
+            // -----------------------------------------------------------
+
+            // Lấy max width và max height của ảnh
+            int maxW = 1, maxH = 1;
+            foreach (var it in items)
+            {
+                if (it?.Bmp == null) continue;
+                maxW = Math.Max(maxW, it.Bmp.Width);
+                maxH = Math.Max(maxH, it.Bmp.Height);
+            }
+
+            // Số ô cần render theo preset
+            int presetN =
+                preset == CollageLayout.One ? 1 :
+                preset == CollageLayout.Two ? 2 :
+                preset == CollageLayout.ThreeRow ? 3 : 4;
+
+            int n = (preset == CollageLayout.AutoWeighted)
+                ? Math.Min(count, 4)
+                : presetN;
+
+            // -----------------------------------------------------------
+            // 2) Tính kích thước canvas theo layout
+            // -----------------------------------------------------------
+
+            int canvasW = maxW;
+            int canvasH = maxH;
+
+            switch (preset)
+            {
+                case CollageLayout.One:
+                    break;
+
+                case CollageLayout.Two:
+                    // 2 ảnh: nếu ảnh rộng → xếp ngang, nếu cao → xếp dọc
+                    bool wide = maxW >= maxH;
+                    if (wide)
+                        canvasW = maxW * 2 + gutter;  // 2 ô ngang
+                    else
+                        canvasH = maxH * 2 + gutter;  // 2 ô dọc
+                    break;
+
+                case CollageLayout.ThreeRow:
+                    canvasW = maxW * 3 + gutter * 2; // 3 cột
+                    break;
+
+                case CollageLayout.FourGrid:
+                    canvasW = maxW * 2 + gutter;
+                    canvasH = maxH * 2 + gutter;
+                    break;
+
+                case CollageLayout.AutoWeighted:
+                    // Behave like FourGrid nhưng theo weight
+                    canvasW = maxW * 2 + gutter;
+                    canvasH = maxH * 2 + gutter;
+                    break;
+            }
+
+            Size targetSize = new Size(canvasW, canvasH);
+
+            // -----------------------------------------------------------
+            // 3) Gọi lại BuildCollageBitmap cũ của bạn để GHÉP
+            // -----------------------------------------------------------
+
+            return BuildCollageBitmap(
+                items,
+                targetSize,
+                gutter,
+                bg,
+                preset,
+                highlightIndex,
+                drawPlaceholders,
+                placeholderText,
+                placeholderBack,
+                placeholderBorder,
+                placeholderTextColor
+            );
+        }
 
 
         // ----- Layout preset (chia đều) -----
