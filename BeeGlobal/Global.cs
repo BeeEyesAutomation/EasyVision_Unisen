@@ -90,6 +90,20 @@ namespace BeeGlobal
                 }
             }
         }
+        public static bool _IsChangeProg = false;
+        public static event Action<bool> ChangeProg;
+        public static bool IsChangeProg
+        {
+            get => _IsChangeProg;
+            set
+            {
+                if (_IsChangeProg != value)
+                {
+                    _IsChangeProg = value;
+                    ChangeProg?.Invoke(_IsChangeProg); // Gọi event
+                }
+            }
+        }
         //private static String _Ex = "";
         //public static event Action<String> ExChanged;
         //public static String Ex
@@ -194,7 +208,9 @@ namespace BeeGlobal
    
         public static int IndexChoose = 0;
         public static String Project = "";
+        public static RectRotate rotAreaAdj;
         public static RectRotate rotOriginAdj;
+        public static RectRotate rotCurrentAdj;
         public static Rectangle ClientRectangleMain;
         public static float angle_Adjustment = 0, X_Adjustment = 0, Y_Adjustment = 0;
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();

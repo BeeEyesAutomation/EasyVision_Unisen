@@ -197,6 +197,7 @@ namespace BeeGlobal
         public StopBits StopBits = StopBits.Two;
         public int DataBit = 7;
         public bool DtrEnable, RtsEnable;
+        private bool IsPressLive = false;
         public async Task<bool> Connect(  )
         {
             try
@@ -253,7 +254,7 @@ namespace BeeGlobal
                   
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
-                      
+                        if (Global.IsChangeProg) return;
                         if (!PlcClient.IsConnect)
                         {
                             Global.PLCStatus = PLCStatus.ErrorConnect;
@@ -286,8 +287,26 @@ namespace BeeGlobal
 
                         if (Global.IsRun && Global.ParaCommon.IsExternal)
                         {
-
-                            if (AddressInput[(int)I_O_Input.Trigger4] != -1)
+                            if (AddressInput[(int)I_O_Input.Live] != -1&& Global.StatusProcessing == StatusProcessing.None)
+                            {
+                                if (valueInput[AddressInput[(int)I_O_Input.Live]] == true &&! IsPressLive)
+                                {
+                                    IsPressLive = true;
+                                   
+                                }
+                                else if (valueInput[AddressInput[(int)I_O_Input.Live]] == false && IsPressLive)
+                                {
+                                    IsPressLive = false;
+                                   
+                                    Global.IsLive = !Global.IsLive;
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsLive);//Busy
+                                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
+                                  
+                                    await WriteOutPut();
+                                }
+                            }
+                            if (Global.IsLive) return;
+                                    if (AddressInput[(int)I_O_Input.Trigger4] != -1)
                             {
                                 if (valueInput[AddressInput[(int)I_O_Input.Trigger4]] == true && Global.StatusProcessing == StatusProcessing.None)
                                 {
@@ -335,6 +354,8 @@ namespace BeeGlobal
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                     Global.TriggerInternal = false;
                                     Global.IsAllowReadPLC = false;
+                                    //PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".0", false);
+                                    //Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", "Write Trigger 1 = 0 "));
                                     if (Global.ParaCommon.IsOnlyTrigger)
                                     {
                                         switch (Global.TriggerNum)
@@ -631,7 +652,9 @@ namespace BeeGlobal
             if (IsLight3)
                 SetOutPut(AddressOutPut[(int)I_O_Output.Light3], IsOn);
         }
-        public bool IsBlink = false;
+      
+        public TypeOutputRS TypeOutputRS = TypeOutputRS.AllTime;
+        public int DelayOutOK=300, DelayOutNG=50;
         public bool IsLogic1, IsLogic2, IsLogic3, IsLogic4, IsLogic5, IsLogic6;
         [NonSerialized]
         private Stopwatch tmReadCT = new Stopwatch();
@@ -845,7 +868,8 @@ namespace BeeGlobal
                     {
                         IsOK =! IsOK;
                         IsByPass = false;
-                    }   
+                    }
+                    bool IsBlink = IsOK;
                     if (Global.IsByPassResult||Global.ParaCommon.IsForceByPassRS)
                       {
                             switch(Global.TriggerNum)
@@ -952,7 +976,6 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //NG
                             break;
                     }
-                  
                             SetLight(false);
                     switch (Global.TriggerNum)
                     {
@@ -988,7 +1011,8 @@ namespace BeeGlobal
                   
                             IsWait = true;
                             await WriteOutPut();
-                            if (IsBlink)
+                   
+                            if (TypeOutputRS==TypeOutputRS.Blink)
                             {
                             if (DelayOutput == 0)
                                 await TimingUtils.DelayAccurateAsync((int)DelayOutput); // thay cho Task.Delay
@@ -1025,9 +1049,58 @@ namespace BeeGlobal
                                 }      
                              await WriteOutPut();
                             }
+                        else if (TypeOutputRS == TypeOutputRS.OKNG)
+                        {
+                            IsBlink = !IsBlink;
+                            int num = 2;
+                            int delayBlink = DelayOutOK;
+                            if (!Global.TotalOK)
+                            {
+                                 num = 11;
+                                 delayBlink = DelayOutNG;
+
+                            }
+                          
+                            for (int i = 0; i < num; i++)
+                            {   if (i == num - 1) IsBlink = false;
+                                await TimingUtils.DelayAccurateAsync(delayBlink); // thay cho Task.Delay
+                                switch (Global.TriggerNum)
+                                {
+                                    case TriggerNum.Trigger1:
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
+                                        break;
+                                    case TriggerNum.Trigger2:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsBlink); 
+                                        break;
+                                    case TriggerNum.Trigger3:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsBlink); 
+                                        break;
+                                    case TriggerNum.Trigger4:
+                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
+                                            break;
+                                        }
+                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result4], IsBlink); 
+                                        break;
+                                }
+                                await WriteOutPut();
+                                IsBlink = !IsBlink;
+                        }
+                    }
 
 
-                    Global.NumSend++;
+                        Global.NumSend++;
                     Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case IO_Processing.ChangeMode:

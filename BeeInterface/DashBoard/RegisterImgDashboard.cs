@@ -211,12 +211,16 @@ namespace BeeInterface
                 if (txt.Length == 0) txt = "Image";
                 if (Item != null)
                 {
+                    int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
                     if (UpdateGlobal)
                     {
-                        int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
+                       
                         if (id > -1)
                             Global.ParaCommon.listRegsImg[id].Name = txt;
                     }
+                    else
+                          if (id > -1)
+                        Global.ParaCommon.listSimImg[id].Name = txt;
                     Item.Name = txt;
                 }    
                    
@@ -509,11 +513,18 @@ namespace BeeInterface
 
             // 4. Xóa trong global (nếu bạn muốn đồng bộ luôn)
             if(UpdateGlobal)
-            if (Global.ParaCommon != null && Global.ParaCommon.listRegsImg != null)
-                Global.ParaCommon.listRegsImg.Clear();
+            {
+                if (Global.ParaCommon != null && Global.ParaCommon.listRegsImg != null)
+                    Global.ParaCommon.listRegsImg.Clear();
+            }
+            else
+            {
+                if (Global.ParaCommon != null && Global.ParaCommon.listSimImg != null)
+                    Global.ParaCommon.listSimImg.Clear();
+            }
 
-            // 5. Báo ra ngoài: danh sách thay đổi
-            ItemsChanged?.Invoke(this, EventArgs.Empty);
+                // 5. Báo ra ngoài: danh sách thay đổi
+                ItemsChanged?.Invoke(this, EventArgs.Empty);
             IndexSelected = -1;
             // 6. Báo là hiện không có item nào được chọn
             SelectedItemChanged?.Invoke(
@@ -684,8 +695,15 @@ namespace BeeInterface
         {
             _items.Add(item);
             if(UpdateGlobal)
-            Global.ParaCommon.listRegsImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
-            int clientW = _flow.ClientSize.Width;
+            {
+                Global.ParaCommon.listRegsImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
+            }
+            else
+            {
+                Global.ParaCommon.listSimImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
+            }    
+
+                int clientW = _flow.ClientSize.Width;
             if (clientW <= 0) clientW = this.Width;
 
             int targetW = Math.Max(60, clientW - THUMB_MARGIN_HORIZONTAL);
@@ -716,15 +734,25 @@ namespace BeeInterface
 
             // 1. cập nhật Mat trong model
             _selectedThumb.Item.SetImage(newMat);
+          
+        
             if (UpdateGlobal)
             {
                 int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
                 if (id > -1)
                     Global.ParaCommon.listRegsImg[id].Image = newMat.ToBitmap();
             }
-            
-            // 2. tính lại size của thumb theo ảnh mới
-            int clientW = _flow.ClientSize.Width;
+            else
+
+            {
+                int id = Global.ParaCommon.listSimImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
+                if (id > -1)
+                    Global.ParaCommon.listSimImg[id].Image = newMat.ToBitmap();
+
+            }    
+
+                // 2. tính lại size của thumb theo ảnh mới
+                int clientW = _flow.ClientSize.Width;
             if (clientW <= 0) clientW = this.Width;
             int targetW = Math.Max(60, clientW - THUMB_MARGIN_HORIZONTAL);
             int targetH = CalcHeightFromImage(_selectedThumb.Item, targetW);
@@ -830,6 +858,8 @@ namespace BeeInterface
             _flow.Controls.RemoveAt(idx);
             if (UpdateGlobal)
                 Global.ParaCommon.listRegsImg.RemoveAt(idx);
+            else
+                Global.ParaCommon.listSimImg.RemoveAt(idx);
             _items.Remove(item);
             _selectedThumb.Dispose();
             item.Dispose();

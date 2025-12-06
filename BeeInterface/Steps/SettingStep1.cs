@@ -162,12 +162,16 @@ namespace BeeInterface
             btnOn.IsCLick = Global.ParaCommon.IsOnLight;
             btnInternal.IsCLick =! Global.ParaCommon.IsExternal;
             btnExternal.IsCLick = Global.ParaCommon.IsExternal;
-            Global.LiveChanged += Global_LiveChanged;
-           btnBlink.IsCLick= Global.ParaCommon.Comunication.Protocol.IsBlink ;
-            btnAllTime.IsCLick =! Global.ParaCommon.Comunication.Protocol.IsBlink;
-            layoutDelay.Enabled = !Global.ParaCommon.Comunication.Protocol.IsBlink;
           
-          
+            btnBlink.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
+            btnAllTime.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeOutputRS == TypeOutputRS.AllTime ? true : false;
+            btnOKNG.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
+
+         
+            layoutDelay.Enabled = Global.ParaCommon.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
+            layDelayOKNG.Enabled = Global.ParaCommon.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
+            numDelayOK.Value = Global.ParaCommon.Comunication.Protocol.DelayOutOK;
+            numDelayNG.Value = Global.ParaCommon.Comunication.Protocol.DelayOutNG;
         }
 
         private void Global_LiveChanged(bool obj)
@@ -436,19 +440,19 @@ namespace BeeInterface
             AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexChoose].Para.OffSetY.Value;
             btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterX);
             btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexChoose].Para.CenterY);
-
+           
             tmShowPara.Enabled = false;
         }
 
         private void btnBlink_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.IsBlink = true;
+            Global.ParaCommon.Comunication.Protocol.TypeOutputRS = TypeOutputRS.Blink;
             layoutDelay.Enabled = true;
         }
 
         private void btnAllTime_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.IsBlink = false;
+            Global.ParaCommon.Comunication.Protocol.TypeOutputRS = TypeOutputRS.AllTime;
             layoutDelay.Enabled = false;
         }
 
@@ -835,6 +839,7 @@ namespace BeeInterface
         {
             lay23.Visible = !btn23.IsCLick;
             layoutDelay.Visible=!btn23.IsCLick;
+            layDelayOKNG.Visible = !btn23.IsCLick;
         }
 
         private void btn24_Click(object sender, EventArgs e)
@@ -851,6 +856,22 @@ namespace BeeInterface
         private void label7_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnOKNG_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.TypeOutputRS = TypeOutputRS.OKNG;
+            layDelayOKNG.Enabled = true;
+        }
+
+        private void numDelayOK_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.Protocol.DelayOutOK =(int) numDelayOK.Value;
+        }
+
+        private void numDelayNG_ValueChanged(float obj)
+        {
+            Global.ParaCommon.Comunication.Protocol.DelayOutNG = (int)numDelayNG.Value;
         }
     }
 }

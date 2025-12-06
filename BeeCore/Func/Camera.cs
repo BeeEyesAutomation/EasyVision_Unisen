@@ -393,6 +393,12 @@ namespace BeeCore
         }
         public void DisConnect(TypeCamera typeCamera)
         {
+            if (typeCamera == TypeCamera.Pylon)
+            {
+                PylonCam.Close();
+                return;
+            }    
+             
             CCDPlus.DestroyAll(IndexCCD, (int)typeCamera);
         }
         
@@ -1492,15 +1498,17 @@ namespace BeeCore
                         matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
                         FrameRate = (int)PylonCam.GetMeasuredFps();
                         matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
-                        unsafe
-                        {
-                            Buffer.MemoryCopy(p.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
-                        }
                         if (p == IntPtr.Zero)
                         {
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
                             return false;
                         }
+                        unsafe
+                        {
+                            Buffer.MemoryCopy(p.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
+                            PylonCam.FreeImage(p);
+                        }
+                       
                         return true;
                        
                         break;

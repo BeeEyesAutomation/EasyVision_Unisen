@@ -1449,17 +1449,22 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
     catch (...) { _lastError = "GrabOneUcharPtr unknown error"; }
 
     return System::IntPtr::Zero;
-}
-System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
+}System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
 {
     w = h = stride = channels = 0;
-    CPylonImage* src = (_bufIndex == 0) ? _bufB : _bufA; // lấy ảnh vừa hoàn tất
+    CPylonImage* src = (_bufIndex == 0) ? _bufB : _bufA;
     if (!src || !src->IsValid()) {
         _lastError = "No valid image";
         return System::IntPtr::Zero;
     }
 
     size_t imgSize = src->GetImageSize();
+    if (imgSize == 0 || !src->GetBuffer()) {
+        _lastError = "Invalid buffer";
+        return System::IntPtr::Zero;
+    }
+
+    // === CHỈNH ĐÚNG NGUYÊN TẮC: cấp phát vùng nhớ mới ===
     unsigned char* clone = new unsigned char[imgSize];
     memcpy(clone, src->GetBuffer(), imgSize);
 
@@ -1469,39 +1474,68 @@ System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channel
     stride = w * channels;
 
     return System::IntPtr(clone);
-    //_latestImageMutex->WaitOne();
-    //if (!_latestImage || !_latestImage->IsValid()) {
-    //    _lastError = "No latest image";
-    //    return System::IntPtr::Zero;
-    //}
-
-    //try {
-    //    size_t imgSize = _latestImage->GetImageSize();
-    //    if (imgSize == 0 || !_latestImage->GetBuffer()) {
-    //        _lastError = "Empty or null image buffer";
-    //        return System::IntPtr::Zero;
-    //    }
-
-    //    // Allocate memory for copy
-    //    unsigned char* clone = new unsigned char[imgSize];
-    //    memcpy(clone, _latestImage->GetBuffer(), imgSize);
-
-    //    w = (int)_latestImage->GetWidth();
-    //    h = (int)_latestImage->GetHeight();
-    //    channels = _activeChannels;
-    //    stride = w * channels;
-
-    //    _lastError = nullptr;
-    //    return System::IntPtr(clone); // Caller must manage memory if needed
-    //}
-    //catch (...) {
-    //    _lastError = "CopyLatestImage failed";
-    //    return System::IntPtr::Zero;
-    //}
-    //finally {
-    //    _latestImageMutex->ReleaseMutex();
-    //}
 }
+void Camera::FreeImage(System::IntPtr p)
+{
+    if (p != System::IntPtr::Zero)
+    {
+        unsigned char* buf = (unsigned char*)p.ToPointer();
+        delete[] buf;
+    }
+}
+
+//System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
+//{
+//    w = h = stride = channels = 0;
+//    CPylonImage* src = (_bufIndex == 0) ? _bufB : _bufA; // lấy ảnh vừa hoàn tất
+//    if (!src || !src->IsValid()) {
+//        _lastError = "No valid image";
+//        return System::IntPtr::Zero;
+//    }
+//
+//    size_t imgSize = src->GetImageSize();
+//    unsigned char* clone = new unsigned char[imgSize];
+//    memcpy(clone, src->GetBuffer(), imgSize);
+//
+//    w = (int)src->GetWidth();
+//    h = (int)src->GetHeight();
+//    channels = _activeChannels;
+//    stride = w * channels;
+//
+//    return System::IntPtr(clone);
+//    //_latestImageMutex->WaitOne();
+//    //if (!_latestImage || !_latestImage->IsValid()) {
+//    //    _lastError = "No latest image";
+//    //    return System::IntPtr::Zero;
+//    //}
+//
+//    //try {
+//    //    size_t imgSize = _latestImage->GetImageSize();
+//    //    if (imgSize == 0 || !_latestImage->GetBuffer()) {
+//    //        _lastError = "Empty or null image buffer";
+//    //        return System::IntPtr::Zero;
+//    //    }
+//
+//    //    // Allocate memory for copy
+//    //    unsigned char* clone = new unsigned char[imgSize];
+//    //    memcpy(clone, _latestImage->GetBuffer(), imgSize);
+//
+//    //    w = (int)_latestImage->GetWidth();
+//    //    h = (int)_latestImage->GetHeight();
+//    //    channels = _activeChannels;
+//    //    stride = w * channels;
+//
+//    //    _lastError = nullptr;
+//    //    return System::IntPtr(clone); // Caller must manage memory if needed
+//    //}
+//    //catch (...) {
+//    //    _lastError = "CopyLatestImage failed";
+//    //    return System::IntPtr::Zero;
+//    //}
+//    //finally {
+//    //    _latestImageMutex->ReleaseMutex();
+//    //}
+//}
 
 //System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels) {
 //  //  auto t0 = std::chrono::steady_clock::now();

@@ -22,6 +22,99 @@ namespace BeeCore
 {
   public   class Common
     {
+        public static RectRotate TransformToolRect(
+        RectRotate cropRect,            // RectRotate vùng Position Adj (dùng để crop + warpAffine)
+        RectRotate sampleOriginCrop,    // object mẫu trong ảnh crop (teach)  - toạ độ pixel trong crop
+        RectRotate sampleCurrentCrop,   // object hiện tại trong ảnh crop (runtime)
+        RectRotate toolRectMaster       // RectRotate tool khác trong master (lúc teach)
+    )
+        {
+            // 1) Bounding box của cropRect trong master
+            RectangleF cropBox = GetBoundingBox(cropRect);
+
+            // 2) Tâm object trong master (pivot)
+            //    => dùng offset cropBox + toạ độ pixel trong crop
+            PointF pivotOrigin = new PointF(
+                cropBox.X + sampleOriginCrop._PosCenter.X,
+                cropBox.Y + sampleOriginCrop._PosCenter.Y
+            );
+
+            PointF pivotCurrent = new PointF(
+                cropBox.X + sampleCurrentCrop._PosCenter.X,
+                cropBox.Y + sampleCurrentCrop._PosCenter.Y
+            );
+
+            // 3) Độ xoay của object (delta góc)
+            //    Tuỳ chiều góc của VisualMatch:
+            //    - Nếu thấy xoay ngược chiều, đổi dấu như dòng comment dưới.
+            float dAngle = sampleCurrentCrop._rectRotation - sampleOriginCrop._rectRotation;
+            // float dAngle = sampleOriginCrop._rectRotation - sampleCurrentCrop._rectRotation; // nếu trên bị ngược
+
+            // 4) Áp transform cho tool
+            RectRotate r = toolRectMaster.Clone();
+
+            // 4a) Xoay tâm tool quanh pivotOrigin
+            r._PosCenter = RotateAround(r._PosCenter, pivotOrigin, dAngle);
+
+            // 4b) Dịch theo sự dịch chuyển của object
+            r._PosCenter = new PointF(
+                r._PosCenter.X + (pivotCurrent.X - pivotOrigin.X),
+                r._PosCenter.Y + (pivotCurrent.Y - pivotOrigin.Y)
+            );
+
+            // 4c) Cộng delta góc vào góc tool
+            r._rectRotation += dAngle;
+
+            return r;
+        }
+
+
+
+
+        public static RectangleF GetBoundingBox(RectRotate rr)
+        {
+            float w = rr._rect.Width;
+            float h = rr._rect.Height;
+
+            PointF[] pts =
+            {
+        new PointF(-w/2, -h/2),
+        new PointF( w/2, -h/2),
+        new PointF( w/2,  h/2),
+        new PointF(-w/2,  h/2)
+    };
+
+            PointF[] ptsW = new PointF[4];
+            for (int i = 0; i < 4; i++)
+                ptsW[i] = RectRotate.Add(rr._PosCenter, RectRotate.Rotate(pts[i], rr._rectRotation));
+
+            float minX = float.MaxValue, minY = float.MaxValue;
+            float maxX = float.MinValue, maxY = float.MinValue;
+
+            foreach (var p in ptsW)
+            {
+                if (p.X < minX) minX = p.X;
+                if (p.Y < minY) minY = p.Y;
+                if (p.X > maxX) maxX = p.X;
+                if (p.Y > maxY) maxY = p.Y;
+            }
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        public static PointF RotateAround(PointF p, PointF center, float deg)
+        {
+            float dx = p.X - center.X;
+            float dy = p.Y - center.Y;
+
+            double rad = deg * Math.PI / 180.0;
+            double c = Math.Cos(rad), s = Math.Sin(rad);
+
+            float xr = (float)(dx * c - dy * s);
+            float yr = (float)(dx * s + dy * c);
+
+            return new PointF(center.X + xr, center.Y + yr);
+        }
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
         [DllImport("user32.dll")]

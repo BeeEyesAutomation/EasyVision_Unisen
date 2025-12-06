@@ -122,7 +122,7 @@ namespace PylonCli {
             [System::Runtime::InteropServices::Out] float% max,
             [System::Runtime::InteropServices::Out] float% step,
             [System::Runtime::InteropServices::Out] float% current);
-
+       void FreeImage(System::IntPtr p);
         void GetDigitalShift(float% min, float% max, float% step, float% current);
         // ===== Event (uchar* qua IntPtr) =====
         event FrameReadyHandler^ FrameReady {

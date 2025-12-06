@@ -129,6 +129,7 @@
     <ResourceCompile />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Align.h" />
     <ClInclude Include="BarcodeCli.h" />
     <ClInclude Include="BarcodeCore.h" />
     <ClInclude Include="barcode_pca_autoclass.hpp" />

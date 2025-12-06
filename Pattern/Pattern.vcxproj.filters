@@ -13,6 +13,7 @@
     <ClCompile Include="PitchCore.cpp" />
     <ClCompile Include="RansacLineCli.cpp" />
     <ClCompile Include="RansacLineCore.cpp" />
+    <ClCompile Include="barcode_pca_autoclass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BarcodeCli.h" />
@@ -30,6 +31,8 @@
     <ClInclude Include="RansacLineCore.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="version.h" />
+    <ClInclude Include="barcode_pca_autoclass.hpp" />
+    <ClInclude Include="Align.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeeCpp.rc" />
@@ -38,5 +41,8 @@
     <Filter Include="Backup">
       <UniqueIdentifier>{7fbc3956-84ab-43e3-be5a-11fa549c3ff9}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(AppLogoIco)" />
   </ItemGroup>
 </Project>

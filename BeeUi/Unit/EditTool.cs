@@ -205,7 +205,8 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
-                       View.pImg.Visible = false;
+                       View. imgView.Text = "";
+                        View.pImg.Visible = false;
                        View.btnChangeImg.IsCLick = false;
                         View.btnChangeImg.Visible = false;
                         layInforTool.Visible = false;
@@ -1106,6 +1107,39 @@ namespace BeeUi
         {
             G.Load.Show();
             G.Load._styles.ShowEditor();
+
+        }
+
+        private void importTool_Click(object sender, EventArgs e)
+        {
+            openFile.Title = "Import Program";
+            openFile.Filter = "Prog|*.tar";
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                string tarPath = openFile.FileName;
+                TarProgramHelper.ImportToDefaultProgram(tarPath);
+                Global.Project = Path.GetFileNameWithoutExtension(tarPath);
+                G.Header.RefreshListPJ();
+                if (!G.Header.workLoadProgram.IsBusy)
+                    G.Header.workLoadProgram.RunWorkerAsync();
+            }
+
+            //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
+            //// Import lại vào \Program
+            //TarProgramHelper.ImportToDefaultProgram(tarPath);
+        }
+
+        private void exportTool_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.Title = "Export Program";
+            saveFileDialog.Filter = "Prog|*.tar";
+            saveFileDialog.FileName = Global.Project+".tar";
+            if (saveFileDialog.ShowDialog()==DialogResult.OK)
+            {
+                string tarPath = saveFileDialog.FileName;
+                TarProgramHelper.ExportProgramSubFolderWithRename(Global.Project, tarPath);
+            }    
+            
 
         }
 

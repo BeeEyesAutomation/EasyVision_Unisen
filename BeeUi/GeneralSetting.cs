@@ -74,7 +74,8 @@ namespace BeeUi
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
             btnByPassResult.IsCLick=Global.ParaCommon.IsForceByPassRS;
-           
+            btnFullDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Full ? true : false;
+            btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
             if (Global.ParaCommon.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
@@ -165,8 +166,8 @@ namespace BeeUi
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SaveData.ParaPJ(Global.Project, Global.ParaCommon);
-            SaveData.Config(Global.Config);
+            //SaveData.ParaPJ(Global.Project, Global.ParaCommon);
+            //SaveData.Config(Global.Config);
             ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
         }
@@ -382,6 +383,16 @@ namespace BeeUi
         private void btnShowScore_Click(object sender, EventArgs e)
         {
             Global.Config.IsShowScore = btnShowScore.IsCLick;
+        }
+
+        private void btnFullDisplay_Click(object sender, EventArgs e)
+        {
+            Global.Config.DisplayResolution = DisplayResolution.Full;
+        }
+
+        private void btnNormalDisplay_Click(object sender, EventArgs e)
+        {
+            Global.Config.DisplayResolution = DisplayResolution.Normal;
         }
     }
 }

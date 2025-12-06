@@ -89,8 +89,8 @@ namespace BeeUi
 
             KeyboardListener.UniversalKeyEventArgs eventArgs = (KeyboardListener.UniversalKeyEventArgs)e;
 
-            
 
+           
 
 
 
@@ -2475,21 +2475,21 @@ namespace BeeUi
        // public List<RectRotate> listChoose = new List<RectRotate>();
         private void imgView_Paint(object sender, PaintEventArgs e)
         {
-            
 
-                if (Global.IsRun)
-                {
-            
+            if (!Global.IsLive&&Global.IsRun)
+            {
+
                 // Vẽ ảnh 2 cũng fit và canh giữa (ví dụ overlay trong suốt)
-              //  DrawImageFit(e.Graphics, bmp2, targetRect);
+                //  DrawImageFit(e.Graphics, bmp2, targetRect);
 
                 //  gcResult = gc;
 
                 return;
-                }
+            }
 
 
-          
+
+
             gc = e.Graphics;
             gc.SmoothingMode= SmoothingMode.AntiAlias;
              var mat = new Matrix();
@@ -2524,6 +2524,8 @@ namespace BeeUi
                     Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();//
             }    
             int index = 0;
+            if (Global.IsLive)
+                gc.DrawString("LIVE", new Font("Arial", Global.Config.FontSize,FontStyle.Bold), Brushes.Red, new Point(50, 50));
             if (Global.Config.IsShowGird)
             {
                 int W = Global.ParaCommon.SizeCCD.Width, H = Global.ParaCommon.SizeCCD.Height;
@@ -2548,9 +2550,9 @@ namespace BeeUi
                         RectRotate rot = PropetyTool.Control.Propety.rotArea;
                     if (rot == null) continue;
                         mat = new Matrix();
-                         mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
-                       mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
-                         mat.Rotate(rot._rectRotation);
+                        mat.Scale((float)(imgView.Zoom / 100.0), (float)(imgView.Zoom / 100.0));
+                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        mat.Rotate(rot._rectRotation);
                         RectangleF _rect3 = rot._rect;
                         gc.Transform = mat;
                         gc.DrawRectangle(new Pen(Color.Blue, 1), new Rectangle((int)_rect3.X, (int)_rect3.Y, (int)_rect3.Width, (int)_rect3.Height));
@@ -2565,6 +2567,16 @@ namespace BeeUi
 
                 }
 
+            }
+            if (Global.IsRun)
+            {
+
+                // Vẽ ảnh 2 cũng fit và canh giữa (ví dụ overlay trong suốt)
+                //  DrawImageFit(e.Graphics, bmp2, targetRect);
+
+                //  gcResult = gc;
+
+                return;
             }
             if ( Global.IndexToolSelected == -1)
             {
@@ -2710,8 +2722,9 @@ namespace BeeUi
             Global.StatusDrawChanged += Global_StatusDrawChanged;
             Global.TypeCropChanged += Global_TypeCropChanged;
               Global.StatusProcessingChanged += Global_StatusProcessingChanged;
-           // tmProcessing.Enabled = true;
-           
+            Global.LiveChanged += Global_LiveChanged;
+            // tmProcessing.Enabled = true;
+
             // toolEdit.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tool_MouseMove);
             //BeeCore.Common.listCamera[Global.IndexChoose].matRaw= BeeCore.Common.GetImageRaw();
             //if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw!=null)
@@ -2735,6 +2748,57 @@ namespace BeeUi
             RefreshExternal(Global.ParaCommon.IsExternal);
             Global.PLCStatusChanged += Global_PLCStatusChanged;
             Global.CameraStatusChanged += Global_CameraStatusChanged;
+            Global.ChangeProg += Global_ChangeProg;
+        }
+
+        private void Global_ChangeProg(bool obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                if (obj)
+                {
+                    G.StatusDashboard.StatusText = "---";
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    if (imgView.Image != null)
+                    {
+                        imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                        imgView.Image = null;      // xoá ảnh khỏi control
+                    }
+                    imgView.Text = "Wait Change Program ...";
+                }
+
+                else
+                {
+
+                    imgView.Text = "";
+                }
+            }));
+        }
+
+        private  void Global_LiveChanged(bool obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                G.Header.btnMode.Enabled = !Global.IsLive;
+               if(!Global.IsLive)
+                {
+                    G.StatusDashboard.StatusText = "---";
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    imgView.Text = "Wait Trigger ..";
+                    
+                    Live();
+                }    
+                    
+                else
+                {
+                   
+                    G.StatusDashboard.StatusText ="LIVE";
+                    G.StatusDashboard.StatusBlockBackColor = Color.Red;
+                    imgView.Text = "";
+                    Live();
+                }  
+               
+            }));
         }
 
         private void Global_CameraStatusChanged(CameraStatus obj)
@@ -2897,8 +2961,8 @@ namespace BeeUi
         String CTTotol = "";
         private void Global_StatusProcessingChanged(StatusProcessing obj)
         {
-            
-             //   Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "Processing", obj.ToString()));
+
+            //   Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "Processing", obj.ToString()));
             switch (obj)
             {
                 case StatusProcessing.None:
@@ -2906,7 +2970,15 @@ namespace BeeUi
                 case StatusProcessing.Trigger:
 
                     timer = CycleTimerSplit.Start();
-
+                    this.Invoke((Action)(() =>
+                    {
+                        if (imgView.Image != null)
+                        {
+                            imgView.Text = "Waiting Checking...";
+                            imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                            imgView.Image = null;      // xoá ảnh khỏi control
+                        }
+                    }));
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -3004,6 +3076,10 @@ namespace BeeUi
                     
                     break;
                 case StatusProcessing.SendResult:
+                    this.Invoke((Action)(() =>
+                    {
+                        imgView.Text = "Waiting Show Picture ..";
+                    }));
                     timer.Split("P");
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
@@ -3104,13 +3180,29 @@ namespace BeeUi
                         }
                     Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
 
+                    if (Global.TotalOK)
+                    {
+                        G.StatusDashboard.StatusText = "OK";
+                        G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(255, 27, 186, 98);
+                        Global.Config.SumOK++;
 
-                   
+
+                    }
+                    else
+                    {
+                        G.StatusDashboard.StatusText = "NG";
+                        G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
+                        Global.Config.SumNG++;
+
+
+                    }
+
                     // G.StatusDashboard.Refresh();
                     if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
+                   
                     Global.IsAllowReadPLC = true;
 
                     timer.Split("W");
@@ -3124,8 +3216,8 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-               
 
+                 
 
                     this.Invoke((Action)(() =>
                     {
@@ -3141,29 +3233,18 @@ namespace BeeUi
 
                     break;
                 case StatusProcessing.Done:
-                    {   
-                        if(Global.IsAutoTemp)
+                    {
+                        this.Invoke((Action)(() =>
+                        {
+                            imgView.Text = "";
+                        }));
+                        if (Global.IsAutoTemp)
                         {
                             Global.IsAutoTemp = false;
                             G.Header.btnTraining.IsCLick = false;
                         }
 
-                        if (Global.TotalOK)
-                        {
-                            G.StatusDashboard.StatusText = "OK";
-                            G.StatusDashboard.StatusBlockBackColor = Color.FromArgb(255, 27, 186, 98);
-                            Global.Config.SumOK++;
-
-
-                        }
-                        else
-                        {
-                            G.StatusDashboard.StatusText = "NG";
-                            G.StatusDashboard.StatusBlockBackColor = Color.DarkRed;
-                            Global.Config.SumNG++;
-
-
-                        }
+                       
                      
                        
                         Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
@@ -4425,6 +4506,33 @@ namespace BeeUi
                 }
             }
         }
+        public void Live()
+        {
+            if (Global.IsLive)
+            {
+                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
+                    if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
+                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
+                            if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
+                            {
+                                BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                                imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+                                ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
+                            }
+                if (!workReadCCD.IsBusy)
+                    workReadCCD.RunWorkerAsync();
+                StartLive();
+            }
+
+            else
+            {
+                
+                StopLive();
+             
+
+            }
+        }
         private async void btnSer_Click(object sender, EventArgs e)
         {
            
@@ -4457,38 +4565,11 @@ namespace BeeUi
             
             }
             gc = imgView.CreateGraphics();
-           
-            if(Global.IsLive)
-            {
-                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                    if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                        if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                            if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-                            {
-                                BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                                imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
-                                ShowTool.Full(imgView, Global.ParaCommon.SizeCCD);
-                            }
-                if (!workReadCCD.IsBusy)
-                    workReadCCD.RunWorkerAsync();
-                StartLive();
-            }    
-            
-            else
-            {
-                StopLive();
-                //if (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera == TypeCamera.Pylon)
-                //{
-                  
-                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.ChangeGrabLoop(false);
-                //    BeeCore.Common.listCamera[Global.IndexChoose].PylonCam.FrameReady -= PylonCam_FrameReady;
 
-                //}
-              
-            }    
-               
-            
+            Live();
+
+
+
 
         }
 private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int stride, int channels)
@@ -4535,14 +4616,21 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
        
         private void workReadCCD_DoWork(object sender, DoWorkEventArgs e)
         {
-          
-            if (!Global.IsRun)
+            if (!Global.IsLive && Global.IsRun && Global.StatusProcessing != StatusProcessing.Read) return;
+                if (Global.IsLive||!Global.IsRun)
             {
                 if (BeeCore.Common.listCamera[Global.IndexChoose].IsMouseDown) return;
+                try
+                {
                     BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                }
+                  
+                catch(Exception)
+                {
 
+                }
             }
-            else
+            else if(Global.IsRun&&Global.StatusProcessing==StatusProcessing.Read)
             {
                 if (Global.ParaCommon.IsMultiCamera)
                 {
@@ -4581,17 +4669,17 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             //if (IsErrCCD)
             //{
             //    await TimingUtils.DelayAccurateAsync(5);
-                
+
             //    if(!workReadCCD.IsBusy)
             //    {
             //        workReadCCD.RunWorkerAsync();
             //        return;
 
             //    }    
-               
+
             //}    
-         
-            if (btnLive.IsCLick)
+
+            if (Global.IsLive )
             {
 
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
@@ -4621,6 +4709,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     await TimingUtils.DelayAccurateAsync(5);
                 if (BeeCore.Common.listCamera[Global.IndexChoose].IsSetPara)
                     await TimingUtils.DelayAccurateAsync(5);
+                
                 workReadCCD.RunWorkerAsync();
                 return;
             }

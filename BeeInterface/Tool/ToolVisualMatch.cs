@@ -54,12 +54,12 @@ namespace BeeInterface
                 Propety.rotArea = new RectRotate();
 
             AdjColorTolerance.Value = Propety.ColorTolerance;
-            AdjMaxDiffPixels.Value=Propety.MaxDiffPixels;
+         
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
             btnArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-
+            AdjThreshod.Value = Propety.ThreshBinary;
             btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
             btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
@@ -317,6 +317,7 @@ namespace BeeInterface
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true;
+                AdjValueTemp.Value = Propety.pxRS;
             }
         }
 
@@ -530,10 +531,7 @@ namespace BeeInterface
 
         }
 
-        private void AdjMaxDiffPixels_ValueChanged(float obj)
-        {
-            Propety.MaxDiffPixels=(int)AdjMaxDiffPixels.Value;
-        }
+     
 
         private void trackNumObject_ValueChanged(float obj)
         {
@@ -543,6 +541,11 @@ namespace BeeInterface
         private void AdjColorTolerance_ValueChanged(float obj)
         {
             Propety.ColorTolerance = (int)AdjColorTolerance.Value;
+        }
+
+        private void AdjThreshod_ValueChanged(float obj)
+        {
+            Propety.ThreshBinary =(int) AdjThreshod.Value;
         }
     }
 }

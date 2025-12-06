@@ -172,10 +172,10 @@
     <value>1083, 41</value>
   </metadata>
   <metadata name="tmLive.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>439, 73</value>
+    <value>324, 75</value>
   </metadata>
   <metadata name="tmShow.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>529, 73</value>
+    <value>451, 76</value>
   </metadata>
   <metadata name="tmEnableControl.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>617, 73</value>

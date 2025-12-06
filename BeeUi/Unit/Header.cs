@@ -344,13 +344,13 @@ namespace BeeUi.Common
         void ChangeProgram(String program)
         {
 
-            if (IsLoad)
-            {
-                IsLoad = false;
-                return;
-                //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
+            //if (IsLoad)
+            //{
+            //    IsLoad = false;
+            //    return;
+            //    //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
-            }
+            //}
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
            
@@ -545,8 +545,11 @@ txtQrCode.Focus();
         bool IsIntialProgram = false;
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
-            if(IsIntialProgram)
+            Global.IsChangeProg = true;
+            if (IsIntialProgram)
             {
+                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                    Global.ParaCommon.Comunication.Protocol.Disconnect();
                 Global.ScanCCD.DisConnectAllCCd();
                 DataTool.LoadProject(Global.Project);
                 
@@ -658,7 +661,7 @@ txtQrCode.Focus();
 
         public int indexToolShow = 0;
       public  int stepShow = 0;
-        private void tmShow_Tick(object sender, EventArgs e)
+        private async void tmShow_Tick(object sender, EventArgs e)
         {
             
             switch (stepShow)
@@ -688,8 +691,46 @@ txtQrCode.Focus();
                     {
                         Global.EditTool.View.btnFull.PerformClick();
 
-                    }  
-                        tmShow.Enabled = false;
+                    }
+                   
+                    if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+                    if (Global.ParaCommon.Comunication.Protocol.IsBypass) return;
+                  
+                    await Global.ParaCommon.Comunication.Protocol.Connect();
+
+                    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                    {
+                        Global.StatusIO = StatusIO.None;
+                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+
+
+
+
+
+                    }
+
+                    else
+                    {
+                        //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                        if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
+                        {
+                            await Global.ParaCommon.Comunication.Protocol.Connect();
+                            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                            {
+                                Global.StatusIO = StatusIO.None;
+                                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+
+
+                            }
+
+                            else
+                            {
+                                MessageBox.Show("Check connect I_O");
+                            }
+                        }
+                    }
+                    Global.IsChangeProg = false;
+                    tmShow.Enabled = false;
                     //Global.EditTool.Acccess(Global.IsRun);
                     break;
             } 

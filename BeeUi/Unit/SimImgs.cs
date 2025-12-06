@@ -26,9 +26,11 @@ namespace BeeUi.Unit
         private void RegisterImgs_Load(object sender, EventArgs e)
         {
             this.Location = new Point( Global.EditTool.View.Width - this.Width,Global.EditTool.View.pBtn.Height + 1);
+            if (Global.ParaCommon.listSimImg == null) Global.ParaCommon.listSimImg = new List<ItemRegsImg>();
+           registerImg.LoadAllItem(Global.ParaCommon.listSimImg);
+            numDelay.Value = 5000;
 
-           // registerImg.LoadAllItem((BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis));
-          
+
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -46,9 +48,9 @@ namespace BeeUi.Unit
             {
                 // phần Global của bạn — giữ nguyên
                 BeeCore.Common.listCamera[Global.IndexChoose].matRaw = clone.Clone();
-                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+              //  Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
                 Global.ParaCommon.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
-                Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
+               // Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
                 Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
                 ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
                 
@@ -100,6 +102,11 @@ namespace BeeUi.Unit
             }
             else
                 btnContinuous.Image = Properties.Resources.Play_2;
+        }
+
+        private void numDelay_ValueChanged(float obj)
+        {
+            Global.EditTool.View.tmSimulation.Interval =(int) numDelay.Value;
         }
     }
 }

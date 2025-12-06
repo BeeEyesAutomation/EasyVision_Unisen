@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.registerImg = new BeeInterface.RegisterImgDashboard();
             this.btnContinuous = new BeeInterface.RJButton();
             this.btnCap = new BeeInterface.RJButton();
-            this.registerImgDashboard1 = new BeeInterface.RegisterImgDashboard();
+            this.numDelay = new BeeInterface.CustomNumericEx();
+            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.registerImg = new BeeInterface.RegisterImgDashboard();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,30 +44,16 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btnContinuous, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnCap, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.numDelay, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.autoFontLabel1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 584);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 558);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(397, 50);
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(397, 76);
             this.tableLayoutPanel1.TabIndex = 3;
-            // 
-            // registerImg
-            // 
-            this.registerImg.AutoNameDigits = 3;
-            this.registerImg.AutoNamePrefix = "Img";
-            this.registerImg.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.registerImg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.registerImg.HeightTopBar1 = 50;
-            this.registerImg.HeightTopBar2 = 40;
-            this.registerImg.HeightTopBar3 = 38;
-            this.registerImg.HideTopBar = false;
-            this.registerImg.Location = new System.Drawing.Point(0, 0);
-            this.registerImg.Name = "registerImg";
-            this.registerImg.Size = new System.Drawing.Size(397, 584);
-            this.registerImg.TabIndex = 2;
-            this.registerImg.UpdateGlobal = true;
-            this.registerImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.registerImg_SelectedItemChanged);
             // 
             // btnContinuous
             // 
@@ -117,7 +104,7 @@
             this.btnContinuous.Margin = new System.Windows.Forms.Padding(5);
             this.btnContinuous.Multiline = false;
             this.btnContinuous.Name = "btnContinuous";
-            this.btnContinuous.Size = new System.Drawing.Size(189, 40);
+            this.btnContinuous.Size = new System.Drawing.Size(189, 28);
             this.btnContinuous.TabIndex = 11;
             this.btnContinuous.Text = "Continuous";
             this.btnContinuous.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -175,7 +162,7 @@
             this.btnCap.Margin = new System.Windows.Forms.Padding(5);
             this.btnCap.Multiline = false;
             this.btnCap.Name = "btnCap";
-            this.btnCap.Size = new System.Drawing.Size(188, 40);
+            this.btnCap.Size = new System.Drawing.Size(188, 28);
             this.btnCap.TabIndex = 10;
             this.btnCap.Text = "Single Trigger";
             this.btnCap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -184,20 +171,72 @@
             this.btnCap.UseVisualStyleBackColor = false;
             this.btnCap.Click += new System.EventHandler(this.btnCap_Click);
             // 
-            // registerImgDashboard1
+            // numDelay
             // 
-            this.registerImgDashboard1.AutoNameDigits = 3;
-            this.registerImgDashboard1.AutoNamePrefix = "Img";
-            this.registerImgDashboard1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.registerImgDashboard1.HeightTopBar1 = 50;
-            this.registerImgDashboard1.HeightTopBar2 = 70;
-            this.registerImgDashboard1.HeightTopBar3 = 40;
-            this.registerImgDashboard1.HideTopBar = true;
-            this.registerImgDashboard1.Location = new System.Drawing.Point(0, 0);
-            this.registerImgDashboard1.Name = "registerImgDashboard1";
-            this.registerImgDashboard1.Size = new System.Drawing.Size(397, 634);
-            this.registerImgDashboard1.TabIndex = 1;
-            this.registerImgDashboard1.UpdateGlobal = true;
+            this.numDelay.AutoShowTextbox = false;
+            this.numDelay.AutoSizeTextbox = true;
+            this.numDelay.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.numDelay.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
+            this.numDelay.BorderRadius = 6;
+            this.numDelay.ButtonMaxSize = 64;
+            this.numDelay.ButtonMinSize = 24;
+            this.numDelay.Decimals = 0;
+            this.numDelay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.numDelay.ElementGap = 6;
+            this.numDelay.FillTextboxToAvailable = true;
+            this.numDelay.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.numDelay.InnerPadding = new System.Windows.Forms.Padding(6);
+            this.numDelay.KeyboardStep = 1F;
+            this.numDelay.Location = new System.Drawing.Point(201, 41);
+            this.numDelay.Max = 10000F;
+            this.numDelay.MaxTextboxWidth = 0;
+            this.numDelay.Min = 100F;
+            this.numDelay.MinimumSize = new System.Drawing.Size(120, 32);
+            this.numDelay.MinTextboxWidth = 16;
+            this.numDelay.Name = "numDelay";
+            this.numDelay.Size = new System.Drawing.Size(193, 32);
+            this.numDelay.SnapToStep = true;
+            this.numDelay.StartWithTextboxHidden = false;
+            this.numDelay.Step = 1F;
+            this.numDelay.TabIndex = 12;
+            this.numDelay.TextboxFontSize = 12F;
+            this.numDelay.TextboxSidePadding = 12;
+            this.numDelay.TextboxWidth = 56;
+            this.numDelay.UnitText = "";
+            this.numDelay.Value = 100F;
+            this.numDelay.WheelStep = 1F;
+            this.numDelay.ValueChanged += new System.Action<float>(this.numDelay_ValueChanged);
+            // 
+            // autoFontLabel1
+            // 
+            this.autoFontLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.autoFontLabel1.AutoFont = true;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.47559F);
+            this.autoFontLabel1.Location = new System.Drawing.Point(5, 43);
+            this.autoFontLabel1.Margin = new System.Windows.Forms.Padding(5);
+            this.autoFontLabel1.Name = "autoFontLabel1";
+            this.autoFontLabel1.Size = new System.Drawing.Size(188, 28);
+            this.autoFontLabel1.TabIndex = 13;
+            this.autoFontLabel1.Text = "Delay Check";
+            // 
+            // registerImg
+            // 
+            this.registerImg.AutoNameDigits = 3;
+            this.registerImg.AutoNamePrefix = "Img";
+            this.registerImg.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.registerImg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.registerImg.HeightTopBar1 = 50;
+            this.registerImg.HeightTopBar2 = 40;
+            this.registerImg.HeightTopBar3 = 38;
+            this.registerImg.HideTopBar = false;
+            this.registerImg.Location = new System.Drawing.Point(0, 0);
+            this.registerImg.Name = "registerImg";
+            this.registerImg.Size = new System.Drawing.Size(397, 558);
+            this.registerImg.TabIndex = 2;
+            this.registerImg.UpdateGlobal = false;
+            this.registerImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.registerImg_SelectedItemChanged);
             // 
             // SimImgs
             // 
@@ -206,7 +245,6 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.registerImg);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.registerImgDashboard1);
             this.DoubleBuffered = true;
             this.Name = "SimImgs";
             this.Size = new System.Drawing.Size(397, 634);
@@ -218,10 +256,12 @@
         }
 
         #endregion
-        private BeeInterface.RegisterImgDashboard registerImgDashboard1;
+  
         private BeeInterface.RegisterImgDashboard registerImg;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public BeeInterface.RJButton btnCap;
         public BeeInterface.RJButton btnContinuous;
+        private BeeInterface.CustomNumericEx numDelay;
+        private BeeInterface.AutoFontLabel autoFontLabel1;
     }
 }

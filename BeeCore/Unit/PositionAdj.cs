@@ -592,15 +592,30 @@ namespace BeeCore
                                                 if (!object.ReferenceEquals(t, matProcess)) matProcess.Dispose();
                                                 matProcess = t;
                                             }
+                                            OrthCornerOptions orthCornerOptions = new OrthCornerOptions
+                                            {
+                                                MaxCandidateLines = 20,
+                                                RansacIterations = 2000,
+                                                RansacThreshold = 2,
+                                                MinInliersPerLine = 3,
+                                                AutoMean = true,
+                                                FixMean = 2,
+                                                AngleTargetDeg = 90,
+                                                AngleToleranceDeg = 10,
+                                                ContinuityGapFactor = 2,
+                                            };
 
-                                      
-                                       
+                                          
+
+
+
+
                                             try
                                             {
-                                               
-                                                Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess);
-                                               
-                                              //  Cv2.ImWrite("RS.png", Result.Debug);
+
+                                                Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
+
+                                                //  Cv2.ImWrite("RS.png", Result.Debug);
 
 
                                             }
@@ -697,7 +712,7 @@ namespace BeeCore
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
                 Global.AngleOrigin = rectRotates[0]._rectRotation;
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
-               
+
             }
             if (!Global.IsRun)
              {
@@ -705,10 +720,22 @@ namespace BeeCore
                     if (results == Results.OK)
                     {
                         rotPositionAdjustment = rectRotates[0].Clone();
-                        Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X - rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X, rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None);
+                   // Global.rotAreaAdj = rotArea.Clone();
+                 //   Global.rotOriginAdj = rectRotates[0].Clone();
+
+                   Global.rotOriginAdj = new RectRotate(rotCrop._rect, new PointF(rotArea._PosCenter.X - rotArea._rect.Width / 2 + rotPositionAdjustment._PosCenter.X, rotArea._PosCenter.Y - rotArea._rect.Height / 2 + rotPositionAdjustment._PosCenter.Y), rotPositionAdjustment._rectRotation, AnchorPoint.None);
                     }
               }
-            Common.PropetyTools[IndexThread][Index].Results = results;
+            //else
+            //{
+            //    if (results == Results.OK)
+            //    {
+            //        Global.rotCurrentAdj = rectRotates[0].Clone();
+
+            //    }
+            //}
+              
+                Common.PropetyTools[IndexThread][Index].Results = results;
         }
         public Graphics DrawResult(Graphics gc)
         {

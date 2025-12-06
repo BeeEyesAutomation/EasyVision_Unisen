@@ -122,7 +122,8 @@ namespace BeeCore
                                 if (propetyTool.TypeTool == TypeTool.Measure)
                                     continue;
                                 if (Global.rotOriginAdj != null)
-                                {
+                                {//  propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.TransformToolRect(Global.rotAreaAdj,Global.rotOriginAdj,Global.rotCurrentAdj,propetyTool.Propety.rotArea);
+
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
                                     //if (propetyTool.TypeTool == TypeTool.Positions)
                                     //{

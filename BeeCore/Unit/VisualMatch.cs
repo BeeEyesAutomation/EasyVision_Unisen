@@ -68,8 +68,9 @@ namespace BeeCore
 
             using (Mat img = raw.Clone())
             {
-              
-
+                if (img.Channels() == 3)
+                    Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
+                Cv2.Threshold(img, img, ThreshBinary, 255, ThresholdTypes.Binary);
                 // Chuẩn hóa kênh về BGR 3 kênh
                 if (img.Channels() == 1)
                     Cv2.CvtColor(img, img, ColorConversionCodes.GRAY2BGR);
@@ -139,13 +140,14 @@ namespace BeeCore
             if(bmRaw != null)
             {
                 matTemp = bmRaw.ToMat();
+              
                 LearnPattern(matTemp, true);
             }
            
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 10000;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
 
@@ -154,14 +156,28 @@ namespace BeeCore
     
 
         public bool IsLimitCouter = true;
+        public float PxTemp = 0;
+        [NonSerialized]
+        public float pxRS;
+        public int ThreshBinary=100;
+        float OffsetX, OffsetY, OffsetAngle;
         public void DoWork(RectRotate rectRotate)
         {
 
             try
             {
-              
+                pxRS=0;
                 using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
+                    if (raw.Empty()) return;
+                    if (raw.Channels() == 3)
+                        Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
+                    Cv2.Threshold(raw, raw, ThreshBinary, 255, ThresholdTypes.Binary);
+                  
+                    if (raw.Type() == MatType.CV_8UC1)
+                    {
+                        Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
+                    }
                     var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
@@ -171,8 +187,7 @@ namespace BeeCore
 
                    
                     int w = 0, h = 0, s = 0, c = 0;
-                    IntPtr intpr = ColorPixel.CheckImageFromMat(
-                       MaxDiffPixels, ColorTolerance, out ISOK, out cycleTime, out w, out h, out s, out c);
+                    IntPtr intpr = ColorPixel.CheckImageFromMat(ColorTolerance, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                     matProcess = new Mat();
 
                     if (intpr != IntPtr.Zero)
@@ -191,15 +206,25 @@ namespace BeeCore
             catch (Exception ex)
             {
             }
+            finally
+            {
+
+            }
         }
+        public bool IsCalib;
         public void Complete()
         {
             try
             {
-
-                if (ISOK) Common.PropetyTools[IndexThread][Index].Results = Results.OK;
-                else
+                if (IsCalib)
+                    PxTemp = pxRS;
+                Common.PropetyTools[IndexThread][Index].ScoreResult = pxRS;
+                if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0)
+                    Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+                if (Common.PropetyTools[IndexThread][Index].ScoreResult> Common.PropetyTools[IndexThread][Index].Score) 
                     Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                else
+                    Common.PropetyTools[IndexThread][Index].Results = Results.OK;
             }
             catch(Exception ex)
             {
@@ -229,21 +254,9 @@ namespace BeeCore
             Color cl = Color.LimeGreen;
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
-            {
                 cl = Color.Red;
-                //if (BeeCore.Common.PropetyTools[IndexThread][Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.LimeGreen;
-
-
-            }
             else
-            {
                 cl = Color.LimeGreen;
-                //if (BeeCore.Common.PropetyTools[IndexThread][Index].UsedTool == UsedTool.Invertse &&
-                //    G.Config.ConditionOK == ConditionOK.Logic)
-                //    cl = Color.Red;
-            }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
@@ -262,8 +275,8 @@ namespace BeeCore
                             mat.Translate(Global.pScroll.X, Global.pScroll.Y);
                             mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
                         }
-                        mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
-                        mat.Rotate(rotA._rectRotation);
+                        mat.Translate(rotA._PosCenter.X+OffsetX, rotA._PosCenter.Y+OffsetY);
+                        mat.Rotate(rotA._rectRotation+OffsetAngle);
 
                         gc.Transform = mat;
                         Bitmap myBitmap = matProcess.ToBitmap();

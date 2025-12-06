@@ -18,6 +18,7 @@ namespace BeeGlobal
         //public Color ColorBar2 = Color.FromArgb(100, 114, 114, 114);
         //public Color ColorEnd = Color.WhiteSmoke;
         //public Color ColorRight = Color.WhiteSmoke;
+        public DisplayResolution DisplayResolution=DisplayResolution.Full;
         public int FontSize = 16;
         public int Opacity = 100;
         public int RadEdit = 40;

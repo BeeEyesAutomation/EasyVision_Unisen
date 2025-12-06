@@ -1,4 +1,5 @@
-﻿using BeeCore.Funtion;
+﻿
+using BeeCore.Funtion;
 using BeeGlobal;
 using CvPlus;
 using OpenCvSharp;
@@ -280,10 +281,12 @@ namespace BeeCore
         public String Content = "";
         public String Matching = "";
         public bool IsEnContent = false;
-      
-        List<RectRotate> boxList = new List<RectRotate>();
-        List<float> scoreList = new List<float>();
-        List<string> labelList = new List<string>();
+
+        //List<RectRotate> boxList = new List<RectRotate>();
+        //List<float> scoreList = new List<float>();
+        //List<string> labelList = new List<string>();
+        [NonSerialized]
+        List<ResultItem> resultTemp = new List<ResultItem>();
         public int IndexThread = 0;
         public float CropOffSetX, CropOffSetY=0;
         [NonSerialized]
@@ -363,14 +366,15 @@ namespace BeeCore
                         int n = (int)boxes.Length();
 
                         // === Chuẩn bị danh sách output ===
-                        if (boxList == null) boxList = new List<RectRotate>(n);
-                        else { boxList.Clear(); if (boxList.Capacity < n) boxList.Capacity = n; }
+                      //  if (resultTemp == null) resultTemp = new List<ResultItem>(n);
+                        resultTemp = new List<ResultItem>();
+                        //else { boxList.Clear(); if (boxList.Capacity < n) boxList.Capacity = n; }
 
-                        if (scoreList == null) scoreList = new List<float>(n);
-                        else { scoreList.Clear(); if (scoreList.Capacity < n) scoreList.Capacity = n; }
+                        //if (scoreList == null) scoreList = new List<float>(n);
+                        //else { scoreList.Clear(); if (scoreList.Capacity < n) scoreList.Capacity = n; }
 
-                        if (labelList == null) labelList = new List<string>(n);
-                        else { labelList.Clear(); if (labelList.Capacity < n) labelList.Capacity = n; }
+                        //if (labelList == null) labelList = new List<string>(n);
+                        //else { labelList.Clear(); if (labelList.Capacity < n) labelList.Capacity = n; }
 
                         // === Đọc kết quả ===
                         for (int j = 0; j < n; j++)
@@ -390,12 +394,14 @@ namespace BeeCore
                                 new System.Drawing.RectangleF(-bw / 2f, -bh / 2f, bw, bh),
                                 new System.Drawing.PointF(cx, cy),
                                 0f, AnchorPoint.None);
-
-                            boxList.Add(rt);
-                            scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
-                            labelList.Add(((PyObject)labels[j]).ToString());
+                            resultTemp.Add(new BeeCore.ResultItem(((PyObject)labels[j]).ToString()));
+                            resultTemp[resultTemp.Count - 1].rot = rt;
+                            resultTemp[resultTemp.Count - 1].Score = (float)((PyObject)scores[j]).As<double>() * 100f;
+                            //boxList.Add(rt);
+                            //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
+                            //labelList.Add(((PyObject)labels[j]).ToString());
                         }
-
+                        resultTemp= ResultFilter.FilterRectRotate(resultTemp,0.7f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
                         // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
                         GC.KeepAlive(matCrop);
                     }
@@ -599,6 +605,7 @@ namespace BeeCore
         double percent = 0;
         [NonSerialized]
         public List< ResultItem> ResultItem=new List<ResultItem>() ;
+        int numOK = 0, numNG = 0;
         public void Complete()
         {
             if (Global.IsIntialPython)
@@ -618,7 +625,7 @@ namespace BeeCore
                         // cycleTime = (int)G.YoloPlus.Cycle;
                         Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                         int i = 0;
-                        int numOK = 0, numNG = 0;
+                        numOK = 0; numNG = 0;
                         int scoreRS = 0;
                         List<String> _listLabelCompare = new List<String>();
                         if (labelItems == null)
@@ -633,10 +640,10 @@ namespace BeeCore
                         //    if (!label.IsEn) continue;
                         //    _listLabelCompare.Add(label.label);
                         //}
-                        foreach (String label in labelList)
+                        foreach (ResultItem rs in resultTemp)
                         {
-                            ResultItem.Add(new ResultItem(label));
-                            int index = labelItems.FindIndex(item => string.Equals(item.Name, label, StringComparison.OrdinalIgnoreCase));
+                            ResultItem.Add(new ResultItem(rs.Name));
+                            int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
                             if (index > -1)
                             {
                                 LabelItem item = labelItems[index];
@@ -644,17 +651,17 @@ namespace BeeCore
                                 { i++; continue; }
                                 bool IsOK = false;
                                 if (item.IsHeight)
-                                    if (boxList[i]._rect.Height >= item.ValueHeight)
+                                    if (rs.rot._rect.Height >= item.ValueHeight)
                                         IsOK = true;
                                 if (item.IsWidth)
-                                    if (boxList[i]._rect.Width >= item.ValueWidth)
+                                    if (rs.rot._rect.Width >= item.ValueWidth)
                                         IsOK = true;
                                 if (item.IsX)
-                                    if (IntersectX(boxList[i], item.ValueX))// if (boxList[i]._PosCenter.X + boxList[i]._rect.Width / 2 >= item.ValueX)
+                                    if (IntersectX(rs.rot, item.ValueX))// if (rs.rot._PosCenter.X + rs.rot._rect.Width / 2 >= item.ValueX)
 
                                         IsOK = true;
                                 if (item.IsY)
-                                    if (IntersectY(boxList[i], item.ValueY)) // [i]._PosCenter.Y + boxList[i]._rect.Height / 2 >= item.ValueY)
+                                    if (IntersectY(rs.rot, item.ValueY)) // [i]._PosCenter.Y + rs.rot._rect.Height / 2 >= item.ValueY)
                                         IsOK = true;
                                
                                     double Area = 0;
@@ -663,12 +670,12 @@ namespace BeeCore
                                     if(item.Name=="T_CHI")
                                     {
                                       
-                                        Rect rect=  new Rect((int)boxList[i]._PosCenter.X+(int)boxList[i]._rect.X, (int)boxList[i]._PosCenter.Y + (int)boxList[i]._rect.Y, (int)boxList[i]._rect.Width, (int)boxList[i]._rect.Height);
+                                        Rect rect=  new Rect((int)rs.rot._PosCenter.X+(int)rs.rot._rect.X, (int)rs.rot._PosCenter.Y + (int)rs.rot._rect.Y, (int)rs.rot._rect.Width, (int)rs.rot._rect.Height);
                                         if (ResultItem[i].matProcess == null) ResultItem[i].matProcess = new Mat();
                                         if (!ResultItem[i].matProcess.Empty()) ResultItem[i].matProcess.Dispose();
                                         ResultItem[i].matProcess = matCropTemp.Clone();
                                         percent =  CalcMissingPercent_AutoMinMax(ref ResultItem[i].matProcess, rect);
-                                        Area = percent * boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height / 100;
+                                        Area = percent * rs.rot._rect.Size.Width * rs.rot._rect.Size.Height / 100;
                                         if (Area >= item.ValueArea * 100)
                                             IsOK = true;
                                       
@@ -677,7 +684,7 @@ namespace BeeCore
                                     {
                                         if (item.Name == "B_CHI")
                                         {
-                                            Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
+                                            Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
                                             if (Area >= item.ValueArea * 100)
                                             {
                                                 IsOK = true;
@@ -686,7 +693,7 @@ namespace BeeCore
                                             {
                                                 if (item.IsCounter)
                                                 {
-                                                    int count = labelList.Count(l => l == label);
+                                                    int count = resultTemp.Count(it => it.Name == rs.Name); ;// labelList.Count(l => l == label);
                                                     if (count >= item.ValueCounter)
                                                         IsOK = true;
                                                     else
@@ -697,7 +704,7 @@ namespace BeeCore
                                         }
                                         else
                                         {
-                                            Area = boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height;
+                                            Area = rs.rot._rect.Size.Width * rs.rot._rect.Size.Height;
                                             if (Area >= item.ValueArea * 100)
                                                 IsOK = true;
                                         }    
@@ -710,8 +717,8 @@ namespace BeeCore
                                 if (item.Name != "B_CHI")
                                     if (item.IsCounter)
                                 {
-                                    int count = labelList.Count(l => l == label);
-                                    if (count >= item.ValueCounter)
+                                    int count = resultTemp.Count(it => it.Name == rs.Name); ;//  labelList.Count(l => l == label);
+                                        if (count >= item.ValueCounter)
                                         IsOK = true;
                                     else
                                         IsOK = false;
@@ -719,15 +726,15 @@ namespace BeeCore
                                 if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY)
                                     IsOK = true;
                                 ResultItem[i].IsOK = IsOK;
-                                ResultItem[i].rot = boxList[i];
-                                ResultItem[i].Score = scoreList[i];
+                                ResultItem[i].rot = rs.rot;
+                                ResultItem[i].Score = rs.Score;
                                 ResultItem[i].Area =(float) Area;
                                 ResultItem[i].Percent = (float)percent;
-                                rectRotates.Add(boxList[i]);
+                                rectRotates.Add(rs.rot);
                                 if (IsOK)
                                 {
                                     //listOK.Add(true);
-                                    //rectRotates.Add(boxList[i]);
+                                    //rectRotates.Add(rs.rot);
                                     //listLabel.Add(label);
                                     //scoreRS += (int)scoreList[i];
                                     //listScore.Add(scoreList[i]);
@@ -736,7 +743,7 @@ namespace BeeCore
                                 //else
                                 //{
                                 //    listOK.Add(false);
-                                //    rectRotates.Add(boxList[i]);
+                                //    rectRotates.Add(rs.rot);
                                 //    listLabel.Add(label);
                                 //    scoreRS += (int)scoreList[i];
                                 //    listScore.Add(scoreList[i]);
@@ -750,10 +757,10 @@ namespace BeeCore
 
                                 //            break;
                                 //        case Compares.Less:
-                                //            if (boxList[i]._rect.Height <= yLine)
+                                //            if (rs.rot._rect.Height <= yLine)
                                 //            {
                                 //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -762,7 +769,7 @@ namespace BeeCore
                                 //            else
                                 //            {
                                 //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -778,10 +785,10 @@ namespace BeeCore
                                 //    switch (CompareArea)
                                 //    {
                                 //        case Compares.More:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= LimitArea*100)
+                                //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= LimitArea*100)
                                 //            {
                                 //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -790,7 +797,7 @@ namespace BeeCore
                                 //            else
                                 //            {
                                 //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -798,10 +805,10 @@ namespace BeeCore
                                 //            }
                                 //            break;
                                 //        case Compares.Less:
-                                //            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height <= LimitArea*100)
+                                //            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height <= LimitArea*100)
                                 //            {
                                 //                listOK.Add(true);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -810,7 +817,7 @@ namespace BeeCore
                                 //            else
                                 //            {
                                 //                listOK.Add(false);
-                                //                rectRotates.Add(boxList[i]);
+                                //                rectRotates.Add(rs.rot);
                                 //                listLabel.Add(label);
                                 //                scoreRS += (int)scoreList[i];
                                 //                listScore.Add(scoreList[i]);
@@ -825,7 +832,7 @@ namespace BeeCore
                                 //{
                                 //    listOK.Add(true);
                                 //    Content += label;
-                                //    rectRotates.Add(boxList[i]);
+                                //    rectRotates.Add(rs.rot);
                                 //    listLabel.Add(label);
                                 //    scoreRS += (int)scoreList[i];
                                 //    listScore.Add(scoreList[i]); numOK++;
@@ -976,20 +983,20 @@ namespace BeeCore
         //                        { i++; continue; }
         //                        bool IsOK = false;
         //                        if (item.IsHeight)
-        //                            if (boxList[i]._rect.Height >= item.ValueHeight)
+        //                            if (rs.rot._rect.Height >= item.ValueHeight)
         //                                IsOK = true;
         //                        if (item.IsWidth)
-        //                            if (boxList[i]._rect.Width >= item.ValueWidth)
+        //                            if (rs.rot._rect.Width >= item.ValueWidth)
         //                                IsOK = true;
         //                        if (item.IsArea)
-        //                            if (boxList[i]._rect.Size.Width * boxList[i]._rect.Size.Height >= item.ValueArea * 100)
+        //                            if (rs.rot._rect.Size.Width * rs.rot._rect.Size.Height >= item.ValueArea * 100)
         //                                IsOK = true;
         //                        if(!item.IsHeight&&!item.IsWidth&&!item.IsArea)
         //                            IsOK = true;
         //                        if (IsOK)
         //                        {
         //                            listOK.Add(true);
-        //                            rectRotates.Add(boxList[i]);
+        //                            rectRotates.Add(rs.rot);
         //                            listLabel.Add(labelConvert);
         //                            scoreRS += (int)scoreList[i];
         //                            listScore.Add(scoreList[i]);
@@ -998,7 +1005,7 @@ namespace BeeCore
         //                        else
         //                        {
         //                            listOK.Add(false);
-        //                            rectRotates.Add(boxList[i]);
+        //                            rectRotates.Add(rs.rot);
         //                            listLabel.Add(labelConvert);
         //                            scoreRS += (int)scoreList[i];
         //                            listScore.Add(scoreList[i]);
@@ -1132,7 +1139,7 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box2Label(gc, rotA, nameTool,"Count: "+ rectRotates.Count , font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
 
           //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
             int i = 0;

@@ -41,6 +41,14 @@ namespace BeeGlobal
             = new List<(Seg, Seg, string, double, Point2f, bool)>();
         public CornerResult Best;
     }
+    public enum DisplayResolution
+    {
+        Full,Normal
+    }
+    public enum TypeOutputRS
+    {
+        AllTime,Blink,OKNG
+    }
     public enum ModeCheck
     {
        Single,Multi

@@ -173,15 +173,41 @@ namespace BeeInterface
         public void Render()
         {
             if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
+            int w = _pb.ClientSize.Width;
+            int h = _pb.ClientSize.Height;
+            if (w <= 0 || h <= 0) return;
 
             bool drawPlaceholders = (_layoutPreset != CollageLayout.AutoWeighted);
+            Size targetSize = new Size(w, h); 
+            Bitmap newBitmap=null;
+            if (Global.Config.DisplayResolution==DisplayResolution.Full)
+            {
 
-            var newBitmap = BuildCollageBitmapAuto(
-                _items,  _gutter, _bg, _layoutPreset,
-                highlightIndex: _lastModifiedIndex,
-                drawPlaceholders: drawPlaceholders,
-                placeholderText: "Empty"
-            );
+             
+
+                 newBitmap = BuildCollageBitmapAuto(
+                    _items, _gutter, _bg, _layoutPreset,
+                    highlightIndex: _lastModifiedIndex,
+                    drawPlaceholders: drawPlaceholders,
+                    placeholderText: "Empty", downscale: 1
+                );
+            }
+            else
+            {
+            
+                 newBitmap = BuildCollageBitmap(
+                    _items,
+                    targetSize,
+                    _gutter,
+                    _bg,
+                    _layoutPreset,
+                    highlightIndex: _lastModifiedIndex,
+                    drawPlaceholders: drawPlaceholders,
+                    placeholderText: "Empty"
+                );
+            }    
+               
+
 
             szImage = newBitmap.Size;
 
@@ -324,47 +350,141 @@ namespace BeeInterface
             return outBmp;
         }
 
+        //    public static Bitmap BuildCollageBitmapAuto(
+        //IList<ImageItem> items,
+        //int gutter = 6,
+        //Color? bg = null,
+        //CollageLayout preset = CollageLayout.AutoWeighted,
+        //int highlightIndex = -1,
+        //bool drawPlaceholders = false,
+        //string placeholderText = "Empty",
+        //Color? placeholderBack = null,
+        //Color? placeholderBorder = null,
+        //Color? placeholderTextColor = null)
+        //    {
+        //        int count = items?.Count ?? 0;
+        //        if (count == 0)
+        //            return new Bitmap(1, 1);
+
+        //        // -----------------------------------------------------------
+        //        // 1) Tính kích thước canvas tự động theo kích thước ảnh
+        //        // -----------------------------------------------------------
+
+        //        // Lấy max width và max height của ảnh
+        //        int maxW = 1, maxH = 1;
+        //        foreach (var it in items)
+        //        {
+        //            if (it?.Bmp == null) continue;
+        //            maxW = Math.Max(maxW, it.Bmp.Width);
+        //            maxH = Math.Max(maxH, it.Bmp.Height);
+        //        }
+
+        //        // Số ô cần render theo preset
+        //        int presetN =
+        //            preset == CollageLayout.One ? 1 :
+        //            preset == CollageLayout.Two ? 2 :
+        //            preset == CollageLayout.ThreeRow ? 3 : 4;
+
+        //        int n = (preset == CollageLayout.AutoWeighted)
+        //            ? Math.Min(count, 4)
+        //            : presetN;
+
+        //        // -----------------------------------------------------------
+        //        // 2) Tính kích thước canvas theo layout
+        //        // -----------------------------------------------------------
+
+        //        int canvasW = maxW;
+        //        int canvasH = maxH;
+
+        //        switch (preset)
+        //        {
+        //            case CollageLayout.One:
+        //                break;
+
+        //            case CollageLayout.Two:
+        //                // 2 ảnh: nếu ảnh rộng → xếp ngang, nếu cao → xếp dọc
+        //                bool wide = maxW >= maxH;
+        //                if (wide)
+        //                    canvasW = maxW * 2 + gutter;  // 2 ô ngang
+        //                else
+        //                    canvasH = maxH * 2 + gutter;  // 2 ô dọc
+        //                break;
+
+        //            case CollageLayout.ThreeRow:
+        //                canvasW = maxW * 3 + gutter * 2; // 3 cột
+        //                break;
+
+        //            case CollageLayout.FourGrid:
+        //                canvasW = maxW * 2 + gutter;
+        //                canvasH = maxH * 2 + gutter;
+        //                break;
+
+        //            case CollageLayout.AutoWeighted:
+        //                // Behave like FourGrid nhưng theo weight
+        //                canvasW = maxW * 2 + gutter;
+        //                canvasH = maxH * 2 + gutter;
+        //                break;
+        //        }
+
+        //        Size targetSize = new Size(canvasW, canvasH);
+
+        //        // -----------------------------------------------------------
+        //        // 3) Gọi lại BuildCollageBitmap cũ của bạn để GHÉP
+        //        // -----------------------------------------------------------
+
+        //        return BuildCollageBitmap(
+        //            items,
+        //            targetSize,
+        //            gutter,
+        //            bg,
+        //            preset,
+        //            highlightIndex,
+        //            drawPlaceholders,
+        //            placeholderText,
+        //            placeholderBack,
+        //            placeholderBorder,
+        //            placeholderTextColor
+        //        );
+        //    }
         public static Bitmap BuildCollageBitmapAuto(
-    IList<ImageItem> items,
-    int gutter = 6,
-    Color? bg = null,
-    CollageLayout preset = CollageLayout.AutoWeighted,
-    int highlightIndex = -1,
-    bool drawPlaceholders = false,
-    string placeholderText = "Empty",
-    Color? placeholderBack = null,
-    Color? placeholderBorder = null,
-    Color? placeholderTextColor = null)
+        IList<ImageItem> items,
+        int gutter = 6,
+        Color? bg = null,
+        CollageLayout preset = CollageLayout.AutoWeighted,
+        int highlightIndex = -1,
+        bool drawPlaceholders = false,
+        string placeholderText = "Empty",
+        Color? placeholderBack = null,
+        Color? placeholderBorder = null,
+        Color? placeholderTextColor = null,
+        int downscale = 1)
         {
             int count = items?.Count ?? 0;
             if (count == 0)
                 return new Bitmap(1, 1);
 
             // -----------------------------------------------------------
-            // 1) Tính kích thước canvas tự động theo kích thước ảnh
+            // 1) Tính max width / height nhanh nhất
             // -----------------------------------------------------------
 
-            // Lấy max width và max height của ảnh
-            int maxW = 1, maxH = 1;
-            foreach (var it in items)
+            int maxW = 1;
+            int maxH = 1;
+
+            // tránh null-check từng item 2 lần, dùng for nhanh hơn foreach
+            for (int i = 0; i < count; i++)
             {
-                if (it?.Bmp == null) continue;
-                maxW = Math.Max(maxW, it.Bmp.Width);
-                maxH = Math.Max(maxH, it.Bmp.Height);
+                var bmp = items[i]?.Bmp;
+                if (bmp == null) continue;
+
+                int w = bmp.Width;
+                int h = bmp.Height;
+
+                if (w > maxW) maxW = w;
+                if (h > maxH) maxH = h;
             }
 
-            // Số ô cần render theo preset
-            int presetN =
-                preset == CollageLayout.One ? 1 :
-                preset == CollageLayout.Two ? 2 :
-                preset == CollageLayout.ThreeRow ? 3 : 4;
-
-            int n = (preset == CollageLayout.AutoWeighted)
-                ? Math.Min(count, 4)
-                : presetN;
-
             // -----------------------------------------------------------
-            // 2) Tính kích thước canvas theo layout
+            // 2) Tính layout cực nhanh (tối giản switch)
             // -----------------------------------------------------------
 
             int canvasW = maxW;
@@ -376,36 +496,59 @@ namespace BeeInterface
                     break;
 
                 case CollageLayout.Two:
-                    // 2 ảnh: nếu ảnh rộng → xếp ngang, nếu cao → xếp dọc
-                    bool wide = maxW >= maxH;
-                    if (wide)
-                        canvasW = maxW * 2 + gutter;  // 2 ô ngang
-                    else
-                        canvasH = maxH * 2 + gutter;  // 2 ô dọc
-                    break;
+                    {
+                        // 2 ảnh: check ratio nhanh
+                        if (maxW >= maxH)
+                            canvasW = maxW * 2 + gutter;   // ngang
+                        else
+                            canvasH = maxH * 2 + gutter;   // dọc
+                        break;
+                    }
 
                 case CollageLayout.ThreeRow:
-                    canvasW = maxW * 3 + gutter * 2; // 3 cột
+                    canvasW = maxW * 3 + gutter * 2;
                     break;
 
                 case CollageLayout.FourGrid:
-                    canvasW = maxW * 2 + gutter;
-                    canvasH = maxH * 2 + gutter;
-                    break;
-
                 case CollageLayout.AutoWeighted:
-                    // Behave like FourGrid nhưng theo weight
                     canvasW = maxW * 2 + gutter;
                     canvasH = maxH * 2 + gutter;
                     break;
             }
 
+            // -----------------------------------------------------------
+            // 2.5) Giảm độ phân giải (downscale) – cực nhanh
+            // -----------------------------------------------------------
+            if (downscale > 1)
+            {
+                if (downscale > 4) downscale = 4;  // limit để tránh chia lớn vô ích
+
+                // dùng shift nếu downscale = 2 hoặc 4 → nhanh gấp 5–7 lần phép chia
+                if (downscale == 2)
+                {
+                    canvasW >>= 1;
+                    canvasH >>= 1;
+                }
+                else if (downscale == 4)
+                {
+                    canvasW >>= 2;
+                    canvasH >>= 2;
+                }
+                else
+                {
+                    canvasW /= downscale;
+                    canvasH /= downscale;
+                }
+
+                if (canvasW < 1) canvasW = 1;
+                if (canvasH < 1) canvasH = 1;
+            }
+
             Size targetSize = new Size(canvasW, canvasH);
 
             // -----------------------------------------------------------
-            // 3) Gọi lại BuildCollageBitmap cũ của bạn để GHÉP
+            // 3) Gọi lại hàm build cũ
             // -----------------------------------------------------------
-
             return BuildCollageBitmap(
                 items,
                 targetSize,

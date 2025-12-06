@@ -481,7 +481,7 @@ namespace BeeUi
                     if (camera.IsConnected)
                     {
                         camera.DisConnect(camera.Para.TypeCamera);
-
+                        camera.IsConnected = false;
                         camera.matRaw = new OpenCvSharp.Mat();
                     }
                 
