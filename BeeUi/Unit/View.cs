@@ -2780,23 +2780,32 @@ namespace BeeUi
             this.Invoke((Action)(() =>
             {
                 G.Header.btnMode.Enabled = !Global.IsLive;
-               if(!Global.IsLive)
+                if (Global.IsRun)
                 {
-                    G.StatusDashboard.StatusText = "---";
-                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    imgView.Text = "Wait Trigger ..";
-                    
-                    Live();
-                }    
-                    
+                    if (!Global.IsLive)
+                    {
+                        G.StatusDashboard.StatusText = "---";
+                        G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                        imgView.Text = "Wait Trigger ..";
+
+                        Live();
+                    }
+
+                    else
+                    {
+
+                        G.StatusDashboard.StatusText = "LIVE";
+                        G.StatusDashboard.StatusBlockBackColor = Color.Red;
+                        imgView.Text = "";
+                        Live();
+                    }
+                }
                 else
                 {
-                   
-                    G.StatusDashboard.StatusText ="LIVE";
-                    G.StatusDashboard.StatusBlockBackColor = Color.Red;
                     imgView.Text = "";
-                    Live();
-                }  
+                    imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                    imgView.Image = null;      // xoá ảnh khỏi control
+                }    
                
             }));
         }
@@ -2992,7 +3001,20 @@ namespace BeeUi
                     }    
                     break;
                 case StatusProcessing.Read:
-                   timer.Split("R");
+                    if(!Global.ParaCommon.IsExternal)
+                    {
+                        this.Invoke((Action)(() =>
+                        {
+                            if (imgView.Image != null)
+                            {
+                                imgView.Text = "Waiting Checking...";
+                                imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                                imgView.Image = null;      // xoá ảnh khỏi control
+                            }
+                        }));
+                    }    
+                  
+                    timer.Split("R");
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -3202,7 +3224,11 @@ namespace BeeUi
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
-                   
+                    if(!Global.ParaCommon.IsExternal)
+                    this.Invoke((Action)(() =>
+                    {
+                        imgView.Text = "Waiting Show Picture ..";
+                    }));
                     Global.IsAllowReadPLC = true;
 
                     timer.Split("W");

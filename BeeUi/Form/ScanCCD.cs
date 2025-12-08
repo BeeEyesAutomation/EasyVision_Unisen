@@ -597,7 +597,7 @@ namespace BeeUi
                 }
                 if (Global.Config.NumTrig < 1) Global.Config.NumTrig = 1;
                 Global.CameraStatus = CameraStatus.Ready;
-                SaveData.Camera(Global.Project,Global.listParaCamera);
+             //   SaveData.Camera(Global.Project,Global.listParaCamera);
                
                 if (G.Main == null)
                 {

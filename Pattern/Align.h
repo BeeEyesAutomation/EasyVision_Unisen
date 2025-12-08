@@ -5,6 +5,31 @@ using namespace cv;
 
 namespace BeeAlign
 {
+    enum class ECCSpeed
+    {
+        Slow = 0,      // chậm nhưng rất chính xác
+        Normal = 1,    // mặc định
+        Fast = 2       // nhanh, đủ tốt
+    };
+    struct ECC_Params
+    {
+        double downScale;          // 0.3–1.0
+        int    maxIter;
+        double eps;
+        int    gaussSize;
+        int    pyramid;
+        int    motion;
+        cv::Scalar border;
+    };
+
+    struct ECC_Result
+    {
+        float dx = 0;
+        float dy = 0;
+        float angle = 0;
+        bool success = false;
+        cv::Mat aligned;
+    };
     static inline cv::Mat ShiftXY(const cv::Mat& img, int dx, int dy)
     {
         cv::Mat M = (cv::Mat_<double>(2, 3) <<
@@ -20,6 +45,127 @@ namespace BeeAlign
         int dx, dy;
         int diffCount;
     };
+    inline ECC_Params MakeECCParams(ECCSpeed speed)
+    {
+        ECC_Params P;
+
+        P.border = cv::Scalar(255, 255, 255); // nền trắng
+
+        switch (speed)
+        {
+        case ECCSpeed::Slow:
+            // chậm nhưng cực chính xác
+            P.downScale = 1.0;                  // full size
+            P.maxIter = 80;
+            P.eps = 1e-6;
+            P.gaussSize = 5;
+            P.pyramid = 3;
+            P.motion = cv::MOTION_AFFINE;
+            break;
+
+        case ECCSpeed::Fast:
+            // nhanh, đủ tốt cho text / template
+            P.downScale = 0.5;                  // giảm 50%
+            P.maxIter = 25;
+            P.eps = 1e-3;
+            P.gaussSize = 3;
+            P.pyramid = 1;
+            P.motion = cv::MOTION_EUCLIDEAN; // chỉ xoay + dịch
+            break;
+
+        default: // ECCSpeed::Normal
+            P.downScale = 0.5;                  // giảm 50%
+            P.maxIter = 40;
+            P.eps = 1e-4;
+            P.gaussSize = 5;
+            P.pyramid = 2;
+            P.motion = cv::MOTION_AFFINE;
+            break;
+        }
+        return P;
+    }
+    inline ECC_Result AlignECC_Custom(
+        const cv::Mat& raw,
+        const cv::Mat& tpl,
+        const ECC_Params& P)
+    {
+        ECC_Result R;
+        if (raw.empty() || tpl.empty()) return R;
+
+        cv::Mat g1, g2;
+        cv::cvtColor(raw, g1, cv::COLOR_BGR2GRAY);
+        cv::cvtColor(tpl, g2, cv::COLOR_BGR2GRAY);
+
+        // Blur nhẹ
+        if (P.gaussSize > 1)
+        {
+            int k = (P.gaussSize % 2 == 0 ? P.gaussSize + 1 : P.gaussSize);
+            cv::GaussianBlur(g1, g1, cv::Size(k, k), 1.2);
+            cv::GaussianBlur(g2, g2, cv::Size(k, k), 1.2);
+        }
+
+        // Downscale
+        double s = P.downScale;
+        cv::Mat s1, s2;
+        cv::resize(g1, s1, cv::Size(), s, s, cv::INTER_AREA);
+        cv::resize(g2, s2, cv::Size(), s, s, cv::INTER_AREA);
+
+        cv::Mat warp = cv::Mat::eye(2, 3, CV_32F);
+
+        try
+        {
+            cv::TermCriteria crit(
+                cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
+                P.maxIter, P.eps);
+
+            cv::findTransformECC(
+                s2, s1,
+                warp,
+                P.motion,
+                crit,
+                cv::noArray(),
+                P.pyramid
+            );
+            R.success = true;
+        }
+        catch (...)
+        {
+            R.success = false;
+            return R;
+        }
+
+        float a = warp.at<float>(0, 0);
+        float c = warp.at<float>(1, 0);
+        float tx = warp.at<float>(0, 2);
+        float ty = warp.at<float>(1, 2);
+
+        R.dx = tx / (float)s;
+        R.dy = ty / (float)s;
+        R.angle = std::atan2(c, a) * 180.0f / CV_PI;
+
+        cv::Mat warpFull = warp.clone();
+        warpFull.at<float>(0, 2) = tx / (float)s;
+        warpFull.at<float>(1, 2) = ty / (float)s;
+
+        cv::warpAffine(
+            raw, R.aligned,
+            warpFull,
+            tpl.size(),
+            cv::INTER_LINEAR | cv::WARP_INVERSE_MAP,
+            cv::BORDER_CONSTANT,
+            P.border
+        );
+
+        return R;
+    }
+    inline ECC_Result AlignECC(
+        const cv::Mat& raw,
+        const cv::Mat& tpl,
+        ECCSpeed speed = ECCSpeed::Normal)
+    {
+        ECC_Params P = MakeECCParams(speed);
+        return AlignECC_Custom(raw, tpl, P);
+    }
     inline cv::Mat AlignECC(
         const cv::Mat& raw,
         const cv::Mat& tpl,

@@ -201,6 +201,10 @@ namespace BeeCore
                 {
 
                     valueScore = value - value % step;
+                    //if (valueScore > Max)
+                    //    ValueScore = Max;
+                    //if (valueScore <Min) 
+                    //    ValueScore = Min;
                     this.Invalidate();
                 }
             }

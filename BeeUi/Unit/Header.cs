@@ -234,7 +234,7 @@ namespace BeeUi.Common
                 G.listProgram.Visible = false;
                 G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
                 G.listProgram.Width = txtQrCode.Width;
-               
+                G.listProgram.SelectedIndexChanged -= ListProgram_SelectedIndexChanged;
                 G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
             }
             string[] files =  Directory.GetDirectories("Program");
@@ -344,13 +344,13 @@ namespace BeeUi.Common
         void ChangeProgram(String program)
         {
 
-            //if (IsLoad)
-            //{
-            //    IsLoad = false;
-            //    return;
-            //    //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
+            if (IsLoad)
+            {
+                IsLoad = false;
+                return;
+                //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
-            //}
+            }
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
            
@@ -382,7 +382,7 @@ namespace BeeUi.Common
         
         private void ListProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsIntialProgram) return;
+            if (!Global.IsIntialProgram) return;
             if(IsKeyPress)
             {
                 IsKeyPress = false;
@@ -456,6 +456,7 @@ namespace BeeUi.Common
                     G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
                     G.listProgram.Width = txtQrCode.Width;
                     RefreshListPJ();
+                    G.listProgram.SelectedIndexChanged -= ListProgram_SelectedIndexChanged;
                     G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
                 }
             }
@@ -476,7 +477,7 @@ namespace BeeUi.Common
             // Cập nhật ComboBox với các mục đã lọc
             if (Global.Initialed)
                 G.listProgram.DataSource = new BindingSource(listFilter, null);
-            
+            IsLoad = false;
 
         }
 
@@ -500,7 +501,7 @@ namespace BeeUi.Common
         {
             if(e.KeyCode==Keys.Enter)
             {
-
+                IsLoad = false;
             }
         }
 
@@ -523,7 +524,7 @@ txtQrCode.Focus();
                 G.listProgram.Visible = false;
               //  G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
                 G.listProgram.Width = txtQrCode.Width;
-              //  RefreshListPJ();
+                G.listProgram.SelectedIndexChanged -= ListProgram_SelectedIndexChanged;
                 G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
             }
            G.listProgram.Location = new Point(pModel.Location.X+ txtQrCode.Location.X, this.Location.Y + pModel.Location.Y  + txtQrCode.Location.Y + txtQrCode.Height + 10);
@@ -533,20 +534,20 @@ txtQrCode.Focus();
             if (G.listProgram.Visible )
             {
                 RefreshListPJ();
-                IsLoad = true;
+              
                 G.listProgram.DataSource = PathFile;
 
             }
-
+            IsLoad = true;
             G.Main.ActiveControl = txtQrCode;
             txtQrCode.Focus();
             txtQrCode.SelectAll();
         }
-        bool IsIntialProgram = false;
+      
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
             Global.IsChangeProg = true;
-            if (IsIntialProgram)
+            if (Global.IsIntialProgram)
             {
                 if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
                 {
@@ -564,7 +565,7 @@ txtQrCode.Focus();
 
         private async void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (IsIntialProgram)
+            if (Global.IsIntialProgram)
             {
                 if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
                 {
@@ -700,7 +701,7 @@ txtQrCode.Focus();
                     if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
                     if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                     {
-                        IsIntialProgram = true;
+                        Global.IsIntialProgram = true;
                         Global.IsChangeProg = false;
                         tmShow.Enabled = false;
                         return;
@@ -732,7 +733,7 @@ txtQrCode.Focus();
                             }
                         }
                     }
-                    IsIntialProgram = true;
+                    Global.IsIntialProgram = true;
 
                     Global.IsChangeProg = false;
                     tmShow.Enabled = false;

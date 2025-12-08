@@ -59,7 +59,8 @@ namespace BeeInterface
             btnArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-           
+            btnSingleCPU.IsCLick =! Propety.IsMultiCPU;
+            btnMultiCPU.IsCLick = Propety.IsMultiCPU;
             AdjClearNoise.Value = Propety.SzClearNoise;
             btnOFFCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? true : false;
             btnSlowCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.Slow ? true : false;
@@ -607,6 +608,26 @@ namespace BeeInterface
         private void btn8_Click(object sender, EventArgs e)
         {
             trackScore.Visible = !btn8.IsCLick;
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnSingleCPU_Click(object sender, EventArgs e)
+        {
+            Propety.IsMultiCPU = false;
+        }
+
+        private void btnMultiCPU_Click(object sender, EventArgs e)
+        {
+            Propety.IsMultiCPU = true;
         }
     }
 }

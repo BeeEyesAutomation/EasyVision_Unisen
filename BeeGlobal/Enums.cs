@@ -315,7 +315,7 @@ namespace BeeGlobal
     }
     public enum ModeCalibVisualMatch
     {
-       OFF,Slow,Normal,Fast
+       Slow,Normal,Fast, OFF
     }
     public enum TypeCrop
     {

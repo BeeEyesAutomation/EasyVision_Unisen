@@ -57,20 +57,20 @@ namespace BeeCore
         }
         public static void Program(String Project, List<List<PropetyTool>> Prog)
         {
-            if (Global.Config.ModeSaveProg == ModeSaveProg.Single)
-            {
-                String path = "Common";
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                Access.SaveProg(path + "\\Common.prog", Prog);
-            }
-            else
-            {
+            //if (Global.Config.ModeSaveProg == ModeSaveProg.Single)
+            //{
+            //    String path = "Common";
+            //    if (!Directory.Exists(path))
+            //        Directory.CreateDirectory(path);
+            //    Access.SaveProg(path + "\\Common.prog", Prog);
+            //}
+            //else
+            //{
                 String path = "Program\\" + Project;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 Access.SaveProg(path + "\\" + Global.Project + ".prog", Prog);
-            }
+            //}
 
 
         }

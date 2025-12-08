@@ -20,41 +20,44 @@ namespace BeeInterface
         {
             NameProject = NameProject.Replace(".prog", "");
             Global.ParaCommon = LoadData.Para(NameProject);
-            List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
-            if (paraCameras.Count() > 0)
+            if (!Global.IsIntialProgram||Global.Config.ModeSaveProg==ModeSaveProg.Multi)
             {
-                Global.listParaCamera = paraCameras;
-                BeeCore.Common.listCamera = new List<Camera>();
-                int indexCCD = 0;
-                foreach (ParaCamera paraCamera in paraCameras)
+                List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
+                if (paraCameras.Count() > 0)
                 {
-                    if (paraCamera != null)
-                        BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
-                    else
+                    Global.listParaCamera = paraCameras;
+                    BeeCore.Common.listCamera = new List<Camera>();
+                    int indexCCD = 0;
+                    foreach (ParaCamera paraCamera in paraCameras)
+                    {
+                        if (paraCamera != null)
+                            BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
+                        else
+                            BeeCore.Common.listCamera.Add(null);
+
+                        indexCCD++;
+                    }
+                X: if (BeeCore.Common.listCamera.Count() != 4)
+                    {
                         BeeCore.Common.listCamera.Add(null);
-                  
-                    indexCCD++;
+                        goto X;
+                    }
+                    if (BeeCore.Common.listCamera.Count() > 0)
+                        if (BeeCore.Common.listCamera[0] != null)
+                            Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
                 }
-            X: if (BeeCore.Common.listCamera.Count() != 4)
+                else
                 {
-                    BeeCore.Common.listCamera.Add(null);
-                    goto X;
-                }
-                if (BeeCore.Common.listCamera.Count() > 0)
-                    if (BeeCore.Common.listCamera[0] != null)
-                        Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
-            }
-            else
-            {
-                BeeCore.Common.listCamera = new List<Camera>();
-                Global.listParaCamera = new List<ParaCamera> { null,null,null,null};
-                foreach (ParaCamera paraCamera in Global.listParaCamera)
-                {
-                    if (paraCamera== null)
-                       
-                        BeeCore.Common.listCamera.Add(null);
-                    
-                   
+                    BeeCore.Common.listCamera = new List<Camera>();
+                    Global.listParaCamera = new List<ParaCamera> { null, null, null, null };
+                    foreach (ParaCamera paraCamera in Global.listParaCamera)
+                    {
+                        if (paraCamera == null)
+
+                            BeeCore.Common.listCamera.Add(null);
+
+
+                    }
                 }
             }
                 //Global.Config.SizeCCD = Camera.GetSzCCD();

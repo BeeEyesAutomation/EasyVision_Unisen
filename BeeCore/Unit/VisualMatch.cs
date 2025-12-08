@@ -148,7 +148,7 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 
-            Common.PropetyTools[IndexThread][Index].MaxValue = 10000;
+            Common.PropetyTools[IndexThread][Index].MaxValue = 5000;
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
         }
 
@@ -162,6 +162,8 @@ namespace BeeCore
         public float pxRS;
         public int ThreshBinary=100;
         float OffsetX, OffsetY, OffsetAngle;
+        bool IsAlign = false;
+        public bool IsMultiCPU = false;
         public void DoWork(RectRotate rectRotate)
         {
 
@@ -188,7 +190,8 @@ namespace BeeCore
 
                    
                     int w = 0, h = 0, s = 0, c = 0;
-                    IntPtr intpr = ColorPixel.CheckImageFromMat(ColorTolerance,SzClearNoise, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                    IsAlign = ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? false : true;
+                    IntPtr intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                     matProcess = new Mat();
 
                     if (intpr != IntPtr.Zero)
@@ -261,7 +264,8 @@ namespace BeeCore
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
             if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.Config.Opacity, Global.Config.ThicknessLine);
+            //Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
 
             gc.ResetTransform();
           

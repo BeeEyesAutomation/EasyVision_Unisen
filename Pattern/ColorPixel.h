@@ -18,7 +18,7 @@ namespace BeeCpp
     private:ColorPx* _img = new ColorPx();   // native pointer
     public:
         // So khớp ảnh (BGR8) từ bytes nén (PNG/JPG), trả RAW BGR (AllocHGlobal).
-        System::IntPtr CheckImageFromBytes(
+     /*   System::IntPtr CheckImageFromBytes(
             array<System::Byte>^ imageBytes,
             array<System::Byte>^ templateBytes,
             int colorTolerance,
@@ -28,11 +28,11 @@ namespace BeeCpp
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels
-           );
+           );*/
         //
      //   System::IntPtr imgData, int imgW, int imgH, int imgStride, int imgChannels,
         // So khớp trực tiếp từ Mat (OpenCvSharp) — data pointer + w/h/stride/channels.
-        System::IntPtr CheckImageFromMat(int colorTolerance,
+        System::IntPtr CheckImageFromMat(bool IsAlign, int ModeAlign,bool IsMultiCPU, int colorTolerance,
             int SzClearNoise,
             [System::Runtime::InteropServices::Out] float% PxOut,
             float% outOffsetX, float% outOffsetY, float% Offsetangle,

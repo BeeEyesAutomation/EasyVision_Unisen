@@ -92,6 +92,7 @@ namespace BeeGlobal
         }
         public static bool _IsChangeProg = false;
         public static event Action<bool> ChangeProg;
+        public static bool IsIntialProgram = false;
         public static bool IsChangeProg
         {
             get => _IsChangeProg;
