@@ -45,87 +45,104 @@ namespace BeeAlign
         int dx, dy;
         int diffCount;
     };
+    inline int FixKernel(int k)
+    {
+        if (k < 1) k = 1;
+        if ((k % 2) == 0) k += 1; // phải lẻ
+        return k;
+    }
     inline ECC_Params MakeECCParams(ECCSpeed speed)
     {
         ECC_Params P;
-
-        P.border = cv::Scalar(255, 255, 255); // nền trắng
+        P.border = cv::Scalar(255, 255, 255);
 
         switch (speed)
         {
         case ECCSpeed::Slow:
-            // chậm nhưng cực chính xác
-            P.downScale = 1.0;                  // full size
+            P.downScale = 1.0;                // không giảm
             P.maxIter = 80;
             P.eps = 1e-6;
-            P.gaussSize = 5;
-            P.pyramid = 3;
             P.motion = cv::MOTION_AFFINE;
+            P.gaussSize = 7;                  // blur mạnh hơn
             break;
 
         case ECCSpeed::Fast:
-            // nhanh, đủ tốt cho text / template
-            P.downScale = 0.5;                  // giảm 50%
+            P.downScale = 0.5;                // giảm 1/2 cho nhanh
             P.maxIter = 25;
             P.eps = 1e-3;
-            P.gaussSize = 3;
-            P.pyramid = 1;
             P.motion = cv::MOTION_EUCLIDEAN; // chỉ xoay + dịch
+            P.gaussSize = 3;
             break;
 
-        default: // ECCSpeed::Normal
-            P.downScale = 0.5;                  // giảm 50%
+        default: // Normal
+            P.downScale = 0.5;
             P.maxIter = 40;
             P.eps = 1e-4;
-            P.gaussSize = 5;
-            P.pyramid = 2;
             P.motion = cv::MOTION_AFFINE;
+            P.gaussSize = 5;
             break;
         }
+
+        // đảm bảo gaussSize hợp lệ cho ECC
+        P.gaussSize = FixKernel(P.gaussSize);
         return P;
     }
+
     inline ECC_Result AlignECC_Custom(
         const cv::Mat& raw,
         const cv::Mat& tpl,
         const ECC_Params& P)
     {
         ECC_Result R;
-        if (raw.empty() || tpl.empty()) return R;
+        if (raw.empty() || tpl.empty())
+            return R;
 
+        // 1) Gray
         cv::Mat g1, g2;
         cv::cvtColor(raw, g1, cv::COLOR_BGR2GRAY);
         cv::cvtColor(tpl, g2, cv::COLOR_BGR2GRAY);
 
-        // Blur nhẹ
-        if (P.gaussSize > 1)
-        {
-            int k = (P.gaussSize % 2 == 0 ? P.gaussSize + 1 : P.gaussSize);
-            cv::GaussianBlur(g1, g1, cv::Size(k, k), 1.2);
-            cv::GaussianBlur(g2, g2, cv::Size(k, k), 1.2);
-        }
+        // (optional) blur nhẹ ngoài nếu muốn
+        // cv::GaussianBlur(g1, g1, cv::Size(3,3), 0.8);
+        // cv::GaussianBlur(g2, g2, cv::Size(3,3), 0.8);
 
-        // Downscale
+        // 2) Downscale để tăng tốc
         double s = P.downScale;
         cv::Mat s1, s2;
         cv::resize(g1, s1, cv::Size(), s, s, cv::INTER_AREA);
         cv::resize(g2, s2, cv::Size(), s, s, cv::INTER_AREA);
 
+        // 3) Kiểm tra kích thước đủ lớn
+        if (s1.cols < 8 || s1.rows < 8 || s2.cols < 8 || s2.rows < 8)
+        {
+            // ảnh quá nhỏ, ECC không ổn định
+            R.success = false;
+            return R;
+        }
+
+        // 4) Warp matrix ECC
         cv::Mat warp = cv::Mat::eye(2, 3, CV_32F);
 
         try
         {
-            cv::TermCriteria crit(
+            cv::TermCriteria criteria(
                 cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
-                P.maxIter, P.eps);
+                P.maxIter,
+                P.eps
+            );
 
+            int gaussFiltSize = FixKernel(P.gaussSize);  // dùng làm gaussFiltSize
+
+            // *** LƯU Ý: TRÊN OPENCV 4.5.5, THAM SỐ CUỐI LÀ gaussFiltSize ***
             cv::findTransformECC(
                 s2, s1,
                 warp,
                 P.motion,
-                crit,
+                criteria,
                 cv::noArray(),
-                P.pyramid
+                gaussFiltSize  // KHÔNG PHẢI PYRAMID!
             );
+
             R.success = true;
         }
         catch (...)
@@ -134,23 +151,29 @@ namespace BeeAlign
             return R;
         }
 
+        // 5) Extract dx,dy,angle
         float a = warp.at<float>(0, 0);
+        float b = warp.at<float>(0, 1);
         float c = warp.at<float>(1, 0);
+        float d = warp.at<float>(1, 1);
         float tx = warp.at<float>(0, 2);
         float ty = warp.at<float>(1, 2);
 
+        R.angle = std::atan2(c, a) * 180.f / CV_PI;
         R.dx = tx / (float)s;
         R.dy = ty / (float)s;
-        R.angle = std::atan2(c, a) * 180.0f / CV_PI;
 
-        cv::Mat warpFull = warp.clone();
-        warpFull.at<float>(0, 2) = tx / (float)s;
-        warpFull.at<float>(1, 2) = ty / (float)s;
+        // 6) Warp full-res RAW → aligned
+        cv::Mat warpFull = (cv::Mat_<float>(2, 3) <<
+            a, b, tx / s,
+            c, d, ty / s
+            );
 
         cv::warpAffine(
-            raw, R.aligned,
+            raw,
+            R.aligned,
             warpFull,
-            tpl.size(),
+            raw.size(),
             cv::INTER_LINEAR | cv::WARP_INVERSE_MAP,
             cv::BORDER_CONSTANT,
             P.border
@@ -158,6 +181,82 @@ namespace BeeAlign
 
         return R;
     }
+
+
+    //inline ECC_Result AlignECC_Custom(
+    //    const cv::Mat& raw,
+    //    const cv::Mat& tpl,
+    //    const ECC_Params& P)
+    //{
+    //    ECC_Result R;
+    //    if (raw.empty() || tpl.empty()) return R;
+
+    //    cv::Mat g1, g2;
+    //    cv::cvtColor(raw, g1, cv::COLOR_BGR2GRAY);
+    //    cv::cvtColor(tpl, g2, cv::COLOR_BGR2GRAY);
+
+    //    // Blur nhẹ
+    //    if (P.gaussSize > 1)
+    //    {
+    //        int k = (P.gaussSize % 2 == 0 ? P.gaussSize + 1 : P.gaussSize);
+    //        cv::GaussianBlur(g1, g1, cv::Size(k, k), 1.2);
+    //        cv::GaussianBlur(g2, g2, cv::Size(k, k), 1.2);
+    //    }
+
+    //    // Downscale
+    //    double s = P.downScale;
+    //    cv::Mat s1, s2;
+    //    cv::resize(g1, s1, cv::Size(), s, s, cv::INTER_AREA);
+    //    cv::resize(g2, s2, cv::Size(), s, s, cv::INTER_AREA);
+
+    //    cv::Mat warp = cv::Mat::eye(2, 3, CV_32F);
+
+    //    try
+    //    {
+    //        cv::TermCriteria crit(
+    //            cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
+    //            P.maxIter, P.eps);
+
+    //        cv::findTransformECC(
+    //            s2, s1,
+    //            warp,
+    //            P.motion,
+    //            crit,
+    //            cv::noArray(),
+    //            P.pyramid
+    //        );
+    //        R.success = true;
+    //    }
+    //    catch (...)
+    //    {
+    //        R.success = false;
+    //        return R;
+    //    }
+
+    //    float a = warp.at<float>(0, 0);
+    //    float c = warp.at<float>(1, 0);
+    //    float tx = warp.at<float>(0, 2);
+    //    float ty = warp.at<float>(1, 2);
+
+    //    R.dx = tx / (float)s;
+    //    R.dy = ty / (float)s;
+    //    R.angle = std::atan2(c, a) * 180.0f / CV_PI;
+
+    //    cv::Mat warpFull = warp.clone();
+    //    warpFull.at<float>(0, 2) = tx / (float)s;
+    //    warpFull.at<float>(1, 2) = ty / (float)s;
+
+    //    cv::warpAffine(
+    //        raw, R.aligned,
+    //        warpFull,
+    //        tpl.size(),
+    //        cv::INTER_LINEAR | cv::WARP_INVERSE_MAP,
+    //        cv::BORDER_CONSTANT,
+    //        P.border
+    //    );
+
+    //    return R;
+    //}
     inline ECC_Result AlignECC(
         const cv::Mat& raw,
         const cv::Mat& tpl,
