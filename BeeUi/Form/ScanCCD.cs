@@ -466,7 +466,7 @@ namespace BeeUi
 
                     }
                 }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
 
@@ -540,7 +540,7 @@ namespace BeeUi
                         }
                     }
                 }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
             int numNull = 0;
@@ -556,7 +556,7 @@ namespace BeeUi
 
 
 
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
 
 
@@ -588,14 +588,14 @@ namespace BeeUi
             {
                 if (NumNoneNull == 1)
                 {
-                    Global.ParaCommon.IsMultiCamera = false;
+                    Global.Config.IsMultiCamera = false;
                 }
                 else
                 {
-                    Global.ParaCommon.IsMultiCamera = true;
+                    Global.Config.IsMultiCamera = true;
 
                 }
-                if (Global.ParaCommon.NumTrig < 1) Global.ParaCommon.NumTrig = 1;
+                if (Global.Config.NumTrig < 1) Global.Config.NumTrig = 1;
                 Global.CameraStatus = CameraStatus.Ready;
                 SaveData.Camera(Global.Project,Global.listParaCamera);
                
@@ -715,7 +715,7 @@ namespace BeeUi
 
                     index++;
                 }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
          
@@ -816,7 +816,7 @@ namespace BeeUi
 
                      index++;
                 }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
 
@@ -845,14 +845,14 @@ namespace BeeUi
                 {
                     if (NumNoneNull == 1)
                     {
-                        Global.ParaCommon.IsMultiCamera = false;
+                        Global.Config.IsMultiCamera = false;
                     }
                     else
                     {
-                        Global.ParaCommon.IsMultiCamera = true;
+                        Global.Config.IsMultiCamera = true;
 
                     }
-                    if (Global.ParaCommon.NumTrig < 1) Global.ParaCommon.NumTrig = 1;
+                    if (Global.Config.NumTrig < 1) Global.Config.NumTrig = 1;
                     Global.CameraStatus = CameraStatus.Ready;
                     SaveData.Camera(Global.Project, Global.listParaCamera);
 

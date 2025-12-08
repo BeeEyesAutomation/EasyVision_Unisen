@@ -158,6 +158,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
@@ -205,7 +206,8 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
-                       View. imgView.Text = "";
+                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+                        View. imgView.Text = "";
                         View.pImg.Visible = false;
                        View.btnChangeImg.IsCLick = false;
                         View.btnChangeImg.Visible = false;
@@ -372,7 +374,7 @@ namespace BeeUi
 
 
                 //}
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+           
          
                
             }
@@ -496,7 +498,7 @@ namespace BeeUi
             {
                 btnShowToolBar.Checked = true;
             }
-            if (Global.ParaCommon.IsForceByPassRS)
+            if (Global.Config.IsForceByPassRS)
             {
 
                 Global.EditTool.lbBypass.Visible = true;
@@ -1050,7 +1052,7 @@ namespace BeeUi
                     if (!CameraLive.matRaw.IsDisposed)
                         if (!CameraLive.matRaw.Empty())
                         {
-                           // Global.ParaCommon.SizeCCD = CameraLive.GetSzCCD();
+                           // Global.Config.SizeCCD = CameraLive.GetSzCCD();
                             // matRaw là OpenCvSharp.Mat
                             var bmp = BitmapConverter.ToBitmap(CameraLive.matRaw);
 

@@ -59,8 +59,13 @@ namespace BeeInterface
             btnArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
-            AdjThreshod.Value = Propety.ThreshBinary;
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
+           
+            AdjClearNoise.Value = Propety.SzClearNoise;
+            btnOFFCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? true : false;
+            btnSlowCalib.IsCLick = Propety.ModeCalibVisualMatch == ModeCalibVisualMatch.Slow ? true : false;
+            btnNormalCalib.IsCLick = Propety.ModeCalibVisualMatch==ModeCalibVisualMatch.Normal ? true : false;
+            btnFastCalib.IsCLick = Propety.ModeCalibVisualMatch==ModeCalibVisualMatch.Fast ? true : false;
+			btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
             btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
@@ -430,7 +435,7 @@ namespace BeeInterface
         {
             IsFullSize = true;
             Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.ParaCommon.SizeCCD.Width / 2, -Global.ParaCommon.SizeCCD.Height / 2, Global.ParaCommon.SizeCCD.Width, Global.ParaCommon.SizeCCD.Height), new PointF(Global.ParaCommon.SizeCCD.Width / 2, Global.ParaCommon.SizeCCD.Height / 2), 0, AnchorPoint.None);
+            Propety.rotArea = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
 
             
            Global.TypeCrop= TypeCrop.Area;
@@ -460,26 +465,7 @@ namespace BeeInterface
 
    
 
-        private void btnLess_Click(object sender, EventArgs e)
-        {
-            Propety.Compare=Compares.Less;
-        }
-
-        private void btnEqual_Click(object sender, EventArgs e)
-        {
-            Propety.Compare = Compares.Equal;
-        }
-
-        private void btnMore_Click(object sender, EventArgs e)
-        {
-            Propety.Compare = Compares.More;
-        }
-
-   
-        private void numLimitCounter_ValueChanged(float obj)
-        {
-            Propety.LimitCounter = (int)numLimitCounter.Value;
-        }
+  
 
         //private void btnLimitCounter_Click(object sender, EventArgs e)
         //{
@@ -545,7 +531,82 @@ namespace BeeInterface
 
         private void AdjThreshod_ValueChanged(float obj)
         {
-            Propety.ThreshBinary =(int) AdjThreshod.Value;
+           // Propety.ThreshBinary =(int) AdjThreshod.Value;
+        }
+
+        private void AdjClearNoise_ValueChanged(float obj)
+        {
+            Propety.SzClearNoise=(int)AdjClearNoise.Value;
+        }
+
+        private void btnOFFCalib_Click(object sender, EventArgs e)
+        {
+            Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.OFF;
+
+		}
+
+        private void btnSlowCalib_Click(object sender, EventArgs e)
+        {
+			Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.Slow;
+		}
+
+        private void btnNormalCalib_Click(object sender, EventArgs e)
+        {
+			Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.Normal;
+		}
+
+        private void btnFastCalib_Click(object sender, EventArgs e)
+        {
+			Propety.ModeCalibVisualMatch = ModeCalibVisualMatch.Fast;
+		}
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            lay1.Visible = !btn1.IsCLick;
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            lay21.Visible = !btn2.IsCLick;
+            lay22.Visible = !btn2.IsCLick;
+            lay23.Visible = !btn2.IsCLick;
+            lay24.Visible = !btn2.IsCLick;
+            lay25.Visible = !btn2.IsCLick;
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+            AdjColorTolerance.Visible=!btn3.IsCLick;
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            lay4.Visible=!btn4.IsCLick;
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            AdjClearNoise.Visible=!btn5.IsCLick;
+        }
+
+        private void rjButton1_Click_1(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void btn6_Click(object sender, EventArgs e)
+        {
+            lay6.Visible = !btn6.IsCLick;
+        }
+
+        private void btn7_Click(object sender, EventArgs e)
+        {
+            AdjValueTemp.Visible=!btn7.IsCLick;
+        }
+
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            trackScore.Visible = !btn8.IsCLick;
         }
     }
 }

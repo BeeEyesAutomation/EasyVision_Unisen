@@ -80,7 +80,7 @@ namespace BeeInterface
             //else
             //    MessageBox.Show("Port Close");
             Global.ParaCommon.TypeLight = 3;
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
+            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
 
         }
        
@@ -155,11 +155,13 @@ namespace BeeInterface
             AdDelayTrig.IsInital = true;
             AdDelayTrig.Value = Global.ParaCommon.Comunication.Protocol.DelayTrigger;
             AdDelayOutput.IsInital = true;
-            AdDelayOutput.Value = Global.ParaCommon.Comunication.Protocol.DelayOutput;
+            Global.Config.IsOnLight = false;
+
+			AdDelayOutput.Value = Global.ParaCommon.Comunication.Protocol.DelayOutput;
             btnLight1.IsCLick = Global.ParaCommon.Comunication.Protocol.IsLight1;
             btnLight2.IsCLick = Global.ParaCommon.Comunication.Protocol.IsLight2;
             btnLight3.IsCLick = Global.ParaCommon.Comunication.Protocol.IsLight3;
-            btnOn.IsCLick = Global.ParaCommon.IsOnLight;
+            btnOn.IsCLick = Global.Config.IsOnLight;
             btnInternal.IsCLick =! Global.ParaCommon.IsExternal;
             btnExternal.IsCLick = Global.ParaCommon.IsExternal;
           
@@ -200,15 +202,15 @@ namespace BeeInterface
 
         private void btnOFF_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsOnLight = false;
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
+            Global.Config.IsOnLight = false;
+            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
 
         }
 
         private void btnOn_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsOnLight =true;
-            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.ParaCommon.IsOnLight);
+            Global.Config.IsOnLight =true;
+            BeeCore.Common.listCamera[Global.IndexChoose].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
 
         }
 

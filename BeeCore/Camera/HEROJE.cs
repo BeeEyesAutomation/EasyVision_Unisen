@@ -1998,8 +1998,8 @@ namespace BeeCore
           
           //  OpenCvSharp.Size sz = Read();
         
-            Global.ParaCommon.SizeCCD=new System.Drawing.Size(sz.Width, sz.Height);
-         //   ShowTool.Full(Shows.imgTemp, Global.ParaCommon.SizeCCD);
+            Global.Config.SizeCCD=new System.Drawing.Size(sz.Width, sz.Height);
+         //   ShowTool.Full(Shows.imgTemp, Global.Config.SizeCCD);
         }
 
         private static void TmSend_Elapsed(object sender, ElapsedEventArgs e)

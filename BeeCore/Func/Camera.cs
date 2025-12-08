@@ -241,7 +241,7 @@ namespace BeeCore
                         break;
                     }
                 }
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
         }
@@ -292,7 +292,7 @@ namespace BeeCore
                         xf.Scale(s, s);
                         g.Transform = xf;
                         SizeF sz = new SizeF();
-                        if (Global.ParaCommon.IsMultiCamera)
+                        if (Global.Config.IsMultiCamera)
                         {
                              sz = g.MeasureString(Para.Name, new Font("Arial", Global.Config.FontSize));
 
@@ -525,6 +525,7 @@ namespace BeeCore
         public async Task<bool> SetFullPara()
 
         {
+          
             if (Para.Width.Value > Para.Width.Min + 1 && Para.Height.Value > Para.Height.Min + 1)
             {
                 if (Para.TypeCamera == TypeCamera.USB)
@@ -1590,7 +1591,7 @@ namespace BeeCore
 
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Retry is " + numTry));
 
-                if (numTry >= Global.ParaCommon.NumRetryCamera)
+                if (numTry >= Global.Config.NumRetryCamera)
                 {
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", "Reconnect.."));
                     Global.CameraStatus = CameraStatus.NotConnect;

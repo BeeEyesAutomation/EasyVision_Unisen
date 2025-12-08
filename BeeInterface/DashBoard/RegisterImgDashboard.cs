@@ -610,14 +610,18 @@ namespace BeeInterface
             }
         }
 
-        private void AddFromCamera()
+        private async void AddFromCamera()
         {
             try
             {
-               
+                Global.Config.IsOnLight = true;
+                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                await TimingUtils.DelayAccurateAsync((int)Global.ParaCommon.Comunication.Protocol.DelayTrigger);
                 BeeCore.Common.listCamera[Global.IndexChoose].Read();
                 if( BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
                 BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                Global.Config.IsOnLight = false;
+                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null) return;
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) return;
                 var autoName = NextAutoName();

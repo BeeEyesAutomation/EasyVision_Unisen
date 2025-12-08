@@ -63,7 +63,7 @@ namespace BeeUi.Common
         ////    BeeCore.RectRotate rotCrop = control.Propety.rotCrop;
         //    if (PropetyTool.TypeTool == TypeTool.Yolo || PropetyTool.TypeTool == TypeTool.OCR || PropetyTool.TypeTool == TypeTool.BarCode || PropetyTool.TypeTool == TypeTool.Color_Area)
         //        control.Propety.rotCrop = null;
-        //        System.Drawing.Size szCCd= Global.ParaCommon.SizeCCD;
+        //        System.Drawing.Size szCCd= Global.Config.SizeCCD;
         //    //    if (rotCrop != null)
         //    //{
         //    //    if (rotCrop._PosCenter.X + rotCrop._rect.X + rotCrop._rect.Width > szCCd.Width ||
@@ -177,7 +177,7 @@ namespace BeeUi.Common
             }
             if (Global.IsRun)
             {
-                if (Global.ParaCommon.IsMultiCamera)
+                if (Global.Config.IsMultiCamera)
                 {
                     FormChoose formChoose = new FormChoose();
                     formChoose.ShowDialog();
@@ -548,9 +548,12 @@ txtQrCode.Focus();
             Global.IsChangeProg = true;
             if (IsIntialProgram)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                    Global.ParaCommon.Comunication.Protocol.Disconnect();
-                Global.ScanCCD.DisConnectAllCCd();
+                if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
+                {
+                    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                        Global.ParaCommon.Comunication.Protocol.Disconnect();
+                    Global.ScanCCD.DisConnectAllCCd();
+                }
                 DataTool.LoadProject(Global.Project);
                 
 
@@ -563,15 +566,17 @@ txtQrCode.Focus();
         {
             if (IsIntialProgram)
             {
-               
-                if (! await Global.ScanCCD.ChangeCCD())
+                if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
                 {
-                    Global.CameraStatus = CameraStatus.ErrorConnect;
+                    if (!await Global.ScanCCD.ChangeCCD())
+                    {
+                        Global.CameraStatus = CameraStatus.ErrorConnect;
+                    }
+                    else
+                    {
+                        Global.CameraStatus = CameraStatus.Ready;
+                    }
                 }
-                else
-                {
-                    Global.CameraStatus = CameraStatus.Ready;
-                }    
             }
            
             if ( G.listProgram!=null)
@@ -583,7 +588,7 @@ txtQrCode.Focus();
 
            
            
-            IsIntialProgram = true;
+           
          
            
             tmIninitial.Enabled = true;
@@ -672,7 +677,6 @@ txtQrCode.Focus();
                     stepShow++;
                     tmShow.Interval = 500;
                     Global.ToolSettings.Size = Global.EditTool.pEditTool.Size;
-                  //  Global.ToolSettings.ResumeLayout(true);
                     break;
                 case 1:
                     Global.EditTool.RefreshGuiEdit(Step.Run);
@@ -694,7 +698,13 @@ txtQrCode.Focus();
                     }
                    
                     if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-                    if (Global.ParaCommon.Comunication.Protocol.IsBypass) return;
+                    if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+                    {
+                        IsIntialProgram = true;
+                        Global.IsChangeProg = false;
+                        tmShow.Enabled = false;
+                        return;
+                    }
                   
                     await Global.ParaCommon.Comunication.Protocol.Connect();
 
@@ -702,16 +712,11 @@ txtQrCode.Focus();
                     {
                         Global.StatusIO = StatusIO.None;
                         Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-
-
-
-
-
                     }
 
                     else
                     {
-                        //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                      
                         if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
                         {
                             await Global.ParaCommon.Comunication.Protocol.Connect();
@@ -719,19 +724,19 @@ txtQrCode.Focus();
                             {
                                 Global.StatusIO = StatusIO.None;
                                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-
-
                             }
 
                             else
                             {
-                                MessageBox.Show("Check connect I_O");
+                                Global.PLCStatus = PLCStatus.ErrorConnect;
                             }
                         }
                     }
+                    IsIntialProgram = true;
+
                     Global.IsChangeProg = false;
                     tmShow.Enabled = false;
-                    //Global.EditTool.Acccess(Global.IsRun);
+                 
                     break;
             } 
            

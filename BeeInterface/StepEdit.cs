@@ -75,7 +75,7 @@ namespace BeeInterface
             if (Global.ParaCommon.matRegister != null)
             {
                 if (!Global.ParaCommon.matRegister.IsDisposed())
-                    Global.ParaCommon.SizeCCD = Global.ParaCommon.matRegister.Size;
+                    Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;
 
                 Global.Step = Step.Step3;
             }

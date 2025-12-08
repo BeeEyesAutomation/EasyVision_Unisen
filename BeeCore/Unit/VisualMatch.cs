@@ -38,8 +38,8 @@ namespace BeeCore
         public RectRotate rotAreaAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap bmRaw;
-  
-      
+        public ModeCalibVisualMatch ModeCalibVisualMatch = ModeCalibVisualMatch.Normal;
+
         public  IntPtr intptrTemp ;
         public TypeCrop TypeCrop;
         public string pathRaw = "";
@@ -47,6 +47,7 @@ namespace BeeCore
         public RectangleF rectArea;
         public Compares Compare = Compares.Equal;
         public int LimitCounter = 0;
+        public int SzClearNoise = 1;
         public async Task SendResult()
         {
         }
@@ -68,9 +69,9 @@ namespace BeeCore
 
             using (Mat img = raw.Clone())
             {
-                if (img.Channels() == 3)
-                    Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
-                Cv2.Threshold(img, img, ThreshBinary, 255, ThresholdTypes.Binary);
+                //if (img.Channels() == 3)
+                //    Cv2.CvtColor(img, img, ColorConversionCodes.BGR2GRAY);
+                //Cv2.Threshold(img, img, ThreshBinary, 255, ThresholdTypes.Binary);
                 // Chuẩn hóa kênh về BGR 3 kênh
                 if (img.Channels() == 1)
                     Cv2.CvtColor(img, img, ColorConversionCodes.GRAY2BGR);
@@ -170,9 +171,9 @@ namespace BeeCore
                 using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
-                    if (raw.Channels() == 3)
-                        Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
-                    Cv2.Threshold(raw, raw, ThreshBinary, 255, ThresholdTypes.Binary);
+                    //if (raw.Channels() == 3)
+                    //    Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
+                    //Cv2.Threshold(raw, raw, ThreshBinary, 255, ThresholdTypes.Binary);
                   
                     if (raw.Type() == MatType.CV_8UC1)
                     {
@@ -187,7 +188,7 @@ namespace BeeCore
 
                    
                     int w = 0, h = 0, s = 0, c = 0;
-                    IntPtr intpr = ColorPixel.CheckImageFromMat(ColorTolerance, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                    IntPtr intpr = ColorPixel.CheckImageFromMat(ColorTolerance,SzClearNoise, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                     matProcess = new Mat();
 
                     if (intpr != IntPtr.Zero)

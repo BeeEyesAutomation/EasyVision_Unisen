@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +19,20 @@ namespace BeeGlobal
         //public Color ColorBar2 = Color.FromArgb(100, 114, 114, 114);
         //public Color ColorEnd = Color.WhiteSmoke;
         //public Color ColorRight = Color.WhiteSmoke;
+        public int NumRetryCamera = 0;
+        public int NumRetryPLC = 0;
+        public bool IsResetReady = false;
+        public bool IsForceByPassRS = false;
+        public bool IsOnlyTrigger = false;
+        public bool IsMultiCamera = false;
+        public bool IsONNG = false;
+        public int NumTrig = 1;
+        public bool IsAutoReload = false;
+    
+        public Size SizeCCD;
+        public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
+        public bool IsSaveLog = false;
+        public ModeSaveProg ModeSaveProg = ModeSaveProg.Single;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
         public int FontSize = 16;
         public int Opacity = 100;

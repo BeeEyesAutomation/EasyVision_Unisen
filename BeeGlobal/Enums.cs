@@ -45,6 +45,10 @@ namespace BeeGlobal
     {
         Full,Normal
     }
+    public enum ModeSaveProg
+    {
+        Single, Multi
+    }
     public enum TypeOutputRS
     {
         AllTime,Blink,OKNG
@@ -254,7 +258,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy
+      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight
     }
     public enum AreaCrop
     {
@@ -308,6 +312,10 @@ namespace BeeGlobal
     {
         Window,
         Process
+    }
+    public enum ModeCalibVisualMatch
+    {
+       OFF,Slow,Normal,Fast
     }
     public enum TypeCrop
     {

@@ -29,7 +29,7 @@ namespace BeeCore.Funtion
             int row = 0;
             control.RowStyles.Clear(); control.Controls.Clear();
 
-            if (Global.ParaCommon.IsMultiCamera)
+            if (Global.Config.IsMultiCamera)
             {
                 int i = 0;
                 foreach (List<PropetyTool> ListPropety in BeeCore.Common.PropetyTools)
@@ -81,7 +81,7 @@ namespace BeeCore.Funtion
             else
             {
                
-                for (int i = 0; i < Global.ParaCommon.NumTrig; i++)
+                for (int i = 0; i < Global.Config.NumTrig; i++)
                 {
                     foreach (PropetyTool tool in BeeCore.Common.PropetyTools[0])
                     {
@@ -112,10 +112,10 @@ namespace BeeCore.Funtion
                     }
                 }
              
-                for (int i = 0; i < Global.ParaCommon.NumTrig; i++)
+                for (int i = 0; i < Global.Config.NumTrig; i++)
                 {
 
-                    if (Global.ParaCommon.NumTrig > 1 || Global.ParaCommon.IsMultiCamera)
+                    if (Global.Config.NumTrig > 1 || Global.Config.IsMultiCamera)
                     {
 
 

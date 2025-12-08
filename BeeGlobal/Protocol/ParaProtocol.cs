@@ -272,7 +272,7 @@ namespace BeeGlobal
                                 ParaBits[ix].Value =Convert.ToInt32( valueInput[i]);
                             }
                         }
-                        if (Global.IsByPassResult|| Global.ParaCommon.IsForceByPassRS)
+                        if (Global.IsByPassResult|| Global.Config.IsForceByPassRS)
                         {
                            
                             Global.EditTool.lbBypass.Visible = true;
@@ -299,9 +299,12 @@ namespace BeeGlobal
                                     IsPressLive = false;
                                    
                                     Global.IsLive = !Global.IsLive;
+
+                                    SetLight(Global.IsLive);
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsLive);//Busy
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
-                                  
+                             
+
                                     await WriteOutPut();
                                 }
                             }
@@ -356,7 +359,7 @@ namespace BeeGlobal
                                     Global.IsAllowReadPLC = false;
                                     //PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".0", false);
                                     //Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", "Write Trigger 1 = 0 "));
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         switch (Global.TriggerNum)
                                         {
@@ -659,7 +662,13 @@ namespace BeeGlobal
         [NonSerialized]
         private Stopwatch tmReadCT = new Stopwatch();
         public async Task<bool>  WriteIO(IO_Processing _IO_Processing)
-        {   if (!IsConnected) return false;
+        {   if (!IsConnected)
+            {
+                valueInput = new bool[16];
+                IO_Processing = IO_Processing.None;
+                Global.StatusIO = StatusIO.None;
+                return false;
+            }
 
             if (_IO_Processing == IO_Processing.None)
             {
@@ -668,6 +677,7 @@ namespace BeeGlobal
             Global.StatusIO = StatusIO.Writing;
             switch (_IO_Processing)
             {
+               
                 case IO_Processing.Trigger:
                   
                     switch(Global.TriggerNum)
@@ -693,7 +703,7 @@ namespace BeeGlobal
                             }
                             break;
                         case TriggerNum.Trigger2:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 if (DelayTrigger == 0)
                                 {
@@ -729,7 +739,7 @@ namespace BeeGlobal
                             }
                             break;
                         case TriggerNum.Trigger3:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 if (DelayTrigger == 0)
                                 {
@@ -765,7 +775,7 @@ namespace BeeGlobal
                             }
                             break;
                         case TriggerNum.Trigger4:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 if (DelayTrigger == 0)
                                 {
@@ -864,13 +874,13 @@ namespace BeeGlobal
                    
                     bool IsOK = Global.TotalOK;
                     bool IsByPass = true;
-                    if(Global.ParaCommon.IsONNG)
+                    if(Global.Config.IsONNG)
                     {
                         IsOK =! IsOK;
                         IsByPass = false;
                     }
                     bool IsBlink = IsOK;
-                    if (Global.IsByPassResult||Global.ParaCommon.IsForceByPassRS)
+                    if (Global.IsByPassResult||Global.Config.IsForceByPassRS)
                       {
                             switch(Global.TriggerNum)
                             {
@@ -878,7 +888,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger2:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
@@ -886,7 +896,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger3:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
@@ -894,7 +904,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsByPass); //NG
                                     break;
                                 case TriggerNum.Trigger4:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsByPass); //NG
                                         break;
@@ -913,7 +923,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger2:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
@@ -921,7 +931,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger3:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
@@ -929,7 +939,7 @@ namespace BeeGlobal
                                     SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsOK); //NG
                                     break;
                                 case TriggerNum.Trigger4:
-                                    if (Global.ParaCommon.IsOnlyTrigger)
+                                    if (Global.Config.IsOnlyTrigger)
                                     {
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsOK); //NG
                                         break;
@@ -952,7 +962,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                             break;
                         case TriggerNum.Trigger2:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                                 break;
@@ -960,7 +970,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //NG
                             break;
                         case TriggerNum.Trigger3:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                                 break;
@@ -968,7 +978,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //NG
                             break;
                         case TriggerNum.Trigger4:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                                 break;
@@ -984,7 +994,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
                             break;
                         case TriggerNum.Trigger2:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
                                 break;
@@ -992,7 +1002,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //NG
                             break;
                         case TriggerNum.Trigger3:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
                                 break;
@@ -1000,7 +1010,7 @@ namespace BeeGlobal
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //NG
                             break;
                         case TriggerNum.Trigger4:
-                            if (Global.ParaCommon.IsOnlyTrigger)
+                            if (Global.Config.IsOnlyTrigger)
                             {
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
                                 break;
@@ -1023,7 +1033,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result],false); //NG
                                         break;
                                     case TriggerNum.Trigger2:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                                             break;
@@ -1031,7 +1041,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //NG
                                         break;
                                     case TriggerNum.Trigger3:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                                             break;
@@ -1039,7 +1049,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //NG
                                         break;
                                     case TriggerNum.Trigger4:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //NG
                                             break;
@@ -1070,7 +1080,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
                                         break;
                                     case TriggerNum.Trigger2:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
                                             break;
@@ -1078,7 +1088,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result2], IsBlink); 
                                         break;
                                     case TriggerNum.Trigger3:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
                                             break;
@@ -1086,7 +1096,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Result3], IsBlink); 
                                         break;
                                     case TriggerNum.Trigger4:
-                                        if (Global.ParaCommon.IsOnlyTrigger)
+                                        if (Global.Config.IsOnlyTrigger)
                                         {
                                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], IsBlink); 
                                             break;
@@ -1121,7 +1131,7 @@ namespace BeeGlobal
                    
                         break;
                 case IO_Processing.Light:
-                    SetLight(Global.ParaCommon.IsOnLight);
+                    SetLight(Global.Config.IsOnLight);
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:

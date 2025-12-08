@@ -34,7 +34,7 @@ namespace {
 
     // ---------- FAST path: vector hóa + đa luồng nội bộ OpenCV (không filter) ----------
 // ---------- FAST path: grayscale + blur để giảm viền ----------
-    static int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated/*=nullptr*/)
+    static int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise)
     {
         Rect roi(0, 0, tpl.cols, tpl.rows);
         Mat I = img(roi), T = tpl;
@@ -59,7 +59,7 @@ namespace {
         // 5. Threshold
         Mat mask;
         threshold(diff, mask, tol, 255, THRESH_BINARY);  // tol chính là ngưỡng diff gray
-        RemoveSmallBlobs(mask, 15);
+        RemoveSmallBlobs(mask,  SzClearNoise);
 
         // 6. Đếm
         int diffCount = countNonZero(mask);
@@ -145,7 +145,7 @@ namespace {
 
     // ---------- Strategy (luôn quét hết) ----------
     static int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
-      int tol, Mat* annotated/*=nullptr*/)
+      int tol, Mat* annotated, int SzClearNoise)
     {
         CV_Assert(!img.empty() && !tpl.empty());
         CV_Assert(tpl.cols <= img.cols && tpl.rows <= img.rows);
@@ -158,7 +158,7 @@ namespace {
         const bool big = (tpl.total() >= 4ull * 1024 * 1024); // >= 4MP
         int diffCount = big
             ? DiffCount_ParallelFull(img, tpl, tol, annotated)
-            : DiffCount_Fast(img, tpl, tol, annotated);
+            : DiffCount_Fast(img, tpl, tol, annotated,  SzClearNoise);
 
  
         return diffCount;
@@ -226,7 +226,7 @@ void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplS
 }
 static int DiffHelper(const cv::Mat& a, const cv::Mat& b, int tol)
 {
-    return PixelCheck_MT_FullScan(a, b, tol, nullptr);
+    return PixelCheck_MT_FullScan(a, b, tol, nullptr,0);
 }
 IntPtr ColorPixel::CheckImageFromBytes(
     array<Byte>^ imageBytes,
@@ -253,7 +253,7 @@ IntPtr ColorPixel::CheckImageFromBytes(
    // cv::Mat aligned = BeeAlign::ShiftXY(_img->raw, best.dx, best.dy);
 
     // cuối cùng mới diff thật
-    outPx = PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated);
+    outPx = PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated,0);
 
    /* if (!IsBGR8(img)) cvtColor(img, img, COLOR_BGR2BGR);
     if (!IsBGR8(tpl)) cvtColor(tpl, tpl, COLOR_BGR2BGR);*/
@@ -279,7 +279,7 @@ IntPtr ColorPixel::CheckImageFromBytes(
 
 IntPtr ColorPixel::CheckImageFromMat(
     
-    int colorTolerance,
+    int colorTolerance, int SzClearNoise,
     float% outPx, float% outOffsetX, float% outOffsetY, float% Offsetangle,
     int% outW, int% outH, int% outStride, int% outChannels)
 {
@@ -311,7 +311,7 @@ IntPtr ColorPixel::CheckImageFromMat(
     outOffsetX = ofs.x;
     outOffsetY = ofs.y;
     Offsetangle = angle;
-    outPx = PixelCheck_MT_FullScan(aligned, _img->temp, colorTolerance, &annotated);
+    outPx = PixelCheck_MT_FullScan(aligned, _img->temp, colorTolerance, &annotated,  SzClearNoise);
 
     if (!annotated.isContinuous()) annotated = annotated.clone();
     const int W = annotated.cols, H = annotated.rows, C = annotated.channels();

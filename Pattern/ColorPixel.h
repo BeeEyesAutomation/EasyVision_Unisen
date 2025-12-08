@@ -22,6 +22,7 @@ namespace BeeCpp
             array<System::Byte>^ imageBytes,
             array<System::Byte>^ templateBytes,
             int colorTolerance,
+           
             [System::Runtime::InteropServices::Out] float% PxOut,
             [System::Runtime::InteropServices::Out] int% outW,
             [System::Runtime::InteropServices::Out] int% outH,
@@ -32,6 +33,7 @@ namespace BeeCpp
      //   System::IntPtr imgData, int imgW, int imgH, int imgStride, int imgChannels,
         // So khớp trực tiếp từ Mat (OpenCvSharp) — data pointer + w/h/stride/channels.
         System::IntPtr CheckImageFromMat(int colorTolerance,
+            int SzClearNoise,
             [System::Runtime::InteropServices::Out] float% PxOut,
             float% outOffsetX, float% outOffsetY, float% Offsetangle,
             [System::Runtime::InteropServices::Out] int% outW,

@@ -162,11 +162,8 @@ namespace BeeUi
         private void TmLoad_Tick(object sender, EventArgs e)
         {
             Global.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
-           
-            if (File.Exists("Default.config"))
-               Global.Config = Access.LoadConfig("Default.config");
-            else
-               Global.Config = new Config();
+
+            Global.Config = LoadData.Config();
             Global.ParaCommon = LoadData.Para(Global.Project);
             if (Global.Config.RoundRad == 0)Global.Config.RoundRad = 10;
             tmLoad.Enabled = false;

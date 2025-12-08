@@ -1122,13 +1122,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             btnMitsu.Enabled = true;
             btnDelta.Enabled = true;
             btnMitsu.PerformClick();
-            Global.ParaCommon.IsResetReady = true;
+            Global.Config.IsResetReady = true;
         }
 
         private void btnIO_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.IsPLC=!btnIO.IsCLick;
-            Global.ParaCommon.IsResetReady = false;
+            Global.Config.IsResetReady = false;
             btnRtu.Enabled = true;
             btnModbusAscii.Enabled = true;
             btnKeyence.Enabled = false;

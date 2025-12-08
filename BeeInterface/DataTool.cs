@@ -42,7 +42,7 @@ namespace BeeInterface
                 }
                 if (BeeCore.Common.listCamera.Count() > 0)
                     if (BeeCore.Common.listCamera[0] != null)
-                        Global.ParaCommon.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
+                        Global.Config.SizeCCD = BeeCore.Common.listCamera[0].GetSzCCD();
             }
             else
             {
@@ -57,7 +57,7 @@ namespace BeeInterface
                    
                 }
             }
-                //Global.ParaCommon.SizeCCD = Camera.GetSzCCD();
+                //Global.Config.SizeCCD = Camera.GetSzCCD();
                 BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
            
 
@@ -123,7 +123,7 @@ namespace BeeInterface
 
                 }
 
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
 
                 indexThread++;
@@ -159,7 +159,7 @@ namespace BeeInterface
                         if (propety.Propety != null)
                             propety.Propety.SetModel();
                 });
-                if (Global.ParaCommon.IsMultiCamera == false)
+                if (Global.Config.IsMultiCamera == false)
                     break;
             }
 
@@ -241,7 +241,7 @@ namespace BeeInterface
         public static RectRotate NewRotRect(TypeCrop TypeCrop)
         {
             int with = 50, height = 50;
-            System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
+            System.Drawing.Size szImg = Global.Config.SizeCCD;
             switch (TypeCrop)
             {
                 case TypeCrop.Crop:
@@ -310,7 +310,7 @@ namespace BeeInterface
                 int with = 50, height = 50;
                
                 control.Propety.Index = Index;
-                System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
+                System.Drawing.Size szImg = Global.Config.SizeCCD;
               
               
 
@@ -342,7 +342,7 @@ namespace BeeInterface
                 int with = 50, height = 50;
                 control.Propety = PropetyTool.Propety;
                 control.Propety.Index = Index;
-                System.Drawing.Size szImg = Global.ParaCommon.SizeCCD;
+                System.Drawing.Size szImg = Global.Config.SizeCCD;
                
                // BeeCore.Common.CreateTemp(TypeTool, IndexThread);
                 if (PropetyTool.Name == null) PropetyTool.Name = "";

@@ -407,7 +407,7 @@ namespace BeeGlobal
             _chkAutoReload.CheckedChanged += delegate
             {
                 AutoReloadOnChange = _chkAutoReload.Checked;
-                if (Global.ParaCommon != null) Global.ParaCommon.IsAutoReload = AutoReloadOnChange;
+                if (Global.ParaCommon != null) Global.Config.IsAutoReload = AutoReloadOnChange;
             };
 
             _btnToday.Click += delegate { SetRangeToday(); };
@@ -461,7 +461,7 @@ namespace BeeGlobal
 
         private void _chkSaveLog_CheckedChanged(object sender, EventArgs e)
         {
-            if (Global.ParaCommon != null) Global.ParaCommon.IsSaveLog = _chkSaveLog.Checked;
+            if (Global.ParaCommon != null) Global.Config.IsSaveLog = _chkSaveLog.Checked;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -548,14 +548,14 @@ namespace BeeGlobal
 
         public void AddLog(LeveLLog level, string message, string source = "")
         {
-            if (Global.ParaCommon != null && Global.ParaCommon.IsSaveLog)
+            if (Global.ParaCommon != null && Global.Config.IsSaveLog)
                 ThreadPool.UnsafeQueueUserWorkItem(new WaitCallback(AddLogWorkItem),
                     new State { self = this, level = level, message = message, source = source });
         }
 
         public void AddLog(LogEntry entry)
         {
-            if (Global.ParaCommon != null && Global.ParaCommon.IsSaveLog)
+            if (Global.ParaCommon != null && Global.Config.IsSaveLog)
             {
                 if (OnlySaveErr)
                 {
@@ -637,16 +637,16 @@ namespace BeeGlobal
             _btnClear = new Button { Text = "Clear", AutoSize = true, Margin = new Padding(6, 3, 0, 3), Font = new Font("Arial", 14) };
 
             if (Global.ParaCommon != null)
-                _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.ParaCommon.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+                _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = Global.Config.IsSaveLog, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
             else
                 _chkSaveLog = new CheckBox { Text = "Save Logs", Checked = false, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
             if (Global.ParaCommon != null)
-                _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = Global.ParaCommon.IsAutoReload, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
+                _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = Global.Config.IsAutoReload, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
             else
                 _chkAutoReload = new CheckBox { Text = "AutoReload", Checked = _autoReloadOnChange, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
-            AutoReloadOnChange = (Global.ParaCommon != null) ? Global.ParaCommon.IsAutoReload : _autoReloadOnChange;
+            AutoReloadOnChange = (Global.ParaCommon != null) ? Global.Config.IsAutoReload : _autoReloadOnChange;
             _chkAutoScroll = new CheckBox { Text = "OnlyError", Checked = OnlySaveErr, AutoSize = true, Margin = new Padding(10, 6, 0, 3), Font = new Font("Arial", 14) };
 
             _filter.Controls.Add(Pair("From:", _dtpFrom, 140));

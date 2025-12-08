@@ -32,18 +32,18 @@ namespace BeeUi
         {
             this.Width = Global.EditTool.BtnHeaderBar.Width+1;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width-1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
-             btnNG.IsCLick= Global.ParaCommon.IsONNG ;
-            btnOK.IsCLick =! Global.ParaCommon.IsONNG;
+             btnNG.IsCLick= Global.Config.IsONNG ;
+            btnOK.IsCLick =! Global.Config.IsONNG;
             btnSaveOK.IsCLick =Global.Config.IsSaveOK;
             btnSaveNG.IsCLick =Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick =Global.Config.IsSaveRS;
-            btnTriggerMulti.IsCLick = !Global.ParaCommon.IsOnlyTrigger;
-            btnTriggerOne.IsCLick=Global.ParaCommon.IsOnlyTrigger;
+            btnTriggerMulti.IsCLick = !Global.Config.IsOnlyTrigger;
+            btnTriggerOne.IsCLick=Global.Config.IsOnlyTrigger;
         
-            numTrigger.Value = Global.ParaCommon.NumTrig;
-            btnMulti.IsCLick = Global.ParaCommon.IsMultiCamera;
-            btnSingle.IsCLick = !Global.ParaCommon.IsMultiCamera;
+            numTrigger.Value = Global.Config.NumTrig;
+            btnMulti.IsCLick = Global.Config.IsMultiCamera;
+            btnSingle.IsCLick = !Global.Config.IsMultiCamera;
             switch (Global.Config.TypeSave){
                 case 1:btnSmall.IsCLick=true; break;
                 case 2: btnNormal.IsCLick = true; break;
@@ -73,27 +73,27 @@ namespace BeeUi
             btnClChoose.ForeColor = Global.Config.ColorChoose;
             AdjOpacity.Value=Global.Config.Opacity;
             AdjThicknessLine.Value=Global.Config.ThicknessLine;
-            btnByPassResult.IsCLick=Global.ParaCommon.IsForceByPassRS;
+            btnByPassResult.IsCLick=Global.Config.IsForceByPassRS;
             btnFullDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Full ? true : false;
             btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
-            if (Global.ParaCommon.IsForceByPassRS)
+            btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
+            btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
+            if (Global.Config.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
                 btnByPassResult.Text = "OFF";
-            if (Global.ParaCommon.IsForceByPassRS)
+            if (Global.Config.IsForceByPassRS)
             {
                 Global.EditTool.lbBypass.Visible = true;
-              
             }
             else
             {
                 Global.EditTool.lbBypass.Visible = false;
                
             }
-            btnResetReady.IsCLick = Global.ParaCommon.IsResetReady;
-            numRetryCam.Value = Global.ParaCommon.NumRetryCamera;
-            numRetryPLC.Value = Global.ParaCommon.NumRetryPLC;
-        
+            btnResetReady.IsCLick = Global.Config.IsResetReady;
+            numRetryCam.Value = Global.Config.NumRetryCamera;
+            numRetryPLC.Value = Global.Config.NumRetryPLC;
         }
 
 
@@ -147,12 +147,12 @@ namespace BeeUi
        
         private void btnMulti_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsMultiCamera =btnMulti.IsCLick;
+            Global.Config.IsMultiCamera =btnMulti.IsCLick;
         }
 
         private void btnSingle_Click(object sender, EventArgs e)
         {
-         Global.ParaCommon.IsMultiCamera=!   btnSingle.IsCLick;
+         Global.Config.IsMultiCamera=!   btnSingle.IsCLick;
         }
 
 
@@ -161,13 +161,14 @@ namespace BeeUi
 
         private void numTrigger_ValueChanged(float obj)
         {
-            Global.ParaCommon.NumTrig =(int) numTrigger.Value;
+            Global.Config.NumTrig =(int) numTrigger.Value;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             //SaveData.ParaPJ(Global.Project, Global.ParaCommon);
-            //SaveData.Config(Global.Config);
+            SaveData.Config(Global.Config);
+           
             ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
         }
@@ -175,12 +176,12 @@ namespace BeeUi
      
         private void btnTriggerOne_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsOnlyTrigger = true;
+            Global.Config.IsOnlyTrigger = true;
         }
 
         private void btnTriggerMulti_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsOnlyTrigger = false;
+            Global.Config.IsOnlyTrigger = false;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -195,12 +196,12 @@ namespace BeeUi
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsONNG = !btnOK.IsCLick;
+            Global.Config.IsONNG = !btnOK.IsCLick;
         }
 
         private void btnNG_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsONNG = btnNG.IsCLick;
+            Global.Config.IsONNG = btnNG.IsCLick;
         }
 
         private void AdjRadEdit_ValueChanged(float obj)
@@ -342,12 +343,12 @@ namespace BeeUi
 
         private void btnByPassResult_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsForceByPassRS = btnByPassResult.IsCLick;
-            if (Global.ParaCommon.IsForceByPassRS)
+            Global.Config.IsForceByPassRS = btnByPassResult.IsCLick;
+            if (Global.Config.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
                 btnByPassResult.Text = "OFF";
-            if ( Global.ParaCommon.IsForceByPassRS)
+            if ( Global.Config.IsForceByPassRS)
             {
                 Global.EditTool.lbBypass.Visible = true;
                
@@ -362,17 +363,17 @@ namespace BeeUi
 
         private void numRetryCam_ValueChanged(float obj)
         {
-            Global.ParaCommon.NumRetryCamera =(int) numRetryCam.Value;
+            Global.Config.NumRetryCamera =(int) numRetryCam.Value;
         }
 
         private void numRetryPLC_ValueChanged(float obj)
         {
-            Global.ParaCommon.NumRetryPLC = (int)numRetryPLC.Value;
+            Global.Config.NumRetryPLC = (int)numRetryPLC.Value;
         }
 
         private void btnResetReady_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.IsResetReady = btnResetReady.IsCLick;
+            Global.Config.IsResetReady = btnResetReady.IsCLick;
         }
 
         private void btnShowLabel_Click(object sender, EventArgs e)
@@ -393,6 +394,17 @@ namespace BeeUi
         private void btnNormalDisplay_Click(object sender, EventArgs e)
         {
             Global.Config.DisplayResolution = DisplayResolution.Normal;
+        }
+
+        private void btnModeSaveSingle_Click(object sender, EventArgs e)
+        {
+            Global.Config.ModeSaveProg = ModeSaveProg.Single;
+
+        }
+
+        private void btnSaveModeMulti_Click(object sender, EventArgs e)
+        {
+            Global.Config.ModeSaveProg = ModeSaveProg.Multi;
         }
     }
 }

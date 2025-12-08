@@ -487,7 +487,7 @@ namespace PlcLib
                     {
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read" + NumErr));
                         NumErr++;
-                        if (NumErr > Global.ParaCommon.NumRetryPLC)
+                        if (NumErr > Global.Config.NumRetryPLC)
                         {
                             NumErr = 0;
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "FailReconnect "));
@@ -744,7 +744,7 @@ namespace PlcLib
                                 IsReadErr = false;
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read" + NumErr));
                                 NumErr++;
-                                if (NumErr > Global.ParaCommon.NumRetryPLC)
+                                if (NumErr > Global.Config.NumRetryPLC)
                                 {
                                     if (!await ReconnectAsync())
                                     {
