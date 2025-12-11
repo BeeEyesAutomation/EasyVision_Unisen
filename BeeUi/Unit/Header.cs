@@ -697,39 +697,41 @@ txtQrCode.Focus();
                         Global.EditTool.View.btnFull.PerformClick();
 
                     }
-                   
-                    if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-                    if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+                    if (Global.Config.ModeSaveProg == ModeSaveProg.Multi|| Global.IsIntialProgram ==false)
                     {
-                        Global.IsIntialProgram = true;
-                        Global.IsChangeProg = false;
-                        tmShow.Enabled = false;
-                        return;
-                    }
-                  
-                    await Global.ParaCommon.Comunication.Protocol.Connect();
-
-                    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                    {
-                        Global.StatusIO = StatusIO.None;
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                    }
-
-                    else
-                    {
-                      
-                        if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
+                        if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+                        if (Global.ParaCommon.Comunication.Protocol.IsBypass)
                         {
-                            await Global.ParaCommon.Comunication.Protocol.Connect();
-                            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                            {
-                                Global.StatusIO = StatusIO.None;
-                                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                            }
+                            Global.IsIntialProgram = true;
+                            Global.IsChangeProg = false;
+                            tmShow.Enabled = false;
+                            return;
+                        }
 
-                            else
+                        await Global.ParaCommon.Comunication.Protocol.Connect();
+
+                        if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                        {
+                            Global.StatusIO = StatusIO.None;
+                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                        }
+
+                        else
+                        {
+
+                            if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
                             {
-                                Global.PLCStatus = PLCStatus.ErrorConnect;
+                                await Global.ParaCommon.Comunication.Protocol.Connect();
+                                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                                {
+                                    Global.StatusIO = StatusIO.None;
+                                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                                }
+
+                                else
+                                {
+                                    Global.PLCStatus = PLCStatus.ErrorConnect;
+                                }
                             }
                         }
                     }

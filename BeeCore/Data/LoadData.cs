@@ -44,7 +44,7 @@ namespace BeeCore {
         {
             Config config = new Config();
             if (File.Exists("Common\\Default.config"))
-                config = Access.LoadConfig("Default.config");
+                config = Access.LoadConfig("Common\\Default.config");
             else
                 config = new Config();
             return config;

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -1143,6 +1144,11 @@ namespace BeeUi
             }    
             
 
+        }
+
+        private void btnRJBtn_Click(object sender, EventArgs e)
+        {
+            Process.Start("osk.exe");
         }
 
         private void btnNew_Click(object sender, EventArgs e)

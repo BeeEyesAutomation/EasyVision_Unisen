@@ -19,9 +19,10 @@ namespace BeeInterface
         public static void LoadProject(String NameProject)
         {
             NameProject = NameProject.Replace(".prog", "");
-            Global.ParaCommon = LoadData.Para(NameProject);
+          
             if (!Global.IsIntialProgram||Global.Config.ModeSaveProg==ModeSaveProg.Multi)
             {
+                Global.ParaCommon = LoadData.Para(NameProject);
                 List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
                 if (paraCameras.Count() > 0)
                 {

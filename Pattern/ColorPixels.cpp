@@ -414,13 +414,29 @@ IntPtr ColorPixel::CheckImageFromMat(
    if (IsAlign)
    {
        auto R = BeeAlign::AlignECC(_img->raw, _img->temp, (BeeAlign::ECCSpeed)ModeAlign);
-       if (!R.success) return IntPtr::Zero;
+     //  if (!R.success) return IntPtr::Zero;
 
        outOffsetX = R.dx;
        outOffsetY = R.dy;
        Offsetangle = R.angle;
+       
+       if (!R.success)
+       {
+           outPx = 100000;
+           annotated = _img->temp.clone();
+           const int W = annotated.cols, H = annotated.rows, C = annotated.channels();
+           const int S = (int)annotated.step;
+           const size_t bytes = (size_t)S * H;
 
+           IntPtr mem = System::Runtime::InteropServices::Marshal::AllocHGlobal((IntPtr)(long long)bytes);
+           if (mem == IntPtr::Zero)
+               return IntPtr::Zero;
+           std::memcpy(mem.ToPointer(), annotated.data, bytes);
 
+           outW = W; outH = H; outStride = S; outChannels = C;
+           return mem;
+       }
+          
        //outPx = PixelCheck_MT_FullScan(R.aligned, _img->temp, colorTolerance, &annotated);
 
         //Mat aligned = BeeAlign::AlignECC(_img->raw, _img->temp, ofs, angle);

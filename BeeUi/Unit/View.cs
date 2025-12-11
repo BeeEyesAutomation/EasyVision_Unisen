@@ -2802,9 +2802,15 @@ namespace BeeUi
                 }
                 else
                 {
-                    imgView.Text = "";
-                    imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
-                    imgView.Image = null;      // xoá ảnh khỏi control
+                    if(imgView.Image!=null)
+                        if (!imgView.Image.IsDisposed())
+
+                        {
+                        imgView.Text = "";
+                        imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                        imgView.Image = null;      // xoá ảnh khỏi control
+                    }    
+                   
                 }    
                
             }));
@@ -3084,6 +3090,9 @@ namespace BeeUi
 
                     break;
                 case StatusProcessing.Checking:
+                    Global.Config.IsOnLight = false;
+                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                   Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     if (timer == null) timer = CycleTimerSplit.Start();
                     timer.Split("C");
                     Global.IsAllowReadPLC = false;

@@ -383,8 +383,8 @@ namespace BeeCore
                 float cx = (p1.X + p2.X + p3.X + p4.X) / 4f;
                 float cy = (p1.Y + p2.Y + p3.Y + p4.Y) / 4f;
                 string txt = $"{AngleDetect:F2}°";
-                using (Font font = new Font("Arial", 16, FontStyle.Bold))
-                using (SolidBrush brush = new SolidBrush(Color.Yellow))
+                using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
+                using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
                 {
                     gc.DrawString(txt, font, brush, cx + 5, cy + 5);
                 }
