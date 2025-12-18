@@ -72,6 +72,7 @@ namespace BeeCore
         public String nameTool = "";
         public int Index = 0;
         public double AngleDetect = 0;
+        public double Distance = 0;
         public int IndexThread = 0;
 
         
@@ -148,7 +149,12 @@ namespace BeeCore
                     Common.PropetyTools[Global.IndexChoose][Index].Results = Results.NG; 
                 }
             }
-            if (PropetyTool3 != null)
+            if (TypeMeasure == TypeMeasure.PointToPoint)
+            {
+                IsDone3 = true;
+                IsDone4 = true;
+            }    
+                if (PropetyTool3 != null)
                 if (!IsDone3)
                     if (PropetyTool3.StatusTool == StatusTool.Done || !Global.IsRun)
                 {
@@ -270,54 +276,54 @@ namespace BeeCore
                        
                  
                     break;
-                //case TypeMeasure.Distance:
-                //    if (IsDone1 && IsDone2 || !IsOK)
-                //    {
-                //        IsDone1 = false;
-                //        IsDone2 = false;
-                //        switch (DirectMeasure)
-                //        {
-                //            case DirectMeasure.XY:
-                //                pCenter1 = listLine1Point[0];
-                //                pCenter2 = listLine1Point[1];
-                //                AngleDetect = Cal.Finddistasnce(pCenter1, pCenter2) / Scale;
-                //                break;
-                //            case DirectMeasure.X:
-                //                float width = Math.Abs(listRot[0]._rect.Width);
-                //                float width2 = Math.Abs(listRot[1]._rect.Width);
-                //                float Ymin1 = Math.Min(listLine1Point[0].Y - listRot[0]._rect.Height / 2, listLine1Point[1].Y - listRot[1]._rect.Height / 2);
-                //                float Ymax1 = Math.Max(listLine1Point[0].Y + listRot[0]._rect.Height / 2, listLine1Point[1].Y + -listRot[1]._rect.Height / 2);
-                //                float Xmin1 = Math.Min(listLine1Point[0].X, listLine1Point[1].X);
-                //                float Xmax1 = Math.Max(listLine1Point[0].X, listLine1Point[1].X);
-                //                pCenter1 = new PointF(Xmin1, Ymin1);
-                //                pCenter2 = new PointF(Xmin1, Ymax1);
-                //                pCenter3 = new PointF(Xmax1, Ymin1);
-                //                pCenter4 = new PointF(Xmax1, Ymax1);
-                //                AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Scale;
-                //                break;
-                //            case DirectMeasure.Y:
-                //                float height = Math.Abs(listRot[0]._rect.Height);
-                //                float height2 = Math.Abs(listRot[1]._rect.Height);
-                //                float Xmin = Math.Min(listLine1Point[0].X, listLine1Point[1].X);
-                //                float Xmax = Math.Max(listLine1Point[0].X, listLine1Point[1].X);
-                //                pCenter1 = new PointF(Xmin, listLine1Point[0].Y - height / 2);
-                //                pCenter2 = new PointF(Xmax, listLine1Point[0].Y - height / 2);
-                //                pCenter3 = new PointF(Xmin, listLine1Point[1].Y - height2 / 2);
-                //                pCenter4 = new PointF(Xmax, listLine1Point[1].Y - height2 / 2);
-                //                AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Scale;
-                //                break;
-                //        }
-                //        AngleDetect = Math.Round(AngleDetect, 2);
-                //        Common.PropetyTools[Global.IndexChoose][Index].ScoreRs = (float)AngleDetect;
-                //        if (ScoreRs <= Common.PropetyTools[Global.IndexChoose][Index].Score)
-                //            IsOK = true;
-                //        else IsOK = false;
+                case TypeMeasure.PointToPoint:
+                   
+                        IsDone1 = false;
+                        IsDone2 = false;
+                        switch (DirectMeasure)
+                        {
+                            case DirectMeasure.XY:
+                                pCenter1 = listLine1Point[0];
+                                pCenter2 = listLine1Point[1];
+                            AngleDetect = Cal.AngleDeg_FromB_ToA_MathYUp(pCenter2, pCenter1);
+                            Distance = Cal.Finddistasnce(pCenter1, pCenter2) / Scale;
 
-                //        StatusTool = StatusTool.Done;
-                //    }
-                //    else
-                //        StatusTool = StatusTool.Processing;
-                //    break;
+                                break;
+                            case DirectMeasure.X:
+                                float width = Math.Abs(listRot[0]._rect.Width);
+                                float width2 = Math.Abs(listRot[1]._rect.Width);
+                                float Ymin1 = Math.Min(listLine1Point[0].Y - listRot[0]._rect.Height / 2, listLine1Point[1].Y - listRot[1]._rect.Height / 2);
+                                float Ymax1 = Math.Max(listLine1Point[0].Y + listRot[0]._rect.Height / 2, listLine1Point[1].Y + -listRot[1]._rect.Height / 2);
+                                float Xmin1 = Math.Min(listLine1Point[0].X, listLine1Point[1].X);
+                                float Xmax1 = Math.Max(listLine1Point[0].X, listLine1Point[1].X);
+                                pCenter1 = new PointF(Xmin1, Ymin1);
+                                pCenter2 = new PointF(Xmin1, Ymax1);
+                                pCenter3 = new PointF(Xmax1, Ymin1);
+                                pCenter4 = new PointF(Xmax1, Ymax1);
+                                AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Scale;
+                                break;
+                            case DirectMeasure.Y:
+                                float height = Math.Abs(listRot[0]._rect.Height);
+                                float height2 = Math.Abs(listRot[1]._rect.Height);
+                                float Xmin = Math.Min(listLine1Point[0].X, listLine1Point[1].X);
+                                float Xmax = Math.Max(listLine1Point[0].X, listLine1Point[1].X);
+                                pCenter1 = new PointF(Xmin, listLine1Point[0].Y - height / 2);
+                                pCenter2 = new PointF(Xmax, listLine1Point[0].Y - height / 2);
+                                pCenter3 = new PointF(Xmin, listLine1Point[1].Y - height2 / 2);
+                                pCenter4 = new PointF(Xmax, listLine1Point[1].Y - height2 / 2);
+                                AngleDetect = Cal.Finddistasnce(pCenter1, pCenter3) / Scale;
+                                break;
+                        }
+                        AngleDetect = Math.Round(AngleDetect, 2);
+                        Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = (float)AngleDetect;
+                       
+                    //if (ScoreRs <= Common.PropetyTools[Global.IndexChoose][Index].Score)
+                        //    IsOK = true;
+                        //else IsOK = false;
+
+                     
+                  
+                    break;
 
             }
         }
@@ -327,6 +333,15 @@ namespace BeeCore
         public LineOrientation LineOrientation = LineOrientation.Vertical;
         [NonSerialized]
         public GapResult GapResult = new GapResult();
+        public static Line2D MakeXAxisLine(Point2f B)
+        {
+            return new Line2D(
+                B.X,     // X0
+                B.Y,     // Y0
+                1.0,     // Vx (hướng +X)
+                0.0      // Vy
+            );
+        }
         public Graphics DrawResult(Graphics gc)
         {
           
@@ -344,68 +359,130 @@ namespace BeeCore
             }
           
             gc.Transform = mat;
-            // === Vẽ 2 line dựa vào listLine1Point và listLine2Point ===
-            if (listLine1Point.Count >= 2 && listLine2Point.Count >= 2)
+            Brush brushText = Brushes.White;
+            Color cl = Color.LimeGreen;
+            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
-                Point p1 = listLine1Point[0];
-                Point p2 = listLine1Point[1];
-                Point p3 = listLine2Point[0];
-                Point p4 = listLine2Point[1];
-
-                // highlight các điểm
-                int r = 5;
-                using (SolidBrush redBrush = new SolidBrush(Color.Red))
-                using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
-                using (Pen yellowPen = new Pen(Color.Yellow, 1))
-                {
-                    gc.FillEllipse(redBrush, p1.X - r, p1.Y - r, r * 2, r * 2);
-                    gc.DrawEllipse(yellowPen, p1.X - r, p1.Y - r, r * 2, r * 2);
-
-                    gc.FillEllipse(redBrush, p2.X - r, p2.Y - r, r * 2, r * 2);
-                    gc.DrawEllipse(yellowPen, p2.X - r, p2.Y - r, r * 2, r * 2);
-
-                    gc.FillEllipse(blueBrush, p3.X - r, p3.Y - r, r * 2, r * 2);
-                    gc.DrawEllipse(yellowPen, p3.X - r, p3.Y - r, r * 2, r * 2);
-
-                    gc.FillEllipse(blueBrush, p4.X - r, p4.Y - r, r * 2, r * 2);
-                    gc.DrawEllipse(yellowPen, p4.X - r, p4.Y - r, r * 2, r * 2);
-                }
-
-                // vẽ 2 line
-                gc.DrawLine(new Pen(Color.Red, 2), p1, p2);
-                gc.DrawLine(new Pen(Color.Blue, 2), p3, p4);
-
-                //// === Tính góc giữa 2 line ===
-                //double v1x = p2.X - p1.X;
-                //double v1y = p2.Y - p1.Y;
-                //double v2x = p4.X - p3.X;
-                //double v2y = p4.Y - p3.Y;
-                float cx = (p1.X + p2.X + p3.X + p4.X) / 4f;
-                float cy = (p1.Y + p2.Y + p3.Y + p4.Y) / 4f;
-                string txt = $"{AngleDetect:F2}°";
-                using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
-                using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
-                {
-                    gc.DrawString(txt, font, brush, cx + 5, cy + 5);
-                }
-                //double dot = v1x * v2x + v1y * v2y;
-                //double mag1 = Math.Sqrt(v1x * v1x + v1y * v1y);
-                //double mag2 = Math.Sqrt(v2x * v2x + v2y * v2y);
-
-                //if (mag1 > 0 && mag2 > 0)
-                //{
-                //    double cosTheta = dot / (mag1 * mag2);
-                //    cosTheta = Math.Max(-1.0, Math.Min(1.0, cosTheta));
-                //    double angleRad = Math.Acos(cosTheta);
-                //    double angleDeg = angleRad * 180.0 / Math.PI;
-
-                //    this.AngleDetect = angleDeg;
-
-                   
-                  
-                //}
+                case Results.OK:
+                    cl = Global.Config.ColorOK;
+                    break;
+                case Results.NG:
+                    cl = Global.Config.ColorNG;
+                    break;
             }
+            // === Vẽ 2 line dựa vào listLine1Point và listLine2Point ===
+            switch (TypeMeasure)
+            {
+                case TypeMeasure.Angle:
+                    if (listLine1Point.Count >= 2 && listLine2Point.Count >= 2)
+                    {
+                        Point p1 = listLine1Point[0];
+                        Point p2 = listLine1Point[1];
+                        Point p3 = listLine2Point[0];
+                        Point p4 = listLine2Point[1];
 
+                        // highlight các điểm
+                        int r = 5;
+                        using (SolidBrush redBrush = new SolidBrush(Color.Red))
+                        using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
+                        using (Pen yellowPen = new Pen(Color.Yellow, 1))
+                        {
+                            gc.FillEllipse(redBrush, p1.X - r, p1.Y - r, r * 2, r * 2);
+                            gc.DrawEllipse(yellowPen, p1.X - r, p1.Y - r, r * 2, r * 2);
+
+                            gc.FillEllipse(redBrush, p2.X - r, p2.Y - r, r * 2, r * 2);
+                            gc.DrawEllipse(yellowPen, p2.X - r, p2.Y - r, r * 2, r * 2);
+
+                            gc.FillEllipse(blueBrush, p3.X - r, p3.Y - r, r * 2, r * 2);
+                            gc.DrawEllipse(yellowPen, p3.X - r, p3.Y - r, r * 2, r * 2);
+
+                            gc.FillEllipse(blueBrush, p4.X - r, p4.Y - r, r * 2, r * 2);
+                            gc.DrawEllipse(yellowPen, p4.X - r, p4.Y - r, r * 2, r * 2);
+                        }
+
+                        // vẽ 2 line
+                        gc.DrawLine(new Pen(Color.Red, 2), p1, p2);
+                        gc.DrawLine(new Pen(Color.Blue, 2), p3, p4);
+
+                        //// === Tính góc giữa 2 line ===
+                        //double v1x = p2.X - p1.X;
+                        //double v1y = p2.Y - p1.Y;
+                        //double v2x = p4.X - p3.X;
+                        //double v2y = p4.Y - p3.Y;
+                        float cx = (p1.X + p2.X + p3.X + p4.X) / 4f;
+                        float cy = (p1.Y + p2.Y + p3.Y + p4.Y) / 4f;
+                        string txt = $"{AngleDetect:F2}°";
+                        using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
+                        using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                        {
+                            gc.DrawString(txt, font, brush, cx + 5, cy + 5);
+                        }
+                        txt = $"{Distance:F2} px";
+                        using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
+                        using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                        {
+                            gc.DrawString(txt, font, brush, cx + 5, cy + 30);
+                        }
+                        //double dot = v1x * v2x + v1y * v2y;
+                        //double mag1 = Math.Sqrt(v1x * v1x + v1y * v1y);
+                        //double mag2 = Math.Sqrt(v2x * v2x + v2y * v2y);
+
+                        //if (mag1 > 0 && mag2 > 0)
+                        //{
+                        //    double cosTheta = dot / (mag1 * mag2);
+                        //    cosTheta = Math.Max(-1.0, Math.Min(1.0, cosTheta));
+                        //    double angleRad = Math.Acos(cosTheta);
+                        //    double angleDeg = angleRad * 180.0 / Math.PI;
+
+                        //    this.AngleDetect = angleDeg;
+
+
+
+                        //}
+                    }
+
+                    break;
+                case TypeMeasure.PointToPoint:
+                    Point p11 = listLine1Point[0];
+                    Point p21 = listLine1Point[1];
+                    int r1 = 5;
+                    using (SolidBrush redBrush = new SolidBrush(Color.Red))
+                    using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
+                    using (Pen yellowPen = new Pen(Color.Yellow, 1))
+                    {
+                        gc.FillEllipse(redBrush, p11.X - r1, p11.Y - r1, r1 * 2, r1 * 2);
+                        gc.DrawEllipse(yellowPen, p11.X - r1, p11.Y - r1, r1 * 2, r1 * 2);
+
+                        gc.FillEllipse(redBrush, p21.X - r1, p21.Y - r1, r1 * 2, r1 * 2);
+                        gc.DrawEllipse(yellowPen, p21.X - r1, p21.Y - r1, r1 * 2, r1 * 2);
+
+                    }
+                    gc.DrawLine(new Pen(Global.Config.ColorInfor, 2), p11, p21);
+
+                  
+                    string txt1 = $"Angle {AngleDetect:F2}°";
+                    using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
+                    using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                    {
+                        gc.DrawString(txt1, font, brush, p11.X + 5, p11.Y + 5);
+                    }
+                    txt1 = $"Distance {Distance:F2} px";
+                    using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
+                    using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                    {
+                        gc.DrawString(txt1, font, brush, p11.X + 5, p11.Y + 50);
+                    }
+                 //Line2D lineX=   MakeXAxisLine(new Point2f(p11.X,p11.Y));
+       
+                  PointF p22=new PointF(p11.X+20, p11.Y);
+                    PointF p23 = new PointF(p11.X , p11.Y+20);
+                    Draws.DrawInfiniteLine(gc, p11,p22, new Pen(cl, Global.Config.ThicknessLine));
+                    Draws.DrawInfiniteLine(gc, p11, p23, new Pen(cl, Global.Config.ThicknessLine));
+
+                    break;
+                    
+            }    
+        
             return gc;
         }
 

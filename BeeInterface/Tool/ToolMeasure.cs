@@ -73,11 +73,14 @@ namespace BeeInterface
                     cb4.DataSource = null;
                     cb4.DataSource = propetyTool.Propety.listP_Center;
                     index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[2].Item1);
-                    propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                 
+                    if(index>-1)
+                        propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb6.DataSource = null;
                     cb6.DataSource = propetyTool.Propety.listP_Center;
                     index = BeeCore.Common.PropetyTools[Propety.IndexThread].FindIndex(a => a.Name == Propety.listPointChoose[3].Item1);
-                    propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
+                    if (index > -1)
+                        propetyTool = BeeCore.Common.PropetyTools[Propety.IndexThread][index];
                     cb8.DataSource = null;
                     cb8.DataSource = propetyTool.Propety.listP_Center;
                     cb2.SafeSelectIndex(Propety.listPointChoose[0].Item2);
@@ -88,7 +91,8 @@ namespace BeeInterface
                   
                 }
             }
-          
+            cbMeasure.SelectedIndex= cbMeasure.FindStringExact(Propety.TypeMeasure.ToString());
+            cbDirect.SelectedIndex = cbMeasure.FindStringExact(Propety.DirectMeasure.ToString());
             //worker.RunWorkerCompleted += (sender, e) =>
             //{
             //    try
@@ -676,11 +680,13 @@ namespace BeeInterface
 
         private void cbMeasure_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Propety.TypeMeasure = (TypeMeasure)cbMeasure.SelectedItem;
+            if (cbMeasure.SelectedItem != null)
+                Propety.TypeMeasure = (TypeMeasure)cbMeasure.SelectedItem;
         }
 
         private void cbDirect_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if(cbDirect.SelectedItem != null) 
             Propety.DirectMeasure = (DirectMeasure)cbDirect.SelectedItem;
         }
 

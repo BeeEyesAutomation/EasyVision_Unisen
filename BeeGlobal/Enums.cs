@@ -16,15 +16,39 @@ namespace BeeGlobal
         public int Count;
         public List<Point2f> RunPts;
     }
+    public enum ValuePLC {
+        TotalOK,
+        TotalNG,
+        Total,
+        Cycle
+
+    }
+    public enum SideLR
+    {
+        Left,
+        Right
+    }
+
+    public enum SideTB
+    {
+        Above,
+        Below
+    }
     public struct CornerResult
     {
         public bool Found;
         public Line2D L1, L2;
         public Point2f Corner;
         public double AngleDeg;
-        public int Inliers1, Inliers2;
+        public float Inliers1, Inliers2;
         public double Score;
-
+        // 🔹 THÊM
+        public double AngleLineA_Deg;   // góc line A so với ảnh raw
+        public double AngleLineB_Deg;   // góc line B so với ảnh raw
+      
+                                        // 🔹 THÊM
+        public SideLR LineA_SideOf_LineB; // trái / phải
+        public SideTB LineB_SideOf_LineA; // trên / dưới
     }
     public sealed class LineEdge
     {
@@ -216,7 +240,11 @@ namespace BeeGlobal
     }
     public enum TypeMeasure
     {
-        Angle,Distance
+        Angle,Distance,PointToPoint
+    }
+    public enum TypeControler
+    {
+        PLC,IO,PCI
     }
     public enum DirectMeasure
     {
@@ -258,7 +286,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight
+      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight,SendValue
     }
     public enum AreaCrop
     {
@@ -284,7 +312,7 @@ namespace BeeGlobal
         EdgePixel= 21, 
         Edge=22,
         CraftOCR = 23,
-        Intersect = 24
+        Intersect = 24,Systems=25, MultiPattern = 26//Note
     }
     public enum TypeOCR
     {
@@ -317,6 +345,7 @@ namespace BeeGlobal
     {
        Slow,Normal,Fast, OFF
     }
+    
     public enum TypeCrop
     {
         Crop, Area, Mask, None
@@ -346,9 +375,13 @@ namespace BeeGlobal
     {
         None, Processing, Trigged, Continue, NotTrig, Complete
     }
+    public enum FilterBox
+    {
+        Merge,Remove,None
+    }
     public enum StatusProcessing
     {
-        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done,Drawing
+        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done,Drawing,Waiting
     }
     public enum StatusMode
     {

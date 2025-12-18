@@ -41,7 +41,7 @@ namespace PylonCli {
         Pylon::CPylonImage* _bufA = nullptr;
         Pylon::CPylonImage* _bufB = nullptr;
         Pylon::CPylonImage* _latestImage = nullptr;
-        int _bufIndex = 0;
+      
         System::Threading::Mutex^ _latestImageMutex;
         // backing delegate cho custom event
         FrameReadyHandler^ _frameReadyHandlers = nullptr;
@@ -79,14 +79,18 @@ namespace PylonCli {
         float  SetHeight(float v);
         float  SetOffsetX(float v);
         float  SetOffsetY(float v);
-
+        bool SetFps(float microseconds);
+       
         // Params
         float SetExposure(float microseconds);
         float SetGain(float value);
         float SetBlackLevel(float value);
         float SetDigitalShift(float value);
         void CenterX();    void CenterY();
-
+        void GetFps([System::Runtime::InteropServices::Out] float% min,
+            [System::Runtime::InteropServices::Out] float% max,
+            [System::Runtime::InteropServices::Out] float% step,
+            [System::Runtime::InteropServices::Out] float% current);
         // ===== Params =====
         // ===== Query with min/max/step =====
         void GetExposure([System::Runtime::InteropServices::Out] float% min,

@@ -244,7 +244,7 @@ namespace BeeCore.Algorithm
                     }
                 });
 
-            if (bestInliers == null || bestInliers.Count < o.MinInliersPerLine)
+            if (bestInliers == null || bestInliers.Count <2)
             {
                 dbg?.RansacRejectedRaw.Add((default(Line2D), bestInliers?.Count ?? 0, "ransac_too_few_inliers"));
                 return default(Line2D);
@@ -297,7 +297,7 @@ namespace BeeCore.Algorithm
                 out contiguous, out splitThr
                 , null);
 
-            if (contiguous == null || contiguous.Count < o.MinInliersPerLine)
+            if (contiguous == null || contiguous.Count < 2)
             {
 
                 dbg?.RansacRejectedRaw.Add((lineInit, bestInliers.Count, "contiguous_too_few"));

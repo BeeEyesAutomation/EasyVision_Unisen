@@ -19,6 +19,9 @@ namespace BeeGlobal
         //public Color ColorBar2 = Color.FromArgb(100, 114, 114, 114);
         //public Color ColorEnd = Color.WhiteSmoke;
         //public Color ColorRight = Color.WhiteSmoke;
+        public bool EnterPO = true;
+        public String POCurrent = "";
+        
         public int NumRetryCamera = 0;
         public int NumRetryPLC = 0;
         public bool IsResetReady = false;
@@ -32,6 +35,8 @@ namespace BeeGlobal
         public Size SizeCCD;
         public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
         public bool IsSaveLog = false;
+        public bool IsResetImg = false;
+        public bool IsAutoTrigger = false;
         public ModeSaveProg ModeSaveProg = ModeSaveProg.Single;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
         public int FontSize = 16;

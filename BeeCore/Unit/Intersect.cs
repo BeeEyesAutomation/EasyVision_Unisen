@@ -51,7 +51,8 @@ namespace BeeCore
       
         public int MaximumLine = 20;
    
-        public int MinInliers = 5;
+        public int MinInlierA = 5;
+        public int MinInlierB = 5;
         public float WidthResult = 0;
         public float WidthTemp = 0;
  
@@ -178,8 +179,9 @@ namespace BeeCore
                         MaxCandidateLines=MaximumLine,
                         RansacIterations=RansacIterations,
                         RansacThreshold=RansacThreshold,
-                        MinInliersPerLine=MinInliers,
-                        AutoMean=AutoMean,
+                        MinInlierA=MinInlierA,
+                        MinInlierB = MinInlierB,
+                            AutoMean =AutoMean,
                         FixMean=FixMean,
                         AngleTargetDeg= AngleTargetDeg,
                         AngleToleranceDeg= AngleToleranceDeg,

@@ -10,6 +10,7 @@ namespace BeeGlobal
 {
     public class Global
     {
+
         public static bool IsSim = false;
         /// <summary>
         ///

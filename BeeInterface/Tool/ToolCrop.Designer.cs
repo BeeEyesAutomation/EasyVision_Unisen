@@ -175,6 +175,7 @@ namespace BeeInterface
             this.btnFolder.IsCLick = false;
             this.btnFolder.IsNotChange = false;
             this.btnFolder.IsRect = false;
+            this.btnFolder.IsTouch = false;
             this.btnFolder.IsUnGroup = false;
             this.btnFolder.Location = new System.Drawing.Point(287, 0);
             this.btnFolder.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -256,6 +257,7 @@ namespace BeeInterface
             this.btnTest.IsCLick = false;
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
+            this.btnTest.IsTouch = false;
             this.btnTest.IsUnGroup = true;
             this.btnTest.Location = new System.Drawing.Point(20, 451);
             this.btnTest.Margin = new System.Windows.Forms.Padding(20, 10, 5, 5);
@@ -384,6 +386,7 @@ namespace BeeInterface
             this.btnCropFull.IsCLick = false;
             this.btnCropFull.IsNotChange = false;
             this.btnCropFull.IsRect = false;
+            this.btnCropFull.IsTouch = false;
             this.btnCropFull.IsUnGroup = false;
             this.btnCropFull.Location = new System.Drawing.Point(189, 0);
             this.btnCropFull.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -441,6 +444,7 @@ namespace BeeInterface
             this.btnCropHalt.IsCLick = true;
             this.btnCropHalt.IsNotChange = false;
             this.btnCropHalt.IsRect = false;
+            this.btnCropHalt.IsTouch = false;
             this.btnCropHalt.IsUnGroup = false;
             this.btnCropHalt.Location = new System.Drawing.Point(3, 0);
             this.btnCropHalt.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -509,6 +513,7 @@ namespace BeeInterface
             this.btnAreaBlack.IsCLick = true;
             this.btnAreaBlack.IsNotChange = false;
             this.btnAreaBlack.IsRect = false;
+            this.btnAreaBlack.IsTouch = false;
             this.btnAreaBlack.IsUnGroup = false;
             this.btnAreaBlack.Location = new System.Drawing.Point(3, 5);
             this.btnAreaBlack.Multiline = false;
@@ -563,6 +568,7 @@ namespace BeeInterface
             this.btnAreaWhite.IsCLick = false;
             this.btnAreaWhite.IsNotChange = false;
             this.btnAreaWhite.IsRect = false;
+            this.btnAreaWhite.IsTouch = false;
             this.btnAreaWhite.IsUnGroup = false;
             this.btnAreaWhite.Location = new System.Drawing.Point(195, 5);
             this.btnAreaWhite.Multiline = false;

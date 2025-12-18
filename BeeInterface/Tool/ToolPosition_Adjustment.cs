@@ -111,8 +111,19 @@ namespace BeeInterface
             btnCropArea.IsCLick = true;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
+            btnAutoMean.IsCLick = Propety.AutoMean == true ? true : false;
+            btnFixedMean.IsCLick = Propety.AutoMean == false ? true : false;
+            AdjContinuityGapFactor.Value = Propety.ContinuityGapFactor;
+            AdjFixedMean.Value = Propety.FixMean;
+            AdjAngleTargetDeg.Value = Propety.AngleTargetDeg;
+            AdjAngleToleranceDeg.Value = Propety.AngleToleranceDeg;
 
-          
+            trackMinInlierA.Value = Propety.MinInliersA;
+            trackMinInlierB.Value = Propety.MinInliersB;
+            trackMaxLine.Value = Propety.MaximumLine;
+            AdjRANSACIterations.Value = Propety.RansacIterations;
+            AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
+
         }
 
         private void ToolPosition_Adjustment_StatusToolChanged(StatusTool obj)
@@ -122,6 +133,14 @@ namespace BeeInterface
             if (Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool == StatusTool.Done)
             {
                 btnTest.Enabled = true; btnTest.IsCLick = false;
+                if (Propety.IsCalib)
+                {
+                    btnCalib.IsCLick = false;
+                    Propety.IsCalib = false;
+                    btnCalib.Enabled = true;
+                    trackMinInlierA.Value = Propety.MinInliersA;
+                    trackMinInlierB.Value = Propety.MinInliersB;
+                }
             }
            
         }
@@ -569,6 +588,69 @@ namespace BeeInterface
         private void btn5_Click(object sender, EventArgs e)
         {
             trackScore.Visible=!lbPattern.IsCLick;
+        }
+        private void AdjAngleTargetDeg_ValueChanged(float obj)
+        {
+            Propety.AngleTargetDeg = (int)AdjAngleTargetDeg.Value;
+        }
+
+        private void AdjAngleToleranceDeg_ValueChanged(float obj)
+        {
+            Propety.AngleToleranceDeg = (int)AdjAngleToleranceDeg.Value;
+        }
+
+        private void btnAutoMean_Click(object sender, EventArgs e)
+        {
+            Propety.AutoMean = btnAutoMean.IsCLick;
+            AdjFixedMean.Enabled = !btnAutoMean.IsCLick;
+        }
+        private void AdjContinuityGapFactor_ValueChanged(float obj)
+        {
+            Propety.ContinuityGapFactor = AdjContinuityGapFactor.Value;
+        }
+
+        private void AdjFixedMean_ValueChanged(float obj)
+        {
+            Propety.FixMean = (int)AdjFixedMean.Value;
+        }
+
+        private void btnFixedMean_Click(object sender, EventArgs e)
+        {
+            Propety.AutoMean = !btnFixedMean.IsCLick;
+            AdjFixedMean.Enabled = btnFixedMean.IsCLick;
+        }
+        private void AdjRANSACIterations_ValueChanged(float obj)
+        {
+            Propety.RansacIterations = (int)AdjRANSACIterations.Value;
+        }
+
+        private void AdjRANSACThreshold_ValueChanged(float obj)
+        {
+            Propety.RansacThreshold = AdjRANSACThreshold.Value;
+        }
+        private void trackMaxLine_ValueChanged(float obj)
+        {
+            Propety.MaximumLine = (int)trackMaxLine.Value;
+        }
+
+        private void trackMinInlier_ValueChanged(float obj)
+        {
+            Propety.MinInliersA = trackMinInlierA.Value;
+        }
+
+        private void btnCalib_Click(object sender, EventArgs e)
+        {
+            btnCalib.Enabled = false;
+            Propety.IsCalib= true;
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
+            else
+                Propety.IsCalib = false;
+        }
+
+        private void trackMinInlierB_ValueChanged(float obj)
+        {
+            Propety.MinInliersB = (int)trackMinInlierB.Value;
         }
     }
 }

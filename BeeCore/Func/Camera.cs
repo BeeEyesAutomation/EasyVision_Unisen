@@ -1489,26 +1489,29 @@ namespace BeeCore
                         FrameRate = CCDPlus.FPS;
                         break;
                     case TypeCamera.Pylon:
-                        if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType || matRaw.IsDisposed)
-                        {
-                            matRaw?.Dispose();
-                            matRaw = new Mat(rows, cols, matType);
-                        }
-                        int w = 0, h = 0, s = 0, c = 0;
-                        IntPtr p = PylonCam.CopyLatestImage(out w, out h, out s, out c);
-                        matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
-                        FrameRate = (int)PylonCam.GetMeasuredFps();
-                        matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
-                        if (p == IntPtr.Zero)
-                        {
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
-                            return false;
-                        }
-                        unsafe
-                        {
-                            Buffer.MemoryCopy(p.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
-                            PylonCam.FreeImage(p);
-                        }
+                      
+
+                            if (matRaw == null || matRaw.Rows != rows || matRaw.Cols != cols || matRaw.Type() != matType )
+                            {
+                                matRaw?.Dispose();
+                               // matRaw = new Mat(rows, cols, matType);
+                            }
+                            int w = 0, h = 0, s = 0, c = 0;
+                        intPtr = PylonCam.CopyLatestImage(out w, out h, out s, out c);
+                            matType = (c == 1) ? OpenCvSharp.MatType.CV_8UC1 : OpenCvSharp.MatType.CV_8UC3;
+                            FrameRate = (int)PylonCam.GetMeasuredFps();
+                            matRaw = new Mat(h, w, matType); // hoặc CV_8UC1 nếu Mono
+                            if (intPtr == IntPtr.Zero)
+                            {
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadCCD", PylonCam.LastError));
+                                return false;
+                            }
+                            unsafe
+                            {
+                                Buffer.MemoryCopy(intPtr.ToPointer(), matRaw.DataPointer, (long)h * w * c, (long)h * w * c);
+                               
+                            }
+                        
                        
                         return true;
                        
@@ -1564,6 +1567,9 @@ namespace BeeCore
             }
             finally
             {
+               if( Para.TypeCamera==TypeCamera.Pylon)
+                PylonCam.FreeImage(intPtr);
+                else
                 if (intPtr != IntPtr.Zero)
                     Native.FreeBuffer(intPtr);
             }

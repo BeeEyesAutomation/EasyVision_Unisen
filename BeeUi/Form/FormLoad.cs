@@ -197,10 +197,10 @@ namespace BeeUi
 
         private void FormLoad_Load(object sender, EventArgs e)
         {
-            //_styles = new ControlStylePersistence(this, "LoadTheme")
-            //{
-            //    LoadImmediately = true
-            //};
+            _styles = new ControlStylePersistence(this, "LoadTheme")
+            {
+                LoadImmediately = true
+            };
 
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - this.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
 

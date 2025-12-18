@@ -107,6 +107,25 @@ namespace BeeCore.Func
             return true;
         
         }
+        public static float AngleDeg_FromB_ToA(PointF A, PointF B)
+        {
+            double dx = A.X - B.X;
+            double dy = A.Y - B.Y;
+
+            double rad = Math.Atan2(dy, dx);          // [-pi, +pi]
+            double deg = rad * 180.0 / Math.PI;       // [-180, +180]
+
+            if (deg < 0) deg += 360.0;                // [0, 360)
+            return (float)deg;
+        }
+        public static float AngleDeg_FromB_ToA_MathYUp(PointF A, PointF B)
+        {
+            double dx = A.X - B.X;
+            double dy = -(A.Y - B.Y);                 // đảo trục Y
+            double deg = Math.Atan2(dy, dx) * 180.0 / Math.PI;
+            if (deg < 0) deg += 360.0;
+            return (float)deg;
+        }
         public static double GetAngleBetweenSegments(PointF A, PointF B, PointF C, PointF D)
         {
             // Vector AB

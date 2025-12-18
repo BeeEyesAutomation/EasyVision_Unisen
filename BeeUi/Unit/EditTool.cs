@@ -441,10 +441,10 @@ namespace BeeUi
        
         private void EditTool_Load(object sender, EventArgs e)
         {
-            //_styles = new ControlStylePersistence(this, "MyPanelTheme")
-            //{
-            //    LoadImmediately = true
-            //};
+            _styles = new ControlStylePersistence(this, "MyPanelTheme")
+            {
+                LoadImmediately = true
+            };
             tmReLoadSplit.Enabled = true;
             BeeCore.CustomGui.RoundRg(pInfor, 20);
             //   this.pInfor.BackColor = BeeCore.CustomGui.BackColor(TypeCtr.Bar, Global.Config.colorGui);

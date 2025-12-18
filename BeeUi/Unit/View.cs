@@ -2982,18 +2982,23 @@ namespace BeeUi
             {
                 case StatusProcessing.None:
                     break;
+              
                 case StatusProcessing.Trigger:
 
                     timer = CycleTimerSplit.Start();
-                    this.Invoke((Action)(() =>
+                    if(Global.Config.IsResetImg)
                     {
-                        if (imgView.Image != null)
+                        this.Invoke((Action)(() =>
                         {
-                            imgView.Text = "Waiting Checking...";
-                            imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
-                            imgView.Image = null;      // xoá ảnh khỏi control
-                        }
-                    }));
+                            if (imgView.Image != null)
+                            {
+                                imgView.Text = "Waiting Checking...";
+                                imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                                imgView.Image = null;      // xoá ảnh khỏi control
+                            }
+                        }));
+                    }    
+                  
                     Global.IsAllowReadPLC = false;
                     if (Global.IsDebug)
                     {
@@ -3007,7 +3012,11 @@ namespace BeeUi
                     }    
                     break;
                 case StatusProcessing.Read:
-                    if(!Global.ParaCommon.IsExternal)
+                    if(Global.Config.IsAutoTrigger)
+                    {
+                        timer = CycleTimerSplit.Start();
+                    }    
+                    if(!Global.ParaCommon.IsExternal&&Global.Config.IsResetImg)
                     {
                         this.Invoke((Action)(() =>
                         {
@@ -3105,6 +3114,12 @@ namespace BeeUi
                         RunProcessing();
                         Global.StatusProcessing = StatusProcessing.WaitingDone;
                     
+                    break;
+                case StatusProcessing.Waiting:
+                    G.StatusDashboard.StatusText = obj.ToString();
+                    G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
+                    
+                    Global.StatusProcessing = StatusProcessing.Read;
                     break;
                 case StatusProcessing.SendResult:
                     this.Invoke((Action)(() =>
@@ -3243,7 +3258,7 @@ namespace BeeUi
                     timer.Split("W");
                    
                     CTTotol = timer.StopAndFormat();
-                    BeeCore.Common.CycleCamera = timer.seg[timer.seg.FindIndex(a => a.Label == "C")].Ms;
+                   // BeeCore.Common.CycleCamera = timer.seg[timer.seg.FindIndex(a => a.Label == "C")].Ms;
                  
                     if (Global.IsDebug)
                     {
@@ -5461,7 +5476,14 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     }
                 }
             }, _cts.Token);
-         //   timer.Stop();
+            if(Global.Config.IsAutoTrigger)
+            if (BeeCore.Common.PropetyTools[0][0].Results == Results.NG )
+            {
+                Global.StatusProcessing = StatusProcessing.Waiting;
+                return;
+            }
+
+            //   timer.Stop();
             Global.TotalOK = true;
             foreach ( Camera camera in BeeCore.Common.listCamera)
             {if (camera == null)

@@ -49,5 +49,8 @@ namespace BeeCpp
             [System::Runtime::InteropServices::Out] int% outChannels);
         // Giải phóng buffer RAW trả về.
         static void FreeBuffer(System::IntPtr p);
+        void SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch);
+         void SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch);
+
     };
 }

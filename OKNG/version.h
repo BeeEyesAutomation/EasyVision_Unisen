@@ -1,6 +1,6 @@
 #define VER_MAJOR 1
 #define VER_MINOR 0
-#define VER_BUILD 7
+#define VER_BUILD 8
 #define VER_REV   0
 
 #define STR_HELPER(x) #x

@@ -217,7 +217,7 @@ namespace BeeCore
             if(Global.Config.IsShowResult)
             if (rectRotates.Count > 0)
             {
-                int i = 1;
+                int i = 0;
                 foreach (RectRotate rot in rectRotates)
                 {
                     gc.ResetTransform();

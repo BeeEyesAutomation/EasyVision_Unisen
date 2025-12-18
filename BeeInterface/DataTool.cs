@@ -235,7 +235,9 @@ namespace BeeInterface
                 case TypeTool.Intersect:
                     control = new ToolIntersect();
                     break;
-
+                case TypeTool.MultiPattern:
+                    control = new ToolMultiPattern();
+                    break;
                 default:
                     return null;
                     break;

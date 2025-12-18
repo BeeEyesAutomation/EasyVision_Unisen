@@ -1,4 +1,5 @@
 ﻿
+using BeeCore.Algorithm;
 using BeeCore.Funtion;
 using BeeGlobal;
 using CvPlus;
@@ -291,6 +292,8 @@ namespace BeeCore
         public float CropOffSetX, CropOffSetY=0;
         [NonSerialized]
         private Mat matCropTemp;
+        public FilterBox FilterBox = FilterBox.Merge;
+        public float ThreshOverlap = 0.1f;
         public void DoWork(RectRotate rotCrop)
         {
             if (!Global.IsIntialPython) return;
@@ -401,7 +404,17 @@ namespace BeeCore
                             //scoreList.Add((float)((PyObject)scores[j]).As<double>() * 100f);
                             //labelList.Add(((PyObject)labels[j]).ToString());
                         }
-                        resultTemp= ResultFilter.FilterRectRotate(resultTemp,0.7f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
+                        switch(FilterBox)
+                        {
+                            case FilterBox.Merge:
+                                resultTemp = ResultFilter.MergeSameNameOverlap(resultTemp, ThreshOverlap);
+                                break;
+                            case FilterBox.Remove:
+                                resultTemp = ResultFilter.FilterRectRotate(resultTemp, ThreshOverlap);
+                                break;
+                        }
+                       
+                      //  resultTemp = ResultFilter.FilterRectRotate(resultTemp,0.8f);// = FilterRect.RemoveInnerRectRotates(boxList, 0.6f);
                         // đảm bảo matCrop còn sống trong suốt thời gian Python dùng p
                         GC.KeepAlive(matCrop);
                     }
@@ -425,93 +438,7 @@ namespace BeeCore
             }
         }
 
-        //public void DoWork(RectRotate rotCrop)
-        //{
-        //    if (Global.IsIntialPython)
-        //        using (Py.GIL())
-        //        {
-        //            try
-        //            {
-        //                // --- offset như cũ ---
-        //                CropOffSetX = rotCrop._PosCenter.X + rotCrop._rect.X;
-        //                CropOffSetY = rotCrop._PosCenter.Y + rotCrop._rect.Y;
-        //                CropOffSetX = (CropOffSetX > 0) ? 0 : -CropOffSetX;
-        //                CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
-
-        //                // --- crop ---
-        //                using (var matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
-        //                {
-        //                    // Đưa về CV_8U 1/3 kênh (tránh double-convert)
-        //                    if (matCrop.Type().Depth != MatType.CV_8U)
-        //                        Cv2.ConvertScaleAbs(matCrop, matCrop);               // 16-bit -> 8-bit nếu có
-        //                    if (matCrop.Channels() == 1)
-        //                        Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2BGR); // YOLO thích 3 kênh
-
-        //                    int h = matCrop.Rows, w = matCrop.Cols, ch = matCrop.Channels();
-        //                    long stride = matCrop.Step(); // có thể != w*ch, đã hỗ trợ ở Python
-        //                    IntPtr p = matCrop.Data;
-
-        //                    float conf = (float)(Common.PropetyTools[IndexThread][Index].Score / 100.0);
-        //                    string toolName = Common.PropetyTools[IndexThread][Index].Name;
-
-        //                    dynamic result = G.objYolo.predict((long)p, h, w, ch, (int)stride, conf, toolName);
-
-        //                    PyObject boxes = result[0], scores = result[1], labels = result[2];
-        //                    int n = (int)boxes.Length();
-
-        //                    if (boxList == null) boxList = new List<RectRotate>(n);
-        //                    else
-        //                    {
-        //                        boxList.Clear();
-        //                        if (boxList.Capacity < n) boxList.Capacity = n; // (tùy chọn) tránh realloc
-        //                    }
-        //                    if (scoreList == null) scoreList = new List<float>(n);
-        //                    else
-        //                    {
-        //                        scoreList.Clear();
-        //                        if (scoreList.Capacity < n) scoreList.Capacity = n;
-        //                    }
-
-        //                    if (labelList == null) labelList = new List<string>(n);
-        //                    else
-        //                    {
-        //                        labelList.Clear();
-        //                        if (labelList.Capacity < n) labelList.Capacity = n;
-        //                    }
-        //                    boxList.Clear(); scoreList.Clear(); labelList.Clear();
-
-        //                    for (int j = 0; j < n; j++)
-        //                    {
-        //                        var box = boxes[j];
-        //                        float x1 = (float)box[0].As<double>();
-        //                        float y1 = (float)box[1].As<double>();
-        //                        float x2 = (float)box[2].As<double>();
-        //                        float y2 = (float)box[3].As<double>();
-
-        //                        float w2 = x2 - x1, h2 = y2 - y1;
-        //                        float cx = x1 + w2 * 0.5f, cy = y1 + h2 * 0.5f;
-
-        //                        var rt = new RectRotate(new RectangleF(-w2 / 2, -h2 / 2, w2, h2), new PointF(cx, cy), 0, AnchorPoint.None);
-        //                        boxList.Add(rt);
-
-        //                        scoreList.Add((float)scores[j].As<double>() * 100f);
-        //                        labelList.Add(labels[j].ToString());
-        //                    }
-        //                }
-
-        //            }
-        //            catch (PythonException pyEx)
-        //            {
-        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", pyEx.ToString()));
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Learning", ex.ToString()));
-        //            }
-        //        }
-
-
-        //}
+    
         public string AddPLC = "";
         public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         public bool IsSendResult;
@@ -1239,8 +1166,15 @@ namespace BeeCore
                         String content = rot._rect.Height + " px";
                          font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
-                        gc.DrawString(content, font, new SolidBrush(clShow), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
-
+                         gc.DrawString(content, font, new SolidBrush(Global.Config.ColorInfor) , new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
+                        String label = ResultItem[i].Name;
+                        sz1 = gc.MeasureString(label, font);
+                        gc.FillRectangle(new SolidBrush(clShow), new RectangleF((int)(rot._rect.X), (int)(rot._rect.Y - sz1.Height-2), sz1.Width, sz1.Height +4));
+                        gc.DrawString(label, font, new SolidBrush(Color.White), new System.Drawing.Point((int)(rot._rect.X ), (int)(rot._rect.Y - sz1.Height-2)));
+                        //String valueScore = Math.Round(ResultItem[i].Score, 1) + "%";
+                        //if (!Global.Config.IsShowScore) valueScore = "";
+                        //if (!Global.Config.IsShowLabel) label = "";
+                        //Draws.Box3Label(gc, rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.Config.ThicknessLine, Global.Config.FontSize, 20, Global.Config.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
                     }
                     else

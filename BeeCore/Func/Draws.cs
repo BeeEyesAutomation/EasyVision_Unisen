@@ -271,6 +271,33 @@ namespace BeeCore
             //System.Drawing.PointF pt2 = new System.Drawing.PointF(x0 - vx * 1000, y0 - vy * 1000);
             //g.DrawLine(pen, pt1, pt2);
         }
+        public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen, float halfLen = 5000f)
+        {
+            float vx = (float)ln.Vx;
+            float vy = (float)ln.Vy;
+            float x0 = (float)ln.X1;
+            float y0 = (float)ln.Y1;
+
+            // nếu vector 0 thì bỏ
+            float norm = (float)Math.Sqrt(vx * vx + vy * vy);
+            if (norm < 1e-6f) return;
+
+            // chuẩn hoá để halfLen đúng nghĩa pixel
+            vx /= norm;
+            vy /= norm;
+
+            PointF p1 = new PointF(x0 + vx * halfLen, y0 + vy * halfLen);
+            PointF p2 = new PointF(x0 - vx * halfLen, y0 - vy * halfLen);
+
+            g.DrawLine(pen, p1, p2);
+        }
+
+        public static void DrawXAxisFromCenter(Graphics g, PointF B, Pen pen, float halfLen = 5000f)
+        {
+            // trục hoành: vx=1, vy=0
+            var ln = new Line2D(B.X, B.Y, 1.0, 0.0);
+            DrawInfiniteLine(g, ln, pen, halfLen);
+        }
         public static void DrawInfiniteLine(Mat img, Line2D ln, Scalar col, int thickness)
         {
             double vx = ln.Vx;
@@ -280,6 +307,32 @@ namespace BeeCore
             Point pt1 = new Point(x0 + vx * 1000, y0 + vy * 1000);
             Point pt2 = new Point(x0 - vx * 1000, y0 - vy * 1000);
             Cv2.Line(img, pt1, pt2, col, thickness);
+        }
+        public static void DrawInfiniteLine(Graphics g, PointF P0, PointF P1, Pen pen, float halfLen = 5000f)
+        {
+            float vx = P1.X - P0.X;
+            float vy = P1.Y - P0.Y;
+
+            float norm = (float)Math.Sqrt(vx * vx + vy * vy);
+            if (norm < 1e-6f) return;
+
+            vx /= norm;
+            vy /= norm;
+
+            // Lấy midpoint để kéo dài ổn định hơn
+            float mx = (P0.X + P1.X) * 0.5f;
+            float my = (P0.Y + P1.Y) * 0.5f;
+
+            PointF A = new PointF(mx - vx * halfLen, my - vy * halfLen);
+            PointF B = new PointF(mx + vx * halfLen, my + vy * halfLen);
+
+            g.DrawLine(pen, A, B);
+        }
+
+        // Overload dùng Point2f (OpenCvSharp)
+        public static void DrawInfiniteLine(Graphics g, Point2f P0, Point2f P1, Pen pen, float halfLen = 5000f)
+        {
+            DrawInfiniteLine(g, new PointF(P0.X, P0.Y), new PointF(P1.X, P1.Y), pen, halfLen);
         }
         public static void Box1Label(Graphics graphics, RectangleF baseRect, string text, Font font, Brush textBrush, Color backgroundBrush,int thiness=4, bool alignRight = false)
         {

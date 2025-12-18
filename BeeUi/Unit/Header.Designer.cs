@@ -51,10 +51,20 @@ namespace BeeUi.Common
             this.btnMode = new BeeInterface.RJButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnTraining = new BeeInterface.RJButton();
+            this.pPO = new System.Windows.Forms.Panel();
+            this.txtPO = new BeeInterface.TextBoxAuto();
+            this.lbPO = new BeeInterface.AutoFontLabel();
+            this.btnEnterPO = new BeeInterface.RJButton();
+            this.splitter3 = new System.Windows.Forms.Splitter();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.pEdit = new BeeUi.Unit.EditProg();
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.splitter4 = new System.Windows.Forms.Splitter();
+            this.lbProg = new BeeInterface.AutoFontLabel();
             this.pModel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.pPO.SuspendLayout();
             this.SuspendLayout();
             // 
             // workConnect
@@ -87,21 +97,22 @@ namespace BeeUi.Common
             // pModel
             // 
             this.pModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.pModel.ColumnCount = 4;
+            this.pModel.ColumnCount = 5;
+            this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.pModel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pModel.Controls.Add(this.txtQrCode, 2, 0);
-            this.pModel.Controls.Add(this.btnEnQrCode, 1, 0);
-            this.pModel.Controls.Add(this.btnShowList, 3, 0);
+            this.pModel.Controls.Add(this.lbProg, 0, 0);
+            this.pModel.Controls.Add(this.txtQrCode, 3, 0);
+            this.pModel.Controls.Add(this.btnEnQrCode, 2, 0);
+            this.pModel.Controls.Add(this.btnShowList, 4, 0);
             this.pModel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pModel.Location = new System.Drawing.Point(305, 0);
+            this.pModel.Location = new System.Drawing.Point(808, 0);
             this.pModel.Name = "pModel";
             this.pModel.RowCount = 1;
             this.pModel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pModel.Size = new System.Drawing.Size(1330, 81);
+            this.pModel.Size = new System.Drawing.Size(822, 81);
             this.pModel.TabIndex = 29;
             this.pModel.SizeChanged += new System.EventHandler(this.pModel_SizeChanged);
             // 
@@ -110,9 +121,9 @@ namespace BeeUi.Common
             this.txtQrCode.AutoFont = true;
             this.txtQrCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtQrCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 46.24609F);
-            this.txtQrCode.Location = new System.Drawing.Point(73, 3);
+            this.txtQrCode.Location = new System.Drawing.Point(160, 3);
             this.txtQrCode.Name = "txtQrCode";
-            this.txtQrCode.Size = new System.Drawing.Size(1173, 75);
+            this.txtQrCode.Size = new System.Drawing.Size(578, 75);
             this.txtQrCode.TabIndex = 28;
             this.txtQrCode.Text = "Prog no";
             this.txtQrCode.TextChanged += new System.EventHandler(this.txtQrCode_TextChanged);
@@ -165,7 +176,7 @@ namespace BeeUi.Common
             this.btnEnQrCode.IsRect = false;
             this.btnEnQrCode.IsTouch = false;
             this.btnEnQrCode.IsUnGroup = true;
-            this.btnEnQrCode.Location = new System.Drawing.Point(10, 8);
+            this.btnEnQrCode.Location = new System.Drawing.Point(97, 8);
             this.btnEnQrCode.Margin = new System.Windows.Forms.Padding(10, 8, 0, 8);
             this.btnEnQrCode.Multiline = false;
             this.btnEnQrCode.Name = "btnEnQrCode";
@@ -220,7 +231,7 @@ namespace BeeUi.Common
             this.btnShowList.IsRect = false;
             this.btnShowList.IsTouch = false;
             this.btnShowList.IsUnGroup = false;
-            this.btnShowList.Location = new System.Drawing.Point(1252, 3);
+            this.btnShowList.Location = new System.Drawing.Point(744, 3);
             this.btnShowList.Multiline = false;
             this.btnShowList.Name = "btnShowList";
             this.btnShowList.Size = new System.Drawing.Size(75, 75);
@@ -245,7 +256,7 @@ namespace BeeUi.Common
             this.split1.Location = new System.Drawing.Point(200, 0);
             this.split1.MaximumSize = new System.Drawing.Size(20, 81);
             this.split1.Name = "split1";
-            this.split1.Size = new System.Drawing.Size(5, 81);
+            this.split1.Size = new System.Drawing.Size(10, 81);
             this.split1.TabIndex = 31;
             this.split1.TabStop = false;
             // 
@@ -331,12 +342,11 @@ namespace BeeUi.Common
             // 
             this.panel2.Controls.Add(this.btnTraining);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(205, 0);
+            this.panel2.Location = new System.Drawing.Point(210, 0);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
             this.panel2.Size = new System.Drawing.Size(100, 81);
             this.panel2.TabIndex = 37;
-            this.panel2.Visible = false;
             // 
             // btnTraining
             // 
@@ -397,6 +407,120 @@ namespace BeeUi.Common
             this.btnTraining.UseVisualStyleBackColor = false;
             this.btnTraining.Click += new System.EventHandler(this.btnTraining_Click);
             // 
+            // pPO
+            // 
+            this.pPO.Controls.Add(this.txtPO);
+            this.pPO.Controls.Add(this.splitter4);
+            this.pPO.Controls.Add(this.splitter2);
+            this.pPO.Controls.Add(this.btnEnterPO);
+            this.pPO.Controls.Add(this.lbPO);
+            this.pPO.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pPO.Location = new System.Drawing.Point(320, 0);
+            this.pPO.Name = "pPO";
+            this.pPO.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
+            this.pPO.Size = new System.Drawing.Size(488, 81);
+            this.pPO.TabIndex = 38;
+            // 
+            // txtPO
+            // 
+            this.txtPO.AutoFont = true;
+            this.txtPO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPO.Enabled = false;
+            this.txtPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.507813F);
+            this.txtPO.Location = new System.Drawing.Point(80, 3);
+            this.txtPO.Name = "txtPO";
+            this.txtPO.Size = new System.Drawing.Size(328, 75);
+            this.txtPO.TabIndex = 0;
+            // 
+            // lbPO
+            // 
+            this.lbPO.AutoFont = true;
+            this.lbPO.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.77539F);
+            this.lbPO.Location = new System.Drawing.Point(2, 3);
+            this.lbPO.Name = "lbPO";
+            this.lbPO.Size = new System.Drawing.Size(73, 75);
+            this.lbPO.TabIndex = 1;
+            this.lbPO.Text = "P/O";
+            this.lbPO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnEnterPO
+            // 
+            this.btnEnterPO.AutoFont = true;
+            this.btnEnterPO.AutoFontHeightRatio = 0.9F;
+            this.btnEnterPO.AutoFontMax = 100F;
+            this.btnEnterPO.AutoFontMin = 8F;
+            this.btnEnterPO.AutoFontWidthRatio = 0.92F;
+            this.btnEnterPO.AutoImage = true;
+            this.btnEnterPO.AutoImageMaxRatio = 0.5F;
+            this.btnEnterPO.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnEnterPO.AutoImageTint = true;
+            this.btnEnterPO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnEnterPO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnEnterPO.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnEnterPO.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnEnterPO.BorderRadius = 15;
+            this.btnEnterPO.BorderSize = 1;
+            this.btnEnterPO.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnEnterPO.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnEnterPO.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnEnterPO.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnEnterPO.Corner = BeeGlobal.Corner.Both;
+            this.btnEnterPO.DebounceResizeMs = 16;
+            this.btnEnterPO.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnEnterPO.FlatAppearance.BorderSize = 0;
+            this.btnEnterPO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnterPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.btnEnterPO.ForeColor = System.Drawing.Color.Black;
+            this.btnEnterPO.Image = global::BeeUi.Properties.Resources.Rename;
+            this.btnEnterPO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEnterPO.ImageDisabled = null;
+            this.btnEnterPO.ImageHover = null;
+            this.btnEnterPO.ImageNormal = null;
+            this.btnEnterPO.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnEnterPO.ImagePressed = null;
+            this.btnEnterPO.ImageTextSpacing = 6;
+            this.btnEnterPO.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnEnterPO.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnEnterPO.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnEnterPO.ImageTintOpacity = 0.5F;
+            this.btnEnterPO.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnEnterPO.IsCLick = false;
+            this.btnEnterPO.IsNotChange = false;
+            this.btnEnterPO.IsRect = false;
+            this.btnEnterPO.IsTouch = false;
+            this.btnEnterPO.IsUnGroup = true;
+            this.btnEnterPO.Location = new System.Drawing.Point(413, 3);
+            this.btnEnterPO.Margin = new System.Windows.Forms.Padding(5);
+            this.btnEnterPO.Multiline = false;
+            this.btnEnterPO.Name = "btnEnterPO";
+            this.btnEnterPO.Size = new System.Drawing.Size(75, 75);
+            this.btnEnterPO.TabIndex = 28;
+            this.btnEnterPO.Text = "Enter";
+            this.btnEnterPO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnEnterPO.TextColor = System.Drawing.Color.Black;
+            this.btnEnterPO.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnEnterPO.UseVisualStyleBackColor = false;
+            this.btnEnterPO.Click += new System.EventHandler(this.btnEnterPO_Click);
+            // 
+            // splitter3
+            // 
+            this.splitter3.Location = new System.Drawing.Point(310, 0);
+            this.splitter3.MaximumSize = new System.Drawing.Size(20, 81);
+            this.splitter3.Name = "splitter3";
+            this.splitter3.Size = new System.Drawing.Size(10, 81);
+            this.splitter3.TabIndex = 40;
+            this.splitter3.TabStop = false;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(808, 0);
+            this.splitter1.MaximumSize = new System.Drawing.Size(20, 81);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(5, 81);
+            this.splitter1.TabIndex = 41;
+            this.splitter1.TabStop = false;
+            // 
             // pEdit
             // 
             this.pEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
@@ -406,13 +530,47 @@ namespace BeeUi.Common
             this.pEdit.Size = new System.Drawing.Size(500, 81);
             this.pEdit.TabIndex = 36;
             // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(75, 3);
+            this.splitter2.MaximumSize = new System.Drawing.Size(20, 81);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(5, 75);
+            this.splitter2.TabIndex = 42;
+            this.splitter2.TabStop = false;
+            // 
+            // splitter4
+            // 
+            this.splitter4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter4.Location = new System.Drawing.Point(408, 3);
+            this.splitter4.MaximumSize = new System.Drawing.Size(20, 81);
+            this.splitter4.Name = "splitter4";
+            this.splitter4.Size = new System.Drawing.Size(5, 75);
+            this.splitter4.TabIndex = 43;
+            this.splitter4.TabStop = false;
+            // 
+            // lbProg
+            // 
+            this.lbProg.AutoFont = true;
+            this.lbProg.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbProg.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbProg.Location = new System.Drawing.Point(3, 0);
+            this.lbProg.Name = "lbProg";
+            this.lbProg.Size = new System.Drawing.Size(81, 81);
+            this.lbProg.TabIndex = 29;
+            this.lbProg.Text = "Prog";
+            this.lbProg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Header
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.Controls.Add(this.split2);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.pModel);
+            this.Controls.Add(this.pPO);
+            this.Controls.Add(this.splitter3);
+            this.Controls.Add(this.split2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.pEdit);
             this.Controls.Add(this.split1);
@@ -427,6 +585,7 @@ namespace BeeUi.Common
             this.pModel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.pPO.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -450,5 +609,14 @@ namespace BeeUi.Common
         public Unit.EditProg pEdit;
         private System.Windows.Forms.Panel panel2;
         public RJButton btnTraining;
+        private System.Windows.Forms.Panel pPO;
+        public RJButton btnEnterPO;
+        private AutoFontLabel lbPO;
+        public TextBoxAuto txtPO;
+        public System.Windows.Forms.Splitter splitter3;
+        public System.Windows.Forms.Splitter splitter1;
+        public System.Windows.Forms.Splitter splitter4;
+        public System.Windows.Forms.Splitter splitter2;
+        private AutoFontLabel lbProg;
     }
 }

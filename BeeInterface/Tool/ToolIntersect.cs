@@ -60,7 +60,7 @@ namespace BeeInterface
 
               
                 trackMaxLine.Value = Propety.MaximumLine;
-                trackMinInlier.Value = Propety.MinInliers;
+                trackMinInlier.Value = Propety.MinInlierA;
                 btnCloseEdge.IsCLick = Propety.MethordEdge == MethordEdge.CloseEdges ? true : false;
                 btnStrongEdge.IsCLick = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
                 btnBinary.IsCLick = Propety.MethordEdge == MethordEdge.Binary ? true : false;
@@ -97,7 +97,7 @@ namespace BeeInterface
                 AdjAngleTargetDeg.Value = Propety.AngleTargetDeg;
                 AdjAngleToleranceDeg.Value = Propety.AngleToleranceDeg;
 
-                trackMinInlier.Value = Propety.MinInliers;
+                trackMinInlier.Value = Propety.MinInlierA;
                 trackMaxLine.Value = Propety.MaximumLine;
                 AdjRANSACIterations.Value = Propety.RansacIterations;
                 AdjRANSACThreshold.Value = (float)Propety.RansacThreshold;
@@ -577,7 +577,7 @@ namespace BeeInterface
 
         private void trackMinInlier_ValueChanged(float obj)
         {
-            Propety.MinInliers = (int)trackMinInlier.Value;
+            Propety.MinInlierA = (int)trackMinInlier.Value;
         }
 
        

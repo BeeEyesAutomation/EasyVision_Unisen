@@ -816,6 +816,11 @@ txtQrCode.Focus();
             Global.IsAutoTemp = btnTraining.IsCLick;
         }
 
+        private void btnEnterPO_Click(object sender, EventArgs e)
+        {
+            txtPO.Enabled = btnEnterPO.IsCLick;
+        }
+
         bool IsKeyEnter = false;
         private void txtQrCode_KeyDown(object sender, KeyEventArgs e)
         {

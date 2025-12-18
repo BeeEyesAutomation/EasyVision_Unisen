@@ -108,10 +108,17 @@ namespace BeeCore
         public string pathRaw = "";
         public int cycleTime = 0;
         public RectangleF rectArea;
-       
-      
 
-      
+
+        public bool AutoMean = true;
+        public int FixMean = 3;
+        public float ContinuityGapFactor = 1.2f;
+        public int AngleTargetDeg = 90;
+        public int AngleToleranceDeg = 10;
+        public int MaximumLine = 20;
+
+        public float MinInliersA = 5;
+        public float MinInliersB = 5;
         private double _angle = 10;
         public double Angle
         {
@@ -451,6 +458,9 @@ namespace BeeCore
         CornerResult Result = new CornerResult();
         [NonSerialized]
       Mat   matProcess =new Mat();
+        public bool IsCalib = false;
+        public SideLR SideLR=SideLR.Left;
+        public SideTB SideTB = SideTB.Above;
         public void DoWork(RectRotate rectRotate)
         {
          
@@ -592,29 +602,29 @@ namespace BeeCore
                                                 if (!object.ReferenceEquals(t, matProcess)) matProcess.Dispose();
                                                 matProcess = t;
                                             }
+                                            if (IsCalib)
+                                            {
+                                                MinInliersA = 2;
+                                                MinInliersB = 2;
+                                            }
                                             OrthCornerOptions orthCornerOptions = new OrthCornerOptions
                                             {
-                                                MaxCandidateLines = 20,
-                                                RansacIterations = 2000,
-                                                RansacThreshold = 2,
-                                                MinInliersPerLine = 3,
-                                                AutoMean = true,
-                                                FixMean = 2,
-                                                AngleTargetDeg = 90,
-                                                AngleToleranceDeg = 10,
-                                                ContinuityGapFactor = 2,
+                                                MaxCandidateLines = MaximumLine,
+                                                RansacIterations = RansacIterations,
+                                                RansacThreshold = RansacThreshold,
+                                                MinInlierA = MinInliersA,
+                                                MinInlierB = MinInliersB,
+                                                AutoMean = AutoMean,
+                                                FixMean = FixMean,
+                                                AngleTargetDeg = AngleTargetDeg,
+                                                AngleToleranceDeg = AngleToleranceDeg,
+                                                ContinuityGapFactor = ContinuityGapFactor,
                                             };
-
-                                          
-
-
-
-
                                             try
                                             {
 
                                                 Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
-
+                                                  
                                                 //  Cv2.ImWrite("RS.png", Result.Debug);
 
 
@@ -623,24 +633,32 @@ namespace BeeCore
                                             {
                                                 Console.WriteLine(ex.ToString());
                                             }
-                                            // Kết quả vẽ 1 rect bé tại góc phát hiện
-                                            int width1 = 10, height1 = 10;
-                                            float angle1 = (float)Result.AngleDeg;
-                                            //   angle1 = 270f - angle1;
+                                            if(Result.Found)
+                                            {   // Kết quả vẽ 1 rect bé tại góc phát hiện
+                                                int width1 = 10, height1 = 10;
+                                                float angle1 = (float)Result.AngleLineA_Deg;
+                                                //   angle1 = 270f - angle1;
 
-                                            scoreSum = 100f;
-                                            PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
-                                            rectRotates = new List<RectRotate>
-                                {
-                                    new RectRotate(
-                                        new System.Drawing.RectangleF(-width1 / 2f, -height1 / 2f, width1, height1),pCenter
-                                       ,
-                                        angle1, AnchorPoint.None)
-                                };
-                                            listP_Center.Add(new System.Drawing.Point(
-                               (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-                               (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
-                                            list_AngleCenter.Add(rotArea._rectRotation + angle1);
+                                                scoreSum = 100f;
+                                                PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
+                                                rectRotates = new List<RectRotate>
+                                            {
+                                                new RectRotate(
+                                                    new System.Drawing.RectangleF(-width1 / 2f, -height1 / 2f, width1, height1),pCenter
+                                                   ,
+                                                    angle1, AnchorPoint.None)
+                                            };
+                                                listP_Center.Add(new System.Drawing.Point(
+                                   (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
+                                   (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                                                list_AngleCenter.Add(rotArea._rectRotation + angle1);
+
+
+                                            }
+                                            else
+                                            {
+                                                rectRotates = new List<RectRotate>();
+                                            }    
                                         }
                                         catch(Exception ex)
                                         {
@@ -714,9 +732,22 @@ namespace BeeCore
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
 
             }
+            if (IsCalib)
+            {
+                SideLR =Result.LineA_SideOf_LineB;
+                SideTB = Result.LineB_SideOf_LineA;
+                MinInliersA = (float)(Result.Inliers1 * (90 / 100.0));
+                MinInliersB = (float)(Result.Inliers2 * (90 / 100.0));
+
+
+
+            }
+            if (Result.LineA_SideOf_LineB != SideLR || Result.LineB_SideOf_LineA != SideTB)
+                results = Results.NG;
             if (!Global.IsRun)
              {
-                    Global.StatusDraw = StatusDraw.Check;
+             
+                Global.StatusDraw = StatusDraw.Check;
                     if (results == Results.OK)
                     {
                         rotPositionAdjustment = rectRotates[0].Clone();
@@ -785,27 +816,14 @@ namespace BeeCore
                 gc.Transform = mat;
                 var flags = DrawFlags.None;
                 if (Global.IsRun)
-                    flags = DrawFlags.BestCorner | DrawFlags.BestLines ;
+                    flags = DrawFlags.BestCorner | DrawFlags.BestLines;
                 else
                 {
-                    if (Global.Config.IsShowDetail)
-                    {
-                        flags = flags | DrawFlags.Inliers ;
-
-                    }
-                    if (Global.Config.IsShowNotMatching)
-                    {
-                        flags=flags|DrawFlags.RansacRejected | DrawFlags.Runs;
-
-                    }
-                    if (Global.Config.IsShowResult)
-                    {
-                        flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
-
-                    }
-
+                    if (Global.Config.IsShowDetail) flags = flags | DrawFlags.Inliers;
+                    if (Global.Config.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
+                    if (Global.Config.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
                 }
-              
+
                 DrawStyle drawStyle = new DrawStyle
                     {
                         Inlier = Color.Red,

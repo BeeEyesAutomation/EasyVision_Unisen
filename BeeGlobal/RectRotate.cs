@@ -85,6 +85,38 @@ namespace BeeGlobal
             IsPolygonClosed = false;
             ActiveVertexIndex = -1;
         }
+        public void ExpandPixels(float expandX, float expandY, bool scalePolygonPoints = false)
+        {
+            if (expandX < 0) expandX = 0;
+            if (expandY < 0) expandY = 0;
+
+            // _rect luôn theo quy ước local: (-w/2, -h/2, w, h)
+            float w0 = Math.Max(1f, _rect.Width);
+            float h0 = Math.Max(1f, _rect.Height);
+
+            float w1 = Math.Max(1f, w0 + 2f * expandX);
+            float h1 = Math.Max(1f, h0 + 2f * expandY);
+
+            if (Shape == ShapeType.Polygon && scalePolygonPoints && PolyLocalPoints != null && PolyLocalPoints.Count > 0)
+            {
+                float sx = w1 / w0;
+                float sy = h1 / h0;
+
+                int end = PolyLocalPoints.Count;
+                // nếu closed thì giữ điểm cuối = điểm đầu
+                bool closed = (end >= 2 && PolyLocalPoints[0].Equals(PolyLocalPoints[end - 1]));
+
+                for (int i = 0; i < end; i++)
+                {
+                    var p = PolyLocalPoints[i];
+                    PolyLocalPoints[i] = new PointF(p.X * sx, p.Y * sy);
+                }
+
+                if (closed) PolyLocalPoints[end - 1] = PolyLocalPoints[0];
+            }
+
+            _rect = new RectangleF(-w1 / 2f, -h1 / 2f, w1, h1);
+        }
 
         public RectRotate Clone() => new RectRotate(this);
 

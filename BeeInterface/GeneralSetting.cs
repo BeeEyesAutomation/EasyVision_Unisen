@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BeeUi
+namespace BeeInterface
 {
     public partial class GeneralSetting : Form
     {
@@ -78,6 +78,10 @@ namespace BeeUi
             btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
             btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
             btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
+            btnOnAutoTrigger.IsCLick = Global.Config.IsAutoTrigger;
+            btnOffAutoTrigger.IsCLick =! Global.Config.IsAutoTrigger;
+            btnONResetImg.IsCLick = Global.Config.IsResetImg;
+            btnOFFResetImg.IsCLick = !Global.Config.IsResetImg;
             if (Global.Config.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
@@ -405,6 +409,26 @@ namespace BeeUi
         private void btnSaveModeMulti_Click(object sender, EventArgs e)
         {
             Global.Config.ModeSaveProg = ModeSaveProg.Multi;
+        }
+
+        private void btnOFFResetImg_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsResetImg = false;
+        }
+
+        private void btnONResetImg_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsResetImg = true;
+        }
+
+        private void btnOnAutoTrigger_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsAutoTrigger = true;
+        }
+
+        private void btnOffAutoTrigger_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsAutoTrigger = false;
         }
     }
 }

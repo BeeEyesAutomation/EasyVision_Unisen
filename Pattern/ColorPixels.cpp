@@ -379,7 +379,38 @@ static int DiffHelper(const cv::Mat& a, const cv::Mat& b, int tol)
 //    return mem;
 //}
 // Xóa các vùng nhiễu có diện tích nhỏ hơn minArea (px)
+void ColorPixel::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
+{
+    _img->temp = Mat(h, w, CV_8UC3, data.ToPointer(), stride);
 
+}
+void ColorPixel::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
+{
+    if (data == IntPtr::Zero || w <= 0 || h <= 0 || stride <= 0)
+    {
+        // reset an toàn
+        _img->raw.release();
+        return;
+    }
+
+    // chọn kiểu Mat đúng kênh
+    int cvType;
+    switch (ch)
+    {
+    case 1: cvType = CV_8UC1; break;
+    case 3: cvType = CV_8UC3; break;
+    case 4: cvType = CV_8UC4; break;
+    default: cvType = CV_8UC1; break; // fallback
+    }
+
+    // wrap IntPtr thành Mat (không copy dữ liệu)
+    cv::Mat wrapped(h, w, cvType, data.ToPointer(), stride);
+
+    // clone để đảm bảo Mat trong C++ sở hữu dữ liệu, tránh phụ thuộc vào vùng nhớ bên C#
+    this->_img->raw = wrapped.clone();
+    //img->matRaw = Mat (h, w, CV_8UC1, data.ToPointer(), stride);
+
+}
 
 IntPtr ColorPixel::CheckImageFromMat(
     bool IsAlign,int ModeAlign,bool IsMultiCPU,

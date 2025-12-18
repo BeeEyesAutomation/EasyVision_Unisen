@@ -464,8 +464,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbParity.Text = Global.ParaCommon.Comunication.Protocol.Parity.ToString();
                 cbStopBits.Text = Global.ParaCommon.Comunication.Protocol.StopBits.ToString();
                 cbDataBits.Text = Global.ParaCommon.Comunication.Protocol.DataBit.ToString();
-                btnIO.IsCLick=! Global.ParaCommon.Comunication.Protocol.IsPLC;
-                btnIsPLC.IsCLick= Global.ParaCommon.Comunication.Protocol.IsPLC;
+                
+                btnIO.IsCLick= Global.ParaCommon.Comunication.Protocol.TypeControler== TypeControler.IO? true : false;
+                btnIsPLC.IsCLick= Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 cbO0.Text = nameOut[0];
                 cbO1.Text = nameOut[1];
                 cbO2.Text = nameOut[2];
@@ -564,11 +565,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     lbTCP1.Enabled = false;
                     lbTCP2.Enabled = false;
                 }
-                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC?false:true;
-                btnModbusAscii.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? false : true;
-                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
-                btnMitsu.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
-                btnDelta.Enabled = Global.ParaCommon.Comunication.Protocol.IsPLC ? true : false;
+                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true; 
+                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false; 
+                btnMitsu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnDelta.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                layBrand.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true; 
+                layComunication.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
+                laySetting.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
             }
             catch(Exception ex)
             {
@@ -1115,25 +1118,31 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnIsPLC_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.IsPLC = btnIsPLC.IsCLick;
+            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.PLC;
             btnRtu.Enabled = false;
             btnModbusAscii.Enabled = false;
             btnKeyence.Enabled = true;
             btnMitsu.Enabled = true;
             btnDelta.Enabled = true;
             btnMitsu.PerformClick();
+            layBrand.Enabled = true;
+            laySetting.Enabled = true;
+            layComunication.Enabled = true;
             Global.Config.IsResetReady = true;
         }
 
         private void btnIO_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.IsPLC=!btnIO.IsCLick;
+            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.IO;
             Global.Config.IsResetReady = false;
+            layBrand.Enabled = true;
+            layComunication.Enabled = true;
             btnRtu.Enabled = true;
             btnModbusAscii.Enabled = true;
             btnKeyence.Enabled = false;
             btnMitsu.Enabled = false;
             btnDelta.Enabled = false;
+            laySetting.Enabled = true;
             btnRtu.PerformClick();
         }
 
@@ -1150,6 +1159,14 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private void btnMitsu2_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi2;
+        }
+
+        private void btnPCICard_Click(object sender, EventArgs e)
+        {
+            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.PCI;
+            layBrand.Enabled = false;
+            layComunication.Enabled = false;
+            laySetting.Enabled = false;
         }
     }
 }

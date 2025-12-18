@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
+using BeeGlobal;
 
 namespace BeeInterface
 {
@@ -15,6 +17,7 @@ namespace BeeInterface
         public ItemValue()
         {
             InitializeComponent();
+            cbTypeResults.DataSource = (ValuePLC[])Enum.GetValues(typeof(ValuePLC));
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)

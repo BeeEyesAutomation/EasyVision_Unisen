@@ -63,12 +63,15 @@
     <Compile Include="Comunication.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CycleTimerSplit.cs" />
+    <Compile Include="DASK.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="HistoryCheck.cs" />
     <Compile Include="IntArrayWithEvent.cs" />
     <Compile Include="ItemNew.cs" />
     <Compile Include="ItemRegsImg.cs" />
+    <Compile Include="PCI_Card.cs" />
+    <Compile Include="PLCResult.cs" />
     <Compile Include="Protocol\ParaBit.cs" />
     <Compile Include="Protocol\ParaProtocol.cs" />
     <Compile Include="Labels.cs" />

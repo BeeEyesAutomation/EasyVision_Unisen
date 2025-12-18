@@ -107,7 +107,15 @@ namespace BeeCore
                         dynamic Propety = BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety;
 
 
-                       // BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusTool = StatusTool.WaitCheck;
+                        if (Global.Config.IsAutoTrigger)
+                        {
+                            if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
+                            {
+                                StatusProcessing = StatusProcessing.Done;
+                                return StatusProcessing;
+                            }
+
+                        }
                         if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
                         {
                             if (Global.rotOriginAdj == null) return StatusProcessing;
@@ -141,7 +149,7 @@ namespace BeeCore
                             StatusProcessing = StatusProcessing.Checking;
                         }
                         else
-                            StatusProcessing = StatusProcessing.Checking;
+                         StatusProcessing = StatusProcessing.Checking;
                     }
                     break;
                 case StatusProcessing.Checking:

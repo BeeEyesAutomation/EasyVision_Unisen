@@ -85,6 +85,9 @@ namespace BeeCore
                 if (_StatusTool != value)
                 {
                     _StatusTool = value;
+                    //if (Global.StatusMode == StatusMode.Continuous && TypeTool == TypeTool.Position_Adjustment && Results == Results.NG)
+                    //    return;
+                       
                     StatusToolChanged?.Invoke(_StatusTool); // Gọi event
                 }
             }

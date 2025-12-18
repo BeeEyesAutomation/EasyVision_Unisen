@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Funtion;
 using BeeGlobal;
+using BeeInterface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

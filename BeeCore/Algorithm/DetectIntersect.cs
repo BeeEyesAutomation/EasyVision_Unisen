@@ -1,4 +1,5 @@
 ﻿using BeeCore.Algorithm;
+using BeeCore.EtherNetIP;
 using BeeGlobal;
 using OpenCvSharp;
 using System;
@@ -35,6 +36,7 @@ namespace BeeCore
         All = RansacRejected | RansacAccepted | Inliers | ContinuityRejected |
                                  ContinuityAccepted | Runs | PairRejectedAll | BestAll
     }
+   
     public sealed class DrawStyle
     {
         public Color LineResult { get; set; } = Color.Lime;       // best lines
@@ -52,7 +54,8 @@ namespace BeeCore
         public int MaxCandidateLines;
         public int RansacIterations;
         public double RansacThreshold;
-        public int MinInliersPerLine;
+        public float MinInlierA;
+        public float MinInlierB;
         public int FixMean;
         // Cắt đoạn liên tục: splitThr = ContinuityGapFactor * meanFiltered
         public double ContinuityGapFactor;
@@ -68,7 +71,8 @@ namespace BeeCore
             MaxCandidateLines = 200,
             RansacIterations = 1200,
             RansacThreshold = 1.5,
-            MinInliersPerLine = 20,
+            MinInlierA = 20,
+            MinInlierB = 20,
             ContinuityGapFactor = 1.2,
             AutoMean=true,
             FixMean=3,
@@ -113,8 +117,11 @@ namespace BeeCore
                         if (ar.inl != null)
                             DrawPointsClipped(g, ar.inl, dest, brushInlier, Math.Max(2, style.InlierSize));
                     }
+                var snapshot = dbg.RansacAcceptedRaw?.ToArray();
+                if (snapshot == null) return;
+
                 if (Has(flags, DrawFlags.RansacAccepted))
-                    foreach (var ar in dbg.RansacAcceptedRaw)
+                    foreach (var ar in snapshot)
                     {
                         DrawLineClipped(g, ar.ln, dest, penNone);
                         //if (Has(flags, DrawFlags.Inliers) && ar.inl != null)
@@ -424,6 +431,97 @@ namespace BeeCore
       
         public LineEdge LineEdge = new LineEdge();
         Stopwatch stopwatch = new Stopwatch();
+        private List<Point2f> ExtractEdgePoints(Mat gray, Mat edges)
+        {
+            try
+            {
+                // Lấy tất cả pixel biên (không cần contour đóng)
+                Mat nonZero = new Mat();
+                Cv2.FindNonZero(edges, nonZero);
+
+                var ptsList = new List<Point>();
+                for (int i = 0; i < nonZero.Rows; i++)
+                {
+                    ptsList.Add(nonZero.At<Point>(i, 0));
+                }
+                if (ptsList.Count == 0)
+                    return new List<Point2f>();
+
+                // Chuyển thành Point2f
+                var ptsf = ptsList.Select(p => new Point2f(p.X, p.Y)).ToArray();
+
+                // Giảm mật độ: lấy mỗi điểm thứ (nếu quá nhiều điểm)
+                int maxPoints = 10000;
+                Point2f[] sampled = ptsf;
+                if (ptsf.Length > maxPoints)
+                {
+                    int step = ptsf.Length / maxPoints;
+                    sampled = ptsf.Where((pt, idx) => idx % step == 0).ToArray();
+                }
+
+                // Tinh chỉnh sub-pixel
+                Cv2.CornerSubPix(
+                    gray,
+                    sampled,
+                    new Size(3, 3),
+                    new Size(-1, -1),
+                    new TermCriteria(CriteriaTypes.Eps | CriteriaTypes.MaxIter, 20, 0.03)
+                );
+                return sampled.ToList();
+            }
+
+            catch (Exception ex)
+            {
+                String s = ex.Message;
+            }
+            return new List<Point2f>();
+
+
+        }
+        private static double AngleDegFromVector(double vx, double vy)
+        {
+            double ang = Math.Atan2(vy, vx) * 180.0 / Math.PI;
+            //if (ang > 180) ang -= 360;
+            //if (ang < -180) ang += 360;
+            return ang;
+        }
+
+        private static bool IsHorizontal(double angDeg)
+        {
+            // gần 0° hoặc 180°
+            return Math.Abs(angDeg) <= 45.0 || Math.Abs(Math.Abs(angDeg) - 180.0) <= 45.0;
+        }
+        static Point2f pA;
+        public static double SignedSide(Line2D ln, Point2f p)
+        {
+            double vx = ln.Vx, vy = ln.Vy;
+            double len = Math.Sqrt(vx * vx + vy * vy);
+            if (len < 1e-12) 
+                return 0;
+
+            // unit direction
+            double ux = vx / len;
+            double uy = vy / len;
+
+            // vector from line origin -> point
+            double dx = p.X - ln.X1;
+            double dy = p.Y - ln.Y1;
+
+            // cross2D(u, d)
+            return ux * dy - uy * dx;
+        }
+
+        private static SideLR GetLineA_SideOf_LineB(Line2D lineA, Point2f P)
+        {
+           // double s = SignedSide(lineA, P);
+            return lineA.X1 < P.X ? SideLR.Left : SideLR.Right;
+        }
+        private static SideTB GetLineB_SideOf_LineA( Line2D lineB, Point2f P)
+        {
+          
+            return  lineB .Y1>P.Y? SideTB.Below : SideTB.Above;
+       
+        }
         // ===== PUBLIC =====
         public CornerResult FindBestCorner_RansacRuns(Mat gray, Mat edges, OrthCornerOptions? opt = null)
         {
@@ -436,16 +534,17 @@ namespace BeeCore
                 Cv2.Canny(gray, edges, 50, 150, 3, true);
             }
             LineEdge = new LineEdge();
-            List<Point2f> cloud = gray.ExtractEdgePoints( edges);
+            List<Point2f> cloud = ExtractEdgePoints(gray, edges);
             if (cloud.Count < 2) return new CornerResult { Found = false };
             var remain = new List<Point2f>(cloud);
             var pool = new List<(Line2D ln, List<Point2f> inl)>();
+            //o.MinInliersPerLine
             for (int r = 0; r < o.MaxCandidateLines; r++)
             {
                 List<Point2f> contiguous;
                 Line2D ln = Ransac.FitLine(remain, o, out contiguous, LineEdge);
 
-                if (contiguous == null || contiguous.Count < o.MinInliersPerLine)
+                if (contiguous == null || contiguous.Count < 2)
                     break;
           
                 pool.Add((ln, contiguous));
@@ -457,10 +556,10 @@ namespace BeeCore
             LineEdge.RunsKept.AddRange(runs);
             if (runs.Count < 2) return new CornerResult { Found = false };
 
-            var best = SelectBestPairFromRuns_WithDebug(runs, gray.Size(), o.AngleTargetDeg, o.AngleToleranceDeg, LineEdge);
-
-
+            var best = SelectBestPairFromRuns_WithDebug(runs, gray.Size(), o.AngleTargetDeg, o.AngleToleranceDeg, LineEdge,o.MinInlierA,o.MinInlierB);
            
+
+
             return best;
         }
 
@@ -583,9 +682,29 @@ namespace BeeCore
         //    sr.P1 = new Point2f((float)(ln.X1 + t1 * ln.Vx), (float)(ln.Y1 + t1 * ln.Vy));
         //    return sr;
         //}
+        static double Angle_LineToPoint(Line2D ln, Point2f p)
+{
+    // vector line
+    double lx = ln.Vx;
+    double ly = ln.Vy;
+    double llen = Math.Sqrt(lx * lx + ly * ly);
+    if (llen < 1e-12) return 0;
+
+    // vector từ line origin → point
+    double dx = p.X - ln.X1;
+    double dy = p.Y - ln.Y1;
+    double dlen = Math.Sqrt(dx * dx + dy * dy);
+    if (dlen < 1e-12) return 0;
+
+    // cos(theta) = dot / (|l||d|)
+    double cos = (lx * dx + ly * dy) / (llen * dlen);
+    cos = Math.Max(-1.0, Math.Min(1.0, cos));
+
+    return Math.Acos(cos) * 180.0 / Math.PI; // 0..180
+}
         private static CornerResult SelectBestPairFromRuns_WithDebug(
     List<Seg> runs, Size imgSize,
-    double targetDeg, double tolDeg, LineEdge dbg)
+    double targetDeg, double tolDeg, LineEdge dbg, float MinInlierA, float MinInlierB)
         {
             var best = new CornerResult { Found = false };
             if (runs.Count < 2) { dbg.Best = best; return best; }
@@ -660,23 +779,68 @@ namespace BeeCore
 
                     if (better)
                     {
+                        double ang1 = AngleDegFromVector(A.Line.Vx, A.Line.Vy);
+                        double ang2 = AngleDegFromVector(B.Line.Vx, B.Line.Vy);
+
+                        // ÉP QUY ƯỚC:
+                        // LineA = ngang, LineB = dọc
+                        Seg lineA = A;
+                        Seg lineB = B;
+                        double angA = ang1;
+                        double angB = ang2;
+                     
+                        if (!IsHorizontal(ang1) && IsHorizontal(ang2))
+                        {
+                            // swap
+                            lineA = B;
+                            lineB = A;
+                            angA = ang2;
+                            angB = ang1;
+                        }
+                        SideLR sideA = GetLineA_SideOf_LineB(lineA.Line, P);
+                        SideTB sideB = GetLineB_SideOf_LineA( lineB.Line, P);
                         bestMinCnt = minCnt;
                         bestSumCnt = sumCnt;
                         bestMinLen = minLen;
                         bestDev = dev;
                         bestScore = score;
-
-                        best = new CornerResult
+                        if (A.Len < MinInlierA || B.Len < MinInlierB)
                         {
-                            Found = true,
-                            L1 = A.Line,
-                            L2 = B.Line,
-                            Corner = P,
-                            AngleDeg = ang,
-                            Inliers1 = A.Count,
-                            Inliers2 = B.Count,
-                            Score = score
-                        };
+                            best = new CornerResult
+                            {
+                                Found = false,
+                                L1 = A.Line,
+                                L2 = B.Line,
+                                Corner = P,
+                                AngleDeg = ang,
+                                Inliers1 =(float) A.Len,
+                                Inliers2 = (float)B.Len,
+                                Score = score,
+                                AngleLineA_Deg = angA,
+                                AngleLineB_Deg = angB,
+                                  LineA_SideOf_LineB = sideA,   // 🔹 TRÁI / PHẢI
+                                LineB_SideOf_LineA = sideB,   // 🔹 TRÊN / DƯỚI
+                            };
+
+                        }
+                        else
+                        {
+                            best = new CornerResult
+                            {
+                                Found = true,
+                                L1 = A.Line,
+                                L2 = B.Line,
+                                Corner = P,
+                                AngleDeg = ang,
+                                Inliers1 =(float) A.Len,
+                                Inliers2 = (float)B.Len,
+                                Score = score,
+                                AngleLineA_Deg = angA,
+                                AngleLineB_Deg = angB,
+                                LineA_SideOf_LineB = sideA,   // 🔹 TRÁI / PHẢI
+                                LineB_SideOf_LineA = sideB,   // 🔹 TRÊN / DƯỚI
+                            };
+                        }
                     }
                 }
             }

@@ -54,7 +54,8 @@ namespace BeeGlobal
         //        }
         //    }, _cts.Token);
         //}
-        public bool IsPLC = false;
+        public TypeControler TypeControler = TypeControler.PLC;
+       
         public String AddRead = "D100";
         public String AddWrite = "D102";
         public float DelayTrigger = 1;
@@ -94,6 +95,8 @@ namespace BeeGlobal
         public int Baurate = 115200;
         public byte SlaveID=1;
         public bool IsBypass=true;
+       
+
         public ParaProtocol() {
             //if (AddRead == 0 && AddWrite == 0)
             //{
@@ -197,11 +200,31 @@ namespace BeeGlobal
         public StopBits StopBits = StopBits.Two;
         public int DataBit = 7;
         public bool DtrEnable, RtsEnable;
+        //hau
+        public List<PLCResult> PLCResults = new List<PLCResult>();
         private bool IsPressLive = false;
         public async Task<bool> Connect(  )
         {
             try
             {
+                if(TypeControler == TypeControler.PCI)
+                {
+                    IsConnected= PCI_Card.Connect();
+                    if (IsConnected)
+                    {
+                        PCI_Card.OnBitsRead += PCI_Card_OnBitsRead;
+                        PCI_Card.StartReadLoop();
+                        TimingUtils.EnableHighResolutionTimer();
+                    }
+                    else
+                    {
+                        Global.PLCStatus = PLCStatus.ErrorConnect;
+                        Global.StatusIO = StatusIO.NotConnect;
+                    }
+
+                    return IsConnected; 
+                   
+                }    
                 PlcClient = new PlcLib.PlcClient(
                 PlcBrand,
                 ConnectionType,
@@ -244,7 +267,7 @@ namespace BeeGlobal
                     Global.PLCStatus = PLCStatus.Ready;
                     Global.IsAllowReadPLC = true;
                     IO_Processing = IO_Processing.Reset;
-                 if(IsPLC)
+                 if(TypeControler==TypeControler.PLC)
                     {
                         timeAlive = new System.Windows.Forms.Timer();
                         timeAlive.Interval = 1000;
@@ -509,7 +532,47 @@ namespace BeeGlobal
             return IsConnected;
         }
 
-     
+        private void PCI_Card_OnBitsRead(bool obj)
+        {
+            if (obj)
+            {
+                if (Global.IsRun && Global.ParaCommon.IsExternal)
+                    if (AddressInput[(int)I_O_Input.Trigger] != -1)
+                    {
+                        int ix = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
+                        if (ix >= 0)
+                        {
+                            ParaBits[ix].Value = Convert.ToInt32(Convert.ToInt32( obj));
+                        }
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                        Global.TriggerInternal = false;
+                        Global.IsAllowReadPLC = false;
+                        if (Global.Config.IsOnlyTrigger)
+                        {
+                            switch (Global.TriggerNum)
+                            {
+                                case TriggerNum.Trigger0:
+                                    Global.TriggerNum = TriggerNum.Trigger1;
+                                    break;
+                                case TriggerNum.Trigger1:
+                                    Global.TriggerNum = TriggerNum.Trigger2;
+                                    break;
+                                case TriggerNum.Trigger2:
+                                    Global.TriggerNum = TriggerNum.Trigger3;
+                                    break;
+                                case TriggerNum.Trigger3:
+                                    Global.TriggerNum = TriggerNum.Trigger4;
+                                    break;
+
+                            }
+                        }
+                        else
+                            Global.TriggerNum = TriggerNum.Trigger1;
+                        Global.StatusProcessing = StatusProcessing.Trigger;
+                        IO_Processing = IO_Processing.Trigger;
+                    }
+            }
+        }
 
         private int numTimeOut=0;
         public void Disconnect()
@@ -615,6 +678,8 @@ namespace BeeGlobal
         public IO_Processing _IO_Processing = IO_Processing.None;
         [NonSerialized]
         private  SemaphoreSlim _ioLock = new SemaphoreSlim(1, 1);
+
+
         public IO_Processing IO_Processing
         {
             get => _IO_Processing;
@@ -677,23 +742,58 @@ namespace BeeGlobal
             Global.StatusIO = StatusIO.Writing;
             switch (_IO_Processing)
             {
-               
+                case IO_Processing.SendValue:
+                    foreach(PLCResult pLCResult in PLCResults)
+                    {
+                        switch(pLCResult.ValuePLC)
+                        {
+                            case ValuePLC.TotalOK:
+                              await  WriteResultFloat(pLCResult.Add, Global.Config.SumOK);
+                                break;
+                            case ValuePLC.TotalNG:
+                                await WriteResultFloat(pLCResult.Add, Global.Config.SumNG);
+                                break;
+                            case ValuePLC.Total:
+                                await WriteResultFloat(pLCResult.Add, Global.Config.SumTime);
+                                break;
+                            case ValuePLC.Cycle:
+                                await WriteResultFloat(pLCResult.Add, Global.Config.TotalTime);
+                                break;
+                        }
+                        
+                    }    
+                    break;
                 case IO_Processing.Trigger:
                   
                     switch(Global.TriggerNum)
                     {
+                      
                         case TriggerNum.Trigger1:
+                           
                             if (DelayTrigger == 0)
                             {
                                 Global.StatusMode = StatusMode.Once;
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
+                            if(TypeControler == TypeControler.PCI)
+                            {
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trigger", "OK"));
+
+                                PCI_Card.Write(PCI_Write.LightON);
+                                if (DelayTrigger > 0)
+                                {
+                                    await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                                    Global.StatusMode = StatusMode.Once;
+                                    Global.StatusProcessing = StatusProcessing.Read;
+                                }
+                                break;
+                            }    
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                            if(!IsPLC)
+                            if(TypeControler==TypeControler.IO)
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetLight(true);
                             await WriteOutPut();
-                            if (IsPLC)
+                            if (TypeControler == TypeControler.PLC)
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             if (DelayTrigger > 0)
                             {
@@ -870,8 +970,16 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
-                  
-                   
+
+                    if (TypeControler == TypeControler.PCI)
+                    {
+                        if (Global.TotalOK)
+                            PCI_Card.Write(PCI_Write.OK);
+                        else
+                            PCI_Card.Write(PCI_Write.NG);
+
+                        break;
+                    }
                     bool IsOK = Global.TotalOK;
                     bool IsByPass = true;
                     if(Global.Config.IsONNG)
@@ -1131,6 +1239,14 @@ namespace BeeGlobal
                    
                         break;
                 case IO_Processing.Light:
+                    if (TypeControler==TypeControler.PCI)
+                    {   if(Global.Config.IsOnLight)
+                             PCI_Card.Write(PCI_Write.LightON);
+                        else
+                            PCI_Card.Write(PCI_Write.LightOFF);
+                       
+                        break;
+                    }
                     SetLight(Global.Config.IsOnLight);
                     await WriteOutPut();
                     break;

@@ -3,11 +3,20 @@
 #include <GenApi/GenApi.h>
 #include <vcclr.h>
 #include <mutex>
+#include <atomic>
 
 using namespace PylonCli;
 using namespace Pylon;
 using namespace GenApi;
 using msclr::interop::marshal_as;
+std::atomic<int> _bufIndex{ 0 }; // 0=A, 1=B (buffer đã publish)
+CPylonImage* _bufA = nullptr;
+CPylonImage* _bufB = nullptr;
+CImageFormatConverter* _conv = nullptr;
+
+uint64_t _frameCount = 0;
+double _emaFps = 0.0;
+std::chrono::steady_clock::time_point _fpsLast;
 static long long RoundToStepClamp_I(long long desired, long long vmin, long long vmax, long long inc)
 {
     if (inc <= 0) inc = 1;
@@ -115,8 +124,12 @@ void Camera::ConfigureConverterForOutput() {
 
 // ===== Double-buffer =====
 CPylonImage* Camera::NextBuffer() { _bufIndex = (_bufIndex + 1) & 1; return _bufIndex ? _bufB : _bufA; }
-CPylonImage* Camera::CurrentBuffer() { return _bufIndex ? _bufB : _bufA; }
 
+CPylonImage* Camera::CurrentBuffer()
+{
+    int idx = _bufIndex.load(std::memory_order_acquire);
+    return (idx == 0) ? _bufA : _bufB;
+}
 // ===== Lifecycle =====
 Camera::Camera() { _latestImageMutex = gcnew System::Threading::Mutex();
 if (!_latestImage)
@@ -141,6 +154,68 @@ cli::array<String^>^ Camera::List() {
     }
     return out;
 }
+// MB/s  → bit/s
+int64_t MbpsToBit(int mb_per_s)
+{
+    return (int64_t)mb_per_s * 1024 * 1024 * 8;
+}
+
+// bit/s → MB/s
+int BitToMBps(int64_t bit)
+{
+    return (int)(bit / 8 / 1024 / 1024);
+}
+struct CamBandwidth
+{
+    Pylon::CInstantCamera* cam;
+    int mbPerSec;   // ví dụ 42
+    bool enable;
+};
+bool ApplyBandwidth(Pylon::CInstantCamera* cam, int mbPerSec)
+{
+    try {
+        if (!cam)
+            return false;
+
+        if (cam->IsGrabbing())
+            cam->StopGrabbing();
+
+        if (!cam->IsOpen())
+            cam->Open();
+
+        auto& nm = cam->GetNodeMap();
+
+        // Enable limit
+        if (CBooleanPtr p = nm.GetNode("DeviceLinkThroughputLimitMode"))
+            if (IsWritable(p)) p->SetValue(true);
+
+        // Set limit
+        CIntegerPtr limit = nm.GetNode("DeviceLinkThroughputLimit");
+        if (!limit || !IsWritable(limit))
+            return false;
+
+        int64_t bits = MbpsToBit(mbPerSec);
+        bits = (std::max)(limit->GetMin(), (std::min)(limit->GetMax(), bits));
+        limit->SetValue(bits);
+
+        // Packet size (giống Pylon Viewer)
+        if (CIntegerPtr p = nm.GetNode("GevSCPSPacketSize"))
+            if (IsWritable(p)) p->SetValue(900);
+    }
+    catch (const GenericException& e)
+    {
+        Console::WriteLine(e.GetDescription());
+    }
+    catch (const std::exception& e) { 
+        Console::WriteLine(gcnew String(e.what()));
+        
+    }
+    return true;
+}
+
+
+
+int valueBandwidth = 0;
 
 void Camera::Open(System::String^ name) {
     try {
@@ -166,7 +241,50 @@ void Camera::Open(System::String^ name) {
 
         _cam = new CInstantCamera(tl.CreateDevice(picked));
         _cam->Open();
+       // auto& nm = _cam->GetNodeMap();
 
+        // 1️⃣ Set transport lại (giống reset)
+       /* if (auto p = GenApi::CIntegerPtr(nm.GetNode("GevSCPSPacketSize")))
+            if (IsWritable(p)) p->SetValue(900);
+
+        if (auto p = GenApi::CIntegerPtr(nm.GetNode("GevSCPD")))
+            if (IsWritable(p)) p->SetValue(2000);*/
+
+        //// 2️⃣ Warm-up grab vài frame
+        //_cam->StartGrabbing(5);
+        //// chờ grab xong (timeout để khỏi treo)
+        //int wait = 0;
+        //while (_cam->IsGrabbing() && wait < 200) // 200*10ms = 2s
+        //{
+        //    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        //    wait++;
+        //}
+
+        // 4️⃣ Hard reset stream
+        _cam->StartGrabbing();
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        _cam->StopGrabbing();
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+       
+
+       /* Console::WriteLine(_cam->GetDeviceInfo().GetModelName());
+        Console::WriteLine(_cam->GetDeviceInfo().GetDeviceClass());*/
+
+     
+        //auto& nm = _cam->GetNodeMap();
+
+        //if (CBooleanPtr en = nm.GetNode("AcquisitionFrameRateEnable"))
+        //    if (IsWritable(en)) 
+        //        en->SetValue(true);
+
+        //if (CFloatPtr fps = nm.GetNode("AcquisitionFrameRateAbs"))
+        //    if (IsWritable(fps))
+        //    {
+        //        fps->SetValue(40.0); // ví dụ 10 fps
+        //        fps->SetValue(40.0); // ví dụ 10 fps
+
+        //    }
+        //       
         _conv = new CImageFormatConverter();
         ConfigureConverterForOutput();
 
@@ -179,7 +297,42 @@ void Camera::Open(System::String^ name) {
     catch (const GenericException& e) { _lastError = gcnew String(e.GetDescription()); }
     catch (const std::exception& e) { _lastError = gcnew String(e.what()); }
 }
+bool Camera::SetFps(float microseconds)
+{
+    try {
+        auto& nm = _cam->GetNodeMap();
 
+        if (CBooleanPtr en = nm.GetNode("AcquisitionFrameRateEnable"))
+            if (IsWritable(en))
+                en->SetValue(true);
+
+        if (CFloatPtr fps = nm.GetNode("AcquisitionFrameRateAbs"))
+            if (IsWritable(fps))
+            {
+                fps->SetValue(microseconds); // ví dụ 10 fps
+                _lastError = "";
+                // 2️⃣ Packet size = max
+                if (auto p = GenApi::CIntegerPtr(nm.GetNode("GevSCPSPacketSize")))
+                    if (IsWritable(p)) p->SetValue(p->GetMax());
+
+                // 3️⃣ Inter-packet delay = 0
+                if (auto p = GenApi::CIntegerPtr(nm.GetNode("GevSCPD")))
+                    if (IsWritable(p)) p->SetValue(0);
+                return true;
+
+            }
+    }
+    catch (const GenericException& e) {
+        _lastError = gcnew String(e.GetDescription()); 
+        Console::WriteLine(_lastError);
+    
+    }
+    catch (const std::exception& e) {
+        _lastError = gcnew String(e.what());
+        Console::WriteLine(_lastError);
+    }
+    return false;
+}
 void Camera::Start() { Start(GrabMode::InternalLoop); }
 void Camera::Start(GrabMode mode) {
     try {
@@ -1019,6 +1172,38 @@ void Camera::GetExposure(float% min, float% max, float% step, float% current)
         return ;
     }
 }
+void Camera::GetFps(float% min, float% max, float% step, float% current)
+{
+    min = max = step = current = 0.0f;
+    _lastError = "";
+
+    try {
+        INodeMap& nm = _cam->GetNodeMap();
+
+        // 1) Tắt auto (nếu có) để đọc/ghi ổn định
+        if (CEnumerationPtr expAuto = nm.GetNode("ExposureAuto")) {
+            if (IsWritable(expAuto)) expAuto->FromString("Off");
+        }
+
+        // 2) Ưu tiên node float chuẩn: ExposureTime (µs)
+        CFloatPtr f = nm.GetNode("AcquisitionFrameRateAbs");
+        if (f && IsReadable(f)) {
+            min = static_cast<float>(f->GetMin());
+            max = static_cast<float>(f->GetMax());
+            current = static_cast<float>(f->GetValue());
+            step = (f->HasInc() ? static_cast<float>(f->GetInc()) : 0.0f); // 0.0 = liên tục
+            return;
+        }
+     
+
+        _lastError = "ExposureTime node not found/readable";
+        return;
+    }
+    catch (const GenICam::GenericException& e) {
+        _lastError = gcnew System::String(e.GetDescription());
+        return;
+    }
+}
 void Camera::GetGain(float% min, float% max, float% step, float% current)
 {
     // reset output
@@ -1317,56 +1502,45 @@ void Camera::GetOffsetY(float% min, float% max, float% step, float% current)
         _lastError = "GetOffsetY(min/max) fail";
     }
 }
+// ====================== MEMBERS ======================
 
 // ===== InternalLoop bridge =====
-void Camera::ProcessGrabbed(const CGrabResultPtr& ptr) {
-   
-    try {
-        int next = (_bufIndex == 0) ? 1 : 0;
-        CPylonImage* target = (next == 0) ? _bufA : _bufB;
-        _conv->Convert(*target, ptr);
-        _bufIndex = next;  // Atomic nếu cần thread-safe tuyệt đối
-        _frameCount++;
-        auto now = std::chrono::steady_clock::now();
-                std::chrono::duration<double> elapsed = now - _lastFrameTime;
-                if (elapsed.count() >= 1.0) {
-                    _emaFps = _frameCount / elapsed.count();
-                    _frameCount = 0;
-                    _lastFrameTime = now;
-                }
-    }
-    catch (...) {
-        _lastError = "ProcessGrabbed error";
-    }
-   
-   
-    //_latestImageMutex->WaitOne();
-    //try {
-    //    CPylonImage* dst = NextBuffer();
-    //    _conv->Convert(*dst, ptr);
+void Camera::ProcessGrabbed(const CGrabResultPtr& ptr)
+{
+    if (!ptr || !ptr->GrabSucceeded())
+        return;
 
-    //    int w = (int)dst->GetWidth();
-    //    int h = (int)dst->GetHeight();
-    //    int ch = _activeChannels;
-    //    int stride = w * ch; // packed Mono8/BGR8
+    int cur = _bufIndex.load(std::memory_order_relaxed);
+    int next = cur ^ 1;
 
-    //    if (_frameReadyHandlers != nullptr) {
-    //        _frameCount++;
-    //        System::IntPtr buffer((unsigned char*)dst->GetBuffer()); // uchar*
-    //        FrameReady(buffer, w, h, stride, ch);
-    //        auto now = std::chrono::steady_clock::now();
-    //        std::chrono::duration<double> elapsed = now - _lastFrameTime;
-    //        if (elapsed.count() >= 1.0) {
-    //            _emaFps = _frameCount / elapsed.count();
-    //            _frameCount = 0;
-    //            _lastFrameTime = now;
-    //        }
-    //    }
-    //    _lastError = nullptr;
-    //}
-    //catch (...) { _lastError = "ProcessGrabbed error"; }
+    CPylonImage* target = (next == 0) ? _bufA : _bufB;
+
+    // Convert vào buffer chưa publish
+    _conv->Convert(*target, ptr);
+
+    // Publish buffer mới (SAU convert)
+    _bufIndex.store(next, std::memory_order_release);
+
+    // FPS count – CHỈ khi có frame thật
+    _frameCount++;
+
+    auto now = std::chrono::steady_clock::now();
+    double dt = std::chrono::duration<double>(now - _lastFrameTime).count();
+    
+  
+    if (dt>= 1.0) {
+        _emaFps = _frameCount / dt;
+        _frameCount = 0;
+        _lastFrameTime = now;
+    }
+  /*  if (dt >= 0.5)
+    {
+        double instFps = _frameCount / dt;
+        _emaFps = (_emaFps <= 0) ? instFps : (_emaFps * 0.9 + instFps * 0.1);
+        _frameCount = 0;
+        _fpsLast = now;
+    }*/
 }
-
 // ===== UserLoop API (uchar* qua IntPtr) =====
 System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% stride, int% channels)
 {
@@ -1449,31 +1623,35 @@ System::IntPtr Camera::GrabOneUcharPtr(int timeoutMs, int% w, int% h, int% strid
     catch (...) { _lastError = "GrabOneUcharPtr unknown error"; }
 
     return System::IntPtr::Zero;
-}System::IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
+}
+IntPtr Camera::CopyLatestImage(int% w, int% h, int% stride, int% channels)
 {
     w = h = stride = channels = 0;
-    CPylonImage* src = (_bufIndex == 0) ? _bufB : _bufA;
-    if (!src || !src->IsValid()) {
-        _lastError = "No valid image";
-        return System::IntPtr::Zero;
+
+    CPylonImage* src = CurrentBuffer();   // ✅ buffer đã ổn định
+    if (!src || !src->IsValid() || !src->GetBuffer())
+        return IntPtr::Zero;
+
+    size_t size = src->GetImageSize();
+    unsigned char* clone = nullptr;
+
+    try
+    {
+        clone = new unsigned char[size];
+        memcpy(clone, src->GetBuffer(), size);
+
+        w = (int)src->GetWidth();
+        h = (int)src->GetHeight();
+        channels = 1; // Mono8
+        stride = w * channels;
+
+        return IntPtr(clone);
     }
-
-    size_t imgSize = src->GetImageSize();
-    if (imgSize == 0 || !src->GetBuffer()) {
-        _lastError = "Invalid buffer";
-        return System::IntPtr::Zero;
+    catch (...)
+    {
+        if (clone) delete[] clone;
+        return IntPtr::Zero;
     }
-
-    // === CHỈNH ĐÚNG NGUYÊN TẮC: cấp phát vùng nhớ mới ===
-    unsigned char* clone = new unsigned char[imgSize];
-    memcpy(clone, src->GetBuffer(), imgSize);
-
-    w = (int)src->GetWidth();
-    h = (int)src->GetHeight();
-    channels = _activeChannels;
-    stride = w * channels;
-
-    return System::IntPtr(clone);
 }
 void Camera::FreeImage(System::IntPtr p)
 {
@@ -1584,18 +1762,31 @@ void Camera::FreeImage(System::IntPtr p)
 //
 //    return System::IntPtr::Zero;
 //}
+System::IntPtr Camera::GrabLatestUcharPtr(
+    int% w, int% h, int% stride, int% ch)
+{
+    CPylonImage* src = CurrentBuffer();
+    if (!src || !src->GetBuffer()) return IntPtr::Zero;
 
-System::IntPtr Camera::GrabLatestUcharPtr(int% w, int% h, int% stride, int% channels) {
-    w = h = stride = channels = 0;
-    CPylonImage* cur = CurrentBuffer();
-    if (!cur || !cur->IsValid() || !cur->GetBuffer()) { _lastError = "No latest frame"; return System::IntPtr::Zero; }
-    w = (int)cur->GetWidth();
-    h = (int)cur->GetHeight();
-    channels = _activeChannels;
-    stride = w * channels; // packed
-    _lastError = nullptr;
-    return System::IntPtr((unsigned char*)cur->GetBuffer()); // uchar*
+    w = (int)src->GetWidth();
+    h = (int)src->GetHeight();
+    ch = 1;
+    stride = w * ch;
+
+    return System::IntPtr((void*)src->GetBuffer()); // ❗ zero-copy
 }
+//
+//System::IntPtr Camera::GrabLatestUcharPtr(int% w, int% h, int% stride, int% channels) {
+//    w = h = stride = channels = 0;
+//    CPylonImage* cur = CurrentBuffer();
+//    if (!cur || !cur->IsValid() || !cur->GetBuffer()) { _lastError = "No latest frame"; return System::IntPtr::Zero; }
+//    w = (int)cur->GetWidth();
+//    h = (int)cur->GetHeight();
+//    channels = _activeChannels;
+//    stride = w * channels; // packed
+//    _lastError = nullptr;
+//    return System::IntPtr((unsigned char*)cur->GetBuffer()); // uchar*
+//}
 double Camera::GetMeasuredFps()
 {
     return _emaFps; // sẽ >0 sau khi có vài frame

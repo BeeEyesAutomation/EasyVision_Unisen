@@ -185,12 +185,6 @@
       <DependentUpon>FormActive.cs</DependentUpon>
     </Compile>
     <Compile Include="GoogleDriveDllManager.cs" />
-    <Compile Include="GeneralSetting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GeneralSetting.Designer.cs">
-      <DependentUpon>GeneralSetting.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -348,9 +342,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\FormActive.resx">
       <DependentUpon>FormActive.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GeneralSetting.resx">
-      <DependentUpon>GeneralSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\AddFilters.resx">
       <DependentUpon>AddFilters.cs</DependentUpon>
@@ -554,6 +545,8 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\EASY_LONG.png" />
+    <None Include="Resources\EASY1.png" />
     <None Include="Resources\Long.png" />
     <None Include="Resources\Small5.png" />
     <None Include="Resources\Small4.png" />

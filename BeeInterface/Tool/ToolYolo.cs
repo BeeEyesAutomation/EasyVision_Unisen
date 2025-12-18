@@ -114,7 +114,11 @@ namespace BeeInterface
                 trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
                 trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
                 numEpoch.Value = Propety.Epoch;
-               
+               btnMergeBox.IsCLick=Propety.FilterBox==FilterBox.Merge?true:false;
+                btnRemoveBox.IsCLick = Propety.FilterBox == FilterBox.Remove ? true : false;
+                btnNoneBox.IsCLick = Propety.FilterBox == FilterBox.None ? true : false;
+                AdjOverLap.Enabled= Propety.FilterBox == FilterBox.None ? false : true;
+                AdjOverLap.Value = Propety.ThreshOverlap;
                 switch (Propety.Compare)
                 {
                     case Compares.Equal:
@@ -193,11 +197,6 @@ namespace BeeInterface
         private void rjButton8_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void btnCropRect_Click(object sender, EventArgs e)
-        {
-          
         }
 
         private void btnCropArea_Click(object sender, EventArgs e)
@@ -1348,6 +1347,34 @@ namespace BeeInterface
         private void btnString_Click(object sender, EventArgs e)
         {
            // Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeSendPLC = TypeSendPLC.String;
+        }
+
+        private void btnMergeBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = FilterBox.Merge;
+            AdjOverLap.Enabled = true;
+        }
+
+        private void btnRemoveBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = FilterBox.Remove;
+            AdjOverLap.Enabled = true;
+        }
+
+        private void dashboardLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnNoneBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = FilterBox.None;
+            AdjOverLap.Enabled = false;
+        }
+
+        private void AdjOverLap_ValueChanged(float obj)
+        {
+            Propety.ThreshOverlap = AdjOverLap.Value;
         }
     }
 }
