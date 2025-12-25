@@ -382,7 +382,7 @@ namespace BeeInterface
             base.Dispose(disposing);
         }
      
-        // ======================= Region & Border Path ===========================
+        // == Region & Border Path ======
         private void UpdateRegionPaths()
         {
             if (_pathSurface != null) { _pathSurface.Dispose(); _pathSurface = null; }

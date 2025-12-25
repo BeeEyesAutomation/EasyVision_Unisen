@@ -30,7 +30,6 @@ namespace BeeInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProtocolPLC));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.layIn = new System.Windows.Forms.TableLayoutPanel();
@@ -2941,7 +2940,6 @@ namespace BeeInterface
             this.btnEditPLC.AutoImageTint = true;
             this.btnEditPLC.BackColor = System.Drawing.SystemColors.Control;
             this.btnEditPLC.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.btnEditPLC.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEditPLC.BackgroundImage")));
             this.btnEditPLC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnEditPLC.BorderColor = System.Drawing.Color.Transparent;
             this.btnEditPLC.BorderRadius = 5;
@@ -2996,7 +2994,6 @@ namespace BeeInterface
             this.btnDeletePLC.AutoImageTint = true;
             this.btnDeletePLC.BackColor = System.Drawing.SystemColors.Control;
             this.btnDeletePLC.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.btnDeletePLC.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDeletePLC.BackgroundImage")));
             this.btnDeletePLC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnDeletePLC.BorderColor = System.Drawing.Color.Transparent;
             this.btnDeletePLC.BorderRadius = 5;
@@ -3051,7 +3048,6 @@ namespace BeeInterface
             this.btnAddPLC.AutoImageTint = true;
             this.btnAddPLC.BackColor = System.Drawing.SystemColors.Control;
             this.btnAddPLC.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.btnAddPLC.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddPLC.BackgroundImage")));
             this.btnAddPLC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnAddPLC.BorderColor = System.Drawing.Color.Transparent;
             this.btnAddPLC.BorderRadius = 5;
@@ -4955,7 +4951,7 @@ namespace BeeInterface
 
         #endregion
         private System.Windows.Forms.ComboBox cbIn0;
-        private  System.Windows.Forms.TableLayoutPanel layIn;
+        private System.Windows.Forms.TableLayoutPanel layIn;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbIn4;
         private System.Windows.Forms.Label label24;
@@ -4974,7 +4970,7 @@ namespace BeeInterface
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
-        private  System.Windows.Forms.TableLayoutPanel layOut;
+        private System.Windows.Forms.TableLayoutPanel layOut;
         private System.Windows.Forms.ComboBox cbO7;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.ComboBox cbO6;

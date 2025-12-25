@@ -236,7 +236,7 @@ namespace    BeeCore
             }
         }
 
-        // ============ PRIVATE: EXPORT SUPPORT ============
+        // ===== PRIVATE: EXPORT SUPPORT =====
 
         private static void WriteFolderRecursive(TarWriter tar, string baseFolder, string currentFolder)
         {
@@ -264,7 +264,7 @@ namespace    BeeCore
             }
         }
 
-        // ============ PRIVATE: IMPORT SUPPORT ============
+        // ===== PRIVATE: IMPORT SUPPORT =====
 
         private static void ExtractFile(FileStream fs, string path, long size)
         {
@@ -306,7 +306,7 @@ namespace    BeeCore
             return Convert.ToInt64(s, 8);
         }
 
-        // ============ PRIVATE: TAR WRITER CLASS ============
+        // ===== PRIVATE: TAR WRITER CLASS =====
 
         private sealed class TarWriter : IDisposable
         {

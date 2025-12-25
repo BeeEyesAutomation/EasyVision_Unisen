@@ -60,7 +60,7 @@ public class LogNetManagment
 			{
 			}
 			stringBuilder.Append(Environment.NewLine);
-			stringBuilder.Append("\u0002/=================================================[    Exception    ]================================================/");
+			stringBuilder.Append("\u0002/[    Exception    ]======/");
 		}
 		try
 		{

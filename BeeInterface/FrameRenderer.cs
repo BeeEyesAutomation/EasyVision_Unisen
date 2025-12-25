@@ -51,7 +51,7 @@ namespace BeeInterface
                 ?.SetValue(c, true, null);
         }
 
-        /// ========== API chính ==========
+        /// === API chính ===
         public void RenderAndDisplay(Mat raw)
         {
             if (_disposed) return;
@@ -166,7 +166,7 @@ namespace BeeInterface
         /// Lưu ảnh hiện tại (không block render)
    
 
-        /// ========== Helper tối ưu ==========
+        /// === Helper tối ưu ===
         // Đảm bảo Mat 8UC3 (BGR). Trả về NEW Mat nếu cần, còn nếu working đã 8UC3 thì trả working.Clone() để tránh share data.
         private static Mat EnsureBgr8Uc3(Mat working)
         {
@@ -247,7 +247,7 @@ namespace BeeInterface
                 if (data != null) dstBmp.UnlockBits(data);
             }
         }
-        /// ========== Shutdown ==========
+        /// === Shutdown ===
         public void Dispose()
         {
             if (_disposed) return;

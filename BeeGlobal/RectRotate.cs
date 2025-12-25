@@ -120,7 +120,7 @@ namespace BeeGlobal
 
         public RectRotate Clone() => new RectRotate(this);
 
-        // ============= NEW: reset sạch trước khi bắt đầu polygon mới =============
+        // ====== NEW: reset sạch trước khi bắt đầu polygon mới ======
         public void ResetFrameForNewPolygonHard()
         {
             _PosCenter = PointF.Empty;
@@ -134,7 +134,7 @@ namespace BeeGlobal
             IsPolygonClosed = false;
         }
 
-        // ===================== HEXAGON =====================
+        //  HEXAGON 
         public PointF[] GetHexagonVerticesLocal()
         {
             const float SQ3_2 = 0.8660254037844386f;
@@ -234,7 +234,7 @@ namespace BeeGlobal
             changeRectCenterRotation?.Invoke();
         }
 
-        // ===================== POLYGON =====================
+        //  POLYGON 
         public void PolygonClear()
         {
             if (PolyLocalPoints == null) PolyLocalPoints = new List<PointF>(16);
@@ -412,7 +412,7 @@ namespace BeeGlobal
             _rect = new RectangleF(-w / 2f, -h / 2f, w, h);
         }
 
-        // ===================== Refit (khi cần) =====================
+        //  Refit (khi cần) 
         public void RefitBoundsToPolygon()
         {
             if (PolyLocalPoints == null || PolyLocalPoints.Count == 0) return;
@@ -475,7 +475,7 @@ namespace BeeGlobal
             }
         }
 
-        // ===================== Utils & Maintenance =====================
+        //  Utils & Maintenance 
         public void Clear()
         {
             if (Shape == ShapeType.Polygon)
@@ -521,7 +521,7 @@ namespace BeeGlobal
 
         public static PointF Add(PointF a, PointF b) => new PointF(a.X + b.X, a.Y + b.Y);
 
-        // ===================== Shape conversions =====================
+        //  Shape conversions 
         public void ConvertToPolygonAutoBounds(int ellipseSegments = 32, bool close = true, bool autoOrient = false)
         {
             List<PointF> pts = new List<PointF>(64);

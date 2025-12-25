@@ -4,7 +4,7 @@
 using namespace cv;
 using namespace BeeCpp;
 using namespace std;
-/* ================= Raw buffer utils ================= */
+/* === Raw buffer utils === */
 int CommonPlus::CvTypeFromChannels(int ch)
 {
     switch (ch)
@@ -21,7 +21,7 @@ size_t CommonPlus::SafeStep(int w, int ch, int stride)
     return static_cast<size_t>(w) * static_cast<size_t>(ch); // 8-bit/channel giả định
 }
 
-/* ================= API cho C# ================= */
+/* === API cho C# === */
 IntPtr CommonPlus::CropRotatedRect(
     IntPtr srcMatCvPtr, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly)
 {
@@ -135,7 +135,7 @@ void CommonPlus::FreeMat(IntPtr p)
     delete m;
 }
 
-/* ================= Helpers lõi ================= */
+/* === Helpers lõi === */
 
 cv::Mat CommonPlus::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
 {

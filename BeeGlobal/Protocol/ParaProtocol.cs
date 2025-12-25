@@ -49,8 +49,8 @@ namespace BeeGlobal
         //    {
         //        while (!_cts.Token.IsCancellationRequested)
         //        {
-        //           await DoWork();                            // ========== Công việc chính
-        //          //  await Task.Delay(timeRead, _cts.Token);  // ========== Chờ 1s (1000 ms)
+        //           await DoWork();                            // === Công việc chính
+        //          //  await Task.Delay(timeRead, _cts.Token);  // === Chờ 1s (1000 ms)
         //        }
         //    }, _cts.Token);
         //}

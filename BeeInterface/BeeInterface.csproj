@@ -366,6 +366,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProtocolPLC.resx">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="StepEdit.resx">
       <DependentUpon>StepEdit.cs</DependentUpon>
@@ -458,7 +459,7 @@
       <Name>BeeCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\BeeGlobal\BeeGlobal.csproj">
-      <Project>{8CAF143E-0DE7-4856-B0B8-FD22932A3C22}</Project>
+      <Project>{8caf143e-0de7-4856-b0b8-fd22932a3c22}</Project>
       <Name>BeeGlobal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Pattern\Pattern.vcxproj">

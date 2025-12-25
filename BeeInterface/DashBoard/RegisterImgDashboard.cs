@@ -15,9 +15,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace BeeInterface
 {
-    // =========================
+    // ====
     // EventArgs cho sự kiện chọn item
-    // =========================
+    // ====
     public sealed class RegisterImgSelectionChangedEventArgs : EventArgs
     {
         /// <summary>Tên ảnh được chọn.</summary>
@@ -33,9 +33,9 @@ namespace BeeInterface
         }
     }
 
-    // =========================
+    // ====
     // Model ảnh — chỉ giữ Mat và Name
-    // =========================
+    // ====
     public sealed class ImgItem : IDisposable
     {
         public string Name { get; set; }
@@ -62,9 +62,9 @@ namespace BeeInterface
         public override string ToString() => Name;
     }
 
-    // =========================
+    // ====
     // UI thumbnail + tên + inline rename
-    // =========================
+    // ====
     public class ImageThumbControl : Control
     {
         public ImgItem Item { get; private set; }
@@ -251,9 +251,9 @@ namespace BeeInterface
         }
     }
 
-    // =========================
+    // ====
     // Dashboard
-    // =========================
+    // ====
     public class RegisterImgDashboard : UserControl
     {
         private bool _hideTopBar = false;

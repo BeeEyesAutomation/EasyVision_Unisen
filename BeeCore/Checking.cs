@@ -26,7 +26,7 @@ namespace BeeCore
             {
                 while (!_cts.Token.IsCancellationRequested)
                 {
-                    ProcessingAll();                            // ========== Công việc chính
+                    ProcessingAll();                            // === Công việc chính
                     if (StatusProcessing == StatusProcessing.Done)
                     {
                      //   BeeCore.Common.listCamera[indexThread].DrawResult();
@@ -107,6 +107,7 @@ namespace BeeCore
                         dynamic Propety = BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety;
 
 
+
                         if (Global.Config.IsAutoTrigger)
                         {
                             if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
@@ -116,6 +117,17 @@ namespace BeeCore
                             }
 
                         }
+
+                     //if (Global.StatusMode==StatusMode.Continuous)
+                     //   {
+                     //       if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
+                     //       {
+                     //           StatusProcessing = StatusProcessing.Done;
+                     //           return StatusProcessing;
+                     //          }   
+                              
+                     //   }    
+
                         if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
                         {
                             if (Global.rotOriginAdj == null) return StatusProcessing;

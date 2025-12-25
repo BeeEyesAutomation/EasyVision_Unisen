@@ -238,9 +238,9 @@ using System.Threading.Tasks;
             Cv2.BitwiseOr(a, b, outMat);
             return outMat;
         }
-        // ================================
+        // ====
         // HÀM LỌC CHÍNH
-        // ================================
+        // ====
         public static List<ResultItem> FilterRectRotate(
                 IList<ResultItem> list,
                 float threshold)
@@ -308,18 +308,18 @@ using System.Threading.Tasks;
             }
 
 
-            // ================================
+            // ====
             // HELPER TÍNH DIỆN TÍCH RECTROTATE
-            // ================================
+            // ====
             private static float GetArea(RectRotate r)
             {
                 return Math.Abs(r._rect.Width * r._rect.Height);
             }
 
 
-            // ================================
+            // ====
             // LẤY 4 GÓC RECT XOAY
-            // ================================
+            // ====
             //private static List<PointF> GetWorldPoly(RectRotate r)
             //{
             //    float w = r._rect.Width;
@@ -387,9 +387,9 @@ using System.Threading.Tasks;
             }
 
 
-            // ================================
+            // ====
             // POLYGON – DIỆN TÍCH SHOELACE
-            // ================================
+            // ====
             private static float PolygonArea(IList<PointF> poly)
             {
                 double sum = 0;
@@ -403,9 +403,9 @@ using System.Threading.Tasks;
             }
 
 
-            // ================================
+            // ====
             // CLIP POLYGON – TÍNH GIAO 2 RECT XOAY
-            // ================================
+            // ====
             private static float Cross(PointF a, PointF b, PointF p)
             {
                 return (b.X - a.X) * (p.Y - a.Y) -

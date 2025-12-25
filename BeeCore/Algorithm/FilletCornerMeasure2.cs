@@ -12,7 +12,7 @@ namespace BeeCore.Algorithm
 
     public class FilletCornerMeasure2
     {
-        // ========= Config =========
+        // == Config ==
         public LinePairStrategy PairStrategy { get; set; } = LinePairStrategy.StrongPlusContourOrth;
         public double PerpAngleToleranceDeg { get; set; } = 1.0; // lọc tiếp tuyến gần vuông góc
         public double RansacThreshold { get; set; } = 2.0; // px
@@ -34,7 +34,7 @@ namespace BeeCore.Algorithm
         }
 
         
-        // ========= Local straightness config (to avoid picking circular tangent as an edge) =========
+        // == Local straightness config (to avoid picking circular tangent as an edge) ==
         public int    LocalWindow = 8;          // +/- points around candidate on the contour
         public double CurvThreshDeg = 8.0;      // local turn angle threshold
         public double StraightGain = 1.7;       // circleErr >= StraightGain * lineErr
@@ -168,7 +168,7 @@ public Line2D ToLine2D(LineAB L)
             public double ThetaBisector_Deg; // [0..360)
         }
         public int MaxLineCandidates = 4;
-        // ========= API chính =========
+        // == API chính ==
         public Result Measure(Mat image, Mat edges, bool debugDraw = false, AxisOption axis = AxisOption.Both, bool signedDistance = false)
         {
             Mat gray = image.Channels() == 1 ? image : image.CvtColor(ColorConversionCodes.BGR2GRAY);
@@ -221,7 +221,7 @@ public Line2D ToLine2D(LineAB L)
 
             if (cands.Count < 1) return new Result();
 
-            // ======= Chọn lineH & lineV theo chiến lược =======
+            //  Chọn lineH & lineV theo chiến lược 
             LineAB lineH = default, lineV = default;
             bool foundPair = false;
 
@@ -356,14 +356,14 @@ public Line2D ToLine2D(LineAB L)
 
             if (!foundPair) return new Result();
 
-            // ======= Giao điểm O =======
+            //  Giao điểm O 
             var O = Intersect(lineH, lineV);
 
-            // ======= CHUẨN HÓA PHÁP TUYẾN: luôn hướng từ O vào trong contour =======
+            //  CHUẨN HÓA PHÁP TUYẾN: luôn hướng từ O vào trong contour 
             lineH = EnsureNormalInwardsFromO(lineH, contour, O);
             lineV = EnsureNormalInwardsFromO(lineV, contour, O);
 
-            // ======= Tính phân giác từ 2 pháp tuyến đã chuẩn hoá =======
+            //  Tính phân giác từ 2 pháp tuyến đã chuẩn hoá 
             var nH = Normalize(new Point2f(lineH.A, lineH.B)); // đã hướng vào trong
             var nV = Normalize(new Point2f(lineV.A, lineV.B)); // đã hướng vào trong
             var u = Normalize(new Point2f(nH.X + nV.X, nH.Y + nV.Y));
@@ -495,7 +495,7 @@ public Line2D ToLine2D(LineAB L)
             };
         }
 
-        // ================== Helpers ==================
+        // ==== Helpers ====
         private static double Angle360FromVec(Point2f v)
         {
             double ang = Math.Atan2(v.Y, v.X) * 180.0 / Math.PI; // Y ảnh hướng xuống

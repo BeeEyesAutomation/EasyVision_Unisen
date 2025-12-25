@@ -218,7 +218,7 @@ public class HttpServer
 			StringBuilder stringBuilder = new StringBuilder();
 			if (LogHttpHeader)
 			{
-				stringBuilder.AppendLine("Header Request=======================");
+				stringBuilder.AppendLine("Header Request==");
 				if (request.Headers != null)
 				{
 					string[] allKeys = request.Headers.AllKeys;
@@ -231,12 +231,12 @@ public class HttpServer
 			}
 			if (LogHttpBody)
 			{
-				stringBuilder.AppendLine("Body Request=========================");
+				stringBuilder.AppendLine("Body Request====");
 				stringBuilder.AppendLine(Encoding.UTF8.GetString(data));
 			}
 			if (LogHttpHeader)
 			{
-				stringBuilder.AppendLine("Header Response =======================");
+				stringBuilder.AppendLine("Header Response ==");
 				if (response.Headers != null)
 				{
 					string[] allKeys2 = response.Headers.AllKeys;
@@ -266,7 +266,7 @@ public class HttpServer
 					}
 					if (LogHttpBody)
 					{
-						stringBuilder.AppendLine("Body Response ==========================");
+						stringBuilder.AppendLine("Body Response =====");
 						stringBuilder.AppendLine(ret_str);
 					}
 				}
@@ -276,7 +276,7 @@ public class HttpServer
 					await stream.WriteAsync(ret_bytes, 0, ret_bytes.Length);
 					if (LogHttpBody)
 					{
-						stringBuilder.AppendLine("Body Response ==========================");
+						stringBuilder.AppendLine("Body Response =====");
 						stringBuilder.AppendLine(SoftBasic.ByteToHexString(ret_bytes));
 					}
 				}

@@ -36,7 +36,9 @@ namespace BeeGlobal
         public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
         public bool IsSaveLog = false;
         public bool IsResetImg = false;
+
         public bool IsAutoTrigger = false;
+
         public ModeSaveProg ModeSaveProg = ModeSaveProg.Single;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
         public int FontSize = 16;

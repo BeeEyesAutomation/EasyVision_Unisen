@@ -1502,7 +1502,7 @@ void Camera::GetOffsetY(float% min, float% max, float% step, float% current)
         _lastError = "GetOffsetY(min/max) fail";
     }
 }
-// ====================== MEMBERS ======================
+// = MEMBERS =
 
 // ===== InternalLoop bridge =====
 void Camera::ProcessGrabbed(const CGrabResultPtr& ptr)

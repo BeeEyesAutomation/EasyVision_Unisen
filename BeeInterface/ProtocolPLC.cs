@@ -29,12 +29,12 @@ namespace BeeInterface
     public partial class ProtocolPLC : UserControl
     {
         List<String> OldIn = new List<string>(16);
-        List<String> OldOut= new List<string>(16);
-        
+        List<String> OldOut = new List<string>(16);
+
         public ProtocolPLC()
         {
             InitializeComponent();
-           
+
             OldIn = new string[16].ToList();
             OldOut = new string[16].ToList();
             cbCom.DataSource = SerialPort.GetPortNames();
@@ -56,7 +56,7 @@ namespace BeeInterface
             //    if (ctl is ComboBox cb)
             //        listCbOut.Add(cb);
             //}
-            cbIn0.DataSource= listIn[0];
+            cbIn0.DataSource = listIn[0];
             cbIn1.DataSource = listIn[1];
             cbIn2.DataSource = listIn[2];
             cbIn3.DataSource = listIn[3];
@@ -89,13 +89,13 @@ namespace BeeInterface
             cbO13.DataSource = listOut[13];
             cbO14.DataSource = listOut[14];
             cbO15.DataSource = listOut[15];
-            cbParity.DataSource= (Parity[])Enum.GetValues(typeof(Parity));
-            cbStopBits.DataSource= (StopBits[])Enum.GetValues(typeof(StopBits));
+            cbParity.DataSource = (Parity[])Enum.GetValues(typeof(Parity));
+            cbStopBits.DataSource = (StopBits[])Enum.GetValues(typeof(StopBits));
             cbDataBits.DataSource = new List<String> { "7", "8" };
-            if(Global.ParaCommon.Comunication.Protocol==null)
+            if (Global.ParaCommon.Comunication.Protocol == null)
             {
                 Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-            }    
+            }
             var ParaBits = Global.ParaCommon.Comunication.Protocol.ParaBits;
             nameOut[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
             nameOut[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
@@ -118,7 +118,7 @@ namespace BeeInterface
                 nameOut[15] = I_O_Output.Alive.ToString();
                 ParaBits.Add(new ParaBit(TypeIO.Output, I_O_Output.Alive, 15));
             }
-            nameInput[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty; 
+            nameInput[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
             nameInput[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
             nameInput[2] = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
             nameInput[3] = ParaBits.Find(x => x.Adddress == 3 && x.TypeIO == TypeIO.Input)?.I_O_Input.ToString() ?? string.Empty;
@@ -165,14 +165,14 @@ namespace BeeInterface
              new List<string>(), new List<string>(), new List<string>(), new List<string>()};
 
         // 3. Đổ tất cả enum chưa chọn vào ComboBox
-        private void RefreshComboBoxIn(int index ,String text)
+        private void RefreshComboBoxIn(int index, String text)
         {
 
             listIn[index] = new List<string>();
             List<String> list = new List<string>();
             foreach (I_O_Input io in Enum.GetValues(typeof(I_O_Input)))
             {
-             if(io!=I_O_Input.Alive)
+                if (io != I_O_Input.Alive)
                     listIn[index].Add(io.ToString());
             }
 
@@ -189,10 +189,10 @@ namespace BeeInterface
             }
 
         }
-      
-        public void ChangeDatasource(int ix,String i_O_Input)
+
+        public void ChangeDatasource(int ix, String i_O_Input)
         {
-            for(int i=0;i<15;i++)
+            for (int i = 0; i < 15; i++)
             {
                 if (ix == i) continue;
                 if (i_O_Input.ToString() == nameInput[i])
@@ -250,15 +250,15 @@ namespace BeeInterface
                             break;
 
                     }
-                  //  listCbIn[i].SelectedIndex = 0;
-                   // listCbIn[i].Text = "None";
-                   
-                }    
-                    
-            
-            }    
-           
-          
+                    //  listCbIn[i].SelectedIndex = 0;
+                    // listCbIn[i].Text = "None";
+
+                }
+
+
+            }
+
+
         }
         //private void RefreshComboBoxOut(ComboBox cb)
         //{
@@ -280,11 +280,12 @@ namespace BeeInterface
                 if (ix == i) continue;
                 if (i_O_Output.ToString() == nameOut[i])
                 {
-                  
+
                     Global.ParaCommon.Comunication.Protocol.RemoveOutPut(i, (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[i], ignoreCase: true));
-                  switch(i)
+                    switch (i)
                     {
-                        case 0:cbO0.Text= "None";
+                        case 0:
+                            cbO0.Text = "None";
                             break;
                         case 1:
                             cbO1.Text = "None";
@@ -331,20 +332,21 @@ namespace BeeInterface
                         case 15:
                             cbO15.Text = "None";
                             break;
-                        
-                    }    
+
+                    }
                     //listCbOut[i].SelectedIndex = 0;
                     //listCbOut[i].Text = "None";
-                   
+
                 }
-           
+
 
             }
 
 
         }
         public void RefreshValuePLC()
-        {if (IsPress) return;
+        {
+            if (IsPress) return;
             if (!this.Visible) return;
             if (Global.ParaCommon.Comunication.Protocol.valueInput.Length < 16) return;
             //foreach (Control c1 in LayIntput.Controls)
@@ -396,9 +398,9 @@ namespace BeeInterface
         int index = 0;
         private void tmShow_Tick(object sender, EventArgs e)
         {
-           // index++;
-           // if(Global.ParaCommon.Comunication.Protocol.valueInput!=null)
-           //Global.ParaCommon.Comunication.Protocol.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
+            // index++;
+            // if(Global.ParaCommon.Comunication.Protocol.valueInput!=null)
+            //Global.ParaCommon.Comunication.Protocol.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
 
         }
 
@@ -408,17 +410,17 @@ namespace BeeInterface
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-        //X: G.Header.tmReadPLC.Enabled = false;
-        //    if (G.Header.workPLC.IsBusy)
-        //    {
-        //        await Task.Delay(5);
-        //        goto X;
-        //    }
-int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
+            //X: G.Header.tmReadPLC.Enabled = false;
+            //    if (G.Header.workPLC.IsBusy)
+            //    {
+            //        await Task.Delay(5);
+            //        goto X;
+            //    }
+            int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
             await Task.Run(() => Global.ParaCommon.Comunication.Protocol.WriteInPut(numAdd, btn.IsCLick));
-            
-          //  G.Header.tmReadPLC.Enabled = true;
+
+            //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
@@ -426,17 +428,17 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         {
             IsPress = true;
             btn.Font = new Font("Arial", 14, FontStyle.Bold);
-        //X: G.Header.tmReadPLC.Enabled = false;
-        //    if (G.Header.workPLC.IsBusy)
-        //    {
-        //        await Task.Delay(5);
-        //        goto X;
-        //    }
+            //X: G.Header.tmReadPLC.Enabled = false;
+            //    if (G.Header.workPLC.IsBusy)
+            //    {
+            //        await Task.Delay(5);
+            //        goto X;
+            //    }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
             Global.ParaCommon.Comunication.Protocol.SetOutPut(numAdd, btn.IsCLick);
-            await Task.Run(() =>  Global.ParaCommon.Comunication.Protocol.WriteOutPut());
-           
-          //  G.Header.tmReadPLC.Enabled = true;
+            await Task.Run(() => Global.ParaCommon.Comunication.Protocol.WriteOutPut());
+
+            //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
             btn.Font = new Font("Arial", 14, FontStyle.Regular);
         }
@@ -451,7 +453,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             BtnWriteOutPLC((RJButton)sender);
         }
 
-      
+
         private void SettingPLC_Load(object sender, EventArgs e)
         {// 1) Khởi tạo và bind:
             try
@@ -464,9 +466,9 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbParity.Text = Global.ParaCommon.Comunication.Protocol.Parity.ToString();
                 cbStopBits.Text = Global.ParaCommon.Comunication.Protocol.StopBits.ToString();
                 cbDataBits.Text = Global.ParaCommon.Comunication.Protocol.DataBit.ToString();
-                
-                btnIO.IsCLick= Global.ParaCommon.Comunication.Protocol.TypeControler== TypeControler.IO? true : false;
-                btnIsPLC.IsCLick= Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+
+                btnIO.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.IO ? true : false;
+                btnIsPLC.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 cbO0.Text = nameOut[0];
                 cbO1.Text = nameOut[1];
                 cbO2.Text = nameOut[2];
@@ -485,8 +487,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbO15.Text = nameOut[15];
 
 
-              
-                
+
+
                 cbIn0.Text = nameInput[0];
                 cbIn1.Text = nameInput[1];
                 cbIn2.Text = nameInput[2];
@@ -504,13 +506,13 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                 cbIn14.Text = nameInput[14];
                 cbIn15.Text = nameInput[15];
                 tmOut.Value = Global.ParaCommon.Comunication.Protocol.timeOut;
-            timerRead.Value=Global.ParaCommon.Comunication.Protocol.timeRead;
-            cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
-            cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
-            numSlaveID.Value= Global.ParaCommon.Comunication.Protocol.SlaveID ;
-            txtAddRead.Text=Global.ParaCommon.Comunication.Protocol.AddRead;
-            txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
-                listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7 , DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
+                timerRead.Value = Global.ParaCommon.Comunication.Protocol.timeRead;
+                cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
+                cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
+                numSlaveID.Value = Global.ParaCommon.Comunication.Protocol.SlaveID;
+                txtAddRead.Text = Global.ParaCommon.Comunication.Protocol.AddRead;
+                txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
+                listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
                 listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
                 foreach (ParaBit paraIO in Global.ParaCommon.Comunication.Protocol.ParaBits)
                 {
@@ -528,16 +530,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     }
                 }
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Keyence)
-                btnKeyence.IsCLick = true;
+                    btnKeyence.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
                     btnMitsu.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi2)
                     btnMitsu2.IsCLick = true;
                 if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
                     btnRtu.IsCLick = true;
-               
+
                 txtIP.Text = Global.ParaCommon.Comunication.Protocol.sIP;
-                txtPort.Text =Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
+                txtPort.Text = Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
 
                 if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
                 {
@@ -550,8 +552,8 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     lbRTU2.Enabled = false;
                     lbTCP1.Enabled = true;
                     lbTCP2.Enabled = true;
-                }    
-                    
+                }
+
                 if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Serial)
                 {
                     btnSerial.IsCLick = true;
@@ -565,107 +567,107 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
                     lbTCP1.Enabled = false;
                     lbTCP2.Enabled = false;
                 }
-                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true; 
-                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false; 
+                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true;
+                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 btnMitsu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 btnDelta.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
-                layBrand.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true; 
+                layBrand.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 layComunication.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 laySetting.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-          
-           foreach(ParaBit paraIO in  Global.ParaCommon.Comunication.Protocol.ParaBits )
+
+            foreach (ParaBit paraIO in Global.ParaCommon.Comunication.Protocol.ParaBits)
             {
                 paraIO.ValueChanged += ParaIO_ValueChanged;
-                
-               
+
+
             }
-         
+
             btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
             Global.StatusIOChanged += Global_StatusIOChanged;
-         
+
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-              //  pComIO.Enabled = false;
+                //  pComIO.Enabled = false;
                 btnConectIO.IsCLick = true;
                 btnConectIO.Enabled = false;
-               // btnBypass.Enabled = true;
+                // btnBypass.Enabled = true;
             }
             else
             {
-             //   pComIO.Enabled = true;
+                //   pComIO.Enabled = true;
                 btnConectIO.IsCLick = false;
                 btnConectIO.Enabled = true;
-             //   btnBypass.Enabled = false;
+                //   btnBypass.Enabled = false;
             }
-         //   Global.ParaCommon.Comunication.Protocol.numReadChanged += IO_numReadChanged;
-          //  Global.ParaCommon.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
+            //   Global.ParaCommon.Comunication.Protocol.numReadChanged += IO_numReadChanged;
+            //  Global.ParaCommon.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
         }
 
-     
+
 
         private void Global_StatusIOChanged(StatusIO obj)
         {
             this.Invoke((Action)(() =>
             {
-              
+
                 if (obj == StatusIO.NotConnect)
                 {
-               
+
                     btnConectIO.IsCLick = false;
                     btnConectIO.Enabled = true;
-                  
-                }    
-               
+
+                }
+
                 StatusIObtn.Text = obj.ToString();
                 StatusIObtn.Refresh();
             }));
-         }
+        }
 
         private void ParaIO_ValueChanged(object arg1, int arg2)
         {
-            ParaBit paraIO =arg1 as ParaBit;
-            if(paraIO!=null)
-            this.Invoke((Action)(() =>
-            {
-                if (paraIO.TypeIO == TypeIO.Input)
+            ParaBit paraIO = arg1 as ParaBit;
+            if (paraIO != null)
+                this.Invoke((Action)(() =>
                 {
+                    if (paraIO.TypeIO == TypeIO.Input)
+                    {
 
-                    listLabelsIn[paraIO.Adddress].Text = arg2 + "";
-                    listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);
-                    listLabelsIn[paraIO.Adddress].Refresh();
-                }
-                else
-                {
-                    listLabelsOut[paraIO.Adddress].Text = arg2 + "";
-                    listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);// + "";
-                    listLabelsOut[paraIO.Adddress].Refresh();
-                }
-            }));
+                        listLabelsIn[paraIO.Adddress].Text = arg2 + "";
+                        listLabelsIn[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);
+                        listLabelsIn[paraIO.Adddress].Refresh();
+                    }
+                    else
+                    {
+                        listLabelsOut[paraIO.Adddress].Text = arg2 + "";
+                        listLabelsOut[paraIO.Adddress].IsCLick = Convert.ToBoolean(arg2);// + "";
+                        listLabelsOut[paraIO.Adddress].Refresh();
+                    }
+                }));
         }
 
-      
+
         List<RJButton> listLabelsIn = new List<RJButton>();
         List<RJButton> listLabelsOut = new List<RJButton>();
-      
 
-      
+
+
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-         await  Global.ParaCommon.Comunication.Protocol.Connect();
-        
+            await Global.ParaCommon.Comunication.Protocol.Connect();
+
         }
-       
+
 
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
         {
-           
-           //     this.LayIntput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
-         //  this.LayOutput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
+
+            //     this.LayIntput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
+            //  this.LayOutput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
 
         }
 
@@ -684,17 +686,17 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             BeeCore.Common.Comunication.TypeComunication = TypeComunication.MobusRS485;
         }
 
-    
+
 
 
         private void cbBaurate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.Baurate =Convert.ToInt32( cbBaurate.Text);
+            Global.ParaCommon.Comunication.Protocol.Baurate = Convert.ToInt32(cbBaurate.Text);
         }
 
         private void slaveID_ValueChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private async void btnConectIO_Click(object sender, EventArgs e)
@@ -707,23 +709,23 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
                 btnConectIO.IsCLick = true;
                 //pComIO.Enabled = false;
-             
-               
+
+
                 Global.ParaCommon.Comunication.Protocol.IsBypass = false;
-              
+
             }
             else
             {
-               Global.PLCStatus = PLCStatus.ErrorConnect;
+                Global.PLCStatus = PLCStatus.ErrorConnect;
                 // pComIO.Enabled = true;
                 Global.ParaCommon.Comunication.Protocol.IsBypass = true;
                 MessageBox.Show("Fail Connect to Module I/O");
-               
+
             }
             btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
         }
 
-      
+
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
@@ -736,20 +738,21 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-       
 
-   
-        public String[] nameInput =new String[] {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
+
+
+        public String[] nameInput = new String[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbIn_SelectionChangeCommitted(object sender, EventArgs e)
         {
-          
+
             ComboBox cb = sender as ComboBox;
             String name = cb.SelectedValue.ToString();
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
             if (name == "") return;
             if (name.Contains("None"))
-            {if (OldIn[value] == null) OldIn[value] = "None";
+            {
+                if (OldIn[value] == null) OldIn[value] = "None";
                 Global.ParaCommon.Comunication.Protocol.RemoveInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[value], ignoreCase: true));
             }
             else
@@ -764,15 +767,16 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         public String[] nameOut = new String[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbOut_SelectionChangeCommitted(object sender, EventArgs e)
         {
-           
-            ComboBox cb =  sender  as ComboBox;
+
+            ComboBox cb = sender as ComboBox;
             String name = cb.SelectedValue.ToString();
             var m = Regex.Match(cb.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
-          
+
             if (name == "") return;
             if (name.Contains("None"))
-            { if (OldOut[value] == null) OldOut[value] = "None";
+            {
+                if (OldOut[value] == null) OldOut[value] = "None";
                 Global.ParaCommon.Comunication.Protocol.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
 
             }
@@ -787,10 +791,10 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
         private async void DOutClick(object sender, EventArgs e)
         {
             RJButton btn = sender as RJButton;
-         
+
             var m = Regex.Match(btn.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
-          
+
             if (Global.ParaCommon.IsExternal)
             {
                 btn.IsCLick = !btn.IsCLick;
@@ -803,32 +807,32 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             //int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
-               
+
                 Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, btn.IsCLick);
                 if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
                 {
                     btn.IsCLick = !btn.IsCLick;
                 }
-              
+
                 btn.Text = Convert.ToInt16(btn.IsCLick).ToString();
             }
             else
                 btn.IsCLick = false;
 
         }
-    
+
 
         private async void btnBypass_Click(object sender, EventArgs e)
         {
-            if(Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
-                
-                
-              
+
+
+
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Busy;
                 Global.ParaCommon.Comunication.Protocol.Disconnect();
-             
-               
+
+
             }
             btnConectIO.IsCLick = false;
             btnConectIO.Enabled = true;
@@ -840,50 +844,50 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.ComSerial = cbCom.SelectedValue.ToString() ;
+            Global.ParaCommon.Comunication.Protocol.ComSerial = cbCom.SelectedValue.ToString();
         }
 
         private void tmCheck_Tick(object sender, EventArgs e)
         {
-           
+
         }
         IO_Processing IO_ProcessingOld = IO_Processing.None;
-     
+
         private async void tmConnect_Tick(object sender, EventArgs e)
         {
             if (!Global.Initialed) return;
             tmConnect.Enabled = false;
-            if (Global.ParaCommon.Comunication.Protocol == null)Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+            if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
             if (Global.ParaCommon.Comunication.Protocol.IsBypass) return;
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected) 
-                 Global.ParaCommon.Comunication.Protocol.Disconnect();
-                await   Global.ParaCommon.Comunication.Protocol.Connect();
+            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                Global.ParaCommon.Comunication.Protocol.Disconnect();
+            await Global.ParaCommon.Comunication.Protocol.Connect();
 
             if (Global.ParaCommon.Comunication.Protocol.IsConnected)
             {
                 Global.StatusIO = StatusIO.None;
                 Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-           
-              
-           
-               
+
+
+
+
 
             }
 
             else
             {
-              //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
+                //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
                 if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
                 {
-                  await  Global.ParaCommon.Comunication.Protocol.Connect();
+                    await Global.ParaCommon.Comunication.Protocol.Connect();
                     if (Global.ParaCommon.Comunication.Protocol.IsConnected)
                     {
                         Global.StatusIO = StatusIO.None;
                         Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                       
+
 
                     }
-                 
+
                     else
                     {
                         MessageBox.Show("Check connect I_O");
@@ -897,14 +901,14 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-    
 
- 
+
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.CTMin = 100000;
             Global.ParaCommon.Comunication.Protocol.CTMax = 0;
-           
+
         }
 
         private void label50_Click(object sender, EventArgs e)
@@ -912,25 +916,25 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         }
 
-    
 
-   
 
-  
+
+
+
         private void timerRead_ValueChanged(float obj)
         {
             Global.ParaCommon.Comunication.Protocol.timeRead = (int)timerRead.Value;
-        
+
         }
 
-      
+
 
         private void btnRTU_Click(object sender, EventArgs e)
         {
-           
+
         }
 
-      
+
         private void txtLog1_TextChanged(object sender, EventArgs e)
         {
 
@@ -938,15 +942,15 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void btnMitsu_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand=PlcLib.PlcBrand.Mitsubishi;
-           
-         
+            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi;
+
+
         }
 
         private void btnKeyence_Click(object sender, EventArgs e)
         {
             Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Keyence;
-         
+
         }
 
         private void btnSerial_Click(object sender, EventArgs e)
@@ -956,7 +960,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Enabled = true;
             txtIP.Enabled = false;
             txtPort.Enabled = false;
-           
+
             lbRTU1.Enabled = true;
             lbRTU2.Enabled = true;
             lbTCP1.Enabled = false;
@@ -970,7 +974,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
             cbBaurate.Enabled = false;
             txtIP.Enabled = true;
             txtPort.Enabled = true;
-            
+
             lbRTU1.Enabled = false;
             lbRTU2.Enabled = false;
             lbTCP1.Enabled = true;
@@ -999,7 +1003,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void cbParity_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.Parity = (Parity)Enum.Parse(typeof(Parity), cbParity.SelectedValue.ToString()) ;
+            Global.ParaCommon.Comunication.Protocol.Parity = (Parity)Enum.Parse(typeof(Parity), cbParity.SelectedValue.ToString());
         }
 
         private void cbStopBits_SelectionChangeCommitted(object sender, EventArgs e)
@@ -1031,12 +1035,12 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void txtPort_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PortIP =Convert.ToInt32( txtPort.Text.Trim());
+            Global.ParaCommon.Comunication.Protocol.PortIP = Convert.ToInt32(txtPort.Text.Trim());
         }
 
         private void txtIP_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.sIP= txtIP.Text.Trim();
+            Global.ParaCommon.Comunication.Protocol.sIP = txtIP.Text.Trim();
         }
 
         private void txtPort_KeyPress(object sender, KeyPressEventArgs e)
@@ -1102,7 +1106,7 @@ int numAdd =Convert.ToInt32( btn.Name.Substring(2).Trim())-1;
 
         private void numSlaveID_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.Protocol.SlaveID =(byte) numSlaveID.Value;
+            Global.ParaCommon.Comunication.Protocol.SlaveID = (byte)numSlaveID.Value;
 
         }
 

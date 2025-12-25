@@ -30,8 +30,9 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolYolo));
-            this.tmCheckFist = new System.Windows.Forms.Timer();
+            this.tmCheckFist = new System.Windows.Forms.Timer(this.components);
             this.workLoadModel = new System.ComponentModel.BackgroundWorker();
             this.workTrain = new System.ComponentModel.BackgroundWorker();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -852,7 +853,8 @@ namespace BeeInterface
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.63218F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 64.36782F));
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 154F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 159F));
             this.tableLayoutPanel20.Controls.Add(this.btnLoadImg, 3, 0);
             this.tableLayoutPanel20.Controls.Add(this.btnCropTemp, 2, 0);
             this.tableLayoutPanel20.Controls.Add(this.cbLabels, 1, 0);
@@ -912,11 +914,11 @@ namespace BeeInterface
             this.btnLoadImg.IsRect = false;
             this.btnLoadImg.IsTouch = false;
             this.btnLoadImg.IsUnGroup = true;
-            this.btnLoadImg.Location = new System.Drawing.Point(240, 2);
+            this.btnLoadImg.Location = new System.Drawing.Point(239, 2);
             this.btnLoadImg.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoadImg.Multiline = false;
             this.btnLoadImg.Name = "btnLoadImg";
-            this.btnLoadImg.Size = new System.Drawing.Size(157, 39);
+            this.btnLoadImg.Size = new System.Drawing.Size(158, 39);
             this.btnLoadImg.TabIndex = 48;
             this.btnLoadImg.Text = "Add Image...";
             this.btnLoadImg.TextColor = System.Drawing.Color.Black;
@@ -970,7 +972,7 @@ namespace BeeInterface
             this.btnCropTemp.IsRect = false;
             this.btnCropTemp.IsTouch = false;
             this.btnCropTemp.IsUnGroup = true;
-            this.btnCropTemp.Location = new System.Drawing.Point(86, 2);
+            this.btnCropTemp.Location = new System.Drawing.Point(85, 2);
             this.btnCropTemp.Margin = new System.Windows.Forms.Padding(2);
             this.btnCropTemp.Multiline = false;
             this.btnCropTemp.Name = "btnCropTemp";
@@ -987,7 +989,7 @@ namespace BeeInterface
             this.cbLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbLabels.FormattingEnabled = true;
-            this.cbLabels.Location = new System.Drawing.Point(32, 2);
+            this.cbLabels.Location = new System.Drawing.Point(31, 2);
             this.cbLabels.Margin = new System.Windows.Forms.Padding(2);
             this.cbLabels.Name = "cbLabels";
             this.cbLabels.Size = new System.Drawing.Size(50, 33);
@@ -1001,7 +1003,7 @@ namespace BeeInterface
             this.label13.Location = new System.Drawing.Point(0, 0);
             this.label13.Margin = new System.Windows.Forms.Padding(0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(30, 43);
+            this.label13.Size = new System.Drawing.Size(29, 43);
             this.label13.TabIndex = 45;
             this.label13.Text = "Draw Label";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

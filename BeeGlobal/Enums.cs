@@ -22,6 +22,7 @@ namespace BeeGlobal
         Total,
         Cycle
 
+
     }
     public enum SideLR
     {
@@ -33,6 +34,7 @@ namespace BeeGlobal
     {
         Above,
         Below
+
     }
     public struct CornerResult
     {
@@ -312,7 +314,10 @@ namespace BeeGlobal
         EdgePixel= 21, 
         Edge=22,
         CraftOCR = 23,
-        Intersect = 24,Systems=25, MultiPattern = 26//Note
+
+        Intersect = 24,Systems=25, MultiPattern = 26
+
+
     }
     public enum TypeOCR
     {

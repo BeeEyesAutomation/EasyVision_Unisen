@@ -593,7 +593,7 @@ namespace BeeUi
             return true;
         }
         // ====== MouseDown ======
-        // ===================== FORM / CONTROL: Mouse handlers =====================
+        //  FORM / CONTROL: Mouse handlers 
 
         // ====== MouseDown ======
         // ⬇️ CỜ MỚI: Polygon bẩn trong lúc kéo (hoãn update center/bounds/angle)
@@ -1935,7 +1935,7 @@ namespace BeeUi
         //            else prop.rotCrop = rrNew;
         //        };
 
-        //        // ======== _drag == true: đang kéo ========
+        //        // = _drag == true: đang kéo =
         //        if (_drag)
         //        {
         //            var rrSrc = getCurrentRR();
@@ -2202,7 +2202,7 @@ namespace BeeUi
 
         //            setCurrentRR(rrNew);
         //        }
-        //        // ======== _drag == false: hit-test ========
+        //        // = _drag == false: hit-test =
         //        else
         //        {
         //            var rrSrc = getCurrentRR();
@@ -3012,10 +3012,13 @@ namespace BeeUi
                     }    
                     break;
                 case StatusProcessing.Read:
+
                     if(Global.Config.IsAutoTrigger)
                     {
                         timer = CycleTimerSplit.Start();
                     }    
+
+
                     if(!Global.ParaCommon.IsExternal&&Global.Config.IsResetImg)
                     {
                         this.Invoke((Action)(() =>
@@ -5476,6 +5479,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     }
                 }
             }, _cts.Token);
+
             if(Global.Config.IsAutoTrigger)
             if (BeeCore.Common.PropetyTools[0][0].Results == Results.NG )
             {
@@ -5485,6 +5489,16 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
             //   timer.Stop();
             Global.TotalOK = true;
+
+            //if (BeeCore.Common.PropetyTools[0][0].Results == Results.NG&&Global.StatusMode==StatusMode.Continuous)
+            //{
+            //    Global.StatusProcessing = StatusProcessing.Waiting;
+            //    return;
+            //}
+          
+                //   timer.Stop();
+                Global.TotalOK = true;
+
             foreach ( Camera camera in BeeCore.Common.listCamera)
             {if (camera == null)
                     continue;

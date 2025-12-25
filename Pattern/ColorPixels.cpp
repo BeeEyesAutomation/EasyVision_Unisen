@@ -76,9 +76,9 @@ namespace {
     // ---------- PARALLEL tiled (KHÔNG early-exit) ----------
 // ---------- PARALLEL tiled (grayscale + blur) ----------
 
-    // ===============================================================
+    // 
 //  PARALLEL TILE BODY
-// ===============================================================
+// 
     struct DiffTileBody : public cv::ParallelLoopBody
     {
         const cv::Mat& G1;    // gray normalized & blurred
@@ -122,14 +122,14 @@ namespace {
         }
     };
 
-    // ===============================================================
+    // 
     //  MAIN PARALLEL DIFF
-    // ===============================================================
+    // 
     static int DiffCount_ParallelFull(const cv::Mat& img, const cv::Mat& tpl, int tol, cv::Mat* annotated)
     {
-        // ===================================================================
+        // ====
         // 1) CLAMP ROI để đảm bảo img và tpl có cùng kích thước xử lý
-        // ===================================================================
+        // ====
         int W = std::min(img.cols, tpl.cols);
         int H = std::min(img.rows, tpl.rows);
 
@@ -141,9 +141,9 @@ namespace {
         cv::Mat I = img(roi);
         cv::Mat T = tpl(cv::Rect(0, 0, W, H));
 
-        // ===================================================================
+        // ====
         // 2) Prepare grayscale
-        // ===================================================================
+        // ====
         cv::Mat g1, g2;
         cv::cvtColor(I, g1, cv::COLOR_BGR2GRAY);
         cv::cvtColor(T, g2, cv::COLOR_BGR2GRAY);
@@ -154,9 +154,9 @@ namespace {
         cv::GaussianBlur(g1, g1, cv::Size(3, 3), 0.8);
         cv::GaussianBlur(g2, g2, cv::Size(3, 3), 0.8);
 
-        // ===================================================================
+        // ====
         // 3) Prepare annotation buffer
-        // ===================================================================
+        // ====
         cv::Mat localAnn;
         if (annotated)
         {
@@ -165,18 +165,18 @@ namespace {
             localAnn = annotated->operator()(roi);
         }
 
-        // ===================================================================
+        // ====
         // 4) PARALLEL DIFF
-        // ===================================================================
+        // ====
         std::atomic<int> acc(0);
         DiffTileBody body(g1, g2, tol, acc, (annotated ? &localAnn : nullptr), annotated != nullptr);
 
         // hàng lớn → chia tile theo height
         cv::parallel_for_(cv::Range(0, H), body, 512);
 
-        // ===================================================================
+        // ====
         // 5) Return count
-        // ===================================================================
+        // ====
         return acc.load(std::memory_order_relaxed);
     }
     //struct DiffTileBody : public ParallelLoopBody {
@@ -281,7 +281,7 @@ namespace {
 //
 //    return matRs;
 //}
-// ================= PUBLIC API =================
+// === PUBLIC API ===
 System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
     [System::Runtime::InteropServices::Out] int% outW,
     [System::Runtime::InteropServices::Out] int% outH,

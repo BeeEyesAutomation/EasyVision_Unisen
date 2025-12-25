@@ -27,36 +27,37 @@ namespace BeeInterface
 
         }
 
-      //  BeeCore.Config ConfigPrev;
+        //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
-            this.Width = Global.EditTool.BtnHeaderBar.Width+1;
-            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width-1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
-             btnNG.IsCLick= Global.Config.IsONNG ;
-            btnOK.IsCLick =! Global.Config.IsONNG;
-            btnSaveOK.IsCLick =Global.Config.IsSaveOK;
-            btnSaveNG.IsCLick =Global.Config.IsSaveNG;
-            btnSaveRaw.IsCLick =Global.Config.IsSaveRaw;
-            btnSaveRS.IsCLick =Global.Config.IsSaveRS;
+            this.Width = Global.EditTool.BtnHeaderBar.Width + 1;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width - 1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
+            btnNG.IsCLick = Global.Config.IsONNG;
+            btnOK.IsCLick = !Global.Config.IsONNG;
+            btnSaveOK.IsCLick = Global.Config.IsSaveOK;
+            btnSaveNG.IsCLick = Global.Config.IsSaveNG;
+            btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
+            btnSaveRS.IsCLick = Global.Config.IsSaveRS;
             btnTriggerMulti.IsCLick = !Global.Config.IsOnlyTrigger;
-            btnTriggerOne.IsCLick=Global.Config.IsOnlyTrigger;
-        
+            btnTriggerOne.IsCLick = Global.Config.IsOnlyTrigger;
+
             numTrigger.Value = Global.Config.NumTrig;
             btnMulti.IsCLick = Global.Config.IsMultiCamera;
             btnSingle.IsCLick = !Global.Config.IsMultiCamera;
-            switch (Global.Config.TypeSave){
-                case 1:btnSmall.IsCLick=true; break;
+            switch (Global.Config.TypeSave)
+            {
+                case 1: btnSmall.IsCLick = true; break;
                 case 2: btnNormal.IsCLick = true; break;
                 case 3: btnbig.IsCLick = true; break;
             }
-            AdjLimitDay.Value =Global.Config.LimitDateSave;
+            AdjLimitDay.Value = Global.Config.LimitDateSave;
             AdjFontSize.Value = Global.Config.FontSize;
             AdjRadEdit.Value = Global.Config.RadEdit;
             btnShowBox.IsCLick = Global.Config.IsShowBox;
             btnShowDetail.IsCLick = Global.Config.IsShowDetail;
             btnShowPositon.IsCLick = Global.Config.IsShowPostion;
             btnShowScore.IsCLick = Global.Config.IsShowScore;
-            btnShowLabel.IsCLick= Global.Config.IsShowLabel;
+            btnShowLabel.IsCLick = Global.Config.IsShowLabel;
 
             lbClOK.BackColor = Global.Config.ColorOK;
             btnClOK.ForeColor = Global.Config.ColorOK;
@@ -71,15 +72,15 @@ namespace BeeInterface
             btnCLText.ForeColor = Global.Config.TextColor;
             lbClChoose.BackColor = Global.Config.ColorChoose;
             btnClChoose.ForeColor = Global.Config.ColorChoose;
-            AdjOpacity.Value=Global.Config.Opacity;
-            AdjThicknessLine.Value=Global.Config.ThicknessLine;
-            btnByPassResult.IsCLick=Global.Config.IsForceByPassRS;
+            AdjOpacity.Value = Global.Config.Opacity;
+            AdjThicknessLine.Value = Global.Config.ThicknessLine;
+            btnByPassResult.IsCLick = Global.Config.IsForceByPassRS;
             btnFullDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Full ? true : false;
             btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
             btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
             btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
             btnOnAutoTrigger.IsCLick = Global.Config.IsAutoTrigger;
-            btnOffAutoTrigger.IsCLick =! Global.Config.IsAutoTrigger;
+            btnOffAutoTrigger.IsCLick = !Global.Config.IsAutoTrigger;
             btnONResetImg.IsCLick = Global.Config.IsResetImg;
             btnOFFResetImg.IsCLick = !Global.Config.IsResetImg;
             if (Global.Config.IsForceByPassRS)
@@ -93,7 +94,7 @@ namespace BeeInterface
             else
             {
                 Global.EditTool.lbBypass.Visible = false;
-               
+
             }
             btnResetReady.IsCLick = Global.Config.IsResetReady;
             numRetryCam.Value = Global.Config.NumRetryCamera;
@@ -101,83 +102,83 @@ namespace BeeInterface
         }
 
 
-     
+
 
         private void btnSaveOK_Click(object sender, EventArgs e)
         {
-           Global.Config.IsSaveOK = btnSaveOK.IsCLick;
+            Global.Config.IsSaveOK = btnSaveOK.IsCLick;
         }
 
         private void btnSaveNG_Click(object sender, EventArgs e)
         {
-           Global.Config.IsSaveNG = btnSaveNG.IsCLick;
+            Global.Config.IsSaveNG = btnSaveNG.IsCLick;
         }
 
-       
+
         private void btnSmall_Click(object sender, EventArgs e)
         {
-           Global.Config.TypeSave = 1;
+            Global.Config.TypeSave = 1;
         }
 
         private void btnNormal_Click(object sender, EventArgs e)
         {
-           Global.Config.TypeSave = 2;
+            Global.Config.TypeSave = 2;
         }
 
         private void btnbig_Click(object sender, EventArgs e)
         {
-           Global.Config.TypeSave = 3;
+            Global.Config.TypeSave = 3;
         }
 
-       
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
-        
+
             this.Close();
         }
 
-     
+
 
         private void btnSaveRaw_Click(object sender, EventArgs e)
         {
-           Global.Config.IsSaveRaw = btnSaveRaw.IsCLick;
+            Global.Config.IsSaveRaw = btnSaveRaw.IsCLick;
         }
 
         private void btnSaveRS_Click(object sender, EventArgs e)
         {
-           Global.Config.IsSaveRS = btnSaveRS.IsCLick;
+            Global.Config.IsSaveRS = btnSaveRS.IsCLick;
         }
 
-       
+
         private void btnMulti_Click(object sender, EventArgs e)
         {
-            Global.Config.IsMultiCamera =btnMulti.IsCLick;
+            Global.Config.IsMultiCamera = btnMulti.IsCLick;
         }
 
         private void btnSingle_Click(object sender, EventArgs e)
         {
-         Global.Config.IsMultiCamera=!   btnSingle.IsCLick;
+            Global.Config.IsMultiCamera = !btnSingle.IsCLick;
         }
 
 
 
-      
+
 
         private void numTrigger_ValueChanged(float obj)
         {
-            Global.Config.NumTrig =(int) numTrigger.Value;
+            Global.Config.NumTrig = (int)numTrigger.Value;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             //SaveData.ParaPJ(Global.Project, Global.ParaCommon);
             SaveData.Config(Global.Config);
-           
+
             ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
         }
 
-     
+
         private void btnTriggerOne_Click(object sender, EventArgs e)
         {
             Global.Config.IsOnlyTrigger = true;
@@ -255,7 +256,7 @@ namespace BeeInterface
 
         private void btnDefault_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorOK= Color.FromArgb(0, 172, 73);
+            Global.Config.ColorOK = Color.FromArgb(0, 172, 73);
             lbClOK.BackColor = Global.Config.ColorOK;
             btnClOK.ForeColor = Global.Config.ColorOK;
         }
@@ -274,7 +275,7 @@ namespace BeeInterface
 
         private void AdjThinkness_ValueChanged(float obj)
         {
-            Global.Config.ThicknessLine=(int)AdjThicknessLine.Value;
+            Global.Config.ThicknessLine = (int)AdjThicknessLine.Value;
         }
 
         private void btnChooseCLInfor_Click(object sender, EventArgs e)
@@ -300,7 +301,7 @@ namespace BeeInterface
             {
                 Global.Config.ColorNone = colorChoose.Color;
                 lbCLNone.BackColor = Global.Config.ColorNone;
-                btnCLNone. ForeColor = Global.Config.ColorNone;
+                btnCLNone.ForeColor = Global.Config.ColorNone;
             }
         }
 
@@ -352,22 +353,22 @@ namespace BeeInterface
                 btnByPassResult.Text = "ON";
             else
                 btnByPassResult.Text = "OFF";
-            if ( Global.Config.IsForceByPassRS)
+            if (Global.Config.IsForceByPassRS)
             {
                 Global.EditTool.lbBypass.Visible = true;
-               
-               
+
+
             }
             else
             {
                 Global.EditTool.lbBypass.Visible = false;
-              
+
             }
         }
 
         private void numRetryCam_ValueChanged(float obj)
         {
-            Global.Config.NumRetryCamera =(int) numRetryCam.Value;
+            Global.Config.NumRetryCamera = (int)numRetryCam.Value;
         }
 
         private void numRetryPLC_ValueChanged(float obj)
@@ -382,7 +383,7 @@ namespace BeeInterface
 
         private void btnShowLabel_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowLabel=btnShowLabel.IsCLick;
+            Global.Config.IsShowLabel = btnShowLabel.IsCLick;
         }
 
         private void btnShowScore_Click(object sender, EventArgs e)

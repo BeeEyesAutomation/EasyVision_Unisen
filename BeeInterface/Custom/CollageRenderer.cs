@@ -79,7 +79,7 @@ namespace BeeInterface
 
         public Size szImage = new Size(0, 0);
 
-        // ==================== Public API: Add/Modify/Remove/Clear ====================
+        // ====== Public API: Add/Modify/Remove/Clear ======
 
         public void AddImage(Bitmap bmp, FillMode1 mode = FillMode1.Cover, float weight = 1f)
         {
@@ -168,7 +168,7 @@ namespace BeeInterface
             _lastModifiedIndex = -1;
         }
 
-        // ==================== Render ====================
+        // ====== Render ======
 
         public void Render()
         {
@@ -224,7 +224,7 @@ namespace BeeInterface
             if (DisposeOnSwap) old?.Dispose();
         }
 
-        // ==================== Build & Layout ====================
+        // ====== Build & Layout ======
 
         public static Bitmap BuildCollageBitmap(
          IList<ImageItem> items, Size targetSize, int gutter = 6, Color? bg = null,
@@ -776,7 +776,7 @@ namespace BeeInterface
             return res;
         }
 
-        // ==================== Vẽ ảnh (trả về vùng đã vẽ) ====================
+        // ====== Vẽ ảnh (trả về vùng đã vẽ) ======
 
         private static Rectangle DrawImageCover(Graphics g, Bitmap bmp, Rectangle dst)
         {
@@ -818,7 +818,7 @@ namespace BeeInterface
             return drawRect; // contain: viền ôm sát ảnh thực vẽ
         }
 
-        // ==================== Utils ====================
+        // ====== Utils ======
 
         private static Bitmap DeepCopyBitmap(Bitmap src)
         {

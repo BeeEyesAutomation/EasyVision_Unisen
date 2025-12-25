@@ -273,7 +273,7 @@ namespace BeeInterface
             public void Dispose() { _c.ResumeLayout(true); if (_had) { SendMessage(_c.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero); _c.Invalidate(true); _c.Update(); } }
         }
 
-        // ================== DockZone ==================
+        // ==== DockZone ====
         internal class DockZone : Panel
         {
             private readonly MultiDockHost _owner;
@@ -669,7 +669,7 @@ namespace BeeInterface
             }
         }
 
-        // ================== DockItem ==================
+        // ==== DockItem ====
         internal class DockItem
         {
             public string Key;

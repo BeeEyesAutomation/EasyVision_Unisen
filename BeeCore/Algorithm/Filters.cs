@@ -76,7 +76,7 @@ namespace BeeCore.Algorithm
             // Cv2.ImWrite("edge.png", result);
             return new Mat();
         }
-        // =========== 1. LÀM MỊN / NHIỄU ===========
+        // ==== 1. LÀM MỊN / NHIỄU ====
         public static (int lower, int upper) AutoCannyThresholdFromHistogram(Mat gray, double k1 = 0.66, double k2 = 1.33)
         {
             // 1. Histogram
@@ -213,7 +213,7 @@ namespace BeeCore.Algorithm
             };
         }
 
-        // =========== 2. CÂN BẰNG / TƯƠNG PHẢN ===========
+        // ==== 2. CÂN BẰNG / TƯƠNG PHẢN ====
 
         public static ImageFilter Clahe(double clipLimit, Size tile) =>
             delegate (Mat src, Mat dst)
@@ -235,7 +235,7 @@ namespace BeeCore.Algorithm
                 lut.Dispose();
             };
 
-        // =========== 3. EDGE / GRADIENT ===========
+        // ==== 3. EDGE / GRADIENT ====
 
         public static ImageFilter Canny(double th1, double th2, int aperture = 3, bool l2 = false) =>
             delegate (Mat src, Mat dst) { Cv2.Canny(src, dst, th1, th2, aperture, l2); };
@@ -257,7 +257,7 @@ namespace BeeCore.Algorithm
                 Cv2.ConvertScaleAbs(dst, dst);
             };
 
-        // =========== 4. NGƯỠNG / THRESHOLD ===========
+        // ==== 4. NGƯỠNG / THRESHOLD ====
 
         public static ImageFilter AdaptiveThresh(AdaptiveThresholdTypes method,
                                                  int block = 11, double C = 2) =>
@@ -274,7 +274,7 @@ namespace BeeCore.Algorithm
                     ThresholdTypes.Binary | ThresholdTypes.Otsu);
             };
 
-        // =========== 5. MORPHOLOGY ===========
+        // ==== 5. MORPHOLOGY ====
 
         public static ImageFilter Morph(MorphTypes type, Size ksize, int iterations = 1) =>
             delegate (Mat src, Mat dst)
@@ -365,7 +365,7 @@ namespace BeeCore.Algorithm
                 kernel.Dispose();
             };
 
-        // =========== 6. WHITE BALANCE ===========
+        // ==== 6. WHITE BALANCE ====
 
         public static ImageFilter WhiteBalanceGrayWorld() =>
             delegate (Mat src, Mat dst)
@@ -381,7 +381,7 @@ namespace BeeCore.Algorithm
                 using (var wb = SimpleWB.Create()) wb.BalanceWhite(src, dst);
             };
 
-        // =========== 7. LỌC / GIỮ MÀU HSV ===========
+        // ==== 7. LỌC / GIỮ MÀU HSV ====
 
         /// <summary>Giữ lại vùng màu HSV (hMin‑hMax), còn lại thành đen.</summary>
         public static ImageFilter KeepColorRange(int hMin, int hMax,
@@ -399,7 +399,7 @@ namespace BeeCore.Algorithm
                 mask.Dispose();
             };
 
-        // =========== 8. CHUYỂN XÁM & RESIZE ===========
+        // ==== 8. CHUYỂN XÁM & RESIZE ====
 
         public static ImageFilter ConvertGray() =>
             delegate (Mat src, Mat dst)

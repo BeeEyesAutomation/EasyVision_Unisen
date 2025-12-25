@@ -219,7 +219,7 @@ namespace BeeCore
         {
             if (source == null || source.Empty()) return new Mat();
 
-            // ================== 1) Xác định tâm neo & kích thước theo shape ==================
+            // ==== 1) Xác định tâm neo & kích thước theo shape ====
             // Với Polygon: tâm neo = PosCenter + Rotate(bboxLocalCenter, rectRotation)
             //              size = kích thước bboxLocal của polygon
             // Các shape khác: tâm neo = PosCenter, size = _rect.(W,H)
@@ -227,7 +227,7 @@ namespace BeeCore
             SD.PointF localCenterForShape; // (0,0) cho non-Polygon; (cx,cy) cho Polygon
             GetAnchorSizeFor(rot, out SD.PointF worldAnchor, out rectSize, out localCenterForShape);
 
-            // ================== 2) Chuẩn hoá góc/size crop (như nguyên tác) ==================
+            // ==== 2) Chuẩn hoá góc/size crop (như nguyên tác) ====
             double angleUsed = rot._rectRotation; // xoay ảnh quanh worldAnchor
             if (angleUsed < -45.0)
             {
@@ -455,7 +455,7 @@ namespace BeeCore
             return matResult;
         }
 
-        // ====================== Helpers cho neo/size theo shape ======================
+        // = Helpers cho neo/size theo shape =
         private static void GetAnchorSizeFor(RectRotate rr,
             out SD.PointF worldAnchor, out Size2f size, out SD.PointF localCenterForShape)
         {
@@ -502,7 +502,7 @@ namespace BeeCore
             if (max == 0) { minX = minY = 0; maxX = maxY = 1; }
         }
 
-        // ====================== Vẽ mask vào patch (có hỗ trợ tâm local riêng cho polygon) ======================
+        // = Vẽ mask vào patch (có hỗ trợ tâm local riêng cho polygon) =
         private static void DrawShapeMaskIntoWithSize(
             RectRotate rr, Mat mask, Point2f centerInMask, float angleInPatch, byte fillValue,
             int W, int H, SD.PointF localCenterForShape)

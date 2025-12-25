@@ -21,7 +21,7 @@ using std::vector;
 using std::mutex;
 using std::lock_guard;
 
-//==================== Structures ====================
+//====== Structures ======
 
 struct OKNGModel {
     int  id{};
@@ -70,10 +70,10 @@ struct OKNGImpl {
     mutex mtx;
 };
 
-//==================== Version ====================
+//====== Version ======
 OKNG_API int OKNG_GetVersion() { return 240; }
 
-//==================== Helpers ====================
+//====== Helpers ======
 
 static Mat loadGray(const char* path) { return imread(path, IMREAD_GRAYSCALE); }
 
@@ -415,7 +415,7 @@ static int detectPriorityCommon(OKNGImpl* p, const Mat& grayOrig,
     return 1;
 }
 
-//==================== API impl ====================
+//====== API impl ======
 
 // Lifecycle / Params
 OKNG_API OKNGHandle OKNG_Create() { return new OKNGImpl(); }

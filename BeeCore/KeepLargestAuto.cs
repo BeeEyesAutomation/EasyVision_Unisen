@@ -193,9 +193,9 @@ public static class KeepLargestCrop
         }
     }
 
-    // ========================
+    // ===
     //  ANTI-BORDER TOOLKIT
-    // ========================
+    // ===
 
     // Làm close/open trong guard band nội bộ để tránh đụng mép thật
     static void MorphInGuardBand(ref Mat bin, Size kClose, Size kOpen, int itC, int itO, int g)
@@ -373,9 +373,9 @@ public static class KeepLargestCrop
         return 200;
     }
 
-    // ========================
+    // ===
     //  HẬU XỬ LÝ & CHỌN LỚN NHẤT
-    // ========================
+    // ===
 
     static Mat PostMorphToLargest(Mat bin, int closeK, int openK, int closeIt, int openIt,
                               BorderPolicy borderPolicy, out int largestArea,
@@ -518,9 +518,9 @@ public static class KeepLargestCrop
         }
     }
 
-    // ========================
+    // ===
     //  CHỌN RR LỚN NHẤT + MAP SANG RectRotate
-    // ========================
+    // ===
 
     static RotatedRect LargestRotatedRect(Mat mask)
     {
@@ -564,9 +564,9 @@ public static class KeepLargestCrop
         return r;
     }
 
-    // ========================
+    // ===
     //  Binarize & Probe chọn method
-    // ========================
+    // ===
 
     static (BinarizeMethod method, bool invert) PickBestMethod(Mat n8, Mat gray, double rough, DebugSaver D)
     {
@@ -687,9 +687,9 @@ public static class KeepLargestCrop
         }
     }
 
-    // ========================
+    // ===
     //  Helpers khác
-    // ========================
+    // ===
 
     static Mat CompareByThresholdFloat(Mat f, Mat T, bool invert)
     {

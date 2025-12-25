@@ -583,7 +583,7 @@ void Pattern::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
 	img->matSample = Mat(h, w, CV_8UC1, data.ToPointer(), stride);
 
 }
-// ================= PUBLIC API =================
+// === PUBLIC API ===
 System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,bool NoCrop,
 	[System::Runtime::InteropServices::Out] int% outW,
 	[System::Runtime::InteropServices::Out] int% outH,
@@ -723,16 +723,16 @@ List<Rotaterectangle>^ Pattern::Match(
 	int    numThreads
 )
 {
-	// ======= Kết quả .NET =======
+	//  Kết quả .NET 
 	auto results = gcnew List<Rotaterectangle>(Math::Max(m_iMaxPos, 0));
 
-	// ======= Kiểm tra đầu vào nhanh =======
+	//  Kiểm tra đầu vào nhanh 
 	if (img == nullptr) return results;
 	if (img->matSample.empty()) return results;
 	if (img->matRaw.empty())    return results;
 	if (!img->m_TemplData.bIsPatternLearned) return results;
 
-	// ======= Kẹp tham số nguy hiểm =======
+	//  Kẹp tham số nguy hiểm 
 	if (m_iMaxPos <= 0) m_iMaxPos = 1;
 	if (m_iMaxPos > 256) m_iMaxPos = 256;
 	const int    MAX_NEXT_MAX = 128;
@@ -741,7 +741,7 @@ List<Rotaterectangle>^ Pattern::Match(
 	const double epsTiny = 1e-6;
 	const double MIN_ANGLE_STEP = 0.05; // độ; tránh bước quá nhỏ
 
-	// ======= Chuẩn hoá nguồn về GRAY 8U =======
+	//  Chuẩn hoá nguồn về GRAY 8U 
 	cv::Mat srcForPyr;
 	{
 		cv::Mat src = img->matRaw;
@@ -762,7 +762,7 @@ List<Rotaterectangle>^ Pattern::Match(
 		if (m_ckBitwiseNot) cv::bitwise_not(srcForPyr, srcForPyr);
 	}
 
-	// ======= Xác định top layer với “ngân sách” =======
+	//  Xác định top layer với “ngân sách” 
 	int iTopLayer = img->GetTopLayer(&img->matSample, (int)std::sqrt((double)img->m_iMinReduceArea));
 	if (iTopLayer < 0) iTopLayer = 0;
 	{
@@ -774,7 +774,7 @@ List<Rotaterectangle>^ Pattern::Match(
 		}
 	}
 
-	// ======= Pyramid nguồn =======
+	//  Pyramid nguồn 
 	std::vector<cv::Mat> vecMatSrcPyr;
 	vecMatSrcPyr.reserve((size_t)iTopLayer + 1);
 	cv::buildPyramid(srcForPyr, vecMatSrcPyr, iTopLayer);
@@ -782,7 +782,7 @@ List<Rotaterectangle>^ Pattern::Match(
 	s_TemplData* pTemplData = &img->m_TemplData;
 	if ((int)pTemplData->vecPyramid.size() <= iTopLayer) return results;
 
-	// ======= Góc quét ở top layer =======
+	//  Góc quét ở top layer 
 	double dAngleStepAuto = std::atan(2.0 / std::max(pTemplData->vecPyramid[(size_t)iTopLayer].cols,
 		pTemplData->vecPyramid[(size_t)iTopLayer].rows)) * R2D;
 	if (dAngleStepAuto < epsTiny) dAngleStepAuto = 0.5;
@@ -791,7 +791,7 @@ List<Rotaterectangle>^ Pattern::Match(
 	const bool   useFixedStep = (userStep > epsTiny);
 	double dAngleStep = useFixedStep ? std::max(userStep, MIN_ANGLE_STEP) : dAngleStepAuto;
 
-	// ======= Dải góc ở top layer =======
+	//  Dải góc ở top layer 
 	std::vector<double> vecAngles;
 	vecAngles.reserve(64);
 	{
@@ -811,7 +811,7 @@ List<Rotaterectangle>^ Pattern::Match(
 		}
 	}
 
-	// ======= Ngưỡng theo tầng =======
+	//  Ngưỡng theo tầng 
 	std::vector<double> vecLayerScore((size_t)iTopLayer + 1, m_dScore);
 	for (int l = 1; l <= iTopLayer; ++l)
 		vecLayerScore[(size_t)l] = vecLayerScore[(size_t)l - 1] * 0.90;
@@ -825,7 +825,7 @@ List<Rotaterectangle>^ Pattern::Match(
 		(vecMatSrcPyr[(size_t)iTopLayer].size().area() / std::max(1, sizePatTop.area()) > 500) &&
 		(m_iMaxPos > 10);
 
-	// ======= Tìm cực đại sơ bộ ở top layer cho mỗi góc =======
+	//  Tìm cực đại sơ bộ ở top layer cho mỗi góc 
 	std::vector<s_MatchParameter> vecMatchParameter;
 	vecMatchParameter.reserve(vecAngles.size() * (size_t)std::min(m_iMaxPos + MATCH_CANDIDATE_NUM, 64));
 
@@ -910,7 +910,7 @@ List<Rotaterectangle>^ Pattern::Match(
 	std::sort(vecMatchParameter.begin(), vecMatchParameter.end(), compareScoreBig2Small);
 	if (vecMatchParameter.empty()) return results;
 
-	// ======= Refine xuống các layer dưới =======
+	//  Refine xuống các layer dưới 
 	const int iDstWTop = pTemplData->vecPyramid[(size_t)iTopLayer].cols;
 	const int iDstHTop = pTemplData->vecPyramid[(size_t)iTopLayer].rows;
 

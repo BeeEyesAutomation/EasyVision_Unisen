@@ -8,7 +8,7 @@
 
 namespace BeeCpp {
     static inline int Clamp(int v, int lo, int hi) { return (v < lo) ? lo : (v > hi) ? hi : v; }
-    // ================== Edge method enum ==================
+    // ==== Edge method enum ====
     enum class MethordEdge {
         CloseEdges = 0,  // auto-canny + close + dilate/erode
         StrongEdges = 1,  // percentile on gradient magnitude
@@ -16,7 +16,7 @@ namespace BeeCpp {
         InvertBinary = 3   // threshold_inv -> canny(0..255)
     };
 
-    // ================== Pipeline options ==================
+    // ==== Pipeline options ====
      struct EdgePipelineOptions {
         MethordEdge method = MethordEdge::CloseEdges;
 
@@ -33,7 +33,7 @@ namespace BeeCpp {
         int clearNoiseBigArea = 0;
     };
 
-    // ================== Helpers used by pipeline ==================
+    // ==== Helpers used by pipeline ====
     struct CannyThresh { int lower; int upper; };
 
     inline CannyThresh AutoCannyThresholdFromHistogram(const cv::Mat& gray, double k1 = 0.66, double k2 = 1.33) {
@@ -168,7 +168,7 @@ namespace BeeCpp {
         cv::LUT(src, lut, dst);
     }
 
-    // ================== ONE-PASS PIPELINE ==================
+    // ==== ONE-PASS PIPELINE ====
     inline void RunEdgePipeline(const cv::Mat& srcBgrOrGray, cv::Mat& dstEdges8u, const EdgePipelineOptions& opt)
     {
         CV_Assert(!srcBgrOrGray.empty());

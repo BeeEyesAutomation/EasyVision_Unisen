@@ -831,7 +831,7 @@ namespace BeeInterface
             this.btnInvert.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
             this.btnInvert.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnInvert.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnInvert.Corner = BeeGlobal.Corner.Right;
+            this.btnInvert.Corner =Corner.Right;
             this.btnInvert.DebounceResizeMs = 6;
             this.btnInvert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnInvert.FlatAppearance.BorderSize = 0;

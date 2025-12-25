@@ -24,9 +24,9 @@ namespace BeeInterface
             //this.TextAlign = ContentAlignment.MiddleCenter;
         }
 
-        //===============================
+        //===
         // XỬ LÝ PARENT
-        //===============================
+        //===
         protected override void OnParentChanged(EventArgs e)
         {
             // Gỡ bỏ event cũ
@@ -58,9 +58,9 @@ namespace BeeInterface
             }
         }
 
-        //===============================
+        //===
         // TEXT / SIZE CHANGE
-        //===============================
+        //===
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
@@ -76,9 +76,9 @@ namespace BeeInterface
                 AdjustFont();
         }
 
-        //===============================
+        //===
         // TÍNH TOÁN FONT
-        //===============================
+        //===
         private void AdjustFont()
         {
             if (_adjusting) return;  // CHẶN VÒNG LẶP

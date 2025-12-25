@@ -12,7 +12,7 @@ namespace BeeCore
     [Serializable]
     public class Access
     {
-        // ===================== Generic helpers =====================
+        //  Generic helpers 
 
         // Serialize object -> Base64 string (hạn chế copy bộ nhớ)
         private static string SerializeToBase64<T>(T obj)
@@ -90,7 +90,7 @@ namespace BeeCore
             }
         }
 
-        // ===================== Public API =====================
+        //  Public API 
 
         // Trả về mảng bytes thay vì Stream (tránh trả về stream đã Dispose)
         public static byte[] SerializeBytes<T>(T objectToSerialize)
