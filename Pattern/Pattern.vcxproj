@@ -134,6 +134,8 @@
     <ClInclude Include="BarcodeCore.h" />
     <ClInclude Include="barcode_pca_autoclass.hpp" />
     <ClInclude Include="ColorArea.h" />
+    <ClInclude Include="MonoSegCli.h" />
+    <ClInclude Include="MonoSegCore.h" />
     <ClInclude Include="ColorPixel.h" />
     <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="FiltersCli.h" />
@@ -152,6 +154,8 @@
     <ClCompile Include="BarcodeCore.cpp" />
     <ClCompile Include="barcode_pca_autoclass.cpp" />
     <ClCompile Include="ColorArea.cpp" />
+    <ClCompile Include="MonoSegCli.cpp" />
+    <ClCompile Include="MonoSegCore.cpp" />
     <ClCompile Include="ColorPixels.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="FiltersCli.cpp" />

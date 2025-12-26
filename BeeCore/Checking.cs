@@ -145,11 +145,16 @@ namespace BeeCore
                                 {//  propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.TransformToolRect(Global.rotAreaAdj,Global.rotOriginAdj,Global.rotCurrentAdj,propetyTool.Propety.rotArea);
 
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
-                                    //if (propetyTool.TypeTool == TypeTool.Positions)
-                                    //{
-                                    //    propetyTool.Propety.pOrigin = new System.Drawing.Point(Global.pOrigin.X, Global.pOrigin.Y);
-                                    //    propetyTool.Propety.AngleOrigin = Global.AngleOrigin;
-                                    //}
+
+                                    if (propetyTool.TypeTool == TypeTool.MultiPattern)
+                                    {
+                                        List<ResultMulti> ResultMulti = propetyTool.Propety.ResultMulti;
+                                        foreach (ResultMulti resultMulti in ResultMulti)
+                                        {
+                                            resultMulti.rotAdj=BeeCore.Common.GetPositionAdjustment(resultMulti.RotCalib, Global.rotOriginAdj);
+                                        }    
+
+                                    }
 
 
                                 }

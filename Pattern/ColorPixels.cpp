@@ -9,8 +9,8 @@ using namespace System;
 using namespace BeeCpp;
 using namespace cv;
 
-namespace {
-    static void RemoveSmallBlobs(cv::Mat& mask, int minArea = 15)
+
+     void ColorPx::RemoveSmallBlobs(cv::Mat& mask, int minArea )
     {
         std::vector<std::vector<cv::Point>> contours;
         findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
@@ -23,18 +23,18 @@ namespace {
             }
         }
     }
-    // ---------- Utils ----------
-    static inline Mat ImdecodeColor(array<Byte>^ bytes) {
-        if (!bytes || bytes->Length == 0) return Mat();
-        pin_ptr<Byte> p = &bytes[0];
-        std::vector<uchar> v(reinterpret_cast<uchar*>(p), reinterpret_cast<uchar*>(p) + bytes->Length);
-        return imdecode(v, IMREAD_COLOR); // CV_8UC3
-    }
-    static inline bool IsBGR8(const Mat& m) { return m.type() == CV_8UC3; }
+    //// ---------- Utils ----------
+    // inline Mat ImdecodeColor(array<Byte>^ bytes) {
+    //    if (!bytes || bytes->Length == 0) return Mat();
+    //    pin_ptr<Byte> p = &bytes[0];
+    //    std::vector<uchar> v(reinterpret_cast<uchar*>(p), reinterpret_cast<uchar*>(p) + bytes->Length);
+    //    return imdecode(v, IMREAD_COLOR); // CV_8UC3
+    //}
+      bool ColorPx::IsBGR8(const Mat& m) { return m.type() == CV_8UC3; }
 
     // ---------- FAST path: vector hóa + đa luồng nội bộ OpenCV (không filter) ----------
 // ---------- FAST path: grayscale + blur để giảm viền ----------
-    static int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise)
+     int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise)
     {
         Rect roi(0, 0, tpl.cols, tpl.rows);
         Mat I = img(roi), T = tpl;
@@ -79,107 +79,107 @@ namespace {
     // 
 //  PARALLEL TILE BODY
 // 
-    struct DiffTileBody : public cv::ParallelLoopBody
-    {
-        const cv::Mat& G1;    // gray normalized & blurred
-        const cv::Mat& G2;
-        const int tol;
-        std::atomic<int>& acc;
-        cv::Mat* ann;
-        bool annotate;
+    //struct DiffTileBody : public cv::ParallelLoopBody
+    //{
+    //    const cv::Mat& G1;    // gray normalized & blurred
+    //    const cv::Mat& G2;
+    //    const int tol;
+    //    std::atomic<int>& acc;
+    //    cv::Mat* ann;
+    //    bool annotate;
 
-        DiffTileBody(const cv::Mat& g1_, const cv::Mat& g2_, int tol_,
-            std::atomic<int>& acc_, cv::Mat* ann_, bool annotate_)
-            : G1(g1_), G2(g2_), tol(tol_), acc(acc_), ann(ann_), annotate(annotate_)
-        {
-        }
+    //    DiffTileBody(const cv::Mat& g1_, const cv::Mat& g2_, int tol_,
+    //        std::atomic<int>& acc_, cv::Mat* ann_, bool annotate_)
+    //        : G1(g1_), G2(g2_), tol(tol_), acc(acc_), ann(ann_), annotate(annotate_)
+    //    {
+    //    }
 
-        void operator()(const cv::Range& r) const override
-        {
-            const int W = G2.cols;
+    //    void operator()(const cv::Range& r) const override
+    //    {
+    //        const int W = G2.cols;
 
-            for (int y = r.start; y < r.end; )
-            {
-                int h = std::min(256, r.end - y);
-                cv::Rect tile(0, y, W, h);
+    //        for (int y = r.start; y < r.end; )
+    //        {
+    //            int h = std::min(256, r.end - y);
+    //            cv::Rect tile(0, y, W, h);
 
-                cv::Mat diff;
-                cv::absdiff(G1(tile), G2(tile), diff);
+    //            cv::Mat diff;
+    //            cv::absdiff(G1(tile), G2(tile), diff);
 
-                cv::Mat mask;
-                cv::threshold(diff, mask, tol, 255, cv::THRESH_BINARY);
+    //            cv::Mat mask;
+    //            cv::threshold(diff, mask, tol, 255, cv::THRESH_BINARY);
 
-                RemoveSmallBlobs(mask, 15);
+    //           _img-> RemoveSmallBlobs(mask, 15);
 
-                int cnt = cv::countNonZero(mask);
-                acc.fetch_add(cnt, std::memory_order_relaxed);
+    //            int cnt = cv::countNonZero(mask);
+    //            acc.fetch_add(cnt, std::memory_order_relaxed);
 
-                if (annotate && ann)
-                    ann->operator()(tile).setTo(cv::Scalar(0, 0, 255), mask);
+    //            if (annotate && ann)
+    //                ann->operator()(tile).setTo(cv::Scalar(0, 0, 255), mask);
 
-                y += h;
-            }
-        }
-    };
+    //            y += h;
+    //        }
+    //    }
+    //};
 
     // 
     //  MAIN PARALLEL DIFF
     // 
-    static int DiffCount_ParallelFull(const cv::Mat& img, const cv::Mat& tpl, int tol, cv::Mat* annotated)
-    {
-        // ====
-        // 1) CLAMP ROI để đảm bảo img và tpl có cùng kích thước xử lý
-        // ====
-        int W = std::min(img.cols, tpl.cols);
-        int H = std::min(img.rows, tpl.rows);
+    //static int DiffCount_ParallelFull(const cv::Mat& img, const cv::Mat& tpl, int tol, cv::Mat* annotated)
+    //{
+    //    // ====
+    //    // 1) CLAMP ROI để đảm bảo img và tpl có cùng kích thước xử lý
+    //    // ====
+    //    int W = std::min(img.cols, tpl.cols);
+    //    int H = std::min(img.rows, tpl.rows);
 
-        if (W <= 0 || H <= 0)
-            return 0;
+    //    if (W <= 0 || H <= 0)
+    //        return 0;
 
-        cv::Rect roi(0, 0, W, H);
+    //    cv::Rect roi(0, 0, W, H);
 
-        cv::Mat I = img(roi);
-        cv::Mat T = tpl(cv::Rect(0, 0, W, H));
+    //    cv::Mat I = img(roi);
+    //    cv::Mat T = tpl(cv::Rect(0, 0, W, H));
 
-        // ====
-        // 2) Prepare grayscale
-        // ====
-        cv::Mat g1, g2;
-        cv::cvtColor(I, g1, cv::COLOR_BGR2GRAY);
-        cv::cvtColor(T, g2, cv::COLOR_BGR2GRAY);
+    //    // ====
+    //    // 2) Prepare grayscale
+    //    // ====
+    //    cv::Mat g1, g2;
+    //    cv::cvtColor(I, g1, cv::COLOR_BGR2GRAY);
+    //    cv::cvtColor(T, g2, cv::COLOR_BGR2GRAY);
 
-        cv::normalize(g1, g1, 0, 255, cv::NORM_MINMAX);
-        cv::normalize(g2, g2, 0, 255, cv::NORM_MINMAX);
+    //    cv::normalize(g1, g1, 0, 255, cv::NORM_MINMAX);
+    //    cv::normalize(g2, g2, 0, 255, cv::NORM_MINMAX);
 
-        cv::GaussianBlur(g1, g1, cv::Size(3, 3), 0.8);
-        cv::GaussianBlur(g2, g2, cv::Size(3, 3), 0.8);
+    //    cv::GaussianBlur(g1, g1, cv::Size(3, 3), 0.8);
+    //    cv::GaussianBlur(g2, g2, cv::Size(3, 3), 0.8);
 
-        // ====
-        // 3) Prepare annotation buffer
-        // ====
-        cv::Mat localAnn;
-        if (annotated)
-        {
-            annotated->create(img.size(), img.type());
-            annotated->setTo(cv::Scalar(0, 0, 0));  // nền đen toàn ảnh
-            localAnn = annotated->operator()(roi);
-        }
+    //    // ====
+    //    // 3) Prepare annotation buffer
+    //    // ====
+    //    cv::Mat localAnn;
+    //    if (annotated)
+    //    {
+    //        annotated->create(img.size(), img.type());
+    //        annotated->setTo(cv::Scalar(0, 0, 0));  // nền đen toàn ảnh
+    //        localAnn = annotated->operator()(roi);
+    //    }
 
-        // ====
-        // 4) PARALLEL DIFF
-        // ====
-        std::atomic<int> acc(0);
-        DiffTileBody body(g1, g2, tol, acc, (annotated ? &localAnn : nullptr), annotated != nullptr);
+    //    // ====
+    //    // 4) PARALLEL DIFF
+    //    // ====
+    //    std::atomic<int> acc(0);
+    //    DiffTileBody body(g1, g2, tol, acc, (annotated ? &localAnn : nullptr), annotated != nullptr);
 
-        // hàng lớn → chia tile theo height
-        cv::parallel_for_(cv::Range(0, H), body, 512);
+    //    // hàng lớn → chia tile theo height
+    //    cv::parallel_for_(cv::Range(0, H), body, 512);
 
-        // ====
-        // 5) Return count
-        // ====
-        return acc.load(std::memory_order_relaxed);
-    }
-    //struct DiffTileBody : public ParallelLoopBody {
+    //    // ====
+    //    // 5) Return count
+    //    // ====
+    //    return acc.load(std::memory_order_relaxed);
+    //}
+    ////struct DiffTileBody : public ParallelLoopBody {
     //    const Mat& G1, & G2;          // grayscale đã chuẩn hoá + blur
     //    const int tol;
     //    std::atomic<int>& acc;
@@ -248,27 +248,27 @@ namespace {
     //}
 
     // ---------- Strategy (luôn quét hết) ----------
-    static int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
+     int ColorPx:: PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
       int tol, Mat* annotated, int SzClearNoise,bool IsMultiCPU)
     {
-        CV_Assert(!img.empty() && !tpl.empty());
+      /*  CV_Assert(!img.empty() && !tpl.empty());
         CV_Assert(tpl.cols <= img.cols && tpl.rows <= img.rows);
-        CV_Assert(IsBGR8(img) && IsBGR8(tpl));
+        CV_Assert(IsBGR8(img) && IsBGR8(tpl));*/
 
        
 
         // chọn song song toàn phần cho ảnh lớn, còn lại fast path;
         // KHÔNG early-exit ở cả hai nhánh
-        const bool big = IsMultiCPU; // >= 4MP
-        int diffCount = big
+      //  const bool big = IsMultiCPU; // >= 4MP
+        int diffCount = DiffCount_Fast(img, tpl, tol, annotated, SzClearNoise); /*big
             ? DiffCount_ParallelFull(img, tpl, tol, annotated)
-            : DiffCount_Fast(img, tpl, tol, annotated,  SzClearNoise);
+            :  DiffCount_Fast(img, tpl, tol, annotated,  SzClearNoise);*/
 
  
         return diffCount;
     }
 
-} // anonymous namespace
+ // anonymous namespace
 //cv::Mat BeeCpp::ColorPx::RotateMat(const cv::Mat& raw, const cv::RotatedRect& rot)
 //{
 //    Mat matRs, matR = getRotationMatrix2D(rot.center, rot.angle, 1);
@@ -328,10 +328,10 @@ void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplS
     );
    
 }
-static int DiffHelper(const cv::Mat& a, const cv::Mat& b, int tol)
-{
-    return PixelCheck_MT_FullScan(a, b, tol, nullptr,0,false);
-}
+//static int DiffHelper(const cv::Mat& a, const cv::Mat& b, int tol)
+//{
+//    return _img->PixelCheck_MT_FullScan(a, b, tol, nullptr,0,false);
+//}
 //IntPtr ColorPixel::CheckImageFromBytes(
 //    array<Byte>^ imageBytes,
 //    array<Byte>^ templateBytes,
@@ -381,7 +381,9 @@ static int DiffHelper(const cv::Mat& a, const cv::Mat& b, int tol)
 // Xóa các vùng nhiễu có diện tích nhỏ hơn minArea (px)
 void ColorPixel::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
 {
-    _img->temp = Mat(h, w, CV_8UC3, data.ToPointer(), stride);
+    cv::Mat m(h, w, CV_8UC3, data.ToPointer(), stride);
+    _img->temp = m.clone();   // BẮT BUỘC
+    //_img->temp = Mat(h, w, CV_8UC3, data.ToPointer(), stride);
 
 }
 void ColorPixel::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
@@ -392,7 +394,10 @@ void ColorPixel::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
         _img->raw.release();
         return;
     }
-
+    if (!_img->raw.empty())
+    {
+        _img->raw.release();
+    }
     // chọn kiểu Mat đúng kênh
     int cvType;
     switch (ch)
@@ -411,7 +416,25 @@ void ColorPixel::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
     //img->matRaw = Mat (h, w, CV_8UC1, data.ToPointer(), stride);
 
 }
+void ColorPixel::SaveRandom(int i)
+{
+    std::srand((unsigned)std::time(nullptr));
 
+    //std::ostringstream oss;
+    //oss << "Temp\\" << "raw_"
+    //    
+    //    << i
+    //    << ".png";
+
+   // cv::imwrite(oss.str(), _img->raw);
+    std::ostringstream oss2;
+    oss2 << "Temp\\" << "temp_"
+
+        << i
+        << ".png";
+
+    cv::imwrite(oss2.str(), _img->temp);
+}
 IntPtr ColorPixel::CheckImageFromMat(
     bool IsAlign,int ModeAlign,bool IsMultiCPU,
     int colorTolerance, int SzClearNoise,
@@ -444,7 +467,7 @@ IntPtr ColorPixel::CheckImageFromMat(
    cv::Mat annotated;
    if (IsAlign)
    {
-       auto R = BeeAlign::AlignECC(_img->raw, _img->temp, (BeeAlign::ECCSpeed)ModeAlign);
+       auto R = BeeAlign::AlignECC(_img->raw, _img->temp.clone(), (BeeAlign::ECCSpeed)ModeAlign);
      //  if (!R.success) return IntPtr::Zero;
 
        outOffsetX = R.dx;
@@ -475,11 +498,14 @@ IntPtr ColorPixel::CheckImageFromMat(
         //outOffsetX = ofs.x;
         //outOffsetY = ofs.y;
         //Offsetangle = angle;
-       outPx = PixelCheck_MT_FullScan(R.aligned, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
+       outPx = _img->PixelCheck_MT_FullScan(R.aligned, _img->temp.clone(), colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
    }
    else
    {
-       outPx = PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
+      
+      // cv::imwrite("i.png", _img->raw);
+      // Mat temp = _img->temp.clone();
+       outPx =_img-> PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
        outOffsetX =0;
        outOffsetY =0;
        Offsetangle =0;

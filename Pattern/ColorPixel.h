@@ -3,19 +3,28 @@
 #include "Global.h"
 using namespace System;
 
+using namespace cv;
 namespace BeeCpp
 {
     class ColorPx {
-    
+    public:    bool IsBGR8(const Mat& m);
     public:  cv::Mat temp; cv::Mat raw;
-        
+   public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU);
+    public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise);
+    public: void RemoveSmallBlobs(cv::Mat& mask, int minArea );
         ColorPx() {}
         ColorPx(const cv::Mat& m) : temp(m.clone()) {}
     };
     public ref class ColorPixel sealed
     {
+        ~ColorPixel() { this->!ColorPixel(); }
+        !ColorPixel()
+        {
+            if (_img) { delete _img; _img = nullptr; }
+            if (com) { delete com;  com = nullptr; }
+        }
     private:CommonPlus* com = new CommonPlus();
-    private:ColorPx* _img = new ColorPx();   // native pointer
+           BeeCpp::ColorPx* _img = new ColorPx();   // native pointer
     public:
         // So khớp ảnh (BGR8) từ bytes nén (PNG/JPG), trả RAW BGR (AllocHGlobal).
      /*   System::IntPtr CheckImageFromBytes(
@@ -48,7 +57,8 @@ namespace BeeCpp
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
         // Giải phóng buffer RAW trả về.
-        static void FreeBuffer(System::IntPtr p);
+         void FreeBuffer(System::IntPtr p);
+         void SaveRandom(int i);
         void SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch);
          void SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch);
 

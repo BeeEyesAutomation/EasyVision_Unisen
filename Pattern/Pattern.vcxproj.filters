@@ -14,6 +14,8 @@
     <ClCompile Include="RansacLineCli.cpp" />
     <ClCompile Include="RansacLineCore.cpp" />
     <ClCompile Include="barcode_pca_autoclass.cpp" />
+    <ClCompile Include="MonoSegCore.cpp" />
+    <ClCompile Include="MonoSegCli.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BarcodeCli.h" />
@@ -33,6 +35,8 @@
     <ClInclude Include="version.h" />
     <ClInclude Include="barcode_pca_autoclass.hpp" />
     <ClInclude Include="Align.h" />
+    <ClInclude Include="MonoSegCore.h" />
+    <ClInclude Include="MonoSegCli.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeeCpp.rc" />
@@ -43,6 +47,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
   </ItemGroup>
 </Project>

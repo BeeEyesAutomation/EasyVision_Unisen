@@ -72,24 +72,13 @@ namespace BeeInterface
             if (Propety.MaxObject == 0) Propety.MaxObject = 1;
             AdjMaximumObj.Value = Propety.MaxObject;
             AdjStepAngle.Value = Propety.StepAngle;
-            AdjLimitCounter.Value= Propety.LimitCounter;
+            AdjLimitY.Value= Propety.LimitCounter;
             trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
            
             ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
             ckSIMD.IsCLick = Propety.ckSIMD;
             ckSubPixel.IsCLick = Propety.ckSubPixel;
-          switch(Propety.Compare)
-            {
-                case Compares.Equal:
-                    btnEqual.IsCLick = true;
-                    break;
-                case Compares.Less:
-                    btnLess.IsCLick = true;
-                    break;
-                case Compares.More:
-                    btnMore.IsCLick = true;
-                    break;
-            }    
+         
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
             else
@@ -118,14 +107,13 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
           
-            adjScale.Value = Propety.Scale;
+            AdjScale.Value = Propety.Scale;
             adjOffsetX.Value = Propety.ExpandX;//
             adjOffsetY.Value = Propety.ExpandY;//
-            adjScalePixel.Value = Propety.ScalePixel;//
-            adjColorPixel.Value = Propety.PxTemp;//
-            btnZero0.IsCLick=Propety.ZeroPos==ZeroPos.Zero?true:false;
-            btnZeroAdj.IsCLick = Propety.ZeroPos == ZeroPos.ZeroADJ ? true : false;
-
+            AdjLimitX.Value = Propety.LimitX;
+            AdjLimitY.Value = Propety.LimitY;
+            AdjThreshColor.Value = Propety.ThreshColor;
+            AdjLimitColor.Value = Propety.LimitColor;
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolMultiPattern_StatusToolChanged;
         }
 
@@ -340,7 +328,7 @@ namespace BeeInterface
    
         private void numLimitCounter_ValueChanged(float obj)
         {
-            Propety.LimitCounter = (int)AdjLimitCounter.Value;
+            Propety.LimitCounter = (int)AdjLimitY.Value;
         }
    
 
@@ -738,8 +726,8 @@ namespace BeeInterface
 
         private void btn7_Click(object sender, EventArgs e)
         {
-            layLimitCouter.Visible = !btn8.IsCLick;
-            AdjLimitCounter.Visible = !btn8.IsCLick;
+            //layLimitCouter.Visible = !btn9.IsCLick;
+            AdjLimitY.Visible = !btn9.IsCLick;
         }
 
         private void btnZeroAdj_Click(object sender, EventArgs e)
@@ -749,13 +737,13 @@ namespace BeeInterface
 
         private void adjScale_ValueChanged(float obj)
         {
-            Propety.Scale =(float)adjScale.Value;
+            Propety.Scale =(float)AdjScale.Value;
         }
 
         private void btn7_Click_1(object sender, EventArgs e)
         {
-            lay71.Visible = !btn7.IsCLick;
-            lay72.Visible = !btn7.IsCLick;
+            AdjScale.Visible = !btn7.IsCLick;
+            AdjScale.Visible = !btn7.IsCLick;
         }
 
         private void btnZero0_Click(object sender, EventArgs e)
@@ -788,10 +776,7 @@ namespace BeeInterface
 
         }
 
-        private void adjScalePixel_ValueChanged(float obj)
-        {
-            Propety.ScalePixel = adjScalePixel.Value;
-        }
+       
 
         private void adjOffsetX_ValueChanged(float obj)
         {
@@ -815,10 +800,41 @@ namespace BeeInterface
             }
         }
 
-        private void adjColorPixel_ValueChanged_1(float obj)
-        {
+        
+   
+ 
 
-            Propety.PxTemp = adjColorPixel.Value;
+  
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Propety.IsClose = btnClose.IsCLick;
+            AdjMorphology.Enabled = Propety.IsClose;
+        }
+
+        private void AdjLimitX_ValueChanged(float obj)
+        {
+            Propety.LimitX=AdjLimitX.Value; 
+        }
+
+        private void AdjLimitY_ValueChanged(float obj)
+        {
+            Propety.LimitY=AdjLimitY.Value;
+        }
+
+        private void btn9_Click(object sender, EventArgs e)
+        {
+            AdjLimitY.Visible=!btn9.IsCLick;
+        }
+
+        private void AdjLimitColor_ValueChanged(float obj)
+        {
+            Propety.LimitColor =(int) AdjLimitColor.Value;
+        }
+
+        private void AdjThreshColor_ValueChanged(float obj)
+        {
+            Propety.ThreshColor =(int) AdjThreshColor.Value;
         }
     }
 }
