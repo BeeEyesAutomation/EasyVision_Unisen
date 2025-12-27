@@ -146,15 +146,15 @@ namespace BeeCore
 
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
 
-                                    if (propetyTool.TypeTool == TypeTool.MultiPattern)
-                                    {
-                                        List<ResultMulti> ResultMulti = propetyTool.Propety.ResultMulti;
-                                        foreach (ResultMulti resultMulti in ResultMulti)
-                                        {
-                                            resultMulti.rotAdj=BeeCore.Common.GetPositionAdjustment(resultMulti.RotCalib, Global.rotOriginAdj);
-                                        }    
+                                    //if (propetyTool.TypeTool == TypeTool.MultiPattern)
+                                    //{
+                                    //    List<ResultMulti> ResultMulti = propetyTool.Propety.ResultMulti;
+                                    //    foreach (ResultMulti resultMulti in ResultMulti)
+                                    //    {
+                                    //        resultMulti.rotAdj=BeeCore.Common.GetPositionAdjustment(resultMulti.RotCalib, Global.rotOriginAdj);
+                                    //    }    
 
-                                    }
+                                    //}
 
 
                                 }

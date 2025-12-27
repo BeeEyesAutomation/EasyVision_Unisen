@@ -85,6 +85,7 @@
     <Compile Include="QpcTimer.cs" />
     <Compile Include="RectRotate.cs" />
     <Compile Include="RotatedBoxInfo.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="TimingUtils.cs" />
     <Compile Include="ValuePara.cs" />
   </ItemGroup>

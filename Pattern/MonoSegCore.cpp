@@ -25,7 +25,6 @@ int MonoSegCore::AutoThresholdHistogramValley(const Mat& score8U)
     }
     return valley;
 }
-
 float MonoSegCore::MedianInplace(std::vector<float>& v)
 {
     if (v.empty()) return 0.f;
@@ -33,7 +32,6 @@ float MonoSegCore::MedianInplace(std::vector<float>& v)
     nth_element(v.begin(), v.begin() + m, v.end());
     return v[m];
 }
-
 RotatedRect MonoSegCore::MinAreaRect_GlobalFromROI(const Mat& roiMask, const Rect& roiBox)
 {
     vector<vector<Point>> cnts;
@@ -137,7 +135,18 @@ int MonoSegCore::SegmentLowContrastMono(
     if (outScore) *outScore = score;
     return countNonZero(outMask8U);
 }
+static inline void NormalizeRectAngle(cv::RotatedRect& rr)
+{
+    // OpenCV: angle ∈ (-90, 0]
+    if (rr.size.width < rr.size.height)
+    {
+        rr.angle += 90.f;
+        std::swap(rr.size.width, rr.size.height);
+    }
 
+    // ép về [0, 90)
+    if (rr.angle < 0) rr.angle += 90.f;
+}
 // ==================== NEW: PAPER + CHIP ROTATED RECTS ====================
 int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
     const cv::Mat& mask8U,
@@ -154,65 +163,7 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
     const int H = mask8U.rows;
     const double imgArea = (double)W * H;
 
-    // =========================================================
-    // A) PAPER DETECT – DÙNG MASK GỐC (VIỀN)
-    // =========================================================
-    cv::RotatedRect bestRR;
-    bool found = false;
-
-    {
-      
-        cv::Mat m = Mat();// mask8U.clone();
-        cv::bitwise_not(mask8U, m);
-        // nối viền đứt + giảm rỗ
-        cv::morphologyEx(m, m, cv::MORPH_CLOSE,
-            cv::getStructuringElement(cv::MORPH_RECT, cv::Size(9, 9)));
-
-        std::vector<std::vector<cv::Point>> cnts;
-        cv::findContours(m, cnts, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
-        double bestScore = 0.0;
-
-        for (auto& c : cnts)
-        {
-            cv::Rect box = cv::boundingRect(c);
-
-            // nới điều kiện một chút (0.45 thay vì 0.6)
-            if (box.width < W * 0.45) continue;
-            if (box.height < H * 0.45) continue;
-
-            // fill ratio bằng COUNT NONZERO trong bounding box (ổn định hơn contourArea cho viền)
-            cv::Mat roi = m(box);
-            double fill = (double)cv::countNonZero(roi) / (double)box.area();
-
-            // viền paper thường fill thấp, nhưng sau close sẽ tăng một chút → cho range rộng hơn
-          /*  if (fill > 0.35) continue;*/
-
-            cv::RotatedRect rr = cv::minAreaRect(c);
-
-            // score: ưu tiên box to, và fill thấp
-            double score = (double)box.area() * (1.0 - fill);
-
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestRR = rr;
-                found = true;
-            }
-        }
-
-        if (found)
-        {
-            if (bestRR.size.width > bestRR.size.height)
-            {
-                std::swap(bestRR.size.width, bestRR.size.height);
-                bestRR.angle += 90.f;
-            }
-            outRR.push_back(bestRR);
-            outIsPaper.push_back(1);
-        }
-    }
-
+    
     // =========================================================
     // B) CHIP DETECT – CLEAN MASK + CC
     // =========================================================
@@ -268,22 +219,45 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
     float maxW = medW * (1.f + p.sizeTol);
     float minH = medH * (1.f - p.sizeTol);
     float maxH = medH * (1.f + p.sizeTol);
+    //float medW = median(Ws);
+    //float medH = median(Hs);
+
+    //float tol = p.sizeTol;   // ví dụ 0.25f
+    //float minW = medW * (1.f - tol);
+    //float maxW = medW * (1.f + tol);
+    //float minH = medH * (1.f - tol);
+    //float maxH = medH * (1.f + tol);
+
 
     // ---- final chip filter ----
     for (auto& box : cand)
     {
         if (box.width < minW || box.width > maxW) continue;
         if (box.height < minH || box.height > maxH) continue;
+        float ar = (float)box.height / (float)box.width;
+        if (ar < 2.0f) continue;   // loại box lùn / méo
 
         cv::Mat roi = clean(box);
         double fill = (double)cv::countNonZero(roi) / (double)box.area();
         if (fill < p.minFillRatio) continue;
+      /*  cv::Mat roi = clean(box);
+        double fill = (double)cv::countNonZero(roi) / (double)box.area();
+        if (fill < p.minFillRatio) continue;*/
 
         std::vector<std::vector<cv::Point>> cnts;
         cv::findContours(roi, cnts, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
         if (cnts.empty()) continue;
-
         cv::RotatedRect rr = cv::minAreaRect(cnts[0]);
+        rr.center.x += box.x;
+        rr.center.y += box.y;
+
+        NormalizeRectAngle(rr);
+        if (rr.size.width > rr.size.height)
+        {
+            std::swap(rr.size.width, rr.size.height);
+            rr.angle += 90.f;
+        }
+        /*cv::RotatedRect rr = cv::minAreaRect(cnts[0]);
         rr.center.x += box.x;
         rr.center.y += box.y;
 
@@ -291,7 +265,7 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
         {
             std::swap(rr.size.width, rr.size.height);
             rr.angle += 90.f;
-        }
+        }*/
 
         outRR.push_back(rr);
         outIsPaper.push_back(0);
