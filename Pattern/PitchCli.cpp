@@ -113,13 +113,10 @@ PitchCliResult^ PitchCli::Measure() {
             double dYprev = (i > 0) ? double(R.crests[i].y - R.crests[i - 1].y) : std::numeric_limits<double>::quiet_NaN();
             double dXnext = (i < n - 1) ? double(R.crests[i + 1].x - R.crests[i].x) : std::numeric_limits<double>::quiet_NaN();
             double dYnext = (i < n - 1) ? double(R.crests[i + 1].y - R.crests[i].y) : std::numeric_limits<double>::quiet_NaN();
-
             double prevPx = ChooseDominantDelta(dXprev, dYprev);
             double nextPx = ChooseDominantDelta(dXnext, dYnext);
-
             info->PitchPrevMM = std::isfinite(prevPx) ? prevPx * R.scale_mm_per_px : std::numeric_limits<double>::quiet_NaN();
             info->PitchNextMM = std::isfinite(nextPx) ? nextPx * R.scale_mm_per_px : std::numeric_limits<double>::quiet_NaN();
-
             M->CrestInfos[i] = info;
         }
     }

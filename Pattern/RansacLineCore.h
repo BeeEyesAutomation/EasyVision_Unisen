@@ -14,8 +14,21 @@ namespace BeeCpp {
         float         length_px = 0.f;   // độ dài theo pixel
         float         length_mm = 0.f;   // độ dài theo mm (= length_px * mmPerPixel)
     };
+    enum LineDirNative
+    {
+        Any = 0,        // như hiện tại
+        Horizontal,     // gần 0° / 180°
+        Vertical,       // gần 90°
+        AngleRange      // dải góc tùy chọn
+    };
 
     class RansacLineCore {
+    private: static bool CheckDirection(
+        double dx, double dy,
+        LineDirNative mode,
+        float angleCenterDeg,
+        float tolDeg
+    );
     public:
         // Overload mới: có tham số mmPerPixel
         static LineResult FindBestLine(
@@ -24,7 +37,10 @@ namespace BeeCpp {
             float threshold = 1.5f,      // ngưỡng khoảng cách điểm -> line (px)
             int maxPoints = 10000,       // giới hạn sample điểm
             unsigned seed = 987654321u,  // seed RNG
-            float mmPerPixel = 1.0f      // scale mm/pixel
+            float mmPerPixel = 1.0f  ,    // scale mm/pixel
+            LineDirNative dirMode = LineDirNative::Any,
+            float angleCenterDeg = 0.0f,   // dùng cho AngleRange
+            float angleToleranceDeg = 10.0f
         );
 
         // Overload cũ (tương thích ngược)

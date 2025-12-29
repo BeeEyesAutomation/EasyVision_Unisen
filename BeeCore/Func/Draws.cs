@@ -271,7 +271,7 @@ namespace BeeCore
             //System.Drawing.PointF pt2 = new System.Drawing.PointF(x0 - vx * 1000, y0 - vy * 1000);
             //g.DrawLine(pen, pt1, pt2);
         }
-        public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen, float halfLen = 5000f)
+        private static void DrawLineAxit(Graphics g, Line2D ln, Pen pen, float halfLen = 5000f)
         {
             float vx = (float)ln.Vx;
             float vy = (float)ln.Vy;
@@ -296,7 +296,7 @@ namespace BeeCore
         {
             // trục hoành: vx=1, vy=0
             var ln = new Line2D(B.X, B.Y, 1.0, 0.0);
-            DrawInfiniteLine(g, ln, pen, halfLen);
+            DrawLineAxit(g, ln, pen, halfLen);
         }
         public static void DrawInfiniteLine(Mat img, Line2D ln, Scalar col, int thickness)
         {

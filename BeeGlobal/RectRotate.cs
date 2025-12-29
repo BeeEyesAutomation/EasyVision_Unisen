@@ -117,7 +117,41 @@ namespace BeeGlobal
 
             _rect = new RectangleF(-w1 / 2f, -h1 / 2f, w1, h1);
         }
+        public void OffsetPixels(float dx, float dy, bool scalePolygonPoints = false)
+        {
+            // dx, dy > 0 : expand
+            // dx, dy < 0 : shrink
+            float w0 = Math.Max(1f, _rect.Width);
+            float h0 = Math.Max(1f, _rect.Height);
 
+            float w1 = Math.Max(1f, w0 + 2f * dx);
+            float h1 = Math.Max(1f, h0 + 2f * dy);
+
+            if (Shape == ShapeType.Polygon &&
+                scalePolygonPoints &&
+                PolyLocalPoints != null &&
+                PolyLocalPoints.Count > 0)
+            {
+                float sx = w1 / w0;
+                float sy = h1 / h0;
+
+                int end = PolyLocalPoints.Count;
+                bool closed =
+                    end >= 2 &&
+                    PolyLocalPoints[0].Equals(PolyLocalPoints[end - 1]);
+
+                for (int i = 0; i < end; i++)
+                {
+                    var p = PolyLocalPoints[i];
+                    PolyLocalPoints[i] = new PointF(p.X * sx, p.Y * sy);
+                }
+
+                if (closed)
+                    PolyLocalPoints[end - 1] = PolyLocalPoints[0];
+            }
+
+            _rect = new RectangleF(-w1 / 2f, -h1 / 2f, w1, h1);
+        }
         public RectRotate Clone() => new RectRotate(this);
 
         // ====== NEW: reset sạch trước khi bắt đầu polygon mới ======

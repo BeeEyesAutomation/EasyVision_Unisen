@@ -5,9 +5,9 @@
 #define VER_MINOR 0
 #define VER_BUILD 1
 
-#define VER_REV 501
+#define VER_REV 511
 
-#define VER_REV 501
+#define VER_REV 511
 
 
 #define STRINGIZE2(x) #x
@@ -17,6 +17,16 @@
 #define VER_FILE_VERSION     VER_MAJOR,VER_MINOR,VER_BUILD,VER_REV
 // "1.0.0.0" cho c?c VALUE chu?i
 #define VER_FILE_VERSION_STR STRINGIZE(VER_MAJOR) "." STRINGIZE(VER_MINOR) "." STRINGIZE(VER_BUILD) "." STRINGIZE(VER_REV)
+
+
+
+
+
+
+
+
+
+
 
 
 

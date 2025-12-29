@@ -150,8 +150,8 @@ namespace BeeCore
                     matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
                 if (IsClearNoiseBig)
                     matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
-               
 
+                LineDirectionMode lineDirectionMode = LineDirectionMode.Horizontal;
               
                 Line2DCli =  RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
@@ -159,9 +159,9 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale
+                    mmPerPixel: 1/Scale,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),0,30
 
-                  
+
                 );
                 PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
                 PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);

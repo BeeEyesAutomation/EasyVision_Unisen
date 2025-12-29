@@ -14,10 +14,27 @@ static void ApplyCliOpts(const DebugDrawOptionsCli^ in, BeeCpp::DebugDrawOptions
     out.fontScale = in->FontScale;
     out.fontThickness = in->FontThickness;
 }
+static LineDirNative ToNative(LineDirectionMode m)
+{
+    switch (m)
+    {
+    case LineDirectionMode::Horizontal:
+        return Horizontal;
+    case LineDirectionMode::Vertical:
+        return Vertical;
+    case LineDirectionMode::AngleRange:
+        return AngleRange;
+    default:
+        return Any;
+    }
+}
 Line2DCli RansacLine::FindBestLine(
     IntPtr edgeData, int width, int height, int stride,
     int iterations, float threshold, int maxPoints, int seed,
-    float mmPerPixel)
+    float mmPerPixel, 
+    LineDirectionMode dirMode ,
+    float angleCenterDeg  ,   
+    float angleToleranceDeg )
 {
     Line2DCli ret{};
     ret.Found = false;
@@ -26,9 +43,9 @@ Line2DCli RansacLine::FindBestLine(
         return ret;
 
     cv::Mat edges(height, width, CV_8UC1, edgeData.ToPointer(), (size_t)stride);
-
+    LineDirNative nativeDir = ToNative(dirMode);
     auto res = RansacLineCore::FindBestLine(
-        edges, iterations, threshold, maxPoints, (unsigned)seed, mmPerPixel);
+        edges, iterations, threshold, maxPoints, (unsigned)seed, mmPerPixel, nativeDir, angleCenterDeg, angleToleranceDeg);
 
     if (!res.found) return ret;
 

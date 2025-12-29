@@ -19,7 +19,13 @@ namespace BeeCpp {
         float LengthPx;
         float LengthMm;
     };
-
+    public enum class LineDirectionMode
+    {
+        Any = 0,        // như hiện tại
+        Horizontal,     // gần 0° / 180°
+        Vertical,       // gần 90°
+        AngleRange      // dải góc tùy chọn
+    };
 
 
         public ref struct DebugDrawOptionsCli {
@@ -34,11 +40,15 @@ namespace BeeCpp {
         };
 
         public ref class RansacLine {
+       
         public:
             // === API cũ vẫn giữ ===
             static Line2DCli FindBestLine(
                 IntPtr edgeData, int width, int height, int stride,
-                int iterations, float threshold, int maxPoints, int seed, float mmPerPixel);
+                int iterations, float threshold, int maxPoints, int seed, float mmPerPixel,
+                LineDirectionMode dirMode ,
+                float angleCenterDeg ,   // dùng cho AngleRange
+                float angleToleranceDeg );
 
             // === API mới: debug & save ===
             static Line2DCli FindBestLineAndDebug(

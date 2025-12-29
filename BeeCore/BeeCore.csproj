@@ -133,7 +133,9 @@
     <Compile Include="Algorithm\Gap.cs" />
     <Compile Include="Algorithm\Geometry2D.cs" />
     <Compile Include="Algorithm\ImagePreprocessPipeline.cs" />
+    <Compile Include="Algorithm\InsertLine.cs" />
     <Compile Include="Algorithm\LineDetector.cs" />
+    <Compile Include="Algorithm\MonoSegmentation.cs" />
     <Compile Include="Algorithm\RansacCircleFitter.cs" />
     <Compile Include="Algorithm\RansacFitLine.cs" />
     <Compile Include="BitmapExtensions.cs" />
