@@ -91,7 +91,7 @@ namespace BeeCore.Algorithm
 
             // Intersection of 2 lines in param form:
             // L1: P = P1 + t*d1, L2: Q = P2 + s*d2
-            private static PointF Intersect(Line2D a, Line2D b)
+            public static PointF Intersect(Line2D a, Line2D b)
             {
             double ax = a.X1, ay = a.Y1;
                 double bx = b.X1, by = b.Y1;
@@ -114,6 +114,53 @@ namespace BeeCore.Algorithm
 
                 return new PointF((float)(ax + t * avx), (float)(ay + t * avy));
             }
-        }
+                private static bool IsHorizontal(double angDeg)
+                {
+                    // gần 0° hoặc 180°
+                    return Math.Abs(angDeg) <= 45.0 || Math.Abs(Math.Abs(angDeg) - 180.0) <= 45.0;
+                }
+                public static SideLR GetLineA_Side(Line2D lineA, Point2f P)
+                  {
+                    // double s = SignedSide(lineA, P);
+                    return lineA.X1 < P.X ? SideLR.Left : SideLR.Right;
+                }
+                public static SideTB GetLineB_Side(Line2D lineB, Point2f P)
+                {
+
+                    return lineB.Y1 > P.Y ? SideTB.Below : SideTB.Above;
+
+                }
+                private static double AngleDegFromVector(double vx, double vy)
+                {
+                    double ang = Math.Atan2(vy, vx) * 180.0 / Math.PI;
+                    //if (ang > 180) ang -= 360;
+                    //if (ang < -180) ang += 360;
+                    return ang;
+                }
+                public static double GetAngleAndSide(Line2D A,Line2D B,PointF P,out SideLR sideLR, out SideTB sideTB )
+                {
+                    double ang1 = AngleDegFromVector(A.Vx, A.Vy);
+                    double ang2 = AngleDegFromVector(B.Vx, B.Vy);
+
+            // ÉP QUY ƯỚC:
+            // LineA = ngang, LineB = dọc
+                    Line2D lineA = A;
+                     Line2D lineB = B;
+                    double angA = ang1;
+                    double angB = ang2;
+
+                    if (!IsHorizontal(ang1) && IsHorizontal(ang2))
+                    {
+                        // swap
+                        lineA = B;
+                        lineB = A;
+                        angA = ang2;
+                        angB = ang1;
+                    }
+                sideLR = GetLineA_Side(lineA,new Point2f( P.X,P.Y));
+                sideTB = GetLineB_Side(lineB,  new Point2f(P.X, P.Y));
+             return angA;
+                }
+    }
     }
 

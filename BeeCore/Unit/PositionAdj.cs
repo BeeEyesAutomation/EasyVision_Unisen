@@ -461,6 +461,13 @@ namespace BeeCore
         public bool IsCalib = false;
         public SideLR SideLR=SideLR.Left;
         public SideTB SideTB = SideTB.Above;
+        public SideLR SideTempLR = SideLR.Left;
+        public SideTB SideTempTB = SideTB.Above;
+        [NonSerialized]
+        private Line2D LineVertial,LineHorial;
+        [NonSerialized]
+        private Line2DCli LineCliHorial, LineCliVertical;
+        public PointF pInsert = new PointF();
         public void DoWork(RectRotate rectRotate)
         {
          
@@ -607,58 +614,80 @@ namespace BeeCore
                                                 MinInliersA = 2;
                                                 MinInliersB = 2;
                                             }
-                                            OrthCornerOptions orthCornerOptions = new OrthCornerOptions
-                                            {
-                                                MaxCandidateLines = MaximumLine,
-                                                RansacIterations = RansacIterations,
-                                                RansacThreshold = RansacThreshold,
-                                                MinInlierA = MinInliersA,
-                                                MinInlierB = MinInliersB,
-                                                AutoMean = AutoMean,
-                                                FixMean = FixMean,
-                                                AngleTargetDeg = AngleTargetDeg,
-                                                AngleToleranceDeg = AngleToleranceDeg,
-                                                ContinuityGapFactor = ContinuityGapFactor,
-                                            };
+                                            
+                                            //OrthCornerOptions orthCornerOptions = new OrthCornerOptions
+                                            //{
+                                            //    MaxCandidateLines = MaximumLine,
+                                            //    RansacIterations = RansacIterations,
+                                            //    RansacThreshold = RansacThreshold,
+                                            //    MinInlierA = MinInliersA,
+                                            //    MinInlierB = MinInliersB,
+                                            //    AutoMean = AutoMean,
+                                            //    FixMean = FixMean,
+                                            //    AngleTargetDeg = AngleTargetDeg,
+                                            //    AngleToleranceDeg = AngleToleranceDeg,
+                                            //    ContinuityGapFactor = ContinuityGapFactor,
+                                            //};
                                             try
                                             {
+                                                 LineCliHorial = RansacLine.FindBestLine(
+                                               matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                               iterations: RansacIterations,
+                                               threshold: (float)RansacThreshold,
+                                               maxPoints: 120000,
+                                               seed: Index,
+                                               mmPerPixel: 1, BeeCpp.LineDirectionMode.Horizontal, 0, AngleToleranceDeg
+                                                );
+                                                LineCliVertical = RansacLine.FindBestLine(
+                                                 matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                                 iterations: RansacIterations,
+                                                 threshold: (float)RansacThreshold,
+                                                 maxPoints: 120000,
+                                                 seed: Index,
+                                                 mmPerPixel: 1, BeeCpp.LineDirectionMode.Vertical, 0, AngleToleranceDeg
+                                                  );
+                                              
+                                                // Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
 
-                                                Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
-                                                  
                                                 //  Cv2.ImWrite("RS.png", Result.Debug);
+                                                if (LineCliHorial.Found&&LineCliVertical.Found)
+                                                {
+                                                    LineHorial = new Line2D(LineCliHorial.Vx, LineCliHorial.Vy, LineCliHorial.X0, LineCliHorial.Y0);
+                                                    LineVertial = new Line2D(LineCliVertical.Vx, LineCliVertical.Vy, LineCliVertical.X0, LineCliVertical.Y0);
+                                                    pInsert = InsertLine.Intersect(LineHorial, LineVertial);
 
+                                                    // Kết quả vẽ 1 rect bé tại góc phát hiện
+                                                    int width1 = 10, height1 = 10;
+                                                    float angle1 = (float)InsertLine.GetAngleAndSide(LineHorial, LineVertial, pInsert, out SideLR, out SideTB);
+                                                    //   angle1 = 270f - angle1;
 
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Console.WriteLine(ex.ToString());
-                                            }
-                                            if(Result.Found)
-                                            {   // Kết quả vẽ 1 rect bé tại góc phát hiện
-                                                int width1 = 10, height1 = 10;
-                                                float angle1 = (float)Result.AngleLineA_Deg;
-                                                //   angle1 = 270f - angle1;
-
-                                                scoreSum = 100f;
-                                                PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
-                                                rectRotates = new List<RectRotate>
+                                                    scoreSum = 100f;
+                                                    PointF pCenter = new System.Drawing.PointF(pInsert.X, pInsert.Y);
+                                                    rectRotates = new List<RectRotate>
                                             {
                                                 new RectRotate(
                                                     new System.Drawing.RectangleF(-width1 / 2f, -height1 / 2f, width1, height1),pCenter
                                                    ,
                                                     angle1, AnchorPoint.None)
                                             };
-                                                listP_Center.Add(new System.Drawing.Point(
-                                   (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-                                   (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
-                                                list_AngleCenter.Add(rotArea._rectRotation + angle1);
+                                                    listP_Center.Add(new System.Drawing.Point(
+                                       (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
+                                       (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                                                    list_AngleCenter.Add(rotArea._rectRotation + angle1);
 
+
+                                                }
+                                                else
+                                                {
+                                                    rectRotates = new List<RectRotate>();
+                                                }
 
                                             }
-                                            else
+                                            catch (Exception ex)
                                             {
-                                                rectRotates = new List<RectRotate>();
-                                            }    
+                                                Console.WriteLine(ex.ToString());
+                                            }
+                                           
                                         }
                                         catch(Exception ex)
                                         {
@@ -734,15 +763,15 @@ namespace BeeCore
             }
             if (IsCalib)
             {
-                SideLR =Result.LineA_SideOf_LineB;
-                SideTB = Result.LineB_SideOf_LineA;
-                MinInliersA = (float)(Result.Inliers1 * (90 / 100.0));
-                MinInliersB = (float)(Result.Inliers2 * (90 / 100.0));
+                SideTempLR = SideLR;
+                SideTempTB = SideTB;
+              //  MinInliersA = (float)(Result.Inliers1 * (90 / 100.0));
+              //  MinInliersB = (float)(Result.Inliers2 * (90 / 100.0));
 
 
 
             }
-            if (Result.LineA_SideOf_LineB != SideLR || Result.LineB_SideOf_LineA != SideTB)
+            if (SideTempLR != SideLR || SideTempTB != SideTB)
                 results = Results.NG;
             if (!Global.IsRun)
              {
@@ -808,37 +837,42 @@ namespace BeeCore
                     Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
             }
 
-            if (MethodSample == MethodSample.Corner && Result.Found)
+            if (MethodSample == MethodSample.Corner )
             {
                
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
            
                 gc.Transform = mat;
-                var flags = DrawFlags.None;
-                if (Global.IsRun)
-                    flags = DrawFlags.BestCorner | DrawFlags.BestLines;
-                else
-                {
-                    if (Global.Config.IsShowDetail) flags = flags | DrawFlags.Inliers;
-                    if (Global.Config.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
-                    if (Global.Config.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
-                }
+                 gc.DrawLine(new Pen(new SolidBrush(Global.Config.ColorInfor), Global.Config.ThicknessLine), LineCliHorial.X1, LineCliHorial.Y1, LineCliHorial.X2, LineCliHorial.Y2);
+                gc.DrawLine(new Pen(new SolidBrush(Global.Config.ColorInfor), Global.Config.ThicknessLine), LineCliVertical.X1, LineCliVertical.Y1, LineCliVertical.X2, LineCliVertical.Y2);
+                //Draws.DrawInfiniteLine(gc,LineHorial, new Pen(Brushes.Blue, 2), rotA._rect);
+                //Draws.DrawInfiniteLine(gc, LineVertial, new Pen(Brushes.Gold, 2), rotA._rect);
+                Draws.Plus(gc,(int) pInsert.X,(int)pInsert.Y, 10, Color.Yellow, 2);
+                //var flags = DrawFlags.None;
+                //if (Global.IsRun)
+                //    flags = DrawFlags.BestCorner | DrawFlags.BestLines;
+                //else
+                //{
+                //    if (Global.Config.IsShowDetail) flags = flags | DrawFlags.Inliers;
+                //    if (Global.Config.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
+                //    if (Global.Config.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
+                //}
 
-                DrawStyle drawStyle = new DrawStyle
-                    {
-                        Inlier = Color.Red,
-                    LineChoose = Global.Config.ColorChoose,
-                    LineResult = Global.Config.ColorInfor,
-                    LineNone = Global.Config.ColorNone,
-                    
-                        LineDash = DashStyle.Solid,
-                        InlierSize = Global.Config.ThicknessLine / 2,
-                        Thickness = Global.Config.ThicknessLine,
-                    };
+                //DrawStyle drawStyle = new DrawStyle
+                //    {
+                //        Inlier = Color.Red,
+                //    LineChoose = Global.Config.ColorChoose,
+                //    LineResult = Global.Config.ColorInfor,
+                //    LineNone = Global.Config.ColorNone,
 
-                DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
+                //        LineDash = DashStyle.Solid,
+                //        InlierSize = Global.Config.ThicknessLine / 2,
+                //        Thickness = Global.Config.ThicknessLine,
+                //    };
 
-             
+                //DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
+
+
             }
 
             if (MethodSample == MethodSample.Pattern)

@@ -8,7 +8,6 @@ using namespace cv;
 namespace BeeCpp {
 
     static inline float Deg2Rad(float d) { return d * 3.14159265358979323846f / 180.f; }
-
     BarcodeCoreCli::BarcodeCoreCli() { _core = new BeeCpp::BarcodeCore(); com = new BeeCpp::CommonPlus(); }
     BarcodeCoreCli::~BarcodeCoreCli() { this->!BarcodeCoreCli(); }
     BarcodeCoreCli::!BarcodeCoreCli() { if (_core) { delete _core; _core = nullptr; } if (com) { delete com; com = nullptr; } }

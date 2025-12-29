@@ -609,7 +609,6 @@ namespace BeeCore
             int W=raw.Width;
             int H = raw.Height;
             int space = 500;
-            
              rotBot = new RectRotate( new RectangleF(-space / 2f, -H / 4f, space, H/2f),new PointF(W/2,3*H/4f),0, AnchorPoint.None);
             using (Mat crop = Cropper.CropRotatedRect(raw, rotBot, null))
             {
@@ -624,7 +623,6 @@ namespace BeeCore
                     seed: Index,
                     mmPerPixel: 1, BeeCpp.LineDirectionMode.Horizontal, 0, 40
                 );
-
             }
             LineBot.X1 += rotBot._PosCenter.X + rotBot._rect.X; LineBot.Y1 += rotBot._PosCenter.Y + rotBot._rect.Y;
             LineBot.X2+= rotBot._PosCenter.X + rotBot._rect.X; LineBot.Y2 += rotBot._PosCenter.Y + rotBot._rect.Y;
