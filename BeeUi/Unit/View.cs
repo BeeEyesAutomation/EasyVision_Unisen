@@ -684,7 +684,7 @@ namespace BeeUi
 
                 if (rr.Shape == ShapeType.Polygon)
                 {
-                    float handle = Global.Config.RadEdit;
+                    float handle = Global.ParaShow.RadEdit;
                     float closeTol = handle * 1.25f;
 
                     // Nếu polygon đang rỗng -> reset sạch khung + xoá điểm cũ
@@ -1182,7 +1182,7 @@ namespace BeeUi
                         ? BboxOf(rotateRect.PolyLocalPoints)
                         : baseRect;
 
-                    float r = Global.Config.RadEdit;
+                    float r = Global.ParaShow.RadEdit;
 
                     RectangleF rectOuter = new RectangleF(polyBounds.X - r / 2f, polyBounds.Y - r / 2f, polyBounds.Width + r, polyBounds.Height + r);
                     RectangleF rectTopLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Top - r / 2f, r, r);
@@ -1658,7 +1658,7 @@ namespace BeeUi
         //            if (rotateRect.Shape == ShapeType.Polygon && rotateRect.PolyLocalPoints != null && rotateRect.PolyLocalPoints.Count >= 3)
         //                polyBounds = BboxOf(rotateRect.PolyLocalPoints);
 
-        //            float r = Global.Config.RadEdit;
+        //            float r = Global.ParaShow.RadEdit;
 
         //            RectangleF rectOuter = new RectangleF(polyBounds.X - r / 2f, polyBounds.Y - r / 2f, polyBounds.Width + r, polyBounds.Height + r);
         //            RectangleF rectTopLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Top - r / 2f, r, r);
@@ -2232,7 +2232,7 @@ namespace BeeUi
         //            // nếu Polygon thì bounding-rect theo điểm (để có handles)
         //            RectangleF polyBounds = (rotateRect.Shape == ShapeType.Polygon) ? GetPolygonBoundsLocal(rotateRect) : baseRect;
 
-        //            float r = Global.Config.RadEdit;
+        //            float r = Global.ParaShow.RadEdit;
 
         //            RectangleF rectOuter = new RectangleF(polyBounds.X - r / 2f, polyBounds.Y - r / 2f, polyBounds.Width + r, polyBounds.Height + r);
         //            RectangleF rectTopLeft = new RectangleF(polyBounds.Left - r / 2f, polyBounds.Top - r / 2f, r, r);
@@ -2507,10 +2507,10 @@ namespace BeeUi
             //        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
             //        mat.Rotate(rot._rectRotation);
             //        gc.Transform = mat;
-            //        Pen pen = new Pen(Global.Config.ColorNone,Global.Config.ThicknessLine);
+            //        Pen pen = new Pen(Global.ParaShow.ColorNone,Global.ParaShow.ThicknessLine);
             //        if(rot._dragAnchor==AnchorPoint.Center)
             //        {
-            //            pen= new Pen(Global.Config.ColorChoose, Global.Config.ThicknessLine);
+            //            pen= new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine);
             //        }    
             //        gc.DrawPolygon(pen, rot.PolyLocalPoints.ToArray());
             //        gc.ResetTransform();
@@ -2525,7 +2525,7 @@ namespace BeeUi
             }    
             int index = 0;
             if (Global.IsLive)
-                gc.DrawString("LIVE", new Font("Arial", Global.Config.FontSize,FontStyle.Bold), Brushes.Red, new Point(50, 50));
+                gc.DrawString("LIVE", new Font("Arial", Global.ParaShow.FontSize,FontStyle.Bold), Brushes.Red, new Point(50, 50));
             if (Global.Config.IsShowGird)
             {
                 int W = Global.Config.SizeCCD.Width, H = Global.Config.SizeCCD.Height;
@@ -2633,10 +2633,10 @@ namespace BeeUi
                 Global.EditTool.lbRsTool.Text = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Results.ToString();
                 if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Results==Results.OK)
                 {
-                    Global.EditTool.lbRsTool.BackColor = Global.Config.ColorOK;
+                    Global.EditTool.lbRsTool.BackColor = Global.ParaShow.ColorOK;
                 }
                 else
-                    Global.EditTool.lbRsTool.BackColor = Global.Config.ColorNG;
+                    Global.EditTool.lbRsTool.BackColor = Global.ParaShow.ColorNG;
 
 
                 //return;
@@ -2648,19 +2648,19 @@ namespace BeeUi
                     case TypeCrop.Crop:
                         Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                        Draws.RectEdit(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, Properties.Resources.Rotate2, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
                         break;
                     case TypeCrop.Area:
 
                         Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                        Draws.RectEdit(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, Properties.Resources.Rotate2, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
                         break;
                     case TypeCrop.Mask:
                         Draws.FillRect(gc, TypeCrop.Area, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea, imgView.AutoScrollPosition, imgView.Zoom, 20);
                         Draws.FillRect(gc, TypeCrop.Crop, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop, imgView.AutoScrollPosition, imgView.Zoom, 50);
-                        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, Properties.Resources.Rotate2, Global.Config.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
+                        Draws.RectEdit(gc, TypeCrop.Mask, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask, Properties.Resources.Rotate2, Global.ParaShow.RadEdit, imgView.AutoScrollPosition, imgView.Zoom, pMove, 4);
 
                         break;
 
@@ -2706,13 +2706,13 @@ namespace BeeUi
             Global.Config.IsShowArea = false;
             Global.Config.IsShowCenter = false;
             Global.Config.IsShowGird = false;
-            Global.Config.IsShowResult = true;
-            Global.Config.IsShowMatProcess = true;
-            Global.Config.IsShowNotMatching = true;
-            showResultTool.Checked = Global.Config.IsShowResult;
-            showDetailTool.Checked = Global.Config.IsShowDetail;
-            showImageFilter.Checked = Global.Config.IsShowMatProcess;
-            showDetailWrong.Checked = Global.Config.IsShowNotMatching;
+            Global.ParaShow.IsShowResult = true;
+            Global.ParaShow.IsShowMatProcess = true;
+            Global.ParaShow.IsShowNotMatching = true;
+            showResultTool.Checked = Global.ParaShow.IsShowResult;
+            showDetailTool.Checked = Global.ParaShow.IsShowDetail;
+            showImageFilter.Checked = Global.ParaShow.IsShowMatProcess;
+            showDetailWrong.Checked = Global.ParaShow.IsShowNotMatching;
             //   pBtn.Height = (int)(pBtn.Height * Global.PerScaleHeight);
             //  
 
@@ -2743,8 +2743,8 @@ namespace BeeUi
             _renderer = new CollageRenderer(imgView, gutter: 8, background: Color.White, autoRerenderOnResize: true);
             imgView.AutoCenter = true;
           
-            if (Global.ParaCommon.Comunication.Protocol == null)
-                Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+            if (Global.Comunication.Protocol == null)
+                Global.Comunication.Protocol = new ParaProtocol();
             RefreshExternal(Global.ParaCommon.IsExternal);
             Global.PLCStatusChanged += Global_PLCStatusChanged;
             Global.CameraStatusChanged += Global_CameraStatusChanged;
@@ -2826,14 +2826,14 @@ namespace BeeUi
                     Global.EditTool.lbCam.Text = "Camera Not Connect";
                     break;
                 case CameraStatus.Ready:
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.NoneErr;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.NoneErr;
                     Global.EditTool.lbCam.Image = Properties.Resources.CameraConnected;
                     Global.EditTool.lbCam.Text = "Camera Connected";
                     break;
                 case CameraStatus.ErrorConnect:
                     this.Invoke((Action)(() =>
                     {
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Error;
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.Error;
                         Global.EditTool.lbCam.Image = Properties.Resources.CameraNotConnect;
                         Global.EditTool.lbCam.Text = "Camera Error Connect";
                         ForrmAlarm forrmAlarm = new ForrmAlarm();
@@ -2856,10 +2856,10 @@ namespace BeeUi
           switch(obj)
             {
                 case PLCStatus.NotConnect:
-                    Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                    Global.Comunication.Protocol.IsBypass = true;
                     break;
                 case PLCStatus.Ready:
-                    Global.ParaCommon.Comunication.Protocol.IsBypass = false;
+                    Global.Comunication.Protocol.IsBypass = false;
                     Global.EditTool.toolStripPort.Text = "PLC Ready";
                     Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
                     break;
@@ -2869,7 +2869,7 @@ namespace BeeUi
                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PLC", "PLC Error Connect"));
                         Global.EditTool.toolStripPort.Text = "PLC Error Connect";
                         Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                        Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                        Global.Comunication.Protocol.IsBypass = true;
                       //  G.Main.Hide();
                         ForrmAlarm forrmAlarm = new ForrmAlarm();
                         forrmAlarm.lbHeader.Text = "PLC not Alive !!";
@@ -2914,7 +2914,7 @@ namespace BeeUi
             else
             {
                 // btnTypeTrig.Enabled = true;
-                if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+                if (Global.Comunication.Protocol.IsBypass)
                     btnTypeTrig.Text = "ByPass I/O";
                 else
                     btnTypeTrig.Text = "Trig External";
@@ -2929,7 +2929,7 @@ namespace BeeUi
         {
             Global.StatusProcessing = StatusProcessing.None;
             Global.StatusIO = StatusIO.None;
-            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
             if (!obj)
             {
                 //btnTypeTrig.Enabled = false;
@@ -2942,7 +2942,7 @@ namespace BeeUi
             else
             {
                // btnTypeTrig.Enabled = true;
-               if(Global.ParaCommon.Comunication.Protocol.IsBypass)
+               if(Global.Comunication.Protocol.IsBypass)
                     btnTypeTrig.Text = "ByPass I/O";
                 else
                     btnTypeTrig.Text = "Trig External";
@@ -3096,15 +3096,15 @@ namespace BeeUi
 
                     //    Global.StatusProcessing = StatusProcessing.Checking;
                     //    if (Global.IsByPassResult)
-                    //        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                    //        Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
                     //}
 
                     break;
                 case StatusProcessing.Checking:
                     Global.Config.IsOnLight = false;
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.None;
-                   Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                   Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     if (timer == null) timer = CycleTimerSplit.Start();
                     timer.Split("C");
                     Global.IsAllowReadPLC = false;
@@ -3137,23 +3137,23 @@ namespace BeeUi
                         G.StatusDashboard.StatusText = obj.ToString();
                         G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     }
-                    Global.ParaCommon.Comunication.Protocol.IsLogic1 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic2 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic3 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic4 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic5 = false;
-                    Global.ParaCommon.Comunication.Protocol.IsLogic6 = false;
+                    Global.Comunication.Protocol.IsLogic1 = false;
+                    Global.Comunication.Protocol.IsLogic2 = false;
+                    Global.Comunication.Protocol.IsLogic3 = false;
+                    Global.Comunication.Protocol.IsLogic4 = false;
+                    Global.Comunication.Protocol.IsLogic5 = false;
+                    Global.Comunication.Protocol.IsLogic6 = false;
                     foreach (int ix in Global.ParaCommon.indexLogic1)
                         if (ix < BeeCore.Common.PropetyTools[Global.IndexChoose].Count())
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+                                Global.Comunication.Protocol.IsLogic1 = true;
                                 break;
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic1 = true;
+                                Global.Comunication.Protocol.IsLogic1 = true;
                                 break;
                             }
                         }
@@ -3162,12 +3162,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+                                Global.Comunication.Protocol.IsLogic2 = true;
                                 break;
                             }
                             else if(BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic2 = true;
+                                Global.Comunication.Protocol.IsLogic2 = true;
                                 break;
                             }
                         }
@@ -3176,12 +3176,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+                                Global.Comunication.Protocol.IsLogic3 = true;
                                 break;
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic3 = true;
+                                Global.Comunication.Protocol.IsLogic3 = true;
                                 break;
                             }
                         }
@@ -3190,12 +3190,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                                Global.Comunication.Protocol.IsLogic4 = true;
                                 break;
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic4 = true;
+                                Global.Comunication.Protocol.IsLogic4 = true;
                                 break;
                             }
                         }
@@ -3204,12 +3204,12 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
+                                Global.Comunication.Protocol.IsLogic5 = true;
                                 break;
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic5 = true;
+                                Global.Comunication.Protocol.IsLogic5 = true;
                                 break;
                             }
                         }
@@ -3218,16 +3218,16 @@ namespace BeeUi
                         {
                             if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.NG && Global.Config.IsONNG == true)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic6 = true;
+                                Global.Comunication.Protocol.IsLogic6 = true;
                                 break;
                             }
                             else if (BeeCore.Common.PropetyTools[Global.IndexChoose][ix].Results == Results.OK && Global.Config.IsONNG == false)
                             {
-                                Global.ParaCommon.Comunication.Protocol.IsLogic6 =  true;
+                                Global.Comunication.Protocol.IsLogic6 =  true;
                                 break;
                             }
                         }
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Result;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Result;
 
                     if (Global.TotalOK)
                     {
@@ -3247,7 +3247,7 @@ namespace BeeUi
                     }
 
                     // G.StatusDashboard.Refresh();
-                    if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+                    if (Global.Comunication.Protocol.IsBypass)
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
@@ -3485,16 +3485,8 @@ namespace BeeUi
         }
        public  String pathRaw;
        public bool IsProcess;
-
-     
-
         public String[] listPath;
         public int indexTool = 0; int indexImg = 0;
- 
-
-     
-    
-      
         int indexToolPosition = -1;
         bool IsAutoTrig;
     //    OutLine ParaPosition;
@@ -4318,7 +4310,7 @@ namespace BeeUi
         public  void Continuous()
             {
              Global.StatusMode = StatusMode.Continuous;
-            if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+            if (Global.Comunication.Protocol.IsBypass)
             {
                 switch (Global.TriggerNum)
                 {
@@ -4353,7 +4345,7 @@ namespace BeeUi
         {
             
 
-            if (!Global.ParaCommon.Comunication.Protocol.IsConnected&&!Global.ParaCommon.Comunication.Protocol.IsBypass )
+            if (!Global.Comunication.Protocol.IsConnected&&!Global.Comunication.Protocol.IsBypass )
             {
                 btnCap.IsCLick = false;
                 return;
@@ -4381,7 +4373,7 @@ namespace BeeUi
             Global.StatusMode = StatusMode.Once;
             timer= CycleTimerSplit.Start();
             btnCap.Enabled = false;
-            if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+            if (Global.Comunication.Protocol.IsBypass)
             {
                 switch(Global.TriggerNum)
                 {
@@ -4414,7 +4406,7 @@ namespace BeeUi
         private async void btnRecord_Click(object sender, EventArgs e)
         {
           
-            if (!Global.ParaCommon.Comunication.Protocol.IsConnected && !Global.ParaCommon.Comunication.Protocol.IsBypass)
+            if (!Global.Comunication.Protocol.IsConnected && !Global.Comunication.Protocol.IsBypass)
             {
                 btnContinuous.IsCLick = false;
                 return;
@@ -4427,16 +4419,16 @@ namespace BeeUi
             btnCap.Enabled = !btnContinuous.IsCLick;
             Global.StatusMode = btnContinuous.IsCLick ? StatusMode.Continuous : StatusMode.None;
 
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.Comunication.Protocol.IsConnected)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     tmContinuous.Enabled = btnContinuous.IsCLick;
                    
                     return;
                 }
             } 
-            else if(Global.ParaCommon.Comunication.Protocol.IsBypass)
+            else if(Global.Comunication.Protocol.IsBypass)
             {
                 tmContinuous.Enabled = btnContinuous.IsCLick;
             }    
@@ -4772,7 +4764,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
               
                 Global.StatusProcessing = StatusProcessing.Checking;
                 if (Global.IsByPassResult)
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
 
             }
 		}
@@ -5153,8 +5145,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void workTrig_DoWork(object sender, DoWorkEventArgs e)
         {
-            //if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-            //    Global.ParaCommon.Comunication.IO.WriteInPut(0, true);//.  BtnWriteInPLC((RJButton)sender);
+            //if (Global.Comunication.Protocol.IsConnected)
+            //    Global.Comunication.IO.WriteInPut(0, true);//.  BtnWriteInPLC((RJButton)sender);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -5587,7 +5579,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void tmShow_Tick(object sender, EventArgs e)
         {
-           if(Global.ParaCommon.Comunication.Protocol.IsConnected)
+           if(Global.Comunication.Protocol.IsConnected)
                 Global.EditTool.toolStripPort.Image = Properties.Resources.PortConnected;
            else
                 Global.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
@@ -5662,28 +5654,28 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
         private void showImageFilter_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowMatProcess = showImageFilter.Checked;
+            Global.ParaShow.IsShowMatProcess = showImageFilter.Checked;
             Global.StatusDraw = StatusDraw.Check;
             imgView.Invalidate();
         }
 
         private void showDetailTool_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowDetail = showDetailTool.Checked; 
+            Global.ParaShow.IsShowDetail = showDetailTool.Checked; 
             Global.StatusDraw = StatusDraw.Check;
             imgView.Invalidate();
         }
 
         private void showResultTool_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowResult = showResultTool.Checked;
+            Global.ParaShow.IsShowResult = showResultTool.Checked;
             Global.StatusDraw = StatusDraw.Check;
             imgView.Invalidate();
         }
 
         private void showDetailWrong_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowNotMatching = showDetailWrong.Checked;
+            Global.ParaShow.IsShowNotMatching = showDetailWrong.Checked;
             Global.StatusDraw = StatusDraw.Check;
             imgView.Invalidate();
 

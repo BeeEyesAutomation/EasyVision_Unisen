@@ -283,7 +283,7 @@ namespace BeeGlobal
                             Global.PLCStatus = PLCStatus.ErrorConnect;
                             Global.StatusIO = StatusIO.NotConnect;
                             PlcClient.StopOneBitReadLoop();
-                            Global.ParaCommon.Comunication.Protocol.Disconnect();
+                            Global.Comunication.Protocol.Disconnect();
 
                         }
                         valueInput = vals;
@@ -380,7 +380,7 @@ namespace BeeGlobal
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                     Global.TriggerInternal = false;
                                     Global.IsAllowReadPLC = false;
-                                    //PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".0", false);
+                                    //PlcClient.WriteBit(Global.Comunication.Protocol.AddRead + ".0", false);
                                     //Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", "Write Trigger 1 = 0 "));
                                     if (Global.Config.IsOnlyTrigger)
                                     {
@@ -456,18 +456,18 @@ namespace BeeGlobal
                           
                          
                         
-                        //if (Global.ParaCommon.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
+                        //if (Global.Comunication.Protocol.IO_Processing != IO_ProcessingOld)
                         //{
 
                         //    if (Global.StatusIO == StatusIO.None)
                         //    {
 
-                        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.ParaCommon.Comunication.Protocol.IO_Processing.ToString()));
-                        //        if (Global.ParaCommon.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
+                        //        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO_WRITE", Global.Comunication.Protocol.IO_Processing.ToString()));
+                        //        if (Global.Comunication.Protocol.IO_Processing == IO_Processing.ByPass)
                         //            Global.EditTool.lbBypass.ForeColor = Color.Green;
-                        //        await Global.ParaCommon.Comunication.Protocol.WriteIO();
-                        //        IO_ProcessingOld = Global.ParaCommon.Comunication.Protocol.IO_Processing;
-                        //        lbWrite.Text = Math.Round(Global.ParaCommon.Comunication.Protocol.CTWrite) + "";
+                        //        await Global.Comunication.Protocol.WriteIO();
+                        //        IO_ProcessingOld = Global.Comunication.Protocol.IO_Processing;
+                        //        lbWrite.Text = Math.Round(Global.Comunication.Protocol.CTWrite) + "";
 
                         //    }
                         //}
@@ -477,7 +477,7 @@ namespace BeeGlobal
                         //    {
                         //        SetOutPut(15, false);
                         //      await   WriteOutPut();
-                        //       PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddRead + ".15", false);
+                        //       PlcClient.WriteBit(Global.Comunication.Protocol.AddRead + ".15", false);
                         //        IsAlive = true;
                         //        IsChangeAlive = true;
 
@@ -595,7 +595,7 @@ namespace BeeGlobal
                 SetOutPut(15, IsAlive);
             }
            if(IsConnected)
-             PlcClient.WriteBit(Global.ParaCommon.Comunication.Protocol.AddWrite + ".15", IsAlive);
+             PlcClient.WriteBit(Global.Comunication.Protocol.AddWrite + ".15", IsAlive);
           
         }
 
@@ -1058,12 +1058,12 @@ namespace BeeGlobal
                       }    
                         
                      
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], Global.ParaCommon.Comunication.Protocol.IsLogic1); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], Global.ParaCommon.Comunication.Protocol.IsLogic2); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], Global.ParaCommon.Comunication.Protocol.IsLogic3); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], Global.ParaCommon.Comunication.Protocol.IsLogic4); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic5], Global.ParaCommon.Comunication.Protocol.IsLogic5); //NG
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic6], Global.ParaCommon.Comunication.Protocol.IsLogic6); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], Global.Comunication.Protocol.IsLogic1); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], Global.Comunication.Protocol.IsLogic2); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], Global.Comunication.Protocol.IsLogic3); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], Global.Comunication.Protocol.IsLogic4); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic5], Global.Comunication.Protocol.IsLogic5); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Logic6], Global.Comunication.Protocol.IsLogic6); //NG
                     switch (Global.TriggerNum)
                     {
                         case TriggerNum.Trigger1:

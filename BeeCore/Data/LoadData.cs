@@ -22,7 +22,7 @@ namespace BeeCore {
         public static ParaCommon Para(String Project)
         {
             ParaCommon ParaCam = new ParaCommon();
-            if(Global.Config.ModeSaveProg==ModeSaveProg.Single)
+            if (Global.Config.IsSaveCommon)
             {
                 if (File.Exists("Common\\Common.para"))
                     ParaCam = Access.LoadParaComon("Common\\Common.para");
@@ -37,8 +37,84 @@ namespace BeeCore {
                     ParaCam = new ParaCommon();
             }
          
-            if(ParaCam.listRegsImg==null) ParaCam.listRegsImg = new List<ItemRegsImg>();
+        //    if(ParaCam.listRegsImg==null) ParaCam.listRegsImg = new List<ItemRegsImg>();
             return ParaCam;
+        }
+        public static Comunication Comunication(String Project)
+        {
+            Comunication Comunication = new Comunication();
+            if (Global.Config.IsSaveCommunication)
+            {
+                if (File.Exists("Common\\Common.com"))
+                    Comunication = Access.LoadComunication("Common\\Common.com");
+                else
+                    Comunication = new Comunication();
+            }
+            else
+            {
+                if (File.Exists("Program\\" + Project + "\\" + Project + ".com"))
+                    Comunication = Access.LoadComunication("Program\\" + Project + "\\" + Project + ".com");
+                else
+                    Comunication = new Comunication();
+            }
+            return Comunication;
+        }
+        public static ParaShow ParaShow(String Project)
+        {
+            ParaShow ParaShow = new ParaShow();
+            if (Global.Config.IsSaveParaShow)
+            {
+                if (File.Exists("Common\\Common.gc"))
+                    ParaShow = Access.LoadParaShow("Common\\Common.gc");
+                else
+                    ParaShow = new ParaShow();
+            }
+            else
+            {
+                if (File.Exists("Program\\" + Project + "\\" + Project + ".gc"))
+                    ParaShow = Access.LoadParaShow("Program\\" + Project + "\\" + Project + ".gc");
+                else
+                    ParaShow = new ParaShow();
+            }
+            return ParaShow;
+        }
+        public static List<ItemRegsImg> listImgRegister(String Project)
+        {
+            List<ItemRegsImg> listImg = new List<ItemRegsImg>();
+            if (Global.Config.IsSaveListRegister)
+            {
+                if (File.Exists("Common\\Common.reg"))
+                    listImg = Access.LoadlistImg("Common\\Common.reg");
+                else
+                    listImg = new List<ItemRegsImg>();
+            }
+            else
+            {
+                if (File.Exists("Program\\" + Project + "\\" + Project + ".reg"))
+                    listImg = Access.LoadlistImg("Program\\" + Project + "\\" + Project + ".reg");
+                else
+                    listImg = new List<ItemRegsImg>();
+            }
+            return listImg;
+        }
+        public static List<ItemRegsImg> listImgSim(String Project)
+        {
+            List<ItemRegsImg> listImg = new List<ItemRegsImg>();
+            if (Global.Config.IsSaveListSim)
+            {
+                if (File.Exists("Common\\Common.sim"))
+                    listImg = Access.LoadlistImg("Common\\Common.sim");
+                else
+                    listImg = new List<ItemRegsImg>();
+            }
+            else
+            {
+                if (File.Exists("Program\\" + Project + "\\" + Project + ".sim"))
+                    listImg = Access.LoadlistImg("Program\\" + Project + "\\" + Project + ".sim");
+                else
+                    listImg = new List<ItemRegsImg>();
+            }
+            return listImg;
         }
         public static Config Config( )
         {
@@ -54,7 +130,7 @@ namespace BeeCore {
         {
             List<ParaCamera> ParaCam = new List<ParaCamera>();
 
-            if (Global.Config.ModeSaveProg == ModeSaveProg.Single)
+            if (Global.Config.IsSaveParaCam)
             {
                 if (File.Exists("Common\\Common.cam"))
                     ParaCam = Access.LoadParaCamera("Common\\Common.cam");

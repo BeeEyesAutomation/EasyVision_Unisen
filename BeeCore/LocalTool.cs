@@ -19,7 +19,6 @@ namespace BeeCore
         public Patterns OutLine;
         public bool IsFullSize = true;
         public bool IsClear = false;
-       
         public Mat matTemp = new Mat();
         public Mat matClear = new Mat(); Mat matMask = new Mat();
         public LocalTool()

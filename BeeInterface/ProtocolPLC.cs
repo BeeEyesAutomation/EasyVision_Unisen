@@ -92,11 +92,11 @@ namespace BeeInterface
             cbParity.DataSource = (Parity[])Enum.GetValues(typeof(Parity));
             cbStopBits.DataSource = (StopBits[])Enum.GetValues(typeof(StopBits));
             cbDataBits.DataSource = new List<String> { "7", "8" };
-            if (Global.ParaCommon.Comunication.Protocol == null)
+            if (Global.Comunication.Protocol == null)
             {
-                Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+                Global.Comunication.Protocol = new ParaProtocol();
             }
-            var ParaBits = Global.ParaCommon.Comunication.Protocol.ParaBits;
+            var ParaBits = Global.Comunication.Protocol.ParaBits;
             nameOut[0] = ParaBits.Find(x => x.Adddress == 0 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
             nameOut[1] = ParaBits.Find(x => x.Adddress == 1 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
             nameOut[2] = ParaBits.Find(x => x.Adddress == 2 && x.TypeIO == TypeIO.Output)?.I_O_Output.ToString() ?? string.Empty;
@@ -197,7 +197,7 @@ namespace BeeInterface
                 if (ix == i) continue;
                 if (i_O_Input.ToString() == nameInput[i])
                 {
-                    Global.ParaCommon.Comunication.Protocol.RemoveInPut(i, (I_O_Input)Enum.Parse(typeof(I_O_Input), nameInput[i], ignoreCase: true));
+                    Global.Comunication.Protocol.RemoveInPut(i, (I_O_Input)Enum.Parse(typeof(I_O_Input), nameInput[i], ignoreCase: true));
                     switch (i)
                     {
                         case 0:
@@ -266,7 +266,7 @@ namespace BeeInterface
         //    cb.Items.Clear();
         //    foreach (I_O_Output io in Enum.GetValues(typeof(I_O_Output)))
         //    {
-        //        if (Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == io) == -1)
+        //        if (Global.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == io) == -1)
         //            cb.Items.Add(io);
         //    }
         //    // (tuỳ chọn) nếu không có item nào thì disable
@@ -281,7 +281,7 @@ namespace BeeInterface
                 if (i_O_Output.ToString() == nameOut[i])
                 {
 
-                    Global.ParaCommon.Comunication.Protocol.RemoveOutPut(i, (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[i], ignoreCase: true));
+                    Global.Comunication.Protocol.RemoveOutPut(i, (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[i], ignoreCase: true));
                     switch (i)
                     {
                         case 0:
@@ -348,7 +348,7 @@ namespace BeeInterface
         {
             if (IsPress) return;
             if (!this.Visible) return;
-            if (Global.ParaCommon.Comunication.Protocol.valueInput.Length < 16) return;
+            if (Global.Comunication.Protocol.valueInput.Length < 16) return;
             //foreach (Control c1 in LayIntput.Controls)
             //{
             //    foreach (Control c in c1.Controls)
@@ -358,12 +358,12 @@ namespace BeeInterface
             //            RJButton btn = c as RJButton;
             //            int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-            //            btn.IsCLick = Convert.ToBoolean(Global.ParaCommon.Comunication.Protocol.valueInput[numAdd]);
+            //            btn.IsCLick = Convert.ToBoolean(Global.Comunication.Protocol.valueInput[numAdd]);
             //        }
             //   }
             //}
-            if (Global.ParaCommon.Comunication.Protocol.valueOutput == null) return;
-            if (Global.ParaCommon.Comunication.Protocol.valueOutput.Length < 16) return;
+            if (Global.Comunication.Protocol.valueOutput == null) return;
+            if (Global.Comunication.Protocol.valueOutput.Length < 16) return;
             //foreach (Control c1 in LayOutput.Controls)
             //{
             //    foreach (Control c in c1.Controls)
@@ -373,7 +373,7 @@ namespace BeeInterface
             //            RJButton btn = c as RJButton;
             //            int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-            //            btn.IsCLick = Convert.ToBoolean(Global.ParaCommon.Comunication.Protocol.valueOutput[numAdd]);
+            //            btn.IsCLick = Convert.ToBoolean(Global.Comunication.Protocol.valueOutput[numAdd]);
             //        }
             //    }
             //}
@@ -399,8 +399,8 @@ namespace BeeInterface
         private void tmShow_Tick(object sender, EventArgs e)
         {
             // index++;
-            // if(Global.ParaCommon.Comunication.Protocol.valueInput!=null)
-            //Global.ParaCommon.Comunication.Protocol.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
+            // if(Global.Comunication.Protocol.valueInput!=null)
+            //Global.Comunication.Protocol.valueInput.ReplaceAll( new int[16] { index, index, index, index, index, index, index, index, index, index, index, index, index, index, index, index });
 
         }
 
@@ -418,7 +418,7 @@ namespace BeeInterface
             //    }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
 
-            await Task.Run(() => Global.ParaCommon.Comunication.Protocol.WriteInPut(numAdd, btn.IsCLick));
+            await Task.Run(() => Global.Comunication.Protocol.WriteInPut(numAdd, btn.IsCLick));
 
             //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -435,8 +435,8 @@ namespace BeeInterface
             //        goto X;
             //    }
             int numAdd = Convert.ToInt32(btn.Name.Substring(2).Trim()) - 1;
-            Global.ParaCommon.Comunication.Protocol.SetOutPut(numAdd, btn.IsCLick);
-            await Task.Run(() => Global.ParaCommon.Comunication.Protocol.WriteOutPut());
+            Global.Comunication.Protocol.SetOutPut(numAdd, btn.IsCLick);
+            await Task.Run(() => Global.Comunication.Protocol.WriteOutPut());
 
             //  G.Header.tmReadPLC.Enabled = true;
             IsPress = false;
@@ -459,16 +459,16 @@ namespace BeeInterface
             try
 
             {
-                if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-                btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
-                btnDtrEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.DtrEnable;
-                btnRtsEnable.IsCLick = Global.ParaCommon.Comunication.Protocol.RtsEnable;
-                cbParity.Text = Global.ParaCommon.Comunication.Protocol.Parity.ToString();
-                cbStopBits.Text = Global.ParaCommon.Comunication.Protocol.StopBits.ToString();
-                cbDataBits.Text = Global.ParaCommon.Comunication.Protocol.DataBit.ToString();
+                if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
+                btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
+                btnDtrEnable.IsCLick = Global.Comunication.Protocol.DtrEnable;
+                btnRtsEnable.IsCLick = Global.Comunication.Protocol.RtsEnable;
+                cbParity.Text = Global.Comunication.Protocol.Parity.ToString();
+                cbStopBits.Text = Global.Comunication.Protocol.StopBits.ToString();
+                cbDataBits.Text = Global.Comunication.Protocol.DataBit.ToString();
 
-                btnIO.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.IO ? true : false;
-                btnIsPLC.IsCLick = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnIO.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.IO ? true : false;
+                btnIsPLC.IsCLick = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
                 cbO0.Text = nameOut[0];
                 cbO1.Text = nameOut[1];
                 cbO2.Text = nameOut[2];
@@ -505,16 +505,16 @@ namespace BeeInterface
                 cbIn13.Text = nameInput[13];
                 cbIn14.Text = nameInput[14];
                 cbIn15.Text = nameInput[15];
-                tmOut.Value = Global.ParaCommon.Comunication.Protocol.timeOut;
-                timerRead.Value = Global.ParaCommon.Comunication.Protocol.timeRead;
-                cbBaurate.Text = Global.ParaCommon.Comunication.Protocol.Baurate + "";
-                cbCom.Text = Global.ParaCommon.Comunication.Protocol.ComSerial;
-                numSlaveID.Value = Global.ParaCommon.Comunication.Protocol.SlaveID;
-                txtAddRead.Text = Global.ParaCommon.Comunication.Protocol.AddRead;
-                txtAddWrite.Text = Global.ParaCommon.Comunication.Protocol.AddWrite;
+                tmOut.Value = Global.Comunication.Protocol.timeOut;
+                timerRead.Value = Global.Comunication.Protocol.timeRead;
+                cbBaurate.Text = Global.Comunication.Protocol.Baurate + "";
+                cbCom.Text = Global.Comunication.Protocol.ComSerial;
+                numSlaveID.Value = Global.Comunication.Protocol.SlaveID;
+                txtAddRead.Text = Global.Comunication.Protocol.AddRead;
+                txtAddWrite.Text = Global.Comunication.Protocol.AddWrite;
                 listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
                 listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
-                foreach (ParaBit paraIO in Global.ParaCommon.Comunication.Protocol.ParaBits)
+                foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
                 {
                     if (paraIO.TypeIO == TypeIO.Input)
                     {
@@ -529,19 +529,19 @@ namespace BeeInterface
                         listLabelsOut[paraIO.Adddress].Refresh();
                     }
                 }
-                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Keyence)
+                if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Keyence)
                     btnKeyence.IsCLick = true;
-                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
+                if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi)
                     btnMitsu.IsCLick = true;
-                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi2)
+                if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.Mitsubishi2)
                     btnMitsu2.IsCLick = true;
-                if (Global.ParaCommon.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
+                if (Global.Comunication.Protocol.PlcBrand == PlcLib.PlcBrand.ModbusRtu)
                     btnRtu.IsCLick = true;
 
-                txtIP.Text = Global.ParaCommon.Comunication.Protocol.sIP;
-                txtPort.Text = Global.ParaCommon.Comunication.Protocol.PortIP.ToString();
+                txtIP.Text = Global.Comunication.Protocol.sIP;
+                txtPort.Text = Global.Comunication.Protocol.PortIP.ToString();
 
-                if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
+                if (Global.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
                 {
                     layCom.Enabled = false;
                     cbBaurate.Enabled = false;
@@ -554,7 +554,7 @@ namespace BeeInterface
                     lbTCP2.Enabled = true;
                 }
 
-                if (Global.ParaCommon.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Serial)
+                if (Global.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Serial)
                 {
                     btnSerial.IsCLick = true;
                     layCom.Enabled = true;
@@ -567,30 +567,30 @@ namespace BeeInterface
                     lbTCP1.Enabled = false;
                     lbTCP2.Enabled = false;
                 }
-                btnRtu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true;
-                btnKeyence.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
-                btnMitsu.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
-                btnDelta.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
-                layBrand.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
-                layComunication.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
-                laySetting.Enabled = Global.ParaCommon.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
+                btnRtu.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? false : true;
+                btnKeyence.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnMitsu.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                btnDelta.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PLC ? true : false;
+                layBrand.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
+                layComunication.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
+                laySetting.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
 
-            foreach (ParaBit paraIO in Global.ParaCommon.Comunication.Protocol.ParaBits)
+            foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
             {
                 paraIO.ValueChanged += ParaIO_ValueChanged;
 
 
             }
 
-            btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
+            btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
             Global.StatusIOChanged += Global_StatusIOChanged;
 
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.Comunication.Protocol.IsConnected)
             {
                 //  pComIO.Enabled = false;
                 btnConectIO.IsCLick = true;
@@ -604,8 +604,8 @@ namespace BeeInterface
                 btnConectIO.Enabled = true;
                 //   btnBypass.Enabled = false;
             }
-            //   Global.ParaCommon.Comunication.Protocol.numReadChanged += IO_numReadChanged;
-            //  Global.ParaCommon.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
+            //   Global.Comunication.Protocol.numReadChanged += IO_numReadChanged;
+            //  Global.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
         }
 
 
@@ -658,7 +658,7 @@ namespace BeeInterface
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            await Global.ParaCommon.Comunication.Protocol.Connect();
+            await Global.Comunication.Protocol.Connect();
 
         }
 
@@ -666,8 +666,8 @@ namespace BeeInterface
         private void SettingPLC_VisibleChanged(object sender, EventArgs e)
         {
 
-            //     this.LayIntput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
-            //  this.LayOutput.Enabled = Global.ParaCommon.Comunication.Protocol.IsConnected;
+            //     this.LayIntput.Enabled = Global.Comunication.Protocol.IsConnected;
+            //  this.LayOutput.Enabled = Global.Comunication.Protocol.IsConnected;
 
         }
 
@@ -691,7 +691,7 @@ namespace BeeInterface
 
         private void cbBaurate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.Baurate = Convert.ToInt32(cbBaurate.Text);
+            Global.Comunication.Protocol.Baurate = Convert.ToInt32(cbBaurate.Text);
         }
 
         private void slaveID_ValueChanged(object sender, EventArgs e)
@@ -702,8 +702,8 @@ namespace BeeInterface
         private async void btnConectIO_Click(object sender, EventArgs e)
         {
             Global.PLCStatus = PLCStatus.NotConnect;
-            await Global.ParaCommon.Comunication.Protocol.Connect();
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            await Global.Comunication.Protocol.Connect();
+            if (Global.Comunication.Protocol.IsConnected)
             {
                 Global.PLCStatus = PLCStatus.Ready;
 
@@ -711,18 +711,18 @@ namespace BeeInterface
                 //pComIO.Enabled = false;
 
 
-                Global.ParaCommon.Comunication.Protocol.IsBypass = false;
+                Global.Comunication.Protocol.IsBypass = false;
 
             }
             else
             {
                 Global.PLCStatus = PLCStatus.ErrorConnect;
                 // pComIO.Enabled = true;
-                Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                Global.Comunication.Protocol.IsBypass = true;
                 MessageBox.Show("Fail Connect to Module I/O");
 
             }
-            btnBypass.IsCLick = Global.ParaCommon.Comunication.Protocol.IsBypass;
+            btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
         }
 
 
@@ -753,16 +753,16 @@ namespace BeeInterface
             if (name.Contains("None"))
             {
                 if (OldIn[value] == null) OldIn[value] = "None";
-                Global.ParaCommon.Comunication.Protocol.RemoveInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[value], ignoreCase: true));
+                Global.Comunication.Protocol.RemoveInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), OldIn[value], ignoreCase: true));
             }
             else
             {
-                Global.ParaCommon.Comunication.Protocol.AddInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
+                Global.Comunication.Protocol.AddInPut(value, (I_O_Input)Enum.Parse(typeof(I_O_Input), name, ignoreCase: true));
                 OldIn[value] = name;
             }
             nameInput[value] = name;
             ChangeDatasource(value, name);
-            Global.ParaCommon.Comunication.Protocol.Arrange();
+            Global.Comunication.Protocol.Arrange();
         }
         public String[] nameOut = new String[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", };
         private void cbOut_SelectionChangeCommitted(object sender, EventArgs e)
@@ -777,15 +777,15 @@ namespace BeeInterface
             if (name.Contains("None"))
             {
                 if (OldOut[value] == null) OldOut[value] = "None";
-                Global.ParaCommon.Comunication.Protocol.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
+                Global.Comunication.Protocol.RemoveOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), OldOut[value], ignoreCase: true));
 
             }
             else
-                Global.ParaCommon.Comunication.Protocol.AddOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
+                Global.Comunication.Protocol.AddOutPut(value, (I_O_Output)Enum.Parse(typeof(I_O_Output), name, ignoreCase: true));
             OldOut[value] = name;
             nameOut[value] = name;
             ChangeDatasourceOut(value, name);
-            Global.ParaCommon.Comunication.Protocol.Arrange();
+            Global.Comunication.Protocol.Arrange();
         }
 
         private async void DOutClick(object sender, EventArgs e)
@@ -802,14 +802,14 @@ namespace BeeInterface
                 return;
             }
             int index = Enum.TryParse<I_O_Output>(nameOut[value], true, out var outputEnum)
-           ? Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == outputEnum && a.TypeIO == TypeIO.Output)
+           ? Global.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == outputEnum && a.TypeIO == TypeIO.Output)
            : -1;
-            //int index = Global.ParaCommon.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
+            //int index = Global.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Output == (I_O_Output)Enum.Parse(typeof(I_O_Output), nameOut[value], ignoreCase: true) && a.TypeIO == TypeIO.Output);
             if (index > -1)
             {
 
-                Global.ParaCommon.Comunication.Protocol.SetOutPut(Global.ParaCommon.Comunication.Protocol.ParaBits[index].Adddress, btn.IsCLick);
-                if (!await Global.ParaCommon.Comunication.Protocol.WriteOutPut())
+                Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.ParaBits[index].Adddress, btn.IsCLick);
+                if (!await Global.Comunication.Protocol.WriteOutPut())
                 {
                     btn.IsCLick = !btn.IsCLick;
                 }
@@ -824,13 +824,13 @@ namespace BeeInterface
 
         private async void btnBypass_Click(object sender, EventArgs e)
         {
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.Comunication.Protocol.IsConnected)
             {
 
 
 
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Busy;
-                Global.ParaCommon.Comunication.Protocol.Disconnect();
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.Busy;
+                Global.Comunication.Protocol.Disconnect();
 
 
             }
@@ -844,7 +844,7 @@ namespace BeeInterface
 
         private void comIO_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.ComSerial = cbCom.SelectedValue.ToString();
+            Global.Comunication.Protocol.ComSerial = cbCom.SelectedValue.ToString();
         }
 
         private void tmCheck_Tick(object sender, EventArgs e)
@@ -857,16 +857,16 @@ namespace BeeInterface
         {
             if (!Global.Initialed) return;
             tmConnect.Enabled = false;
-            if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-            if (Global.ParaCommon.Comunication.Protocol.IsBypass) return;
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                Global.ParaCommon.Comunication.Protocol.Disconnect();
-            await Global.ParaCommon.Comunication.Protocol.Connect();
+            if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
+            if (Global.Comunication.Protocol.IsBypass) return;
+            if (Global.Comunication.Protocol.IsConnected)
+                Global.Comunication.Protocol.Disconnect();
+            await Global.Comunication.Protocol.Connect();
 
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.Comunication.Protocol.IsConnected)
             {
                 Global.StatusIO = StatusIO.None;
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
 
 
 
@@ -877,13 +877,13 @@ namespace BeeInterface
             else
             {
                 //  G.EditTool.toolStripPort.Image = Properties.Resources.PortNotConnect;
-                if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
+                if (!Global.Comunication.Protocol.IsBypass)
                 {
-                    await Global.ParaCommon.Comunication.Protocol.Connect();
-                    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                    await Global.Comunication.Protocol.Connect();
+                    if (Global.Comunication.Protocol.IsConnected)
                     {
                         Global.StatusIO = StatusIO.None;
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
 
 
                     }
@@ -906,8 +906,8 @@ namespace BeeInterface
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.CTMin = 100000;
-            Global.ParaCommon.Comunication.Protocol.CTMax = 0;
+            Global.Comunication.Protocol.CTMin = 100000;
+            Global.Comunication.Protocol.CTMax = 0;
 
         }
 
@@ -923,7 +923,7 @@ namespace BeeInterface
 
         private void timerRead_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.Protocol.timeRead = (int)timerRead.Value;
+            Global.Comunication.Protocol.timeRead = (int)timerRead.Value;
 
         }
 
@@ -942,20 +942,20 @@ namespace BeeInterface
 
         private void btnMitsu_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi;
 
 
         }
 
         private void btnKeyence_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Keyence;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Keyence;
 
         }
 
         private void btnSerial_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Serial;
+            Global.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Serial;
             layCom.Enabled = true;
             cbBaurate.Enabled = true;
             txtIP.Enabled = false;
@@ -969,7 +969,7 @@ namespace BeeInterface
 
         private void btnTCP_Click_1(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Tcp;
+            Global.Comunication.Protocol.ConnectionType = PlcLib.ConnectionType.Tcp;
             layCom.Enabled = false;
             cbBaurate.Enabled = false;
             txtIP.Enabled = true;
@@ -983,12 +983,12 @@ namespace BeeInterface
 
         private void txtAddRead_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.AddRead = txtAddRead.Text.Trim();
+            Global.Comunication.Protocol.AddRead = txtAddRead.Text.Trim();
         }
 
         private void txtAddWrite_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.AddWrite = txtAddWrite.Text.Trim();
+            Global.Comunication.Protocol.AddWrite = txtAddWrite.Text.Trim();
         }
 
         private void label44_Click(object sender, EventArgs e)
@@ -1003,29 +1003,29 @@ namespace BeeInterface
 
         private void cbParity_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.Parity = (Parity)Enum.Parse(typeof(Parity), cbParity.SelectedValue.ToString());
+            Global.Comunication.Protocol.Parity = (Parity)Enum.Parse(typeof(Parity), cbParity.SelectedValue.ToString());
         }
 
         private void cbStopBits_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.SelectedValue.ToString());
+            Global.Comunication.Protocol.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.SelectedValue.ToString());
         }
 
         private void cbDataBits_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (cbDataBits.SelectedValue == null)
                 return;
-            Global.ParaCommon.Comunication.Protocol.DataBit = Convert.ToInt32(cbDataBits.SelectedValue.ToString());
+            Global.Comunication.Protocol.DataBit = Convert.ToInt32(cbDataBits.SelectedValue.ToString());
         }
 
         private void btnDtrEnable_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.DtrEnable = btnDtrEnable.IsCLick;
+            Global.Comunication.Protocol.DtrEnable = btnDtrEnable.IsCLick;
         }
 
         private void btnRtsEnable_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.RtsEnable = btnRtsEnable.IsCLick;
+            Global.Comunication.Protocol.RtsEnable = btnRtsEnable.IsCLick;
         }
 
         private void btnReScan_Click(object sender, EventArgs e)
@@ -1035,12 +1035,12 @@ namespace BeeInterface
 
         private void txtPort_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PortIP = Convert.ToInt32(txtPort.Text.Trim());
+            Global.Comunication.Protocol.PortIP = Convert.ToInt32(txtPort.Text.Trim());
         }
 
         private void txtIP_TextChanged(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.sIP = txtIP.Text.Trim();
+            Global.Comunication.Protocol.sIP = txtIP.Text.Trim();
         }
 
         private void txtPort_KeyPress(object sender, KeyPressEventArgs e)
@@ -1096,7 +1096,7 @@ namespace BeeInterface
 
         private void btnRS485_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusRtu;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusRtu;
         }
 
         private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
@@ -1106,23 +1106,23 @@ namespace BeeInterface
 
         private void numSlaveID_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.Protocol.SlaveID = (byte)numSlaveID.Value;
+            Global.Comunication.Protocol.SlaveID = (byte)numSlaveID.Value;
 
         }
 
         private void btnModbusASII_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusAscii;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.ModbusAscii;
         }
 
         private void btnDelta_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Delta;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Delta;
         }
 
         private void btnIsPLC_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.PLC;
+            Global.Comunication.Protocol.TypeControler = TypeControler.PLC;
             btnRtu.Enabled = false;
             btnModbusAscii.Enabled = false;
             btnKeyence.Enabled = true;
@@ -1137,7 +1137,7 @@ namespace BeeInterface
 
         private void btnIO_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.IO;
+            Global.Comunication.Protocol.TypeControler = TypeControler.IO;
             Global.Config.IsResetReady = false;
             layBrand.Enabled = true;
             layComunication.Enabled = true;
@@ -1157,17 +1157,17 @@ namespace BeeInterface
 
         private void tmOut_ValueChanged(float obj)
         {
-            Global.ParaCommon.Comunication.Protocol.timeOut = (int)tmOut.Value;
+            Global.Comunication.Protocol.timeOut = (int)tmOut.Value;
         }
 
         private void btnMitsu2_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi2;
+            Global.Comunication.Protocol.PlcBrand = PlcLib.PlcBrand.Mitsubishi2;
         }
 
         private void btnPCICard_Click(object sender, EventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.TypeControler = TypeControler.PCI;
+            Global.Comunication.Protocol.TypeControler = TypeControler.PCI;
             layBrand.Enabled = false;
             layComunication.Enabled = false;
             laySetting.Enabled = false;

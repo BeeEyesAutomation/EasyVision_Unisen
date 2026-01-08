@@ -613,9 +613,9 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-               if( Global.ParaCommon.Comunication.Protocol.IsConnected)
+               if( Global.Comunication.Protocol.IsConnected)
                 {
-                //  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                //  await  Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
                 }
             }
         }
@@ -662,20 +662,20 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
           
-                Pen pen = new Pen(cl, Global.Config.ThicknessLine);
+                Pen pen = new Pen(cl, Global.ParaShow.ThicknessLine);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (ModeCheck == ModeCheck.Single&&!IsScan)
-                Draws.DrawRectRotate(gc, rotA,new Pen(cl, Global.Config.ThicknessLine));
-            else  if (Global.Config.IsShowBox || IsScan)
-                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.Config.TextColor), cl, Global.Config.ThicknessLine);
+                Draws.DrawRectRotate(gc, rotA,new Pen(cl, Global.ParaShow.ThicknessLine));
+            else  if (Global.ParaShow.IsShowBox || IsScan)
+                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
 
             int i = 0;
            
@@ -691,11 +691,11 @@ namespace BeeCore
                     {
                      
                       
-                        cl = Global.Config.ColorChoose;
+                        cl = Global.ParaShow.ColorChoose;
                     }    
                         
                     else
-                        cl = Global.Config.ColorNone;
+                        cl = Global.ParaShow.ColorNone;
                 }
                     mat = new Matrix();
                     if (!Global.IsRun)
@@ -714,7 +714,7 @@ namespace BeeCore
                     //if (rot.PolyLocalPoints.Count > 0)
                     //    gc.DrawPolygon(pen, rot.PolyLocalPoints.ToArray());
 
-                Draws.Box1Label(gc, rot,((CodeSymbologyCli)( rot.TypeValue)).ToString()+": "+ rot.Name, font, brushText, cl,  Global.Config.ThicknessLine);
+                Draws.Box1Label(gc, rot,((CodeSymbologyCli)( rot.TypeValue)).ToString()+": "+ rot.Name, font, brushText, cl,  Global.ParaShow.ThicknessLine);
                 gc.ResetTransform();
                 i++;
                  }

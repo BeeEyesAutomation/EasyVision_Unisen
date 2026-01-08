@@ -26,8 +26,8 @@ namespace BeeUi.Unit
         private void RegisterImgs_Load(object sender, EventArgs e)
         {
             this.Location = new Point( Global.EditTool.View.Width - this.Width,Global.EditTool.View.pBtn.Height + 1);
-            if (Global.ParaCommon.listSimImg == null) Global.ParaCommon.listSimImg = new List<ItemRegsImg>();
-           registerImg.LoadAllItem(Global.ParaCommon.listSimImg);
+            if (Global.listSimImg == null) Global.listSimImg = new List<ItemRegsImg>();
+           registerImg.LoadAllItem(Global.listSimImg);
             numDelay.Value = 5000;
 
 

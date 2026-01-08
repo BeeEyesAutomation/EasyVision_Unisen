@@ -225,9 +225,9 @@ namespace BeeCore
         {
             if (Common.PropetyTools[IndexThread][Index].IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
-                   // await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   // await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
                 }
             }
         }
@@ -253,21 +253,21 @@ namespace BeeCore
 
             if (Common.PropetyTools[IndexThread][Index].Results == Results.NG)
             {
-                cl = Global.Config.ColorNG;
+                cl = Global.ParaShow.ColorNG;
             }
             else
             {
-                cl =  Global.Config.ColorOK;
+                cl =  Global.ParaShow.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             
-            Draws.Box2Label(gc, rotA, nameTool,PxResult+ " Px", font, cl, brushText,16, Global.Config.ThicknessLine);
+            Draws.Box2Label(gc, rotA, nameTool,PxResult+ " Px", font, cl, brushText,16, Global.ParaShow.ThicknessLine);
 
 
-            if (!Global.IsRun || Global.Config.IsShowDetail)
+            if (!Global.IsRun || Global.ParaShow.IsShowDetail)
                 if (matProcess != null && !matProcess.Empty())
-                Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
 
             return gc;
         }

@@ -19,10 +19,16 @@ namespace BeeInterface
         public static void LoadProject(String NameProject)
         {
             NameProject = NameProject.Replace(".prog", "");
-          
-            if (!Global.IsIntialProgram||Global.Config.ModeSaveProg==ModeSaveProg.Multi)
-            {
+            if (!Global.IsIntialProgram|| !Global.Config.IsSaveCommon)
                 Global.ParaCommon = LoadData.Para(NameProject);
+            if (!Global.IsIntialProgram||!Global.Config.IsSaveCommunication)
+                Global.Comunication=LoadData.Comunication(NameProject);
+            if (!Global.IsIntialProgram || !Global.Config.IsSaveParaShow)
+                Global.ParaShow=LoadData.ParaShow(NameProject);
+            if (!Global.IsIntialProgram || !Global.Config.IsSaveListRegister)
+                Global.listRegsImg=LoadData.listImgRegister(NameProject);
+            if (!Global.IsIntialProgram || !Global.Config.IsSaveParaCam)
+            {
                 List<ParaCamera> paraCameras = LoadData.ParaCamera(NameProject);
                 if (paraCameras.Count() > 0)
                 {
@@ -63,8 +69,6 @@ namespace BeeInterface
             }
                 //Global.Config.SizeCCD = Camera.GetSzCCD();
                 BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
-           
-
             if (BeeCore.Common.PropetyTools.Count == 0)
             {
                 BeeCore.Common.PropetyTools = new List<List<PropetyTool>> { new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>() };

@@ -330,10 +330,10 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                    
-                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
+                    await Global.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
                 }
             }
         }
@@ -359,23 +359,23 @@ namespace BeeCore
             switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
-            Pen pen = new Pen(Global.Config.ColorInfor,Global.Config.ThicknessLine);
+            Pen pen = new Pen(Global.ParaShow.ColorInfor,Global.ParaShow.ThicknessLine);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
 
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 
-            if (!Global.IsRun||Global.Config.IsShowDetail)
+            if (!Global.IsRun||Global.ParaShow.IsShowDetail)
             {
                 if (matProcess != null && !matProcess.Empty())
-                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
             gc.ResetTransform();
             if (Line2DCli.Found == false) return gc;
@@ -398,7 +398,7 @@ namespace BeeCore
              Draws.DrawTicks(gc, p1,LineOrientation, pen);
             Draws.DrawTicks(gc, p2,LineOrientation, pen);
             gc.DrawLine(pen, p1, p2);
-            gc.DrawString($"{Line2DCli.LengthMm:F2}mm", new Font("Arial", Global.Config.FontSize), new SolidBrush(Global.Config.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
+            gc.DrawString($"{Line2DCli.LengthMm:F2}mm", new Font("Arial", Global.ParaShow.FontSize), new SolidBrush(Global.ParaShow.ColorInfor), p1.X + 5, (p1.Y + p2.Y) / 2 + 10);
             // gc.ResetTransform();
             //mat = new Matrix();
             //if (!Global.IsRun)

@@ -123,7 +123,7 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     int i = 0; 
                     int Add=(int)Converts.StringtoDouble(AddPLC);
@@ -132,7 +132,7 @@ namespace BeeCore
                     {
                         String Address = sAdd + Add;
                         float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i],(float) listScore[i] };
-                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
+                        await Global.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
                         Add += 8;
                          i++;
                     }
@@ -713,16 +713,16 @@ namespace BeeCore
             //OffSetY = (OffSetY > 0) ? 0 : -OffSetY;
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
 			{
-				cl = Global.Config.ColorNG;
+				cl = Global.ParaShow.ColorNG;
 			}
 			else
 			{
-				cl =  Global.Config.ColorOK;
+				cl =  Global.ParaShow.ColorOK;
 			}
 			String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+				Draws.Box1Label(gc,rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 			gc.ResetTransform();
 			if (listScore == null) return gc;
 			if (rectRotates.Count > 0)
@@ -754,18 +754,18 @@ namespace BeeCore
                     //  gc.Transform = mat;
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                     if(Global.Config.IsShowPostion)
+                     if(Global.ParaShow.IsShowPostion)
                     {
                         int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
-                        Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
+                        Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
                         String sPos = "X,Y,A _ " + listP_Center[i - 1].X + "," + listP_Center[i - 1].Y + "," + Math.Round(list_AngleCenter[i - 1], 1);
                         if (ZeroPos == ZeroPos.ZeroADJ)
                             sPos = "*X,Y,A _ " + listP_Center[i - 1].X + "," + listP_Center[i - 1].Y + "," + Math.Round(list_AngleCenter[i - 1], 1);
 
-                        gc.DrawString(sPos, font, new SolidBrush(Global.Config.ColorInfor), new PointF(5, 5));
+                        gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
 
                     }
-                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) +"%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                    Draws.Box2Label(gc, rot._rect, i + "", Math.Round(listScore[i - 1], 1) +"%", font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
 
 					gc.ResetTransform();

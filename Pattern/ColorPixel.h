@@ -9,8 +9,8 @@ namespace BeeCpp
     class ColorPx {
     public:    bool IsBGR8(const Mat& m);
     public:  cv::Mat temp; cv::Mat raw;
-   public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU);
-    public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise);
+   public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU,  float Aspect);
+    public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, float Aspect);
     public: void RemoveSmallBlobs(cv::Mat& mask, int minArea );
         ColorPx() {}
         ColorPx(const cv::Mat& m) : temp(m.clone()) {}
@@ -42,7 +42,7 @@ namespace BeeCpp
      //   System::IntPtr imgData, int imgW, int imgH, int imgStride, int imgChannels,
         // So khớp trực tiếp từ Mat (OpenCvSharp) — data pointer + w/h/stride/channels.
         System::IntPtr CheckImageFromMat(bool IsAlign, int ModeAlign,bool IsMultiCPU, int colorTolerance,
-            int SzClearNoise,
+            int SzClearNoise, float Aspect,
             [System::Runtime::InteropServices::Out] float% PxOut,
             float% outOffsetX, float% outOffsetY, float% Offsetangle,
             [System::Runtime::InteropServices::Out] int% outW,

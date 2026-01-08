@@ -72,6 +72,7 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            AdjAspect.Value= Propety.Aspect;
         }
 
         private void btnCropRect_Click(object sender, EventArgs e)
@@ -628,6 +629,11 @@ namespace BeeInterface
         private void btnMultiCPU_Click(object sender, EventArgs e)
         {
             Propety.IsMultiCPU = true;
+        }
+
+        private void AdjAspect_ValueChanged(float obj)
+        {
+            Propety.Aspect=AdjAspect.Value;
         }
     }
 }

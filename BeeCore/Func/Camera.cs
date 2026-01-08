@@ -294,21 +294,21 @@ namespace BeeCore
                         SizeF sz = new SizeF();
                         if (Global.Config.IsMultiCamera)
                         {
-                             sz = g.MeasureString(Para.Name, new Font("Arial", Global.Config.FontSize));
+                             sz = g.MeasureString(Para.Name, new Font("Arial", Global.ParaShow.FontSize));
 
-                            g.DrawString(Para.Name, new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
+                            g.DrawString(Para.Name, new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
                         }
                         else
                         {
-                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize));
+                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize));
 
-                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.Config.FontSize), Brushes.DarkGray, new PointF(10, 10));
+                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
                         }
 
                         if (Results == Results.OK)
-                            g.DrawString("OK", new Font("Arial", Global.Config.FontSize), Brushes.Green, new PointF(10, sz.Height + 5));
+                            g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize), Brushes.Green, new PointF(10, sz.Height + 5));
                         else
-                            g.DrawString("NG", new Font("Arial", Global.Config.FontSize), Brushes.Red, new PointF(10, sz.Height + 5));
+                            g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize), Brushes.Red, new PointF(10, sz.Height + 5));
                         var tools = BeeCore.Common.PropetyTools[IndexCCD];
                         foreach (var tool in tools)
                             if (tool.UsedTool != UsedTool.NotUsed)
@@ -1684,7 +1684,7 @@ namespace BeeCore
                     HEROJE.Light(TypeLight, IsOn);
                     break;
                 case TypeCamera.MVS:
-                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     break;
                 default:
                     break;

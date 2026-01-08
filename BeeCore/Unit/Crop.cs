@@ -134,16 +134,16 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
 
 

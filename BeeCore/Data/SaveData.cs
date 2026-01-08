@@ -12,7 +12,9 @@ namespace BeeCore
     {
          public static void ParaPJ( String Project,ParaCommon ParaCam)
         {
-            if(Global.Config.ModeSaveProg==ModeSaveProg.Single)
+         
+            
+            if (Global.Config.IsSaveCommon)
             {
                 String path = "Common";
                 if (!Directory.Exists(path))
@@ -27,8 +29,8 @@ namespace BeeCore
                     Directory.CreateDirectory(path);
                 Access.SaveParaComon(path + "\\" + Project + ".para", ParaCam);
 
-            }    
-            
+            }
+
         }
         public static void Config(Config config)
         {
@@ -38,7 +40,7 @@ namespace BeeCore
         }
         public static void Camera(String Project, List<ParaCamera> ParaCamera)
         {
-            if (Global.Config.ModeSaveProg == ModeSaveProg.Single)
+            if (Global.Config.IsSaveParaCam)
             {
                 String path = "Common";
                 if (!Directory.Exists(path))
@@ -55,23 +57,85 @@ namespace BeeCore
             
            
         }
-        public static void Program(String Project, List<List<PropetyTool>> Prog)
+        public static void Comunication(String Project, Comunication Comunication)
         {
-            //if (Global.Config.ModeSaveProg == ModeSaveProg.Single)
-            //{
-            //    String path = "Common";
-            //    if (!Directory.Exists(path))
-            //        Directory.CreateDirectory(path);
-            //    Access.SaveProg(path + "\\Common.prog", Prog);
-            //}
-            //else
-            //{
+            if (Global.Config.IsSaveCommunication)
+            {
+                String path = "Common";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SaveComunication(path + "\\Common.com", Comunication);
+            }
+            else
+            {
                 String path = "Program\\" + Project;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-                Access.SaveProg(path + "\\" + Global.Project + ".prog", Prog);
-            //}
+                Access.SaveComunication(path + "\\" + Global.Project + ".com", Comunication);
+            }
 
+
+        }
+        public static void ParaShow(String Project, ParaShow ParaShow)
+        {
+            if (Global.Config.IsSaveParaShow)
+            {
+                String path = "Common";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SaveParaShow(path + "\\Common.gc", ParaShow);
+            }
+            else
+            {
+                String path = "Program\\" + Project;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SaveParaShow(path + "\\" + Global.Project + ".gc", ParaShow);
+            }
+
+        }
+        public static void ListImgRegister(String Project, List<ItemRegsImg> listImg)
+        {
+            if (Global.Config.IsSaveListRegister)
+            {
+                String path = "Common";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SavelistImg(path + "\\Common.reg", listImg);
+            }
+            else
+            {
+                String path = "Program\\" + Project;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SavelistImg(path + "\\" + Global.Project + ".reg", listImg);
+            }
+
+        }
+        public static void ListImgSim(String Project, List<ItemRegsImg> listImg)
+        {
+            if (Global.Config.IsSaveListSim)
+            {
+                String path = "Common";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SavelistImg(path + "\\Common.sim", listImg);
+            }
+            else
+            {
+                String path = "Program\\" + Project;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                Access.SavelistImg(path + "\\" + Global.Project + ".sim", listImg);
+            }
+
+        }
+        public static void Program(String Project, List<List<PropetyTool>> Prog)
+        {
+            String path = "Program\\" + Project;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            Access.SaveProg(path + "\\" + Global.Project + ".prog", Prog);
 
         }
         public static void Project(String Project)
@@ -82,12 +146,16 @@ namespace BeeCore
                    String path = "Program\\" + Project;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-                Program(Global.Project, BeeCore.Common.PropetyTools);
+                Program(Project, BeeCore.Common.PropetyTools);
                // Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                // Access.SaveConfig("Default.config", Global.Config);
-                ParaPJ(Global.Project, Global.ParaCommon);
-                Camera(Global.Project, Global.listParaCamera);
-               // Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
+                ParaPJ(Project, Global.ParaCommon);
+                Camera(Project, Global.listParaCamera);
+                Comunication(Project, Global.Comunication);
+                ParaShow(Project, Global.ParaShow);
+                ListImgRegister(Project, Global.listRegsImg);
+                ListImgSim(Project, Global.listSimImg);
+                // Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
                 //Access.SaveParaCamera(path + "\\" + Global.Project + ".cam", Global.listParaCamera);
             }
             catch(Exception ex)

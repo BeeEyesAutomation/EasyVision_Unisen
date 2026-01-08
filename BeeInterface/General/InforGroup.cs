@@ -24,11 +24,11 @@ namespace BeeInterface.General
                     {
                         case Results.OK:
                             lbStatus.Text = "OK";
-                            lbStatus.ForeColor =  Global.Config.ColorOK;
+                            lbStatus.ForeColor =  Global.ParaShow.ColorOK;
                             break;
                         case Results.NG:
                             lbStatus.Text = "NG";
-                            lbStatus.ForeColor = Global.Config.ColorNG;
+                            lbStatus.ForeColor = Global.ParaShow.ColorNG;
                             break;
                         case Results.None:
                             lbStatus.Text = "---";

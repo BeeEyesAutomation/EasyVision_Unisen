@@ -407,7 +407,7 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     int i = 0;
                     int Add = (int)Converts.StringtoDouble(AddPLC);
@@ -416,7 +416,7 @@ namespace BeeCore
                     {
                         String Address = sAdd + Add;
                         float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i], (float)listScore[i] };
-                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
+                        await Global.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
                         Add += 8;
                         i++;
                     }
@@ -815,26 +815,26 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText =new SolidBrush( Global.Config.TextColor);
+            Brush brushText =new SolidBrush( Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
             {
-                cl = Global.Config.ColorNG;
+                cl = Global.ParaShow.ColorNG;
             }
             else
             {
-                cl =  Global.Config.ColorOK;
+                cl =  Global.ParaShow.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
-            if (!Global.IsRun && Global.Config.IsShowMatProcess||Global.IsRun&&Global.Config.IsShowDetail)
+            if (!Global.IsRun && Global.ParaShow.IsShowMatProcess||Global.IsRun&&Global.ParaShow.IsShowDetail)
             {
                 if (matProcess != null && !matProcess.Empty())
-                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
 
             if (MethodSample == MethodSample.Corner )
@@ -843,8 +843,8 @@ namespace BeeCore
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
            
                 gc.Transform = mat;
-                 gc.DrawLine(new Pen(new SolidBrush(Global.Config.ColorInfor), Global.Config.ThicknessLine), LineCliHorial.X1, LineCliHorial.Y1, LineCliHorial.X2, LineCliHorial.Y2);
-                gc.DrawLine(new Pen(new SolidBrush(Global.Config.ColorInfor), Global.Config.ThicknessLine), LineCliVertical.X1, LineCliVertical.Y1, LineCliVertical.X2, LineCliVertical.Y2);
+                 gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), LineCliHorial.X1, LineCliHorial.Y1, LineCliHorial.X2, LineCliHorial.Y2);
+                gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), LineCliVertical.X1, LineCliVertical.Y1, LineCliVertical.X2, LineCliVertical.Y2);
                 //Draws.DrawInfiniteLine(gc,LineHorial, new Pen(Brushes.Blue, 2), rotA._rect);
                 //Draws.DrawInfiniteLine(gc, LineVertial, new Pen(Brushes.Gold, 2), rotA._rect);
                 Draws.Plus(gc,(int) pInsert.X,(int)pInsert.Y, 10, Color.Yellow, 2);
@@ -853,21 +853,21 @@ namespace BeeCore
                 //    flags = DrawFlags.BestCorner | DrawFlags.BestLines;
                 //else
                 //{
-                //    if (Global.Config.IsShowDetail) flags = flags | DrawFlags.Inliers;
-                //    if (Global.Config.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
-                //    if (Global.Config.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
+                //    if (Global.ParaShow.IsShowDetail) flags = flags | DrawFlags.Inliers;
+                //    if (Global.ParaShow.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
+                //    if (Global.ParaShow.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
                 //}
 
                 //DrawStyle drawStyle = new DrawStyle
                 //    {
                 //        Inlier = Color.Red,
-                //    LineChoose = Global.Config.ColorChoose,
-                //    LineResult = Global.Config.ColorInfor,
-                //    LineNone = Global.Config.ColorNone,
+                //    LineChoose = Global.ParaShow.ColorChoose,
+                //    LineResult = Global.ParaShow.ColorInfor,
+                //    LineNone = Global.ParaShow.ColorNone,
 
                 //        LineDash = DashStyle.Solid,
-                //        InlierSize = Global.Config.ThicknessLine / 2,
-                //        Thickness = Global.Config.ThicknessLine,
+                //        InlierSize = Global.ParaShow.ThicknessLine / 2,
+                //        Thickness = Global.ParaShow.ThicknessLine,
                 //    };
 
                 //DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
@@ -901,15 +901,15 @@ namespace BeeCore
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
 
-                        if (Global.Config.IsShowPostion)
+                        if (Global.ParaShow.IsShowPostion)
                         {
                             int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height / 4);
-                            Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
+                            Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
                             String sPos = "X,Y,A - " + listP_Center[i ].X + "," + listP_Center[ i].Y + " , " + Math.Round(list_AngleCenter[i ], 1);
                             gc.DrawString(sPos, font, brushText, new PointF(5, 5));
 
                         }
-                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i], 1) + "%", font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                        Draws.Box2Label(gc, rot._rect, "", Math.Round(listScore[i], 1) + "%", font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
                     }
                   

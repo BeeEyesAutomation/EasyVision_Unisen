@@ -10,7 +10,10 @@ namespace BeeGlobal
 {
     public class Global
     {
-
+        public static ParaShow ParaShow=new ParaShow();
+        public static Comunication Comunication = new Comunication();
+        public static List<ItemRegsImg> listSimImg = new List<ItemRegsImg>();
+        public static List<ItemRegsImg> listRegsImg = new List<ItemRegsImg>();
         public static bool IsSim = false;
         /// <summary>
         ///

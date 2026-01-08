@@ -495,14 +495,14 @@ namespace BeeCore
                 //    cl = Color.Red;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
-                Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , font, cl, brushText, 16, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
             else
-                Draws.Box2Label(gc, rotA._rect, ScoreNG + "% NG ", ScoreOK + "% OK", font, cl, brushText, 16, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA._rect, ScoreNG + "% NG ", ScoreOK + "% OK", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
             gc.ResetTransform();
             //if (listScore == null) return gc;
             //if (rectRotates.Count > 0)

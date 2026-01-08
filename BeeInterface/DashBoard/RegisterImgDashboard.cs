@@ -211,16 +211,16 @@ namespace BeeInterface
                 if (txt.Length == 0) txt = "Image";
                 if (Item != null)
                 {
-                    int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
+                    int id = Global.listRegsImg.FindIndex(a => a.Name.Contains(Item.Name));
                     if (UpdateGlobal)
                     {
                        
                         if (id > -1)
-                            Global.ParaCommon.listRegsImg[id].Name = txt;
+                            Global.listRegsImg[id].Name = txt;
                     }
                     else
                           if (id > -1)
-                        Global.ParaCommon.listSimImg[id].Name = txt;
+                        Global.listSimImg[id].Name = txt;
                     Item.Name = txt;
                 }    
                    
@@ -514,13 +514,13 @@ namespace BeeInterface
             // 4. Xóa trong global (nếu bạn muốn đồng bộ luôn)
             if(UpdateGlobal)
             {
-                if (Global.ParaCommon != null && Global.ParaCommon.listRegsImg != null)
-                    Global.ParaCommon.listRegsImg.Clear();
+                if (Global.ParaCommon != null && Global.listRegsImg != null)
+                    Global.listRegsImg.Clear();
             }
             else
             {
-                if (Global.ParaCommon != null && Global.ParaCommon.listSimImg != null)
-                    Global.ParaCommon.listSimImg.Clear();
+                if (Global.ParaCommon != null && Global.listSimImg != null)
+                    Global.listSimImg.Clear();
             }
 
                 // 5. Báo ra ngoài: danh sách thay đổi
@@ -615,13 +615,13 @@ namespace BeeInterface
             try
             {
                 Global.Config.IsOnLight = true;
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
-                await TimingUtils.DelayAccurateAsync((int)Global.ParaCommon.Comunication.Protocol.DelayTrigger);
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                await TimingUtils.DelayAccurateAsync((int)Global.Comunication.Protocol.DelayTrigger);
                 BeeCore.Common.listCamera[Global.IndexChoose].Read();
                 if( BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
                 BeeCore.Common.listCamera[Global.IndexChoose].Read();
                 Global.Config.IsOnLight = false;
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null) return;
                 if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) return;
                 var autoName = NextAutoName();
@@ -700,11 +700,11 @@ namespace BeeInterface
             _items.Add(item);
             if(UpdateGlobal)
             {
-                Global.ParaCommon.listRegsImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
+                Global.listRegsImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
             }
             else
             {
-                Global.ParaCommon.listSimImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
+                Global.listSimImg.Add(new ItemRegsImg(item.Name, item.Image.ToBitmap()));
             }    
 
                 int clientW = _flow.ClientSize.Width;
@@ -742,16 +742,16 @@ namespace BeeInterface
         
             if (UpdateGlobal)
             {
-                int id = Global.ParaCommon.listRegsImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
+                int id = Global.listRegsImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
                 if (id > -1)
-                    Global.ParaCommon.listRegsImg[id].Image = newMat.ToBitmap();
+                    Global.listRegsImg[id].Image = newMat.ToBitmap();
             }
             else
 
             {
-                int id = Global.ParaCommon.listSimImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
+                int id = Global.listSimImg.FindIndex(a => a.Name.Contains(_selectedThumb.Item.Name));
                 if (id > -1)
-                    Global.ParaCommon.listSimImg[id].Image = newMat.ToBitmap();
+                    Global.listSimImg[id].Image = newMat.ToBitmap();
 
             }    
 
@@ -861,9 +861,9 @@ namespace BeeInterface
             var item = _selectedThumb.Item;
             _flow.Controls.RemoveAt(idx);
             if (UpdateGlobal)
-                Global.ParaCommon.listRegsImg.RemoveAt(idx);
+                Global.listRegsImg.RemoveAt(idx);
             else
-                Global.ParaCommon.listSimImg.RemoveAt(idx);
+                Global.listSimImg.RemoveAt(idx);
             _items.Remove(item);
             _selectedThumb.Dispose();
             item.Dispose();

@@ -677,9 +677,9 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-               if( Global.ParaCommon.Comunication.Protocol.IsConnected)
+               if( Global.Comunication.Protocol.IsConnected)
                 {
-                  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                  await  Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
                 }
             }
         }
@@ -737,20 +737,20 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
           
-                Pen pen = new Pen(cl, Global.Config.ThicknessLine);
+                Pen pen = new Pen(cl, Global.ParaShow.ThicknessLine);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (ModeCheck == ModeCheck.Single && !IsScan)
-                Draws.DrawRectRotate(gc, rotA, new Pen(cl, Global.Config.ThicknessLine));
-            else if (Global.Config.IsShowBox || IsScan)
-                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.Config.TextColor), cl, Global.Config.ThicknessLine);
+                Draws.DrawRectRotate(gc, rotA, new Pen(cl, Global.ParaShow.ThicknessLine));
+            else if (Global.ParaShow.IsShowBox || IsScan)
+                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
 
              
             gc.ResetTransform();
@@ -764,12 +764,12 @@ namespace BeeCore
                     {
 
 
-                        cl = Global.Config.ColorChoose;
+                        cl = Global.ParaShow.ColorChoose;
                     }
 
                     else
-                        cl = Global.Config.ColorNone;
-                    pen = new Pen(cl, Global.Config.ThicknessLine);
+                        cl = Global.ParaShow.ColorNone;
+                    pen = new Pen(cl, Global.ParaShow.ThicknessLine);
                 }
                 if (!IsScan)
                 {
@@ -779,7 +779,7 @@ namespace BeeCore
                         mat.Translate(Global.pScroll.X, Global.pScroll.Y);
                         mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
                     }
-                    pen = new Pen(cl, Global.Config.ThicknessLine);
+                    pen = new Pen(cl, Global.ParaShow.ThicknessLine);
                     mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
                     mat.Rotate(rotA._rectRotation);
                     mat.Translate(rotA._rect.X, rotA._rect.Y);
@@ -808,7 +808,7 @@ namespace BeeCore
                     gc.Transform = mat;
                         Draws.DrawRectRotate(gc, rot, pen);
 
-                    if (Global.Config.IsShowNotMatching)
+                    if (Global.ParaShow.IsShowNotMatching)
                     {
                         Rectangle rect = new Rectangle(0, 0, (int)rot._rect.Width, (int)rot._rect.Height);
                         mat.Translate(rot._rect.X, rot._rect.Y);
@@ -817,7 +817,7 @@ namespace BeeCore
 
                         int Area = (rect.Width * rect.Height) / 10;
                         String sArea = Area + "";
-                        gc.DrawString(sArea, new Font("Arial", 6), new SolidBrush(Global.Config.ColorInfor), new PointF(0, rect.Y + rect.Height -2));
+                        gc.DrawString(sArea, new Font("Arial", 6), new SolidBrush(Global.ParaShow.ColorInfor), new PointF(0, rect.Y + rect.Height -2));
                     }
                 }
                 gc.ResetTransform();

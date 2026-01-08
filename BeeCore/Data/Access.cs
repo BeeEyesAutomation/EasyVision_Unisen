@@ -127,26 +127,6 @@ namespace BeeCore
             //    config.icon=Properties.Resources.icon;
            
 
-            if (config.ColorOK.Name == "0")
-                config.ColorOK = Color.FromArgb(0, 172, 73);
-            if (config.ColorNG.Name == "0")
-                config.ColorNG = Color.DarkRed;
-            if (config.ColorInfor.Name == "0")
-                config.ColorNG = Color.Blue;
-            if (config.ColorNone.Name == "0")
-                config.ColorNG = Color.Gray;
-            if (config.ColorChoose.Name == "0")
-                config.ColorChoose = Color.FromArgb(246, 204, 120);
-            if (config.TextColor.Name == "0")
-                config.TextColor = Color.White;
-            if (config.RadEdit==0)
-                config.RadEdit = 40;
-            if (config.FontSize == 0)
-                config.FontSize = 12;
-            if (config.ThicknessLine == 0)
-                config.ThicknessLine = 4;
-            if (config.Opacity == 0)
-                config.Opacity = 50;
           
             return config;
 
@@ -169,7 +149,51 @@ namespace BeeCore
         {
             SaveBase64(path, list);
         }
-
+        public static void SaveComunication(string path, Comunication Comunication)
+        {
+            SaveBase64(path, Comunication);
+        }
+        public static void SavelistImg(string path, List<ItemRegsImg> listRegsImg)
+        {
+            SaveBase64(path, listRegsImg);
+        }
+        public static void SaveParaShow(string path, ParaShow ParaShow)
+        {
+            SaveBase64(path, ParaShow);
+        }
+        public static Comunication LoadComunication(string path)
+        {
+            return LoadBase64<Comunication>(path, defaultFactory: () => new Comunication());
+        }
+        public static List<ItemRegsImg> LoadlistImg(string path)
+        {
+            return LoadBase64<List<ItemRegsImg>>(path, defaultFactory: () => new List<ItemRegsImg>());
+        }
+        public static ParaShow  LoadParaShow(string path)
+        {
+            ParaShow ParaShow= LoadBase64<ParaShow>(path, defaultFactory: () => new ParaShow());
+            if (ParaShow.ColorOK.Name == "0")
+                ParaShow.ColorOK = Color.FromArgb(0, 172, 73);
+            if (ParaShow.ColorNG.Name == "0")
+                ParaShow.ColorNG = Color.DarkRed;
+            if (ParaShow.ColorInfor.Name == "0")
+                ParaShow.ColorNG = Color.Blue;
+            if (ParaShow.ColorNone.Name == "0")
+                ParaShow.ColorNG = Color.Gray;
+            if (ParaShow.ColorChoose.Name == "0")
+                ParaShow.ColorChoose = Color.FromArgb(246, 204, 120);
+            if (ParaShow.TextColor.Name == "0")
+                ParaShow.TextColor = Color.White;
+            if (ParaShow.RadEdit == 0)
+                ParaShow.RadEdit = 40;
+            if (ParaShow.FontSize == 0)
+                ParaShow.FontSize = 12;
+            if (ParaShow.ThicknessLine == 0)
+                ParaShow.ThicknessLine = 4;
+            if (ParaShow.Opacity == 0)
+                ParaShow.Opacity = 50;
+            return ParaShow;
+        }
         public static List<ParaCamera> LoadParaCamera(string path)
         {
             return LoadBase64(path, defaultFactory: () => new List<ParaCamera>());

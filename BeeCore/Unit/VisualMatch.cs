@@ -58,7 +58,7 @@ namespace BeeCore
         {
             
         }
-   
+        public float Aspect = 0.1f;
        public int ColorTolerance = 1;
         public int MaxDiffPixels = 1;
 
@@ -191,7 +191,7 @@ namespace BeeCore
                    
                     int w = 0, h = 0, s = 0, c = 0;
                     IsAlign = ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? false : true;
-                    IntPtr intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                    IntPtr intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise,Aspect/100.0f, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                     matProcess = new Mat();
 
                     if (intpr != IntPtr.Zero)
@@ -262,10 +262,10 @@ namespace BeeCore
             else
                 cl = Color.LimeGreen;
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.Config.Opacity, Global.Config.ThicknessLine);
-            //Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box2Label(gc, rotA, nameTool, pxRS + " Px", font, cl, brushText, Global.ParaShow.Opacity, Global.ParaShow.ThicknessLine);
+            //Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 
             gc.ResetTransform();
           

@@ -130,7 +130,7 @@ namespace BeeUi.Unit
             else
             {
                 btnMenu.Corner = Corner.Right;
-                if (OldWidth <= btnMenu.Width + 20) OldWidth = 300;
+                if (OldWidth <= btnMenu.Width + 20) OldWidth = 380;
                 this.Width = OldWidth;
                 // btnMenu.Parent.Width = 150;
                 //  btnMenu.Text = "Menu Program";

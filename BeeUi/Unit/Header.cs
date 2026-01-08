@@ -117,12 +117,12 @@ namespace BeeUi.Common
         {
             if(!G.IsReConnectCCD)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
-                    //if (Global.ParaCommon.Comunication.Protocol.valueOutput[4] == 0)
+                    //if (Global.Comunication.Protocol.valueOutput[4] == 0)
                     //{
 
-                    //   // Global.ParaCommon.Comunication.Protocol.WriteOutPut(4, true);
+                    //   // Global.Comunication.Protocol.WriteOutPut(4, true);
 
                     //}
                 }
@@ -307,10 +307,10 @@ namespace BeeUi.Common
                 G.SettingPLC = new ProtocolPLC();
             }
 
-            if (Global.ParaCommon.Comunication == null)
+            if (Global.Comunication == null)
             {
-                Global.ParaCommon.Comunication = new Comunication();
-                Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
+                Global.Comunication = new Comunication();
+                Global.Comunication.Protocol = new ParaProtocol();
               
 
             }
@@ -549,12 +549,14 @@ txtQrCode.Focus();
             Global.IsChangeProg = true;
             if (Global.IsIntialProgram)
             {
-                if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
-                {
-                    if (Global.ParaCommon.Comunication.Protocol.IsConnected)
-                        Global.ParaCommon.Comunication.Protocol.Disconnect();
-                    Global.ScanCCD.DisConnectAllCCd();
-                }
+                
+                
+                    if(Global.Config.IsSaveCommunication) 
+                    if (Global.Comunication.Protocol.IsConnected)
+                        Global.Comunication.Protocol.Disconnect();
+                    if (Global.Config.IsSaveParaCam)
+                        Global.ScanCCD.DisConnectAllCCd();
+                
                 DataTool.LoadProject(Global.Project);
                 
 
@@ -567,7 +569,7 @@ txtQrCode.Focus();
         {
             if (Global.IsIntialProgram)
             {
-                if (Global.Config.ModeSaveProg == ModeSaveProg.Multi)
+                if (Global.Config.IsSaveParaCam)
                 {
                     if (!await Global.ScanCCD.ChangeCCD())
                     {
@@ -697,10 +699,10 @@ txtQrCode.Focus();
                         Global.EditTool.View.btnFull.PerformClick();
 
                     }
-                    if (Global.Config.ModeSaveProg == ModeSaveProg.Multi|| Global.IsIntialProgram ==false)
+                    if (Global.Config.IsSaveCommunication|| Global.IsIntialProgram ==false)
                     {
-                        if (Global.ParaCommon.Comunication.Protocol == null) Global.ParaCommon.Comunication.Protocol = new ParaProtocol();
-                        if (Global.ParaCommon.Comunication.Protocol.IsBypass)
+                        if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
+                        if (Global.Comunication.Protocol.IsBypass)
                         {
                             Global.IsIntialProgram = true;
                             Global.IsChangeProg = false;
@@ -708,24 +710,24 @@ txtQrCode.Focus();
                             return;
                         }
 
-                        await Global.ParaCommon.Comunication.Protocol.Connect();
+                        await Global.Comunication.Protocol.Connect();
 
-                        if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                        if (Global.Comunication.Protocol.IsConnected)
                         {
                             Global.StatusIO = StatusIO.None;
-                            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                            Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
                         }
 
                         else
                         {
 
-                            if (!Global.ParaCommon.Comunication.Protocol.IsBypass)
+                            if (!Global.Comunication.Protocol.IsBypass)
                             {
-                                await Global.ParaCommon.Comunication.Protocol.Connect();
-                                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                                await Global.Comunication.Protocol.Connect();
+                                if (Global.Comunication.Protocol.IsConnected)
                                 {
                                     Global.StatusIO = StatusIO.None;
-                                    Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
                                 }
 
                                 else

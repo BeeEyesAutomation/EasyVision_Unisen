@@ -14,8 +14,7 @@ namespace BeeGlobal
     public class ParaCommon
     {
     
-        public List<ItemRegsImg> listSimImg = new List<ItemRegsImg>();
-        public List<ItemRegsImg> listRegsImg= new List<ItemRegsImg>();
+
         private bool _IsExternal = false;
         [field: NonSerialized]
         public event Action<bool> ExternalChange;
@@ -69,9 +68,9 @@ namespace BeeGlobal
         //                }
         //            }
         //        }
-        public Comunication Comunication = new Comunication();
-        public List<String> NameCCDs = new List<string>();
+      
+       // public List<String> NameCCDs = new List<string>();
         public Bitmap matRegister;
-        public Bitmap matSample;
+      //  public Bitmap matSample;
     }
 }

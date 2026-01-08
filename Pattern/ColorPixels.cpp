@@ -31,10 +31,42 @@ using namespace cv;
     //    return imdecode(v, IMREAD_COLOR); // CV_8UC3
     //}
       bool ColorPx::IsBGR8(const Mat& m) { return m.type() == CV_8UC3; }
+      static void FilterBlobsByAspect(
+          cv::Mat& mask8u,
+          float minAspect
+      )
+      {
+          CV_Assert(mask8u.type() == CV_8UC1);
 
+          std::vector<std::vector<cv::Point>> contours;
+          findContours(mask8u, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+          cv::Mat filtered = cv::Mat::zeros(mask8u.size(), CV_8UC1);
+
+          for (const auto& c : contours)
+          {
+              if (c.size() < 10) continue;
+
+              cv::RotatedRect rr = minAreaRect(c);
+              float w = rr.size.width;
+              float h = rr.size.height;
+              if (w <= 1 || h <= 1) continue;
+
+              float aspect = std::min(w, h)/ std::max(w, h) ;
+
+              if (aspect >= minAspect)
+              {
+                  drawContours(filtered,
+                      std::vector<std::vector<cv::Point>>{c},
+                      -1, cv::Scalar(255), FILLED);
+              }
+          }
+
+          mask8u = filtered;
+      }
     // ---------- FAST path: vector hóa + đa luồng nội bộ OpenCV (không filter) ----------
 // ---------- FAST path: grayscale + blur để giảm viền ----------
-     int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise)
+     int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise,float Aspect)
     {
         Rect roi(0, 0, tpl.cols, tpl.rows);
         Mat I = img(roi), T = tpl;
@@ -60,7 +92,8 @@ using namespace cv;
         Mat mask;
         threshold(diff, mask, tol, 255, THRESH_BINARY);  // tol chính là ngưỡng diff gray
         RemoveSmallBlobs(mask,  SzClearNoise);
-
+      
+        FilterBlobsByAspect(mask, Aspect);
         // 6. Đếm
         int diffCount = countNonZero(mask);
 
@@ -249,7 +282,7 @@ using namespace cv;
 
     // ---------- Strategy (luôn quét hết) ----------
      int ColorPx:: PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl,
-      int tol, Mat* annotated, int SzClearNoise,bool IsMultiCPU)
+      int tol, Mat* annotated, int SzClearNoise,bool IsMultiCPU, float Aspect)
     {
       /*  CV_Assert(!img.empty() && !tpl.empty());
         CV_Assert(tpl.cols <= img.cols && tpl.rows <= img.rows);
@@ -260,7 +293,7 @@ using namespace cv;
         // chọn song song toàn phần cho ảnh lớn, còn lại fast path;
         // KHÔNG early-exit ở cả hai nhánh
       //  const bool big = IsMultiCPU; // >= 4MP
-        int diffCount = DiffCount_Fast(img, tpl, tol, annotated, SzClearNoise); /*big
+        int diffCount = DiffCount_Fast(img, tpl, tol, annotated, SzClearNoise,Aspect); /*big
             ? DiffCount_ParallelFull(img, tpl, tol, annotated)
             :  DiffCount_Fast(img, tpl, tol, annotated,  SzClearNoise);*/
 
@@ -437,7 +470,7 @@ void ColorPixel::SaveRandom(int i)
 }
 IntPtr ColorPixel::CheckImageFromMat(
     bool IsAlign,int ModeAlign,bool IsMultiCPU,
-    int colorTolerance, int SzClearNoise,
+    int colorTolerance, int SzClearNoise, float Aspect,
     float% outPx, float% outOffsetX, float% outOffsetY, float% Offsetangle,
     int% outW, int% outH, int% outStride, int% outChannels)
 {
@@ -498,14 +531,14 @@ IntPtr ColorPixel::CheckImageFromMat(
         //outOffsetX = ofs.x;
         //outOffsetY = ofs.y;
         //Offsetangle = angle;
-       outPx = _img->PixelCheck_MT_FullScan(R.aligned, _img->temp.clone(), colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
+       outPx = _img->PixelCheck_MT_FullScan(R.aligned, _img->temp.clone(), colorTolerance, &annotated, SzClearNoise, IsMultiCPU,Aspect);
    }
    else
    {
       
       // cv::imwrite("i.png", _img->raw);
       // Mat temp = _img->temp.clone();
-       outPx =_img-> PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU);
+       outPx =_img-> PixelCheck_MT_FullScan(_img->raw, _img->temp, colorTolerance, &annotated, SzClearNoise, IsMultiCPU, Aspect);
        outOffsetX =0;
        outOffsetY =0;
        Offsetangle =0;

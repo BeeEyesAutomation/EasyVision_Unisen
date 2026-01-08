@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -402,15 +403,81 @@ namespace BeeCore
             return result;
         }
 
-   
+        public Graphics DrawResult(Graphics gc)
+        {
+            if (rotAreaAdjustment == null && Global.IsRun) return gc;
+            gc.ResetTransform();
+            RectRotate rotA = rotArea;
+            if (Global.IsRun) rotA = rotAreaAdjustment;
+           
+            var mat = new Matrix();
+            if (!Global.IsRun)
+            {
+                mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            }
+            mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            mat.Rotate(rotA._rectRotation);
+            gc.Transform = mat;
+            Brush brushText = Brushes.White;
+            Color cl = Color.LimeGreen;
+            switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
+            {
+                case Results.OK:
+                    cl = Global.ParaShow.ColorOK;
+                    break;
+                case Results.NG:
+                    cl = Global.ParaShow.ColorNG;
+                    break;
+            }
+
+            Pen pen = new Pen(cl, Global.ParaShow.ThicknessLine);
+            String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+          
+                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
+
+
+            gc.ResetTransform();
+            int i = 0;
+            if (rectRotates != null)
+                foreach (RectRotate rot in rectRotates)
+                {
+                    mat = new Matrix();
+                    if (!Global.IsRun)
+                    {
+                        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                    }
+                    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+                    mat.Rotate(rotA._rectRotation);
+                    mat.Translate(rotA._rect.X, rotA._rect.Y);
+                    gc.Transform = mat;
+
+                    mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                    mat.Rotate(rot._rectRotation);
+                    gc.Transform = mat;
+                    Draws.Box2Label(gc, rot._rect, listLabelResult[i], Math.Round(listScore[i], 1) + "%", font, cl, brushText, 50, 8, 50);
+
+
+                  
+                    gc.ResetTransform();
+                    i++;
+                }
+
+
+            return gc;
+        }
 
         public  bool SetModel()
         {
             if (!Global.IsOCR) return false;
             using (Py.GIL())
             {
-                
-         G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
+                rotMask = null;
+                if (rotCrop == null) rotCrop = new RectRotate();
+                if (rotArea == null) rotArea = new RectRotate();
+                G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
                 Common.PropetyTools[IndexThread][Index].StepValue = 1;
                 Common.PropetyTools[IndexThread][Index].MinValue = 0;
 

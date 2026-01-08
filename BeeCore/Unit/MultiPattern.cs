@@ -148,7 +148,7 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     int i = 0; 
                     int Add=(int)Converts.StringtoDouble(AddPLC);
@@ -157,7 +157,7 @@ namespace BeeCore
                     {
                         String Address = sAdd + Add;
                         float[] floats = new float[4] { point.X, point.Y, list_AngleCenter[i],(float) listScore[i] };
-                        await Global.ParaCommon.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
+                        await Global.Comunication.Protocol.WriteResultFloatArr(AddPLC, floats);
                         Add += 8;
                          i++;
                     }
@@ -798,7 +798,11 @@ namespace BeeCore
                     RectRotate rotAuto = new RectRotate(new RectangleF(-raw.Width / 2,- raw.Height / 2, raw.Width , raw.Height),  new PointF(raw.Width/2,raw.Height/2),0,AnchorPoint.None);
                     Mat gray = Cropper.CropRotatedRect(raw, rotAuto, null);
                     rotArea = CheckPage(gray);//rotArea= 
+                   // Cv2.CvtColor(color, color, ColorConversionCodes.BGR2GRAY);
+                  
                     gray = Cropper.CropRotatedRect(raw, rotArea, null);
+                    Cv2.EqualizeHist(gray, gray);
+                    Cv2.ImWrite("Equli.png", gray);
                     // 1) Segment -> maskPtr (như bạn đang làm)
                     var segP = new MonoSegCliParams { BgBlurK = 41, OpenK = 2, CloseK = 4, Mode = 0, UseBlackHat = false, BlackHatK = 31 };
                     IntPtr maskPtr = IntPtr.Zero; int maskStep;
@@ -819,13 +823,13 @@ namespace BeeCore
                         PaperMinAreaFrac = 0.02f
                     };
                    RectRotateCli[] ListRotRect = MonoSegCli.ExtractPaperAndChipRects(maskPtr, gray.Width, gray.Height, maskStep, extP);
-
+                   
                     // 3) Draw to color result
                     IntPtr colorPtr = IntPtr.Zero; int colorStep;
                     MonoSegCli.DrawRectRotateToColorImage(maskPtr, gray.Width, gray.Height, maskStep, ListRotRect, out colorPtr, out colorStep);
 
             Mat color = new Mat(gray.Height, gray.Width, MatType.CV_8UC3, colorPtr, colorStep);
-                   // Cv2.ImWrite("Result.png", color);
+                  
                   //  Cv2.WaitKey();
 
                     MonoSegCli.FreeBuffer(colorPtr);
@@ -905,7 +909,7 @@ namespace BeeCore
                         RectRotateCli? rrMaskCli2 =
                             (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                         RectRotate rotTemp = rot.Clone();
-                        rotTemp.ExpandPixels(4,4);
+                        rotTemp.ExpandPixels(6,6);
                         RectRotateCli rrCli2 = Converts.ToCli(rotTemp);
                         RectRotateCli? rrMaskCliLocal2 = null;
 
@@ -1190,7 +1194,7 @@ namespace BeeCore
                                     int s3, c3, w3, h3;
                                     IntPtr intpr = list_ColorPixel[i].CheckImageFromMat(
                                         false, 1, false,
-                                        (int)ThreshColor, 30,
+                                        (int)ThreshColor, 30,0.1f,
                                         out pxOut,
                                         ref OffsetX,
                                         ref OffsetY,
@@ -1337,7 +1341,7 @@ namespace BeeCore
             mat.Translate(rectPage._PosCenter.X, rectPage._PosCenter.Y);
             mat.Rotate(rectPage._rectRotation);
             gc.Transform = mat;
-            Draws.Box1Label(gc, rectPage, "Page", new Font("Arial",Global.Config.FontSize),new SolidBrush( Global.Config.TextColor), Color.Red, Global.Config.ThicknessLine);
+            Draws.Box1Label(gc, rectPage, "Page", new Font("Arial",Global.ParaShow.FontSize),new SolidBrush( Global.ParaShow.TextColor), Color.Red, Global.ParaShow.ThicknessLine);
             gc.ResetTransform();
             mat=new Matrix();
             //if (!Global.IsRun)
@@ -1372,16 +1376,16 @@ namespace BeeCore
             Color cl = Color.LimeGreen;
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
             {
-                cl = Global.Config.ColorNG;
+                cl = Global.ParaShow.ColorNG;
             }
             else
             {
-                cl = Global.Config.ColorOK;
+                cl = Global.ParaShow.ColorOK;
             }
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
             gc.ResetTransform();
 
 
@@ -1397,11 +1401,11 @@ namespace BeeCore
                     Color clPCs = Color.LimeGreen;
                     if (!rs.IsOK)
                     {
-                        clPCs = Global.Config.ColorNG;
+                        clPCs = Global.ParaShow.ColorNG;
                     }
                     else
                     {
-                        clPCs = Global.Config.ColorOK;
+                        clPCs = Global.ParaShow.ColorOK;
                     }
                     RectRotate rot = rs.RotCalib;
                     RectRotate rotOrigin = rs.RotOrigin;
@@ -1419,8 +1423,8 @@ namespace BeeCore
 
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                    if (Global.Config.IsShowDetail)
-                        Draws.Box2Label(gc, rot._rect, i + "", "", font, Global.Config.ColorNone, brushText, Global.Config.FontSize, Global.Config.ThicknessLine, 10, 2);
+                    if (Global.ParaShow.IsShowDetail)
+                        Draws.Box2Label(gc, rot._rect, i + "", "", font, Global.ParaShow.ColorNone, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine, 10, 2);
                     if (rs.RotCheck == null)
                     {
                         i++; continue;
@@ -1435,15 +1439,15 @@ namespace BeeCore
                     {
                         Bitmap myBitmap = rs.BCheckColor.ToBitmap();
                         myBitmap.MakeTransparent(Color.Black);
-                        myBitmap = General.ChangeToColor(myBitmap, Color.Red, (float)(Global.Config.Opacity / 100.0));
+                        myBitmap = General.ChangeToColor(myBitmap, Color.Red, (float)(Global.ParaShow.Opacity / 100.0));
                         gc.DrawImage(myBitmap, rs.RotCheck._rect);
                     }
-                    Draws.Box2Label(gc, rs.RotCheck._rect, Math.Round(rs.Score, 1) + "%", "", font, clPCs, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                    Draws.Box2Label(gc, rs.RotCheck._rect, Math.Round(rs.Score, 1) + "%", "", font, clPCs, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
                     Draws.Plus(gc, 0, 0, 10, clPCs, 2);
-                    gc.DrawString(rs.ScoreColor + " px", font, new SolidBrush(Global.Config.ColorInfor), new PointF(5, 50));
-                    Font font1 = new Font("Arial", Global.Config.FontSize);
-                    gc.DrawString(rs.deltaX.ToString() + "," + rs.deltaY.ToString(), font1, new SolidBrush(Global.Config.ColorInfor), new PointF(5, 10));
-                    if (!IsCalibs && Global.Config.IsShowDetail)
+                    gc.DrawString(rs.ScoreColor + " px", font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 50));
+                    Font font1 = new Font("Arial", Global.ParaShow.FontSize);
+                    gc.DrawString(rs.deltaX.ToString() + "," + rs.deltaY.ToString(), font1, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 10));
+                    if (!IsCalibs && Global.ParaShow.IsShowDetail)
                     {
                         if (rs.RotOrigin == null) continue;
                         mat.Translate(-rs.RotCheck._PosCenter.X, -rs.RotCheck._PosCenter.Y);
@@ -1452,7 +1456,7 @@ namespace BeeCore
                         mat.Rotate(rs.RotOrigin._rectRotation);
                         gc.Transform = mat;
 
-                        Draws.Box2Label(gc, rs.RotOrigin._rect, "", "", font, Color.Yellow, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+                        Draws.Box2Label(gc, rs.RotOrigin._rect, "", "", font, Color.Yellow, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
                         Draws.Plus(gc, 0, 0, 10, Color.Yellow, 2);
                     }
 

@@ -30,7 +30,7 @@ namespace BeeInterface
           
             SaveData.Project(Global.Project);
             Global.EditTool.RefreshGuiEdit(Step.Run);
-            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
 
         }
 

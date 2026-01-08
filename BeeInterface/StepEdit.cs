@@ -159,7 +159,7 @@ namespace BeeInterface
         {
             // SaveData.Project(Global.Project);
             Global.Step = Step.Run;
-            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
 
         }
     }

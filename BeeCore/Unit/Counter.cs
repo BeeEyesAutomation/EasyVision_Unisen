@@ -503,9 +503,9 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-               if( Global.ParaCommon.Comunication.Protocol.IsConnected)
+               if( Global.Comunication.Protocol.IsConnected)
                 {
-                  await  Global.ParaCommon.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
+                  await  Global.Comunication.Protocol.WriteResultBits(AddPLC, BitsResult);
                 }
             }
         }
@@ -719,24 +719,24 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText = new SolidBrush(Global.Config.TextColor);
+            Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box2Label(gc, rotA, nameTool,"Count: "+ rectRotates.Count , font, cl, brushText, Global.Config.FontSize, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box2Label(gc, rotA, nameTool,"Count: "+ rectRotates.Count , font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
 
-          //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+          //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
             int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
@@ -788,7 +788,7 @@ namespace BeeCore
                     gc.Transform = mat;
                 } 
                 int index = labelItems.FindIndex(item => string.Equals(item.Name, listLabel[i], StringComparison.OrdinalIgnoreCase));
-                Color clShow = Global.Config.ColorNone;
+                Color clShow = Global.ParaShow.ColorNone;
                 if (listOK[i] == true)
                     clShow = cl;
                 if (index > -1)
@@ -827,7 +827,7 @@ namespace BeeCore
                         mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         gc.Transform = mat;
                         String content = rot._rect.Height + " px";
-                         font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
+                         font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
                         gc.DrawString(content, font, new SolidBrush(clShow), new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
 
@@ -841,8 +841,8 @@ namespace BeeCore
                       //  gc.Transform = mat;
                         mat.Rotate(rot._rectRotation);
                         gc.Transform = mat;
-                        font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", font, clShow, brushText, 30,Global.Config.ThicknessLine, Global.Config.FontSize, 1, Global.Config.IsShowDetail);
+                        font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+                        Draws.Box2Label(gc, rot._rect, listLabel[i], Math.Round(listScore[i], 1) + "%", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, Global.ParaShow.IsShowDetail);
                         gc.ResetTransform();
 
                     }

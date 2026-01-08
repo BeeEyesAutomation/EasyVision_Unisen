@@ -253,18 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bee.ico" />
-    <None Include="Resources\UNISEN_icon1.png" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W303.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W202.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_W101.jpg" />
-    <None Include="Resources\BID_SLIDER_SCALE_8PIX_WHITE.jpg" />
+    <None Include="Resources\BID_SLIDER_HANDLE_ON_NORMAL.jpg" />
     <None Include="Resources\BID_SLIDER_HANDLE_ON_DOWN.jpg" />
     <None Include="Resources\BID_SLIDER_HANDLE_ON_DISABLE.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_ROLLOVER.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_NORMAL.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_OFF_DOWN.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_ROLLOVER.jpg" />
-    <None Include="Resources\BID_SLIDER_HANDLE_ON_NORMAL.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Comuni\" />

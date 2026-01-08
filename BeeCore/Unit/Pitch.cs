@@ -324,9 +324,9 @@ namespace BeeCore
         {
             if (Common.PropetyTools[IndexThread][Index].IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
-                   // await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                   // await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
                 }
             }
         }
@@ -352,16 +352,16 @@ namespace BeeCore
             switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
             {
                 String crest = "", root = "";
                 try { crest = $"P={CurPitchCrest:0.###} mm"; } catch { }
@@ -371,14 +371,14 @@ namespace BeeCore
                 int nR = PitchResult.Roots?.Length ?? 0;
 
                 String Content = $"Crest N={nC}  {crest} | Root N={nR}  {root} ";
-                Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText,16, Global.Config.ThicknessLine);
+                Draws.Box2Label(gc, rotA, nameTool, Content, font, cl, brushText,16, Global.ParaShow.ThicknessLine);
 
             }
 
-            if (!Global.IsRun || Global.Config.IsShowDetail)
+            if (!Global.IsRun || Global.ParaShow.IsShowDetail)
             {
                 if (matProcess != null && !matProcess.Empty())
-                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
          
             gc.ResetTransform();

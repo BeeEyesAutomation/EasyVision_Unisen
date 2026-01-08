@@ -42,19 +42,19 @@ namespace BeeInterface
 
         private void SettingStep2_Load(object sender, EventArgs e)
         {
-            if (Global.ParaCommon.listRegsImg == null)
+            if (Global.listRegsImg == null)
             {
-                Global.ParaCommon.listRegsImg = new List<ItemRegsImg>();
+                Global.listRegsImg = new List<ItemRegsImg>();
                 if (Global.ParaCommon.matRegister!=null)
-                Global.ParaCommon.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
+                Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
             }
-            if (Global.ParaCommon.listRegsImg.Count==0)
+            if (Global.listRegsImg.Count==0)
             {
-                Global.ParaCommon.listRegsImg = new List<ItemRegsImg>();
+                Global.listRegsImg = new List<ItemRegsImg>();
                 if (Global.ParaCommon.matRegister != null)
-                    Global.ParaCommon.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
+                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
             }
-            RegisterImg.LoadAllItem(Global.ParaCommon.listRegsImg);
+            RegisterImg.LoadAllItem(Global.listRegsImg);
 
         }
         public void SaveParaPJ()

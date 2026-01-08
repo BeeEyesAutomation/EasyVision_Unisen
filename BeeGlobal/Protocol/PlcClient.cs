@@ -347,7 +347,7 @@ namespace PlcLib
                     if (_connType == ConnectionType.Tcp)
                     {
                         // gọi ConnectServer() nếu có, nếu không có thì coi như lazy connect
-                        var ok = TryCall(_plc, "ConnectServer", Global.ParaCommon.Comunication.Protocol.timeOut);
+                        var ok = TryCall(_plc, "ConnectServer", Global.Comunication.Protocol.timeOut);
                         if (ok == null)
                         {
                             // method không tồn tại → lazy connect: coi như thành công
@@ -371,7 +371,7 @@ namespace PlcLib
                     else
                     {
                         // Serial: gọi Open()
-                        var opened = TryCall(_plc, "Open", Global.ParaCommon.Comunication.Protocol.timeOut);
+                        var opened = TryCall(_plc, "Open", Global.Comunication.Protocol.timeOut);
                         if (opened==true)
                         {
                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Connect", "Success: " + _com));
@@ -404,9 +404,9 @@ namespace PlcLib
             try
             {
                 if (_connType == ConnectionType.Tcp)
-                    TryCall(_plc, "ConnectClose", Global.ParaCommon.Comunication.Protocol.timeOut);
+                    TryCall(_plc, "ConnectClose", Global.Comunication.Protocol.timeOut);
                 else
-                    TryCall(_plc, "Close", Global.ParaCommon.Comunication.Protocol.timeOut);
+                    TryCall(_plc, "Close", Global.Comunication.Protocol.timeOut);
             }
             catch { }
             _plc = null;

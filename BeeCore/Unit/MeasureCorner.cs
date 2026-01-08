@@ -219,9 +219,9 @@ namespace BeeCore
         {
             if (Common.PropetyTools[IndexThread][Index].IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
-                    //await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
+                    //await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, WidthResult);
                 }
             }
         }
@@ -248,17 +248,17 @@ namespace BeeCore
             switch(Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             Pen pen = new Pen(Color.Blue, 2);
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
 
             if (!Global.IsRun)
             {
@@ -302,8 +302,8 @@ namespace BeeCore
 
             RectangleF rectClient = new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height);
 
-            Draws.DrawInfiniteLine(gc, FilletCornerMeasure. ToLine2D (Result.LineH), new Pen(Global.Config.ColorInfor, Global.Config.ThicknessLine), rectClient);
-            Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineV), new Pen(Global.Config.ColorInfor,  Global.Config.ThicknessLine), rectClient);
+            Draws.DrawInfiniteLine(gc, FilletCornerMeasure. ToLine2D (Result.LineH), new Pen(Global.ParaShow.ColorInfor, Global.ParaShow.ThicknessLine), rectClient);
+            Draws.DrawInfiniteLine(gc, FilletCornerMeasure.ToLine2D(Result.LineV), new Pen(Global.ParaShow.ColorInfor,  Global.ParaShow.ThicknessLine), rectClient);
          
             //Draws.DrawTicks(gc, p1, LineOrientation, pen);
             //Draws.DrawTicks(gc, p2, LineOrientation, pen);

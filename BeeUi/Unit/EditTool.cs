@@ -159,7 +159,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
                         View.pMenu.Visible = false;
@@ -207,7 +207,7 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
-                        Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
+                        Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         View. imgView.Text = "";
                         View.pImg.Visible = false;
                        View.btnChangeImg.IsCLick = false;
@@ -397,9 +397,9 @@ namespace BeeUi
 
             View.tmContinuous.Enabled = false;
            
-            if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+            if (Global.Comunication.Protocol.IsConnected)
             {
-                Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Close;
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.Close;
             }
 
           
@@ -571,7 +571,7 @@ namespace BeeUi
             if (MessageBox.Show("Sure", "byPass PLC",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 toolStripPort.Text = "ByPass PLC";
-                Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                Global.Comunication.Protocol.IsBypass = true;
             }
         }
 

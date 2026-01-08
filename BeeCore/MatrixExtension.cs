@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BeeCore
 {
+
     [Serializable()]
     public static class MatrixExtension
     {

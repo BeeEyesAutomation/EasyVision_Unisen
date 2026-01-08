@@ -237,11 +237,11 @@ namespace BeeCore
         {
             if (Common.PropetyTools[IndexThread][Index].IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     if (TypeMeasure == TypeMeasure.Angle)
                     {
-                      //  await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
+                      //  await Global.Comunication.Protocol.WriteResultFloat(Common.PropetyTools[IndexThread][Index].AddPLC, (float)AngleDetect);
                     }
                 }
             }
@@ -364,10 +364,10 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl = Global.Config.ColorOK;
+                    cl = Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             // === Vẽ 2 line dựa vào listLine1Point và listLine2Point ===
@@ -412,14 +412,14 @@ namespace BeeCore
                         float cx = (p1.X + p2.X + p3.X + p4.X) / 4f;
                         float cy = (p1.Y + p2.Y + p3.Y + p4.Y) / 4f;
                         string txt = $"{AngleDetect:F2}°";
-                        using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
-                        using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                        using (Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold))
+                        using (SolidBrush brush = new SolidBrush(Global.ParaShow.ColorInfor))
                         {
                             gc.DrawString(txt, font, brush, cx + 5, cy + 5);
                         }
                         txt = $"{Distance:F2} px";
-                        using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
-                        using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                        using (Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold))
+                        using (SolidBrush brush = new SolidBrush(Global.ParaShow.ColorInfor))
                         {
                             gc.DrawString(txt, font, brush, cx + 5, cy + 30);
                         }
@@ -457,18 +457,18 @@ namespace BeeCore
                         gc.DrawEllipse(yellowPen, p21.X - r1, p21.Y - r1, r1 * 2, r1 * 2);
 
                     }
-                    gc.DrawLine(new Pen(Global.Config.ColorInfor, 2), p11, p21);
+                    gc.DrawLine(new Pen(Global.ParaShow.ColorInfor, 2), p11, p21);
 
                   
                     string txt1 = $"Angle {AngleDetect:F2}°";
-                    using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
-                    using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                    using (Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold))
+                    using (SolidBrush brush = new SolidBrush(Global.ParaShow.ColorInfor))
                     {
                         gc.DrawString(txt1, font, brush, p11.X + 5, p11.Y + 5);
                     }
                     txt1 = $"Distance {Distance:F2} px";
-                    using (Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold))
-                    using (SolidBrush brush = new SolidBrush(Global.Config.ColorInfor))
+                    using (Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold))
+                    using (SolidBrush brush = new SolidBrush(Global.ParaShow.ColorInfor))
                     {
                         gc.DrawString(txt1, font, brush, p11.X + 5, p11.Y + 50);
                     }
@@ -476,8 +476,8 @@ namespace BeeCore
        
                   PointF p22=new PointF(p11.X+20, p11.Y);
                     PointF p23 = new PointF(p11.X , p11.Y+20);
-                    Draws.DrawInfiniteLine(gc, p11,p22, new Pen(cl, Global.Config.ThicknessLine));
-                    Draws.DrawInfiniteLine(gc, p11, p23, new Pen(cl, Global.Config.ThicknessLine));
+                    Draws.DrawInfiniteLine(gc, p11,p22, new Pen(cl, Global.ParaShow.ThicknessLine));
+                    Draws.DrawInfiniteLine(gc, p11, p23, new Pen(cl, Global.ParaShow.ThicknessLine));
 
                     break;
                     

@@ -151,21 +151,21 @@ namespace BeeInterface
             if(lbCode.Text.Contains("0x002"))
             {
                 Global.PLCStatus = PLCStatus.NotConnect;
-                await Global.ParaCommon.Comunication.Protocol.Connect();
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                await Global.Comunication.Protocol.Connect();
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                     Global.PLCStatus = PLCStatus.Ready;
                     this.TopMost = false;
                     this.Close();
 
-                    Global.ParaCommon.Comunication.Protocol.IsBypass = false;
+                    Global.Comunication.Protocol.IsBypass = false;
 
                 }
                 else
                 {
                     Global.PLCStatus = PLCStatus.ErrorConnect;
                   
-                    Global.ParaCommon.Comunication.Protocol.IsBypass = true;
+                    Global.Comunication.Protocol.IsBypass = true;
                   //  MessageBox.Show("Fail Connect to Module I/O");
 
                 }

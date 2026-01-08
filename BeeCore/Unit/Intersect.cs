@@ -248,10 +248,10 @@ namespace BeeCore
         {
             if (IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {
                    
-                    await Global.ParaCommon.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
+                    await Global.Comunication.Protocol.WriteResultFloat(AddPLC, WidthResult);
                 }
             }
         }
@@ -271,21 +271,21 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
-            Brush brushText = new SolidBrush(Global.Config.TextColor);
+            Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.NG)
-                cl = Global.Config.ColorNG;
+                cl = Global.ParaShow.ColorNG;
             else
-                cl = Global.Config.ColorOK;
+                cl = Global.ParaShow.ColorOK;
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.Config.ThicknessLine);
-            if (!Global.IsRun && Global.Config.IsShowMatProcess || Global.IsRun && Global.Config.IsShowDetail)
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl, Global.ParaShow.ThicknessLine);
+            if (!Global.IsRun && Global.ParaShow.IsShowMatProcess || Global.IsRun && Global.ParaShow.IsShowDetail)
             {
                 if (matProcess != null && !matProcess.Empty())
-                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
             if ( Result.Found)
             {
@@ -298,20 +298,20 @@ namespace BeeCore
                     flags = DrawFlags.BestCorner | DrawFlags.BestLines;
                 else
                 {
-                    if (Global.Config.IsShowDetail) flags = flags | DrawFlags.Inliers;                 
-                    if (Global.Config.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
-                    if (Global.Config.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
+                    if (Global.ParaShow.IsShowDetail) flags = flags | DrawFlags.Inliers;                 
+                    if (Global.ParaShow.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
+                    if (Global.ParaShow.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
                 }
 
                 DrawStyle drawStyle = new DrawStyle
                 {
                     Inlier = Color.Red,
-                    LineChoose = Global.Config.ColorChoose,
-                    LineResult = Global.Config.ColorInfor,
-                    LineNone = Global.Config.ColorNone,
+                    LineChoose = Global.ParaShow.ColorChoose,
+                    LineResult = Global.ParaShow.ColorInfor,
+                    LineNone = Global.ParaShow.ColorNone,
                     LineDash = DashStyle.Solid,
-                    InlierSize = Global.Config.ThicknessLine / 2,
-                    Thickness = Global.Config.ThicknessLine,
+                    InlierSize = Global.ParaShow.ThicknessLine / 2,
+                    Thickness = Global.ParaShow.ThicknessLine,
                 };
                 DetectIntersect.RenderDebugToGraphics(gc, new RectangleF(0, 0, rotA._rect.Width, rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
             }

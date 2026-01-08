@@ -198,23 +198,23 @@ namespace BeeCore
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
             {
                 case Results.OK:
-                    cl =  Global.Config.ColorOK;
+                    cl =  Global.ParaShow.ColorOK;
                     break;
                 case Results.NG:
-                    cl = Global.Config.ColorNG;
+                    cl = Global.ParaShow.ColorNG;
                     break;
             }
             String nameTool = (int)(Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Index].Name;
-            Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-            if (Global.Config.IsShowBox)
-                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+            Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+            if (Global.ParaShow.IsShowBox)
+                Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
-            if (!Global.IsRun || Global.Config.IsShowDetail)
+            if (!Global.IsRun || Global.ParaShow.IsShowDetail)
             {
                 if (matProcess != null && !matProcess.Empty())
-                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.Config.Opacity / 100.0f);
+                    Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
             }
-            if(Global.Config.IsShowResult)
+            if(Global.ParaShow.IsShowResult)
             if (rectRotates.Count > 0)
             {
                 int i = 0;
@@ -234,14 +234,14 @@ namespace BeeCore
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
                     int min = (int)Math.Min(rot._rect.Width / 4, rot._rect.Height /4);
-                    Draws.Plus(gc, 0, 0, min, cl, Global.Config.ThicknessLine);
+                    Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
 
-                    gc.DrawEllipse(new Pen(cl, Global.Config.ThicknessLine), rot._rect);
-                        SizeF sz = gc.MeasureString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold));
-                    if(Global.Config.IsShowDetail)
-                    gc.DrawString("D:" + RadiusResult, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(Global.Config.ColorInfor), new PointF(0, 0));
-                    if(Global.Config.IsShowPostion)
-                      gc.DrawString("X,Y - " + listP_Center[i].X+","+ listP_Center[i].Y, new Font("Arial", Global.Config.FontSize, FontStyle.Bold), new SolidBrush(Global.Config.ColorInfor), new PointF(0, sz.Height+1));
+                    gc.DrawEllipse(new Pen(cl, Global.ParaShow.ThicknessLine), rot._rect);
+                        SizeF sz = gc.MeasureString("D:" + RadiusResult, new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold));
+                    if(Global.ParaShow.IsShowDetail)
+                    gc.DrawString("D:" + RadiusResult, new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold), new SolidBrush(Global.ParaShow.ColorInfor), new PointF(0, 0));
+                    if(Global.ParaShow.IsShowPostion)
+                      gc.DrawString("X,Y - " + listP_Center[i].X+","+ listP_Center[i].Y, new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold), new SolidBrush(Global.ParaShow.ColorInfor), new PointF(0, sz.Height+1));
 
                         gc.ResetTransform();
                     i++;
@@ -257,10 +257,10 @@ namespace BeeCore
         {
             if (Common.PropetyTools[IndexThread][Index].IsSendResult)
             {
-                if (Global.ParaCommon.Comunication.Protocol.IsConnected)
+                if (Global.Comunication.Protocol.IsConnected)
                 {   
                    // if(listP_Center.Count>0)
-                     //   await Global.ParaCommon.Comunication.Protocol.WriteResultString(Common.PropetyTools[IndexThread][Index].AddPLC,  listP_Center[0].X+ "," + listP_Center[0].Y + "," + RadiusResult);
+                     //   await Global.Comunication.Protocol.WriteResultString(Common.PropetyTools[IndexThread][Index].AddPLC,  listP_Center[0].X+ "," + listP_Center[0].Y + "," + RadiusResult);
                 }
             }
         }

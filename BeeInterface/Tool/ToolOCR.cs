@@ -249,9 +249,9 @@ namespace BeeInterface
                 mat.Rotate(rotA._rectRotation);
                 gc.Transform = mat;
                 String nameTool = (int)(Propety.Index + 1) + "." + Common.PropetyTools[Global.IndexChoose][Propety.Index].Name;
-                Font font = new Font("Arial", Global.Config.FontSize, FontStyle.Bold);
-                if (Global.Config.IsShowBox)
-                    Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.Config.ThicknessLine);
+                Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
+                if (Global.ParaShow.IsShowBox)
+                    Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
                 int i = 0;
                 if (Propety.listLabelResult.Count() != Propety.rectRotates.Count())
@@ -586,11 +586,6 @@ namespace BeeInterface
 
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnLearning_Click(object sender, EventArgs e)
         {
 
@@ -683,13 +678,9 @@ namespace BeeInterface
 
         private void btnTest_Click_1(object sender, EventArgs e)
         {
-           
-            if (!worker.IsBusy)
-            {
-                worker.RunWorkerAsync();
-                btnTest.Enabled= false;
-            }
-               
+
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
+                Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
         }

@@ -284,9 +284,7 @@ namespace BeeCore
                                     dynamic cls2 = module.GetAttr("CraftOCRDetector"); // class
                                     G.objCraftOCR = cls2.Invoke();              // khởi tạo instance
                                     Global.IsOCR = true;
-                                    //dynamic module3 = Py.Import("Tool.OCR");
-                                    //dynamic cls3 = module.GetAttr("OCR"); // class
-                                    //G.objOCR = cls3.Invoke();  
+                                   
                                 }
                                 catch (Exception ex)
                                 {
@@ -295,7 +293,9 @@ namespace BeeCore
                             }
                             else
                                 Global.IsOCR = false;
-
+                            dynamic module3 = Py.Import("Tool.OCR");
+                            dynamic cls3 = module3.GetAttr("OCR"); // class
+                            G.objOCR = cls3.Invoke();
                             Global.IsIntialPython = true;
 
 

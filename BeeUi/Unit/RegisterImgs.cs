@@ -24,7 +24,7 @@ namespace BeeUi.Unit
         }
         public void LoadData()
         {
-            registerImg.LoadAllItem(Global.ParaCommon.listRegsImg, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis);
+            registerImg.LoadAllItem(Global.listRegsImg, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].IndexImgRegis);
 
         }
         private void RegisterImgs_Load(object sender, EventArgs e)

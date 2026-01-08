@@ -21,7 +21,7 @@ namespace BeeGlobal
         //public Color ColorRight = Color.WhiteSmoke;
         public bool EnterPO = true;
         public String POCurrent = "";
-        
+      
         public int NumRetryCamera = 0;
         public int NumRetryPLC = 0;
         public bool IsResetReady = false;
@@ -39,27 +39,14 @@ namespace BeeGlobal
 
         public bool IsAutoTrigger = false;
 
-        public ModeSaveProg ModeSaveProg = ModeSaveProg.Single;
+     
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
-        public int FontSize = 16;
-        public int Opacity = 100;
-        public int RadEdit = 40;
-        public Color ColorOK;
-        public Color ColorNG;
-        public Color ColorNone;
-        public Color ColorChoose;
-        public Color ColorInfor;
-        public Color TextColor;
-
-        public int ThicknessLine = 4;
-        public bool IsShowDetail = true;
-        public bool IsShowBox = true;
-        public bool IsShowScore = false;
-        public bool IsShowLabel = true;
-        public bool IsShowPostion = true;
-        public bool IsShowResult = true;
-        public bool IsShowNotMatching = true;
-        public bool IsShowMatProcess = false;
+        public bool IsSaveCommon = false;
+        public bool IsSaveCommunication=true;
+        public bool IsSaveListRegister = true;
+        public bool IsSaveListSim= true;
+        public bool IsSaveParaShow= true;
+        public bool IsSaveParaCam = true;
 
         public float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;

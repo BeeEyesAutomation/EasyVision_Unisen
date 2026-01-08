@@ -51,34 +51,34 @@ namespace BeeInterface
                 case 3: btnbig.IsCLick = true; break;
             }
             AdjLimitDay.Value = Global.Config.LimitDateSave;
-            AdjFontSize.Value = Global.Config.FontSize;
-            AdjRadEdit.Value = Global.Config.RadEdit;
-            btnShowBox.IsCLick = Global.Config.IsShowBox;
-            btnShowDetail.IsCLick = Global.Config.IsShowDetail;
-            btnShowPositon.IsCLick = Global.Config.IsShowPostion;
-            btnShowScore.IsCLick = Global.Config.IsShowScore;
-            btnShowLabel.IsCLick = Global.Config.IsShowLabel;
+            AdjFontSize.Value = Global.ParaShow.FontSize;
+            AdjRadEdit.Value = Global.ParaShow.RadEdit;
+            btnShowBox.IsCLick = Global.ParaShow.IsShowBox;
+            btnShowDetail.IsCLick = Global.ParaShow.IsShowDetail;
+            btnShowPositon.IsCLick = Global.ParaShow.IsShowPostion;
+            btnShowScore.IsCLick = Global.ParaShow.IsShowScore;
+            btnShowLabel.IsCLick = Global.ParaShow.IsShowLabel;
 
-            lbClOK.BackColor = Global.Config.ColorOK;
-            btnClOK.ForeColor = Global.Config.ColorOK;
-            lbCLNG.BackColor = Global.Config.ColorNG;
-            btnClNG.ForeColor = Global.Config.ColorNG;
+            lbClOK.BackColor = Global.ParaShow.ColorOK;
+            btnClOK.ForeColor = Global.ParaShow.ColorOK;
+            lbCLNG.BackColor = Global.ParaShow.ColorNG;
+            btnClNG.ForeColor = Global.ParaShow.ColorNG;
 
-            lbCLInfor.BackColor = Global.Config.ColorInfor;
-            btnCLInfor.ForeColor = Global.Config.ColorInfor;
-            lbCLNone.BackColor = Global.Config.ColorNone;
-            btnCLNone.ForeColor = Global.Config.ColorNone;
-            lbCLText.BackColor = Global.Config.TextColor;
-            btnCLText.ForeColor = Global.Config.TextColor;
-            lbClChoose.BackColor = Global.Config.ColorChoose;
-            btnClChoose.ForeColor = Global.Config.ColorChoose;
-            AdjOpacity.Value = Global.Config.Opacity;
-            AdjThicknessLine.Value = Global.Config.ThicknessLine;
+            lbCLInfor.BackColor = Global.ParaShow.ColorInfor;
+            btnCLInfor.ForeColor = Global.ParaShow.ColorInfor;
+            lbCLNone.BackColor = Global.ParaShow.ColorNone;
+            btnCLNone.ForeColor = Global.ParaShow.ColorNone;
+            lbCLText.BackColor = Global.ParaShow.TextColor;
+            btnCLText.ForeColor = Global.ParaShow.TextColor;
+            lbClChoose.BackColor = Global.ParaShow.ColorChoose;
+            btnClChoose.ForeColor = Global.ParaShow.ColorChoose;
+            AdjOpacity.Value = Global.ParaShow.Opacity;
+            AdjThicknessLine.Value = Global.ParaShow.ThicknessLine;
             btnByPassResult.IsCLick = Global.Config.IsForceByPassRS;
             btnFullDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Full ? true : false;
             btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
-            btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
-            btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
+          //  btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
+          //  btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
             btnOnAutoTrigger.IsCLick = Global.Config.IsAutoTrigger;
             btnOffAutoTrigger.IsCLick = !Global.Config.IsAutoTrigger;
             btnONResetImg.IsCLick = Global.Config.IsResetImg;
@@ -99,6 +99,11 @@ namespace BeeInterface
             btnResetReady.IsCLick = Global.Config.IsResetReady;
             numRetryCam.Value = Global.Config.NumRetryCamera;
             numRetryPLC.Value = Global.Config.NumRetryPLC;
+            btnSaveCommon.IsCLick = Global.Config.IsSaveCommon;
+            btnSaveParaCamera.IsCLick = Global.Config.IsSaveParaCam;
+            btnSaveGraphic.IsCLick = Global.Config.IsSaveParaShow;
+            btnSaveImgRegister.IsCLick = Global.Config.IsSaveListRegister;
+            btnSaveListImgSim.IsCLick = Global.Config.IsSaveListSim;
         }
 
 
@@ -173,7 +178,8 @@ namespace BeeInterface
         {
             //SaveData.ParaPJ(Global.Project, Global.ParaCommon);
             SaveData.Config(Global.Config);
-
+            SaveData.ParaShow(Global.Project, Global.ParaShow);
+          
             ShowTool.ShowAllChart(Global.ToolSettings.pAllTool);
             this.Close();
         }
@@ -211,36 +217,36 @@ namespace BeeInterface
 
         private void AdjRadEdit_ValueChanged(float obj)
         {
-            Global.Config.RadEdit = (int)AdjRadEdit.Value;
+            Global.ParaShow.RadEdit = (int)AdjRadEdit.Value;
         }
 
         private void btnShowBox_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowBox = btnShowBox.IsCLick;
+            Global.ParaShow.IsShowBox = btnShowBox.IsCLick;
         }
 
         private void btnShowDetail_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowDetail = btnShowDetail.IsCLick;
+            Global.ParaShow.IsShowDetail = btnShowDetail.IsCLick;
         }
 
         private void btnShowPositon_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowPostion = btnShowPositon.IsCLick;
+            Global.ParaShow.IsShowPostion = btnShowPositon.IsCLick;
         }
 
         private void AdjFontSize_ValueChanged(float obj)
         {
-            Global.Config.FontSize = (int)AdjFontSize.Value;
+            Global.ParaShow.FontSize = (int)AdjFontSize.Value;
         }
 
         private void btnChooseCLOK_Click(object sender, EventArgs e)
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.ColorOK = colorChoose.Color;
-                lbClOK.BackColor = Global.Config.ColorOK;
-                btnClOK.ForeColor = Global.Config.ColorOK;
+                Global.ParaShow.ColorOK = colorChoose.Color;
+                lbClOK.BackColor = Global.ParaShow.ColorOK;
+                btnClOK.ForeColor = Global.ParaShow.ColorOK;
             }
         }
 
@@ -248,102 +254,102 @@ namespace BeeInterface
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.ColorNG = colorChoose.Color;
-                lbCLNG.BackColor = Global.Config.ColorNG;
-                btnClNG.ForeColor = Global.Config.ColorNG;
+                Global.ParaShow.ColorNG = colorChoose.Color;
+                lbCLNG.BackColor = Global.ParaShow.ColorNG;
+                btnClNG.ForeColor = Global.ParaShow.ColorNG;
             }
         }
 
         private void btnDefault_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorOK = Color.FromArgb(0, 172, 73);
-            lbClOK.BackColor = Global.Config.ColorOK;
-            btnClOK.ForeColor = Global.Config.ColorOK;
+            Global.ParaShow.ColorOK = Color.FromArgb(0, 172, 73);
+            lbClOK.BackColor = Global.ParaShow.ColorOK;
+            btnClOK.ForeColor = Global.ParaShow.ColorOK;
         }
 
         private void btnDefaultNg_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorNG = Color.DarkRed;
-            lbCLNG.BackColor = Global.Config.ColorNG;
-            btnClNG.ForeColor = Global.Config.ColorNG;
+            Global.ParaShow.ColorNG = Color.DarkRed;
+            lbCLNG.BackColor = Global.ParaShow.ColorNG;
+            btnClNG.ForeColor = Global.ParaShow.ColorNG;
         }
 
         private void AdjOpacity_ValueChanged(float obj)
         {
-            Global.Config.Opacity = (int)AdjOpacity.Value;
+            Global.ParaShow.Opacity = (int)AdjOpacity.Value;
         }
 
         private void AdjThinkness_ValueChanged(float obj)
         {
-            Global.Config.ThicknessLine = (int)AdjThicknessLine.Value;
+            Global.ParaShow.ThicknessLine = (int)AdjThicknessLine.Value;
         }
 
         private void btnChooseCLInfor_Click(object sender, EventArgs e)
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.ColorInfor = colorChoose.Color;
-                lbCLInfor.BackColor = Global.Config.ColorInfor;
-                btnCLInfor.ForeColor = Global.Config.ColorInfor;
+                Global.ParaShow.ColorInfor = colorChoose.Color;
+                lbCLInfor.BackColor = Global.ParaShow.ColorInfor;
+                btnCLInfor.ForeColor = Global.ParaShow.ColorInfor;
             }
         }
 
         private void btnDefInfor_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorInfor = Color.Blue;
-            lbCLInfor.BackColor = Global.Config.ColorInfor;
-            btnCLInfor.ForeColor = Global.Config.ColorInfor;
+            Global.ParaShow.ColorInfor = Color.Blue;
+            lbCLInfor.BackColor = Global.ParaShow.ColorInfor;
+            btnCLInfor.ForeColor = Global.ParaShow.ColorInfor;
         }
 
         private void btnChooseNone_Click(object sender, EventArgs e)
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.ColorNone = colorChoose.Color;
-                lbCLNone.BackColor = Global.Config.ColorNone;
-                btnCLNone.ForeColor = Global.Config.ColorNone;
+                Global.ParaShow.ColorNone = colorChoose.Color;
+                lbCLNone.BackColor = Global.ParaShow.ColorNone;
+                btnCLNone.ForeColor = Global.ParaShow.ColorNone;
             }
         }
 
         private void btnDefNone_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorNone = Color.LightGray;
-            lbCLNone.BackColor = Global.Config.ColorNone;
-            btnCLNone.ForeColor = Global.Config.ColorNone;
+            Global.ParaShow.ColorNone = Color.LightGray;
+            lbCLNone.BackColor = Global.ParaShow.ColorNone;
+            btnCLNone.ForeColor = Global.ParaShow.ColorNone;
         }
 
         private void btnChooseCLChoose_Click(object sender, EventArgs e)
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.ColorChoose = colorChoose.Color;
-                lbClChoose.BackColor = Global.Config.ColorChoose;
-                btnClChoose.ForeColor = Global.Config.ColorChoose;
+                Global.ParaShow.ColorChoose = colorChoose.Color;
+                lbClChoose.BackColor = Global.ParaShow.ColorChoose;
+                btnClChoose.ForeColor = Global.ParaShow.ColorChoose;
             }
         }
 
         private void btnDefaultChoose_Click(object sender, EventArgs e)
         {
-            Global.Config.ColorChoose = Color.FromArgb(246, 204, 120);
-            lbClChoose.BackColor = Global.Config.ColorChoose;
-            btnClChoose.ForeColor = Global.Config.ColorChoose;
+            Global.ParaShow.ColorChoose = Color.FromArgb(246, 204, 120);
+            lbClChoose.BackColor = Global.ParaShow.ColorChoose;
+            btnClChoose.ForeColor = Global.ParaShow.ColorChoose;
         }
 
         private void btnChooseCLText_Click(object sender, EventArgs e)
         {
             if (colorChoose.ShowDialog() == DialogResult.OK)
             {
-                Global.Config.TextColor = colorChoose.Color;
-                lbCLText.BackColor = Global.Config.TextColor;
-                btnCLText.ForeColor = Global.Config.TextColor;
+                Global.ParaShow.TextColor = colorChoose.Color;
+                lbCLText.BackColor = Global.ParaShow.TextColor;
+                btnCLText.ForeColor = Global.ParaShow.TextColor;
             }
         }
 
         private void btnDefaultCLText_Click(object sender, EventArgs e)
         {
-            Global.Config.TextColor = Color.White;
-            lbCLText.BackColor = Global.Config.TextColor;
-            btnCLText.ForeColor = Global.Config.TextColor;
+            Global.ParaShow.TextColor = Color.White;
+            lbCLText.BackColor = Global.ParaShow.TextColor;
+            btnCLText.ForeColor = Global.ParaShow.TextColor;
         }
 
         private void btnByPassResult_Click(object sender, EventArgs e)
@@ -383,12 +389,12 @@ namespace BeeInterface
 
         private void btnShowLabel_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowLabel = btnShowLabel.IsCLick;
+            Global.ParaShow.IsShowLabel = btnShowLabel.IsCLick;
         }
 
         private void btnShowScore_Click(object sender, EventArgs e)
         {
-            Global.Config.IsShowScore = btnShowScore.IsCLick;
+            Global.ParaShow.IsShowScore = btnShowScore.IsCLick;
         }
 
         private void btnFullDisplay_Click(object sender, EventArgs e)
@@ -401,17 +407,7 @@ namespace BeeInterface
             Global.Config.DisplayResolution = DisplayResolution.Normal;
         }
 
-        private void btnModeSaveSingle_Click(object sender, EventArgs e)
-        {
-            Global.Config.ModeSaveProg = ModeSaveProg.Single;
-
-        }
-
-        private void btnSaveModeMulti_Click(object sender, EventArgs e)
-        {
-            Global.Config.ModeSaveProg = ModeSaveProg.Multi;
-        }
-
+     
         private void btnOFFResetImg_Click(object sender, EventArgs e)
         {
             Global.Config.IsResetImg = false;
@@ -430,6 +426,37 @@ namespace BeeInterface
         private void btnOffAutoTrigger_Click(object sender, EventArgs e)
         {
             Global.Config.IsAutoTrigger = false;
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnSaveImgRegister_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveListRegister = btnSaveImgRegister.IsCLick;
+        }
+
+        private void btnSaveListImgSim_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveListSim = btnSaveListImgSim.IsCLick;
+        }
+
+        private void btnParaPLC_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveCommunication = btnParaPLC.IsCLick;
+        }
+
+        private void btnSaveGraphic_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveParaShow = btnSaveGraphic.IsCLick;
+
+        }
+
+        private void btnSaveCommon_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveCommon = btnSaveCommon.IsCLick;
         }
     }
 }

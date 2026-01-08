@@ -589,7 +589,7 @@ namespace BeeCore
         var oldSmoothing = g.SmoothingMode;
         var oldTrans = g.Transform.Clone();
         g.SmoothingMode = SmoothingMode.AntiAlias;
-            float rH = Global.Config.RadEdit;
+            float rH = Global.ParaShow.RadEdit;
             if (!Global.IsRun&& drawHandles)
                 if (rr._dragAnchor == AnchorPoint.Center)
             {
@@ -652,7 +652,7 @@ namespace BeeCore
                 using (var dashPen = new Pen(Color.Orange, 1f) { DashStyle = DashStyle.Dash })
                     g.DrawLine(dashPen, last, pLocal);
 
-                float rM = Math.Max(2f, Global.Config.RadEdit * 0.35f);
+                float rM = Math.Max(2f, Global.ParaShow.RadEdit * 0.35f);
                 var hoverDot = new RectangleF(pLocal.X - rM, pLocal.Y - rM, 2f * rM, 2f * rM);
                 g.FillEllipse(Brushes.Orange, hoverDot);
                 g.DrawEllipse(Pens.Black, hoverDot);
@@ -1170,7 +1170,7 @@ Pen outlinePen)
             //        // nếu bạn vẽ ở world-space, chuyển local->world trước
             //        // Ở đây ví dụ vẽ local sau đó để Matrix chung xử lý
             //        PointF[] vertsLocal = RectDraw.GetHexagonVerticesLocal();
-            //        float rad = Global.Config.RadEdit;
+            //        float rad = Global.ParaShow.RadEdit;
             //        for (int i = 0; i < 6; i++)
             //        {
             //            RectangleF handle = new RectangleF(vertsLocal[i].X - rad / 2f, vertsLocal[i].Y - rad / 2f, rad, rad);

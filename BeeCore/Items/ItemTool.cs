@@ -680,9 +680,9 @@ namespace BeeCore
                          
                         Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
                         CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
-                        colorTrack =  Global.Config.ColorOK;
-                        ClStatus =  Global.Config.ColorOK;
-                        ClScore=  Global.Config.ColorOK;
+                        colorTrack =  Global.ParaShow.ColorOK;
+                        ClStatus =  Global.ParaShow.ColorOK;
+                        ClScore=  Global.ParaShow.ColorOK;
                     }
                     else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.NG)
                     {
@@ -695,9 +695,9 @@ namespace BeeCore
                         }
                         Status = Common.PropetyTools[IndexThread][IndexTool].Results.ToString();
                         CT = Common.PropetyTools[IndexThread][IndexTool].CycleTime;
-                        colorTrack = Global.Config.ColorNG;
-                        ClStatus = Global.Config.ColorNG;
-                        ClScore = Global.Config.ColorNG;
+                        colorTrack = Global.ParaShow.ColorNG;
+                        ClStatus = Global.ParaShow.ColorNG;
+                        ClScore = Global.ParaShow.ColorNG;
                     }
                     else if (Common.PropetyTools[IndexThread][IndexTool].Results == Results.None)
                     {

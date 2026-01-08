@@ -73,7 +73,7 @@ namespace BeeUi
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Global.ParaCommon.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
             Task.Delay(1000);
             //if(G.DeviceConnectForm!=null)
             //G.DeviceConnectForm.FormClosingDo(sender, e);
