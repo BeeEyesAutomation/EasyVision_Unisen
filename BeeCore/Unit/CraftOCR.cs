@@ -39,7 +39,8 @@ namespace BeeCore
         public int _Percent = 0;//note
         [field: NonSerialized]
         public event Action<int> PercentChange;
-
+        [NonSerialized]
+        public bool IsNew = false;
         public int Percent
         {
             get => _Percent;
@@ -91,6 +92,7 @@ namespace BeeCore
 
 
         }
+        public int IndexCCD = 0;
         public int OffSetSample = 10;
         public int _OffSetArea = 30;
         public void UpdateOffSet()
@@ -120,7 +122,7 @@ namespace BeeCore
             rotTemp = rectRotate.Clone();
             rotTemp.UpdateFromPolygon(false);
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 matTemp = Cropper.CropRotatedRect(raw, rotTemp, null);
                 LearnPattern(matTemp, true);
@@ -160,7 +162,7 @@ namespace BeeCore
             rotArea = rectRotate2.Clone();
             rotArea.UpdateFromPolygon(false);
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 matTemp = Cropper.CropRotatedRect(raw, rotTemp, null);
                 //    var dbg = new DebugOptions
@@ -194,9 +196,9 @@ namespace BeeCore
         {
             if (ModeCheck == ModeCheck.Single)
             {
-                RectRotate rotAdj = BeeCore.Common.GetPositionAdjustment(rotArea, Global.rotOriginAdj);
+              //  RectRotate rotAdj = BeeCore.Common.GetPositionAdjustment(rotArea, Global.rotOriginAdj);
 
-                //using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                //using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 //{
                 //    matTemp = Cropper.CropRotatedRect(raw, rotAdj, null);
                 //    LearnPattern(matTemp, true);
@@ -214,7 +216,7 @@ namespace BeeCore
 
 
                         // === Crop ROI ===
-                        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAdj, null))
+                        using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotAreaAdjustment, null))
                         {
                             if (matCrop.Empty()) return;
 
@@ -357,7 +359,11 @@ namespace BeeCore
         public RectRotate rotArea, rotCrop,rotTemp, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
 
+
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public List<RectRotate> listRotScan = new List<RectRotate>();
         public Bitmap bmRaw;
@@ -423,7 +429,7 @@ namespace BeeCore
 
 
                     // === Crop ROI ===
-                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
+                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotCrop, null))
                     {
                         if (matCrop.Empty()) return;
 
@@ -546,7 +552,7 @@ namespace BeeCore
             Global.StatusDraw = StatusDraw.Scan;
             
         }
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
@@ -554,7 +560,7 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
@@ -573,9 +579,9 @@ namespace BeeCore
                     {
                         matProcess = raw; // reuse backing store
                     }
-                    Mat crop1 = Cropper.CropRotatedRect(matProcess, rectRotate,null);
+                    Mat crop1 = Cropper.CropRotatedRect(matProcess, rotArea,null);
                   //  Cv2.ImWrite("crop1.png", crop1);
-                    var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                     Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
@@ -621,8 +627,8 @@ namespace BeeCore
                             listScore.Add(Math.Round(score, 1));
                             list_AngleCenter.Add(rotArea._rectRotation + angle);
                             listP_Center.Add(new System.Drawing.Point(
-                                (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-                                (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                                (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X),
+                                (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y)));
                         }
                     }
 
@@ -660,7 +666,7 @@ namespace BeeCore
             {
                 //if (rectRotates.Count() > 0)
                     AutoTemp();
-                DoWork(rotAreaAdjustment);
+                DoWork(rotAreaAdjustment,rotMaskAdjustment);
                 if (rectRotates.Count() == 0)
                     Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                 else

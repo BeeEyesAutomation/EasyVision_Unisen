@@ -20,10 +20,15 @@ namespace BeeCore
         {
 
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public int Index = -1;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp, matMask;
         
@@ -34,9 +39,9 @@ namespace BeeCore
         [DllImport(@".\BeeCV.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         unsafe public static extern IntPtr SetTemp(IntPtr data, int image_rows, int image_cols, MatType matType);
         public  int Threshold=100,  MinArea=100;
-    
+        public int IndexCCD = 0;
         public  bool Invert=false;
-        public void DoWork()
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
           
           //  Matching(indexTool);
@@ -49,7 +54,7 @@ namespace BeeCore
         }
         public  Mat GetImgTemp()
         {
-            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexThread].matRaw.Clone().ToBitmap());
+            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexCCD].matRaw.Clone().ToBitmap());
             Common.CropRotate(rotArea);
             int rows = 0, cols = 0, Type = 0;
             IntPtr intPtr = GetTemp(ref rows , ref cols, ref Type , Threshold, MinArea,(int)Methord, Invert);
@@ -79,7 +84,7 @@ namespace BeeCore
         public void Check(bool IsRun, RectRotate rot)
         {
             if(!IsRun)
-            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexThread].matRaw.Clone().ToBitmap());
+            G.CommonPlus.BitmapSrc(BeeCore.Common.listCamera[IndexCCD].matRaw.Clone().ToBitmap());
             Common.CropRotate(rot);
             float numNG = G.MatchingShape.CheckShape(Threshold, MinArea, (int)Methord, Invert);
             cycleTime =(int) G.MatchingShape.cycleTool;

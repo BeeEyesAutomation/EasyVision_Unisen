@@ -24,7 +24,7 @@ namespace BeeUi.Tool
             var col2 = new DataGridViewTextBoxColumn();
             var col3 = new DataGridViewTextBoxColumn();
             var col4 = new DataGridViewTextBoxColumn();
-            var col5 = new DataGridViewTextBoxColumn();
+          
             var col6 = new DataGridViewTextBoxColumn();
             // var col7 = new DataGridViewImageColumn();
             // var col8 = new DataGridViewImageColumn();
@@ -42,30 +42,23 @@ namespace BeeUi.Tool
             col2.DefaultCellStyle.Font = new Font("Arial", 18);
             col2.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            col3.HeaderText = "Model";
-            col3.Name = "Model";
-            col3.DataPropertyName = "Model";
+            col3.HeaderText = "Prog";
+            col3.Name = "Prog";
+            col3.DataPropertyName = "Prog";
             col3.Width = 250;
             col3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             col3.DefaultCellStyle.Font = new Font("Arial", 18);
             col3.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
-            col4.HeaderText = "Qty";
-            col4.Name = "Qty";
-            col4.DataPropertyName = "Qty";
-            col4.Width = 140;
+            col4.HeaderText = "PO";
+            col4.Name = "PO";
+            col4.DataPropertyName = "PO";
+            col4.Width = 200;
             col4.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            col4.DefaultCellStyle.Font = new Font("Arial", 30, FontStyle.Bold);
+            col4.DefaultCellStyle.Font = new Font("Arial", 18, FontStyle.Bold);
             col4.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             col4.DefaultCellStyle.BackColor = Color.LightGray;
-            col5.HeaderText = "Total";
-            col5.Name = "Total";
-            col5.DataPropertyName = "Total";
-            col5.Width = 200;
-            col5.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            col5.DefaultCellStyle.Font = new Font("Arial", 30);
-            col5.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
+           
 
             col6.HeaderText = "Status";
             col6.Name = "Status";
@@ -91,7 +84,7 @@ namespace BeeUi.Tool
 
             dataView.DataSource = null;
             dataView.RowTemplate.Height = 50;
-            dataView.Columns.AddRange(new DataGridViewColumn[] { col1, col2, col3, col4, col5, col6 });
+            dataView.Columns.AddRange(new DataGridViewColumn[] { col1, col2, col3, col4, col6 });
             //String path = Path.Combine(Environment.CurrentDirectory, "DataReport.mdf");
             // G._pathSqlMaster= @"Data Source=(LocalDB)\v11.0;AttachDbFilename="+path+";Integrated Security=True";
 
@@ -238,14 +231,14 @@ namespace BeeUi.Tool
 
             return dt;
         }
-        int Toatal = 0, Qty=0;
+        int OK = 0, NG=0;
         DataTable dtPicture = new DataTable();
         DataTable dtPicturers = new DataTable();
        public  DataTable dtAll = new DataTable();
         public void ShowData()
         {
-             Qty = 0;
-            Toatal = 0;
+             OK = 0;
+            NG = 0;
             String sql = "";
             sql += _sModel;
             if (_sStatus != "" && _sModel != "")
@@ -274,7 +267,7 @@ namespace BeeUi.Tool
                 con.Open();
               
          
-                DataTable dtOne = Table("STT,Date,Model,Qty,Total,Status", "Report", sql, G.cnn);
+                DataTable dtOne = Table("STT,Date,Prog,PO,Status", "Report", sql, G.cnn);
                 // DataTable dtTwo = Table("Raw", "Report", sql, con);
                 // DataTable dtThree = Table("Result", "Report", sql, con);
                 dtAll.Merge(dtOne);
@@ -297,21 +290,23 @@ namespace BeeUi.Tool
                 }
                 else if (dataView.Rows[j].Cells["Status"].Value.ToString() == "OK")
                 {
+                    OK++;
                     dataView.Rows[j].Cells["Status"].Style.BackColor = Color.Green;
                 }
                 else
                 {
+                    NG++;
                     dataView.Rows[j].Cells["Status"].Style.BackColor = Color.DarkRed;
 
                 }
                 if (j != -1)
                 {
-                     Qty += Convert.ToInt32(dataView.Rows[j].Cells["Qty"].Value.ToString());
-                    Toatal += Convert.ToInt32(dataView.Rows[j].Cells["Total"].Value.ToString());
+                    // Qty += Convert.ToInt32(dataView.Rows[j].Cells["Qty"].Value.ToString());
+                   // Toatal += Convert.ToInt32(dataView.Rows[j].Cells["Total"].Value.ToString());
                 }
             }
-            //lbQty.Text = Qty + "";
-            lbTotal.Text = Toatal + "";
+            lbNG.Text = NG + "";
+            lbOK.Text = OK + "";
         }
         private void label4_Click(object sender, EventArgs e)
         {
@@ -400,7 +395,7 @@ namespace BeeUi.Tool
                 if (G.cnn.State == ConnectionState.Closed) {
                     Connect_SQL();
                 }
-                DataTable dt = Table("Model,STT", "Report", "", G.cnn);
+                DataTable dt = Table("Prog,STT", "Report", "", G.cnn);
                 List<String> _listName = SQL_List(0, dt);
                 _listName = _listName.Distinct().ToList();
                 cbModel.DataSource = _listName;
@@ -438,7 +433,7 @@ namespace BeeUi.Tool
         int _numPCsReset = 10000;
         public void Loads()
         {
-            DataTable dt = Table("Model,STT", "Report", "", G.cnn);
+            DataTable dt = Table("Prog,STT", "Report", "", G.cnn);
             List<String> _listName = SQL_List(0, dt);
             _listName = _listName.Distinct().ToList();
             cbModel.DataSource = _listName;
@@ -464,7 +459,7 @@ namespace BeeUi.Tool
             {
                 btnIsModel.BackColor = Color.Green;
                 btnIsModel.ForeColor = Color.White;
-                _sModel = "Model='" + cbModel.Text + "'";
+                _sModel = "Prog='" + cbModel.Text + "'";
                 cbModel.Enabled = true;
                 btnDown.Enabled = true;
             }
@@ -483,7 +478,7 @@ namespace BeeUi.Tool
         {
             if (_isLoad)
             {
-                _sModel = "Model='" + cbModel.Text + "'";
+                _sModel = "Prog='" + cbModel.Text + "'";
                 // ShowData();
             }
             _isLoad = true;
@@ -588,6 +583,10 @@ namespace BeeUi.Tool
          MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
+                SqlServer sqlServer = new SqlServer();
+                // sqlServer.Delete("Report",)
+                Batch.CleanKeepFiles("Report", new[] { "Default.mdf", "Default_log.ldf" },
+                dryRun: true);
                 SQL_Delete();
                 MessageBox.Show("Đã Xóa hết");
             }
@@ -613,10 +612,10 @@ namespace BeeUi.Tool
             String _sExel = "";
             _sExel += "Report Data " + "\t" + "\t" + "Date : " + DateTime.Now.ToString("yyyy/MM/dd");
             _sExel += Environment.NewLine;
+            _sExel += "OK" + "\t" + OK + "\t" + "NG" + "\t" + NG;
             _sExel += Environment.NewLine;
-            _sExel += "Qty OK: " + Qty + "\t" + "\t" + "Total : " + Toatal;
-            _sExel += Environment.NewLine;
-            _sExel += "No" + "\t" + "Date" + "\t" + "Model" + "\t" + "Qty" + "\t" + "Total" + "\t" + "Status";
+          
+            _sExel += "No" + "\t" + "Date" + "\t" + "Prog" + "\t" + "PO" + "\t" + "Status";
             _sExel += Environment.NewLine;
             System.IO.DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(pathSave));
 

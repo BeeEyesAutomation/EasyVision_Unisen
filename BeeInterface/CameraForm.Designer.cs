@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraForm));
             this.pCamera = new System.Windows.Forms.TableLayoutPanel();
             this.btnDelect4 = new BeeInterface.RJButton();
             this.btnDelect3 = new BeeInterface.RJButton();
@@ -51,10 +50,6 @@
             this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.pCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.pCamera.Controls.Add(this.btnDelect4, 3, 1);
             this.pCamera.Controls.Add(this.btnDelect3, 2, 1);
             this.pCamera.Controls.Add(this.btnDelect2, 1, 1);
@@ -63,13 +58,13 @@
             this.pCamera.Controls.Add(this.btnCamera1, 0, 0);
             this.pCamera.Controls.Add(this.btnCamera2, 1, 0);
             this.pCamera.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pCamera.Location = new System.Drawing.Point(0, 35);
+            this.pCamera.Location = new System.Drawing.Point(0, 44);
             this.pCamera.Margin = new System.Windows.Forms.Padding(1);
             this.pCamera.Name = "pCamera";
             this.pCamera.RowCount = 2;
             this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.pCamera.Size = new System.Drawing.Size(413, 129);
+            this.pCamera.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.pCamera.Size = new System.Drawing.Size(445, 110);
             this.pCamera.TabIndex = 32;
             // 
             // btnDelect4
@@ -89,6 +84,9 @@
             this.btnDelect4.BorderColor = System.Drawing.Color.LightGray;
             this.btnDelect4.BorderRadius = 6;
             this.btnDelect4.BorderSize = 1;
+            this.btnDelect4.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDelect4.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDelect4.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDelect4.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDelect4.Corner = BeeGlobal.Corner.Left;
             this.btnDelect4.DebounceResizeMs = 16;
@@ -113,16 +111,18 @@
             this.btnDelect4.IsCLick = false;
             this.btnDelect4.IsNotChange = false;
             this.btnDelect4.IsRect = true;
+            this.btnDelect4.IsTouch = false;
             this.btnDelect4.IsUnGroup = false;
-            this.btnDelect4.Location = new System.Drawing.Point(314, 89);
+            this.btnDelect4.Location = new System.Drawing.Point(338, 70);
             this.btnDelect4.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect4.Multiline = false;
             this.btnDelect4.Name = "btnDelect4";
-            this.btnDelect4.Size = new System.Drawing.Size(99, 35);
+            this.btnDelect4.Size = new System.Drawing.Size(107, 35);
             this.btnDelect4.TabIndex = 38;
             this.btnDelect4.Text = "Delect Cam 4";
             this.btnDelect4.TextColor = System.Drawing.Color.Black;
             this.btnDelect4.UseVisualStyleBackColor = false;
+            this.btnDelect4.Visible = false;
             this.btnDelect4.Click += new System.EventHandler(this.btnDelect4_Click);
             // 
             // btnDelect3
@@ -142,6 +142,9 @@
             this.btnDelect3.BorderColor = System.Drawing.Color.LightGray;
             this.btnDelect3.BorderRadius = 6;
             this.btnDelect3.BorderSize = 1;
+            this.btnDelect3.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDelect3.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDelect3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDelect3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDelect3.Corner = BeeGlobal.Corner.Left;
             this.btnDelect3.DebounceResizeMs = 16;
@@ -166,16 +169,18 @@
             this.btnDelect3.IsCLick = false;
             this.btnDelect3.IsNotChange = false;
             this.btnDelect3.IsRect = true;
+            this.btnDelect3.IsTouch = false;
             this.btnDelect3.IsUnGroup = false;
-            this.btnDelect3.Location = new System.Drawing.Point(211, 89);
+            this.btnDelect3.Location = new System.Drawing.Point(227, 70);
             this.btnDelect3.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect3.Multiline = false;
             this.btnDelect3.Name = "btnDelect3";
-            this.btnDelect3.Size = new System.Drawing.Size(98, 35);
+            this.btnDelect3.Size = new System.Drawing.Size(106, 35);
             this.btnDelect3.TabIndex = 37;
             this.btnDelect3.Text = "Delect Cam 3";
             this.btnDelect3.TextColor = System.Drawing.Color.Black;
             this.btnDelect3.UseVisualStyleBackColor = false;
+            this.btnDelect3.Visible = false;
             this.btnDelect3.Click += new System.EventHandler(this.btnDelect3_Click);
             // 
             // btnDelect2
@@ -195,6 +200,9 @@
             this.btnDelect2.BorderColor = System.Drawing.Color.LightGray;
             this.btnDelect2.BorderRadius = 6;
             this.btnDelect2.BorderSize = 1;
+            this.btnDelect2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnDelect2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnDelect2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnDelect2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnDelect2.Corner = BeeGlobal.Corner.Left;
             this.btnDelect2.DebounceResizeMs = 16;
@@ -219,16 +227,18 @@
             this.btnDelect2.IsCLick = false;
             this.btnDelect2.IsNotChange = false;
             this.btnDelect2.IsRect = true;
+            this.btnDelect2.IsTouch = false;
             this.btnDelect2.IsUnGroup = false;
-            this.btnDelect2.Location = new System.Drawing.Point(108, 89);
+            this.btnDelect2.Location = new System.Drawing.Point(116, 70);
             this.btnDelect2.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnDelect2.Multiline = false;
             this.btnDelect2.Name = "btnDelect2";
-            this.btnDelect2.Size = new System.Drawing.Size(98, 35);
+            this.btnDelect2.Size = new System.Drawing.Size(106, 35);
             this.btnDelect2.TabIndex = 36;
             this.btnDelect2.Text = "Delect Cam 2";
             this.btnDelect2.TextColor = System.Drawing.Color.Black;
             this.btnDelect2.UseVisualStyleBackColor = false;
+            this.btnDelect2.Visible = false;
             this.btnDelect2.Click += new System.EventHandler(this.rjButton1_Click);
             // 
             // btnCamera4
@@ -248,6 +258,9 @@
             this.btnCamera4.BorderColor = System.Drawing.Color.LightGray;
             this.btnCamera4.BorderRadius = 6;
             this.btnCamera4.BorderSize = 1;
+            this.btnCamera4.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCamera4.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCamera4.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCamera4.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCamera4.Corner = BeeGlobal.Corner.Right;
             this.btnCamera4.DebounceResizeMs = 16;
@@ -257,7 +270,7 @@
             this.btnCamera4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.btnCamera4.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera4.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera4.Image")));
+            this.btnCamera4.Image = global::BeeInterface.Properties.Resources.Flow;
             this.btnCamera4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCamera4.ImageDisabled = null;
             this.btnCamera4.ImageHover = null;
@@ -273,14 +286,15 @@
             this.btnCamera4.IsCLick = false;
             this.btnCamera4.IsNotChange = false;
             this.btnCamera4.IsRect = true;
+            this.btnCamera4.IsTouch = false;
             this.btnCamera4.IsUnGroup = false;
-            this.btnCamera4.Location = new System.Drawing.Point(309, 5);
+            this.btnCamera4.Location = new System.Drawing.Point(333, 5);
             this.btnCamera4.Margin = new System.Windows.Forms.Padding(0, 5, 10, 5);
             this.btnCamera4.Multiline = false;
             this.btnCamera4.Name = "btnCamera4";
-            this.btnCamera4.Size = new System.Drawing.Size(94, 74);
+            this.btnCamera4.Size = new System.Drawing.Size(102, 55);
             this.btnCamera4.TabIndex = 34;
-            this.btnCamera4.Text = "Camera 4";
+            this.btnCamera4.Text = "FlowChart 4";
             this.btnCamera4.TextColor = System.Drawing.Color.Black;
             this.btnCamera4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCamera4.UseVisualStyleBackColor = false;
@@ -303,6 +317,9 @@
             this.btnCamera3.BorderColor = System.Drawing.Color.LightGray;
             this.btnCamera3.BorderRadius = 6;
             this.btnCamera3.BorderSize = 1;
+            this.btnCamera3.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCamera3.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCamera3.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCamera3.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCamera3.Corner = BeeGlobal.Corner.None;
             this.btnCamera3.DebounceResizeMs = 16;
@@ -312,7 +329,7 @@
             this.btnCamera3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.btnCamera3.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera3.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera3.Image")));
+            this.btnCamera3.Image = global::BeeInterface.Properties.Resources.Flow;
             this.btnCamera3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCamera3.ImageDisabled = null;
             this.btnCamera3.ImageHover = null;
@@ -328,14 +345,15 @@
             this.btnCamera3.IsCLick = false;
             this.btnCamera3.IsNotChange = false;
             this.btnCamera3.IsRect = true;
+            this.btnCamera3.IsTouch = false;
             this.btnCamera3.IsUnGroup = false;
-            this.btnCamera3.Location = new System.Drawing.Point(206, 5);
+            this.btnCamera3.Location = new System.Drawing.Point(222, 5);
             this.btnCamera3.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera3.Multiline = false;
             this.btnCamera3.Name = "btnCamera3";
-            this.btnCamera3.Size = new System.Drawing.Size(103, 74);
+            this.btnCamera3.Size = new System.Drawing.Size(111, 55);
             this.btnCamera3.TabIndex = 33;
-            this.btnCamera3.Text = "Camera 3";
+            this.btnCamera3.Text = "FlowChart 3";
             this.btnCamera3.TextColor = System.Drawing.Color.Black;
             this.btnCamera3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCamera3.UseVisualStyleBackColor = false;
@@ -358,6 +376,9 @@
             this.btnCamera1.BorderColor = System.Drawing.Color.LightGray;
             this.btnCamera1.BorderRadius = 6;
             this.btnCamera1.BorderSize = 1;
+            this.btnCamera1.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCamera1.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCamera1.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCamera1.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCamera1.Corner = BeeGlobal.Corner.Left;
             this.btnCamera1.DebounceResizeMs = 16;
@@ -366,7 +387,7 @@
             this.btnCamera1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.btnCamera1.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera1.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera1.Image")));
+            this.btnCamera1.Image = global::BeeInterface.Properties.Resources.Flow;
             this.btnCamera1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCamera1.ImageDisabled = null;
             this.btnCamera1.ImageHover = null;
@@ -382,14 +403,15 @@
             this.btnCamera1.IsCLick = true;
             this.btnCamera1.IsNotChange = false;
             this.btnCamera1.IsRect = true;
+            this.btnCamera1.IsTouch = false;
             this.btnCamera1.IsUnGroup = false;
             this.btnCamera1.Location = new System.Drawing.Point(5, 5);
             this.btnCamera1.Margin = new System.Windows.Forms.Padding(5, 5, 0, 5);
             this.btnCamera1.Multiline = false;
             this.btnCamera1.Name = "btnCamera1";
-            this.btnCamera1.Size = new System.Drawing.Size(98, 74);
+            this.btnCamera1.Size = new System.Drawing.Size(106, 55);
             this.btnCamera1.TabIndex = 32;
-            this.btnCamera1.Text = "Camera 1";
+            this.btnCamera1.Text = "FlowChart 1";
             this.btnCamera1.TextColor = System.Drawing.Color.Black;
             this.btnCamera1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCamera1.UseVisualStyleBackColor = false;
@@ -412,6 +434,9 @@
             this.btnCamera2.BorderColor = System.Drawing.Color.LightGray;
             this.btnCamera2.BorderRadius = 6;
             this.btnCamera2.BorderSize = 1;
+            this.btnCamera2.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnCamera2.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnCamera2.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
             this.btnCamera2.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
             this.btnCamera2.Corner = BeeGlobal.Corner.None;
             this.btnCamera2.DebounceResizeMs = 16;
@@ -420,7 +445,7 @@
             this.btnCamera2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
             this.btnCamera2.ForeColor = System.Drawing.Color.Black;
-            this.btnCamera2.Image = ((System.Drawing.Image)(resources.GetObject("btnCamera2.Image")));
+            this.btnCamera2.Image = global::BeeInterface.Properties.Resources.Flow;
             this.btnCamera2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCamera2.ImageDisabled = null;
             this.btnCamera2.ImageHover = null;
@@ -436,14 +461,15 @@
             this.btnCamera2.IsCLick = false;
             this.btnCamera2.IsNotChange = false;
             this.btnCamera2.IsRect = true;
+            this.btnCamera2.IsTouch = false;
             this.btnCamera2.IsUnGroup = false;
-            this.btnCamera2.Location = new System.Drawing.Point(103, 5);
+            this.btnCamera2.Location = new System.Drawing.Point(111, 5);
             this.btnCamera2.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.btnCamera2.Multiline = false;
             this.btnCamera2.Name = "btnCamera2";
-            this.btnCamera2.Size = new System.Drawing.Size(103, 74);
+            this.btnCamera2.Size = new System.Drawing.Size(111, 55);
             this.btnCamera2.TabIndex = 19;
-            this.btnCamera2.Text = "Camera 2";
+            this.btnCamera2.Text = "FlowChart 2";
             this.btnCamera2.TextColor = System.Drawing.Color.Black;
             this.btnCamera2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCamera2.UseVisualStyleBackColor = false;
@@ -451,20 +477,22 @@
             // 
             // label1
             // 
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(413, 35);
+            this.label1.Size = new System.Drawing.Size(445, 44);
             this.label1.TabIndex = 33;
-            this.label1.Text = "Choose Camera";
+            this.label1.Text = "Choose Flow Chart";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CameraForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(413, 164);
+            this.ClientSize = new System.Drawing.Size(445, 154);
             this.Controls.Add(this.pCamera);
             this.Controls.Add(this.label1);
             this.DoubleBuffered = true;

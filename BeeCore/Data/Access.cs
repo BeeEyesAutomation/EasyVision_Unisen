@@ -108,7 +108,14 @@ namespace BeeCore
         {
             SaveBase64(path, list);
         }
-
+        public static void SaveProgNo(string path, List<ProgNo> list)
+        {
+            SaveBase64(path, list);
+        }
+        public static List<ProgNo> LoadProgNo(string path)
+        {
+            return LoadBase64(path, defaultFactory: () => new List<ProgNo>());
+        }
         public static List<List<PropetyTool>> LoadProg(string path)
         {
             return LoadBase64(path, defaultFactory: () => new List<List<PropetyTool>>());

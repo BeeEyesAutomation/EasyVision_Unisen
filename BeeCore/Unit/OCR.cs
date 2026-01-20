@@ -40,7 +40,10 @@ namespace BeeCore
        
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp, matTemp2, matMask;
         public List<String> Labels = new List<string>();
@@ -48,8 +51,8 @@ namespace BeeCore
         public Compares Compare = Compares.Equal;
    
         public TypeCrop TypeCrop;
-    
-    
+        public bool IsCompareNoFixed = false;
+        public String AddPLC = "";
         int _NumObject = 0;
         public int NumObject
         {
@@ -87,8 +90,9 @@ namespace BeeCore
         public bool IsEnLimitArea = false;
         public int LimitArea = 100;
         public Compares CompareArea = Compares.More;
-      
-        String exMess = "";
+		public int IndexCCD = 0;
+
+		String exMess = "";
         public static OpenCvSharp.Point[] ConvertBoxToPoints(PyObject box)
         {
             OpenCvSharp.Point[] points = new OpenCvSharp.Point[4];
@@ -155,7 +159,7 @@ namespace BeeCore
         }
         public  String sAllow = "";
         public int IndexThread = 0;
-        public void DoWork(RectRotate rotCrop)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             using (Py.GIL())
             {
@@ -172,13 +176,13 @@ namespace BeeCore
                     listScore = new List<float>();
                   
                     Content = "";
-                  
+                    Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
                     listLabelResult = new List<String>();
-                    using (Mat raw =BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                    using (Mat raw =BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                     {
                         if (raw.Empty()) return;
                         Mat matCrop = new Mat();
-                        matCrop = Cropper.CropRotatedRect(raw, rotCrop ,null);
+                        matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                         if (Clahe == 0) Clahe = 2;
                         if (Sigma == 0) Sigma = 3;
                         if (Blur == 0) Blur = 3;
@@ -190,25 +194,21 @@ namespace BeeCore
                         {
                             Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.GRAY2RGB);
                         }
+                      
                         if (!matCrop.IsContinuous())
                         {
                             matCrop = matCrop.Clone();
                         }
-
-                        // Copy dữ liệu sang byte[]
-                        int size = (int)(matCrop.Total() * matCrop.ElemSize());
-                        byte[] buffer = new byte[size];
-                        Marshal.Copy(matCrop.Data, buffer, 0, size);
-
-                        int height1 = matCrop.Height;
-                        int width1 = matCrop.Width;
-
-
-                        var npArray = G.np.array(buffer).reshape(height1, width1, 3);
+                        int h = matCrop.Rows;
+                        int w = matCrop.Cols;
+                        int ch = matCrop.Channels(); // 3
+                        int stride = (int)matCrop.Step(); // bytes/row (có thể > w*ch)
+                        IntPtr p = matCrop.Data;
+                     
                         int limit = LimitArea * 100;
                         //if (!IsEnLimitArea)
                         limit = 0;
-                        dynamic result = G.objOCR.find_ocr(npArray, Common.PropetyTools[IndexThread][Index].Name, limit);//, (float)(Score / 100.0), nameTool
+                        dynamic result = G.objOCR.find_ocr((long)p, h, w, ch, stride, Common.PropetyTools[IndexThread][Index].Name, limit);//, (float)(Score / 100.0), nameTool
 
                         if (result == null) return;
                         // File.WriteAllText("ErC.txt", pyEx.Message);
@@ -239,35 +239,35 @@ namespace BeeCore
                             int height = (int)rotatedRect.Size.Height;
                             if (width < height)
                             {
-                                int h = width, w = height;
-                                width = w;
-                                height = h;
+                                int h1 = width, w1 = height;
+                                width = w1;
+                                height = h1;
                                 rotatedRect.Angle = rotatedRect.Angle + 90;
                             }
                             if (rotatedRect.Angle > 145) rotatedRect.Angle = -(180 - rotatedRect.Angle);
-                            if (IsEnLimitArea)
-                            {
-                                switch (CompareArea)
-                                {
-                                    case Compares.Less:
-                                        if (width * height > LimitArea)
-                                        {
-                                            i++;
-                                            continue;
-                                        }
-                                        break;
-                                    case Compares.More:
-                                        if (width * height < LimitArea)
-                                        {
-                                            i++;
-                                            continue;
-                                        }
-                                        break;
+                            //if (IsEnLimitArea)
+                            //{
+                            //    switch (CompareArea)
+                            //    {
+                            //        case Compares.Less:
+                            //            if (width * height > LimitArea)
+                            //            {
+                            //                i++;
+                            //                continue;
+                            //            }
+                            //            break;
+                            //        case Compares.More:
+                            //            if (width * height < LimitArea)
+                            //            {
+                            //                i++;
+                            //                continue;
+                            //            }
+                            //            break;
 
-                                }
+                            //    }
 
 
-                            }
+                            //}
 
                             RectangleF rect = new RectangleF(-width / 2, -height / 2, width, height);
                             RectRotate rt = new RectRotate(rect, new PointF(rotatedRect.Center.X, rotatedRect.Center.Y), rotatedRect.Angle, AnchorPoint.None);
@@ -280,11 +280,11 @@ namespace BeeCore
                             // Label
                             string label = labels[j].ToString();
                           
-                            List<char> allowed = new List<char>(sAllow.ToCharArray());
+                            //List<char> allowed = new List<char>(sAllow.ToCharArray());
 
-                            label = new string(label.Where(c => allowed.Contains(c)).ToArray());
+                           // label = new string(label.Where(c => allowed.Contains(c)).ToArray());
               
-                            Content += label.Trim();
+                            Content += label.Trim()+ "\r\n";
                             listLabelResult.Add(label);
                             listLabel[listLabel.Count() - 1].Add(label);
                             listOK.Add(false);
@@ -329,6 +329,8 @@ namespace BeeCore
                 }
             }
 
+            //String trans = BeeCore.Common. libreTranslate.Translate(Content, "en", "auto");
+           // Console.WriteLine(trans);
         }
         public void Complete()
         {
@@ -340,11 +342,23 @@ namespace BeeCore
 
 
                 Common.PropetyTools[IndexThread][Index].ScoreResult = (int)(Common.PropetyTools[IndexThread][Index].ScoreResult / (rectRotates.Count() * 1.0));
-                //   listContent = Content.Select(c => c.ToString()).ToArray();
-                //  listMatching = Matching.Select(c => c.ToString()).ToArray();
+               if(IsCompareNoFixed)
+                {
+                    try
+                    {if(Global.Comunication.Protocol.IsConnected)
+                        Matching = Global.Comunication.Protocol.PlcClient.ReadStringAsciiKey(AddPLC,16).Trim().ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name , ex.ToString()));
+                    }
+                   
+                }    
                 Content = "";
                 foreach (String label in listLabelResult)
                     Content += label;
+      
+                
                 if (Common.PropetyTools[IndexThread][Index].ScoreResult < 0) Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
                 if (Content != "")
                 {
@@ -402,14 +416,12 @@ namespace BeeCore
 
             return result;
         }
-
         public Graphics DrawResult(Graphics gc)
         {
             if (rotAreaAdjustment == null && Global.IsRun) return gc;
             gc.ResetTransform();
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
-           
             var mat = new Matrix();
             if (!Global.IsRun)
             {
@@ -430,14 +442,10 @@ namespace BeeCore
                     cl = Global.ParaShow.ColorNG;
                     break;
             }
-
             Pen pen = new Pen(cl, Global.ParaShow.ThicknessLine);
             String nameTool = (int)(Index + 1) + "." + BeeCore.Common.PropetyTools[IndexThread][Index].Name;
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-          
-                Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
-
-
+            Draws.Box1Label(gc, rotA, nameTool, font, new SolidBrush(Global.ParaShow.TextColor), cl, Global.ParaShow.ThicknessLine);
             gc.ResetTransform();
             int i = 0;
             if (rectRotates != null)
@@ -457,10 +465,7 @@ namespace BeeCore
                     mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                     mat.Rotate(rot._rectRotation);
                     gc.Transform = mat;
-                    Draws.Box2Label(gc, rot._rect, listLabelResult[i], Math.Round(listScore[i], 1) + "%", font, cl, brushText, 50, 8, 50);
-
-
-                  
+                    Draws.Box2Label(gc, rot._rect, listLabelResult[i],"", font, cl, brushText, 50, 8, 50);
                     gc.ResetTransform();
                     i++;
                 }
@@ -468,24 +473,63 @@ namespace BeeCore
 
             return gc;
         }
+        
+     
+        [NonSerialized]
+        public bool Isini2 = false;
+      
+        [NonSerialized]
+        public bool IsNew2 = false;
 
         public  bool SetModel()
         {
+
+
+
+
+            rotCrop = null;
+            
+                if (rotArea == null) rotArea = new RectRotate();
+                 //if (rotMask == null) rotMask = new RectRotate();
+                 Common.PropetyTools[IndexThread][Index].StepValue = 1;
+                Common.PropetyTools[IndexThread][Index].MinValue = 0;
+                Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            if (sAllow == "")
+                sAllow = "ABCDEFJKLMNOPQSTUWXYZabcdefghijklmnopqstuwxyz0123456789,.;'\"?/\"<>@#!$%^&*()_-+={}[]|\\~`";
+           // if(!IsNew2)
+           // SetModelOCR();
+            Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+            return true;
+        }
+        public bool SetModelOCR()
+        {
+           
+            if (Isini2) return true;
             if (!Global.IsOCR) return false;
             using (Py.GIL())
             {
-                rotMask = null;
-                if (rotCrop == null) rotCrop = new RectRotate();
-                if (rotArea == null) rotArea = new RectRotate();
-                G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
-                Common.PropetyTools[IndexThread][Index].StepValue = 1;
-                Common.PropetyTools[IndexThread][Index].MinValue = 0;
 
-                Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-                Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                try
+                {
+                    G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
+                    Global.IsInitialOCR = true;
+                    Isini2 = true;
+                }
+                catch (PythonException pyEx)
+                {
+                    File.WriteAllText("IniModel.txt", pyEx.Message);
+                    exMess = pyEx.Message;
+                }
+                catch (Exception ex)
+                {
+                    File.WriteAllText("IniModelCsharp.txt", ex.Message);
+                    exMess = ex.Message;
+                }
+
+
+
             }
             return true;
         }
-
     }
 }

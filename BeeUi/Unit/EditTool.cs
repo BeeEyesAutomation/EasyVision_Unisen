@@ -139,9 +139,9 @@ namespace BeeUi
             {
                 
              
-                if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
+                if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
                 {
-                    BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(new ParaCamera(), Global.IndexChoose);
+                    BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexChoose);
                     Global.ScanCCD.ShowDialog();
                     return;
                 }
@@ -175,24 +175,41 @@ namespace BeeUi
                         G.SettingPLC.Visible = false;
                         pInfor.Show("Dashboard");
                         pEditTool.Show("Tool");
-                   
+                       
+                        Mat matRegStep1=new Mat();
                         try
                         {
-                            if (Global.ParaCommon.matRegister!=null)
-                                if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                            if (!Global.ParaCommon.matRegister.IsDisposed())
-                            {
-                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();
-                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
-                                    G.IsCalib = false;
-                                    Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                    Global.EditTool.View.imgView.Invalidate();
-                                    Global.EditTool.View.imgView.Update();
-                                    ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-                                   Global.Config.imgZoom = View.imgView.Zoom;
-                                   Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
-                                   Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                          
+                          
+                               
+                            if(Global.Config.IsMultiProg)
+                                if(Global.Config.NumTrig==2)
+                                {
+                                  MatMergerOptions opt=new MatMergerOptions();
+                                    opt.Direction = MergeDirection.Vertical;
+                                    matRegStep1 = MatMerger.Merge(Global.ParaCommon.matRegister.ToMat(), Global.ParaCommon.matRegister2.ToMat(), opt);
                                 }
+                                else
+                                {
+                                    matRegStep1 = Global.ParaCommon.matRegister.ToMat();
+
+                                }
+
+                                if (matRegStep1 != null)
+                                    if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
+                                        if (!matRegStep1.IsDisposed)
+                                        {
+                                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = new Mat();
+                                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matRegStep1.Clone();
+                                            G.IsCalib = false;
+                                            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                                            Global.EditTool.View.imgView.Invalidate();
+                                            Global.EditTool.View.imgView.Update();
+                                            ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
+                                            Global.Config.imgZoom = View.imgView.Zoom;
+                                            Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                            Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                        }
                             foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                             {
                                 propetyTool.ItemTool.IsCLick = false;
@@ -202,6 +219,12 @@ namespace BeeUi
                         catch (Exception ex)
                         {
                             //MessageBox.Show(ex.Message);
+                        }
+                        finally
+                        {
+                            if (matRegStep1 != null)
+                                if (!matRegStep1.IsDisposed)
+                                    matRegStep1.Dispose();
                         }
                      
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
@@ -260,37 +283,62 @@ namespace BeeUi
 
                         //iconTool.BackgroundImage = Properties.Resources._2;
                         lbTool.Text = "2.Register Image";
+                        Mat matReg = new Mat();
                         try
                         {
-                            if (Global.ParaCommon.matRegister != null)
-                                if (!Global.ParaCommon.matRegister.IsDisposed())
-                            {
-                                if (Global.ParaCommon.matRegister.Width != 0)
+                          
+                            
+                                switch (Global.IndexChoose)
                                 {
-                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
-                                    G.IsCalib = false;
-                                    Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                                 
+                                    case 0:
+                                        matReg = Global.ParaCommon.matRegister.ToMat();
+                                        break;
+                                    case 1:
+                                        matReg = Global.ParaCommon.matRegister2.ToMat();
+                                    break;
+                                    case 2:
+                                        matReg = Global.ParaCommon.matRegister3.ToMat();
+                                    break;
+                                    case 3:
+                                        matReg = Global.ParaCommon.matRegister4.ToMat();
+                                    break;
+                                }
+                            
+                            if (matReg != null)
+                            {
+                                if (!matReg.IsDisposed)
+                                {
+                                    if (matReg.Width != 0)
+                                    {
+                                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matReg.Clone();
+                                        G.IsCalib = false;
+                                        Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                                         Global.EditTool.View.imgView.Invalidate();
-                                    Global.EditTool.View.imgView.Update();
-                                    ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
-                                    Global.Config.imgZoom = View.imgView.Zoom;
-                                    Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
-                                    Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                        Global.EditTool.View.imgView.Update();
+                                        ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
+                                        Global.Config.imgZoom = View.imgView.Zoom;
+                                        Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
+                                        Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
+                                    }
                                 }
                             }
                             else
                             {
 
                             }    
+                          
+                           
                         }
                         catch (Exception ex)
                         {
 
                         }
-                        //Global.EditTool.View.imgView.Image = Global.ParaCommon.matRegister;
-                        //Global.EditTool.View.imgView.Invalidate();
-                        //Global.EditTool.View.imgView.Update();
+                        finally
+                        {
+                            if (matReg != null)
+                                if (!matReg.IsDisposed)
+                                    matReg.Dispose();
+                        }
                         break;
                     case Step.Step3:
                       
@@ -305,34 +353,77 @@ namespace BeeUi
                        
                         pEditTool.Show("Tool");
                         ShowTool.ShowChart( Global.ToolSettings.pAllTool, BeeCore.Common.PropetyTools[Global.IndexChoose]);
-                     
-                    
-                            if (Global.ParaCommon.matRegister != null)
-                                if (!Global.ParaCommon.matRegister.IsDisposed())
+                        Mat matReg2 = new Mat();
+                        try
+                        {
+                            switch (Global.IndexChoose)
+                            {
+                                case 0:
+                                    matReg2 = Global.ParaCommon.matRegister.ToMat();
+                                    break;
+                                case 1:
+                                    matReg2 = Global.ParaCommon.matRegister2.ToMat();
+                                    break;
+                                case 2:
+                                    matReg2 = Global.ParaCommon.matRegister3.ToMat();
+                                    break;
+                                case 3:
+                                    matReg2 = Global.ParaCommon.matRegister4.ToMat();
+                                    break;
+                            }
+
+                            if (matReg2 != null)
+                            {
+                                if (!matReg2.IsDisposed)
                                 {
-                                    if (Global.ParaCommon.matRegister.Width != 0)
+                                    if (matReg2.Width != 0)
                                     {
-                                    G.IsCalib = false;
-                                    pEditTool.Visible = true;
-                                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.ParaCommon.matRegister.ToMat().Clone();
                                         G.IsCalib = false;
-                                        Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                                        pEditTool.Visible = true;
+                                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = matReg2.Clone();
+                                        G.IsCalib = false;
+                                        Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                                         Global.EditTool.View.imgView.Invalidate();
                                         Global.EditTool.View.imgView.Update();
-                                        ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                                        ShowTool.Full(View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
                                         Global.Config.imgZoom = View.imgView.Zoom;
                                         Global.Config.imgOffSetX = View.imgView.AutoScrollPosition.X;
                                         Global.Config.imgOffSetY = View.imgView.AutoScrollPosition.Y;
                                     }
                                 }
-                                else
+                                else   
                                 {
-                                MessageBox.Show("Please,Register Image!");
+                                    FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
+                                    formWarning.ShowDialog();
+                                    Global.StepEdit.btnStep2.IsCLick = true;
+                                    Step = Step.Step2; pEditTool.Show("Step2");
+                                    goto X;
+                                }
+                            }
+                           else
+                            {
+                                FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
+                                formWarning.ShowDialog();
                                 Global.StepEdit.btnStep2.IsCLick = true;
                                 Step = Step.Step2; pEditTool.Show("Step2");
                                 goto X;
-                                }
-                        
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            FormWarning formWarning = new FormWarning("Image Master", "Please,Register Image!");
+                            formWarning.ShowDialog();
+                            Global.StepEdit.btnStep2.IsCLick = true;
+                            Step = Step.Step2; pEditTool.Show("Step2");
+                            goto X;
+
+                        }
+                        finally
+                        {
+                            if (matReg2 != null)
+                                if (!matReg2.IsDisposed)
+                                    matReg2.Dispose();
+                        }
                       
                         if (Global.ToolSettings.btnEnEdit.IsCLick)
                             Global.ToolSettings.btnEnEdit.PerformClick();
@@ -512,8 +603,8 @@ namespace BeeUi
 
             }
             //  Global.ExChanged += Global_ExChanged;
-            if (BeeCore.Common.listCamera[Global.IndexChoose] != null)
-                BeeCore.Common.listCamera[Global.IndexChoose].FrameChanged += EditTool_FrameChanged;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
+                BeeCore.Common.listCamera[Global.IndexCCCD].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
 			//
 		}
@@ -626,7 +717,7 @@ namespace BeeUi
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
             await Task.Delay(100);
-            ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+            ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
         }
 
         private void btnShowTop_Click(object sender, EventArgs e)
@@ -694,11 +785,11 @@ namespace BeeUi
         SaveFileDialog saveFileDialog = new SaveFileDialog();
         private void saveImageTool_Click(object sender, EventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null) return;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw == null) return;
             saveFileDialog.Filter = " PNG|*.png";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Cv2.ImWrite(saveFileDialog.FileName, BeeCore.Common.listCamera[Global.IndexChoose].matRaw);
+                Cv2.ImWrite(saveFileDialog.FileName, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
             }
         }
 
@@ -714,11 +805,11 @@ namespace BeeUi
                 View.Files = new List<string>();
                 View.Files = openFile.FileNames.ToList();
                 workLoadFile.RunWorkerAsync();
-                //BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(View.Files[View.indexFile]);
+                //BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(View.Files[View.indexFile]);
                 //View.listMat = new List<Mat>();
-                //View.listMat.Add(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                //View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                //View.listMat.Add(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                //BeeCore.Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                //View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                 //View.btnFile.Enabled = false;
                 //Global.StatusMode = StatusMode.SimOne;
                 //View.timer.Restart();
@@ -752,9 +843,9 @@ namespace BeeUi
                 View.indexFile = 0;
                 View.pathFileSeleted = View.Files[View.indexFile];
 
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile]; ;// Cv2.ImRead(Files[indexFile]);
-              Native.SetImg(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = View.listMat[View.indexFile]; ;// Cv2.ImRead(Files[indexFile]);
+              Native.SetImg(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
             }
         }
 
@@ -777,8 +868,8 @@ namespace BeeUi
 
               
                 if (View.indexFile >= View.listMat.Count) View.indexFile = 0;
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]);
-                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = View.listMat[View.indexFile];// Cv2.ImRead(Files[indexFile]);
+                View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
             View.timer = CycleTimerSplit.Start();
             Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;
@@ -804,8 +895,8 @@ namespace BeeUi
             if (openFile.ShowDialog() == DialogResult.OK)
             {
             
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
-              //  View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(openFile.FileName);
+              //  View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                 View.timer = CycleTimerSplit.Start();
                 if (Global.IsRun)
                 {
@@ -814,8 +905,8 @@ namespace BeeUi
                 }
                 else
                 {
-                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
-                    View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                    BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(openFile.FileName);
+                    View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                 }
             }
             }
@@ -1063,7 +1154,7 @@ namespace BeeUi
 
                             // (tuỳ chọn) báo cho display thread là có frame mới
                             _frameReady?.Set();
-                            //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw))
+                            //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
                             //{
 
                             //        _sharedFrame?.Dispose();

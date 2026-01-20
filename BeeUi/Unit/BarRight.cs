@@ -38,7 +38,7 @@ namespace BeeUi.Unit
         {
             
             //Global.IndexChoose = 0;
-            //if (BeeCore.Common.listCamera[Global.IndexChoose] == null)
+            //if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
             //{
             //    btnCamera1.IsCLick = false;
             //    return;

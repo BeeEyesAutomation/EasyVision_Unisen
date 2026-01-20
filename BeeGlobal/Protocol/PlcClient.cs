@@ -817,7 +817,98 @@ namespace PlcLib
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", "PLC chưa kết nối"));
             //   throw new InvalidOperationException("PLC chưa kết nối.");
         }
+        public int ReadInt(string addr, int bits = 16)
+        {
+            dynamic d = _plc;
+            dynamic r;
 
+            if (bits == 16) r = d.ReadInt16(addr);
+            else if (bits == 32) r = d.ReadInt32(addr);
+            else throw new ArgumentException("bits chỉ hỗ trợ 16 hoặc 32", nameof(bits));
+
+            if (!r.IsSuccess) throw new Exception("ReadInt" + bits + " " + addr + " lỗi: " + r.Message);
+
+            return bits == 16 ? (short)r.Content : (int)r.Content;
+        }
+        public string ReadStringAsciiKey(string addr, ushort wordLen, bool hiByteFirst = true)
+        {
+            dynamic d = _plc;
+
+            // đọc mảng word 16-bit
+            dynamic r = d.ReadUInt16(addr, wordLen);
+            if (!r.IsSuccess) throw new Exception("ReadAscii " + addr + " lỗi: " + r.Message);
+
+            ushort[] words = (ushort[])r.Content;
+
+            // mỗi word = 2 bytes = 2 ký tự ASCII
+            byte[] bytes = new byte[words.Length * 2];
+            int k = 0;
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                ushort w = words[i];
+
+                byte hi = (byte)((w >> 8) & 0xFF);
+                byte lo = (byte)(w & 0xFF);
+
+                if (hiByteFirst)
+                {
+                    bytes[k++] = hi;
+                    bytes[k++] = lo;
+                }
+                else
+                {
+                    bytes[k++] = lo;
+                    bytes[k++] = hi;
+                }
+            }
+
+            // cắt tại null-terminator nếu có
+            int n = Array.IndexOf(bytes, (byte)0);
+            if (n < 0) n = bytes.Length;
+
+            return System.Text.Encoding.ASCII.GetString(bytes, 0, n);
+        }
+        public float ReadFloat(string addr)
+        {
+            dynamic d = _plc;
+            dynamic r;
+
+            // Nhiều driver HSL có ReadFloat trực tiếp
+            try
+            {
+                r = d.ReadFloat(addr);
+                if (!r.IsSuccess) throw new Exception("ReadFloat " + addr + " lỗi: " + r.Message);
+                return (float)r.Content;
+            }
+            catch
+            {
+                // Fallback: nếu driver không có ReadFloat, đọc 32-bit rồi đổi bit -> float
+                r = d.ReadInt32(addr);
+                if (!r.IsSuccess) throw new Exception("ReadInt32(for float) " + addr + " lỗi: " + r.Message);
+
+                int raw = (int)r.Content;
+
+                // int bits -> float (IEEE754)
+                byte[] b = BitConverter.GetBytes(raw);
+                return BitConverter.ToSingle(b, 0);
+            }
+        }
+
+        public string ReadString(string addr, ushort? length = null)
+        {
+            dynamic d = _plc;
+
+            dynamic r;
+            if (length.HasValue)
+                r = d.ReadString(addr, length.Value);
+            else
+                r = d.ReadString(addr,3);
+
+            if (!r.IsSuccess) throw new Exception("ReadString " + addr + " lỗi: " + r.Message);
+
+            return (string)r.Content;
+        }
         private bool ReadBit_NoRetry_NoLock(string addr)
         {
             dynamic d = _plc;

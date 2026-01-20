@@ -427,15 +427,6 @@
     <Folder Include="Menu\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Circled 2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Circled 3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Circled 4.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Zoom In_1.png" />
   </ItemGroup>
   <ItemGroup>
@@ -545,18 +536,12 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Rotate.ico" />
     <None Include="Resources\EASY_LONG.png" />
     <None Include="Resources\EASY1.png" />
     <None Include="Resources\Long.png" />
     <None Include="Resources\Small5.png" />
     <None Include="Resources\Small4.png" />
-    <None Include="Resources\AHSO1.png" />
-    <None Include="Resources\AHSO.png" />
-    <None Include="Resources\LogoBlueSmall.png" />
-    <None Include="Resources\LogoBlue.png" />
-    <None Include="Resources\LogoTeamRound2.png" />
-    <None Include="Resources\TeamLong.png" />
-    <None Include="Resources\TeamSmall.png" />
     <None Include="Resources\Image Gallery.png" />
     <None Include="Resources\Menubar_1.png" />
     <None Include="Resources\Change_1.png" />
@@ -588,39 +573,15 @@
     <None Include="Resources\Warning_1.png" />
     <None Include="Resources\Warning.ico" />
     <None Include="Resources\plc.png" />
-    <None Include="Resources\Programming Logic Controller_1.png" />
-    <None Include="Resources\Programming Logic Controller.png" />
     <None Include="Resources\Sort Right_2.png" />
     <None Include="Resources\Sort Left_1.png" />
     <None Include="Resources\Sort Left.png" />
     <None Include="Resources\Sort Right_1.png" />
     <None Include="Resources\Forward.png" />
     <None Include="Resources\Back.png" />
-    <None Include="Resources\1.png" />
-    <None Include="Resources\4.png" />
-    <None Include="Resources\2.png" />
-    <None Include="Resources\3.png" />
-    <None Include="Resources\Number 1.png" />
     <None Include="Resources\Fantasy_1.png" />
     <None Include="Resources\Fantasy.png" />
     <None Include="Resources\Collapse.png" />
-    <None Include="Resources\Chart2.png" />
-    <None Include="Resources\Chart.png" />
-    <None Include="Resources\UNISEN_icon1.png" />
-    <None Include="Resources\UNISEN_icon.png" />
-    <None Include="Resources\UniSenBackground1.png" />
-    <None Include="Resources\UniSenBackground.png" />
-    <None Include="Resources\UNISEN_21.png" />
-    <None Include="Resources\UNISEN_2.png" />
-    <None Include="Resources\UNISENLogo1.jpg" />
-    <None Include="Resources\UNISEN LOGO %281%291.jpg" />
-    <None Include="Resources\UNISEN LOGO %281%29.jpg" />
-    <None Include="Resources\UNISEN LOGO.jpg" />
-    <None Include="Resources\UNISENLogo.jpg" />
-    <None Include="Resources\LogoTeamRound1.png" />
-    <None Include="Resources\Image_20231201092021.png" />
-    <None Include="Resources\LogoTeamRound.png" />
-    <None Include="Resources\LogoTrans.png" />
     <None Include="Resources\Statistic Document.png" />
     <None Include="Resources\Support.png" />
     <None Include="Resources\Language Skill_3.png" />
@@ -639,24 +600,14 @@
     <None Include="Resources\Chevron Right.png" />
     <None Include="Resources\Menu.png" />
     <None Include="Resources\Qr Code_1.png" />
-    <None Include="Resources\BeauNho1.png" />
     <None Include="Resources\Full Screen.png" />
     <None Include="Resources\Zoom Out.png" />
     <None Include="Resources\Zoom In.png" />
-    <None Include="Resources\baslerGigE1.jpg" />
-    <None Include="Resources\baslerGigE.jpg" />
-    <None Include="Resources\image-ace-2-bas-gige-color.jpg" />
-    <None Include="Resources\LogoAHSo1.png" />
-    <None Include="Resources\LogoAHSo.png" />
     <None Include="Resources\Flip Vertical.png" />
     <None Include="Resources\Invert Colors.png" />
     <None Include="Resources\Exposure.png" />
     <None Include="Resources\Aperture.png" />
     <None Include="Resources\HD 1080p.png" />
-    <None Include="Resources\output-onlinepngtools.png" />
-    <None Include="Resources\AS_68876_L2.jpg" />
-    <None Include="Resources\AS_68876_L1.jpg" />
-    <None Include="Resources\AS_68876_L.jpg" />
     <None Include="Resources\Download.png" />
     <None Include="Resources\Key_1.png" />
     <None Include="Resources\Test Passed.png" />
@@ -681,7 +632,6 @@
     <None Include="Resources\RS-232 Male_1.png" />
     <None Include="Resources\RS-232 Male.png" />
     <None Include="Resources\PrepareDlgProgress.gif" />
-    <None Include="Resources\BeauNho.png" />
     <None Include="Resources\Natural User Interface 2.png" />
     <None Include="Resources\Cursor.png" />
     <None Include="Resources\Customer.png" />
@@ -713,27 +663,10 @@
     <None Include="Resources\BID_ICON_DELETE_E_32BIT.jpg" />
     <None Include="Resources\BID_ICON_TOOL_ADD_E_32BIT.jpg" />
     <None Include="Resources\Eraser.jpg" />
-    <None Include="Resources\BID_ICON_COPY_D_32BIT.jpg" />
     <None Include="Resources\BID_ICON_TOOL_EDIT_E_32BIT.jpg" />
     <None Include="Resources\DeleteUndo.jpg" />
     <None Include="Resources\Dropper.jpg" />
     <None Include="Resources\Delete.jpg" />
-    <None Include="Resources\Circled 4_3.png" />
-    <None Include="Resources\Circled 2_4.png" />
-    <None Include="Resources\Circled 3_3.png" />
-    <None Include="Resources\Circled 4_2.png" />
-    <None Include="Resources\Circled 2_3.png" />
-    <None Include="Resources\Circled 3_2.png" />
-    <None Include="Resources\Circled 2_2.png" />
-    <None Include="Resources\Level 1.png" />
-    <None Include="Resources\Circled 4_1.png" />
-    <None Include="Resources\Circled 3_1.png" />
-    <None Include="Resources\Circled 2_1.png" />
-    <None Include="Resources\Number 1_1.png" />
-    <None Include="Resources\Number 1.ico" />
-    <None Include="Resources\Thumbnail_180x174_MountArea_Active.jpg" />
-    <None Include="Resources\Thumbnail_180x174_MountArea_Normal.jpg" />
-    <None Include="Resources\Thumbnail_180x174_MountArea_Down.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />

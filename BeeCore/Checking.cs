@@ -130,10 +130,11 @@ namespace BeeCore
 
                         if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.OK)
                         {
-                            if (Global.rotOriginAdj == null) return StatusProcessing;
-                            Global.X_Adjustment = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - Global.rotOriginAdj._PosCenter.X;
-                            Global.Y_Adjustment = Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - Global.rotOriginAdj._PosCenter.Y;
-                            Global.angle_Adjustment = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - Global.rotOriginAdj._rectRotation;
+                            if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj == null) return StatusProcessing;
+                             float AngAdj = 0, X_Adj = 0, Y_Adj = 0;
+                            X_Adj = Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rectRotates[0]._PosCenter.X - BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj._PosCenter.X;
+                            Y_Adj= Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rectRotates[0]._PosCenter.Y - BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj._PosCenter.Y;
+                            AngAdj = Propety.rotArea._rectRotation + Propety.rectRotates[0]._rectRotation - BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj._rectRotation;
 
                             foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[indexThread])
                             {
@@ -141,10 +142,12 @@ namespace BeeCore
                                     continue;
                                 if (propetyTool.TypeTool == TypeTool.Measure)
                                     continue;
-                                if (Global.rotOriginAdj != null)
+                                if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj != null)
                                 {//  propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.TransformToolRect(Global.rotAreaAdj,Global.rotOriginAdj,Global.rotCurrentAdj,propetyTool.Propety.rotArea);
 
-                                    propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, Global.rotOriginAdj);
+                                    propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj,X_Adj,Y_Adj,AngAdj);
+                                    if(propetyTool.Propety.rotMask!=null)
+                                    propetyTool.Propety.rotMaskAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotMask, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj, X_Adj, Y_Adj, AngAdj);
 
                                     //if (propetyTool.TypeTool == TypeTool.MultiPattern)
                                     //{

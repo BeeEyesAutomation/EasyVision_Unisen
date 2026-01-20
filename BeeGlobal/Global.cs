@@ -1,10 +1,13 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace BeeGlobal
 {
@@ -14,7 +17,9 @@ namespace BeeGlobal
         public static Comunication Comunication = new Comunication();
         public static List<ItemRegsImg> listSimImg = new List<ItemRegsImg>();
         public static List<ItemRegsImg> listRegsImg = new List<ItemRegsImg>();
+        public static List<Results> ListResult = new List<Results> { Results.None,Results.None,Results.None, Results.None };
         public static bool IsSim = false;
+        public static bool IsDisnablePLc = false;
         /// <summary>
         ///
         /// </summary> 
@@ -60,6 +65,10 @@ namespace BeeGlobal
                 }
             }
         }
+        public static bool IsInitialOCR=false;
+        public static List<ProgNo> ListProgNo = new List<ProgNo>();
+        public static Mat[] listMatRs = new Mat[4];
+        public static Mat[] listMatRaw = new Mat[4];
         public static bool IsSetPara = false;
         public static bool IsChange = false;
         public static bool IsAllowReadPLC = true;
@@ -71,7 +80,7 @@ namespace BeeGlobal
         public static int WidthOldTools = 0;
          public static dynamic EditTool ;
         public static bool IsSendRS = false;
-        public static bool TotalOK = false;
+        public static Results TotalOK = Results.None;
         public static bool TotalOK1 = false;
         public static bool TotalOK2 = false;
         public static bool TotalOK3 = false;
@@ -206,18 +215,20 @@ namespace BeeGlobal
                 }
             }
         }
+        public static int NumProgFromPLC = 1;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();
         public static bool IsRun=true;
-   
+        public static bool IsPLCChangeProg = false;
+        public static int IndexCCCD = 0;
         public static int IndexChoose = 0;
         public static String Project = "";
         public static RectRotate rotAreaAdj;
-        public static RectRotate rotOriginAdj;
+      
         public static RectRotate rotCurrentAdj;
         public static Rectangle ClientRectangleMain;
-        public static float angle_Adjustment = 0, X_Adjustment = 0, Y_Adjustment = 0;
+     
         public static OpenCvSharp.Point pOrigin = new OpenCvSharp.Point();
         private static int _IndexToolSelected=-1;
         public static bool IsEditTool = false;

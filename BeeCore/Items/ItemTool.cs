@@ -265,6 +265,7 @@ namespace BeeCore
             this.MouseDown += ItemTool_MouseDown;
             this.Click += ItemTool_Click;
             this.VisibleChanged += ItemTool_VisibleChanged;
+            this.EnabledChanged += ItemTool_EnabledChanged;
           TriggerNum = triggerNum;
             if (TriggerNum != TriggerNum.Trigger1)
                 NotChange = true;
@@ -276,6 +277,12 @@ namespace BeeCore
 
 
 
+        }
+
+        private void ItemTool_EnabledChanged(object sender, EventArgs e)
+        {
+            isHovered = !this.Enabled;
+            this.Invalidate();
         }
 
         private void ItemTool_VisibleChanged(object sender, EventArgs e)
@@ -633,7 +640,7 @@ namespace BeeCore
             float ratio = (Value - Min) / (Max - Min);
             pTick = new PointF(
                 pTrack.X + ratio * (szTrack.Width - imgTick.Width),
-                pTrack.Y - (imgTick.Height - szTrack.Height) / 2
+                 pTrack.Y
             );
 
             // 3) Vị trí icon/label trên đầu:
@@ -650,7 +657,7 @@ namespace BeeCore
 
         private void ItemTool_StatusToolChanged(StatusTool obj)
         {
-            if (TriggerNum != Global.TriggerNum)
+            if (TriggerNum != Global.TriggerNum&&!Global.Config.IsMultiProg)
                 return;
             switch(obj)
             {
@@ -722,10 +729,10 @@ namespace BeeCore
        private void ItemTool_DoubleClick(object sender, EventArgs e)
         {
             //if (Global.ParaCommon.matRegister != null)
-            //    BeeCore.Common.listCamera[IndexThread].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
+            //    BeeCore.Common.listCamera[IndexCCD].matRaw = OpenCvSharp.Extensions.BitmapConverter.ToMat(Global.ParaCommon.matRegister);
             //else if (G.IsCCD)
-            //    BeeCore.Common.listCamera[IndexThread].matRaw = null;// BeeCore.Common.GetImageRaw();
-            //if (BeeCore.Common.listCamera[IndexThread].matRaw == null)
+            //    BeeCore.Common.listCamera[IndexCCD].matRaw = null;// BeeCore.Common.GetImageRaw();
+            //if (BeeCore.Common.listCamera[IndexCCD].matRaw == null)
             //{
             //    MessageBox.Show("Vui long dang ky Anh");
             //    return;

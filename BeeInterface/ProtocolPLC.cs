@@ -2,7 +2,9 @@
 using BeeCore.Func;
 using BeeCore.Funtion;
 using BeeGlobal;
+using Microsoft.VisualBasic.Devices;
 using OpenCvSharp.Flann;
+using PlcLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -459,6 +461,7 @@ namespace BeeInterface
             try
 
             {
+                
                 if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
                 btnBypass.IsCLick = Global.Comunication.Protocol.IsBypass;
                 btnDtrEnable.IsCLick = Global.Comunication.Protocol.DtrEnable;
@@ -540,7 +543,7 @@ namespace BeeInterface
 
                 txtIP.Text = Global.Comunication.Protocol.sIP;
                 txtPort.Text = Global.Comunication.Protocol.PortIP.ToString();
-
+                txtProg.Text ="No"+ Global.Comunication.Protocol.NoProg;
                 if (Global.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
                 {
                     layCom.Enabled = false;
@@ -574,6 +577,9 @@ namespace BeeInterface
                 layBrand.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 layComunication.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 laySetting.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
+                txtAddProg.Text = Global.Comunication.Protocol.AddProg;
+                txtAddCountProg.Text=Global.Comunication.Protocol.AddCountProg;
+                txtAddPO.Text = Global.Comunication.Protocol.AddPO;
             }
             catch (Exception ex)
             {
@@ -604,11 +610,41 @@ namespace BeeInterface
                 btnConectIO.Enabled = true;
                 //   btnBypass.Enabled = false;
             }
+            
+            Global.Comunication.Protocol.ValuePOChanged += Protocol_ValuePOChanged;
+            Global.Comunication.Protocol.ValueProgChanged += Protocol_ValueProgChanged1;
+            Global.Comunication.Protocol.ValueCountProgChanged += Protocol_ValueCountProgChanged;     
             //   Global.Comunication.Protocol.numReadChanged += IO_numReadChanged;
             //  Global.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
         }
 
+        private void Protocol_ValueCountProgChanged(int obj)
+        {
+           
+            this.Invoke((Action)(() =>
+            {
+                Global.NumProgFromPLC = obj;
+                txtValueCountProg.Text = "" + obj;
+            }));
+        }
 
+        private void Protocol_ValuePOChanged(string obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                txtValuePO.Text = "" + obj;
+            }));
+        }
+
+        private void Protocol_ValueProgChanged1(int obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                txtProg.Text ="No"+ obj;
+            }));
+        }
+
+       
 
         private void Global_StatusIOChanged(StatusIO obj)
         {
@@ -1171,6 +1207,59 @@ namespace BeeInterface
             layBrand.Enabled = false;
             layComunication.Enabled = false;
             laySetting.Enabled = false;
+        }
+
+        private void txtAddProg_TextChanged(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.AddProg= txtAddProg.Text.Trim();
+        }
+
+        private void tmReadProgNo_Tick(object sender, EventArgs e)
+        {
+            txtProg.Text ="No"+ Global.Comunication.Protocol.NoProg;
+        }
+
+        private void tabControl1_VisibleChanged(object sender, EventArgs e)
+        {
+           // tmReadProgNo.Enabled = !this.Visible;
+        }
+
+        private void txtPO_TextChanged(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.AddPO= txtAddPO.Text.Trim();
+        }
+
+        private void txtAddCountProg_TextChanged(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.AddCountProg= txtAddCountProg.Text.Trim();
+        }
+
+        private void btnReadCountProg_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.AddCountProg != null)
+                if (Global.Comunication.Protocol.AddCountProg != "")
+                {
+                    Global.Comunication.Protocol.ValueCountProg = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddCountProg);
+                    Global.NumProgFromPLC = Global.Comunication.Protocol.ValueCountProg;
+                }    
+                
+            txtValueCountProg.Text=Global.NumProgFromPLC.ToString();
+        }
+
+        private void btnReadPO_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.AddPO != null)
+                if (Global.Comunication.Protocol.AddPO != "")
+                    Global.Comunication.Protocol.ValuePO = Global.Comunication.Protocol.PlcClient.ReadStringAsciiKey(Global.Comunication.Protocol.AddPO, 16).Trim();
+       txtValuePO.Text= Global.Comunication.Protocol.ValuePO;
+        }
+
+        private void btnReadProg_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.AddProg != null)
+                if (Global.Comunication.Protocol.AddProg != "")
+                    Global.Comunication.Protocol.NoProg = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddProg);
+            txtProg.Text = "No" + Global.Comunication.Protocol.NoProg;
         }
     }
 }

@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppRestart.cs" />
+    <Compile Include="Comunication\WriteValuePLCSystems.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comunication\WriteValuePLCSystems.Designer.cs">
+      <DependentUpon>WriteValuePLCSystems.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControlStylePersistence.cs" />
     <Compile Include="Custom\AutoLabel.cs">
       <SubType>Component</SubType>
@@ -95,11 +101,20 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DashBoard\RegisterImgDashboard.cs" />
+    <Compile Include="DashBoard\SaveProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DataTool.cs" />
     <Compile Include="Custom\DbTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileName.cs" />
+    <Compile Include="FormWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormWarning.Designer.cs">
+      <DependentUpon>FormWarning.cs</DependentUpon>
+    </Compile>
     <Compile Include="ForrmAlarm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -338,6 +353,12 @@
   <ItemGroup>
     <EmbeddedResource Include="CameraForm.resx">
       <DependentUpon>CameraForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comunication\WriteValuePLCSystems.resx">
+      <DependentUpon>WriteValuePLCSystems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormWarning.resx">
+      <DependentUpon>FormWarning.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ForrmAlarm.resx">
       <DependentUpon>ForrmAlarm.cs</DependentUpon>
@@ -743,6 +764,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Warning_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

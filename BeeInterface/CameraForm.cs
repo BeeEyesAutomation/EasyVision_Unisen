@@ -22,6 +22,7 @@ namespace BeeInterface
         private void btnCamera1_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 0;
+
             ShowTool.ShowChart( Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexChoose]);
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
@@ -31,6 +32,8 @@ namespace BeeInterface
         private void btnCamera2_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 1;
+            if (BeeCore.Common.PropetyTools[Global.IndexChoose] == null)
+                BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
             ShowTool.ShowChart(Global.ToolSettings.pAllTool , BeeCore.Common.PropetyTools[Global.IndexChoose]);
 
             Global.EditTool.RefreshGuiEdit(Step.Step1);
@@ -40,6 +43,8 @@ namespace BeeInterface
         private void btnCamera3_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 2;
+            if (BeeCore.Common.PropetyTools[Global.IndexChoose] == null)
+                BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
         }
@@ -47,6 +52,8 @@ namespace BeeInterface
         private void btnCamera4_Click(object sender, EventArgs e)
         {
             Global.IndexChoose = 3;
+            if (BeeCore.Common.PropetyTools[Global.IndexChoose] == null)
+                BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
             Global.EditTool.RefreshGuiEdit(Step.Step1);
             this.Close();
         }
@@ -58,14 +65,14 @@ namespace BeeInterface
 
         private void CameraForm_Load(object sender, EventArgs e)
         {
-            if (Global.listParaCamera[0] != null)
-                btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[1] != null)
-                btnCamera2.Text = Global.listParaCamera[1].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[2] != null)
-               btnCamera3.Text = Global.listParaCamera[2].Name.Substring(0, 8) + "..";
-            if (Global.listParaCamera[3] != null)
-               btnCamera4.Text = Global.listParaCamera[3].Name.Substring(0, 8) + "..";
+            //if (Global.listParaCamera[0] != null)
+            //    btnCamera1.Text = Global.listParaCamera[0].Name.Substring(0, 8) + "..";
+            //if (Global.listParaCamera[1] != null)
+            //    btnCamera2.Text = Global.listParaCamera[1].Name.Substring(0, 8) + "..";
+            //if (Global.listParaCamera[2] != null)
+            //   btnCamera3.Text = Global.listParaCamera[2].Name.Substring(0, 8) + "..";
+            //if (Global.listParaCamera[3] != null)
+            //   btnCamera4.Text = Global.listParaCamera[3].Name.Substring(0, 8) + "..";
             this.Location = new Point(Global.SizeScreen.Width / 2-this.Width/2, Global.SizeScreen.Height / 2 -this.Height/2);
         }
 

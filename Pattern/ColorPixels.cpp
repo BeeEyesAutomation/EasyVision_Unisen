@@ -64,6 +64,41 @@ using namespace cv;
 
           mask8u = filtered;
       }
+      Mat ColorPx::RemoveByThicknessDT(const Mat& bin255, float minRadius)
+      {
+          CV_Assert(bin255.type() == CV_8U);
+
+          Mat bin;
+          threshold(bin255, bin, 0, 255, THRESH_BINARY);
+
+          Mat labels, stats, centroids;
+          int n = connectedComponentsWithStats(
+              bin, labels, stats, centroids, 8, CV_32S);
+
+          Mat out = Mat::zeros(bin.size(), CV_8U);
+
+          for (int i = 1; i < n; i++) // skip background
+          {
+              Mat mask = (labels == i);
+              mask.convertTo(mask, CV_8U, 255);
+
+              Mat dist;
+              distanceTransform(mask, dist, DIST_L2, 3);
+
+              double maxDist;
+              minMaxLoc(dist, nullptr, &maxDist);
+
+              if (maxDist >= minRadius)
+              {
+                  // blob đủ dày → giữ NGUYÊN
+                  out.setTo(255, mask);
+              }
+              // else: blob mỏng → xóa toàn bộ
+          }
+
+          return out;
+      }
+
     // ---------- FAST path: vector hóa + đa luồng nội bộ OpenCV (không filter) ----------
 // ---------- FAST path: grayscale + blur để giảm viền ----------
      int ColorPx:: DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise,float Aspect)
@@ -93,7 +128,7 @@ using namespace cv;
         threshold(diff, mask, tol, 255, THRESH_BINARY);  // tol chính là ngưỡng diff gray
         RemoveSmallBlobs(mask,  SzClearNoise);
       
-        FilterBlobsByAspect(mask, Aspect);
+        mask=  RemoveByThicknessDT(mask, Aspect);
         // 6. Đếm
         int diffCount = countNonZero(mask);
 

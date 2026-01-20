@@ -47,12 +47,12 @@ namespace BeeUi.Unit
             using (Mat clone = e.Image?.Clone())
             {
                 // phần Global của bạn — giữ nguyên
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = clone.Clone();
-              //  Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
-               // Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
-                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = clone.Clone();
+              //  Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
+               // Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone();
+                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
                 
             }
 
@@ -73,7 +73,32 @@ namespace BeeUi.Unit
         {
             if (registerImg.IndexSelected == -1) return;
             Global.EditTool.View.timer = CycleTimerSplit.Start();
-            Global.TriggerNum = TriggerNum.Trigger1;
+            if (Global.Comunication.Protocol.IsBypass)
+            {
+                switch (Global.TriggerNum)
+                {
+                    case TriggerNum.Trigger0:
+                        Global.TriggerNum = TriggerNum.Trigger1;
+                        Global.IndexChoose = 0;
+                        break;
+                    case TriggerNum.Trigger1:
+                        Global.TriggerNum = TriggerNum.Trigger2;
+                        Global.IndexChoose = 1;
+                        break;
+                    case TriggerNum.Trigger2:
+                        Global.TriggerNum = TriggerNum.Trigger3;
+                        Global.IndexChoose = 2;
+                        break;
+                    case TriggerNum.Trigger3:
+                        Global.TriggerNum = TriggerNum.Trigger4;
+                        Global.IndexChoose = 3;
+                        break;
+                }
+               // Global.StatusProcessing = StatusProcessing.Read;
+            }
+            else
+                Global.TriggerNum = TriggerNum.Trigger1;
+            //  Global.TriggerNum = TriggerNum.Trigger1;
             Global.StatusProcessing = StatusProcessing.Checking;
         }
        
@@ -92,7 +117,7 @@ namespace BeeUi.Unit
                 }
                 btnContinuous.Image = Properties.Resources.Stop;
                 if (Global.EditTool.View.indexFile >= Global.EditTool.View.listMat.Count) Global.EditTool.View.indexFile = 0;
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Global.EditTool.View.listMat[Global.EditTool.View.indexFile].Clone();// Cv2.ImRead(Files[indexFile]);
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Global.EditTool.View.listMat[Global.EditTool.View.indexFile].Clone();// Cv2.ImRead(Files[indexFile]);
                Global.EditTool.View.timer = CycleTimerSplit.Start();
                 Global.TriggerNum = TriggerNum.Trigger1;
                 Global.StatusProcessing = StatusProcessing.Checking;

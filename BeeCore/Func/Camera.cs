@@ -224,12 +224,12 @@ namespace BeeCore
             return dst;
         }
         public Results Results = Results.OK;
-        public void SumResult()
+        public Results SumResult()
         {
             Results = Results.OK;
-            foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
+           // foreach (List<PropetyTool> PropetyTools in BeeCore.Common.PropetyTools)
             {
-                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[IndexCCD])
+                foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                 {
                     if (PropetyTool.UsedTool == UsedTool.NotUsed)
                     {
@@ -241,9 +241,9 @@ namespace BeeCore
                         break;
                     }
                 }
-                if (Global.Config.IsMultiCamera == false)
-                    break;
+               
             }
+            return Results;
         }
         public void DrawResult( )
         {
@@ -292,24 +292,24 @@ namespace BeeCore
                         xf.Scale(s, s);
                         g.Transform = xf;
                         SizeF sz = new SizeF();
-                        if (Global.Config.IsMultiCamera)
-                        {
-                             sz = g.MeasureString(Para.Name, new Font("Arial", Global.ParaShow.FontSize));
+                        //if (Global.Config.IsMultiProg)
+                        //{
+                        //     sz = g.MeasureString(Para.Name, new Font("Arial", Global.ParaShow.FontSize));
 
-                            g.DrawString(Para.Name, new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
-                        }
-                        else
-                        {
-                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize));
+                        //    g.DrawString(Para.Name, new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
+                        //}
+                        //else
+                        //{
+                             sz = g.MeasureString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*3));
 
-                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize), Brushes.DarkGray, new PointF(10, 10));
-                        }
+                            g.DrawString(Global.TriggerNum.ToString(), new Font("Arial", Global.ParaShow.FontSize*3), Brushes.DarkGray, new PointF(10, 10));
+                    //    }
 
                         if (Results == Results.OK)
-                            g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize), Brushes.Green, new PointF(10, sz.Height + 5));
+                            g.DrawString("OK", new Font("Arial", Global.ParaShow.FontSize*3), Brushes.Green, new PointF(10, sz.Height + 5));
                         else
-                            g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize), Brushes.Red, new PointF(10, sz.Height + 5));
-                        var tools = BeeCore.Common.PropetyTools[IndexCCD];
+                            g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 3), Brushes.Red, new PointF(10, sz.Height + 5));
+                        var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
                         foreach (var tool in tools)
                             if (tool.UsedTool != UsedTool.NotUsed)
                                 tool.Propety.DrawResult(g);
@@ -332,43 +332,45 @@ namespace BeeCore
                     {
                        bmResult?.Dispose();
                        bmResult = storeCopy;
-                        String pathRaw, pathRS;
-                        String date = DateTime.Now.ToString("yyyyMMdd");
-                        String Hour = DateTime.Now.ToString("HHmmss");
-                        pathRaw = "Report//" + date + "//Raw";
-                        pathRS = "Report//" + date + "//Result";
-                        if (!Directory.Exists(pathRaw))
-                            Directory.CreateDirectory(pathRaw);
-                        if (!Directory.Exists(pathRS))
-                            Directory.CreateDirectory(pathRS);
-                        if (Results == Results.OK && Global.Config.IsSaveOK || Results == Results.NG && Global.Config.IsSaveNG)
+                        //String pathRaw, pathRS;
+                        //String date = DateTime.Now.ToString("yyyyMMdd");
+                        //String Hour = DateTime.Now.ToString("HHmmss");
+                        //pathRaw = "Report//" + date + "//Raw";
+                        //pathRS = "Report//" + date + "//Result";
+                        //if (!Directory.Exists(pathRaw))
+                        //    Directory.CreateDirectory(pathRaw);
+                        //if (!Directory.Exists(pathRS))
+                        //    Directory.CreateDirectory(pathRS);
+                        Mat matRs = bmResult.ToMat();
+                        using (Mat raw = matRaw.Clone())
                         {
-                            Mat matRs = bmResult.ToMat();
-                            using (Mat raw = matRaw.Clone())
+
+
+                            switch (Global.Config.TypeSave)
                             {
-
-
-                                switch (Global.Config.TypeSave)
-                                {
-                                    case 1:
-                                        Cv2.PyrDown(matRs, matRs);
-                                        Cv2.PyrDown(matRs, matRs);
-                                        Cv2.PyrDown(raw, raw);
-                                        Cv2.PyrDown(raw, raw);
-                                        break;
-                                    case 2:
-                                        Cv2.PyrDown(matRs, matRs);
-                                        Cv2.PyrDown(raw, raw);
-                                        break;
-                                }
-
-                                if (Global.Config.IsSaveRaw)
-                                    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Hour + ".png", raw);
-                                if (Global.Config.IsSaveRS)
-                                    Cv2.ImWrite(pathRS + "//" + Global.Project + "_" + Results.ToString() + "_" + Hour + ".png", matRs);
-                                matRs.Dispose();
+                                case 1:
+                                    Cv2.PyrDown(matRs, matRs);
+                                    Cv2.PyrDown(matRs, matRs);
+                                    Cv2.PyrDown(raw, raw);
+                                    Cv2.PyrDown(raw, raw);
+                                    break;
+                                case 2:
+                                    Cv2.PyrDown(matRs, matRs);
+                                    Cv2.PyrDown(raw, raw);
+                                    break;
                             }
+                            if (Global.listMatRs[Global.IndexChoose] == null) Global.listMatRs[Global.IndexChoose] = new Mat();
+                            if (!Global.listMatRs[Global.IndexChoose].IsDisposed)
+                                if (!Global.listMatRs[Global.IndexChoose].Empty()) Global.listMatRs[Global.IndexChoose].Dispose();
+                            Global.listMatRaw[Global.IndexChoose] = raw.Clone();
+                            Global.listMatRs[Global.IndexChoose] = matRs.Clone();
+                            //if (Global.Config.IsSaveRaw)
+                            //    Cv2.ImWrite(pathRaw + "//" + Global.Project + "_" + Results.ToString() + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + Hour + ".png", raw);
+                            //if (Global.Config.IsSaveRS)
+                            //    Cv2.ImWrite(pathRS + "//" + Global.Project + "_" + Global.Config.POCurrent + "_" + Global.TriggerNum.ToString() + "_" + "_" + Results.ToString() + "_" + Hour + ".png", matRs);
+                            matRs.Dispose();
                         }
+                     
                         //  bmResult.Save("Result"+ IndexCCD + ".png");
                     }
                     canvas = null; // tránh dispose ở finally

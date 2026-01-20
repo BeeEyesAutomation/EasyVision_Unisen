@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,8 +29,23 @@ namespace BeeInterface
         {
             if (Global.ParaCommon.matRegister != null)
             {
-                if (!Global.ParaCommon.matRegister.IsDisposed())
-                    Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;
+                switch (Global.IndexChoose)
+                {
+                    case 0:
+                        Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;// = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 1:
+                        Global.Config.SizeCCD = Global.ParaCommon.matRegister2.Size;// Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 2:
+                        Global.Config.SizeCCD = Global.ParaCommon.matRegister3.Size;//  Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 3:
+                        Global.Config.SizeCCD = Global.ParaCommon.matRegister4.Size;//   Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                }
+                //if (!Global.ParaCommon.matRegister.IsDisposed())
+                //    Global.Config.SizeCCD = Global.ParaCommon.matRegister.Size;
 
                 Global.Step = Step.Step3;
             }
@@ -39,9 +55,11 @@ namespace BeeInterface
             }    
                
         }
+        bool IsLoad = false;
 
         private void SettingStep2_Load(object sender, EventArgs e)
         {
+            IsLoad = true;
             if (Global.listRegsImg == null)
             {
                 Global.listRegsImg = new List<ItemRegsImg>();
@@ -56,6 +74,7 @@ namespace BeeInterface
             }
             RegisterImg.LoadAllItem(Global.listRegsImg);
 
+           // RegisterImg.IndexSelected = 1;
         }
         public void SaveParaPJ()
         {
@@ -69,19 +88,41 @@ namespace BeeInterface
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 Global.EditTool.View. pathRaw = fileDialog.FileName;
-              BeeCore.Common.listCamera[Global.IndexChoose].matRaw = BeeCore.Common.LoadImage(Global.EditTool.View.pathRaw, ImreadModes.AnyColor);
-               
-              //  Cv2.CvtColor(BeeCore.Common.listCamera[Global.IndexChoose].matRaw, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, ColorConversionCodes.GRAY2BGR);
-                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                Global.Config.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
-                Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-                Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-                Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-                Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
+              BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = BeeCore.Common.LoadImage(Global.EditTool.View.pathRaw, ImreadModes.AnyColor);
+                Cv2.CvtColor(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw, ColorConversionCodes.GRAY2BGR);
+                if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
+                {
+                    if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                    {
+
+                        switch (Global.IndexChoose)
+                        {
+                            case 0:
+                                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 1:
+                                Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 2:
+                                Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 3:
+                                Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                        }
+                    }
+                    else
+                        return;
+                }
+                else
+                    return;
+
+                 Global.Config.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
+              
                 btnNextStep.Enabled = true;
-                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                 //  btnNextStep.BackgroundImage = Properties.Resources.btnChoose1;
-                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
 
                 SaveParaPJ();
 
@@ -107,20 +148,47 @@ namespace BeeInterface
 
         private void workRead_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            BeeCore.Common.listCamera[Global.IndexChoose].Read();
-            if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.IsDisposed)
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-                        Global.ParaCommon.matRegister = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone().ToBitmap(); ;
-            if (Global.ParaCommon.matRegister == null)
-                return;
-            //Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            //Global.EditTool.View.bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            //Global.EditTool.View.matMaskAdd = new Mat(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Rows, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Cols, MatType.CV_8UC1);
-            //Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
-            btnNextStep.Enabled = true;
-            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-            Global.Config.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
+          
+            BeeCore.Common.listCamera[Global.IndexCCCD].Read();
+          
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
+            {
+
+
+                if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
+                {
+                    if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                    {
+                        switch (Global.IndexChoose)
+                        {
+                            case 0:
+                                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 1:
+                                Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 2:
+                                Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                            case 3:
+                                Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                                break;
+                        }
+                    }
+                    else
+                        return;
+                }
+                else
+                    
+                    return;
+            }
+            else
+                { return; }
+
+            
+                btnNextStep.Enabled = true;
+            Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+            Global.Config.SizeCCD =new System.Drawing.Size( BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
           if (Global.ParaCommon.matRegister.IsDisposed())
             { MessageBox.Show("Fail"); }    
 
@@ -140,10 +208,16 @@ namespace BeeInterface
 
         private void RegisterImg_SelectedItemChanged(object sender, RegisterImgSelectionChangedEventArgs e)
         {
+            if (IsLoad)
+            {
+                IsLoad = false;
+                return;
+            }    
+              
             using (Mat clone = e.Image?.Clone())
             {if(clone==null)
                 {
-                    BeeCore.Common.listCamera[Global.IndexChoose].matRaw = new Mat();
+                    BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = new Mat();
                     Global.ParaCommon.matRegister = null;
                   //  Global.EditTool.View.imgView.Image.Dispose();
                     BeginInvoke(new Action(() =>
@@ -155,12 +229,27 @@ namespace BeeInterface
                     return;
                 }    
                 // phần Global của bạn — giữ nguyên
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = clone.Clone();
-                Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
-                Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size().Height);
-                Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone();
-                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
-                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = clone.Clone();
+                switch (Global.IndexChoose)
+                {
+                    case 0:
+                        Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 1:
+                        Global.ParaCommon.matRegister2 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 2:
+                        Global.ParaCommon.matRegister3 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                    case 3:
+                        Global.ParaCommon.matRegister4 = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                        break;
+                }
+             //   Global.ParaCommon.matRegister = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
+                Global.Config.SizeCCD = new System.Drawing.Size(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Width, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size().Height);
+             //   Global.EditTool.View.matResgiter = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone();
+                Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
+                ShowTool.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
                 btnNextStep.Enabled = true;
             }
 

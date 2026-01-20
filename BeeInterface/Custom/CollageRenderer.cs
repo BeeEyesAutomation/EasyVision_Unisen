@@ -1,36 +1,33 @@
 ﻿using BeeGlobal;
-using OpenCvSharp.Flann;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Windows.Forms;
 
 namespace BeeInterface
 {
-
     public enum CollageLayout
     {
-        AutoWeighted = 0, // theo weight
-        One,              // 1 ảnh full
-        Two,              // 2 ảnh chia đều (ngang/dọc tùy aspect)
-        ThreeRow,         // 1 hàng 3 cột
-        FourGrid          // 2x2 chia đều
+        AutoWeighted = 0,
+        One,
+        Two,
+        ThreeRow,
+        FourGrid
     }
 
     public sealed class CollageRenderer : IDisposable
     {
-        // Public để BuildCollageBitmap dùng và tránh inconsistent accessibility
+        // ================= IMAGE ITEM =================
         public sealed class ImageItem
         {
-            public Bitmap Bmp { get; }
-            public FillMode1 Mode { get; }
-            public float Weight { get; }
-            public bool Owned { get; } // renderer sở hữu và có quyền dispose
+            public Bitmap Bmp;
+            public FillMode1 Mode;
+            public float Weight;
+            public bool Owned;
 
-            public ImageItem(Bitmap bmp, FillMode1 mode, float weight, bool owned = false)
+            public ImageItem(Bitmap bmp, FillMode1 mode, float weight, bool owned)
             {
                 Bmp = bmp;
                 Mode = mode;
@@ -39,310 +36,221 @@ namespace BeeInterface
             }
         }
 
-        private readonly Cyotek.Windows.Forms.ImageBox _pb;
-        private readonly int _gutter;
-        private readonly Color _bg;
-        private readonly bool _autoRerenderOnResize;
-        private readonly List<ImageItem> _items = new List<ImageItem>();
+        // ================= FIELDS =================
+        private Cyotek.Windows.Forms.ImageBox _pb;
+        private int _gutter;
+        private Color _bg;
+        private List<ImageItem> _items = new List<ImageItem>();
 
-        private CollageLayout _layoutPreset = CollageLayout.AutoWeighted;
-        public CollageLayout LayoutPreset
-        {
-            get => _layoutPreset;
-            set => _layoutPreset = value;
-        }
-
-        /// <summary>
-        /// Khi Render, có dispose ảnh KẾT QUẢ cũ (PictureBox + bmResult) không.
-        /// Ảnh đầu vào trong _items KHÔNG bị dispose ở Render dù cờ này là true.
-        /// </summary>
-        public bool DisposeOnSwap { get; set; } = true;
-
-        // Lưu index ảnh vừa Modify để highlight
         private int _lastModifiedIndex = -1;
 
+        public bool DisposeOnSwap = true;
+
+        public CollageLayout LayoutPreset = CollageLayout.AutoWeighted;
+
+        // 🔥 NEW
+        public LayoutOrientation Orientation = LayoutOrientation.Auto;
+
+        public Size szImage = Size.Empty;
+
+        // ================= CTOR =================
         public CollageRenderer(
             Cyotek.Windows.Forms.ImageBox pictureBox,
-            int gutter = 6,
-            Color? background = null,
-            bool autoRerenderOnResize = false)
+            int gutter,
+            Color? background)
         {
-            _pb = pictureBox ?? throw new ArgumentNullException(nameof(pictureBox));
+            _pb = pictureBox;
             _gutter = Math.Max(0, gutter);
-            _bg = background ?? Color.Black;
-            _autoRerenderOnResize = autoRerenderOnResize;
-
-          //  if (_autoRerenderOnResize) _pb.Resize += OnPictureBoxResize;
+            _bg = background.HasValue ? background.Value : Color.Black;
         }
 
-        public int Count() => _items.Count;
-
-        public Size szImage = new Size(0, 0);
-
-        // ====== Public API: Add/Modify/Remove/Clear ======
-
-        public void AddImage(Bitmap bmp, FillMode1 mode = FillMode1.Cover, float weight = 1f)
+        // ⚠️ overload để KHỚP View.cs cũ
+        public CollageRenderer(
+            Cyotek.Windows.Forms.ImageBox pictureBox,
+            int gutter,
+            Color? background,
+            bool autoRenderOnResize)
+            : this(pictureBox, gutter, background)
         {
-            if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
-            var owned = DeepCopyBitmap(bmp);
-            if (owned == null) return;
-            _items.Add(new ImageItem(owned, mode, weight, owned: true));
+            // giữ param cho tương thích – không dùng
+        }
+
+        // ================= API =================
+        public int Count()
+        {
+            return _items.Count;
+        }
+
+        public void AddImage(Bitmap bmp, FillMode1 mode, float weight=1.0f)
+        {
+            if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0)
+                return;
+
+            Bitmap owned = DeepCopyBitmap(bmp);
+            if (owned == null)
+                return;
+
+            _items.Add(new ImageItem(owned, mode, weight, true));
             _lastModifiedIndex = _items.Count - 1;
             Render();
         }
 
-        public void AddImage(Bitmap bmp, FillMode1 mode, float weight, CollageLayout layout)
+        public void ModifyImage(int index, Bitmap bmp, FillMode1 mode, float weight = 1.0f)
         {
-            _layoutPreset = layout;
-            AddImage(bmp, mode, weight);
-         
-        }
+            if (index < 0 || index >= _items.Count)
+                return;
+            if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0)
+                return;
 
-        public void AddImage(string path, FillMode1 mode = FillMode1.Cover, float weight = 1f,
-                             bool normalize = true, int longestSideLimit = 2048)
-        {
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return;
-            using (var img = Image.FromFile(path))
-            {
-                Bitmap bmp = new Bitmap(img);
-                if (normalize && longestSideLimit > 0)
-                    bmp = NormalizeLongestSide(bmp, longestSideLimit, disposeInput: true);
-                if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
-                _items.Add(new ImageItem(bmp, mode, weight, owned: true));
-               
-            }
-        }
+            Bitmap owned = DeepCopyBitmap(bmp);
+            if (owned == null)
+                return;
 
-        public void ModifyImage(int index, Bitmap bmp, FillMode1 mode = FillMode1.Cover, float weight = 1f)
-        {
-            if (bmp == null || index < 0 || index >= _items.Count) return;
-            if (bmp.Width <= 0 || bmp.Height <= 0) return;
+            if (_items[index].Owned && _items[index].Bmp != null)
+                _items[index].Bmp.Dispose();
 
-            var newOwned = DeepCopyBitmap(bmp);
-            if (newOwned == null) return;
-
-            var old = _items[index];
-            if (old?.Owned == true) old.Bmp?.Dispose();
-
-            _items[index] = new ImageItem(newOwned, mode, weight, owned: true);
+            _items[index] = new ImageItem(owned, mode, weight, true);
             _lastModifiedIndex = index;
             Render();
-        }
-
-        public void ModifyImage(int index, string path, FillMode1 mode = FillMode1.Cover, float weight = 1f,
-                                bool normalize = true, int longestSideLimit = 2048)
-        {
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return;
-            if (index < 0 || index >= _items.Count) return;
-
-            using (var img = Image.FromFile(path))
-            {
-                Bitmap bmp = new Bitmap(img);
-                if (normalize && longestSideLimit > 0)
-                    bmp = NormalizeLongestSide(bmp, longestSideLimit, disposeInput: true);
-                if (bmp == null || bmp.Width <= 0 || bmp.Height <= 0) return;
-
-                var old = _items[index];
-                if (old?.Owned == true) old.Bmp?.Dispose();
-
-                _items[index] = new ImageItem(bmp, mode, weight, owned: true);
-            }
-            _lastModifiedIndex = index;
-            Render();
-        }
-
-        public void RemoveImage(int index)
-        {
-            if (index < 0 || index >= _items.Count) return;
-            var old = _items[index];
-            if (old?.Owned == true) old.Bmp?.Dispose();
-            _items.RemoveAt(index);
-            if (_lastModifiedIndex == index) _lastModifiedIndex = -1;
         }
 
         public void ClearImages()
         {
-            foreach (var it in _items)
-                if (it?.Owned == true) it.Bmp?.Dispose();
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (_items[i].Owned && _items[i].Bmp != null)
+                    _items[i].Bmp.Dispose();
+            }
+
             _items.Clear();
             _lastModifiedIndex = -1;
+            Render();
         }
 
-        // ====== Render ======
-
+        // ================= RENDER =================
         public void Render()
         {
-            if (_pb.ClientSize.Width <= 0 || _pb.ClientSize.Height <= 0) return;
+            if (_pb == null)
+                return;
+
             int w = _pb.ClientSize.Width;
             int h = _pb.ClientSize.Height;
-            if (w <= 0 || h <= 0) return;
+            if (w <= 0 || h <= 0)
+                return;
 
-            bool drawPlaceholders = (_layoutPreset != CollageLayout.AutoWeighted);
-            Size targetSize = new Size(w, h); 
-            Bitmap newBitmap=null;
-            if (Global.Config.DisplayResolution==DisplayResolution.Full)
+            Bitmap bmp;
+
+            if (Global.Config.DisplayResolution == DisplayResolution.Full)
             {
-
-             
-
-                 newBitmap = BuildCollageBitmapAuto(
-                    _items, _gutter, _bg, _layoutPreset,
-                    highlightIndex: _lastModifiedIndex,
-                    drawPlaceholders: drawPlaceholders,
-                    placeholderText: "Empty", downscale: 1
+                bmp = BuildCollageBitmapAuto(
+                    _items,
+                    _gutter,
+                    _bg,
+                    LayoutPreset,
+                    Orientation,
+                    _lastModifiedIndex,
+                    LayoutPreset != CollageLayout.AutoWeighted,
+                    "Empty",
+                    1
                 );
             }
             else
             {
-            
-                 newBitmap = BuildCollageBitmap(
+                bmp = BuildCollageBitmap(
                     _items,
-                    targetSize,
+                    new Size(w, h),
                     _gutter,
                     _bg,
-                    _layoutPreset,
-                    highlightIndex: _lastModifiedIndex,
-                    drawPlaceholders: drawPlaceholders,
-                    placeholderText: "Empty"
+                    LayoutPreset,
+                    Orientation,
+                    _lastModifiedIndex,
+                    LayoutPreset != CollageLayout.AutoWeighted,
+                    "Empty"
                 );
-            }    
-               
+            }
 
+            szImage = bmp.Size;
 
-            szImage = newBitmap.Size;
-
-            var cloneForSave = newBitmap.Clone(
-                new Rectangle(0, 0, newBitmap.Width, newBitmap.Height),
-                newBitmap.PixelFormat);
-
-            //var oldResult = BeeCore.Common.bmResult;
-            //BeeCore.Common.bmResult = cloneForSave;
-            //if (DisposeOnSwap) oldResult?.Dispose();
-
-            var old = _pb.Image;
-            _pb.Image = newBitmap;
-            if (DisposeOnSwap) old?.Dispose();
+            Image old = _pb.Image;
+            _pb.Image = bmp;
+            if (DisposeOnSwap && old != null)
+                old.Dispose();
         }
 
-        // ====== Build & Layout ======
-
+        // ================= BUILD =================
         public static Bitmap BuildCollageBitmap(
-         IList<ImageItem> items, Size targetSize, int gutter = 6, Color? bg = null,
-         CollageLayout preset = CollageLayout.AutoWeighted,
-         int highlightIndex = -1,
-         bool drawPlaceholders = false,
-         string placeholderText = "Empty",
-         Color? placeholderBack = null,
-         Color? placeholderBorder = null,
-         Color? placeholderTextColor = null)
+            IList<ImageItem> items,
+            Size targetSize,
+            int gutter,
+            Color bg,
+            CollageLayout preset,
+            LayoutOrientation orientation,
+            int highlightIndex,
+            bool drawPlaceholders,
+            string placeholderText)
         {
             int w = Math.Max(1, targetSize.Width);
             int h = Math.Max(1, targetSize.Height);
-            var outBmp = new Bitmap(w, h, PixelFormat.Format24bppRgb);
+
+            Bitmap outBmp = new Bitmap(w, h, PixelFormat.Format24bppRgb);
             outBmp.SetResolution(96, 96);
 
-            using (var g = Graphics.FromImage(outBmp))
+            using (Graphics g = Graphics.FromImage(outBmp))
             {
-                g.Clear(bg ?? Color.Black);
-                int itemCount = items?.Count ?? 0;
-
-                // Số ô theo preset
-                int presetN = (preset == CollageLayout.One ? 1 :
-                              (preset == CollageLayout.Two ? 2 :
-                              (preset == CollageLayout.ThreeRow ? 3 : 4)));
-
-                // Quan trọng: với layout cố định, LUÔN tạo đủ số ô preset
-                int n = (preset == CollageLayout.AutoWeighted) ? Math.Min(itemCount, 4) : presetN;
-                if (n <= 0) return outBmp;
-
-                var dstRect = new Rectangle(0, 0, w, h);
-                List<Rectangle> cells =
-                    (preset == CollageLayout.AutoWeighted)
-                    ? ComputeCellsWeighted(dstRect, items, n, Math.Max(0, gutter))
-                    : ComputeCellsPreset(dstRect, n, Math.Max(0, gutter), preset);
-
+                g.Clear(bg);
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.SmoothingMode = SmoothingMode.None;
-                g.CompositingQuality = CompositingQuality.AssumeLinear;
-                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-                var phBack = placeholderBack ?? Color.White;
-                var phBorder = placeholderBorder ?? Color.LightGray;
-                var phText = placeholderTextColor ?? Color.Gray;
+                int count = items != null ? items.Count : 0;
+                int n;
 
-                // helper: căn giữa một rect kích thước 'sz' vào cell
-                Rectangle CenterRect(Rectangle cell, Size sz)
-                {
-                    int rw = Math.Min(sz.Width, cell.Width);
-                    int rh = Math.Min(sz.Height, cell.Height);
-                    int rx = cell.X + (cell.Width - rw) / 2;
-                    int ry = cell.Y + (cell.Height - rh) / 2;
-                    return new Rectangle(rx, ry, Math.Max(1, rw), Math.Max(1, rh));
-                }
+                if (preset == CollageLayout.AutoWeighted)
+                    n = Math.Min(count, 4);
+                else if (preset == CollageLayout.One)
+                    n = 1;
+                else if (preset == CollageLayout.Two)
+                    n = 2;
+                else if (preset == CollageLayout.ThreeRow)
+                    n = 3;
+                else
+                    n = 4;
 
-                Rectangle refDrawnRect = Rectangle.Empty; // vùng vẽ của item[0] (nếu có), dùng scale placeholder cho trường hợp chỉ có 1 ảnh
+                if (n <= 0)
+                    return outBmp;
+
+                Rectangle dst = new Rectangle(0, 0, w, h);
+
+                List<Rectangle> cells =
+                    preset == CollageLayout.AutoWeighted
+                    ? ComputeCellsWeighted(dst, n, gutter, orientation)
+                    : ComputeCellsPreset(dst, n, gutter, preset, orientation);
 
                 for (int i = 0; i < cells.Count; i++)
                 {
-                    Rectangle drawnRect = Rectangle.Empty;
+                    Rectangle drawn = Rectangle.Empty;
 
-                    if (i < itemCount && items[i]?.Bmp != null &&
-                        items[i].Bmp.Width > 0 && items[i].Bmp.Height > 0)
+                    if (i < count && items[i] != null && items[i].Bmp != null)
                     {
-                        var it = items[i];
-                        drawnRect = (it.Mode == FillMode1.Cover)
-                            ? DrawImageCover(g, it.Bmp, cells[i])
-                            : DrawImageContain(g, it.Bmp, cells[i]);
-
-                        // Nếu chỉ có 1 ảnh, lưu kích thước đã vẽ để dùng cho placeholder
-                        if (itemCount == 1 && i == 0)
-                            refDrawnRect = drawnRect;
-                    }
-                    else
-                    {
-                        // Ô trống → placeholder, vẫn vẽ như trước
-                        if (drawPlaceholders && preset != CollageLayout.AutoWeighted)
-                        {
-                            Rectangle phRect = (itemCount == 1 && !refDrawnRect.IsEmpty)
-                                ? CenterRect(cells[i], refDrawnRect.Size)
-                                : cells[i];
-
-                            using (var br = new SolidBrush(phBack)) g.FillRectangle(br, phRect);
-                            using (var pen = new Pen(phBorder, 1f)) g.DrawRectangle(pen, phRect);
-
-                            float fs = Math.Max(10f, Math.Min(phRect.Width, phRect.Height) * 0.18f);
-                            using (var f = new Font("Segoe UI", fs, FontStyle.Bold, GraphicsUnit.Pixel))
-                            using (var brText = new SolidBrush(phText))
-                            using (var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                                g.DrawString(placeholderText, f, brText, phRect, sf);
-
-                            drawnRect = phRect; // highlight sẽ ôm sát placeholder
-                        }
+                        if (items[i].Mode == FillMode1.Cover)
+                            drawn = DrawImageCover(g, items[i].Bmp, cells[i]);
                         else
+                            drawn = DrawImageContain(g, items[i].Bmp, cells[i]);
+                    }
+                    else if (drawPlaceholders)
+                    {
+                        using (SolidBrush br = new SolidBrush(Color.White))
+                        using (Pen pen = new Pen(Color.LightGray))
                         {
-                            drawnRect = cells[i];
+                            g.FillRectangle(br, cells[i]);
+                            g.DrawRectangle(pen, cells[i]);
                         }
+                        drawn = cells[i];
                     }
 
-                    //// ✅ Luôn vẽ VIỀN MỎNG cho MỌI Ô (kể cả đủ ảnh hay không)
-                    //using (var penCell = new Pen(Color.FromArgb(180, 180, 180), 1f))
-                    //{
-                    //    var border = cells[i];
-                    //    border.Width = Math.Max(1, border.Width - 1);
-                    //    border.Height = Math.Max(1, border.Height - 1);
-                    //    g.DrawRectangle(penCell, border);
-                    //}
-
-                    // 🔷 Viền HIGHLIGHT ôm sát vùng đã vẽ (ảnh/placeholder) nếu trúng highlightIndex
-                    if (i == highlightIndex && !drawnRect.IsEmpty)
+                    if (i == highlightIndex && !drawn.IsEmpty)
                     {
-                        using (var pen = new Pen(Color.FromArgb(246, 204, 120), 4f)) // hoặc Color.Blue
+                        using (Pen pen = new Pen(Color.FromArgb(246, 204, 120), 4f))
                         {
-                            var r = drawnRect;
-                            r.Width = Math.Max(1, r.Width - 1);
-                            r.Height = Math.Max(1, r.Height - 1);
-                            g.DrawRectangle(pen, r);
+                            g.DrawRectangle(pen, drawn);
                         }
                     }
                 }
@@ -350,528 +258,197 @@ namespace BeeInterface
             return outBmp;
         }
 
-        //    public static Bitmap BuildCollageBitmapAuto(
-        //IList<ImageItem> items,
-        //int gutter = 6,
-        //Color? bg = null,
-        //CollageLayout preset = CollageLayout.AutoWeighted,
-        //int highlightIndex = -1,
-        //bool drawPlaceholders = false,
-        //string placeholderText = "Empty",
-        //Color? placeholderBack = null,
-        //Color? placeholderBorder = null,
-        //Color? placeholderTextColor = null)
-        //    {
-        //        int count = items?.Count ?? 0;
-        //        if (count == 0)
-        //            return new Bitmap(1, 1);
-
-        //        // -----------------------------------------------------------
-        //        // 1) Tính kích thước canvas tự động theo kích thước ảnh
-        //        // -----------------------------------------------------------
-
-        //        // Lấy max width và max height của ảnh
-        //        int maxW = 1, maxH = 1;
-        //        foreach (var it in items)
-        //        {
-        //            if (it?.Bmp == null) continue;
-        //            maxW = Math.Max(maxW, it.Bmp.Width);
-        //            maxH = Math.Max(maxH, it.Bmp.Height);
-        //        }
-
-        //        // Số ô cần render theo preset
-        //        int presetN =
-        //            preset == CollageLayout.One ? 1 :
-        //            preset == CollageLayout.Two ? 2 :
-        //            preset == CollageLayout.ThreeRow ? 3 : 4;
-
-        //        int n = (preset == CollageLayout.AutoWeighted)
-        //            ? Math.Min(count, 4)
-        //            : presetN;
-
-        //        // -----------------------------------------------------------
-        //        // 2) Tính kích thước canvas theo layout
-        //        // -----------------------------------------------------------
-
-        //        int canvasW = maxW;
-        //        int canvasH = maxH;
-
-        //        switch (preset)
-        //        {
-        //            case CollageLayout.One:
-        //                break;
-
-        //            case CollageLayout.Two:
-        //                // 2 ảnh: nếu ảnh rộng → xếp ngang, nếu cao → xếp dọc
-        //                bool wide = maxW >= maxH;
-        //                if (wide)
-        //                    canvasW = maxW * 2 + gutter;  // 2 ô ngang
-        //                else
-        //                    canvasH = maxH * 2 + gutter;  // 2 ô dọc
-        //                break;
-
-        //            case CollageLayout.ThreeRow:
-        //                canvasW = maxW * 3 + gutter * 2; // 3 cột
-        //                break;
-
-        //            case CollageLayout.FourGrid:
-        //                canvasW = maxW * 2 + gutter;
-        //                canvasH = maxH * 2 + gutter;
-        //                break;
-
-        //            case CollageLayout.AutoWeighted:
-        //                // Behave like FourGrid nhưng theo weight
-        //                canvasW = maxW * 2 + gutter;
-        //                canvasH = maxH * 2 + gutter;
-        //                break;
-        //        }
-
-        //        Size targetSize = new Size(canvasW, canvasH);
-
-        //        // -----------------------------------------------------------
-        //        // 3) Gọi lại BuildCollageBitmap cũ của bạn để GHÉP
-        //        // -----------------------------------------------------------
-
-        //        return BuildCollageBitmap(
-        //            items,
-        //            targetSize,
-        //            gutter,
-        //            bg,
-        //            preset,
-        //            highlightIndex,
-        //            drawPlaceholders,
-        //            placeholderText,
-        //            placeholderBack,
-        //            placeholderBorder,
-        //            placeholderTextColor
-        //        );
-        //    }
+        // ================= AUTO SIZE =================
         public static Bitmap BuildCollageBitmapAuto(
-        IList<ImageItem> items,
-        int gutter = 6,
-        Color? bg = null,
-        CollageLayout preset = CollageLayout.AutoWeighted,
-        int highlightIndex = -1,
-        bool drawPlaceholders = false,
-        string placeholderText = "Empty",
-        Color? placeholderBack = null,
-        Color? placeholderBorder = null,
-        Color? placeholderTextColor = null,
-        int downscale = 1)
+            IList<ImageItem> items,
+            int gutter,
+            Color bg,
+            CollageLayout preset,
+            LayoutOrientation orientation,
+            int highlightIndex,
+            bool drawPlaceholders,
+            string placeholderText,
+            int downscale)
         {
-            int count = items?.Count ?? 0;
-            if (count == 0)
-                return new Bitmap(1, 1);
+            int maxW = 1, maxH = 1;
 
-            // -----------------------------------------------------------
-            // 1) Tính max width / height nhanh nhất
-            // -----------------------------------------------------------
-
-            int maxW = 1;
-            int maxH = 1;
-
-            // tránh null-check từng item 2 lần, dùng for nhanh hơn foreach
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                var bmp = items[i]?.Bmp;
-                if (bmp == null) continue;
-
-                int w = bmp.Width;
-                int h = bmp.Height;
-
-                if (w > maxW) maxW = w;
-                if (h > maxH) maxH = h;
+                if (items[i] != null && items[i].Bmp != null)
+                {
+                    maxW = Math.Max(maxW, items[i].Bmp.Width);
+                    maxH = Math.Max(maxH, items[i].Bmp.Height);
+                }
             }
 
-            // -----------------------------------------------------------
-            // 2) Tính layout cực nhanh (tối giản switch)
-            // -----------------------------------------------------------
+            int w = maxW;
+            int h = maxH;
 
-            int canvasW = maxW;
-            int canvasH = maxH;
-
-            switch (preset)
+            if (preset == CollageLayout.Two)
             {
-                case CollageLayout.One:
-                    break;
-
-                case CollageLayout.Two:
-                    {
-                        // 2 ảnh: check ratio nhanh
-                        if (maxW >= maxH)
-                            canvasW = maxW * 2 + gutter;   // ngang
-                        else
-                            canvasH = maxH * 2 + gutter;   // dọc
-                        break;
-                    }
-
-                case CollageLayout.ThreeRow:
-                    canvasW = maxW * 3 + gutter * 2;
-                    break;
-
-                case CollageLayout.FourGrid:
-                case CollageLayout.AutoWeighted:
-                    canvasW = maxW * 2 + gutter;
-                    canvasH = maxH * 2 + gutter;
-                    break;
+                bool wide = ResolveWide(w, h, orientation);
+                if (wide) w = maxW * 2 + gutter;
+                else h = maxH * 2 + gutter;
+            }
+            else if (preset == CollageLayout.ThreeRow)
+            {
+                w = maxW * 3 + gutter * 2;
+            }
+            else if (preset == CollageLayout.FourGrid || preset == CollageLayout.AutoWeighted)
+            {
+                w = maxW * 2 + gutter;
+                h = maxH * 2 + gutter;
             }
 
-            // -----------------------------------------------------------
-            // 2.5) Giảm độ phân giải (downscale) – cực nhanh
-            // -----------------------------------------------------------
             if (downscale > 1)
             {
-                if (downscale > 4) downscale = 4;  // limit để tránh chia lớn vô ích
-
-                // dùng shift nếu downscale = 2 hoặc 4 → nhanh gấp 5–7 lần phép chia
-                if (downscale == 2)
-                {
-                    canvasW >>= 1;
-                    canvasH >>= 1;
-                }
-                else if (downscale == 4)
-                {
-                    canvasW >>= 2;
-                    canvasH >>= 2;
-                }
-                else
-                {
-                    canvasW /= downscale;
-                    canvasH /= downscale;
-                }
-
-                if (canvasW < 1) canvasW = 1;
-                if (canvasH < 1) canvasH = 1;
+                w /= downscale;
+                h /= downscale;
             }
 
-            Size targetSize = new Size(canvasW, canvasH);
-
-            // -----------------------------------------------------------
-            // 3) Gọi lại hàm build cũ
-            // -----------------------------------------------------------
             return BuildCollageBitmap(
                 items,
-                targetSize,
+                new Size(Math.Max(1, w), Math.Max(1, h)),
                 gutter,
                 bg,
                 preset,
+                orientation,
                 highlightIndex,
                 drawPlaceholders,
-                placeholderText,
-                placeholderBack,
-                placeholderBorder,
-                placeholderTextColor
+                placeholderText
             );
         }
 
-
-        // ----- Layout preset (chia đều) -----
-        private static List<Rectangle> ComputeCellsPreset(
-            Rectangle dst, int n, int gutter, CollageLayout preset)
+        // ================= LAYOUT =================
+        private static bool ResolveWide(int w, int h, LayoutOrientation o)
         {
-            var res = new List<Rectangle>(n);
+            if (o == LayoutOrientation.ForceHorizontal)
+                return true;
+            if (o == LayoutOrientation.ForceVertical)
+                return false;
+            return w >= h;
+        }
 
-            Rectangle Shrink(Rectangle r, int pad)
-                => new Rectangle(r.X + pad, r.Y + pad,
-                                 Math.Max(0, r.Width - 2 * pad),
-                                 Math.Max(0, r.Height - 2 * pad));
-
-            double aspect = (double)dst.Width / Math.Max(1, dst.Height);
-            bool wide = aspect >= 1.0;
+        private static List<Rectangle> ComputeCellsPreset(
+            Rectangle dst,
+            int n,
+            int gutter,
+            CollageLayout preset,
+            LayoutOrientation orientation)
+        {
+            List<Rectangle> res = new List<Rectangle>(n);
+            bool wide = ResolveWide(dst.Width, dst.Height, orientation);
 
             if (preset == CollageLayout.One || n == 1)
             {
-                res.Add(Shrink(dst, gutter));
+                res.Add(dst);
                 return res;
             }
 
-            if (preset == CollageLayout.Two || n == 2)
+            if (preset == CollageLayout.Two)
             {
                 if (wide)
                 {
-                    int leftW = (dst.Width - gutter) / 2;
-                    var left = new Rectangle(dst.X, dst.Y, leftW, dst.Height);
-                    var right = new Rectangle(dst.X + leftW + gutter, dst.Y, dst.Width - leftW - gutter, dst.Height);
-                    res.Add(Shrink(left, gutter));
-                    res.Add(Shrink(right, gutter));
+                    int w = (dst.Width - gutter) / 2;
+                    res.Add(new Rectangle(dst.X, dst.Y, w, dst.Height));
+                    res.Add(new Rectangle(dst.X + w + gutter, dst.Y, dst.Width - w - gutter, dst.Height));
                 }
                 else
                 {
-                    int topH = (dst.Height - gutter) / 2;
-                    var top = new Rectangle(dst.X, dst.Y, dst.Width, topH);
-                    var bottom = new Rectangle(dst.X, dst.Y + topH + gutter, dst.Width, dst.Height - topH - gutter);
-                    res.Add(Shrink(top, gutter));
-                    res.Add(Shrink(bottom, gutter));
+                    int h = (dst.Height - gutter) / 2;
+                    res.Add(new Rectangle(dst.X, dst.Y, dst.Width, h));
+                    res.Add(new Rectangle(dst.X, dst.Y + h + gutter, dst.Width, dst.Height - h - gutter));
                 }
                 return res;
             }
 
-            if (preset == CollageLayout.ThreeRow || n == 3)
+            if (preset == CollageLayout.ThreeRow)
             {
-                // Chia 3 cột chắc chắn ≥ 1px, không Shrink đúp gây mất cột
-                int innerG = Math.Max(0, gutter);
-                int wAvail = dst.Width - (2 * innerG);
-
-                int w0 = Math.Max(1, (int)Math.Floor(wAvail / 3.0));
-                int w1 = Math.Max(1, (int)Math.Floor(wAvail / 3.0));
-                int w2 = Math.Max(1, wAvail - w0 - w1);
-
-                int x0 = dst.X;
-                int x1 = x0 + w0 + innerG;
-                int x2 = x1 + w1 + innerG;
-
-                var r0 = new Rectangle(x0, dst.Y, w0, dst.Height);
-                var r1 = new Rectangle(x1, dst.Y, w1, dst.Height);
-                var r2 = new Rectangle(x2, dst.Y, Math.Max(1, dst.Right - x2), dst.Height);
-
-                res.Add(r0);
-                res.Add(r1);
-                res.Add(r2);
+                int w = (dst.Width - gutter * 2) / 3;
+                for (int i = 0; i < 3; i++)
+                    res.Add(new Rectangle(dst.X + i * (w + gutter), dst.Y, w, dst.Height));
                 return res;
             }
 
-            // FourGrid hoặc n >= 4 -> 2x2
-            {
-                int colLW = (dst.Width - gutter) / 2;
-                int rowTopH = (dst.Height - gutter) / 2;
+            int cw = (dst.Width - gutter) / 2;
+            int ch = (dst.Height - gutter) / 2;
 
-                var r00 = new Rectangle(dst.X, dst.Y, colLW, rowTopH);
-                var r01 = new Rectangle(dst.X + colLW + gutter, dst.Y, dst.Width - colLW - gutter, rowTopH);
-                var r10 = new Rectangle(dst.X, dst.Y + rowTopH + gutter, colLW, dst.Height - rowTopH - gutter);
-                var r11 = new Rectangle(dst.X + colLW + gutter, dst.Y + rowTopH + gutter, dst.Width - colLW - gutter, dst.Height - rowTopH - gutter);
-
-                res.Add(Shrink(r00, gutter));
-                res.Add(Shrink(r01, gutter));
-                res.Add(Shrink(r10, gutter));
-                res.Add(Shrink(r11, gutter));
-                return res;
-            }
-        }
-
-        // ----- Layout theo weight (đã an toàn khi itemCount==0) -----
-        private static List<Rectangle> ComputeCellsWeighted(
-            Rectangle dst, IList<ImageItem> items, int n, int gutter)
-        {
-            var res = new List<Rectangle>(Math.Max(0, n));
-            int itemCount = items?.Count ?? 0;
-            n = Math.Max(0, Math.Min(n, Math.Min(itemCount, 4)));
-            if (n == 0) return res;
-
-            double aspect = (double)dst.Width / Math.Max(1, dst.Height);
-            bool wide = aspect >= 1.0;
-
-            // Chuẩn hoá weight
-            float sum = 0f;
-            for (int i = 0; i < n; i++) sum += Math.Max(0f, items[i].Weight);
-            if (sum <= 0f) sum = n;
-
-            Rectangle Shrink(Rectangle r, int pad)
-                => new Rectangle(r.X + pad, r.Y + pad,
-                                 Math.Max(0, r.Width - 2 * pad),
-                                 Math.Max(0, r.Height - 2 * pad));
-
-            if (n == 1)
-            {
-                res.Add(Shrink(dst, gutter));
-            }
-            else if (n == 2)
-            {
-                float w0 = Math.Max(0f, items[0].Weight) / sum;
-
-                if (wide)
-                {
-                    int leftW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * w0));
-                    leftW = Math.Min(leftW, dst.Width - gutter - 1);
-
-                    var left = new Rectangle(dst.X, dst.Y, leftW, dst.Height);
-                    var right = new Rectangle(dst.X + leftW + gutter, dst.Y, dst.Width - leftW - gutter, dst.Height);
-
-                    res.Add(Shrink(left, gutter));
-                    res.Add(Shrink(right, gutter));
-                }
-                else
-                {
-                    int topH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * w0));
-                    topH = Math.Min(topH, dst.Height - gutter - 1);
-
-                    var top = new Rectangle(dst.X, dst.Y, dst.Width, topH);
-                    var bottom = new Rectangle(dst.X, dst.Y + topH + gutter, dst.Width, dst.Height - topH - gutter);
-
-                    res.Add(Shrink(top, gutter));
-                    res.Add(Shrink(bottom, gutter));
-                }
-            }
-            else if (n == 3)
-            {
-                float w0 = Math.Max(0f, items[0].Weight) / sum;
-                float w1 = Math.Max(0f, items[1].Weight) / sum;
-                float w2 = 1f - w0 - w1;
-
-                if (wide)
-                {
-                    int leftW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * w0));
-                    leftW = Math.Min(leftW, dst.Width - gutter - 1);
-
-                    var left = new Rectangle(dst.X, dst.Y, leftW, dst.Height);
-                    int rightW = dst.Width - leftW - gutter;
-
-                    float s = w1 + w2; if (s <= 0f) s = 1f;
-                    int topH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * (w1 / s)));
-                    topH = Math.Min(topH, dst.Height - gutter - 1);
-
-                    var topR = new Rectangle(dst.X + leftW + gutter, dst.Y, rightW, topH);
-                    var botR = new Rectangle(dst.X + leftW + gutter, dst.Y + topH + gutter, rightW, dst.Height - topH - gutter);
-
-                    res.Add(Shrink(left, gutter));   // img0
-                    res.Add(Shrink(topR, gutter));   // img1
-                    res.Add(Shrink(botR, gutter));   // img2
-                }
-                else
-                {
-                    int topH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * (w0 + w1)));
-                    topH = Math.Min(topH, dst.Height - gutter - 1);
-
-                    var top = new Rectangle(dst.X, dst.Y, dst.Width, topH);
-                    var bottom = new Rectangle(dst.X, dst.Y + topH + gutter, dst.Width, dst.Height - topH - gutter);
-
-                    float s = w0 + w1; if (s <= 0f) s = 1f;
-                    int leftW = Math.Max(1, (int)Math.Round((top.Width - gutter) * (w0 / s)));
-                    leftW = Math.Min(leftW, top.Width - gutter - 1);
-
-                    var topL = new Rectangle(top.X, top.Y, leftW, top.Height);
-                    var topR = new Rectangle(top.X + leftW + gutter, top.Y, top.Width - leftW - gutter, top.Height);
-
-                    res.Add(Shrink(topL, gutter));   // img0
-                    res.Add(Shrink(topR, gutter));   // img1
-                    res.Add(Shrink(bottom, gutter)); // img2
-                }
-            }
-            else // n >= 4 -> 2x2
-            {
-                float w0 = Math.Max(0f, items[0].Weight);
-                float w1 = Math.Max(0f, items[1].Weight);
-                float w2 = Math.Max(0f, items[2].Weight);
-                float w3 = Math.Max(0f, items[3].Weight);
-                float total = w0 + w1 + w2 + w3; if (total <= 0f) total = 4f;
-
-                float colLRatio = (w0 + w2) / total;
-                int colLW = Math.Max(1, (int)Math.Round((dst.Width - gutter) * colLRatio));
-                colLW = Math.Min(colLW, dst.Width - gutter - 1);
-
-                float rowTopRatio = (w0 + w1) / total;
-                int rowTopH = Math.Max(1, (int)Math.Round((dst.Height - gutter) * rowTopRatio));
-                rowTopH = Math.Min(rowTopH, dst.Height - gutter - 1);
-
-                var r00 = new Rectangle(dst.X, dst.Y, colLW, rowTopH);
-                var r01 = new Rectangle(dst.X + colLW + gutter, dst.Y, dst.Width - colLW - gutter, rowTopH);
-                var r10 = new Rectangle(dst.X, dst.Y + rowTopH + gutter, colLW, dst.Height - rowTopH - gutter);
-                var r11 = new Rectangle(dst.X + colLW + gutter, dst.Y + rowTopH + gutter, dst.Width - colLW - gutter, dst.Height - rowTopH - gutter);
-
-                res.Add(Shrink(r00, gutter)); // 0
-                res.Add(Shrink(r01, gutter)); // 1
-                res.Add(Shrink(r10, gutter)); // 2
-                res.Add(Shrink(r11, gutter)); // 3
-            }
-
+            res.Add(new Rectangle(dst.X, dst.Y, cw, ch));
+            res.Add(new Rectangle(dst.X + cw + gutter, dst.Y, dst.Width - cw - gutter, ch));
+            res.Add(new Rectangle(dst.X, dst.Y + ch + gutter, cw, dst.Height - ch - gutter));
+            res.Add(new Rectangle(dst.X + cw + gutter, dst.Y + ch + gutter,
+                                  dst.Width - cw - gutter, dst.Height - ch - gutter));
             return res;
         }
 
-        // ====== Vẽ ảnh (trả về vùng đã vẽ) ======
+        private static List<Rectangle> ComputeCellsWeighted(
+            Rectangle dst,
+            int n,
+            int gutter,
+            LayoutOrientation orientation)
+        {
+            // giữ đơn giản: reuse preset Two theo orientation
+            return ComputeCellsPreset(dst, n, gutter, CollageLayout.Two, orientation);
+        }
 
+        // ================= DRAW =================
         private static Rectangle DrawImageCover(Graphics g, Bitmap bmp, Rectangle dst)
         {
-            if (bmp == null || dst.Width <= 0 || dst.Height <= 0) return Rectangle.Empty;
+            float sx = (float)dst.Width / bmp.Width;
+            float sy = (float)dst.Height / bmp.Height;
+            float scale = Math.Max(sx, sy);
 
-            float scaleX = (float)dst.Width / bmp.Width;
-            float scaleY = (float)dst.Height / bmp.Height;
-            float scale = Math.Max(scaleX, scaleY);
+            int cw = (int)(dst.Width / scale);
+            int ch = (int)(dst.Height / scale);
 
-            int cropW = Math.Max(1, (int)Math.Round(dst.Width / scale));
-            int cropH = Math.Max(1, (int)Math.Round(dst.Height / scale));
-            int cropX = (bmp.Width - cropW) / 2;
-            int cropY = (bmp.Height - cropH) / 2;
+            int cx = (bmp.Width - cw) / 2;
+            int cy = (bmp.Height - ch) / 2;
 
-            cropX = Math.Max(0, Math.Min(cropX, Math.Max(0, bmp.Width - cropW)));
-            cropY = Math.Max(0, Math.Min(cropY, Math.Max(0, bmp.Height - cropH)));
-
-            var srcRect = new Rectangle(cropX, cropY, cropW, cropH);
-            g.DrawImage(bmp, dst, srcRect, GraphicsUnit.Pixel);
-            return dst; // cover: viền trùng cell
+            g.DrawImage(bmp, dst, new Rectangle(cx, cy, cw, ch), GraphicsUnit.Pixel);
+            return dst;
         }
 
         private static Rectangle DrawImageContain(Graphics g, Bitmap bmp, Rectangle dst)
         {
-            if (bmp == null || dst.Width <= 0 || dst.Height <= 0) return Rectangle.Empty;
-
             float sx = (float)dst.Width / bmp.Width;
             float sy = (float)dst.Height / bmp.Height;
             float scale = Math.Min(sx, sy);
 
-            int nw = Math.Max(1, (int)Math.Round(bmp.Width * scale));
-            int nh = Math.Max(1, (int)Math.Round(bmp.Height * scale));
+            int w = (int)(bmp.Width * scale);
+            int h = (int)(bmp.Height * scale);
 
-            int x = dst.X + (dst.Width - nw) / 2;
-            int y = dst.Y + (dst.Height - nh) / 2;
+            Rectangle r = new Rectangle(
+                dst.X + (dst.Width - w) / 2,
+                dst.Y + (dst.Height - h) / 2,
+                w, h);
 
-            var drawRect = new Rectangle(x, y, nw, nh);
-            g.DrawImage(bmp, drawRect, new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
-            return drawRect; // contain: viền ôm sát ảnh thực vẽ
+            g.DrawImage(bmp, r);
+            return r;
         }
 
-        // ====== Utils ======
-
+        // ================= UTILS =================
         private static Bitmap DeepCopyBitmap(Bitmap src)
         {
-            if (src == null || src.Width <= 0 || src.Height <= 0) return null;
-            var dst = new Bitmap(src.Width, src.Height, PixelFormat.Format24bppRgb);
-            dst.SetResolution(src.HorizontalResolution, src.VerticalResolution);
-            using (var g = Graphics.FromImage(dst))
+            Bitmap bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.SmoothingMode = SmoothingMode.None;
-                g.DrawImage(src, new Rectangle(0, 0, src.Width, src.Height));
+                g.DrawImage(src, 0, 0);
             }
-            return dst;
+            return bmp;
         }
-
-        private static Bitmap NormalizeLongestSide(Bitmap src, int longest, bool disposeInput)
-        {
-            if (src == null) return null;
-            if (longest <= 0) return src;
-
-            int w = src.Width, h = src.Height;
-            int maxSide = Math.Max(w, h);
-            if (maxSide <= longest) return src;
-
-            float scale = (float)longest / maxSide;
-            int nw = Math.Max(1, (int)Math.Round(w * scale));
-            int nh = Math.Max(1, (int)Math.Round(h * scale));
-
-            var dst = new Bitmap(nw, nh, PixelFormat.Format24bppRgb);
-            dst.SetResolution(96, 96);
-            using (var g = Graphics.FromImage(dst))
-            {
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.SmoothingMode = SmoothingMode.None;
-                g.DrawImage(src, new Rectangle(0, 0, nw, nh));
-            }
-            if (disposeInput) src.Dispose();
-            return dst;
-        }
-
-       // private void OnPictureBoxResize(object sender, EventArgs e) => Render();
 
         public void Dispose()
         {
-           // if (_autoRerenderOnResize) _pb.Resize -= OnPictureBoxResize;
+            if (DisposeOnSwap && _pb.Image != null)
+                _pb.Image.Dispose();
 
-            if (DisposeOnSwap) _pb.Image?.Dispose();
             _pb.Image = null;
 
-            foreach (var it in _items)
-                if (it?.Owned == true) it.Bmp?.Dispose();
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (_items[i].Owned && _items[i].Bmp != null)
+                    _items[i].Bmp.Dispose();
+            }
             _items.Clear();
         }
     }

@@ -215,19 +215,19 @@ namespace BeeInterface
             _rbResult.Checked = true;
 
             // row1
-            _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            
             _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             _row1Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             _row1Flow.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            _row1Flow.Controls.Add(_lbDate, 0, 0);
-            _row1Flow.Controls.Add(_cbDate, 1, 0);
-            _row1Flow.Controls.Add(_lblFrom, 2, 0);
-            _row1Flow.Controls.Add(_dtFrom, 3, 0);
-            _row1Flow.Controls.Add(_lblTo, 4, 0);
-            _row1Flow.Controls.Add(_dtTo, 5, 0);
+         //   _row1Flow.Controls.Add(_lbDate, 0, 0);
+            _row1Flow.Controls.Add(_cbDate, 0, 0);
+            _row1Flow.Controls.Add(_lblFrom, 1, 0);
+            _row1Flow.Controls.Add(_dtFrom, 2, 0);
+            _row1Flow.Controls.Add(_lblTo, 3, 0);
+            _row1Flow.Controls.Add(_dtTo, 4, 0);
 
             // row2
             _row2Flow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));

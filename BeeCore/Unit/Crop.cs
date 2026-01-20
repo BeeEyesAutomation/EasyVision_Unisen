@@ -27,6 +27,7 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public int IndexCCD = 0;
         public int IndexThread;
         public void SetModel()
         {
@@ -53,13 +54,17 @@ namespace BeeCore
    
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
-       
+        [NonSerialized]
+        public bool IsNew = false;
         public TypeCrop TypeCrop;
       [NonSerialized]
       private bool IsDone1=false,  IsDone2 = false,  IsDone3 = false,  IsDone4 = false;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             if (PathSaveImage != "")
             {
@@ -71,9 +76,9 @@ namespace BeeCore
                         if (!matProcess.IsDisposed)
                         if (!matProcess.Empty())
                             matProcess.Release();
-                    if (rectRotate != null)
+                    if (rotArea != null)
                     {
-                        matProcess = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rectRotate, null);
+                        matProcess = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask);
                         String path = PathSaveImage + "\\" + Global.Project + "\\" + Common.PropetyTools[Global.IndexChoose][Index].Name + "_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + ".png";
                         string dir = PathSaveImage + "\\" + Global.Project;
                         if (!Directory.Exists(dir))

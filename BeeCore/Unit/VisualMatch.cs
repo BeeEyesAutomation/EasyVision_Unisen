@@ -31,11 +31,15 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap bmRaw;
         public ModeCalibVisualMatch ModeCalibVisualMatch = ModeCalibVisualMatch.Normal;
@@ -135,7 +139,7 @@ namespace BeeCore
         {
             ColorPixel = new ColorPixel();
             rotCrop = null;
-            rotMask = null;
+           
             if (rotArea == null)
                 rotArea = new RectRotate();
             if(bmRaw != null)
@@ -164,34 +168,31 @@ namespace BeeCore
         float OffsetX, OffsetY, OffsetAngle;
         bool IsAlign = false;
         public bool IsMultiCPU = false;
-        public void DoWork(RectRotate rectRotate)
+        [NonSerialized]
+        public bool IsNew = false;
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
 
             try
             {
                 pxRS=0;
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
-                    //if (raw.Channels() == 3)
-                    //    Cv2.CvtColor(raw, raw, ColorConversionCodes.BGR2GRAY);
-                    //Cv2.Threshold(raw, raw, ThreshBinary, 255, ThresholdTypes.Binary);
-                  
+
                     if (raw.Type() == MatType.CV_8UC1)
                     {
                         Cv2.CvtColor(raw, raw, ColorConversionCodes.GRAY2BGR);
                     }
-                    var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                     ColorPixel.SetImgeRaw(raw.Data, raw.Width, raw.Height, (int)raw.Step(), raw.Channels(), rrCli,rrMaskCli);
 
                     if (raw.Empty()) return;
-
-                   
                     int w = 0, h = 0, s = 0, c = 0;
                     IsAlign = ModeCalibVisualMatch == ModeCalibVisualMatch.OFF ? false : true;
-                    IntPtr intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise,Aspect/100.0f, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
+                    IntPtr intpr = ColorPixel.CheckImageFromMat(IsAlign,(int) ModeCalibVisualMatch, IsMultiCPU, ColorTolerance, SzClearNoise,Aspect, out pxRS,ref OffsetX, ref OffsetY, ref OffsetAngle, out w, out h, out s, out c);
                     matProcess = new Mat();
 
                     if (intpr != IntPtr.Zero)
@@ -209,6 +210,8 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
+
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "VisalMatch", ex.ToString()));
             }
             finally
             {

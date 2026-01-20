@@ -380,11 +380,11 @@ namespace BeeInterface
             //    else
             //        Propety.rotAreaAdjustment = Propety.rotArea;
             //    Propety.rotAreaAdjustment._rectRotation = 0;
-            //    Propety.Matching(Global.IsRun, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, indexTool, Propety.rotAreaAdjustment);
+            //    Propety.Matching(Global.IsRun, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw, indexTool, Propety.rotAreaAdjustment);
 
             //}
             //else
-            //    Propety.Matching(Global.IsRun, BeeCore.Common.listCamera[Global.IndexChoose].matRaw, indexTool, Propety.rotArea);
+            //    Propety.Matching(Global.IsRun, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw, indexTool, Propety.rotArea);
         }
         Bitmap bmResult ;
         private void threadProcess_DoWork(object sender, DoWorkEventArgs e)

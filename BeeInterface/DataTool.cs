@@ -41,7 +41,6 @@ namespace BeeInterface
                             BeeCore.Common.listCamera.Add(new Camera(paraCamera, indexCCD));
                         else
                             BeeCore.Common.listCamera.Add(null);
-
                         indexCCD++;
                     }
                 X: if (BeeCore.Common.listCamera.Count() != 4)
@@ -67,14 +66,20 @@ namespace BeeInterface
                     }
                 }
             }
-                //Global.Config.SizeCCD = Camera.GetSzCCD();
-                BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
+            BeeCore.Common.PropetyTools = LoadData.Project(NameProject);
             if (BeeCore.Common.PropetyTools.Count == 0)
             {
                 BeeCore.Common.PropetyTools = new List<List<PropetyTool>> { new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>(), new List<PropetyTool>() };
-                //  G.listAlltool = new List<List<Tools>> { new List<Tools>(), new List<Tools>(), new List<Tools>(), new List<Tools>() };
-
+              
             }
+            for (int i = 0; i < BeeCore.Common.PropetyTools.Count; i++)
+                if (i >= Global.Config.NumTrig)
+                {
+                    BeeCore.Common.PropetyTools[i] = null;
+                    BeeCore.Common.listCamera[i] = null;
+                }    
+                    
+
 
             for (int i = 0; i < BeeCore.Common.PropetyTools.Count; i++)
             {   if(BeeCore.Common.PropetyTools[i]!=null)
@@ -114,24 +119,24 @@ namespace BeeInterface
                         {
                             dynamic control = DataTool.CreateControls(PropTool, i, indexThread, new Point(Global.pShowTool.X, Global.pShowTool.Y));
                             ItemTool Itemtool = DataTool.CreateItemTool(PropTool, i, indexThread, new Point(Global.pShowTool.X, Global.pShowTool.Y));
-
                             Global.pShowTool.Y += Itemtool.Height + 10;
                             PropTool.ItemTool = Itemtool;
                             PropTool.Propety.IndexThread = indexThread;
                             PropTool.Control = control;
                             DataTool.LoadPropety(PropTool.Control);
+                            if (PropTool.TypeTool == TypeTool.OCR)
+                                PropTool.Propety.SetModelOCR();
                         }
                         catch (Exception ex)
                         {
                             String s = ex.Message;
                         }
-
                         i++;
                     }
 
                 }
 
-                if (Global.Config.IsMultiCamera == false)
+                if (Global.Config.IsMultiProg == false)
                     break;
 
                 indexThread++;
@@ -160,21 +165,22 @@ namespace BeeInterface
             //}
             foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
             {
+                if (ListTool == null) continue;
 
-                Parallel.ForEach(ListTool, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, propety =>
+              foreach(PropetyTool propety in ListTool)
                 {
                     if (propety != null)
                         if (propety.Propety != null)
                             propety.Propety.SetModel();
-                });
-                if (Global.Config.IsMultiCamera == false)
+                }
+                if (Global.Config.IsMultiProg == false)
                     break;
             }
 
             Global.IsLoadProgFist = true;
 
         }
-        public static dynamic New(TypeTool typeTool)
+        public static dynamic New(TypeTool typeTool,bool IsNew=false)
         {
             dynamic control = null;
             switch (typeTool)
@@ -197,7 +203,7 @@ namespace BeeInterface
                     control = new ToolYolo();
                     break;
                 case TypeTool.OCR:
-                    control = new ToolOCR();
+                    control = new ToolOCR(IsNew);
                     break;
                 case TypeTool.BarCode:
                     control = new ToolBarcode();
@@ -312,7 +318,7 @@ namespace BeeInterface
 
 
          
-            dynamic control = New(TypeTool);
+            dynamic control = New(TypeTool,true);
 
             try
             {
@@ -321,8 +327,9 @@ namespace BeeInterface
                
                 control.Propety.Index = Index;
                 System.Drawing.Size szImg = Global.Config.SizeCCD;
+                control.Propety.IndexThread = IndexThread;
               
-              
+
 
 
                 control.Name =Nametool;

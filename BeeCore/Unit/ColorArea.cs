@@ -32,11 +32,13 @@ namespace BeeCore
         {
 
         }
-
+        public int IndexCCD = 0;
         public object Clone()
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsClose = false;
         public bool IsOpen = false;
         public bool IsClearNoiseBig = false;
@@ -57,11 +59,13 @@ namespace BeeCore
         public TypeCrop TypeCrop;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
-        
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
 
-        
-      
+
+
         [NonSerialized]
         public  BeeCpp.ColorArea ColorAreaPP;
 
@@ -102,7 +106,6 @@ namespace BeeCore
            
             if (rotArea == null) rotArea = new RectRotate();
 
-            rotMask = null;
             rotCrop = null;
             ColorAreaPP = new BeeCpp.ColorArea();
             SetColor();
@@ -252,10 +255,10 @@ namespace BeeCore
 
         public bool IsCalib;
      public   int pxRS = 0;
-        public void DoWork(RectRotate rotCrop)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
 
-            pxRS= CheckColor(rotCrop);
+            pxRS= CheckColor(rotArea);
 
         }
         public void Complete()
@@ -322,7 +325,7 @@ namespace BeeCore
 
             if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
 
-            using (Mat src =BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat src =BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (src.Empty()) return -1;
 

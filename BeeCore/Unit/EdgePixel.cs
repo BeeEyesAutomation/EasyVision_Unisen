@@ -35,14 +35,19 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsIni = false;
         public int Index = -1;
-      
+        public int IndexCCD = 0;
         [NonSerialized]
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
@@ -149,17 +154,17 @@ namespace BeeCore
 
             return filled;
         }
-        public void DoWork( RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
 
 
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
 
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
@@ -275,9 +280,11 @@ namespace BeeCore
 
         public void SetModel()
         {
-            rotMask = null;
+          
             rotCrop = null;
-           
+            rotMask = null;
+           // if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotArea == null) rotArea = new RectRotate();
             Common.PropetyTools[IndexThread][Index].StepValue =1f;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
           

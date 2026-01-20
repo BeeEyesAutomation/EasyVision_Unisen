@@ -45,8 +45,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-        
-     
+
+        [NonSerialized]
+        public bool IsNew = false;
         public String pathFullModel = "";
         [NonSerialized]
         public Mat matTemp;
@@ -116,7 +117,7 @@ namespace BeeCore
             ListTempBarcode = new List<string>();
             ListTempBarcode.Add(rot.Name);
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 matTemp = Cropper.CropRotatedRect(raw,rot, null);
               
@@ -135,7 +136,7 @@ namespace BeeCore
             }
             else
             {
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     ListTempBarcode = new List<string>();
                     List<Bitmap> bitmaps = new List<Bitmap>();
@@ -212,7 +213,7 @@ namespace BeeCore
         public void SetMulTemp()
         {
             List<Bitmap> bitmaps = new List<Bitmap>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 rotArea = rotCrop.Clone();
                 rotArea._dragAnchor = AnchorPoint.None;
@@ -276,8 +277,10 @@ namespace BeeCore
       
         public RectRotate rotArea, rotCrop,rotTemp, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
-
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public List<RectRotate> listRotScan = new List<RectRotate>();
         public Bitmap bmRaw;
@@ -301,7 +304,7 @@ namespace BeeCore
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
         public List<float> list_AngleCenter = new List<float>();
         public List<double> listScore = new List<double>();
-
+        public int IndexCCD = 0;
         public void Scan()
         {
 
@@ -311,7 +314,7 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
@@ -459,7 +462,7 @@ namespace BeeCore
             Global.StatusDraw = StatusDraw.None;
             Global.StatusDraw = StatusDraw.Scan;
         }
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
@@ -467,7 +470,7 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
@@ -486,7 +489,7 @@ namespace BeeCore
                     {
                         matProcess = raw; // reuse backing store
                     }
-                    var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                    var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                     RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                     var cli = new BarcodeCoreCli();
                     var opts = DetectOptionsCli.Defaults();
@@ -527,8 +530,8 @@ namespace BeeCore
                             rectRotates.Add(rect);
                             list_AngleCenter.Add(rotArea._rectRotation + angle);
                             listP_Center.Add(new System.Drawing.Point(
-                                (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-                                (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                                (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X),
+                                (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y)));
                             i++; 
                         }
 
@@ -581,7 +584,7 @@ namespace BeeCore
                 {
                 if (rectRotates.Count() > 0)
                     AutoTemp(rectRotates);
-                DoWork(rotAreaAdjustment);
+                DoWork(rotAreaAdjustment,rotMaskAdjustment);
                 //if (rectRotates.Count() > 0)
                 //{
 

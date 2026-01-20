@@ -617,21 +617,21 @@ namespace BeeInterface
                 Global.Config.IsOnLight = true;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 await TimingUtils.DelayAccurateAsync((int)Global.Comunication.Protocol.DelayTrigger);
-                BeeCore.Common.listCamera[Global.IndexChoose].Read();
-                if( BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera==TypeCamera.USB)
-                BeeCore.Common.listCamera[Global.IndexChoose].Read();
+                BeeCore.Common.listCamera[Global.IndexCCCD].Read();
+                if( BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera==TypeCamera.USB)
+                BeeCore.Common.listCamera[Global.IndexCCCD].Read();
                 Global.Config.IsOnLight = false;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw == null) return;
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty()) return;
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw == null) return;
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty()) return;
                 var autoName = NextAutoName();
                 if(IsChange && _items.Count > 0)
                 {
-                    UpdateSelectedItemImage(BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone());
+                    UpdateSelectedItemImage(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone());
 
                 }
                 else
-                    AddItem(new ImgItem(autoName, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Clone()));
+                    AddItem(new ImgItem(autoName, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone()));
             }
             catch (Exception ex)
             {

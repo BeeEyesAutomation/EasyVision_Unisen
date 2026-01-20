@@ -40,10 +40,13 @@ namespace BeeInterface
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
             btnTriggerMulti.IsCLick = !Global.Config.IsOnlyTrigger;
             btnTriggerOne.IsCLick = Global.Config.IsOnlyTrigger;
-
+            btnDisPLC.IsCLick = Global.IsDisnablePLc; ;
+            if (btnDisPLC.IsCLick)
+                btnDisPLC.Text = "ON";
+            else btnDisPLC.Text = "OFF";
             numTrigger.Value = Global.Config.NumTrig;
-            btnMulti.IsCLick = Global.Config.IsMultiCamera;
-            btnSingle.IsCLick = !Global.Config.IsMultiCamera;
+            btnMulti.IsCLick = Global.Config.IsMultiProg;
+            btnSingle.IsCLick = !Global.Config.IsMultiProg;
             switch (Global.Config.TypeSave)
             {
                 case 1: btnSmall.IsCLick = true; break;
@@ -104,6 +107,8 @@ namespace BeeInterface
             btnSaveGraphic.IsCLick = Global.Config.IsSaveParaShow;
             btnSaveImgRegister.IsCLick = Global.Config.IsSaveListRegister;
             btnSaveListImgSim.IsCLick = Global.Config.IsSaveListSim;
+            btnIsWaitingResultTotal.IsCLick=Global.Config.IsWaitResultTotal;
+            ShowNo();
         }
 
 
@@ -157,12 +162,12 @@ namespace BeeInterface
 
         private void btnMulti_Click(object sender, EventArgs e)
         {
-            Global.Config.IsMultiCamera = btnMulti.IsCLick;
+            Global.Config.IsMultiProg = btnMulti.IsCLick;
         }
 
         private void btnSingle_Click(object sender, EventArgs e)
         {
-            Global.Config.IsMultiCamera = !btnSingle.IsCLick;
+            Global.Config.IsMultiProg = !btnSingle.IsCLick;
         }
 
 
@@ -457,6 +462,58 @@ namespace BeeInterface
         private void btnSaveCommon_Click(object sender, EventArgs e)
         {
             Global.Config.IsSaveCommon = btnSaveCommon.IsCLick;
+        }
+
+        private void btnIsWaitingResultTotal_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsWaitResultTotal = btnIsWaitingResultTotal.IsCLick;
+        }
+        public void ShowNo()
+        {
+            lbListNo.Text = "";
+            foreach (ProgNo no in Global.ListProgNo)
+            {
+                lbListNo.Text += no.No + "." + no.Name+"\n";
+            }
+        }
+        private void btnImportProgNo_Click(object sender, EventArgs e)
+        {
+            Global.ListProgNo = new List<ProgNo>();
+            if (openFileDialog.ShowDialog()==DialogResult.OK)
+            {
+                String[] sConent=File.ReadAllLines(openFileDialog.FileName);
+                foreach (String s in sConent)
+                {
+                   String[] col = s.Split('\t');
+                    String Name = col[1].Replace("_", "").Trim();
+                    int No = 0;
+                    if (int.TryParse(col[0], out No))
+                        Global.ListProgNo.Add(new ProgNo(No, Name));
+
+                }
+                if (Global.ListProgNo.Count > 0)
+                    SaveData.ProgNo(Global.ListProgNo);
+                ShowNo();
+            }    
+        }
+
+        private async void btnDisPLC_Click(object sender, EventArgs e)
+        {
+            Global.IsDisnablePLc = btnDisPLC.IsCLick;
+            if (btnDisPLC.IsCLick) btnDisPLC.Text = "ON";
+            else btnDisPLC.Text = "OFF";
+            if(Global.Comunication.Protocol.IsConnected)
+            {
+                Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], btnDisPLC.IsCLick);
+                await Global.Comunication.Protocol.WriteOutPut();
+
+            }
+            else
+            {
+                btnDisPLC.IsCLick = false;
+                btnDisPLC.Text = "OFF";
+            }
+
         }
     }
 }

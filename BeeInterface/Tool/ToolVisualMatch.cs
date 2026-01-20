@@ -73,6 +73,7 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             AdjAspect.Value= Propety.Aspect;
+            lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
         }
 
         private void btnCropRect_Click(object sender, EventArgs e)
@@ -90,6 +91,8 @@ namespace BeeInterface
 
         private void btnCropArea_Click(object sender, EventArgs e)
         {
+            Global.StatusDraw = StatusDraw.Check;
+            lay2Mask.Visible = false;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
@@ -102,6 +105,8 @@ namespace BeeInterface
         }
         private void btnClear_Click(object sender, EventArgs e)
         {
+            Global.StatusDraw = StatusDraw.Check;
+            lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;
             if (Propety.rotMask == null)
@@ -112,8 +117,8 @@ namespace BeeInterface
             btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
             btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
             btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+            btnWhite.IsCLick = Propety.rotMask.IsWhite;
+            btnBlack.IsCLick = !Propety.rotMask.IsWhite;
 
 
         }
@@ -300,6 +305,9 @@ namespace BeeInterface
                 case TypeCrop.Crop:
                     Propety.rotCrop.IsWhite = btnWhite.IsCLick;
                     break;
+                case TypeCrop.Mask:
+                    Propety.rotMask.IsWhite = btnWhite.IsCLick;
+                    break;
             }
 
         }
@@ -313,6 +321,9 @@ namespace BeeInterface
                     break;
                 case TypeCrop.Crop:
                     Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
+                    break;
+                case TypeCrop.Mask:
+                    Propety.rotMask.IsWhite =!btnBlack.IsCLick;
                     break;
             }
 
@@ -406,7 +417,7 @@ namespace BeeInterface
             if (Propety.rotArea != null)
                 if (Propety.rotArea._rect.Width != 0 && Propety.rotArea._rect.Height != 0)
                 {
-                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
+                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
                     imgTemp.Image = Propety.bmRaw;
                 }
 
@@ -425,7 +436,8 @@ namespace BeeInterface
         bool IsFullSize = false;
         private void btnCropHalt_Click(object sender, EventArgs e)
         {
-           Global.TypeCrop= TypeCrop.Area;
+            Global.TypeCrop = TypeCrop.None;
+            Global.TypeCrop= TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
             IsFullSize = false;
             Propety.rotArea = Propety.rotAreaTemp.Clone();
@@ -439,8 +451,8 @@ namespace BeeInterface
             Propety.rotAreaTemp = Propety.rotArea.Clone();
             Propety.rotArea = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
 
-            
-           Global.TypeCrop= TypeCrop.Area;
+            Global.TypeCrop = TypeCrop.None;
+            Global.TypeCrop= TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
             Global.StatusDraw = StatusDraw.Check;
@@ -573,7 +585,7 @@ namespace BeeInterface
             lay22.Visible = !btn2.IsCLick;
             lay23.Visible = !btn2.IsCLick;
             lay24.Visible = !btn2.IsCLick;
-            lay25.Visible = !btn2.IsCLick;
+            
         }
 
         private void rjButton1_Click(object sender, EventArgs e)

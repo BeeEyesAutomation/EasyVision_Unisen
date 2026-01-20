@@ -18,6 +18,7 @@ namespace BeeCore
         {
 
         }
+        public int IndexCamera = 0;
         public String Name = "";
         public dynamic Propety;
         public TypeTool TypeTool;
@@ -110,7 +111,7 @@ namespace BeeCore
             Propety.rotAreaAdjustment = Propety.rotArea;
            if (Propety.rotAreaAdjustment==null)
                 Propety.rotAreaAdjustment = Propety.rotArea;
-            Propety.DoWork(Propety.rotAreaAdjustment);
+            Propety.DoWork(Propety.rotAreaAdjustment, Propety.rotMaskAdjustment);
         }
         public void Complete()
         {

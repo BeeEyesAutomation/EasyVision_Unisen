@@ -27,15 +27,25 @@ namespace BeeUi.Unit
             saveFile.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Program";
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
-                Directory.CreateDirectory("Program\\" + Global.Project);
-                Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
-              //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                String pathNew = Path.GetFileNameWithoutExtension(saveFile.FileName);
+                if (!Directory.Exists(pathNew))
+                {
+                    Batch.CopyAndRename("Program\\"+Global.Project,  pathNew);
+                    Global.Project = pathNew;// Path.GetFileNameWithoutExtension(saveFile.FileName);
+                                             // Directory.CreateDirectory("Program\\" + Global.Project);
+                                             //   Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
+                                             //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
-               G.Header.RefreshListPJ();
-                Global.IsLoadProgFist = true;
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                    G.Header.RefreshListPJ();
+                    Global.IsLoadProgFist = true;
+                    if (!G.Header.workLoadProgram.IsBusy)
+                        G.Header.workLoadProgram.RunWorkerAsync();
+                }
+                else
+                {
+                    FormWarning formWarning = new FormWarning("Copy Prog", "A program with this name already exists!");
+                    formWarning.ShowDialog();
+                }
                 //PathFile = files.Select(a => Path.GetFileName(a)).ToArray();
                 //items = PathFile.ToList();
                 //IsLoad=true;
@@ -106,14 +116,47 @@ namespace BeeUi.Unit
             }
 
         }
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             btnSave.Enabled = false;
-            if (!G.Header.workSaveProject.IsBusy)
-                G.Header.workSaveProject.RunWorkerAsync();
+            using (var dlg = new SaveProgressDialog("Save Program"))
+            {
+                dlg.SetStatus("Saving Program " + Global.Project + "..." , "Writing data to file...");
+                dlg.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - dlg.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - dlg.Height / 2);
 
-            //MessageBox.Show("Save Program Success");
+                dlg.Show(this);          // modeless
+                //dlg.BringToFront();
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        SaveData.Project(Global.Project);
+                    });
+
+                    if (dlg.CancelRequested)
+                    {
+                        dlg.SetStatus("Cancelled", "You have cancelled the save operation.");
+                        dlg.MarkCompleted("Cancelled", "No data was written.");
+                    }
+                    else
+                    {
+                        btnSave.Enabled = true;
+                        dlg.MarkCompleted("Save completed", "Program " + Global.Project);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dlg.SetStatus("Save error", ex.Message);
+                    dlg.MarkCompleted("Error", "Please click OK to close.");
+                }
+
+            }
         }
+      
+          
+           
+        
       public  int OldWidth = 0;
         private void btnMenu_Click(object sender, EventArgs e)
         {
@@ -172,17 +215,19 @@ namespace BeeUi.Unit
         {
             if (MessageBox.Show(" Rename Prog To " + G.Header.txtQrCode.Text+ " .Are you sure!", "Rename Prog", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-               if( Directory.Exists("Program\\"+Global.Project))
+                String newName = G.Header.txtQrCode.Text.Trim();
+                if ( Directory.Exists("Program\\"+Global.Project) && !Directory.Exists("Program\\" + newName))
                 {
-                    String newName = G.Header.txtQrCode.Text.Trim();
-                    Directory.Move("Program\\" + Global.Project, "Program\\" + newName);
                    
-                    if (File.Exists("Program\\" + newName + "\\"+Global.Project+ ".cam"))
-                        File.Move("Program\\" + newName + "\\" + Global.Project + ".cam", "Program\\" + newName + "\\" + newName + ".cam");
-                    if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".para"))
-                        File.Move("Program\\" + newName + "\\" + Global.Project + ".para", "Program\\" + newName + "\\" + newName + ".para");
-                    if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".prog"))
-                        File.Move("Program\\" + newName + "\\" + Global.Project + ".prog", "Program\\" + newName + "\\" + newName + ".prog");
+                    Batch.RenameRootFolderAndFiles("Program\\" + Global.Project, newName);
+                    //Directory.Move("Program\\" + Global.Project, "Program\\" + newName);
+                   
+                    //if (File.Exists("Program\\" + newName + "\\"+Global.Project+ ".cam"))
+                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".cam", "Program\\" + newName + "\\" + newName + ".cam");
+                    //if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".para"))
+                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".para", "Program\\" + newName + "\\" + newName + ".para");
+                    //if (File.Exists("Program\\" + newName + "\\" + Global.Project + ".prog"))
+                    //    File.Move("Program\\" + newName + "\\" + Global.Project + ".prog", "Program\\" + newName + "\\" + newName + ".prog");
              
                    
                     G.listProgram.Visible = false;

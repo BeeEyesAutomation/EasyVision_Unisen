@@ -33,6 +33,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
+        public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
         [NonSerialized]
@@ -41,7 +44,10 @@ namespace BeeCore
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
@@ -102,18 +108,18 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-       
-        
-   
 
-       
-        public void DoWork( RectRotate rectRotate)
+
+
+
+
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
                 if (ParallelGapDetector == null) ParallelGapDetector = new ParallelGapDetector();
                 WidthResult = 0;
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
                     if (IsCalibs | MaxLen == 0)
@@ -121,7 +127,7 @@ namespace BeeCore
                         MinInliers = 2;
 
                     }
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
@@ -162,7 +168,7 @@ namespace BeeCore
                             PointF p2 = new PointF(GapResult.lineMid[1].X, GapResult.lineMid[1].Y);
                             float Xmin = Math.Min(p1.X, p2.X); float Ymin = Math.Min(p1.Y, p2.Y);
                             PointF pCenter = new PointF(Xmin + Math.Abs(p1.X - p2.X) / 2, Ymin + Math.Abs(p1.Y - p2.Y) / 2);
-                            listP_Center.Add(new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)pCenter.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)pCenter.Y));
+                            listP_Center.Add(new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)pCenter.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)pCenter.Y));
                             rectRotates.Add(new RectRotate());
                         }
                 }

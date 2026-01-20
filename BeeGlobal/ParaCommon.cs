@@ -71,6 +71,9 @@ namespace BeeGlobal
       
        // public List<String> NameCCDs = new List<string>();
         public Bitmap matRegister;
-      //  public Bitmap matSample;
+        public Bitmap matRegister2;
+        public Bitmap matRegister3;
+        public Bitmap matRegister4;
+        //  public Bitmap matSample;
     }
 }

@@ -35,7 +35,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
-       
+        [NonSerialized]
+        public bool IsNew = false;
+        public int IndexCCD = 0;
         [NonSerialized]
         public Mat matProcess=new Mat();
         public int MaxCircles = 2;
@@ -47,7 +49,10 @@ namespace BeeCore
         public int Index = -1;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp,matMask;
         public List<OpenCvSharp.Point> Postion=new List<OpenCvSharp.Point>();
@@ -90,7 +95,7 @@ namespace BeeCore
         public bool IsCalibs = false;
         public CircleScanDirection CircleScanDirection = CircleScanDirection.InsideOut;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
-        public void DoWork( RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
@@ -104,16 +109,16 @@ namespace BeeCore
                     MinRadius = 0;
                     MaxRadius = 10000;
                 }
-                    using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                    using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
                     Mat matCrop = new Mat();
                     PatchCropContext ctx=new PatchCropContext();
                    
-                    if (rectRotate.Shape == ShapeType.Ellipse)
-                        matCrop = Cropper.CropOuterPatch(raw, rectRotate, out ctx);
+                    if (rotArea.Shape == ShapeType.Ellipse)
+                        matCrop = Cropper.CropOuterPatch(raw, rotArea, out ctx);
                     else
-                        matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                        matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                     if(matProcess==null) matProcess = new Mat();
                     if (!matProcess.IsDisposed)
                         if (!matProcess.Empty()) matProcess.Dispose();
@@ -132,8 +137,8 @@ namespace BeeCore
                             matProcess = Filters.Threshold(matCrop, ThresholdBinary, ThresholdTypes.BinaryInv);
                             break;
                     }
-                    if (rectRotate.Shape == ShapeType.Ellipse)
-                        matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rectRotate, rotMask, returnMaskOnly: false);
+                    if (rotArea.Shape == ShapeType.Ellipse)
+                        matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                     //Cv2.ImWrite("CropCircle.png", matProcess);
                     var circles = RansacCircleFitter.DetectCircles(
                    matProcess,

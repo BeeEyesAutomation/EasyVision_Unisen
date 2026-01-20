@@ -26,6 +26,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        public int IndexCCD = 0; 
+        [NonSerialized]
+        public bool IsNew = false;
         public void SetModel()
         {
             rotMask = null;
@@ -83,13 +86,16 @@ namespace BeeCore
         public List<Tuple<String, int>> listPointChoose = new List<Tuple<String, int>>();
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
     
      
       [NonSerialized]
       private bool IsDone1=false,  IsDone2 = false,  IsDone3 = false,  IsDone4 = false;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
         X: Common.PropetyTools[Global.IndexChoose][Index].Results = Results.OK;
           

@@ -174,7 +174,7 @@ namespace BeeInterface
             {
                 Global.CameraStatus = CameraStatus.Reconnect;
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Retry", "Reconnect CCD"));
-                if ( BeeCore.Common.listCamera[Global.IndexChoose].ReConnect2())
+                if ( BeeCore.Common.listCamera[Global.IndexCCCD].ReConnect2())
                 {
                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Retry", "Success"));
 

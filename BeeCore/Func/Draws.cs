@@ -1110,7 +1110,7 @@ Pen outlinePen)
             g.Transform = oldTransform;
             g.SmoothingMode = oldSmoothing;
         }
-        public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw,Image ImageRotate, int WidthPoint, System.Drawing.Point posAutoScroll,float zoom, System.Drawing.Point pMouse, int Thiness = 2)
+        public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw, int WidthPoint, System.Drawing.Point posAutoScroll,float zoom, System.Drawing.Point pMouse, int Thiness = 2)
         {
             if (RectDraw == null) return;
             //RectangleF _rect = new RectangleF(); ;

@@ -808,8 +808,8 @@ namespace BeeInterface
                 return;
             }
 
-            float imageWidth = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width;
-            float imageHeight = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height;
+            float imageWidth = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Width;
+            float imageHeight = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Height;
 
             RotatedRect rrect = new RotatedRect(
                 new Point2f(Propety.rotCrop._PosCenter.X, Propety.rotCrop._PosCenter.Y),
@@ -818,7 +818,7 @@ namespace BeeInterface
             );
 
             Mat matCrop = BeeCore.Cropper.CropRotatedRect(
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw,
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw,
                 Propety.rotCrop, null
             );
 
@@ -946,7 +946,7 @@ namespace BeeInterface
                         Directory.CreateDirectory(pathLabel);
 
                         string fullImagePath = Path.Combine(pathImage, imageName);
-                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.SaveImage(fullImagePath);
+                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.SaveImage(fullImagePath);
 
                         string fullLabelPath = Path.Combine(pathLabel, labelName);
                         File.WriteAllLines(fullLabelPath, listLabelTrainYolo);
@@ -956,8 +956,8 @@ namespace BeeInterface
 
                         string lb = SaveYoloRects(
                             Propety.rectTrain,
-                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Width,
-                            BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Height, new List<string>(),
+                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Width,
+                            BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Height, new List<string>(),
                             Propety.labelItems
                                     );
 
@@ -971,7 +971,7 @@ namespace BeeInterface
                         Directory.CreateDirectory(pathLabel);
 
                         string fullImagePath = Path.Combine(pathImage, imageName);
-                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.SaveImage(fullImagePath);
+                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.SaveImage(fullImagePath);
 
                         string fullLabelPath = Path.Combine(pathLabel, labelName);
                         File.WriteAllText(fullLabelPath, lb + string.Join("", listLabelTrainYolo));
@@ -1285,13 +1285,13 @@ namespace BeeInterface
             OpenFileDialog openFile = new OpenFileDialog();
             if (openFile.ShowDialog() == DialogResult.OK)
             {
-                if (BeeCore.Common.listCamera[Global.IndexChoose].matRaw != null)
-                    if (!BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Empty())
-                        BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Release();
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
+                    if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                        BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Release();
                
-                BeeCore.Common.listCamera[Global.IndexChoose].matRaw = Cv2.ImRead(openFile.FileName);
+                BeeCore.Common.listCamera[Global.IndexCCCD].matRaw = Cv2.ImRead(openFile.FileName);
               
-              Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexChoose].matRaw.ToBitmap();
+              Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
 
 
                 strImgName =Path.GetFileNameWithoutExtension( openFile.FileName);

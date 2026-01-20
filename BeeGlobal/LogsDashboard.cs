@@ -40,7 +40,7 @@ namespace BeeGlobal
     {
         private readonly VScrollBar _vscroll = new VScrollBar();
         private readonly List<LogEntry> _items = new List<LogEntry>();
-        private int _rowHeight = 20;
+        private int _rowHeight = 40;
         private Font _boldFont;
         private int _firstVisibleIndex;
         private bool _autoScroll = true;
@@ -671,7 +671,7 @@ namespace BeeGlobal
         {
             _canvas.SetBottomPadding(10);
             _canvas.Dock = DockStyle.Fill;
-            _canvas.SetRowHeight(24);
+            _canvas.SetRowHeight(45);
             _canvas.SetColumns(130, 50, 50);
             _canvas.AutoScrollToEnd = _autoScrollToEnd;
         }

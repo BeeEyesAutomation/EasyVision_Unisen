@@ -80,7 +80,7 @@ namespace BeeUi
             if (Global.ScanCCD.cbCCD.SelectedIndex == -1)
 
             {
-                String NameCamera = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name.Split('$')[0];
+                String NameCamera = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name.Split('$')[0];
                 MessageBox.Show("Connect Failed Camera" + NameCamera + "!");
                 Global.ScanCCD.Show();
                 return;
@@ -129,12 +129,12 @@ namespace BeeUi
                 FormActive.CheckActive(addMac);
                 if (G.IsActive)
                 {
-                    if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != null)
-                        if (BeeCore.Common.listCamera[Global.IndexChoose].Para.Name != "")
+                    if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name != null)
+                        if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name != "")
                         {
                             if (Global.ScanCCD == null) Global.ScanCCD = new ScanCCD();
 
-                            int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[Global.IndexChoose].Para.Name));
+                            int indexCCD = listCCD.FindIndex(a => a.Contains(BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name));
                             // G.ScanCCD.cbReSolution.SelectedIndex = G.ScanCCD.cbReSolution.FindStringExact(Global.Config.Resolution);
 
                             if (indexCCD != -1)
@@ -159,11 +159,14 @@ namespace BeeUi
         }
         List<String> listCCD;
 
-        private void TmLoad_Tick(object sender, EventArgs e)
+        private async void TmLoad_Tick(object sender, EventArgs e)
         {
+
+      
             Global.Project =Properties.Settings.Default.programCurrent.Replace(".prog", "");
 
             Global.Config = LoadData.Config();
+            Global.ListProgNo = LoadData.ProgNo();
             Global.ParaCommon = LoadData.Para(Global.Project);
             if (Global.Config.RoundRad == 0)Global.Config.RoundRad = 10;
             tmLoad.Enabled = false;
@@ -195,8 +198,14 @@ namespace BeeUi
 
         }
 
-        private void FormLoad_Load(object sender, EventArgs e)
+        private async void FormLoad_Load(object sender, EventArgs e)
         {
+            //BeeCore.Common.libreTranslate = new LibreTranslateClient("http://localhost:5000");
+            //if (!await BeeCore.Common.libreTranslate.PingAsync())
+            //{
+            //    MessageBox.Show("LibreTranslate chưa chạy!");
+            //    return;
+            //}
             _styles = new ControlStylePersistence(this, "LoadTheme")
             {
                 LoadImmediately = true

@@ -33,6 +33,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
+        public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
         [NonSerialized]
@@ -43,7 +46,10 @@ namespace BeeCore
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
         public List<RectRotate> rectRotates = new List<RectRotate>();
@@ -91,24 +97,24 @@ namespace BeeCore
             if (G.IniEdge) return;
            
         }
-       
-        
-   
 
-       
-       
-        
-     
-     
-        
-       
-        public void DoWork( RectRotate rectRotate)
+
+
+
+
+
+
+
+
+
+
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
 
                
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
                   

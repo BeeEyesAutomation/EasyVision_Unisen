@@ -61,11 +61,11 @@ namespace BeeUi
                 lbStatus.Text = "Đang kiểm tra DLL...";
                 progressBar.Value = 0;
                 lbList.Items.Clear();
-                if(! await HasInternetByHttpAsync())
-                {
-                    MessageBox.Show("Please Check Internet !");
-                    return;
-                }    
+                //if(! await HasInternetByHttpAsync())
+                //{
+                //    MessageBox.Show("Please Check Internet !");
+                //    return;
+                //}    
                 var progress = new Progress<(int percent, string status)>(p =>
                 {
                     progressBar.Value = p.percent;

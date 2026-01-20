@@ -36,8 +36,8 @@ namespace BeeUi.Unit
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btncheck = new BeeInterface.RJButton();
             this.btnSetting = new BeeInterface.RJButton();
-            this.btnUser = new BeeInterface.RJButton();
             this.btnReport = new BeeInterface.RJButton();
+            this.btnUser = new BeeInterface.RJButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -105,8 +105,9 @@ namespace BeeUi.Unit
             this.btncheck.ImageTintOpacity = 0.5F;
             this.btncheck.ImageTintPressed = System.Drawing.Color.Empty;
             this.btncheck.IsCLick = false;
-            this.btncheck.IsNotChange = false;
+            this.btncheck.IsNotChange = true;
             this.btncheck.IsRect = false;
+            this.btncheck.IsTouch = false;
             this.btncheck.IsUnGroup = true;
             this.btncheck.Location = new System.Drawing.Point(97, 0);
             this.btncheck.Margin = new System.Windows.Forms.Padding(0);
@@ -147,7 +148,7 @@ namespace BeeUi.Unit
             this.btnSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSetting.FlatAppearance.BorderSize = 0;
             this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
             this.btnSetting.ForeColor = System.Drawing.Color.Black;
             this.btnSetting.Image = global::BeeUi.Properties.Resources.Support;
             this.btnSetting.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -165,6 +166,7 @@ namespace BeeUi.Unit
             this.btnSetting.IsCLick = false;
             this.btnSetting.IsNotChange = false;
             this.btnSetting.IsRect = false;
+            this.btnSetting.IsTouch = false;
             this.btnSetting.IsUnGroup = true;
             this.btnSetting.Location = new System.Drawing.Point(291, 0);
             this.btnSetting.Margin = new System.Windows.Forms.Padding(0);
@@ -177,64 +179,6 @@ namespace BeeUi.Unit
             this.btnSetting.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSetting.UseVisualStyleBackColor = false;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
-            // 
-            // btnUser
-            // 
-            this.btnUser.AutoFont = true;
-            this.btnUser.AutoFontHeightRatio = 0.85F;
-            this.btnUser.AutoFontMax = 100F;
-            this.btnUser.AutoFontMin = 10F;
-            this.btnUser.AutoFontWidthRatio = 1F;
-            this.btnUser.AutoImage = true;
-            this.btnUser.AutoImageMaxRatio = 0.65F;
-            this.btnUser.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnUser.AutoImageTint = true;
-            this.btnUser.BackColor = System.Drawing.Color.White;
-            this.btnUser.BackgroundColor = System.Drawing.Color.White;
-            this.btnUser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUser.BackgroundImage")));
-            this.btnUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnUser.BorderColor = System.Drawing.Color.White;
-            this.btnUser.BorderRadius = 5;
-            this.btnUser.BorderSize = 1;
-            this.btnUser.ClickBotColor = System.Drawing.Color.White;
-            this.btnUser.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnUser.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnUser.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnUser.Corner = BeeGlobal.Corner.None;
-            this.btnUser.DebounceResizeMs = 16;
-            this.btnUser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnUser.FlatAppearance.BorderSize = 0;
-            this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.btnUser.ForeColor = System.Drawing.Color.Black;
-            this.btnUser.Image = global::BeeUi.Properties.Resources.User;
-            this.btnUser.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnUser.ImageDisabled = null;
-            this.btnUser.ImageHover = null;
-            this.btnUser.ImageNormal = null;
-            this.btnUser.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnUser.ImagePressed = null;
-            this.btnUser.ImageTextSpacing = 2;
-            this.btnUser.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnUser.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnUser.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnUser.ImageTintOpacity = 0.5F;
-            this.btnUser.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnUser.IsCLick = false;
-            this.btnUser.IsNotChange = false;
-            this.btnUser.IsRect = false;
-            this.btnUser.IsUnGroup = true;
-            this.btnUser.Location = new System.Drawing.Point(0, 0);
-            this.btnUser.Margin = new System.Windows.Forms.Padding(0);
-            this.btnUser.Multiline = false;
-            this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(97, 53);
-            this.btnUser.TabIndex = 32;
-            this.btnUser.Text = "Account";
-            this.btnUser.TextColor = System.Drawing.Color.Black;
-            this.btnUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnUser.UseVisualStyleBackColor = false;
-            this.btnUser.Click += new System.EventHandler(this.btnUser_Click);
             // 
             // btnReport
             // 
@@ -279,8 +223,9 @@ namespace BeeUi.Unit
             this.btnReport.ImageTintOpacity = 0.5F;
             this.btnReport.ImageTintPressed = System.Drawing.Color.Empty;
             this.btnReport.IsCLick = false;
-            this.btnReport.IsNotChange = false;
+            this.btnReport.IsNotChange = true;
             this.btnReport.IsRect = false;
+            this.btnReport.IsTouch = false;
             this.btnReport.IsUnGroup = true;
             this.btnReport.Location = new System.Drawing.Point(194, 0);
             this.btnReport.Margin = new System.Windows.Forms.Padding(0);
@@ -293,6 +238,65 @@ namespace BeeUi.Unit
             this.btnReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnReport.UseVisualStyleBackColor = false;
             this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            // 
+            // btnUser
+            // 
+            this.btnUser.AutoFont = true;
+            this.btnUser.AutoFontHeightRatio = 0.85F;
+            this.btnUser.AutoFontMax = 100F;
+            this.btnUser.AutoFontMin = 10F;
+            this.btnUser.AutoFontWidthRatio = 1F;
+            this.btnUser.AutoImage = true;
+            this.btnUser.AutoImageMaxRatio = 0.65F;
+            this.btnUser.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnUser.AutoImageTint = true;
+            this.btnUser.BackColor = System.Drawing.Color.White;
+            this.btnUser.BackgroundColor = System.Drawing.Color.White;
+            this.btnUser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUser.BackgroundImage")));
+            this.btnUser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnUser.BorderColor = System.Drawing.Color.White;
+            this.btnUser.BorderRadius = 5;
+            this.btnUser.BorderSize = 1;
+            this.btnUser.ClickBotColor = System.Drawing.Color.White;
+            this.btnUser.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnUser.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnUser.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnUser.Corner = BeeGlobal.Corner.None;
+            this.btnUser.DebounceResizeMs = 16;
+            this.btnUser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnUser.FlatAppearance.BorderSize = 0;
+            this.btnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.35156F);
+            this.btnUser.ForeColor = System.Drawing.Color.Black;
+            this.btnUser.Image = global::BeeUi.Properties.Resources.User;
+            this.btnUser.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnUser.ImageDisabled = null;
+            this.btnUser.ImageHover = null;
+            this.btnUser.ImageNormal = null;
+            this.btnUser.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnUser.ImagePressed = null;
+            this.btnUser.ImageTextSpacing = 2;
+            this.btnUser.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnUser.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnUser.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnUser.ImageTintOpacity = 0.5F;
+            this.btnUser.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnUser.IsCLick = false;
+            this.btnUser.IsNotChange = true;
+            this.btnUser.IsRect = false;
+            this.btnUser.IsTouch = false;
+            this.btnUser.IsUnGroup = true;
+            this.btnUser.Location = new System.Drawing.Point(0, 0);
+            this.btnUser.Margin = new System.Windows.Forms.Padding(0);
+            this.btnUser.Multiline = false;
+            this.btnUser.Name = "btnUser";
+            this.btnUser.Size = new System.Drawing.Size(97, 53);
+            this.btnUser.TabIndex = 32;
+            this.btnUser.Text = "Account";
+            this.btnUser.TextColor = System.Drawing.Color.Black;
+            this.btnUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnUser.UseVisualStyleBackColor = false;
+            this.btnUser.Click += new System.EventHandler(this.btnUser_Click);
             // 
             // BtnHeaderBar
             // 

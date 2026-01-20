@@ -189,9 +189,10 @@ namespace BeeCore
                 {
                     return finalMask.Clone();
                 }
-
+                bool isWhite = false;
+                if (rotMask!=null)
                 // Nền (trắng/đen) — giữ tương thích tham số IsWhite cũ
-                bool isWhite = whiteBackground ? true : rot.IsWhite;
+                 isWhite = whiteBackground ? true : rotMask.IsWhite;
                 Scalar bg = isWhite
                     ? new Scalar(255, 255, 255, 255)
                     : new Scalar(0, 0, 0, 0);
@@ -268,7 +269,7 @@ namespace BeeCore
                 DrawShapeMaskIntoWithSize(rot, cropMask, patchCenter, angleInPatchCrop, 255,
                                           (int)Math.Round(rectSize.Width), (int)Math.Round(rectSize.Height),
                                           localCenterForShape);
-
+                Scalar bg= new Scalar(0, 0, 0, 0);
                 // 6) Mask loại trừ (nếu có)
                 if (rotMask != null)
                 {
@@ -297,6 +298,7 @@ namespace BeeCore
 
                     finalMask = new Mat();
                     Cv2.BitwiseAnd(cropMask, mask2, finalMask);
+                    bg = rotMask.IsWhite ? new Scalar(255, 255, 255, 255) : new Scalar(0, 0, 0, 0);
                 }
                 else
                 {
@@ -307,7 +309,7 @@ namespace BeeCore
                     return finalMask.Clone();
 
                 // 7) Áp mask lên nền
-                Scalar bg = rot.IsWhite ? new Scalar(255, 255, 255, 255) : new Scalar(0, 0, 0, 0);
+             
                 bgMat = new Mat(patch.Size(), patch.Type(), bg);
                 result = bgMat.Clone();
                 patch.CopyTo(result, finalMask);

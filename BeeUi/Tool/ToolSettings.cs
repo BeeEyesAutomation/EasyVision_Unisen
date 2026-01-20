@@ -82,17 +82,21 @@ namespace BeeUi.Tool
         {
             if (btnEnEdit.IsCLick)
             {
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+              foreach (List< PropetyTool> List in BeeCore.Common.PropetyTools)
+                if(List!=null)
+                foreach (PropetyTool propetyTool in List)
                 {
                     propetyTool.ItemTool.IsEdit = true;
                 }
             }
             else
             {
-                foreach (PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
-                {
-                    propetyTool.ItemTool.IsEdit = false;
-                }
+                foreach (List<PropetyTool> List in BeeCore.Common.PropetyTools)
+                    if (List != null)
+                        foreach (PropetyTool propetyTool in List)
+                        {
+                            propetyTool.ItemTool.IsEdit = false;
+                        }
             }
         }
      

@@ -36,7 +36,7 @@ namespace BeeInterface
             worker = new BackgroundWorker();
             worker.DoWork += (sender, e) =>
             {
-                Propety.DoWork();
+              //  Propety.DoWork();
             };
 
             worker.RunWorkerCompleted += (sender, e) =>

@@ -69,7 +69,9 @@ namespace BeeCore
         }
 
 
-
+        public static  void InitialTranslate()
+        {
+        }
 
         public static RectangleF GetBoundingBox(RectRotate rr)
         {
@@ -172,9 +174,9 @@ namespace BeeCore
         {
             return Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
         }
-        public static RectRotate GetPositionAdjustment(RectRotate rotOrigin, RectRotate rotTemp)
+        public static RectRotate GetPositionAdjustment(RectRotate rotOrigin, RectRotate rotTemp,float XAdj,float YAdj,float AngAdj)
         {
-            System.Drawing.Size sz = BeeCore.Common.listCamera[Global.IndexChoose].GetSzCCD();
+            System.Drawing.Size sz = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
             RectRotate rot = new RectRotate();
             rot.Shape = rotOrigin.Shape;
             rot.PolyLocalPoints=rotOrigin.PolyLocalPoints;
@@ -182,8 +184,8 @@ namespace BeeCore
             rot.IsWhite = rotOrigin.IsWhite;
            
             rot._rect = rotOrigin._rect;
-            rot._rectRotation = rotOrigin._rectRotation + Global.angle_Adjustment;
-            PointF pPos = new PointF(rotTemp._PosCenter.X + Global.X_Adjustment, rotTemp._PosCenter.Y + Global.Y_Adjustment);
+            rot._rectRotation = rotOrigin._rectRotation + AngAdj;
+            PointF pPos = new PointF(rotTemp._PosCenter.X + XAdj, rotTemp._PosCenter.Y + YAdj);
             double DeltaX = rotOrigin._PosCenter.X - rotTemp._PosCenter.X;
             double DeltaY = rotOrigin._PosCenter.Y - rotTemp._PosCenter.Y;
             int dauX = 1; int dauY = 1;
@@ -200,13 +202,13 @@ namespace BeeCore
             //    angle1 = - angle1;
             //if(angle1<0) angle1 = 360 + angle1;
             double distance = GetDistance(rotOrigin._PosCenter.X, rotOrigin._PosCenter.Y, rotTemp._PosCenter.X, rotTemp._PosCenter.Y);
-            double angle2 = angle1 - Global.angle_Adjustment;
+            double angle2 = angle1 - AngAdj;
             if (DeltaX > 0 && DeltaY < 0)
-                angle2 = angle1 - Global.angle_Adjustment;
+                angle2 = angle1 - AngAdj;
             else if (DeltaX > 0 && DeltaY > 0)
-                angle2 = -angle1 - Global.angle_Adjustment;
+                angle2 = -angle1 - AngAdj;
             else if (DeltaX < 0 && DeltaY < 0)
-                angle2 = angle1 + Global.angle_Adjustment;
+                angle2 = angle1 + AngAdj;
             // else if (DeltaX < 0 && DeltaY > 0)
             //     angle2 = -angle1- G.angle_Adjustment;
             double cos1 = Math.Cos((angle2) * Math.PI / 180);

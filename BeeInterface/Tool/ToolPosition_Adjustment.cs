@@ -33,8 +33,8 @@ namespace BeeInterface
             {
                 imgTemp.Image = Propety.bmRaw;
             }
-            if (Propety.rotPositionAdjustment != null)
-               Global.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
+          //  if (Propety.rotPositionAdjustment != null)
+              // Propety.rotOriginAdj = new RectRotate(Propety.rotCrop._rect, new PointF(Propety.rotArea._PosCenter.X - Propety.rotArea._rect.Width / 2 + Propety.rotPositionAdjustment._PosCenter.X, Propety.rotArea._PosCenter.Y - Propety.rotArea._rect.Height / 2 + Propety.rotPositionAdjustment._PosCenter.Y), Propety.rotPositionAdjustment._rectRotation, AnchorPoint.None);
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             trackAngle.Value = (int)Propety.Angle;
             if (Propety.Angle > 360) Propety.Angle = 360;
@@ -57,7 +57,6 @@ namespace BeeInterface
             AdjOpen.Value = Propety.SizeOpen;
             AdjClearNoise.Value = Propety.SizeClearsmall;
             AdjClearBig.Value = Propety.SizeClearBig;
-
             btnClose.IsCLick = Propety.IsClose;
             btnOpen.IsCLick = Propety.IsOpen;
             btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
@@ -71,6 +70,7 @@ namespace BeeInterface
             switch (Propety.MethodSample)
             {
                 case MethodSample.Pattern:
+                    btnCalib.Visible = false;
                     layThreshod.Visible = false;
                     layEdge.Visible = false;
                     lbEdge.Visible = false;
@@ -81,6 +81,7 @@ namespace BeeInterface
                     trackAngle.Visible = true;
                     break;
                 case MethodSample.Corner:
+                    btnCalib.Visible = true;
                     layThreshod.Visible = true;
                     layEdge.Visible = true;
                     lbEdge.Visible = true;
@@ -91,6 +92,7 @@ namespace BeeInterface
                     trackAngle.Visible = false;
                     break;
                 case MethodSample.Edge:
+                    btnCalib.Visible = false;
                     layThreshod.Visible = true;
                     layEdge.Visible = true;
                     lbEdge.Visible = true;
@@ -150,6 +152,7 @@ namespace BeeInterface
         
         private void btnCropRect_Click(object sender, EventArgs e)
         {
+            Global.StatusDraw = StatusDraw.Check;
             Global.TypeCrop= TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
 
@@ -157,7 +160,8 @@ namespace BeeInterface
 
         private void btnCropArea_Click(object sender, EventArgs e)
         {
-          Global.TypeCrop= TypeCrop.Area;
+            Global.StatusDraw = StatusDraw.Check;
+            Global.TypeCrop= TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
         }
@@ -362,7 +366,7 @@ namespace BeeInterface
                 if (Propety.rotCrop != null)
                     if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
                     {
-                    Propety.bmRaw = Propety.LearnPattern( BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(),false).ToBitmap();
+                    Propety.bmRaw = Propety.LearnPattern( BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(),false).ToBitmap();
                     imgTemp.Image = Propety.bmRaw;
                     }
            
@@ -519,6 +523,7 @@ namespace BeeInterface
 
         private void btnPattern_Click(object sender, EventArgs e)
         {
+            btnCalib.Visible = false;
             Propety.MethodSample=MethodSample.Pattern;
             layThreshod.Visible =false;
             layEdge.Visible =false;
@@ -531,6 +536,7 @@ namespace BeeInterface
 
         private void btnCorner_Click(object sender, EventArgs e)
         {
+            btnCalib.Visible = true;
             Propety.MethodSample = MethodSample.Corner;
             layThreshod.Visible = true;
             layEdge.Visible = true;
@@ -543,6 +549,7 @@ namespace BeeInterface
 
         private void btnEdge_Click(object sender, EventArgs e)
         {
+            btnCalib.Visible = false;
             Propety.MethodSample = MethodSample.Edge;
             layPattern.Visible = false;
             lbPattern.Visible = false;

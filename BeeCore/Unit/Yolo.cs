@@ -34,7 +34,8 @@ namespace BeeCore
         public int _Percent = 0;//note
         [field: NonSerialized]
         public event Action<int> PercentChange;
-
+        [NonSerialized]
+        public bool IsNew = false;
         public int Percent
         {
             get => _Percent;
@@ -215,7 +216,10 @@ namespace BeeCore
         public TypeTool TypeTool=TypeTool.Learning;
         public RectRotate rotArea, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp, matTemp2, matMask;
         public List<String> Labels = new List<string>();
@@ -263,14 +267,7 @@ namespace BeeCore
         [NonSerialized]
         public List<RectRotate> rectTrain = new List<RectRotate>();
         String[] sSplit;
-        //[NonSerialized]
-        //public List<float> listScore = new List<float>();
-        //[NonSerialized]
-        //public List<double> listArea = new List<double>();
-        //[NonSerialized]
-        //public List<bool> listOK = new List<bool>();
-        //[NonSerialized]
-        //public List<string> listLabel = new List<string>();
+        
         public List<string> listModels = new List<string>();
         String listMatch;
         public bool IsCheckLine = false;
@@ -283,18 +280,17 @@ namespace BeeCore
         public String Matching = "";
         public bool IsEnContent = false;
 
-        //List<RectRotate> boxList = new List<RectRotate>();
-        //List<float> scoreList = new List<float>();
-        //List<string> labelList = new List<string>();
         [NonSerialized]
         List<ResultItem> resultTemp = new List<ResultItem>();
         public int IndexThread = 0;
+        public int IndexCCD = 0;
         public float CropOffSetX, CropOffSetY=0;
         [NonSerialized]
         private Mat matCropTemp;
         public FilterBox FilterBox = FilterBox.Merge;
         public float ThreshOverlap = 0.1f;
-        public void DoWork(RectRotate rotCrop)
+
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             if (!Global.IsIntialPython) return;
 
@@ -314,12 +310,10 @@ namespace BeeCore
                     CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
 
                     // === Crop ROI ===
-                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotCrop, null))
+                    using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                     {
                         if (matCrop.Empty()) return;
-                      
-                        // --- Chuẩn hoá về 8-bit, 3 kênh BGR ---
-                        // 1) nếu depth != 8U => scale về 8U
+
                         if (matCrop.Type().Depth != MatType.CV_8U)
                         {
                             using (var tmp8u = new Mat())
@@ -544,12 +538,7 @@ namespace BeeCore
                     try
                     {
                         ResultItem = new List<ResultItem>();
-                        //listArea = new List<double>();
-                        //listOK = new List<bool>();
-                        //listLabel = new List<string>();
                         rectRotates = new List<RectRotate>();
-                       // listScore = new List<float>();
-                        // cycleTime = (int)G.YoloPlus.Cycle;
                         Common.PropetyTools[IndexThread][Index].Results = Results.OK;
                         int i = 0;
                         numOK = 0; numNG = 0;

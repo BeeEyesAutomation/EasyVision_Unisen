@@ -50,7 +50,10 @@ namespace BeeCore
        
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
         public int ThresholdBinary;
@@ -64,6 +67,7 @@ namespace BeeCore
         public int SizeClearBig = 1;
         public int SizeClose = 1;
         public int SizeOpen = 1;
+        public int IndexCCD = 0;
         public string AddPLC = "";
         public TypeSendPLC TypeSendPLC = TypeSendPLC.Float;
         [NonSerialized]
@@ -285,6 +289,8 @@ namespace BeeCore
               
             }
         }
+        [NonSerialized]
+        public bool IsNew = false;
         private bool isAutoTrig;
         private int numOK;
         private int delayTrig;
@@ -465,7 +471,7 @@ namespace BeeCore
         public ZeroPos ZeroPos=ZeroPos.Zero;
         public float Scale = 1;
         public bool IsLimitCouter = true;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
             // 5) Gom kết quả
@@ -473,7 +479,7 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
                 if (raw.Type() == MatType.CV_8UC3)
@@ -491,7 +497,7 @@ namespace BeeCore
                 {
                     // 1) Crop ROI
 
-                    //  matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                    //  matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
 
                     // 2) Tiền xử lý theo chế độ
                     switch (TypeMode)
@@ -500,7 +506,7 @@ namespace BeeCore
                            
                                 matProcess = raw; // reuse backing store
                             
-                            var rrCli = Converts.ToCli(rectRotate); // như ở reply trước
+                            var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                             RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
 
                             Pattern.SetImgeRaw(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels(), rrCli, rrMaskCli);
@@ -512,7 +518,7 @@ namespace BeeCore
                         case Mode.Edge:
                             Mat matCrop = new Mat();                               
                                 PatchCropContext ctx = new PatchCropContext();
-                                matCrop = Cropper.CropOuterPatch(raw, rectRotate, out ctx);
+                                matCrop = Cropper.CropOuterPatch(raw, rotArea, out ctx);
                                 if (matProcess == null) matProcess = new Mat();
                                 if (!matProcess.IsDisposed)
                                     if (!matProcess.Empty()) matProcess.Dispose();
@@ -533,7 +539,7 @@ namespace BeeCore
                                         break;
                                 }
 
-                                matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rectRotate, rotMask, returnMaskOnly: false);
+                                matProcess = ApplyShapeMaskAndCompose(matProcess, ctx, rotArea, rotMask, returnMaskOnly: false);
                             //Cv2.ImWrite("process.png", matProcess);
                                 Pattern.SetRawNoCrop(matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(), matProcess.Channels());
 
@@ -590,8 +596,8 @@ namespace BeeCore
                                 pCenter, angle, AnchorPoint.None));
 
                             listScore.Add(Math.Round(score, 1));
-                            int xCenter = (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X);
-                            int yCenter = (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y);
+                            int xCenter = (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X);
+                            int yCenter = (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y);
                             float angleCenter = rotArea._rectRotation + angle;
                             
                             if (ZeroPos==ZeroPos.Zero)
@@ -602,12 +608,12 @@ namespace BeeCore
                             }
                             else
                             {
-                                angleCenter = angleCenter - Global.rotOriginAdj._rectRotation;
-                                xCenter = xCenter-(int) Global.rotOriginAdj._PosCenter.X;
-                                yCenter = yCenter - (int)Global.rotOriginAdj._PosCenter.Y;
-                                list_AngleCenter.Add(angleCenter);
-                                listP_Center.Add(new System.Drawing.Point(
-                                 (int)(xCenter / Scale), (int)(yCenter / Scale)));
+                                //angleCenter = angleCenter - Global.rotOriginAdj._rectRotation;
+                                //xCenter = xCenter-(int) Global.rotOriginAdj._PosCenter.X;
+                                //yCenter = yCenter - (int)Global.rotOriginAdj._PosCenter.Y;
+                                //list_AngleCenter.Add(angleCenter);
+                                //listP_Center.Add(new System.Drawing.Point(
+                                // (int)(xCenter / Scale), (int)(yCenter / Scale)));
                             }    
                           
                         }
@@ -836,7 +842,7 @@ namespace BeeCore
 
     //public void Matching( RectRotate rectRotate)
     //    {
-    //        using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+    //        using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
     //        {
 
     //            if (raw.Empty()) return;

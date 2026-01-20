@@ -29,24 +29,28 @@ namespace BeeCore.Funtion
             int row = 0;
             control.RowStyles.Clear(); control.Controls.Clear();
 
-            if (Global.Config.IsMultiCamera)
+            if (Global.Config.IsMultiProg)
             {
                 int i = 0;
                 foreach (List<PropetyTool> ListPropety in BeeCore.Common.PropetyTools)
                 {
+                    if (ListPropety==null)
+                        continue;
                     if (ListPropety.Count() == 0)
                         continue;
+                    int ixFlowChart = i + 1;
+                    Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + ixFlowChart;
                    // Global.ToolSettings.Labels[i].Font = new Font("Arial", 12, FontStyle.Regular);
-                    if (BeeCore.Common.listCamera[0] == null)
-                        Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " (No Camera)";
-                    else
-                    {
-                        int Len = BeeCore.Common.listCamera[i].Para.Name.Length;
-                        if (Len > 20)
-                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name.Substring(0, 20) + "...";
-                        else
-                            Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[i].Para.Name;
-                    }
+                    //if (BeeCore.Common.listCamera[ListPropety[0].IndexCamera] == null)
+                    //    Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " (No Camera)";
+                    //else
+                    //{
+                    //    int Len = BeeCore.Common.listCamera[ListPropety[0].IndexCamera].Para.Name.Length;
+                    //    if (Len > 20)
+                    //        Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[ListPropety[0].IndexCamera].Para.Name.Substring(0, 20) + "...";
+                    //    else
+                    //        Global.ToolSettings.Labels[i].lbGroup.Text = "Follow Chart " + i + " " + BeeCore.Common.listCamera[ListPropety[0].IndexCamera].Para.Name;
+                    //}
                     
 
                     Global.ToolSettings.Labels[i].Height = 40;
@@ -115,7 +119,7 @@ namespace BeeCore.Funtion
                 for (int i = 0; i < Global.Config.NumTrig; i++)
                 {
 
-                    if (Global.Config.NumTrig > 1 || Global.Config.IsMultiCamera)
+                    if (Global.Config.NumTrig > 1 || Global.Config.IsMultiProg)
                     {
 
 
@@ -196,7 +200,7 @@ namespace BeeCore.Funtion
             int row = 0;
             control.RowStyles.Clear();
             control.Controls.Clear();
-
+            if (propetyTool == null) propetyTool = new List<PropetyTool>();
             foreach ( PropetyTool tool in propetyTool )
             {
                 control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));

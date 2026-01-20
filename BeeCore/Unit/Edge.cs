@@ -29,11 +29,14 @@ namespace BeeCore
     public class Edge
     {
         [NonSerialized]
+        public bool IsNew = false;
+        [NonSerialized]
         public Line2D Line;
         public object Clone()
         {
             return this.MemberwiseClone();
         }
+        public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
         [NonSerialized]
@@ -48,7 +51,10 @@ namespace BeeCore
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
@@ -110,19 +116,19 @@ namespace BeeCore
         }
         [NonSerialized]
         private CropPlus CropPlus = new CropPlus();
-        
-   
-        
-       
-        public void DoWork( RectRotate rectRotate)
+
+
+
+
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
           
                 if (matProcess != null) { matProcess.Dispose(); matProcess = null; }
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
               
-                Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, rotMask);
+                Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                 if (matProcess == null) matProcess = new Mat();
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
@@ -165,8 +171,8 @@ namespace BeeCore
                 );
                 PointF p1 = new PointF(Line2DCli.X1, Line2DCli.Y1);
                 PointF p2 = new PointF(Line2DCli.X2, Line2DCli.Y2);
-                System.Drawing.Point pCenter = new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)p1.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)p1.Y);
-                System.Drawing.Point pCenter2 = new System.Drawing.Point((int)rectRotate._PosCenter.X - (int)rectRotate._rect.Width / 2 + (int)p2.X, (int)rectRotate._PosCenter.Y - (int)rectRotate._rect.Height / 2 + (int)p2.Y);
+                System.Drawing.Point pCenter = new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)p1.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)p1.Y);
+                System.Drawing.Point pCenter2 = new System.Drawing.Point((int)rotArea._PosCenter.X - (int)rotArea._rect.Width / 2 + (int)p2.X, (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)p2.Y);
                 listP_Center = new List<System.Drawing.Point>();
                 rectRotates = new List<RectRotate>();
                 listP_Center.Add(pCenter);
@@ -175,7 +181,7 @@ namespace BeeCore
             
 
             }
-            //using (Mat src = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            //using (Mat src = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             //    {
             //        if (src.Empty()) return;
 

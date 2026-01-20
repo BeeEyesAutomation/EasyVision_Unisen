@@ -20,13 +20,15 @@ namespace BeeCore
         public bool ShowHeightsRoot = true;
         public bool ShowHeightLabels = true;
         public bool ShowTitle = true;
-
+        [NonSerialized]
+        public bool IsNew = false;
         // Sizes
         public int CrestRadius = 4;
         public int RootRadius = 3;
         public float LineWidthCenter = 2f;
         public float LineWidthPitch = 2f;
         public float LineWidthHeight = 2f;
+        public int IndexCCD = 0;
 
         // Colors
         public Color CenterlineColor = Color.FromArgb(255, 0, 255);

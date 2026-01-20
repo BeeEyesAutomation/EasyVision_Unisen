@@ -283,9 +283,6 @@
   <data name="Plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Plus_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LogoTeamRound" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LogoTeamRound2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Invert_Colors" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Invert Colors.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -361,9 +358,6 @@
   <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Folder_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="UNISEN_icon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UNISEN_icon1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="EASY1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EASY1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -403,9 +397,6 @@
   <data name="Profile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Profile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LogoAHSo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LogoAHSo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BID_ICON_TOOL_EDIT_E_32BIT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BID_ICON_TOOL_EDIT_E_32BIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -415,23 +406,14 @@
   <data name="Zoom_In_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Zoom In_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="UNISEN LOGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UNISEN LOGO.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Color_Dropper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Color Dropper.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TeamSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TeamSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Record_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Record_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Report" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Statistic Document.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AHSO1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AHSO1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Play_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -441,15 +423,6 @@
   </data>
   <data name="Play_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AHSO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AHSO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="LogoBlueSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LogoBlueSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TeamLong" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TeamLong.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Access_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Access_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -468,5 +441,8 @@
   </data>
   <data name="EASY_LONG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EASY_LONG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rotate1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Rotate.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

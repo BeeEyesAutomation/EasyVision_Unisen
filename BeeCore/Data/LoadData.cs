@@ -126,6 +126,14 @@ namespace BeeCore {
             return config;
 
         }
+        public static List<ProgNo> ProgNo()
+        {
+            List < ProgNo > ProgNo=new List<ProgNo>();
+            if (File.Exists("Common\\ProgNo.no"))
+                ProgNo = Access.LoadProgNo("Common\\ProgNo.no");
+            return ProgNo;
+
+        }
         public static List<ParaCamera> ParaCamera(String Project)
         {
             List<ParaCamera> ParaCam = new List<ParaCamera>();

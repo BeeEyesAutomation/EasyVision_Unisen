@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace BeeGlobal
 {
+    public enum LayoutOrientation
+    {
+        Auto = 0,      // theo aspect canvas (hiện tại)
+        ForceHorizontal,
+        ForceVertical
+    }
     public struct Seg
     {
         public Line2D Line;
@@ -168,7 +174,11 @@ namespace BeeGlobal
     public enum TypeIO
     {
         Input,
-        Output
+        Output,ValueIn,ValueOut
+    }
+    public enum TypeVar
+    {
+        Int,Float,String
     }
     public enum I_O_Input
     {
@@ -182,6 +192,7 @@ namespace BeeGlobal
         ByPass,
         Reset,
         Shuttdown,
+        ChangeProg,
         Prog1,
         Prog2,
         Prog3,
@@ -189,7 +200,22 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive
+        Alive,ResetImg
+    }
+    public enum ValueInput
+    {
+        None,
+        Prog,
+        PO
+    }
+    public enum ValueOutput
+    {
+        None,
+       
+        Total,
+        QtyOK,
+        QtyNG,
+     
     }
     public enum I_O_Output
     {
@@ -198,6 +224,7 @@ namespace BeeGlobal
         Result2,
         Result3,
         Result4,
+        ResultTotal,
         Ready,
         Ready2,
         Ready3,
@@ -218,6 +245,8 @@ namespace BeeGlobal
         Alive,
         Logic5,
         Logic6,
+        DoneCCD1,DoneCCD2, DoneCCD3, DoneCCD4,
+        ByPass
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }
@@ -288,7 +317,7 @@ namespace BeeGlobal
     }
     public enum IO_Processing
     {
-      None,Trigger, Trigger2, Trigger3, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight,SendValue
+      None,Trigger, Trigger2, Trigger3,DoneCCD, Trigger4, Result,Reset,Error,NoneErr,Close,ChangeMode,Light,ChangeProg,ByPass,Busy,TriggerLight,SendValue
     }
     public enum AreaCrop
     {
@@ -374,7 +403,7 @@ namespace BeeGlobal
    
     public enum Results
     {
-        None, OK, NG,ERR, REVERSE,
+        None, OK, NG,ERR, REVERSE,Wait
     }
     public enum Trig
     {
@@ -386,7 +415,7 @@ namespace BeeGlobal
     }
     public enum StatusProcessing
     {
-        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done,Drawing,Waiting
+        None,Trigger,Read,Checking, Adjusting, WaitingDone,SendResult, Done,Drawing,Waiting,ResetImg
     }
     public enum StatusMode
     {

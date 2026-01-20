@@ -38,6 +38,8 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsIni = false;
         public int Index = -1;
         [NonSerialized]
@@ -46,7 +48,10 @@ namespace BeeCore
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
@@ -62,6 +67,7 @@ namespace BeeCore
         public bool IsEnCrestCounter = true;
         public bool IsEnRootCounter = true;
         public Values Values = Values.Mean;
+        public int IndexCCD = 0;
         public LineOrientation LineOrientation = LineOrientation.Vertical;
         public float ValueGau=3;
         public int NumCrestCouter;
@@ -128,16 +134,16 @@ namespace BeeCore
         public bool IsCalib = false;
 
        public bool IsNGCrestPitch, IsNGCrestHeight, IsNGRootPitch, IsNGRootHeight,IsNGCountCrest,IsNGCountRoot;
-        public void DoWork( RectRotate rectRotate)// lay anh raw xong crop dung bo loc, de loc canh
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             try
             {
 
-                using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+                using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                 {
                     if (raw.Empty()) return;
 
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, null);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)

@@ -56,14 +56,19 @@ namespace BeeCore
             AngleLower = angle - Angle;
             AngleUper = angle + Angle;
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsIni = false;
         public int Index = -1;
-
+        public int IndexCCD = 0;
         public int ValueCompare =0;
         public bool IsCalibs = false;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public MethordEdge MethordEdge = MethordEdge.CloseEdges;
         public int ThresholdBinary;
@@ -765,7 +770,7 @@ namespace BeeCore
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
             ResultMulti = new List<ResultMulti>();
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
@@ -1061,7 +1066,7 @@ namespace BeeCore
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
 
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty()) return;
 
@@ -1269,21 +1274,21 @@ namespace BeeCore
 
         public ModeCalibVisualMatch ModeCalibVisualMatch = ModeCalibVisualMatch.Normal;
 
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
                if(Global.IsRun)
             {
-                RunMode(rectRotate);
+                RunMode(rotArea);
             }
             else
             {
                 if (IsCalibs)
 
                 { 
-                    EditMode(rectRotate);
+                    EditMode(rotArea);
                 }
                 else
-                    RunMode(rectRotate);
+                    RunMode(rotArea);
             }
             }
         public int LimitColor = 100;

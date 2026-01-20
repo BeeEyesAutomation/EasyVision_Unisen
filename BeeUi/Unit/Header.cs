@@ -177,7 +177,7 @@ namespace BeeUi.Common
             }
             if (Global.IsRun)
             {
-                if (Global.Config.IsMultiCamera)
+                if (Global.Config.IsMultiProg)
                 {
                     FormChoose formChoose = new FormChoose();
                     formChoose.ShowDialog();
@@ -240,7 +240,7 @@ namespace BeeUi.Common
             string[] files =  Directory.GetDirectories("Program");
           
             PathFile = files.Select(a => Path.GetFileNameWithoutExtension(a)).ToArray();
-            items = PathFile.ToList();
+            listNameProg = PathFile.ToList();
             IsLoad = true;
             G.listProgram.DataSource = PathFile;
         }
@@ -335,6 +335,7 @@ namespace BeeUi.Common
 
 
             }
+            txtPO.Text= Global.Config.POCurrent  ;
             tmShow.Interval = 1000;
            // ThreadPool.SetMinThreads(Environment.ProcessorCount, Environment.ProcessorCount);
             //Acccess(Global.IsRun);
@@ -438,7 +439,7 @@ namespace BeeUi.Common
         }
         String sQrcode = "";
         bool IsInsert2, IsEnter, IsChangetext;
-        List<String> items=new List<String>();
+       public List<String> listNameProg=new List<String>();
         bool IsKeyPress = false;
         List<String> listFilter = new List<string>();
         private void txtQrCode_TextChanged(object sender, EventArgs e)
@@ -472,7 +473,7 @@ namespace BeeUi.Common
                 string filter = txtQrCode.Text.ToLower();
 
             // Lọc danh sách dựa trên chuỗi tìm kiếm
-            listFilter = items.Where(item => item.ToLower().Contains(filter)).ToList();
+            listFilter = listNameProg.Where(item => item.ToLower().Contains(filter)).ToList();
                 IsKeyPress = true;
             // Cập nhật ComboBox với các mục đã lọc
             if (Global.Initialed)
@@ -551,7 +552,7 @@ txtQrCode.Focus();
             {
                 
                 
-                    if(Global.Config.IsSaveCommunication) 
+                    if(!Global.Config.IsSaveCommunication) 
                     if (Global.Comunication.Protocol.IsConnected)
                         Global.Comunication.Protocol.Disconnect();
                     if (Global.Config.IsSaveParaCam)
@@ -601,17 +602,7 @@ txtQrCode.Focus();
            
         }
 
-        private void workSaveProject_DoWork(object sender, DoWorkEventArgs e)
-        {
-       
-        }
-
-        private void workSaveProject_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            SaveData.Project(Global.Project);
-            G.EditProg.btnSave.Enabled = true;
-        }
-
+      
         private void panel3_SizeChanged(object sender, EventArgs e)
         {
           //  txtQrCode.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left;
@@ -683,8 +674,11 @@ txtQrCode.Focus();
                     break;
                 case 1:
                     Global.EditTool.RefreshGuiEdit(Step.Run);
+                    if(Global. IsInitialOCR&&Global.IsOCR)
                     stepShow++;
-                    break;
+                    else
+                        stepShow++;
+                        break;
                 case 2:
                     if (pEdit.Width <= pEdit. btnMenu.Width + 1)
                     {
@@ -694,13 +688,14 @@ txtQrCode.Focus();
                     pEdit.OldWidth = Global.Config.WidthEditProg;
                     stepShow = 0;
                         indexToolShow = 0;
-                    if (BeeCore.Common.listCamera[Global.IndexChoose]!=null)
+                    if (BeeCore.Common.listCamera[Global.IndexCCCD]!=null)
                     {
                         Global.EditTool.View.btnFull.PerformClick();
 
                     }
-                    if (Global.Config.IsSaveCommunication|| Global.IsIntialProgram ==false)
+                    if (!Global.Config.IsSaveCommunication|| Global.IsIntialProgram ==false)
                     {
+                        Global.IsIntialProgram = true;
                         if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
                         if (Global.Comunication.Protocol.IsBypass)
                         {
@@ -737,7 +732,9 @@ txtQrCode.Focus();
                             }
                         }
                     }
+                  
                     Global.IsIntialProgram = true;
+                    txtPO.Text = Global.Config.POCurrent;
 
                     Global.IsChangeProg = false;
                     tmShow.Enabled = false;
@@ -821,12 +818,44 @@ txtQrCode.Focus();
         private void btnEnterPO_Click(object sender, EventArgs e)
         {
             txtPO.Enabled = btnEnterPO.IsCLick;
+            if (btnEnterPO.IsCLick)
+            {
+                btnEnterPO.Text = "Enter";
+
+            }
+            else
+            {
+                btnEnterPO.Text = "Edit";
+             Global.Config.POCurrent=   txtPO.Text;
+            }    
+        }
+
+        private void pEdit_Load(object sender, EventArgs e)
+        {
+
         }
 
         bool IsKeyEnter = false;
         private void txtQrCode_KeyDown(object sender, KeyEventArgs e)
         {
-          
+            //    if (G.listProgram == null)
+            //    {
+
+            //        G.listProgram = new System.Windows.Forms.ListBox();
+            //        G.listProgram.Font = new Font("Arial", 16);
+            //        G.listProgram.Parent = G.Main;
+            //        G.listProgram.BringToFront();
+            //        G.listProgram.Visible = false;
+            //        G.listProgram.Location = new Point(this.Location.X + btnMode.Width + txtQrCode.Location.X, this.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+            //        G.listProgram.Width = txtQrCode.Width;
+            //        G.listProgram.SelectedIndexChanged -= ListProgram_SelectedIndexChanged;
+            //        G.listProgram.SelectedIndexChanged += ListProgram_SelectedIndexChanged;
+            //        G.listProgram.Location = new Point(pModel.Location.X + txtQrCode.Location.X, this.Location.Y + pModel.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+
+            //    }
+            if(G.listProgram!=null)
+            G.listProgram.Location = new Point(pModel.Location.X + txtQrCode.Location.X, this.Location.Y + pModel.Location.Y + txtQrCode.Location.Y + txtQrCode.Height + 10);
+
             if (e.KeyCode == Keys.Enter)
             {
                 IsKeyEnter = true;

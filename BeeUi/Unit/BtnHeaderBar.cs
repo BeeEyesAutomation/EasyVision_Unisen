@@ -85,17 +85,17 @@ namespace BeeUi.Unit
          //   }    
                
          //   await Task.Delay(100);
-         //   Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexChoose].matRaw.Size());
+         //   Shows.Full(Global.EditTool.View.imgView, BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Size());
         }
          //if (Global.WidthOldTools == 0) Global.WidthOldTools = 400;
          //   Global.EditTool.pEdit.Width = Global.WidthOldTools;
          //   btnShuttdown.Visible = false;
             //if (Global.listParaCamera[Global.IndexChoose] == null)
             //    Global.listParaCamera[Global.IndexChoose] = new ParaCamera();
-            //BeeCore.Common.listCamera[Global.IndexChoose] = new Camera(Global.listParaCamera[Global.IndexChoose], Global.IndexChoose);
-            //G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[Global.IndexChoose].Para.Name;
+            //BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(Global.listParaCamera[Global.IndexChoose], Global.IndexChoose);
+            //G.ScanCCD.cbCCD.Text = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
 
-            //switch (BeeCore.Common.listCamera[Global.IndexChoose].Para.TypeCamera)
+            //switch (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera)
             //{
             //    case TypeCamera.USB:
             //        G.ScanCCD.btnUSB2_0.IsCLick = true;

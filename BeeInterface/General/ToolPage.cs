@@ -264,6 +264,7 @@ namespace BeeInterface
                 {
                     propetyTool.Complete();
                 };
+            propetyTool.Propety.IsNew2 = true;
                 propetyTool.Propety.SetModel();
             
                 DataTool.LoadPropety(control);

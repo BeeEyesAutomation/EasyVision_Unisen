@@ -32,18 +32,23 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsIni = false;
         public int Index = -1;
         [NonSerialized]
         DetectIntersect DetectIntersect = new DetectIntersect();
         [NonSerialized]
         CornerResult Result = new CornerResult();
-        
+        public int IndexCCD = 0;
         [NonSerialized]
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public TypeCrop TypeCrop;
         public List<System.Drawing.Point> listP_Center = new List<System.Drawing.Point>();
@@ -103,9 +108,9 @@ namespace BeeCore
         public float ContinuityGapFactor = 1.2f;
         public int AngleTargetDeg = 90;
         public int AngleToleranceDeg = 10;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
                 if (raw.Empty())
                     return;
@@ -196,8 +201,8 @@ namespace BeeCore
                         PointF pCenter = new System.Drawing.PointF(Result.Corner.X, Result.Corner.Y);
                        
                         listP_Center.Add(new System.Drawing.Point(
-                       (int)(rectRotate._PosCenter.X - rectRotate._rect.Width / 2f + pCenter.X),
-                       (int)(rectRotate._PosCenter.Y - rectRotate._rect.Height / 2f + pCenter.Y)));
+                       (int)(rotArea._PosCenter.X - rotArea._rect.Width / 2f + pCenter.X),
+                       (int)(rotArea._PosCenter.Y - rotArea._rect.Height / 2f + pCenter.Y)));
 
                     }
                     finally

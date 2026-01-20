@@ -502,58 +502,70 @@ void CommonPlus::RunCrop(
         (int)std::round(rectSize.height),
         localCenter
     );
-
+     cv::Scalar bg= cv::Scalar(0, 0, 0, 0);
     // 8) Mask loại trừ (nếu có)
     cv::Mat finalMask;
-    if (rrMask)
+    try
     {
-        cv::Mat mask2(patchH, patchW, CV_8UC1, cv::Scalar(255));
+        if (rrMask)
+        {
+            cv::Mat mask2(patchH, patchW, CV_8UC1, cv::Scalar(255));
 
-        cv::Point2f worldAnchorMask, maskLocalCenter;
-        cv::Size2f  maskSize;
-        GetAnchorSizeFor(*rrMask, worldAnchorMask, maskSize, maskLocalCenter);
+            cv::Point2f worldAnchorMask, maskLocalCenter;
+            cv::Size2f  maskSize;
+            GetAnchorSizeFor(*rrMask, worldAnchorMask, maskSize, maskLocalCenter);
 
-        // Tính vị trí mask trong patch
-        cv::Point2f deltaWorld(
-            worldAnchorMask.x - worldAnchor.x,
-            worldAnchorMask.y - worldAnchor.y
-        );
-        cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)-angleUsed);
+            // Tính vị trí mask trong patch
+            cv::Point2f deltaWorld(
+                worldAnchorMask.x - worldAnchor.x,
+                worldAnchorMask.y - worldAnchor.y
+            );
+            cv::Point2f deltaInPatch = RotatePoint(deltaWorld, (float)-angleUsed);
 
-        cv::Point2f maskCenterInPatch(
-            patchCenter.x + deltaInPatch.x,
-            patchCenter.y + deltaInPatch.y
-        );
+            cv::Point2f maskCenterInPatch(
+                patchCenter.x + deltaInPatch.x,
+                patchCenter.y + deltaInPatch.y
+            );
 
-        double maskAng = rrMask->RectRotationDeg;// ConvertCWtoCCW(rrMask->RectRotationDeg);
-        NormalizeSizeAndAngle(maskSize, maskAng);
+            double maskAng = rrMask->RectRotationDeg;// ConvertCWtoCCW(rrMask->RectRotationDeg);
+            NormalizeSizeAndAngle(maskSize, maskAng);
 
-        float maskAngleInPatch = (float)(maskAng - angleUsed);
+            float maskAngleInPatch = (float)(maskAng - angleUsed);
 
-        DrawShapeMaskIntoWithSize(
-            *rrMask, mask2,
-            maskCenterInPatch, maskAngleInPatch, 0,
-            (int)std::round(maskSize.width),
-            (int)std::round(maskSize.height),
-            maskLocalCenter
-        );
+            DrawShapeMaskIntoWithSize(
+                *rrMask, mask2,
+                maskCenterInPatch, maskAngleInPatch, 0,
+                (int)std::round(maskSize.width),
+                (int)std::round(maskSize.height),
+                maskLocalCenter
+            );
 
-        cv::bitwise_and(cropMask, mask2, finalMask);
+            cv::bitwise_and(cropMask, mask2, finalMask);
+            bg = rrMask->IsWhite ?
+                cv::Scalar(255, 255, 255, 255) :
+                cv::Scalar(0, 0, 0, 0);
+        }
+        else {
+            finalMask = cropMask.clone();
+        }
+
+        if (returnMaskOnly) { out = finalMask.clone(); return; }
+        
+        // 9) Áp mask lên patch
+      /* bg = rrMask->IsWhite ?
+            cv::Scalar(255, 255, 255, 255) :
+            cv::Scalar(0, 0, 0, 0);*/
+
+        out.create(patch.size(), patch.type());
+        out.setTo(bg);
+        patch.copyTo(out, finalMask);
+
     }
-    else {
-        finalMask = cropMask.clone();
+    catch (...)
+    {
+
     }
 
-    if (returnMaskOnly) { out = finalMask.clone(); return; }
-
-    // 9) Áp mask lên patch
-    const cv::Scalar bg = rr.IsWhite ?
-        cv::Scalar(255, 255, 255, 255) :
-        cv::Scalar(0, 0, 0, 0);
-
-    out.create(patch.size(), patch.type());
-    out.setTo(bg);
-    patch.copyTo(out, finalMask);
 }
 
 

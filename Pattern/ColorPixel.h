@@ -12,6 +12,7 @@ namespace BeeCpp
    public:      int PixelCheck_MT_FullScan(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, bool IsMultiCPU,  float Aspect);
     public:   int DiffCount_Fast(const Mat& img, const Mat& tpl, int tol, Mat* annotated, int SzClearNoise, float Aspect);
     public: void RemoveSmallBlobs(cv::Mat& mask, int minArea );
+    public: Mat RemoveByThicknessDT(const Mat& bin255, float minRadius = 2.0f);
         ColorPx() {}
         ColorPx(const cv::Mat& m) : temp(m.clone()) {}
     };

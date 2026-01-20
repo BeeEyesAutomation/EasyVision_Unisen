@@ -33,12 +33,17 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
         public bool IsIni = false;
         public int Index = -1;
-       
+        public int IndexCCD = 0;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
         public RectRotate rotAreaTemp = new RectRotate();
+        [NonSerialized]
         public RectRotate rotAreaAdjustment;
+        [NonSerialized]
+        public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp,matMask;
         public List<Point> Postion=new List<Point>();
@@ -169,7 +174,7 @@ namespace BeeCore
         }
         public void AddOK()
         {
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;
@@ -182,7 +187,7 @@ namespace BeeCore
         }
         public void AddNG()
         {
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;
@@ -323,15 +328,15 @@ namespace BeeCore
         public List<String> listLabel = new List<String>();
         public bool IsLimitCouter = true;
         public float ScoreOK, ScoreNG;
-        public void DoWork(RectRotate rectRotate)
+        public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
            
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;
 
-                Mat matCrop = Cropper.CropRotatedRect(raw, rectRotate, null);
+                Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, null);
                 rectRotates = new List<RectRotate>();
                 listScore = new List<double>();
                 listP_Center = new List<System.Drawing.Point>(); 
@@ -391,7 +396,7 @@ namespace BeeCore
         }
         public void Debug()
         {
-            using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
+            using (Mat raw = BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
             {
 
                 if (raw.Empty()) return;

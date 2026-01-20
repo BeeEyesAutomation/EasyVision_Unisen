@@ -30,11 +30,14 @@ namespace BeeUi.Tool
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbNG = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.lbProcess = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.process = new System.Windows.Forms.ProgressBar();
             this.btnReport = new System.Windows.Forms.Button();
-            this.lbTotal = new System.Windows.Forms.Label();
+            this.lbOK = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -53,6 +56,7 @@ namespace BeeUi.Tool
             this.wExport = new System.ComponentModel.BackgroundWorker();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dataView = new System.Windows.Forms.DataGridView();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -63,11 +67,15 @@ namespace BeeUi.Tool
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Gray;
+            this.panel1.Controls.Add(this.btnDelete);
+            this.panel1.Controls.Add(this.lbNG);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.lbProcess);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.process);
             this.panel1.Controls.Add(this.btnReport);
-            this.panel1.Controls.Add(this.lbTotal);
+            this.panel1.Controls.Add(this.lbOK);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.groupBox1);
@@ -77,6 +85,41 @@ namespace BeeUi.Tool
             this.panel1.Size = new System.Drawing.Size(983, 91);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // lbNG
+            // 
+            this.lbNG.BackColor = System.Drawing.SystemColors.GrayText;
+            this.lbNG.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbNG.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNG.ForeColor = System.Drawing.Color.LightCoral;
+            this.lbNG.Location = new System.Drawing.Point(194, 27);
+            this.lbNG.Name = "lbNG";
+            this.lbNG.Size = new System.Drawing.Size(86, 34);
+            this.lbNG.TabIndex = 19;
+            this.lbNG.Text = "00000";
+            this.lbNG.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(248, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 20);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "pcs";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(211, 3);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(33, 20);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "NG";
             // 
             // lbProcess
             // 
@@ -96,7 +139,7 @@ namespace BeeUi.Tool
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(1169, 123);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(20, 16);
+            this.label5.Size = new System.Drawing.Size(19, 16);
             this.label5.TabIndex = 14;
             this.label5.Text = "%";
             // 
@@ -112,35 +155,35 @@ namespace BeeUi.Tool
             this.btnReport.BackColor = System.Drawing.SystemColors.Control;
             this.btnReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnReport.Image = global::BeeUi.Properties.Resources.Export;
-            this.btnReport.Location = new System.Drawing.Point(825, 6);
+            this.btnReport.Location = new System.Drawing.Point(715, 7);
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(153, 56);
+            this.btnReport.Size = new System.Drawing.Size(135, 56);
             this.btnReport.TabIndex = 4;
             this.btnReport.Text = "Xuất dữ liệu";
             this.btnReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnReport.UseVisualStyleBackColor = false;
             this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
             // 
-            // lbTotal
+            // lbOK
             // 
-            this.lbTotal.BackColor = System.Drawing.SystemColors.GrayText;
-            this.lbTotal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTotal.ForeColor = System.Drawing.Color.White;
-            this.lbTotal.Location = new System.Drawing.Point(7, 27);
-            this.lbTotal.Name = "lbTotal";
-            this.lbTotal.Size = new System.Drawing.Size(316, 34);
-            this.lbTotal.TabIndex = 3;
-            this.lbTotal.Text = "00000";
-            this.lbTotal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbTotal.Click += new System.EventHandler(this.label4_Click);
+            this.lbOK.BackColor = System.Drawing.SystemColors.GrayText;
+            this.lbOK.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbOK.ForeColor = System.Drawing.Color.White;
+            this.lbOK.Location = new System.Drawing.Point(7, 27);
+            this.lbOK.Name = "lbOK";
+            this.lbOK.Size = new System.Drawing.Size(165, 34);
+            this.lbOK.TabIndex = 3;
+            this.lbOK.Text = "00000";
+            this.lbOK.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbOK.Click += new System.EventHandler(this.label4_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(329, 42);
+            this.label4.Location = new System.Drawing.Point(135, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 20);
             this.label4.TabIndex = 3;
@@ -152,11 +195,11 @@ namespace BeeUi.Tool
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(6, 3);
+            this.label2.Location = new System.Drawing.Point(72, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(118, 20);
+            this.label2.Size = new System.Drawing.Size(31, 20);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Tổng sản lượng";
+            this.label2.Text = "OK";
             // 
             // groupBox1
             // 
@@ -165,9 +208,9 @@ namespace BeeUi.Tool
             this.groupBox1.Controls.Add(this.ckDetail);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.White;
-            this.groupBox1.Location = new System.Drawing.Point(376, 6);
+            this.groupBox1.Location = new System.Drawing.Point(306, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(409, 56);
+            this.groupBox1.Size = new System.Drawing.Size(402, 56);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "File Cần xuất";
@@ -367,6 +410,20 @@ namespace BeeUi.Tool
             this.dataView.Size = new System.Drawing.Size(983, 468);
             this.dataView.TabIndex = 0;
             // 
+            // btnDelete
+            // 
+            this.btnDelete.BackColor = System.Drawing.SystemColors.Control;
+            this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnDelete.Image = global::BeeUi.Properties.Resources.Delete;
+            this.btnDelete.Location = new System.Drawing.Point(871, 6);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(109, 56);
+            this.btnDelete.TabIndex = 20;
+            this.btnDelete.Text = "Xóa Dữ Liệu";
+            this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // ucReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,7 +458,7 @@ namespace BeeUi.Tool
         private System.Windows.Forms.ComboBox cbModel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label lbTotal;
+        private System.Windows.Forms.Label lbOK;
         private System.Windows.Forms.Button btnReport;
         private System.Windows.Forms.Button btnIsModel;
         private System.Windows.Forms.Button btnDate;
@@ -418,5 +475,9 @@ namespace BeeUi.Tool
         private System.ComponentModel.BackgroundWorker wExport;
         private System.Windows.Forms.Panel panel2;
         public System.Windows.Forms.DataGridView dataView;
+        private System.Windows.Forms.Label lbNG;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnDelete;
     }
 }

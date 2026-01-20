@@ -21,12 +21,13 @@ namespace BeeGlobal
         //public Color ColorRight = Color.WhiteSmoke;
         public bool EnterPO = true;
         public String POCurrent = "";
-      
+        public bool IsWaitResultTotal = false;
         public int NumRetryCamera = 0;
         public int NumRetryPLC = 0;
         public bool IsResetReady = false;
         public bool IsForceByPassRS = false;
         public bool IsOnlyTrigger = false;
+        public bool IsMultiProg = false;
         public bool IsMultiCamera = false;
         public bool IsONNG = false;
         public int NumTrig = 1;

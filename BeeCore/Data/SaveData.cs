@@ -38,6 +38,12 @@ namespace BeeCore
                 Directory.CreateDirectory("Common");
             Access.SaveConfig("Common\\Default.config", config);
         }
+        public static void ProgNo(List<ProgNo> ProgNo)
+        {
+            if (!Directory.Exists("Common"))
+                Directory.CreateDirectory("Common");
+            Access.SaveProgNo("Common\\ProgNo.no", ProgNo);
+        }
         public static void Camera(String Project, List<ParaCamera> ParaCamera)
         {
             if (Global.Config.IsSaveParaCam)

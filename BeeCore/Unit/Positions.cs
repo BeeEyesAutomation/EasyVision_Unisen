@@ -26,6 +26,9 @@ namespace BeeCore
         {
             return this.MemberwiseClone();
         }
+        [NonSerialized]
+        public bool IsNew = false;
+        public int IndexCCD = 0;
         public bool IsIni = false;
         public int Index = -1;
         public RectRotate rotArea,rotCheck, rotCrop, rotMask;
@@ -357,7 +360,7 @@ namespace BeeCore
             //}
             //if (BeeCore.Common.TypeCCD == TypeCamera.TinyIV)
             //    BeeCore.Common.SetRaw();
-            Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexThread].matRaw, rotAreaAdjustment, rotMask);
+            Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotAreaAdjustment, rotMask);
             Mat matProcess = new Mat();
             switch (TypeMode)
             {
