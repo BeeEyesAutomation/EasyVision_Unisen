@@ -26,7 +26,7 @@ namespace BeeGlobal
         public int NumRetryPLC = 0;
         public bool IsResetReady = false;
         public bool IsForceByPassRS = false;
-        public bool IsOnlyTrigger = false;
+       
         public bool IsMultiProg = false;
         public bool IsMultiCamera = false;
         public bool IsONNG = false;

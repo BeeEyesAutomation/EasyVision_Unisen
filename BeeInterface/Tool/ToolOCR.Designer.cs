@@ -33,15 +33,12 @@ namespace BeeInterface
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolOCR));
-            this.threadProcess = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabP1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lay8 = new System.Windows.Forms.TableLayoutPanel();
             this.btnValuePLC = new BeeInterface.RJButton();
-            this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
             this.txtAddressPLC = new System.Windows.Forms.TextBox();
-            this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
             this.btn8 = new BeeInterface.RJButton();
             this.AdjLimitArea = new BeeInterface.AdjustBarEx();
             this.btn6 = new BeeInterface.RJButton();
@@ -94,6 +91,8 @@ namespace BeeInterface
             this.btnTest = new BeeInterface.RJButton();
             this.tmEnble = new System.Windows.Forms.Timer(this.components);
             this.oK_Cancel1 = new BeeInterface.GroupControl.OK_Cancel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabP1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -194,10 +193,10 @@ namespace BeeInterface
             this.lay8.ColumnCount = 2;
             this.lay8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.lay8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.lay8.Controls.Add(this.label4, 1, 0);
+            this.lay8.Controls.Add(this.label3, 0, 0);
             this.lay8.Controls.Add(this.btnValuePLC, 1, 1);
-            this.lay8.Controls.Add(this.autoFontLabel2, 1, 0);
             this.lay8.Controls.Add(this.txtAddressPLC, 0, 1);
-            this.lay8.Controls.Add(this.autoFontLabel1, 0, 0);
             this.lay8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lay8.Location = new System.Drawing.Point(3, 760);
             this.lay8.Name = "lay8";
@@ -264,18 +263,6 @@ namespace BeeInterface
             this.btnValuePLC.UseVisualStyleBackColor = false;
             this.btnValuePLC.Click += new System.EventHandler(this.btnValuePLC_Click);
             // 
-            // autoFontLabel2
-            // 
-            this.autoFontLabel2.AutoFont = true;
-            this.autoFontLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.47559F);
-            this.autoFontLabel2.Location = new System.Drawing.Point(218, 0);
-            this.autoFontLabel2.Name = "autoFontLabel2";
-            this.autoFontLabel2.Size = new System.Drawing.Size(209, 26);
-            this.autoFontLabel2.TabIndex = 49;
-            this.autoFontLabel2.Text = "Value";
-            this.autoFontLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // txtAddressPLC
             // 
             this.txtAddressPLC.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -286,18 +273,6 @@ namespace BeeInterface
             this.txtAddressPLC.Size = new System.Drawing.Size(202, 44);
             this.txtAddressPLC.TabIndex = 47;
             this.txtAddressPLC.TextChanged += new System.EventHandler(this.AddressPLC_TextChanged);
-            // 
-            // autoFontLabel1
-            // 
-            this.autoFontLabel1.AutoFont = true;
-            this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.47559F);
-            this.autoFontLabel1.Location = new System.Drawing.Point(3, 0);
-            this.autoFontLabel1.Name = "autoFontLabel1";
-            this.autoFontLabel1.Size = new System.Drawing.Size(209, 26);
-            this.autoFontLabel1.TabIndex = 48;
-            this.autoFontLabel1.Text = "AddPLC";
-            this.autoFontLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btn8
             // 
@@ -2175,6 +2150,36 @@ namespace BeeInterface
             this.oK_Cancel1.Size = new System.Drawing.Size(450, 57);
             this.oK_Cancel1.TabIndex = 20;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(5, 0);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(205, 26);
+            this.label3.TabIndex = 104;
+            this.label3.Text = "AddPLC";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label3.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(220, 0);
+            this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(205, 26);
+            this.label4.TabIndex = 105;
+            this.label4.Text = "Value";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label4.Visible = false;
+            // 
             // ToolOCR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2185,8 +2190,6 @@ namespace BeeInterface
             this.DoubleBuffered = true;
             this.Name = "ToolOCR";
             this.Size = new System.Drawing.Size(450, 1005);
-            this.Load += new System.EventHandler(this.ToolOutLine_Load);
-            this.VisibleChanged += new System.EventHandler(this.ToolOutLine_VisibleChanged);
             this.tabControl1.ResumeLayout(false);
             this.tabP1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -2218,7 +2221,6 @@ namespace BeeInterface
         }
 
         #endregion
-        public System.ComponentModel.BackgroundWorker threadProcess;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabP1;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -2275,9 +2277,9 @@ namespace BeeInterface
         private RJButton btn8;
         private TableLayoutPanel lay8;
         private TextBox txtAddressPLC;
-        private AutoFontLabel autoFontLabel1;
-        private AutoFontLabel autoFontLabel2;
         private RJButton btnValuePLC;
         private Timer tmEnble;
+        private Label label4;
+        private Label label3;
     }
 }

@@ -106,6 +106,7 @@ namespace BeeInterface
 
         private readonly TextBox _tbSearch = new TextBox { BorderStyle = BorderStyle.FixedSingle, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
         private readonly Timer _searchTimer = new Timer { Interval = 300 };
+        private readonly Timer tmLoad = new Timer { Interval = 300 };
         private readonly ComboBox _cbSort = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 180, Font = new Font("Arial", 14), Dock = DockStyle.Fill };
 
         // ====== BOTTOM ======
@@ -190,13 +191,13 @@ namespace BeeInterface
         // Layout constants
         private const int ItemTopPad = 10;
         private const int ItemBottomPad = 10;
-
+        bool IsLoad = false;
         public DashboardImages()
         {
             DoubleBuffered = true;
             BackColor = SystemColors.Control;
             TabStop = true;
-
+            tmLoad.Tick += TmLoad_Tick;
             // ===== compose Top (3 row) =====
             _topTL.ColumnStyles.Clear();
             _topTL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -287,20 +288,24 @@ namespace BeeInterface
             };
 
             _cbDate.SelectedIndexChanged += (s, e) =>
-            {
+            {   if (!IsLoad) return;
                 _lastSelectedDate = _cbDate.SelectedItem != null ? _cbDate.SelectedItem.ToString() : null;
                 ResetTimePickersToFullDay();
                 ShowBusyBlocking("Loading page…");
                 ReloadAccordingToUI();
             };
-            _rbRaw.CheckedChanged += (s, e) => { if (_rbRaw.Checked) { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); } };
-            _rbResult.CheckedChanged += (s, e) => { if (_rbResult.Checked) { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); } };
-            _cbFilter.SelectedIndexChanged += (s, e) => { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
+            _rbRaw.CheckedChanged += (s, e) => { if (_rbRaw.Checked) {
+                    ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); } };
+            _rbResult.CheckedChanged += (s, e) => { if (_rbResult.Checked) {
+                    ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); } };
+            _cbFilter.SelectedIndexChanged += (s, e) => {
+                ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
 
             _cbPageSize.SelectedIndexChanged += (s, e) =>
             {
                 if (int.TryParse(_cbPageSize.SelectedItem?.ToString() ?? "10", out var val) && val > 0)
                 {
+                    if (!IsLoad) return;
                     _pageSize = val;
                     _currentPage = 0;
                     bool multiPages = (CurrentFilter == FilterMode.All || CurrentFilter == FilterMode.OnlyOK || CurrentFilter == FilterMode.OnlyNG);
@@ -310,8 +315,10 @@ namespace BeeInterface
                 }
             };
 
-            _dtFrom.ValueChanged += (s, e) => { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
-            _dtTo.ValueChanged += (s, e) => { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
+            _dtFrom.ValueChanged += (s, e) => {
+                if (!IsLoad) return; ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
+            _dtTo.ValueChanged += (s, e) => {
+                if (!IsLoad) return; ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
 
             _tbSearch.TextChanged += (s, e) => { _searchTimer.Stop(); _searchTimer.Start(); };
             _searchTimer.Tick += (s, e) => { _searchTimer.Stop(); ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
@@ -320,10 +327,13 @@ namespace BeeInterface
                 try { SendMessage(_tbSearch.Handle, EM_SETCUEBANNER, (IntPtr)1, "Lọc theo tên…"); } catch { }
             };
 
-            _cbSort.SelectedIndexChanged += (s, e) => { ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
+            _cbSort.SelectedIndexChanged += (s, e) => {
+                if (!IsLoad) return; ShowBusyBlocking("Loading page…"); ReloadAccordingToUI(); };
 
-            _btnPrev.Click += (s, e) => { if (_currentPage > 0) { _currentPage--; ShowBusyBlocking("Loading page…"); LoadPage(); } };
-            _btnNext.Click += (s, e) => { if (_currentPage < _totalPages - 1) { _currentPage++; ShowBusyBlocking("Loading page…"); LoadPage(); } };
+            _btnPrev.Click += (s, e) => { if (_currentPage > 0) { 
+                    if (!IsLoad) return; _currentPage--; ShowBusyBlocking("Loading page…"); LoadPage(); } };
+            _btnNext.Click += (s, e) => { if (_currentPage < _totalPages - 1) {
+                    if (!IsLoad) return; _currentPage++; ShowBusyBlocking("Loading page…"); LoadPage(); } };
 
             MouseWheel += Dashboard_MouseWheel;
             MouseDown += Dashboard_MouseDown;
@@ -340,11 +350,17 @@ namespace BeeInterface
                     else { Invalidate(_pendingInvalidate); _pendingInvalidate = Rectangle.Empty; }
                 }
             };
-
+            tmLoad.Enabled = true;
             // First run
             RefreshDates();
             ResetTimePickersToFullDay();
-            HookFormShownOnce();
+           // HookFormShownOnce();
+        }
+
+        private void TmLoad_Tick(object sender, EventArgs e)
+        {
+            tmLoad.Enabled = false;
+            IsLoad = true;
         }
 
         // ===== Busy overlay builder =====
@@ -476,16 +492,15 @@ namespace BeeInterface
             else if (_cbDate.Items.Count > 0)
                 _cbDate.SelectedIndex = 0;
 
-            ReloadAccordingToUI();
+            //ReloadAccordingToUI();
         }
 
         private string CurrentDate => _cbDate.SelectedItem != null ? _cbDate.SelectedItem.ToString() : null;
         private bool UseRaw => _rbRaw.Checked;
         private FilterMode CurrentFilter => (FilterMode)_cbFilter.SelectedIndex;
-
-        private void ReloadAccordingToUI()
+        public void ReloadAccordingToUI()
         {
-            if (string.IsNullOrEmpty(CurrentDate))
+            if (string.IsNullOrEmpty(CurrentDate)|| !IsHandleCreated)
             {
                 ClearAll();
                 HideBusyUnblock();
@@ -495,6 +510,7 @@ namespace BeeInterface
             _ctsList?.Cancel();
             _ctsList = new CancellationTokenSource();
             var ct = _ctsList.Token;
+
             _isLoadingList = true;
             _lblPage.Text = "Loading…";
             Invalidate();
@@ -505,52 +521,155 @@ namespace BeeInterface
             string nameFilter = (_tbSearch.Text ?? string.Empty).Trim();
             var sortMode = (SortMode)_cbSort.SelectedIndex;
 
-            if (!DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var day))
+            DateTime day;
+            if (!DateTime.TryParseExact(
+                    date,
+                    "yyyyMMdd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out day))
+            {
                 day = DateTime.Today;
+            }
 
             var startLocal = day.Date + _dtFrom.Value.TimeOfDay;
             var endLocal = day.Date + _dtTo.Value.TimeOfDay;
-            if (endLocal < startLocal) { var t = startLocal; startLocal = endLocal; endLocal = t; }
+            if (endLocal < startLocal)
+            {
+                var t = startLocal;
+                startLocal = endLocal;
+                endLocal = t;
+            }
 
             Task.Run(() =>
             {
+                List<string> files = null;
+
                 try
                 {
-                    var files = BuildFileListCore(date, useRaw, filter, nameFilter, startLocal, endLocal, sortMode, ct);
-                    if (ct.IsCancellationRequested) return;
-
-                    if (!IsDisposed && IsHandleCreated)
-                    {
-                        BeginInvoke((Action)(() =>
-                        {
-                            _allFiles.Clear();
-                            _allFiles.AddRange(files);
-
-                            _currentPage = 0;
-                            bool multiPages = (filter == FilterMode.All || filter == FilterMode.OnlyOK || filter == FilterMode.OnlyNG);
-                            _totalPages = multiPages ? Math.Max(1, (int)Math.Ceiling(_allFiles.Count / (float)_pageSize)) : 1;
-
-                            LoadPage(); // blocking page flow bên trong
-                            _isLoadingList = false;
-                        }));
-                    }
+                    files = BuildFileListCore(
+                        date, useRaw, filter, nameFilter,
+                        startLocal, endLocal, sortMode, ct
+                    );
                 }
-                catch (OperationCanceledException) { }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
                 catch
                 {
-                    if (!IsDisposed && IsHandleCreated)
+                    files = null;
+                }
+
+                if (ct.IsCancellationRequested)
+                    return;
+
+                if (!IsDisposed && IsHandleCreated)
+                {
+                    BeginInvoke((Action)(() =>
                     {
-                        BeginInvoke((Action)(() =>
+                        _isLoadingList = false;
+
+                        if (files == null || files.Count == 0)
                         {
-                            _isLoadingList = false;
-                            _lblPage.Text = "Error loading files";
+                            // ✅ QUAN TRỌNG: không để UI kẹt
+                            ClearAll();
+                            _lblPage.Text = "No images";
                             HideBusyUnblock();
                             Invalidate();
-                        }));
-                    }
+                            return;
+                        }
+
+                        _allFiles.Clear();
+                        _allFiles.AddRange(files);
+
+                        _currentPage = 0;
+                        bool multiPages =
+                            (filter == FilterMode.All ||
+                             filter == FilterMode.OnlyOK ||
+                             filter == FilterMode.OnlyNG);
+
+                        _totalPages = multiPages
+                            ? Math.Max(1, (int)Math.Ceiling(_allFiles.Count / (float)_pageSize))
+                            : 1;
+
+                        LoadPage();   // bản production bạn đã sửa
+                    }));
                 }
             });
         }
+
+
+        //private void ReloadAccordingToUI()
+        //{
+        //    if (string.IsNullOrEmpty(CurrentDate))
+        //    {
+        //        ClearAll();
+        //        HideBusyUnblock();
+        //        return;
+        //    }
+
+        //    _ctsList?.Cancel();
+        //    _ctsList = new CancellationTokenSource();
+        //    var ct = _ctsList.Token;
+        //    _isLoadingList = true;
+        //    _lblPage.Text = "Loading…";
+        //    Invalidate();
+
+        //    string date = CurrentDate;
+        //    bool useRaw = UseRaw;
+        //    FilterMode filter = CurrentFilter;
+        //    string nameFilter = (_tbSearch.Text ?? string.Empty).Trim();
+        //    var sortMode = (SortMode)_cbSort.SelectedIndex;
+
+        //    if (!DateTime.TryParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var day))
+        //        day = DateTime.Today;
+
+        //    var startLocal = day.Date + _dtFrom.Value.TimeOfDay;
+        //    var endLocal = day.Date + _dtTo.Value.TimeOfDay;
+        //    if (endLocal < startLocal) { var t = startLocal; startLocal = endLocal; endLocal = t; }
+
+        //    Task.Run(() =>
+        //    {
+        //        try
+        //        {
+        //            var files = BuildFileListCore(date, useRaw, filter, nameFilter, startLocal, endLocal, sortMode, ct);
+        //            if(files.Count==0)
+        //                return;
+        //            if (ct.IsCancellationRequested) return;
+
+        //            if (!IsDisposed && IsHandleCreated)
+        //            {
+        //                BeginInvoke((Action)(() =>
+        //                {
+        //                    _allFiles.Clear();
+        //                    _allFiles.AddRange(files);
+
+        //                    _currentPage = 0;
+        //                    bool multiPages = (filter == FilterMode.All || filter == FilterMode.OnlyOK || filter == FilterMode.OnlyNG);
+        //                    _totalPages = multiPages ? Math.Max(1, (int)Math.Ceiling(_allFiles.Count / (float)_pageSize)) : 1;
+
+        //                    LoadPage(); // blocking page flow bên trong
+        //                    _isLoadingList = false;
+        //                }));
+        //            }
+        //        }
+        //        catch (OperationCanceledException) { }
+        //        catch
+        //        {
+        //            if (!IsDisposed && IsHandleCreated)
+        //            {
+        //                BeginInvoke((Action)(() =>
+        //                {
+        //                    _isLoadingList = false;
+        //                    _lblPage.Text = "Error loading files";
+        //                    HideBusyUnblock();
+        //                    Invalidate();
+        //                }));
+        //            }
+        //        }
+        //    });
+        //}
 
         private List<string> BuildFileListCore(
             string dateFolder,
@@ -626,6 +745,7 @@ namespace BeeInterface
                 if (ct.IsCancellationRequested) break;
                 list.Add(f);
             }
+
             return list;
         }
 
@@ -1192,9 +1312,18 @@ namespace BeeInterface
 
         private void ResetTimePickersToFullDay()
         {
-            var now = DateTime.Now;
-            _dtFrom.Value = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
-            _dtTo.Value = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+            if (!DateTime.TryParseExact(
+             _cbDate.SelectedItem?.ToString(),
+             "yyyyMMdd",
+             CultureInfo.InvariantCulture,
+             DateTimeStyles.None,
+             out var day))
+            {
+                day = DateTime.Today;
+            }
+
+            _dtFrom.Value = day.Date;
+            _dtTo.Value = day.Date.AddDays(1).AddTicks(-1);
         }
 
         protected override void Dispose(bool disposing)

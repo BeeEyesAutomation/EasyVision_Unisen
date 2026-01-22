@@ -455,6 +455,22 @@ namespace BeeCore
                                 var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                                 RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                                 Pattern.SetImgeRaw(gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels(), rrCli, rrMaskCli);
+                                //var opt = new PatternMatchOptions
+                                //{
+                                //    EnableValidate = true,
+
+                                //    EnableScoreStability = false,     // Cách 1
+
+                                //    EnableMinEdge = true,
+                                //    MinEdgeRatio = 0.60,             // 0.55–0.70
+
+                                //    EnableSoftAntiText = true,
+                                //    EntropyWeight = 0.60,            // 0.40–0.80
+
+                                //    EnableMultiScaleCheck = true,
+                                //    MaxScaleScoreDiff = 12.0,        // nếu struct có field này
+                                //};
+                                //Pattern.SetMatchOptions(opt);
                                 var listRS = Pattern.Match(
                                     IsHighSpeed, StepAngle,
                                     AngleLower, AngleUper,

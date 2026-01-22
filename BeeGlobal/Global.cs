@@ -13,13 +13,55 @@ namespace BeeGlobal
 {
     public class Global
     {
+        public static bool _IsDummy = false;
+        public static event Action<bool> ChangeDummy;
+ 
+        public static bool IsDummy
+        {
+            get => _IsDummy;
+            set
+            {
+                if (_IsDummy != value)
+                {
+                    _IsDummy = value;
+                    ChangeDummy?.Invoke(_IsDummy); // Gọi event
+                }
+            }
+        }
+        public static bool _IsAutoShuttDown = false;
+        public static event Action<bool> AutoShuttDown;
+        public static bool IsAutoShuttDown
+        {
+            get => _IsAutoShuttDown;
+            set
+            {
+                if (_IsAutoShuttDown != value)
+                {
+                    _IsAutoShuttDown = value;
+                    AutoShuttDown?.Invoke(_IsAutoShuttDown); // Gọi event
+                }
+            }
+        }
         public static ParaShow ParaShow=new ParaShow();
         public static Comunication Comunication = new Comunication();
         public static List<ItemRegsImg> listSimImg = new List<ItemRegsImg>();
         public static List<ItemRegsImg> listRegsImg = new List<ItemRegsImg>();
         public static List<Results> ListResult = new List<Results> { Results.None,Results.None,Results.None, Results.None };
         public static bool IsSim = false;
-        public static bool IsDisnablePLc = false;
+        public static bool _IsDisnablePLc = false;
+        public static event Action<bool> DisPLCChange;
+        public static bool IsDisnablePLc
+        {
+            get => _IsDisnablePLc;
+            set
+            {
+                if (_IsDisnablePLc != value)
+                {
+                    _IsDisnablePLc = value;
+                    DisPLCChange?.Invoke(_IsDisnablePLc); // Gọi event
+                }
+            }
+        }
         /// <summary>
         ///
         /// </summary> 
@@ -195,7 +237,6 @@ namespace BeeGlobal
         public static bool Initialed = false;
        
         public static float Scale = 1, AngleOrigin;
-     
         public static Color ColorRead = Color.SkyBlue;
         public static Color ColorProssing = Color.Blue;
         public static Color ColorTrigger = Color.LightBlue;
@@ -215,7 +256,7 @@ namespace BeeGlobal
                 }
             }
         }
-        public static int NumProgFromPLC = 1;
+        public static int NumProgFromPLC = 20;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();

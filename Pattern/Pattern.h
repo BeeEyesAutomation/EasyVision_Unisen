@@ -34,7 +34,34 @@ namespace BeeCpp
 #ifndef MATCH_CANDIDATE_NUM
 #define MATCH_CANDIDATE_NUM 32
 #endif
+	public value struct PatternMatchOptions
+	{
+		bool EnableScoreStability;
+		// master switch
+		bool EnableValidate;
+		// soft anti-text (entropy penalty)
+		bool EnableSoftAntiText;
+		double EntropyWeight;   // 0..1+ (0 disables effect)
+		// min-edge validation (estimated strong edges)
+		bool EnableMinEdge;
+		double MinEdgeRatio;    // 0..1 (e.g. 0.6)
+		// multi-scale consistency (compare coarse vs final score)
+		bool EnableMultiScaleCheck;
+		double MaxScaleScoreDiff; // in score unit 0..1 (e.g. 0.12)
 
+		PatternMatchOptions(bool init)
+		{
+			EnableScoreStability = true;
+			EnableValidate = true;
+			EnableSoftAntiText = false;
+			EntropyWeight = 0.5;
+			EnableMinEdge = false;
+			MinEdgeRatio = 0.6;
+			EnableMultiScaleCheck = false;
+			MaxScaleScoreDiff = 0.12;
+		}
+	};
+// ===== Struct native =====
 // ===== Struct native =====
 	public struct s_TemplData
 	{
@@ -45,6 +72,9 @@ namespace BeeCpp
 		vector<bool> vecResultEqual1;
 		bool bIsPatternLearned;
 		int iBorderColor;
+		// Optional template statistics for validation (do NOT affect legacy flow)
+		int    modelEdgeCount = 0; // strong-edge count estimated from template (level 0)
+		double modelEntropy = 0; // entropy of template gray (level 0)
 		void clear()
 		{
 			vector<Mat>().swap(vecPyramid);
@@ -67,8 +97,11 @@ namespace BeeCpp
 	};
 	public struct s_MatchParameter
 	{
+		int nPyrLevel = 0;
 		Point2d pt;
 		double dMatchScore;
+		// score at coarse (top) layer for optional multi-scale consistency check
+		double dCoarseScore;
 		double dMatchAngle;
 		//Mat matRotatedSrc;
 		Rect rectRoi;
@@ -89,6 +122,7 @@ namespace BeeCpp
 			pt = ptMinMax;
 			dMatchScore = dScore;
 			dMatchAngle = dAngle;
+			dCoarseScore = dScore;
 
 			bDelete = false;
 			dNewAngle = 0.0;
@@ -97,8 +131,9 @@ namespace BeeCpp
 		}
 		s_MatchParameter()
 		{
-			double dMatchScore = 0;
-			double dMatchAngle = 0;
+			dMatchScore = 0;
+			dMatchAngle = 0;
+			dCoarseScore = 0;
 		}
 		~s_MatchParameter()
 		{
@@ -241,10 +276,10 @@ namespace BeeCpp
 	};
 
 
-    inline bool compareScoreBig2Small(const s_MatchParameter& a,
-        const s_MatchParameter& b) {
-        return a.dMatchScore > b.dMatchScore;
-    }
+	inline bool compareScoreBig2Small(const s_MatchParameter& a,
+		const s_MatchParameter& b) {
+		return a.dMatchScore > b.dMatchScore;
+	}
 
   
 

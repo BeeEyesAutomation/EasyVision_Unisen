@@ -156,7 +156,7 @@ namespace BeeCore
                // Access.SaveProg(path + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                // Access.SaveConfig("Default.config", Global.Config);
                 ParaPJ(Project, Global.ParaCommon);
-                Camera(Project, Global.listParaCamera);
+                //Camera(Project, Global.listParaCamera);
                 Comunication(Project, Global.Comunication);
                 ParaShow(Project, Global.ParaShow);
                 ListImgRegister(Project, Global.listRegsImg);

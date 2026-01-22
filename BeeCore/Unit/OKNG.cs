@@ -180,6 +180,7 @@ namespace BeeCore
                 if (raw.Empty()) return;
                
                 Mat matCrop = Cropper.CropRotatedRect(raw, rotCrop,null);
+                Cv2.ImWrite("CropOK.png", matCrop);
                 bmOK.Add(matCrop.ToBitmap());
              }
          
@@ -269,6 +270,7 @@ namespace BeeCore
         {
             get => _numCPU; set
             {
+                if (oKNGHandle == null) oKNGHandle = new OKNGHandle();
                 _numCPU = value;
                 OKNGAPI.OKNG_SetOMPThreadCount(oKNGHandle.Handle, numCPU);
                 OKNGAPI.OKNG_SetUseOMP(oKNGHandle.Handle, Convert.ToInt32(Multi));
@@ -286,7 +288,8 @@ namespace BeeCore
         {if (oKNGHandle == null)
                 oKNGHandle = new OKNGHandle();
 
-
+            if (rotCrop == null) rotCrop = new RectRotate();
+            if (rotArea == null) rotArea = new RectRotate();
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
 			Common.PropetyTools[IndexThread][Index].MinValue = 0;
 

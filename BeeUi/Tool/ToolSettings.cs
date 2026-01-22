@@ -37,6 +37,7 @@ namespace BeeUi.Tool
                 G.AddTool = new AddTool();
             else
             {
+                
                 G.AddTool.Dispose();
                 G.AddTool = new AddTool();
             }    

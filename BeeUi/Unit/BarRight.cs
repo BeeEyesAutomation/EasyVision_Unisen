@@ -55,10 +55,10 @@ namespace BeeUi.Unit
         { if(Global.EditTool. DashboardImages==null)
             {
                 Global.EditTool.DashboardImages = new DashboardImages();
-
+              
                 //  DashboardImages.
             }
-            
+            Global.EditTool.DashboardImages.ReloadAccordingToUI();
             Global.EditTool.pEditTool.Show("Images");
         }
 

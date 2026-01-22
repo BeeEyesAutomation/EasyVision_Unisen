@@ -16,6 +16,7 @@
     <ClCompile Include="barcode_pca_autoclass.cpp" />
     <ClCompile Include="MonoSegCore.cpp" />
     <ClCompile Include="MonoSegCli.cpp" />
+    <ClCompile Include="Pattern2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BarcodeCli.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Align.h" />
     <ClInclude Include="MonoSegCore.h" />
     <ClInclude Include="MonoSegCli.h" />
+    <ClInclude Include="Pattern2.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeeCpp.rc" />
@@ -47,6 +49,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
   </ItemGroup>

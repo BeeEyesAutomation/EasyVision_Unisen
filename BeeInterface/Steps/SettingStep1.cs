@@ -875,5 +875,42 @@ namespace BeeInterface
         {
             Global.Comunication.Protocol.DelayOutNG = (int)numDelayNG.Value;
         }
+
+        private async void btnSaveCamera_Click(object sender, EventArgs e)
+        {
+            btnSaveCamera.Enabled = false;
+            using (var dlg = new SaveProgressDialog("Save Para Camera"))
+            {
+                dlg.SetStatus("Saving  Para Camera " + "...", "Writing data to file...");
+             
+                dlg.Show(this);          // modeless
+                //dlg.BringToFront();
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        SaveData.Camera(Global.Project,Global.listParaCamera);
+                    });
+
+                    if (dlg.CancelRequested)
+                    {
+                        dlg.SetStatus("Cancelled", "You have cancelled the save operation.");
+                        dlg.MarkCompleted("Cancelled", "No data was written.");
+                    }
+                    else
+                    {
+                        btnSaveCamera.Enabled = true;
+                        dlg.MarkCompleted("Save completed", "Para Camera " );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dlg.SetStatus("Save error", ex.Message);
+                    dlg.MarkCompleted("Error", "Please click OK to close.");
+                }
+
+            }
+        }
     }
 }

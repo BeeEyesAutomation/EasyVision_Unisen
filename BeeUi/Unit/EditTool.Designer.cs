@@ -116,6 +116,9 @@ namespace BeeUi
             this.tmLoad = new System.Windows.Forms.Timer(this.components);
             this.workLive = new System.ComponentModel.BackgroundWorker();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lbdisPLC = new System.Windows.Forms.Label();
+            this.splitter3 = new System.Windows.Forms.Splitter();
+            this.splitter4 = new System.Windows.Forms.Splitter();
             this.pInfor = new BeeUi.ViewHost();
             this.pEditTool = new BeeUi.ViewHost();
             this.btnLive = new BeeInterface.RJButton();
@@ -370,7 +373,7 @@ namespace BeeUi
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 33);
             this.label1.TabIndex = 5;
-            this.label1.Text = "1.1.9";
+            this.label1.Text = "1.1.12";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // split6
@@ -467,6 +470,9 @@ namespace BeeUi
             // 
             this.pTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(116)))));
             this.pTop.Controls.Add(this.btnRJBtn);
+            this.pTop.Controls.Add(this.splitter4);
+            this.pTop.Controls.Add(this.lbdisPLC);
+            this.pTop.Controls.Add(this.splitter3);
             this.pTop.Controls.Add(this.lbBypass);
             this.pTop.Controls.Add(this.split4);
             this.pTop.Controls.Add(this.autoFontLabel1);
@@ -892,6 +898,41 @@ namespace BeeUi
             this.workLive.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLive_DoWork);
             this.workLive.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLive_RunWorkerCompleted);
             // 
+            // lbdisPLC
+            // 
+            this.lbdisPLC.BackColor = System.Drawing.Color.Brown;
+            this.lbdisPLC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbdisPLC.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lbdisPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbdisPLC.ForeColor = System.Drawing.Color.White;
+            this.lbdisPLC.Location = new System.Drawing.Point(1500, 0);
+            this.lbdisPLC.Name = "lbdisPLC";
+            this.lbdisPLC.Size = new System.Drawing.Size(127, 51);
+            this.lbdisPLC.TabIndex = 16;
+            this.lbdisPLC.Text = "Dis PLC";
+            this.lbdisPLC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbdisPLC.Visible = false;
+            // 
+            // splitter3
+            // 
+            this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter3.Location = new System.Drawing.Point(1627, 0);
+            this.splitter3.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter3.Name = "splitter3";
+            this.splitter3.Size = new System.Drawing.Size(5, 51);
+            this.splitter3.TabIndex = 17;
+            this.splitter3.TabStop = false;
+            // 
+            // splitter4
+            // 
+            this.splitter4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter4.Location = new System.Drawing.Point(1495, 0);
+            this.splitter4.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter4.Name = "splitter4";
+            this.splitter4.Size = new System.Drawing.Size(5, 51);
+            this.splitter4.TabIndex = 18;
+            this.splitter4.TabStop = false;
+            // 
             // pInfor
             // 
             this.pInfor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
@@ -1109,7 +1150,7 @@ namespace BeeUi
             this.btnRJBtn.IsRect = false;
             this.btnRJBtn.IsTouch = false;
             this.btnRJBtn.IsUnGroup = true;
-            this.btnRJBtn.Location = new System.Drawing.Point(1503, 0);
+            this.btnRJBtn.Location = new System.Drawing.Point(1366, 0);
             this.btnRJBtn.Multiline = false;
             this.btnRJBtn.Name = "btnRJBtn";
             this.btnRJBtn.Size = new System.Drawing.Size(129, 51);
@@ -1333,5 +1374,8 @@ namespace BeeUi
         private System.Windows.Forms.ToolStripMenuItem importTool;
         private System.Windows.Forms.ToolStripMenuItem exportTool;
         private RJButton btnRJBtn;
+        public System.Windows.Forms.Label lbdisPLC;
+        private System.Windows.Forms.Splitter splitter4;
+        private System.Windows.Forms.Splitter splitter3;
     }
 }

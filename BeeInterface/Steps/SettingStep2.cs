@@ -56,23 +56,27 @@ namespace BeeInterface
                
         }
         bool IsLoad = false;
-
-        private void SettingStep2_Load(object sender, EventArgs e)
+        public void LoadImg()
         {
             IsLoad = true;
             if (Global.listRegsImg == null)
             {
                 Global.listRegsImg = new List<ItemRegsImg>();
-                if (Global.ParaCommon.matRegister!=null)
-                Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
+                if (Global.ParaCommon.matRegister != null)
+                    Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
             }
-            if (Global.listRegsImg.Count==0)
+            if (Global.listRegsImg.Count == 0)
             {
                 Global.listRegsImg = new List<ItemRegsImg>();
                 if (Global.ParaCommon.matRegister != null)
                     Global.listRegsImg.Add(new ItemRegsImg("IMAGE", Global.ParaCommon.matRegister));
             }
             RegisterImg.LoadAllItem(Global.listRegsImg);
+
+        }
+        private void SettingStep2_Load(object sender, EventArgs e)
+        {
+           // LoadImg();
 
            // RegisterImg.IndexSelected = 1;
         }

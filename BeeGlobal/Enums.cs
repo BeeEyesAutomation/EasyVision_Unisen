@@ -200,7 +200,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive,ResetImg
+        Alive, Dummy
     }
     public enum ValueInput
     {

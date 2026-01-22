@@ -104,9 +104,9 @@ namespace BeeUi
                     case TypeCamera.MVS:
                         btnGigE.IsCLick = true;
                         break;
-                    case TypeCamera.TinyIV:
-                        btnCameraTiny.IsCLick = true;
-                        break;
+                    //case TypeCamera.TinyIV:
+                    //    btnCameraTiny.IsCLick = true;
+                    //    break;
 
                 }
             }
@@ -685,7 +685,7 @@ namespace BeeUi
             BeeCore.Common.listCamera[Global.IndexCCCD] = null;
            Global.listParaCamera[Global.IndexChoose] = null;
             Global.IndexChoose--;
-            SaveData.Camera(Global.Project,Global.listParaCamera);
+            //SaveData.Camera(Global.Project,Global.listParaCamera);
 
             if (Global.IndexChoose < 0) Global.IndexChoose = 0;
             if (Global.ToolSettings!=null)
@@ -756,7 +756,7 @@ namespace BeeUi
                         Global.listParaCamera[Global.IndexChoose] = BeeCore.Common.listCamera[Global.IndexCCCD].Para;
 
                     Global.CameraStatus = CameraStatus.Ready;
-                    SaveData.Camera(Global.Project, Global.listParaCamera);
+                 //   SaveData.Camera(Global.Project, Global.listParaCamera);
                    // Global.Config.IDCamera = cbCCD.Text.Trim();
 
                         this.Hide();
@@ -868,7 +868,7 @@ namespace BeeUi
                     //}
                     if (Global.Config.NumTrig < 1) Global.Config.NumTrig = 1;
                     Global.CameraStatus = CameraStatus.Ready;
-                    SaveData.Camera(Global.Project, Global.listParaCamera);
+               //     SaveData.Camera(Global.Project, Global.listParaCamera);
 
                     if (G.Main == null)
                     {

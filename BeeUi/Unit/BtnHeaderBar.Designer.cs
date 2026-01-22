@@ -313,11 +313,10 @@ namespace BeeUi.Unit
         }
 
         #endregion
-
-        private RJButton btnSetting;
-        private RJButton btnReport;
         public RJButton btnUser;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private RJButton btncheck;
+        public RJButton btnSetting;
+        public RJButton btnReport;
+        public RJButton btncheck;
     }
 }

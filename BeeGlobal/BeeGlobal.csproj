@@ -61,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchRename.cs" />
+    <Compile Include="Common\AdjustControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\AdjustMoveMouse.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Comunication.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CycleTimerSplit.cs" />

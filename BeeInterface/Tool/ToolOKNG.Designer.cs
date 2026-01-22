@@ -243,6 +243,7 @@ namespace BeeInterface
             this.btnCrop.IsCLick = false;
             this.btnCrop.IsNotChange = false;
             this.btnCrop.IsRect = false;
+            this.btnCrop.IsTouch = false;
             this.btnCrop.IsUnGroup = false;
             this.btnCrop.Location = new System.Drawing.Point(5, 5);
             this.btnCrop.Margin = new System.Windows.Forms.Padding(0);
@@ -300,6 +301,7 @@ namespace BeeInterface
             this.btnCropArea.IsCLick = true;
             this.btnCropArea.IsNotChange = false;
             this.btnCropArea.IsRect = false;
+            this.btnCropArea.IsTouch = false;
             this.btnCropArea.IsUnGroup = false;
             this.btnCropArea.Location = new System.Drawing.Point(197, 5);
             this.btnCropArea.Margin = new System.Windows.Forms.Padding(0);
@@ -357,7 +359,8 @@ namespace BeeInterface
             this.imgOK.Name = "imgOK";
             this.imgOK.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.None;
             this.imgOK.ShortcutsEnabled = false;
-            this.imgOK.Size = new System.Drawing.Size(395, 103);
+            this.imgOK.Size = new System.Drawing.Size(391, 120);
+            this.imgOK.SizeMode = Cyotek.Windows.Forms.ImageBoxSizeMode.Fit;
             this.imgOK.TabIndex = 1;
             this.imgOK.TextBackColor = System.Drawing.Color.White;
             this.imgOK.TextDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
@@ -426,6 +429,7 @@ namespace BeeInterface
             this.btnAddNG.IsCLick = false;
             this.btnAddNG.IsNotChange = true;
             this.btnAddNG.IsRect = false;
+            this.btnAddNG.IsTouch = false;
             this.btnAddNG.IsUnGroup = true;
             this.btnAddNG.Location = new System.Drawing.Point(5, 5);
             this.btnAddNG.Margin = new System.Windows.Forms.Padding(0);
@@ -482,6 +486,7 @@ namespace BeeInterface
             this.btnRemoveAllNG.IsCLick = false;
             this.btnRemoveAllNG.IsNotChange = true;
             this.btnRemoveAllNG.IsRect = false;
+            this.btnRemoveAllNG.IsTouch = false;
             this.btnRemoveAllNG.IsUnGroup = false;
             this.btnRemoveAllNG.Location = new System.Drawing.Point(264, 5);
             this.btnRemoveAllNG.Margin = new System.Windows.Forms.Padding(0);
@@ -538,6 +543,7 @@ namespace BeeInterface
             this.btnUndoNG.IsCLick = false;
             this.btnUndoNG.IsNotChange = true;
             this.btnUndoNG.IsRect = false;
+            this.btnUndoNG.IsTouch = false;
             this.btnUndoNG.IsUnGroup = false;
             this.btnUndoNG.Location = new System.Drawing.Point(129, 5);
             this.btnUndoNG.Margin = new System.Windows.Forms.Padding(0);
@@ -614,6 +620,7 @@ namespace BeeInterface
             this.btnAddOK.IsCLick = false;
             this.btnAddOK.IsNotChange = true;
             this.btnAddOK.IsRect = false;
+            this.btnAddOK.IsTouch = false;
             this.btnAddOK.IsUnGroup = true;
             this.btnAddOK.Location = new System.Drawing.Point(5, 5);
             this.btnAddOK.Margin = new System.Windows.Forms.Padding(0);
@@ -670,6 +677,7 @@ namespace BeeInterface
             this.btnRemoveAllOK.IsCLick = false;
             this.btnRemoveAllOK.IsNotChange = true;
             this.btnRemoveAllOK.IsRect = false;
+            this.btnRemoveAllOK.IsTouch = false;
             this.btnRemoveAllOK.IsUnGroup = false;
             this.btnRemoveAllOK.Location = new System.Drawing.Point(265, 5);
             this.btnRemoveAllOK.Margin = new System.Windows.Forms.Padding(0);
@@ -726,6 +734,7 @@ namespace BeeInterface
             this.btnUndoOK.IsCLick = false;
             this.btnUndoOK.IsNotChange = true;
             this.btnUndoOK.IsRect = false;
+            this.btnUndoOK.IsTouch = false;
             this.btnUndoOK.IsUnGroup = false;
             this.btnUndoOK.Location = new System.Drawing.Point(129, 5);
             this.btnUndoOK.Margin = new System.Windows.Forms.Padding(0);
@@ -767,7 +776,8 @@ namespace BeeInterface
             this.imgNG.Name = "imgNG";
             this.imgNG.PanMode = Cyotek.Windows.Forms.ImageBoxPanMode.None;
             this.imgNG.ShortcutsEnabled = false;
-            this.imgNG.Size = new System.Drawing.Size(393, 100);
+            this.imgNG.Size = new System.Drawing.Size(393, 83);
+            this.imgNG.SizeMode = Cyotek.Windows.Forms.ImageBoxSizeMode.Fit;
             this.imgNG.TabIndex = 2;
             this.imgNG.TextBackColor = System.Drawing.Color.White;
             this.imgNG.TextDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
@@ -817,6 +827,7 @@ namespace BeeInterface
             this.btnLearning.IsCLick = false;
             this.btnLearning.IsNotChange = true;
             this.btnLearning.IsRect = false;
+            this.btnLearning.IsTouch = false;
             this.btnLearning.IsUnGroup = true;
             this.btnLearning.Location = new System.Drawing.Point(5, 546);
             this.btnLearning.Margin = new System.Windows.Forms.Padding(5);
@@ -1014,6 +1025,7 @@ namespace BeeInterface
             this.btnMulti.IsCLick = false;
             this.btnMulti.IsNotChange = false;
             this.btnMulti.IsRect = false;
+            this.btnMulti.IsTouch = false;
             this.btnMulti.IsUnGroup = false;
             this.btnMulti.Location = new System.Drawing.Point(105, 5);
             this.btnMulti.Margin = new System.Windows.Forms.Padding(0);
@@ -1071,6 +1083,7 @@ namespace BeeInterface
             this.btnSingle.IsCLick = true;
             this.btnSingle.IsNotChange = false;
             this.btnSingle.IsRect = false;
+            this.btnSingle.IsTouch = false;
             this.btnSingle.IsUnGroup = false;
             this.btnSingle.Location = new System.Drawing.Point(5, 5);
             this.btnSingle.Margin = new System.Windows.Forms.Padding(0);
@@ -1195,6 +1208,7 @@ namespace BeeInterface
             this.btnEnResizeSample.IsCLick = false;
             this.btnEnResizeSample.IsNotChange = false;
             this.btnEnResizeSample.IsRect = false;
+            this.btnEnResizeSample.IsTouch = false;
             this.btnEnResizeSample.IsUnGroup = true;
             this.btnEnResizeSample.Location = new System.Drawing.Point(219, 3);
             this.btnEnResizeSample.Multiline = false;
@@ -1262,6 +1276,7 @@ namespace BeeInterface
             this.btnAreaBlack.IsCLick = true;
             this.btnAreaBlack.IsNotChange = false;
             this.btnAreaBlack.IsRect = false;
+            this.btnAreaBlack.IsTouch = false;
             this.btnAreaBlack.IsUnGroup = false;
             this.btnAreaBlack.Location = new System.Drawing.Point(3, 5);
             this.btnAreaBlack.Multiline = false;
@@ -1316,6 +1331,7 @@ namespace BeeInterface
             this.btnAreaWhite.IsCLick = false;
             this.btnAreaWhite.IsNotChange = false;
             this.btnAreaWhite.IsRect = false;
+            this.btnAreaWhite.IsTouch = false;
             this.btnAreaWhite.IsUnGroup = false;
             this.btnAreaWhite.Location = new System.Drawing.Point(195, 5);
             this.btnAreaWhite.Multiline = false;
@@ -1388,6 +1404,7 @@ namespace BeeInterface
             this.btnTest.IsCLick = false;
             this.btnTest.IsNotChange = true;
             this.btnTest.IsRect = false;
+            this.btnTest.IsTouch = false;
             this.btnTest.IsUnGroup = true;
             this.btnTest.Location = new System.Drawing.Point(10, 10);
             this.btnTest.Margin = new System.Windows.Forms.Padding(10);

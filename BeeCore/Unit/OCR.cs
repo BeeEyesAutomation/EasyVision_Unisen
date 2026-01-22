@@ -479,7 +479,7 @@ namespace BeeCore
         public bool Isini2 = false;
       
         [NonSerialized]
-        public bool IsNew2 = false;
+        public bool IsNew = false;
 
         public  bool SetModel()
         {

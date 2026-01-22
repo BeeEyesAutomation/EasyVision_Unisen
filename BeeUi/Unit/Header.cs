@@ -207,6 +207,7 @@ namespace BeeUi.Common
                     }
                     btnMode.Text = "EDIT";
                     btnMode.ForeColor = Color.DarkSlateGray;
+
                 }
                 else
                 {
@@ -582,7 +583,7 @@ txtQrCode.Focus();
                     }
                 }
             }
-           
+           Actions. DeleteData();
             if ( G.listProgram!=null)
 
             G.listProgram.Visible = false;
@@ -810,9 +811,21 @@ txtQrCode.Focus();
 
         }
 
-        private void btnTraining_Click(object sender, EventArgs e)
+        private async void btnTraining_Click(object sender, EventArgs e)
         {
             Global.IsAutoTemp = btnTraining.IsCLick;
+
+            if (Global.Comunication.Protocol.IsConnected)
+            {
+                Global.IsDisnablePLc = false;
+                Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], Global.IsDisnablePLc);
+                await Global.Comunication.Protocol.WriteOutPut();
+
+            }
+            else
+            {
+                Global.IsDisnablePLc = false;
+            }
         }
 
         private void btnEnterPO_Click(object sender, EventArgs e)

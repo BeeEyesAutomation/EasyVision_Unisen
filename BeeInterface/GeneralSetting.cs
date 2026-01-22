@@ -38,8 +38,7 @@ namespace BeeInterface
             btnSaveNG.IsCLick = Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
-            btnTriggerMulti.IsCLick = !Global.Config.IsOnlyTrigger;
-            btnTriggerOne.IsCLick = Global.Config.IsOnlyTrigger;
+            
             btnDisPLC.IsCLick = Global.IsDisnablePLc; ;
             if (btnDisPLC.IsCLick)
                 btnDisPLC.Text = "ON";
@@ -107,7 +106,7 @@ namespace BeeInterface
             btnSaveGraphic.IsCLick = Global.Config.IsSaveParaShow;
             btnSaveImgRegister.IsCLick = Global.Config.IsSaveListRegister;
             btnSaveListImgSim.IsCLick = Global.Config.IsSaveListSim;
-            btnIsWaitingResultTotal.IsCLick=Global.Config.IsWaitResultTotal;
+            
             ShowNo();
         }
 
@@ -190,15 +189,7 @@ namespace BeeInterface
         }
 
 
-        private void btnTriggerOne_Click(object sender, EventArgs e)
-        {
-            Global.Config.IsOnlyTrigger = true;
-        }
-
-        private void btnTriggerMulti_Click(object sender, EventArgs e)
-        {
-            Global.Config.IsOnlyTrigger = false;
-        }
+       
 
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -464,10 +455,7 @@ namespace BeeInterface
             Global.Config.IsSaveCommon = btnSaveCommon.IsCLick;
         }
 
-        private void btnIsWaitingResultTotal_Click(object sender, EventArgs e)
-        {
-            Global.Config.IsWaitResultTotal = btnIsWaitingResultTotal.IsCLick;
-        }
+        
         public void ShowNo()
         {
             lbListNo.Text = "";
@@ -511,6 +499,7 @@ namespace BeeInterface
             else
             {
                 btnDisPLC.IsCLick = false;
+                Global.IsDisnablePLc = false;
                 btnDisPLC.Text = "OFF";
             }
 

@@ -52,6 +52,15 @@ namespace BeeUi
             _layout.EnableAuto();
            
         }
+        public void RegisTer(String name,Control toolEdit)
+        {
+            if(!pEditTool.Show(name))
+             {
+                pEditTool.Register(name, () => toolEdit);
+               
+            }
+            pEditTool.Show(name);
+        }
 		public void Acccess(bool IsRun)
 		{
             BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
@@ -70,7 +79,15 @@ namespace BeeUi
 					G.Header.btnMode.Enabled = true;
                     View.pBtn.Enabled= true;
 					G.Header.pEdit.Enabled = true;
-					View.btnTypeTrig.Enabled = true;
+                    G.Header.pModel.Enabled = true;
+                    G.Header.pPO.Enabled = true;
+                    this.BtnHeaderBar.btnSetting.Enabled = true;
+                    this.BtnHeaderBar.btncheck.Enabled = true;
+                    this.BtnHeaderBar.btnReport.Enabled = true;
+                    G.Header.btnDummy.Enabled = true;
+                    G.Header.btnTraining.Enabled = true;
+                    Global.ToolSettings.btnEnEdit.Enabled = true;
+                    View.btnTypeTrig.Enabled = true;
 					BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = true;
 					BarRight.btnHardware.Enabled = true;
@@ -78,13 +95,22 @@ namespace BeeUi
                     btnLogo.Enabled = true;
 					break;
 				case Users.Leader:
+
 					Global.EditTool.View.btnContinuous.Enabled = false;
-					G.StatusDashboard.btnReset.Enabled = true;
-					G.Header.btnMode.Enabled = true;
+                    G.Header.btnTraining.Enabled = false;
+                    G.Header.btnDummy.Enabled = true;
+                    G.StatusDashboard.btnReset.Enabled = true;
+                    this.BtnHeaderBar.btnSetting.Enabled = false;
+                    this.BtnHeaderBar.btncheck.Enabled = false;
+                    this.BtnHeaderBar.btnReport.Enabled = true;
+                    G.Header.btnMode.Enabled = false;
 					View.pBtn.Enabled = true;
 					View.btnTypeTrig.Enabled = false;
-					G.Header.pEdit.Enabled = true;
-					BarRight.btnFlowChart.Enabled = true;
+                    G.Header.pEdit.Enabled = false;
+                    G.Header.pModel.Enabled = false;
+                    G.Header.pPO.Enabled = false;
+                    Global.ToolSettings.btnEnEdit.Enabled = false;
+                    BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = true;
 					BarRight.btnHardware.Enabled = false;
 					BarRight.btnLog.Enabled = false;
@@ -92,12 +118,20 @@ namespace BeeUi
 					break;
 				case Users.User:
 					Global.EditTool.View.btnContinuous.Enabled = false;
-					G.Header.btnMode.Enabled = false;
-			         G.StatusDashboard.btnReset.Enabled = false;
-					View.pBtn.Enabled = false;
+                    G.Header.btnDummy.Enabled = true;
+                    G.Header.btnMode.Enabled = false;
+                    G.Header.btnTraining.Enabled = false;
+                    G.StatusDashboard.btnReset.Enabled = false;
+                    this.BtnHeaderBar.btnSetting.Enabled = false;
+                    this.BtnHeaderBar.btncheck.Enabled = false;
+                    this.BtnHeaderBar.btnReport.Enabled = false;
+                    View.pBtn.Enabled = false;
 					View.btnTypeTrig.Enabled = false;
-					G.Header.pEdit.Enabled = false;
-					BarRight.btnFlowChart.Enabled = true;
+                    G.Header.pEdit.Enabled = false;
+                    G.Header.pModel.Enabled = false;
+                    G.Header.pPO.Enabled = false;
+                    Global.ToolSettings.btnEnEdit.Enabled = false;
+                    BarRight.btnFlowChart.Enabled = true;
 					BarRight.btnHistory.Enabled = false;
 					BarRight.btnHardware.Enabled = false;
 					BarRight.btnLog.Enabled = false;
@@ -179,13 +213,16 @@ namespace BeeUi
                         Mat matRegStep1=new Mat();
                         try
                         {
-                          
-                          
-                               
-                            if(Global.Config.IsMultiProg)
-                                if(Global.Config.NumTrig==2)
+
+
+
+                            if (Global.Config.IsMultiProg)
+                            {
+
+
+                                if (Global.Config.NumTrig == 2 && Global.NumProgFromPLC == Global.Config.NumTrig)
                                 {
-                                  MatMergerOptions opt=new MatMergerOptions();
+                                    MatMergerOptions opt = new MatMergerOptions();
                                     opt.Direction = MergeDirection.Vertical;
                                     matRegStep1 = MatMerger.Merge(Global.ParaCommon.matRegister.ToMat(), Global.ParaCommon.matRegister2.ToMat(), opt);
                                 }
@@ -194,8 +231,11 @@ namespace BeeUi
                                     matRegStep1 = Global.ParaCommon.matRegister.ToMat();
 
                                 }
+                            }
+                            else
+                                matRegStep1 = Global.ParaCommon.matRegister.ToMat();
 
-                                if (matRegStep1 != null)
+                            if (matRegStep1 != null)
                                     if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                                         if (!matRegStep1.IsDisposed)
                                         {
@@ -230,6 +270,8 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
+                       
+                      
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         View. imgView.Text = "";
                         View.pImg.Visible = false;
@@ -278,7 +320,7 @@ namespace BeeUi
                         Global.StepEdit.btnStep2.IsCLick = true;
                         //   pName.Visible = true;
                         G.IsCalib = false;
-
+                        Global.StepEdit.SettingStep2.LoadImg();
                         pEditTool.Show("Step2");
 
                         //iconTool.BackgroundImage = Properties.Resources._2;
@@ -477,8 +519,10 @@ namespace BeeUi
             }
         
         }
+      
         public async void DesTroy()
         {
+            SaveData.Config(Global.Config);
             View.tmContinuous.Enabled = false;
             if(Global.LogsDashboard!=null)
             Global.LogsDashboard.Dispose();
@@ -510,7 +554,7 @@ namespace BeeUi
 
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
-      public  DashboardImages DashboardImages;
+        public DashboardImages DashboardImages;
       public void LockSpilter(bool IsLock)
         {
 			split0.Enabled = !IsLock;
@@ -606,8 +650,14 @@ namespace BeeUi
             if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                 BeeCore.Common.listCamera[Global.IndexCCCD].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
+            Global.DisPLCChange += Global_DisPLCChange;
 			//
 		}
+
+        private void Global_DisPLCChange(bool obj)
+        {
+            lbdisPLC.Visible = obj;
+        }
 
         private void Global_StepModeChanged(Step obj)
         {
@@ -1191,10 +1241,13 @@ namespace BeeUi
 
         private void btnLogo_Click_1(object sender, EventArgs e)
         {
-            Point menuPoint = new Point(0, btnLogo.Height);
+            if (Global.Config.Users == Users.Admin)
+            {
+                Point menuPoint = new Point(0, btnLogo.Height);
 
-            //if(btnLogo.IsCLick)
-            mouseLeft.Show(btnLogo, menuPoint);
+                //if(btnLogo.IsCLick)
+                mouseLeft.Show(btnLogo, menuPoint);
+            }
         }
 
         private void customFormLoadTool_Click(object sender, EventArgs e)

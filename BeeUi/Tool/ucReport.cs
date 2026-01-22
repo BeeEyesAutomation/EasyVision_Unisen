@@ -1,4 +1,5 @@
-﻿using BeeGlobal;
+﻿using BeeCore;
+using BeeGlobal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -128,28 +129,9 @@ namespace BeeUi.Tool
 
             }
 
-            string resourceDir = Path.Combine(Environment.CurrentDirectory, "Report");
-            string[] files = Directory.GetFiles(resourceDir, "*.mdf");
-            DateTime dtNow = DateTime.Now;
-           foreach(string path2 in files)
-            {
-                if (path2 .Contains("Default.mdf")) 
-                    continue;
-                 String Date = Path.GetFileNameWithoutExtension(path2);
-                DateTime date2 = DateTime.ParseExact(Date, "yyyyMMdd", null);
-                TimeSpan sp = dtNow - date2;
-                if(sp.TotalDays>Global.Config.LimitDateSave)
-                {
-                    
-                        File.Delete(path2);
-                    System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo("Report//" + Date);
-                    if(Directory.Exists("Report//" + Date))
-                    Empty(directory);
-                   
-                }
-           
-            }    
-        
+         Actions. DeleteData();
+
+
 
 
         }

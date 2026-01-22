@@ -351,7 +351,7 @@ namespace BeeInterface
             
                 
                 TypeTool TypeTool = PropetyTool.TypeTool;
-                dynamic control = New(TypeTool);
+                dynamic control = New(TypeTool,false);
                
             try
             {

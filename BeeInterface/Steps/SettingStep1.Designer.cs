@@ -99,6 +99,8 @@ namespace BeeInterface
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tmShowPara = new System.Windows.Forms.Timer(this.components);
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSaveCamera = new BeeInterface.RJButton();
             this.tableLayout1.SuspendLayout();
             this.tableLayoutPanel22.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -115,6 +117,7 @@ namespace BeeInterface
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayout1
@@ -174,7 +177,7 @@ namespace BeeInterface
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayout1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayout1.Size = new System.Drawing.Size(480, 704);
+            this.tableLayout1.Size = new System.Drawing.Size(480, 652);
             this.tableLayout1.TabIndex = 52;
             this.tableLayout1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayout1_Paint);
             // 
@@ -1719,7 +1722,7 @@ namespace BeeInterface
             this.tableLayoutPanel11.Controls.Add(this.btnCancel, 1, 0);
             this.tableLayoutPanel11.Controls.Add(this.btnNextStep, 0, 0);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 751);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 767);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -3059,7 +3062,7 @@ namespace BeeInterface
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(494, 748);
+            this.tabControl1.Size = new System.Drawing.Size(494, 696);
             this.tabControl1.TabIndex = 60;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -3070,7 +3073,7 @@ namespace BeeInterface
             this.tabPage3.Location = new System.Drawing.Point(4, 34);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(486, 710);
+            this.tabPage3.Size = new System.Drawing.Size(486, 658);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Camera";
             // 
@@ -3090,17 +3093,90 @@ namespace BeeInterface
             // 
             this.tmShowPara.Tick += new System.EventHandler(this.tmShowPara_Tick);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.2844F));
+            this.tableLayoutPanel1.Controls.Add(this.btnSaveCamera, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 699);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(494, 68);
+            this.tableLayoutPanel1.TabIndex = 61;
+            // 
+            // btnSaveCamera
+            // 
+            this.btnSaveCamera.AutoFont = true;
+            this.btnSaveCamera.AutoFontHeightRatio = 0.75F;
+            this.btnSaveCamera.AutoFontMax = 100F;
+            this.btnSaveCamera.AutoFontMin = 6F;
+            this.btnSaveCamera.AutoFontWidthRatio = 0.92F;
+            this.btnSaveCamera.AutoImage = true;
+            this.btnSaveCamera.AutoImageMaxRatio = 0.75F;
+            this.btnSaveCamera.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnSaveCamera.AutoImageTint = true;
+            this.btnSaveCamera.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.btnSaveCamera.BackgroundColor = System.Drawing.Color.WhiteSmoke;
+            this.btnSaveCamera.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSaveCamera.BackgroundImage")));
+            this.btnSaveCamera.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btnSaveCamera.BorderRadius = 5;
+            this.btnSaveCamera.BorderSize = 1;
+            this.btnSaveCamera.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveCamera.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveCamera.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnSaveCamera.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnSaveCamera.Corner = BeeGlobal.Corner.Both;
+            this.btnSaveCamera.DebounceResizeMs = 16;
+            this.btnSaveCamera.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSaveCamera.FlatAppearance.BorderSize = 0;
+            this.btnSaveCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveCamera.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.42188F, System.Drawing.FontStyle.Bold);
+            this.btnSaveCamera.ForeColor = System.Drawing.Color.Black;
+            this.btnSaveCamera.Image = null;
+            this.btnSaveCamera.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSaveCamera.ImageDisabled = null;
+            this.btnSaveCamera.ImageHover = null;
+            this.btnSaveCamera.ImageNormal = null;
+            this.btnSaveCamera.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnSaveCamera.ImagePressed = null;
+            this.btnSaveCamera.ImageTextSpacing = 6;
+            this.btnSaveCamera.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnSaveCamera.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnSaveCamera.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnSaveCamera.ImageTintOpacity = 0.5F;
+            this.btnSaveCamera.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnSaveCamera.IsCLick = false;
+            this.btnSaveCamera.IsNotChange = true;
+            this.btnSaveCamera.IsRect = false;
+            this.btnSaveCamera.IsTouch = false;
+            this.btnSaveCamera.IsUnGroup = true;
+            this.btnSaveCamera.Location = new System.Drawing.Point(5, 5);
+            this.btnSaveCamera.Margin = new System.Windows.Forms.Padding(5);
+            this.btnSaveCamera.Multiline = false;
+            this.btnSaveCamera.Name = "btnSaveCamera";
+            this.btnSaveCamera.Size = new System.Drawing.Size(484, 58);
+            this.btnSaveCamera.TabIndex = 58;
+            this.btnSaveCamera.Text = "Save Para Camera";
+            this.btnSaveCamera.TextColor = System.Drawing.Color.Black;
+            this.btnSaveCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSaveCamera.UseVisualStyleBackColor = false;
+            this.btnSaveCamera.Click += new System.EventHandler(this.btnSaveCamera_Click);
+            // 
             // SettingStep1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.tableLayoutPanel11);
             this.DoubleBuffered = true;
             this.Name = "SettingStep1";
             this.Padding = new System.Windows.Forms.Padding(3);
-            this.Size = new System.Drawing.Size(500, 822);
+            this.Size = new System.Drawing.Size(500, 838);
             this.Load += new System.EventHandler(this.SettingStep1_Load);
             this.VisibleChanged += new System.EventHandler(this.SettingStep1_VisibleChanged);
             this.tableLayout1.ResumeLayout(false);
@@ -3123,6 +3199,7 @@ namespace BeeInterface
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3194,5 +3271,7 @@ namespace BeeInterface
         private CustomNumericEx numDelayOK;
         private CustomNumericEx numDelayNG;
         private Label label3;
+        private TableLayoutPanel tableLayoutPanel1;
+        private RJButton btnSaveCamera;
     }
 }

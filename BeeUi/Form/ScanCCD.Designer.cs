@@ -45,7 +45,6 @@ namespace BeeUi
             this.btnPylon = new BeeInterface.RJButton();
             this.btnUSB2_0 = new BeeInterface.RJButton();
             this.btnGigE = new BeeInterface.RJButton();
-            this.btnCameraTiny = new BeeInterface.RJButton();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -55,9 +54,9 @@ namespace BeeUi
             this.label3 = new System.Windows.Forms.Label();
             this.cbCCD = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSkip = new System.Windows.Forms.Button();
             this.btnDisConnect = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.btnSkip = new System.Windows.Forms.Button();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -72,7 +71,7 @@ namespace BeeUi
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.ForeColor = System.Drawing.Color.Black;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(446, 44);
@@ -83,11 +82,11 @@ namespace BeeUi
             // 
             // btnClose
             // 
-            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnClose.BackColor = System.Drawing.Color.White;
             this.btnClose.BackgroundImage = global::BeeUi.Properties.Resources.Delete;
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnClose.ForeColor = System.Drawing.Color.White;
             this.btnClose.Location = new System.Drawing.Point(455, 3);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(53, 36);
@@ -135,21 +134,20 @@ namespace BeeUi
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.White;
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.btnPylon, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.btnUSB2_0, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnGigE, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.btnCameraTiny, 0, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 4;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(136, 283);
             this.tableLayoutPanel2.TabIndex = 50;
             // 
@@ -200,11 +198,11 @@ namespace BeeUi
             this.btnPylon.IsRect = true;
             this.btnPylon.IsTouch = false;
             this.btnPylon.IsUnGroup = false;
-            this.btnPylon.Location = new System.Drawing.Point(5, 145);
+            this.btnPylon.Location = new System.Drawing.Point(5, 159);
             this.btnPylon.Margin = new System.Windows.Forms.Padding(5);
             this.btnPylon.Multiline = false;
             this.btnPylon.Name = "btnPylon";
-            this.btnPylon.Size = new System.Drawing.Size(126, 60);
+            this.btnPylon.Size = new System.Drawing.Size(126, 67);
             this.btnPylon.TabIndex = 50;
             this.btnPylon.Text = "Pylon";
             this.btnPylon.TextColor = System.Drawing.Color.Black;
@@ -263,7 +261,7 @@ namespace BeeUi
             this.btnUSB2_0.Margin = new System.Windows.Forms.Padding(5);
             this.btnUSB2_0.Multiline = false;
             this.btnUSB2_0.Name = "btnUSB2_0";
-            this.btnUSB2_0.Size = new System.Drawing.Size(126, 60);
+            this.btnUSB2_0.Size = new System.Drawing.Size(126, 67);
             this.btnUSB2_0.TabIndex = 47;
             this.btnUSB2_0.Text = "USB 2.0";
             this.btnUSB2_0.TextColor = System.Drawing.Color.Black;
@@ -318,76 +316,17 @@ namespace BeeUi
             this.btnGigE.IsRect = true;
             this.btnGigE.IsTouch = false;
             this.btnGigE.IsUnGroup = false;
-            this.btnGigE.Location = new System.Drawing.Point(5, 75);
+            this.btnGigE.Location = new System.Drawing.Point(5, 82);
             this.btnGigE.Margin = new System.Windows.Forms.Padding(5);
             this.btnGigE.Multiline = false;
             this.btnGigE.Name = "btnGigE";
-            this.btnGigE.Size = new System.Drawing.Size(126, 60);
+            this.btnGigE.Size = new System.Drawing.Size(126, 67);
             this.btnGigE.TabIndex = 48;
             this.btnGigE.Text = "MVS";
             this.btnGigE.TextColor = System.Drawing.Color.Black;
             this.btnGigE.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnGigE.UseVisualStyleBackColor = false;
             this.btnGigE.Click += new System.EventHandler(this.btnGigE_Click);
-            // 
-            // btnCameraTiny
-            // 
-            this.btnCameraTiny.AutoFont = true;
-            this.btnCameraTiny.AutoFontHeightRatio = 0.75F;
-            this.btnCameraTiny.AutoFontMax = 100F;
-            this.btnCameraTiny.AutoFontMin = 6F;
-            this.btnCameraTiny.AutoFontWidthRatio = 0.92F;
-            this.btnCameraTiny.AutoImage = true;
-            this.btnCameraTiny.AutoImageMaxRatio = 0.75F;
-            this.btnCameraTiny.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
-            this.btnCameraTiny.AutoImageTint = true;
-            this.btnCameraTiny.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCameraTiny.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCameraTiny.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCameraTiny.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.btnCameraTiny.BorderRadius = 5;
-            this.btnCameraTiny.BorderSize = 0;
-            this.btnCameraTiny.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
-            this.btnCameraTiny.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
-            this.btnCameraTiny.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
-            this.btnCameraTiny.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
-            this.btnCameraTiny.Corner = BeeGlobal.Corner.Both;
-            this.btnCameraTiny.DebounceResizeMs = 16;
-            this.btnCameraTiny.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCameraTiny.Enabled = false;
-            this.btnCameraTiny.FlatAppearance.BorderSize = 0;
-            this.btnCameraTiny.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCameraTiny.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
-            this.btnCameraTiny.ForeColor = System.Drawing.Color.Black;
-            this.btnCameraTiny.Image = global::BeeUi.Properties.Resources.CameraConnected;
-            this.btnCameraTiny.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCameraTiny.ImageDisabled = null;
-            this.btnCameraTiny.ImageHover = null;
-            this.btnCameraTiny.ImageNormal = null;
-            this.btnCameraTiny.ImagePadding = new System.Windows.Forms.Padding(1);
-            this.btnCameraTiny.ImagePressed = null;
-            this.btnCameraTiny.ImageTextSpacing = 0;
-            this.btnCameraTiny.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.btnCameraTiny.ImageTintHover = System.Drawing.Color.Empty;
-            this.btnCameraTiny.ImageTintNormal = System.Drawing.Color.Empty;
-            this.btnCameraTiny.ImageTintOpacity = 0.5F;
-            this.btnCameraTiny.ImageTintPressed = System.Drawing.Color.Empty;
-            this.btnCameraTiny.IsCLick = false;
-            this.btnCameraTiny.IsNotChange = false;
-            this.btnCameraTiny.IsRect = true;
-            this.btnCameraTiny.IsTouch = false;
-            this.btnCameraTiny.IsUnGroup = false;
-            this.btnCameraTiny.Location = new System.Drawing.Point(5, 215);
-            this.btnCameraTiny.Margin = new System.Windows.Forms.Padding(5);
-            this.btnCameraTiny.Multiline = false;
-            this.btnCameraTiny.Name = "btnCameraTiny";
-            this.btnCameraTiny.Size = new System.Drawing.Size(126, 63);
-            this.btnCameraTiny.TabIndex = 49;
-            this.btnCameraTiny.Text = "Tiny";
-            this.btnCameraTiny.TextColor = System.Drawing.Color.Black;
-            this.btnCameraTiny.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnCameraTiny.UseVisualStyleBackColor = false;
-            this.btnCameraTiny.Click += new System.EventHandler(this.btnCameraTiny_Click);
             // 
             // tableLayoutPanel3
             // 
@@ -449,7 +388,7 @@ namespace BeeUi
             // 
             // tableLayoutPanel6
             // 
-            this.tableLayoutPanel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.tableLayoutPanel6.ColumnCount = 1;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.Controls.Add(this.lbCamera, 0, 2);
@@ -482,8 +421,8 @@ namespace BeeUi
             // 
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Black;
             this.label3.Location = new System.Drawing.Point(10, 0);
             this.label3.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
             this.label3.Name = "label3";
@@ -507,7 +446,7 @@ namespace BeeUi
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -523,38 +462,6 @@ namespace BeeUi
             this.tableLayoutPanel1.Size = new System.Drawing.Size(363, 50);
             this.tableLayoutPanel1.TabIndex = 52;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // btnDisConnect
-            // 
-            this.btnDisConnect.BackColor = System.Drawing.Color.Silver;
-            this.btnDisConnect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDisConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDisConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDisConnect.ForeColor = System.Drawing.Color.White;
-            this.btnDisConnect.Location = new System.Drawing.Point(5, 5);
-            this.btnDisConnect.Margin = new System.Windows.Forms.Padding(5);
-            this.btnDisConnect.Name = "btnDisConnect";
-            this.btnDisConnect.Size = new System.Drawing.Size(129, 40);
-            this.btnDisConnect.TabIndex = 34;
-            this.btnDisConnect.Text = "DisConnect";
-            this.btnDisConnect.UseVisualStyleBackColor = false;
-            this.btnDisConnect.Click += new System.EventHandler(this.btnDisConnect_Click);
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.btnConnect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnect.ForeColor = System.Drawing.Color.White;
-            this.btnConnect.Location = new System.Drawing.Point(144, 5);
-            this.btnConnect.Margin = new System.Windows.Forms.Padding(5);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(129, 40);
-            this.btnConnect.TabIndex = 33;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = false;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // btnSkip
             // 
@@ -572,11 +479,43 @@ namespace BeeUi
             this.btnSkip.UseVisualStyleBackColor = false;
             this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
             // 
+            // btnDisConnect
+            // 
+            this.btnDisConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnDisConnect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDisConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDisConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDisConnect.ForeColor = System.Drawing.Color.White;
+            this.btnDisConnect.Location = new System.Drawing.Point(5, 5);
+            this.btnDisConnect.Margin = new System.Windows.Forms.Padding(5);
+            this.btnDisConnect.Name = "btnDisConnect";
+            this.btnDisConnect.Size = new System.Drawing.Size(129, 40);
+            this.btnDisConnect.TabIndex = 34;
+            this.btnDisConnect.Text = "DisConnect";
+            this.btnDisConnect.UseVisualStyleBackColor = false;
+            this.btnDisConnect.Click += new System.EventHandler(this.btnDisConnect_Click);
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.btnConnect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnConnect.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnConnect.ForeColor = System.Drawing.Color.White;
+            this.btnConnect.Location = new System.Drawing.Point(144, 5);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(5);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(129, 40);
+            this.btnConnect.TabIndex = 33;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
             // ScanCCD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(527, 355);
             this.Controls.Add(this.cbReSolution);
             this.Controls.Add(this.tableLayoutPanel3);
@@ -607,7 +546,6 @@ namespace BeeUi
         private RJButton btnSimulation;
         public RJButton btnGigE;
         public RJButton btnUSB2_0;
-        public RJButton btnCameraTiny;
         public System.Windows.Forms.ComboBox cbReSolution;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         public System.ComponentModel.BackgroundWorker workConAll;

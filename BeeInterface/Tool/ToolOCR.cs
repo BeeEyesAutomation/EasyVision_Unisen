@@ -35,7 +35,7 @@ namespace BeeInterface
         }
         bool IsNew = false;
         bool IsIni = false;
-        public BackgroundWorker worker = new BackgroundWorker();
+        
         Stopwatch timer = new Stopwatch();
         public void RefreshLabels()
         {
@@ -191,58 +191,8 @@ namespace BeeInterface
         }
 
 
-        private void btnCannyMin_Click(object sender, EventArgs e)
-        {
-            //Propety.threshMin = 180;
-            //Propety.threshMax = 255;
-            //Propety.LearnPattern(indexTool, matTemp);
 
-        }
-
-        private void btnCannyMedium_Click(object sender, EventArgs e)
-        {
-            //    Propety.threshMin = 100;
-            //    Propety.threshMax = 255;
-            //    Propety.LearnPattern(indexTool, matTemp);
-            //}
-        }
-
-        private void btnCannyMax_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-
-
-        Bitmap bmResult;
-
-        public int indexTool = 0;
-
-
-        private void trackScore_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void trackScore_MouseUp(object sender, MouseEventArgs e)
-        {
-
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
-
-
-
-        private void trackMaxOverLap_MouseUp(object sender, MouseEventArgs e)
-        {
-
-
-            if (!threadProcess.IsBusy)
-                threadProcess.RunWorkerAsync();
-        }
+      
 
 
 
@@ -251,25 +201,8 @@ namespace BeeInterface
 
 
 
-
-
-        public void Loads()
-        {
-
-
-            //Propety.NumObject = 1;
-        }
-        private void ToolOutLine_Load(object sender, EventArgs e)
-        {
-            Loads();
-
-
-        }
-
-        private void ToolOutLine_VisibleChanged(object sender, EventArgs e)
-        {
-
-        }
+      
+       
         public bool IsClear = false;
         private void btnClear_Click(object sender, EventArgs e)
         {

@@ -255,6 +255,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions.cs" />
     <Compile Include="AddTool.cs" />
     <Compile Include="Algorithm\DetectIntersect.cs" />
     <Compile Include="Algorithm\EdgePoints.cs" />

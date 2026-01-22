@@ -32,9 +32,8 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tmNotPress = new System.Windows.Forms.Timer(this.components);
+            this.tmNotPress = new System.Windows.Forms.Timer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnNextStep = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
@@ -228,6 +227,6 @@ namespace BeeInterface
         private System.Windows.Forms.Timer tmNotPress;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private RegisterImgDashboard RegisterImg;
+        public RegisterImgDashboard RegisterImg;
     }
 }

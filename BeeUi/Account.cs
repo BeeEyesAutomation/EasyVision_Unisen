@@ -27,16 +27,20 @@ namespace BeeUi
             switch (users)
             {   case Users.Admin:
                     if (txtPass.Text.Trim().ToLower() != "393939") {
+                        users = Users.User;
                         MessageBox.Show("You have wrong password!");
                         this.Close();
-                    } 
-                        
-                     
-                    break;
+                    }
+                   
+
+
+
+                        break;
                 case Users.Leader:
                     if (txtPass.Text.Trim().ToLower() != "797979")
                     {
                         MessageBox.Show("You have wrong password!");
+                        users = Users.User;
                         this.Close();
 
                     }    
