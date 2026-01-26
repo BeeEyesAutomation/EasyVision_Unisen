@@ -36,7 +36,6 @@ namespace BeeUi.Common
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Header));
             this.workConnect = new System.ComponentModel.BackgroundWorker();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
-            this.workLoadProgram = new System.ComponentModel.BackgroundWorker();
             this.tmQrCode = new System.Windows.Forms.Timer(this.components);
             this.pModel = new System.Windows.Forms.TableLayoutPanel();
             this.lbProg = new BeeInterface.AutoFontLabel();
@@ -82,11 +81,6 @@ namespace BeeUi.Common
             this.saveFile.InitialDirectory = "Program";
             this.saveFile.Title = "Save As";
             // 
-            // workLoadProgram
-            // 
-            this.workLoadProgram.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadProgram_DoWork);
-            this.workLoadProgram.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLoadProgram_RunWorkerCompleted);
-            // 
             // tmQrCode
             // 
             this.tmQrCode.Interval = 10000;
@@ -118,10 +112,14 @@ namespace BeeUi.Common
             // 
             this.lbProg.AutoFont = true;
             this.lbProg.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lbProg.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.9873F);
-            this.lbProg.Location = new System.Drawing.Point(3, 0);
+            this.lbProg.EnableHorizontalScroll = false;
+            this.lbProg.EnableVerticalScroll = false;
+            this.lbProg.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.05078F);
+            this.lbProg.Location = new System.Drawing.Point(3, 3);
+            this.lbProg.MaxFontSize = 200F;
+            this.lbProg.MinFontSize = 6F;
             this.lbProg.Name = "lbProg";
-            this.lbProg.Size = new System.Drawing.Size(81, 81);
+            this.lbProg.Size = new System.Drawing.Size(81, 75);
             this.lbProg.TabIndex = 29;
             this.lbProg.Text = "Prog";
             this.lbProg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -130,7 +128,7 @@ namespace BeeUi.Common
             // 
             this.txtQrCode.AutoFont = true;
             this.txtQrCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtQrCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 46.24609F);
+            this.txtQrCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 46.39063F);
             this.txtQrCode.Location = new System.Drawing.Point(160, 3);
             this.txtQrCode.Name = "txtQrCode";
             this.txtQrCode.Size = new System.Drawing.Size(463, 75);
@@ -524,8 +522,12 @@ namespace BeeUi.Common
             // 
             this.lbPO.AutoFont = true;
             this.lbPO.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lbPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.77539F);
+            this.lbPO.EnableHorizontalScroll = false;
+            this.lbPO.EnableVerticalScroll = false;
+            this.lbPO.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.80859F);
             this.lbPO.Location = new System.Drawing.Point(2, 3);
+            this.lbPO.MaxFontSize = 200F;
+            this.lbPO.MinFontSize = 6F;
             this.lbPO.Name = "lbPO";
             this.lbPO.Size = new System.Drawing.Size(73, 75);
             this.lbPO.TabIndex = 1;
@@ -671,7 +673,6 @@ namespace BeeUi.Common
         private System.ComponentModel.BackgroundWorker workConnect;
         private System.Windows.Forms.SaveFileDialog saveFile;
         private System.Windows.Forms.Timer tmQrCode;
-        public System.ComponentModel.BackgroundWorker workLoadProgram;
         public RJButton btnEnQrCode;
         public RJButton btnMode;
         public  System.Windows.Forms.TableLayoutPanel pModel;

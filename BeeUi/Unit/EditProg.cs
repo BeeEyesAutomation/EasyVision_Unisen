@@ -38,8 +38,8 @@ namespace BeeUi.Unit
 
                     G.Header.RefreshListPJ();
                     Global.IsLoadProgFist = true;
-                    if (!G.Header.workLoadProgram.IsBusy)
-                        G.Header.workLoadProgram.RunWorkerAsync();
+                    G.Header.ChangeProgram(Global.Project);
+                       // G.Header.workLoadProgram.RunWorkerAsync();
                 }
                 else
                 {
@@ -72,8 +72,9 @@ namespace BeeUi.Unit
                Directory.CreateDirectory("Program\\"+Global.Project);
                 Access.SaveProg("Program\\" + Global.Project+"\\"+ Global.Project+ ".prog", BeeCore.Common.PropetyTools);
                 G.Header.RefreshListPJ();
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                G.Header.ChangeProgram(Global.Project);
+                //if (!G.Header.workLoadProgram.IsBusy)
+                //    G.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 
@@ -110,8 +111,9 @@ namespace BeeUi.Unit
                 Properties.Settings.Default.programCurrent = Global.Project;
                 Properties.Settings.Default.Save();
                 G.Header.RefreshListPJ(); Global.IsLoadProgFist = true;
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                G.Header.ChangeProgram(Global.Project);
+                //if (!G.Header.workLoadProgram.IsBusy)
+                //    G.Header.workLoadProgram.RunWorkerAsync();
 
             }
 

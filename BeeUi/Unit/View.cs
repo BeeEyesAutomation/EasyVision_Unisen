@@ -1857,7 +1857,8 @@ namespace BeeUi
                                 if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
                                 {
                                     Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
-                                    G.Header.workLoadProgram.RunWorkerAsync();
+                                    G.Header.ChangeProgram(Global.Project);
+                                    //G.Header.workLoadProgram.RunWorkerAsync();
                                     G.StatusDashboard.TotalTimes = Global.Config.SumTime;
                                     G.StatusDashboard.OkCount = Global.Config.SumOK;
                                     G.StatusDashboard.NgCount = Global.Config.SumNG;
@@ -1881,8 +1882,9 @@ namespace BeeUi
                                         Global.Project = Global.Comunication.Protocol.ValueProg;
                                          G.Header.RefreshListPJ();
                                         Global.IsLoadProgFist = true;
-                                        if (!G.Header.workLoadProgram.IsBusy)
-                                            G.Header.workLoadProgram.RunWorkerAsync();
+                                        G.Header.ChangeProgram(Global.Project);
+                                        //if (!G.Header.workLoadProgram.IsBusy)
+                                        //    G.Header.workLoadProgram.RunWorkerAsync();
 
 
                                     }    

@@ -861,9 +861,9 @@ namespace BeeUi
                 //  Global.Project = Path.GetFileNameWithoutExtension(saveFile.FileName);
 
                 G.Header.RefreshListPJ();
-
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                G.Header.ChangeProgram(Global.Project);
+                //if (!G.Header.workLoadProgram.IsBusy)
+                //    G.Header.workLoadProgram.RunWorkerAsync();
               
             }
         }
@@ -1302,8 +1302,9 @@ namespace BeeUi
                 TarProgramHelper.ImportToDefaultProgram(tarPath);
                 Global.Project = Path.GetFileNameWithoutExtension(tarPath);
                 G.Header.RefreshListPJ();
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                G.Header.ChangeProgram(Global.Project);
+                //if (!G.Header.workLoadProgram.IsBusy)
+                //    G.Header.workLoadProgram.RunWorkerAsync();
             }
 
             //string tarPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ProgramBackup.tar");
@@ -1342,8 +1343,9 @@ namespace BeeUi
                 Directory.CreateDirectory("Program\\" + Global.Project);
                 Access.SaveProg("Program\\" + Global.Project + "\\" + Global.Project + ".prog", BeeCore.Common.PropetyTools);
                 G.Header.RefreshListPJ();
-                if (!G.Header.workLoadProgram.IsBusy)
-                    G.Header.workLoadProgram.RunWorkerAsync();
+                G.Header.ChangeProgram(Global.Project);
+                //if (!G.Header.workLoadProgram.IsBusy)
+                //    G.Header.workLoadProgram.RunWorkerAsync();
             }
         }
 

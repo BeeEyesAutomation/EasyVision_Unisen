@@ -331,8 +331,9 @@ namespace BeeUi.Common
                 txtQrCode.Text = Global.Project;
                 txtQrCode.Enabled = false;
                 btnShowList.Enabled = false;
-                if (!workLoadProgram.IsBusy)
-                    workLoadProgram.RunWorkerAsync();
+                ChangeProgram(Global.Project);
+                //if (!workLoadProgram.IsBusy)
+                //    workLoadProgram.RunWorkerAsync();
 
 
             }
@@ -343,26 +344,111 @@ namespace BeeUi.Common
             G.Main.Location = new Point(0, 0);
 
         }
-        void ChangeProgram(String program)
+       public async void  ChangeProgram(String program)
         {
 
             if (IsLoad)
             {
                 IsLoad = false;
+                tmShow.Enabled = true;
+                txtQrCode.Enabled = true;
+                btnShowList.Enabled = true;
+                
                 return;
                 //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
             }
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
-           
-           
-            Global.Project= program;
+            if (Global.IsChangeProg) 
+                return;
+
+                Global.Project= program;
              Properties.Settings.Default.programCurrent = Global.Project;
              Properties.Settings.Default.Save();
-            if (!workLoadProgram.IsBusy)
-                workLoadProgram.RunWorkerAsync();
-            txtQrCode.Text = Global.Project;
+         
+            using (var dlg = new SaveProgressDialog("Load Program"))
+            {
+                dlg.SetStatus("Load Program " + Global.Project + "...", "Reading data from file...");
+                dlg.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - dlg.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - dlg.Height / 2);
+
+                dlg.Show(this);          // modeless
+                //dlg.BringToFront();
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        Global.IsChangeProg = true;
+                        if (Global.IsIntialProgram)
+                        {
+
+
+                            if (!Global.Config.IsSaveCommunication)
+                                if (Global.Comunication.Protocol.IsConnected)
+                                    Global.Comunication.Protocol.Disconnect();
+                            if (Global.Config.IsSaveParaCam)
+                                Global.ScanCCD.DisConnectAllCCd();
+
+                            DataTool.LoadProject(Global.Project);
+
+
+                        }
+                    });
+
+                    if (dlg.CancelRequested)
+                    {
+                        dlg.SetStatus("Cancelled", "You have cancelled the save operation.");
+                        dlg.MarkCompleted("Cancelled", "No data was written.");
+                    }
+                    else
+                    {
+                        txtQrCode.Enabled = true;
+                        btnShowList.Enabled = true;
+                        if (Global.IsIntialProgram)
+                        {
+                            if (Global.Config.IsSaveParaCam)
+                            {
+                                if (!await Global.ScanCCD.ChangeCCD())
+                                {
+                                    Global.CameraStatus = CameraStatus.ErrorConnect;
+                                }
+                                else
+                                {
+                                    Global.CameraStatus = CameraStatus.Ready;
+                                }
+                            }
+                        }
+                        Actions.DeleteData();
+                        if (G.listProgram != null)
+
+                            G.listProgram.Visible = false;
+                        txtQrCode.Enabled = true;
+                        btnShowList.Enabled = true;
+                        txtQrCode.Text = Global.Project;
+
+
+
+
+
+
+                        tmIninitial.Enabled = true;
+
+
+                        tmShow.Enabled = true;
+                        dlg.MarkCompleted("Load Program completed", "Program " + Global.Project);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    dlg.SetStatus("Load Program error", ex.Message);
+                    dlg.MarkCompleted("Error", "Please click OK to close.");
+                }
+
+            }
+            //if (!workLoadProgram.IsBusy)
+            //    workLoadProgram.RunWorkerAsync();
+           // txtQrCode.Text = Global.Project;
             if (btnEnQrCode.IsCLick)
             {
                 G.Main.ActiveControl = txtQrCode;
@@ -548,58 +634,14 @@ txtQrCode.Focus();
       
         private void workLoadProgram_DoWork(object sender, DoWorkEventArgs e)
         {
-            Global.IsChangeProg = true;
-            if (Global.IsIntialProgram)
-            {
-                
-                
-                    if(!Global.Config.IsSaveCommunication) 
-                    if (Global.Comunication.Protocol.IsConnected)
-                        Global.Comunication.Protocol.Disconnect();
-                    if (Global.Config.IsSaveParaCam)
-                        Global.ScanCCD.DisConnectAllCCd();
-                
-                DataTool.LoadProject(Global.Project);
-                
-
-            }    
+           
            
          
         }
 
         private async void workLoadProgram_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (Global.IsIntialProgram)
-            {
-                if (Global.Config.IsSaveParaCam)
-                {
-                    if (!await Global.ScanCCD.ChangeCCD())
-                    {
-                        Global.CameraStatus = CameraStatus.ErrorConnect;
-                    }
-                    else
-                    {
-                        Global.CameraStatus = CameraStatus.Ready;
-                    }
-                }
-            }
-           Actions. DeleteData();
-            if ( G.listProgram!=null)
-
-            G.listProgram.Visible = false;
-            txtQrCode.Enabled = true;
-            btnShowList.Enabled = true;
-            txtQrCode.Text = Global.Project;
-
            
-           
-           
-         
-           
-            tmIninitial.Enabled = true;
-        
-           
-            tmShow.Enabled = true;
            
         }
 
