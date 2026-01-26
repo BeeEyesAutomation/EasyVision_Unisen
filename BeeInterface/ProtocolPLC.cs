@@ -515,6 +515,12 @@ namespace BeeInterface
                 numSlaveID.Value = Global.Comunication.Protocol.SlaveID;
                 txtAddRead.Text = Global.Comunication.Protocol.AddRead;
                 txtAddWrite.Text = Global.Comunication.Protocol.AddWrite;
+                txtAddQty.Text = Global.Comunication.Protocol.AddQty;
+                txtAddProg.Text = Global.Comunication.Protocol.AddProg;
+                txtAddCountProg.Text = Global.Comunication.Protocol.AddCountProg;
+                txtProg.Text = "No" + Global.Comunication.Protocol.NoProg;
+                txtAddPO.Text = Global.Comunication.Protocol.AddPO;
+                txtAddProgress.Text = Global.Comunication.Protocol.AddProgress;
                 listLabelsIn = new List<RJButton> { DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15 };
                 listLabelsOut = new List<RJButton> { DO0, DO1, DO2, D3, DO4, DO5, DO6, DO7, DO8, DO9, DO10, DO11, DO12, DO13, DO14, DO15 };
                 foreach (ParaBit paraIO in Global.Comunication.Protocol.ParaBits)
@@ -543,7 +549,7 @@ namespace BeeInterface
 
                 txtIP.Text = Global.Comunication.Protocol.sIP;
                 txtPort.Text = Global.Comunication.Protocol.PortIP.ToString();
-                txtProg.Text ="No"+ Global.Comunication.Protocol.NoProg;
+              
                 if (Global.Comunication.Protocol.ConnectionType == PlcLib.ConnectionType.Tcp)
                 {
                     layCom.Enabled = false;
@@ -577,9 +583,7 @@ namespace BeeInterface
                 layBrand.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 layComunication.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
                 laySetting.Enabled = Global.Comunication.Protocol.TypeControler == TypeControler.PCI ? false : true;
-                txtAddProg.Text = Global.Comunication.Protocol.AddProg;
-                txtAddCountProg.Text=Global.Comunication.Protocol.AddCountProg;
-                txtAddPO.Text = Global.Comunication.Protocol.AddPO;
+               
             }
             catch (Exception ex)
             {
@@ -613,9 +617,19 @@ namespace BeeInterface
             
             Global.Comunication.Protocol.ValuePOChanged += Protocol_ValuePOChanged;
             Global.Comunication.Protocol.ValueProgChanged += Protocol_ValueProgChanged1;
-            Global.Comunication.Protocol.ValueCountProgChanged += Protocol_ValueCountProgChanged;     
+            Global.Comunication.Protocol.ValueCountProgChanged += Protocol_ValueCountProgChanged;
+            Global.Comunication.Protocol.QtyChanged += Protocol_QtyChanged;
             //   Global.Comunication.Protocol.numReadChanged += IO_numReadChanged;
             //  Global.Comunication.Protocol.numWriteChanged += IO_numWriteChanged;
+        }
+
+        private void Protocol_QtyChanged(int obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+               
+                txtValueQty.Text = "" + obj;
+            }));
         }
 
         private void Protocol_ValueCountProgChanged(int obj)
@@ -1260,6 +1274,35 @@ namespace BeeInterface
                 if (Global.Comunication.Protocol.AddProg != "")
                     Global.Comunication.Protocol.NoProg = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddProg);
             txtProg.Text = "No" + Global.Comunication.Protocol.NoProg;
+        }
+
+        private void btnReadQty_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.AddQty != null)
+                if (Global.Comunication.Protocol.AddQty != "")
+                    Global.Comunication.Protocol.ValueQty = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddQty);
+            Global.Config.SumTime = Global.Comunication.Protocol.ValueQty;
+            Global.Config.SumOK = Global.Config.SumTime - Global.Config.SumNG;
+            txtValueQty.Text = Global.Comunication.Protocol.ValueQty+"";
+        }
+
+        private void txtAddQty_TextChanged(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.AddQty = txtAddQty.Text.Trim();
+        }
+
+        private void btnReadProgress_Click(object sender, EventArgs e)
+        {
+            if (Global.Comunication.Protocol.AddProgress != null)
+                if (Global.Comunication.Protocol.AddProgress != "")
+                    Global.Comunication.Protocol.ValueProgress = Global.Comunication.Protocol.PlcClient.ReadInt(Global.Comunication.Protocol.AddProgress);
+            txtValueProgress.Text = Global.Comunication.Protocol.ValueProgress + "";
+
+        }
+
+        private void txtAddProgress_TextChanged(object sender, EventArgs e)
+        {
+            Global.Comunication.Protocol.AddProgress=txtAddProgress.Text.Trim();
         }
     }
 }

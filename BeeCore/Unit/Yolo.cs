@@ -304,8 +304,8 @@ namespace BeeCore
                 try
                 {
                     // === Tính offset (như cũ) ===
-                    CropOffSetX =( rotCrop._PosCenter.X - rotCrop._rect.Width/2);
-                    CropOffSetY =( rotCrop._PosCenter.Y - rotCrop._rect.Height/2);
+                    CropOffSetX =(rotArea._PosCenter.X - rotArea._rect.Width/2);
+                    CropOffSetY =(rotArea._PosCenter.Y - rotArea._rect.Height/2);
                     CropOffSetX = (CropOffSetX > 0) ? 0 :- CropOffSetX;
                     CropOffSetY = (CropOffSetY > 0) ? 0 : -CropOffSetY;
 

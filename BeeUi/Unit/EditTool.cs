@@ -23,6 +23,7 @@ using System.Web.Configuration;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static BeeInterface.DashboardImages;
 using Point = System.Drawing.Point;
 
 namespace BeeUi
@@ -554,7 +555,7 @@ namespace BeeUi
 
       
         MultiDockHost DockHost = new MultiDockHost { Dock = DockStyle.Fill };
-        public DashboardImages DashboardImages;
+        public DashboardImages DashboardImages=new DashboardImages();
       public void LockSpilter(bool IsLock)
         {
 			split0.Enabled = !IsLock;
@@ -564,7 +565,9 @@ namespace BeeUi
 			split4.Enabled = !IsLock;
 			split5.Enabled = !IsLock;
 			split6.Enabled = !IsLock;
-			View.split2.Enabled = !IsLock;
+            splitter5.Enabled = !IsLock;
+
+            View.split2.Enabled = !IsLock;
 			View.split3.Enabled = !IsLock;
 			View.split4.Enabled = !IsLock;
 			View.split5.Enabled = !IsLock;
@@ -576,6 +579,14 @@ namespace BeeUi
        
         private void EditTool_Load(object sender, EventArgs e)
         {
+            StepProccessBar.SetSteps(new[] { "Start", "Marking 1", "Camera 1", "Marking 2", "Camera 2", "Done" });
+            StepProccessBar.DoneCount = 0;
+            // Chưa chạy gì
+
+
+
+
+
             _styles = new ControlStylePersistence(this, "MyPanelTheme")
             {
                 LoadImmediately = true
@@ -588,7 +599,7 @@ namespace BeeUi
 
 
             Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
-
+            DashboardImages.ImageClicked += DashboardImages_ImageClicked;
             pHeader.Height = (int)(pHeader.Height * Global.PerScaleHeight);
             pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);
             pEdit.Width = (int)(pEdit.Width * Global.PerScaleWidth);
@@ -651,9 +662,33 @@ namespace BeeUi
                 BeeCore.Common.listCamera[Global.IndexCCCD].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
             Global.DisPLCChange += Global_DisPLCChange;
-			//
-		}
+          StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+            //
+        }
 
+        private void DashboardImages_ImageClicked(object sender, ImageClickedEventArgs e)
+        {
+            if (View.imgView.Image != null)
+            {
+                View.imgView.Image.Dispose();
+                View.imgView.Image = null;
+            }
+
+            if (e.Image != null)
+            {
+               // View.imgView.SizeMode = PictureBoxSizeMode.Zoom;
+                View.imgView.Image = e.Image;
+            }
+            else
+            {
+                // chưa load xong → load trực tiếp từ file (nếu muốn)
+                View.imgView.Image = System.Drawing.Image.FromFile(e.Path);
+            }
+            ShowTool.Full(View.imgView, View.imgView.Image.Size);
+            // lblInfo.Text = $"{e.Caption}  ({e.OriginalSize.Width}×{e.OriginalSize.Height})";
+        }
+
+   
         private void Global_DisPLCChange(bool obj)
         {
             lbdisPLC.Visible = obj;

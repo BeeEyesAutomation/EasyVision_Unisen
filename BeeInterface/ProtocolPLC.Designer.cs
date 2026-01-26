@@ -132,6 +132,18 @@ namespace BeeInterface
             this.label47 = new System.Windows.Forms.Label();
             this.DO0 = new BeeInterface.RJButton();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.btnReadProgress = new BeeInterface.RJButton();
+            this.txtValueProgress = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.txtAddProgress = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.btnReadQty = new BeeInterface.RJButton();
+            this.txtValueQty = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.txtAddQty = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.btnReadCountProg = new BeeInterface.RJButton();
             this.txtValueCountProg = new System.Windows.Forms.TextBox();
@@ -216,6 +228,8 @@ namespace BeeInterface
             this.tabPage6.SuspendLayout();
             this.layOut.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -2925,6 +2939,8 @@ namespace BeeInterface
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.panel8);
+            this.tabPage1.Controls.Add(this.panel7);
             this.tabPage1.Controls.Add(this.panel6);
             this.tabPage1.Controls.Add(this.panel4);
             this.tabPage1.Controls.Add(this.panel3);
@@ -2934,6 +2950,206 @@ namespace BeeInterface
             this.tabPage1.Size = new System.Drawing.Size(414, 803);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Value";
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.btnReadProgress);
+            this.panel8.Controls.Add(this.txtValueProgress);
+            this.panel8.Controls.Add(this.label27);
+            this.panel8.Controls.Add(this.txtAddProgress);
+            this.panel8.Controls.Add(this.label29);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(3, 275);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(408, 68);
+            this.panel8.TabIndex = 28;
+            // 
+            // btnReadProgress
+            // 
+            this.btnReadProgress.AutoFont = true;
+            this.btnReadProgress.AutoFontHeightRatio = 0.75F;
+            this.btnReadProgress.AutoFontMax = 100F;
+            this.btnReadProgress.AutoFontMin = 6F;
+            this.btnReadProgress.AutoFontWidthRatio = 0.92F;
+            this.btnReadProgress.AutoImage = true;
+            this.btnReadProgress.AutoImageMaxRatio = 0.75F;
+            this.btnReadProgress.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnReadProgress.AutoImageTint = true;
+            this.btnReadProgress.BackColor = System.Drawing.SystemColors.Control;
+            this.btnReadProgress.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnReadProgress.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnReadProgress.BorderRadius = 0;
+            this.btnReadProgress.BorderSize = 0;
+            this.btnReadProgress.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnReadProgress.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnReadProgress.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnReadProgress.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnReadProgress.Corner = BeeGlobal.Corner.Both;
+            this.btnReadProgress.DebounceResizeMs = 16;
+            this.btnReadProgress.FlatAppearance.BorderSize = 0;
+            this.btnReadProgress.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReadProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.203125F);
+            this.btnReadProgress.ForeColor = System.Drawing.Color.Black;
+            this.btnReadProgress.Image = null;
+            this.btnReadProgress.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReadProgress.ImageDisabled = null;
+            this.btnReadProgress.ImageHover = null;
+            this.btnReadProgress.ImageNormal = null;
+            this.btnReadProgress.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnReadProgress.ImagePressed = null;
+            this.btnReadProgress.ImageTextSpacing = 6;
+            this.btnReadProgress.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnReadProgress.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnReadProgress.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnReadProgress.ImageTintOpacity = 0.5F;
+            this.btnReadProgress.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnReadProgress.IsCLick = false;
+            this.btnReadProgress.IsNotChange = true;
+            this.btnReadProgress.IsRect = false;
+            this.btnReadProgress.IsTouch = false;
+            this.btnReadProgress.IsUnGroup = true;
+            this.btnReadProgress.Location = new System.Drawing.Point(344, 26);
+            this.btnReadProgress.Multiline = false;
+            this.btnReadProgress.Name = "btnReadProgress";
+            this.btnReadProgress.Size = new System.Drawing.Size(55, 33);
+            this.btnReadProgress.TabIndex = 29;
+            this.btnReadProgress.Text = "Read";
+            this.btnReadProgress.TextColor = System.Drawing.Color.Black;
+            this.btnReadProgress.UseVisualStyleBackColor = false;
+            this.btnReadProgress.Click += new System.EventHandler(this.btnReadProgress_Click);
+            // 
+            // txtValueProgress
+            // 
+            this.txtValueProgress.Location = new System.Drawing.Point(161, 33);
+            this.txtValueProgress.Name = "txtValueProgress";
+            this.txtValueProgress.Size = new System.Drawing.Size(168, 29);
+            this.txtValueProgress.TabIndex = 3;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(157, 6);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(139, 24);
+            this.label27.TabIndex = 2;
+            this.label27.Text = "Value Progress";
+            // 
+            // txtAddProgress
+            // 
+            this.txtAddProgress.Location = new System.Drawing.Point(7, 30);
+            this.txtAddProgress.Name = "txtAddProgress";
+            this.txtAddProgress.Size = new System.Drawing.Size(118, 29);
+            this.txtAddProgress.TabIndex = 1;
+            this.txtAddProgress.TextChanged += new System.EventHandler(this.txtAddProgress_TextChanged);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(17, 3);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(125, 24);
+            this.label29.TabIndex = 0;
+            this.label29.Text = "Add Progress";
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.btnReadQty);
+            this.panel7.Controls.Add(this.txtValueQty);
+            this.panel7.Controls.Add(this.label23);
+            this.panel7.Controls.Add(this.txtAddQty);
+            this.panel7.Controls.Add(this.label25);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel7.Location = new System.Drawing.Point(3, 207);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(408, 68);
+            this.panel7.TabIndex = 27;
+            // 
+            // btnReadQty
+            // 
+            this.btnReadQty.AutoFont = true;
+            this.btnReadQty.AutoFontHeightRatio = 0.75F;
+            this.btnReadQty.AutoFontMax = 100F;
+            this.btnReadQty.AutoFontMin = 6F;
+            this.btnReadQty.AutoFontWidthRatio = 0.92F;
+            this.btnReadQty.AutoImage = true;
+            this.btnReadQty.AutoImageMaxRatio = 0.75F;
+            this.btnReadQty.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnReadQty.AutoImageTint = true;
+            this.btnReadQty.BackColor = System.Drawing.SystemColors.Control;
+            this.btnReadQty.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnReadQty.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnReadQty.BorderRadius = 0;
+            this.btnReadQty.BorderSize = 0;
+            this.btnReadQty.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnReadQty.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnReadQty.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnReadQty.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnReadQty.Corner = BeeGlobal.Corner.Both;
+            this.btnReadQty.DebounceResizeMs = 16;
+            this.btnReadQty.FlatAppearance.BorderSize = 0;
+            this.btnReadQty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReadQty.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.203125F);
+            this.btnReadQty.ForeColor = System.Drawing.Color.Black;
+            this.btnReadQty.Image = null;
+            this.btnReadQty.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReadQty.ImageDisabled = null;
+            this.btnReadQty.ImageHover = null;
+            this.btnReadQty.ImageNormal = null;
+            this.btnReadQty.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnReadQty.ImagePressed = null;
+            this.btnReadQty.ImageTextSpacing = 6;
+            this.btnReadQty.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnReadQty.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnReadQty.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnReadQty.ImageTintOpacity = 0.5F;
+            this.btnReadQty.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnReadQty.IsCLick = false;
+            this.btnReadQty.IsNotChange = true;
+            this.btnReadQty.IsRect = false;
+            this.btnReadQty.IsTouch = false;
+            this.btnReadQty.IsUnGroup = true;
+            this.btnReadQty.Location = new System.Drawing.Point(344, 26);
+            this.btnReadQty.Multiline = false;
+            this.btnReadQty.Name = "btnReadQty";
+            this.btnReadQty.Size = new System.Drawing.Size(55, 33);
+            this.btnReadQty.TabIndex = 29;
+            this.btnReadQty.Text = "Read";
+            this.btnReadQty.TextColor = System.Drawing.Color.Black;
+            this.btnReadQty.UseVisualStyleBackColor = false;
+            this.btnReadQty.Click += new System.EventHandler(this.btnReadQty_Click);
+            // 
+            // txtValueQty
+            // 
+            this.txtValueQty.Location = new System.Drawing.Point(161, 33);
+            this.txtValueQty.Name = "txtValueQty";
+            this.txtValueQty.Size = new System.Drawing.Size(168, 29);
+            this.txtValueQty.TabIndex = 3;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(157, 6);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(92, 24);
+            this.label23.TabIndex = 2;
+            this.label23.Text = "Value Qty";
+            // 
+            // txtAddQty
+            // 
+            this.txtAddQty.Location = new System.Drawing.Point(7, 30);
+            this.txtAddQty.Name = "txtAddQty";
+            this.txtAddQty.Size = new System.Drawing.Size(118, 29);
+            this.txtAddQty.TabIndex = 1;
+            this.txtAddQty.TextChanged += new System.EventHandler(this.txtAddQty_TextChanged);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(17, 3);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(78, 24);
+            this.label25.TabIndex = 0;
+            this.label25.Text = "Add Qty";
             // 
             // panel6
             // 
@@ -5076,6 +5292,10 @@ namespace BeeInterface
             this.layOut.ResumeLayout(false);
             this.layOut.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -5281,5 +5501,17 @@ namespace BeeInterface
         private RJButton btnReadPO;
         private RJButton btnReadProg;
         private RJButton btnReadCountProg;
+        private Panel panel7;
+        private RJButton btnReadQty;
+        public TextBox txtValueQty;
+        private Label label23;
+        private TextBox txtAddQty;
+        private Label label25;
+        private Panel panel8;
+        private RJButton btnReadProgress;
+        public TextBox txtValueProgress;
+        private Label label27;
+        private TextBox txtAddProgress;
+        private Label label29;
     }
 }

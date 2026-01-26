@@ -1241,87 +1241,131 @@ static inline bool ConvertBySDKEx(CMvCamera* camera, const MV_FRAME_OUT& out, cv
 	}
 	return true;
 }
-
 bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
 {
 	MV_FRAME_OUT out{};
-	int ret = camera->GetImageBuffer(&out, timeoutMs);
-	if (ret != MV_OK) {
-		std::cerr << "GetImageBuffer failed: " << ret << "\n";
+	if (camera->GetImageBuffer(&out, timeoutMs) != MV_OK)
 		return false;
-	}
 
 	struct Guard {
 		CMvCamera* cam; MV_FRAME_OUT* o;
-		~Guard() { if (cam && o) cam->FreeImageBuffer(o); }
+		~Guard() { cam->FreeImageBuffer(o); }
 	} guard{ camera, &out };
 
-	const unsigned int w = out.stFrameInfo.nWidth;
-	const unsigned int h = out.stFrameInfo.nHeight;
-	const unsigned int px = out.stFrameInfo.enPixelType;
+	auto& info = out.stFrameInfo;
+	if (!out.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
+		return false;
+
+	int w = info.nWidth, h = info.nHeight;
 	void* p = out.pBufAddr;
-	if (!p || w == 0 || h == 0) return false;
 
-	// --- 1) BGR8: copy thẳng (1 lần) vào buffer tái sử dụng
-	if (px == PixelType_Gvsp_BGR8_Packed) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat view(h, w, CV_8UC3, p);
-		view.copyTo(imageBGR);
+	switch (info.enPixelType)
+	{
+	case PixelType_Gvsp_BGR8_Packed:
+		EnsureSize(imageBGR, w, h, CV_8UC3);
+		cv::Mat(h, w, CV_8UC3, p).copyTo(imageBGR);
 		return true;
-	}
 
-	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
-	if (px == PixelType_Gvsp_RGB8_Packed) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat rgb(h, w, CV_8UC3, p);
-		RGBtoBGR(rgb, imageBGR);
+	case PixelType_Gvsp_RGB8_Packed:
+		EnsureSize(imageBGR, w, h, CV_8UC3);
+		cv::cvtColor(cv::Mat(h, w, CV_8UC3, p), imageBGR, cv::COLOR_RGB2BGR);
 		return true;
-	}
 
-	// --- 3) MONO8: nâng lên BGR
-	if (px == PixelType_Gvsp_Mono8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat mono(h, w, CV_8UC1, p);
-		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
+	case PixelType_Gvsp_Mono8:
+		EnsureSize(imageBGR, w, h, CV_8UC3);
+		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_GRAY2BGR);
 		return true;
-	}
-	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
-	if (px == PixelType_Gvsp_BayerBG8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat raw(h, w, CV_8UC1, p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2RGB);
-		return true;
-	}
-	// --- 4) Bayer8: demosaic bằng OpenCV (nhanh). Có 4 pattern thường gặp.
-	// Nếu bạn muốn màu đẹp hơn (HQ), có thể bỏ 4 nhánh này để dùng SDK ConvertBySDKEx.
-	/*if (px == PixelType_Gvsp_BayerBG8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat raw(h, w, CV_8UC1, p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR);
-		return true;
-	}
-	if (px == PixelType_Gvsp_BayerGB8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat raw(h, w, CV_8UC1, p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
-		return true;
-	}
-	if (px == PixelType_Gvsp_BayerRG8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat raw(h, w, CV_8UC1, p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
-		return true;
-	}
-	if (px == PixelType_Gvsp_BayerGR8) {
-		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
-		cv::Mat raw(h, w, CV_8UC1, p);
-		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
-		return true;
-	}*/
 
-	// --- 5) Các định dạng còn lại (Bayer10/12/16, Mono10/12/16, Packed, v.v.) → dùng SDK EX
-	return ConvertBySDKEx(camera, out, imageBGR);
+	case PixelType_Gvsp_BayerBG8:
+		EnsureSize(imageBGR, w, h, CV_8UC3);
+		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_BayerBG2BGR);
+		return true;
+
+	default:
+		return ConvertBySDKEx(camera, out, imageBGR);
+	}
 }
+
+//bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
+//{
+//	MV_FRAME_OUT out{};
+//	int ret = camera->GetImageBuffer(&out, timeoutMs);
+//	if (ret != MV_OK) {
+//		std::cerr << "GetImageBuffer failed: " << ret << "\n";
+//		return false;
+//	}
+//
+//	struct Guard {
+//		CMvCamera* cam; MV_FRAME_OUT* o;
+//		~Guard() { if (cam && o) cam->FreeImageBuffer(o); }
+//	} guard{ camera, &out };
+//
+//	const unsigned int w = out.stFrameInfo.nWidth;
+//	const unsigned int h = out.stFrameInfo.nHeight;
+//	const unsigned int px = out.stFrameInfo.enPixelType;
+//	void* p = out.pBufAddr;
+//	if (!p || w == 0 || h == 0) return false;
+//
+//	// --- 1) BGR8: copy thẳng (1 lần) vào buffer tái sử dụng
+//	if (px == PixelType_Gvsp_BGR8_Packed) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat view(h, w, CV_8UC3, p);
+//		view.copyTo(imageBGR);
+//		return true;
+//	}
+//
+//	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
+//	if (px == PixelType_Gvsp_RGB8_Packed) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat rgb(h, w, CV_8UC3, p);
+//		RGBtoBGR(rgb, imageBGR);
+//		return true;
+//	}
+//
+//	// --- 3) MONO8: nâng lên BGR
+//	if (px == PixelType_Gvsp_Mono8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat mono(h, w, CV_8UC1, p);
+//		cv::cvtColor(mono, imageBGR, cv::COLOR_GRAY2BGR);
+//		return true;
+//	}
+//	// --- 2) RGB8: đảo kênh → BGR (chuẩn OpenCV)
+//	if (px == PixelType_Gvsp_BayerBG8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw(h, w, CV_8UC1, p);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2RGB);
+//		return true;
+//	}
+//	// --- 4) Bayer8: demosaic bằng OpenCV (nhanh). Có 4 pattern thường gặp.
+//	// Nếu bạn muốn màu đẹp hơn (HQ), có thể bỏ 4 nhánh này để dùng SDK ConvertBySDKEx.
+//	/*if (px == PixelType_Gvsp_BayerBG8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw(h, w, CV_8UC1, p);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerBG2BGR);
+//		return true;
+//	}
+//	if (px == PixelType_Gvsp_BayerGB8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw(h, w, CV_8UC1, p);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGB2BGR);
+//		return true;
+//	}
+//	if (px == PixelType_Gvsp_BayerRG8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw(h, w, CV_8UC1, p);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerRG2BGR);
+//		return true;
+//	}
+//	if (px == PixelType_Gvsp_BayerGR8) {
+//		EnsureSize(imageBGR, (int)w, (int)h, CV_8UC3);
+//		cv::Mat raw(h, w, CV_8UC1, p);
+//		cv::cvtColor(raw, imageBGR, cv::COLOR_BayerGR2BGR);
+//		return true;
+//	}*/
+//
+//	// --- 5) Các định dạng còn lại (Bayer10/12/16, Mono10/12/16, Packed, v.v.) → dùng SDK EX
+//	return ConvertBySDKEx(camera, out, imageBGR);
+//}
 bool CaptureFrame(CMvCamera* camera, cv::Mat& imageBGR) {
 	MV_FRAME_OUT out = { 0 };
 
@@ -1587,6 +1631,75 @@ void CCD::CalHist()
 
 
 }
+bool CCD::ReconnectHik(int indexCCD,System::String^ NameCamera, int waitAfterResetMs )
+{
+	
+
+	
+	// ===== 1) Stop grabbing nếu còn sống =====
+	m_pcMyCamera[indexCCD]->StopGrabbing();
+
+	// ===== 2) Thử DeviceReset (soft reset) =====
+	int r = m_pcMyCamera[indexCCD]->CommandExecute("DeviceReset");
+	if (r == MV_OK)
+	{
+		std::cout << "[Reconnect] DeviceReset OK, wait reboot..." << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(waitAfterResetMs));
+	}
+	else
+	{
+		std::cout << "[Reconnect] DeviceReset not supported / failed = " << r << std::endl;
+	}
+
+	// ===== 3) Close & Destroy handle cũ =====
+	m_pcMyCamera[indexCCD]->Close();
+	delete m_pcMyCamera[indexCCD];
+	m_pcMyCamera[indexCCD] = nullptr;
+
+	// ===== 4) Enum lại device =====
+	memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
+	int nRet = CMvCamera::EnumDevices(
+		MV_GIGE_DEVICE | MV_USB_DEVICE | MV_GENTL_GIGE_DEVICE,
+		&m_stDevList
+	);
+	if (nRet != MV_OK || m_stDevList.nDeviceNum == 0)
+	{
+		std::cerr << "[Reconnect] EnumDevices failed or no device\n";
+		return false;
+	}
+	std::string nameCCD = marshal_as<std::string>(NameCamera);
+	int index = FindCameraIndexByUserName(m_stDevList, nameCCD);
+	if (index <= -1)
+		return false;
+	bool IsConnect = ConnectHik(index, indexCCD);
+
+
+
+	if (!IsConnect)
+	{
+		std::cerr << "[Reconnect] Open failed: " << nRet << std::endl;
+		delete m_pcMyCamera[indexCCD];
+		m_pcMyCamera[indexCCD] = nullptr;
+		return false;
+	}
+
+	// ===== 7) GigE: set lại packet size =====
+	if (m_stDevList.pDeviceInfo[index]->nTLayerType == MV_GIGE_DEVICE)
+	{
+		unsigned int packetSize = 0;
+		if (m_pcMyCamera[indexCCD]->GetOptimalPacketSize(&packetSize) == MV_OK)
+		{
+			m_pcMyCamera[indexCCD]->SetIntValue("GevSCPSPacketSize", packetSize);
+		}
+	}
+
+	// ===== 8) Start grabbing =====
+	m_pcMyCamera[indexCCD]->StartGrabbing();
+
+	std::cout << "[Reconnect] Reconnect SUCCESS\n";
+	return true;
+}
+
 void CCD::DestroyAll(int indexCCD,int TypeCamera )
 {
 	

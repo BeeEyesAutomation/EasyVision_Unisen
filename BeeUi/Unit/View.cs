@@ -1812,6 +1812,15 @@ namespace BeeUi
             Global.ChangeProg += Global_ChangeProg;
             Global.ChangeDummy += Global_ChangeDummy;
             Global.AutoShuttDown += Global_AutoShuttDown;
+            Global.Comunication.Protocol.ProgressChanged += Protocol_ProgressChanged;
+        }
+
+        private void Protocol_ProgressChanged(int obj)
+        {
+            this.Invoke((Action)(async () =>
+            {
+                Global.EditTool.StepProccessBar.DoneCount = obj;
+            }));
         }
 
         private void Global_AutoShuttDown(bool obj)
@@ -1849,9 +1858,6 @@ namespace BeeUi
                                 {
                                     Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
                                     G.Header.workLoadProgram.RunWorkerAsync();
-                                    Global.Config.SumOK = 0;
-                                    Global.Config.SumNG = 0;
-                                    Global.Config.SumTime = 0;
                                     G.StatusDashboard.TotalTimes = Global.Config.SumTime;
                                     G.StatusDashboard.OkCount = Global.Config.SumOK;
                                     G.StatusDashboard.NgCount = Global.Config.SumNG;
@@ -1867,9 +1873,7 @@ namespace BeeUi
                                     if (messageChoose.IsOK)
                                     {
 
-                                        Global.Config.SumOK = 0;
-                                        Global.Config.SumNG = 0;
-                                        Global.Config.SumTime = 0;
+                                       
                                         G.StatusDashboard.TotalTimes = Global.Config.SumTime;
                                         G.StatusDashboard.OkCount = Global.Config.SumOK;
                                         G.StatusDashboard.NgCount = Global.Config.SumNG;
@@ -1908,7 +1912,9 @@ namespace BeeUi
 
                 else
                 {
-
+                    G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                    G.StatusDashboard.OkCount = Global.Config.SumOK;
+                    G.StatusDashboard.NgCount = Global.Config.SumNG;
                     imgView.Text = "";
                 }
             }));

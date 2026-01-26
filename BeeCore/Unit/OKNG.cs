@@ -508,9 +508,19 @@ namespace BeeCore
                 Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
 
             if (Common.PropetyTools[Global.IndexChoose][Index].Results == Results.OK)
-                Draws.Box2Label(gc, rotA._rect, ScoreOK+ "% OK ", ScoreNG + "% NG" , font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
+            {
+                ScoreOK += 10;
+                ScoreNG -= 10;
+                Draws.Box2Label(gc, rotA._rect, ScoreOK + "% OK ", ScoreNG + "% NG", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
+
+            }
             else
+            {
+                ScoreOK -= 10;
+                ScoreNG += 10;
                 Draws.Box2Label(gc, rotA._rect, ScoreNG + "% NG ", ScoreOK + "% OK", font, cl, brushText, 16, Global.ParaShow.ThicknessLine);
+            }    
+               
             gc.ResetTransform();
             //if (listScore == null) return gc;
             //if (rectRotates.Count > 0)

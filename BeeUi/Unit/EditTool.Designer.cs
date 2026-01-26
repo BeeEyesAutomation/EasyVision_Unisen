@@ -66,6 +66,9 @@ namespace BeeUi
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.pTop = new System.Windows.Forms.Panel();
+            this.splitter4 = new System.Windows.Forms.Splitter();
+            this.lbdisPLC = new System.Windows.Forms.Label();
+            this.splitter3 = new System.Windows.Forms.Splitter();
             this.lbBypass = new System.Windows.Forms.Label();
             this.split4 = new System.Windows.Forms.Splitter();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -116,9 +119,8 @@ namespace BeeUi
             this.tmLoad = new System.Windows.Forms.Timer(this.components);
             this.workLive = new System.ComponentModel.BackgroundWorker();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.lbdisPLC = new System.Windows.Forms.Label();
-            this.splitter3 = new System.Windows.Forms.Splitter();
-            this.splitter4 = new System.Windows.Forms.Splitter();
+            this.splitter5 = new System.Windows.Forms.Splitter();
+            this.StepProccessBar = new BeeInterface.StepProgressBar();
             this.pInfor = new BeeUi.ViewHost();
             this.pEditTool = new BeeUi.ViewHost();
             this.btnLive = new BeeInterface.RJButton();
@@ -485,6 +487,41 @@ namespace BeeUi
             this.pTop.Size = new System.Drawing.Size(2240, 51);
             this.pTop.TabIndex = 22;
             // 
+            // splitter4
+            // 
+            this.splitter4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter4.Location = new System.Drawing.Point(1495, 0);
+            this.splitter4.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter4.Name = "splitter4";
+            this.splitter4.Size = new System.Drawing.Size(5, 51);
+            this.splitter4.TabIndex = 18;
+            this.splitter4.TabStop = false;
+            // 
+            // lbdisPLC
+            // 
+            this.lbdisPLC.BackColor = System.Drawing.Color.Brown;
+            this.lbdisPLC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbdisPLC.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lbdisPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbdisPLC.ForeColor = System.Drawing.Color.White;
+            this.lbdisPLC.Location = new System.Drawing.Point(1500, 0);
+            this.lbdisPLC.Name = "lbdisPLC";
+            this.lbdisPLC.Size = new System.Drawing.Size(127, 51);
+            this.lbdisPLC.TabIndex = 16;
+            this.lbdisPLC.Text = "Dis PLC";
+            this.lbdisPLC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbdisPLC.Visible = false;
+            // 
+            // splitter3
+            // 
+            this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter3.Location = new System.Drawing.Point(1627, 0);
+            this.splitter3.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter3.Name = "splitter3";
+            this.splitter3.Size = new System.Drawing.Size(5, 51);
+            this.splitter3.TabIndex = 17;
+            this.splitter3.TabStop = false;
+            // 
             // lbBypass
             // 
             this.lbBypass.BackColor = System.Drawing.Color.LightGreen;
@@ -542,12 +579,12 @@ namespace BeeUi
             // 
             // pView
             // 
-            this.pView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.pView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.pView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pView.Location = new System.Drawing.Point(5, 252);
             this.pView.Margin = new System.Windows.Forms.Padding(1);
             this.pView.Name = "pView";
-            this.pView.Size = new System.Drawing.Size(1730, 1115);
+            this.pView.Size = new System.Drawing.Size(1730, 1009);
             this.pView.TabIndex = 27;
             this.pView.SizeChanged += new System.EventHandler(this.pView_SizeChanged);
             // 
@@ -898,40 +935,30 @@ namespace BeeUi
             this.workLive.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLive_DoWork);
             this.workLive.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLive_RunWorkerCompleted);
             // 
-            // lbdisPLC
+            // splitter5
             // 
-            this.lbdisPLC.BackColor = System.Drawing.Color.Brown;
-            this.lbdisPLC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbdisPLC.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lbdisPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbdisPLC.ForeColor = System.Drawing.Color.White;
-            this.lbdisPLC.Location = new System.Drawing.Point(1500, 0);
-            this.lbdisPLC.Name = "lbdisPLC";
-            this.lbdisPLC.Size = new System.Drawing.Size(127, 51);
-            this.lbdisPLC.TabIndex = 16;
-            this.lbdisPLC.Text = "Dis PLC";
-            this.lbdisPLC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbdisPLC.Visible = false;
+            this.splitter5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.splitter5.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter5.Location = new System.Drawing.Point(5, 1261);
+            this.splitter5.Name = "splitter5";
+            this.splitter5.Size = new System.Drawing.Size(1730, 5);
+            this.splitter5.TabIndex = 32;
+            this.splitter5.TabStop = false;
             // 
-            // splitter3
+            // StepProccessBar
             // 
-            this.splitter3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter3.Location = new System.Drawing.Point(1627, 0);
-            this.splitter3.MaximumSize = new System.Drawing.Size(200, 2000);
-            this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(5, 51);
-            this.splitter3.TabIndex = 17;
-            this.splitter3.TabStop = false;
-            // 
-            // splitter4
-            // 
-            this.splitter4.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter4.Location = new System.Drawing.Point(1495, 0);
-            this.splitter4.MaximumSize = new System.Drawing.Size(200, 2000);
-            this.splitter4.Name = "splitter4";
-            this.splitter4.Size = new System.Drawing.Size(5, 51);
-            this.splitter4.TabIndex = 18;
-            this.splitter4.TabStop = false;
+            this.StepProccessBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.StepProccessBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.StepProccessBar.DoneColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(116)))));
+            this.StepProccessBar.DoneCount = 0;
+            this.StepProccessBar.EnableAnimation = true;
+            this.StepProccessBar.Font = new System.Drawing.Font("Segoe UI", 12.5F, System.Drawing.FontStyle.Bold);
+            this.StepProccessBar.ForeColor = System.Drawing.Color.White;
+            this.StepProccessBar.Location = new System.Drawing.Point(5, 1266);
+            this.StepProccessBar.Name = "StepProccessBar";
+            this.StepProccessBar.PendingStepColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.StepProccessBar.Size = new System.Drawing.Size(1730, 101);
+            this.StepProccessBar.TabIndex = 31;
             // 
             // pInfor
             // 
@@ -1241,6 +1268,8 @@ namespace BeeUi
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(223)))), ((int)(((byte)(223)))));
             this.Controls.Add(this.pView);
+            this.Controls.Add(this.splitter5);
+            this.Controls.Add(this.StepProccessBar);
             this.Controls.Add(this.split3);
             this.Controls.Add(this.pInfor);
             this.Controls.Add(this.pLeft);
@@ -1377,5 +1406,7 @@ namespace BeeUi
         public System.Windows.Forms.Label lbdisPLC;
         private System.Windows.Forms.Splitter splitter4;
         private System.Windows.Forms.Splitter splitter3;
+        private System.Windows.Forms.Splitter splitter5;
+        public StepProgressBar StepProccessBar;
     }
 }

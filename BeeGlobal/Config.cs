@@ -13,12 +13,7 @@ namespace BeeGlobal
     [Serializable()]
     public class Config
     {
-        ////public Image icon;
-        //public Color ColorBG = Color.FromArgb(223, 223, 223);
-        //public Color ColorBar1 = Color.FromArgb(114, 114, 114);
-        //public Color ColorBar2 = Color.FromArgb(100, 114, 114, 114);
-        //public Color ColorEnd = Color.WhiteSmoke;
-        //public Color ColorRight = Color.WhiteSmoke;
+        public  bool IsShowProgressingPLC = true;
         public bool EnterPO = true;
         public String POCurrent = "";
         public bool IsWaitResultTotal = false;

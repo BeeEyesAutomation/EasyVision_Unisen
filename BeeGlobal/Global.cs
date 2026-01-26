@@ -190,6 +190,7 @@ namespace BeeGlobal
         public static float ZoomMinimum = 0;
        public static  bool IsLearning=true;
         public static bool IsOCR = true;
+       
         public static StatusDraw StatusDraw
         {
             get => _StatusDraw;

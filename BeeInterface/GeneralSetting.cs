@@ -43,7 +43,7 @@ namespace BeeInterface
             if (btnDisPLC.IsCLick)
                 btnDisPLC.Text = "ON";
             else btnDisPLC.Text = "OFF";
-            numTrigger.Value = Global.Config.NumTrig;
+            numFlowChart.Value = Global.Config.NumTrig;
             btnMulti.IsCLick = Global.Config.IsMultiProg;
             btnSingle.IsCLick = !Global.Config.IsMultiProg;
             switch (Global.Config.TypeSave)
@@ -79,8 +79,8 @@ namespace BeeInterface
             btnByPassResult.IsCLick = Global.Config.IsForceByPassRS;
             btnFullDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Full ? true : false;
             btnNormalDisplay.IsCLick = Global.Config.DisplayResolution == DisplayResolution.Normal ? true : false;
-          //  btnModeSaveSingle.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Single ? true : false;
-          //  btnSaveModeMulti.IsCLick = Global.Config.ModeSaveProg == ModeSaveProg.Multi ? true : false;
+            btnShowProgessing.IsCLick = Global.Config.IsShowProgressingPLC;
+            btnHideProgessing.IsCLick =! Global.Config.IsShowProgressingPLC;
             btnOnAutoTrigger.IsCLick = Global.Config.IsAutoTrigger;
             btnOffAutoTrigger.IsCLick = !Global.Config.IsAutoTrigger;
             btnONResetImg.IsCLick = Global.Config.IsResetImg;
@@ -175,7 +175,7 @@ namespace BeeInterface
 
         private void numTrigger_ValueChanged(float obj)
         {
-            Global.Config.NumTrig = (int)numTrigger.Value;
+            Global.Config.NumTrig = (int)numFlowChart.Value;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -461,7 +461,7 @@ namespace BeeInterface
             lbListNo.Text = "";
             foreach (ProgNo no in Global.ListProgNo)
             {
-                lbListNo.Text += no.No + "." + no.Name+"\n";
+                lbListNo.Text += no.No + "." + no.Name+Environment.NewLine;
             }
         }
         private void btnImportProgNo_Click(object sender, EventArgs e)
@@ -503,6 +503,60 @@ namespace BeeInterface
                 btnDisPLC.Text = "OFF";
             }
 
+        }
+
+        private void btnShowProgessing_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowProgressingPLC = btnShowProgessing.IsCLick;
+            Global.EditTool.StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+        }
+
+        private void btnHideProgessing_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowProgressingPLC = !btnHideProgessing.IsCLick;
+            Global.EditTool.StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+        }
+
+        private void btnP1_Click(object sender, EventArgs e)
+        {
+            lay1.Visible = !btnP1.IsCLick;
+        }
+
+        private void btnP2_Click(object sender, EventArgs e)
+        {
+            layP2.Visible= !btnP2.IsCLick;
+        }
+
+        private void btnP3_Click(object sender, EventArgs e)
+        {
+            numFlowChart.Visible = !btnP3.IsCLick;
+        }
+
+        private void tableLayoutPanel6_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+      
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            layShowProgressing.Visible = !btnP4.IsCLick;
+        }
+
+        private void rjButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnD1_Click(object sender, EventArgs e)
+        {
+            laySetSaveProg.Visible = !btnD1.IsCLick;
+        }
+
+        private void btnSetSaveReport_Click(object sender, EventArgs e)
+        {
+            laySetReport.Visible = !btnD2.IsCLick;
         }
     }
 }

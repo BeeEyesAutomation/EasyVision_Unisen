@@ -279,11 +279,11 @@ namespace BeeCore
 
                             // Label
                             string label = labels[j].ToString();
-                          
-                            //List<char> allowed = new List<char>(sAllow.ToCharArray());
 
-                           // label = new string(label.Where(c => allowed.Contains(c)).ToArray());
-              
+                            List<char> allowed = new List<char>(sAllow.ToCharArray());
+
+                            label = new string(label.Where(c => allowed.Contains(c)).ToArray());
+
                             Content += label.Trim()+ "\r\n";
                             listLabelResult.Add(label);
                             listLabel[listLabel.Count() - 1].Add(label);
@@ -494,6 +494,7 @@ namespace BeeCore
                  Common.PropetyTools[IndexThread][Index].StepValue = 1;
                 Common.PropetyTools[IndexThread][Index].MinValue = 0;
                 Common.PropetyTools[IndexThread][Index].MaxValue = 100;
+            sAllow = "0123456789";
             if (sAllow == "")
                 sAllow = "ABCDEFJKLMNOPQSTUWXYZabcdefghijklmnopqstuwxyz0123456789,.;'\"?/\"<>@#!$%^&*()_-+={}[]|\\~`";
            // if(!IsNew2)

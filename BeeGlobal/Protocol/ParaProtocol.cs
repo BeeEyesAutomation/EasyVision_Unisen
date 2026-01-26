@@ -218,6 +218,45 @@ namespace BeeGlobal
         public String AddPO = "";
         public String AddCountProg = "";
         public int _ValueCountProg = 2;
+        public String AddQty = "";
+        public int _ValueQty = 0;
+        [field: NonSerialized]
+        public event Action<int> QtyChanged;
+        public int ValueQty
+        {
+            get => _ValueQty;
+            set
+            {
+                if (_ValueQty != value)
+                {
+                    _ValueQty = value;
+                    if(_ValueQty!=0)
+                     if (  _ValueQty != Global.Config.SumTime)
+                        {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Qty", "PLC:" + _ValueQty + "VS:" + Global.Config.SumTime));
+
+                        }
+
+                    QtyChanged?.Invoke(_ValueQty); // Gọi event
+                }
+            }
+        }
+        public String AddProgress = "";
+        public int _ValueProgress = 0;
+        [field: NonSerialized]
+        public event Action<int> ProgressChanged;
+        public int ValueProgress
+        {
+            get => _ValueProgress;
+            set
+            {
+                if (_ValueProgress != value)
+                {
+                    _ValueProgress = value;
+                    ProgressChanged?.Invoke(_ValueProgress); // Gọi event
+                }
+            }
+        }
         [field: NonSerialized]
         public event Action<int> ValueCountProgChanged;
         public int ValueCountProg
@@ -356,7 +395,15 @@ namespace BeeGlobal
                             if (AddCountProg != null)
                                 if (AddCountProg != "")
                                     ValueCountProg = PlcClient.ReadInt(AddCountProg);
-                            Global.NumProgFromPLC = ValueCountProg;
+                           if (AddQty != null)
+                                if (AddQty != "")
+                                    ValueQty = PlcClient.ReadInt(AddQty);
+                           if(ValueQty!=0)
+                            {
+                                Global.Config.SumTime = ValueQty;
+                                Global.Config.SumOK = Global.Config.SumTime - Global.Config.SumNG;
+                            }    
+                           Global.NumProgFromPLC = ValueCountProg;
 
 
                         }
@@ -387,8 +434,6 @@ namespace BeeGlobal
                         {
                            
                             Global.EditTool.lbBypass.Visible = true;
-                          
-
                         }
                         else
                         {
@@ -400,8 +445,13 @@ namespace BeeGlobal
                         {
                             if (Global.ParaCommon.IsExternal)
                             {
+                               
+
                                 if (Global.StatusProcessing == StatusProcessing.None)
                                 {
+                                    if (AddProgress != null)
+                                        if (AddProgress != "")
+                                            ValueProgress = PlcClient.ReadInt(AddProgress);
                                     if (GetInPut(I_O_Input.Live) == true && !IsPressLive)
                                     {
                                         IsPressLive = true;
@@ -426,6 +476,9 @@ namespace BeeGlobal
                                             if (AddProg != "")
                                                 NoProg = PlcClient.ReadInt(AddProg);
                                         WriteInput(I_O_Input.ChangeProg, false);
+                                        Global.Config.SumOK = 0;
+                                        Global.Config.SumNG = 0;
+                                        Global.Config.SumTime = 0;
                                         Global.IsPLCChangeProg = true;
                                         Global.IsChangeProg = true;
 
@@ -471,9 +524,9 @@ namespace BeeGlobal
                                         if (GetInPut(I_O_Input.Reset) == true)
                                     {
                                         WriteInput(I_O_Input.Reset, false);
-                                        Global.Config.SumTime = 0;
-                                        Global.Config.SumOK = 0;
-                                        Global.Config.SumNG = 0;
+                                        //Global.Config.SumTime = 0;
+                                        //Global.Config.SumOK = 0;
+                                        //Global.Config.SumNG = 0;
 
                                     }
                                     if (GetInPut(I_O_Input.ByPass) == true && !Global.IsByPassResult)
@@ -547,7 +600,16 @@ namespace BeeGlobal
                                                 if (AddPO != null)
                                                     if (AddPO != "")
                                                         ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
+                                                try
+                                                {
+                                                    if (AddQty != null)
+                                                        if (AddQty != "")
+                                                            ValueQty = PlcClient.ReadInt(AddQty);
+                                                }
+                                                catch(Exception ex)
+                                                {
 
+                                                }
                                                 Global.IndexChoose = 0;
                                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                                 Global.TriggerInternal = false;

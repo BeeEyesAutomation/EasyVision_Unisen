@@ -32,7 +32,48 @@ namespace BeeInterface
     public enum FilterMode { All = 0, NewestAny = 1, OnlyOK = 2, OnlyNG = 3 }
 
     public class DashboardImages : Control
-    {
+    {// ===== Public event: click image =====
+        public event EventHandler<ImageClickedEventArgs> ImageClicked;
+        public class ImageClickedEventArgs : EventArgs
+        {
+            public string Path { get; private set; }
+            public Image Image { get; private set; }   // có thể null
+            public Size OriginalSize { get; private set; }
+            public string Caption { get; private set; }
+
+            public ImageClickedEventArgs(string path, Image img, Size origSize, string caption)
+            {
+                Path = path;
+                Image = img;
+                OriginalSize = origSize;
+                Caption = caption;
+            }
+        }
+        private Image GetImage(ImageItem it)
+        {
+            if (it == null) return null;
+
+            // Ưu tiên full-res
+            lock (_cacheLock)
+            {
+                if (_cache.TryGetValue(it.Path, out var full) && full != null)
+                {
+                    // ⚠️ clone để tránh dispose chéo
+                    return (Image)full.Clone();
+                }
+            }
+
+            // Fallback thumbnail
+            lock (_thumbLock)
+            {
+                if (_thumbCache.TryGetValue(it.Path, out var th) && th != null)
+                {
+                    return (Image)th.Clone();
+                }
+            }
+
+            return null; // chưa có ảnh
+        }
         // Sort mode
         private enum SortMode { TimeDesc = 0, TimeAsc = 1, NameAsc = 2, NameDesc = 3 }
 
@@ -1203,15 +1244,37 @@ namespace BeeInterface
         private void Dashboard_MouseDown(object sender, MouseEventArgs e)
         {
             if (!_allowInteractions) return;
+
             Focus();
             _lastMouse = e.Location;
             _activeItem = null;
 
             foreach (var it in _items)
             {
-                var r = it.Bounds; r.Y -= _vScroll.Value;
-                if (!r.Contains(e.Location)) continue;
+                var r = it.Bounds;
+                r.Y -= _vScroll.Value;
+
+                if (!r.Contains(e.Location))
+                    continue;
+
                 _activeItem = it;
+
+                // 👉 CLICK TRÁI → emit event
+                if (e.Button == MouseButtons.Left)
+                {
+                    var img = GetImage(it);
+
+                    ImageClicked?.Invoke(
+                        this,
+                        new ImageClickedEventArgs(
+                            it.Path,
+                            img,
+                            it.OrigSize,
+                            it.Caption
+                        )
+                    );
+                }
+
                 break;
             }
         }

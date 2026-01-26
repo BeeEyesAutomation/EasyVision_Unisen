@@ -43,7 +43,7 @@ namespace CvPlus {
 	public: int numERR = 0;
 	public: int TypeCamera = 0;
 	public: bool  IsErrCCD = false;
-	
+	public: bool ReconnectHik(int indexCCD, System::String^ NameCamera, int waitAfterResetMs );
 	public: bool  IsWaiting = false;
 	//public:int  colCCD = 1280, rowCCD = 720; //  colCCD = 240, rowCCD = 120; //
 	public:int colCrop, rowCrop;

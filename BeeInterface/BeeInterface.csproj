@@ -96,6 +96,9 @@
     <Compile Include="Custom\RoundedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Custom\StepProgressBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DashBoard\DashboardImages.cs" />
     <Compile Include="DashBoard\DashboardListCompact.cs">
       <SubType>Component</SubType>

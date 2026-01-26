@@ -1525,7 +1525,7 @@ namespace BeeCore
                 // intPtr = Native.GetRaw(ref rows, ref cols, ref matType);
                 if (intPtr == IntPtr.Zero || rows <= 0 || cols <= 0)
                 {
-
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "MVS", "ReadCCD"));
                     return false;
 
                 }
@@ -1650,6 +1650,11 @@ namespace BeeCore
         public bool Read() => ReadAwait().GetAwaiter().GetResult();
         public async Task<bool> ReConnectAwait()
         {
+            if (Para.TypeCamera == TypeCamera.MVS)
+            {
+                CCDPlus.ReconnectHik(IndexCCD, Para.Name,300);
+                return true;
+            }
             await TimingUtils.DelayAccurateAsync(200);
             DisConnect(Para.TypeCamera);
             await TimingUtils.DelayAccurateAsync(200);
@@ -1666,7 +1671,7 @@ namespace BeeCore
         public bool ReConnect() => ReConnectAwait().GetAwaiter().GetResult();
         public bool ReConnect2()
         {
-            
+          
             DisConnect(Para.TypeCamera);
           
             if (!ConnectNoAwait(Para.Name, Para.TypeCamera))

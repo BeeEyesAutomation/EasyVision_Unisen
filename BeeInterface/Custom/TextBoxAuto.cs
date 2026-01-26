@@ -1,102 +1,143 @@
-﻿
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
 
-    namespace BeeInterface
+namespace BeeInterface
+{
+    public class TextBoxAuto : TextBox
     {
-        public class TextBoxAuto : TextBox
+        private bool _autoFont = true;
+        private bool _adjusting = false;
+        private Control _oldParent = null;
+
+        private float _minFontSize = 6f;
+        private float _maxFontSize = 100f;
+
+        [Category("Behavior")]
+        public bool AutoFont
         {
-            private bool autoFont = true;
+            get => _autoFont;
+            set { _autoFont = value; Invalidate(); if (_autoFont) AdjustFont(); }
+        }
 
-            [Category("Behavior")]
-            public bool AutoFont
+        [Category("Appearance")]
+        [DefaultValue(6f)]
+        public float MinFontSize
+        {
+            get => _minFontSize;
+            set
             {
-                get => autoFont;
-                set { autoFont = value; Invalidate(); }
+                _minFontSize = Math.Max(1f, value);
+                if (_maxFontSize < _minFontSize) _maxFontSize = _minFontSize;
+                if (_autoFont) AdjustFont();
             }
+        }
 
-            public TextBoxAuto()
+        [Category("Appearance")]
+        [DefaultValue(100f)]
+        public float MaxFontSize
+        {
+            get => _maxFontSize;
+            set
             {
-                this.AutoSize = false;
-
-               // this.TextAlign =HorizontalAlignment.Center;
+                _maxFontSize = Math.Max(_minFontSize, value);
+                if (_autoFont) AdjustFont();
             }
+        }
+
+        public TextBoxAuto()
+        {
+            AutoSize = false;
+        }
+
         protected override void OnParentChanged(EventArgs e)
         {
+            // unsubscribe parent cũ
+            if (_oldParent != null)
+                _oldParent.SizeChanged -= Parent_SizeChanged;
+
             base.OnParentChanged(e);
-            // Subscribe to parent's SizeChanged to auto-stretch height
-            if (this.Parent != null)
+
+            // subscribe parent mới
+            if (Parent != null)
             {
-                this.Parent.SizeChanged += Parent_SizeChanged;
-                // Initial sync
-                this.Height = this.Parent.ClientSize.Height;
+                Parent.SizeChanged += Parent_SizeChanged;
+                _oldParent = Parent;
+
+                Height = Parent.ClientSize.Height;
             }
-            if (autoFont) AdjustFont();
+
+            if (_autoFont) AdjustFont();
         }
 
         private void Parent_SizeChanged(object sender, EventArgs e)
         {
-            if (this.Parent != null)
+            if (Parent != null)
             {
-                this.Height = this.Parent.ClientSize.Height;
-                if (autoFont) AdjustFont();
+                Height = Parent.ClientSize.Height;
+                if (_autoFont) AdjustFont();
             }
         }
 
         protected override void OnTextChanged(EventArgs e)
+        {
+            base.OnTextChanged(e);
+            if (_autoFont) AdjustFont();
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (_autoFont) AdjustFont();
+        }
+
+        private void AdjustFont()
+        {
+            if (_adjusting) return;
+            if (!_autoFont) return;
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
+            if (string.IsNullOrEmpty(Text)) return;
+
+            _adjusting = true;
+            try
             {
-                base.OnTextChanged(e);
-                if (autoFont)
-                    AdjustFont();
-            }
-
-            protected override void OnSizeChanged(EventArgs e)
-            {
-                base.OnSizeChanged(e);
-
-                if (autoFont)
-                    AdjustFont();
-
-            }
-
-            private void AdjustFont()
-            {
-                if (string.IsNullOrEmpty(this.Text) || this.ClientSize.Width <= 0 || this.ClientSize.Height <= 0)
-                    return;
-
-                using (Graphics g = this.CreateGraphics())
+                using (Graphics g = CreateGraphics())
                 {
-                    float minFont = 1f;
-                    float maxFont = 100f;
-                    float best = minFont;
+                    float minF = _minFontSize;
+                    float maxF = _maxFontSize;
+                    float best = minF;
 
-                    while (maxFont - minFont > 0.5f)
+                    var proposed = ClientSize;
+                    var flags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
+
+                    while (maxF - minF > 0.5f)
                     {
-                        float mid = (minFont + maxFont) / 2;
-                        using (Font testFont = new Font(this.Font.FontFamily, mid, this.Font.Style))
+                        float mid = (minF + maxF) / 2f;
+                        using (Font test = new Font(Font.FontFamily, mid, Font.Style))
                         {
-                            Size proposedSize = this.ClientSize;
-                            TextFormatFlags flags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
-                            Size measured = TextRenderer.MeasureText(g, this.Text, testFont, proposedSize, flags);
+                            Size measured = TextRenderer.MeasureText(g, Text, test, proposed, flags);
 
-                            if (measured.Height <= this.ClientSize.Height && measured.Width <= this.ClientSize.Width)
+                            if (measured.Width <= proposed.Width && measured.Height <= proposed.Height)
                             {
                                 best = mid;
-                                minFont = mid;
+                                minF = mid;
                             }
                             else
                             {
-                                maxFont = mid;
+                                maxF = mid;
                             }
                         }
                     }
 
-                    this.Font = new Font(this.Font.FontFamily, best, this.Font.Style);
+                    // set 1 lần
+                    Font = new Font(Font.FontFamily, best, Font.Style);
                 }
+            }
+            finally
+            {
+                _adjusting = false;
             }
         }
     }
-
-
+}
