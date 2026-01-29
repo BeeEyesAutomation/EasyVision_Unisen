@@ -48,7 +48,7 @@ namespace BeeUi.Common
             this.split2 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnMode = new BeeInterface.RJButton();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.pTrain = new System.Windows.Forms.Panel();
             this.btnTraining = new BeeInterface.RJButton();
             this.pPO = new System.Windows.Forms.Panel();
             this.txtPO = new BeeInterface.TextBoxAuto();
@@ -56,17 +56,17 @@ namespace BeeUi.Common
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.btnEnterPO = new BeeInterface.RJButton();
             this.lbPO = new BeeInterface.AutoFontLabel();
-            this.splitter3 = new System.Windows.Forms.Splitter();
+            this.spTrain = new System.Windows.Forms.Splitter();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.pEdit = new BeeUi.Unit.EditProg();
-            this.splitter5 = new System.Windows.Forms.Splitter();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.spDummy = new System.Windows.Forms.Splitter();
+            this.pDummy = new System.Windows.Forms.Panel();
             this.btnDummy = new BeeInterface.RJButton();
             this.pModel.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.pTrain.SuspendLayout();
             this.pPO.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.pDummy.SuspendLayout();
             this.SuspendLayout();
             // 
             // workConnect
@@ -346,15 +346,15 @@ namespace BeeUi.Common
             this.btnMode.UseVisualStyleBackColor = false;
             this.btnMode.Click += new System.EventHandler(this.btnMode_Click);
             // 
-            // panel2
+            // pTrain
             // 
-            this.panel2.Controls.Add(this.btnTraining);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(210, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
-            this.panel2.Size = new System.Drawing.Size(100, 81);
-            this.panel2.TabIndex = 37;
+            this.pTrain.Controls.Add(this.btnTraining);
+            this.pTrain.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pTrain.Location = new System.Drawing.Point(210, 0);
+            this.pTrain.Name = "pTrain";
+            this.pTrain.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
+            this.pTrain.Size = new System.Drawing.Size(100, 81);
+            this.pTrain.TabIndex = 37;
             // 
             // btnTraining
             // 
@@ -534,14 +534,14 @@ namespace BeeUi.Common
             this.lbPO.Text = "P/O";
             this.lbPO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // splitter3
+            // spTrain
             // 
-            this.splitter3.Location = new System.Drawing.Point(310, 0);
-            this.splitter3.MaximumSize = new System.Drawing.Size(20, 81);
-            this.splitter3.Name = "splitter3";
-            this.splitter3.Size = new System.Drawing.Size(10, 81);
-            this.splitter3.TabIndex = 40;
-            this.splitter3.TabStop = false;
+            this.spTrain.Location = new System.Drawing.Point(310, 0);
+            this.spTrain.MaximumSize = new System.Drawing.Size(20, 81);
+            this.spTrain.Name = "spTrain";
+            this.spTrain.Size = new System.Drawing.Size(10, 81);
+            this.spTrain.TabIndex = 40;
+            this.spTrain.TabStop = false;
             // 
             // splitter1
             // 
@@ -562,24 +562,24 @@ namespace BeeUi.Common
             this.pEdit.TabIndex = 36;
             this.pEdit.Load += new System.EventHandler(this.pEdit_Load);
             // 
-            // splitter5
+            // spDummy
             // 
-            this.splitter5.Location = new System.Drawing.Point(425, 0);
-            this.splitter5.MaximumSize = new System.Drawing.Size(20, 81);
-            this.splitter5.Name = "splitter5";
-            this.splitter5.Size = new System.Drawing.Size(10, 81);
-            this.splitter5.TabIndex = 43;
-            this.splitter5.TabStop = false;
+            this.spDummy.Location = new System.Drawing.Point(425, 0);
+            this.spDummy.MaximumSize = new System.Drawing.Size(20, 81);
+            this.spDummy.Name = "spDummy";
+            this.spDummy.Size = new System.Drawing.Size(10, 81);
+            this.spDummy.TabIndex = 43;
+            this.spDummy.TabStop = false;
             // 
-            // panel3
+            // pDummy
             // 
-            this.panel3.Controls.Add(this.btnDummy);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel3.Location = new System.Drawing.Point(325, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
-            this.panel3.Size = new System.Drawing.Size(100, 81);
-            this.panel3.TabIndex = 42;
+            this.pDummy.Controls.Add(this.btnDummy);
+            this.pDummy.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pDummy.Location = new System.Drawing.Point(325, 0);
+            this.pDummy.Name = "pDummy";
+            this.pDummy.Padding = new System.Windows.Forms.Padding(2, 3, 0, 3);
+            this.pDummy.Size = new System.Drawing.Size(100, 81);
+            this.pDummy.TabIndex = 42;
             // 
             // btnDummy
             // 
@@ -644,12 +644,12 @@ namespace BeeUi.Common
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
             this.Controls.Add(this.pModel);
             this.Controls.Add(this.pPO);
-            this.Controls.Add(this.splitter5);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.spDummy);
+            this.Controls.Add(this.pDummy);
             this.Controls.Add(this.splitter1);
-            this.Controls.Add(this.splitter3);
+            this.Controls.Add(this.spTrain);
             this.Controls.Add(this.split2);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.pTrain);
             this.Controls.Add(this.pEdit);
             this.Controls.Add(this.split1);
             this.Controls.Add(this.panel1);
@@ -662,9 +662,9 @@ namespace BeeUi.Common
             this.SizeChanged += new System.EventHandler(this.Header_SizeChanged);
             this.pModel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.pTrain.ResumeLayout(false);
             this.pPO.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
+            this.pDummy.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -684,19 +684,19 @@ namespace BeeUi.Common
         public System.Windows.Forms.Splitter split1;
         public System.Windows.Forms.Splitter split2;
         public Unit.EditProg pEdit;
-        private System.Windows.Forms.Panel panel2;
         public RJButton btnTraining;
         public RJButton btnEnterPO;
         private AutoFontLabel lbPO;
         public TextBoxAuto txtPO;
-        public System.Windows.Forms.Splitter splitter3;
+        public System.Windows.Forms.Splitter spTrain;
         public System.Windows.Forms.Splitter splitter1;
         public System.Windows.Forms.Splitter splitter4;
         public System.Windows.Forms.Splitter splitter2;
         private AutoFontLabel lbProg;
-        public System.Windows.Forms.Splitter splitter5;
-        private System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.Splitter spDummy;
         public RJButton btnDummy;
         public System.Windows.Forms.Panel pPO;
+        public System.Windows.Forms.Panel pDummy;
+        public System.Windows.Forms.Panel pTrain;
     }
 }

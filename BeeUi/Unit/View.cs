@@ -3115,7 +3115,7 @@ namespace BeeUi
               
                    
                         Global.Config.SizeCCD = _renderer.szImage;
-                        ShowTool.Full(imgView, Global.Config.SizeCCD);
+                     //   ShowTool.Full(imgView, Global.Config.SizeCCD);
 
 
                 //_renderer.Render();
@@ -3273,33 +3273,36 @@ namespace BeeUi
             Global.StatusMode = StatusMode.Once;
             timer= CycleTimerSplit.Start();
             btnCap.Enabled = false;
-            if (Global.Comunication.Protocol.IsBypass)
+            if (Global.Comunication.Protocol.IsBypass )
             {
-                switch(Global.TriggerNum)
+                if (Global.Config.NumTrig > 1)
                 {
-                    case TriggerNum.Trigger0:
-                        Global.TriggerNum=TriggerNum.Trigger1;
-                        Global.IndexChoose = 0;
-                        break;
-                    case TriggerNum.Trigger1:
-                        Global.TriggerNum = TriggerNum.Trigger2;
-                        Global.IndexChoose = 1;
-                        break;
-                    case TriggerNum.Trigger2:
-                        Global.TriggerNum = TriggerNum.Trigger3;
-                        Global.IndexChoose = 2;
-                        break;
-                    case TriggerNum.Trigger3:
-                        Global.TriggerNum = TriggerNum.Trigger4;
-                        Global.IndexChoose = 3;
-                        break;
-                }    
-                Global.StatusProcessing = StatusProcessing.Read;
+                    switch (Global.TriggerNum)
+                    {
+                        case TriggerNum.Trigger0:
+                            Global.TriggerNum = TriggerNum.Trigger1;
+                            Global.IndexChoose = 0;
+                            break;
+                        case TriggerNum.Trigger1:
+                            Global.TriggerNum = TriggerNum.Trigger2;
+                            Global.IndexChoose = 1;
+                            break;
+                        case TriggerNum.Trigger2:
+                            Global.TriggerNum = TriggerNum.Trigger3;
+                            Global.IndexChoose = 2;
+                            break;
+                        case TriggerNum.Trigger3:
+                            Global.TriggerNum = TriggerNum.Trigger4;
+                            Global.IndexChoose = 3;
+                            break;
+                    }
+                    Global.StatusProcessing = StatusProcessing.Read;
+                }
             }    
                
             else
             {
-                if (Global.Config.IsMultiProg)
+                if (Global.Config.NumTrig > 1)
                 {
 
 

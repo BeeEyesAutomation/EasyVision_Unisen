@@ -78,6 +78,7 @@ namespace BeeInterface
 
         private void btnCropRect_Click(object sender, EventArgs e)
         {
+            Global.StatusDraw = StatusDraw.Edit;
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
             btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
@@ -91,7 +92,7 @@ namespace BeeInterface
 
         private void btnCropArea_Click(object sender, EventArgs e)
         {
-            Global.StatusDraw = StatusDraw.Check;
+            Global.StatusDraw = StatusDraw.Edit;
             lay2Mask.Visible = false;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
@@ -105,7 +106,7 @@ namespace BeeInterface
         }
         private void btnClear_Click(object sender, EventArgs e)
         {
-            Global.StatusDraw = StatusDraw.Check;
+            Global.StatusDraw = StatusDraw.Edit;
             lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;

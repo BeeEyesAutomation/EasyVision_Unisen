@@ -150,7 +150,7 @@ namespace BeeCore.Funtion
                         switch (i)
                         {
                             case 0:
-                               
+                                if (tool.ItemTool == null) continue;
                     
                                 control.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                                 control.RowCount = row + 1;

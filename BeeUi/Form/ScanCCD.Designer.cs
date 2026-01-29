@@ -553,7 +553,6 @@ namespace BeeUi
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         public RJButton btnPylon;
-        private ListBox cbCCD;
         private Panel panel4;
         private TableLayoutPanel tableLayoutPanel6;
         private Label label3;
@@ -562,5 +561,6 @@ namespace BeeUi
         private Button btnConnect;
         private Label lbCamera;
         private Button btnSkip;
+        public ListBox cbCCD;
     }
     }

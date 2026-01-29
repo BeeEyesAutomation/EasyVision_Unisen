@@ -1,5 +1,6 @@
 ﻿using BeeCore.Funtion;
 using BeeGlobal;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -111,6 +112,8 @@ namespace BeeCore
             Propety.rotAreaAdjustment = Propety.rotArea;
            if (Propety.rotAreaAdjustment==null)
                 Propety.rotAreaAdjustment = Propety.rotArea;
+            if (!Global.IsRun)
+                Propety.rotMaskAdjustment = Propety.rotMask;
             Propety.DoWork(Propety.rotAreaAdjustment, Propety.rotMaskAdjustment);
         }
         public void Complete()

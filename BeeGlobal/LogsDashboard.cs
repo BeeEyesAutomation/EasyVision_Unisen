@@ -423,6 +423,7 @@ namespace BeeGlobal
                     _view.Clear();
                     _canvas.Clear();
                     _allRawFromDisk.Clear();
+                    SaveNow(true);
                     if (_frozenAllForView != null) _frozenAllForView.Clear();
                     _dirty = true;
                     _saveDebounce.Stop(); _saveDebounce.Start();
@@ -1001,7 +1002,7 @@ namespace BeeGlobal
         }
 
         // ===== Save ngay (public) — LUÔN LƯU FULL (read-merge-write) =====
-        public void SaveNow()
+        public void SaveNow(bool IsClear=false)
         {
             try
             {
@@ -1017,7 +1018,7 @@ namespace BeeGlobal
                     // Đọc file hiện tại để merge trước khi ghi
                     List<LogEntry> listOnDisk = null;
                     try
-                    {
+                    {if(!IsClear)
                         if (File.Exists(_storagePath))
                         {
                             using (var fs = File.Open(_storagePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))

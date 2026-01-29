@@ -614,6 +614,7 @@ namespace BeeCore
                                                 //  Cv2.ImWrite("RS.png", Result.Debug);
                                                 if (LineCliHorial.Found&&LineCliVertical.Found)
                                                 {
+                                                   
                                                     LineHorial = new Line2D(LineCliHorial.Vx, LineCliHorial.Vy, LineCliHorial.X0, LineCliHorial.Y0);
                                                     LineVertial = new Line2D(LineCliVertical.Vx, LineCliVertical.Vy, LineCliVertical.X0, LineCliVertical.Y0);
                                                     pInsert = InsertLine.Intersect(LineHorial, LineVertial);
@@ -703,7 +704,9 @@ namespace BeeCore
             results = Results.OK;
             if (rectRotates.Count() != 1)
                 results = Results.NG;
-           
+            if(MethodSample == MethodSample.Corner)
+           if(LineCliVertical.Inliers< MinInliersA|| LineCliHorial.Inliers< MinInliersB)
+                results = Results.NG;
             if (results == Results.OK)
             {
                 Matrix mat = new Matrix();
@@ -723,17 +726,19 @@ namespace BeeCore
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
 
             }
-            if (IsCalib)
+            if (MethodSample == MethodSample.Corner)
+                if (IsCalib)
             {
                 SideTempLR = SideLR;
                 SideTempTB = SideTB;
-              //  MinInliersA = (float)(Result.Inliers1 * (90 / 100.0));
-              //  MinInliersB = (float)(Result.Inliers2 * (90 / 100.0));
+                MinInliersA = (float)(LineCliVertical.Inliers * (80 / 100.0));
+               MinInliersB = (float)(LineCliHorial.Inliers * (80 / 100.0));
 
 
 
             }
-            if (SideTempLR != SideLR || SideTempTB != SideTB)
+            if (MethodSample == MethodSample.Corner)
+                if (SideTempLR != SideLR || SideTempTB != SideTB)
                 results = Results.NG;
             if (!Global.IsRun)
              {

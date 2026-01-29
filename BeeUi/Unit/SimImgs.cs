@@ -73,7 +73,7 @@ namespace BeeUi.Unit
         {
             if (registerImg.IndexSelected == -1) return;
             Global.EditTool.View.timer = CycleTimerSplit.Start();
-            if (Global.Comunication.Protocol.IsBypass)
+            if (Global.Comunication.Protocol.IsBypass&&Global.Config.NumTrig>1)
             {
                 switch (Global.TriggerNum)
                 {

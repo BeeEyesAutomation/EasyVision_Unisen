@@ -241,6 +241,15 @@ namespace BeeUi.Tool
            
             foreach (var file in files)
             {
+                String name = Path.GetFileNameWithoutExtension(file);
+                //String Date = DateTime.Now.ToString("yyyyMMdd");
+                if(_isDate)
+                {
+                    String Date = dateTime.Value.ToString("yyyyMMdd");
+                    if (name != Date)
+                        continue;
+                }    
+                
                 SqlConnection con = new SqlConnection();
                 if (file.Contains("Default"))
                     continue;
@@ -281,11 +290,11 @@ namespace BeeUi.Tool
                     dataView.Rows[j].Cells["Status"].Style.BackColor = Color.DarkRed;
 
                 }
-                if (j != -1)
-                {
-                    // Qty += Convert.ToInt32(dataView.Rows[j].Cells["Qty"].Value.ToString());
-                   // Toatal += Convert.ToInt32(dataView.Rows[j].Cells["Total"].Value.ToString());
-                }
+                //if (j != -1)
+                //{
+                //    // Qty += Convert.ToInt32(dataView.Rows[j].Cells["Qty"].Value.ToString());
+                //   // Toatal += Convert.ToInt32(dataView.Rows[j].Cells["Total"].Value.ToString());
+                //}
             }
             lbNG.Text = NG + "";
             lbOK.Text = OK + "";

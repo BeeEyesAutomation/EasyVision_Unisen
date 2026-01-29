@@ -265,7 +265,13 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
-          
+
+            pDummy.Visible = Global.Config.IsEnDummy;
+            spDummy.Visible = Global.Config.IsEnDummy;
+            pTrain.Visible = Global.Config.IsEnTrain;
+            spTrain.Visible = Global.Config.IsEnTrain;
+            pPO.Visible=Global.Config.IsEnPO;
+            
         
           ///  RefreshListPJ();
             //    this.Controls.Add(btnHide);

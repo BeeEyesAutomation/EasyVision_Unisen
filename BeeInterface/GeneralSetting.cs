@@ -106,7 +106,9 @@ namespace BeeInterface
             btnSaveGraphic.IsCLick = Global.Config.IsSaveParaShow;
             btnSaveImgRegister.IsCLick = Global.Config.IsSaveListRegister;
             btnSaveListImgSim.IsCLick = Global.Config.IsSaveListSim;
-            
+            btnEnPO.IsCLick = Global.Config.IsEnPO;
+            btnEnDummy.IsCLick = Global.Config.IsEnDummy;
+            btnEnTrain.IsCLick = Global.Config.IsEnTrain;
             ShowNo();
         }
 
@@ -557,6 +559,33 @@ namespace BeeInterface
         private void btnSetSaveReport_Click(object sender, EventArgs e)
         {
             laySetReport.Visible = !btnD2.IsCLick;
+        }
+
+        private void btnP5_Click(object sender, EventArgs e)
+        {
+            layEnFunction.Visible= !btnP5.IsCLick;
+        }
+
+        private void btnEnDummy_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnDummy=btnEnDummy.IsCLick;
+            Global.EditTool.pHeader. pDummy.Visible = Global.Config.IsEnDummy;
+            Global.EditTool.pHeader.spDummy.Visible = Global.Config.IsEnDummy;
+            
+        }
+
+        private void btnEnTrain_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnTrain = btnEnTrain.IsCLick;
+            Global.EditTool.pHeader.pTrain.Visible = Global.Config.IsEnTrain;
+            Global.EditTool.pHeader.spTrain.Visible = Global.Config.IsEnTrain;
+           
+        }
+
+        private void btnEnPO_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsEnPO = btnEnPO.IsCLick;
+            Global.EditTool.pHeader.pPO.Visible = Global.Config.IsEnPO;
         }
     }
 }

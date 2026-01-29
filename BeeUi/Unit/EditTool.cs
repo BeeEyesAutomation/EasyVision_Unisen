@@ -194,6 +194,7 @@ namespace BeeUi
                 {
                    
                     case Step.Run:
+                        Global.IndexChoose = 0;
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         Global.EditTool.View.btnChangeImg.Visible = true;
                         Global.EditTool.View.imgView.AutoCenter = true;
@@ -629,7 +630,7 @@ namespace BeeUi
             pEditTool.Register("Logs", () => Global.LogsDashboard);
             pInfor.Register("Dashboard", () => G.StatusDashboard);
             pInfor.Register("StepEdit", () => Global.StepEdit);
-
+           progBarTool.Checked = Global.EditTool.pHeader.Visible ;
             btnShowTop.Checked = Global.EditTool.pTop.Visible;
             btnShowDashBoard.Checked = Global.EditTool.pInfor.Visible;
             btnMenu.Checked = Global.EditTool.View.pBtn.Visible;
@@ -639,7 +640,7 @@ namespace BeeUi
             if (Global.EditTool.pEdit.Width == 0)
             {
                 btnShowToolBar.Checked = false;
-                //    Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
+                // Global.EditTool.hideBar.btnShowToolBar.IsCLick = true;
             }
             else
             {
@@ -662,7 +663,7 @@ namespace BeeUi
                 BeeCore.Common.listCamera[Global.IndexCCCD].FrameChanged += EditTool_FrameChanged;
             Global.StepModeChanged += Global_StepModeChanged;
             Global.DisPLCChange += Global_DisPLCChange;
-          StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+            StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
             //
         }
 
@@ -1329,6 +1330,13 @@ namespace BeeUi
         private void btnRJBtn_Click(object sender, EventArgs e)
         {
             Process.Start("osk.exe");
+        }
+
+        private void progBarTool_Click(object sender, EventArgs e)
+        {
+            progBarTool.Checked = !progBarTool.Checked;
+           
+            Global.EditTool.pHeader.Visible = progBarTool.Checked;
         }
 
         private void btnNew_Click(object sender, EventArgs e)

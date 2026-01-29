@@ -566,24 +566,37 @@ namespace BeeCore
                                 if (!item.IsUse)
                                 { i++; continue; }
                                 bool IsOK = false;
+                                if (item.IsX)
+                                    if (IntersectX(rs.rot, item.ValueX))
+                                        IsOK = true;
+                                     else
+                                        continue;
+                                if (item.IsY)
+                                      if (IntersectY(rs.rot, item.ValueY))
+                                            IsOK = true;
+                                        else
+                                            continue;
                                 if (item.IsHeight)
+                                {
+                                    IsOK = false;
                                     if (rs.rot._rect.Height >= item.ValueHeight)
                                         IsOK = true;
+
+                                }    
+                                   
                                 if (item.IsWidth)
+                                {
+                                    IsOK = false;
                                     if (rs.rot._rect.Width >= item.ValueWidth)
                                         IsOK = true;
-                                if (item.IsX)
-                                    if (IntersectX(rs.rot, item.ValueX))// if (rs.rot._PosCenter.X + rs.rot._rect.Width / 2 >= item.ValueX)
-
-                                        IsOK = true;
-                                if (item.IsY)
-                                    if (IntersectY(rs.rot, item.ValueY)) // [i]._PosCenter.Y + rs.rot._rect.Height / 2 >= item.ValueY)
-                                        IsOK = true;
-                               
+                                }    
+                                   
+                                
                                     double Area = 0;
                                 if (item.IsArea)
                                 {
-                                    if(item.Name=="T_CHI")
+                                    IsOK = false;
+                                    if (item.Name=="T_CHI")
                                     {
                                       
                                         Rect rect=  new Rect((int)rs.rot._PosCenter.X+(int)rs.rot._rect.X, (int)rs.rot._PosCenter.Y + (int)rs.rot._rect.Y, (int)rs.rot._rect.Width, (int)rs.rot._rect.Height);
@@ -1032,6 +1045,29 @@ namespace BeeCore
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
             var mat = new Matrix();
+            if (rotMaskAdjustment != null)
+            {
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
+                mat.Translate(rotMaskAdjustment._PosCenter.X, rotMaskAdjustment._PosCenter.Y);
+                mat.Rotate(rotMaskAdjustment._rectRotation);
+                gc.Transform = mat;
+                int alpha = Global.ParaShow.Opacity * 255 / 100;
+
+                Color color = Color.FromArgb(
+                    alpha,
+                    Global.ParaShow.ColorNone.R,
+                    Global.ParaShow.ColorNone.G,
+                    Global.ParaShow.ColorNone.B
+                );
+                gc.FillRectangle(new SolidBrush(color), new Rectangle((int)rotMaskAdjustment._rect.X, (int)rotMaskAdjustment._rect.Y, (int)rotMaskAdjustment._rect.Width, (int)rotMaskAdjustment._rect.Height));
+                gc.ResetTransform();
+
+            }
+            mat = new Matrix();
             if (!Global.IsRun)
             {
                 mat.Translate(Global.pScroll.X, Global.pScroll.Y);
@@ -1056,8 +1092,9 @@ namespace BeeCore
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
-
-          //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
+           
+          
+            //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
             int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
