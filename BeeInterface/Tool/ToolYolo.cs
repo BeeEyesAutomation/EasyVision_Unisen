@@ -1622,6 +1622,19 @@ namespace BeeInterface
                     break;
             }
         }
+
+        private void btnCrop_Click(object sender, EventArgs e)
+        {   if (Propety.rotCrop == null) Propety.rotCrop = new RectRotate();
+            Global.StatusDraw = StatusDraw.Edit;
+            Global.TypeCrop = TypeCrop.Crop;
+            Propety.TypeCrop = Global.TypeCrop;
+            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
+            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
+            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
+            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
+            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
+            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
+        }
     }
 }
 

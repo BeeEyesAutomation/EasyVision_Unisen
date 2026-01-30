@@ -294,6 +294,7 @@
     <Compile Include="Func\FilterRect.cs" />
     <Compile Include="Func\General.cs" />
     <Compile Include="Func\ImageUtils.cs" />
+    <Compile Include="Func\Line2DTransform.cs" />
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
     <Compile Include="Func\MatMerger.cs" />

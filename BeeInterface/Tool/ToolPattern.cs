@@ -633,6 +633,7 @@ namespace BeeInterface
    
         private void btnCropRect_Click(object sender, EventArgs e)
         {
+            Global.StatusDraw = StatusDraw.Edit;
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
             btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;

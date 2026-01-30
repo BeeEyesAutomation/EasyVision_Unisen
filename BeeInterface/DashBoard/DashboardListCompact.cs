@@ -38,7 +38,7 @@ namespace BeeInterface
         private const float BASE_FONT_PT = 9f;
         private const int BASE_NAME_H = 22;
         private const int BASE_LINE_H = 30;
-        private const int BASE_LINES = 6;
+        private const int BASE_LINES = 9;
         private const int BASE_ROWSPACE = 10;
         private const int BASE_PADX = 8;
         private const int BASE_PADY = 6;
@@ -219,13 +219,16 @@ namespace BeeInterface
                 DrawUseButton(g, i, yTop, _items[i], w);
 
                 int baseY = yTop + _nameH;
-                DrawLine(g, i, 0, baseY, "MinArea", _items[i], _items[i].IsArea, _items[i].ValueArea, Segment.Area, Segment.ValueArea, w);
-                DrawLine(g, i, 1, baseY, "MinWidth", _items[i], _items[i].IsWidth, _items[i].ValueWidth, Segment.Width, Segment.ValueWidth, w);
-                DrawLine(g, i, 2, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
-                DrawLine(g, i, 3, baseY, "MinX", _items[i], _items[i].IsX, _items[i].ValueX, Segment.X, Segment.ValueX, w);
-                DrawLine(g, i, 4, baseY, "MinY", _items[i], _items[i].IsY, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
-                DrawLine(g, i, 5, baseY, "MinCount", _items[i], _items[i].IsCounter, _items[i].ValueCounter, Segment.Counter, Segment.ValueCounter, w);
-               
+                DrawLine(g, i, 0, baseY, "MinX", _items[i], _items[i].IsX, _items[i].ValueX, Segment.X, Segment.ValueX, w);
+                DrawLine(g, i, 1, baseY, "MaxX", _items[i], _items[i].IsXMax, _items[i].ValueXMax, Segment.XMax, Segment.ValueXMax, w);
+                DrawLine(g, i, 2, baseY, "MinY", _items[i], _items[i].IsY, _items[i].ValueY, Segment.Y, Segment.ValueY, w);
+                DrawLine(g, i, 3, baseY, "MaxY", _items[i], _items[i].IsYMax, _items[i].ValueYMax, Segment.YMax, Segment.ValueYMax, w);
+                DrawLine(g, i, 4, baseY, "MinArea", _items[i], _items[i].IsArea, _items[i].ValueArea, Segment.Area, Segment.ValueArea, w);
+                DrawLine(g, i, 5, baseY, "MinWidth", _items[i], _items[i].IsWidth, _items[i].ValueWidth, Segment.Width, Segment.ValueWidth, w);
+                DrawLine(g, i, 6, baseY, "MinHeight", _items[i], _items[i].IsHeight, _items[i].ValueHeight, Segment.Height, Segment.ValueHeight, w);
+                DrawLine(g, i, 7, baseY, "MinCount", _items[i], _items[i].IsCounter, _items[i].ValueCounter, Segment.Counter, Segment.ValueCounter, w);
+                DrawLine(g, i, 8, baseY, "MinDistance", _items[i], _items[i].IsDistance, _items[i].ValueDistance, Segment.Distance, Segment.ValueDistance, w);
+
                 using (Pen p = new Pen(Color.FromArgb(230, 230, 230)))
                 {
                     g.DrawLine(p, rectItem.Left, rectItem.Bottom - 1, rectItem.Right, rectItem.Bottom - 1);
@@ -339,8 +342,12 @@ namespace BeeInterface
             Height, ValueHeight,
             X, ValueX,
             Y, ValueY,
+          
             Counter,
-            ValueCounter
+            ValueCounter,
+            XMax, ValueXMax,
+            YMax, ValueYMax,
+            Distance, ValueDistance
         }
 
         private bool HitTest(Point pt, out int idx, out Segment seg, out Rectangle targetRect)
@@ -388,25 +395,30 @@ namespace BeeInterface
                 Rectangle valRect = new Rectangle(valX, lineRect.Y + 2, valW, lineRect.Height - 4);
 
                 if (leftRect.Contains(pt))
-                {
-                    if (line == 0) seg = Segment.Area;
-                    else if (line == 1) seg = Segment.Width;
-                    else if (line == 2) seg = Segment.Height;
-                    else if (line == 3) seg = Segment.X;
-                    else if (line == 4) seg = Segment.Y;
-                    else if (line == 5) seg = Segment.Counter;
+                {  
+                    if (line == 0) seg = Segment.X;
+                    else if (line == 1) seg = Segment.XMax;
+                    else if (line == 2) seg = Segment.Y;
+                    else if (line ==3) seg = Segment.YMax;
+                    else if (line == 4) seg = Segment.Area;
+                    else if (line == 5) seg = Segment.Width;
+                    else if (line == 6) seg = Segment.Height;
+                    else if (line == 7) seg = Segment.Counter;
+                    else if (line == 8) seg = Segment.Distance;
                     targetRect = leftRect;
                     return true;
                 }
 
                 if (valRect.Contains(pt))
-                {
-                    if (line == 0) seg = Segment.ValueArea;
-                    else if (line == 1) seg = Segment.ValueWidth;
-                    else if (line == 2) seg = Segment.ValueHeight;
-                    else if (line == 3) seg = Segment.ValueX;
-                    else if (line == 4) seg = Segment.ValueY;
-                    else if (line == 5) seg = Segment.ValueCounter;
+                {   if (line == 0) seg = Segment.ValueX;
+                    else if (line == 1) seg = Segment.ValueXMax;
+                    else if (line == 2) seg = Segment.ValueY;
+                    else if (line == 3) seg = Segment.ValueYMax;
+                    else if (line == 4) seg = Segment.ValueArea;
+                    else if (line == 5) seg = Segment.ValueWidth;
+                    else if (line == 6) seg = Segment.ValueHeight;
+                    else if (line == 7) seg = Segment.ValueCounter;
+                    else if (line == 8) seg = Segment.ValueDistance;
                     targetRect = valRect;
                     return true;
                 }
@@ -465,16 +477,33 @@ namespace BeeInterface
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
-
+                        case Segment.XMax:
+                            it.IsXMax = !it.IsXMax;
+                            if (!it.IsXMax && IsEditing(idx, Segment.ValueXMax)) HideEditor();
+                            UpdateScroll();
+                            Invalidate(RowRect(idx));
+                            break;
                         case Segment.Y:
                             it.IsY = !it.IsY;
                             if (!it.IsY && IsEditing(idx, Segment.ValueY)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
+                        case Segment.YMax:
+                            it.IsYMax = !it.IsYMax;
+                            if (!it.IsYMax && IsEditing(idx, Segment.ValueYMax)) HideEditor();
+                            UpdateScroll();
+                            Invalidate(RowRect(idx));
+                            break;
                         case Segment.Counter:
                             it.IsCounter = !it.IsCounter;
                             if (!it.IsCounter && IsEditing(idx, Segment.ValueCounter)) HideEditor();
+                            UpdateScroll();
+                            Invalidate(RowRect(idx));
+                            break;
+                        case Segment.Distance:
+                            it.IsDistance = !it.IsDistance;
+                            if (!it.IsDistance && IsEditing(idx, Segment.ValueDistance)) HideEditor();
                             UpdateScroll();
                             Invalidate(RowRect(idx));
                             break;
@@ -497,8 +526,18 @@ namespace BeeInterface
                         case Segment.ValueY:
                             if (it.IsY) BeginEdit(idx, seg, it.ValueY, rect);
                             break;
+                        case Segment.ValueXMax:
+                            if (it.IsXMax) BeginEdit(idx, seg, it.ValueXMax, rect);
+                            break;
+
+                        case Segment.ValueYMax:
+                            if (it.IsYMax) BeginEdit(idx, seg, it.ValueYMax, rect);
+                            break;
                         case Segment.ValueCounter:
                             if (it.IsCounter) BeginEdit(idx, seg, it.ValueCounter, rect);
+                            break;
+                        case Segment.ValueDistance:
+                            if (it.IsDistance) BeginEdit(idx, seg, it.ValueDistance, rect);
                             break;
                     }
                     break;
@@ -600,7 +639,10 @@ namespace BeeInterface
                 if (seg == Segment.ValueHeight && it.IsUse && it.IsHeight) it.ValueHeight = iv;
                 if (seg == Segment.ValueX && it.IsUse && it.IsX) it.ValueX = iv;
                 if (seg == Segment.ValueY && it.IsUse && it.IsY) it.ValueY = iv;
+                if (seg == Segment.ValueXMax && it.IsUse && it.IsXMax) it.ValueXMax = iv;
+                if (seg == Segment.ValueYMax && it.IsUse && it.IsYMax) it.ValueYMax = iv;
                 if (seg == Segment.ValueCounter && it.IsUse && it.IsCounter) it.ValueCounter = iv;
+                if (seg == Segment.ValueDistance && it.IsUse && it.IsDistance) it.ValueDistance = iv;
                 Invalidate(RowRect(idx));
             };
 
@@ -662,12 +704,15 @@ namespace BeeInterface
             int line = -1;
             switch (_editing.Item2)
             {
-                case Segment.ValueArea: line = 0; break;
-                case Segment.ValueWidth: line = 1; break;
-                case Segment.ValueHeight: line = 2; break;
-                case Segment.ValueX: line = 3; break;
-                case Segment.ValueY: line = 4; break;
-                case Segment.ValueCounter: line =5; break;
+                case Segment.ValueX: line = 0; break;
+                case Segment.ValueXMax: line = 1; break;
+                case Segment.ValueY: line = 2; break;
+                case Segment.ValueYMax: line = 3; break;
+                case Segment.ValueArea: line = 4; break;
+                case Segment.ValueWidth: line = 5; break;
+                case Segment.ValueHeight: line = 6; break;
+                case Segment.ValueCounter: line =7; break;
+                case Segment.ValueDistance: line = 8; break;
             }
             if (line < 0)
             {

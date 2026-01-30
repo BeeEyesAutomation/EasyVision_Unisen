@@ -2,6 +2,7 @@
 using BeeGlobal;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -61,20 +62,36 @@ namespace BeeCore {
         }
         public static ParaShow ParaShow(String Project)
         {
+            bool IsNew = false;
             ParaShow ParaShow = new ParaShow();
             if (Global.Config.IsSaveParaShow)
             {
                 if (File.Exists("Common\\Common.gc"))
                     ParaShow = Access.LoadParaShow("Common\\Common.gc");
                 else
-                    ParaShow = new ParaShow();
+                {
+                    IsNew = true; ParaShow = new ParaShow();
+                }    
+                    
             }
             else
             {
                 if (File.Exists("Program\\" + Project + "\\" + Project + ".gc"))
                     ParaShow = Access.LoadParaShow("Program\\" + Project + "\\" + Project + ".gc");
                 else
-                    ParaShow = new ParaShow();
+                {
+                    ParaShow = new ParaShow(); IsNew = true;
+                }
+                    
+            }
+            if(IsNew)
+            {
+                ParaShow.ColorOK= Color.FromArgb(0, 172, 73);
+                ParaShow.ColorNG = Color.DarkRed;
+                ParaShow.ColorInfor = Color.Blue;
+                ParaShow.ColorNone = Color.LightGray;
+                ParaShow.ColorChoose = Color.FromArgb(246, 204, 120);
+                ParaShow.TextColor = Color.White;
             }
             return ParaShow;
         }

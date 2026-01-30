@@ -20,14 +20,19 @@ namespace BeeCore
         //public bool IsLine { get; set; }
 
         public bool IsX { get; set; }//HAU
-
+        public bool IsXMax { get; set; }//HAU
         public bool IsY { get; set; }//HAU
+        public bool IsYMax { get; set; }//HAU
+        public bool IsDistance { get; set; }//HAU
         public int ValueArea { get; set; }
             public int ValueWidth { get; set; }
             public int ValueHeight { get; set; }
         //public int ValueLine { get; set; }
         public int ValueX { get; set; }//HAU
+        public int ValueDistance { get; set; }//HAU
         public int ValueY { get; set; }//HAU
+        public int ValueXMax { get; set; }//HAU
+        public int ValueYMax { get; set; }//HAU
         public int ValueCounter { get; set; }//HAU
     }
     

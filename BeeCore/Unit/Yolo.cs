@@ -1,8 +1,11 @@
 ﻿
 using BeeCore.Algorithm;
+using BeeCore.Func;
 using BeeCore.Funtion;
+using BeeCpp;
 using BeeGlobal;
 using CvPlus;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using Python.Runtime;
@@ -24,6 +27,7 @@ using System.Windows.Forms;
 using static LibUsbDotNet.Main.UsbTransferQueue;
 using static OpenCvSharp.ML.DTrees;
 using static System.Windows.Forms.MonthCalendar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using Point = System.Drawing.Point;
 
 namespace BeeCore
@@ -63,6 +67,7 @@ namespace BeeCore
         {
            
             if (rotArea == null) rotArea = new RectRotate();
+           
             Common.PropetyTools[IndexThread][Index].StepValue = 1;
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
@@ -219,6 +224,8 @@ namespace BeeCore
         [NonSerialized]
         public RectRotate rotAreaAdjustment;
         [NonSerialized]
+        public RectRotate rotCropAdjustment;
+        [NonSerialized]
         public RectRotate rotMaskAdjustment;
         public RectRotate rotPositionAdjustment;
         public Bitmap matTemp, matTemp2, matMask;
@@ -289,11 +296,62 @@ namespace BeeCore
         private Mat matCropTemp;
         public FilterBox FilterBox = FilterBox.Merge;
         public float ThreshOverlap = 0.1f;
-
+        [NonSerialized]
+        Line2DCli Line2D;
+        [NonSerialized]
+        Line2D LineVerital;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             if (!Global.IsIntialPython) return;
+            if (!Global.IsRun) 
+                rotCropAdjustment = rotCrop;
+            if (rotCropAdjustment != null)
+            {
+                Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotCropAdjustment,null);
+                Mat  matProcess = new Mat();
+              
+                if (matCrop.Type() == MatType.CV_8UC3)
+                    Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
+                matProcess = Filters.GetStrongEdgesOnly(matCrop);
+              
+                //if (IsClearNoiseSmall)
+                //    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
+                //if (IsClose)
+                //    matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
+                //if (IsOpen)
+                //    matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
+                //if (IsClearNoiseBig)
+                //    matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
 
+                LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
+
+                 Line2D= RansacLine.FindBestLine(
+                    matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                    iterations: 200,
+                    threshold: (float)2,
+                    maxPoints: 120000,
+                    seed: Index,
+                    mmPerPixel: 1, (BeeCpp.LineDirectionMode)((int)lineDirectionMode), 0, 30
+
+
+                );
+               
+              if(Line2D.Found)
+                {
+                    Line2D line = new Line2D( Line2D.Vx, Line2D.Vy, Line2D.X0, Line2D.Y0);
+                    Line2D lineWorld =
+                    Line2DRectRotateXform.LineLocalToWorld(
+                        line,
+                        rotCropAdjustment
+                    );
+                    Line2D lineInRotArea =
+                Line2DRectRotateXform.LineWorldToLocal(
+                    lineWorld,
+                    rotArea
+                );
+                    LineVerital = lineInRotArea;// Line2DRectRotateXform.LineLocal_SrcToLocal_Dst(LineVerital, rotCropAdjustment, rotArea);
+                }
+            }
             using (Py.GIL())
             {
                 PyObject result = null;
@@ -312,6 +370,7 @@ namespace BeeCore
                     // === Crop ROI ===
                     using (Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotArea, rotMask))
                     {
+                    
                         if (matCrop.Empty()) return;
 
                         if (matCrop.Type().Depth != MatType.CV_8U)
@@ -474,6 +533,31 @@ namespace BeeCore
 
             return maxY>=valueY ;   // cắt đường y = valueY
         }
+        static bool IntersectXMax(RectRotate r, float valueX)
+        {
+            float w = r._rect.Width, h = r._rect.Height;
+            double th = r._rectRotation * Math.PI / 180.0;
+            double c = Math.Cos(th), s = Math.Sin(th);
+
+            float extX = (float)(Math.Abs(c) * (w * 0.5) + Math.Abs(s) * (h * 0.5));
+            float minX = r._PosCenter.X - extX;
+            float maxX = r._PosCenter.X + extX;
+
+            return maxX <= valueX;   // cắt đường x = valueX
+        }
+
+        static bool IntersectYMax(RectRotate r, float valueY)
+        {
+            float w = r._rect.Width, h = r._rect.Height;
+            double th = r._rectRotation * Math.PI / 180.0;
+            double c = Math.Cos(th), s = Math.Sin(th);
+
+            float extY = (float)(Math.Abs(s) * (w * 0.5) + Math.Abs(c) * (h * 0.5));
+            float minY = r._PosCenter.Y - extY;
+            float maxY = r._PosCenter.Y + extY;
+
+            return maxY <= valueY;   // cắt đường y = valueY
+        }
         public static double CalcMissingPercent_AutoMinMax(ref Mat src, Rect bbox, double brightRatio = 0.25)
         {
             // brightRatio = phần trăm "vùng sáng nhất" muốn lấy (0.2–0.4 thường ok)
@@ -550,15 +634,12 @@ namespace BeeCore
                             return;
                         }
                         Content = "";
-                        //foreach (Labels label in listLabelCompare)
-                        //{
-                        //    if (label == null) continue;
-                        //    if (!label.IsEn) continue;
-                        //    _listLabelCompare.Add(label.label);
-                        //}
+                   
                         foreach (ResultItem rs in resultTemp)
                         {
                             ResultItem.Add(new ResultItem(rs.Name));
+                            ResultItem[i].rot = rs.rot;
+                            ResultItem[i].Score = rs.Score;
                             int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
                             if (index > -1)
                             {
@@ -570,12 +651,22 @@ namespace BeeCore
                                     if (IntersectX(rs.rot, item.ValueX))
                                         IsOK = true;
                                      else
-                                        continue;
+                                    { i++; continue; }
                                 if (item.IsY)
                                       if (IntersectY(rs.rot, item.ValueY))
                                             IsOK = true;
                                         else
-                                            continue;
+                                    { i++; continue; }
+                                if (item.IsXMax)
+                                    if (IntersectXMax(rs.rot, item.ValueXMax))
+                                        IsOK = true;
+                                    else
+                                    { i++; continue; }
+                                if (item.IsYMax)
+                                    if (IntersectYMax(rs.rot, item.ValueYMax))
+                                        IsOK = true;
+                                    else
+                                    { i++; continue; }
                                 if (item.IsHeight)
                                 {
                                     IsOK = false;
@@ -589,9 +680,16 @@ namespace BeeCore
                                     IsOK = false;
                                     if (rs.rot._rect.Width >= item.ValueWidth)
                                         IsOK = true;
-                                }    
-                                   
-                                
+                                }
+
+                                if (item.IsDistance&& LineVerital!=null)
+                                { 
+                                    PointF point = new PointF();
+                                    ResultItem[i].Distance= (float) Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
+                                    if(ResultItem[i].Distance<=item.ValueDistance)
+                                        IsOK = true;
+                                    ResultItem[i].point = point;
+                                }
                                     double Area = 0;
                                 if (item.IsArea)
                                 {
@@ -652,14 +750,13 @@ namespace BeeCore
                                     else
                                         IsOK = false;
                                 }
-                                if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY)
+                                if (!item.IsHeight && !item.IsWidth && !item.IsArea && !item.IsX && !item.IsY && !item.IsXMax && !item.IsYMax && !item.IsDistance && !item.IsCounter)
                                     IsOK = true;
                                 ResultItem[i].IsOK = IsOK;
-                                ResultItem[i].rot = rs.rot;
-                                ResultItem[i].Score = rs.Score;
+                               
                                 ResultItem[i].Area =(float) Area;
                                 ResultItem[i].Percent = (float)percent;
-                                rectRotates.Add(rs.rot);
+                                
                                 if (IsOK)
                                 {
                                     //listOK.Add(true);
@@ -1045,6 +1142,28 @@ namespace BeeCore
             RectRotate rotA = rotArea;
             if (Global.IsRun) rotA = rotAreaAdjustment;
             var mat = new Matrix();
+            //if (Line2D.Found)
+            //{
+
+            //    if (!Global.IsRun)
+            //    {
+            //        mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //        mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            //    }
+            //    mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
+            //    mat.Rotate(rotA._rectRotation);
+            //    mat.Translate(rotA._rect.X, rotA._rect.Y);
+            //    gc.Transform = mat;
+                
+
+            //    //PointF p1 = new PointF(LineVerital.X1, LiLineVeritalne2D.Y1);
+            //    //PointF p2 = new PointF(LineVerital.X2, LineVerital.Y2);
+            //  //  Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
+
+            //    //   gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), p1, p2);
+            //    gc.ResetTransform();
+            //}
+            mat = new Matrix();
             if (rotMaskAdjustment != null)
             {
                 if (!Global.IsRun)
@@ -1076,6 +1195,7 @@ namespace BeeCore
             mat.Translate(rotA._PosCenter.X, rotA._PosCenter.Y);
             mat.Rotate(rotA._rectRotation);
             gc.Transform = mat;
+
             Brush brushText = new SolidBrush(Global.ParaShow.TextColor);
             Color cl = Color.LimeGreen;
             switch (Common.PropetyTools[Global.IndexChoose][Index].Results)
@@ -1092,10 +1212,38 @@ namespace BeeCore
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
-           
-          
+            if (Line2D.Found)
+            {
+                mat.Translate(rotA._rect.X, rotA._rect.Y);
+                gc.Transform = mat;
+                Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
+                gc.ResetTransform();
+            }
+              
+            //if (Line2D.Found)
+            //{
+
+            //    //if (!Global.IsRun)
+            //    //{
+            //    //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+            //    //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+            //    //}
+            //    //mat.Translate(rotCropAdjustment._PosCenter.X, rotCropAdjustment._PosCenter.Y);
+            //    //mat.Rotate(rotCropAdjustment._rectRotation);
+            //    //mat.Translate(rotCropAdjustment._rect.X, rotCropAdjustment._rect.Y);
+            //    //gc.Transform = mat;
+
+            //  //  mat.Translate(rotA._rect.X, rotA._rect.Y);
+
+            // //   gc.Transform = mat;
+            //    Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
+            //    //   gc.DrawLine(new Pen(new SolidBrush(Global.ParaShow.ColorInfor), Global.ParaShow.ThicknessLine), p1, p2);
+            //    // gc.ResetTransform();
+            //}
+
+
             //  Draws.Box1Label(gc, rotA, nameTool, font, brushText, cl,  Global.ParaShow.ThicknessLine);
-            int i = 0;
+            //int i = 0;
             if (!Global.IsRun)
                 foreach (LabelItem item in labelItems)
             {
@@ -1125,12 +1273,24 @@ namespace BeeCore
                         Point p2 = new Point(item.ValueX, 50);
                         Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
                     }
+                    if (item.IsYMax)
+                    {
+                        Point p1 = new Point(0, item.ValueYMax);
+                        Point p2 = new Point(50, item.ValueYMax);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                    }
+                    if (item.IsXMax)
+                    {
+                        Point p1 = new Point(item.ValueXMax, 0);
+                        Point p2 = new Point(item.ValueXMax, 50);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                    }
                     gc.ResetTransform();  
             }
-            foreach (RectRotate rot in rectRotates)
+            foreach (ResultItem rs in ResultItem)
             {
                 Color clShow = Global.ParaShow.ColorNone;
-                if (ResultItem[i].IsOK == true)
+                if (rs.IsOK == true)
                     clShow = cl;
               
                 mat = new Matrix();
@@ -1152,7 +1312,7 @@ namespace BeeCore
                 
                       
 
-                int index = labelItems.FindIndex(item => string.Equals(item.Name, ResultItem[i].Name, StringComparison.OrdinalIgnoreCase));
+                int index = labelItems.FindIndex(item => string.Equals(item.Name, rs.Name, StringComparison.OrdinalIgnoreCase));
                
                 if (index > -1)
                 {
@@ -1170,37 +1330,61 @@ namespace BeeCore
                         Point p2 = new Point(item.ValueX, 50);
                         Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
                     }
+                    if (item.IsYMax)
+                    {
+                        Point p1 = new Point(0, item.ValueYMax);
+                        Point p2 = new Point(50, item.ValueYMax);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                    }
+                    if (item.IsXMax)
+                    {
+                        Point p1 = new Point(item.ValueXMax, 0);
+                        Point p2 = new Point(item.ValueXMax, 50);
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                    }
+                    if (item.IsDistance&& LineVerital != null)
+                    {
+                        Draws.Plus(gc, (int)rs.point.X, (int)rs.point.Y, 10, Color.Red, 2);
+                        Draws.DrawPerpendicularWithDistanceText(
+                            gc, pen, rs.point, LineVerital, font,
+                            textBrush:new SolidBrush( Global.ParaShow.TextColor),
+                            textBackBrush: new SolidBrush(Global.ParaShow.ColorInfor),
+                            decimals: 1,
+                            textOffsetPx: 8f
+                        );
+                       
+                    }
                     if (item.IsHeight || item.IsWidth)
                     {
                         //mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
                         //gc.Transform = mat;
-                        mat.Rotate(rot._rectRotation);
+                        mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
                         //mat.Rotate(rot._rectRotation);
                         //gc.Transform = mat;
-                        System.Drawing.Point point1 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point2 = new System.Drawing.Point((int)(rot._PosCenter.X), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                        System.Drawing.Point point3 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point4 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y - rot._rect.Height / 2));
-                        System.Drawing.Point point5 = new System.Drawing.Point((int)(rot._PosCenter.X - rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
-                        System.Drawing.Point point6 = new System.Drawing.Point((int)(rot._PosCenter.X + rot._rect.Width / 2), (int)(rot._PosCenter.Y + rot._rect.Height / 2));
+                        System.Drawing.Point point1 = new System.Drawing.Point((int)(rs.rot._PosCenter.X), (int)(rs.rot._PosCenter.Y - rs.rot._rect.Height / 2));
+                        System.Drawing.Point point2 = new System.Drawing.Point((int)(rs.rot._PosCenter.X), (int)(rs.rot._PosCenter.Y + rs.rot._rect.Height / 2));
+                        System.Drawing.Point point3 = new System.Drawing.Point((int)(rs.rot._PosCenter.X - rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y - rs.rot._rect.Height / 2));
+                        System.Drawing.Point point4 = new System.Drawing.Point((int)(rs.rot._PosCenter.X + rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y - rs.rot._rect.Height / 2));
+                        System.Drawing.Point point5 = new System.Drawing.Point((int)(rs.rot._PosCenter.X - rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y + rs.rot._rect.Height / 2));
+                        System.Drawing.Point point6 = new System.Drawing.Point((int)(rs.rot._PosCenter.X + rs.rot._rect.Width / 2), (int)(rs.rot._PosCenter.Y + rs.rot._rect.Height / 2));
                         gc.DrawLine(new Pen(clShow, 8), point1, point2);
                         gc.DrawLine(new Pen(clShow, 8), point3, point4);
                         gc.DrawLine(new Pen(clShow, 8), point5, point6);
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                         gc.Transform = mat;
-                        String content = rot._rect.Height + " px";
+                        String content = rs.rot._rect.Height + " px";
                          font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
                         SizeF sz1 = gc.MeasureString(content, font);
-                         gc.DrawString(content, font, new SolidBrush(Global.ParaShow.ColorInfor) , new System.Drawing.Point((int)(rot._rect.X + rot._rect.Width / 2), (int)(rot._rect.Y + rot._rect.Height / 2 - sz1.Height / 2)));
-                        String label = ResultItem[i].Name;
+                         gc.DrawString(content, font, new SolidBrush(Global.ParaShow.ColorInfor) , new System.Drawing.Point((int)(rs.rot._rect.X + rs.rot._rect.Width / 2), (int)(rs.rot._rect.Y + rs.rot._rect.Height / 2 - sz1.Height / 2)));
+                        String label =rs.Name;
                         sz1 = gc.MeasureString(label, font);
-                        gc.FillRectangle(new SolidBrush(clShow), new RectangleF((int)(rot._rect.X), (int)(rot._rect.Y - sz1.Height-2), sz1.Width, sz1.Height +4));
-                        gc.DrawString(label, font, new SolidBrush(Color.White), new System.Drawing.Point((int)(rot._rect.X ), (int)(rot._rect.Y - sz1.Height-2)));
+                        gc.FillRectangle(new SolidBrush(clShow), new RectangleF((int)(rs.rot._rect.X), (int)(rs.rot._rect.Y - sz1.Height-2), sz1.Width, sz1.Height +4));
+                        gc.DrawString(label, font, new SolidBrush(Color.White), new System.Drawing.Point((int)(rs.rot._rect.X ), (int)(rs.rot._rect.Y - sz1.Height-2)));
                         //String valueScore = Math.Round(ResultItem[i].Score, 1) + "%";
                         //if (!Global.ParaShow.IsShowScore) valueScore = "";
                         //if (!Global.ParaShow.IsShowLabel) label = "";
-                        //Draws.Box3Label(gc, rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        //Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(ResultItem[i].Area / 100) + "px", font, clShow, brushText, 30, Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 20, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
                     }
                     else
@@ -1208,22 +1392,22 @@ namespace BeeCore
                       
                         //  mat = new Matrix();
                         //mat = new Matrix();
-                        mat.Translate(rot._PosCenter.X, rot._PosCenter.Y);
+                        mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
                       //  gc.Transform = mat;
-                        mat.Rotate(rot._rectRotation);
+                        mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
                         if (!Global.IsRun  || Global.ParaShow.IsShowDetail)
-                            if (ResultItem[i].matProcess != null && !ResultItem[i].matProcess.Empty())
+                            if (rs.matProcess != null && !rs.matProcess.Empty())
                             {
-                                Draws.DrawMatInRectRotateNotMatrix(gc, ResultItem[i].matProcess, rot, clShow, Global.ParaShow.Opacity / 100.0f);
+                                Draws.DrawMatInRectRotateNotMatrix(gc, rs.matProcess, rs.rot, clShow, Global.ParaShow.Opacity / 100.0f);
 
                             }
                         font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
-                        String label = ResultItem[i].Name;
-                        String valueScore = Math.Round(ResultItem[i].Score, 1) + "%";
+                        String label = rs.Name;
+                        String valueScore = Math.Round(rs.Score, 1) + "%";
                         if (!Global.ParaShow.IsShowScore) valueScore = "";
                         if (!Global.ParaShow.IsShowLabel) label = "";
-                        Draws.Box3Label(gc, rot._rect, label, valueScore, (int)(ResultItem[i].Area/100) + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1, Global.ParaShow.IsShowDetail);//("+Math.Round( ResultItem[i].Percent) + "%)
+                        Draws.Box3Label(gc, rs.rot._rect, label, valueScore, (int)(rs.Area/100) + "px", font, clShow, brushText, 30,Global.ParaShow.ThicknessLine, Global.ParaShow.FontSize, 1,item.IsArea);//("+Math.Round( ResultItem[i].Percent) + "%)
                         gc.ResetTransform();
 
                     }
@@ -1231,8 +1415,7 @@ namespace BeeCore
 
 
                 }
-                i++;
-
+                
                 //else
                 //{
 

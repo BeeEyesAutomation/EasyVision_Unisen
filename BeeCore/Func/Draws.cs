@@ -207,6 +207,92 @@ namespace BeeCore
             gc.DrawLine(pen, centerX - lineLength / 2, centerY, centerX + lineLength / 2, centerY);
             gc.DrawLine(pen, centerX, centerY - lineLength / 2, centerX, centerY + lineLength / 2);
         }
+        public static void DrawPerpendicularWithDistanceText(
+       Graphics g,
+       Pen pen,
+       PointF p,
+       Line2D line,
+       Font font = null,
+       Brush textBrush = null,
+       Brush textBackBrush = null,
+       float footRadius = 3f,
+       int decimals = 1,
+       float textOffsetPx = 6f // đẩy text lệch khỏi đường 1 chút
+   )
+        {
+            if (g == null || pen == null) return;
+
+            if (font == null) font = SystemFonts.DefaultFont;
+            if (textBrush == null) textBrush = Brushes.Black;
+            if (textBackBrush == null) textBackBrush = Brushes.White;
+
+            double x1 = line.X1, y1 = line.Y1;
+            double vx = line.Vx, vy = line.Vy;
+            if (vx * vx + vy * vy < 1e-12) return;
+
+            // ===== chân vuông góc =====
+            double dx = p.X - x1;
+            double dy = p.Y - y1;
+            double t = dx * vx + dy * vy;
+
+            PointF h = new PointF(
+                (float)(x1 + t * vx),
+                (float)(y1 + t * vy)
+            );
+
+            // ===== distance (vx,vy normalized) =====
+            float dist = (float)Math.Abs(dx * vy - dy * vx);
+
+            // ===== vẽ đoạn vuông góc =====
+            g.DrawLine(pen, p, h);
+
+            // ===== vẽ điểm chân =====
+            if (footRadius > 0.1f)
+            {
+                g.FillEllipse(Brushes.Red, h.X - footRadius, h.Y - footRadius, footRadius * 2, footRadius * 2);
+            }
+
+            // ===== vẽ text distance ở giữa đoạn =====
+            string s = dist.ToString("F" + decimals);
+
+            // midpoint
+            float mx = (p.X + h.X) * 0.5f;
+            float my = (p.Y + h.Y) * 0.5f;
+
+            // hướng normal để đẩy text ra khỏi đường (vuông góc với đoạn P->H)
+            float ndx = h.X - p.X;
+            float ndy = h.Y - p.Y;
+            float nlen = (float)Math.Sqrt(ndx * ndx + ndy * ndy);
+            if (nlen < 1e-6f) nlen = 1f;
+
+            // vector “lệch” (vuông góc với đoạn), để text không nằm đè lên đường
+            float ox = -ndy / nlen * textOffsetPx;
+            float oy = ndx / nlen * textOffsetPx;
+
+            PointF textPos = new PointF(mx + ox, my + oy);
+
+            // measure text
+            SizeF sz = g.MeasureString(s, font);
+
+            // background box (nền trắng)
+            RectangleF box = new RectangleF(
+                textPos.X - sz.Width * 0.5f - 2,
+                textPos.Y - sz.Height * 0.5f - 1,
+                sz.Width + 4,
+                sz.Height + 2
+            );
+
+            g.FillRectangle(textBackBrush, box);
+            g.DrawRectangle(Pens.Black, box.X, box.Y, box.Width, box.Height);
+
+            // draw text centered
+            g.DrawString(
+                s,
+                font,
+                textBrush,
+                new PointF(textPos.X - sz.Width * 0.5f, textPos.Y - sz.Height * 0.5f)
+            );
+        }
         private static void DrawLineClipped(Graphics g, Line2D ln, RectangleF clip, Pen pen)
         {
           
@@ -255,7 +341,39 @@ namespace BeeCore
             B = new PointF(x0 + tMax * vx, y0 + tMax * vy);
             return true;
         }
+        public static void DrawInfiniteLine(
+     Graphics g,
+     Pen pen,
+     Line2D line,
+     float length = 100000f   // đủ lớn là được
+ )
+        {
+            if (g == null || pen == null) return;
 
+            // 1 điểm trên line
+            float x0 = (float)line.X1;
+            float y0 = (float)line.Y1;
+
+            // hướng (đã normalize)
+            float vx = (float)line.Vx;
+            float vy = (float)line.Vy;
+
+            // tránh line suy biến
+            if (vx * vx + vy * vy < 1e-12f) return;
+
+            // 2 điểm rất xa
+            PointF p0 = new PointF(
+                x0 - vx * length,
+                y0 - vy * length
+            );
+
+            PointF p1 = new PointF(
+                x0 + vx * length,
+                y0 + vy * length
+            );
+
+            g.DrawLine(pen, p0, p1);
+        }
         public static void DrawInfiniteLine(Graphics g, Line2D ln, Pen pen, RectangleF rectClient)
         {
             PointF a, b;

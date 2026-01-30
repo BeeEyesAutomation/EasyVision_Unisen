@@ -4274,8 +4274,12 @@ namespace BeeInterface
             // 
             this.autoFontLabel1.AutoFont = true;
             this.autoFontLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 289.4883F);
-            this.autoFontLabel1.Location = new System.Drawing.Point(3, 97);
+            this.autoFontLabel1.EnableHorizontalScroll = false;
+            this.autoFontLabel1.EnableVerticalScroll = false;
+            this.autoFontLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 199.6211F);
+            this.autoFontLabel1.Location = new System.Drawing.Point(3, 100);
+            this.autoFontLabel1.MaxFontSize = 200F;
+            this.autoFontLabel1.MinFontSize = 6F;
             this.autoFontLabel1.Name = "autoFontLabel1";
             this.autoFontLabel1.Size = new System.Drawing.Size(504, 743);
             this.autoFontLabel1.TabIndex = 81;
@@ -4331,7 +4335,7 @@ namespace BeeInterface
             // 
             this.txtAddPLC.AutoFont = true;
             this.txtAddPLC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAddPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.04297F);
+            this.txtAddPLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.42188F);
             this.txtAddPLC.Location = new System.Drawing.Point(171, 8);
             this.txtAddPLC.Name = "txtAddPLC";
             this.txtAddPLC.Size = new System.Drawing.Size(157, 39);

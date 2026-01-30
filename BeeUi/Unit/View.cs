@@ -3298,6 +3298,14 @@ namespace BeeUi
                     }
                     Global.StatusProcessing = StatusProcessing.Read;
                 }
+                else
+
+                {
+                    Global.TriggerNum = TriggerNum.Trigger1;
+                    Global.IndexChoose = 0;
+                   
+                    Global.StatusProcessing = StatusProcessing.Read;
+                }
             }    
                
             else
@@ -3329,8 +3337,10 @@ namespace BeeUi
                 }
                 else
                 {
+                    Global.TriggerNum = TriggerNum.Trigger1;
                     Global.IndexChoose = 0;
                     Global.TriggerInternal = true;
+
                 }    
                
             }    

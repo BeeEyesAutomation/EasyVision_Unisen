@@ -148,11 +148,19 @@ namespace BeeCore
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj,X_Adj,Y_Adj,AngAdj);
                                     if(propetyTool.Propety.rotMask!=null)
                                     propetyTool.Propety.rotMaskAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotMask, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj, X_Adj, Y_Adj, AngAdj);
+                                    if(propetyTool.TypeTool==TypeTool.Learning)
+                                    {
+                                        if (propetyTool.Propety.rotCrop != null)
+                                      
+                                            propetyTool.Propety.rotCropAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotCrop, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj, X_Adj, Y_Adj, AngAdj);
+
+                                    }
 
                                     //if (propetyTool.TypeTool == TypeTool.MultiPattern)
                                     //{
                                     //    List<ResultMulti> ResultMulti = propetyTool.Propety.ResultMulti;
                                     //    foreach (ResultMulti resultMulti in ResultMulti)
+
                                     //    {
                                     //        resultMulti.rotAdj=BeeCore.Common.GetPositionAdjustment(resultMulti.RotCalib, Global.rotOriginAdj);
                                     //    }    
@@ -162,7 +170,12 @@ namespace BeeCore
 
                                 }
                                 else
+                                {
                                     propetyTool.Propety.rotAreaAdjustment = propetyTool.Propety.rotArea;
+                                    propetyTool.Propety.rotCropAdjustment = propetyTool.Propety.rotCrop;
+                                    propetyTool.Propety.rotMaskAdjustment = propetyTool.Propety.rotMask;
+                                }    
+                                   
 
 
                             }
