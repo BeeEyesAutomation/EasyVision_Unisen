@@ -6,7 +6,7 @@ using namespace System;
 
 namespace BeeCpp
 {
-    
+
 
 
 
@@ -36,7 +36,7 @@ namespace BeeCpp
             IntPtr grayPtr, int w, int h, int step,
             [System::Runtime::InteropServices::Out] IntPtr% outMaskPtr,
             [System::Runtime::InteropServices::Out] int% outMaskStep,
-            MonoSegCliParams p
+            MonoSegCliParams p, bool IsHardNoise
         );
 
         // NEW: trả về paper + chips dưới dạng RectRotateCli[]

@@ -42,13 +42,16 @@ namespace BeeCpp
     int MonoSegCli::SegmentMonoLowContrast(
         IntPtr grayPtr, int w, int h, int step,
         IntPtr% outMaskPtr, int% outMaskStep,
-        MonoSegCliParams p
+        MonoSegCliParams p, bool IsHardNoise
     )
     {
         Mat gray(h, w, CV_8UC1, grayPtr.ToPointer(), (size_t)step);
         Mat mask;
-        int area = MonoSegCore::SegmentLowContrastMono(gray, mask, ToNative(p));
-
+        int area = 0;
+        if (!IsHardNoise)
+            int area = MonoSegCore::SegmentLowContrastMono(gray, mask, ToNative(p));
+        else
+            int area = MonoSegCore::SegmentLowContrastMonoHardNoise(gray, mask, ToNative(p));
         // output mask: step = w (CV_8UC1 packed)
         outMaskStep = w;
         size_t bytes = (size_t)w * h;
@@ -86,7 +89,7 @@ namespace BeeCpp
                 (float)rr[i].size.width,
                 (float)rr[i].size.height
             );
-           // cli.RectWH = wh;
+            // cli.RectWH = wh;
             r.RectWH = wh;// RectF32((float)rr[i].size.width, (float)rr[i].size.height);
             r.RectRotationDeg = rr[i].angle;
 

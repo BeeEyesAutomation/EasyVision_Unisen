@@ -135,6 +135,158 @@ int MonoSegCore::SegmentLowContrastMono(
     if (outScore) *outScore = score;
     return countNonZero(outMask8U);
 }
+static void SplitVerticalBlobs(
+    const Mat& inMask,
+    Mat& outMask,
+    int minGap
+)
+{
+    outMask = Mat::zeros(inMask.size(), CV_8UC1);
+
+    Mat labels, stats, cents;
+    int n = connectedComponentsWithStats(
+        inMask, labels, stats, cents
+    );
+
+    for (int i = 1; i < n; i++)
+    {
+        int x = stats.at<int>(i, CC_STAT_LEFT);
+        int y = stats.at<int>(i, CC_STAT_TOP);
+        int w = stats.at<int>(i, CC_STAT_WIDTH);
+        int h = stats.at<int>(i, CC_STAT_HEIGHT);
+
+        Mat roi = (labels == i)(Rect(x, y, w, h));
+
+        // projection theo Y
+        Mat proj;
+        reduce(roi, proj, 1, REDUCE_SUM, CV_32S);
+
+        int start = -1;
+        for (int r = 0; r < proj.rows; r++)
+        {
+            int v = proj.at<int>(r, 0);
+            if (v > 0 && start < 0) start = r;
+            if (v == 0 && start >= 0)
+            {
+                if (r - start > minGap)
+                {
+                    Rect part(x, y + start, w, r - start);
+                    outMask(part).setTo(255);
+                }
+                start = -1;
+            }
+        }
+
+        if (start >= 0)
+        {
+            Rect part(x, y + start, w, proj.rows - start);
+            outMask(part).setTo(255);
+        }
+    }
+}
+
+int MonoSegCore::SegmentLowContrastMonoHardNoise(
+    const Mat& gray8U,
+    Mat& outMask8U,
+    const MonoSegParams& pin,
+    Mat* outScore
+)
+{
+    CV_Assert(gray8U.type() == CV_8UC1);
+
+    MonoSegParams p = pin;
+    p.bgBlurK = MakeOdd(max(3, p.bgBlurK));
+    p.blackHatK = MakeOdd(max(3, p.blackHatK));
+
+    Mat score;
+
+    // ===== 1️⃣ BACKGROUND SUPPRESSION =====
+    if (p.useBlackHat)
+    {
+        Mat k = getStructuringElement(
+            MORPH_RECT,
+            Size(p.blackHatK, p.blackHatK)
+        );
+        morphologyEx(gray8U, score, MORPH_BLACKHAT, k);
+    }
+    else
+    {
+        Mat bg;
+        blur(gray8U, bg, Size(p.bgBlurK, p.bgBlurK));
+        if (p.mode == 0) subtract(bg, gray8U, score);
+        else             subtract(gray8U, bg, score);
+    }
+
+    normalize(score, score, 0, 255, NORM_MINMAX);
+    score.convertTo(score, CV_8U);
+
+    // ===== 2️⃣ THRESHOLD =====
+    int thr = AutoThresholdHistogramValley(score);
+    threshold(score, outMask8U, thr, 255, THRESH_BINARY);
+
+    // đảm bảo object là foreground
+    if (countNonZero(outMask8U) < (outMask8U.total() / 2))
+        bitwise_not(outMask8U, outMask8U);
+
+    // ===== 3️⃣ OPEN DỌC (DIỆT NOISE) =====
+    if (p.openK > 0)
+    {
+        Mat kOpen = getStructuringElement(
+            MORPH_RECT,
+            Size(p.openK, p.openK * 5)
+        );
+        morphologyEx(outMask8U, outMask8U, MORPH_OPEN, kOpen);
+    }
+
+    // ===== 4️⃣ CLOSE DỌC (LIỀN KHỐI) =====
+    if (p.closeK > 0)
+    {
+        Mat kClose = getStructuringElement(
+            MORPH_RECT,
+            Size(p.closeK, p.closeK * 2)
+        );
+        morphologyEx(outMask8U, outMask8U, MORPH_CLOSE, kClose);
+    }
+
+    // ===== 5️⃣ CONNECTED COMPONENT FILTER =====
+    Mat labels, stats, cents;
+    int n = connectedComponentsWithStats(
+        outMask8U, labels, stats, cents
+    );
+
+    Mat clean = Mat::zeros(outMask8U.size(), CV_8UC1);
+    int totalArea = 0;
+
+    for (int i = 1; i < n; i++)
+    {
+        int area = stats.at<int>(i, CC_STAT_AREA);
+        int w = stats.at<int>(i, CC_STAT_WIDTH);
+        int h = stats.at<int>(i, CC_STAT_HEIGHT);
+
+        if (area < 800) continue;   // loại noise
+        if (h < w * 2)  continue;   // chỉ giữ object đứng
+
+        clean.setTo(255, labels == i);
+        totalArea += area;
+    }
+
+    // ===== 6️⃣ FILL HOLE (CỰC KỲ QUAN TRỌNG) =====
+    Mat filled = clean.clone();
+    floodFill(filled, Point(0, 0), Scalar(255));
+    bitwise_not(filled, filled);
+    clean |= filled;
+
+    // ===== 7️⃣ SPLIT OBJECT DÍNH THEO TRỤC Y =====
+    Mat split;
+    SplitVerticalBlobs(clean, split, 15);
+
+    // ===== 8️⃣ OUTPUT CUỐI =====
+    outMask8U = split;
+
+    if (outScore) *outScore = score;
+    return totalArea;
+}
+
 static inline void NormalizeRectAngle(cv::RotatedRect& rr)
 {
     // OpenCV: angle ∈ (-90, 0]
@@ -163,7 +315,7 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
     const int H = mask8U.rows;
     const double imgArea = (double)W * H;
 
-    
+
     // =========================================================
     // B) CHIP DETECT – CLEAN MASK + CC
     // =========================================================
@@ -201,7 +353,7 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
         Hs.push_back((float)h);
     }
 
-    if ((int)cand.size() < 3)
+    if ((int)cand.size() < 1)
         return (int)outRR.size();
 
     // ---- auto-learn size ----
@@ -240,9 +392,9 @@ int MonoSegCore::ExtractPaperAndChipRectRotatesFromMask(
         cv::Mat roi = clean(box);
         double fill = (double)cv::countNonZero(roi) / (double)box.area();
         if (fill < p.minFillRatio) continue;
-      /*  cv::Mat roi = clean(box);
-        double fill = (double)cv::countNonZero(roi) / (double)box.area();
-        if (fill < p.minFillRatio) continue;*/
+        /*  cv::Mat roi = clean(box);
+          double fill = (double)cv::countNonZero(roi) / (double)box.area();
+          if (fill < p.minFillRatio) continue;*/
 
         std::vector<std::vector<cv::Point>> cnts;
         cv::findContours(roi, cnts, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);

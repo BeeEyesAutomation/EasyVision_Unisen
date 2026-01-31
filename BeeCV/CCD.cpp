@@ -1258,7 +1258,7 @@ bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
 
 	int w = info.nWidth, h = info.nHeight;
 	void* p = out.pBufAddr;
-
+	return ConvertBySDKEx(camera, out, imageBGR);
 	switch (info.enPixelType)
 	{
 	case PixelType_Gvsp_BGR8_Packed:
@@ -1273,14 +1273,19 @@ bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
 
 	case PixelType_Gvsp_Mono8:
 		EnsureSize(imageBGR, w, h, CV_8UC3);
-		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_GRAY2BGR);
+		//cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_GRAY2BGR);
 		return true;
 
 	case PixelType_Gvsp_BayerBG8:
 		EnsureSize(imageBGR, w, h, CV_8UC3);
 		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_BayerBG2RGB);
 		return true;
-	
+	case PixelType_Gvsp_BayerRG8:
+		EnsureSize(imageBGR, w, h, CV_8UC3);
+		cv::Mat(h, w, CV_8UC1, p).copyTo(imageBGR);
+		//cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_BayerBG2RGB);
+		return true;
+
 
 	default:
 		return ConvertBySDKEx(camera, out, imageBGR);
@@ -1446,6 +1451,17 @@ void  CCD::SetFormatImage(int Format)
 {
 	FormatCCD = Format;
 }
+struct MvFrameGuard
+{
+	CMvCamera* cam;
+	MV_FRAME_OUT* frame;
+
+	MvFrameGuard(CMvCamera* c, MV_FRAME_OUT* f) : cam(c), frame(f) {}
+	~MvFrameGuard()
+	{
+		if (cam && frame) cam->FreeImageBuffer(frame);
+	}
+};
 uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 {
 	auto t0 = std::chrono::steady_clock::now();
@@ -1460,11 +1476,60 @@ uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 		{
 			return nullptr;
 		}
-		if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
-			//DeviceReset(m_pcMyCamera[indexCCD]);
-			*rows = *cols = *Type = 0;
+		//auto t0 = std::chrono::steady_clock::now();
+		frameCount++;
+
+		*rows = *cols = *Type = 0;
+
+		if (IsWaiting || !m_pcMyCamera[indexCCD])
 			return nullptr;
+
+		MV_FRAME_OUT frameOut{};
+		if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
+			return nullptr;
+
+		// auto FreeImageBuffer
+		MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
+
+		auto& info = frameOut.stFrameInfo;
+		if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
+			return nullptr;
+
+		// ===== CHỈ CHẤP NHẬN MONO8 =====
+		if (info.enPixelType != PixelType_Gvsp_Mono8)
+			return nullptr;
+
+		const int w = info.nWidth;
+		const int h = info.nHeight;
+		const size_t imageSize = (size_t)w * h;
+
+		uchar* image_uchar = new uchar[imageSize];
+
+		// Copy 1 lần duy nhất
+		std::memcpy(image_uchar, frameOut.pBufAddr, imageSize);
+
+		// ===== FPS =====
+		auto now = std::chrono::steady_clock::now();
+		elapsed = now - lastTime;
+		if (elapsed.count() >= 1.0)
+		{
+			FPS = frameCount / elapsed.count();
+			frameCount = 0;
+			lastTime = now;
 		}
+		cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
+
+		*rows = h;
+		*cols = w;
+		*Type = CV_8UC1;
+
+		return image_uchar;
+		//return ConvertBySDKEx(camera, out, imageBGR);
+		//if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
+		//	//DeviceReset(m_pcMyCamera[indexCCD]);
+		//	*rows = *cols = *Type = 0;
+		//	return nullptr;
+		//}
 		break;
 	}
 	default: { // OpenCV VideoCapture

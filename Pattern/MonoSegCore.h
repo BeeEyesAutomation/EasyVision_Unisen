@@ -48,7 +48,13 @@ public:
         const MonoSegParams& p,
         cv::Mat* outScore = nullptr
     );
-
+    // ====== STEP 1: Segment low-contrast mono ======
+    static int SegmentLowContrastMonoHardNoise(
+        const cv::Mat& gray8U,
+        cv::Mat& outMask8U,
+        const MonoSegParams& p,
+        cv::Mat* outScore = nullptr
+    );
     // ====== BACKWARD: Extract chip boxes (axis-aligned) ======
     // (giữ lại để không vỡ chỗ khác, nhưng nội bộ dùng fillRatio + auto size)
     static int ExtractChipBoxesFromMask(

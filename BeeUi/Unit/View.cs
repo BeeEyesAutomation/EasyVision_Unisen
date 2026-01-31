@@ -3682,32 +3682,32 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
                     if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
-                      if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
+                        if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                         {
-                        Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
-                        // matRaw là OpenCvSharp.Mat
-                        var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
+                            Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
+                            // matRaw là OpenCvSharp.Mat
+                            var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
 
-                        // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
-                        var old = Interlocked.Exchange(ref _sharedFrame, bmp);
-                        old?.Dispose();
+                            // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
+                            var old = Interlocked.Exchange(ref _sharedFrame, bmp);
+                            old?.Dispose();
 
-                        // (tuỳ chọn) báo cho display thread là có frame mới
-                        _frameReady?.Set();
-                        //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
-                        //{
+                            // (tuỳ chọn) báo cho display thread là có frame mới
+                            _frameReady?.Set();
+                            //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
+                            //{
 
-                        //        _sharedFrame?.Dispose();
-                        //        _sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
+                            //        _sharedFrame?.Dispose();
+                            //        _sharedFrame = (Bitmap)frame.Clone(); // Clone để thread-safe
 
-                        //}
-                    }
+                            //}
+                        }
 
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown)
                     await TimingUtils.DelayAccurateAsync(5);
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].IsSetPara)
                     await TimingUtils.DelayAccurateAsync(5);
-                
+
                 workReadCCD.RunWorkerAsync();
                 return;
             }
