@@ -1278,8 +1278,9 @@ bool CaptureFrameMat(CMvCamera* camera, cv::Mat& imageBGR, int timeoutMs = 1000)
 
 	case PixelType_Gvsp_BayerBG8:
 		EnsureSize(imageBGR, w, h, CV_8UC3);
-		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_BayerBG2BGR);
+		cv::cvtColor(cv::Mat(h, w, CV_8UC1, p), imageBGR, cv::COLOR_BayerBG2RGB);
 		return true;
+	
 
 	default:
 		return ConvertBySDKEx(camera, out, imageBGR);

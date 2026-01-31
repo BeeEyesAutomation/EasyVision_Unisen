@@ -300,11 +300,13 @@ namespace BeeCore
         Line2DCli Line2D;
         [NonSerialized]
         Line2D LineVerital;
+        public bool IsLine = false;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             if (!Global.IsIntialPython) return;
             if (!Global.IsRun) 
                 rotCropAdjustment = rotCrop;
+            if(IsLine)
             if (rotCropAdjustment != null)
             {
                 Mat matCrop = Cropper.CropRotatedRect(BeeCore.Common.listCamera[IndexCCD].matRaw, rotCropAdjustment,null);
@@ -681,14 +683,25 @@ namespace BeeCore
                                     if (rs.rot._rect.Width >= item.ValueWidth)
                                         IsOK = true;
                                 }
+                                if (IsLine)
+                                {
+                                    
+                                    if (item.IsDistance)
+                                    {
+                                        if (LineVerital != null)
+                                        {
+                                            PointF point = new PointF();
+                                            ResultItem[i].Distance = (float)Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
+                                            if (ResultItem[i].Distance <= item.ValueDistance)
+                                                IsOK = true;
 
-                                if (item.IsDistance&& LineVerital!=null)
-                                { 
-                                    PointF point = new PointF();
-                                    ResultItem[i].Distance= (float) Cal.DistanceLine2D_RectRotate(LineVerital, rs.rot, out point);
-                                    if(ResultItem[i].Distance<=item.ValueDistance)
-                                        IsOK = true;
-                                    ResultItem[i].point = point;
+                                            ResultItem[i].point = point;
+
+                                        }
+                                        if(!Line2D.Found)
+                                            IsOK = true;
+
+                                    }
                                 }
                                     double Area = 0;
                                 if (item.IsArea)
@@ -1212,14 +1225,17 @@ namespace BeeCore
             Font font = new Font("Arial", Global.ParaShow.FontSize, FontStyle.Bold);
             if (Global.ParaShow.IsShowBox)
                 Draws.Box2Label(gc, rotA, nameTool,"Count: "+ numOK, font, cl, brushText, Global.ParaShow.FontSize, Global.ParaShow.ThicknessLine);
-            if (Line2D.Found)
+            if (IsLine)
+                if (Line2D.Found)
             {
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
                 gc.Transform = mat;
                 Draws.DrawInfiniteLine(gc, new Pen(Global.ParaShow.ColorChoose, Global.ParaShow.ThicknessLine), LineVerital);
                 gc.ResetTransform();
-            }
-              
+                    Line2D = new Line2DCli();
+
+                }
+
             //if (Line2D.Found)
             //{
 
@@ -1265,25 +1281,25 @@ namespace BeeCore
                     {
                         Point p1 = new Point(0, item.ValueY);
                         Point p2 = new Point(50, item.ValueY);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.SkyBlue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsX)
                     {
                         Point p1 = new Point(item.ValueX, 0);
                         Point p2 = new Point(item.ValueX, 50);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.SkyBlue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsYMax)
                     {
                         Point p1 = new Point(0, item.ValueYMax);
                         Point p2 = new Point(50, item.ValueYMax);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsXMax)
                     {
                         Point p1 = new Point(item.ValueXMax, 0);
                         Point p2 = new Point(item.ValueXMax, 50);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, Global.ParaShow.ThicknessLine));
                     }
                     gc.ResetTransform();  
             }
@@ -1322,25 +1338,25 @@ namespace BeeCore
                     {
                         Point p1 = new Point(0, item.ValueY);
                         Point p2 = new Point(50, item.ValueY);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.SkyBlue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsX)
                     {
                         Point p1 = new Point(item.ValueX, 0);
                         Point p2 = new Point(item.ValueX, 50);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.SkyBlue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsYMax)
                     {
                         Point p1 = new Point(0, item.ValueYMax);
                         Point p2 = new Point(50, item.ValueYMax);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsXMax)
                     {
                         Point p1 = new Point(item.ValueXMax, 0);
                         Point p2 = new Point(item.ValueXMax, 50);
-                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Red, 5));
+                        Draws.DrawInfiniteLine(gc, p1, p2, new Rectangle(0, 0, (int)rotA._rect.Width, (int)rotA._rect.Height), new Pen(Color.Blue, Global.ParaShow.ThicknessLine));
                     }
                     if (item.IsDistance&& LineVerital != null)
                     {

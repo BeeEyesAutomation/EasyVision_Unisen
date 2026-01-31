@@ -2520,6 +2520,7 @@ namespace BeeInterface
             this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel24.Size = new System.Drawing.Size(425, 637);
             this.tableLayoutPanel24.TabIndex = 0;
+            this.tableLayoutPanel24.Visible = false;
             // 
             // tableLayoutPanel25
             // 

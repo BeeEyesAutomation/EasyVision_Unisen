@@ -31,6 +31,7 @@ namespace BeeInterface
         private void IOSetting_Load(object sender, EventArgs e)
         {
             this.Width = Global.EditTool.BtnHeaderBar.Width + 1;
+           this.Height=Global.SizeScreen.Height- Global.EditTool.BtnHeaderBar.Height-20;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width - 1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
             btnNG.IsCLick = Global.Config.IsONNG;
             btnOK.IsCLick = !Global.Config.IsONNG;

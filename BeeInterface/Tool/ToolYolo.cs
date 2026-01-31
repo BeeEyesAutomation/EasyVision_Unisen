@@ -119,6 +119,9 @@ namespace BeeInterface
                 btnNoneBox.IsCLick = Propety.FilterBox == FilterBox.None ? true : false;
                 AdjOverLap.Enabled= Propety.FilterBox == FilterBox.None ? false : true;
                 AdjOverLap.Value = Propety.ThreshOverlap;
+                btnOnline.IsCLick = Propety.IsLine;
+                btnOffLine.IsCLick=!Propety.IsLine;
+                btnCrop.Enabled=Propety.IsLine;
                 switch (Propety.Compare)
                 {
                     case Compares.Equal:
@@ -1573,9 +1576,10 @@ namespace BeeInterface
         {
             switch (Global.TypeCrop)
             {
-                //case TypeCrop.Crop:
-                //    Propety.rotCrop.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
-                //    break;
+                case TypeCrop.Crop:
+                  
+                    Propety.rotCrop.Shape = btnElip.IsCLick == true ? ShapeType.Ellipse : ShapeType.Rectangle;
+                    break;
                 //case TypeCrop.Area:
                 //    Propety.rotArea.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
                 //    break;
@@ -1624,7 +1628,9 @@ namespace BeeInterface
         }
 
         private void btnCrop_Click(object sender, EventArgs e)
-        {   if (Propety.rotCrop == null) Propety.rotCrop = new RectRotate();
+        { 
+           Propety.IsLine = true;
+            if (Propety.rotCrop == null) Propety.rotCrop = new RectRotate();
             Global.StatusDraw = StatusDraw.Edit;
             Global.TypeCrop = TypeCrop.Crop;
             Propety.TypeCrop = Global.TypeCrop;
@@ -1634,6 +1640,19 @@ namespace BeeInterface
             btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
             btnWhite.IsCLick = Propety.rotCrop.IsWhite;
             btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
+        }
+
+        private void btnOnline_Click(object sender, EventArgs e)
+        {
+            Propety.IsLine=btnOnline.IsCLick;
+           btnCrop.Enabled=Propety.IsLine;
+        }
+
+        private void tnOffLine_Click(object sender, EventArgs e)
+        {
+            Propety.IsLine =! btnOffLine.IsCLick;
+            btnCrop.Enabled = Propety.IsLine;
+
         }
     }
 }
