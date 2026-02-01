@@ -303,26 +303,42 @@ namespace BeeGlobal
             if(!IsConnected) return ;
             PlcClient.WriteBit(AddRead + "." + AddressInput[(int)I_O_Input], Value);
         }
+        [NonSerialized]
+        public PCI_Card PCI_Card1 = new PCI_Card();
         public async Task<bool> Connect(  )
         {
             try
             {
                 if(TypeControler == TypeControler.PCI)
                 {
-                    IsConnected= PCI_Card.Connect();
-                    if (IsConnected)
+                    try
                     {
-                        PCI_Card.OnBitsRead += PCI_Card_OnBitsRead;
-                        PCI_Card.StartReadLoop();
-                        TimingUtils.EnableHighResolutionTimer();
+                        PCI_Card1 = new PCI_Card();
+
+                        IsConnected = PCI_Card1.Connect();
+                     //  IsConnected = true;
+                        if (IsConnected)
+                        {
+                           PCI_Card1.Write(PCI_Write.LightOFF);
+                            PCI_Card1.OnBitsRead += PCI_Card_OnBitsRead;
+                            PCI_Card1.StartReadLoop();
+                            TimingUtils.EnableHighResolutionTimer();
+                        }
+                        else
+                        {
+                            Global.PLCStatus = PLCStatus.ErrorConnect;
+                            Global.StatusIO = StatusIO.NotConnect;
+                        }
+                        Arrange();
+                        return IsConnected;
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        Global.PLCStatus = PLCStatus.ErrorConnect;
-                        Global.StatusIO = StatusIO.NotConnect;
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+
+
                     }
-                    return IsConnected; 
-                   
+
                 }    
                 PlcClient = new PlcLib.PlcClient(
                 PlcBrand,
@@ -751,39 +767,52 @@ namespace BeeGlobal
         {
             if (obj)
             {
-                if (Global.IsRun && Global.ParaCommon.IsExternal)
-                    if (AddressInput[(int)I_O_Input.Trigger] != -1)
-                    {
-                        int ix = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
-                        if (ix >= 0)
+                try
+                {
+                    if (Global.IsRun && Global.ParaCommon.IsExternal)
+                        if (AddressInput[(int)I_O_Input.Trigger] != -1)
                         {
-                            ParaBits[ix].Value = Convert.ToInt32(Convert.ToInt32( obj));
-                        }
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
-                        Global.TriggerInternal = false;
-                        Global.IsAllowReadPLC = false;
-                       
-                       
-                            switch (Global.TriggerNum)
+                            int ix = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
+                            if (ix >= 0)
                             {
-                                case TriggerNum.Trigger0:
-                                    Global.TriggerNum = TriggerNum.Trigger1;
-                                    break;
-                                case TriggerNum.Trigger1:
-                                    Global.TriggerNum = TriggerNum.Trigger2;
-                                    break;
-                                case TriggerNum.Trigger2:
-                                    Global.TriggerNum = TriggerNum.Trigger3;
-                                    break;
-                                case TriggerNum.Trigger3:
-                                    Global.TriggerNum = TriggerNum.Trigger4;
-                                    break;
+                                ParaBits[ix].Value = Convert.ToInt32(Convert.ToInt32(obj));
+                                if (obj == true)
+                                {
 
+
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                                    Global.TriggerInternal = false;
+                                    Global.IsAllowReadPLC = false;
+
+
+                                    switch (Global.TriggerNum)
+                                    {
+                                        case TriggerNum.Trigger0:
+                                            Global.TriggerNum = TriggerNum.Trigger1;
+                                            break;
+                                        case TriggerNum.Trigger1:
+                                            Global.TriggerNum = TriggerNum.Trigger2;
+                                            break;
+                                        case TriggerNum.Trigger2:
+                                            Global.TriggerNum = TriggerNum.Trigger3;
+                                            break;
+                                        case TriggerNum.Trigger3:
+                                            Global.TriggerNum = TriggerNum.Trigger4;
+                                            break;
+
+                                    }
+
+                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                    IO_Processing = IO_Processing.Trigger;
+                                }
+                               
                             }
-                      
-                        Global.StatusProcessing = StatusProcessing.Trigger;
-                        IO_Processing = IO_Processing.Trigger;
-                    }
+                        }
+                }
+                catch(Exception ex)
+                {
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI2", ex.Message));
+                }
             }
         }
 
@@ -981,8 +1010,26 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Trigger:
-                  
-                    switch(Global.TriggerNum)
+                   
+                    if (TypeControler == TypeControler.PCI)
+                    {
+                        if (DelayTrigger == 0)
+                        {
+                            Global.StatusMode = StatusMode.Once;
+                            Global.StatusProcessing = StatusProcessing.Read;
+                        }
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trigger", "OK"));
+
+                        PCI_Card1.Write(PCI_Write.LightON);
+                        if (DelayTrigger > 0)
+                        {
+                            await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
+                            Global.StatusMode = StatusMode.Once;
+                            Global.StatusProcessing = StatusProcessing.Read;
+                        }
+                        break;
+                    }
+                    switch (Global.TriggerNum)
                     {
                       
                         case TriggerNum.Trigger1:
@@ -996,7 +1043,7 @@ namespace BeeGlobal
                             {
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trigger", "OK"));
 
-                                PCI_Card.Write(PCI_Write.LightON);
+                                PCI_Card1.Write(PCI_Write.LightON);
                                 if (DelayTrigger > 0)
                                 {
                                     await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
@@ -1233,22 +1280,33 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Result:
+                    bool IsOK = Global.ListResult[Global.IndexChoose] == Results.OK ? true : false;
+                    bool IsOKTotal = false;
+                    if (Global.TotalOK == Results.OK) IsOKTotal = true;
+                    try
+                    {
+                      
+                        if (TypeControler == TypeControler.PCI)
+                        {
+                            if (IsOK)
+                                PCI_Card1.Write(PCI_Write.OK);
+                            else
+                                PCI_Card1.Write(PCI_Write.NG);
+                            Global.StatusProcessing = StatusProcessing.Drawing;
+                            break;
+                        }
+                       
+                    }
+                  catch(Exception ex)
+                  {
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "SendRS", ex.Message));
+
+                    }
                     SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], false);//Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], false);//Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], false);//Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], false);//Busy
-                    bool IsOK = Global.ListResult[Global.IndexChoose] == Results.OK ? true : false;
-                    bool IsOKTotal = false;
-                    if(Global.TotalOK == Results.OK) IsOKTotal= true;
-                    if (TypeControler == TypeControler.PCI)
-                    {
-                        if (IsOK)
-                            PCI_Card.Write(PCI_Write.OK);
-                        else
-                            PCI_Card.Write(PCI_Write.NG);
-
-                        break;
-                    }
+                   
                 
                     if(Global.Config.IsONNG)
                     {
@@ -1415,6 +1473,8 @@ namespace BeeGlobal
                     Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case IO_Processing.ChangeMode:
+                    if (TypeControler == TypeControler.PCI)
+                        break;
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], !Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], !Global.IsRun); //Busy
@@ -1434,9 +1494,9 @@ namespace BeeGlobal
                 case IO_Processing.Light:
                     if (TypeControler==TypeControler.PCI)
                     {   if(Global.Config.IsOnLight)
-                             PCI_Card.Write(PCI_Write.LightON);
+                            PCI_Card1.Write(PCI_Write.LightON);
                         else
-                            PCI_Card.Write(PCI_Write.LightOFF);
+                            PCI_Card1.Write(PCI_Write.LightOFF);
                        
                         break;
                     }
@@ -1470,6 +1530,8 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:
+                    if (TypeControler == TypeControler.PCI)
+                        break;
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true); //Busy
@@ -1477,7 +1539,9 @@ namespace BeeGlobal
                     await WriteOutPut();
                     break;
                 case IO_Processing.Reset:
-                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                    if (TypeControler == TypeControler.PCI)
+                        break;
+                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //Ready

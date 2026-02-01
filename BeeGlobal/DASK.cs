@@ -761,423 +761,423 @@ public class DASK
 
 	public const ushort RegBySlot = 32768;
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short Register_Card(ushort CardType, ushort card_num);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short Release_Card(ushort CardNumber);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetActualRate(ushort CardNumber, double fSampleRate, out double fActualRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short EMGShutDownControl(ushort CardNumber, byte ctrl);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short EMGShutDownStatus(ushort CardNumber, out byte sts);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short HotResetHoldControl(ushort wCardNumber, byte enable);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short HotResetHoldStatus(ushort wCardNumber, out byte sts);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetInitPattern(ushort CardNumber, byte patID, out uint pattern);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short SetInitPattern(ushort wCardNumber, byte patID, uint pattern);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short IdentifyLED_Control(ushort CardNumber, byte ctrl);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9111_Config(ushort CardNumber, ushort TrigSource, ushort TrgMode, ushort TraceCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9112_Config(ushort CardNumber, ushort TrigSource);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9113_Config(ushort CardNumber, ushort TrigSource);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9114_Config(ushort CardNumber, ushort TrigSource);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9116_Config(ushort CardNumber, ushort ConfigCtrl, ushort TrigCtrl, ushort PostCnt, ushort MCnt, ushort ReTrgCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9118_Config(ushort CardNumber, ushort ModeCtrl, ushort FunCtrl, ushort BurstCnt, ushort PostCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9812_Config(ushort CardNumber, ushort TrgMode, ushort TrgSrc, ushort TrgPol, ushort ClkSel, ushort TrgLevel, ushort PostCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9812_SetDiv(ushort wCardNumber, uint PacerVal);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9114_PreTrigConfig(ushort CardNumber, ushort PreTrgEn, ushort TraceCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_9116_CounterInterval(ushort wCardNumber, uint ScanIntrv, uint SampIntrv);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_InitialMemoryAllocated(ushort CardNumber, out uint MemSize);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ReadChannel(ushort CardNumber, ushort Channel, ushort AdRange, out ushort Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_VReadChannel(ushort CardNumber, ushort Channel, ushort AdRange, out double voltage);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_VoltScale(ushort CardNumber, ushort AdRange, ushort reading, out double voltage);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContReadChannel(ushort CardNumber, ushort Channel, ushort AdRange, ushort[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContReadMultiChannels(ushort CardNumber, ushort NumChans, ushort[] Chans, ushort[] AdRanges, ushort[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContScanChannels(ushort CardNumber, ushort Channel, ushort AdRange, ushort[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContReadChannelToFile(ushort CardNumber, ushort Channel, ushort AdRange, string FileName, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContReadMultiChannelsToFile(ushort CardNumber, ushort NumChans, ushort[] Chans, ushort[] AdRanges, string[] FileName, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContScanChannelsToFile(ushort CardNumber, ushort Channel, ushort AdRange, string FileName, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContStatus(ushort CardNumber, out ushort Status);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_ContVScale(ushort wCardNumber, ushort adRange, ushort[] readingArray, double[] voltageArray, int count);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncCheck(ushort CardNumber, out byte Stopped, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncClear(ushort CardNumber, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncDblBufferHalfReady(ushort CardNumber, out byte HalfReady, out byte StopFlag);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncDblBufferMode(ushort CardNumber, bool Enable);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncDblBufferTransfer(ushort CardNumber, ushort[] Buffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_AsyncDblBufferOverrun(ushort CardNumber, ushort op, out ushort overrunFlag);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_EventCallBack(ushort CardNumber, ushort mode, ushort EventType, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_6208A_Config(ushort CardNumber, ushort V2AMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_6308A_Config(ushort CardNumber, ushort V2AMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_6308V_Config(ushort wCardNumber, ushort Channel, ushort wOutputPolarity, double refVoltage);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_9111_Config(ushort CardNumber, ushort OutputPolarity);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_9112_Config(ushort CardNumber, ushort Channel, double refVoltage);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_WriteChannel(ushort CardNumber, ushort Channel, short Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_VWriteChannel(ushort CardNumber, ushort Channel, double Voltage);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_VoltScale(ushort CardNumber, ushort Channel, double Voltage, out short binValue);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_SimuWriteChannel(ushort wCardNumber, ushort wGroup, short[] pwBuffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_SimuVWriteChannel(ushort wCardNumber, ushort wGroup, double[] VBuffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_7200_Config(ushort CardNumber, ushort TrigSource, ushort ExtTrigEn, ushort TrigPol, ushort I_REQ_Pol);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_7300A_Config(ushort CardNumber, ushort PortWidth, ushort TrigSource, ushort WaitStatus, ushort Terminator, ushort I_REQ_Pol, bool clear_fifo, bool disable_di);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_7300B_Config(ushort CardNumber, ushort PortWidth, ushort TrigSource, ushort WaitStatus, ushort Terminator, ushort I_Cntrl_Pol, bool clear_fifo, bool disable_di);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_InitialMemoryAllocated(ushort CardNumber, out uint DmaSize);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ReadLine(ushort CardNumber, ushort Port, ushort Line, out ushort State);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ReadPort(ushort CardNumber, ushort Port, out uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContReadPort(ushort CardNumber, ushort Port, byte[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContReadPort(ushort CardNumber, ushort Port, ushort[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContReadPort(ushort CardNumber, ushort Port, uint[] Buffer, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContReadPortToFile(ushort CardNumber, ushort Port, string FileName, uint ReadCount, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContStatus(ushort CardNumber, out ushort Status);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncCheck(ushort CardNumber, out byte Stopped, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncClear(ushort CardNumber, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferHalfReady(ushort CardNumber, out byte HalfReady);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferMode(ushort CardNumber, bool Enable);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferTransfer(ushort CardNumber, byte[] Buffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferTransfer(ushort CardNumber, short[] Buffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferTransfer(ushort CardNumber, uint[] Buffer);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContMultiBufferSetup(ushort wCardNumber, byte[] pwBuffer, uint dwReadCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContMultiBufferSetup(ushort wCardNumber, short[] pwBuffer, uint dwReadCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContMultiBufferSetup(ushort wCardNumber, uint[] pwBuffer, uint dwReadCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_ContMultiBufferStart(ushort wCardNumber, ushort wPort, double fSampleRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncMultiBufferNextReady(ushort CardNumber, out byte bNextReady, out ushort wBufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_AsyncDblBufferOverrun(ushort CardNumber, ushort op, out ushort overrunFlag);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_EventCallBack(ushort CardNumber, short mode, short EventType, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_7200_Config(ushort CardNumber, ushort TrigSource, ushort OutReqEn, ushort OutTrigSig);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_7300A_Config(ushort CardNumber, ushort PortWidth, ushort TrigSource, ushort WaitStatus, ushort Terminator, ushort O_REQ_Pol);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_7300B_Config(ushort CardNumber, ushort PortWidth, ushort TrigSource, ushort WaitStatus, ushort Terminator, ushort O_Cntrl_Pol, uint FifoThreshold);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_InitialMemoryAllocated(ushort CardNumber, out uint MemSize);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_WriteLine(ushort CardNumber, ushort Port, ushort Line, ushort Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_WritePort(ushort CardNumber, byte Port, uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_WritePort(ushort CardNumber, ushort Port, uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_WritePort(ushort CardNumber, uint Port, uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_WriteExtTrigLine(ushort CardNumber, ushort Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ReadLine(ushort CardNumber, ushort Port, ushort Line, out ushort Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ReadPort(ushort CardNumber, ushort Port, out uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContWritePort(ushort CardNumber, ushort Port, byte[] Buffer, uint WriteCount, ushort Iterations, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContWritePort(ushort CardNumber, ushort Port, ushort[] Buffer, uint WriteCount, ushort Iterations, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContWritePort(ushort CardNumber, ushort Port, uint[] Buffer, uint WriteCount, ushort Iterations, double SampleRate, ushort SyncMode);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_PGStart(ushort CardNumber, byte[] Buffer, uint WriteCount, double SampleRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_PGStart(ushort CardNumber, short[] Buffer, uint WriteCount, double SampleRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_PGStart(ushort CardNumber, uint[] Buffer, uint WriteCount, double SampleRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_PGStop(ushort CardNumber);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContStatus(ushort CardNumber, out ushort Status);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_AsyncCheck(ushort CardNumber, out byte Stopped, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_AsyncClear(ushort CardNumber, out uint AccessCnt);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short EDO_9111_Config(ushort CardNumber, ushort EDO_Fun);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContMultiBufferSetup(ushort CardNumber, byte[] pwBuffer, uint dwWriteCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContMultiBufferSetup(ushort CardNumber, short[] pwBuffer, uint dwWriteCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContMultiBufferSetup(ushort CardNumber, uint[] pwBuffer, uint dwWriteCount, out ushort BufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_AsyncMultiBufferNextReady(ushort CardNumber, out byte bNextReady, out ushort wBufferId);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_ContMultiBufferStart(ushort wCardNumber, ushort wPort, double fSampleRate);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_EventCallBack(ushort CardNumber, short mode, short EventType, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_PortConfig(ushort CardNumber, ushort Port, ushort Direction);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_LinesConfig(ushort wCardNumber, ushort wPort, ushort wLinesdirmap);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_LineConfig(ushort wCardNumber, ushort wPort, ushort wLine, ushort wDirection);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_SetDualInterrupt(ushort CardNumber, short Int1Mode, short Int2Mode, long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_SetCOSInterrupt(ushort CardNumber, ushort Port, ushort ctlA, ushort ctlB, ushort ctlC);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_INT1_EventMessage(ushort CardNumber, short Int1Mode, long windowHandle, long message, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_INT2_EventMessage(ushort CardNumber, short Int2Mode, long windowHandle, long message, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_7300SetInterrupt(ushort CardNumber, short AuxDIEn, short T2En, long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_AUXDI_EventMessage(ushort CardNumber, short AuxDIEn, long windowHandle, uint message, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_T2_EventMessage(ushort CardNumber, short T2En, long windowHandle, uint message, MulticastDelegate callbackAddr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_GetCOSLatchData(ushort wCardNumber, out ushort CosLData);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_SetCOSInterrupt32(ushort wCardNumber, byte Port, uint ctl, out long hEvent, bool bManualReset);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DIO_GetCOSLatchDataInt32(ushort wCardNumber, byte Port, out uint CosLData);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_Setup(ushort CardNumber, ushort Ctr, ushort Mode, uint Count, ushort BinBcd);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_Clear(ushort CardNumber, ushort Ctr, ushort State);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_Read(ushort CardNumber, ushort Ctr, out uint Value);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_Update(ushort CardNumber, ushort Ctr, uint Count);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_8554_ClkSrc_Config(ushort CardNumber, ushort Ctr, ushort ClockSource);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_8554_CK1_Config(ushort CardNumber, ushort ClockSource);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short CTR_8554_Debounce_Config(ushort CardNumber, ushort DebounceClock);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GCTR_Setup(ushort wCardNumber, ushort wGCtr, ushort wGCtrCtrl, uint dwCount);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GCTR_Clear(ushort wCardNumber, ushort wGCtr);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GCTR_Read(ushort wCardNumber, ushort wGCtr, out uint pValue);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short WDT_Setup(ushort CardNumber, ushort wCtr, float ovflowSec, out float actualSec, out long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short WDT_Control(ushort wCardNumber, ushort wCtr, ushort action);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short WDT_Status(ushort wCardNumber, ushort Ctr, out uint pValue);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short WDT_Reload(ushort wCardNumber, float ovflowSec, out float actualSec);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_GetEvent(ushort wCardNumber, out long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AO_GetEvent(ushort wCardNumber, out long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_GetEvent(ushort wCardNumber, out long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_GetEvent(ushort wCardNumber, out long hEvent);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short AI_GetView(ushort wCardNumber, uint[] pView);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DI_GetView(ushort wCardNumber, uint[] pView);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short DO_GetView(ushort wCardNumber, uint[] pView);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetCardType(ushort wCardNumber, out ushort cardType);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetCardIndexFromID(ushort wCardNumber, out ushort cardType, out ushort cardIndex);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetBaseAddr(ushort wCardNumber, uint[] BaseAddr, uint[] BaseAddr2);
 
-	[DllImport("PCI-Dask.dll")]
+	[DllImport("PCI-Dask64.dll")]
 	public static extern short GetLCRAddr(ushort wCardNumber, uint[] LcrAddr);
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace BeeGlobal
@@ -20,8 +21,8 @@ namespace BeeGlobal
     }
     public class PCI_Card
     {
-        public static short m_dev;
-        public static bool Connect()
+        public  short m_dev;
+        public  bool Connect()
         {
             
             m_dev = DASK.Register_Card(6, 0);
@@ -34,7 +35,7 @@ namespace BeeGlobal
                 return true;
             }
         }
-        public static bool Write(PCI_Write PCI_Write)
+        public  bool Write(PCI_Write PCI_Write)
         {
             uint value = 128u;
             switch (PCI_Write)
@@ -66,24 +67,33 @@ namespace BeeGlobal
             }
             return true;
         }
-        public static int iSensorOn = 0;
-        public static Task<bool> Read()
+        public  int iSensorOn = 0;
+        public  Task<bool> Read()
         {
             return Task.Run(() =>
             {
              
-            short ret;
-                ret = DASK.DI_ReadPort((ushort)m_dev, 0, out var int_value);
+            short ret=0;
+                uint value = 0;
+                try
+                {
+                    ret = DASK.DI_ReadPort((ushort)m_dev, 0, out value);
+                }
+                catch(Exception ex)
+                {
+                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR,"PCI", ex.Message));
+                }
+               
                 if (ret < 0)
                 {
                     return  false;
                 }
-                if (int_value == 1)
+                if (value == 1)
                 {
                     iSensorOn = 1;
                 return false;
                 }
-                if (iSensorOn == 1 && int_value == 0)
+                if (iSensorOn == 1 && value == 0)
                 {
 
                     iSensorOn = 0;
@@ -94,10 +104,10 @@ namespace BeeGlobal
 
             });
         }
-        private static Task _loopTask;
-        private static CancellationTokenSource _loopCts;
-        public static event Action<bool> OnBitsRead;
-        public static bool StartReadLoop(int cycleMs = 500)
+        private  Task _loopTask;
+        private  CancellationTokenSource _loopCts;
+        public  event Action<bool> OnBitsRead;
+        public  bool StartReadLoop(int cycleMs = 500)
         {
             StopReadLoop();
             _loopCts = new CancellationTokenSource();
@@ -109,19 +119,94 @@ namespace BeeGlobal
                 {
                  try
                     {
-                        if (Global.IsAllowReadPLC)
+                        //if (Global.IsAllowReadPLC)
                         {
-                          bool val = await Read();
-                            
-                            var handler = OnBitsRead;
-                            if (handler != null) handler(val);
+
+                            bool val = false;
+                            short ret = 0;
+                                uint value = 0;
+                                try
+                                {
+                                    ret = DASK.DI_ReadPort((ushort)m_dev, 0, out value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+                                }
+
+                                if (ret < 0)
+                                {
+                                val = false;
+                                }
+                                if (value == 1)
+                                {
+                                    iSensorOn = 1;
+                                val = false;
+                                }
+                                if (iSensorOn == 1 && value == 0)
+                                {
+
+                                    iSensorOn = 0;
+                                val = true;
+                                }
+                            //val = true;
+                        //  val= false;
+
+
+                        //val = await Read();
+                        //if(Global.ParaCommon==null)
+                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ParaCommon","null"));
+
+                        //if (Global.Comunication.Protocol == null)
+                        //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Protocol", "null"));
+
+                        //if (Global.IsRun && Global.ParaCommon.IsExternal)
+                        //    if (Global.Comunication.Protocol. AddressInput[(int)I_O_Input.Trigger] != -1&&val==true)
+                        //    {
+                        //        int ix = Global.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
+                        //        if (ix >= 0)
+                        //        {
+
+                        //            Global.Comunication.Protocol.ParaBits[ix].Value = Convert.ToInt32(Convert.ToInt32(val));
+
+                        //            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                        //            Global.TriggerInternal = false;
+                        //            Global.IsAllowReadPLC = false;
+
+
+                        //            switch (Global.TriggerNum)
+                        //            {
+                        //                case TriggerNum.Trigger0:
+                        //                    Global.TriggerNum = TriggerNum.Trigger1;
+                        //                    break;
+                        //                case TriggerNum.Trigger1:
+                        //                    Global.TriggerNum = TriggerNum.Trigger2;
+                        //                    break;
+                        //                case TriggerNum.Trigger2:
+                        //                    Global.TriggerNum = TriggerNum.Trigger3;
+                        //                    break;
+                        //                case TriggerNum.Trigger3:
+                        //                    Global.TriggerNum = TriggerNum.Trigger4;
+                        //                    break;
+
+                        //            }
+
+                        //            Global.StatusProcessing = StatusProcessing.Trigger;
+                        //            Global.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
+                        //        }
+                        //    }
+                        var handler = OnBitsRead;
+                            if (handler != null)
+                                handler(val);
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Read", val+""));
+
                         }
 
                     }
                     catch (Exception ex)
                     {
 
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ReadPLC", "Fail Read"));
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI0", ex.Message));
                     }
 
                     await TimingUtils.DelayAccurateAsync(cycleMs < 50 ? 50 : cycleMs);
@@ -130,7 +215,7 @@ namespace BeeGlobal
             return true;
         }
 
-        public static void StopReadLoop()
+        public  void StopReadLoop()
         {
             if (_loopCts == null) return;
             try { _loopCts.Cancel(); _loopTask?.Wait(800); } catch { }

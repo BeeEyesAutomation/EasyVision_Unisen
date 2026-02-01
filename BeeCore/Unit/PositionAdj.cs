@@ -418,7 +418,7 @@ namespace BeeCore
         public PointF pInsert = new PointF();
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-         
+       
              rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
             rectRotates = new List<RectRotate>();
@@ -704,6 +704,7 @@ namespace BeeCore
             results = Results.OK;
             if (rectRotates.Count() != 1)
                 results = Results.NG;
+            if(!Global.IsAutoTemp)
             if(MethodSample == MethodSample.Corner)
            if(LineCliVertical.Inliers< MinInliersA|| LineCliHorial.Inliers< MinInliersB)
                 results = Results.NG;
@@ -731,8 +732,8 @@ namespace BeeCore
             {
                 SideTempLR = SideLR;
                 SideTempTB = SideTB;
-                MinInliersA = (float)(LineCliVertical.Inliers * (80 / 100.0));
-               MinInliersB = (float)(LineCliHorial.Inliers * (80 / 100.0));
+                MinInliersA = (float)(LineCliVertical.Inliers * (60 / 100.0));
+               MinInliersB = (float)(LineCliHorial.Inliers * (60 / 100.0));
 
 
 
@@ -740,7 +741,7 @@ namespace BeeCore
             if (MethodSample == MethodSample.Corner)
                 if (SideTempLR != SideLR || SideTempTB != SideTB)
                 results = Results.NG;
-            if (!Global.IsRun)
+            if (!Global.IsRun || Global.IsAutoTemp)
              {
              
                 Global.StatusDraw = StatusDraw.Check;
