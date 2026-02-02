@@ -107,7 +107,7 @@ namespace BeeGlobal
         private  Task _loopTask;
         private  CancellationTokenSource _loopCts;
         public  event Action<bool> OnBitsRead;
-        public  bool StartReadLoop(int cycleMs = 500)
+        public  bool StartReadLoop(int cycleMs = 1)
         {
             StopReadLoop();
             _loopCts = new CancellationTokenSource();
@@ -122,38 +122,12 @@ namespace BeeGlobal
                         //if (Global.IsAllowReadPLC)
                         {
 
-                            bool val = false;
-                            short ret = 0;
-                                uint value = 0;
-                                try
-                                {
-                                    ret = DASK.DI_ReadPort((ushort)m_dev, 0, out value);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
-                                }
-
-                                if (ret < 0)
-                                {
-                                val = false;
-                                }
-                                if (value == 1)
-                                {
-                                    iSensorOn = 1;
-                                val = false;
-                                }
-                                if (iSensorOn == 1 && value == 0)
-                                {
-
-                                    iSensorOn = 0;
-                                val = true;
-                                }
+                            
                             //val = true;
                         //  val= false;
 
 
-                        //val = await Read();
+                      bool  val = await Read();
                         //if(Global.ParaCommon==null)
                         //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "ParaCommon","null"));
 

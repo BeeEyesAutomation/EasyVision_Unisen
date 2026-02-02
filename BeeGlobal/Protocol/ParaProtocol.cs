@@ -321,7 +321,7 @@ namespace BeeGlobal
                         {
                            PCI_Card1.Write(PCI_Write.LightOFF);
                             PCI_Card1.OnBitsRead += PCI_Card_OnBitsRead;
-                            PCI_Card1.StartReadLoop();
+                            PCI_Card1.StartReadLoop(timeRead);
                             TimingUtils.EnableHighResolutionTimer();
                         }
                         else

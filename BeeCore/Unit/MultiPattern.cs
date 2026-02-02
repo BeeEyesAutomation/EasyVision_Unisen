@@ -616,7 +616,7 @@ namespace BeeCore
             OffSetPage = -20;
             int W = raw.Width;
             int H = raw.Height;
-            int space = 500;
+            int space = 300;
 
             rotBot = new RectRotate(new RectangleF(-space / 2f, -H / 4f, space, H / 2f), new PointF(W / 2, 3 * H / 4f), 0, AnchorPoint.None);
             using (Mat crop = Cropper.CropRotatedRect(raw, rotBot, null))
@@ -812,22 +812,22 @@ namespace BeeCore
                     gray = Cropper.CropRotatedRect(raw, rotArea, null);
                     //  Cv2.EqualizeHist(gray, gray);//note cv.imwite o day
                     // 1) Segment -> maskPtr (như bạn đang làm)
-                    var segP = new MonoSegCliParams { BgBlurK = 41, OpenK = 2, CloseK = 4, Mode = 0, UseBlackHat = false, BlackHatK = 31 };
+                    var segP = new MonoSegCliParams { BgBlurK = 41, OpenK = 2, CloseK = 4, Mode = 0, UseBlackHat = true, BlackHatK = 31 };
                     IntPtr maskPtr = IntPtr.Zero; int maskStep;
                     MonoSegCli.SegmentMonoLowContrast(gray.Data, gray.Width, gray.Height, (int)gray.Step(), out maskPtr, out maskStep, segP, IsHardNoise);
 
                     // 2) Extract paper + chips (RectRotateCli[])
                     var extP = new ChipExtractCliParams
                     {
-                        MinArea = 50,
-                        MinW = 5,
+                        MinArea = 300,
+                        MinW = 8,
                         MinH = 10,
                         MinAspect = 1.2f,
                         VertKW = 3,
                         //VertKH = 15,
                         VertKH = 15,
-                        OpenK = 3,
-                        MinFillRatio = 0.32f,
+                        OpenK = 5,
+                        MinFillRatio = 0.50f,
                         SizeTol = 0.40f,
                         PaperMinAreaFrac = 0.02f
                     };

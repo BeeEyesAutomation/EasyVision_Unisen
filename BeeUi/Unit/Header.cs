@@ -863,17 +863,17 @@ txtQrCode.Focus();
         {
             Global.IsAutoTemp = btnTraining.IsCLick;
 
-            if (Global.Comunication.Protocol.IsConnected)
-            {
-                Global.IsDisnablePLc = false;
-                Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], Global.IsDisnablePLc);
-                await Global.Comunication.Protocol.WriteOutPut();
+            //if (Global.Comunication.Protocol.IsConnected)
+            //{
+            //    Global.IsDisnablePLc = false;
+            //    Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], Global.IsDisnablePLc);
+            //    await Global.Comunication.Protocol.WriteOutPut();
 
-            }
-            else
-            {
-                Global.IsDisnablePLc = false;
-            }
+            //}
+            //else
+            //{
+            //    Global.IsDisnablePLc = false;
+            //}
         }
 
         private void btnEnterPO_Click(object sender, EventArgs e)
