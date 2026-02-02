@@ -301,6 +301,10 @@ namespace BeeCore
         [NonSerialized]
         Line2D LineVerital;
         public bool IsLine = false;
+        public int LenTemp = 0;
+        public int LenRS= 0;
+        public float ThresholdLine = 0.5f;
+        public float ToleranceLine = 0.1f;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             if (!Global.IsIntialPython) return;
@@ -315,31 +319,28 @@ namespace BeeCore
                 if (matCrop.Type() == MatType.CV_8UC3)
                     Cv2.CvtColor(matCrop, matCrop, ColorConversionCodes.BGR2GRAY);
                 matProcess = Filters.GetStrongEdgesOnly(matCrop);
-              
-                //if (IsClearNoiseSmall)
-                //    matProcess = Filters.ClearNoise(matProcess, SizeClearsmall);
-                //if (IsClose)
-                //    matProcess = Filters.Morphology(matProcess, MorphTypes.Close, new Size(SizeClose, SizeClose));
-                //if (IsOpen)
-                //    matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
-                //if (IsClearNoiseBig)
-                //    matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
-
+            
                 LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
-
-                 Line2D= RansacLine.FindBestLine(
+                    Line2D = new Line2DCli();
+                 Line2D = RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
-                    iterations: 200,
-                    threshold: (float)2,
+                    iterations: 2000,
+                    threshold: ThresholdLine,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1, (BeeCpp.LineDirectionMode)((int)lineDirectionMode), 0, 30
+                    mmPerPixel: 1, 0.6f, (BeeCpp.LineDirectionMode)((int)lineDirectionMode), LineScanMode.RightToLeft, 0, 10
 
 
                 );
-               
-              if(Line2D.Found)
+                  LenRS =(int) Line2D.LengthPx;
+
+                    if (Math.Abs( LenRS - LenTemp)/ (LenTemp*1.0) >ToleranceLine)
+                    {
+                        Line2D.Found = false;
+                    }
+                    if (Line2D.Found)
                 {
+                            
                     Line2D line = new Line2D( Line2D.Vx, Line2D.Vy, Line2D.X0, Line2D.Y0);
                     Line2D lineWorld =
                     Line2DRectRotateXform.LineLocalToWorld(

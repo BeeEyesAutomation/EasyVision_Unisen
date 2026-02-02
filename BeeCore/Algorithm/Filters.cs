@@ -23,6 +23,176 @@ namespace BeeCore.Algorithm
             else if (value.CompareTo(max) > 0) return max;
             else return value;
         }
+        public static Mat RemoveBorderTouchAndKeepCenter(
+        Mat bin,
+        int borderMargin = 10,
+        int minArea = 5000)
+        {
+            if (bin.Empty())
+                throw new ArgumentException("bin empty");
+            if (bin.Type() != MatType.CV_8UC1)
+                throw new ArgumentException("bin must be CV_8UC1");
+
+            // đảm bảo binary
+            Mat bw = new Mat();
+            Cv2.Threshold(bin, bw, 0, 255, ThresholdTypes.Binary);
+
+            Mat labels = new Mat();
+            Mat stats = new Mat();
+            Mat centroids = new Mat();
+
+            int n = Cv2.ConnectedComponentsWithStats(
+                bw, labels, stats, centroids,
+                PixelConnectivity.Connectivity8,
+                MatType.CV_32S);
+
+            int W = bw.Cols;
+            int H = bw.Rows;
+
+            int bestLabel = -1;
+            int bestArea = 0;
+
+            for (int i = 1; i < n; i++) // 0 = background
+            {
+                int x = stats.At<int>(i, (int)ConnectedComponentsTypes.Left);
+                int y = stats.At<int>(i, (int)ConnectedComponentsTypes.Top);
+                int w = stats.At<int>(i, (int)ConnectedComponentsTypes.Width);
+                int h = stats.At<int>(i, (int)ConnectedComponentsTypes.Height);
+                int area = stats.At<int>(i, (int)ConnectedComponentsTypes.Area);
+
+                if (area < minArea)
+                    continue;
+
+                // ❌ loại component chạm biên
+                bool touchBorder =
+                    x <= borderMargin ||
+                    y <= borderMargin ||
+                    (x + w) >= (W - borderMargin) ||
+                    (y + h) >= (H - borderMargin);
+
+                if (touchBorder)
+                    continue;
+
+                // ✅ chọn component lớn nhất còn lại
+                if (area > bestArea)
+                {
+                    bestArea = area;
+                    bestLabel = i;
+                }
+            }
+
+            Mat resultMask = Mat.Zeros(bw.Size(), MatType.CV_8UC1);
+            if (bestLabel >= 0)
+            {
+                Cv2.Compare(labels, bestLabel, resultMask, CmpType.EQ);
+                resultMask.ConvertTo(resultMask, MatType.CV_8UC1); // 0/255
+            }
+
+            return resultMask;
+        }
+        public static Mat AutoEnhanceForPaper(Mat gray)
+        {
+            if (gray.Empty())
+                throw new ArgumentException("Input image empty");
+
+            Mat g = gray.Clone();
+
+            // =========================
+            // 1. Normalize illumination (remove shading)
+            // =========================
+            Mat blurBg = new Mat();
+            Cv2.GaussianBlur(g, blurBg, new Size(0, 0), 45);
+            Mat norm = new Mat();
+            Cv2.Divide(g, blurBg, norm, scale: 255);
+
+            // =========================
+            // 2. Auto contrast stretch (percentile)
+            // =========================
+            double pLow = Percentile(norm, 1.0);
+            double pHigh = Percentile(norm, 99.0);
+
+            Mat stretched = new Mat();
+            Cv2.Normalize(norm, stretched, pLow, pHigh, NormTypes.MinMax);
+            stretched.ConvertTo(stretched, MatType.CV_8UC1);
+
+            // =========================
+            // 3. CLAHE (adaptive)
+            // =========================
+            var clahe = Cv2.CreateCLAHE(clipLimit: 3.0, tileGridSize: new Size(4,4));
+            Mat enhanced = new Mat();
+            clahe.Apply(stretched, enhanced);
+
+            return enhanced;
+        }
+
+        /// <summary>
+        /// Auto detect paper mask
+        /// </summary>
+        public static Mat DetectPaperMask(Mat enhanced)
+        {
+            Mat bin1 = new Mat();
+            Mat bin2 = new Mat();
+
+            // Adaptive threshold
+            Cv2.AdaptiveThreshold(
+                enhanced, bin1, 255,
+                AdaptiveThresholdTypes.GaussianC,
+                ThresholdTypes.Binary,
+                51, -5
+            );
+
+            // Otsu
+            Cv2.Threshold(
+                enhanced, bin2, 0, 255,
+                ThresholdTypes.Binary | ThresholdTypes.Otsu
+            );
+
+            // Pick better one
+            Mat bin = (Cv2.CountNonZero(bin1) > Cv2.CountNonZero(bin2)) ? bin1 : bin2;
+
+            // Morph clean
+            Mat k = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(9, 9));
+            Cv2.MorphologyEx(bin, bin, MorphTypes.Close, k);
+
+            return bin;
+        }
+
+        // =========================
+        // Helper: percentile
+        // =========================
+        private static double Percentile(Mat img8u, double percentile)
+        {
+            if (img8u.Empty()) return 0;
+            if (img8u.Type() != MatType.CV_8UC1)
+                throw new ArgumentException("Percentile expects CV_8UC1");
+
+            // hist as Mat (256x1 float)
+              var hist = new Mat();
+            Cv2.CalcHist(
+                images: new[] { img8u },
+                channels: new[] { 0 },
+                mask: null,
+                hist: hist,
+                dims: 1,
+                histSize: new[] { 256 },
+                ranges: new[] { new Rangef(0, 256) }
+            );
+
+            int total = img8u.Rows * img8u.Cols;
+            int target = (int)Math.Round(total * (percentile / 100.0));
+            if (target <= 0) return 0;
+
+            double acc = 0;
+            for (int i = 0; i < 256; i++)
+            {
+                // hist is float
+                float h = hist.At<float>(i, 0);
+                acc += h;
+                if (acc >= target)
+                    return i;
+            }
+            return 255;
+        }
         public static String Err = "";
         public static Mat GetStrongEdgesOnly(Mat raw, double percentile = 0.98)
         {

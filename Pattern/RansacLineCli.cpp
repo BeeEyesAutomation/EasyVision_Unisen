@@ -27,14 +27,34 @@ static LineDirNative ToNative(LineDirectionMode m)
     default:
         return Any;
     }
+
+}static LineScanPriority ToNative2(LineScanMode m)
+{
+    switch (m)
+    {
+    case LineScanMode::LeftToRight:  return LineScanPriority::LeftToRight;
+    case LineScanMode::RightToLeft:  return LineScanPriority::RightToLeft;
+    case LineScanMode::TopToBottom:  return LineScanPriority::TopToBottom;
+    case LineScanMode::BottomToTop:  return LineScanPriority::BottomToTop;
+    default:                         return LineScanPriority::None;
+    }
 }
+
 Line2DCli RansacLine::FindBestLine(
-    IntPtr edgeData, int width, int height, int stride,
-    int iterations, float threshold, int maxPoints, int seed,
-    float mmPerPixel, 
-    LineDirectionMode dirMode ,
-    float angleCenterDeg  ,   
-    float angleToleranceDeg )
+    IntPtr edgeData,
+    int width,
+    int height,
+    int stride,
+    int iterations,
+    float threshold,
+    int maxPoints,
+    int seed,
+    float mmPerPixel,
+    float AspectLen,
+    LineDirectionMode dirMode,
+    LineScanMode scanMode,          // <<< NEW
+    float angleCenterDeg,
+    float angleToleranceDeg)
 {
     Line2DCli ret{};
     ret.Found = false;
@@ -42,10 +62,25 @@ Line2DCli RansacLine::FindBestLine(
     if (edgeData == IntPtr::Zero || width <= 1 || height <= 1 || stride < width)
         return ret;
 
-    cv::Mat edges(height, width, CV_8UC1, edgeData.ToPointer(), (size_t)stride);
+    cv::Mat edges(height, width, CV_8UC1,
+        edgeData.ToPointer(), (size_t)stride);
+
     LineDirNative nativeDir = ToNative(dirMode);
+    LineScanPriority nativeScan = ToNative2(scanMode);
+
     auto res = RansacLineCore::FindBestLine(
-        edges, iterations, threshold, maxPoints, (unsigned)seed, mmPerPixel, nativeDir, angleCenterDeg, angleToleranceDeg);
+        edges,
+        iterations,
+        threshold,
+        maxPoints,
+        (unsigned)seed,
+        mmPerPixel,
+        AspectLen,
+        nativeDir,
+        angleCenterDeg,
+        angleToleranceDeg,
+        nativeScan      // <<< TRUYỀN XUỐNG CORE
+    );
 
     if (!res.found) return ret;
 
@@ -64,6 +99,42 @@ Line2DCli RansacLine::FindBestLine(
 
     return ret;
 }
+//Line2DCli RansacLine::FindBestLine(
+//    IntPtr edgeData, int width, int height, int stride,
+//    int iterations, float threshold, int maxPoints, int seed,
+//    float mmPerPixel, 
+//    LineDirectionMode dirMode ,
+//    float angleCenterDeg  ,   
+//    float angleToleranceDeg )
+//{
+//    Line2DCli ret{};
+//    ret.Found = false;
+//
+//    if (edgeData == IntPtr::Zero || width <= 1 || height <= 1 || stride < width)
+//        return ret;
+//
+//    cv::Mat edges(height, width, CV_8UC1, edgeData.ToPointer(), (size_t)stride);
+//    LineDirNative nativeDir = ToNative(dirMode);
+//    auto res = RansacLineCore::FindBestLine(
+//        edges, iterations, threshold, maxPoints, (unsigned)seed, mmPerPixel, nativeDir, angleCenterDeg, angleToleranceDeg);
+//
+//    if (!res.found) return ret;
+//
+//    ret.Found = true;
+//
+//    ret.X1 = res.p1.x; ret.Y1 = res.p1.y;
+//    ret.X2 = res.p2.x; ret.Y2 = res.p2.y;
+//
+//    ret.Vx = res.line[0]; ret.Vy = res.line[1];
+//    ret.X0 = res.line[2]; ret.Y0 = res.line[3];
+//
+//    ret.Inliers = res.inliers;
+//    ret.Score = res.score;
+//    ret.LengthPx = res.length_px;
+//    ret.LengthMm = res.length_mm;
+//
+//    return ret;
+//}
 
 
 Line2DCli RansacLine::FindBestLineAndDebug(

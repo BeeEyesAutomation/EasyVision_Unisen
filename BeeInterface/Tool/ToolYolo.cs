@@ -61,7 +61,13 @@ namespace BeeInterface
                 if (Propety.listModels == null) Propety.listModels = new List<string>();
                 Propety.listModels = Propety.listModels.Distinct().ToList();
                 Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
-                if(!File.Exists(Propety.pathFullModel))
+                lbLen.Text = Propety.LenTemp.ToString();
+                laySetLine.Visible = Propety.IsLine;
+                laySetLine2.Visible = Propety.IsLine;
+                laySetLine3.Visible = Propety.IsLine;
+                AdjThreshLine.Value = Propety.ThresholdLine;
+                AdjTolerance.Value = Propety.ToleranceLine;
+                if (!File.Exists(Propety.pathFullModel))
                 {
                     Propety.listModels.Remove(Propety.PathModel);
                     if(Propety.listModels.Count>0)
@@ -1646,13 +1652,35 @@ namespace BeeInterface
         {
             Propety.IsLine=btnOnline.IsCLick;
            btnCrop.Enabled=Propety.IsLine;
+            laySetLine.Visible = Propety.IsLine;
+            laySetLine2.Visible = Propety.IsLine;
+            laySetLine3.Visible = Propety.IsLine;
         }
 
         private void tnOffLine_Click(object sender, EventArgs e)
         {
             Propety.IsLine =! btnOffLine.IsCLick;
             btnCrop.Enabled = Propety.IsLine;
+            laySetLine.Visible = Propety.IsLine;
+            laySetLine2.Visible = Propety.IsLine;
+            laySetLine3.Visible = Propety.IsLine;
 
+        }
+
+        private void btnSetThreshLine_Click(object sender, EventArgs e)
+        {
+            Propety.LenTemp = Propety.LenRS;
+            lbLen.Text = Propety.LenTemp.ToString();
+        }
+
+        private void AdjThreshLine_ValueChanged(float obj)
+        {
+            Propety.ThresholdLine = AdjThreshLine.Value;
+        }
+
+        private void AdjTolerance_ValueChanged(float obj)
+        {
+            Propety.ToleranceLine = AdjTolerance.Value;
         }
     }
 }

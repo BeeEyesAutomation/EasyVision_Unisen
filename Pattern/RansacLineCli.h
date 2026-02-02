@@ -19,6 +19,7 @@ namespace BeeCpp {
         float LengthPx;
         float LengthMm;
     };
+
     public enum class LineDirectionMode
     {
         Any = 0,        // như hiện tại
@@ -38,17 +39,34 @@ namespace BeeCpp {
             int   FontThickness;
             // màu giữ nguyên default ở core; nếu cần, ta có thể thêm map màu sau
         };
-
+        public enum class LineScanMode
+        {
+            None = 0,
+            LeftToRight,
+            RightToLeft,
+            TopToBottom,
+            BottomToTop
+        };
         public ref class RansacLine {
        
         public:
             // === API cũ vẫn giữ ===
             static Line2DCli FindBestLine(
-                IntPtr edgeData, int width, int height, int stride,
-                int iterations, float threshold, int maxPoints, int seed, float mmPerPixel,
-                LineDirectionMode dirMode ,
-                float angleCenterDeg ,   // dùng cho AngleRange
-                float angleToleranceDeg );
+                IntPtr edge,
+                int width,
+                int height,
+                int step,
+                int iterations,
+                float threshold,
+                int maxPoints,
+                int seed,
+                float mmPerPixel,
+                float AspectLen,
+                LineDirectionMode dirMode,
+                LineScanMode scanMode,          // <<< NEW
+                float angleCenterDeg,
+                float angleToleranceDeg
+            );
 
             // === API mới: debug & save ===
             static Line2DCli FindBestLineAndDebug(

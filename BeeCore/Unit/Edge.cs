@@ -118,7 +118,7 @@ namespace BeeCore
         private CropPlus CropPlus = new CropPlus();
 
 
-
+        public float AspectLen=0.6f;
 
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
@@ -157,7 +157,7 @@ namespace BeeCore
                 if (IsClearNoiseBig)
                     matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
 
-                LineDirectionMode lineDirectionMode = LineDirectionMode.Horizontal;
+                LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
               
                 Line2DCli =  RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
@@ -165,7 +165,7 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),0,30
+                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,30
 
 
                 );

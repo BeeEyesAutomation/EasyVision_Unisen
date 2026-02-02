@@ -21,7 +21,16 @@ namespace BeeCpp {
         Vertical,       // gần 90°
         AngleRange      // dải góc tùy chọn
     };
+    enum class LineScanPriority
+    {
+        None = 0,
 
+        LeftToRight,
+        RightToLeft,
+
+        TopToBottom,
+        BottomToTop
+    };
     class RansacLineCore {
     private: static bool CheckDirection(
         double dx, double dy,
@@ -38,9 +47,11 @@ namespace BeeCpp {
             int maxPoints = 10000,       // giới hạn sample điểm
             unsigned seed = 987654321u,  // seed RNG
             float mmPerPixel = 1.0f  ,    // scale mm/pixel
+            float AspectLen=0.6f,
             LineDirNative dirMode = LineDirNative::Any,
             float angleCenterDeg = 0.0f,   // dùng cho AngleRange
-            float angleToleranceDeg = 10.0f
+            float angleToleranceDeg = 10.0f,
+            LineScanPriority scanMode = LineScanPriority::None // <<< NEW
         );
 
         // Overload cũ (tương thích ngược)

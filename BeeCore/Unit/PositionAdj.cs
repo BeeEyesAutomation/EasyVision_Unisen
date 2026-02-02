@@ -416,6 +416,7 @@ namespace BeeCore
         [NonSerialized]
         private Line2DCli LineCliHorial, LineCliVertical;
         public PointF pInsert = new PointF();
+        public float AspectLen = 0.6f;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
        
@@ -592,13 +593,14 @@ namespace BeeCore
                                             //};
                                             try
                                             {
+                                                AspectLen = 0.01f;
                                                  LineCliHorial = RansacLine.FindBestLine(
                                                matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
                                                iterations: RansacIterations,
                                                threshold: (float)RansacThreshold,
                                                maxPoints: 120000,
                                                seed: Index,
-                                               mmPerPixel: 1, BeeCpp.LineDirectionMode.Horizontal, 0, AngleToleranceDeg
+                                               mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Horizontal, LineScanMode.TopToBottom, 0, AngleToleranceDeg
                                                 );
                                                 LineCliVertical = RansacLine.FindBestLine(
                                                  matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
@@ -606,7 +608,7 @@ namespace BeeCore
                                                  threshold: (float)RansacThreshold,
                                                  maxPoints: 120000,
                                                  seed: Index,
-                                                 mmPerPixel: 1, BeeCpp.LineDirectionMode.Vertical, 0, AngleToleranceDeg
+                                                 mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, AngleToleranceDeg
                                                   );
                                               
                                                 // Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);

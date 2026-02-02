@@ -39,20 +39,8 @@ namespace BeeInterface
         {
 
 
-            //if (!workLoadModel.IsBusy)
-            //    workLoadModel.RunWorkerAsync();
-            if (Propety.IsColorPixel)
-                btnVisualMatch.IsCLick = true;
-            else
-                btnVisualMatch.IsCLick = false;
-            if (Propety.IsHardNoise)
-                btnHardNoise.IsCLick = true;
-            else
-                btnHardNoise.IsCLick = false;
-            if (Propety.bmRaw != null)
-            {
-                imgTemp.Image = Propety.bmRaw;
-            }
+           
+          
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value = (int)Propety.Angle;
 
@@ -67,59 +55,47 @@ namespace BeeInterface
             Propety.AngleLower = angle - Propety.Angle;
             Propety.AngleUper = angle + Propety.Angle;
 
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+           
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
             trackScore.Value = Common.PropetyTools[Global.IndexChoose][Propety.Index].Score;
             if (Propety.MaxObject == 0) Propety.MaxObject = 1;
-            AdjMaximumObj.Value = Propety.MaxObject;
-            AdjStepAngle.Value = Propety.StepAngle;
-            AdjLimitY.Value = Propety.LimitCounter;
-            trackMaxOverLap.Value = (int)(Propety.OverLap * 100);
-
-            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
-            ckSIMD.IsCLick = Propety.ckSIMD;
-            ckSubPixel.IsCLick = Propety.ckSubPixel;
-
-            if (Propety.IsHighSpeed)
-                btnHighSpeed.IsCLick = true;
-            else
-                btnNormal.IsCLick = true;
-            AdjMorphology.Value = Propety.SizeClose;
-            AdjOpen.Value = Propety.SizeOpen;
-            AdjClearNoise.Value = Propety.SizeClearsmall;
-            AdjClearBig.Value = Propety.SizeClearBig;
-
-            btnClose.IsCLick = Propety.IsClose;
-            btnOpen.IsCLick = Propety.IsOpen;
-            btnIsClearSmall.IsCLick = Propety.IsClearNoiseSmall;
-            btnIsClearBig.IsCLick = Propety.IsClearNoiseBig;
-            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
-            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
-            AdjOpen.Enabled = Propety.IsOpen;
-            AdjMorphology.Enabled = Propety.IsClose;
-            btnArea.IsCLick = true;
+           
+          
+          
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
+          
+            AdjScoreLearning.Value = Propety.ScoreYolo;
 
             AdjScale.Value = Propety.Scale;
             adjOffsetX.Value = Propety.ExpandX;//
             adjOffsetY.Value = Propety.ExpandY;//
-            adjAspect.Value = Propety.LimitAspect * 10;//
+          
             AdjLimitX.Value = Propety.LimitX;//
             AdjLimitY.Value = Propety.LimitY;//
-            AdjThreshColor.Value = Propety.ThreshColor;//
-            AdjLimitColor.Value = Propety.LimitColor;//
+           
+           
+            if (cbListModel.InvokeRequired)
+            {
+                cbListModel.Invoke(new Action(() =>
+                {
+                    cbListModel.DataSource = Propety.listModels;
+                }));
+            }
+            else
+            {
+                cbListModel.DataSource = Propety.listModels;
+            }
+
+            if (Propety.PathModel != "")
+                cbListModel.Text = Propety.PathModel;
+           
+            RefreshLabels();
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolMultiPattern_StatusToolChanged;
+    
         }
 
         private void ToolMultiPattern_StatusToolChanged(StatusTool obj)
@@ -142,117 +118,19 @@ namespace BeeInterface
 
 
 
-        private void ckSIMD_Click(object sender, EventArgs e)
-        {
-            Propety.ckSIMD = !Propety.ckSIMD;
-            if (Propety.ckSIMD)
-            {
-                ckSIMD.BackColor = Color.Goldenrod;
-                ckSIMD.BorderColor = Color.DarkGoldenrod;
-            }
-            else
-            {
-                ckSIMD.BackColor = Color.WhiteSmoke;
-                ckSIMD.BorderColor = Color.Silver;
-                ckSIMD.TextColor = Color.Black;
-            }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-
-        private void ckBitwiseNot_Click(object sender, EventArgs e)
-        {
-            Propety.ckBitwiseNot = !Propety.ckBitwiseNot;
-            if (Propety.ckBitwiseNot)
-            {
-                ckBitwiseNot.BackColor = Color.Goldenrod;
-                ckBitwiseNot.BorderColor = Color.DarkGoldenrod;
-            }
-            else
-            {
-                ckBitwiseNot.BackColor = Color.WhiteSmoke;
-                ckBitwiseNot.BorderColor = Color.Silver;
-                ckBitwiseNot.TextColor = Color.Black;
-            }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
-
-        private void ckSubPixel_Click(object sender, EventArgs e)
-        {
-            Propety.ckSubPixel = !Propety.ckSubPixel;
-            if (Propety.ckSubPixel)
-            {
-                ckSubPixel.BackColor = Color.Goldenrod;
-                ckSubPixel.BorderColor = Color.DarkGoldenrod;
-            }
-            else
-            {
-                ckSubPixel.BackColor = Color.WhiteSmoke;
-                ckSubPixel.BorderColor = Color.Silver;
-                ckSubPixel.TextColor = Color.Black;
-            }
-            //if (!threadProcess.IsBusy)
-            //    threadProcess.RunWorkerAsync();
-        }
+     
 
 
 
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Mask;
-            Propety.TypeCrop = Global.TypeCrop;
-            if (Propety.rotMask == null)
-            {
-                Propety.rotMask = DataTool.NewRotRect(TypeCrop.Mask); ;
-            }
-            btnElip.IsCLick = Propety.rotMask.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotMask.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotMask.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotMask.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-
-
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            //  G.IsCancel = true;
-
-            //  G.EditTool.RefreshGuiEdit(Step.Step3);
-        }
-
-
-
-        private void btnNormal_Click(object sender, EventArgs e)
-        {
-            Propety.IsHighSpeed = false;
-        }
-
-        private void btnHighSpeed_Click(object sender, EventArgs e)
-        {
-            Propety.IsHighSpeed = true;
-
-        }
+     
 
 
 
 
 
-        private void btnLearning_Click(object sender, EventArgs e)
-        {
-
-            if (Propety.rotCrop != null)
-                if (Propety.rotCrop._rect.Width != 0 && Propety.rotCrop._rect.Height != 0)
-                {
-                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Propety.IndexThread].matRaw.Clone(), false).ToBitmap();
-                    imgTemp.Image = Propety.bmRaw;
-                }
 
 
-        }
+     
 
         private void btnTest_Click(object sender, EventArgs e)
         {
@@ -264,29 +142,7 @@ namespace BeeInterface
                 btnTest.IsCLick = false;
         }
         bool IsFullSize = false;
-        private void btnCropHalt_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-            IsFullSize = false;
-            Propety.rotArea = Propety.rotAreaTemp.Clone();
-            Global.StatusDraw = StatusDraw.Check;
-            Global.IsRun = true;//note
-        }
-
-        private void btnCropFull_Click(object sender, EventArgs e)
-        {
-            IsFullSize = true;
-            Propety.rotAreaTemp = Propety.rotArea.Clone();
-            Propety.rotArea = new RectRotate(new RectangleF(-Global.Config.SizeCCD.Width / 2, -Global.Config.SizeCCD.Height / 2, Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height), new PointF(Global.Config.SizeCCD.Width / 2, Global.Config.SizeCCD.Height / 2), 0, AnchorPoint.None);
-
-
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            Global.StatusDraw = StatusDraw.Check;
-
-        }
+      
 
 
 
@@ -306,12 +162,7 @@ namespace BeeInterface
         }
 
 
-        private void trackMaxOverLap_ValueChanged(float obj)
-        {
-
-            Propety.OverLap = trackMaxOverLap.Value / 100.0;
-
-        }
+     
 
 
 
@@ -472,71 +323,25 @@ namespace BeeInterface
         {
             Propety.TypeMode = Mode.Pattern;
         }
-        private void AdjThreshod_ValueChanged(float obj)
-        {
-            Propety.ThresholdBinary = (int)AdjThreshod.Value;
-        }
+     
 
-        private void btnInvert_Click(object sender, EventArgs e)
-        {
-            Propety.MethordEdge = MethordEdge.InvertBinary;
-            layThreshod.Enabled = true;
-        }
-
-        private void btnStrongEdge_Click(object sender, EventArgs e)
-        {
-            Propety.MethordEdge = MethordEdge.StrongEdges;
-            layThreshod.Enabled = false;
-        }
-
-        private void btnCloseEdge_Click(object sender, EventArgs e)
-        {
-            Propety.MethordEdge = MethordEdge.CloseEdges;
-            layThreshod.Enabled = false;
-        }
-        private void btnBinary_Click(object sender, EventArgs e)
-        {
-            Propety.MethordEdge = MethordEdge.Binary;
-            layThreshod.Enabled = true;
-        }
+      
 
         private void workLoadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-            //  Patterns.LoadEdge();
-
-        }
-
-        private void btnNone_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
+            if (Propety.PathModel != null)
             {
-                //case TypeCrop.Crop:
-                //    Propety.rotCrop.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
-                //    break;
-                //case TypeCrop.Area:
-                //    Propety.rotArea.Shape= btnElip.IsCLick==true ? ShapeType.Ellipse: ShapeType.Rectangle;
-                //    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask = null;// = btnElip.IsCLick;
-                    break;
+                Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
 
+                if (File.Exists(Propety.pathFullModel))
+                {
+                    Propety.SetModel();
+                }
             }
-            //  G.EditTool.View.imgView.Invalidate();
-        }
-
-        private void workLoadModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //if (Propety.TypeMode == Mode.Edge)
-            //    if(!G.IniEdge)
-            //    {
-            //        workLoadModel.RunWorkerAsync();
-            //        return;
-
-            //    }    
-
 
         }
 
+    
         private void trackNumObject_Load(object sender, EventArgs e)
         {
 
@@ -548,179 +353,17 @@ namespace BeeInterface
         }
 
 
-        private void btnCropRect_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Crop;
-            Propety.TypeCrop = Global.TypeCrop;
-            btnElip.IsCLick = Propety.rotCrop.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotCrop.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotCrop.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotCrop.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotCrop.IsWhite;
-            btnBlack.IsCLick = !Propety.rotCrop.IsWhite;
-
-        }
-
-        private void btnCropArea_Click(object sender, EventArgs e)
-        {
-            Global.TypeCrop = TypeCrop.Area;
-            Propety.TypeCrop = Global.TypeCrop;
-
-            btnElip.IsCLick = Propety.rotArea.Shape == ShapeType.Ellipse ? true : false;
-            btnRect.IsCLick = Propety.rotArea.Shape == ShapeType.Rectangle ? true : false;
-            btnHexagon.IsCLick = Propety.rotArea.Shape == ShapeType.Hexagon ? true : false;
-            btnPolygon.IsCLick = Propety.rotArea.Shape == ShapeType.Polygon ? true : false;
-            btnWhite.IsCLick = Propety.rotArea.IsWhite;
-            btnBlack.IsCLick = !Propety.rotArea.IsWhite;
-        }
-
-        ShapeType ShapeType = ShapeType.Rectangle;
-        private void btnHexagon_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Hexagon;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-        }
-
-        private void btnPolygon_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Polygon;
-
-            SetShapeFor(Global.TypeCrop, ShapeType);
-        }
-        private void btnNewShape_Click(object sender, EventArgs e)
-        {
-            NewShape(ShapeType);
-        }
-
-        private void btnRect_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Rectangle;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-
-        }
-
-        private void btnElip_Click(object sender, EventArgs e)
-        {
-            ShapeType = ShapeType.Ellipse;
-            SetShapeFor(Global.TypeCrop, ShapeType);
-
-        }
-
-        private void btnWhite_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = btnWhite.IsCLick;
-                    break;
-            }
-
-        }
-
-        private void btnBlack_Click(object sender, EventArgs e)
-        {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
-                    break;
-            }
-
-        }
-        private void AdjClearNoise_ValueChanged(float obj)
-        {
-            Propety.SizeClearsmall = (int)AdjClearNoise.Value;
-        }
-
-        private void btnEnMorphology_Click(object sender, EventArgs e)
-        {
-            Propety.IsClose = btnClose.IsCLick;
-            AdjMorphology.Enabled = Propety.IsClose;
-        }
-
-        private void btnEnableNoise_Click(object sender, EventArgs e)
-        {
-
-            Propety.IsClearNoiseSmall = btnIsClearSmall.IsCLick;
-            AdjClearNoise.Enabled = Propety.IsClearNoiseSmall;
-        }
-
-        private void AdjMorphology_ValueChanged(float obj)
-        {
-
-            Propety.SizeClose = (int)AdjMorphology.Value;
-        }
-        private void AdjOpen_ValueChanged(float obj)
-        {
-            Propety.SizeOpen = (int)AdjOpen.Value;
-        }
-
-        private void AdjClearBig_ValueChanged(float obj)
-        {
-            Propety.SizeClearBig = (int)AdjClearBig.Value;
-        }
-
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
-            Propety.IsOpen = btnOpen.IsCLick;
-            AdjOpen.Enabled = Propety.IsOpen;
-        }
-
-        private void btnIsClearBig_Click(object sender, EventArgs e)
-        {
-            Propety.IsClearNoiseBig = btnIsClearBig.IsCLick;
-            AdjClearBig.Enabled = Propety.IsClearNoiseBig;
-
-        }
-
-        private void AdjMaximumObj_ValueChanged(float obj)
-        {
-            Propety.MaxObject = (int)AdjMaximumObj.Value;
-        }
-
-        private void AdjStepAngle_ValueChanged(float obj)
-        {
-
-            Propety.StepAngle = (int)AdjStepAngle.Value;
-        }
+      
+    
 
 
-
-        private void btn1_Click(object sender, EventArgs e)
-        {
-            lay1.Visible = !btn1.IsCLick;
-        }
-
-        private void btn2_Click(object sender, EventArgs e)
-        {
-            lay2.Visible = !btn2.IsCLick;
-            lb2.Visible = !btn2.IsCLick;
-            lay21.Visible = !btn2.IsCLick;
-            lay22.Visible = !btn2.IsCLick;
-            lay23.Visible = !btn2.IsCLick;
-
-        }
-
-        private void btn3_Click(object sender, EventArgs e)
-        {
-            lay3.Visible = !btn3.IsCLick;
-        }
-
+       
         private void btn4_Click(object sender, EventArgs e)
         {
             trackAngle.Visible = !btn4.IsCLick;
         }
 
-        private void rjButton1_Click(object sender, EventArgs e)
-        {
-            lay5.Visible = !btn5.IsCLick;
-        }
+      
 
 
 
@@ -740,11 +383,7 @@ namespace BeeInterface
             Propety.ZeroPos = ZeroPos.ZeroADJ;
         }
 
-        private void adjScale_ValueChanged(float obj)
-        {
-            Propety.Scale = (float)AdjScale.Value;
-        }
-
+     
         private void btn7_Click_1(object sender, EventArgs e)
         {
             AdjScale.Visible = !btn7.IsCLick;
@@ -793,17 +432,7 @@ namespace BeeInterface
             Propety.ExpandY = adjOffsetY.Value;
         }
 
-        private void btnVisualMatch_Click(object sender, EventArgs e)
-        {
-            if (btnVisualMatch.IsCLick)
-            {
-                Propety.IsColorPixel = true;
-            }
-            else
-            {
-                Propety.IsColorPixel = false;
-            }
-        }
+     
 
 
 
@@ -811,11 +440,7 @@ namespace BeeInterface
 
 
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            Propety.IsClose = btnClose.IsCLick;
-            AdjMorphology.Enabled = Propety.IsClose;
-        }
+   
 
         private void AdjLimitX_ValueChanged(float obj)
         {
@@ -832,31 +457,178 @@ namespace BeeInterface
             AdjLimitY.Visible = !btn9.IsCLick;
         }
 
-        private void AdjLimitColor_ValueChanged(float obj)
-        {
-            Propety.LimitColor = (int)AdjLimitColor.Value;
-        }
+     
+    
+      
 
-        private void AdjThreshColor_ValueChanged(float obj)
+        private void cbListModel_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            Propety.ThreshColor = (int)AdjThreshColor.Value;
-        }
-
-        private void adjAspect_ValueChanged(float obj)
-        {
-            Propety.LimitAspect = adjAspect.Value;
-        }
-
-        private void btnHardNoise_Click(object sender, EventArgs e)
-        {
-            if (btnHardNoise.IsCLick)
+            Propety.PathModel = cbListModel.SelectedValue.ToString();//.Text;
+            Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+            if (!File.Exists(Propety.pathFullModel))
             {
-                Propety.IsHardNoise = true;
+                Propety.listModels.Remove(Propety.PathModel);
+                if (Propety.listModels.Count > 0)
+                {
+                    Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
+                    Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+
+                }
+                else
+                {
+                    Propety.PathModel = "";
+                    Propety.pathFullModel = "";
+                }
+                cbListModel.DataSource = null;
+                cbListModel.DataSource = Propety.listModels;
+                cbListModel.Refresh();
+                cbListModel.Text = Propety.PathModel;
             }
-            else
+
+            if (File.Exists(Propety.pathFullModel))
             {
-                Propety.IsHardNoise = false;
+                cbListModel.Enabled = false;
+
+                workLoadModel.RunWorkerAsync();
+                //  Propety.listLabelCompare = new List<Labels>();
+                //RefreshLabels();
+
             }
+        }
+        public void RefreshLabels()
+        {
+            if (Propety.labelItems == null)
+                return;
+            DashLabels.Items.Clear();
+            foreach (LabelItem labelItem in Propety.labelItems)
+                DashLabels.Items.Add(labelItem);
+
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name);
+                if (Content != null && Content.Length > 0)
+                {
+                    Propety.labelItems = new List<LabelItem>();
+                    foreach (String label in Content)
+                    {
+                        if (label == "") continue;
+                        Propety.labelItems.Add(new LabelItem(label));
+                    }
+                    RefreshLabels();
+                }
+                else
+                {
+                    MessageBox.Show("Check File Class Again", "Error");
+                }
+            }
+        }
+
+        private void btnMergeBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = BeeGlobal.FilterBox.Merge;
+            AdjOverLap.Enabled = true;
+        }
+
+        private void btnRemoveBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = BeeGlobal.FilterBox.Remove;
+            AdjOverLap.Enabled = true;
+        }
+
+       
+        private void btnNoneBox_Click(object sender, EventArgs e)
+        {
+            Propety.FilterBox = BeeGlobal.FilterBox.None;
+            AdjOverLap.Enabled = false;
+        }
+
+        private void AdjOverLap_ValueChanged(float obj)
+        {
+            Propety.ThreshOverlap = AdjOverLap.Value;
+        }
+
+        private void btnRemoveModel_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure", "Delete Model", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
+                String pathModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+                if (File.Exists(pathModel))
+                {
+                    File.Delete(pathModel);
+                }
+                Propety.listModels.Remove(Propety.PathModel);
+                Propety.listModels = Propety.listModels.Distinct().ToList();
+                cbListModel.DataSource = null;
+                cbListModel.DataSource = Propety.listModels.ToArray();
+                if (Propety.listModels.Count > 0)
+                {
+                    Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
+                    cbListModel.Text = Propety.PathModel;
+                    if (!workLoadModel.IsBusy)
+                        workLoadModel.RunWorkerAsync();
+                }
+                else
+                    cbListModel.Text = "";
+            }
+        }
+        bool IsReload;
+
+        private void btnAddModel_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                String pathModel = OpenFileDialog.FileName;
+
+                String NameModel = Path.GetFileName(pathModel);
+                pathModel = "Program\\" + Global.Project + "\\" + NameModel;
+                if (Propety.listModels == null) Propety.listModels = new List<string>();
+                if (File.Exists(OpenFileDialog.FileName))
+                {
+                    File.Copy(OpenFileDialog.FileName, pathModel, true);
+                    Propety.listModels.Add(NameModel);
+                    Propety.listModels = Propety.listModels.Distinct().ToList();
+                    cbListModel.DataSource = null;
+                    Propety.PathModel = Path.GetFileName(pathModel);
+                    IsReload = true;
+                    if (!workLoadModel.IsBusy)
+                        workLoadModel.RunWorkerAsync();
+                    cbListModel.DataSource = Propety.listModels.ToArray();
+                    cbListModel.Text = Propety.PathModel;
+                  
+                }
+            }
+            //switch (StepEdit)
+            //{
+            //    case StepSetModel.SetModel:
+
+
+            //        break;
+            //    case StepSetModel.SetLabels:
+
+
+
+            //        break;
+            //}
+        }
+
+        private void AdjScoreLearning_ValueChanged(float obj)
+        {
+            Propety.ScoreYolo=(int)AdjScoreLearning.Value;
+        }
+
+       
+
+        private void AdjScale_ValueChanged(float obj)
+        {
+            Propety.Scale = (float)AdjScale.Value;
+
         }
     }
 }
