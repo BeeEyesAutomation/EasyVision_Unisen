@@ -295,9 +295,9 @@ namespace BeeCore
                             }
                             else
                                 Global.IsOCR = false;
-                            //dynamic module3 = Py.Import("Tool.OCR");
-                            //dynamic cls3 = module3.GetAttr("OCR"); // class
-                            //G.objOCR = cls3.Invoke();
+                            dynamic module3 = Py.Import("Tool.OCR");
+                            dynamic cls3 = module3.GetAttr("OCR"); // class
+                            G.objOCR = cls3.Invoke();
                             Global.IsIntialPython = true;
 
 

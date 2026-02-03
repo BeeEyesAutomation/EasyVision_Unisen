@@ -1845,62 +1845,62 @@ namespace BeeUi
             {
                 if (obj)
                 {
-                    //if (Global.IsPLCChangeProg == true)
-                    //{
-                    //    Global.IsPLCChangeProg = false;
-                    //    int ix = Global.ListProgNo.FindIndex(a => a.No == Global.Comunication.Protocol.NoProg);
-                    //    if (ix > -1)
-                    //        Global.Comunication.Protocol.ValueProg = Global.ListProgNo[ix].Name;
-                    //    if (Global.Comunication.Protocol.ValueProg != null)
-                    //        if (Global.Comunication.Protocol.ValueProg != Global.Project)
-                    //        {
-                    //            if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
-                    //            {
-                    //                Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
-                    //                G.Header.ChangeProgram(Global.Project);
-                    //                //G.Header.workLoadProgram.RunWorkerAsync();
-                    //                G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                    //                G.StatusDashboard.OkCount = Global.Config.SumOK;
-                    //                G.StatusDashboard.NgCount = Global.Config.SumNG;
-                    //            }
-                    //            else
-                    //            {
-                    //                Global.IsChangeProg = false;
-                    //                imgView.Text = "";
-                    //                FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
-                    //                formWarning.ShowDialog();
-                    //                MessageChoose messageChoose = new MessageChoose("Copy Program", "Copy Program From  : " +Global.Project+" To " + Global.Comunication.Protocol.ValueProg);
-                    //                messageChoose.ShowDialog();
-                    //                if (messageChoose.IsOK)
-                    //                {
-
-                                       
-                    //                    G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                    //                    G.StatusDashboard.OkCount = Global.Config.SumOK;
-                    //                    G.StatusDashboard.NgCount = Global.Config.SumNG;
-                    //                    Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
-                    //                    Global.Project = Global.Comunication.Protocol.ValueProg;
-                    //                     G.Header.RefreshListPJ();
-                    //                    Global.IsLoadProgFist = true;
-                    //                    G.Header.ChangeProgram(Global.Project);
-                    //                    //if (!G.Header.workLoadProgram.IsBusy)
-                    //                    //    G.Header.workLoadProgram.RunWorkerAsync();
+                    if (Global.IsPLCChangeProg == true)
+                    {
+                        Global.IsPLCChangeProg = false;
+                        int ix = Global.ListProgNo.FindIndex(a => a.No == Global.Comunication.Protocol.NoProg);
+                        if (ix > -1)
+                            Global.Comunication.Protocol.ValueProg = Global.ListProgNo[ix].Name;
+                        if (Global.Comunication.Protocol.ValueProg != null)
+                            if (Global.Comunication.Protocol.ValueProg != Global.Project)
+                            {
+                                if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
+                                {
+                                    Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
+                                    G.Header.ChangeProgram(Global.Project);
+                                    //G.Header.workLoadProgram.RunWorkerAsync();
+                                    G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                    G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                    G.StatusDashboard.NgCount = Global.Config.SumNG;
+                                }
+                                else
+                                {
+                                    Global.IsChangeProg = false;
+                                    imgView.Text = "";
+                                    FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
+                                    formWarning.ShowDialog();
+                                    MessageChoose messageChoose = new MessageChoose("Copy Program", "Copy Program From  : " + Global.Project + " To " + Global.Comunication.Protocol.ValueProg);
+                                    messageChoose.ShowDialog();
+                                    if (messageChoose.IsOK)
+                                    {
 
 
-                    //                }    
-                                
-                    //            }
+                                        G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                        G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                        G.StatusDashboard.NgCount = Global.Config.SumNG;
+                                        Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
+                                        Global.Project = Global.Comunication.Protocol.ValueProg;
+                                        G.Header.RefreshListPJ();
+                                        Global.IsLoadProgFist = true;
+                                        G.Header.ChangeProgram(Global.Project);
+                                        //if (!G.Header.workLoadProgram.IsBusy)
+                                        //    G.Header.workLoadProgram.RunWorkerAsync();
 
-                    //        }
-                    //        else
-                    //        {
-                    //            imgView.Text = "";
-                    //            Global.IsChangeProg = false;
-                    //            Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                    //            return;
-                    //        }
-                       
-                    //}
+
+                                    }
+
+                                }
+
+                            }
+                            else
+                            {
+                                imgView.Text = "";
+                                Global.IsChangeProg = false;
+                                Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                                return;
+                            }
+
+                    }
                     G.StatusDashboard.StatusText = "---";
                     G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     if (imgView.Image != null)

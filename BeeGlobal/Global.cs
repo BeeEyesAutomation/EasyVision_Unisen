@@ -257,7 +257,7 @@ namespace BeeGlobal
                 }
             }
         }
-        public static int NumProgFromPLC = 20;
+        public static int NumProgFromPLC = 2;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();

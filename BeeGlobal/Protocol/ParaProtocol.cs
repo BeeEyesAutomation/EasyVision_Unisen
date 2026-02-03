@@ -613,19 +613,7 @@ namespace BeeGlobal
                                         case TriggerNum.Trigger0:
                                             if (GetInPut(I_O_Input.Trigger) == true)
                                             {
-                                                if (AddPO != null)
-                                                    if (AddPO != "")
-                                                        ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
-                                                try
-                                                {
-                                                    if (AddQty != null)
-                                                        if (AddQty != "")
-                                                            ValueQty = PlcClient.ReadInt(AddQty);
-                                                }
-                                                catch(Exception ex)
-                                                {
-
-                                                }
+                                              
                                                 Global.IndexChoose = 0;
                                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                                 Global.TriggerInternal = false;
@@ -636,6 +624,19 @@ namespace BeeGlobal
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
 
+                                                try
+                                                {
+                                                    if (AddPO != null)
+                                                        if (AddPO != "")
+                                                            ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
+                                                    if (AddQty != null)
+                                                        if (AddQty != "")
+                                                            ValueQty = PlcClient.ReadInt(AddQty);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Read PO", ex.Message));
+                                                }
                                             }
                                             break;
                                     }

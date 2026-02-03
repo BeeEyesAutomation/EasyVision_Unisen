@@ -494,7 +494,7 @@ namespace BeeCore
                  Common.PropetyTools[IndexThread][Index].StepValue = 1;
                 Common.PropetyTools[IndexThread][Index].MinValue = 0;
                 Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-          //  sAllow = "0123456789";
+            sAllow = "0123456789";
             if (sAllow == "")
                 sAllow = "ABCDEFJKLMNOPQSTUWXYZabcdefghijklmnopqstuwxyz0123456789,.;'\"?/\"<>@#!$%^&*()_-+={}[]|\\~`";
            // if(!IsNew2)
