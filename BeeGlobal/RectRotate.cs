@@ -8,7 +8,52 @@ namespace BeeGlobal
     [Serializable()]
     public class RectRotate
     {
+        public  bool ContainsPoint(PointF pWorld, float eps = 1e-4f)
+        {
+            // 1) World -> Local (local gốc tại rr._PosCenter, trục local quay theo rr._rectRotation)
+            float dx = pWorld.X - this._PosCenter.X;
+            float dy = pWorld.Y - this._PosCenter.Y;
 
+            double rad = -this._rectRotation * Math.PI / 180.0; // quay ngược để đưa về local
+            float c = (float)Math.Cos(rad);
+            float s = (float)Math.Sin(rad);
+
+            float xL = dx * c - dy * s;
+            float yL = dx * s + dy * c;
+
+            // 2) Check theo shape
+            var r = this._rect; // expected: (-w/2,-h/2,w,h) in local
+
+            switch (this.Shape)
+            {
+                case BeeGlobal.ShapeType.Rectangle:
+                    return (xL >= r.Left - eps && xL <= r.Right + eps &&
+                            yL >= r.Top - eps && yL <= r.Bottom + eps);
+
+                case BeeGlobal.ShapeType.Ellipse:
+                    {
+                        float a = r.Width * 0.5f;
+                        float b = r.Height * 0.5f;
+                        if (a <= eps || b <= eps) return false;
+                        float u = xL / a;
+                        float v = yL / b;
+                        return (u * u + v * v) <= 1.0f + eps;
+                    }
+
+                case BeeGlobal.ShapeType.Polygon:
+                    {
+                        // PolyLocalPoints là điểm local -> dùng thẳng
+                        var poly = this.PolyLocalPoints;
+                        if (poly == null || poly.Count < 3) return false;
+                        return BeeGlobal.RectRotate.PointInPolygon(poly, new PointF(xL, yL));
+                    }
+
+                default:
+                    // nếu shape khác, fallback rectangle
+                    return (xL >= r.Left - eps && xL <= r.Right + eps &&
+                            yL >= r.Top - eps && yL <= r.Bottom + eps);
+            }
+        }
         public int TypeValue;
         public bool IsOK = false;
         public float Score = 0;

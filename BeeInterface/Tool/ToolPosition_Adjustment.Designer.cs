@@ -3488,7 +3488,7 @@ namespace BeeInterface
             this.trackMinInlierB.Name = "trackMinInlierB";
             this.trackMinInlierB.Radius = 8;
             this.trackMinInlierB.ShowValueOnThumb = true;
-            this.trackMinInlierB.Size = new System.Drawing.Size(479, 53);
+            this.trackMinInlierB.Size = new System.Drawing.Size(483, 53);
             this.trackMinInlierB.SnapToStep = true;
             this.trackMinInlierB.StartWithTextboxHidden = true;
             this.trackMinInlierB.Step = 1F;
@@ -3517,7 +3517,7 @@ namespace BeeInterface
             this.label14.Location = new System.Drawing.Point(6, 593);
             this.label14.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(479, 32);
+            this.label14.Size = new System.Drawing.Size(483, 32);
             this.label14.TabIndex = 105;
             this.label14.Text = "Min Points B";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3567,7 +3567,7 @@ namespace BeeInterface
             this.AdjAngleToleranceDeg.Name = "AdjAngleToleranceDeg";
             this.AdjAngleToleranceDeg.Radius = 8;
             this.AdjAngleToleranceDeg.ShowValueOnThumb = true;
-            this.AdjAngleToleranceDeg.Size = new System.Drawing.Size(479, 53);
+            this.AdjAngleToleranceDeg.Size = new System.Drawing.Size(483, 53);
             this.AdjAngleToleranceDeg.SnapToStep = true;
             this.AdjAngleToleranceDeg.StartWithTextboxHidden = true;
             this.AdjAngleToleranceDeg.Step = 1F;
@@ -3596,7 +3596,7 @@ namespace BeeInterface
             this.label13.Location = new System.Drawing.Point(6, 106);
             this.label13.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(479, 32);
+            this.label13.Size = new System.Drawing.Size(483, 32);
             this.label13.TabIndex = 103;
             this.label13.Text = "AngleToleranceDeg";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3646,7 +3646,7 @@ namespace BeeInterface
             this.AdjAngleTargetDeg.Name = "AdjAngleTargetDeg";
             this.AdjAngleTargetDeg.Radius = 8;
             this.AdjAngleTargetDeg.ShowValueOnThumb = true;
-            this.AdjAngleTargetDeg.Size = new System.Drawing.Size(479, 53);
+            this.AdjAngleTargetDeg.Size = new System.Drawing.Size(483, 53);
             this.AdjAngleTargetDeg.SnapToStep = true;
             this.AdjAngleTargetDeg.StartWithTextboxHidden = true;
             this.AdjAngleTargetDeg.Step = 1F;
@@ -3675,7 +3675,7 @@ namespace BeeInterface
             this.label12.Location = new System.Drawing.Point(6, 11);
             this.label12.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(479, 32);
+            this.label12.Size = new System.Drawing.Size(483, 32);
             this.label12.TabIndex = 101;
             this.label12.Text = "AngleTargetDeg";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3696,7 +3696,7 @@ namespace BeeInterface
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(479, 50);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(483, 50);
             this.tableLayoutPanel7.TabIndex = 100;
             // 
             // label9
@@ -3758,7 +3758,7 @@ namespace BeeInterface
             this.AdjFixedMean.Name = "AdjFixedMean";
             this.AdjFixedMean.Radius = 8;
             this.AdjFixedMean.ShowValueOnThumb = true;
-            this.AdjFixedMean.Size = new System.Drawing.Size(374, 40);
+            this.AdjFixedMean.Size = new System.Drawing.Size(378, 40);
             this.AdjFixedMean.SnapToStep = true;
             this.AdjFixedMean.StartWithTextboxHidden = true;
             this.AdjFixedMean.Step = 1F;
@@ -3794,7 +3794,7 @@ namespace BeeInterface
             this.tableLayoutPanel10.RowCount = 1;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(479, 50);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(483, 50);
             this.tableLayoutPanel10.TabIndex = 99;
             // 
             // label5
@@ -3856,7 +3856,7 @@ namespace BeeInterface
             this.AdjContinuityGapFactor.Name = "AdjContinuityGapFactor";
             this.AdjContinuityGapFactor.Radius = 8;
             this.AdjContinuityGapFactor.ShowValueOnThumb = true;
-            this.AdjContinuityGapFactor.Size = new System.Drawing.Size(374, 40);
+            this.AdjContinuityGapFactor.Size = new System.Drawing.Size(378, 40);
             this.AdjContinuityGapFactor.SnapToStep = true;
             this.AdjContinuityGapFactor.StartWithTextboxHidden = true;
             this.AdjContinuityGapFactor.Step = 1F;
@@ -3891,7 +3891,7 @@ namespace BeeInterface
             this.tableLayoutPanel11.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(479, 54);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(483, 54);
             this.tableLayoutPanel11.TabIndex = 98;
             // 
             // btnFixedMean
@@ -3939,11 +3939,11 @@ namespace BeeInterface
             this.btnFixedMean.IsRect = false;
             this.btnFixedMean.IsTouch = false;
             this.btnFixedMean.IsUnGroup = false;
-            this.btnFixedMean.Location = new System.Drawing.Point(239, 5);
+            this.btnFixedMean.Location = new System.Drawing.Point(241, 5);
             this.btnFixedMean.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnFixedMean.Multiline = false;
             this.btnFixedMean.Name = "btnFixedMean";
-            this.btnFixedMean.Size = new System.Drawing.Size(232, 44);
+            this.btnFixedMean.Size = new System.Drawing.Size(234, 44);
             this.btnFixedMean.TabIndex = 3;
             this.btnFixedMean.Text = "Fixed";
             this.btnFixedMean.TextColor = System.Drawing.Color.Black;
@@ -4001,7 +4001,7 @@ namespace BeeInterface
             this.btnAutoMean.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnAutoMean.Multiline = false;
             this.btnAutoMean.Name = "btnAutoMean";
-            this.btnAutoMean.Size = new System.Drawing.Size(231, 44);
+            this.btnAutoMean.Size = new System.Drawing.Size(233, 44);
             this.btnAutoMean.TabIndex = 2;
             this.btnAutoMean.Text = "Auto";
             this.btnAutoMean.TextColor = System.Drawing.Color.Black;
@@ -4018,7 +4018,7 @@ namespace BeeInterface
             this.label1.Location = new System.Drawing.Point(6, 688);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(479, 32);
+            this.label1.Size = new System.Drawing.Size(483, 32);
             this.label1.TabIndex = 97;
             this.label1.Text = "Methold Cal Mean Step";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4068,7 +4068,7 @@ namespace BeeInterface
             this.AdjRANSACIterations.Name = "AdjRANSACIterations";
             this.AdjRANSACIterations.Radius = 8;
             this.AdjRANSACIterations.ShowValueOnThumb = true;
-            this.AdjRANSACIterations.Size = new System.Drawing.Size(479, 53);
+            this.AdjRANSACIterations.Size = new System.Drawing.Size(483, 53);
             this.AdjRANSACIterations.SnapToStep = true;
             this.AdjRANSACIterations.StartWithTextboxHidden = true;
             this.AdjRANSACIterations.Step = 1F;
@@ -4097,7 +4097,7 @@ namespace BeeInterface
             this.label17.Location = new System.Drawing.Point(1, 302);
             this.label17.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(489, 38);
+            this.label17.Size = new System.Drawing.Size(493, 38);
             this.label17.TabIndex = 95;
             this.label17.Text = "Number of Random Samples";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4147,7 +4147,7 @@ namespace BeeInterface
             this.AdjRANSACThreshold.Name = "AdjRANSACThreshold";
             this.AdjRANSACThreshold.Radius = 8;
             this.AdjRANSACThreshold.ShowValueOnThumb = true;
-            this.AdjRANSACThreshold.Size = new System.Drawing.Size(479, 53);
+            this.AdjRANSACThreshold.Size = new System.Drawing.Size(483, 53);
             this.AdjRANSACThreshold.SnapToStep = true;
             this.AdjRANSACThreshold.StartWithTextboxHidden = true;
             this.AdjRANSACThreshold.Step = 0.1F;
@@ -4176,7 +4176,7 @@ namespace BeeInterface
             this.label2.Location = new System.Drawing.Point(1, 201);
             this.label2.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(489, 38);
+            this.label2.Size = new System.Drawing.Size(493, 38);
             this.label2.TabIndex = 93;
             this.label2.Text = "Inlier Distance Threshold (pixels)";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4190,7 +4190,7 @@ namespace BeeInterface
             this.label3.Location = new System.Drawing.Point(6, 498);
             this.label3.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(479, 32);
+            this.label3.Size = new System.Drawing.Size(483, 32);
             this.label3.TabIndex = 75;
             this.label3.Text = "Min Points A";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4204,7 +4204,7 @@ namespace BeeInterface
             this.label8.Location = new System.Drawing.Point(6, 403);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(479, 32);
+            this.label8.Size = new System.Drawing.Size(483, 32);
             this.label8.TabIndex = 72;
             this.label8.Text = "Maximum Lines";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4254,7 +4254,7 @@ namespace BeeInterface
             this.trackMinInlierA.Name = "trackMinInlierA";
             this.trackMinInlierA.Radius = 8;
             this.trackMinInlierA.ShowValueOnThumb = true;
-            this.trackMinInlierA.Size = new System.Drawing.Size(479, 53);
+            this.trackMinInlierA.Size = new System.Drawing.Size(483, 53);
             this.trackMinInlierA.SnapToStep = true;
             this.trackMinInlierA.StartWithTextboxHidden = true;
             this.trackMinInlierA.Step = 1F;
@@ -4319,7 +4319,7 @@ namespace BeeInterface
             this.trackMaxLine.Name = "trackMaxLine";
             this.trackMaxLine.Radius = 8;
             this.trackMaxLine.ShowValueOnThumb = true;
-            this.trackMaxLine.Size = new System.Drawing.Size(479, 53);
+            this.trackMaxLine.Size = new System.Drawing.Size(483, 53);
             this.trackMaxLine.SnapToStep = true;
             this.trackMaxLine.StartWithTextboxHidden = true;
             this.trackMaxLine.Step = 1F;

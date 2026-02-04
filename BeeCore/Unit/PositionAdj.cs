@@ -456,22 +456,7 @@ namespace BeeCore
                                 var rrCli = Converts.ToCli(rotArea); // như ở reply trước
                                 RectRotateCli? rrMaskCli = (rotMask != null) ? Converts.ToCli(rotMask) : (RectRotateCli?)null;
                                 Pattern.SetImgeRaw(gray.Data, gray.Width, gray.Height, (int)gray.Step(), gray.Channels(), rrCli, rrMaskCli);
-                                //var opt = new PatternMatchOptions
-                                //{
-                                //    EnableValidate = true,
 
-                                //    EnableScoreStability = false,     // Cách 1
-
-                                //    EnableMinEdge = true,
-                                //    MinEdgeRatio = 0.60,             // 0.55–0.70
-
-                                //    EnableSoftAntiText = true,
-                                //    EntropyWeight = 0.60,            // 0.40–0.80
-
-                                //    EnableMultiScaleCheck = true,
-                                //    MaxScaleScoreDiff = 12.0,        // nếu struct có field này
-                                //};
-                                //Pattern.SetMatchOptions(opt);
                                 var listRS = Pattern.Match(
                                     IsHighSpeed, StepAngle,
                                     AngleLower, AngleUper,
@@ -712,21 +697,32 @@ namespace BeeCore
                 results = Results.NG;
             if (results == Results.OK)
             {
+              
                 Matrix mat = new Matrix();
                 System.Drawing.Point pZero = new System.Drawing.Point(0, 0);
                 PointF[] pMatrix = { pZero };
                 mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
                 mat.Rotate(rotArea._rectRotation);
                 mat.Translate(rotArea._rect.X, rotArea._rect.Y);
-
                 mat.Translate(rectRotates[0]._PosCenter.X, rectRotates[0]._PosCenter.Y);
                 mat.Rotate(rectRotates[0]._rectRotation);
                 mat.TransformPoints(pMatrix);
-
                 int x = (int)pMatrix[0].X;// (int)rotArea._PosCenter.X -(int) rotArea ._rect.Width/2 + (int)rot._PosCenter.X;
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
                 Global.AngleOrigin = rectRotates[0]._rectRotation;
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
+                if (Global.Config.IsWaitCenter)
+                {
+                    if (rotCrop != null)
+                        if (!rotCrop.ContainsPoint(new PointF( Global.pOrigin.X,Global.pOrigin.Y)))
+                        {
+                            results = Results.NG;
+                            Common.PropetyTools[IndexThread][Index].Results = results;
+
+                            return;
+                        }
+
+                }
 
             }
             if (MethodSample == MethodSample.Corner)
@@ -809,7 +805,8 @@ namespace BeeCore
 
             if (MethodSample == MethodSample.Corner )
             {
-               
+              
+
                 mat.Translate(rotA._rect.X, rotA._rect.Y);
            
                 gc.Transform = mat;
@@ -818,36 +815,26 @@ namespace BeeCore
                 //Draws.DrawInfiniteLine(gc,LineHorial, new Pen(Brushes.Blue, 2), rotA._rect);
                 //Draws.DrawInfiniteLine(gc, LineVertial, new Pen(Brushes.Gold, 2), rotA._rect);
                 Draws.Plus(gc,(int) pInsert.X,(int)pInsert.Y, 10, Color.Yellow, 2);
-                //var flags = DrawFlags.None;
-                //if (Global.IsRun)
-                //    flags = DrawFlags.BestCorner | DrawFlags.BestLines;
-                //else
-                //{
-                //    if (Global.ParaShow.IsShowDetail) flags = flags | DrawFlags.Inliers;
-                //    if (Global.ParaShow.IsShowNotMatching) flags = flags | DrawFlags.RansacRejected | DrawFlags.Runs;
-                //    if (Global.ParaShow.IsShowResult) flags = flags | DrawFlags.BestCorner | DrawFlags.BestLines;
-                //}
+                mat = new Matrix();
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
 
-                //DrawStyle drawStyle = new DrawStyle
-                //    {
-                //        Inlier = Color.Red,
-                //    LineChoose = Global.ParaShow.ColorChoose,
-                //    LineResult = Global.ParaShow.ColorInfor,
-                //    LineNone = Global.ParaShow.ColorNone,
-
-                //        LineDash = DashStyle.Solid,
-                //        InlierSize = Global.ParaShow.ThicknessLine / 2,
-                //        Thickness = Global.ParaShow.ThicknessLine,
-                //    };
-
-                //DetectIntersect.RenderDebugToGraphics(gc,new RectangleF(0,0, rotA._rect.Width,rotA._rect.Height), DetectIntersect.LineEdge, flags, drawStyle);
-
+                mat.Translate(rotCrop._PosCenter.X, rotCrop._PosCenter.Y);
+                mat.Rotate(rotCrop._rectRotation);
+                
+                gc.Transform = mat;
+                gc.DrawRectangle(new Pen(new SolidBrush(Global.ParaShow.ColorNone), Global.ParaShow.ThicknessLine), Rectangle.Truncate(rotCrop._rect));
+                gc.ResetTransform();
 
             }
 
             if (MethodSample == MethodSample.Pattern)
             {
                 gc.ResetTransform();
+
             if (listScore == null) return gc;
                 if (listScore.Count != rectRotates.Count) return gc;
                 if (rectRotates.Count > 0)

@@ -1858,10 +1858,11 @@ namespace BeeUi
                                 {
                                     Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
                                     G.Header.ChangeProgram(Global.Project);
+                                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                                     //G.Header.workLoadProgram.RunWorkerAsync();
-                                    G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                                    G.StatusDashboard.OkCount = Global.Config.SumOK;
-                                    G.StatusDashboard.NgCount = Global.Config.SumNG;
+                                    //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                    //G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                    //G.StatusDashboard.NgCount = Global.Config.SumNG;
                                 }
                                 else
                                 {
@@ -1875,14 +1876,15 @@ namespace BeeUi
                                     {
 
 
-                                        G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                                        G.StatusDashboard.OkCount = Global.Config.SumOK;
-                                        G.StatusDashboard.NgCount = Global.Config.SumNG;
+                                        //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                        //G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                        //G.StatusDashboard.NgCount = Global.Config.SumNG;
                                         Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
                                         Global.Project = Global.Comunication.Protocol.ValueProg;
                                         G.Header.RefreshListPJ();
-                                        Global.IsLoadProgFist = true;
+                                      //  Global.IsLoadProgFist = true;
                                         G.Header.ChangeProgram(Global.Project);
+                                        Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                                         //if (!G.Header.workLoadProgram.IsBusy)
                                         //    G.Header.workLoadProgram.RunWorkerAsync();
 
@@ -1897,8 +1899,11 @@ namespace BeeUi
                                 imgView.Text = "";
                                 Global.IsChangeProg = false;
                                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                                Global.StatusProcessing = StatusProcessing.None;
+                                Global.IsAllowReadPLC = true;
                                 return;
                             }
+                        Global.StatusProcessing = StatusProcessing.None;
 
                     }
                     G.StatusDashboard.StatusText = "---";
@@ -1914,11 +1919,16 @@ namespace BeeUi
 
                 else
                 {
-                    G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                    G.StatusDashboard.OkCount = Global.Config.SumOK;
-                    G.StatusDashboard.NgCount = Global.Config.SumNG;
+                  
+
+                   
                     imgView.Text = "";
                 }
+                Global.IsAllowReadPLC = true;
+                Global.StatusProcessing = StatusProcessing.None;
+                G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                G.StatusDashboard.OkCount = Global.Config.SumOK;
+                G.StatusDashboard.NgCount = Global.Config.SumNG;
             }));
         }
 

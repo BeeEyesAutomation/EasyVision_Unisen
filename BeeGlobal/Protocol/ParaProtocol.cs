@@ -837,7 +837,8 @@ namespace BeeGlobal
                 IsAlive = !IsAlive;
                 SetOutPut(15, IsAlive);
             }
-           if(IsConnected)
+            if (IsConnected)
+              
              PlcClient.WriteBit(AddWrite + ".15", IsAlive);
           
         }
@@ -1554,8 +1555,8 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.ByPass], false);
                     SetLight(false);
                     await WriteOutPut();
-                    if (AddressInput[(int)I_O_Input.ChangeProg] != -1)
-                        PlcClient.WriteBit(AddRead + "." + AddressInput[(int)I_O_Input.ChangeProg], false);
+                    WriteInput(I_O_Input.ChangeProg, false);
+                 
                     if (AddCountProg != null)
                         if (AddCountProg != "")
                             ValueCountProg = PlcClient.ReadInt(AddCountProg);

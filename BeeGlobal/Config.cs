@@ -45,6 +45,7 @@ namespace BeeGlobal
         public bool IsSaveParaCam = true;
         public bool IsEnTrain = true;
         public bool IsEnPO = true;
+        public bool IsWaitCenter = false;
         public bool IsEnDummy = true;
         public float TotalTime = 0, Percent = 0;
         public  int SumOK, SumNG, SumTime = 0;

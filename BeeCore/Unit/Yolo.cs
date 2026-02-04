@@ -337,6 +337,7 @@ namespace BeeCore
                     if (Math.Abs( LenRS - LenTemp)/ (LenTemp*1.0) >ToleranceLine)
                     {
                         Line2D.Found = false;
+                        LineVerital = null;
                     }
                     if (Line2D.Found)
                 {
@@ -945,7 +946,11 @@ namespace BeeCore
                                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
                             }
                         }
-
+                        if(IsLine)
+                        {
+                           if(!Line2D.Found)
+                                Common.PropetyTools[IndexThread][Index].Results = Results.NG;
+                        }    
                         G.IsChecked = true;
                         // MessageBox.Show($"Predict xong: {boxes.len()} boxes");
                     }
@@ -1410,9 +1415,21 @@ namespace BeeCore
                         //  mat = new Matrix();
                         //mat = new Matrix();
                         mat.Translate(rs.rot._PosCenter.X, rs.rot._PosCenter.Y);
-                      //  gc.Transform = mat;
                         mat.Rotate(rs.rot._rectRotation);
                         gc.Transform = mat;
+                        if (Global.ParaShow.IsShowPostion)
+                            {
+                                int min = (int)Math.Min(rs.rot._rect.Width / 4, rs.rot._rect.Height / 4);
+                                Draws.Plus(gc, 0, 0, min, cl, Global.ParaShow.ThicknessLine);
+                                String sPos = "X,Y,A _ " + rs.rot._PosCenter.X + "," + rs.rot._PosCenter.Y + "," + Math.Round(rs.rot._rectRotation, 1);
+                               
+                                gc.DrawString(sPos, font, new SolidBrush(Global.ParaShow.ColorInfor), new PointF(5, 5));
+
+                            }
+                          
+                        
+                        //  gc.Transform = mat;
+                  
                         if (!Global.IsRun  || Global.ParaShow.IsShowDetail)
                             if (rs.matProcess != null && !rs.matProcess.Empty())
                             {

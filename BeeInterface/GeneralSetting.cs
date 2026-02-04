@@ -39,7 +39,7 @@ namespace BeeInterface
             btnSaveNG.IsCLick = Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
-            
+            btnWaitingCenter.IsCLick=Global.Config.IsWaitCenter ;
             btnDisPLC.IsCLick = Global.IsDisnablePLc; ;
             if (btnDisPLC.IsCLick)
                 btnDisPLC.Text = "ON";
@@ -587,6 +587,11 @@ namespace BeeInterface
         {
             Global.Config.IsEnPO = btnEnPO.IsCLick;
             Global.EditTool.pHeader.pPO.Visible = Global.Config.IsEnPO;
+        }
+
+        private void btnWaitingCenter_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsWaitCenter=btnWaitingCenter.IsCLick;
         }
     }
 }
