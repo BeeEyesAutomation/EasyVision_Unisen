@@ -127,7 +127,20 @@ namespace BeeGlobal
         public static bool TotalOK2 = false;
         public static bool TotalOK3 = false;
         public static bool TotalOK4 = false;
-        public static bool IsByPassResult = false;
+        public static bool _IsByPassResult = false;
+        public static event Action<bool> ByPassResultChanged;
+        public static bool IsByPassResult
+        {
+            get => _IsByPassResult;
+            set
+            {
+                if (_IsByPassResult != value)
+                {
+                    _IsByPassResult = value;
+                    ByPassResultChanged?.Invoke(_IsByPassResult); // Gọi event
+                }
+            }
+        }
         public static int NumSend = 0;
         public static String Ex = "";
        //Gui

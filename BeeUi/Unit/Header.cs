@@ -188,9 +188,9 @@ namespace BeeUi.Common
                     }
                     else
                     {
-                        btnMode.Text = "RUN"; btnMode.IsCLick = false;
-                        btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
-                        return;
+                        //btnMode.Text = "RUN"; btnMode.IsCLick = false;
+                        //btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+                        //return;
                     }
                 }
                 else
@@ -198,31 +198,36 @@ namespace BeeUi.Common
                     FormChoose formChoose = new FormChoose();
                     formChoose.ShowDialog();
                 }
-                if (Global.Step == Step.Step1)
-                {
+                //if (Global.Step == Step.Step1)
+                //{
 
-                    foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
-                    {
-                        PropetyTool.ItemTool.IsEdit = false;
-                    }
-                    btnMode.Text = "EDIT";
-                    btnMode.ForeColor = Color.DarkSlateGray;
+                    
+                  
 
-                }
-                else
-                {
-                    btnMode.Text = "RUN"; btnMode.IsCLick = false;
-                    btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
-                    return;
+                //}
+                //else
+                //{
+                  
+                //    return;
 
-                }
+                //}
 
             }
+            if(Global.IsRun)
+            {
+                btnMode.Text = "RUN"; btnMode.IsCLick = false;
+                btnMode.ForeColor = Color.FromArgb(101, 173, 245); ;// Color.DarkSlateGray;
+            }
+            else
+            {
+                btnMode.Text = "EDIT";
+                btnMode.ForeColor = Color.DarkSlateGray;
+            }    
 
-          Global.EditTool.  Acccess(Global.IsRun);
+                Global.EditTool.Acccess(Global.IsRun);
         }
         String[] PathFile;
-        bool IsLoad = false;
+       public bool IsLoad = false;
         public void RefreshListPJ()
         {
             if (G.listProgram == null)
@@ -350,13 +355,18 @@ namespace BeeUi.Common
             G.Main.Location = new Point(0, 0);
 
         }
-       public async void  ChangeProgram(String program)
+       public async void  ChangeProgram(String program,bool IsBypass=false)
         {
 
             if (IsLoad)
             {
                 IsLoad = false;
-                tmShow.Enabled = true;
+                if(!Global.IsIntialProgram)
+                {
+                    tmIninitial.Enabled = true; 
+                    tmShow.Enabled = true;
+                }    
+               
                 txtQrCode.Enabled = true;
                 btnShowList.Enabled = true;
                 
@@ -366,7 +376,7 @@ namespace BeeUi.Common
             }
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
-            if (Global.IsChangeProg) 
+            if (Global.IsChangeProg&& IsBypass==false) 
                 return;
 
                 Global.Project= program;
@@ -393,7 +403,7 @@ namespace BeeUi.Common
                             if (!Global.Config.IsSaveCommunication)
                                 if (Global.Comunication.Protocol.IsConnected)
                                     Global.Comunication.Protocol.Disconnect();
-                            if (Global.Config.IsSaveParaCam)
+                            if (!Global.Config.IsSaveParaCam)
                                 Global.ScanCCD.DisConnectAllCCd();
 
                             DataTool.LoadProject(Global.Project);
@@ -413,7 +423,7 @@ namespace BeeUi.Common
                         btnShowList.Enabled = true;
                         if (Global.IsIntialProgram)
                         {
-                            if (Global.Config.IsSaveParaCam)
+                            if (!Global.Config.IsSaveParaCam)
                             {
                                 if (!await Global.ScanCCD.ChangeCCD())
                                 {

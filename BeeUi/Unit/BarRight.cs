@@ -58,6 +58,7 @@ namespace BeeUi.Unit
               
                 //  DashboardImages.
             }
+            Global.EditTool.DashboardImages.RefreshDates();
             Global.EditTool.DashboardImages.ReloadAccordingToUI();
             Global.EditTool.pEditTool.Show("Images");
         }

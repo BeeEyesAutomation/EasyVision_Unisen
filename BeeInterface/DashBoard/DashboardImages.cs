@@ -510,7 +510,7 @@ namespace BeeInterface
         }
 
         // ===== Data =====
-        private void RefreshDates()
+        public void RefreshDates()
         {
             var rx = new Regex(@"^\d{8}$");
             var allDates = Directory.Exists(_rootFolder)
@@ -547,7 +547,7 @@ namespace BeeInterface
                 HideBusyUnblock();
                 return;
             }
-
+          
             _ctsList?.Cancel();
             _ctsList = new CancellationTokenSource();
             var ct = _ctsList.Token;
@@ -1358,6 +1358,7 @@ namespace BeeInterface
             _didInitialShownRefresh = true;
             ResetTimePickersToFullDay();
             ShowBusyBlocking("Loading page…");
+
             ReloadAccordingToUI();
         }
 

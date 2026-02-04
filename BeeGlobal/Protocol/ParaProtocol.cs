@@ -446,16 +446,19 @@ namespace BeeGlobal
                                 ParaBits[ix].Value =Convert.ToInt32( valueInput[i]);
                             }
                         }
-                        if (Global.IsByPassResult|| Global.Config.IsForceByPassRS)
-                        {
-                           
-                            Global.EditTool.lbBypass.Visible = true;
-                        }
-                        else
-                        {
-                            Global.EditTool.lbBypass.Visible = false;
+                       // if ( Global.Config.IsForceByPassRS)
+                       // {
+                       //     Global.IsByPassResult = true;
+
+
+                       //      //   Global.EditTool.lbBypass.Visible = true;
+                       // }
+                       // else
+                       // {
+                       //     Global.IsByPassResult = false;
+                       ////     Global.EditTool.lbBypass.Visible = false;
                        
-                        }
+                       // }
                         if (Global.IsLive) return;
                         if (Global.IsRun  )
                         {
@@ -548,14 +551,14 @@ namespace BeeGlobal
                                     if (GetInPut(I_O_Input.ByPass) == true && !Global.IsByPassResult)
                                     {
                                         Global.IsByPassResult = true;
-                                        Global.EditTool.lbBypass.Visible = true;
+                                       // Global.EditTool.lbBypass.Visible = true;
                                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
 
                                     }
                                     else if (GetInPut(I_O_Input.ByPass) == false && Global.IsByPassResult)
                                     {
                                         Global.IsByPassResult = false;
-                                        Global.EditTool.lbBypass.Visible = false;
+                                     //   Global.EditTool.lbBypass.Visible = false;
                                         Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
 
                                     }

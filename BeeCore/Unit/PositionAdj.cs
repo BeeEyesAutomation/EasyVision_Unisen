@@ -711,7 +711,7 @@ namespace BeeCore
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
                 Global.AngleOrigin = rectRotates[0]._rectRotation;
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
-                if (Global.Config.IsWaitCenter)
+                if (Global.Config.IsWaitCenter&&Global.Config.IsAutoTrigger)
                 {
                     if (rotCrop != null)
                         if (!rotCrop.ContainsPoint(new PointF( Global.pOrigin.X,Global.pOrigin.Y)))

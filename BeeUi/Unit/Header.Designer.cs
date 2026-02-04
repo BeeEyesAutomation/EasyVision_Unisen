@@ -678,7 +678,6 @@ namespace BeeUi.Common
         public  System.Windows.Forms.TableLayoutPanel pModel;
         private System.Windows.Forms.Timer tmIninitial;
         public System.Windows.Forms.Timer tmShow;
-        private RJButton btnShowList;
         private System.Windows.Forms.Panel panel1;
         public TextBoxAuto txtQrCode;
         public System.Windows.Forms.Splitter split1;
@@ -698,5 +697,6 @@ namespace BeeUi.Common
         public System.Windows.Forms.Panel pPO;
         public System.Windows.Forms.Panel pDummy;
         public System.Windows.Forms.Panel pTrain;
+        public RJButton btnShowList;
     }
 }

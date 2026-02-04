@@ -40,6 +40,11 @@ namespace BeeInterface
             btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
             btnWaitingCenter.IsCLick=Global.Config.IsWaitCenter ;
+            if (Global.Config.IsWaitCenter)
+                btnWaitingCenter.Text = "ON";
+            else
+                btnWaitingCenter.Text = "OFF";
+            layAutoTrig.Visible = Global.Config.IsAutoTrigger;
             btnDisPLC.IsCLick = Global.IsDisnablePLc; ;
             if (btnDisPLC.IsCLick)
                 btnDisPLC.Text = "ON";
@@ -420,11 +425,19 @@ namespace BeeInterface
         private void btnOnAutoTrigger_Click(object sender, EventArgs e)
         {
             Global.Config.IsAutoTrigger = true;
+            layAutoTrig.Visible = Global.Config.IsAutoTrigger;
         }
 
         private void btnOffAutoTrigger_Click(object sender, EventArgs e)
         {
             Global.Config.IsAutoTrigger = false;
+            Global.Config.IsWaitCenter = false;
+            btnWaitingCenter.IsCLick = Global.Config.IsWaitCenter;
+            if (Global.Config.IsWaitCenter)
+                btnWaitingCenter.Text = "ON";
+            else
+                btnWaitingCenter.Text = "OFF";
+            layAutoTrig.Visible = Global.Config.IsAutoTrigger;
         }
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
@@ -523,6 +536,7 @@ namespace BeeInterface
         private void btnP1_Click(object sender, EventArgs e)
         {
             lay1.Visible = !btnP1.IsCLick;
+            layAutoTrig.Visible = !btnP1.IsCLick;
         }
 
         private void btnP2_Click(object sender, EventArgs e)
@@ -592,6 +606,15 @@ namespace BeeInterface
         private void btnWaitingCenter_Click(object sender, EventArgs e)
         {
             Global.Config.IsWaitCenter=btnWaitingCenter.IsCLick;
+            if (Global.Config.IsWaitCenter)
+            btnWaitingCenter.Text = "ON";
+            else
+                btnWaitingCenter.Text = "OFF";
+        }
+
+        private void btnSaveParaCamera_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveParaCam = btnSaveParaCamera.IsCLick;
         }
     }
 }

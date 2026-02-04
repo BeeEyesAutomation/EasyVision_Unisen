@@ -72,6 +72,9 @@ namespace BeeUi
             Global.ToolSettings.btnDelect.Enabled = !Global.IsRun;
             Global.ToolSettings.btnEnEdit.Enabled = Global.IsRun;
             Global.ToolSettings.btnRename.Enabled = !Global.IsRun;
+            G.Header.btnShowList.Enabled = true;
+            G.Header.txtQrCode.Enabled = true;
+            G.Header.pEdit.Enabled = true;
             switch (Global.Config.Users)
             {
                 case Users.Admin:
@@ -254,8 +257,10 @@ namespace BeeUi
                                         }
                             foreach(PropetyTool propetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                             {
+                                if (propetyTool.ItemTool == null)
+                                    continue;
                                 propetyTool.ItemTool.IsCLick = false;
-                                
+                              
                             }    
                         }
                         catch (Exception ex)
@@ -272,8 +277,12 @@ namespace BeeUi
                       View.RefreshExternal(Global.ParaCommon.IsExternal);
                         break;
                     case Step.Step1:
-                       
-                      
+
+                        foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
+                        {
+                            if (PropetyTool.ItemTool != null)
+                                PropetyTool.ItemTool.IsEdit = false;
+                        }
                         Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
                         View. imgView.Text = "";
                         View.pImg.Visible = false;
@@ -664,7 +673,19 @@ namespace BeeUi
             Global.StepModeChanged += Global_StepModeChanged;
             Global.DisPLCChange += Global_DisPLCChange;
             StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+            Global.ByPassResultChanged += Global_ByPassResultChanged;
             //
+        }
+
+        private void Global_ByPassResultChanged(bool obj)
+        {
+            this.Invoke((Action)(() =>
+            {
+                if (Global.Config.IsForceByPassRS) 
+                    lbBypass.Visible = true;
+                else
+                    lbBypass.Visible = obj;
+            }));
         }
 
         private void DashboardImages_ImageClicked(object sender, ImageClickedEventArgs e)

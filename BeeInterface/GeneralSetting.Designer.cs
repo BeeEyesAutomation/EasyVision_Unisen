@@ -66,7 +66,7 @@ namespace BeeInterface
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.Processing = new System.Windows.Forms.TabPage();
             this.layPage1 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.layAutoTrig = new System.Windows.Forms.TableLayoutPanel();
             this.btnWaitingCenter = new BeeInterface.RJButton();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
             this.layEnFunction = new System.Windows.Forms.TableLayoutPanel();
@@ -202,7 +202,7 @@ namespace BeeInterface
             this.tabControl2.SuspendLayout();
             this.Processing.SuspendLayout();
             this.layPage1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.layAutoTrig.SuspendLayout();
             this.layEnFunction.SuspendLayout();
             this.lay1.SuspendLayout();
             this.layP2.SuspendLayout();
@@ -1421,6 +1421,7 @@ namespace BeeInterface
             this.btnSaveParaCamera.TextColor = System.Drawing.Color.Black;
             this.btnSaveParaCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSaveParaCamera.UseVisualStyleBackColor = false;
+            this.btnSaveParaCamera.Click += new System.EventHandler(this.btnSaveParaCamera_Click);
             // 
             // tabControl2
             // 
@@ -1454,7 +1455,7 @@ namespace BeeInterface
             this.layPage1.BackColor = System.Drawing.SystemColors.Control;
             this.layPage1.ColumnCount = 1;
             this.layPage1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layPage1.Controls.Add(this.tableLayoutPanel1, 0, 2);
+            this.layPage1.Controls.Add(this.layAutoTrig, 0, 2);
             this.layPage1.Controls.Add(this.layEnFunction, 0, 10);
             this.layPage1.Controls.Add(this.btnP5, 0, 9);
             this.layPage1.Controls.Add(this.btnP4, 0, 7);
@@ -1486,23 +1487,23 @@ namespace BeeInterface
             this.layPage1.Size = new System.Drawing.Size(425, 637);
             this.layPage1.TabIndex = 35;
             // 
-            // tableLayoutPanel1
+            // layAutoTrig
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.btnWaitingCenter, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.autoFontLabel1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 90);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(425, 55);
-            this.tableLayoutPanel1.TabIndex = 106;
+            this.layAutoTrig.BackColor = System.Drawing.Color.White;
+            this.layAutoTrig.ColumnCount = 2;
+            this.layAutoTrig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layAutoTrig.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.layAutoTrig.Controls.Add(this.btnWaitingCenter, 1, 0);
+            this.layAutoTrig.Controls.Add(this.autoFontLabel1, 0, 0);
+            this.layAutoTrig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layAutoTrig.Location = new System.Drawing.Point(0, 90);
+            this.layAutoTrig.Margin = new System.Windows.Forms.Padding(0);
+            this.layAutoTrig.Name = "layAutoTrig";
+            this.layAutoTrig.Padding = new System.Windows.Forms.Padding(5);
+            this.layAutoTrig.RowCount = 1;
+            this.layAutoTrig.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layAutoTrig.Size = new System.Drawing.Size(425, 55);
+            this.layAutoTrig.TabIndex = 106;
             // 
             // btnWaitingCenter
             // 
@@ -1548,14 +1549,14 @@ namespace BeeInterface
             this.btnWaitingCenter.IsNotChange = false;
             this.btnWaitingCenter.IsRect = false;
             this.btnWaitingCenter.IsTouch = false;
-            this.btnWaitingCenter.IsUnGroup = false;
+            this.btnWaitingCenter.IsUnGroup = true;
             this.btnWaitingCenter.Location = new System.Drawing.Point(212, 5);
             this.btnWaitingCenter.Margin = new System.Windows.Forms.Padding(0);
             this.btnWaitingCenter.Multiline = false;
             this.btnWaitingCenter.Name = "btnWaitingCenter";
             this.btnWaitingCenter.Size = new System.Drawing.Size(208, 45);
             this.btnWaitingCenter.TabIndex = 9;
-            this.btnWaitingCenter.Text = "ON";
+            this.btnWaitingCenter.Text = "-";
             this.btnWaitingCenter.TextColor = System.Drawing.Color.Black;
             this.btnWaitingCenter.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnWaitingCenter.UseVisualStyleBackColor = false;
@@ -5993,7 +5994,7 @@ namespace BeeInterface
             this.tabControl2.ResumeLayout(false);
             this.Processing.ResumeLayout(false);
             this.layPage1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.layAutoTrig.ResumeLayout(false);
             this.layEnFunction.ResumeLayout(false);
             this.lay1.ResumeLayout(false);
             this.layP2.ResumeLayout(false);
@@ -6185,7 +6186,7 @@ namespace BeeInterface
         private RJButton btnEnDummy;
         private RJButton btnP5;
         private RJButton btnEnTrain;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel layAutoTrig;
         private RJButton btnWaitingCenter;
         private AutoFontLabel autoFontLabel1;
     }

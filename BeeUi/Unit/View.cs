@@ -1847,17 +1847,18 @@ namespace BeeUi
                 {
                     if (Global.IsPLCChangeProg == true)
                     {
+                       
                         Global.IsPLCChangeProg = false;
                         int ix = Global.ListProgNo.FindIndex(a => a.No == Global.Comunication.Protocol.NoProg);
                         if (ix > -1)
                             Global.Comunication.Protocol.ValueProg = Global.ListProgNo[ix].Name;
                         if (Global.Comunication.Protocol.ValueProg != null)
-                            if (Global.Comunication.Protocol.ValueProg != Global.Project)
+                         //   if (Global.Comunication.Protocol.ValueProg != Global.Project)
                             {
                                 if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
                                 {
                                     Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
-                                    G.Header.ChangeProgram(Global.Project);
+                                    G.Header.ChangeProgram(Global.Project,true);
                                     Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                                     //G.Header.workLoadProgram.RunWorkerAsync();
                                     //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
@@ -1866,7 +1867,7 @@ namespace BeeUi
                                 }
                                 else
                                 {
-                                    Global.IsChangeProg = false;
+                                 
                                     imgView.Text = "";
                                     FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
                                     formWarning.ShowDialog();
@@ -1882,8 +1883,9 @@ namespace BeeUi
                                         Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
                                         Global.Project = Global.Comunication.Protocol.ValueProg;
                                         G.Header.RefreshListPJ();
-                                      //  Global.IsLoadProgFist = true;
-                                        G.Header.ChangeProgram(Global.Project);
+                                    G.Header.IsLoad = false;
+                                      Global.IsLoadProgFist = true;
+                                    G.Header.ChangeProgram(Global.Project,true);
                                         Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                                         //if (!G.Header.workLoadProgram.IsBusy)
                                         //    G.Header.workLoadProgram.RunWorkerAsync();
@@ -1897,9 +1899,9 @@ namespace BeeUi
                             else
                             {
                                 imgView.Text = "";
-                                Global.IsChangeProg = false;
-                                Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                                Global.StatusProcessing = StatusProcessing.None;
+                                Global.IsChangeProg = false; Global.StatusProcessing = StatusProcessing.None;
+                            Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+                               
                                 Global.IsAllowReadPLC = true;
                                 return;
                             }
