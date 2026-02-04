@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 namespace BeeGlobal
 {
@@ -373,7 +374,7 @@ namespace BeeGlobal
                
                  if (IsConnected)
                 {
-                  
+                    Global.NumProgFromPLC = Global.Config.NumTrig;
                     foreach (ParaBit paraIO in ParaBits)
                     {
                         paraIO.Value = 0;

@@ -80,7 +80,9 @@ namespace BeeUi.Unit
 
         private void btnDelect_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Bạn chắc chắn muốn Xóa  Model này ?", " Xóa  Model"+Global.Project, MessageBoxButtons.YesNo) == DialogResult.Yes)
+            MessageChoose messageChoose = new MessageChoose("Delete Program", "Delete Program  : " + Global.Project );
+            messageChoose.ShowDialog();
+            if (messageChoose.IsOK)
             {
                 string path = Path.Combine("Program", Global.Project);
 

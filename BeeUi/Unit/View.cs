@@ -3839,10 +3839,8 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             {
                 if (G.cnn.State == ConnectionState.Closed)
                     G.ucReport.Connect_SQL();
-                if (Global.TotalOK == Results.OK)
-                    SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, ResultsSave);
-                else
-                    SQL_Insert(DateTime.Now, Properties.Settings.Default.programCurrent.Replace(".prog", ""), Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, ResultsSave);
+             
+                    SQL_Insert(DateTime.Now, Global.Project, Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, ResultsSave);
 
             }
 
