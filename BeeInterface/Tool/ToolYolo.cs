@@ -67,22 +67,50 @@ namespace BeeInterface
                 laySetLine3.Visible = Propety.IsLine;
                 AdjThreshLine.Value = Propety.ThresholdLine;
                 AdjTolerance.Value = Propety.ToleranceLine;
-                if (!File.Exists(Propety.pathFullModel))
+                btnTypeYolo.IsCLick = Propety.TypeYolo == TypeYolo.YOLO ?true:false ;
+                btnTypeOnnx.IsCLick = Propety.TypeYolo == TypeYolo.Onnx ? true : false;
+                btnTypeRCNN.IsCLick = Propety.TypeYolo == TypeYolo.RCNN ? true : false;
+                switch(Propety.TypeYolo)
                 {
-                    Propety.listModels.Remove(Propety.PathModel);
-                    if(Propety.listModels.Count>0)
-                    {
-                        Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
-                        Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+                    case TypeYolo.YOLO:
+                        if (!File.Exists(Propety.pathFullModel))
+                        {
+                            Propety.listModels.Remove(Propety.PathModel);
+                            if (Propety.listModels.Count > 0)
+                            {
+                                Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
+                                Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
 
-                    }
-                    else
-                    {
-                        Propety.PathModel = "";
-                        Propety.pathFullModel ="";
-                    }    
-                        
+                            }
+                            else
+                            {
+                                Propety.PathModel = "";
+                                Propety.pathFullModel = "";
+                            }
+
+                        }
+                        break;
+                    case TypeYolo.Onnx:
+                        if (!Directory.Exists(Propety.pathFullModel))
+                        {
+                            Propety.listModelOnnx.Remove(Propety.PathModel);
+                            if (Propety.listModelOnnx.Count > 0)
+                            {
+                                Propety.PathModel = Propety.listModelOnnx[Propety.listModelOnnx.Count - 1];
+                                Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+
+                            }
+                            else
+                            {
+                                Propety.PathModel = "";
+                                Propety.pathFullModel = "";
+                            }
+
+                        }
+                        break;
+
                 }    
+               
                  
               IsReload = true;
                 if (cbListModel.InvokeRequired)
@@ -638,29 +666,69 @@ namespace BeeInterface
         {
             OpenFileDialog OpenFileDialog = new OpenFileDialog();
 
+            switch(Propety.TypeYolo)
+            {
+                case TypeYolo.YOLO:
+                    OpenFileDialog.Filter = "Model|*.pt";
+                    break;
+                case TypeYolo.Onnx:
+                    OpenFileDialog.Filter = "Onnx|*.xml";
+                    break;
+                case TypeYolo.RCNN:
+                    OpenFileDialog.Filter = "RCNN|*.pth";
+                    break;
+        }
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
+                
                 String pathModel = OpenFileDialog.FileName;
+
 
                 String NameModel = Path.GetFileName(pathModel);
                 pathModel = "Program\\" + Global.Project + "\\" + NameModel;
-                if (Propety.listModels == null) Propety.listModels = new List<string>();
-                if (File.Exists(OpenFileDialog.FileName))
+                switch (Propety.TypeYolo)
                 {
-                    File.Copy(OpenFileDialog.FileName, pathModel, true);
-                    Propety.listModels.Add(NameModel);
-                    Propety.listModels = Propety.listModels.Distinct().ToList();
-                    cbListModel.DataSource = null;
-                    Propety.PathModel = Path.GetFileName(pathModel);
-                    IsReload = true;
-                    if (!workLoadModel.IsBusy)
-                        workLoadModel.RunWorkerAsync();
-                    cbListModel.DataSource = Propety.listModels.ToArray();
-                    cbListModel.Text = Propety.PathModel;
-                    //cbListModel.SelectedIndex = Propety.listModels.Count-1;
+                    case TypeYolo.YOLO:
+                        if (Propety.listModels == null) Propety.listModels = new List<string>();
+                       
+                            File.Copy(OpenFileDialog.FileName, pathModel, true);
+                            Propety.listModels.Add(NameModel);
+                            Propety.listModels = Propety.listModels.Distinct().ToList();
+                            cbListModel.DataSource = null;
+                            Propety.PathModel = Path.GetFileName(pathModel);
+                            IsReload = true;
+                            if (!workLoadModel.IsBusy)
+                                workLoadModel.RunWorkerAsync();
+                            cbListModel.DataSource = Propety.listModels.ToArray();
+                            cbListModel.Text = Propety.PathModel;
+                           
+                        
+                        break;
+                    case TypeYolo.Onnx:
+                        NameModel = new DirectoryInfo(
+                            Path.GetDirectoryName(OpenFileDialog.FileName)
+                        ).Name;
+                        //pathModel =Path.GetPathRoot(OpenFileDialog.FileName);
+                        //NameModel = Path.GetDirectoryName(OpenFileDialog.FileName);// Path.GetFileNameWithoutExtension(OpenFileDialog.FileName);
+                        pathModel = "Program\\" + Global.Project + "\\" + NameModel;
+                        if (Propety.listModelOnnx == null) Propety.listModelOnnx = new List<string>();
+                            Batch.CopyAndRename(Path.GetDirectoryName(OpenFileDialog.FileName), pathModel, false);
 
-
+                            Propety.listModelOnnx.Add(NameModel);
+                            Propety.listModelOnnx = Propety.listModelOnnx.Distinct().ToList();
+                            cbListModel.DataSource = null;
+                            Propety.PathModel = Path.GetFileName(pathModel);
+                            IsReload = true;
+                        if (!workLoadModel.IsBusy)
+                            workLoadModel.RunWorkerAsync();
+                        cbListModel.DataSource = Propety.listModelOnnx.ToArray();
+                        cbListModel.Text = Propety.PathModel;
+                        break;
+                    case TypeYolo.RCNN:
+                        break;
                 }
+               
+             
             }
             switch (StepEdit)
             {
@@ -757,10 +825,23 @@ namespace BeeInterface
             {
                 Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
 
-                if (File.Exists(Propety.pathFullModel))
+
+                switch(Propety.TypeYolo)
                 {
-                    Propety.SetModel();
-                }
+                    case TypeYolo.YOLO:
+                        if (File.Exists(Propety.pathFullModel))
+                        {
+                            Propety.SetModel();
+                        }
+                        break;
+                    case TypeYolo.Onnx:
+                        if (Directory.Exists(Propety.pathFullModel))
+                        {
+                            Propety.SetModel();
+                        }
+                        break;
+                }    
+              
             }
 
 
@@ -1236,41 +1317,79 @@ namespace BeeInterface
         {
             Propety.PathModel = cbListModel.SelectedValue.ToString();//.Text;
             Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
-            if (!File.Exists(Propety.pathFullModel))
+            switch(Propety.TypeYolo)
             {
-                Propety.listModels.Remove(Propety.PathModel);
-                if (Propety.listModels.Count > 0)
-                {
-                    Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
-                    Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+                case TypeYolo.YOLO:
+                    if (!File.Exists(Propety.pathFullModel))
+                    {
+                        Propety.listModels.Remove(Propety.PathModel);
+                        if (Propety.listModels.Count > 0)
+                        {
+                            Propety.PathModel = Propety.listModels[Propety.listModels.Count - 1];
+                            Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
 
-                }
-                else
-                {
-                    Propety.PathModel = "";
-                    Propety.pathFullModel = "";
-                }
-                cbListModel.DataSource = null;
-                cbListModel.DataSource = Propety.listModels;
-                cbListModel.Refresh();
-                cbListModel.Text = Propety.PathModel;
-            }
+                        }
+                        else
+                        {
+                            Propety.PathModel = "";
+                            Propety.pathFullModel = "";
+                        }
+                        cbListModel.DataSource = null;
+                        cbListModel.DataSource = Propety.listModels;
+                        cbListModel.Refresh();
+                        cbListModel.Text = Propety.PathModel;
+                    }
 
-            if (File.Exists(Propety.pathFullModel))
-            {
-                cbListModel.Enabled = false;
+                    if (File.Exists(Propety.pathFullModel))
+                    {
+                        cbListModel.Enabled = false;
 
-                workLoadModel.RunWorkerAsync();
-                //  Propety.listLabelCompare = new List<Labels>();
-                //RefreshLabels();
+                        workLoadModel.RunWorkerAsync();
+                        //  Propety.listLabelCompare = new List<Labels>();
+                        //RefreshLabels();
 
-            }
+                    }
+                    break;
+                case TypeYolo.Onnx:
+                    if (!Directory.Exists(Propety.pathFullModel))
+                    {
+                        Propety.listModelOnnx.Remove(Propety.PathModel);
+                        if (Propety.listModelOnnx.Count > 0)
+                        {
+                            Propety.PathModel = Propety.listModelOnnx[Propety.listModelOnnx.Count - 1];
+                            Propety.pathFullModel = "Program\\" + Global.Project + "\\" + Propety.PathModel;
+
+                        }
+                        else
+                        {
+                            Propety.PathModel = "";
+                            Propety.pathFullModel = "";
+                        }
+                        cbListModel.DataSource = null;
+                        cbListModel.DataSource = Propety.listModelOnnx;
+                        cbListModel.Refresh();
+                        cbListModel.Text = Propety.PathModel;
+                    }
+
+                    if (Directory.Exists(Propety.pathFullModel))
+                    {
+                        cbListModel.Enabled = false;
+
+                        workLoadModel.RunWorkerAsync();
+                        //  Propety.listLabelCompare = new List<Labels>();
+                        //RefreshLabels();
+
+                    }
+                    break;
+            }    
+           
         }
 
         private void btnReload_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure", "Reload All Para of Label", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+               
                 String[] Content = Propety.LoadNameModel(Common.PropetyTools[Global.IndexChoose][Propety.Index].Name);
                 if (Content != null && Content.Length > 0)
                 {
@@ -1681,6 +1800,30 @@ namespace BeeInterface
         private void AdjTolerance_ValueChanged(float obj)
         {
             Propety.ToleranceLine = AdjTolerance.Value;
+        }
+
+        private void btnTypeYolo_Click(object sender, EventArgs e)
+        {
+            Propety.TypeYolo = TypeYolo.YOLO;
+        }
+
+        private void btnTypeOnnx_Click(object sender, EventArgs e)
+        {
+            Propety.TypeYolo = TypeYolo.Onnx;
+         
+            Propety.listModelOnnx = Propety.listModelOnnx.Distinct().ToList();
+            cbListModel.DataSource = null;
+          
+            IsReload = true;
+          
+            cbListModel.DataSource = Propety.listModelOnnx.ToArray();
+            cbListModel.Text = Propety.PathModel;
+
+        }
+
+        private void btnTypeRCNN_Click(object sender, EventArgs e)
+        {
+            Propety.TypeYolo=TypeYolo.RCNN;
         }
     }
 }

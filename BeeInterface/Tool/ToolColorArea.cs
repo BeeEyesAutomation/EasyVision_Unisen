@@ -366,8 +366,8 @@ namespace BeeInterface
           
         
             
-            picColor.Invalidate();
-            Propety.SetColor();
+           // picColor.Invalidate();
+            //Propety.SetColor();
            
         }
         

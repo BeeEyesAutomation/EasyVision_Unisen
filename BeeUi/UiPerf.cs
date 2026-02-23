@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeeUi.Commons;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -142,6 +143,19 @@ namespace BeeUi
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
             _factories[key] = factory ?? throw new ArgumentNullException(nameof(factory));
         }
+        private void Ui(Action a)
+        {
+            if (IsDisposed) return;
+            if (InvokeRequired) BeginInvoke(a);
+            else a();
+        }
+        public bool Unregister(string key, bool removeExistingView = true, bool disposeView = true)
+        {
+           
+
+            return false;
+        }
+
 
         // Hiện view theo key (tạo lần đầu, sau dùng lại)
         public bool Show(string key)
@@ -149,6 +163,10 @@ namespace BeeUi
             if (!_factories.TryGetValue(key, out var factory))
                 return false;
             var view = EnsureView(key, factory);
+            if(view==null)
+                return false;
+            if(view.IsDisposed) 
+                return false;
             ShowView(view);
             return true;
         }

@@ -55,37 +55,47 @@ namespace BeeUi
 
         public List<string> ScanIDCCD(TypeCamera typeCamera)
         {
-            cbCCD.Text = "Waiting Scan";
-     
             List<string> listStringCCD = new List<string>();
-            if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
-                if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
+            cbCCD.Text = "Waiting Scan";
+            try
             {
-                BeeCore.Common.listCamera[Global.IndexCCCD].Init(typeCamera);
-                    listStringCCD = BeeCore.Common.listCamera[Global.IndexCCCD].Scan(typeCamera).ToList();
-            }
-                else
+               
+                if (BeeCore.Common.listCamera.Count() > Global.IndexChoose)
+                    if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
+                    {
+                        BeeCore.Common.listCamera[Global.IndexCCCD].Init(typeCamera);
+                        listStringCCD = BeeCore.Common.listCamera[Global.IndexCCCD].Scan(typeCamera).ToList();
+                    }
+                    else
+                    {
+                        BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexChoose);
+                        BeeCore.Common.listCamera[Global.IndexCCCD].Init(typeCamera);
+                        listStringCCD = BeeCore.Common.listCamera[Global.IndexCCCD].Scan(typeCamera).ToList();
+                    }
+
+
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
                 {
-                    BeeCore.Common.listCamera[Global.IndexCCCD] = new Camera(new ParaCamera(), Global.IndexChoose);
-                    BeeCore.Common.listCamera[Global.IndexCCCD].Init(typeCamera);
-                    listStringCCD = BeeCore.Common.listCamera[Global.IndexCCCD].Scan(typeCamera).ToList();
+                    int index = Array.FindIndex(listStringCCD.ToArray(), s => s.Contains(BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name));
+                    if (index != -1)
+                        indexCCD = index;
+                }
+                cbCCD.DataSource = listStringCCD;
+                if (listStringCCD.Count() == 0)
+                {
+                    cbCCD.Text = "No Camera";
+                    btnConnect.Enabled = false;
                 }
 
+                else
+                    btnConnect.Enabled = true;
 
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
+                
+            }
+            catch(Exception ex)
             {
-                int index = Array.FindIndex(listStringCCD.ToArray(), s => s.Contains(BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name));
-                if (index != -1)
-                    indexCCD = index;
+
             }
-            cbCCD.DataSource = listStringCCD;
-            if (listStringCCD.Count()==0)
-            { cbCCD.Text = "No Camera";
-                btnConnect.Enabled = false;
-            }
-              
-            else
-                btnConnect.Enabled = true;
             return listStringCCD;
         }
         private void ScanCCD_Load(object sender, EventArgs e)
@@ -483,8 +493,11 @@ namespace BeeUi
         {
             foreach (Camera camera in BeeCore.Common.listCamera)
             {
+               
                 if (camera != null)
                 {
+                    if (camera.Para.Name == NameOldCCD)
+                        continue;
                     if (camera.IsConnected)
                     {
                         camera.DisConnect(camera.Para.TypeCamera);
@@ -498,6 +511,7 @@ namespace BeeUi
               
             }
         }
+        public String NameOldCCD = "";
         public async Task< bool > ChangeCCD()
         {
             bool IsConnect = true;
@@ -506,46 +520,49 @@ namespace BeeUi
             {
                 if (camera != null)
                 {
-                    if (camera.IsConnected)
+                    if (camera.Para.Name != NameOldCCD)
                     {
-                        camera.DisConnect(camera.Para.TypeCamera);
+                        if (camera.IsConnected)
+                        {
+                            camera.DisConnect(camera.Para.TypeCamera);
 
-                        camera.matRaw = new OpenCvSharp.Mat();
+                            camera.matRaw = new OpenCvSharp.Mat();
+                        }
+
+                        if (camera.Para.TypeCamera == TypeCamera.USB)
+                        {
+                            indexCCD = -1;
+                            camera.Init(camera.Para.TypeCamera);
+                            int index = Array.FindIndex(ListCamUSB.ToArray(), s => s.Contains(camera.Para.Name));
+                            if (index != -1)
+                                indexCCD = index;
+                        }
+                        else
+                        {
+                            camera.Init(camera.Para.TypeCamera);
+                            camera.Scan(camera.Para.TypeCamera);
+
+                        }
+                    
                     }
-                   
-                    if (camera.Para.TypeCamera == TypeCamera.USB)
-                    {
-                        indexCCD = -1;
-                        camera.Init(camera.Para.TypeCamera);
-                        int index = Array.FindIndex(ListCamUSB.ToArray(), s => s.Contains(camera.Para.Name));
-                        if (index != -1)
-                            indexCCD = index;
-                    }
-                    else
-                    {
-                        camera.Init(camera.Para.TypeCamera);
-                        camera.Scan(camera.Para.TypeCamera);
-                        // List<String> listStringCCD = camera.Scan(camera.Para.TypeCamera).ToList();
-                    }
-                    //String[] listStringCCD = camera.Scan(camera.Para.TypeCamera);
-                    //if (camera.Para.TypeCamera == TypeCamera.USB)
-                    //{
-                    //    int index = Array.FindIndex(listStringCCD, s => s.Contains(camera.Para.Name));
-                    //    if (index != -1)
-                    //        indexCCD = index;
-                    //}
+                  
                    
                     if (indexCCD != -1&&camera.Para.Name.Trim()!="" | camera.Para.TypeCamera != TypeCamera.USB)
                     {
                         camera.IndexConnect = indexCCD;
                         camera.matRaw = new OpenCvSharp.Mat();
-                        camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
+                        if (camera.Para.Name != NameOldCCD)
+                            camera.IsConnected = await camera.Connect(camera.Para.Name, camera.Para.TypeCamera);
+                        else
+                            camera.IsConnected = true;
                         if (camera.IsConnected)
                         {
 
                             await camera.SetFullPara();
+                       
                         }
                     }
+                    NameOldCCD = camera.Para.Name;
                 }
                 if (Global.Config.IsMultiProg == false)
                     break;
@@ -780,27 +797,35 @@ namespace BeeUi
 
         private void ScanCCD_Shown(object sender, EventArgs e)
         {
-            if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
+            try
             {
-                lbCamera.Text = "NULL";
-
-            }
-            else
-            {
-                lbCamera.Text = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
-                TypeCamera typeCamera = BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera;
-                switch (typeCamera)
+                if (Global.IndexCCCD >= BeeCore.Common.listCamera.Count())
+                    BeeCore.Common.listCamera.Add(null);
+                if (BeeCore.Common.listCamera[Global.IndexCCCD] == null)
                 {
-                    case TypeCamera.USB:
-                        btnUSB2_0.IsCLick = true;
-                        break;
-                    case TypeCamera.MVS:
-                        btnGigE.IsCLick = true;
-                        break;
-                    case TypeCamera.Pylon:
-                        btnPylon.IsCLick = true;
-                        break;
+                    lbCamera.Text = "NULL";
+
                 }
+                else
+                {
+                    lbCamera.Text = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
+                    TypeCamera typeCamera = BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera;
+                    switch (typeCamera)
+                    {
+                        case TypeCamera.USB:
+                            btnUSB2_0.IsCLick = true;
+                            break;
+                        case TypeCamera.MVS:
+                            btnGigE.IsCLick = true;
+                            break;
+                        case TypeCamera.Pylon:
+                            btnPylon.IsCLick = true;
+                            break;
+                    }
+                }
+            }catch(Exception ex)
+            {
+
             }
          
         }

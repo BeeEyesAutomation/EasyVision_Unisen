@@ -2,6 +2,7 @@
 using BeeGlobal;
 using BeeInterface;
 using Cyotek.Windows.Forms;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -39,8 +40,15 @@ namespace BeeInterface
         {
 
 
-           
-          
+            ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
+            ckSIMD.IsCLick = Propety.ckSIMD;
+            ckSubPixel.IsCLick = Propety.ckSubPixel;
+            if (Propety.IsHighSpeed)
+                btnHighSpeed.IsCLick = true;
+            else
+                btnNormal.IsCLick = true;
+            btnOffBlackDot.IsCLick = !Propety.IsBlackDot;
+            btnOnBlackDot.IsCLick = Propety.IsBlackDot;
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value = (int)Propety.Angle;
 
@@ -76,8 +84,10 @@ namespace BeeInterface
           
             AdjLimitX.Value = Propety.LimitX;//
             AdjLimitY.Value = Propety.LimitY;//
-           
-           
+
+            AdjPage.Value = Propety.ExpandPage;
+            AdjSample.Value = Propety.ExpandPattern;
+            AdjWidthDetect.Value = Propety.WidthDetectBox;
             if (cbListModel.InvokeRequired)
             {
                 cbListModel.Invoke(new Action(() =>
@@ -629,6 +639,117 @@ namespace BeeInterface
         {
             Propety.Scale = (float)AdjScale.Value;
 
+        }
+
+        private void AdjPage_ValueChanged(float obj)
+        {
+            Propety.ExpandPage = (int)AdjPage.Value;
+        }
+
+        private void AdjSample_ValueChanged(float obj)
+        {
+            Propety.ExpandPattern = (int)AdjSample.Value;
+        }
+
+        private void AdjWidthDetect_ValueChanged(float obj)
+        {
+            Propety.WidthDetectBox= (int)AdjWidthDetect.Value;
+        }
+        private void ckSIMD_Click(object sender, EventArgs e)
+        {
+            Propety.ckSIMD = !Propety.ckSIMD;
+            if (Propety.ckSIMD)
+            {
+                ckSIMD.BackColor = Color.Goldenrod;
+                ckSIMD.BorderColor = Color.DarkGoldenrod;
+            }
+            else
+            {
+                ckSIMD.BackColor = Color.WhiteSmoke;
+                ckSIMD.BorderColor = Color.Silver;
+                ckSIMD.TextColor = Color.Black;
+            }
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
+        }
+
+        private void ckBitwiseNot_Click(object sender, EventArgs e)
+        {
+            Propety.ckBitwiseNot = !Propety.ckBitwiseNot;
+            if (Propety.ckBitwiseNot)
+            {
+                ckBitwiseNot.BackColor = Color.Goldenrod;
+                ckBitwiseNot.BorderColor = Color.DarkGoldenrod;
+            }
+            else
+            {
+                ckBitwiseNot.BackColor = Color.WhiteSmoke;
+                ckBitwiseNot.BorderColor = Color.Silver;
+                ckBitwiseNot.TextColor = Color.Black;
+            }
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
+        }
+
+        private void ckSubPixel_Click(object sender, EventArgs e)
+        {
+            Propety.ckSubPixel = !Propety.ckSubPixel;
+            if (Propety.ckSubPixel)
+            {
+                ckSubPixel.BackColor = Color.Goldenrod;
+                ckSubPixel.BorderColor = Color.DarkGoldenrod;
+            }
+            else
+            {
+                ckSubPixel.BackColor = Color.WhiteSmoke;
+                ckSubPixel.BorderColor = Color.Silver;
+                ckSubPixel.TextColor = Color.Black;
+            }
+            //if (!threadProcess.IsBusy)
+            //    threadProcess.RunWorkerAsync();
+        }
+        private void btnNormal_Click(object sender, EventArgs e)
+        {
+            Propety.IsHighSpeed = false;
+        }
+
+        private void btnHighSpeed_Click(object sender, EventArgs e)
+        {
+            Propety.IsHighSpeed = true;
+
+        }
+
+        private void btnOnBlackDot_Click(object sender, EventArgs e)
+        {
+            Propety.IsBlackDot = btnOnBlackDot.IsCLick;
+        }
+
+        private void btnOffBlackDot_Click(object sender, EventArgs e)
+        {
+            Propety.IsBlackDot =! btnOffBlackDot.IsCLick;
+        }
+
+        private void rjButton2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OpenFileDialog = new OpenFileDialog();
+
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                String pathModel = OpenFileDialog.FileName;
+
+                String NameModel = Path.GetFileName(pathModel);
+                pathModel = "Program\\" + Global.Project + "\\" + NameModel;
+             
+                if (File.Exists(OpenFileDialog.FileName))
+                {
+                    File.Copy(OpenFileDialog.FileName, pathModel, true);
+                  
+                    Propety.pathBlackDot =pathModel;
+                    Propety.SetModel();
+                    MessageBox.Show(Propety.pathBlackDot);
+
+                }
+            }
         }
     }
 }

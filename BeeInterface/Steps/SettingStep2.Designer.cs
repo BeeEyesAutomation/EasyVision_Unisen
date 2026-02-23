@@ -32,8 +32,9 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.workRead = new System.ComponentModel.BackgroundWorker();
-            this.tmNotPress = new System.Windows.Forms.Timer();
+            this.tmNotPress = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnNextStep = new BeeInterface.RJButton();
             this.btnCancel = new BeeInterface.RJButton();
@@ -202,6 +203,7 @@ namespace BeeInterface
             this.RegisterImg.UpdateGlobal = true;
             this.RegisterImg.SelectedItemChanged += new System.EventHandler<BeeInterface.RegisterImgSelectionChangedEventArgs>(this.RegisterImg_SelectedItemChanged);
             this.RegisterImg.ItemsChanged += new System.EventHandler(this.RegisterImg_ItemsChanged);
+            this.RegisterImg.Load += new System.EventHandler(this.RegisterImg_Load);
             // 
             // SettingStep2
             // 

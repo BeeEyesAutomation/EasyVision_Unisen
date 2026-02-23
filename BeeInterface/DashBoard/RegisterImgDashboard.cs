@@ -614,6 +614,7 @@ namespace BeeInterface
         {
             try
             {
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                 Global.Config.IsOnLight = true;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 await TimingUtils.DelayAccurateAsync((int)Global.Comunication.Protocol.DelayTrigger);
@@ -621,6 +622,7 @@ namespace BeeInterface
                 if( BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera==TypeCamera.USB)
                 BeeCore.Common.listCamera[Global.IndexCCCD].Read();
                 Global.Config.IsOnLight = false;
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw == null) return;
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty()) return;

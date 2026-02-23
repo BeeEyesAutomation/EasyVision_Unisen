@@ -39,7 +39,15 @@ namespace BeeInterface
             btnSaveNG.IsCLick = Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
-            btnWaitingCenter.IsCLick=Global.Config.IsWaitCenter ;
+            btnShowFullScreen.IsCLick = Global.IsShowImageResult;
+
+            btnWaitingCenter.IsCLick=Global.Config.IsShowFull;
+            if (Global.Config.IsShowFull)
+            {
+                btnShowFullScreen.Text = "ON";
+            }
+            else
+            { btnShowFullScreen.Text = "OFF"; }
             if (Global.Config.IsWaitCenter)
                 btnWaitingCenter.Text = "ON";
             else
@@ -115,6 +123,8 @@ namespace BeeInterface
             btnEnPO.IsCLick = Global.Config.IsEnPO;
             btnEnDummy.IsCLick = Global.Config.IsEnDummy;
             btnEnTrain.IsCLick = Global.Config.IsEnTrain;
+            btnCommonProg.IsCLick=Global.Config.IsSaveProg;
+            btnParaPLC.IsCLick = Global.Config.IsSaveCommunication;
             ShowNo();
         }
 
@@ -615,6 +625,22 @@ namespace BeeInterface
         private void btnSaveParaCamera_Click(object sender, EventArgs e)
         {
             Global.Config.IsSaveParaCam = btnSaveParaCamera.IsCLick;
+        }
+
+        private void btnCommonProg_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveProg=btnCommonProg.IsCLick;
+        }
+
+        private void btnShowFullScreen_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowFull=btnShowFullScreen.IsCLick;
+            if (Global.Config.IsShowFull)
+            {
+                btnShowFullScreen.Text = "ON";
+            }
+            else
+            { btnShowFullScreen.Text = "OFF"; }
         }
     }
 }

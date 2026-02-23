@@ -315,7 +315,7 @@ namespace BeeGlobal
                     try
                     {
                         PCI_Card1 = new PCI_Card();
-
+                        Global.NumProgFromPLC = Global.Config.NumTrig;
                         IsConnected = PCI_Card1.Connect();
                      //  IsConnected = true;
                         if (IsConnected)
@@ -330,7 +330,19 @@ namespace BeeGlobal
                             Global.PLCStatus = PLCStatus.ErrorConnect;
                             Global.StatusIO = StatusIO.NotConnect;
                         }
+                        if (valueInput == null)
+                            valueInput = new bool[16];
+                        if (valueOutput == null)
+                            valueOutput = new bool[16];
+                        if (AddressInput == null)
+                            AddressInput = new int[60];
+                        if (AddressOutPut == null)
+                            AddressOutPut = new int[60];
                         Arrange();
+                        foreach (ParaBit paraIO in ParaBits)
+                        {
+                            paraIO.Value = 0;
+                        }
                         return IsConnected;
                     }
                     catch(Exception ex)
@@ -429,7 +441,7 @@ namespace BeeGlobal
 
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
-                        if (Global.IsChangeProg) return;
+                      //  if (Global.IsChangeProg) return;
                         if (!PlcClient.IsConnect)
                         {
                             Global.PLCStatus = PLCStatus.ErrorConnect;
@@ -463,7 +475,7 @@ namespace BeeGlobal
                         if (Global.IsLive) return;
                         if (Global.IsRun  )
                         {
-                            if (Global.ParaCommon.IsExternal)
+                            if (Global.Config.IsExternal)
                             {
                                
 
@@ -487,7 +499,7 @@ namespace BeeGlobal
                                         SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
                                         await WriteOutPut();
                                     }
-                                    if (GetInPut(I_O_Input.ChangeProg) == true)
+                                    if (GetInPut(I_O_Input.ChangeProg) == true&& !Global.IsChangeProg)
                                     {
                                         if (AddCountProg != null)
                                             if (AddCountProg != "")
@@ -611,6 +623,7 @@ namespace BeeGlobal
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger2;
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
+                                                IO_Processing = IO_Processing.None;
                                                 IO_Processing = IO_Processing.Trigger;
                                             }
                                             break;
@@ -626,6 +639,7 @@ namespace BeeGlobal
                                                 Global.TriggerNum = TriggerNum.Trigger1;
 
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
+                                                IO_Processing = IO_Processing.None;
                                                 IO_Processing = IO_Processing.Trigger;
 
                                                 try
@@ -770,18 +784,27 @@ namespace BeeGlobal
 
         private void PCI_Card_OnBitsRead(bool obj)
         {
+            int index0 = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
+            if (index0 >= 0)
+            {
+                ParaBits[index0].Value = Convert.ToInt32(obj);
+            }
+
             if (obj)
             {
                 try
                 {
-                    if (Global.IsRun && Global.ParaCommon.IsExternal)
+                   
+                   
+                       
+                    if (Global.IsRun && Global.Config.IsExternal)
                         if (AddressInput[(int)I_O_Input.Trigger] != -1)
                         {
                             int ix = ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
                             if (ix >= 0)
                             {
                                 ParaBits[ix].Value = Convert.ToInt32(Convert.ToInt32(obj));
-                                if (obj == true)
+                                if (obj == true||Global.TriggerInternal)
                                 {
 
 
@@ -1040,24 +1063,30 @@ namespace BeeGlobal
                       
                         case TriggerNum.Trigger1:
                            
-                            if (DelayTrigger == 0)
-                            {
-                                Global.StatusMode = StatusMode.Once;
-                                Global.StatusProcessing = StatusProcessing.Read;
-                            }
+                          
                             if(TypeControler == TypeControler.PCI)
                             {
                                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Trigger", "OK"));
 
                                 PCI_Card1.Write(PCI_Write.LightON);
-                                if (DelayTrigger > 0)
+                                if (DelayTrigger == 0)
+                                {
+                                    Global.StatusMode = StatusMode.Once;
+                                    Global.StatusProcessing = StatusProcessing.Read;
+                                }
+                                else if (DelayTrigger > 0)
                                 {
                                     await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
                                     Global.StatusMode = StatusMode.Once;
                                     Global.StatusProcessing = StatusProcessing.Read;
                                 }
                                 break;
-                            }    
+                            }
+                            if (DelayTrigger == 0)
+                            {
+                                Global.StatusMode = StatusMode.Once;
+                                Global.StatusProcessing = StatusProcessing.Read;
+                            }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
                             if(TypeControler==TypeControler.IO)
                                 SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
@@ -1294,7 +1323,7 @@ namespace BeeGlobal
                       
                         if (TypeControler == TypeControler.PCI)
                         {
-                            if (IsOK)
+                            if (IsOK||Global.Config.IsForceByPassRS)
                                 PCI_Card1.Write(PCI_Write.OK);
                             else
                                 PCI_Card1.Write(PCI_Write.NG);
@@ -1547,7 +1576,7 @@ namespace BeeGlobal
                 case IO_Processing.Reset:
                     if (TypeControler == TypeControler.PCI)
                         break;
-                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //Ready
@@ -1560,12 +1589,11 @@ namespace BeeGlobal
                     SetLight(false);
                     await WriteOutPut();
                     WriteInput(I_O_Input.ChangeProg, false);
-                 
-                    if (AddCountProg != null)
-                        if (AddCountProg != "")
-                            ValueCountProg = PlcClient.ReadInt(AddCountProg);
-                    break;
 
+                    //if (AddCountProg != null)
+                    //    if (AddCountProg != "")
+                    //       ValueCountProg = PlcClient.ReadInt(AddCountProg);
+                    break;
             }
             valueInput = new bool[16];
             IO_Processing = IO_Processing.None;

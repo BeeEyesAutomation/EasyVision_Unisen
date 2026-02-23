@@ -28,6 +28,7 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Image = System.Drawing.Image;
 using Point = System.Drawing.Point;
@@ -157,6 +158,11 @@ namespace BeeUi.Common
     
         private void btnMode_Click(object sender, EventArgs e)
         {
+            if (Global.IsChangeProg)
+            { btnMode.IsCLick = false;
+                return;
+            }    
+               
             if(G.listProgram!=null)
             if (G.listProgram.Visible == true) G.listProgram.Visible = false;
             if (Global.EditTool.View.btnLive.IsCLick)
@@ -270,7 +276,7 @@ namespace BeeUi.Common
         }
         private void Header_Load(object sender, EventArgs e)
         {
-
+            if (Global.Config == null) return;
             pDummy.Visible = Global.Config.IsEnDummy;
             spDummy.Visible = Global.Config.IsEnDummy;
             pTrain.Visible = Global.Config.IsEnTrain;
@@ -355,6 +361,7 @@ namespace BeeUi.Common
             G.Main.Location = new Point(0, 0);
 
         }
+        private SaveProgressDialog LoadDiaLog=new  SaveProgressDialog();
        public async void  ChangeProgram(String program,bool IsBypass=false)
         {
 
@@ -369,26 +376,30 @@ namespace BeeUi.Common
                
                 txtQrCode.Enabled = true;
                 btnShowList.Enabled = true;
-                
+                Global.IsChangeProg = false;
                 return;
                 //    G.listProgram.SelectedIndex = G.listProgram.FindStringExact(Properties.Settings.Default.programCurrent);
 
             }
             txtQrCode.Enabled = false;
             btnShowList.Enabled = false;
-            if (Global.IsChangeProg&& IsBypass==false) 
+            if (Global.IsChangeProg&& IsBypass==false)
+            {
+                Global.IsChangeProg = false;
                 return;
+            }
+                
 
                 Global.Project= program;
              Properties.Settings.Default.programCurrent = Global.Project;
              Properties.Settings.Default.Save();
-         
-            using (var dlg = new SaveProgressDialog("Load Program"))
-            {
-                dlg.SetStatus("Load Program " + Global.Project + "...", "Reading data from file...");
-                dlg.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - dlg.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - dlg.Height / 2);
 
-                dlg.Show(this);          // modeless
+            LoadDiaLog = new SaveProgressDialog("Load Program");
+            {
+                LoadDiaLog.SetStatus("Load Program " + Global.Project + "...", "Reading data from file...");
+                LoadDiaLog.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - LoadDiaLog.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - LoadDiaLog.Height / 2);
+
+                LoadDiaLog.Show(this);          // modeless
                 //dlg.BringToFront();
 
                 try
@@ -405,17 +416,42 @@ namespace BeeUi.Common
                                     Global.Comunication.Protocol.Disconnect();
                             if (!Global.Config.IsSaveParaCam)
                                 Global.ScanCCD.DisConnectAllCCd();
+                            if (BeeCore.Common.PropetyTools.Count > 0)
+                            {
+                                foreach (List<PropetyTool> list in BeeCore.Common.PropetyTools)
+                                {
+                                    if (list != null)
 
-                            DataTool.LoadProject(Global.Project);
+                                        foreach (PropetyTool propetyTool in list)
+                                        {
+                                            try
+                                            {
+                                              
+                                                propetyTool.Dispose();
+                                            
 
 
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
+
+
+                                        }
+
+                                }
+                            }
+                            DataTool.LoadProjectData(Global.Project);
+                           
+                                     
                         }
                     });
-
-                    if (dlg.CancelRequested)
+                    DataTool.BuildProjectUI();
+                    if (LoadDiaLog.CancelRequested)
                     {
-                        dlg.SetStatus("Cancelled", "You have cancelled the save operation.");
-                        dlg.MarkCompleted("Cancelled", "No data was written.");
+                        LoadDiaLog.SetStatus("Cancelled", "You have cancelled the save operation.");
+                        LoadDiaLog.MarkCompleted("Cancelled", "No data was written.");
                     }
                     else
                     {
@@ -423,7 +459,7 @@ namespace BeeUi.Common
                         btnShowList.Enabled = true;
                         if (Global.IsIntialProgram)
                         {
-                            if (!Global.Config.IsSaveParaCam)
+                            if (!Global.Config.IsSaveParaCam )
                             {
                                 if (!await Global.ScanCCD.ChangeCCD())
                                 {
@@ -452,13 +488,13 @@ namespace BeeUi.Common
 
 
                         tmShow.Enabled = true;
-                        dlg.MarkCompleted("Load Program completed", "Program " + Global.Project);
+                      
                     }
                 }
                 catch (Exception ex)
                 {
-                    dlg.SetStatus("Load Program error", ex.Message);
-                    dlg.MarkCompleted("Error", "Please click OK to close.");
+                    LoadDiaLog.SetStatus("Load Program error", ex.Message);
+                    LoadDiaLog.MarkCompleted("Error", "Please click OK to close.");
                 }
 
             }
@@ -761,6 +797,8 @@ txtQrCode.Focus();
                             Global.IsIntialProgram = true;
                             Global.IsChangeProg = false;
                             tmShow.Enabled = false;
+                            LoadDiaLog.MarkCompleted("Load Program completed", "Program " + Global.Project);
+                            LoadDiaLog.Hide();
                             return;
                         }
 
@@ -799,15 +837,15 @@ txtQrCode.Focus();
                     tmShow.Enabled = false;
                  
                     break;
-            } 
-           
-                
-               
+            }
 
 
-         
-               
-            
+
+
+            LoadDiaLog.MarkCompleted("Load Program completed", "Program " + Global.Project);
+            LoadDiaLog.Hide();
+
+
 
 
         }
@@ -892,11 +930,12 @@ txtQrCode.Focus();
             if (btnEnterPO.IsCLick)
             {
                 btnEnterPO.Text = "Enter";
-
+                btnTraining.Enabled = false;
             }
             else
             {
                 btnEnterPO.Text = "Edit";
+                btnTraining.Enabled = true;
              Global.Config.POCurrent=   txtPO.Text;
             }    
         }

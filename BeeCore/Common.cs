@@ -256,7 +256,6 @@ namespace BeeCore
                         //Runtime.PythonDLL = pythonDll;
                         PythonEngine.Initialize();
                         PythonEngine.BeginAllowThreads();
-
                         using (Py.GIL())
                         {
 

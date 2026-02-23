@@ -845,7 +845,7 @@ namespace BeeInterface
             var m = Regex.Match(btn.Name, @"[+-]?\d+");
             int value = m.Success ? int.Parse(m.Value) : 0;  // -42
 
-            if (Global.ParaCommon.IsExternal)
+            if (Global.Config.IsExternal)
             {
                 btn.IsCLick = !btn.IsCLick;
                 MessageBox.Show("Change Mode to Internal!");

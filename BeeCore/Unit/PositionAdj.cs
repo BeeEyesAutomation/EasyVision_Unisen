@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -419,8 +420,8 @@ namespace BeeCore
         public float AspectLen = 0.6f;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
-       
-             rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
+            IsDone = false;
+                  rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -579,7 +580,35 @@ namespace BeeCore
                                             try
                                             {
                                                 AspectLen = 0.01f;
-                                                 LineCliHorial = RansacLine.FindBestLine(
+                                                //                       Parallel.For(0, 2,
+                                                //new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
+                                                //i =>
+                                                //{
+
+                                                //});
+
+
+                                                //Parallel.Invoke(
+                                                //    () =>
+                                                //    {
+                                                //        LineCliHorial = RansacLine.FindBestLine(
+                                                //            matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                                //            RansacIterations, (float)RansacThreshold, 120000, Index, 1,
+                                                //            AspectLen, BeeCpp.LineDirectionMode.Horizontal, LineScanMode.TopToBottom, 0, AngleToleranceDeg
+                                                //        );
+                                                //    },
+                                                //    () =>
+                                                //    {
+                                                //        LineCliVertical = RansacLine.FindBestLine(
+                                                //            matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                                //            RansacIterations, (float)RansacThreshold, 120000, Index, 1,
+                                                //            AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, AngleToleranceDeg
+                                                //        );
+                                                //    }
+                                                //);
+
+
+                                                LineCliHorial = RansacLine.FindBestLine(
                                                matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
                                                iterations: RansacIterations,
                                                threshold: (float)RansacThreshold,
@@ -595,7 +624,7 @@ namespace BeeCore
                                                  seed: Index,
                                                  mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, AngleToleranceDeg
                                                   );
-                                              
+
                                                 // Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
 
                                                 //  Cv2.ImWrite("RS.png", Result.Debug);
@@ -631,16 +660,18 @@ namespace BeeCore
                                                 {
                                                     rectRotates = new List<RectRotate>();
                                                 }
-
+                                                IsDone = true;
                                             }
                                             catch (Exception ex)
                                             {
+                                                IsDone = true;
                                                 Console.WriteLine(ex.ToString());
                                             }
                                            
                                         }
                                         catch(Exception ex)
                                         {
+                                            IsDone = true;
                                             Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Position Adj", ex.Message));
                                         }
                                         finally
@@ -684,9 +715,10 @@ namespace BeeCore
             }
         }
 
-      
+        bool IsDone = false;
         public void Complete()
         {
+      
             Results results = Results.None;
             results = Results.OK;
             if (rectRotates.Count() != 1)
@@ -711,7 +743,7 @@ namespace BeeCore
                 int y = (int)pMatrix[0].Y; ;// (int)rotArea._PosCenter.Y - (int)rotArea._rect.Height / 2 + (int)rot._PosCenter.Y;
                 Global.AngleOrigin = rectRotates[0]._rectRotation;
                 Global.pOrigin = new OpenCvSharp.Point(x, y);
-                if (Global.Config.IsWaitCenter&&Global.Config.IsAutoTrigger)
+                if (Global.Config.IsWaitCenter&&Global.Config.IsAutoTrigger&&Global.IsRun)
                 {
                     if (rotCrop != null)
                         if (!rotCrop.ContainsPoint(new PointF( Global.pOrigin.X,Global.pOrigin.Y)))
@@ -730,8 +762,8 @@ namespace BeeCore
             {
                 SideTempLR = SideLR;
                 SideTempTB = SideTB;
-                MinInliersA = (float)(LineCliVertical.Inliers * (60 / 100.0));
-               MinInliersB = (float)(LineCliHorial.Inliers * (60 / 100.0));
+                MinInliersA = (float)(LineCliVertical.Inliers * (50 / 100.0));
+               MinInliersB = (float)(LineCliHorial.Inliers * (50 / 100.0));
 
 
 

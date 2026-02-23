@@ -380,6 +380,7 @@ namespace BeeUi.Common
             this.btnTraining.Corner = BeeGlobal.Corner.Both;
             this.btnTraining.DebounceResizeMs = 16;
             this.btnTraining.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTraining.Enabled = false;
             this.btnTraining.FlatAppearance.BorderSize = 0;
             this.btnTraining.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTraining.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);

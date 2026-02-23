@@ -228,7 +228,32 @@ namespace BeeInterface
                         propetyTool2.timer = new System.Diagnostics.Stopwatch();
                         propetyTool2.worker.DoWork += (sender, e) =>
                         {
-                            propetyTool2.DoWork();
+                            var bw = (BackgroundWorker)sender;
+
+                            Exception exOut = null;
+                            bool finished = false;
+
+                            var t = System.Threading.Tasks.Task.Run(() =>
+                            {
+                                try
+                                {
+                                    propetyTool2.DoWork();
+                                    finished = true;
+                                }
+                                catch (Exception ex) { exOut = ex; }
+                            });
+
+                            if (!t.Wait(Global.timeOutWork))
+                            {
+                                propetyTool2.Results = Results.NG;
+                                propetyTool2.StatusTool = StatusTool.Done;
+                                e.Cancel = true; // coi như timeout
+                                return;
+                            }
+
+                            if (exOut != null) throw exOut;
+                            if (!finished) e.Cancel = true;
+                           
                         };
                         propetyTool2.worker.RunWorkerCompleted += (sender, e) =>
                         {
@@ -258,7 +283,32 @@ namespace BeeInterface
                 propetyTool.timer = new System.Diagnostics.Stopwatch();
                 propetyTool.worker.DoWork += (sender, e) =>
                 {
-                    propetyTool.DoWork();
+                    var bw = (BackgroundWorker)sender;
+
+                    Exception exOut = null;
+                    bool finished = false;
+
+                    var t = System.Threading.Tasks.Task.Run(() =>
+                    {
+                        try
+                        {
+                            propetyTool.DoWork();
+                            finished = true;
+                        }
+                        catch (Exception ex) { exOut = ex; }
+                    });
+
+                    if (!t.Wait(Global.timeOutWork))
+                    {
+                        propetyTool.Results = Results.NG;
+                        propetyTool.StatusTool = StatusTool.Done;
+                        e.Cancel = true; // coi như timeout
+                        return;
+                    }
+
+                    if (exOut != null) throw exOut;
+                    if (!finished) e.Cancel = true;
+                   
                 };
                 propetyTool.worker.RunWorkerCompleted += (sender, e) =>
                 {

@@ -202,10 +202,13 @@ namespace BeeInterface
 
         public AdjustBarEx()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint |
-                     ControlStyles.OptimizedDoubleBuffer |
-                     ControlStyles.UserPaint |
-                     ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.UserPaint |
+                 ControlStyles.AllPaintingInWmPaint |
+                 ControlStyles.OptimizedDoubleBuffer |
+                 ControlStyles.ResizeRedraw, true);
+
+            DoubleBuffered = true;
+            UpdateStyles();
 
             _tb = new TextBox
             {

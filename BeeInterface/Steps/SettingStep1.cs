@@ -110,9 +110,9 @@ namespace BeeInterface
        
         private void btnInternal_Click(object sender, EventArgs e)
         {
-           Global.ParaCommon.IsExternal =! btnInternal.IsCLick;
+           Global.Config.IsExternal =! btnInternal.IsCLick;
          
-            //if (! Global.ParaCommon.IsExternal)
+            //if (! Global.Config.IsExternal)
             //{
             //    G.EditTool.View.btnTypeTrig.Enabled=false;
             //    G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -126,9 +126,9 @@ namespace BeeInterface
 
         private void btnExternal_Click(object sender, EventArgs e)
         {
-           Global.ParaCommon.IsExternal = btnExternal.IsCLick;
+           Global.Config.IsExternal = btnExternal.IsCLick;
          
-            //if (! Global.ParaCommon.IsExternal)
+            //if (! Global.Config.IsExternal)
             //{
             //    G.EditTool.View.btnTypeTrig.Enabled = false;
             //    G.EditTool.View.btnTypeTrig.Text = "Trig Internal";
@@ -162,8 +162,8 @@ namespace BeeInterface
             btnLight2.IsCLick = Global.Comunication.Protocol.IsLight2;
             btnLight3.IsCLick = Global.Comunication.Protocol.IsLight3;
             btnOn.IsCLick = Global.Config.IsOnLight;
-            btnInternal.IsCLick =! Global.ParaCommon.IsExternal;
-            btnExternal.IsCLick = Global.ParaCommon.IsExternal;
+            btnInternal.IsCLick =! Global.Config.IsExternal;
+            btnExternal.IsCLick = Global.Config.IsExternal;
           
             btnBlink.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
             btnAllTime.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.AllTime ? true : false;
@@ -635,8 +635,8 @@ namespace BeeInterface
 
         private void SettingStep1_VisibleChanged(object sender, EventArgs e)
         {
-            btnInternal.IsCLick = !Global.ParaCommon.IsExternal;
-            btnExternal.IsCLick = Global.ParaCommon.IsExternal;
+            btnInternal.IsCLick = !Global.Config.IsExternal;
+            btnExternal.IsCLick = Global.Config.IsExternal;
         }
 
         private async void  AdjOffsetX_MouseUp(object sender, MouseEventArgs e)

@@ -135,6 +135,10 @@ namespace BeeInterface
 
         private void btnCapCamera_Click(object sender, EventArgs e)
         {
+            Global.Config.IsOnLight = true;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+            Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+
             if (!workRead.IsBusy)
                workRead.RunWorkerAsync();
             tmNotPress.Enabled = true;
@@ -261,6 +265,11 @@ namespace BeeInterface
         }
 
         private void RegisterImg_ItemsChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RegisterImg_Load(object sender, EventArgs e)
         {
 
         }

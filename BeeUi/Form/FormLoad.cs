@@ -228,36 +228,43 @@ namespace BeeUi
 
         private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Global.Project = Properties.Settings.Default.programCurrent;
-            DataTool.LoadProject(Global.Project);
-        
-            foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+            try
             {
-                if (ListTool == null) continue;
-                Parallel.For(0, ListTool.Count, i =>
-            {
-                PropetyTool propety = ListTool[i];
+                Global.Project = Properties.Settings.Default.programCurrent;
+                DataTool.LoadProject(Global.Project);
 
-            X: if (propety.StatusTool == StatusTool.NotInitial)
+                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
                 {
+                    if (ListTool == null) continue;
+                    Parallel.For(0, ListTool.Count, i =>
+                {
+                    PropetyTool propety = ListTool[i];
 
-                    goto X;
+                X: if (propety.StatusTool == StatusTool.NotInitial)
+                    {
+
+                        goto X;
+                    }
+
+                });
                 }
-
-            });
-            }
-            Global.ScanCCD = new ScanCCD();
+                Global.ScanCCD = new ScanCCD();
                 G.IsIniPython = true;
-            lb.Text = "Initial Learning AI Complete";
-            Task.Delay(200);
-          //  listCCD = Global.ScanCCD.ScanIDCCD(Global.Config.ty);
-            addMac = Decompile.GetMacAddress();
+                lb.Text = "Initial Learning AI Complete";
+                Task.Delay(200);
+                //  listCCD = Global.ScanCCD.ScanIDCCD(Global.Config.ty);
+                addMac = Decompile.GetMacAddress();
 
 
 
-            FormActive.CheckActive(addMac);
-            Global.ScanCCD.ListCamUSB = Global.ScanCCD.ScanIDCCD(TypeCamera.USB);
-            Global.ScanCCD.workConAll.RunWorkerAsync();
+                FormActive.CheckActive(addMac);
+                Global.ScanCCD.ListCamUSB = Global.ScanCCD.ScanIDCCD(TypeCamera.USB);
+                Global.ScanCCD.workConAll.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
     }

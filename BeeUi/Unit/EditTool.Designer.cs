@@ -41,6 +41,7 @@ namespace BeeUi
             this.toolStripPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.pEdit = new System.Windows.Forms.Panel();
             this.pRight = new System.Windows.Forms.Panel();
+            this.pEditTool = new BeeUi.ViewHost();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.pCamera = new System.Windows.Forms.Panel();
             this.btnLive = new BeeInterface.RJButton();
@@ -56,11 +57,13 @@ namespace BeeUi
             this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
             this.iconTool = new System.Windows.Forms.PictureBox();
             this.split5 = new System.Windows.Forms.Splitter();
+            this.BarRight = new BeeUi.Unit.Cameras();
             this.split31 = new System.Windows.Forms.Splitter();
             this.split2 = new System.Windows.Forms.Splitter();
             this.LayoutEnd = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.split6 = new System.Windows.Forms.Splitter();
+            this.hideBar = new BeeUi.Unit.HideBar();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -72,6 +75,8 @@ namespace BeeUi
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.pTop = new System.Windows.Forms.Panel();
+            this.btnShowResult = new BeeInterface.RJButton();
+            this.splitter6 = new System.Windows.Forms.Splitter();
             this.btnRJBtn = new BeeInterface.RJButton();
             this.splitter4 = new System.Windows.Forms.Splitter();
             this.lbdisPLC = new System.Windows.Forms.Label();
@@ -79,6 +84,7 @@ namespace BeeUi
             this.lbBypass = new System.Windows.Forms.Label();
             this.split4 = new System.Windows.Forms.Splitter();
             this.autoFontLabel1 = new BeeInterface.AutoFontLabel();
+            this.BtnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.btnLogo = new System.Windows.Forms.PictureBox();
             this.split1 = new System.Windows.Forms.Splitter();
@@ -95,6 +101,7 @@ namespace BeeUi
             this.btnShowDashBoard = new System.Windows.Forms.ToolStripMenuItem();
             this.btnMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.btnShowToolBar = new System.Windows.Forms.ToolStripMenuItem();
+            this.progBarTool = new System.Windows.Forms.ToolStripMenuItem();
             this.showsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.girdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -131,12 +138,8 @@ namespace BeeUi
             this.StepProccessBar = new BeeInterface.StepProgressBar();
             this.rjButton1 = new BeeInterface.RJButton();
             this.pInfor = new BeeUi.ViewHost();
-            this.pEditTool = new BeeUi.ViewHost();
-            this.BarRight = new BeeUi.Unit.Cameras();
-            this.hideBar = new BeeUi.Unit.HideBar();
             this.pHeader = new BeeUi.Common.Header();
-            this.BtnHeaderBar = new BeeUi.Unit.BtnHeaderBar();
-            this.progBarTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportListTool = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.pEdit.SuspendLayout();
             this.pRight.SuspendLayout();
@@ -227,6 +230,15 @@ namespace BeeUi
             this.pRight.Size = new System.Drawing.Size(500, 1156);
             this.pRight.TabIndex = 5;
             this.pRight.SizeChanged += new System.EventHandler(this.pRight_SizeChanged);
+            // 
+            // pEditTool
+            // 
+            this.pEditTool.BackColor = System.Drawing.Color.Transparent;
+            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pEditTool.Location = new System.Drawing.Point(4, 47);
+            this.pEditTool.Name = "pEditTool";
+            this.pEditTool.Size = new System.Drawing.Size(495, 773);
+            this.pEditTool.TabIndex = 1;
             // 
             // splitter2
             // 
@@ -476,6 +488,16 @@ namespace BeeUi
             this.split5.TabIndex = 4;
             this.split5.TabStop = false;
             // 
+            // BarRight
+            // 
+            this.BarRight.BackColor = System.Drawing.Color.White;
+            this.BarRight.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BarRight.Location = new System.Drawing.Point(0, 5);
+            this.BarRight.Margin = new System.Windows.Forms.Padding(0);
+            this.BarRight.Name = "BarRight";
+            this.BarRight.Size = new System.Drawing.Size(500, 67);
+            this.BarRight.TabIndex = 3;
+            // 
             // split31
             // 
             this.split31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -523,7 +545,7 @@ namespace BeeUi
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 33);
             this.label1.TabIndex = 5;
-            this.label1.Text = "1.1.16";
+            this.label1.Text = "1.1.21";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // split6
@@ -535,6 +557,15 @@ namespace BeeUi
             this.split6.Size = new System.Drawing.Size(5, 33);
             this.split6.TabIndex = 4;
             this.split6.TabStop = false;
+            // 
+            // hideBar
+            // 
+            this.hideBar.BackColor = System.Drawing.Color.White;
+            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.hideBar.Location = new System.Drawing.Point(1730, 0);
+            this.hideBar.Name = "hideBar";
+            this.hideBar.Size = new System.Drawing.Size(510, 33);
+            this.hideBar.TabIndex = 3;
             // 
             // label3
             // 
@@ -619,6 +650,8 @@ namespace BeeUi
             // pTop
             // 
             this.pTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(116)))));
+            this.pTop.Controls.Add(this.btnShowResult);
+            this.pTop.Controls.Add(this.splitter6);
             this.pTop.Controls.Add(this.btnRJBtn);
             this.pTop.Controls.Add(this.splitter4);
             this.pTop.Controls.Add(this.lbdisPLC);
@@ -634,6 +667,70 @@ namespace BeeUi
             this.pTop.Name = "pTop";
             this.pTop.Size = new System.Drawing.Size(2240, 51);
             this.pTop.TabIndex = 22;
+            // 
+            // btnShowResult
+            // 
+            this.btnShowResult.AutoFont = true;
+            this.btnShowResult.AutoFontHeightRatio = 0.85F;
+            this.btnShowResult.AutoFontMax = 100F;
+            this.btnShowResult.AutoFontMin = 8F;
+            this.btnShowResult.AutoFontWidthRatio = 0.92F;
+            this.btnShowResult.AutoImage = true;
+            this.btnShowResult.AutoImageMaxRatio = 0.75F;
+            this.btnShowResult.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnShowResult.AutoImageTint = true;
+            this.btnShowResult.BackColor = System.Drawing.SystemColors.Control;
+            this.btnShowResult.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.btnShowResult.BorderColor = System.Drawing.SystemColors.Control;
+            this.btnShowResult.BorderRadius = 14;
+            this.btnShowResult.BorderSize = 1;
+            this.btnShowResult.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnShowResult.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnShowResult.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnShowResult.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnShowResult.Corner = BeeGlobal.Corner.None;
+            this.btnShowResult.DebounceResizeMs = 6;
+            this.btnShowResult.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnShowResult.FlatAppearance.BorderSize = 0;
+            this.btnShowResult.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.39063F);
+            this.btnShowResult.ForeColor = System.Drawing.Color.Black;
+            this.btnShowResult.Image = null;
+            this.btnShowResult.ImageDisabled = null;
+            this.btnShowResult.ImageHover = null;
+            this.btnShowResult.ImageNormal = null;
+            this.btnShowResult.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnShowResult.ImagePressed = null;
+            this.btnShowResult.ImageTextSpacing = 6;
+            this.btnShowResult.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnShowResult.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnShowResult.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnShowResult.ImageTintOpacity = 0.5F;
+            this.btnShowResult.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnShowResult.IsCLick = true;
+            this.btnShowResult.IsNotChange = false;
+            this.btnShowResult.IsRect = false;
+            this.btnShowResult.IsTouch = false;
+            this.btnShowResult.IsUnGroup = true;
+            this.btnShowResult.Location = new System.Drawing.Point(1216, 0);
+            this.btnShowResult.Multiline = false;
+            this.btnShowResult.Name = "btnShowResult";
+            this.btnShowResult.Size = new System.Drawing.Size(145, 51);
+            this.btnShowResult.TabIndex = 19;
+            this.btnShowResult.Text = "Show  Result";
+            this.btnShowResult.TextColor = System.Drawing.Color.Black;
+            this.btnShowResult.UseVisualStyleBackColor = false;
+            this.btnShowResult.Click += new System.EventHandler(this.btnShowResult_Click);
+            // 
+            // splitter6
+            // 
+            this.splitter6.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter6.Location = new System.Drawing.Point(1361, 0);
+            this.splitter6.MaximumSize = new System.Drawing.Size(200, 2000);
+            this.splitter6.Name = "splitter6";
+            this.splitter6.Size = new System.Drawing.Size(5, 51);
+            this.splitter6.TabIndex = 20;
+            this.splitter6.TabStop = false;
             // 
             // btnRJBtn
             // 
@@ -764,6 +861,16 @@ namespace BeeUi
             this.autoFontLabel1.Size = new System.Drawing.Size(309, 51);
             this.autoFontLabel1.TabIndex = 9;
             this.autoFontLabel1.Text = "Easy Vision";
+            // 
+            // BtnHeaderBar
+            // 
+            this.BtnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
+            this.BtnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.BtnHeaderBar.Location = new System.Drawing.Point(1735, 0);
+            this.BtnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnHeaderBar.Name = "BtnHeaderBar";
+            this.BtnHeaderBar.Size = new System.Drawing.Size(505, 51);
+            this.BtnHeaderBar.TabIndex = 8;
             // 
             // splitter1
             // 
@@ -926,6 +1033,13 @@ namespace BeeUi
             this.btnShowToolBar.Text = "Tool Bar";
             this.btnShowToolBar.Click += new System.EventHandler(this.btnShowToolBar_Click);
             // 
+            // progBarTool
+            // 
+            this.progBarTool.Name = "progBarTool";
+            this.progBarTool.Size = new System.Drawing.Size(180, 26);
+            this.progBarTool.Text = "ProgBar";
+            this.progBarTool.Click += new System.EventHandler(this.progBarTool_Click);
+            // 
             // showsToolStripMenuItem
             // 
             this.showsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1083,7 +1197,8 @@ namespace BeeUi
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importTool,
-            this.exportTool});
+            this.exportTool,
+            this.exportListTool});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(296, 32);
             this.fileToolStripMenuItem.Text = "File";
@@ -1091,14 +1206,14 @@ namespace BeeUi
             // importTool
             // 
             this.importTool.Name = "importTool";
-            this.importTool.Size = new System.Drawing.Size(135, 26);
+            this.importTool.Size = new System.Drawing.Size(180, 26);
             this.importTool.Text = "Import";
             this.importTool.Click += new System.EventHandler(this.importTool_Click);
             // 
             // exportTool
             // 
             this.exportTool.Name = "exportTool";
-            this.exportTool.Size = new System.Drawing.Size(135, 26);
+            this.exportTool.Size = new System.Drawing.Size(180, 26);
             this.exportTool.Text = "Export";
             this.exportTool.Click += new System.EventHandler(this.exportTool_Click);
             // 
@@ -1243,34 +1358,6 @@ namespace BeeUi
             this.pInfor.TabIndex = 25;
             this.pInfor.SizeChanged += new System.EventHandler(this.pInfor_SizeChanged);
             // 
-            // pEditTool
-            // 
-            this.pEditTool.BackColor = System.Drawing.Color.Transparent;
-            this.pEditTool.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pEditTool.Location = new System.Drawing.Point(4, 47);
-            this.pEditTool.Name = "pEditTool";
-            this.pEditTool.Size = new System.Drawing.Size(495, 773);
-            this.pEditTool.TabIndex = 1;
-            // 
-            // BarRight
-            // 
-            this.BarRight.BackColor = System.Drawing.Color.White;
-            this.BarRight.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BarRight.Location = new System.Drawing.Point(0, 5);
-            this.BarRight.Margin = new System.Windows.Forms.Padding(0);
-            this.BarRight.Name = "BarRight";
-            this.BarRight.Size = new System.Drawing.Size(500, 67);
-            this.BarRight.TabIndex = 3;
-            // 
-            // hideBar
-            // 
-            this.hideBar.BackColor = System.Drawing.Color.White;
-            this.hideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.hideBar.Location = new System.Drawing.Point(1730, 0);
-            this.hideBar.Name = "hideBar";
-            this.hideBar.Size = new System.Drawing.Size(510, 33);
-            this.hideBar.TabIndex = 3;
-            // 
             // pHeader
             // 
             this.pHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
@@ -1283,22 +1370,12 @@ namespace BeeUi
             this.pHeader.Size = new System.Drawing.Size(2240, 80);
             this.pHeader.TabIndex = 22;
             // 
-            // BtnHeaderBar
+            // exportListTool
             // 
-            this.BtnHeaderBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(114)))), ((int)(((byte)(114)))));
-            this.BtnHeaderBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.BtnHeaderBar.Location = new System.Drawing.Point(1735, 0);
-            this.BtnHeaderBar.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnHeaderBar.Name = "BtnHeaderBar";
-            this.BtnHeaderBar.Size = new System.Drawing.Size(505, 51);
-            this.BtnHeaderBar.TabIndex = 8;
-            // 
-            // progBarTool
-            // 
-            this.progBarTool.Name = "progBarTool";
-            this.progBarTool.Size = new System.Drawing.Size(180, 26);
-            this.progBarTool.Text = "ProgBar";
-            this.progBarTool.Click += new System.EventHandler(this.progBarTool_Click);
+            this.exportListTool.Name = "exportListTool";
+            this.exportListTool.Size = new System.Drawing.Size(180, 26);
+            this.exportListTool.Text = "ExportList";
+            this.exportListTool.Click += new System.EventHandler(this.exportListTool_Click);
             // 
             // EditTool
             // 
@@ -1447,5 +1524,8 @@ namespace BeeUi
         private System.Windows.Forms.Splitter splitter5;
         public StepProgressBar StepProccessBar;
         private System.Windows.Forms.ToolStripMenuItem progBarTool;
+        private RJButton btnShowResult;
+        private System.Windows.Forms.Splitter splitter6;
+        private System.Windows.Forms.ToolStripMenuItem exportListTool;
     }
 }

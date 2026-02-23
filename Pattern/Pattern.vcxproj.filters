@@ -39,6 +39,7 @@
     <ClInclude Include="MonoSegCore.h" />
     <ClInclude Include="MonoSegCli.h" />
     <ClInclude Include="Pattern2.h" />
+    <ClInclude Include="StdAfxNative.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BeeCpp.rc" />
@@ -49,6 +50,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(AppLogoIco)" />
+    <None Include="$(AppLogoIco)" />
+    <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />
     <None Include="$(AppLogoIco)" />

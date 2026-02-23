@@ -108,10 +108,11 @@ namespace BeeCore
 
 
 
-                        if (Global.Config.IsAutoTrigger)
+                        if (Global.Config.IsAutoTrigger&&Global.IsRun)
                         {
                             if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
                             {
+                               
                                 StatusProcessing = StatusProcessing.Done;
                                 return StatusProcessing;
                             }
@@ -144,18 +145,29 @@ namespace BeeCore
                                     continue;
                                 if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj != null)
                                 {//  propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.TransformToolRect(Global.rotAreaAdj,Global.rotOriginAdj,Global.rotCurrentAdj,propetyTool.Propety.rotArea);
+                                    if (Global.IsAutoTemp)
+                                    {
+                                        if (propetyTool.TypeTool == TypeTool.Learning)
+                                        {
+                                            int index = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.MultiPattern);
+                                            if (index >= 0)
+                                                propetyTool.Propety.rotArea = BeeCore.Common.PropetyTools[indexThread][index].Propety.rotArea;
 
+                                        }
+
+                                    }
                                     propetyTool.Propety.rotAreaAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotArea, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj,X_Adj,Y_Adj,AngAdj);
                                     if(propetyTool.Propety.rotMask!=null)
                                     propetyTool.Propety.rotMaskAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotMask, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj, X_Adj, Y_Adj, AngAdj);
-                                    if(propetyTool.TypeTool==TypeTool.Learning)
+                                 
+                                    if (propetyTool.TypeTool==TypeTool.Learning)
                                     {
                                         if (propetyTool.Propety.rotCrop != null)
                                       
                                             propetyTool.Propety.rotCropAdjustment = BeeCore.Common.GetPositionAdjustment(propetyTool.Propety.rotCrop, BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Propety.rotOriginAdj, X_Adj, Y_Adj, AngAdj);
 
                                     }
-
+                                    
                                     //if (propetyTool.TypeTool == TypeTool.MultiPattern)
                                     //{
                                     //    List<ResultMulti> ResultMulti = propetyTool.Propety.ResultMulti;

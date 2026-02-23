@@ -15,21 +15,7 @@ namespace BeeGlobal
     {
     
 
-        private bool _IsExternal = false;
-        [field: NonSerialized]
-        public event Action<bool> ExternalChange;
-        public bool IsExternal
-        {
-            get => _IsExternal;
-            set
-            {
-                if (_IsExternal != value)
-                {
-                    _IsExternal = value;
-                    ExternalChange?.Invoke(_IsExternal); // Gọi event
-                }
-            }
-        }
+       
         public String CardChoosed = "";
         public List<int> indexLogic1 = new List<int>();
         public List<int> indexLogic2 = new List<int>();

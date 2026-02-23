@@ -298,6 +298,7 @@
     <Compile Include="Func\Logs.cs" />
     <Compile Include="Func\MatHelper.cs" />
     <Compile Include="Func\MatMerger.cs" />
+    <Compile Include="Func\NativeYolo.cs" />
     <Compile Include="Func\PolyOffset.cs" />
     <Compile Include="Func\ResultFilter.cs" />
     <Compile Include="Func\ResultItem.cs" />

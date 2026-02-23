@@ -26,6 +26,8 @@ namespace BeeGlobal
         public Mat BCropColor = null;
         [NonSerialized]
         public bool IsOK = false;
+        [NonSerialized]
+        public bool IsDot = false;
         public RectRotate rotAdj = null;
         public ResultMulti()
         {

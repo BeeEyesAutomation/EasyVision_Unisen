@@ -270,14 +270,15 @@ namespace BeeGlobal
                 }
             }
         }
-      
-        public static int NumProgFromPLC = 2;
+        public static bool IsShowImageResult = true;
+        public static int NumProgFromPLC = 1;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();
         public static ParaCommon ParaCommon = new ParaCommon();
         public static bool IsRun=true;
         public static bool IsPLCChangeProg = false;
         public static int IndexCCCD = 0;
+        public static int timeOutWork = 3000;
         public static int IndexChoose = 0;
         public static String Project = "";
         public static RectRotate rotAreaAdj;

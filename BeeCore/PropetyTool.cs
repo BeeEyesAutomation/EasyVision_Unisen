@@ -13,8 +13,93 @@ using System.Web.UI;
 namespace BeeCore
 {
     [Serializable()]
-    public  class PropetyTool : ICloneable
+    public  class PropetyTool :  ICloneable, IDisposable
     {
+        private bool _disposed;
+        private static void TryDisposeObject(object obj)
+        {
+            if (obj == null) return;
+            try
+            {
+                if (obj is IDisposable d) d.Dispose();
+            }
+            catch { }
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+
+            try
+            {
+                // ====== stop timer/worker ======
+                try { timer?.Stop(); } catch { }
+                TryDisposeObject(worker); // BackgroundWorker implements IDisposable
+                worker = null;
+                timer = null;
+
+                // ====== UI control (phải UI thread) ======
+                SafeRemoveAndDisposeControl(Control);
+                Control = null;
+
+                // ====== Dispose các NonSerialized ItemTool ======
+                TryDisposeObject(ItemTool);
+                TryDisposeObject(ItemTool2);
+                TryDisposeObject(ItemTool3);
+                TryDisposeObject(ItemTool4);
+                ItemTool = ItemTool2 = ItemTool3 = ItemTool4 = null;
+
+                // ====== Dispose Propety (dynamic) nếu có IDisposable ======
+                // (Nếu Propety giữ Mat/Bitmap/Timer/... mà có Dispose thì sẽ được gọi)
+                TryDisposeObject((object)Propety);
+                Propety = null;
+
+                // ====== clear event để cắt reference ======
+                ScoreChanged = null;
+                PercentChange = null;
+                StatusToolChanged = null;
+            }
+            catch { }
+        }
+
+        private static void SafeRemoveAndDisposeControl(object ctlObj)
+        {
+            if (ctlObj == null) return;
+
+            // tránh dynamic gây exception => cast về Control trước
+            var ctl = ctlObj as System.Windows.Forms.Control;
+            if (ctl == null)
+            {
+                // nếu không phải Control nhưng có IDisposable thì dispose thường
+                TryDisposeObject(ctlObj);
+                return;
+            }
+
+            try
+            {
+                if (ctl.IsDisposed) return;
+
+                if (ctl.InvokeRequired)
+                {
+                    ctl.BeginInvoke(new Action(() =>
+                    {
+                        try
+                        {
+                            ctl.Parent?.Controls.Remove(ctl);
+                            if (!ctl.IsDisposed) ctl.Dispose();
+                        }
+                        catch { }
+                    }));
+                }
+                else
+                {
+                    ctl.Parent?.Controls.Remove(ctl);
+                    if (!ctl.IsDisposed) ctl.Dispose();
+                }
+            }
+            catch { }
+        }
         public PropetyTool()
         {
 
@@ -100,21 +185,72 @@ namespace BeeCore
         public Stopwatch timer = new Stopwatch();
         [NonSerialized]
         public BackgroundWorker worker = new BackgroundWorker();
+        //public async Task RunToolAsync()
+        //{
+        //    Exception exOut = null;
+        //    bool finished = false;
+
+        //    var t = Task.Run(() =>
+        //    {
+        //        try
+        //        {
+        //            this.DoWork();
+        //            finished = true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            exOut = ex;
+        //        }
+        //    });
+
+        //    // đợi complete hoặc timeout
+        //    if (await Task.WhenAny(t, Task.Delay(Global.timeOutWork)) != t)
+        //    {
+        //        // TIMEOUT
+        //        this.Results = Results.NG;
+        //        this.StatusTool = StatusTool.Done;
+
+        //        this.Complete();
+        //        return;
+        //    }
+
+        //    // nếu có exception thì ném lại
+        //    if (exOut != null)
+        //        throw exOut;
+
+        //    if (!finished)
+        //    {
+        //        this.Complete();
+        //        return;
+        //    }
+
+        //    // COMPLETE OK
+        //    this.Complete();
+        //}
+        //public void  Runtool() => RunToolAsync().GetAwaiter().GetResult();
+
         public void DoWork()
         {
             Results=Results.None;
-          
-              StatusTool = StatusTool.Processing;
-            timer.Restart();
-            if (UsedTool == UsedTool.NotUsed&&Global.IsRun)
-                return;
-           if (!Global.IsRun)
-            Propety.rotAreaAdjustment = Propety.rotArea;
-           if (Propety.rotAreaAdjustment==null)
-                Propety.rotAreaAdjustment = Propety.rotArea;
-            if (!Global.IsRun)
-                Propety.rotMaskAdjustment = Propety.rotMask;
-            Propety.DoWork(Propety.rotAreaAdjustment, Propety.rotMaskAdjustment);
+            try
+            {
+                StatusTool = StatusTool.Processing;
+                timer.Restart();
+                if (UsedTool == UsedTool.NotUsed && Global.IsRun)
+                    return;
+                if (!Global.IsRun)
+                    Propety.rotAreaAdjustment = Propety.rotArea;
+                if (Propety.rotAreaAdjustment == null)
+                    Propety.rotAreaAdjustment = Propety.rotArea;
+                if (!Global.IsRun)
+                    Propety.rotMaskAdjustment = Propety.rotMask;
+                Propety.DoWork(Propety.rotAreaAdjustment, Propety.rotMaskAdjustment);
+            }
+            catch (Exception ex)
+            {
+                Global.LogsDashboard?.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Name, ex.Message));
+            }
+           
         }
         public void Complete()
         {

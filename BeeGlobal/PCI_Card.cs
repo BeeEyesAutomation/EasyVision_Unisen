@@ -134,7 +134,7 @@ namespace BeeGlobal
                         //if (Global.Comunication.Protocol == null)
                         //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Protocol", "null"));
 
-                        //if (Global.IsRun && Global.ParaCommon.IsExternal)
+                        //if (Global.IsRun && Global.Config.IsExternal)
                         //    if (Global.Comunication.Protocol. AddressInput[(int)I_O_Input.Trigger] != -1&&val==true)
                         //    {
                         //        int ix = Global.Comunication.Protocol.ParaBits.FindIndex(a => a.I_O_Input == I_O_Input.Trigger && a.TypeIO == TypeIO.Input);
@@ -172,7 +172,7 @@ namespace BeeGlobal
                         var handler = OnBitsRead;
                             if (handler != null)
                                 handler(val);
-                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Read", val+""));
+                          //  Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Read", val+""));
 
                         }
 

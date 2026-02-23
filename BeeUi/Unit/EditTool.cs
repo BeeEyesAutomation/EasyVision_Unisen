@@ -59,10 +59,12 @@ namespace BeeUi
              {
                 pEditTool.Register(name, () => toolEdit);
                
+
             }
             pEditTool.Show(name);
         }
-		public void Acccess(bool IsRun)
+      
+        public void Acccess(bool IsRun)
 		{
             BtnHeaderBar.btnUser.Text = Global.Config.Users.ToString();
 			View.btnLive.Enabled = !Global.IsRun;
@@ -145,7 +147,7 @@ namespace BeeUi
 			}
 			
 		
-			if (Global.ParaCommon.IsExternal)
+			if (Global.Config.IsExternal)
 			{
 				Global.EditTool.View.btnCap.Enabled = false;
 				Global.EditTool.View.btnContinuous.Enabled = false;
@@ -274,7 +276,7 @@ namespace BeeUi
                                     matRegStep1.Dispose();
                         }
                      
-                      View.RefreshExternal(Global.ParaCommon.IsExternal);
+                      View.RefreshExternal(Global.Config.IsExternal);
                         break;
                     case Step.Step1:
 
@@ -1358,6 +1360,24 @@ namespace BeeUi
             progBarTool.Checked = !progBarTool.Checked;
            
             Global.EditTool.pHeader.Visible = progBarTool.Checked;
+        }
+
+        private void btnShowResult_Click(object sender, EventArgs e)
+        {
+            Global.IsShowImageResult = btnShowResult.IsCLick;
+        }
+
+        private void exportListTool_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Title = "Export List";
+            saveFile.Filter = " Text|*.txt";
+            BeeCore.Common.PropetyTools[Global.IndexChoose] = new List<BeeCore.PropetyTool>();
+            
+            if (saveFile.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllLines(saveFile.FileName, G.Header.listNameProg);
+             }
         }
 
         private void btnNew_Click(object sender, EventArgs e)

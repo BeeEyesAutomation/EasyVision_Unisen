@@ -32,12 +32,26 @@ namespace BeeGlobal
         public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
         public bool IsSaveLog = false;
         public bool IsResetImg = false;
-
+        private bool _IsExternal = true;
+        [field: NonSerialized]
+        public event Action<bool> ExternalChange;
+        public bool IsExternal
+        {
+            get => _IsExternal;
+            set
+            {
+                if (_IsExternal != value)
+                {
+                    _IsExternal = value;
+                    ExternalChange?.Invoke(_IsExternal); // Gọi event
+                }
+            }
+        }
+        public bool IsShowFull = false;
         public bool IsAutoTrigger = false;
-
-     
         public DisplayResolution DisplayResolution=DisplayResolution.Full;
         public bool IsSaveCommon = false;
+        public bool IsSaveProg = false;
         public bool IsSaveCommunication=true;
         public bool IsSaveListRegister = true;
         public bool IsSaveListSim= true;

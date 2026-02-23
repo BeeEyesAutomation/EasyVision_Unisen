@@ -355,7 +355,7 @@ namespace BeeGlobal
     }
     public enum TypeYolo
     {
-        FAST,
+        Onnx,
         YOLO,
         RCNN
     }

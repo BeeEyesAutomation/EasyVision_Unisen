@@ -148,6 +148,7 @@
     <ClInclude Include="RansacLineCli.h" />
     <ClInclude Include="RansacLineCore.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StdAfxNative.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,5 @@
     <ResourceCompile Include="BeeCpp.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -81,6 +81,7 @@ namespace BeeInterface
                     trackAngle.Visible = true;
                     break;
                 case MethodSample.Corner:
+
                     btnCalib.Visible = true;
                     layThreshod.Visible = true;
                     layEdge.Visible = true;
@@ -103,7 +104,21 @@ namespace BeeInterface
                     trackAngle.Visible = false;
                     break;
             }
-
+            switch (Propety.MethordEdge)
+            {
+                case MethordEdge.StrongEdges:
+                    btnStrongEdge.IsCLick = true; layThreshod.Enabled = false;
+                    break;
+                case MethordEdge.CloseEdges:
+                    btnCloseEdge.IsCLick = true; layThreshod.Enabled = false;
+                    break;
+                case MethordEdge.Binary:
+                    btnBinary.IsCLick = true; layThreshod.Enabled = true;
+                    break;
+                case MethordEdge.InvertBinary:
+                    btnInvert.IsCLick = true; layThreshod.Enabled = true;
+                    break;
+            }
             if (Propety.IsHighSpeed)
                 btnHighSpeed.IsCLick = true;
             else
@@ -658,6 +673,11 @@ namespace BeeInterface
         private void trackMinInlierB_ValueChanged(float obj)
         {
             Propety.MinInliersB = (int)trackMinInlierB.Value;
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

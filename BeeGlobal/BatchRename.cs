@@ -79,7 +79,7 @@ namespace BeeGlobal
         }
         public static string CopyAndRename(
         string sourceFolderPath,
-        string newFolderName)
+        string newFolderName,bool IsChangeName=true)
         {
             if (string.IsNullOrWhiteSpace(sourceFolderPath))
                 throw new ArgumentException("sourceFolderPath is empty");
@@ -95,9 +95,10 @@ namespace BeeGlobal
                 throw new Exception("Cannot copy from drive root.");
 
             string targetFolderPath = Path.Combine(parent, newFolderName);
-
-            // Nếu trùng folder → thêm hậu tố
-            if (Directory.Exists(targetFolderPath))
+            if (!IsChangeName)
+                targetFolderPath = newFolderName;
+                // Nếu trùng folder → thêm hậu tố
+                if (Directory.Exists(targetFolderPath))
             {
                 int i = 1;
                 string candidate;
@@ -122,7 +123,8 @@ namespace BeeGlobal
 
                 string ext = Path.GetExtension(file);
                 string newFile = Path.Combine(dir, newFolderName + ext);
-
+                if (!IsChangeName)
+                    newFile = file;
                 if (string.Equals(file, newFile, StringComparison.OrdinalIgnoreCase))
                     continue;
 

@@ -28,7 +28,7 @@ namespace BeeUi.Unit
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
                 String pathNew = Path.GetFileNameWithoutExtension(saveFile.FileName);
-                if (!Directory.Exists(pathNew))
+                if (!Directory.Exists(saveFile.FileName))
                 {
                     Batch.CopyAndRename("Program\\"+Global.Project,  pathNew);
                     Global.Project = pathNew;// Path.GetFileNameWithoutExtension(saveFile.FileName);

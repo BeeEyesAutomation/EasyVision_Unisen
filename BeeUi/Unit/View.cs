@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeCore.Func;
 using BeeCore.Funtion;
+
 using BeeGlobal;
 using BeeInterface;
 using BeeUi.Common;
@@ -323,19 +324,7 @@ namespace BeeUi
         public Mat matMaskAdd = null;
         public List<Mat> listMask ;
         public List<Mat> listRedo;
-        public void Undo(dynamic Propety)
-        {
-            toolEdit.matTemp = Propety.Undo(toolEdit.matCrop);
-         
-            imgView.Invalidate();
-        }
-        public void ClearTemp(dynamic Propety)
-        {
-            if (Global.IndexToolSelected == -1) return;
-            toolEdit.matTemp = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.ClearTemp();
-           
-            imgView.Invalidate();
-        }
+     
         public void RefreshMask()
         {
           bmMask = new Mat(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Rows,BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Cols, MatType.CV_8UC1, Scalar.Black);
@@ -575,7 +564,7 @@ namespace BeeUi
         private void imgView_MouseDown(object sender, MouseEventArgs e)
         {
             if (Global.IndexToolSelected == -1) return;
-                if (toolEdit == null) return;
+              
             if (Global.IsRun) return;
          
             //if (Global.StatusDraw == StatusDraw.Scan && e.Button == MouseButtons.Left)
@@ -1641,7 +1630,7 @@ namespace BeeUi
                 return;
             }
           //  if (Global.StatusDraw == StatusDraw.None)
-                if (toolEdit != null)
+                
                     foreach (PropetyTool PropetyTool in BeeCore.Common.PropetyTools[Global.IndexChoose])
                     {
                         if (index != BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.Index )
@@ -1665,8 +1654,7 @@ namespace BeeUi
                     }
 
                
-                if (toolEdit == null)
-                    return;
+              
                 if (imgView.Image == null)
                     return;
 
@@ -1757,7 +1745,44 @@ namespace BeeUi
      
         private  void View_Load(object sender, EventArgs e)
         {
-            
+            //IntPtr handle = NativeYolo.YOLO_Create("E:\\onnx_BlackDot\\onnx_BlackDot\\best_int8_openvino_model\\best.xml", 0, 0, 16);
+
+            //NativeYolo.YOLO_Warmup(handle, 10);
+          
+            //YoloBox[] boxes = new YoloBox[10];
+            //var mat = Cv2.ImRead(@"E:\onnx_BlackDot\onnx_BlackDot\Image\Image_20251226115444490.bmp"); // BGR
+            //int n = NativeYolo.YOLO_Detect(
+            //    handle,
+            //    mat.Data,
+            //    mat.Width,
+            //    mat.Height,
+            //    (int)mat.Step(),
+            //    0.01f,
+            //    1f,
+            //    boxes,
+            //    boxes.Length);
+
+            //// 5) dùng kết quả
+            //foreach (var b in boxes)
+            //{
+            //    Console.WriteLine($"cls={b.classId} score={b.score:F2} "
+            //        + $"[{b.x1:F0},{b.y1:F0},{b.x2:F0},{b.y2:F0}]");
+
+            //    Cv2.Rectangle(mat,
+            //        new OpenCvSharp.Point((int)b.x1, (int)b.y1),
+            //        new OpenCvSharp.Point((int)b.x2, (int)b.y2),
+            //        Scalar.Lime, 2);
+            //}
+
+            //Cv2.ImWrite(@"Result.jpg", mat);
+            ////for (int i = 0; i < n; i++)
+            ////{
+            ////    Console.WriteLine(boxes[i].classId);
+            ////}
+
+            //NativeYolo.YOLO_Destroy(handle);
+           
+
             pImg.Register("Res", () => RegisterImgs);
             pImg.Register("Sim", () =>SimImgs);
             if (G.Header == null) return;
@@ -1796,7 +1821,7 @@ namespace BeeUi
             Checking2.StatusProcessingChanged += Checking2_StatusProcessingChanged;
             Checking3.StatusProcessingChanged += Checking3_StatusProcessingChanged;
             Checking4.StatusProcessingChanged += Checking4_StatusProcessingChanged;
-            Global.ParaCommon.ExternalChange += ParaCommon_ExternalChange;
+            Global.Config.ExternalChange += ParaCommon_ExternalChange;
             Global.StatusProcessing=StatusProcessing.None;
           
             //time
@@ -1805,7 +1830,7 @@ namespace BeeUi
           
             if (Global.Comunication.Protocol == null)
                 Global.Comunication.Protocol = new ParaProtocol();
-            RefreshExternal(Global.ParaCommon.IsExternal);
+            RefreshExternal(Global.Config.IsExternal);
             G.Header.RefreshListPJ();
             Global.PLCStatusChanged += Global_PLCStatusChanged;
             Global.CameraStatusChanged += Global_CameraStatusChanged;
@@ -1869,6 +1894,14 @@ namespace BeeUi
                                 {
                                  
                                     imgView.Text = "";
+                              
+                               
+                                //if (Global.Comunication.Protocol.IsConnected)
+                                //{
+                                //    Global.IsDisnablePLc = true;
+                                //    Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], Global.IsDisnablePLc);
+                                //     Global.Comunication.Protocol.WriteOutPut();
+                                //}
                                     FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
                                     formWarning.ShowDialog();
                                     MessageChoose messageChoose = new MessageChoose("Copy Program", "Copy Program From  : " + Global.Project + " To " + Global.Comunication.Protocol.ValueProg);
@@ -1892,7 +1925,14 @@ namespace BeeUi
 
 
                                     }
+                                else
+                                {
+                                    Global.IsChangeProg = false;
+                                    Global.StatusProcessing = StatusProcessing.None;
+                                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
 
+                                    Global.IsAllowReadPLC = true;
+                                }
                                 }
 
                             }
@@ -1926,6 +1966,7 @@ namespace BeeUi
                    
                     imgView.Text = "";
                 }
+                Global.StatusMode =StatusMode.Once;
                 Global.IsAllowReadPLC = true;
                 Global.StatusProcessing = StatusProcessing.None;
                 G.StatusDashboard.TotalTimes = Global.Config.SumTime;
@@ -2133,7 +2174,7 @@ namespace BeeUi
             Processing1 = obj;
         }
         String CTTotol = "";
-        private void Global_StatusProcessingChanged(StatusProcessing obj)
+        private async void Global_StatusProcessingChanged(StatusProcessing obj)
         {
             if (Global.IsDebug)
                 Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "Processing", obj.ToString()));
@@ -2142,13 +2183,14 @@ namespace BeeUi
                 case StatusProcessing.None:
                     break;
                 case StatusProcessing.ResetImg:
-                    if (Global.Config.IsResetImg)
+                    if (Global.Config.IsResetImg   )
                     {
                         this.Invoke((Action)(() =>
                         {
                             G.StatusDashboard.StatusText = "---";
                             G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                            if (imgView.Image != null)
+                            if (Global.IsShowImageResult)
+                                if (imgView.Image != null)
                             {
                                 imgView.Text = "Waiting Checking...";
                                 imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
@@ -2167,14 +2209,19 @@ namespace BeeUi
                     {
                         this.Invoke((Action)(() =>
                         {
-                            if (imgView.Image != null)
+                            if(Global.IsShowImageResult)
                             {
-                                imgView.Text = "Waiting Checking...";
-                                imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
-                                imgView.Image = null;      // xoá ảnh khỏi control
-                            }
+                                if (imgView.Image != null)
+                                {
+                                    imgView.Text = "Waiting Checking...";
+                                    imgView.Image.Dispose();   // tránh leak bộ nhớ nếu là Bitmap tự tạo
+                                    imgView.Image = null;      // xoá ảnh khỏi control
+                                }
+                                _renderer.ClearImages();
+                            }    
+                          
                             G.Header.txtPO.Text = Global.Config.POCurrent;
-                            _renderer.ClearImages();
+                         
                             if (Global.ToolSettings.Labels.Length >= 2)
                             {
                                 Global.ToolSettings.Labels[1].Results = Results.None;
@@ -2210,7 +2257,7 @@ namespace BeeUi
                     }    
 
 
-                    if(!Global.ParaCommon.IsExternal&&Global.Config.IsResetImg)
+                    if(!Global.Config.IsExternal&&Global.Config.IsResetImg&&Global.IsShowImageResult)
                     {
                         this.Invoke((Action)(() =>
                         {
@@ -2290,12 +2337,14 @@ namespace BeeUi
                     
                     break;
                 case StatusProcessing.Waiting:
+
                     G.StatusDashboard.StatusText = obj.ToString();
                     G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
-                    
+                    await    TimingUtils.DelayAccurateAsync(1);
                     Global.StatusProcessing = StatusProcessing.Read;
                     break;
                 case StatusProcessing.SendResult:
+                    if(Global.IsShowImageResult)
                     this.Invoke((Action)(() =>
                     {
                         imgView.Text = "Waiting Show Picture ..";
@@ -2430,9 +2479,11 @@ namespace BeeUi
                         Global.StatusProcessing = StatusProcessing.Drawing;
                     break;
                 case StatusProcessing.Drawing:
-                    if(!Global.ParaCommon.IsExternal)
+                    if(!Global.Config.IsExternal && Global.IsShowImageResult)
                     this.Invoke((Action)(() =>
                     {
+                      
+                         
                         imgView.Text = "Waiting Show Picture ..";
                     }));
                     Global.IsAllowReadPLC = true;
@@ -2452,15 +2503,17 @@ namespace BeeUi
                     break;
                 case StatusProcessing.Done:
                     {
-                       
-                        this.Invoke((Action)(() =>
+                        if (Global.IsShowImageResult)
+                            this.Invoke((Action)(() =>
                         {
                             imgView.Text = "";
                         }));
                         if (Global.IsAutoTemp&&Global.TotalOK!=Results.Wait)
                         {
                             Global.IsAutoTemp = false;
+                            G.Header.btnTraining.Enabled = false;
                             G.Header.btnTraining.IsCLick = false;
+
                         }
                         Global.Config.SumTime = Global.Config.SumOK + Global.Config.SumNG;
                         G.StatusDashboard.CycleTime = (int)(timer.TT + Cyclyle1);
@@ -2571,11 +2624,13 @@ namespace BeeUi
                         String name = "Tools" + BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Name;
                         //   if (Score.Enabled||Global.IsRun) return;
                         Global.TypeCrop = TypeCrop.Area;
-                        Global.EditTool.pEditTool.Controls.Clear();
-                        toolEdit = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
-                          toolEdit.Enabled = false;
-                         tmEnableControl.Enabled = true;
-                       Global.EditTool.RegisTer(name, toolEdit);
+                       // Global.EditTool.pEditTool.Controls.Clear();
+                        BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.Enabled = false;
+                      
+                        //  toolEdit = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control;
+                        //   toolEdit.Enabled = false;
+                        tmEnableControl.Enabled = true;
+                        Global.EditTool.RegisTer(name, BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control);
                         //if (!Global.EditTool.pEditTool.Show(name))
                         //{
                         //    editTool.pEditTool.Register(name, () => toolEdit);
@@ -2594,7 +2649,7 @@ namespace BeeUi
                         Global.EditTool.iconTool.BackgroundImage = Global.itemNews[Global.itemNews.FindIndex(a => a.TypeTool == TypeTool)].Icon;// (Image)Properties.Resources.ResourceManager.GetObject(TypeTool.ToString());
                         Global.EditTool.lbTool.Text = TypeTool.ToString();
                         Global.EditTool.View.imgView.Image = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
-                        BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
+                       // BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.Propety = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety;
                         BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.LoadPara();
                         Global.EditTool.View.imgView.Invalidate();
                         Global.EditTool.View.imgView.Update();
@@ -2674,7 +2729,7 @@ namespace BeeUi
             Global.EditTool.lbFrameRate.Text = Global.Config.SizeCCD.ToString()+"-"+ BeeCore.Common.listCamera[Global.IndexCCCD].FrameRate+" img/s ";
         }
 
-        public dynamic toolEdit;
+     
       
         public void CurrentTool()
         {
@@ -2683,7 +2738,7 @@ namespace BeeUi
         }
         public void ToolMouseUp()
         {
-            if (toolEdit == null) return;
+          
        
           if(Global.IndexToolSelected>=0)
             switch (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].TypeTool)
@@ -2700,8 +2755,8 @@ namespace BeeUi
                     //    }
                     break;
                 case TypeTool.Color_Area:
-                  
-                    toolEdit.GetTemp();
+
+                        BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.SetColor();
                         //Global.StatusDraw = StatusDraw.Check;
                     break;
             }
@@ -3019,7 +3074,7 @@ namespace BeeUi
         }
         private CollageRenderer _renderer;
      
-        public  void ShowResultTotal()
+        public async void ShowResultTotal()
         {
             try
             {
@@ -3087,10 +3142,13 @@ namespace BeeUi
                             Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
-                            if (_renderer.Count() < 1)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                            else
-                                _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            if (Global.IsShowImageResult)
+                            {
+                                if (_renderer.Count() < 1)
+                                    _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                else
+                                    _renderer.ModifyImage(0, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            }
                                 break;
                         case 1:
                             Global.ToolSettings.Labels[1].Results = Global.ListResult[Global.IndexChoose];
@@ -3098,10 +3156,13 @@ namespace BeeUi
                             Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
-                            if (_renderer.Count() < 2)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                            else
-                                _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            if (Global.IsShowImageResult)
+                            {
+                                if (_renderer.Count() < 2)
+                                    _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                else
+                                    _renderer.ModifyImage(1, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            }
                             break;
                         case 2:
                             Global.ToolSettings.Labels[2].Results = Global.ListResult[Global.IndexChoose];
@@ -3109,10 +3170,14 @@ namespace BeeUi
                             Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[3].BackColor = Color.LightGray;
-                            if (_renderer.Count() < 3)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                            else
-                                _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            if (Global.IsShowImageResult)
+                            {
+                                if (_renderer.Count() < 3)
+                                    _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                else
+                                    _renderer.ModifyImage(2, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            }    
+                              
                             break;
                         case 3:
                             Global.ToolSettings.Labels[3].Results = Global.ListResult[Global.IndexChoose];
@@ -3120,10 +3185,14 @@ namespace BeeUi
                             Global.ToolSettings.Labels[1].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[2].BackColor = Color.LightGray;
                             Global.ToolSettings.Labels[0].BackColor = Color.LightGray;
-                            if (_renderer.Count() < 4)
-                                _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
-                            else
-                                _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            if (Global.IsShowImageResult)
+                            {
+
+                                if (_renderer.Count() < 4)
+                                    _renderer.AddImage(BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                                else
+                                    _renderer.ModifyImage(3, BeeCore.Common.listCamera[0].bmResult, FillMode1.Contain);
+                            }
                             break;
                     }    
                       
@@ -3132,7 +3201,8 @@ namespace BeeUi
               
                    
                         Global.Config.SizeCCD = _renderer.szImage;
-                     //   ShowTool.Full(imgView, Global.Config.SizeCCD);
+                if(Global.Config.IsShowFull)
+                        ShowTool.Full(imgView, Global.Config.SizeCCD);
 
 
                 //_renderer.Render();
@@ -3140,11 +3210,27 @@ namespace BeeUi
                 ResultsSave = Global.TotalOK;
                 if(Global.IsDummy&& ResultsSave!=Results.Wait)
                 {
-                    if (!workInsert.IsBusy)
-                        workInsert.RunWorkerAsync();
-                    else
+                    await Task.Run(() =>
+                    {
+                        if (Global.IsDummy)
+                        {
+                            SaveDumy(ResultsSave);
+                        }
+                        else
+                        {
+                            if (G.cnn.State == ConnectionState.Closed)
+                                G.ucReport.Connect_SQL();
 
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Data", "Fail Save Data NG"));
+                            SQL_Insert(DateTime.Now, Global.Project, Global.Config.SumOK, Global.Config.SumOK + Global.Config.SumNG, ResultsSave);
+
+                        }
+
+                    });
+                    //    if (!workInsert.IsBusy)
+                    //    workInsert.RunWorkerAsync();
+                    //else
+
+                    //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Data", "Fail Save Data NG"));
                     Global.TotalOK = Results.None;
                 }
                 else if (!Global.IsAutoTemp)
@@ -3729,14 +3815,15 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 return;
             }
 
-			if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-			{
+            Global.StatusProcessing = StatusProcessing.Checking;
+            if (Global.IsByPassResult)
+                Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+   //         if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+			//{
               
-                Global.StatusProcessing = StatusProcessing.Checking;
-                if (Global.IsByPassResult)
-                    Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+               
 
-            }
+   //         }
 		}
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -4141,7 +4228,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         private void tmPress_Tick(object sender, EventArgs e)
         {
             tmPress.Enabled = false;
-            if(Global.IsRun&&! Global.ParaCommon.IsExternal)
+            if(Global.IsRun&&! Global.Config.IsExternal)
             btnCap.Enabled = true;
             else
             {
@@ -4210,7 +4297,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         private void btnTypeTrig_Click(object sender, EventArgs e)
         {
           
-                Global.ParaCommon.IsExternal = !Global.ParaCommon.IsExternal;
+                Global.Config.IsExternal = !Global.Config.IsExternal;
         }
 
         private void btnRunSim_Click(object sender, EventArgs e)
@@ -4660,7 +4747,7 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
             this.Invoke((Action)(() =>
             {
-                toolEdit.Enabled = true;
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Control.Enabled = true;
                 tmEnableControl.Enabled = false;
             }));
         }
