@@ -736,19 +736,25 @@ namespace BeeInterface
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
                 String pathModel = OpenFileDialog.FileName;
-
-                String NameModel = Path.GetFileName(pathModel);
+             String   NameModel = new DirectoryInfo(
+                          Path.GetDirectoryName(OpenFileDialog.FileName)
+                      ).Name;
+                //pathModel =Path.GetPathRoot(OpenFileDialog.FileName);
+                //NameModel = Path.GetDirectoryName(OpenFileDialog.FileName);// Path.GetFileNameWithoutExtension(OpenFileDialog.FileName);
                 pathModel = "Program\\" + Global.Project + "\\" + NameModel;
-             
-                if (File.Exists(OpenFileDialog.FileName))
-                {
-                    File.Copy(OpenFileDialog.FileName, pathModel, true);
-                  
-                    Propety.pathBlackDot =pathModel;
-                    Propety.SetModel();
+              
+                Batch.CopyAndRename(Path.GetDirectoryName(OpenFileDialog.FileName), pathModel, false);
+
+
+                Propety.pathBlackDot = pathModel;
+                IsReload = true;
+                if (!workLoadModel.IsBusy)
+                    workLoadModel.RunWorkerAsync();
+               
+                
                     MessageBox.Show(Propety.pathBlackDot);
 
-                }
+                
             }
         }
     }

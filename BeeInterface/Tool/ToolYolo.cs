@@ -1810,14 +1810,16 @@ namespace BeeInterface
         private void btnTypeOnnx_Click(object sender, EventArgs e)
         {
             Propety.TypeYolo = TypeYolo.Onnx;
-         
-            Propety.listModelOnnx = Propety.listModelOnnx.Distinct().ToList();
-            cbListModel.DataSource = null;
-          
-            IsReload = true;
-          
-            cbListModel.DataSource = Propety.listModelOnnx.ToArray();
-            cbListModel.Text = Propety.PathModel;
+            if (Propety.listModelOnnx != null)
+            {
+                Propety.listModelOnnx = Propety.listModelOnnx.Distinct().ToList();
+                cbListModel.DataSource = null;
+
+                IsReload = true;
+
+                cbListModel.DataSource = Propety.listModelOnnx.ToArray();
+                cbListModel.Text = Propety.PathModel;
+            }
 
         }
 

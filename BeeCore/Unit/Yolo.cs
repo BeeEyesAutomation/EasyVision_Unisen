@@ -100,12 +100,18 @@ namespace BeeCore
                         NumThreadCPU = 16;
                         String pathModel = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathFullModel);
                         pathModel += "\\best.xml";
-                        NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
+                        if (File.Exists(pathModel ))
+                        {
+                            NativeOnnx = new NativeYolo(pathModel, 0, 0, NumThreadCPU);
 
-                        NativeOnnx.Warmup(10);
-                        OnnxBoxes = new NativeYolo.YoloBox[200];
-                        TypeYolo = TypeYolo.Onnx;
+                            NativeOnnx.Warmup(10);
+                            OnnxBoxes = new NativeYolo.YoloBox[200];
+                            TypeYolo = TypeYolo.Onnx;
+                        }
+                       
+                            
                         Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
+                            
                     }
                     catch(Exception ex)
                     {
@@ -252,7 +258,11 @@ namespace BeeCore
                         }
                         break;
                     case TypeYolo.Onnx:
-                        ListNameOnnx = NativeOnnx.LoadNames(pathFullModel + "\\metadata.yaml");
+                        if (NativeOnnx != null)
+                        {
+
+                            ListNameOnnx = NativeOnnx.LoadNames(pathFullModel + "\\metadata.yaml");
+                        }
                         return DictToArray(ListNameOnnx);
                         break;
                     default:

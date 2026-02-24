@@ -561,17 +561,22 @@ namespace BeeCore
                             G.objYolo.load_model(Common.PropetyTools[IndexThread][Index].Name, pathFullModel, (int)TypeYolo);
                             try
                             {
-                                String pathBlackDot = @"E:\Code\EasyVision_Unisen\bin\Release\Program\AD_MAYBOI\BlackDot1024";
+                                String pathBlack = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathBlackDot);
+                              //  String pathBlackDot = @"E:\Code\EasyVision_Unisen\bin\Release\Program\AD_MAYBOI\BlackDot1024";
                             int    NumThreadCPU = 16;
-                              
-                              
-                                NativeOnnx = new NativeYolo(pathBlackDot + "\\best.xml", 0, 0, NumThreadCPU);
 
-                                NativeOnnx.Warmup(10);
-                                OnnxBoxes = new NativeYolo.YoloBox[20];
-                                TypeYolo = TypeYolo.Onnx;
-                                ListNameOnnx = NativeOnnx.LoadNames(pathBlackDot + "\\metadata.yaml");
-                              
+                                
+                                if (File.Exists(pathBlack + "\\best.xml"))
+                                      {
+                                    NativeOnnx = new NativeYolo(pathBlack + "\\best.xml", 0, 0, NumThreadCPU);
+
+                                    NativeOnnx.Warmup(10);
+                                    OnnxBoxes = new NativeYolo.YoloBox[20];
+                                    TypeYolo = TypeYolo.Onnx;
+                                    ListNameOnnx = NativeOnnx.LoadNames(pathBlack + "\\metadata.yaml");
+                                }
+                              else
+                                    Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                                 //Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;
                             }
                             catch (Exception ex)
@@ -1009,6 +1014,8 @@ namespace BeeCore
         }
         public void EditMode(RectRotate rectRotate)
         {
+            if (ResultItems != null)
+                ResultItems.Clear();
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
             list_Patterns = new List<BeeCpp.Pattern>();
             rectRotates = new List<RectRotate>();
@@ -1264,7 +1271,8 @@ namespace BeeCore
             listScore = new List<double>();
             listP_Center = new List<System.Drawing.Point>();
             list_AngleCenter = new List<float>();
-
+            if (ResultItems != null)
+            ResultItems.Clear();
             using (Mat raw = BeeCore.Common.listCamera[IndexThread].matRaw.Clone())
             {
                 if (raw.Empty()) return;
@@ -1295,11 +1303,6 @@ namespace BeeCore
                         (ch == 3) ? MatType.CV_8UC3 :
                                     MatType.CV_8UC4;
                     // CHỈ 1 thread vào được đây (thread nào cũng có thể là i nào)
-                  
-
-   
-
-                        
                         //Cv2.ImWrite($"Temp\\Raw.png", crop);
                         Parallel.For(0, l,
                        new ParallelOptions { MaxDegreeOfParallelism = Math.Min(300, Environment.ProcessorCount) },
@@ -1330,7 +1333,10 @@ namespace BeeCore
                                        lock (ResultItems) ResultItems.Add(item); // thread-safe
                                    }
                                }
-                               catch (Exception ex) { Console.WriteLine(ex.Message); }
+                               catch (Exception ex) {
+                                   Global.LogsDashboard?.AddLog(
+                        new LogEntry(DateTime.Now, LeveLLog.ERROR, "PatternBlack", ex.ToString()));
+                               }
                            }
                            try
                            {
@@ -1442,8 +1448,8 @@ namespace BeeCore
 
                            catch (Exception ex)
                            {
-                               Console.WriteLine($"[EXCEPTION] i={i} {ex}");
-                               throw; // hoặc giữ lại để xem
+                               Global.LogsDashboard?.AddLog(
+                         new LogEntry(DateTime.Now, LeveLLog.ERROR, "Pattern", ex.ToString()));
                            }
                        });
 
@@ -1578,6 +1584,7 @@ namespace BeeCore
             {
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
             }
+            if(ResultItems!=null)
             if(ResultItems.Count > 0)
                 Common.PropetyTools[IndexThread][Index].Results = Results.NG;
 
@@ -1752,7 +1759,7 @@ namespace BeeCore
                 }
             }
 
-
+            if(ResultItems!=null)
             foreach (ResultItem rs in ResultItems)
             {
                 Color clShow = Global.ParaShow.ColorNG;

@@ -1462,94 +1462,181 @@ struct MvFrameGuard
 		if (cam && frame) cam->FreeImageBuffer(frame);
 	}
 };
+//uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
+//{
+//	auto t0 = std::chrono::steady_clock::now();
+//	frameCount++;
+//
+//	cv::Mat rawBGR;
+//
+//	switch (TypeCamera)
+//	{
+//	case 1: { // Camera SDK
+//		if (IsWaiting)
+//		{
+//			return nullptr;
+//		}
+//		//auto t0 = std::chrono::steady_clock::now();
+//		frameCount++;
+//
+//		*rows = *cols = *Type = 0;
+//
+//		if (IsWaiting || !m_pcMyCamera[indexCCD])
+//			return nullptr;
+//
+//		MV_FRAME_OUT frameOut{};
+//		if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
+//			return nullptr;
+//
+//		// auto FreeImageBuffer
+//		MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
+//
+//		auto& info = frameOut.stFrameInfo;
+//		if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
+//			return nullptr;
+//
+//		// ===== CHỈ CHẤP NHẬN MONO8 =====
+//		if (info.enPixelType != PixelType_Gvsp_Mono8)
+//			
+//			return nullptr;
+//
+//		const int w = info.nWidth;
+//		const int h = info.nHeight;
+//		const size_t imageSize = (size_t)w * h;
+//
+//		uchar* image_uchar = new uchar[imageSize];
+//
+//		// Copy 1 lần duy nhất
+//		std::memcpy(image_uchar, frameOut.pBufAddr, imageSize);
+//
+//		// ===== FPS =====
+//		auto now = std::chrono::steady_clock::now();
+//		elapsed = now - lastTime;
+//		if (elapsed.count() >= 1.0)
+//		{
+//			FPS = frameCount / elapsed.count();
+//			frameCount = 0;
+//			lastTime = now;
+//		}
+//		cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
+//
+//		*rows = h;
+//		*cols = w;
+//		*Type = CV_8UC1;
+//
+//		return image_uchar;
+//		//return ConvertBySDKEx(camera, out, imageBGR);
+//		//if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
+//		//	//DeviceReset(m_pcMyCamera[indexCCD]);
+//		//	*rows = *cols = *Type = 0;
+//		//	return nullptr;
+//		//}
+//		break;
+//	}
+//	default: { // OpenCV VideoCapture
+//		// grab/retrieve để giảm latency
+//		if (!camUSB.grab() || !camUSB.retrieve(rawBGR)) {
+//			*rows = *cols = *Type = 0;
+//			return nullptr;
+//		}
+//		// Đảm bảo ảnh về BGR 8-bit nếu camera trả YUYV/GRAY…
+//		if (rawBGR.type() == CV_8UC1) {
+//			cv::cvtColor(rawBGR, rawBGR, cv::COLOR_GRAY2BGR);
+//		}
+//		break;
+//	}
+//	}
+//
+//	// Cập nhật FPS mỗi ~1s
+//	auto now = std::chrono::steady_clock::now();
+//	elapsed = now - lastTime;
+//	if (elapsed.count() >= 1.0) {
+//		FPS = frameCount / elapsed.count();
+//		frameCount = 0;
+//		lastTime = now;
+//	}
+//
+//	cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
+//
+//	*rows = rawBGR.rows;
+//	*cols = rawBGR.cols;
+//	*Type = rawBGR.type();
+//
+//	if (rawBGR.empty()) {
+//		*rows = *cols = *Type = 0;
+//		return nullptr;
+//	}
+//
+//	// Xuất dữ liệu dạng bytes (copy 1 lần để caller sở hữu bộ nhớ)
+//	const size_t image_size = rawBGR.total() * rawBGR.elemSize();
+//	uchar* image_uchar = new uchar[image_size];
+//	std::memcpy(image_uchar, rawBGR.data, image_size);
+//	return image_uchar;
+//}
 uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 {
 	auto t0 = std::chrono::steady_clock::now();
-	frameCount++;
+	*rows = *cols = *Type = 0;
 
-	cv::Mat rawBGR;
+	if (IsWaiting || !m_pcMyCamera[indexCCD])
+		return nullptr;
 
-	switch (TypeCamera)
+	MV_FRAME_OUT frameOut{};
+	if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
+		return nullptr;
+
+	MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
+
+	auto& info = frameOut.stFrameInfo;
+	if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
+		return nullptr;
+
+	const int w = info.nWidth;
+	const int h = info.nHeight;
+
+	uchar* image_uchar = nullptr;
+
+	// =====================================================
+	// 1️⃣ Nếu là Mono8 → copy trực tiếp
+	// =====================================================
+	if (info.enPixelType == PixelType_Gvsp_Mono8)
 	{
-	case 1: { // Camera SDK
-		if (IsWaiting)
-		{
-			return nullptr;
-		}
-		//auto t0 = std::chrono::steady_clock::now();
-		frameCount++;
+		size_t imageSize = (size_t)w * h;
+		image_uchar = new uchar[imageSize];
 
-		*rows = *cols = *Type = 0;
-
-		if (IsWaiting || !m_pcMyCamera[indexCCD])
-			return nullptr;
-
-		MV_FRAME_OUT frameOut{};
-		if (m_pcMyCamera[indexCCD]->GetImageBuffer(&frameOut, 1000) != MV_OK)
-			return nullptr;
-
-		// auto FreeImageBuffer
-		MvFrameGuard guard(m_pcMyCamera[indexCCD], &frameOut);
-
-		auto& info = frameOut.stFrameInfo;
-		if (!frameOut.pBufAddr || info.nWidth == 0 || info.nHeight == 0)
-			return nullptr;
-
-		// ===== CHỈ CHẤP NHẬN MONO8 =====
-		if (info.enPixelType != PixelType_Gvsp_Mono8)
-			return nullptr;
-
-		const int w = info.nWidth;
-		const int h = info.nHeight;
-		const size_t imageSize = (size_t)w * h;
-
-		uchar* image_uchar = new uchar[imageSize];
-
-		// Copy 1 lần duy nhất
 		std::memcpy(image_uchar, frameOut.pBufAddr, imageSize);
-
-		// ===== FPS =====
-		auto now = std::chrono::steady_clock::now();
-		elapsed = now - lastTime;
-		if (elapsed.count() >= 1.0)
-		{
-			FPS = frameCount / elapsed.count();
-			frameCount = 0;
-			lastTime = now;
-		}
-		cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
 
 		*rows = h;
 		*cols = w;
 		*Type = CV_8UC1;
-
-		return image_uchar;
-		//return ConvertBySDKEx(camera, out, imageBGR);
-		//if (!CaptureFrameMat(m_pcMyCamera[indexCCD], rawBGR)) {
-		//	//DeviceReset(m_pcMyCamera[indexCCD]);
-		//	*rows = *cols = *Type = 0;
-		//	return nullptr;
-		//}
-		break;
 	}
-	default: { // OpenCV VideoCapture
-		// grab/retrieve để giảm latency
-		if (!camUSB.grab() || !camUSB.retrieve(rawBGR)) {
-			*rows = *cols = *Type = 0;
+	// =====================================================
+	// 2️⃣ Nếu KHÔNG phải Mono8 → convert sang BGR
+	// =====================================================
+	else
+	{
+		cv::Mat dstBGR;
+
+		if (!ConvertBySDKEx(m_pcMyCamera[indexCCD], frameOut, dstBGR))
 			return nullptr;
-		}
-		// Đảm bảo ảnh về BGR 8-bit nếu camera trả YUYV/GRAY…
-		if (rawBGR.type() == CV_8UC1) {
-			cv::cvtColor(rawBGR, rawBGR, cv::COLOR_GRAY2BGR);
-		}
-		break;
-	}
+
+		size_t imageSize = (size_t)w * h * 3;
+		image_uchar = new uchar[imageSize];
+
+		std::memcpy(image_uchar, dstBGR.data, imageSize);
+
+		*rows = h;
+		*cols = w;
+		*Type = CV_8UC3;
 	}
 
-	// Cập nhật FPS mỗi ~1s
+	// ================= FPS =================
+	frameCount++;
 	auto now = std::chrono::steady_clock::now();
 	elapsed = now - lastTime;
-	if (elapsed.count() >= 1.0) {
+
+	if (elapsed.count() >= 1.0)
+	{
 		FPS = frameCount / elapsed.count();
 		frameCount = 0;
 		lastTime = now;
@@ -1557,22 +1644,8 @@ uchar* CCD::ReadCCD(int indexCCD, int* rows, int* cols, int* Type)
 
 	cycle = int(std::chrono::duration_cast<std::chrono::milliseconds>(now - t0).count());
 
-	*rows = rawBGR.rows;
-	*cols = rawBGR.cols;
-	*Type = rawBGR.type();
-
-	if (rawBGR.empty()) {
-		*rows = *cols = *Type = 0;
-		return nullptr;
-	}
-
-	// Xuất dữ liệu dạng bytes (copy 1 lần để caller sở hữu bộ nhớ)
-	const size_t image_size = rawBGR.total() * rawBGR.elemSize();
-	uchar* image_uchar = new uchar[image_size];
-	std::memcpy(image_uchar, rawBGR.data, image_size);
 	return image_uchar;
 }
-
 Mat equalizeBGRA(const Mat& img)
 {
 	Mat res(img.size(), img.type());

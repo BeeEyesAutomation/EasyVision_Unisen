@@ -421,7 +421,7 @@ namespace BeeCore
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
             IsDone = false;
-                  rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
+            rotArea = rotArea; // <-- gán này không tác dụng ra ngoài, bỏ đi
 
             rectRotates = new List<RectRotate>();
             listScore = new List<double>();
@@ -563,7 +563,7 @@ namespace BeeCore
                                                 MinInliersA = 2;
                                                 MinInliersB = 2;
                                             }
-                                            
+
                                             //OrthCornerOptions orthCornerOptions = new OrthCornerOptions
                                             //{
                                             //    MaxCandidateLines = MaximumLine,
@@ -606,24 +606,23 @@ namespace BeeCore
                                                 //        );
                                                 //    }
                                                 //);
-
-
+              
                                                 LineCliHorial = RansacLine.FindBestLine(
-                                               matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
-                                               iterations: RansacIterations,
-                                               threshold: (float)RansacThreshold,
-                                               maxPoints: 120000,
-                                               seed: Index,
-                                               mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Horizontal, LineScanMode.TopToBottom, 0, AngleToleranceDeg
-                                                );
+                                                   matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                                   iterations: RansacIterations,
+                                                   threshold: (float)RansacThreshold,
+                                                   maxPoints: 120000,
+                                                   seed: Index,
+                                                   mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Horizontal, LineScanMode.TopToBottom, 0, AngleToleranceDeg
+                                                    );
                                                 LineCliVertical = RansacLine.FindBestLine(
-                                                 matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
-                                                 iterations: RansacIterations,
-                                                 threshold: (float)RansacThreshold,
-                                                 maxPoints: 120000,
-                                                 seed: Index,
-                                                 mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, AngleToleranceDeg
-                                                  );
+                                                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
+                                                     iterations: RansacIterations,
+                                                     threshold: (float)RansacThreshold,
+                                                     maxPoints: 120000,
+                                                     seed: Index,
+                                                     mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, AngleToleranceDeg
+                                                      );
 
                                                 // Result = DetectIntersect.FindBestCorner_RansacRuns(matCrop, matProcess, orthCornerOptions);
 

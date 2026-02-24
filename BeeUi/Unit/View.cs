@@ -3604,6 +3604,16 @@ namespace BeeUi
         {
             if (Global.IsLive)
             {
+                BeeCore.Common.listCamera[Global.IndexCCCD].Read();
+                Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
+                if(Global.Config.SizeCCD.Width==0|| Global.Config.SizeCCD.Height==0)
+                {
+                    btnLive.IsCLick = false;
+                    Global.IsLive = false;
+                    return;
+                }    
+                _liveBmp = new Bitmap(Global.Config.SizeCCD.Width, Global.Config.SizeCCD.Height, PixelFormat.Format24bppRgb);
+                imgView.Image = _liveBmp;   // set 1 lần duy nhất
                 //if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                 //    if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw != null)
                 //        if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
@@ -3616,13 +3626,13 @@ namespace BeeUi
                 //            }
                 if (!workReadCCD.IsBusy)
                     workReadCCD.RunWorkerAsync();
-                StartLive();
+               // StartLive();
             }
 
             else
             {
-                
-                StopLive();
+                _isGray = false;
+              //  StopLive();
              
 
             }
@@ -3765,6 +3775,166 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
 
 
         }
+        unsafe void CopyMatToBitmapFast(Mat mat, ref Bitmap bmp)
+        {
+            if (mat.Empty()) return;
+
+            // đảm bảo BGR 24bpp
+            Mat bgr = mat;
+            if (mat.Type() == MatType.CV_8UC1)
+            {
+                bgr = new Mat();
+                Cv2.CvtColor(mat, bgr, ColorConversionCodes.GRAY2BGR);
+            }
+            else if (mat.Type() != MatType.CV_8UC3)
+            {
+                // nếu bạn có BGRA/16bit... thì xử riêng (tạm bỏ)
+                throw new NotSupportedException($"Mat type not supported: {mat.Type()}");
+            }
+
+            int w = bgr.Cols, h = bgr.Rows;
+
+            if (bmp == null || bmp.Width != w || bmp.Height != h || bmp.PixelFormat != PixelFormat.Format24bppRgb)
+            {
+                bmp?.Dispose();
+                bmp = new Bitmap(w, h, PixelFormat.Format24bppRgb);
+            }
+
+            var rect = new Rectangle(0, 0, w, h);
+            var bd = bmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+            try
+            {
+                byte* srcBase = (byte*)bgr.DataPointer;
+                byte* dstBase = (byte*)bd.Scan0;
+
+                int srcStep = (int)bgr.Step();
+                int dstStep = bd.Stride;
+                int rowBytes = w * 3;
+
+                if (srcStep == dstStep)
+                {
+                    Buffer.MemoryCopy(srcBase, dstBase, (long)dstStep * h, (long)srcStep * h);
+                }
+                else
+                {
+                    for (int y = 0; y < h; y++)
+                    {
+                        byte* s = srcBase + (long)y * srcStep;
+                        byte* d = dstBase + (long)y * dstStep;
+                        Buffer.MemoryCopy(s, d, dstStep, rowBytes);
+                    }
+                }
+            }
+            finally
+            {
+                bmp.UnlockBits(bd);
+                if (!ReferenceEquals(bgr, mat)) bgr.Dispose();
+            }
+        }
+        Bitmap _liveBmp;
+        readonly object _bmpLock = new object();
+        bool _isGray = false;
+        void InitGray(int w, int h)
+        {
+            _liveBmp?.Dispose();
+            _liveBmp = new Bitmap(w, h, PixelFormat.Format8bppIndexed);
+
+            // set grayscale palette
+            var palette = _liveBmp.Palette;
+            for (int i = 0; i < 256; i++)
+                palette.Entries[i] = Color.FromArgb(i, i, i);
+
+            _liveBmp.Palette = palette;
+
+            imgView.Image = _liveBmp;
+            _isGray = true;
+        }
+
+        unsafe void UpdateGray(Mat mat)
+        {
+            if (mat.Type() != MatType.CV_8UC1)
+                return;
+
+            if (_liveBmp == null || !_isGray ||
+                _liveBmp.Width != mat.Width ||
+                _liveBmp.Height != mat.Height)
+            {
+                InitGray(mat.Width, mat.Height);
+            }
+
+            var rect = new Rectangle(0, 0, _liveBmp.Width, _liveBmp.Height);
+            var bd = _liveBmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+
+            try
+            {
+                byte* src = (byte*)mat.DataPointer;
+                byte* dst = (byte*)bd.Scan0;
+
+                int srcStep = (int)mat.Step();
+                int dstStep = bd.Stride;
+
+                for (int y = 0; y < mat.Height; y++)
+                {
+                    Buffer.MemoryCopy(
+                        src + y * srcStep,
+                        dst + y * dstStep,
+                        dstStep,
+                        mat.Width);
+                }
+            }
+            finally
+            {
+                _liveBmp.UnlockBits(bd);
+            }
+
+            imgView.Invalidate();
+        }
+        void UpdateFrame(Mat mat)
+        {
+            if (mat.Type() == MatType.CV_8UC1)
+                UpdateGray(mat);
+            else if (mat.Type() == MatType.CV_8UC3)
+                UpdateBgr(mat);
+        }
+        unsafe void UpdateBgr(Mat mat)
+        {
+            if (_liveBmp == null) return;
+
+            lock (_bmpLock)
+            {
+                var rect = new Rectangle(0, 0, _liveBmp.Width, _liveBmp.Height);
+                var bd = _liveBmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+                try
+                {
+                    byte* src = (byte*)mat.DataPointer;
+                    byte* dst = (byte*)bd.Scan0;
+
+                    int srcStep = (int)mat.Step();
+                    int dstStep = bd.Stride;
+                    int rowBytes = mat.Width * 3;
+
+                    for (int y = 0; y < mat.Height; y++)
+                    {
+                        Buffer.MemoryCopy(
+                            src + y * srcStep,
+                            dst + y * dstStep,
+                            dstStep,
+                            rowBytes);
+                    }
+                }
+                finally
+                {
+                    _liveBmp.UnlockBits(bd);
+                }
+            }
+
+            imgView.BeginInvoke((Action)(() =>
+            {
+                imgView.Invalidate();  // chỉ redraw
+            }));
+        }
         private async void  workReadCCD_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             //if (IsErrCCD)
@@ -3787,16 +3957,16 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                     if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.IsDisposed)
                         if (!BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Empty())
                         {
-                            Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
+                            UpdateFrame(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
+                            // Global.Config.SizeCCD = BeeCore.Common.listCamera[Global.IndexCCCD].GetSzCCD();
                             // matRaw là OpenCvSharp.Mat
-                            var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
+                            //var bmp = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw);
+                            //// Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
+                            //var old = Interlocked.Exchange(ref _sharedFrame, bmp);
+                            //old?.Dispose();
 
-                            // Đẩy frame mới nhất và hủy frame cũ một cách an toàn, không cần lock
-                            var old = Interlocked.Exchange(ref _sharedFrame, bmp);
-                            old?.Dispose();
-
-                            // (tuỳ chọn) báo cho display thread là có frame mới
-                            _frameReady?.Set();
+                            //// (tuỳ chọn) báo cho display thread là có frame mới
+                            //_frameReady?.Set();
                             //using (Bitmap frame = BitmapConverter.ToBitmap(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw))
                             //{
 
@@ -3815,16 +3985,17 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
                 return;
             }
 
-            Global.StatusProcessing = StatusProcessing.Checking;
-            if (Global.IsByPassResult)
-                Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
-   //         if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
-			//{
-              
-               
+          
+           
+            if (Global.StatusMode == StatusMode.Continuous || Global.StatusMode == StatusMode.Once)
+            {
+                Global.StatusProcessing = StatusProcessing.Checking;
 
-   //         }
-		}
+                if (Global.IsByPassResult)
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.ByPass;
+
+            }
+        }
         private void workShow_DoWork(object sender, DoWorkEventArgs e)
         {
         }
