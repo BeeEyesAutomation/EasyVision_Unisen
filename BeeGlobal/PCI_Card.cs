@@ -41,18 +41,26 @@ namespace BeeGlobal
             switch (PCI_Write)
             {
                 case PCI_Write.LightON:
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Light", "ON"));
+
                     value = 128u;
                     break;
                 case PCI_Write.LightOFF:
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Light", "OFF"));
+
                     value = 0u;
                     break;
                 case PCI_Write.OK:
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Light", "OK"));
+
                     value = 0u;
                     break;
                 case PCI_Write.NG:
                     value = 256u;  
                     break;
                 case PCI_Write.OFF:
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "Light", "OFF 2"));
+
                     value = 0;
                     break;
                    

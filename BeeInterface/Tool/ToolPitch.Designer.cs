@@ -277,7 +277,7 @@ namespace BeeInterface
             this.AdjGaussianSmooth.Name = "AdjGaussianSmooth";
             this.AdjGaussianSmooth.Radius = 8;
             this.AdjGaussianSmooth.ShowValueOnThumb = true;
-            this.AdjGaussianSmooth.Size = new System.Drawing.Size(388, 53);
+            this.AdjGaussianSmooth.Size = new System.Drawing.Size(390, 53);
             this.AdjGaussianSmooth.SnapToStep = true;
             this.AdjGaussianSmooth.StartWithTextboxHidden = true;
             this.AdjGaussianSmooth.Step = 1F;
@@ -342,7 +342,7 @@ namespace BeeInterface
             this.AdjMagin.Name = "AdjMagin";
             this.AdjMagin.Radius = 8;
             this.AdjMagin.ShowValueOnThumb = true;
-            this.AdjMagin.Size = new System.Drawing.Size(388, 53);
+            this.AdjMagin.Size = new System.Drawing.Size(390, 53);
             this.AdjMagin.SnapToStep = true;
             this.AdjMagin.StartWithTextboxHidden = true;
             this.AdjMagin.Step = 1F;
@@ -407,7 +407,7 @@ namespace BeeInterface
             this.AdjScale.Name = "AdjScale";
             this.AdjScale.Radius = 8;
             this.AdjScale.ShowValueOnThumb = true;
-            this.AdjScale.Size = new System.Drawing.Size(388, 53);
+            this.AdjScale.Size = new System.Drawing.Size(390, 53);
             this.AdjScale.SnapToStep = true;
             this.AdjScale.StartWithTextboxHidden = true;
             this.AdjScale.Step = 1F;
@@ -436,7 +436,7 @@ namespace BeeInterface
             this.label18.Location = new System.Drawing.Point(6, 543);
             this.label18.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(388, 32);
+            this.label18.Size = new System.Drawing.Size(390, 32);
             this.label18.TabIndex = 81;
             this.label18.Text = "Scale Pixel to mm";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -486,7 +486,7 @@ namespace BeeInterface
             this.trackScore.Name = "trackScore";
             this.trackScore.Radius = 8;
             this.trackScore.ShowValueOnThumb = true;
-            this.trackScore.Size = new System.Drawing.Size(388, 53);
+            this.trackScore.Size = new System.Drawing.Size(390, 53);
             this.trackScore.SnapToStep = true;
             this.trackScore.StartWithTextboxHidden = true;
             this.trackScore.Step = 1F;
@@ -516,7 +516,7 @@ namespace BeeInterface
             this.label8.Location = new System.Drawing.Point(6, 648);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 20, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(388, 25);
+            this.label8.Size = new System.Drawing.Size(390, 25);
             this.label8.TabIndex = 77;
             this.label8.Text = "Tolerance";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -538,7 +538,7 @@ namespace BeeInterface
             this.layThreshod.RowCount = 1;
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layThreshod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.layThreshod.Size = new System.Drawing.Size(388, 50);
+            this.layThreshod.Size = new System.Drawing.Size(390, 50);
             this.layThreshod.TabIndex = 76;
             // 
             // label11
@@ -600,7 +600,7 @@ namespace BeeInterface
             this.AdjThreshod.Name = "AdjThreshod";
             this.AdjThreshod.Radius = 8;
             this.AdjThreshod.ShowValueOnThumb = true;
-            this.AdjThreshod.Size = new System.Drawing.Size(283, 40);
+            this.AdjThreshod.Size = new System.Drawing.Size(285, 40);
             this.AdjThreshod.SnapToStep = true;
             this.AdjThreshod.StartWithTextboxHidden = true;
             this.AdjThreshod.Step = 1F;
@@ -629,7 +629,7 @@ namespace BeeInterface
             this.label2.Location = new System.Drawing.Point(6, 387);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(388, 32);
+            this.label2.Size = new System.Drawing.Size(390, 32);
             this.label2.TabIndex = 75;
             this.label2.Text = "Extract Edge";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -643,7 +643,7 @@ namespace BeeInterface
             this.label3.Location = new System.Drawing.Point(6, 292);
             this.label3.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(388, 32);
+            this.label3.Size = new System.Drawing.Size(390, 32);
             this.label3.TabIndex = 74;
             this.label3.Text = "Gaussian Smooth";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -657,7 +657,7 @@ namespace BeeInterface
             this.label10.Location = new System.Drawing.Point(6, 197);
             this.label10.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(388, 32);
+            this.label10.Size = new System.Drawing.Size(390, 32);
             this.label10.TabIndex = 73;
             this.label10.Text = "Magin";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -671,7 +671,7 @@ namespace BeeInterface
             this.label1.Location = new System.Drawing.Point(6, 101);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 10, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(388, 32);
+            this.label1.Size = new System.Drawing.Size(390, 32);
             this.label1.TabIndex = 72;
             this.label1.Text = "Direction Pitch";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -685,7 +685,7 @@ namespace BeeInterface
             this.label7.Location = new System.Drawing.Point(6, 5);
             this.label7.Margin = new System.Windows.Forms.Padding(5, 5, 5, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(388, 32);
+            this.label7.Size = new System.Drawing.Size(390, 32);
             this.label7.TabIndex = 71;
             this.label7.Text = "Search Range";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -705,7 +705,7 @@ namespace BeeInterface
             this.tableLayoutPanel3.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(388, 54);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(390, 54);
             this.tableLayoutPanel3.TabIndex = 63;
             // 
             // btnHori
@@ -753,11 +753,11 @@ namespace BeeInterface
             this.btnHori.IsRect = false;
             this.btnHori.IsTouch = false;
             this.btnHori.IsUnGroup = false;
-            this.btnHori.Location = new System.Drawing.Point(194, 5);
+            this.btnHori.Location = new System.Drawing.Point(195, 5);
             this.btnHori.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnHori.Multiline = false;
             this.btnHori.Name = "btnHori";
-            this.btnHori.Size = new System.Drawing.Size(186, 44);
+            this.btnHori.Size = new System.Drawing.Size(187, 44);
             this.btnHori.TabIndex = 3;
             this.btnHori.Text = "Horizontal";
             this.btnHori.TextColor = System.Drawing.Color.Black;
@@ -815,7 +815,7 @@ namespace BeeInterface
             this.btnVer.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnVer.Multiline = false;
             this.btnVer.Name = "btnVer";
-            this.btnVer.Size = new System.Drawing.Size(186, 44);
+            this.btnVer.Size = new System.Drawing.Size(187, 44);
             this.btnVer.TabIndex = 2;
             this.btnVer.Text = "Vertical";
             this.btnVer.TextColor = System.Drawing.Color.Black;
@@ -842,7 +842,7 @@ namespace BeeInterface
             this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel15.RowCount = 1;
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(388, 54);
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(390, 54);
             this.tableLayoutPanel15.TabIndex = 62;
             // 
             // btnInvert
@@ -890,11 +890,11 @@ namespace BeeInterface
             this.btnInvert.IsRect = false;
             this.btnInvert.IsTouch = false;
             this.btnInvert.IsUnGroup = false;
-            this.btnInvert.Location = new System.Drawing.Point(287, 5);
+            this.btnInvert.Location = new System.Drawing.Point(290, 5);
             this.btnInvert.Margin = new System.Windows.Forms.Padding(0);
             this.btnInvert.Multiline = false;
             this.btnInvert.Name = "btnInvert";
-            this.btnInvert.Size = new System.Drawing.Size(96, 44);
+            this.btnInvert.Size = new System.Drawing.Size(95, 44);
             this.btnInvert.TabIndex = 5;
             this.btnInvert.Text = "Invert";
             this.btnInvert.TextColor = System.Drawing.Color.Black;
@@ -947,11 +947,11 @@ namespace BeeInterface
             this.btnBinary.IsRect = false;
             this.btnBinary.IsTouch = false;
             this.btnBinary.IsUnGroup = false;
-            this.btnBinary.Location = new System.Drawing.Point(193, 5);
+            this.btnBinary.Location = new System.Drawing.Point(195, 5);
             this.btnBinary.Margin = new System.Windows.Forms.Padding(0);
             this.btnBinary.Multiline = false;
             this.btnBinary.Name = "btnBinary";
-            this.btnBinary.Size = new System.Drawing.Size(94, 44);
+            this.btnBinary.Size = new System.Drawing.Size(95, 44);
             this.btnBinary.TabIndex = 4;
             this.btnBinary.Text = "Binay";
             this.btnBinary.TextColor = System.Drawing.Color.Black;
@@ -1004,11 +1004,11 @@ namespace BeeInterface
             this.btnStrongEdge.IsRect = false;
             this.btnStrongEdge.IsTouch = false;
             this.btnStrongEdge.IsUnGroup = false;
-            this.btnStrongEdge.Location = new System.Drawing.Point(99, 5);
+            this.btnStrongEdge.Location = new System.Drawing.Point(100, 5);
             this.btnStrongEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnStrongEdge.Multiline = false;
             this.btnStrongEdge.Name = "btnStrongEdge";
-            this.btnStrongEdge.Size = new System.Drawing.Size(94, 44);
+            this.btnStrongEdge.Size = new System.Drawing.Size(95, 44);
             this.btnStrongEdge.TabIndex = 3;
             this.btnStrongEdge.Text = "Strong";
             this.btnStrongEdge.TextColor = System.Drawing.Color.Black;
@@ -1066,7 +1066,7 @@ namespace BeeInterface
             this.btnCloseEdge.Margin = new System.Windows.Forms.Padding(0);
             this.btnCloseEdge.Multiline = false;
             this.btnCloseEdge.Name = "btnCloseEdge";
-            this.btnCloseEdge.Size = new System.Drawing.Size(94, 44);
+            this.btnCloseEdge.Size = new System.Drawing.Size(95, 44);
             this.btnCloseEdge.TabIndex = 2;
             this.btnCloseEdge.Text = "Close";
             this.btnCloseEdge.TextColor = System.Drawing.Color.Black;
@@ -1089,7 +1089,7 @@ namespace BeeInterface
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(388, 54);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(390, 54);
             this.tableLayoutPanel2.TabIndex = 39;
             // 
             // btnCropFull
@@ -1137,11 +1137,11 @@ namespace BeeInterface
             this.btnCropFull.IsRect = false;
             this.btnCropFull.IsTouch = false;
             this.btnCropFull.IsUnGroup = false;
-            this.btnCropFull.Location = new System.Drawing.Point(194, 5);
+            this.btnCropFull.Location = new System.Drawing.Point(195, 5);
             this.btnCropFull.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnCropFull.Multiline = false;
             this.btnCropFull.Name = "btnCropFull";
-            this.btnCropFull.Size = new System.Drawing.Size(186, 44);
+            this.btnCropFull.Size = new System.Drawing.Size(187, 44);
             this.btnCropFull.TabIndex = 3;
             this.btnCropFull.Text = "Partial";
             this.btnCropFull.TextColor = System.Drawing.Color.Black;
@@ -1199,7 +1199,7 @@ namespace BeeInterface
             this.btnCropHalt.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnCropHalt.Multiline = false;
             this.btnCropHalt.Name = "btnCropHalt";
-            this.btnCropHalt.Size = new System.Drawing.Size(186, 44);
+            this.btnCropHalt.Size = new System.Drawing.Size(187, 44);
             this.btnCropHalt.TabIndex = 2;
             this.btnCropHalt.Text = "Entire";
             this.btnCropHalt.TextColor = System.Drawing.Color.Black;
@@ -1642,11 +1642,14 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbRootCount.AutoFont = true;
-            this.lbRootCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbRootCount.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbRootCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.68359F);
+            this.lbRootCount.EnableHorizontalScroll = false;
+            this.lbRootCount.EnableVerticalScroll = false;
+            this.lbRootCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.83984F);
             this.lbRootCount.Location = new System.Drawing.Point(134, 5);
             this.lbRootCount.Margin = new System.Windows.Forms.Padding(0);
+            this.lbRootCount.MaxFontSize = 200F;
+            this.lbRootCount.MinFontSize = 6F;
             this.lbRootCount.Name = "lbRootCount";
             this.lbRootCount.Size = new System.Drawing.Size(129, 44);
             this.lbRootCount.TabIndex = 16;
@@ -1660,10 +1663,14 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Right)));
             this.autoFontLabel17.AutoFont = true;
             this.autoFontLabel17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.autoFontLabel17.Font = new System.Drawing.Font("Microsoft Sans Serif", 99.61328F);
-            this.autoFontLabel17.Location = new System.Drawing.Point(4, 770);
+            this.autoFontLabel17.EnableHorizontalScroll = false;
+            this.autoFontLabel17.EnableVerticalScroll = false;
+            this.autoFontLabel17.Font = new System.Drawing.Font("Microsoft Sans Serif", 125.7344F);
+            this.autoFontLabel17.Location = new System.Drawing.Point(4, 773);
+            this.autoFontLabel17.MaxFontSize = 200F;
+            this.autoFontLabel17.MinFontSize = 6F;
             this.autoFontLabel17.Name = "autoFontLabel17";
-            this.autoFontLabel17.Size = new System.Drawing.Size(402, 200);
+            this.autoFontLabel17.Size = new System.Drawing.Size(402, 194);
             this.autoFontLabel17.TabIndex = 110;
             this.autoFontLabel17.Text = "...";
             // 
@@ -1755,12 +1762,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightCrestMean.AutoFont = true;
-            this.lbHeightCrestMean.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightCrestMean.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightCrestMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightCrestMean.Location = new System.Drawing.Point(85, 5);
+            this.lbHeightCrestMean.EnableHorizontalScroll = false;
+            this.lbHeightCrestMean.EnableVerticalScroll = false;
+            this.lbHeightCrestMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightCrestMean.Location = new System.Drawing.Point(85, 8);
+            this.lbHeightCrestMean.MaxFontSize = 200F;
+            this.lbHeightCrestMean.MinFontSize = 6F;
             this.lbHeightCrestMean.Name = "lbHeightCrestMean";
-            this.lbHeightCrestMean.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightCrestMean.Size = new System.Drawing.Size(71, 38);
             this.lbHeightCrestMean.TabIndex = 17;
             this.lbHeightCrestMean.Text = "--.--";
             this.lbHeightCrestMean.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1771,12 +1781,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightCrestMedian.AutoFont = true;
-            this.lbHeightCrestMedian.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightCrestMedian.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightCrestMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightCrestMedian.Location = new System.Drawing.Point(162, 5);
+            this.lbHeightCrestMedian.EnableHorizontalScroll = false;
+            this.lbHeightCrestMedian.EnableVerticalScroll = false;
+            this.lbHeightCrestMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightCrestMedian.Location = new System.Drawing.Point(162, 8);
+            this.lbHeightCrestMedian.MaxFontSize = 200F;
+            this.lbHeightCrestMedian.MinFontSize = 6F;
             this.lbHeightCrestMedian.Name = "lbHeightCrestMedian";
-            this.lbHeightCrestMedian.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightCrestMedian.Size = new System.Drawing.Size(71, 38);
             this.lbHeightCrestMedian.TabIndex = 16;
             this.lbHeightCrestMedian.Text = "--.--";
             this.lbHeightCrestMedian.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1787,12 +1800,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightCrestMin.AutoFont = true;
-            this.lbHeightCrestMin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightCrestMin.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightCrestMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightCrestMin.Location = new System.Drawing.Point(239, 5);
+            this.lbHeightCrestMin.EnableHorizontalScroll = false;
+            this.lbHeightCrestMin.EnableVerticalScroll = false;
+            this.lbHeightCrestMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightCrestMin.Location = new System.Drawing.Point(239, 8);
+            this.lbHeightCrestMin.MaxFontSize = 200F;
+            this.lbHeightCrestMin.MinFontSize = 6F;
             this.lbHeightCrestMin.Name = "lbHeightCrestMin";
-            this.lbHeightCrestMin.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightCrestMin.Size = new System.Drawing.Size(71, 38);
             this.lbHeightCrestMin.TabIndex = 15;
             this.lbHeightCrestMin.Text = "--.--";
             this.lbHeightCrestMin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1803,12 +1819,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightCrestMax.AutoFont = true;
-            this.lbHeightCrestMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightCrestMax.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightCrestMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.36328F);
-            this.lbHeightCrestMax.Location = new System.Drawing.Point(316, 5);
+            this.lbHeightCrestMax.EnableHorizontalScroll = false;
+            this.lbHeightCrestMax.EnableVerticalScroll = false;
+            this.lbHeightCrestMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightCrestMax.Location = new System.Drawing.Point(316, 8);
+            this.lbHeightCrestMax.MaxFontSize = 200F;
+            this.lbHeightCrestMax.MinFontSize = 6F;
             this.lbHeightCrestMax.Name = "lbHeightCrestMax";
-            this.lbHeightCrestMax.Size = new System.Drawing.Size(74, 44);
+            this.lbHeightCrestMax.Size = new System.Drawing.Size(74, 38);
             this.lbHeightCrestMax.TabIndex = 14;
             this.lbHeightCrestMax.Text = "--.--";
             this.lbHeightCrestMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1901,12 +1920,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightRootMean.AutoFont = true;
-            this.lbHeightRootMean.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightRootMean.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightRootMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightRootMean.Location = new System.Drawing.Point(85, 5);
+            this.lbHeightRootMean.EnableHorizontalScroll = false;
+            this.lbHeightRootMean.EnableVerticalScroll = false;
+            this.lbHeightRootMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightRootMean.Location = new System.Drawing.Point(85, 8);
+            this.lbHeightRootMean.MaxFontSize = 200F;
+            this.lbHeightRootMean.MinFontSize = 6F;
             this.lbHeightRootMean.Name = "lbHeightRootMean";
-            this.lbHeightRootMean.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightRootMean.Size = new System.Drawing.Size(71, 38);
             this.lbHeightRootMean.TabIndex = 17;
             this.lbHeightRootMean.Text = "--.--";
             this.lbHeightRootMean.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1917,12 +1939,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightRootMedian.AutoFont = true;
-            this.lbHeightRootMedian.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightRootMedian.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightRootMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightRootMedian.Location = new System.Drawing.Point(162, 5);
+            this.lbHeightRootMedian.EnableHorizontalScroll = false;
+            this.lbHeightRootMedian.EnableVerticalScroll = false;
+            this.lbHeightRootMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightRootMedian.Location = new System.Drawing.Point(162, 8);
+            this.lbHeightRootMedian.MaxFontSize = 200F;
+            this.lbHeightRootMedian.MinFontSize = 6F;
             this.lbHeightRootMedian.Name = "lbHeightRootMedian";
-            this.lbHeightRootMedian.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightRootMedian.Size = new System.Drawing.Size(71, 38);
             this.lbHeightRootMedian.TabIndex = 16;
             this.lbHeightRootMedian.Text = "--.--";
             this.lbHeightRootMedian.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1933,12 +1958,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightRootMin.AutoFont = true;
-            this.lbHeightRootMin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightRootMin.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightRootMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbHeightRootMin.Location = new System.Drawing.Point(239, 5);
+            this.lbHeightRootMin.EnableHorizontalScroll = false;
+            this.lbHeightRootMin.EnableVerticalScroll = false;
+            this.lbHeightRootMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightRootMin.Location = new System.Drawing.Point(239, 8);
+            this.lbHeightRootMin.MaxFontSize = 200F;
+            this.lbHeightRootMin.MinFontSize = 6F;
             this.lbHeightRootMin.Name = "lbHeightRootMin";
-            this.lbHeightRootMin.Size = new System.Drawing.Size(71, 44);
+            this.lbHeightRootMin.Size = new System.Drawing.Size(71, 38);
             this.lbHeightRootMin.TabIndex = 15;
             this.lbHeightRootMin.Text = "--.--";
             this.lbHeightRootMin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1949,12 +1977,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbHeightRootMax.AutoFont = true;
-            this.lbHeightRootMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbHeightRootMax.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbHeightRootMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.36328F);
-            this.lbHeightRootMax.Location = new System.Drawing.Point(316, 5);
+            this.lbHeightRootMax.EnableHorizontalScroll = false;
+            this.lbHeightRootMax.EnableVerticalScroll = false;
+            this.lbHeightRootMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbHeightRootMax.Location = new System.Drawing.Point(316, 8);
+            this.lbHeightRootMax.MaxFontSize = 200F;
+            this.lbHeightRootMax.MinFontSize = 6F;
             this.lbHeightRootMax.Name = "lbHeightRootMax";
-            this.lbHeightRootMax.Size = new System.Drawing.Size(74, 44);
+            this.lbHeightRootMax.Size = new System.Drawing.Size(74, 38);
             this.lbHeightRootMax.TabIndex = 14;
             this.lbHeightRootMax.Text = "--.--";
             this.lbHeightRootMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1989,12 +2020,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchRootMean.AutoFont = true;
-            this.lbPitchRootMean.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchRootMean.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchRootMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchRootMean.Location = new System.Drawing.Point(85, 5);
+            this.lbPitchRootMean.EnableHorizontalScroll = false;
+            this.lbPitchRootMean.EnableVerticalScroll = false;
+            this.lbPitchRootMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchRootMean.Location = new System.Drawing.Point(85, 8);
+            this.lbPitchRootMean.MaxFontSize = 200F;
+            this.lbPitchRootMean.MinFontSize = 6F;
             this.lbPitchRootMean.Name = "lbPitchRootMean";
-            this.lbPitchRootMean.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchRootMean.Size = new System.Drawing.Size(71, 38);
             this.lbPitchRootMean.TabIndex = 17;
             this.lbPitchRootMean.Text = "--.--";
             this.lbPitchRootMean.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2005,12 +2039,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchRootMedian.AutoFont = true;
-            this.lbPitchRootMedian.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchRootMedian.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchRootMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchRootMedian.Location = new System.Drawing.Point(162, 5);
+            this.lbPitchRootMedian.EnableHorizontalScroll = false;
+            this.lbPitchRootMedian.EnableVerticalScroll = false;
+            this.lbPitchRootMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchRootMedian.Location = new System.Drawing.Point(162, 8);
+            this.lbPitchRootMedian.MaxFontSize = 200F;
+            this.lbPitchRootMedian.MinFontSize = 6F;
             this.lbPitchRootMedian.Name = "lbPitchRootMedian";
-            this.lbPitchRootMedian.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchRootMedian.Size = new System.Drawing.Size(71, 38);
             this.lbPitchRootMedian.TabIndex = 16;
             this.lbPitchRootMedian.Text = "--.--";
             this.lbPitchRootMedian.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2021,12 +2058,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchRootMin.AutoFont = true;
-            this.lbPitchRootMin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchRootMin.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchRootMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchRootMin.Location = new System.Drawing.Point(239, 5);
+            this.lbPitchRootMin.EnableHorizontalScroll = false;
+            this.lbPitchRootMin.EnableVerticalScroll = false;
+            this.lbPitchRootMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchRootMin.Location = new System.Drawing.Point(239, 8);
+            this.lbPitchRootMin.MaxFontSize = 200F;
+            this.lbPitchRootMin.MinFontSize = 6F;
             this.lbPitchRootMin.Name = "lbPitchRootMin";
-            this.lbPitchRootMin.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchRootMin.Size = new System.Drawing.Size(71, 38);
             this.lbPitchRootMin.TabIndex = 15;
             this.lbPitchRootMin.Text = "--.--";
             this.lbPitchRootMin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2037,12 +2077,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchRootMax.AutoFont = true;
-            this.lbPitchRootMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchRootMax.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchRootMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.36328F);
-            this.lbPitchRootMax.Location = new System.Drawing.Point(316, 5);
+            this.lbPitchRootMax.EnableHorizontalScroll = false;
+            this.lbPitchRootMax.EnableVerticalScroll = false;
+            this.lbPitchRootMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchRootMax.Location = new System.Drawing.Point(316, 8);
+            this.lbPitchRootMax.MaxFontSize = 200F;
+            this.lbPitchRootMax.MinFontSize = 6F;
             this.lbPitchRootMax.Name = "lbPitchRootMax";
-            this.lbPitchRootMax.Size = new System.Drawing.Size(74, 44);
+            this.lbPitchRootMax.Size = new System.Drawing.Size(74, 38);
             this.lbPitchRootMax.TabIndex = 14;
             this.lbPitchRootMax.Text = "--.--";
             this.lbPitchRootMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2177,12 +2220,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchCrestMax.AutoFont = true;
-            this.lbPitchCrestMax.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchCrestMax.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchCrestMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.36328F);
-            this.lbPitchCrestMax.Location = new System.Drawing.Point(316, 5);
+            this.lbPitchCrestMax.EnableHorizontalScroll = false;
+            this.lbPitchCrestMax.EnableVerticalScroll = false;
+            this.lbPitchCrestMax.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchCrestMax.Location = new System.Drawing.Point(316, 8);
+            this.lbPitchCrestMax.MaxFontSize = 200F;
+            this.lbPitchCrestMax.MinFontSize = 6F;
             this.lbPitchCrestMax.Name = "lbPitchCrestMax";
-            this.lbPitchCrestMax.Size = new System.Drawing.Size(74, 44);
+            this.lbPitchCrestMax.Size = new System.Drawing.Size(74, 38);
             this.lbPitchCrestMax.TabIndex = 13;
             this.lbPitchCrestMax.Text = "--.--";
             this.lbPitchCrestMax.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2193,12 +2239,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchCrestMin.AutoFont = true;
-            this.lbPitchCrestMin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchCrestMin.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchCrestMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchCrestMin.Location = new System.Drawing.Point(239, 5);
+            this.lbPitchCrestMin.EnableHorizontalScroll = false;
+            this.lbPitchCrestMin.EnableVerticalScroll = false;
+            this.lbPitchCrestMin.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchCrestMin.Location = new System.Drawing.Point(239, 8);
+            this.lbPitchCrestMin.MaxFontSize = 200F;
+            this.lbPitchCrestMin.MinFontSize = 6F;
             this.lbPitchCrestMin.Name = "lbPitchCrestMin";
-            this.lbPitchCrestMin.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchCrestMin.Size = new System.Drawing.Size(71, 38);
             this.lbPitchCrestMin.TabIndex = 12;
             this.lbPitchCrestMin.Text = "--.--";
             this.lbPitchCrestMin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2209,12 +2258,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchCrestMedian.AutoFont = true;
-            this.lbPitchCrestMedian.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchCrestMedian.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchCrestMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchCrestMedian.Location = new System.Drawing.Point(162, 5);
+            this.lbPitchCrestMedian.EnableHorizontalScroll = false;
+            this.lbPitchCrestMedian.EnableVerticalScroll = false;
+            this.lbPitchCrestMedian.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchCrestMedian.Location = new System.Drawing.Point(162, 8);
+            this.lbPitchCrestMedian.MaxFontSize = 200F;
+            this.lbPitchCrestMedian.MinFontSize = 6F;
             this.lbPitchCrestMedian.Name = "lbPitchCrestMedian";
-            this.lbPitchCrestMedian.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchCrestMedian.Size = new System.Drawing.Size(71, 38);
             this.lbPitchCrestMedian.TabIndex = 11;
             this.lbPitchCrestMedian.Text = "--.--";
             this.lbPitchCrestMedian.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2283,12 +2335,15 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPitchCrestMean.AutoFont = true;
-            this.lbPitchCrestMean.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbPitchCrestMean.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbPitchCrestMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.81641F);
-            this.lbPitchCrestMean.Location = new System.Drawing.Point(85, 5);
+            this.lbPitchCrestMean.EnableHorizontalScroll = false;
+            this.lbPitchCrestMean.EnableVerticalScroll = false;
+            this.lbPitchCrestMean.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.53516F);
+            this.lbPitchCrestMean.Location = new System.Drawing.Point(85, 8);
+            this.lbPitchCrestMean.MaxFontSize = 200F;
+            this.lbPitchCrestMean.MinFontSize = 6F;
             this.lbPitchCrestMean.Name = "lbPitchCrestMean";
-            this.lbPitchCrestMean.Size = new System.Drawing.Size(71, 44);
+            this.lbPitchCrestMean.Size = new System.Drawing.Size(71, 38);
             this.lbPitchCrestMean.TabIndex = 10;
             this.lbPitchCrestMean.Text = "--.--";
             this.lbPitchCrestMean.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2641,11 +2696,14 @@ namespace BeeInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbCrestCount.AutoFont = true;
-            this.lbCrestCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
             this.lbCrestCount.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbCrestCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 24.58984F);
+            this.lbCrestCount.EnableHorizontalScroll = false;
+            this.lbCrestCount.EnableVerticalScroll = false;
+            this.lbCrestCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 23.05078F);
             this.lbCrestCount.Location = new System.Drawing.Point(134, 5);
             this.lbCrestCount.Margin = new System.Windows.Forms.Padding(0);
+            this.lbCrestCount.MaxFontSize = 200F;
+            this.lbCrestCount.MinFontSize = 6F;
             this.lbCrestCount.Name = "lbCrestCount";
             this.lbCrestCount.Size = new System.Drawing.Size(129, 40);
             this.lbCrestCount.TabIndex = 42;

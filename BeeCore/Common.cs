@@ -308,8 +308,8 @@ namespace BeeCore
             catch (PythonException ex)
             {
                  er=ex.Message;
-                String a = "b";
-                //MessageBox.Show(ex.Message);
+                File.WriteAllText("IniPython.txt", ex.Message);
+
             }
         }
         public static void ClosePython()

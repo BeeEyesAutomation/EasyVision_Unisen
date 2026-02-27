@@ -270,7 +270,7 @@ namespace BeeGlobal
                 }
             }
         }
-        public static bool IsShowImageResult = true;
+        public static ImgShow ImgShow = ImgShow.Result;
         public static int NumProgFromPLC = 1;
         public static TypeCamera TypeCamera;
         public static Model Model = new Model();

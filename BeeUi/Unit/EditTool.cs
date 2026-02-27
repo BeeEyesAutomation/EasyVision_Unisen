@@ -1364,7 +1364,7 @@ namespace BeeUi
 
         private void btnShowResult_Click(object sender, EventArgs e)
         {
-            Global.IsShowImageResult = btnShowResult.IsCLick;
+           // Global.IsShowImageResult = btnShowResult.IsCLick;
         }
 
         private void exportListTool_Click(object sender, EventArgs e)

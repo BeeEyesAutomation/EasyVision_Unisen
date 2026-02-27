@@ -38,8 +38,8 @@ namespace BeeInterface
 
         public void LoadPara()
         {
-
-
+            btnEnBet.IsCLick = Propety.IsAdjPostion;
+            AdjScoreNG.Value = Propety.ScoreYolo;
             ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
             ckSIMD.IsCLick = Propety.ckSIMD;
             ckSubPixel.IsCLick = Propety.ckSubPixel;
@@ -145,7 +145,7 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
 
-            btnTest.Enabled = false;
+         //   btnTest.Enabled = false;
             if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
             else
@@ -407,8 +407,8 @@ namespace BeeInterface
 
         private void btnCalib_Click(object sender, EventArgs e)
         {
-            Propety.IsCalibs = true;
-            btnTest.Enabled = false;
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.IsCalibs = true;
+     //       btnTest.Enabled = false;
             if (!Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Propety.Index].worker.RunWorkerAsync();
             else
@@ -756,6 +756,16 @@ namespace BeeInterface
 
                 
             }
+        }
+
+        private void AdjScoreNG_ValueChanged(float obj)
+        {
+            Propety.ScoreYolo =(int) AdjScoreNG.Value;
+        }
+
+        private void btnEnBet_Click(object sender, EventArgs e)
+        {
+            Propety.IsAdjPostion =btnEnBet.IsCLick;
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -1228,6 +1229,35 @@ Pen outlinePen)
             g.Transform = oldTransform;
             g.SmoothingMode = oldSmoothing;
         }
+        static void FillRectRotate(Graphics g, RectRotate rr,
+                                  Brush fillBrush)
+        {
+            if (rr == null) return;
+
+            // Lưu state
+            var oldSmoothing = g.SmoothingMode;
+            var oldTransform = g.Transform;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Transform forward: screen <- local
+            using (var m = new Matrix())
+            {
+               
+                m.Translate(rr._PosCenter.X, rr._PosCenter.Y);   // tâm
+                m.Rotate(rr._rectRotation);                      // góc
+                g.Transform = m;
+
+                using (var path = BuildPathLocal(rr))
+                {
+                    if (fillBrush != null) g.FillPath(fillBrush, path);
+
+                }
+            }
+
+            // Khôi phục
+            g.Transform = oldTransform;
+            g.SmoothingMode = oldSmoothing;
+        }
         public static void RectEdit(Graphics gc, TypeCrop TypeCrop, RectRotate RectDraw, int WidthPoint, System.Drawing.Point posAutoScroll,float zoom, System.Drawing.Point pMouse, int Thiness = 2)
         {
             if (RectDraw == null) return;
@@ -1418,6 +1448,80 @@ Pen outlinePen)
               
             gc.ResetTransform();
         }
+        public static void FillListRectMask(Graphics gc, TypeCrop TypeCrop,List<RectRotate> ListRect,RectRotate rotArea, System.Drawing.Point posAutoScroll, float zoom, int Opacity = 10)
+        {
+            if (ListRect == null) return;
+            foreach (RectRotate RectDraw in ListRect)
+            {
+                RectangleF _rect = new RectangleF();
+
+
+                _rect = RectDraw._rect;
+                Brush backcolor = new SolidBrush(Color.FromArgb(0, 0, 0, 255));
+                Matrix mat = new Matrix();
+                mat.Translate(posAutoScroll.X, posAutoScroll.Y);
+                mat.Scale((float)(zoom / 100.0), (float)(zoom / 100.0));
+                mat.Translate(rotArea._PosCenter.X, rotArea._PosCenter.Y);
+                mat.Translate(rotArea._rect.X, rotArea._rect.Y);
+                mat.Rotate(rotArea._rectRotation);
+              
+              
+                mat.Translate(RectDraw._PosCenter.X, RectDraw._PosCenter.Y);
+                mat.Rotate(RectDraw._rectRotation);
+                gc.Transform = mat;
+                switch (TypeCrop)
+                {
+                    case TypeCrop.Area:
+                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 0, 191, 255));
+                        break;
+                    case TypeCrop.Crop:
+                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 165, 0));
+                        break;
+                    case TypeCrop.Mask:
+                        backcolor = new SolidBrush(Color.FromArgb(Opacity, 255, 0, 0));
+                        break;
+                }
+                switch (RectDraw.Shape)
+                {
+                    case ShapeType.Ellipse:
+                        gc.FillEllipse(backcolor, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+
+                        break;
+                    case ShapeType.Rectangle:
+                        gc.FillRectangle(backcolor, new Rectangle((int)_rect.X, (int)_rect.Y, (int)_rect.Width, (int)_rect.Height));
+
+                        break;
+                    case ShapeType.Hexagon:
+                        //mat.Translate(rr._PosCenter.X, rr._PosCenter.Y);   // tâm
+                        //mat.Rotate(rr._rectRotation);                      // góc
+                        //gc.Transform = m;
+
+                        using (var path = BuildPathLocal(RectDraw))
+                        {
+                           gc.FillPath(backcolor, path);
+
+                        }
+                       // FillRectRotate(gc, RectDraw, backcolor);
+                        break;
+                    case ShapeType.Polygon:
+                        using (var path = new GraphicsPath())
+                        {
+                            var poly = RectDraw.GetPolygonVerticesLocal();
+                            path.AddPolygon(poly);
+                            gc.FillPath(backcolor, path);
+                        }    
+                           
+                      
+                        break;
+                       
+
+                }
+
+
+                gc.ResetTransform();
+            }
+        }
+
         public static void DrawInfiniteLine(Graphics g, PointF p1, PointF p2, Rectangle bounds, Pen pen)
         {
             if (p1 == p2) return; // Không thể xác định được nếu 2 điểm trùng nhau

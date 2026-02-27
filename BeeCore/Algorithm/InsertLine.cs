@@ -27,6 +27,218 @@ namespace BeeCore.Algorithm
 
             return new Line2D(gvx, gvy, gx0, gy0);
         }
+        //public static RectRotate CreateRectRotate_BotAxis(
+        //  Line2D top, Line2D bot, Line2D left, Line2D right)
+        //{
+        //    // 1) Intersections
+        //    PointF TL = Intersect(top, left);
+        //    PointF TR = Intersect(top, right);
+        //    PointF BR = Intersect(bot, right);
+        //    PointF BL = Intersect(bot, left);
+
+        //    // ==================================================
+        //    // 2) Center hình học (không phải BR)
+        //    // ==================================================
+        //    PointF C = new PointF(
+        //        (TL.X + TR.X + BR.X + BL.X) / 4f,
+        //        (TL.Y + TR.Y + BR.Y + BL.Y) / 4f
+        //    );
+
+        //    // ==================================================
+        //    // 3) Trục X theo cạnh BOT (BL -> BR)
+        //    // ==================================================
+        //    double ux = BR.X - BL.X;
+        //    double uy = BR.Y - BL.Y;
+        //    double ulen = Math.Sqrt(ux * ux + uy * uy);
+
+        //    if (ulen < 1e-9)
+        //        throw new Exception("Bot edge too small.");
+
+        //    ux /= ulen;
+        //    uy /= ulen;
+
+        //    // ==================================================
+        //    // 4) Size
+        //    // ==================================================
+        //    float w = Distance(BL, BR);   // chiều theo bot
+        //    float h = Distance(BR, TR);   // chiều lên trên
+
+        //    if (w <= 0 || h <= 0)
+        //        throw new Exception("Invalid rectangle size.");
+
+        //    // ==================================================
+        //    // 5) Angle theo cạnh BOT
+        //    // ==================================================
+        //    float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
+
+        //    // ==================================================
+        //    // 6) rectLocal centered chuẩn BeeCore
+        //    // ==================================================
+        //    RectangleF rectLocal = new RectangleF(
+        //        -w / 2f,
+        //        -h / 2f,
+        //        w,
+        //        h
+        //    );
+
+        //    return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
+        //}
+        static void Normalize(ref double x, ref double y)
+        {
+            double len = Math.Sqrt(x * x + y * y);
+            if (len < 1e-12) throw new Exception("Zero direction.");
+            x /= len; y /= len;
+        }
+
+        public static RectRotate CreateRectRotate_FromBotRight(
+    Line2D bot,
+    Line2D right,
+    float width,
+    float height)
+        {
+            if (width <= 0 || height <= 0)
+                throw new ArgumentException("Invalid width/height.");
+
+            // 1) BR
+            PointF BR = Intersect(bot, right);
+
+            // 2) u = direction(bot)
+            double ux = bot.Vx;
+            double uy = bot.Vy;
+            double ulen = Math.Sqrt(ux * ux + uy * uy);
+            if (ulen < 1e-12) throw new Exception("Invalid bot direction.");
+            ux /= ulen;
+            uy /= ulen;
+
+            // 3) v = direction(right)
+            double vx = right.Vx;
+            double vy = right.Vy;
+            double vlen = Math.Sqrt(vx * vx + vy * vy);
+            if (vlen < 1e-12) throw new Exception("Invalid right direction.");
+            vx /= vlen;
+            vy /= vlen;
+
+            // ===============================
+            // 4) FIX ORIENTATION HÌNH HỌC
+            // v phải hướng lên phía trên của bot
+            // ===============================
+
+            // normal của bot (vuông góc u)
+            double nx = -uy;
+            double ny = ux;
+
+            // nếu v đang đi xuống phía dưới bot → flip
+            if (vx * nx + vy * ny < 0)
+            {
+                vx = -vx;
+                vy = -vy;
+            }
+
+            // ===============================
+
+            // 5) Center = BR - w/2*u - h/2*v
+            PointF C = new PointF(
+                (float)(BR.X - (width / 2f) * ux - (height / 2f) * vx),
+                (float)(BR.Y - (width / 2f) * uy - (height / 2f) * vy)
+            );
+
+            float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
+
+            RectangleF rectLocal = new RectangleF(
+                -width / 2f,
+                -height / 2f,
+                width,
+                height
+            );
+
+            return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
+        }
+
+        public static RectRotate CreateRectRotate_BotAxis(
+    Line2D top, Line2D bot, Line2D left, Line2D right)
+        {
+            // 1) Intersections
+            PointF TL = Intersect(top, left);
+            PointF TR = Intersect(top, right);
+            PointF BR = Intersect(bot, right);
+            PointF BL = Intersect(bot, left);
+
+            // 2) Trục u theo cạnh BOT (BL -> BR)
+            double ux = BR.X - BL.X;
+            double uy = BR.Y - BL.Y;
+            double ulen = Math.Sqrt(ux * ux + uy * uy);
+            if (ulen < 1e-9) throw new Exception("Bot edge too small.");
+            ux /= ulen; uy /= ulen;
+
+            // 3) v = perp(u). Chọn chiều v sao cho hướng tới TR (bot -> top)
+            double vx = -uy;
+            double vy = ux;
+
+            double tx = TR.X - BR.X;
+            double ty = TR.Y - BR.Y;
+
+            // nếu v đang chỉ xuống dưới (ngược TR), flip
+            if (tx * vx + ty * vy < 0)
+            {
+                vx = -vx;
+                vy = -vy;
+            }
+
+            // 4) Size
+            float w = Distance(BL, BR);
+            float h = Distance(BR, TR);
+            if (w <= 0 || h <= 0) throw new Exception("Invalid rectangle size.");
+
+            // 5) Center tính từ BR + w/2 + h/2
+            // C = BR - (w/2)*u + (h/2)*v
+            PointF C = new PointF(
+                (float)(BR.X - (w / 2f) * ux + (h / 2f) * vx),
+                (float)(BR.Y - (w / 2f) * uy + (h / 2f) * vy)
+            );
+
+            // 6) Angle theo cạnh BOT
+            float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
+
+            // 7) rectLocal centered chuẩn BeeCore
+            RectangleF rectLocal = new RectangleF(-w / 2f, -h / 2f, w, h);
+
+            return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
+        }
+
+        public static RectRotate CreateRectRotate_PivotBR(Line2D top, Line2D bot, Line2D left, Line2D right)
+        {
+            // Intersections
+            PointF TL = Intersect(top, left);
+            PointF TR = Intersect(top, right);
+            PointF BR = Intersect(bot, right);   // <-- PIVOT / điểm xoay
+            PointF BL = Intersect(bot, left);
+
+            // Trục u theo top (TL->TR)
+            double ux = TR.X - TL.X;
+            double uy = TR.Y - TL.Y;
+            double ulen = Math.Sqrt(ux * ux + uy * uy);
+            if (ulen < 1e-9) throw new Exception("Top edge too small / invalid intersections.");
+            ux /= ulen; uy /= ulen;
+
+            // width/height chỉ để lấy kích thước
+            float w = Distance(TL, TR);
+            float h = Distance(TR, BR); // hoặc Distance(TL, BL)
+
+            if (w <= 0 || h <= 0) throw new Exception("Invalid rectangle size from 4 lines.");
+
+            float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
+
+            // Local rect: gốc tại BR => BR local = (0,0), TL local = (-w,-h)
+            RectangleF rectLocal = new RectangleF(-w, -h, w, h);
+
+            // LƯU Ý: tham số thứ 2 (C) là "điểm xoay", không phải center box
+            return new RectRotate(rectLocal, BR, angleDeg, AnchorPoint.BottomRight);
+        }
+        static float Distance(PointF a, PointF b)
+        {
+            float dx = a.X - b.X, dy = a.Y - b.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
         public static RectRotate CreateRectRotate(Line2D top, Line2D bot, Line2D left, Line2D right)
             {
                 // 1) Intersections (TL, TR, BR, BL)

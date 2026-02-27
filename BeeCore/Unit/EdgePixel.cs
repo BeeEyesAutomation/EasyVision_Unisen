@@ -43,6 +43,7 @@ namespace BeeCore
         [NonSerialized]
         public Mat matProcess = new Mat();
         public RectRotate rotArea, rotCheck, rotCrop, rotMask;
+        public List<RectRotate> ListRotMask=new List<RectRotate>();
         public RectRotate rotAreaTemp = new RectRotate();
         [NonSerialized]
         public RectRotate rotAreaAdjustment;
@@ -164,7 +165,7 @@ namespace BeeCore
                 {
                     if (raw.Empty()) return;
 
-                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
+                    Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, null);
                     if (matProcess == null) matProcess = new Mat();
                     if (!matProcess.Empty()) matProcess.Dispose();
                     if (matCrop.Type() == MatType.CV_8UC3)
@@ -192,12 +193,16 @@ namespace BeeCore
                         matProcess = Filters.Morphology(matProcess, MorphTypes.Open, new Size(SizeOpen, SizeOpen));
                     if (IsClearNoiseBig)
                         matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
+                  
                     // matProcess đã tạo từ các bước Filters.*
-                //    ForceBinary(matProcess);
+                    //    ForceBinary(matProcess);
 
-                   //  FillCache _cache = new FillCache();
+                    //  FillCache _cache = new FillCache();
                     FillHoles(matProcess);
-
+                  
+                    if (ListRotMask != null)
+                        matProcess = Cropper.DrawListMaskOnImage(matProcess, ListRotMask, true);
+                    //Cv2.ImWrite("Process.png", matProcess);
                     // PxResult= (int)(Cv2.CountNonZero(matProcess) / 100.0);
                     PxResult = (int)(Cv2.CountNonZero(matProcess) / 100.0);
                 }
@@ -271,7 +276,7 @@ namespace BeeCore
 
 
             if (!Global.IsRun || Global.ParaShow.IsShowDetail)
-                if (matProcess != null && !matProcess.Empty())
+                if (matProcess != null && !matProcess .IsDisposed&& !matProcess.Empty())
                 Draws.DrawMatInRectRotate(gc, matProcess, rotA, Global.ScaleZoom * 100, Global.pScroll, cl, Global.ParaShow.Opacity / 100.0f);
 
             return gc;
@@ -282,7 +287,9 @@ namespace BeeCore
         {
           
             rotCrop = null;
-            rotMask = null;
+          
+            if (ListRotMask == null)
+                ListRotMask = new List<RectRotate>();
            // if (rotCrop == null) rotCrop = new RectRotate();
             if (rotArea == null) rotArea = new RectRotate();
             Common.PropetyTools[IndexThread][Index].StepValue =1f;

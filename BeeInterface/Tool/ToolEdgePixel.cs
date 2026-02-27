@@ -164,7 +164,7 @@ namespace BeeInterface
         private void btnTest_Click(object sender, EventArgs e)
         {
             btnTest.Enabled = false;
-            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected]. worker.IsBusy)
+            if (!Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.IsBusy)
                 Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].worker.RunWorkerAsync();
             else
                 btnTest.IsCLick = false;
@@ -530,6 +530,29 @@ namespace BeeInterface
 
         }
 
-      
+        private void btnAddToList_Click(object sender, EventArgs e)
+        {
+            RectRotate rot = Propety.rotMask.Clone();
+            PointF pCenter = Propety.rotArea.WorldToLocal(rot._PosCenter); 
+            
+            rot._PosCenter = pCenter;
+           // rot.UpdateFromPolygon(false);
+            Propety.ListRotMask.Add(rot);
+            Global.EditTool.View.imgView.Invalidate();
+        }
+
+        private void btnUnoMask_Click(object sender, EventArgs e)
+        {
+            if(Propety.ListRotMask.Count() > 0) 
+            Propety.ListRotMask.RemoveAt(Propety.ListRotMask.Count()-1);
+            Global.EditTool.View.imgView.Invalidate();
+        }
+
+        private void btnClearAllMask_Click(object sender, EventArgs e)
+        {
+            if (Propety.ListRotMask.Count() > 0)
+                Propety.ListRotMask.Clear();
+            Global.EditTool.View.imgView.Invalidate();
+        }
     }
 }

@@ -128,7 +128,7 @@ namespace BeeCore
             {
                 if (raw.Empty()) return;
               
-                Mat matCrop = Cropper.CropRotatedRect(raw, rotArea, rotMask);
+                Mat matCrop = Cropper.CropRotatedRectUltraFast(raw, rotArea);
                 if (matProcess == null) matProcess = new Mat();
                 if (!matProcess.Empty()) matProcess.Dispose();
                 if (matCrop.Type() == MatType.CV_8UC3)
@@ -165,7 +165,7 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.LeftToRight,0,30
+                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.RightToLeft,0,30
 
 
                 );

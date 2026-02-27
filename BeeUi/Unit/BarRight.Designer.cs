@@ -150,7 +150,7 @@ namespace BeeUi.Unit
             this.btnHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.btnHistory.ForeColor = System.Drawing.Color.Black;
-            this.btnHistory.Image = global::BeeUi.Properties.Resources.Image;
+            this.btnHistory.Image = global::BeeUi.Properties.Resources.Image25;
             this.btnHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnHistory.ImageDisabled = null;
             this.btnHistory.ImageHover = null;

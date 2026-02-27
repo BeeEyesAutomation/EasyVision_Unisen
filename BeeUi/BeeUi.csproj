@@ -215,6 +215,12 @@
     <Compile Include="Tool\ucReport.Designer.cs">
       <DependentUpon>ucReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Unit\StatusBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Unit\StatusBar.Designer.cs">
+      <DependentUpon>StatusBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Unit\HideBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -360,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ucReport.resx">
       <DependentUpon>ucReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unit\StatusBar.resx">
+      <DependentUpon>StatusBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\HideBar.resx">
       <DependentUpon>HideBar.cs</DependentUpon>
@@ -545,6 +554,15 @@
     <Content Include="bee.ico" />
     <Content Include="Python\Learning.py" />
     <Content Include="Python\OcrWapper.py" />
+    <None Include="Resources\Edit Image_1.png" />
+    <None Include="Resources\Edit Image.png" />
+    <None Include="Resources\Image_3.png" />
+    <None Include="Resources\Image_2.png" />
+    <None Include="Resources\Right Click.png" />
+    <None Include="Resources\Drag And Drop.png" />
+    <None Include="Resources\Image_1.png" />
+    <None Include="Resources\Image.png" />
+    <None Include="Resources\Image.ico" />
     <None Include="Resources\Rotate.ico" />
     <None Include="Resources\EASY_LONG.png" />
     <None Include="Resources\EASY1.png" />
@@ -630,7 +648,6 @@
     <None Include="Resources\Prison.png" />
     <None Include="Resources\Live Video On.png" />
     <None Include="Resources\Brightness.png" />
-    <None Include="Resources\Image.png" />
     <None Include="Resources\Refresh.png" />
     <None Include="Resources\Down Button.png" />
     <None Include="Resources\Camera_3.png" />

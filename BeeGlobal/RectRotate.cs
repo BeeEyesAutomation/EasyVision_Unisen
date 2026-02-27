@@ -8,6 +8,57 @@ namespace BeeGlobal
     [Serializable()]
     public class RectRotate
     {
+        public PointF WorldToLocal(PointF pWorld)
+        {
+            // 1) World -> Local (gốc tại center)
+            float dx = pWorld.X - _PosCenter.X;
+            float dy = pWorld.Y - _PosCenter.Y;
+
+            double rad = -_rectRotation * Math.PI / 180.0; // quay ngược về local
+            float c = (float)Math.Cos(rad);
+            float s = (float)Math.Sin(rad);
+
+            float xC = dx * c - dy * s;  // local theo center
+            float yC = dx * s + dy * c;
+
+            // 2) Shift center-origin -> topLeft-origin
+            // _rect thường là (-w/2, -h/2, w, h)
+            float w = _rect.Width;
+            float h = _rect.Height;
+
+            return new PointF(xC + w * 0.5f, yC + h * 0.5f);
+        }
+
+        public PointF LocalToWorld(PointF pLocalTL)
+        {
+            // 1) Unshift topLeft-origin -> center-origin
+            float w = _rect.Width;
+            float h = _rect.Height;
+
+            float xC = pLocalTL.X - w * 0.5f;
+            float yC = pLocalTL.Y - h * 0.5f;
+
+            // 2) Local(center) -> World
+            double rad = _rectRotation * Math.PI / 180.0;
+            float c = (float)Math.Cos(rad);
+            float s = (float)Math.Sin(rad);
+
+            float xW = xC * c - yC * s + _PosCenter.X;
+            float yW = xC * s + yC * c + _PosCenter.Y;
+            return new PointF(xW, yW);
+        }
+
+        /// <summary>
+        /// Center world của rect src -> local(top-left) của rect dst
+        /// </summary>
+        public static PointF CenterWorldToOtherLocal_TopLeft(RectRotate src, RectRotate dst)
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src));
+            if (dst == null) throw new ArgumentNullException(nameof(dst));
+
+            // center world của src chính là src._PosCenter
+            return dst.WorldToLocal(src._PosCenter);
+        }
         public  bool ContainsPoint(PointF pWorld, float eps = 1e-4f)
         {
             // 1) World -> Local (local gốc tại rr._PosCenter, trục local quay theo rr._rectRotation)

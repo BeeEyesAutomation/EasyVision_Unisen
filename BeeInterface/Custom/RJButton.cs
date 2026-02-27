@@ -399,7 +399,17 @@ namespace BeeInterface
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-            if (Visible) SmoothAncestors();
+            if (Visible)
+            {
+                SmoothAncestors();
+
+                // TÍNH LAYOUT NGAY, đừng chờ Idle
+                if (IsHandleCreated)
+                    UpdateTextImageLayoutCore();
+
+                SafeInvalidate();
+            }
+           // if (Visible) SmoothAncestors();
         }
 
         protected override void Dispose(bool disposing)
@@ -1124,17 +1134,31 @@ namespace BeeInterface
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
-            RequestLayout();
+            if (IsHandleCreated && Visible)
+                UpdateTextImageLayoutCore();
+            else
+                RequestLayout();
+
+            SafeInvalidate();
+           // RequestLayout();
         }
 
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-
-            // Nếu AutoFit đang set Font thì bỏ qua để tránh vòng lặp
             if (_autoFitInProgress) return;
 
-            RequestLayout();
+            if (IsHandleCreated && Visible)
+                UpdateTextImageLayoutCore();
+            else
+                RequestLayout();
+
+            SafeInvalidate();
+
+            // Nếu AutoFit đang set Font thì bỏ qua để tránh vòng lặp
+            //if (_autoFitInProgress) return;
+
+            //RequestLayout();
         }
 
         // ===== Utils =====

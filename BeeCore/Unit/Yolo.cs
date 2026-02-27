@@ -406,6 +406,7 @@ namespace BeeCore
                 {
                             
                     Line2D line = new Line2D( Line2D.Vx, Line2D.Vy, Line2D.X0, Line2D.Y0);
+                      
                     Line2D lineWorld =
                     Line2DRectRotateXform.LineLocalToWorld(
                         line,

@@ -2,6 +2,8 @@
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using Point = OpenCvSharp.Point;
 using SD = System.Drawing; // alias: dùng SD.PointF nếu cần đọc dữ liệu từ RectRotate
 
 namespace BeeCore
@@ -26,6 +28,132 @@ namespace BeeCore
                 if (M != null) { M.Dispose(); M = null; }
                 if (Patch != null) { Patch.Dispose(); Patch = null; }
             }
+        }
+
+
+        public static Mat DrawListMaskOnImage(
+            Mat src,
+            IList<BeeGlobal.RectRotate> masks,
+           
+            bool cloneSrc = true)
+        {
+            if (src == null || src.Empty())
+                throw new ArgumentException("src is null/empty");
+
+            if (masks == null || masks.Count == 0)
+                return cloneSrc ? src.Clone() : src;
+
+            Mat dst = cloneSrc ? src.Clone() : src;
+            bool isGray = dst.Channels() == 1;
+
+            foreach (var rr in masks)
+            {
+                if (rr == null) continue;
+
+                // ===== COLOR =====
+                Scalar color = isGray
+                    ? (rr.IsWhite ? new Scalar(255) : new Scalar(0))
+                    : (rr.IsWhite ? new Scalar(255, 255, 255) : new Scalar(0, 0, 0));
+
+                // ===== COMMON CENTER + SIZE =====
+                var center = new OpenCvSharp.Point2f(
+                    rr._PosCenter.X,
+                    rr._PosCenter.Y);
+
+                var size = new OpenCvSharp.Size2f(
+                    rr._rect.Width,
+                    rr._rect.Height);
+
+                switch (rr.Shape)
+                {
+                    // =====================================================
+                    // RECTANGLE
+                    // =====================================================
+                    case BeeGlobal.ShapeType.Rectangle:
+                        {
+                            RotatedRect rrect =
+                                new RotatedRect(center, size, rr._rectRotation);
+
+                            OpenCvSharp.Point2f[] v = rrect.Points();
+                            OpenCvSharp.Point[] pts = new OpenCvSharp.Point[4];
+
+                            for (int i = 0; i < 4; i++)
+                                pts[i] = new OpenCvSharp.Point(
+                                    (int)Math.Round(v[i].X),
+                                    (int)Math.Round(v[i].Y));
+
+                            Cv2.FillConvexPoly(dst, pts, color);
+                            break;
+                        }
+
+                    // =====================================================
+                    // ELLIPSE
+                    // =====================================================
+                    case BeeGlobal.ShapeType.Ellipse:
+                        {
+                            Cv2.Ellipse(
+                                dst,
+                                new OpenCvSharp.Point(
+                                    (int)Math.Round(center.X),
+                                    (int)Math.Round(center.Y)),
+                                new OpenCvSharp.Size(
+                                    (int)Math.Round(size.Width / 2f),
+                                    (int)Math.Round(size.Height / 2f)),
+                                rr._rectRotation,
+                                0,
+                                360,
+                                color,
+                                -1);
+                            break;
+                        }
+
+                    // =====================================================
+                    // HEXAGON
+                    // =====================================================
+                    case BeeGlobal.ShapeType.Hexagon:
+                        {
+                            var wv = rr.GetHexagonVerticesWorld();
+                            if (wv == null || wv.Length < 3) break;
+
+                            OpenCvSharp.Point[] pts =
+                                new OpenCvSharp.Point[wv.Length];
+
+                            for (int i = 0; i < wv.Length; i++)
+                            {
+                                pts[i] = new OpenCvSharp.Point(
+                                    (int)Math.Round(wv[i].X),
+                                    (int)Math.Round(wv[i].Y));
+                            }
+
+                            Cv2.FillPoly(dst, new[] { pts }, color);
+                            break;
+                        }
+
+                    // =====================================================
+                    // POLYGON
+                    // =====================================================
+                    case BeeGlobal.ShapeType.Polygon:
+                        {
+                            var wv = rr.GetPolygonVerticesWorld();
+                            if (wv == null || wv.Length < 3) break;
+
+                            OpenCvSharp.Point[] pts =
+                                new OpenCvSharp.Point[wv.Length];
+
+                            for (int i = 0; i < wv.Length; i++)
+                            {
+                                pts[i] = new OpenCvSharp.Point(
+                                    (int)Math.Round(wv[i].X),
+                                    (int)Math.Round(wv[i].Y));
+                            }
+
+                            Cv2.FillPoly(dst, new[] { pts }, color);
+                            break;
+                        }
+                }
+            }
+
+            return dst;
         }
         // (1) Cắt outer rotated bounding patch — trả về Mat patch
         public static Mat CropOuterPatch(Mat source, RectRotate rot, out PatchCropContext ctx)
@@ -212,6 +340,57 @@ namespace BeeCore
                 if (mask2 != null) mask2.Dispose();
                 if (finalMask != null && result == null) finalMask.Dispose();
                 if (bgMat != null) bgMat.Dispose();
+            }
+        }
+        public static Mat CropRotatedRectUltraFast(Mat source, RectRotate rot)
+        {
+            if (source == null || source.Empty())
+                return new Mat();
+
+            Point2f center = new Point2f(
+                rot._PosCenter.X,
+                rot._PosCenter.Y);
+
+            Size2f size = new Size2f(
+                rot._rect.Width,
+                rot._rect.Height);
+
+            float angle = (float)rot._rectRotation;
+
+            // Tính bounding box lớn hơn 1 chút
+            float cos = Math.Abs((float)Math.Cos(angle * Math.PI / 180.0));
+            float sin = Math.Abs((float)Math.Sin(angle * Math.PI / 180.0));
+
+            int boundW = (int)(size.Width * cos + size.Height * sin);
+            int boundH = (int)(size.Width * sin + size.Height * cos);
+
+            Rect roi = new Rect(
+                (int)(center.X - boundW / 2),
+                (int)(center.Y - boundH / 2),
+                boundW,
+                boundH);
+
+            roi = roi.Intersect(new Rect(0, 0, source.Width, source.Height));
+            if (roi.Width <= 0 || roi.Height <= 0)
+                return new Mat();
+
+            using (Mat sub = new Mat(source, roi))
+            using (Mat M = Cv2.GetRotationMatrix2D(
+                new Point2f(sub.Width / 2f, sub.Height / 2f),
+                angle,
+                1.0))
+            using (Mat rotated = new Mat())
+            {
+                Cv2.WarpAffine(sub, rotated, M, sub.Size());
+
+                Mat patch = new Mat();
+                Cv2.GetRectSubPix(
+                    rotated,
+                    new OpenCvSharp.Size(size.Width, size.Height),
+                    new Point2f(rotated.Width / 2f, rotated.Height / 2f),
+                    patch);
+
+                return patch;
             }
         }
         public static Mat CropRotatedRect(

@@ -1,11 +1,11 @@
 #define VER_MAJOR 1
 #define VER_MINOR 1
 
-#define VER_BUILD 299
-#define VER_REVISION 260223
+#define VER_BUILD 301
+#define VER_REVISION 260227
 
-#define VER_BUILD 299
-#define VER_REVISION 260223
+#define VER_BUILD 301
+#define VER_REVISION 260227
 
 
 #define VER_FILEVERSION_STR "1.1.0.1"

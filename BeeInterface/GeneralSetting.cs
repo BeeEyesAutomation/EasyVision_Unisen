@@ -39,9 +39,9 @@ namespace BeeInterface
             btnSaveNG.IsCLick = Global.Config.IsSaveNG;
             btnSaveRaw.IsCLick = Global.Config.IsSaveRaw;
             btnSaveRS.IsCLick = Global.Config.IsSaveRS;
-            btnShowFullScreen.IsCLick = Global.IsShowImageResult;
+            btnShowFullScreen.IsCLick = Global.Config.IsShowFull;
 
-            btnWaitingCenter.IsCLick=Global.Config.IsShowFull;
+            btnWaitingCenter.IsCLick=Global.Config.IsWaitCenter;
             if (Global.Config.IsShowFull)
             {
                 btnShowFullScreen.Text = "ON";

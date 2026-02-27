@@ -280,10 +280,10 @@ namespace BeeInterface
                     trackExposure.IsInital = true;
                 trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
                 trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
-                if (trackExposure.Max > 50000)
+                if (trackExposure.Max > 5000)
                 {
 
-                    trackExposure.Max = 50000;
+                    trackExposure.Max = 5000;
                 }
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > 50000)
                 {
@@ -390,10 +390,10 @@ namespace BeeInterface
                 trackExposure.IsInital = true;
             trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
             trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
-            if (trackExposure.Max > 50000)
+            if (trackExposure.Max > 5000)
             {
 
-                trackExposure.Max = 50000;
+                trackExposure.Max = 5000;
             }
             if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > 50000)
             {

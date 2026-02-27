@@ -453,6 +453,8 @@ namespace BeeCore
         public void SetModel()
         {
             rotMask = null;
+          
+            if (rotArea == null) rotArea = new RectRotate();
             PitchMeasure = new BeeCppCli.PitchCli();
             Common.PropetyTools[IndexThread][Index].StepValue = 0.1f;
     

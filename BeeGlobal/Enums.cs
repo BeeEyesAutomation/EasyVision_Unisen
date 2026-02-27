@@ -353,6 +353,12 @@ namespace BeeGlobal
         CPU,
         GPU
     }
+    public enum ImgShow
+    {
+        Result,
+        Raw,
+        History
+    }
     public enum TypeYolo
     {
         Onnx,

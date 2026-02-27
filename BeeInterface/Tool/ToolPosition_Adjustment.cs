@@ -43,6 +43,7 @@ namespace BeeInterface
             {
                 Propety.Angle = 1;
             }
+            //btnEnBet.IsCLick = Propety.IsBet;
             float angle = (Propety.rotCrop._rectRotation) - (Propety.rotArea._rectRotation);
             Propety.AngleLower = angle - Propety.Angle;
             Propety.AngleUper = angle + Propety.Angle;
@@ -678,6 +679,11 @@ namespace BeeInterface
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void btnEnBet_Click(object sender, EventArgs e)
+        {
+           // Propety.IsBet = btnEnBet.IsCLick;
         }
     }
 }

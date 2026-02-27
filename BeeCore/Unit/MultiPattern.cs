@@ -35,6 +35,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Windows.Markup;
 using static BeeCore.Cropper;
 using static LibUsbDotNet.Main.UsbTransferQueue;
+using static System.Windows.Forms.MonthCalendar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Point = OpenCvSharp.Point;
 using ShapeType = BeeGlobal.ShapeType;
@@ -564,8 +565,7 @@ namespace BeeCore
                                 String pathBlack = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathBlackDot);
                               //  String pathBlackDot = @"E:\Code\EasyVision_Unisen\bin\Release\Program\AD_MAYBOI\BlackDot1024";
                             int    NumThreadCPU = 16;
-
-                                
+                             
                                 if (File.Exists(pathBlack + "\\best.xml"))
                                       {
                                     NativeOnnx = new NativeYolo(pathBlack + "\\best.xml", 0, 0, NumThreadCPU);
@@ -581,7 +581,9 @@ namespace BeeCore
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(ex.Message);
+                                Global.LogsDashboard?.AddLog(
+                        new LogEntry(DateTime.Now, LeveLLog.ERROR, "IniBlack", ex.ToString()));
+                               
                             }
                             // if(pathBlackDot!=null)
                             //if (File.Exists(pathBlackDot))
@@ -732,9 +734,9 @@ namespace BeeCore
             using (Mat crop = Cropper.CropRotatedRect(raw, rotBot, null))
             {
 
-                Mat Edge = Filters.GetStrongEdgesOnly(crop);
+                Mat Edge = Filters.Edge(crop);
                 //  Edge = Filters.Morphology(Edge, MorphTypes.Open, new Size(7, 7));
-                Cv2.ImWrite("Bot.png", Edge);
+             //   Cv2.ImWrite("Bot.png", Edge);
                 LineBot = RansacLine.FindBestLine(
                     Edge.Data, Edge.Width, Edge.Height, (int)Edge.Step(),
                     iterations: RansacIterations,
@@ -804,22 +806,23 @@ namespace BeeCore
                 );
 
             }
+            LineRight.X1 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y1 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
+            LineRight.X2 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y2 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
+            LineRight.X0 = LineRight.X1; LineRight.Y0 = LineRight.Y1;
             if (LineLeft.Found && LineTop.Found && LineRight.Found && LineBot.Found)
             {
 
             
-            LineRight.X1 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y1 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
-            LineRight.X2 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y2 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
-            LineRight.X0 = LineRight.X1; LineRight.Y0 = LineRight.Y1;
+           
             line1 = new Line2D(LineTop.Vx, LineTop.Vy, LineTop.X0, LineTop.Y0);
             line2 = new Line2D(LineBot.Vx, LineBot.Vy, LineBot.X0, LineBot.Y0);
             line3 = new Line2D(LineLeft.Vx, LineLeft.Vy, LineLeft.X0, LineLeft.Y0);
             line4 = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
 
-            rectPage = InsertLine.CreateRectRotate(line1, line2, line3, line4);
+            rectPage = InsertLine.CreateRectRotate_BotAxis(line1, line2, line3, line4);
             
             RectRotate rtReturn = rectPage.Clone();
-            rtReturn.OffsetPixels(-ExpandPage,- ExpandPage);
+            //rtReturn.OffsetPixels(-ExpandPage,- ExpandPage);
 
             return rtReturn;
             }
@@ -889,6 +892,7 @@ namespace BeeCore
         //);
         public bool IsHardNoise;
         public int ScoreYolo = 10;
+        public RectRotate rotOrigin = new RectRotate();
         public List<ResultItem> CheckBoxYolo( Mat raw )
         {
             List<ResultItem> resultTemp = new List<ResultItem>();
@@ -1012,6 +1016,9 @@ namespace BeeCore
             }
           return  resultTemp;
         }
+        public bool IsAdjPostion = false;
+        public PointF pInsert;
+        public PointF pInsert1;
         public void EditMode(RectRotate rectRotate)
         {
             if (ResultItems != null)
@@ -1061,10 +1068,35 @@ namespace BeeCore
                             );
                        // Cv2.ImWrite("CANY.png", gray);
                         rotArea = CheckPage(gray);//rotArea= 
-                    }    
-                  
-                    gray = Cropper.CropRotatedRect(raw, rotArea, null);
-                  
+                    }
+                    //if (LineTop.Found && LineRight.Found)
+                    //{
+
+                    //    Line2D LineHorial = new Line2D(LineTop.Vx, LineTop.Vy, LineTop.X0, LineTop.Y0);
+                    //    Line2D LineVertial = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
+                    //    pInsert = InsertLine.Intersect(LineHorial, LineVertial);
+                    //  //  MoveTopRightTo(rotArea, pInsert);
+                       
+                    //}
+                    //    if (LineTop.Found && LineRight.Found)
+                    //{
+
+                    //    Line2D LineHorial = new Line2D(LineTop.Vx, LineTop.Vy, LineTop.X0, LineTop.Y0);
+                    //    Line2D  LineVertial = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
+                    //    pInsert = InsertLine.Intersect(LineHorial, LineVertial);
+                    //    int w = (int)rotArea._rect.Width;
+                    //    int h = (int)rotArea._rect.Height;
+                    //    PointF pCenter = new PointF(pInsert.X - w / 2, pInsert.Y + h / 2);
+
+                    //  //  rotOrigin = rotArea.Clone();
+                    //    rotArea._PosCenter = pCenter;
+                    //   // rotArea._rectRotation = 0;
+                    // //   rotOrigin._PosCenter = pCenter;
+                    // //   rotOrigin._rect = new RectangleF(- rotArea._rect.Width / 2,  - rotArea._rect.Height / 2, rotArea._rect.Width, rotArea._rect.Height);
+                    //}
+                   
+                         gray = Cropper.CropRotatedRectUltraFast(raw, rotArea);
+                  //  Cv2.ImWrite("Yolo.png", gray);
                     List<ResultItem> itChip=  CheckBoxYolo(gray);
                 
                     if (list_Patterns == null)
@@ -1264,6 +1296,45 @@ namespace BeeCore
         List<ResultItem> ResultItems = new List<ResultItem>();
         [NonSerialized]
         public bool IsDone = false;
+        public static Mat CropRoiView(Mat src, RectRotate rot)
+        {
+            Rect roi = new Rect(new Point(rot._PosCenter.X - rot._rect.Width / 2, rot._PosCenter.Y - rot._rect.Height / 2),new Size(rot._rect.Width,rot._rect.Height));
+            if (src == null || src.Empty()) return new Mat();
+            return new Mat(src, roi); // view, dùng xong nhớ Dispose
+        }
+        public static PointF GetTopRightWorld(RectRotate r)
+        {
+            float w = r._rect.Width;
+            float h = r._rect.Height;
+
+            // local top-right
+            float lx = +w / 2f;
+            float ly = -h / 2f;
+
+            float rad = (float)(r._rectRotation * Math.PI / 180.0);
+            float cos = (float)Math.Cos(rad);
+            float sin = (float)Math.Sin(rad);
+
+            // rotate local
+            float rx = lx * cos - ly * sin;
+            float ry = lx * sin + ly * cos;
+
+            // world
+            return new PointF(
+                r._PosCenter.X + rx,
+                r._PosCenter.Y + ry);
+        }
+        public static void MoveTopRightTo(RectRotate r, PointF target)
+        {
+            PointF tr = GetTopRightWorld(r);
+
+            float dx = tr.X - target.X;
+            float dy = tr.Y - target.Y;
+
+            r._PosCenter = new PointF(
+                r._PosCenter.X - dx,
+                r._PosCenter.Y - dy);
+        }
         public async void RunMode(RectRotate rectRotate)
         {
             Common.PropetyTools[Global.IndexChoose][Index].ScoreResult = 0;
@@ -1278,17 +1349,179 @@ namespace BeeCore
                 if (raw.Empty()) return;
 
                 Mat matBlack = new Mat();
-
+               
                 try
-                {
+                {   if(IsAdjPostion)
+                    {
+                        LineBot.Found = false;
+                        LineRight.Found = false;
+                        rectRotate = rotArea.Clone(); ; 
+                        rotAreaAdjustment = rotArea.Clone();
+                        int W = raw.Width;
+                        int H = raw.Height;
+                        RansacIterations = 2000;
+
+                        Parallel.Invoke(
+                            new ParallelOptions
+                            {
+                                MaxDegreeOfParallelism = 2
+                            },
+
+                            // ===== TOP =====
+                            () =>
+                            {
+
+
+                                rotBot = new RectRotate(new RectangleF(-WidthDetectBox / 2f, -H / 4f, WidthDetectBox, H / 2f), new PointF(W / 2, 3 * H / 4f), 0, AnchorPoint.None);
+                                using (Mat crop1 = CropRoiView(raw, rotBot))
+                                using (Mat Edge = Filters.GetStrongEdgesOnly(crop1))
+                                {
+
+                                   
+                                    LineBot = RansacLine.FindBestLine(
+                                        Edge.Data, Edge.Width, Edge.Height, (int)Edge.Step(),
+                                        iterations: RansacIterations,
+                                        threshold: (float)RansacThreshold,
+                                        maxPoints: 120000,
+                                        seed: Index,
+                                        mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Horizontal, LineScanMode.BottomToTop, 0, 40
+                                    );
+
+                                }
+                                LineBot.X1 += rotBot._PosCenter.X + rotBot._rect.X; LineBot.Y1 += rotBot._PosCenter.Y + rotBot._rect.Y;
+                                LineBot.X2 += rotBot._PosCenter.X + rotBot._rect.X; LineBot.Y2 += rotBot._PosCenter.Y + rotBot._rect.Y;
+                                LineBot.X0 = LineBot.X1; LineBot.Y0 = LineBot.Y1;
+
+                                //using (Mat crop1 = CropRoiView(raw, rotTop))
+                                //using (Mat edge = Filters.Edge(crop1))
+                                //{
+                                //    var line = RansacLine.FindBestLine(
+                                //        edge.Data, edge.Width, edge.Height, (int)edge.Step(),
+                                //        iterations: RansacIterations,
+                                //        threshold: (float)RansacThreshold,
+                                //        maxPoints: 120000,
+                                //        seed: Index,
+                                //        mmPerPixel: 1,
+                                //        AspectLen,
+                                //        BeeCpp.LineDirectionMode.Horizontal,
+                                //        LineScanMode.TopToBottom,
+                                //        0,
+                                //        40);
+
+                                //    line.X1 += rotTop._PosCenter.X + rotTop._rect.X;
+                                //    line.Y1 += rotTop._PosCenter.Y + rotTop._rect.Y;
+                                //    line.X2 += rotTop._PosCenter.X + rotTop._rect.X;
+                                //    line.Y2 += rotTop._PosCenter.Y + rotTop._rect.Y;
+                                //    line.X0 = line.X1;
+                                //    line.Y0 = line.Y1;
+
+                                //    LineTop = line;
+                            //}
+                            },
+
+                            // ===== RIGHT =====
+                            () =>
+                            {
+                                rotRigth = new RectRotate(new RectangleF(-W / 4f, -WidthDetectBox / 2f, W / 2f, WidthDetectBox), new PointF(3 * W / 4f, H / 2), 0, AnchorPoint.None);
+                                using (Mat crop1 = CropRoiView(raw, rotRigth))
+                                using (Mat Edge = Filters.GetStrongEdgesOnly(crop1))
+                                {
+
+
+                                    LineRight = RansacLine.FindBestLine(
+                                        Edge.Data, Edge.Width, Edge.Height, (int)Edge.Step(),
+                                        iterations: RansacIterations,
+                                        threshold: (float)RansacThreshold,
+                                        maxPoints: 120000,
+                                        seed: Index,
+                                        mmPerPixel: 1, AspectLen, BeeCpp.LineDirectionMode.Vertical, LineScanMode.RightToLeft, 0, 40
+                                    );
+
+                                }
+                                LineRight.X1 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y1 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
+                                LineRight.X2 += rotRigth._PosCenter.X + rotRigth._rect.X; LineRight.Y2 += rotRigth._PosCenter.Y + rotRigth._rect.Y;
+                                LineRight.X0 = LineRight.X1; LineRight.Y0 = LineRight.Y1;
+                                //var rotRight = new RectRotate(
+                                //    new RectangleF(-W / 4f, -WidthDetectBox / 2f, W / 2f, WidthDetectBox),
+                                //    new PointF(3 * W / 4f, H / 2),
+                                //    0,
+                                //    AnchorPoint.None);
+
+                                //using (Mat crop1 = CropRoiView(raw, rotRight))
+                                //using (Mat edge = Filters.Edge(crop1))
+                                //{
+                                //    var line = RansacLine.FindBestLine(
+                                //        edge.Data, edge.Width, edge.Height, (int)edge.Step(),
+                                //        iterations: RansacIterations,
+                                //        threshold: (float)RansacThreshold,
+                                //        maxPoints: 120000,
+                                //        seed: Index,
+                                //        mmPerPixel: 1,
+                                //        AspectLen,
+                                //        BeeCpp.LineDirectionMode.Vertical,
+                                //        LineScanMode.RightToLeft,
+                                //        0,
+                                //        40);
+
+                                //    line.X1 += rotRight._PosCenter.X + rotRight._rect.X;
+                                //    line.Y1 += rotRight._PosCenter.Y + rotRight._rect.Y;
+                                //    line.X2 += rotRight._PosCenter.X + rotRight._rect.X;
+                                //    line.Y2 += rotRight._PosCenter.Y + rotRight._rect.Y;
+                                //    line.X0 = line.X1;
+                                //    line.Y0 = line.Y1;
+
+                                //    LineRight = line;
+                                //}
+                            }
+                        );
+
+                        if (LineBot.Found && LineRight.Found)
+                              {
+
+                                  Line2D LineHorial = new Line2D(LineBot.Vx, LineBot.Vy, LineBot.X0, LineBot.Y0);
+                                  Line2D LineVertial = new Line2D(LineRight.Vx, LineRight.Vy, LineRight.X0, LineRight.Y0);
+
+                            rotAreaAdjustment = InsertLine.CreateRectRotate_FromBotRight(LineHorial, LineVertial, rotAreaAdjustment._rect.Width, rotAreaAdjustment._rect.Height);
+                          //  MoveTopRightTo(rotAreaAdjustment, pInsert1);
+                            rectRotate = rotAreaAdjustment;
+                            if (!Global.IsRun)
+                                rotArea = rectRotate;
+                            //if (!Global.IsRun)
+                            //{
+                            //    pInsert = pInsert1;
+                            //    MoveTopRightTo(rotAreaAdjustment, pInsert);
+                            //    rectRotate = rotAreaAdjustment;
+                            //}
+                            //else
+                            //{
+
+                                //    float deltaX = pInsert.X - pInsert1.X;
+                                //    float deltaY = pInsert.Y - pInsert1.Y;
+
+
+                                //    rotAreaAdjustment._PosCenter = new PointF(rotArea._PosCenter.X - deltaX, rotArea._PosCenter.Y - deltaY);
+                                //    rectRotate._PosCenter = rotAreaAdjustment._PosCenter;
+                                //}
+                                //   rotOrigin._PosCenter = pCenter;
+                                //   rotOrigin._rect = new RectangleF(- rotArea._rect.Width / 2,  - rotArea._rect.Height / 2, rotArea._rect.Width, rotArea._rect.Height);
+                              }
+                          
+                     
+                    }
                     //RectRotate rotAuto = new RectRotate(new RectangleF(-raw.Width / 2, -raw.Height / 2, raw.Width, raw.Height), new PointF(raw.Width / 2, raw.Height / 2), 0, AnchorPoint.None);
                     //Mat gray = Cropper.CropRotatedRect(raw, rotAuto, null);
                     //rectRotate = CheckPage(gray);//rotArea= 
-                    Mat crop = Cropper.CropRotatedRect(raw, rectRotate, null);
+                    Mat crop = Cropper.CropRotatedRectUltraFast(raw, rectRotate);
+                  //  Cv2.ImWrite("Crop.png", crop);
                     ResultItems = new List<ResultItem>();
                     bool IsBlack = false;
                     int onnxOnce = 0;
                      matBlack = crop.Clone();
+                    if (matBlack.Channels() == 1)
+                    {
+                       
+                        Cv2.CvtColor(matBlack, matBlack, ColorConversionCodes.GRAY2BGR);
+                    }
                     if (crop.Type() == MatType.CV_8UC3)
                         Cv2.CvtColor(crop, crop, ColorConversionCodes.BGR2GRAY);
                     int l = Math.Min(list_Patterns.Count, ResultMulti.Count)+1;
@@ -1312,9 +1545,10 @@ namespace BeeCore
                            {
                                try
                                {
+                                   float Score = (float)(ScoreYolo / 100.0);
                                    int countDetect = NativeOnnx.Detect(
                                        matBlack.Data, matBlack.Width, matBlack.Height, (int)matBlack.Step(),
-                                       0.1f, 0.9f, OnnxBoxes);
+                                       Score, 0.9f, OnnxBoxes);
 
                                    if (countDetect > 0) IsBlack = true;
 
@@ -1322,8 +1556,8 @@ namespace BeeCore
                                    {
                                        if (box.score == 0) continue;
 
-                                       string name = (ListNameOnnx == null) ? "unknown"
-                                           : (ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown");
+                                       string name = "blackdot";// (ListNameOnnx == null) ? "unknown"
+                                          // : (ListNameOnnx.TryGetValue(box.classId, out var s) ? s : "unknown");
 
                                        var item = new BeeCore.ResultItem(name);
                                        item.rot = NativeYolo.YoloBoxToRectRotate(box);
@@ -1341,106 +1575,108 @@ namespace BeeCore
                            try
                            {
                                // Debug.WriteLine($"[ENTER] i={i}");
-
-                               var rm = ResultMulti[i];
-
-                               if (rm == null)
-                                   return;
-                               RectRotate rotCrop = rm.RotCalib;
-                               RectRotate roiRR = CalcRoiRect(crop, rotCrop);
-
-                               int w0 = (int)Math.Round(roiRR._rect.Width);
-                               int h0 = (int)Math.Round(roiRR._rect.Height);
-                               int x = (int)Math.Round(roiRR._PosCenter.X - w0 * 0.5f);
-                               int y = (int)Math.Round(roiRR._PosCenter.Y - h0 * 0.5f);
-
-                               // clamp
-                               if (x < 0) x = 0;
-                               if (y < 0) y = 0;
-                               if (x + w0 > crop.Width) w0 = crop.Width - x;
-                               if (y + h0 > crop.Height) h0 = crop.Height - y;
-                               if (w0 < 1 || h0 < 1)
-                                   return;
-
-                               int offset = y * step + x * elem;
-                               IntPtr ptr = IntPtr.Add(data, offset);
-
-
-
-                               Mat matCrop0 = new Mat(h0, w0, type, ptr, step);
-
-                               list_Patterns[i].SetRawNoCrop(
-                                               ptr,
-                                               w0,
-                                               h0,
-                                               step,
-                                               ch
-                                           );
-                               var rot = list_Patterns[i].Match(
-                                       IsHighSpeed,
-                                       0,
-                                       AngleLower,
-                                       AngleUper,
-                                       Common.PropetyTools[IndexThread][Index].Score / 100.0,
-                                       ckSIMD,
-                                       ckBitwiseNot,
-                                       ckSubPixel,
-                                       1,
-                                       OverLap,
-                                       false,
-                                       -1
-                                   );
-
-                               rm.IsDot = false;
-                               if (rot == null || rot.Count == 0)
+                               if (i < ResultMulti.Count)
                                {
-                                   rm.Score = 0;
-                                   rm.RotCheck = null;
+                                   var rm = ResultMulti[i];
 
-                               }
-                               else
-                               {
-                                   var r0 = rot[0];
+                                   if (rm == null)
+                                       return;
+                                   RectRotate rotCrop = rm.RotCalib;
+                                   RectRotate roiRR = CalcRoiRect(crop, rotCrop);
 
-                                   float w1 = (float)r0.Width;
-                                   float h1 = (float)r0.Height;
-                                   float angle = (float)r0.AngleDeg;
+                                   int w0 = (int)Math.Round(roiRR._rect.Width);
+                                   int h0 = (int)Math.Round(roiRR._rect.Height);
+                                   int x = (int)Math.Round(roiRR._PosCenter.X - w0 * 0.5f);
+                                   int y = (int)Math.Round(roiRR._PosCenter.Y - h0 * 0.5f);
 
-                                   var center = new System.Drawing.PointF(
-                                           (float)r0.Cx,
-                                           (float)r0.Cy
+                                   // clamp
+                                   if (x < 0) x = 0;
+                                   if (y < 0) y = 0;
+                                   if (x + w0 > crop.Width) w0 = crop.Width - x;
+                                   if (y + h0 > crop.Height) h0 = crop.Height - y;
+                                   if (w0 < 1 || h0 < 1)
+                                       return;
+
+                                   int offset = y * step + x * elem;
+                                   IntPtr ptr = IntPtr.Add(data, offset);
+
+
+
+                                   Mat matCrop0 = new Mat(h0, w0, type, ptr, step);
+
+                                   list_Patterns[i].SetRawNoCrop(
+                                                   ptr,
+                                                   w0,
+                                                   h0,
+                                                   step,
+                                                   ch
+                                               );
+                                   var rot = list_Patterns[i].Match(
+                                           IsHighSpeed,
+                                           0,
+                                           AngleLower,
+                                           AngleUper,
+                                           Common.PropetyTools[IndexThread][Index].Score / 100.0,
+                                           ckSIMD,
+                                           ckBitwiseNot,
+                                           ckSubPixel,
+                                           1,
+                                           OverLap,
+                                           false,
+                                           -1
                                        );
 
-                                   RectRotate rotCheck = new RectRotate(
-                                           new System.Drawing.RectangleF(-w1 / 2f, -h1 / 2f, w1, h1),
-                                           center,
-                                           angle,
-                                           AnchorPoint.None
-                                       );
-
-                                   if (!Global.IsRun || Global.IsAutoTemp)
-                                       rm.RotOrigin = rotCheck.Clone();
-
-                                   rm.RotCheck = rotCheck;
-                                   rm.Score = (float)Math.Round(r0.Score, 1);
-
-
-
-                                   var org = rm.RotOrigin;
-                                   var chk = rm.RotCheck;
-
-                                   if (org != null && chk != null)
+                                   rm.IsDot = false;
+                                   if (rot == null || rot.Count == 0)
                                    {
-                                       rm.deltaX = (float)Math.Round(
-                                               (chk._PosCenter.X - org._PosCenter.X) / Scale, 1);//pixel to mm
+                                       rm.Score = 0;
+                                       rm.RotCheck = null;
 
-                                       rm.deltaY = (float)Math.Round(
-                                               (chk._PosCenter.Y - org._PosCenter.Y) / Scale, 1);//pixel to mm
                                    }
                                    else
                                    {
-                                       rm.deltaX = 0;
-                                       rm.deltaY = 0;
+                                       var r0 = rot[0];
+
+                                       float w1 = (float)r0.Width;
+                                       float h1 = (float)r0.Height;
+                                       float angle = (float)r0.AngleDeg;
+
+                                       var center = new System.Drawing.PointF(
+                                               (float)r0.Cx,
+                                               (float)r0.Cy
+                                           );
+
+                                       RectRotate rotCheck = new RectRotate(
+                                               new System.Drawing.RectangleF(-w1 / 2f, -h1 / 2f, w1, h1),
+                                               center,
+                                               angle,
+                                               AnchorPoint.None
+                                           );
+
+                                       if (!Global.IsRun || Global.IsAutoTemp)
+                                           rm.RotOrigin = rotCheck.Clone();
+
+                                       rm.RotCheck = rotCheck;
+                                       rm.Score = (float)Math.Round(r0.Score, 1);
+
+
+
+                                       var org = rm.RotOrigin;
+                                       var chk = rm.RotCheck;
+
+                                       if (org != null && chk != null)
+                                       {
+                                           rm.deltaX = (float)Math.Round(
+                                                   (chk._PosCenter.X - org._PosCenter.X) / Scale, 1);//pixel to mm
+
+                                           rm.deltaY = (float)Math.Round(
+                                                   (chk._PosCenter.Y - org._PosCenter.Y) / Scale, 1);//pixel to mm
+                                       }
+                                       else
+                                       {
+                                           rm.deltaX = 0;
+                                           rm.deltaY = 0;
+                                       }
                                    }
                                }
                            }
@@ -1602,28 +1838,95 @@ namespace BeeCore
             // 
             if (!Global.IsRun&IsCalibs)
             {
+                //if (!Global.IsRun)
+                //{
+                //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                //}
+              //  gc.Transform = mat;
+               // mat.Translate(rotOrigin._PosCenter.X, rotOrigin._PosCenter.Y);
+              //  mat.Rotate(rotOrigin._rectRotation);
+                //mat.Translate(rotOrigin._rect.X, rotOrigin._rect.Y);
+               // gc.Transform = mat;
+              //  gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotOrigin._rect));
+              //  gc.ResetTransform();
+                mat = new Matrix();
                 if (!Global.IsRun)
                 {
                     mat.Translate(Global.pScroll.X, Global.pScroll.Y);
                     mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
                 }
-                mat.Translate(rotBot._PosCenter.X, rotBot._PosCenter.Y);
                 gc.Transform = mat;
-                gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotBot._rect));
+
+                Draws.Plus(gc, (int)pInsert.X, (int)pInsert.Y, 10, Color.Yellow, 2);
+                if(rotBot!=null)
+                {
+                    mat.Translate(rotBot._PosCenter.X, rotBot._PosCenter.Y);
+                    gc.Transform = mat;
+                    gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotBot._rect));
 
 
-                mat.Translate(-rotBot._PosCenter.X, -rotBot._PosCenter.Y);
-                mat.Translate(rotTop._PosCenter.X, rotTop._PosCenter.Y);
+                    mat.Translate(-rotBot._PosCenter.X, -rotBot._PosCenter.Y);
+                }
+                if (rotTop != null)
+                {
+                    mat.Translate(rotTop._PosCenter.X, rotTop._PosCenter.Y);
+                    gc.Transform = mat;
+                    gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotTop._rect));
+                    mat.Translate(-rotTop._PosCenter.X, -rotTop._PosCenter.Y);
+
+                }
+                if (rotLeft != null)
+                {
+                    mat.Translate(rotLeft._PosCenter.X, rotLeft._PosCenter.Y);
+                    gc.Transform = mat;
+                    gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotLeft._rect));
+                    mat.Translate(-rotLeft._PosCenter.X, -rotLeft._PosCenter.Y);
+
+                }
+                if (rotRigth != null)
+                {
+                    mat.Translate(rotRigth._PosCenter.X, rotRigth._PosCenter.Y);
+                    gc.Transform = mat;
+                    gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotRigth._rect));
+                }    
+                   
+               
+                mat = new Matrix();
+                gc.ResetTransform();
+            }
+            //if (Global.IsRun)
+            {
+                //if (!Global.IsRun)
+                //{
+                //    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                //    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                //}
+                //  gc.Transform = mat;
+                // mat.Translate(rotOrigin._PosCenter.X, rotOrigin._PosCenter.Y);
+                //  mat.Rotate(rotOrigin._rectRotation);
+                //mat.Translate(rotOrigin._rect.X, rotOrigin._rect.Y);
+                // gc.Transform = mat;
+                //  gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotOrigin._rect));
+                //  gc.ResetTransform();
+                mat = new Matrix();
+                if (!Global.IsRun)
+                {
+                    mat.Translate(Global.pScroll.X, Global.pScroll.Y);
+                    mat.Scale(Global.ScaleZoom, Global.ScaleZoom);
+                }
                 gc.Transform = mat;
-                gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotTop._rect));
-                mat.Translate(-rotTop._PosCenter.X, -rotTop._PosCenter.Y);
-                mat.Translate(rotLeft._PosCenter.X, rotLeft._PosCenter.Y);
+
+              //  Draws.Plus(gc, (int)pInsert1.X, (int)pInsert1.Y, 10, Color.Yellow, 2);
+             
                 gc.Transform = mat;
-                gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotLeft._rect));
-                mat.Translate(-rotLeft._PosCenter.X, -rotLeft._PosCenter.Y);
-                mat.Translate(rotRigth._PosCenter.X, rotRigth._PosCenter.Y);
-                gc.Transform = mat;
-                gc.DrawRectangle(new Pen(Color.Red, 1), Rectangle.Round(rotRigth._rect));
+                
+                if (LineBot.Found)
+                    gc.DrawLine(new Pen(Brushes.Blue, 2), LineBot.X1, LineBot.Y1, LineBot.X2, LineBot.Y2);
+              
+                if (LineRight.Found)
+                    gc.DrawLine(new Pen(Brushes.Blue, 2), LineRight.X1, LineRight.Y1, LineRight.X2, LineRight.Y2);
+
                 mat = new Matrix();
                 gc.ResetTransform();
             }
@@ -1656,6 +1959,7 @@ namespace BeeCore
 
                 gc.ResetTransform();
             }
+
 
             mat = new Matrix();
             if (!Global.IsRun)
