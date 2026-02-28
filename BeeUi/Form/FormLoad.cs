@@ -259,10 +259,10 @@ namespace BeeUi
             workIniModel.RunWorkerAsync();
         }
 
-        private void workLoadProg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async void workLoadProg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             lb.Text = "Loading Parameters...";
-            Task.Delay(100);
+          await  Task.Delay(200);
             workLoadPara.RunWorkerAsync();
 
         }
