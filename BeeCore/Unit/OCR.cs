@@ -492,7 +492,7 @@ namespace BeeCore
       
         [NonSerialized]
         public bool IsNew = false;
-
+        public bool IsAllChar = false;
         public  bool SetModel()
         {
 
@@ -506,9 +506,11 @@ namespace BeeCore
                  Common.PropetyTools[IndexThread][Index].StepValue = 1;
                 Common.PropetyTools[IndexThread][Index].MinValue = 0;
                 Common.PropetyTools[IndexThread][Index].MaxValue = 100;
-            sAllow = "0123456789";
             if (sAllow == "")
                 sAllow = "ABCDEFJKLMNOPQSTUWXYZabcdefghijklmnopqstuwxyz0123456789,.;'\"?/\"<>@#!$%^&*()_-+={}[]|\\~`";
+            if (!IsAllChar)
+            sAllow = "0123456789";
+         
            // if(!IsNew2)
            // SetModelOCR();
             Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.WaitCheck;

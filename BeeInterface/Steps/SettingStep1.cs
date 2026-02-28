@@ -511,6 +511,7 @@ namespace BeeInterface
         }
         public void RefreshData()
         {
+            btnSaveCamera.Visible = !Global.Config.IsSaveAllPara;
             AdjZoom.IsInital = true;
             AdjZoom.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom;
             AdjFocus.IsInital = true;

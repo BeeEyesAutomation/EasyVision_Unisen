@@ -30,6 +30,9 @@ namespace BeeInterface
         //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
+            btnSaveAllPara.IsCLick = Global.Config.IsSaveAllPara;
+            if (btnSaveAllPara.IsCLick) btnSaveAllPara.Text = "ON";
+            else btnSaveAllPara.Text = "OFF";
             txtListStep.Text = Global.Config.ListNameStep;
             AdjLimitDelayTrigger.Value = Global.Config.LimitDelayTrigger;
             AdjLimitExposureTime.Value = Global.Config.LimitExposure;
@@ -595,6 +598,7 @@ namespace BeeInterface
         private void btnD1_Click(object sender, EventArgs e)
         {
             laySetSaveProg.Visible = !btnD1.IsCLick;
+            laySaveCamera.Visible = !btnD1.IsCLick;
         }
 
         private void btnSetSaveReport_Click(object sender, EventArgs e)
@@ -697,5 +701,11 @@ namespace BeeInterface
             }
         }
 
+        private void btnSaveAllPara_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsSaveAllPara=btnSaveAllPara.IsCLick;
+            if (btnSaveAllPara.IsCLick) btnSaveAllPara.Text = "ON";
+            else btnSaveAllPara.Text = "OFF";
+        }
     }
 }

@@ -41,8 +41,8 @@ namespace BeeUi
            this.Region = System.Drawing.Region.FromHrgn(Draws.CreateRoundRectRgn(0, 0, this.Width, this.Height, 20, 20));
            G.Load = this;
            
-            tmActive.Interval = 1000;
-            tmLoad.Interval = 1000;
+            tmActive.Interval = 200;
+            tmLoad.Interval = 200;
             tmActive.Tick += TmActive_Tick;
             tmLoad.Tick += TmLoad_Tick;
             wLoad.DoWork += WLoad_DoWork;
@@ -228,52 +228,19 @@ namespace BeeUi
 
         private void workIniModel_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            try
-            {
-                Global.Project = Properties.Settings.Default.programCurrent;
-                DataTool.LoadProject(Global.Project);
 
-                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
-                {
-                    if (ListTool == null) continue;
-                    Parallel.For(0, ListTool.Count, i =>
-                {
-                    PropetyTool propety = ListTool[i];
-
-                X: if (propety.StatusTool == StatusTool.NotInitial)
-                    {
-
-                        goto X;
-                    }
-
-                });
-                }
-                Global.ScanCCD = new ScanCCD();
-                G.IsIniPython = true;
-                lb.Text = "Initial Learning AI Complete";
-                Task.Delay(200);
-                //  listCCD = Global.ScanCCD.ScanIDCCD(Global.Config.ty);
-                addMac = Decompile.GetMacAddress();
-
-
-
-                FormActive.CheckActive(addMac);
-                Global.ScanCCD.ListCamUSB = Global.ScanCCD.ScanIDCCD(TypeCamera.USB);
-                Global.ScanCCD.workConAll.RunWorkerAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
+            lb.Text = "Loading Program...";
+          
+            workLoadProg.RunWorkerAsync();
         }
 
         private void workScanDependency_DoWork(object sender, DoWorkEventArgs e)
         {
+            Global.PathPython = Environment.GetEnvironmentVariable("Python39");
             if (Global.Config.IsScanDenpendency)
             {
                 DependencyScanner.ScanAndLog(AppDomain.CurrentDomain.BaseDirectory);
-                Global.PathPython = Environment.GetEnvironmentVariable("Python39");
+
                 if (!string.IsNullOrEmpty(Global.PathPython))
                 {
                     PythonDepScanner.CheckToolFolder(
@@ -288,8 +255,65 @@ namespace BeeUi
 
         private void workScanDependency_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            lb.Text = "Waiting Initial Learning AI";
+            lb.Text = "Loading AI ...";
             workIniModel.RunWorkerAsync();
+        }
+
+        private void workLoadProg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lb.Text = "Loading Parameters...";
+            Task.Delay(100);
+            workLoadPara.RunWorkerAsync();
+
+        }
+
+        private void workLoadPara_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+
+                DataTool.BuildProjectUI();
+
+                foreach (List<PropetyTool> ListTool in BeeCore.Common.PropetyTools)
+                {
+                    if (ListTool == null) continue;
+                    Parallel.For(0, ListTool.Count, i =>
+                    {
+                        PropetyTool propety = ListTool[i];
+
+                    X: if (propety.StatusTool == StatusTool.NotInitial)
+                        {
+
+                            goto X;
+                        }
+
+                    });
+                }
+                Global.ScanCCD = new ScanCCD();
+                G.IsIniPython = true;
+                lb.Text = "Checking Camera...";
+                Task.Delay(200);
+                //  listCCD = Global.ScanCCD.ScanIDCCD(Global.Config.ty);
+                addMac = Decompile.GetMacAddress();
+
+
+
+                FormActive.CheckActive(addMac);
+                Global.ScanCCD.ListCamUSB = Global.ScanCCD.ScanIDCCD(TypeCamera.USB);
+                Global.ScanCCD.workConAll.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
+        }
+
+        private void workLoadProg_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Global.Project = Properties.Settings.Default.programCurrent;
+            DataTool.LoadProjectData(Global.Project);
+           
         }
     }
 }

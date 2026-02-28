@@ -202,7 +202,7 @@ namespace BeeGlobal
         public static Config Config;
         public static float ZoomMinimum = 0;
        public static  bool IsLearning=true;
-        public static bool IsOCR = false;
+        public static bool IsOCR = true;
        
         public static StatusDraw StatusDraw
         {

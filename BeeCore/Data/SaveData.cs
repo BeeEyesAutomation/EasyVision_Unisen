@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BeeGlobal;
+using OpenCvSharp.Flann;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using BeeGlobal;
 namespace BeeCore
 {
     public class SaveData
@@ -172,12 +173,16 @@ namespace BeeCore
                 ParaShow(Project, Global.ParaShow);
                 ListImgRegister(Project, Global.listRegsImg);
                 ListImgSim(Project, Global.listSimImg);
+                if (Global.Config.IsSaveAllPara)
+                    Camera(Global.Project, Global.listParaCamera);
                 // Access.SaveParaComon(path + "\\" + Global.Project + ".para", Global.ParaCommon);
                 //Access.SaveParaCamera(path + "\\" + Global.Project + ".cam", Global.listParaCamera);
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR,"Save Prog", ex.Message.ToString()));
+
+               // MessageBox.Show(ex.Message);
             }
         }
     }

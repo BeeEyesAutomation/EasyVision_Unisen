@@ -35,6 +35,9 @@ namespace BeeInterface
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GeneralSetting));
             this.PageData = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.laySaveCamera = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSaveAllPara = new BeeInterface.RJButton();
+            this.autoFontLabel2 = new BeeInterface.AutoFontLabel();
             this.laySetReport = new System.Windows.Forms.TableLayoutPanel();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -208,6 +211,7 @@ namespace BeeInterface
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.PageData.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
+            this.laySaveCamera.SuspendLayout();
             this.laySetReport.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
@@ -277,8 +281,9 @@ namespace BeeInterface
             this.tableLayoutPanel6.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel6.ColumnCount = 1;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Controls.Add(this.laySetReport, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.btnD2, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.laySaveCamera, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.laySetReport, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.btnD2, 0, 3);
             this.tableLayoutPanel6.Controls.Add(this.btnD1, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.laySetSaveProg, 0, 1);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -286,7 +291,8 @@ namespace BeeInterface
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 13;
+            this.tableLayoutPanel6.RowCount = 14;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -304,6 +310,97 @@ namespace BeeInterface
             this.tableLayoutPanel6.TabIndex = 36;
             this.tableLayoutPanel6.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel6_Paint);
             // 
+            // laySaveCamera
+            // 
+            this.laySaveCamera.BackColor = System.Drawing.Color.White;
+            this.laySaveCamera.ColumnCount = 2;
+            this.laySaveCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.laySaveCamera.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.laySaveCamera.Controls.Add(this.btnSaveAllPara, 1, 0);
+            this.laySaveCamera.Controls.Add(this.autoFontLabel2, 0, 0);
+            this.laySaveCamera.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.laySaveCamera.Location = new System.Drawing.Point(8, 258);
+            this.laySaveCamera.Margin = new System.Windows.Forms.Padding(8, 0, 0, 3);
+            this.laySaveCamera.Name = "laySaveCamera";
+            this.laySaveCamera.Padding = new System.Windows.Forms.Padding(5);
+            this.laySaveCamera.RowCount = 1;
+            this.laySaveCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.laySaveCamera.Size = new System.Drawing.Size(417, 55);
+            this.laySaveCamera.TabIndex = 107;
+            this.laySaveCamera.Visible = false;
+            // 
+            // btnSaveAllPara
+            // 
+            this.btnSaveAllPara.AutoFont = true;
+            this.btnSaveAllPara.AutoFontHeightRatio = 0.75F;
+            this.btnSaveAllPara.AutoFontMax = 100F;
+            this.btnSaveAllPara.AutoFontMin = 6F;
+            this.btnSaveAllPara.AutoFontWidthRatio = 0.92F;
+            this.btnSaveAllPara.AutoImage = true;
+            this.btnSaveAllPara.AutoImageMaxRatio = 0.75F;
+            this.btnSaveAllPara.AutoImageMode = BeeInterface.RJButton.ImageFitMode.Contain;
+            this.btnSaveAllPara.AutoImageTint = true;
+            this.btnSaveAllPara.BackColor = System.Drawing.Color.White;
+            this.btnSaveAllPara.BackgroundColor = System.Drawing.Color.White;
+            this.btnSaveAllPara.BorderColor = System.Drawing.Color.White;
+            this.btnSaveAllPara.BorderRadius = 5;
+            this.btnSaveAllPara.BorderSize = 1;
+            this.btnSaveAllPara.ClickBotColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(139)))));
+            this.btnSaveAllPara.ClickMidColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(204)))), ((int)(((byte)(120)))));
+            this.btnSaveAllPara.ClickTopColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(192)))), ((int)(((byte)(89)))));
+            this.btnSaveAllPara.ContentPadding = new System.Windows.Forms.Padding(8, 6, 8, 6);
+            this.btnSaveAllPara.Corner = BeeGlobal.Corner.Right;
+            this.btnSaveAllPara.DebounceResizeMs = 6;
+            this.btnSaveAllPara.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSaveAllPara.FlatAppearance.BorderSize = 0;
+            this.btnSaveAllPara.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveAllPara.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.07813F);
+            this.btnSaveAllPara.ForeColor = System.Drawing.Color.Black;
+            this.btnSaveAllPara.Image = null;
+            this.btnSaveAllPara.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSaveAllPara.ImageDisabled = null;
+            this.btnSaveAllPara.ImageHover = null;
+            this.btnSaveAllPara.ImageNormal = null;
+            this.btnSaveAllPara.ImagePadding = new System.Windows.Forms.Padding(1);
+            this.btnSaveAllPara.ImagePressed = null;
+            this.btnSaveAllPara.ImageTextSpacing = 6;
+            this.btnSaveAllPara.ImageTintDisabled = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.btnSaveAllPara.ImageTintHover = System.Drawing.Color.Empty;
+            this.btnSaveAllPara.ImageTintNormal = System.Drawing.Color.Empty;
+            this.btnSaveAllPara.ImageTintOpacity = 0.5F;
+            this.btnSaveAllPara.ImageTintPressed = System.Drawing.Color.Empty;
+            this.btnSaveAllPara.IsCLick = false;
+            this.btnSaveAllPara.IsNotChange = false;
+            this.btnSaveAllPara.IsRect = false;
+            this.btnSaveAllPara.IsTouch = false;
+            this.btnSaveAllPara.IsUnGroup = true;
+            this.btnSaveAllPara.Location = new System.Drawing.Point(208, 5);
+            this.btnSaveAllPara.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSaveAllPara.Multiline = false;
+            this.btnSaveAllPara.Name = "btnSaveAllPara";
+            this.btnSaveAllPara.Size = new System.Drawing.Size(204, 45);
+            this.btnSaveAllPara.TabIndex = 9;
+            this.btnSaveAllPara.Text = "OFF";
+            this.btnSaveAllPara.TextColor = System.Drawing.Color.Black;
+            this.btnSaveAllPara.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSaveAllPara.UseVisualStyleBackColor = false;
+            this.btnSaveAllPara.Click += new System.EventHandler(this.btnSaveAllPara_Click);
+            // 
+            // autoFontLabel2
+            // 
+            this.autoFontLabel2.AutoFont = true;
+            this.autoFontLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.autoFontLabel2.EnableHorizontalScroll = false;
+            this.autoFontLabel2.EnableVerticalScroll = false;
+            this.autoFontLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.74609F);
+            this.autoFontLabel2.Location = new System.Drawing.Point(8, 8);
+            this.autoFontLabel2.MaxFontSize = 200F;
+            this.autoFontLabel2.MinFontSize = 6F;
+            this.autoFontLabel2.Name = "autoFontLabel2";
+            this.autoFontLabel2.Size = new System.Drawing.Size(197, 39);
+            this.autoFontLabel2.TabIndex = 10;
+            this.autoFontLabel2.Text = "Save All Settings";
+            // 
             // laySetReport
             // 
             this.laySetReport.ColumnCount = 1;
@@ -317,7 +414,7 @@ namespace BeeInterface
             this.laySetReport.Controls.Add(this.tableLayoutPanel9, 0, 3);
             this.laySetReport.Controls.Add(this.AdjLimitDay, 0, 7);
             this.laySetReport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.laySetReport.Location = new System.Drawing.Point(10, 299);
+            this.laySetReport.Location = new System.Drawing.Point(10, 354);
             this.laySetReport.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.laySetReport.Name = "laySetReport";
             this.laySetReport.RowCount = 9;
@@ -964,7 +1061,7 @@ namespace BeeInterface
             this.btnD2.IsRect = false;
             this.btnD2.IsTouch = true;
             this.btnD2.IsUnGroup = true;
-            this.btnD2.Location = new System.Drawing.Point(5, 261);
+            this.btnD2.Location = new System.Drawing.Point(5, 316);
             this.btnD2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.btnD2.Multiline = false;
             this.btnD2.Name = "btnD2";
@@ -1028,7 +1125,7 @@ namespace BeeInterface
             this.btnD1.Name = "btnD1";
             this.btnD1.Size = new System.Drawing.Size(415, 35);
             this.btnD1.TabIndex = 102;
-            this.btnD1.Text = "1.Mode Save Data Program";
+            this.btnD1.Text = "1.Global Save Parameters( All Programs)";
             this.btnD1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnD1.TextColor = System.Drawing.Color.White;
             this.btnD1.UseVisualStyleBackColor = false;
@@ -1044,6 +1141,7 @@ namespace BeeInterface
             this.laySetSaveProg.Controls.Add(this.tableLayoutPanel36, 0, 2);
             this.laySetSaveProg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.laySetSaveProg.Location = new System.Drawing.Point(3, 38);
+            this.laySetSaveProg.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.laySetSaveProg.Name = "laySetSaveProg";
             this.laySetSaveProg.RowCount = 4;
             this.laySetSaveProg.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -6305,7 +6403,7 @@ namespace BeeInterface
             this.AdjLimitDelayTrigger.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.AdjLimitDelayTrigger.InnerPadding = new System.Windows.Forms.Padding(10, 6, 10, 6);
             this.AdjLimitDelayTrigger.KeyboardStep = 1F;
-            this.AdjLimitDelayTrigger.Location = new System.Drawing.Point(5, 123);
+            this.AdjLimitDelayTrigger.Location = new System.Drawing.Point(5, 126);
             this.AdjLimitDelayTrigger.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjLimitDelayTrigger.MatchTextboxFontToThumb = true;
             this.AdjLimitDelayTrigger.Max = 10000F;
@@ -6391,7 +6489,7 @@ namespace BeeInterface
             this.rjButton5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.rjButton5.Multiline = false;
             this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(415, 35);
+            this.rjButton5.Size = new System.Drawing.Size(415, 38);
             this.rjButton5.TabIndex = 110;
             this.rjButton5.Text = "2.Limit Camera  - Delay Trigger (ms)";
             this.rjButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -6734,6 +6832,7 @@ namespace BeeInterface
             this.Load += new System.EventHandler(this.IOSetting_Load);
             this.PageData.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
+            this.laySaveCamera.ResumeLayout(false);
             this.laySetReport.ResumeLayout(false);
             this.laySetReport.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
@@ -6963,5 +7062,8 @@ namespace BeeInterface
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel29;
         private RJButton btnDisPLC;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TableLayoutPanel laySaveCamera;
+        private RJButton btnSaveAllPara;
+        private AutoFontLabel autoFontLabel2;
     }
 }

@@ -39,6 +39,8 @@ namespace BeeUi
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.workIniModel = new System.ComponentModel.BackgroundWorker();
             this.workScanDependency = new System.ComponentModel.BackgroundWorker();
+            this.workLoadProg = new System.ComponentModel.BackgroundWorker();
+            this.workLoadPara = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,6 +129,15 @@ namespace BeeUi
             this.workScanDependency.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workScanDependency_DoWork);
             this.workScanDependency.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workScanDependency_RunWorkerCompleted);
             // 
+            // workLoadProg
+            // 
+            this.workLoadProg.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workLoadProg_DoWork);
+            this.workLoadProg.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLoadProg_RunWorkerCompleted);
+            // 
+            // workLoadPara
+            // 
+            this.workLoadPara.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workLoadPara_RunWorkerCompleted);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,5 +171,7 @@ namespace BeeUi
         public System.Windows.Forms.PictureBox pictureBox1;
         private System.ComponentModel.BackgroundWorker workIniModel;
         private System.ComponentModel.BackgroundWorker workScanDependency;
+        private System.ComponentModel.BackgroundWorker workLoadProg;
+        private System.ComponentModel.BackgroundWorker workLoadPara;
     }
 }

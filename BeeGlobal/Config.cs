@@ -63,6 +63,7 @@ namespace BeeGlobal
         public bool IsSaveParaShow= true;
         public bool IsSaveParaCam = true;
         public bool IsEnTrain = true;
+        public bool IsSaveAllPara= true;
         public bool IsEnPO = true;
         public bool IsWaitCenter = false;
         public bool IsEnDummy = true;
