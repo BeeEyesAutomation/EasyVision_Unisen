@@ -202,7 +202,7 @@ namespace BeeGlobal
         public static Config Config;
         public static float ZoomMinimum = 0;
        public static  bool IsLearning=true;
-        public static bool IsOCR = true;
+        public static bool IsOCR = false;
        
         public static StatusDraw StatusDraw
         {
@@ -278,7 +278,7 @@ namespace BeeGlobal
         public static bool IsRun=true;
         public static bool IsPLCChangeProg = false;
         public static int IndexCCCD = 0;
-        public static int timeOutWork = 3000;
+        public static String PathPython = "";
         public static int IndexChoose = 0;
         public static String Project = "";
         public static RectRotate rotAreaAdj;

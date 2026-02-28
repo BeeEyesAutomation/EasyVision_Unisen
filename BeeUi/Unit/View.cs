@@ -2330,11 +2330,12 @@ namespace BeeUi
                                 Global.ParaCommon.matRegister4 = BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.ToBitmap();
                                 Global.listRegsImg[3].Image = Global.ParaCommon.matRegister4;
                                 break;
+
                         }  
-                    }    
-                   // Global.Config.IsOnLight = false;
-                    //Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
-                   //Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
+                    }
+                    Global.Config.IsOnLight = false;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.DoneCCD;
                     if (timer == null) timer = CycleTimerSplit.Start();
                     timer.Split("C");
                     Global.IsAllowReadPLC = false;

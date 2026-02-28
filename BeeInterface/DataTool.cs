@@ -144,11 +144,12 @@ namespace BeeInterface
                             var item = CreateItemTool(tool, i, indexThread, Global.pShowTool);
 
                             if (item != null)
+                            {
                                 Global.pShowTool.Y += item.Height + 10;
 
-                            tool.ItemTool = item;
-                            tool.Control = control;
-
+                                tool.ItemTool = item;
+                                tool.Control = control;
+                            }
                           //  LoadPropety(control);
 
                             if (tool.TypeTool == TypeTool.OCR)
@@ -586,7 +587,7 @@ namespace BeeInterface
 
                     });
 
-                    if (!t.Wait(Global.timeOutWork))
+                    if (!t.Wait(Global.Config.TimerOutChecking))
                     {
                         PropetyTool.Results = Results.NG;
                         PropetyTool.StatusTool = StatusTool.Done;

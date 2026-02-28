@@ -1035,6 +1035,23 @@ namespace BeeGlobal
                     }    
                     break;
                 case IO_Processing.DoneCCD:
+                    if (TypeControler == TypeControler.PCI)
+                        break;
+                    switch (Global.IndexCCCD)
+                    {
+                        case 0:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], true);//Busy
+                            break;
+                        case 1:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], true);//Busy
+                            break;
+                        case 2:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], true);//Busy
+                            break;
+                        case 3:
+                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], true);//Busy
+                            break;
+                    }
                    
                     await WriteOutPut();
                     break;
@@ -1526,6 +1543,7 @@ namespace BeeGlobal
                     await WriteOutPut();
                    
                         break;
+              
                 case IO_Processing.Light:
                     if (TypeControler==TypeControler.PCI)
                     {   if(Global.Config.IsOnLight)
@@ -1535,32 +1553,7 @@ namespace BeeGlobal
                        
                         break;
                     }
-                    if(!Global.Config.IsOnLight)
-                    {
-                        switch (Global.IndexCCCD)
-                        {
-                            case 0:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], true);//Busy
-                                break;
-                            case 1:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], true);//Busy
-                                break;
-                            case 2:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], true);//Busy
-                                break;
-                            case 3:
-                                SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], true);//Busy
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], false);//Busy
-                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], false);//Busy
-                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], false);//Busy
-                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], false);//Busy
-
-                    }
+                  
                         SetLight(Global.Config.IsOnLight);
                     await WriteOutPut();
                     break;

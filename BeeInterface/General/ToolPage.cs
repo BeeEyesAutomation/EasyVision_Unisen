@@ -243,7 +243,7 @@ namespace BeeInterface
                                 catch (Exception ex) { exOut = ex; }
                             });
 
-                            if (!t.Wait(Global.timeOutWork))
+                            if (!t.Wait(Global.Config.TimerOutChecking))
                             {
                                 propetyTool2.Results = Results.NG;
                                 propetyTool2.StatusTool = StatusTool.Done;
@@ -298,7 +298,7 @@ namespace BeeInterface
                         catch (Exception ex) { exOut = ex; }
                     });
 
-                    if (!t.Wait(Global.timeOutWork))
+                    if (!t.Wait(Global.Config.TimerOutChecking))
                     {
                         propetyTool.Results = Results.NG;
                         propetyTool.StatusTool = StatusTool.Done;

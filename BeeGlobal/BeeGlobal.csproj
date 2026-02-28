@@ -74,6 +74,8 @@
     <Compile Include="CycleTimerSplit.cs" />
     <Compile Include="DASK.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="General\DependencyScanner.cs" />
+    <Compile Include="General\PythonDepScanner.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="HistoryCheck.cs" />
     <Compile Include="IntArrayWithEvent.cs" />

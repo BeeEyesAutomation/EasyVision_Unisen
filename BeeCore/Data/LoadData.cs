@@ -153,7 +153,16 @@ namespace BeeCore {
                 config = Access.LoadConfig("Common\\Default.config");
             else
                 config = new Config();
+            if (config.LimitExposure == 0)
+                config.LimitExposure = 100000;
+            if (config.LimitDelayTrigger == 0)
+                config.LimitDelayTrigger = 10000;
+            if (config.ListNameStep == null)
+            {
+                config.ListNameStep = "Start \n Done";
 
+            }
+        
             config.IsExternal = true;
             return config;
 

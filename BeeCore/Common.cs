@@ -238,10 +238,10 @@ namespace BeeCore
 
                 //string pythonDll = Path.Combine(pyHome, "python39.dll");
 
-                string pythonHome = Environment.GetEnvironmentVariable("Python39");
-                if (!string.IsNullOrEmpty(pythonHome))
+             //   string pythonHome = Environment.GetEnvironmentVariable("Python39");
+                if (!string.IsNullOrEmpty(Global.PathPython))
                 {
-                    string pythonDll = Path.Combine(pythonHome, "python39.dll");
+                    string pythonDll = Path.Combine(Global.PathPython, "python39.dll");
                     if (File.Exists(pythonDll))
                     {
                         Python.Runtime.Runtime.PythonDLL = pythonDll;
@@ -274,8 +274,8 @@ namespace BeeCore
                                 {
                                     Global.IsLearning = false;
                                 }
-                            
-                            if(Directory.Exists( pythonHome+ "\\Lib\\site-packages\\craft_text_detector"))//
+                          
+                            if(Directory.Exists( Global.PathPython+ "\\Lib\\site-packages\\craft_text_detector"))//
                              
                             {
                                 try
@@ -294,10 +294,15 @@ namespace BeeCore
                             }
                             else
                                 Global.IsOCR = false;
-                            dynamic module3 = Py.Import("Tool.OCR");
-                            dynamic cls3 = module3.GetAttr("OCR"); // class
-                            G.objOCR = cls3.Invoke();
+                            if (File.Exists("Tool\\OCR.py"))
+                            {
+                                dynamic module3 = Py.Import("Tool.OCR");
+                                dynamic cls3 = module3.GetAttr("OCR"); // class
+                                G.objOCR = cls3.Invoke();
+                                Global.IsOCR = true;
+                            }
                             Global.IsIntialPython = true;
+
 
 
                         }

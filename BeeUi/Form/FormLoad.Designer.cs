@@ -38,6 +38,7 @@ namespace BeeUi
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.workIniModel = new System.ComponentModel.BackgroundWorker();
+            this.workScanDependency = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,6 +122,11 @@ namespace BeeUi
             this.workIniModel.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workIniModel_DoWork);
             this.workIniModel.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workIniModel_RunWorkerCompleted);
             // 
+            // workScanDependency
+            // 
+            this.workScanDependency.DoWork += new System.ComponentModel.DoWorkEventHandler(this.workScanDependency_DoWork);
+            this.workScanDependency.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workScanDependency_RunWorkerCompleted);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -153,5 +159,6 @@ namespace BeeUi
         public System.Windows.Forms.Label label3;
         public System.Windows.Forms.PictureBox pictureBox1;
         private System.ComponentModel.BackgroundWorker workIniModel;
+        private System.ComponentModel.BackgroundWorker workScanDependency;
     }
 }

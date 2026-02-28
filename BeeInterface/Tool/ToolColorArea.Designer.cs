@@ -988,7 +988,7 @@ namespace BeeInterface
             this.AdjValueTemp.Location = new System.Drawing.Point(6, 650);
             this.AdjValueTemp.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjValueTemp.MatchTextboxFontToThumb = true;
-            this.AdjValueTemp.Max = 100000F;
+            this.AdjValueTemp.Max = 1000000F;
             this.AdjValueTemp.MaxTextboxWidth = 0;
             this.AdjValueTemp.MaxThumb = 1000;
             this.AdjValueTemp.MaxTrackHeight = 1000;
@@ -1841,7 +1841,7 @@ namespace BeeInterface
             this.AdjClearBig.Location = new System.Drawing.Point(5, 399);
             this.AdjClearBig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.AdjClearBig.MatchTextboxFontToThumb = true;
-            this.AdjClearBig.Max = 10000F;
+            this.AdjClearBig.Max = 100000F;
             this.AdjClearBig.MaxTextboxWidth = 0;
             this.AdjClearBig.MaxThumb = 1000;
             this.AdjClearBig.MaxTrackHeight = 1000;

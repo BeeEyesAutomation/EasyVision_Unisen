@@ -31,7 +31,6 @@ namespace BeeInterface
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingStep1));
             this.tableLayout1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel22 = new BeeInterface.TableLayoutPanel2();
@@ -98,7 +97,6 @@ namespace BeeInterface
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tmShowPara = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSaveCamera = new BeeInterface.RJButton();
             this.tableLayout1.SuspendLayout();
@@ -206,9 +204,13 @@ namespace BeeInterface
             this.lbErr.AutoFont = true;
             this.lbErr.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lbErr.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbErr.EnableHorizontalScroll = false;
+            this.lbErr.EnableVerticalScroll = false;
             this.lbErr.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.91016F);
             this.lbErr.Location = new System.Drawing.Point(102, 2);
             this.lbErr.Margin = new System.Windows.Forms.Padding(2);
+            this.lbErr.MaxFontSize = 200F;
+            this.lbErr.MinFontSize = 6F;
             this.lbErr.Name = "lbErr";
             this.lbErr.Size = new System.Drawing.Size(341, 36);
             this.lbErr.TabIndex = 92;
@@ -1879,7 +1881,7 @@ namespace BeeInterface
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(480, 704);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(480, 652);
             this.tableLayoutPanel10.TabIndex = 53;
             this.tableLayoutPanel10.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel10_Paint);
             // 
@@ -3085,13 +3087,9 @@ namespace BeeInterface
             this.tabPage4.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(486, 710);
+            this.tabPage4.Size = new System.Drawing.Size(486, 658);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Hardware";
-            // 
-            // tmShowPara
-            // 
-            this.tmShowPara.Tick += new System.EventHandler(this.tmShowPara_Tick);
             // 
             // tableLayoutPanel1
             // 
@@ -3232,7 +3230,6 @@ namespace BeeInterface
         private  System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private RJButton btnCenterY;
         private RJButton btnCenterX;
-        private System.Windows.Forms.Timer tmShowPara;
         private AdjustBarEx AdDelayTrig;
         private AdjustBarEx AdDelayOutput;
         private AdjustBarEx trackExposure;

@@ -30,6 +30,10 @@ namespace BeeInterface
         //  BeeCore.Config ConfigPrev;
         private void IOSetting_Load(object sender, EventArgs e)
         {
+            txtListStep.Text = Global.Config.ListNameStep;
+            AdjLimitDelayTrigger.Value = Global.Config.LimitDelayTrigger;
+            AdjLimitExposureTime.Value = Global.Config.LimitExposure;
+            AdjTimeOut.Value = Global.Config.TimerOutChecking;
             this.Width = Global.EditTool.BtnHeaderBar.Width + 1;
            this.Height=Global.SizeScreen.Height- Global.EditTool.BtnHeaderBar.Height-20;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width - Global.EditTool.BtnHeaderBar.Width - 1, Global.EditTool.pTop.Height);// Screen.PrimaryScreen.Bounds.Height / 2 - this.Height / 2);
@@ -54,8 +58,7 @@ namespace BeeInterface
                 btnWaitingCenter.Text = "OFF";
             layAutoTrig.Visible = Global.Config.IsAutoTrigger;
             btnDisPLC.IsCLick = Global.IsDisnablePLc; ;
-            if (btnDisPLC.IsCLick)
-                btnDisPLC.Text = "ON";
+            if (btnDisPLC.IsCLick)btnDisPLC.Text = "ON";
             else btnDisPLC.Text = "OFF";
             numFlowChart.Value = Global.Config.NumTrig;
             btnMulti.IsCLick = Global.Config.IsMultiProg;
@@ -99,6 +102,11 @@ namespace BeeInterface
             btnOffAutoTrigger.IsCLick = !Global.Config.IsAutoTrigger;
             btnONResetImg.IsCLick = Global.Config.IsResetImg;
             btnOFFResetImg.IsCLick = !Global.Config.IsResetImg;
+            btnEnScanDependency.IsCLick = Global.Config.IsScanDenpendency;
+            if (Global.Config.IsScanDenpendency)
+                btnEnScanDependency.Text = "ON";
+            else
+                btnEnScanDependency.Text = "OFF";
             if (Global.Config.IsForceByPassRS)
                 btnByPassResult.Text = "ON";
             else
@@ -534,7 +542,15 @@ namespace BeeInterface
         private void btnShowProgessing_Click(object sender, EventArgs e)
         {
             Global.Config.IsShowProgressingPLC = btnShowProgessing.IsCLick;
-            Global.EditTool.StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+            String[] ListStep=Global.Config.ListNameStep.Split('\n');
+            if (ListStep.Length > 0)
+            {
+                Global.EditTool.StepProccessBar.SetSteps(ListStep);
+                Global.EditTool.StepProccessBar.DoneCount = 0;
+            }
+                Global.EditTool.StepProccessBar.Visible = Global.Config.IsShowProgressingPLC;
+            
+
         }
 
         private void btnHideProgessing_Click(object sender, EventArgs e)
@@ -642,5 +658,44 @@ namespace BeeInterface
             else
             { btnShowFullScreen.Text = "OFF"; }
         }
+
+        private void rjButton5_Click(object sender, EventArgs e)
+        {
+            AdjTimeOut.Visible =! btn6.IsCLick;
+        }
+
+        private void AdjTimeOut_ValueChanged(float obj)
+        {
+            Global.Config.TimerOutChecking =(int) AdjTimeOut.Value;
+        }
+
+        private void AdjLimitExposureTime_ValueChanged(float obj)
+        {
+            Global.Config.LimitExposure=AdjLimitExposureTime.Value;
+        }
+
+        private void AdjLimitDelayTrigger_ValueChanged(float obj)
+        {
+            Global.Config.LimitDelayTrigger=(int)AdjLimitDelayTrigger.Value;
+        }
+
+        private void btnEnScanDependency_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsScanDenpendency=btnEnScanDependency.IsCLick;
+            if (btnEnScanDependency.IsCLick) btnEnScanDependency.Text = "ON";
+            else btnEnScanDependency.Text = "OFF";
+        }
+
+        private void txtListStep_TextChanged(object sender, EventArgs e)
+        {
+            Global.Config.ListNameStep=txtListStep.Text;
+            String[] ListStep = Global.Config.ListNameStep.Split('\n');
+            if (ListStep.Length > 0)
+            {
+                Global.EditTool.StepProccessBar.SetSteps(ListStep);
+                Global.EditTool.StepProccessBar.DoneCount = 0;
+            }
+        }
+
     }
 }

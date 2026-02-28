@@ -176,8 +176,8 @@ namespace BeeUi
             Global.SizeScreen= Screen.PrimaryScreen.Bounds.Size;
             Global.PerScaleWidth = (float)((Global.SizeScreen.Width * 1.0)/ 2240.0 );
             Global.PerScaleHeight = (float)((Global.SizeScreen.Height * 1.0)/ 1400.0 );
-            lb.Text = "Waiting Initial Learning AI";
-            workIniModel.RunWorkerAsync();
+            lb.Text = "Waiting Check Dependency...";
+            workScanDependency.RunWorkerAsync();
           
         }
 
@@ -266,6 +266,30 @@ namespace BeeUi
                 MessageBox.Show(ex.Message);
             }
 
+        }
+
+        private void workScanDependency_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (Global.Config.IsScanDenpendency)
+            {
+                DependencyScanner.ScanAndLog(AppDomain.CurrentDomain.BaseDirectory);
+                Global.PathPython = Environment.GetEnvironmentVariable("Python39");
+                if (!string.IsNullOrEmpty(Global.PathPython))
+                {
+                    PythonDepScanner.CheckToolFolder(
+                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tool"),
+                 pythonExe: Global.PathPython + "\\python.exe"   // hoặc "python" nếu đã add PATH
+             );
+                }
+            }
+            
+             
+        }
+
+        private void workScanDependency_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lb.Text = "Waiting Initial Learning AI";
+            workIniModel.RunWorkerAsync();
         }
     }
 }

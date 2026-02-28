@@ -54,6 +54,8 @@ namespace BeeCore
         public bool IsCompareNoFixed = false;
         public String AddPLC = "";
         int _NumObject = 0;
+        [NonSerialized]
+        private bool IsModelOK = false;
         public int NumObject
         {
             get
@@ -161,6 +163,19 @@ namespace BeeCore
         public int IndexThread = 0;
         public void DoWork(RectRotate rotArea, RectRotate rotMask)
         {
+            listOK = new List<bool>();
+            listLabel = new List<List<string>>();
+            rectRotates = new List<RectRotate>();
+            listScore = new List<float>();
+            listLabelResult = new List<String>();
+            Content = "";
+            Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
+            if (!IsModelOK)
+            {
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, "Load Model Fail"));
+                return;
+            }
+
             using (Py.GIL())
             {
                
@@ -170,14 +185,10 @@ namespace BeeCore
                 
                     var labelList = new List<string>();
                    
-                    listOK = new List<bool>();
-                    listLabel = new List<List<string>>();
-                    rectRotates = new List<RectRotate>();
-                    listScore = new List<float>();
                   
-                    Content = "";
-                    Common.PropetyTools[IndexThread][Index].ScoreResult = 0;
-                    listLabelResult = new List<String>();
+                  
+                  
+                   
                     using (Mat raw =BeeCore.Common.listCamera[IndexCCD].matRaw.Clone())
                     {
                         if (raw.Empty()) return;
@@ -315,13 +326,13 @@ namespace BeeCore
                 }
                 catch (PythonException pyEx)
                 {
-                    File.WriteAllText("PythonException.txt", pyEx.Message);
-                    exMess=pyEx.Message;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, pyEx.Message.ToString()));
+                  
                 }
                 catch (Exception ex)
                 {
-                    File.WriteAllText("ErCharp.txt", ex.Message);
-                    exMess = ex.Message;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+
                 }
                 finally
                 {
@@ -385,7 +396,8 @@ namespace BeeCore
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("Kết quả không hợp lệ: " + ex.Message);
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+
             }
         }
       
@@ -486,7 +498,7 @@ namespace BeeCore
 
 
 
-
+            
             rotCrop = null;
             
                 if (rotArea == null) rotArea = new RectRotate();
@@ -504,6 +516,7 @@ namespace BeeCore
         }
         public bool SetModelOCR()
         {
+
            
             if (Isini2) return true;
             if (!Global.IsOCR) return false;
@@ -514,17 +527,23 @@ namespace BeeCore
                 {
                     G.objOCR.initialize_ocr(Common.PropetyTools[IndexThread][Index].Name);
                     Global.IsInitialOCR = true;
+                    IsModelOK = true;
                     Isini2 = true;
                 }
                 catch (PythonException pyEx)
                 {
-                    File.WriteAllText("IniModel.txt", pyEx.Message);
-                    exMess = pyEx.Message;
+                    IsModelOK = false;
+                    Global.IsInitialOCR = false;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, pyEx.Message.ToString()));
+
+                
                 }
                 catch (Exception ex)
                 {
-                    File.WriteAllText("IniModelCsharp.txt", ex.Message);
-                    exMess = ex.Message;
+                    IsModelOK = false;
+                    Global.IsInitialOCR = false;
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, Common.PropetyTools[IndexThread][Index].Name, ex.Message.ToString()));
+
                 }
 
 

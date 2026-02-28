@@ -13,8 +13,10 @@ namespace BeeGlobal
     [Serializable()]
     public class Config
     {
+        public bool IsScanDenpendency = false;
         public  bool IsShowProgressingPLC = true;
         public bool EnterPO = true;
+        public String ListNameStep = "";
         public String POCurrent = "";
         public bool IsWaitResultTotal = false;
         public int NumRetryCamera = 0;
@@ -47,6 +49,9 @@ namespace BeeGlobal
                 }
             }
         }
+        public int LimitDelayTrigger = 100000;
+        public float LimitExposure = 1000000;
+        public int TimerOutChecking = 3000;
         public bool IsShowFull = false;
         public bool IsAutoTrigger = false;
         public DisplayResolution DisplayResolution=DisplayResolution.Full;

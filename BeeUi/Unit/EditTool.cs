@@ -588,18 +588,36 @@ namespace BeeUi
 			Global.ToolSettings.split1.Enabled = !IsLock;
 			G.StatusDashboard.IsLockSplit = IsLock;
 		}
-       
+        private Version GetDllVersion(string filePath)
+        {
+            try
+            {
+                var info = FileVersionInfo.GetVersionInfo(filePath);
+                return new Version(info.FileMajorPart, info.FileMinorPart, info.FileBuildPart, info.FilePrivatePart);
+            }
+            catch
+            {
+                return null;
+            }
+        }
         private void EditTool_Load(object sender, EventArgs e)
         {
-            StepProccessBar.SetSteps(new[] { "Start", "Marking 1", "Camera 1", "Marking 2", "Camera 2", "Done" });
+            String[] ListStep = Global.Config.ListNameStep.Split('\n');
+            if (ListStep.Length > 0)
+            {
+               StepProccessBar.SetSteps(ListStep);
+               StepProccessBar.DoneCount = 0;
+            }
+        
+        StepProccessBar.SetSteps(new[] { "Start", "Marking 1", "Camera 1", "Marking 2", "Camera 2", "Done" });
             StepProccessBar.DoneCount = 0;
             // Chưa chạy gì
 
 
+            lbVersion.Text= GetDllVersion("BeeUi.dll").ToString()??"----";
 
-
-
-            _styles = new ControlStylePersistence(this, "MyPanelTheme")
+            
+           _styles = new ControlStylePersistence(this, "MyPanelTheme")
             {
                 LoadImmediately = true
             };
@@ -610,7 +628,7 @@ namespace BeeUi
 
 
 
-            Global.EditTool.lbLicence.Text = "Licence: " + G.Licence;
+          lbLicence.Text = "Licence: " + G.Licence;
             DashboardImages.ImageClicked += DashboardImages_ImageClicked;
             pHeader.Height = (int)(pHeader.Height * Global.PerScaleHeight);
             pTop.Height = (int)(pTop.Height * Global.PerScaleHeight);

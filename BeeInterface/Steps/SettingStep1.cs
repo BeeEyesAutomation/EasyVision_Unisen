@@ -40,7 +40,7 @@ namespace BeeInterface
 
         private void SettingStep1_HandleCreated(object sender, EventArgs e)
         {
-            tmShowPara.Enabled = true;
+           
         }
 
         private void btnNextStep_Click(object sender, EventArgs e)
@@ -148,32 +148,7 @@ namespace BeeInterface
         private void SettingStep1_Load(object sender, EventArgs e)
         {
            
-              AdjZoom.IsInital = true;
-            AdjZoom.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom;
-            AdjFocus.IsInital = true;
-            AdjFocus.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Focus;
-            AdDelayTrig.IsInital = true;
-            AdDelayTrig.Value = Global.Comunication.Protocol.DelayTrigger;
-            AdDelayOutput.IsInital = true;
-            Global.Config.IsOnLight = false;
-
-			AdDelayOutput.Value = Global.Comunication.Protocol.DelayOutput;
-            btnLight1.IsCLick = Global.Comunication.Protocol.IsLight1;
-            btnLight2.IsCLick = Global.Comunication.Protocol.IsLight2;
-            btnLight3.IsCLick = Global.Comunication.Protocol.IsLight3;
-            btnOn.IsCLick = Global.Config.IsOnLight;
-            btnInternal.IsCLick =! Global.Config.IsExternal;
-            btnExternal.IsCLick = Global.Config.IsExternal;
-          
-            btnBlink.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
-            btnAllTime.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.AllTime ? true : false;
-            btnOKNG.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
-
          
-            layoutDelay.Enabled = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
-            layDelayOKNG.Enabled = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
-            numDelayOK.Value = Global.Comunication.Protocol.DelayOutOK;
-            numDelayNG.Value = Global.Comunication.Protocol.DelayOutNG;
         }
 
         private void Global_LiveChanged(bool obj)
@@ -280,14 +255,14 @@ namespace BeeInterface
                     trackExposure.IsInital = true;
                 trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
                 trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
-                if (trackExposure.Max > 5000)
+                if (trackExposure.Max > Global.Config.LimitExposure)
                 {
 
-                    trackExposure.Max = 5000;
+                    trackExposure.Max = Global.Config.LimitExposure;
                 }
-                if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > 50000)
+                if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > Global.Config.LimitExposure)
                 {
-                    BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = 50000;
+                    BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = Global.Config.LimitExposure;
                 }
                 trackExposure.IsInital = true;
                 trackExposure.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step;
@@ -347,105 +322,7 @@ namespace BeeInterface
            
         }
 
-        private void tmShowPara_Tick(object sender, EventArgs e)
-        {
-        
-           
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera==TypeCamera.USB)
-            {
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Min = 320;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Min = 240;
-
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Step = 1;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Step = 1;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Max = 3000;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Max = 3000;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step = 1;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min = 3;
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max = 12;
-             //   trackExposure.Enabled = false;
-                trackGain.Enabled = false;
-                trackShift.Enabled = false;
-                AdjOffsetX.Enabled = false;
-                AdjOffSetY.Enabled = false;
-                btnCenterX.Enabled = false;
-                btnCenterY.Enabled = false;
-                AdjFocus.Enabled = true;
-                AdjZoom.Enabled = true;
-                btnFocus.Enabled = true;
-            }
-            else
-            {
-                btnFocus.Enabled = false;
-                trackGain.Enabled = true;
-                trackShift.Enabled = true;
-                AdjOffsetX.Enabled = true;
-                AdjOffSetY.Enabled = true;
-                btnCenterX.Enabled = true;
-                btnCenterY.Enabled = true;
-                AdjFocus.Enabled = false;
-                AdjZoom.Enabled = false;
-
-            }    
-                trackExposure.IsInital = true;
-            trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
-            trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
-            if (trackExposure.Max > 5000)
-            {
-
-                trackExposure.Max = 5000;
-            }
-            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > 50000)
-            {
-                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = 50000;
-            }
-
-            trackExposure.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step;
-            trackExposure.IsInital = true;
-            trackExposure.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value;
-
-            trackGain.IsInital = true;
-            trackGain.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Min;
-            trackGain.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Max;
-            trackGain.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Step;
-            trackGain.IsInital = true;
-            trackGain.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value;
-            trackShift.IsInital = true;
-            trackShift.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Min;
-            trackShift.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Max;
-            trackShift.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Step;
-            trackShift.IsInital = true;
-            trackShift.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value;
-            AdjWidth.IsInital = true;
-            AdjWidth.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Min;
-            AdjWidth.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Max;
-            AdjWidth.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Step;
-            AdjWidth.IsInital = true;
-            AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Value;
-            AdjHeight.IsInital = true;
-            AdjHeight.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Min;
-            AdjHeight.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Max;
-            AdjHeight.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Step;
-            AdjHeight.IsInital = true;
-            AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Value;
-            AdjOffsetX.IsInital = true;
-            AdjOffsetX.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Min;
-            AdjOffsetX.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Max;
-            AdjOffsetX.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Step;
-            AdjOffsetX.IsInital = true;
-            AdjOffsetX.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Value;
-            AdjOffSetY.IsInital = true;
-            AdjOffSetY.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Min;
-            AdjOffSetY.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Max;
-            AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Step;
-            AdjOffSetY.IsInital = true;
-            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Value;
-            btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
-            btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
-           
-            tmShowPara.Enabled = false;
-        }
-
+      
         private void btnBlink_Click(object sender, EventArgs e)
         {
             Global.Comunication.Protocol.TypeOutputRS = TypeOutputRS.Blink;
@@ -632,11 +509,143 @@ namespace BeeInterface
         {
             BeeCore.Common.listCamera[Global.IndexCCCD].IsMouseDown = true;
         }
+        public void RefreshData()
+        {
+            AdjZoom.IsInital = true;
+            AdjZoom.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Zoom;
+            AdjFocus.IsInital = true;
+            AdjFocus.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Focus;
+            AdDelayTrig.IsInital = true;
+            AdDelayTrig.Value = Global.Comunication.Protocol.DelayTrigger;
+            if (AdDelayTrig.Max > Global.Config.LimitDelayTrigger)
+            {
+                AdDelayTrig.Max = Global.Config.LimitDelayTrigger;
+            }
+            AdDelayOutput.IsInital = true;
+            Global.Config.IsOnLight = false;
+
+            AdDelayOutput.Value = Global.Comunication.Protocol.DelayOutput;
+            btnLight1.IsCLick = Global.Comunication.Protocol.IsLight1;
+            btnLight2.IsCLick = Global.Comunication.Protocol.IsLight2;
+            btnLight3.IsCLick = Global.Comunication.Protocol.IsLight3;
+            btnOn.IsCLick = Global.Config.IsOnLight;
+            btnInternal.IsCLick = !Global.Config.IsExternal;
+            btnExternal.IsCLick = Global.Config.IsExternal;
+
+            btnBlink.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
+            btnAllTime.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.AllTime ? true : false;
+            btnOKNG.IsCLick = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
+
+
+            layoutDelay.Enabled = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.Blink ? true : false;
+            layDelayOKNG.Enabled = Global.Comunication.Protocol.TypeOutputRS == TypeOutputRS.OKNG ? true : false;
+            numDelayOK.Value = Global.Comunication.Protocol.DelayOutOK;
+            numDelayNG.Value = Global.Comunication.Protocol.DelayOutNG;
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera == TypeCamera.USB)
+            {
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Min = 320;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Min = 240;
+
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Step = 1;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Step = 1;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Max = 3000;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Max = 3000;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step = 1;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min = 3;
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max = 12;
+                //   trackExposure.Enabled = false;
+                trackGain.Enabled = false;
+                trackShift.Enabled = false;
+                AdjOffsetX.Enabled = false;
+                AdjOffSetY.Enabled = false;
+                btnCenterX.Enabled = false;
+                btnCenterY.Enabled = false;
+                AdjFocus.Enabled = true;
+                AdjZoom.Enabled = true;
+                btnFocus.Enabled = true;
+            }
+            else
+            {
+                btnFocus.Enabled = false;
+                trackGain.Enabled = true;
+                trackShift.Enabled = true;
+                AdjOffsetX.Enabled = true;
+                AdjOffSetY.Enabled = true;
+                btnCenterX.Enabled = true;
+                btnCenterY.Enabled = true;
+                AdjFocus.Enabled = false;
+                AdjZoom.Enabled = false;
+
+            }
+            trackExposure.IsInital = true;
+            trackExposure.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Min;
+            trackExposure.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Max;
+
+            if (trackExposure.Max > Global.Config.LimitExposure)
+            {
+
+                trackExposure.Max = Global.Config.LimitExposure;
+            }
+            if (BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value > Global.Config.LimitExposure)
+            {
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value = Global.Config.LimitExposure;
+            }
+
+            trackExposure.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Step;
+            trackExposure.IsInital = true;
+            trackExposure.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Exposure.Value;
+
+            trackGain.IsInital = true;
+            trackGain.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Min;
+            trackGain.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Max;
+            trackGain.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Step;
+            trackGain.IsInital = true;
+            trackGain.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Gain.Value;
+            trackShift.IsInital = true;
+            trackShift.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Min;
+            trackShift.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Max;
+            trackShift.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Step;
+            trackShift.IsInital = true;
+            trackShift.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Shift.Value;
+            AdjWidth.IsInital = true;
+            AdjWidth.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Min;
+            AdjWidth.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Max;
+            AdjWidth.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Step;
+            AdjWidth.IsInital = true;
+            AdjWidth.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Width.Value;
+            AdjHeight.IsInital = true;
+            AdjHeight.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Min;
+            AdjHeight.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Max;
+            AdjHeight.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Step;
+            AdjHeight.IsInital = true;
+            AdjHeight.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Height.Value;
+            AdjOffsetX.IsInital = true;
+            AdjOffsetX.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Min;
+            AdjOffsetX.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Max;
+            AdjOffsetX.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Step;
+            AdjOffsetX.IsInital = true;
+            AdjOffsetX.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetX.Value;
+            AdjOffSetY.IsInital = true;
+            AdjOffSetY.Min = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Min;
+            AdjOffSetY.Max = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Max;
+            AdjOffSetY.Step = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Step;
+            AdjOffSetY.IsInital = true;
+            AdjOffSetY.Value = BeeCore.Common.listCamera[Global.IndexCCCD].Para.OffSetY.Value;
+            btnCenterX.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterX);
+            btnCenterY.IsCLick = Convert.ToBoolean(BeeCore.Common.listCamera[Global.IndexCCCD].Para.CenterY);
+
+
+        }
 
         private void SettingStep1_VisibleChanged(object sender, EventArgs e)
         {
-            btnInternal.IsCLick = !Global.Config.IsExternal;
-            btnExternal.IsCLick = Global.Config.IsExternal;
+            if(this.Visible)
+            {
+                RefreshData();
+                btnInternal.IsCLick = !Global.Config.IsExternal;
+                btnExternal.IsCLick = Global.Config.IsExternal;
+            }    
+         
         }
 
         private async void  AdjOffsetX_MouseUp(object sender, MouseEventArgs e)

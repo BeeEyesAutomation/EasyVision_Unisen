@@ -397,119 +397,127 @@ namespace BeeCore
         private Point pTrack = new Point(10, 10);
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            base.OnPaint(pevent);
-
-            pEnd = new PointF(this.Width - 5, 5);
-            Rectangle rectSurface = this.ClientRectangle;
-            Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
-            // Xác định màu nền dựa trên trạng thái
-            Color topColor, middleColor, bottomColor;
-
-            if (isCLick)
+            try
             {
-                // Màu khi bấm xuống
-                topColor = Color.FromArgb(244, 192, 89);
-                middleColor = Color.FromArgb(246, 204, 120);
-                bottomColor = Color.FromArgb(247, 211, 139);//247, 211, 139
-            }
-            else if (isHovered)
-            {
-                // Màu khi hover
-                topColor = Color.FromArgb(208, 211, 213);
-                middleColor = Color.FromArgb(193, 197, 199);
-                bottomColor = Color.FromArgb(179, 182, 185);
-            }
-            else
-            {
-                // Màu mặc định
-                topColor = Color.FromArgb(243, 247, 250);
-                middleColor = Color.FromArgb(218, 221, 224);
-                bottomColor = Color.FromArgb(199, 203, 206);
-            }
+                base.OnPaint(pevent);
+                if (this.ClientRectangle == null) return;
+                if(this.Parent == null) return; 
+                pEnd = new PointF(this.Width - 5, 5);
+                Rectangle rectSurface = this.ClientRectangle;
+                Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
+                // Xác định màu nền dựa trên trạng thái
+                Color topColor, middleColor, bottomColor;
 
-            // Gradient 3 màu
-            using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.White, Color.Gray, LinearGradientMode.Vertical))
-            {
-                ColorBlend colorBlend = new ColorBlend();
-                colorBlend.Colors = new Color[] { topColor, middleColor, bottomColor };
-                colorBlend.Positions = new float[] { 0.0f, 0.5f, 1.0f }; // 3 điểm màu
-                brush.InterpolationColors = colorBlend;
+                if (isCLick)
+                {
+                    // Màu khi bấm xuống
+                    topColor = Color.FromArgb(244, 192, 89);
+                    middleColor = Color.FromArgb(246, 204, 120);
+                    bottomColor = Color.FromArgb(247, 211, 139);//247, 211, 139
+                }
+                else if (isHovered)
+                {
+                    // Màu khi hover
+                    topColor = Color.FromArgb(208, 211, 213);
+                    middleColor = Color.FromArgb(193, 197, 199);
+                    bottomColor = Color.FromArgb(179, 182, 185);
+                }
+                else
+                {
+                    // Màu mặc định
+                    topColor = Color.FromArgb(243, 247, 250);
+                    middleColor = Color.FromArgb(218, 221, 224);
+                    bottomColor = Color.FromArgb(199, 203, 206);
+                }
 
-                pevent.Graphics.FillRectangle(brush, rect);
-            }
-            // Vẽ hình ảnh nếu có
+                // Gradient 3 màu
+                using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.White, Color.Gray, LinearGradientMode.Vertical))
+                {
+                    ColorBlend colorBlend = new ColorBlend();
+                    colorBlend.Colors = new Color[] { topColor, middleColor, bottomColor };
+                    colorBlend.Positions = new float[] { 0.0f, 0.5f, 1.0f }; // 3 điểm màu
+                    brush.InterpolationColors = colorBlend;
 
-            // Vẽ hình ảnh nếu có
-            int imgSize = Math.Min(this.Height - 10, 24); // Giới hạn kích thước ảnh
-            Rectangle imgRect = Rectangle.Empty;
-            Rectangle textRect = rect;
-            int spacing = 5; // Khoảng cách giữa ảnh và chữ
+                    pevent.Graphics.FillRectangle(brush, rect);
+                }
+                // Vẽ hình ảnh nếu có
 
-         
+                // Vẽ hình ảnh nếu có
+                int imgSize = Math.Min(this.Height - 10, 24); // Giới hạn kích thước ảnh
+                Rectangle imgRect = Rectangle.Empty;
+                Rectangle textRect = rect;
+                int spacing = 5; // Khoảng cách giữa ảnh và chữ
+
+
                 // Vẽ chữ trên button
                 textRect = new Rectangle(0, 0, this.Width, this.Height);
                 TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
 
                 TextRenderer.DrawText(pevent.Graphics, this.Text, this.Font, textRect, this.ForeColor, flags);
-            int smoothSize = 2;
-         
-            Rectangle rectBorder = Rectangle.Inflate(rectSurface, -1, -1);
+                int smoothSize = 2;
 
-            using (GraphicsPath pathSurface = GetFigurePath(rectSurface, 10))
-           
-            using (Pen penSurface = new Pen(this.Parent.BackColor, smoothSize))
-            using (Pen penBorder = new Pen(Color.Transparent, 1))
-            {
-                pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                //Button surface
-                this.Region = new Region(pathSurface);
-                //Draw surface border for HD result
-                pevent.Graphics.DrawPath(penSurface, pathSurface);
+                Rectangle rectBorder = Rectangle.Inflate(rectSurface, -1, -1);
 
-                ////Button border                    
-                //if (borderSize >= 1)
-                //    //Draw control border
-                //    pevent.Graphics.DrawPath(penBorder, pathBorder);
-                //else
-                //    pevent.Graphics.DrawPath(new Pen(this.Parent.BackColor,1), pathBorder);
+                using (GraphicsPath pathSurface = GetFigurePath(rectSurface, 10))
+
+                using (Pen penSurface = new Pen(this.Parent.BackColor, smoothSize))
+                using (Pen penBorder = new Pen(Color.Transparent, 1))
+                {
+                    pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    //Button surface
+                    this.Region = new Region(pathSurface);
+                    //Draw surface border for HD result
+                    pevent.Graphics.DrawPath(penSurface, pathSurface);
+
+                    ////Button border                    
+                    //if (borderSize >= 1)
+                    //    //Draw control border
+                    //    pevent.Graphics.DrawPath(penBorder, pathBorder);
+                    //else
+                    //    pevent.Graphics.DrawPath(new Pen(this.Parent.BackColor,1), pathBorder);
+                }
+                int num = IndexTool + 1;
+
+
+                pevent.Graphics.DrawImage(IconTool, pFist);
+                pevent.Graphics.DrawString(num + "." + Name, Font, Brushes.Black, new PointF(pFist.X + IconTool.Width + 5, pFist.Y));
+                Size sz = Cal.GetSizeText(Status, new Font("Arial", 20, FontStyle.Bold));
+                szNameTool = Cal.GetSizeText(num + "." + Name, Font);
+                if (Status == null)
+                    Status = String.Empty;
+
+                pevent.Graphics.FillRectangle(new SolidBrush(ClStatus), new RectangleF(pEnd.X - szStatus.Width, pEnd.Y, szStatus.Width, szStatus.Height));
+                pevent.Graphics.DrawString(Status, new Font("Arial", 20, FontStyle.Bold), Brushes.White, new PointF(pEnd.X - szStatus.Width / 2 - sz.Width / 2, pEnd.Y + szStatus.Height / 2 - sz.Height / 2));
+                sz = Cal.GetSizeText(CT + "ms", new Font("Arial", 10, FontStyle.Bold));
+                int space1 = 5;
+                pevent.Graphics.FillRectangle(new SolidBrush(Color.Gray), new RectangleF(pEnd.X - szStatus.Width - space1 - szCT.Width, pEnd.Y, szCT.Width, szCT.Height));
+                pevent.Graphics.DrawString(CT + "ms", new Font("Arial", 10, FontStyle.Bold), Brushes.White, new PointF(pEnd.X - szStatus.Width - space1 - szCT.Width / 2 - sz.Width / 2, pEnd.Y + szCT.Height / 2 - sz.Height / 2));
+                space1 = 3;
+                sz = Cal.GetSizeText(Score, new Font("Arial", 18, FontStyle.Bold));
+                pevent.Graphics.DrawString(Score, new Font("Arial", 18, FontStyle.Bold), Brushes.Gray, new PointF(pEnd.X - szStatus.Width / 2 - sz.Width / 2, pEnd.Y + szStatus.Height + space1));
+
+
+                if (max == min) max++;
+                int LocalValue = (int)((valueScore / ((max - min) * 1.0)) * (szTrack.Width - 2));
+                // int w = imgTick.Width;
+                //  Image imgBar = Properties.Resources.BID_SLIDER_SCALE_8PIX_W303;
+                rect = new Rectangle(pTrack.X, pTrack.Y, szTrack.Width, szTrack.Height);
+                pevent.Graphics.FillRectangle(new SolidBrush(colorTrack), rect);
+
+                //  pevent.Graphics.DrawImage(imgBar, new Rectangle(pTrack.X,pTrack.Y, szTrack.Width , imgBar.Height));
+
+                pevent.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)), new RectangleF(pTrack.X, pTrack.Y, LocalValue, szTrack.Height));
+                if (!NotChange)
+                {
+                    pevent.Graphics.DrawImage(imgTick, pTick);
+                    sz = Cal.GetSizeText(value + "", new Font("Arial", 11));
+
+                    pevent.Graphics.DrawString(value + "", new Font("Arial", 11), Brushes.Black, new PointF(pTick.X + imgTick.Width / 2 - (int)sz.Width / 2, pTick.Y + imgTick.Height));
+                }
             }
-            int num = IndexTool + 1;
-           
-               
-            pevent.Graphics.DrawImage(IconTool, pFist);
-            pevent.Graphics.DrawString(num+"."+Name, Font,Brushes.Black, new PointF(pFist.X+IconTool.Width+5, pFist.Y));
-            Size sz = Cal.GetSizeText(Status, new Font("Arial", 20, FontStyle.Bold));
-            szNameTool = Cal.GetSizeText(num + "." + Name, Font);
-            if (Status == null)
-               Status = String.Empty;
-
-            pevent.Graphics.FillRectangle(new SolidBrush(ClStatus), new RectangleF(pEnd.X- szStatus.Width, pEnd.Y, szStatus.Width, szStatus.Height));
-            pevent.Graphics.DrawString(Status, new Font("Arial",20,FontStyle.Bold), Brushes.White, new PointF(pEnd.X - szStatus .Width/ 2- sz.Width/2, pEnd.Y+ szStatus .Height/ 2-sz.Height/2));
-             sz = Cal.GetSizeText(CT + "ms", new Font("Arial", 10, FontStyle.Bold));
-            int space1 = 5;
-            pevent.Graphics.FillRectangle(new SolidBrush(Color.Gray), new RectangleF(pEnd.X - szStatus.Width- space1 - szCT.Width, pEnd.Y , szCT.Width, szCT.Height));
-            pevent.Graphics.DrawString(CT+"ms", new Font("Arial", 10, FontStyle.Bold), Brushes.White, new PointF(pEnd.X - szStatus.Width - space1 - szCT.Width/2 - sz.Width / 2  , pEnd.Y +szCT.Height/2- sz.Height / 2));
-             space1 =3;
-            sz = Cal.GetSizeText(Score, new Font("Arial", 18, FontStyle.Bold));
-            pevent.Graphics.DrawString(Score, new Font("Arial", 18, FontStyle.Bold), Brushes.Gray, new PointF(pEnd.X - szStatus.Width/2  - sz.Width / 2, pEnd.Y + szStatus.Height + space1 ));
-           
-            
-            if (max == min) max++;
-            int LocalValue = (int)((valueScore / ((max - min) * 1.0)) * (szTrack.Width - 2));
-            // int w = imgTick.Width;
-          //  Image imgBar = Properties.Resources.BID_SLIDER_SCALE_8PIX_W303;
-             rect = new Rectangle(pTrack.X,pTrack.Y, szTrack.Width, szTrack.Height );
-            pevent.Graphics.FillRectangle(new SolidBrush(colorTrack), rect);
-
-          //  pevent.Graphics.DrawImage(imgBar, new Rectangle(pTrack.X,pTrack.Y, szTrack.Width , imgBar.Height));
-
-            pevent.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, 255, 255, 255)), new RectangleF(pTrack.X,pTrack.Y, LocalValue, szTrack.Height));
-            if (!NotChange)
+            catch(Exception ex)
             {
-                pevent.Graphics.DrawImage(imgTick, pTick);
-                sz = Cal.GetSizeText(value + "", new Font("Arial", 11));
 
-                pevent.Graphics.DrawString(value + "", new Font("Arial", 11), Brushes.Black, new PointF(pTick.X + imgTick.Width / 2 - (int)sz.Width / 2, pTick.Y + imgTick.Height));
             }
         }
         public Color ClStatus = Color.Green;
