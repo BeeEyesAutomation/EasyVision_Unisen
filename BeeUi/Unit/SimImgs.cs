@@ -98,8 +98,8 @@ namespace BeeUi.Unit
             }
             else
                 Global.TriggerNum = TriggerNum.Trigger1;
-            //  Global.TriggerNum = TriggerNum.Trigger1;
-            Global.StatusProcessing = StatusProcessing.Checking;
+            Global.IsSim = true;
+             Global.StatusProcessing = StatusProcessing.Checking;
         }
        
         private void btnContinuous_Click(object sender, EventArgs e)

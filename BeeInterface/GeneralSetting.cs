@@ -136,6 +136,9 @@ namespace BeeInterface
             btnEnTrain.IsCLick = Global.Config.IsEnTrain;
             btnCommonProg.IsCLick=Global.Config.IsSaveProg;
             btnParaPLC.IsCLick = Global.Config.IsSaveCommunication;
+            btnShowImgTrig.IsCLick = Global.Config.IsShowImgTrig;
+            if (btnShowImgTrig.IsCLick) btnShowImgTrig.Text = "ON";
+            else btnShowImgTrig.Text = "OFF";
             ShowNo();
         }
 
@@ -706,6 +709,13 @@ namespace BeeInterface
             Global.Config.IsSaveAllPara=btnSaveAllPara.IsCLick;
             if (btnSaveAllPara.IsCLick) btnSaveAllPara.Text = "ON";
             else btnSaveAllPara.Text = "OFF";
+        }
+
+        private void btnShowImgTrig_Click(object sender, EventArgs e)
+        {
+            Global.Config.IsShowImgTrig = btnShowImgTrig.IsCLick;
+            if (btnShowImgTrig.IsCLick) btnShowImgTrig.Text = "ON";
+            else btnShowImgTrig.Text = "OFF";
         }
     }
 }

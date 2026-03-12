@@ -90,7 +90,7 @@ namespace BeeCpp {
 
             com->CropRotToMat(
                 data, width, height, stride, channels,
-                rr, mask, false,
+                rr, mask, false,0,
                 System::IntPtr(&src)
             );
         }

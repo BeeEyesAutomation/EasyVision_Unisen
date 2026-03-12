@@ -127,8 +127,11 @@ namespace BeeInterface
             _btnPlus.MouseEnter += (s, e) => { if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } };
             _btnPlus.MouseLeave += (s, e) => { if (_suppressLeaveOnce) { _suppressLeaveOnce = false; return; } TryHideTextboxOnLeave(); };
 
-            _btnMinus.Click += (s, e) => { Value = _value - _step; if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } Focus(); };
-            _btnPlus.Click += (s, e) => { Value = _value + _step; if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } Focus(); };
+            _btnMinus.Click += (s, e) => { 
+                Value = _value - _step; if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } Focus(); };
+            _btnPlus.Click += (s, e) => { 
+                Value = _value + _step; 
+                if (AutoShowTextbox && !InDesigner()) { _suppressLeaveOnce = true; ShowTextbox(); } Focus(); };
 
             Controls.Add(_btnMinus);
             Controls.Add(_btnPlus);

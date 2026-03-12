@@ -530,6 +530,8 @@ namespace BeeCore
            protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+            if (this.Parent == null)
+                return;
             this.Parent.BackColorChanged += new EventHandler(Container_BackColorChanged);
         }
 

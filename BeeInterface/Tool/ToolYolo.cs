@@ -57,6 +57,7 @@ namespace BeeInterface
         {
             try
             {
+                Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
 
                 if (Propety.listModels == null) Propety.listModels = new List<string>();
                 Propety.listModels = Propety.listModels.Distinct().ToList();
@@ -1826,6 +1827,17 @@ namespace BeeInterface
         private void btnTypeRCNN_Click(object sender, EventArgs e)
         {
             Propety.TypeYolo=TypeYolo.RCNN;
+        }
+
+        private void btnAddToList_Click(object sender, EventArgs e)
+        {
+            RectRotate rot = Propety.rotCrop.Clone();
+            PointF pCenter = Propety.rotCrop.WorldToLocal(rot._PosCenter);
+
+            rot._PosCenter = pCenter;
+            // rot.UpdateFromPolygon(false);
+            Propety.ListRotCrop.Add(rot);
+            Global.EditTool.View.imgView.Invalidate();
         }
     }
 }

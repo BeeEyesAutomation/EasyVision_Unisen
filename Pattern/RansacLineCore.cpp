@@ -1049,23 +1049,129 @@ LineResult RansacLineCore::FindBestLine(
                 return a.scanPos < b.scanPos;
             });
     }
+  //  Candidate* best = nullptr;
 
-    // ---- Chọn line tốt nhất theo thứ tự quét ----
-    Candidate* best = nullptr;
+    //for (auto& c : candidates)
+    //{
+    //    if (c.runLen < minLenPx)
+    //        continue;
+
+    //    if (!best)
+    //    {
+    //        best = &c;
+    //        continue;
+    //    }
+
+    //    // scan priority trước
+    //    if (c.scanPos < best->scanPos)
+    //    {
+    //        best = &c;
+    //        continue;
+    //    }
+
+    //    // nếu cùng vị trí thì chọn line dài hơn
+    //    if (std::abs(c.scanPos - best->scanPos) < 3)
+    //    {
+    //        if (c.runLen > best->runLen)
+    //            best = &c;
+    //    }
+    //}
+    /*Candidate* best = nullptr;
+    float bestScore = -FLT_MAX;
 
     for (auto& c : candidates)
     {
         if (c.runLen < minLenPx)
             continue;
 
-        if (!best)
+        float density = c.run.size() / (c.runLen + 1e-6f);
+
+        float score =
+            c.runLen * 2.0f +
+            density * 200.0f -
+            c.scanPos * 0.5f;
+
+        if (score > bestScore)
+        {
+            bestScore = score;
             best = &c;
-        else if (c.runLen > best->runLen)
-            best = &c;
-        else if (std::abs(c.runLen - best->runLen) < 1e-3 &&
-            c.inliers > best->inliers)
-            best = &c;
+        }
+    }*/
+    //// ---- Chọn line tốt nhất theo thứ tự quét ----
+    Candidate* best = nullptr;
+
+// ---- 1. lọc line đủ dài ----
+    std::vector<Candidate*> valid;
+
+    for (auto& c : candidates)
+    {
+        if (c.runLen >= minLenPx)
+            valid.push_back(&c);
     }
+
+    if (valid.empty())
+        return out;
+
+    // ---- 2. sort theo độ dài ----
+    std::sort(valid.begin(), valid.end(),
+        [](Candidate* a, Candidate* b)
+        {
+            return a->runLen > b->runLen;
+        });
+
+    // ---- 3. lấy TOP N ----
+    int topN = std::min((int)valid.size(), 8);
+
+    // ---- 4. chọn theo density + scan ----
+    float bestScore = -FLT_MAX;
+
+    for (int i = 0; i < topN; i++)
+    {
+        Candidate* c = valid[i];
+
+        float density = (float)c->run.size() / (c->runLen + 1e-6f);
+
+        // normalize scan position
+        float scanNorm = 1.0f;
+
+        if (scanMode == LineScanPriority::BottomToTop ||
+            scanMode == LineScanPriority::TopToBottom)
+        {
+            scanNorm = 1.0f - (c->scanPos / (float)edges8u1.rows);
+        }
+        else if (scanMode == LineScanPriority::LeftToRight ||
+            scanMode == LineScanPriority::RightToLeft)
+        {
+            scanNorm = 1.0f - (c->scanPos / (float)edges8u1.cols);
+        }
+
+        scanNorm = std::clamp(scanNorm, 0.0f, 1.0f);
+
+        float score =
+            density * 0.7f +
+            scanNorm * 0.3f;
+
+        if (score > bestScore)
+        {
+            bestScore = score;
+            best = c;
+        }
+    }
+    //Candidate* best = nullptr;
+
+    //for (auto& c : candidates)
+    //{
+    //    if (c.runLen < minLenPx)
+    //        continue;
+
+    //    if (!best)
+    //        best = &c;
+    //    else if (c.runLen > best->runLen)
+    //        best = &c;
+    //    else if (std::abs(c.runLen - best->runLen) < 1e-3 &&
+    //        c.inliers > best->inliers)
+    //        best = &c;
+    //}
 
     // ---- Fallback khi scanMode == None ----
     if (!best && scanMode == LineScanPriority::None)

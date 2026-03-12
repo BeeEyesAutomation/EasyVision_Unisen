@@ -80,7 +80,7 @@ namespace BeeInterface
             //else
             //    MessageBox.Show("Port Close");
             Global.ParaCommon.TypeLight = 3;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
+            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Comunication.Protocol.IsOnLight);
 
         }
        
@@ -177,15 +177,15 @@ namespace BeeInterface
 
         private void btnOFF_Click(object sender, EventArgs e)
         {
-            Global.Config.IsOnLight = false;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
+            Global.Comunication.Protocol.IsOnLight = false;
+            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Comunication.Protocol.IsOnLight);
 
         }
 
         private void btnOn_Click(object sender, EventArgs e)
         {
-            Global.Config.IsOnLight =true;
-            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Config.IsOnLight);
+            Global.Comunication.Protocol.IsOnLight =true;
+            BeeCore.Common.listCamera[Global.IndexCCCD].Light(Global.ParaCommon.TypeLight, Global.Comunication.Protocol.IsOnLight);
 
         }
 
@@ -196,12 +196,12 @@ namespace BeeInterface
 
         private void btnLight2_Click(object sender, EventArgs e)
         {
-            Global.Comunication.Protocol.IsLight1 = btnLight2.IsCLick;
+            Global.Comunication.Protocol.IsLight2= btnLight2.IsCLick;
         }
 
         private void btnLight3_Click(object sender, EventArgs e)
         {
-            Global.Comunication.Protocol.IsLight1 = btnLight3.IsCLick;
+            Global.Comunication.Protocol.IsLight3 = btnLight3.IsCLick;
         }
        
 
@@ -523,13 +523,13 @@ namespace BeeInterface
                 AdDelayTrig.Max = Global.Config.LimitDelayTrigger;
             }
             AdDelayOutput.IsInital = true;
-            Global.Config.IsOnLight = false;
+            Global.Comunication.Protocol.IsOnLight = false;
 
             AdDelayOutput.Value = Global.Comunication.Protocol.DelayOutput;
             btnLight1.IsCLick = Global.Comunication.Protocol.IsLight1;
             btnLight2.IsCLick = Global.Comunication.Protocol.IsLight2;
             btnLight3.IsCLick = Global.Comunication.Protocol.IsLight3;
-            btnOn.IsCLick = Global.Config.IsOnLight;
+            btnOn.IsCLick = Global.Comunication.Protocol.IsOnLight;
             btnInternal.IsCLick = !Global.Config.IsExternal;
             btnExternal.IsCLick = Global.Config.IsExternal;
 

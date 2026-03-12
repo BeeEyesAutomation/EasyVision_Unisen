@@ -755,40 +755,177 @@ txtQrCode.Focus();
 
         public int indexToolShow = 0;
       public  int stepShow = 0;
+        private CancellationTokenSource _cts;
+        private Task _readTask;
+        private bool _isRunning = false;
+
+        public event Action<byte[]> DataReceived;
+        public event Action<string> LogMessage;
+
+        public bool IsRunning => _isRunning;
+
+        public void StartReadPCI()
+        {
+            if (_isRunning) return;
+
+            _cts = new CancellationTokenSource();
+            _isRunning = true;
+
+            _readTask = Task.Run(() => ReadLoop(_cts.Token));
+            LogMessage?.Invoke("PCI reader started.");
+        }
+
+        public void StopReadPCI()
+        {
+            if (!_isRunning) return;
+
+            _cts.Cancel();
+
+            try
+            {
+                _readTask?.Wait();
+            }
+            catch (AggregateException)
+            {
+                // bỏ qua lỗi khi cancel
+            }
+
+            _isRunning = false;
+            LogMessage?.Invoke("PCI reader stopped.");
+        }
+        int iSensorOn = 0;
+
+        private void  ReadLoop(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    short ret = 0;
+                    uint value = 0;
+                    try
+                    {
+                        ret = DASK.DI_ReadPort((ushort)Global.Comunication.Protocol.PCI_Card1.m_dev, 0, out value);
+                     //   Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", value + ""));
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+                    }
+
+                    if (ret < 0)
+                    {
+                        goto X ;
+                    }
+                    if (value == 1)
+                    {
+                        iSensorOn = 1;
+                        
+                    }
+                    if (iSensorOn == 1 && value == 0)
+                    {
+
+                        iSensorOn = 0;
+                       
+                        {
+
+
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                            Global.TriggerInternal = false;
+                            Global.IsAllowReadPLC = false;
+                            switch (Global.TriggerNum)
+                            {
+                                case TriggerNum.Trigger0:
+                                    Global.TriggerNum = TriggerNum.Trigger1;
+                                    break;
+                                case TriggerNum.Trigger1:
+                                    Global.TriggerNum = TriggerNum.Trigger2;
+                                    break;
+                                case TriggerNum.Trigger2:
+                                    Global.TriggerNum = TriggerNum.Trigger3;
+                                    break;
+                                case TriggerNum.Trigger3:
+                                    Global.TriggerNum = TriggerNum.Trigger4;
+                                    break;
+
+                            }
+
+                            Global.StatusProcessing = StatusProcessing.Trigger;
+                            Global.Comunication.Protocol.IO_Processing = IO_Processing.Trigger;
+
+                        }
+                   
+                  
+                    }
+
+                  X:   Thread.Sleep(1);
+
+
+                }
+                catch (Exception ex)
+                {
+                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+
+                    //LogMessage?.Invoke("Read PCI error: " + ex.Message);
+                    Thread.Sleep(1);
+                }
+            }
+        }
+
+     
         private async void tmShow_Tick(object sender, EventArgs e)
         {
-            
+
             switch (stepShow)
             {
                 case 0:
-                Global.EditTool.View.imgView.Visible = true;
-                Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
+                    Global.EditTool.View.imgView.Visible = true;
+                    Global.EditTool.View.imgView.Size = Global.EditTool.View.pView.Size;
                     stepShow++;
                     tmShow.Interval = 500;
                     Global.ToolSettings.Size = Global.EditTool.pEditTool.Size;
                     break;
                 case 1:
                     Global.EditTool.RefreshGuiEdit(Step.Run);
-                    if(Global. IsInitialOCR&&Global.IsOCR)
-                    stepShow++;
+                    if (Global.IsInitialOCR && Global.IsOCR)
+                        stepShow++;
                     else
                         stepShow++;
-                        break;
+                    break;
                 case 2:
-                    if (pEdit.Width <= pEdit. btnMenu.Width + 1)
+                    if (pEdit.Width <= pEdit.btnMenu.Width + 1)
                     {
                         pEdit.btnMenu.IsCLick = true;
-                      
+
                     }
                     pEdit.OldWidth = Global.Config.WidthEditProg;
                     stepShow = 0;
-                        indexToolShow = 0;
-                    if (BeeCore.Common.listCamera[Global.IndexCCCD]!=null)
+                    indexToolShow = 0;
+                    if (BeeCore.Common.listCamera[Global.IndexCCCD] != null)
                     {
                         Global.EditTool.View.btnFull.PerformClick();
 
                     }
-                    if (!Global.Config.IsSaveCommunication|| Global.IsIntialProgram ==false)
+                    if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
+                    {
+                        if (!Global.Config.IsSaveCommunication || Global.IsIntialProgram == false)
+                        {
+
+                            if (Global.Comunication.Protocol.PCI_Card1 == null)
+                                Global.Comunication.Protocol.PCI_Card1 = new PCI_Card();
+                            if (Global.Comunication.Protocol.PCI_Card1.Connect())
+                            {
+                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", "sucess"));
+                                Global.Comunication.Protocol.IsConnected = true;
+                                Global.Comunication.Protocol.PCI_Card1.Write(PCI_Write.LightOFF);
+                                StartReadPCI();
+                                Global.PLCStatus = PLCStatus.Ready;
+                            }
+                        }
+                    }else
+                    { 
+                        if (!Global.Config.IsSaveCommunication || Global.IsIntialProgram == false)
                     {
                         Global.IsIntialProgram = true;
                         if (Global.Comunication.Protocol == null) Global.Comunication.Protocol = new ParaProtocol();
@@ -829,7 +966,8 @@ txtQrCode.Focus();
                             }
                         }
                     }
-                  
+
+                    }
                     Global.IsIntialProgram = true;
                     txtPO.Text = Global.Config.POCurrent;
 

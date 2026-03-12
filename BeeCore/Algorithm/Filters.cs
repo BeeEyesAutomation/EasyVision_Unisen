@@ -193,7 +193,103 @@ namespace BeeCore.Algorithm
             }
             return 255;
         }
+        public static Mat EdgeAnyAngleFast(Mat src)
+        {
+            Mat gray;
+
+            if (src.Channels() == 3)
+            {
+                gray = new Mat();
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            }
+            else
+            {
+                gray = src;
+            }
+
+            Mat blur = new Mat();
+            Cv2.GaussianBlur(gray, blur, new Size(5, 5), 0);
+
+            Mat gx = new Mat();
+            Mat gy = new Mat();
+
+            // Scharr cho gradient tốt hơn Sobel
+            Cv2.Scharr(blur, gx, MatType.CV_16S, 1, 0);
+            Cv2.Scharr(blur, gy, MatType.CV_16S, 0, 1);
+
+            Cv2.ConvertScaleAbs(gx, gx);
+            Cv2.ConvertScaleAbs(gy, gy);
+
+            Mat grad = new Mat();
+            Cv2.Add(gx, gy, grad);   // nhanh hơn AddWeighted
+
+            Mat bin = new Mat();
+            Cv2.Threshold(grad, bin, 40, 255, ThresholdTypes.Binary);
+
+            // remove noise nhỏ
+            Mat kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new Size(3, 3));
+            Cv2.MorphologyEx(bin, bin, MorphTypes.Open, kernel);
+
+            return bin;
+        }
         public static String Err = "";
+        public static Mat EdgeAnyAngle(Mat src)
+        {
+            Mat gray = new Mat();
+            Mat blur = new Mat();
+            Mat gx = new Mat();
+            Mat gy = new Mat();
+            Mat mag = new Mat();
+            Mat bin = new Mat();
+
+            if (src.Channels() == 3)
+                Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = src.Clone();
+
+            Cv2.GaussianBlur(gray, blur, new Size(5, 5), 0);
+
+            Cv2.Sobel(blur, gx, MatType.CV_16S, 1, 0);
+            Cv2.Sobel(blur, gy, MatType.CV_16S, 0, 1);
+
+            Cv2.ConvertScaleAbs(gx, gx);
+            Cv2.ConvertScaleAbs(gy, gy);
+
+            Cv2.AddWeighted(gx, 0.5, gy, 0.5, 0, mag);
+
+            Cv2.Threshold(mag, bin, 40, 255, ThresholdTypes.Binary);
+
+            return bin;
+        }
+        public static Mat GetStrongEdgesStable(Mat raw)
+        {
+            Mat gray = new Mat();
+            Mat blur = new Mat();
+            Mat grad = new Mat();
+            Mat bin = new Mat();
+
+            if (raw.Channels() == 3)
+                Cv2.CvtColor(raw, gray, ColorConversionCodes.BGR2GRAY);
+            else
+                gray = raw.Clone();
+
+            Cv2.GaussianBlur(gray, blur, new Size(5, 5), 0);
+
+            Mat gx = new Mat();
+            Mat gy = new Mat();
+
+            Cv2.Sobel(blur, gx, MatType.CV_16S, 1, 0);
+            Cv2.Sobel(blur, gy, MatType.CV_16S, 0, 1);
+
+            Cv2.ConvertScaleAbs(gx, gx);
+            Cv2.ConvertScaleAbs(gy, gy);
+
+            Cv2.AddWeighted(gx, 0.5, gy, 0.5, 0, grad);
+
+            Cv2.Threshold(grad, bin, 0, 255, ThresholdTypes.Otsu);
+
+            return bin;
+        }
         public static Mat GetStrongEdgesOnly(Mat raw, double percentile = 0.98)
         {
             Mat blur = new Mat(); Mat magnitude = new Mat();

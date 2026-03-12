@@ -55,6 +55,7 @@ namespace BeeCore
             }
         }
         public int indexThread = 0;
+
         public StatusProcessing ProcessingAll()
         {
       
@@ -73,11 +74,31 @@ namespace BeeCore
                     {
                         PropetyTool.StatusTool = StatusTool.WaitCheck;
                     }
-                        indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
+                      
+                    if (Global.Config.IsAutoTrigger && Global.IsRun&&!Global.IsDoneTrig)
+                    {
+                        Global.IndexToolAuto = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.AutoTrig);
+                        if (Global.IndexToolAuto > -1)
+                        {
+                            if (!BeeCore.Common.PropetyTools[indexThread][Global.IndexToolAuto].worker.IsBusy)
+                                BeeCore.Common.PropetyTools[indexThread][Global.IndexToolAuto].worker.RunWorkerAsync();
+                            StatusProcessing = StatusProcessing.Waiting;
+                            return StatusProcessing;
+                        }
+                    }
+                    indexToolPosition = BeeCore.Common.PropetyTools[indexThread].FindIndex(a => a.TypeTool == TypeTool.Position_Adjustment);
                     if (indexToolPosition == -1)
                     {
                         StatusProcessing = StatusProcessing.Checking;
                         return StatusProcessing;
+                    }
+                    if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
+                    {
+
+                        if (!BeeCore.Common.PropetyTools[indexThread][indexToolPosition].worker.IsBusy)
+                            BeeCore.Common.PropetyTools[indexThread][indexToolPosition].worker.RunWorkerAsync();
+
+                        StatusProcessing = StatusProcessing.Adjusting;
                     }
                     if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].TypeTool == TypeTool.Position_Adjustment)
                     {
@@ -101,6 +122,37 @@ namespace BeeCore
                     }
 
                     break;
+                case StatusProcessing.Waiting:
+                    if (BeeCore.Common.PropetyTools[indexThread][Global.IndexToolAuto].StatusTool == StatusTool.Done)
+                    {
+                        if (!Global.IsDoneTrig)
+                        {
+                            if (BeeCore.Common.PropetyTools[indexThread][Global.IndexToolAuto].TypeTool == TypeTool.AutoTrig)
+                            {
+
+
+                                if (BeeCore.Common.PropetyTools[indexThread][Global.IndexToolAuto].Results == Results.NG)
+                                {
+
+                                    StatusProcessing = StatusProcessing.Done;
+                                    return StatusProcessing;
+                                }
+                                else
+                                {
+                                    Global.IsDoneTrig = true;
+                                    StatusProcessing = StatusProcessing.Checking;
+                                    return StatusProcessing;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            StatusProcessing = StatusProcessing.Checking;
+                            return StatusProcessing;
+                        }
+                    }
+
+                    break;
                 case StatusProcessing.Adjusting:
                     if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].StatusTool == StatusTool.Done)
                     {
@@ -108,16 +160,16 @@ namespace BeeCore
 
 
 
-                        if (Global.Config.IsAutoTrigger&&Global.IsRun)
-                        {
-                            if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
-                            {
+                        //if (Global.Config.IsAutoTrigger&&Global.IsRun)
+                        //{
+                        //    if (BeeCore.Common.PropetyTools[indexThread][indexToolPosition].Results == Results.NG)
+                        //    {
                                
-                                StatusProcessing = StatusProcessing.Done;
-                                return StatusProcessing;
-                            }
+                        //        StatusProcessing = StatusProcessing.Done;
+                        //        return StatusProcessing;
+                        //    }
 
-                        }
+                        //}
 
                      //if (Global.StatusMode==StatusMode.Continuous)
                      //   {
@@ -206,8 +258,17 @@ namespace BeeCore
                         //// Tools.ItemTool.Score.ColorTrack = Color.Gray;
                         //PropetyTool.ItemTool.ClScore = Color.Gray;
                         //PropetyTool.ItemTool.ClStatus = Color.Gray;
-                      
-                        if (PropetyTool.TypeTool == TypeTool.Position_Adjustment) continue;
+                        if (PropetyTool.TypeTool == TypeTool.AutoTrig)
+                        {
+                          //  PropetyTool.StatusTool = StatusTool.Done;
+                            continue;
+                        }
+
+                        if (PropetyTool.TypeTool == TypeTool.Position_Adjustment)
+                        {
+                            PropetyTool.StatusTool = StatusTool.Done;
+                            continue;
+                        }
                         PropetyTool.StatusTool = StatusTool.WaitCheck;
                         if (!PropetyTool.worker.IsBusy)
                             PropetyTool.worker.RunWorkerAsync();
@@ -221,16 +282,13 @@ namespace BeeCore
                         PropetyTool PropetyTool = BeeCore.Common.PropetyTools[indexThread][i];
 
 
-
-                        if (PropetyTool.StatusTool != StatusTool.Done)
+                        if (PropetyTool.TypeTool != TypeTool.AutoTrig)
+                            if (PropetyTool.StatusTool != StatusTool.Done)
                         {
                             Status = StatusProcessing.WaitingDone;
                             return;
                         }
-                        else
-                        {
-                           
-                        }
+                       
 
                     }
                     );

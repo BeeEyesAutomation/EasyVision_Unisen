@@ -988,7 +988,18 @@ bool ConnectHik( int index,int indexCCD)
 				
 			}
 		}
+	
 
+		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceWhiteAuto", 0);
+
+		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 0);
+		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1857);
+
+		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 1);
+		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1024);
+
+		m_pcMyCamera[indexCCD]->SetEnumValue("BalanceRatioSelector", 2);
+		m_pcMyCamera[indexCCD]->SetIntValue("BalanceRatio", 1978);
 		m_pcMyCamera[indexCCD]->StartGrabbing();
 
 	return true;

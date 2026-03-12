@@ -1,6 +1,7 @@
 ﻿using BeeCore;
 using BeeGlobal;
 using BeeInterface;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using OpenCvSharp.Flann;
@@ -42,10 +43,13 @@ namespace BeeInterface
             {
 				imgTemp.Image = Propety.bmRaw;
 			}
-			
-			Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
-          
+            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
 
+            btnOnBinary.IsCLick = Propety.IsBinary;
+            this.btnOnBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
+            Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
+
+            AdjBorder.Value = Propety.Border;
             trackScore.Min = Common.PropetyTools[Global.IndexChoose][Propety.Index].MinValue;
             trackScore.Max = Common.PropetyTools[Global.IndexChoose][Propety.Index].MaxValue;
             trackScore.Step = Common.PropetyTools[Global.IndexChoose][Propety.Index].StepValue;
@@ -53,7 +57,7 @@ namespace BeeInterface
             if (Propety.rotArea == null)
                 Propety.rotArea = new RectRotate();
 
-            AdjColorTolerance.Value = Propety.ColorTolerance;
+            AdjColorTolerance.Value = Propety.ThreshBinary;
          
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusToolChanged += ToolPattern_StatusToolChanged;
             btnArea.IsCLick = true;
@@ -73,7 +77,7 @@ namespace BeeInterface
             btnWhite.IsCLick = Propety.rotArea.IsWhite;
             btnBlack.IsCLick = !Propety.rotArea.IsWhite;
             AdjAspect.Value= Propety.Aspect;
-            lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
+         //   lay2Mask.Visible = Global.TypeCrop == TypeCrop.Mask ? true : false;
         }
 
         private void btnCropRect_Click(object sender, EventArgs e)
@@ -93,7 +97,7 @@ namespace BeeInterface
         private void btnCropArea_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-            lay2Mask.Visible = false;
+           // lay2Mask.Visible = false;
             Global.TypeCrop = TypeCrop.Area;
             Propety.TypeCrop = Global.TypeCrop;
 
@@ -107,7 +111,7 @@ namespace BeeInterface
         private void btnClear_Click(object sender, EventArgs e)
         {
             Global.StatusDraw = StatusDraw.Edit;
-            lay2Mask.Visible = true;
+           // lay2Mask.Visible = true;
             Global.TypeCrop = TypeCrop.Mask;
             Propety.TypeCrop = Global.TypeCrop;
             if (Propety.rotMask == null)
@@ -298,35 +302,40 @@ namespace BeeInterface
 
         private void btnWhite_Click(object sender, EventArgs e)
         {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = btnWhite.IsCLick;
-                    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask.IsWhite = btnWhite.IsCLick;
-                    break;
-            }
-
+            if (Propety.rotMask == null)
+                Propety.rotMask = new RectRotate();
+            Propety.rotMask.IsWhite = btnWhite.IsCLick;
+            //switch (Global.TypeCrop)
+            //{
+            //    case TypeCrop.Area:
+            //        Propety.rotArea.IsWhite = btnWhite.IsCLick;
+            //        break;
+            //    case TypeCrop.Crop:
+            //        Propety.rotCrop.IsWhite = btnWhite.IsCLick;
+            //        break;
+            //    case TypeCrop.Mask:
+            //        Propety.rotMask.IsWhite = btnWhite.IsCLick;
+            //        break;
+            //}
         }
 
         private void btnBlack_Click(object sender, EventArgs e)
         {
-            switch (Global.TypeCrop)
-            {
-                case TypeCrop.Area:
-                    Propety.rotArea.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Crop:
-                    Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
-                    break;
-                case TypeCrop.Mask:
-                    Propety.rotMask.IsWhite =!btnBlack.IsCLick;
-                    break;
-            }
+            if (Propety.rotMask == null)
+                Propety.rotMask = new RectRotate();
+            Propety.rotMask.IsWhite = !btnBlack.IsCLick;
+            //switch (Global.TypeCrop)
+            //{
+            //    case TypeCrop.Area:
+            //        Propety.rotArea.IsWhite = !btnBlack.IsCLick;
+            //        break;
+            //    case TypeCrop.Crop:
+            //        Propety.rotCrop.IsWhite = !btnBlack.IsCLick;
+            //        break;
+            //    case TypeCrop.Mask:
+            //        Propety.rotMask.IsWhite =!btnBlack.IsCLick;
+            //        break;
+            //}
 
         }
 
@@ -415,11 +424,11 @@ namespace BeeInterface
         private void btnLearning_Click(object sender, EventArgs e)
         {
 
-            if (Propety.rotArea != null)
-                if (Propety.rotArea._rect.Width != 0 && Propety.rotArea._rect.Height != 0)
+            if (Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.rotArea != null)
+                if (Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.rotArea._rect.Width != 0 && Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.rotArea._rect.Height != 0)
                 {
-                    Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
-                    imgTemp.Image = Propety.bmRaw;
+                    Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.bmRaw = Propety.LearnPattern(BeeCore.Common.listCamera[Global.IndexCCCD].matRaw.Clone(), false).ToBitmap();
+                    imgTemp.Image = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety.bmRaw;
                 }
 
 
@@ -541,7 +550,7 @@ namespace BeeInterface
 
         private void AdjColorTolerance_ValueChanged(float obj)
         {
-            Propety.ColorTolerance = (int)AdjColorTolerance.Value;
+            Propety.ThreshBinary = (int)AdjColorTolerance.Value;
         }
 
         private void AdjThreshod_ValueChanged(float obj)
@@ -647,6 +656,17 @@ namespace BeeInterface
         private void AdjAspect_ValueChanged(float obj)
         {
             Propety.Aspect=AdjAspect.Value;
+        }
+
+        private void AdjBorder_ValueChanged(float obj)
+        {
+            Propety.Border =(int) AdjBorder.Value;
+        }
+
+        private void btnOnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.IsBinary = btnOnBinary.IsCLick;
+            this.btnOnBinary.Text = Propety.IsBinary == true ? "ON" : "OFF";
         }
     }
 }

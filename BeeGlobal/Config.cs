@@ -31,7 +31,7 @@ namespace BeeGlobal
         public bool IsAutoReload = false;
     
         public Size SizeCCD;
-        public bool IsOnLight = false, IsEqualization, IsRevese, IsMirror, IsHance;
+        public bool  IsEqualization, IsRevese, IsMirror, IsHance;
         public bool IsSaveLog = false;
         public bool IsResetImg = false;
         private bool _IsExternal = true;
@@ -64,6 +64,7 @@ namespace BeeGlobal
         public bool IsSaveParaCam = true;
         public bool IsEnTrain = true;
         public bool IsSaveAllPara= true;
+        public bool IsShowImgTrig = true;
         public bool IsEnPO = true;
         public bool IsWaitCenter = false;
         public bool IsEnDummy = true;

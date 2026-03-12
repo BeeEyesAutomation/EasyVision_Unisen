@@ -196,6 +196,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="QuickSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuickSetting.Designer.cs">
+      <DependentUpon>QuickSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="UiPerf.cs" />
     <Compile Include="Unit\AddFilters.cs">
       <SubType>UserControl</SubType>
@@ -357,6 +363,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form\FormActive.resx">
       <DependentUpon>FormActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuickSetting.resx">
+      <DependentUpon>QuickSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Unit\AddFilters.resx">
       <DependentUpon>AddFilters.cs</DependentUpon>

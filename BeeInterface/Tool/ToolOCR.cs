@@ -83,7 +83,7 @@ namespace BeeInterface
         public void LoadPara()
         {
 
-
+            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
             Global.TypeCrop = TypeCrop.Area;
             txtContent.Text = Propety.Matching;
 

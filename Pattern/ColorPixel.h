@@ -50,9 +50,9 @@ namespace BeeCpp
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,
             [System::Runtime::InteropServices::Out] int% outChannels);
-        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels , RectRotateCli rr, Nullable<RectRotateCli> rrMask);
+        void  SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels , RectRotateCli rr, Nullable<RectRotateCli> rrMask,int Thiness);
         System::IntPtr SetImgeSample(IntPtr data, int w, int h, int stride, int ch
-            , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
+            , RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, int Thiness,
             [System::Runtime::InteropServices::Out] int% outW,
             [System::Runtime::InteropServices::Out] int% outH,
             [System::Runtime::InteropServices::Out] int% outStride,

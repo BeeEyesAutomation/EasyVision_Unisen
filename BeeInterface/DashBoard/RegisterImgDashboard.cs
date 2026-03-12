@@ -615,13 +615,13 @@ namespace BeeInterface
             try
             {
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
-                Global.Config.IsOnLight = true;
+                Global.Comunication.Protocol.IsOnLight = true;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 await TimingUtils.DelayAccurateAsync((int)Global.Comunication.Protocol.DelayTrigger);
                 BeeCore.Common.listCamera[Global.IndexCCCD].Read();
                 if( BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera==TypeCamera.USB)
                 BeeCore.Common.listCamera[Global.IndexCCCD].Read();
-                Global.Config.IsOnLight = false;
+                Global.Comunication.Protocol.IsOnLight = false;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                 Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                 if (BeeCore.Common.listCamera[Global.IndexCCCD].matRaw == null) return;

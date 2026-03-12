@@ -113,8 +113,25 @@ namespace BeeInterface
                 new List<PropetyTool>()
             };
                 }
+                //if(BeeCore.Common.PropetyTools.Count >= 2)
+                //{
+                //    List<PropetyTool> newList = new List<PropetyTool>();
+                //    foreach (PropetyTool List1 in BeeCore.Common.PropetyTools[1])
+                //    {
+                //        newList.Add((PropetyTool)List1.Clone());
+                //    }
+                //    BeeCore.Common.PropetyTools[2] = newList;
 
-                Global.IsLoadProgFist = true;
+
+                //    List<PropetyTool> newList2 = new List<PropetyTool>();
+                //    foreach (PropetyTool List2 in BeeCore.Common.PropetyTools[1])
+                //    {
+                //        newList2.Add((PropetyTool)List2.Clone());
+                //    }
+                //    BeeCore.Common.PropetyTools[3] = newList2;
+                //}
+
+                    Global.IsLoadProgFist = true;
             }
             catch (Exception ex)
             {
@@ -450,6 +467,12 @@ namespace BeeInterface
                     break;
                 case TypeTool.MultiPattern:
                     control = new ToolMultiPattern();
+                    break;
+                case TypeTool.AutoTrig:
+                    control = new ToolAutoTrig();
+                    break;
+                case TypeTool.MultiLearning:
+                    control = new ToolMultiOnnx();
                     break;
                 default:
                     return null;

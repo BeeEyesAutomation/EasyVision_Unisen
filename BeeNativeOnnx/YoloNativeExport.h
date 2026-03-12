@@ -24,7 +24,7 @@ extern "C"
         void* handle,
         const uint8_t* bgr, int w, int h, int step,
 
-        float conf, float iou,
+        float conf, float iou, bool Is3,
         YoloBoxC* outBoxes,
         int maxBoxes);
 }

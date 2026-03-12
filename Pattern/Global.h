@@ -71,7 +71,7 @@ namespace BeeCpp
          void CropRotToMat(       // từ buffer raw → crop → ghi dst
             IntPtr data, int w, int h, int stride, int ch,
             RectRotateCli rr, Nullable<RectRotateCli> rrMask,
-            bool returnMaskOnly,
+            bool returnMaskOnly, int Thiness,
             IntPtr dstMatCvPtr
         );
 
@@ -83,7 +83,7 @@ namespace BeeCpp
             const cv::Mat& src,
             const RectRotateCli% rr,
             const RectRotateCli* rrMask,
-            bool returnMaskOnly,
+            bool returnMaskOnly, int Thiness,
             cv::Mat& out);
 
         // Helpers lõi

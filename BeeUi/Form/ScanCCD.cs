@@ -128,37 +128,69 @@ namespace BeeUi
      public   int indexCCD;
         
         public void ConnectCCD()
-        {if (cbCCD.SelectedValue == null) return;
-            indexCCD = cbCCD.SelectedIndex;
-           BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name = cbCCD.SelectedValue.ToString();
-            BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera = TypeCameraNew;
-            if (Global.listParaCamera[Global.IndexChoose] == null)
-                Global.listParaCamera[Global.IndexChoose] = BeeCore.Common.listCamera[Global.IndexCCCD].Para;
-          
-           // Global.Config.IDCamera = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
-            G.Load.FormActive.CheckActive(G.Load.addMac);
-            if(G.IsActive)
+        {
+            try
             {
-                if (!workConAll.IsBusy)
-                    workConAll.RunWorkerAsync();
-            }    
-           else
-            {
-            G.Load.addMac = Decompile.GetMacAddress();
-             
-                if (G.Load.IsLockTrial)
+                if (cbCCD.SelectedValue == null) return;
+                indexCCD = cbCCD.SelectedIndex;
+                Global.IndexCCCD = 0;
+
+                if (Global.IndexCCCD == -1)
                 {
-                    G.Load.IsLockTrial = false;
+                    FormWarning formWarning = new FormWarning("Camera", "No Camera  ");
+                    formWarning.ShowDialog();
+                    return;
+                }
+                if (Global.listParaCamera == null)
+                {
+                    Global.listParaCamera = new List<ParaCamera> { null, null, null, null };
+                    BeeCore.Common.listCamera = new List<Camera>();
+                    int index = 0;
+
+                    foreach (var p in Global.listParaCamera)
+                    {
+                        if (p != null)
+                            BeeCore.Common.listCamera.Add(new Camera(p, index));
+                        else
+                            BeeCore.Common.listCamera.Add(null);
+                        index++;
+                    }
+                }
 
 
-                    G.Load.FormActive.txtLicence.Text = "Locked Trial";
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name = cbCCD.SelectedValue.ToString();
+                BeeCore.Common.listCamera[Global.IndexCCCD].Para.TypeCamera = TypeCameraNew;
+                if (Global.listParaCamera[Global.IndexCCCD] == null)
+                    Global.listParaCamera[Global.IndexCCCD] = BeeCore.Common.listCamera[Global.IndexCCCD].Para;
+
+                // Global.Config.IDCamera = BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
+                G.Load.FormActive.CheckActive(G.Load.addMac);
+                if (G.IsActive)
+                {
+                    if (!workConAll.IsBusy)
+                        workConAll.RunWorkerAsync();
+                }
+                else
+                {
+                    G.Load.addMac = Decompile.GetMacAddress();
+
+                    if (G.Load.IsLockTrial)
+                    {
+                        G.Load.IsLockTrial = false;
+
+
+                        G.Load.FormActive.txtLicence.Text = "Locked Trial";
+
+                    }
+                    String ID = G.Load.addMac + "*" + BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
+                    G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
+                    G.Load.FormActive.Show();
 
                 }
-                String ID = G.Load.addMac + "*" + BeeCore.Common.listCamera[Global.IndexCCCD].Para.Name;
-                G.Load.FormActive.KeyActive = Crypto.EncryptString128Bit(ID, "b@@");
-                G.Load.FormActive.Show();
-
-            }    
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         public void ConnectAll()
         {
@@ -323,6 +355,22 @@ namespace BeeUi
             TypeCameraNew = TypeCamera.MVS;
             //label1.Text = "Resolution";
             cbReSolution.Enabled = true;
+            if (Global.listParaCamera.Count==0)
+            {
+                Global.listParaCamera = new List<ParaCamera> { null, null, null, null };
+                BeeCore.Common.listCamera = new List<Camera>();
+                int index = 0;
+
+                foreach (var p in Global.listParaCamera)
+                {
+                    if (p != null)
+                        BeeCore.Common.listCamera.Add(new Camera(p, index));
+                    else
+                        BeeCore.Common.listCamera.Add(null);
+                    index++;
+                }
+            }
+
             if (Global.listParaCamera[Global.IndexChoose] == null)
             {
                Global.listParaCamera[Global.IndexChoose] = new ParaCamera();

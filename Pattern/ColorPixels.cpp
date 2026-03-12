@@ -350,7 +350,7 @@ using namespace cv;
 //    return matRs;
 //}
 // === PUBLIC API ===
-System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop,
+System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool NoCrop, int Thiness,
     [System::Runtime::InteropServices::Out] int% outW,
     [System::Runtime::InteropServices::Out] int% outH,
     [System::Runtime::InteropServices::Out] int% outStride,
@@ -366,7 +366,7 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
             : Nullable<RectRotateCli>();
         com->CropRotToMat(
             tplData, tplW, tplH, tplStride, tplChannels,
-            rr, mask, /*returnMaskOnly*/ false,
+            rr, mask, /*returnMaskOnly*/ false, Thiness,
             System::IntPtr(&_img->temp)
         );
     
@@ -383,7 +383,7 @@ System::IntPtr ColorPixel::SetImgeSample(System::IntPtr tplData, int tplW, int t
     
     return mem;
 }
-void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask)
+void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask, int Thiness)
 {
   
     Nullable<RectRotateCli> mask =
@@ -391,7 +391,7 @@ void ColorPixel::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplS
         : Nullable<RectRotateCli>();
     com->CropRotToMat(
         tplData, tplW, tplH, tplStride, tplChannels,
-        rr, mask, /*returnMaskOnly*/ false,
+        rr, mask, /*returnMaskOnly*/ false, Thiness,
         System::IntPtr(&_img->raw)
     );
    

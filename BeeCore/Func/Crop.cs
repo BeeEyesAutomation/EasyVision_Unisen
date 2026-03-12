@@ -393,6 +393,143 @@ namespace BeeCore
                 return patch;
             }
         }
+        public static Mat CropRotatedRectUltraFast3(Mat src, RectRotate rot)
+        {
+            if (src == null || src.Empty())
+                return new Mat();
+
+            float cx = rot._PosCenter.X;
+            float cy = rot._PosCenter.Y;
+
+            float w = rot._rect.Width;
+            float h = rot._rect.Height;
+
+            float angleDeg = (float)rot._rectRotation;
+
+            // ===== 1. Nếu không rotate -> crop ROI =====
+            if (Math.Abs(angleDeg) < 0.01f)
+            {
+                int x = (int)(cx - w / 2);
+                int y = (int)(cy - h / 2);
+
+                Rect roi = new Rect(x, y, (int)w, (int)h);
+                roi = roi & new Rect(0, 0, src.Width, src.Height);
+
+                return new Mat(src, roi).Clone();
+            }
+
+            // ===== 2. Tính bounding box trước =====
+            float angle = angleDeg * (float)Math.PI / 180f;
+
+            float cos = Math.Abs((float)Math.Cos(angle));
+            float sin = Math.Abs((float)Math.Sin(angle));
+
+            int boundW = (int)(w * cos + h * sin);
+            int boundH = (int)(w * sin + h * cos);
+
+            int bx = (int)(cx - boundW / 2);
+            int by = (int)(cy - boundH / 2);
+
+            Rect bound = new Rect(bx, by, boundW, boundH);
+            bound = bound & new Rect(0, 0, src.Width, src.Height);
+
+            if (bound.Width <= 0 || bound.Height <= 0)
+                return new Mat();
+
+            Mat small = new Mat(src, bound);
+
+            // ===== 3. Tính lại center trong ROI nhỏ =====
+            float localCx = cx - bound.X;
+            float localCy = cy - bound.Y;
+
+            Point2f center = new Point2f(localCx, localCy);
+
+            // ===== 4. rotate ROI nhỏ =====
+            using (Mat M = Cv2.GetRotationMatrix2D(center, angleDeg, 1.0))
+            {
+
+                Mat rotated = new Mat();
+                Cv2.WarpAffine(
+                    small,
+                    rotated,
+                    M,
+                    small.Size(),
+                    InterpolationFlags.Linear,
+                    BorderTypes.Constant);
+
+                // ===== 5. crop final =====
+                int x2 = (int)(localCx - w / 2);
+                int y2 = (int)(localCy - h / 2);
+
+                Rect finalRoi = new Rect(x2, y2, (int)w, (int)h);
+                finalRoi = finalRoi & new Rect(0, 0, rotated.Width, rotated.Height);
+
+                if (finalRoi.Width <= 0 || finalRoi.Height <= 0)
+                    return new Mat();
+
+                return new Mat(rotated, finalRoi).Clone();
+            }
+        }
+        public static Mat CropRotatedRectUltraFast2(Mat src, RectRotate rot)
+        {
+            if (src == null || src.Empty())
+                return new Mat();
+
+            float cx = rot._PosCenter.X;
+            float cy = rot._PosCenter.Y;
+
+            float w = rot._rect.Width;
+            float h = rot._rect.Height;
+
+            float angle = (float)(rot._rectRotation * Math.PI / 180.0);
+
+            float cos = (float)Math.Cos(angle);
+            float sin = (float)Math.Sin(angle);
+
+            // patch size
+            int patchW = (int)Math.Round(w);
+            int patchH = (int)Math.Round(h);
+
+            // destination triangle
+            Point2f[] dst =
+            {
+        new Point2f(0,0),
+        new Point2f(patchW-1,0),
+        new Point2f(0,patchH-1)
+    };
+
+            // source triangle (tính trực tiếp từ center + rotation)
+            Point2f[] srcTri =
+            {
+        new Point2f(
+            cx - w/2*cos + h/2*sin,
+            cy - w/2*sin - h/2*cos),
+
+        new Point2f(
+            cx + w/2*cos + h/2*sin,
+            cy + w/2*sin - h/2*cos),
+
+        new Point2f(
+            cx - w/2*cos - h/2*sin,
+            cy - w/2*sin + h/2*cos)
+    };
+
+            using (Mat M = Cv2.GetAffineTransform(srcTri, dst))
+            {
+
+                Mat patch = new Mat();
+
+                Cv2.WarpAffine(
+                    src,
+                    patch,
+                    M,
+                    new OpenCvSharp.Size(patchW, patchH),
+                    InterpolationFlags.Nearest,   // không blur
+                    BorderTypes.Constant);
+
+                return patch;
+            }
+        }
         public static Mat CropRotatedRect(
             Mat source, RectRotate rot, RectRotate rotMask,
             bool returnMaskOnly = false)

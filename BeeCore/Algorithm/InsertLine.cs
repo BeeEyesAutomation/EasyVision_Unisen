@@ -89,57 +89,48 @@ namespace BeeCore.Algorithm
             if (len < 1e-12) throw new Exception("Zero direction.");
             x /= len; y /= len;
         }
-
+        public static PointF pInsert = new PointF();
         public static RectRotate CreateRectRotate_FromBotRight(
-    Line2D bot,
-    Line2D right,
-    float width,
-    float height)
+        Line2D bot,
+        Line2D right,
+        float width,
+        float height)
         {
             if (width <= 0 || height <= 0)
                 throw new ArgumentException("Invalid width/height.");
 
             // 1) BR
             PointF BR = Intersect(bot, right);
+            pInsert = BR;
+            // 2) Tạo 1 điểm thứ 2 trên bot để xác định hướng thật
+            PointF P2 = new PointF(
+                (float)(BR.X + bot.Vx),
+                (float)(BR.Y + bot.Vy)
+            );
 
-            // 2) u = direction(bot)
-            double ux = bot.Vx;
-            double uy = bot.Vy;
+            // 3) u = BR -> P2
+            double ux = P2.X - BR.X;
+            double uy = P2.Y - BR.Y;
             double ulen = Math.Sqrt(ux * ux + uy * uy);
             if (ulen < 1e-12) throw new Exception("Invalid bot direction.");
             ux /= ulen;
             uy /= ulen;
 
-            // 3) v = direction(right)
-            double vx = right.Vx;
-            double vy = right.Vy;
-            double vlen = Math.Sqrt(vx * vx + vy * vy);
-            if (vlen < 1e-12) throw new Exception("Invalid right direction.");
-            vx /= vlen;
-            vy /= vlen;
+            // 4) v = perp(u)
+            double vx = -uy;
+            double vy = ux;
 
-            // ===============================
-            // 4) FIX ORIENTATION HÌNH HỌC
-            // v phải hướng lên phía trên của bot
-            // ===============================
-
-            // normal của bot (vuông góc u)
-            double nx = -uy;
-            double ny = ux;
-
-            // nếu v đang đi xuống phía dưới bot → flip
-            if (vx * nx + vy * ny < 0)
+            // ép v luôn hướng lên ảnh
+            if (vy > 0)
             {
                 vx = -vx;
                 vy = -vy;
             }
 
-            // ===============================
-
-            // 5) Center = BR - w/2*u - h/2*v
+            // 5) Center
             PointF C = new PointF(
-                (float)(BR.X - (width / 2f) * ux - (height / 2f) * vx),
-                (float)(BR.Y - (width / 2f) * uy - (height / 2f) * vy)
+                (float)(BR.X - (width / 2f) * ux + (height / 2f) * vx),
+                (float)(BR.Y - (width / 2f) * uy + (height / 2f) * vy)
             );
 
             float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
@@ -153,7 +144,172 @@ namespace BeeCore.Algorithm
 
             return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
         }
+        static double NormalizeAngle(double a)
+        {
+            while (a > Math.PI) a -= 2 * Math.PI;
+            while (a < -Math.PI) a += 2 * Math.PI;
 
+            return a;
+        }
+        static double MeanAngle(double a, double b)
+        {
+            double x = Math.Cos(a) + Math.Cos(b);
+            double y = Math.Sin(a) + Math.Sin(b);
+
+            return Math.Atan2(y, x);
+        }
+        public static RectRotate CreateRectRotate_FromRightBot_VisionPro(
+    Line2D bot,
+    Line2D right,
+    float width,
+    float height)
+        {
+            if (width <= 0 || height <= 0)
+                throw new ArgumentException("Invalid width/height.");
+            //---------------------------------------------------
+            // 1. Intersection BR
+            //---------------------------------------------------
+            PointF BR = Intersect(bot, right);
+            pInsert = BR;
+            //---------------------------------------------------
+            // 2. BOT direction
+            //---------------------------------------------------
+            double botAngle = Math.Atan2(bot.Vy, bot.Vx);
+            // ép bot hướng sang phải
+            if (Math.Cos(botAngle) < 0)
+                botAngle += Math.PI;
+            botAngle = NormalizeAngle(botAngle);
+            //---------------------------------------------------
+            // 3. RIGHT direction
+            //---------------------------------------------------
+            double rightAngle = Math.Atan2(right.Vy, right.Vx);
+            // ép right hướng lên
+            if (Math.Sin(rightAngle) > 0)
+                rightAngle += Math.PI;
+
+            rightAngle = NormalizeAngle(rightAngle);
+
+            //---------------------------------------------------
+            // 4. height direction (trung vị)
+            //---------------------------------------------------
+            double heightAngle = MeanAngle(
+                botAngle - Math.PI / 2.0,
+                rightAngle
+            );
+
+            heightAngle = NormalizeAngle(heightAngle);
+
+            //---------------------------------------------------
+            // 5. width direction
+            //---------------------------------------------------
+            double widthAngle = heightAngle + Math.PI / 2.0;
+
+            widthAngle = NormalizeAngle(widthAngle);
+
+            //---------------------------------------------------
+            // 6. vectors
+            //---------------------------------------------------
+            double ux = Math.Cos(widthAngle);
+            double uy = Math.Sin(widthAngle);
+
+            double vx = Math.Cos(heightAngle);
+            double vy = Math.Sin(heightAngle);
+
+            Normalize(ref ux, ref uy);
+            Normalize(ref vx, ref vy);
+
+            //---------------------------------------------------
+            // 7. Center
+            //---------------------------------------------------
+            PointF C = new PointF(
+                (float)(BR.X - width / 2.0 * ux + height / 2.0 * vx),
+                (float)(BR.Y - width / 2.0 * uy + height / 2.0 * vy)
+            );
+
+            //---------------------------------------------------
+            // 8. angle deg
+            //---------------------------------------------------
+            float angleDeg = (float)(widthAngle * 180.0 / Math.PI);
+
+            //---------------------------------------------------
+            // 9. local rect
+            //---------------------------------------------------
+            RectangleF rectLocal = new RectangleF(
+                -width / 2f,
+                -height / 2f,
+                width,
+                height
+            );
+
+            return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
+        }
+        public static RectRotate CreateRectRotate_FromRightBot(
+        Line2D bot,
+        Line2D right,
+        float width,
+        float height)
+        {
+            if (width <= 0 || height <= 0)
+                throw new ArgumentException("Invalid width/height.");
+
+            // 1) BR = giao của bot & right
+            PointF BR = Intersect(bot, right);
+            pInsert = BR;
+
+            // =====================================================
+            // 2) v = hướng của RIGHT (BR -> TR), ép luôn hướng lên ảnh (Y âm)
+            // =====================================================
+            // Lấy vector right.V
+            double vx = right.Vx;
+            double vy = right.Vy;
+
+            double vlen = Math.Sqrt(vx * vx + vy * vy);
+            if (vlen < 1e-12) throw new Exception("Invalid right direction.");
+            vx /= vlen;
+            vy /= vlen;
+
+            // ép v hướng lên (Y âm)
+            if (vy > 0)
+            {
+                vx = -vx;
+                vy = -vy;
+            }
+
+            // =====================================================
+            // 3) u = perp(v) sao cho u hướng sang phải (X dương)
+            //    Với v hướng lên, chọn u = (-vy, vx) sẽ ra hướng "phải"
+            // =====================================================
+            double ux = -vy;
+            double uy = vx;
+
+            // nếu u bị hướng trái thì đảo u (để BR đúng là bottom-right theo công thức center)
+            if (ux < 0)
+            {
+                ux = -ux;
+                uy = -uy;
+            }
+
+            // =====================================================
+            // 4) Center (GIỐNG HÀM GỐC):
+            //    BR -> Center = -w/2*u + h/2*v   (v là hướng lên)
+            // =====================================================
+            PointF C = new PointF(
+                (float)(BR.X - (width / 2f) * ux + (height / 2f) * vx),
+                (float)(BR.Y - (width / 2f) * uy + (height / 2f) * vy)
+            );
+
+            // 5) angle theo trục width (u) giống hàm gốc
+            float angleDeg = (float)(Math.Atan2(uy, ux) * 180.0 / Math.PI);
+
+            RectangleF rectLocal = new RectangleF(
+                -width / 2f,
+                -height / 2f,
+                width,
+                height
+            );
+
+            return new RectRotate(rectLocal, C, angleDeg, AnchorPoint.None);
+        }
         public static RectRotate CreateRectRotate_BotAxis(
     Line2D top, Line2D bot, Line2D left, Line2D right)
         {

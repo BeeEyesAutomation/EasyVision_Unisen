@@ -28,6 +28,7 @@ namespace BeeGlobal
                 }
             }
         }
+        public static bool IsDoneTrig;
         public static bool _IsAutoShuttDown = false;
         public static event Action<bool> AutoShuttDown;
         public static bool IsAutoShuttDown
@@ -196,11 +197,26 @@ namespace BeeGlobal
         public static float ScaleZoom;
         public static Point pScroll;
         public static dynamic ToolSettings;
-        public static bool IsAutoTemp= false;
+        public static bool _IsAutoTemp= false;
+        public static event Action<bool> ChangeTraining;
+
+        public static bool IsAutoTemp
+        {
+            get => _IsAutoTemp;
+            set
+            {
+                if (_IsAutoTemp != value)
+                {
+                    _IsAutoTemp = value;
+                    ChangeTraining?.Invoke(_IsAutoTemp); // Gọi event
+                }
+            }
+        }
         public static StatusDraw _StatusDraw = StatusDraw.None;
         public static event Action<StatusDraw> StatusDrawChanged;
         public static Config Config;
         public static float ZoomMinimum = 0;
+        public static int IndexToolAuto = -1;
        public static  bool IsLearning=true;
         public static bool IsOCR = true;
        

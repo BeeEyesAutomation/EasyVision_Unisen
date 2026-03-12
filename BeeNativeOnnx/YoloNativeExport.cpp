@@ -85,7 +85,7 @@ extern "C"
     int YOLO_Detect(
         void* handle,
         const uint8_t* bgr, int w, int h, int step,
-        float conf, float iou,
+        float conf, float iou,bool Is3,
         YoloBoxC* outBoxes,
         int maxBoxes)
     {
@@ -94,7 +94,7 @@ extern "C"
         cv::Mat img(h, w, CV_8UC3, (void*)bgr, step);
 
         std::vector<YoloBox> result;
-        ((OpenVinoYoloHP*)handle)->Detect(img, conf, iou, result);
+        ((OpenVinoYoloHP*)handle)->Detect(img, conf, iou, Is3, result);
 
         int n = (int)result.size();
         if (n > maxBoxes) n = maxBoxes;

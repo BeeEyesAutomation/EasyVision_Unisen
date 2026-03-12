@@ -157,7 +157,7 @@ namespace BeeCore
                 if (IsClearNoiseBig)
                     matProcess = Filters.ClearNoise(matProcess, SizeClearBig);
 
-                LineDirectionMode lineDirectionMode = LineDirectionMode.Vertical;
+                LineDirectionMode lineDirectionMode = LineDirectionMode.Horizontal;
               
                 Line2DCli =  RansacLine.FindBestLine(
                     matProcess.Data, matProcess.Width, matProcess.Height, (int)matProcess.Step(),
@@ -165,7 +165,7 @@ namespace BeeCore
                     threshold: (float)RansacThreshold,
                     maxPoints: 120000,
                     seed: Index,
-                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.RightToLeft,0,30
+                    mmPerPixel: 1/Scale, AspectLen,(BeeCpp.LineDirectionMode) ((int)lineDirectionMode),LineScanMode.BottomToTop,0,30
 
 
                 );

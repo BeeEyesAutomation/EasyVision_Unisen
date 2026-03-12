@@ -265,7 +265,6 @@
             this.btnCamera4.Corner = BeeGlobal.Corner.Right;
             this.btnCamera4.DebounceResizeMs = 16;
             this.btnCamera4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera4.Enabled = false;
             this.btnCamera4.FlatAppearance.BorderSize = 0;
             this.btnCamera4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
@@ -324,7 +323,6 @@
             this.btnCamera3.Corner = BeeGlobal.Corner.None;
             this.btnCamera3.DebounceResizeMs = 16;
             this.btnCamera3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCamera3.Enabled = false;
             this.btnCamera3.FlatAppearance.BorderSize = 0;
             this.btnCamera3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCamera3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);

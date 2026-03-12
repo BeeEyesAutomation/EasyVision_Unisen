@@ -33,6 +33,7 @@ namespace BeeInterface
             Global.itemNews.Add(new ItemNew(TypeTool.Measure, GroupTool.Extra_Tool_1, Properties.Resources.Measure, Properties.Resources.Measure, "Content.."));
        
             Global.itemNews.Add(new ItemNew(TypeTool.Learning, GroupTool.Extra_Tool_2, Properties.Resources.Learning, Properties.Resources.Learning, "Content..",Global.IsLearning));
+            Global.itemNews.Add(new ItemNew(TypeTool.MultiLearning, GroupTool.Extra_Tool_2, Properties.Resources.Learning, Properties.Resources.Learning, "Content.."));
 
             Global.itemNews.Add(new ItemNew(TypeTool.CraftOCR, GroupTool.Extra_Tool_2, Properties.Resources.OCR, Properties.Resources.contentOCR, "Content..",Global.IsOCR));
 
@@ -42,6 +43,7 @@ namespace BeeInterface
                 IsQRCode = true;
             Global.itemNews.Add(new ItemNew(TypeTool.BarCode, GroupTool.Extra_Tool_2, Properties.Resources.BarCode, Properties.Resources.BarCode, "Content..", IsQRCode));
             Global.itemNews.Add(new ItemNew(TypeTool.Crop, GroupTool.Extra_Tool_2, Properties.Resources.Crop, Properties.Resources.contentCrop, "✂️ Cắt vùng quan sát\r\nLựa chọn và cắt chính xác khu vực cần xử lý để tăng tốc độ tính toán và giảm nhiễu.\r\n➡️ Tối ưu hiệu năng và tập trung vào điểm kiểm tra quan trọng."));
+            Global.itemNews.Add(new ItemNew(TypeTool.AutoTrig, GroupTool.Extra_Tool_2, Properties.Resources.Crop, Properties.Resources.contentCrop, "Auto Trigger\r\n Tựu tìm Ảnh Tốt nhất"));
 
         }
         public static void ArrangeLogic()

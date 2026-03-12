@@ -310,9 +310,17 @@ namespace BeeCore
                         else
                             g.DrawString("NG", new Font("Arial", Global.ParaShow.FontSize * 3), Brushes.Red, new PointF(10, sz.Height + 5));
                         var tools = BeeCore.Common.PropetyTools[Global.IndexChoose];
-                        foreach (var tool in tools)
-                            if (tool.UsedTool != UsedTool.NotUsed)
-                                tool.Propety.DrawResult(g);
+                        if(Global.Config.IsAutoTrigger&&Global.StatusProcessing!=StatusProcessing.Drawing)
+                        {
+                            tools[Global.IndexToolAuto].Propety.DrawResult(g);
+                        }
+                        else
+                            foreach (var tool in tools)
+                            {
+                                if (tool.UsedTool != UsedTool.NotUsed)
+                                    tool.Propety.DrawResult(g);
+                            }    
+                            
                        
                       
                         //String Content = "OK Date:" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
@@ -1691,9 +1699,12 @@ namespace BeeCore
                     HEROJE.Light(TypeLight, IsOn);
                     break;
                 case TypeCamera.MVS:
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                     Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     break;
                 default:
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                    Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
                     break;
 
             }

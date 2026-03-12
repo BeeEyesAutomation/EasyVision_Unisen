@@ -140,7 +140,7 @@ System::IntPtr Pattern2::SetImgeSample(System::IntPtr tplData, int tplW, int tpl
 
 		com->CropRotToMat(
 			tplData, tplW, tplH, tplStride, tplChannels,
-			rr, mask, /*returnMaskOnly*/ false,
+			rr, mask, /*returnMaskOnly*/ false, 0,
 			System::IntPtr(&img->matSample)
 		);
 		/*Mat raw(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
@@ -171,7 +171,7 @@ void Pattern2::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStr
 
 	com->CropRotToMat(
 		tplData, tplW, tplH, tplStride, tplChannels,
-		rr, mask, /*returnMaskOnly*/ false,
+		rr, mask, /*returnMaskOnly*/ false, 0,
 		System::IntPtr(&img->matRaw)
 	);
    

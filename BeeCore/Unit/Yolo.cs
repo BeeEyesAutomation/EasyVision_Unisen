@@ -63,6 +63,8 @@ namespace BeeCore
         {
            
         }
+        public List<RectRotate> ListRotMask = new List<RectRotate>();
+        public List<RectRotate> ListRotCrop = new List<RectRotate>();
         public String pathFullModel = "";
         [NonSerialized]
         private NativeYolo NativeOnnx;
@@ -79,7 +81,10 @@ namespace BeeCore
             Common.PropetyTools[IndexThread][Index].MinValue = 0;
             Common.PropetyTools[IndexThread][Index].MaxValue = 100;
             if (labelItems==null)labelItems = new List<LabelItem>();
-
+            if (ListRotMask == null)
+                ListRotMask = new List<RectRotate>();
+            if (ListRotCrop == null)
+                ListRotCrop = new List<RectRotate>();
             try
             {
                 Common.PropetyTools[IndexThread][Index].StatusTool = StatusTool.NotInitial;
@@ -436,7 +441,7 @@ namespace BeeCore
                         matCrop.Height,
                         (int)matCrop.Step(),
                         conf,
-                        0.9f,
+                        0.9f,false,
                         OnnxBoxes);
                         foreach(NativeYolo.YoloBox box in  OnnxBoxes)
                         {if (box.score == 0) continue;

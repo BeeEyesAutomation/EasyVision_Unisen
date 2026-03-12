@@ -112,20 +112,20 @@ namespace BeeGlobal
          
                 AddressOutPut = new int[60];
           
-            ParaBits.RemoveAll(b => b.I_O_Input == I_O_Input.None&&b.TypeIO==TypeIO.Input || b.I_O_Output == I_O_Output.None && b.TypeIO == TypeIO.Output);
-            var seen = new HashSet<string>();
-            var filtered = new List<ParaBit>();
+            //ParaBits.RemoveAll(b => b.I_O_Input == I_O_Input.None&&b.TypeIO==TypeIO.Input || b.I_O_Output == I_O_Output.None && b.TypeIO == TypeIO.Output);
+            //var seen = new HashSet<string>();
+            //var filtered = new List<ParaBit>();
 
-            foreach (var b in ParaBits)
-            {
-                // TODO: thay Key theo tiêu chí bạn muốn
-                string key = $"{b.Adddress}|{b.TypeIO}|{b.I_O_Input}|{b.I_O_Output}";
+            //foreach (var b in ParaBits)
+            //{
+            //    // TODO: thay Key theo tiêu chí bạn muốn
+            //    string key = $"{b.Adddress}|{b.TypeIO}|{b.I_O_Input}|{b.I_O_Output}";
 
-                if (seen.Add(key)) // Add trả true nếu chưa tồn tại
-                    filtered.Add(b);
-            }
+            //    if (seen.Add(key)) // Add trả true nếu chưa tồn tại
+            //        filtered.Add(b);
+            //}
 
-            ParaBits = filtered;
+         //   ParaBits = filtered;
             foreach (I_O_Input DI in Enum.GetValues(typeof(I_O_Input)))
             {
                 int index = ParaBits.FindIndex(a => a.I_O_Input== DI && a.TypeIO == TypeIO.Input);
@@ -146,36 +146,75 @@ namespace BeeGlobal
                     AddressOutPut[(int)(DO)] = value;
             }
         }
-        public bool AddInPut(int index,I_O_Input Input)
-        {   int ix= ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
-            if (ParaBits.FindIndex(a=>a.Adddress== index && a.TypeIO==TypeIO.Input)==-1)
-            {
-                ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
-                return true;
-            }
-            else if (ix >= 0)
-            {
-                ParaBits.RemoveAt(ix);
-                ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
-                return true;
-            }
-            else
-                return false;
-        }
-        public bool AddOutPut(int index, I_O_Output Output)
+        //public bool AddInPut(int index,I_O_Input Input)
+        //{   int ix= ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input != Input);
+        //    if (ParaBits.FindIndex(a=>a.Adddress== index && a.TypeIO==TypeIO.Input)==-1)
+        //    {
+        //        ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
+        //        return true;
+        //    }
+        //    else if (ix >= 0)
+        //    {
+        //        ParaBits.RemoveAt(ix);
+        //        ParaBits.Add(new ParaBit(TypeIO.Input, Input, index)); Arrange();
+        //        return true;
+        //    }
+        //    else
+        //        return false;
+        //}
+        public bool AddOutPut(int index, I_O_Output Output,I_O_Output OldOutput)
         {
-            int ix = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
-            if(ix == -1)
+            int ix2 = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output);
+          
+            if (ix2 == -1)
             {
-                ParaBits.Add(new ParaBit(TypeIO.Output, Output, index)); Arrange();
-               
+                ParaBits.Add(new ParaBit(TypeIO.Output, OldOutput, index)); 
+
             }
-            else
+            if(Output!=I_O_Output.None)
             {
-                ParaBits[ix].I_O_Output = Output;
-            }    
+                int ix3 = ParaBits.FindIndex(a => a.TypeIO == TypeIO.Output && a.I_O_Output == Output);
+                if (ix3 != -1)
+                    ParaBits[ix3].I_O_Output = I_O_Output.None;
+            }
+            //if (OldOutput != I_O_Output.None)
+            {
+                int ix = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Output && a.I_O_Output == OldOutput);
+                if (ix != -1)
+                    ParaBits[ix].I_O_Output = Output;
+            }
+          
+                Arrange();
+               
                 return true;
            
+        }
+        public bool AddInPut(int index, I_O_Input Input, I_O_Input OldInput)
+        {
+            int ix2 = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input);
+
+            if (ix2 == -1)
+            {
+                ParaBits.Add(new ParaBit(TypeIO.Input, OldInput, index));
+
+            }
+            if (Input != I_O_Input.None)
+            {
+                int ix3 = ParaBits.FindIndex(a => a.TypeIO == TypeIO.Input && a.I_O_Input == Input);
+                if (ix3 != -1)
+                    ParaBits[ix3].I_O_Input = I_O_Input.None;
+            }
+            //if (OldOutput != I_O_Output.None)
+            {
+                int ix = ParaBits.FindIndex(a => a.Adddress == index && a.TypeIO == TypeIO.Input && a.I_O_Input == OldInput);
+                if (ix != -1)
+                    ParaBits[ix].I_O_Input = Input;
+            }
+
+            Arrange();
+
+            return true;
+
         }
         public bool RemoveInPut(int index, I_O_Input Input)
         {
@@ -299,60 +338,72 @@ namespace BeeGlobal
         }
         public  void WriteInput(I_O_Input I_O_Input,bool Value)
         {
-            int ix = AddressInput[(int)I_O_Input];
-            if (ix == -1 ) return ;
+            
+           
             if(!IsConnected) return ;
+            int ix = AddressInput[(int)I_O_Input];
+            if (ix == -1) return;
             PlcClient.WriteBit(AddRead + "." + AddressInput[(int)I_O_Input], Value);
+        }
+        public void WriteOutputBit(I_O_Output I_O_Output, bool Value)
+        {
+          
+            if (!IsConnected) return;
+            int ix = AddressOutPut[(int)I_O_Output];
+            if (ix == -1) return;
+            PlcClient.WriteBit(AddWrite+ "." + AddressOutPut[(int)I_O_Output], Value);
         }
         [NonSerialized]
         public PCI_Card PCI_Card1 = new PCI_Card();
         public async Task<bool> Connect(  )
         {
+           
             try
             {
-                if(TypeControler == TypeControler.PCI)
+                if (TypeControler == TypeControler.PCI)
                 {
-                    try
-                    {
-                        PCI_Card1 = new PCI_Card();
-                        Global.NumProgFromPLC = Global.Config.NumTrig;
-                        IsConnected = PCI_Card1.Connect();
-                     //  IsConnected = true;
-                        if (IsConnected)
-                        {
-                           PCI_Card1.Write(PCI_Write.LightOFF);
-                            PCI_Card1.OnBitsRead += PCI_Card_OnBitsRead;
-                            PCI_Card1.StartReadLoop(timeRead);
-                            TimingUtils.EnableHighResolutionTimer();
-                        }
-                        else
-                        {
-                            Global.PLCStatus = PLCStatus.ErrorConnect;
-                            Global.StatusIO = StatusIO.NotConnect;
-                        }
-                        if (valueInput == null)
-                            valueInput = new bool[16];
-                        if (valueOutput == null)
-                            valueOutput = new bool[16];
-                        if (AddressInput == null)
-                            AddressInput = new int[60];
-                        if (AddressOutPut == null)
-                            AddressOutPut = new int[60];
-                        Arrange();
-                        foreach (ParaBit paraIO in ParaBits)
-                        {
-                            paraIO.Value = 0;
-                        }
-                        return IsConnected;
-                    }
-                    catch(Exception ex)
-                    {
-                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
+                    return true;
+                    //try
+                    //{
+                    //    PCI_Card1 = new PCI_Card();
+                    //    Global.NumProgFromPLC = Global.Config.NumTrig;
+                    //    IsConnected = PCI_Card1.Connect();
+                    //    //  IsConnected = true;
+                    //    if (IsConnected)
+                    //    {
+                    //        PCI_Card1.Write(PCI_Write.LightOFF);
+                    //        PCI_Card1.OnBitsRead += PCI_Card_OnBitsRead;
+                    //        PCI_Card1.StartReadLoop(timeRead);
+                    //        TimingUtils.EnableHighResolutionTimer();
+                    //    }
+                    //    else
+                    //    {
+                    //        Global.PLCStatus = PLCStatus.ErrorConnect;
+                    //        Global.StatusIO = StatusIO.NotConnect;
+                    //    }
+                    //    if (valueInput == null)
+                    //        valueInput = new bool[16];
+                    //    if (valueOutput == null)
+                    //        valueOutput = new bool[16];
+                    //    if (AddressInput == null)
+                    //        AddressInput = new int[60];
+                    //    if (AddressOutPut == null)
+                    //        AddressOutPut = new int[60];
+                    //    Arrange();
+                    //    foreach (ParaBit paraIO in ParaBits)
+                    //    {
+                    //        paraIO.Value = 0;
+                    //    }
+                    //    return IsConnected;
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "PCI", ex.Message));
 
 
-                    }
+                    //}
 
-                }    
+                }
                 PlcClient = new PlcLib.PlcClient(
                 PlcBrand,
                 ConnectionType,
@@ -360,19 +411,19 @@ namespace BeeGlobal
                 comPort: ComSerial,
                 baudRate: Baurate,
                 port: PortIP,
-                _SlaveID:this.SlaveID,
+                _SlaveID: this.SlaveID,
                  retryCount: 3,
                   parity: Parity,
-                  stopBits: StopBits,  
+                  stopBits: StopBits,
                   databit: DataBit,
                   DtrEnable: DtrEnable,
                   RtsEnable: RtsEnable,
                 timeoutMs: timeOut);
 
-                IsConnected= PlcClient.Connect();
+                IsConnected = PlcClient.Connect();
 
-             
-               // IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
+
+                // IsConnected = ModbusService.IsConnected;// Modbus.ConnectPLC(Port, Baurate, SlaveID);
                 if (valueInput == null)
                     valueInput = new bool[16];
                 if (valueOutput == null)
@@ -381,11 +432,12 @@ namespace BeeGlobal
                     AddressInput = new int[60];
                 if (AddressOutPut == null)
                     AddressOutPut = new int[60];
-                
+
                 Arrange();
-               
-                 if (IsConnected)
+
+                if (IsConnected)
                 {
+
                     Global.NumProgFromPLC = Global.Config.NumTrig;
                     foreach (ParaBit paraIO in ParaBits)
                     {
@@ -408,15 +460,20 @@ namespace BeeGlobal
                     SetLight(false);
                     await WriteOutPut();
                     IO_Processing = IO_Processing.Reset;
-                    if (TypeControler==TypeControler.PLC)
+                    if (TypeControler == TypeControler.PLC)
                     {
-                        if(AddProg.Trim()!="")
+                        //timeAlive = new System.Windows.Forms.Timer();
+                        //timeAlive.Tick += TimeAlive_Tick;
+                        //timeAlive.Interval = 1000;
+                        //timeAlive.Start();
+                        
+                        if (AddProg.Trim() != "")
                         {
                             NoProg = PlcClient.ReadInt(AddProg);
                             Global.IsChangeProg = false;
                             Global.IsPLCChangeProg = true;
                             Global.IsChangeProg = true;
-                      
+
 
                             if (AddPO != null)
                                 if (AddPO != "")
@@ -424,15 +481,15 @@ namespace BeeGlobal
                             if (AddCountProg != null)
                                 if (AddCountProg != "")
                                     ValueCountProg = PlcClient.ReadInt(AddCountProg);
-                           if (AddQty != null)
+                            if (AddQty != null)
                                 if (AddQty != "")
                                     ValueQty = PlcClient.ReadInt(AddQty);
-                           if(ValueQty!=0)
+                            if (ValueQty != 0)
                             {
                                 Global.Config.SumTime = ValueQty;
                                 Global.Config.SumOK = Global.Config.SumTime - Global.Config.SumNG;
-                            }    
-                           Global.NumProgFromPLC = ValueCountProg;
+                            }
+                            Global.NumProgFromPLC = ValueCountProg;
 
 
                         }
@@ -441,274 +498,326 @@ namespace BeeGlobal
 
                     PlcClient.OnBitsRead += async (vals, addrs) =>
                     {
-                      //  if (Global.IsChangeProg) return;
-                        if (!PlcClient.IsConnect)
+                        try
                         {
-                            Global.PLCStatus = PLCStatus.ErrorConnect;
-                            Global.StatusIO = StatusIO.NotConnect;
-                            PlcClient.StopOneBitReadLoop();
-                            Disconnect();
-
-                        }
-                        valueInput = vals;
-                        for (int i = 0; i < valueInput.Length; i++)
-                        {
-                            int ix = ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
-                            if (ix >= 0)
+                            //  if (Global.IsChangeProg) return;
+                            if (!PlcClient.IsConnect)
                             {
-                                ParaBits[ix].Value =Convert.ToInt32( valueInput[i]);
+                                Global.PLCStatus = PLCStatus.ErrorConnect;
+                                Global.StatusIO = StatusIO.NotConnect;
+                                PlcClient.StopOneBitReadLoop();
+                                Disconnect();
+
                             }
-                        }
-                       // if ( Global.Config.IsForceByPassRS)
-                       // {
-                       //     Global.IsByPassResult = true;
-
-
-                       //      //   Global.EditTool.lbBypass.Visible = true;
-                       // }
-                       // else
-                       // {
-                       //     Global.IsByPassResult = false;
-                       ////     Global.EditTool.lbBypass.Visible = false;
-                       
-                       // }
-                        if (Global.IsLive) return;
-                        if (Global.IsRun  )
-                        {
-                            if (Global.Config.IsExternal)
+                            valueInput = vals;
+                            for (int i = 0; i < valueInput.Length; i++)
                             {
-                               
-
-                                if (Global.StatusProcessing == StatusProcessing.None)
+                                int ix = ParaBits.FindIndex(a => a.Adddress == i && a.TypeIO == TypeIO.Input);
+                                if (ix >= 0)
                                 {
-                                    if (AddProgress != null)
-                                        if (AddProgress != "")
-                                            ValueProgress = PlcClient.ReadInt(AddProgress);
-                                    if (GetInPut(I_O_Input.Live) == true && !IsPressLive)
-                                    {
-                                        IsPressLive = true;
+                                    ParaBits[ix].Value = Convert.ToInt32(valueInput[i]);
+                                }
+                            }
+                            // if ( Global.Config.IsForceByPassRS)
+                            // {
+                            //     Global.IsByPassResult = true;
 
-                                    }
-                                    else if (GetInPut(I_O_Input.Live) == false && IsPressLive)
-                                    {
-                                        IsPressLive = false;
 
-                                        Global.IsLive = !Global.IsLive;
-                                        SetLight(Global.IsLive);
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsLive);//Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
-                                        await WriteOutPut();
-                                    }
-                                    if (GetInPut(I_O_Input.ChangeProg) == true&& !Global.IsChangeProg)
-                                    {
-                                        if (AddCountProg != null)
-                                            if (AddCountProg != "")
-                                                ValueCountProg = PlcClient.ReadInt(AddCountProg);
-                                        if (AddProg != null)
-                                            if (AddProg != "")
-                                                NoProg = PlcClient.ReadInt(AddProg);
-                                        WriteInput(I_O_Input.ChangeProg, false);
-                                        Global.Config.SumOK = 0;
-                                        Global.Config.SumNG = 0;
-                                        Global.Config.SumTime = 0;
-                                        Global.IsPLCChangeProg = true;
-                                        Global.IsChangeProg = true;
+                            //      //   Global.EditTool.lbBypass.Visible = true;
+                            // }
+                            // else
+                            // {
+                            //     Global.IsByPassResult = false;
+                            ////     Global.EditTool.lbBypass.Visible = false;
 
-                                    }
-                                    if (GetInPut(I_O_Input.Dummy) == true&&!Global.IsDummy)
-                                    {
-                                        Global.IsDummy = true;
-                                    }
-                                    else if (GetInPut(I_O_Input.Dummy) == false && Global.IsDummy)
-                                    {
-                                        Global.IsDummy = false;
-                                    }
-                                    if (GetInPut(I_O_Input.Shuttdown) == true)
-                                    {
-                                        WriteInput(I_O_Input.Shuttdown, false);
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //T.Result1
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //T.Result1
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //T.Result1
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //T.Result1
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false); //Ready
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false); //Ready
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false); //Ready
+                            // }
+                            if (Global.IsLive) return;
+                            if (Global.IsRun)
+                            {
+                                if (Global.Config.IsExternal)
+                                {
 
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], false); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true); //Busy
-                                        SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true); //Busy
-                                        await WriteOutPut();
-                                        Disconnect();
-                                        Global.IsAutoShuttDown = true;
-                                      
 
-                                    }    
-                                        if (GetInPut(I_O_Input.Reset) == true)
+                                    if (Global.StatusProcessing == StatusProcessing.None)
                                     {
-                                        WriteInput(I_O_Input.Reset, false);
-                                        //Global.Config.SumTime = 0;
-                                        //Global.Config.SumOK = 0;
-                                        //Global.Config.SumNG = 0;
+                                        if (AddProgress != null)
+                                            if (AddProgress != "")
+                                                ValueProgress = PlcClient.ReadInt(AddProgress);
+                                        if (GetInPut(I_O_Input.Live) == true && !IsPressLive)
+                                        {
+                                            IsPressLive = true;
 
-                                    }
-                                    if (GetInPut(I_O_Input.ByPass) == true && !Global.IsByPassResult)
-                                    {
-                                        Global.IsByPassResult = true;
-                                       // Global.EditTool.lbBypass.Visible = true;
-                                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
+                                        }
+                                        else if (GetInPut(I_O_Input.Live) == false && IsPressLive)
+                                        {
+                                            IsPressLive = false;
 
-                                    }
-                                    else if (GetInPut(I_O_Input.ByPass) == false && Global.IsByPassResult)
-                                    {
-                                        Global.IsByPassResult = false;
-                                     //   Global.EditTool.lbBypass.Visible = false;
-                                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
+                                            Global.IsLive = !Global.IsLive;
+                                            SetLight(Global.IsLive);
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], Global.IsLive);//Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], !Global.IsLive);//Ready false
+                                            await WriteOutPut();
+                                        }
+                                        if (GetInPut(I_O_Input.ChangeProg) == true && !Global.IsChangeProg)
+                                        {
+                                            if (AddCountProg != null)
+                                                if (AddCountProg != "")
+                                                    ValueCountProg = PlcClient.ReadInt(AddCountProg);
+                                            if (AddProg != null)
+                                                if (AddProg != "")
+                                                    NoProg = PlcClient.ReadInt(AddProg);
+                                            WriteInput(I_O_Input.ChangeProg, false);
+                                            Global.Config.SumOK = 0;
+                                            Global.Config.SumNG = 0;
+                                            Global.Config.SumTime = 0;
+                                            Global.IsPLCChangeProg = true;
+                                            Global.IsChangeProg = true;
 
-                                    }
-                                  
-                                    switch (Global.TriggerNum)
-                                    {
-                                        case TriggerNum.Trigger3:
-                                            if (GetInPut(I_O_Input.Trigger4) == true)
+                                        }
+                                        if (GetInPut(I_O_Input.ResetQty) == true)
+                                        {
+
+
+                                            WriteInput(I_O_Input.ResetQty, false);
+                                            Global.Config.SumOK = 0;
+                                            Global.Config.SumNG = 0;
+                                            Global.Config.SumTime = 0;
+                                            ValueQty = 0;
+
+
+                                        }
+                                        if (Global.Config.IsEnDummy)
+                                        {
+                                            if (GetInPut(I_O_Input.Dummy) == true && !Global.IsDummy)
                                             {
-                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 4..."));
-                                                Global.TriggerInternal = false;
-                                                Global.IsAllowReadPLC = false;
-                                                Global.TriggerNum = TriggerNum.Trigger4;
-                                                if (Global.Config.IsMultiProg)
-                                                    Global.IndexChoose = 3;
-                                                else
-                                                    Global.IndexChoose = 0;
-                                                Global.StatusProcessing = StatusProcessing.Trigger;
+                                                Global.IsDummy = true;
+                                            }
 
-                                                IO_Processing = IO_Processing.Trigger;
+                                            else if (GetInPut(I_O_Input.Dummy) == false && Global.IsDummy)
+                                            {
+                                                Global.IsDummy = false;
+                                            }
+                                        }
+                                        if (Global.Config.IsEnTrain)
+                                        {
+                                            if (GetInPut(I_O_Input.Training) == true && !Global.IsAutoTemp)
+                                            {
+                                                Global.IsAutoTemp = true;
+                                                WriteInput(I_O_Input.Training, false);
 
                                             }
-                                            break;
-                                        case TriggerNum.Trigger2:
-                                            if (GetInPut(I_O_Input.Trigger3) == true)
-                                            {
-                                                if (Global.Config.IsMultiProg)
-                                                    Global.IndexChoose = 2;
-                                                else
+                                        }
+                                        if (GetInPut(I_O_Input.Shuttdown) == true)
+                                        {
+                                            WriteInput(I_O_Input.Shuttdown, false);
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false); //Ready
+
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true); //Busy
+                                            await WriteOutPut();
+                                            Disconnect();
+                                            Global.IsAutoShuttDown = true;
+
+
+                                        }
+                                        if (GetInPut(I_O_Input.Reset) == true)
+                                        {
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false); //T.Result1
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //Ready
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //Ready
+
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD1], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD2], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD3], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.DoneCCD4], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //Busy
+                                            SetOutPut(AddressOutPut[(int)I_O_Output.Reset], false); //Busy
+
+                                            await WriteOutPut();
+
+
+                                        }
+                                        if (GetInPut(I_O_Input.ByPass) == true && !Global.IsByPassResult)
+                                        {
+                                            Global.IsByPassResult = true;
+                                            // Global.EditTool.lbBypass.Visible = true;
+                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "BYPASS"));
+
+                                        }
+                                        else if (GetInPut(I_O_Input.ByPass) == false && Global.IsByPassResult)
+                                        {
+                                            Global.IsByPassResult = false;
+                                            //   Global.EditTool.lbBypass.Visible = false;
+                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO_READ", "NO BYPASS"));
+
+                                        }
+
+                                        switch (Global.TriggerNum)
+                                        {
+                                            case TriggerNum.Trigger3:
+                                                if (GetInPut(I_O_Input.Trigger4) == true)
+                                                {
+                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 4..."));
+                                                    Global.TriggerInternal = false;
+                                                    Global.IsAllowReadPLC = false;
+                                                    Global.TriggerNum = TriggerNum.Trigger4;
+                                                    if (Global.Config.IsMultiProg)
+                                                        Global.IndexChoose = 3;
+                                                    else
+                                                        Global.IndexChoose = 0;
+                                                    Global.StatusProcessing = StatusProcessing.Trigger;
+
+                                                    IO_Processing = IO_Processing.Trigger;
+
+                                                }
+                                                break;
+                                            case TriggerNum.Trigger2:
+                                                if (GetInPut(I_O_Input.Trigger3) == true)
+                                                {
+                                                    if (Global.Config.IsMultiProg)
+                                                        Global.IndexChoose = 2;
+                                                    else
+                                                        Global.IndexChoose = 0;
+                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 3..."));
+                                                    Global.TriggerInternal = false;
+                                                    Global.IsAllowReadPLC = false;
+                                                    Global.TriggerNum = TriggerNum.Trigger3;
+                                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                                    IO_Processing = IO_Processing.Trigger;
+
+                                                }
+                                                break;
+                                            case TriggerNum.Trigger1:
+                                                if (GetInPut(I_O_Input.Trigger2) == true)
+                                                {
+                                                    if (Global.Config.IsMultiProg)
+                                                        Global.IndexChoose = 1;
+                                                    else
+                                                        Global.IndexChoose = 0;
+                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 2..."));
+                                                    Global.TriggerInternal = false;
+                                                    Global.IsAllowReadPLC = false;
+                                                    Global.TriggerNum = TriggerNum.Trigger2;
+                                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                                    IO_Processing = IO_Processing.None;
+                                                    IO_Processing = IO_Processing.Trigger;
+                                                }
+                                                break;
+                                            case TriggerNum.Trigger0:
+                                                if (GetInPut(I_O_Input.Trigger) == true)
+                                                {
+
                                                     Global.IndexChoose = 0;
-                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 3..."));
-                                                Global.TriggerInternal = false;
+                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
+                                                    Global.TriggerInternal = false;
+                                                    Global.IsAllowReadPLC = false;
+
+                                                    Global.TriggerNum = TriggerNum.Trigger1;
+
+                                                    Global.StatusProcessing = StatusProcessing.Trigger;
+                                                    IO_Processing = IO_Processing.None;
+                                                    IO_Processing = IO_Processing.Trigger;
+
+                                                    try
+                                                    {
+                                                        if (AddPO != null)
+                                                            if (AddPO != "")
+                                                                ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
+                                                        if (AddQty != null)
+                                                            if (AddQty != "")
+                                                                ValueQty = PlcClient.ReadInt(AddQty);
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Read PO", ex.Message));
+                                                    }
+                                                }
+                                                break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (Global.TriggerInternal)
+                                    {
+                                        Global.TriggerInternal = false;
+                                        switch (Global.TriggerNum)
+                                        {
+                                            case TriggerNum.Trigger0:
+                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+
+                                                Global.IsAllowReadPLC = false;
+                                                Global.TriggerNum = TriggerNum.Trigger1;
+                                                Global.StatusProcessing = StatusProcessing.Trigger;
+                                                IO_Processing = IO_Processing.Trigger;
+                                                break;
+                                            case TriggerNum.Trigger1:
+                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+
+                                                Global.IsAllowReadPLC = false;
+                                                Global.TriggerNum = TriggerNum.Trigger2;
+                                                Global.StatusProcessing = StatusProcessing.Trigger;
+                                                IO_Processing = IO_Processing.Trigger;
+                                                break;
+                                            case TriggerNum.Trigger2:
+                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
+
                                                 Global.IsAllowReadPLC = false;
                                                 Global.TriggerNum = TriggerNum.Trigger3;
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
                                                 IO_Processing = IO_Processing.Trigger;
+                                                break;
+                                            case TriggerNum.Trigger3:
+                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
 
-                                            }
-                                            break;
-                                        case TriggerNum.Trigger1:
-                                            if (GetInPut(I_O_Input.Trigger2) == true)
-                                            {
-                                                if (Global.Config.IsMultiProg)
-                                                    Global.IndexChoose = 1;
-                                                else
-                                                    Global.IndexChoose = 0;
-                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 2..."));
-                                                Global.TriggerInternal = false;
                                                 Global.IsAllowReadPLC = false;
-                                                Global.TriggerNum = TriggerNum.Trigger2;
+                                                Global.TriggerNum = TriggerNum.Trigger4;
                                                 Global.StatusProcessing = StatusProcessing.Trigger;
-                                                IO_Processing = IO_Processing.None;
                                                 IO_Processing = IO_Processing.Trigger;
-                                            }
-                                            break;
-                                        case TriggerNum.Trigger0:
-                                            if (GetInPut(I_O_Input.Trigger) == true)
-                                            {
-                                              
-                                                Global.IndexChoose = 0;
-                                                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
-                                                Global.TriggerInternal = false;
-                                                Global.IsAllowReadPLC = false;
+                                                break;
+                                        }
 
-                                                Global.TriggerNum = TriggerNum.Trigger1;
-
-                                                Global.StatusProcessing = StatusProcessing.Trigger;
-                                                IO_Processing = IO_Processing.None;
-                                                IO_Processing = IO_Processing.Trigger;
-
-                                                try
-                                                {
-                                                    if (AddPO != null)
-                                                        if (AddPO != "")
-                                                            ValuePO = PlcClient.ReadStringAsciiKey(AddPO, 16).Trim();
-                                                    if (AddQty != null)
-                                                        if (AddQty != "")
-                                                            ValueQty = PlcClient.ReadInt(AddQty);
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Read PO", ex.Message));
-                                                }
-                                            }
-                                            break;
                                     }
                                 }
+
+
+
+
                             }
-                            else
-                            {
-                                if ( Global.TriggerInternal)
-                                {
-                                    Global.TriggerInternal = false;
-                                    switch (Global.TriggerNum)
-                                    {
-                                        case TriggerNum.Trigger0:
-                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
-                                           
-                                            Global.IsAllowReadPLC = false;
-                                            Global.TriggerNum = TriggerNum.Trigger1;
-                                            Global.StatusProcessing = StatusProcessing.Trigger;
-                                            IO_Processing = IO_Processing.Trigger;
-                                            break;
-                                        case TriggerNum.Trigger1:
-                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
-                                          
-                                            Global.IsAllowReadPLC = false;
-                                            Global.TriggerNum = TriggerNum.Trigger2;
-                                            Global.StatusProcessing = StatusProcessing.Trigger;
-                                            IO_Processing = IO_Processing.Trigger;
-                                            break;
-                                        case TriggerNum.Trigger2:
-                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
-                                          
-                                            Global.IsAllowReadPLC = false;
-                                            Global.TriggerNum = TriggerNum.Trigger3;
-                                            Global.StatusProcessing = StatusProcessing.Trigger;
-                                            IO_Processing = IO_Processing.Trigger;
-                                            break;
-                                        case TriggerNum.Trigger3:
-                                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger..."));
-                                           
-                                            Global.IsAllowReadPLC = false;
-                                            Global.TriggerNum = TriggerNum.Trigger4;
-                                            Global.StatusProcessing = StatusProcessing.Trigger;
-                                            IO_Processing = IO_Processing.Trigger;
-                                            break;
-                                    }
-
-                                }
-                            }    
-                           
-                          
-
-
                         }
-                       
+                        catch (Exception ex)
+                        {
+                            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Read IO", ex.Message));
+                        }
                         //if (AddressInput[(int)I_O_Input.ResetImg] != -1 && Global.StatusProcessing == StatusProcessing.None && Global.StatusProcessing != StatusProcessing.Trigger)
                         //{
                         //    if (valueInput[AddressInput[(int)I_O_Input.ResetImg]] == true)
@@ -720,8 +829,6 @@ namespace BeeGlobal
                         //    }
 
                         //}
-
-
 
                         //if (IO_Processing != IO_ProcessingOld)
                         //{
@@ -751,36 +858,38 @@ namespace BeeGlobal
                         //    }
                         //}
 
-                       
-                       
+
+
                     };
                     if (!PlcClient.StartOneBitReadLoop(AddRead, timeRead))
                         IsConnected = false;
                     TimingUtils.EnableHighResolutionTimer();
                 }
-              else
+                else
                 {
-                  //  Global.PLCStatus = PLCStatus.ErrorConnect;
+                    //  Global.PLCStatus = PLCStatus.ErrorConnect;
                 }
 
-                    if (valueInput.Length < 16)
+                if (valueInput.Length < 16)
                 {
                     IsConnected = false;
                     return false;
                 }
-              
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "IO", ex.Message));
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.ERROR, "Initial IO", ex.Message));
                 return false;
             }
-           if(IsConnected)
-            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO","Connected Success"));
-           else
-            Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connect Fail"));
+            if (IsConnected)
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connected Success"));
+            else
+                Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.INFO, "IO", "Connect Fail"));
             return IsConnected;
         }
+
+      
 
         private void PCI_Card_OnBitsRead(bool obj)
         {
@@ -811,8 +920,6 @@ namespace BeeGlobal
                                     Global.LogsDashboard.AddLog(new LogEntry(DateTime.Now, LeveLLog.TRACE, "IO", " Trigger 1..."));
                                     Global.TriggerInternal = false;
                                     Global.IsAllowReadPLC = false;
-
-
                                     switch (Global.TriggerNum)
                                     {
                                         case TriggerNum.Trigger0:
@@ -857,17 +964,18 @@ namespace BeeGlobal
             PlcClient.Disconnect();
         }
        
-        private async void TimeAlive_Tick(object sender, EventArgs e)
+        private  void TimeAlive_Tick(object sender, EventArgs e)
         {
-            if (Global.IsAllowReadPLC)
-            {
-                IsAlive = !IsAlive;
-                SetOutPut(15, IsAlive);
-            }
-            if (IsConnected)
-              
-             PlcClient.WriteBit(AddWrite + ".15", IsAlive);
-          
+            timeAlive.Enabled = false;
+
+           // if (Global.IsAllowReadPLC)
+           //{
+           //    IsAlive = !IsAlive;
+           //    SetOutPut(15, IsAlive);
+           //}
+           //if (IsConnected)
+           //    WriteOutputBit( I_O_Output.Alive, IsAlive);
+
         }
 
         [field: NonSerialized]
@@ -949,7 +1057,7 @@ namespace BeeGlobal
         public IO_Processing _IO_Processing = IO_Processing.None;
         [NonSerialized]
         private  SemaphoreSlim _ioLock = new SemaphoreSlim(1, 1);
-
+        public bool IsOnLight = false;
 
         public IO_Processing IO_Processing
         {
@@ -1105,12 +1213,10 @@ namespace BeeGlobal
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                            if(TypeControler==TypeControler.IO)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetLight(true);
                            
-                            if (TypeControler == TypeControler.PLC)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                         
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false);
@@ -1154,14 +1260,12 @@ namespace BeeGlobal
                                 Global.StatusMode = StatusMode.Once;
                                 Global.StatusProcessing = StatusProcessing.Read;
                             }
+                           
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], true);//Busy
                             SetLight(true);
-                            if (TypeControler == TypeControler.IO)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false);//Ready false
-                            SetLight(true);
-
-                            if (TypeControler == TypeControler.PLC)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false);//Ready false
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false);
@@ -1203,12 +1307,9 @@ namespace BeeGlobal
 
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], true);//Busy
                             SetLight(true);
-                            if (TypeControler == TypeControler.IO)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false);//Ready false
-                            SetLight(true);
-
-                            if (TypeControler == TypeControler.PLC)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false);//Ready false
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false);
@@ -1223,25 +1324,7 @@ namespace BeeGlobal
                             }
                             break;
                         case TriggerNum.Trigger4:
-                            //if (Global.Config.IsOnlyTrigger)
-                            //{
-                            //    if (DelayTrigger == 0)
-                            //    {
-                            //        Global.StatusMode = StatusMode.Once;
-                            //        Global.StatusProcessing = StatusProcessing.Read;
-                            //    }
-                            //    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
-                            //    SetLight(true);
-                            //    await WriteOutPut();
-                            //    SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
-                            //    if (DelayTrigger > 0)
-                            //    {
-                            //        await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
-                            //        Global.StatusMode = StatusMode.Once;
-                            //        Global.StatusProcessing = StatusProcessing.Read;
-                            //    }
-                            //    break;
-                            //}
+                          
                             if (DelayTrigger == 0)
                             {
                                 Global.StatusMode = StatusMode.Once;
@@ -1249,19 +1332,15 @@ namespace BeeGlobal
                             }
                             SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], true);//Busy
                             SetLight(true);
-                            if (TypeControler == TypeControler.IO)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false);//Ready false
-                            SetLight(true);
-
-                            if (TypeControler == TypeControler.PLC)
-                                SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false);//Ready false
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Busy], true);//Busy
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], false);//Ready false
+                            SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false);//Ready false
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result2], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result3], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.Result4], false);
                             SetOutPut(AddressOutPut[(int)I_O_Output.ResultTotal], false);
                             await WriteOutPut();
-                           
                             if (DelayTrigger > 0)
                             {
                                 await TimingUtils.DelayAccurateAsync((int)DelayTrigger); // thay cho Task.Delay
@@ -1283,7 +1362,6 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], false); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], false); //Ready
                     SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], false); //Ready
-
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic1], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic2], false); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic3], false); //Busy
@@ -1412,47 +1490,32 @@ namespace BeeGlobal
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic4], IsLogic4); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic5], IsLogic5); //NG
                     SetOutPut(AddressOutPut[(int)I_O_Output.Logic6], IsLogic6); //NG
+
                     switch (Global.TriggerNum)
                     {
                         case TriggerNum.Trigger1:
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                             break;
                         case TriggerNum.Trigger2:
-                            
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready2], true); //NG
                             break;
                         case TriggerNum.Trigger3:
-                            
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready3], true); //NG
                             break;
                         case TriggerNum.Trigger4:
-                           
+                            //SetOutPut(AddressOutPut[(int)I_O_Output.Ready], true); //NG
                             SetOutPut(AddressOutPut[(int)I_O_Output.Ready4], true); //NG
                             break;
                     }
                             SetLight(false);
-                    switch (Global.TriggerNum)
-                    {
-                        case TriggerNum.Trigger1:
-
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
-                            break;
-                        case TriggerNum.Trigger2:
-                           
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //NG
-                            break;
-                        case TriggerNum.Trigger3:
-                           
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //NG
-                            break;
-                        case TriggerNum.Trigger4:
-                           
-                            SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //NG
-                            break;
-                    }
-                  
-                            IsWait = true;
-                            await WriteOutPut();
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], false); //NG
+                    SetOutPut(AddressOutPut[(int)I_O_Output.Busy4], false); //NG
+                    IsWait = true;
+                    await WriteOutPut();
                    
                             if (TypeOutputRS==TypeOutputRS.Blink)
                             {
@@ -1527,6 +1590,7 @@ namespace BeeGlobal
                 case IO_Processing.ChangeMode:
                     if (TypeControler == TypeControler.PCI)
                         break;
+                    SetOutPut(AddressOutPut[(int)I_O_Output.EditMode], !Global.IsRun); //
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy], !Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy2], !Global.IsRun); //Busy
                     SetOutPut(AddressOutPut[(int)I_O_Output.Busy3], !Global.IsRun); //Busy
@@ -1546,7 +1610,7 @@ namespace BeeGlobal
               
                 case IO_Processing.Light:
                     if (TypeControler==TypeControler.PCI)
-                    {   if(Global.Config.IsOnLight)
+                    {   if(IsOnLight)
                             PCI_Card1.Write(PCI_Write.LightON);
                         else
                             PCI_Card1.Write(PCI_Write.LightOFF);
@@ -1554,7 +1618,7 @@ namespace BeeGlobal
                         break;
                     }
                   
-                        SetLight(Global.Config.IsOnLight);
+                        SetLight(IsOnLight);
                     await WriteOutPut();
                     break;
                 case IO_Processing.ChangeProg:

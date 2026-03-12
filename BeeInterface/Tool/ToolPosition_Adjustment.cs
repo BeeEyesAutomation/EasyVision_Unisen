@@ -29,6 +29,7 @@ namespace BeeInterface
         }
         public void LoadPara()
         {
+            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
             if (Propety.bmRaw != null)
             {
                 imgTemp.Image = Propety.bmRaw;

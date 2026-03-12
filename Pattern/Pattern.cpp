@@ -581,7 +581,7 @@ Pattern::!Pattern() { if (img) { delete img; img = nullptr; } }
 void Pattern::SetImgeSampleNoCrop(IntPtr data, int w, int h, int stride, int ch)
 {
 	img->matSample = Mat(h, w, CV_8UC1, data.ToPointer(), stride);
-
+	//img->matSample = img->EnhanceForPatternStrong(img->matSample);
 }
 // === PUBLIC API ===
 System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH, int tplStride, int tplChannels, RectRotateCli rr, Nullable<RectRotateCli> rrMask,bool NoCrop,
@@ -600,7 +600,7 @@ System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH
 
 		com->CropRotToMat(
 			tplData, tplW, tplH, tplStride, tplChannels,
-			rr, mask, /*returnMaskOnly*/ false,
+			rr, mask, /*returnMaskOnly*/ false, 0,
 			System::IntPtr(&img->matSample)
 		);
 		/*Mat raw(tplH, tplW, CV_8UC1, tplData.ToPointer(), tplStride);
@@ -613,6 +613,7 @@ System::IntPtr Pattern::SetImgeSample(System::IntPtr tplData, int tplW, int tplH
 
 	}
 	if (!img->matSample.isContinuous()) img->matSample = img->matSample.clone();
+	//img->matSample = img->EnhanceForPatternStrong(img->matSample);
 	const int W = img->matSample.cols, H = img->matSample.rows, C = img->matSample.channels();
 	const int S = (int)img->matSample.step;
 	const size_t bytes = (size_t)S * H;
@@ -631,10 +632,10 @@ void Pattern::SetImgeRaw(System::IntPtr tplData, int tplW, int tplH, int tplStri
 
 	com->CropRotToMat(
 		tplData, tplW, tplH, tplStride, tplChannels,
-		rr, mask, /*returnMaskOnly*/ false,
+		rr, mask, /*returnMaskOnly*/ false, 0,
 		System::IntPtr(&img->matRaw)
 	);
-   
+	//img->matRaw = img->EnhanceForPatternStrong(img->matRaw);
 	//cv::imwrite("Pos.png", img->matRaw);
 }
 void Pattern::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
@@ -661,9 +662,152 @@ void Pattern::SetRawNoCrop(IntPtr data, int w, int h, int stride, int ch)
 
 	// clone để đảm bảo Mat trong C++ sở hữu dữ liệu, tránh phụ thuộc vào vùng nhớ bên C#
 	this->img->matRaw = wrapped.clone();
+	//img->matRaw=	img->EnhanceForPatternStrong(img->matRaw);
 	//img->matRaw = Mat (h, w, CV_8UC1, data.ToPointer(), stride);
 	
+}static inline int ClampI(int v, int lo, int hi)
+{
+	return (v < lo) ? lo : (v > hi ? hi : v);
 }
+
+//cv::Mat Img::EnhanceForPatternStrong(const cv::Mat& src)
+//{
+//	if (src.empty())
+//		return cv::Mat();
+//
+//	Mat gray;
+//	if (src.channels() == 3)
+//		cvtColor(src, gray, COLOR_BGR2GRAY);
+//	else
+//		gray = src.clone();
+//
+//	// 1) blur nhẹ
+//	GaussianBlur(gray, gray, Size(5, 5), 0);
+//
+//	// 2) gradient magnitude
+//	Mat gx, gy;
+//	Sobel(gray, gx, CV_32F, 1, 0, 3);
+//	Sobel(gray, gy, CV_32F, 0, 1, 3);
+//
+//	Mat mag;
+//	magnitude(gx, gy, mag);
+//
+//	// 3) normalize để tìm biên yếu
+//	normalize(mag, mag, 0, 255, NORM_MINMAX);
+//	mag.convertTo(mag, CV_8U);
+//
+//	// 4) tìm điểm biên
+//	std::vector<Point> pts;
+//	findNonZero(mag, pts);
+//
+//	Mat out = Mat::zeros(src.size(), CV_8UC1);
+//
+//	if (pts.empty())
+//		return out;
+//
+//	// 5) bounding box
+//	Rect box = boundingRect(pts);
+//
+//	// tránh trường hợp ăn full ảnh
+//	if (box.width > src.cols * 0.9 || box.height > src.rows * 0.9)
+//		return out;
+//	// 8) vẽ box trắng trên nền đen
+//	cv::rectangle(out, box, cv::Scalar(255), FILLED);
+//
+//	return out;
+//}
+//cv::Mat Img::EnhanceForPatternStrong(const cv::Mat& src)
+//{
+//	cv::Mat gray, bg, norm, edge;
+//
+//	//-------------------------------------
+//	// 1. convert gray
+//	//-------------------------------------
+//	if (src.channels() == 3)
+//		cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
+//	else
+//		gray = src.clone();
+//
+//	//-------------------------------------
+//	// 2. remove uneven lighting
+//	//-------------------------------------
+//	cv::blur(gray, bg, cv::Size(61, 61));
+//	cv::subtract(gray, bg, norm);
+//
+//	//-------------------------------------
+//	// 3. edge detection
+//	//-------------------------------------
+//	cv::Mat gx, gy;
+//
+//	cv::Sobel(norm, gx, CV_16S, 1, 0, 3);
+//	cv::Sobel(norm, gy, CV_16S, 0, 1, 3);
+//
+//	cv::convertScaleAbs(gx, gx);
+//	cv::convertScaleAbs(gy, gy);
+//
+//	cv::addWeighted(gx, 0.5, gy, 0.5, 0, edge);
+//
+//	//-------------------------------------
+//	// 4. threshold edge
+//	//-------------------------------------
+//	cv::Mat edgeBin;
+//	cv::threshold(edge, edgeBin, 10, 255, cv::THRESH_BINARY);
+//
+//	//-------------------------------------
+//	// 5. close edge gap
+//	//-------------------------------------
+//	cv::morphologyEx(
+//		edgeBin,
+//		edgeBin,
+//		cv::MORPH_CLOSE,
+//		cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5))
+//	);
+//
+//	//-------------------------------------
+//	// 6. find contours
+//	//-------------------------------------
+//	std::vector<std::vector<cv::Point>> contours;
+//
+//	cv::findContours(
+//		edgeBin,
+//		contours,
+//		cv::RETR_EXTERNAL,
+//		cv::CHAIN_APPROX_SIMPLE
+//	);
+//
+//	//-------------------------------------
+//	// 7. find largest contour
+//	//-------------------------------------
+//	int bestIdx = -1;
+//	double bestArea = 0;
+//
+//	for (int i = 0; i < contours.size(); i++)
+//	{
+//		double area = cv::contourArea(contours[i]);
+//
+//		if (area > bestArea)
+//		{
+//			bestArea = area;
+//			bestIdx = i;
+//		}
+//	}
+//
+//	//-------------------------------------
+//	// 8. create output mask
+//	//-------------------------------------
+//	cv::Mat mask = cv::Mat::zeros(src.size(), CV_8UC1);
+//
+//	if (bestIdx >= 0)
+//	{
+//		cv::Rect box = cv::boundingRect(contours[bestIdx]);
+//
+//		// draw box white
+//		cv::rectangle(mask, box, cv::Scalar(255), 1);
+//	}
+//
+//	return mask;
+//	
+//}
 void Pattern::LearnPattern()
 {
 	Mat raw = img->matSample.clone();

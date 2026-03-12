@@ -144,5 +144,11 @@ namespace BeeUi.Unit
         {
             G.Main.Close();
         }
+
+        private void btnQuickSetting_Click(object sender, EventArgs e)
+        {
+            QuickSetting quickSetting = new QuickSetting();
+            quickSetting.ShowDialog();
+        }
     }
 }

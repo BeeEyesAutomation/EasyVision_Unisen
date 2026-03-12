@@ -53,7 +53,7 @@ namespace BeeCore
         private static extern int YOLO_Detect(
             IntPtr handle,
             IntPtr bgr, int w, int h, int step,
-            float conf, float iou,
+            float conf, float iou,bool Is3,
             [Out] YoloBox[] boxes,
             int maxBoxes);
 
@@ -89,12 +89,12 @@ namespace BeeCore
         // =============================
         public int Detect(
             IntPtr bgr, int w, int h, int step,
-            float conf, float iou,
+            float conf, float iou,bool Is3,
             YoloBox[] boxes)
         {
             if (_handle == IntPtr.Zero) return 0;
 
-            return YOLO_Detect(_handle, bgr, w, h, step, conf, iou, boxes, boxes.Length);
+            return YOLO_Detect(_handle, bgr, w, h, step, conf, iou, Is3, boxes, boxes.Length);
         }
         public  Dictionary<int, string> LoadNames(string yamlPath)
         {

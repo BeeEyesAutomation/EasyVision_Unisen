@@ -167,15 +167,27 @@
     <Compile Include="LayoutPersistence.cs" />
     <Compile Include="Load.cs" />
     <Compile Include="MultiDockHost.cs" />
+    <Compile Include="PLC\ucBitInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PLC\ucBitInput.Designer.cs">
+      <DependentUpon>ucBitInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PLC\ucBitOutput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PLC\ucBitOutput.Designer.cs">
+      <DependentUpon>ucBitOutput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProtocolPLC.cs">
+    <Compile Include="PLC\ProtocolPLC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ProtocolPLC.Designer.cs">
+    <Compile Include="PLC\ProtocolPLC.Designer.cs">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
     </Compile>
     <Compile Include="ShowTool.cs" />
@@ -248,6 +260,12 @@
     <Compile Include="Tool\ToolCraftOCR.Designer.cs">
       <DependentUpon>ToolCraftOCR.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tool\ToolAutoTrig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolAutoTrig.Designer.cs">
+      <DependentUpon>ToolAutoTrig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tool\ToolMatchingShape.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -259,6 +277,12 @@
     </Compile>
     <Compile Include="Tool\ToolMeasure.Designer.cs">
       <DependentUpon>ToolMeasure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tool\ToolMultiOnnx.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tool\ToolMultiOnnx.Designer.cs">
+      <DependentUpon>ToolMultiOnnx.cs</DependentUpon>
     </Compile>
     <Compile Include="Tool\ToolMultiPattern.cs">
       <SubType>UserControl</SubType>
@@ -385,11 +409,17 @@
     <EmbeddedResource Include="ItemValue.resx">
       <DependentUpon>ItemValue.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PLC\ucBitInput.resx">
+      <DependentUpon>ucBitInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\ucBitOutput.resx">
+      <DependentUpon>ucBitOutput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProtocolPLC.resx">
+    <EmbeddedResource Include="PLC\ProtocolPLC.resx">
       <DependentUpon>ProtocolPLC.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -426,11 +456,17 @@
     <EmbeddedResource Include="Tool\ToolCraftOCR.resx">
       <DependentUpon>ToolCraftOCR.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolAutoTrig.resx">
+      <DependentUpon>ToolAutoTrig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMatchingShape.resx">
       <DependentUpon>ToolMatchingShape.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMeasure.resx">
       <DependentUpon>ToolMeasure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tool\ToolMultiOnnx.resx">
+      <DependentUpon>ToolMultiOnnx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tool\ToolMultiPattern.resx">
       <DependentUpon>ToolMultiPattern.cs</DependentUpon>

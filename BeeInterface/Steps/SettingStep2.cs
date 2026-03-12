@@ -135,7 +135,7 @@ namespace BeeInterface
 
         private void btnCapCamera_Click(object sender, EventArgs e)
         {
-            Global.Config.IsOnLight = true;
+            Global.Comunication.Protocol.IsOnLight = true;
             Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
             Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
 

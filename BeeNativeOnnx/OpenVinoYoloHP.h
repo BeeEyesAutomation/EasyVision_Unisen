@@ -31,11 +31,17 @@ public:
     void Warmup(int iters = 10);
 
     // BGR uint8
-    void Detect(const cv::Mat& bgr, float conf, float iou, std::vector<YoloBox>& out);
+    void Detect(const cv::Mat& bgr, float conf, float iou,bool Is3, std::vector<YoloBox>& out);
 
 private:
     void Letterbox(const cv::Mat& src, cv::Mat& dst, float& scale, int& padw, int& padh);
     void BgrToCHWFloat01(const cv::Mat& u8, float* dstCHW); // directly write CHW float
+    void DecodeYolo(
+        const ov::Tensor& t,
+        float conf,
+        float scale, int padw, int padh,
+        int imgW, int imgH,
+        std::vector<YoloBox>& out);
     void DecodeDetectionOutput(
         const ov::Tensor& t,
         float conf,

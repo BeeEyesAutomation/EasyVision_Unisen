@@ -16,10 +16,11 @@ namespace BeeGlobal
         public RectRotate RotOrigin = new RectRotate();
         public RectRotate RotCalib = new RectRotate();
         public Bitmap BTemp = null;
+       
         [NonSerialized]
         public RectRotate RotCheck = new RectRotate();
         [NonSerialized]
-        public float deltaX, deltaY, ZeroPixel,Score,ScoreColor;
+        public float deltaX, deltaY, ZeroPixel,Score,AspectW, AspectH;
         [NonSerialized]
         public Mat BCheckColor = null;
         [NonSerialized]
@@ -27,7 +28,8 @@ namespace BeeGlobal
         [NonSerialized]
         public bool IsOK = false;
         [NonSerialized]
-        public bool IsDot = false;
+        public bool IsAspect = false;
+
         public RectRotate rotAdj = null;
         public ResultMulti()
         {

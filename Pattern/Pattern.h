@@ -291,6 +291,7 @@ namespace BeeCpp
         cv::Mat     matSample;
         s_TemplData m_TemplData;
         int         m_iMinReduceArea = 256;
+		//cv::Mat EnhanceForPatternStrong(const cv::Mat& src);
 
         // pipeline
         void BuildTemplatePyramid();

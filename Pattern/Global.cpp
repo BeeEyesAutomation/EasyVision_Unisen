@@ -20,10 +20,10 @@ size_t CommonPlus::SafeStep(int w, int ch, int stride)
     if (stride > 0) return static_cast<size_t>(stride);
     return static_cast<size_t>(w) * static_cast<size_t>(ch); // 8-bit/channel giả định
 }
-
+//
 /* === API cho C# === */
 IntPtr CommonPlus::CropRotatedRect(
-    IntPtr srcMatCvPtr, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly)
+    IntPtr srcMatCvPtr, RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly )
 {
     try
     {
@@ -31,8 +31,8 @@ IntPtr CommonPlus::CropRotatedRect(
         if (!src || src->empty()) return IntPtr::Zero;
 
         cv::Mat result;
-        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(*src, rr, &m, returnMaskOnly, result); }
-        else { RunCrop(*src, rr, nullptr, returnMaskOnly, result); }
+        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(*src, rr, &m, returnMaskOnly, 0, result); }
+        else { RunCrop(*src, rr, nullptr, returnMaskOnly, 0, result); }
 
         return IntPtr(new cv::Mat(result)); // caller FreeMat
     }
@@ -52,8 +52,8 @@ void CommonPlus::CropTo(
         if (!src || src->empty() || !dst) return;
 
         cv::Mat result;
-        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(*src, rr, &m, returnMaskOnly, result); }
-        else { RunCrop(*src, rr, nullptr, returnMaskOnly, result); }
+        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(*src, rr, &m, returnMaskOnly, 0, result); }
+        else { RunCrop(*src, rr, nullptr, returnMaskOnly, 0, result); }
 
         *dst = result;
     }
@@ -89,8 +89,8 @@ IntPtr CropPlus::CropRotatedInt(
         cv::Mat src(h, w, type, data.ToPointer(), step); // header non-owning
 
         cv::Mat result;
-        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; com->RunCrop(src, rr, &m, false, result); }
-        else { com->RunCrop(src, rr, nullptr, false, result); }
+        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; com->RunCrop(src, rr, &m, false,0, result); }
+        else { com->RunCrop(src, rr, nullptr, false,0, result); }
       
         outW = result.cols;
         outH = result.rows;
@@ -107,7 +107,7 @@ IntPtr CropPlus::CropRotatedInt(
 
 void CommonPlus::CropRotToMat(
     IntPtr data, int w, int h, int stride, int ch,
-    RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly, IntPtr dstMatCvPtr)
+    RectRotateCli rr, Nullable<RectRotateCli> rrMask, bool returnMaskOnly,int Thiness, IntPtr dstMatCvPtr)
 {
     if (data == IntPtr::Zero || w <= 0 || h <= 0 || dstMatCvPtr == IntPtr::Zero) return;
     try
@@ -117,8 +117,8 @@ void CommonPlus::CropRotToMat(
         cv::Mat src(h, w, type, data.ToPointer(), step);
 
         cv::Mat result;
-        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(src, rr, &m, returnMaskOnly, result); }
-        else { RunCrop(src, rr, nullptr, returnMaskOnly, result); }
+        if (rrMask.HasValue) { RectRotateCli m = rrMask.Value; RunCrop(src, rr, &m, returnMaskOnly, Thiness, result); }
+        else { RunCrop(src, rr, nullptr, returnMaskOnly, Thiness, result); }
 
         auto* dst = reinterpret_cast<cv::Mat*>(dstMatCvPtr.ToPointer());
         *dst = result;
@@ -442,13 +442,71 @@ static inline void NormalizeSizeAndAngle(cv::Size2f& s, double& angDeg)
     //    angDeg += 180;
 }
 
+static void DrawShapeBorderIntoWithSize(
+    const RectRotateCli% rr,
+    cv::Mat& dst,
+    cv::Point2f center,
+    float angleDeg,
+    cv::Scalar color,
+    int width,
+    int height,
+    cv::Point2f localCenter,
+    int thickness = 2)
+{
+    float rad = angleDeg * CV_PI / 180.0f;
 
+    float cs = cos(rad);
+    float sn = sin(rad);
+
+    auto Transform = [&](cv::Point2f p)->cv::Point2f
+        {
+            p -= localCenter;
+
+            float x = p.x;
+            float y = p.y;
+
+            float rx = x * cs - y * sn;
+            float ry = x * sn + y * cs;
+
+            return cv::Point2f(
+                center.x + rx,
+                center.y + ry
+            );
+        };
+
+    if (rr.Shape == ShapeType::Rectangle)
+    {
+        std::vector<cv::Point> pts;
+
+        pts.push_back(Transform({ -width / 2.f, -height / 2.f }));
+        pts.push_back(Transform({ width / 2.f, -height / 2.f }));
+        pts.push_back(Transform({ width / 2.f, height / 2.f }));
+        pts.push_back(Transform({ -width / 2.f, height / 2.f }));
+
+        cv::polylines(dst, pts, true, color, thickness, cv::LINE_AA);
+    }
+    else if (rr.Shape == ShapeType::Ellipse)
+    {
+        cv::ellipse(
+            dst,
+            center,
+            cv::Size(width / 2, height / 2),
+            angleDeg,
+            0,
+            360,
+            color,
+            thickness,
+            cv::LINE_AA
+        );
+    }
+}
 // ---- RUN CROP CHUẨN KHÔNG BAO GIỜ XOAY SAI ----
 void CommonPlus::RunCrop(
     const cv::Mat& src,
     const RectRotateCli% rr,
     const RectRotateCli* rrMask,
     bool returnMaskOnly,
+    int Thiness,
     cv::Mat& out)
 {
     // 1) Lấy anchor, size
@@ -559,6 +617,30 @@ void CommonPlus::RunCrop(
         out.create(patch.size(), patch.type());
         out.setTo(bg);
         patch.copyTo(out, finalMask);
+        if (Thiness > 0)
+        {
+            // 10) Draw border của shape rr
+            cv::Scalar borderColor = cv::Scalar(0, 0, 0);
+
+            if (rrMask)
+            {
+                borderColor = rrMask->IsWhite ?
+                    cv::Scalar(255, 255, 255) :
+                    cv::Scalar(0, 0, 0);
+            }
+
+            DrawShapeBorderIntoWithSize(
+                rr,
+                out,
+                patchCenter,
+                angleInPatchCrop,
+                borderColor,
+                (int)std::round(rectSize.width),
+                (int)std::round(rectSize.height),
+                localCenter,
+                Thiness
+            );
+        }
 
     }
     catch (...)

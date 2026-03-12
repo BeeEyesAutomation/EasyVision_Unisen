@@ -309,11 +309,16 @@ namespace BeeCore
 
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Not Has Python 39");
+                }    
             }
             catch (PythonException ex)
             {
                  er=ex.Message;
-                File.WriteAllText("IniPython.txt", ex.Message);
+                MessageBox.Show(ex.Message);
+              //  File.WriteAllText("IniPython.txt", ex.Message);
 
             }
         }

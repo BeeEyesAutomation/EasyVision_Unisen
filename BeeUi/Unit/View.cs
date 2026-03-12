@@ -518,20 +518,20 @@ namespace BeeUi
         {
             var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
             if (tool == null || tool.Propety == null) return null;
-            if (Global.TypeCrop == TypeCrop.Area) return tool.Propety.rotArea;
-            else if (Global.TypeCrop == TypeCrop.Mask) return tool.Propety.rotMask;
-            else return tool.Propety.rotCrop;
+            if (Global.TypeCrop == TypeCrop.Area) return BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea;
+            else if (Global.TypeCrop == TypeCrop.Mask) return BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask;
+            else return BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotCrop;
         }
         private void SetCurrentRR(RectRotate rr)
         {
             var tool = BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected];
             if (tool == null) return;
-            if (Global.TypeCrop == TypeCrop.Area) tool.Propety.rotArea = rr;
-            else if (Global.TypeCrop == TypeCrop.Mask) tool.Propety.rotMask = rr;
+            if (Global.TypeCrop == TypeCrop.Area) BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotArea = rr;
+            else if (Global.TypeCrop == TypeCrop.Mask) BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.rotMask = rr;
             else tool.Propety.rotCrop = rr;
             if(tool.TypeTool==TypeTool.Position_Adjustment|| tool.TypeTool == TypeTool.Pattern)
             {
-                tool.Propety.ReSetAngle();
+                BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolSelected].Propety.ReSetAngle();
             }    
         }
 
@@ -1848,7 +1848,16 @@ namespace BeeUi
             Global.ChangeProg += Global_ChangeProg;
             Global.ChangeDummy += Global_ChangeDummy;
             Global.AutoShuttDown += Global_AutoShuttDown;
+            Global.ChangeTraining += Global_ChangeTraining;
             Global.Comunication.Protocol.ProgressChanged += Protocol_ProgressChanged;
+        }
+
+        private void Global_ChangeTraining(bool obj)
+        {
+            this.Invoke((Action)(async () =>
+            {
+                G.Header.btnTraining.IsCLick = obj;
+            }));
         }
 
         private void Protocol_ProgressChanged(int obj)
@@ -1888,54 +1897,64 @@ namespace BeeUi
                         int ix = Global.ListProgNo.FindIndex(a => a.No == Global.Comunication.Protocol.NoProg);
                         if (ix > -1)
                             Global.Comunication.Protocol.ValueProg = Global.ListProgNo[ix].Name;
+                        else
+                        {
+                            imgView.Text = "";
+                            Global.IsChangeProg = false; Global.StatusProcessing = StatusProcessing.None;
+                            Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
+
+                            Global.IsAllowReadPLC = true;
+                            return;
+                        }
+
                         if (Global.Comunication.Protocol.ValueProg != null)
-                         //   if (Global.Comunication.Protocol.ValueProg != Global.Project)
+                        //   if (Global.Comunication.Protocol.ValueProg != Global.Project)
+                        {
+                            if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
                             {
-                                if (G.Header.listNameProg.IndexOf(Global.Comunication.Protocol.ValueProg) >= 0)
-                                {
-                                    Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
-                                    G.Header.ChangeProgram(Global.Project,true);
-                                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
-                                    //G.Header.workLoadProgram.RunWorkerAsync();
-                                    //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                                    //G.StatusDashboard.OkCount = Global.Config.SumOK;
-                                    //G.StatusDashboard.NgCount = Global.Config.SumNG;
-                                }
-                                else
-                                {
-                                 
-                                    imgView.Text = "";
-                              
-                               
+                                Global.Project = Global.Comunication.Protocol.ValueProg.Trim();
+                                G.Header.ChangeProgram(Global.Project, true);
+                                Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                                //G.Header.workLoadProgram.RunWorkerAsync();
+                                //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                //G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                //G.StatusDashboard.NgCount = Global.Config.SumNG;
+                            }
+                            else
+                            {
+
+                                imgView.Text = "";
+
+
                                 //if (Global.Comunication.Protocol.IsConnected)
                                 //{
                                 //    Global.IsDisnablePLc = true;
                                 //    Global.Comunication.Protocol.SetOutPut(Global.Comunication.Protocol.AddressOutPut[(int)I_O_Output.ByPass], Global.IsDisnablePLc);
                                 //     Global.Comunication.Protocol.WriteOutPut();
                                 //}
-                                    FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
-                                    formWarning.ShowDialog();
-                                    MessageChoose messageChoose = new MessageChoose("Copy Program", "Copy Program From  : " + Global.Project + " To " + Global.Comunication.Protocol.ValueProg);
-                                    messageChoose.ShowDialog();
-                                    if (messageChoose.IsOK)
-                                    {
+                                FormWarning formWarning = new FormWarning("Change Program", "Not has Prog : " + Global.Comunication.Protocol.ValueProg);
+                                formWarning.ShowDialog();
+                                MessageChoose messageChoose = new MessageChoose("Copy Program", "Copy Program From  : " + Global.Project + " To " + Global.Comunication.Protocol.ValueProg);
+                                messageChoose.ShowDialog();
+                                if (messageChoose.IsOK)
+                                {
 
 
-                                        //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
-                                        //G.StatusDashboard.OkCount = Global.Config.SumOK;
-                                        //G.StatusDashboard.NgCount = Global.Config.SumNG;
-                                        Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
-                                        Global.Project = Global.Comunication.Protocol.ValueProg;
-                                        G.Header.RefreshListPJ();
+                                    //G.StatusDashboard.TotalTimes = Global.Config.SumTime;
+                                    //G.StatusDashboard.OkCount = Global.Config.SumOK;
+                                    //G.StatusDashboard.NgCount = Global.Config.SumNG;
+                                    Batch.CopyAndRename("Program\\" + Global.Project, Global.Comunication.Protocol.ValueProg);
+                                    Global.Project = Global.Comunication.Protocol.ValueProg;
+                                    G.Header.RefreshListPJ();
                                     G.Header.IsLoad = false;
-                                      Global.IsLoadProgFist = true;
-                                    G.Header.ChangeProgram(Global.Project,true);
-                                        Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
-                                        //if (!G.Header.workLoadProgram.IsBusy)
-                                        //    G.Header.workLoadProgram.RunWorkerAsync();
+                                    Global.IsLoadProgFist = true;
+                                    G.Header.ChangeProgram(Global.Project, true);
+                                    Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
+                                    //if (!G.Header.workLoadProgram.IsBusy)
+                                    //    G.Header.workLoadProgram.RunWorkerAsync();
 
 
-                                    }
+                                }
                                 else
                                 {
                                     Global.IsChangeProg = false;
@@ -1944,18 +1963,18 @@ namespace BeeUi
 
                                     Global.IsAllowReadPLC = true;
                                 }
-                                }
+                            }
 
-                            }
-                            else
-                            {
-                                imgView.Text = "";
-                                Global.IsChangeProg = false; Global.StatusProcessing = StatusProcessing.None;
+                        }
+                        else
+                        {
+                            imgView.Text = "";
+                            Global.IsChangeProg = false; Global.StatusProcessing = StatusProcessing.None;
                             Global.Comunication.Protocol.IO_Processing = IO_Processing.Reset;
-                               
-                                Global.IsAllowReadPLC = true;
-                                return;
-                            }
+
+                            Global.IsAllowReadPLC = true;
+                            return;
+                        }
                         Global.StatusProcessing = StatusProcessing.None;
 
                     }
@@ -2143,8 +2162,10 @@ namespace BeeUi
             Global.Comunication.Protocol.IO_Processing = IO_Processing.ChangeMode;
             if (!obj)
             {
-                //btnTypeTrig.Enabled = false;
-                btnTypeTrig.Text = "Trig Internal";
+               if(Global.Comunication.Protocol.TypeControler==TypeControler.PCI)
+                    btnTypeTrig.Text = "Start";
+               else
+                    btnTypeTrig.Text = "Trig Internal";
                 btnCap.Enabled = true;
                 btnContinuous.Enabled = true;
              
@@ -2156,7 +2177,13 @@ namespace BeeUi
                if(Global.Comunication.Protocol.IsBypass)
                     btnTypeTrig.Text = "ByPass I/O";
                 else
-                    btnTypeTrig.Text = "Trig External";
+                {
+                    if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
+                        btnTypeTrig.Text = "Stop ";
+                    else
+                        btnTypeTrig.Text = "Trig External";
+                }    
+                   
                 btnCap.Enabled = false;
                 btnContinuous.Enabled = false;
               
@@ -2333,7 +2360,7 @@ namespace BeeUi
 
                         }  
                     }
-                    Global.Config.IsOnLight = false;
+                    Global.Comunication.Protocol.IsOnLight = false;
                     Global.Comunication.Protocol.IO_Processing = IO_Processing.None;
                     Global.Comunication.Protocol.IO_Processing = IO_Processing.DoneCCD;
                     if (timer == null) timer = CycleTimerSplit.Start();
@@ -2354,7 +2381,16 @@ namespace BeeUi
                     G.StatusDashboard.StatusText = obj.ToString();
                     G.StatusDashboard.StatusBlockBackColor = Global.ColorNone;
                     await    TimingUtils.DelayAccurateAsync(1);
-                    Global.StatusProcessing = StatusProcessing.Read;
+                    if(Global.IsSim)
+                        Global.StatusProcessing = StatusProcessing.None;
+                    else
+                        Global.StatusProcessing = StatusProcessing.Read;
+                    if(Global.Config.IsShowImgTrig)
+                    this.Invoke((Action)(() =>
+                    {
+                        ShowResultTotal();
+                      
+                    }));
                     break;
                 case StatusProcessing.SendResult:
                     if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
@@ -2513,10 +2549,13 @@ namespace BeeUi
                         ShowResultTotal();
                         CheckStatusMode();
                     }));
+                  
                     Global.StatusProcessing = StatusProcessing.Done;
                     break;
                 case StatusProcessing.Done:
                     {
+                        Global.IsSim = false;
+                        Global.IsDoneTrig = false;
                         if (Global.ImgShow == ImgShow.Result || Global.ImgShow == ImgShow.Raw)
                             this.Invoke((Action)(() =>
                         {
@@ -3144,8 +3183,8 @@ namespace BeeUi
                    
 
                    
-                        if (BeeCore.Common.listCamera[0] == null) return;
-                        BeeCore.Common.listCamera[0].DrawResult();
+                        if (BeeCore.Common.listCamera[Global.IndexCCCD] == null) return;
+                        BeeCore.Common.listCamera[Global.IndexCCCD].DrawResult();
                    // Results results = Global.TotalOK==true ? Results.OK : Results.NG;
                     switch (Global.IndexChoose)
                     {
@@ -3673,6 +3712,8 @@ namespace BeeUi
              
 
             }
+            Global.Comunication.Protocol.IsLight1 = Global.IsLive;
+         Global.Comunication.Protocol.IO_Processing = IO_Processing.Light;
         }
         private async void btnSer_Click(object sender, EventArgs e)
         {
@@ -4506,6 +4547,17 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
         {
           
                 Global.Config.IsExternal = !Global.Config.IsExternal;
+            if (Global.Comunication.Protocol.TypeControler == TypeControler.PCI)
+            {
+                if (Global.Config.IsExternal)
+                {
+                    G.Header.StartReadPCI();
+                }
+                else
+                {
+                    G.Header.StopReadPCI();
+                }
+            }
         }
 
         private void btnRunSim_Click(object sender, EventArgs e)
@@ -4761,11 +4813,18 @@ private void PylonCam_FrameReady(IntPtr buffer, int width, int height, int strid
             }, _cts.Token);
 
             if(Global.Config.IsAutoTrigger)
-            if (BeeCore.Common.PropetyTools[0][0].Results == Results.NG )
             {
-                Global.StatusProcessing = StatusProcessing.Waiting;
-                return;
-            }
+                if(Global.IndexToolAuto>-1)
+                {
+                    if (BeeCore.Common.PropetyTools[Global.IndexChoose][Global.IndexToolAuto].Results == Results.NG)
+                    {
+                        Global.StatusProcessing = StatusProcessing.Waiting;
+                        return;
+                    }
+                }    
+              
+            }    
+           
 
             //   timer.Stop();
             // Global.TotalOK = true;

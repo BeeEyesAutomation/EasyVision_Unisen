@@ -38,7 +38,20 @@ namespace BeeInterface
 
         public void LoadPara()
         {
-            btnEnBet.IsCLick = Propety.IsAdjPostion;
+            Propety = Common.PropetyTools[Global.IndexChoose][Propety.Index].Propety;
+            AdjOffSetBR.Value = Propety.OffSetBR;
+            AdjAspectBox.Value = Propety.AspectBox;
+            AdjBinary.Value = Propety.ThresholdBinary;
+            AdjBinary.Visible= Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            btnLineBot.IsCLick = Propety.CornerAdj == CornerAdj.Bottom ? true : false;
+            btnLineRight.IsCLick = Propety.CornerAdj == CornerAdj.Right ? true : false;
+            btnLineMid.IsCLick = Propety.CornerAdj == CornerAdj.MidBotRight ? true : false;
+            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            AdThreshStrong.Value = Propety.ThreshStrongRight;
+            btnEdgeNormal.IsCLick = Propety.MethordEdge == MethordEdge.CloseEdges ?true: false;
+            btnEdgeStrong.IsCLick = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+            btnBinary.IsCLick = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            btnEnBet.IsCLick  = Propety.IsAdjPostion;
             AdjScoreNG.Value = Propety.ScoreYolo;
             ckBitwiseNot.IsCLick = Propety.ckBitwiseNot;
             ckSIMD.IsCLick = Propety.ckSIMD;
@@ -52,7 +65,7 @@ namespace BeeInterface
             Common.PropetyTools[Global.IndexChoose][Propety.Index].StatusTool = StatusTool.WaitCheck;
             trackAngle.Value = (int)Propety.Angle;
 
-
+           
             if (Propety.Angle > 360) Propety.Angle = 360;
 
             if (Propety.Angle == 0)
@@ -85,7 +98,7 @@ namespace BeeInterface
             AdjLimitX.Value = Propety.LimitX;//
             AdjLimitY.Value = Propety.LimitY;//
 
-            AdjPage.Value = Propety.ExpandPage;
+            AdjWidthBoxBR.Value = Propety.WidthDetectBoxBR;
             AdjSample.Value = Propety.ExpandPattern;
             AdjWidthDetect.Value = Propety.WidthDetectBox;
             if (cbListModel.InvokeRequired)
@@ -643,7 +656,7 @@ namespace BeeInterface
 
         private void AdjPage_ValueChanged(float obj)
         {
-            Propety.ExpandPage = (int)AdjPage.Value;
+           Propety.WidthDetectBoxBR = (int)AdjWidthBoxBR.Value;
         }
 
         private void AdjSample_ValueChanged(float obj)
@@ -732,29 +745,19 @@ namespace BeeInterface
         private void rjButton2_Click(object sender, EventArgs e)
         {
             OpenFileDialog OpenFileDialog = new OpenFileDialog();
-
             if (OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
                 String pathModel = OpenFileDialog.FileName;
-             String   NameModel = new DirectoryInfo(
+                String NameModel = new DirectoryInfo(
                           Path.GetDirectoryName(OpenFileDialog.FileName)
                       ).Name;
-                //pathModel =Path.GetPathRoot(OpenFileDialog.FileName);
-                //NameModel = Path.GetDirectoryName(OpenFileDialog.FileName);// Path.GetFileNameWithoutExtension(OpenFileDialog.FileName);
                 pathModel = "Program\\" + Global.Project + "\\" + NameModel;
-              
                 Batch.CopyAndRename(Path.GetDirectoryName(OpenFileDialog.FileName), pathModel, false);
-
-
                 Propety.pathBlackDot = pathModel;
                 IsReload = true;
                 if (!workLoadModel.IsBusy)
                     workLoadModel.RunWorkerAsync();
-               
-                
-                    MessageBox.Show(Propety.pathBlackDot);
-
-                
+                MessageBox.Show(Propety.pathBlackDot);
             }
         }
 
@@ -767,5 +770,67 @@ namespace BeeInterface
         {
             Propety.IsAdjPostion =btnEnBet.IsCLick;
         }
+
+        private void btnEdgeNormal_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.CloseEdges;
+            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+        }
+
+        private void btnEdgeStrong_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.StrongEdges;
+            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+        }
+
+        private void AdThreshStrong_ValueChanged(float obj)
+        {
+            Propety.ThreshStrongRight = AdThreshStrong.Value;
+        }
+
+        private void btnBinary_Click(object sender, EventArgs e)
+        {
+            Propety.MethordEdge = MethordEdge.Binary;
+            AdjBinary.Visible = Propety.MethordEdge == MethordEdge.Binary ? true : false;
+            AdThreshStrong.Visible = Propety.MethordEdge == MethordEdge.StrongEdges ? true : false;
+        }
+
+        private void AdjBinary_ValueChanged(float obj)
+        {
+            Propety.ThresholdBinary = (int)AdjBinary.Value;
+        }
+
+        private void AdjAspect_ValueChanged(float obj)
+        {
+            Propety.AspectBox=AdjAspectBox.Value;
+        }
+
+        private void tableLayoutPanel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnLineBot_Click(object sender, EventArgs e)
+        {
+            Propety.CornerAdj = CornerAdj.Bottom;
+        }
+
+        private void btnLineRight_Click(object sender, EventArgs e)
+        {
+            Propety.CornerAdj = CornerAdj.Right;
+        }
+
+        private void btnLineMid_Click(object sender, EventArgs e)
+        {
+            Propety.CornerAdj = CornerAdj.MidBotRight;
+        }
+
+        private void AdjOffSetBR_ValueChanged(float obj)
+        {
+            Propety.OffSetBR = (int)AdjOffSetBR.Value;
+        }
+
     }
 }

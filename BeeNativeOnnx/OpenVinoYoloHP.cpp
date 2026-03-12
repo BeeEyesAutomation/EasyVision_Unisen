@@ -60,7 +60,7 @@ void OpenVinoYoloHP::Warmup(int iters)
     out.reserve(128);
 
     for (int i = 0; i < iters; i++)
-        Detect(dummy, 0.25f, 0.45f, out);
+        Detect(dummy, 0.25f, 0.45f,false, out);
 }
 
 void OpenVinoYoloHP::Letterbox(const cv::Mat& src, cv::Mat& dst, float& scale, int& padw, int& padh)
@@ -276,8 +276,193 @@ void OpenVinoYoloHP::NmsPerClass(std::vector<YoloBox>& cand, float iou, std::vec
         }
     }
 }
+//void OpenVinoYoloHP::DecodeYoloAuto(
+//    const ov::Tensor& t,
+//    float conf,
+//    float scale, int padw, int padh,
+//    int imgW, int imgH,
+//    std::vector<YoloBox>& out)
+//{
+//    out.clear();
+//
+//    const auto shape = t.get_shape();
+//    if (shape.size() != 3)
+//        return;
+//
+//#pragma warning(push)
+//#pragma warning(disable:4996)
+//    const float* data = t.data<const float>();
+//#pragma warning(pop)
+//
+//    int dim1 = (int)shape[1];
+//    int dim2 = (int)shape[2];
+//
+//    bool isCHW = false; // [1,C,N]
+//    bool isHWC = false; // [1,N,C]
+//
+//    // ưu tiên YOLO phổ biến: [1,C,N] với C nhỏ, N lớn
+//    if (dim1 >= 5 && dim1 <= 512 && dim2 > dim1)
+//        isCHW = true;
+//    else if (dim2 >= 5 && dim2 <= 512 && dim1 > dim2)
+//        isHWC = true;
+//    else
+//        return;
+//
+//    auto decode_one = [&](float cx, float cy, float w, float h, float score, int cls)
+//        {
+//            if (score < conf) return;
+//
+//            float x1 = (cx - w * 0.5f - padw) / scale;
+//            float y1 = (cy - h * 0.5f - padh) / scale;
+//            float x2 = (cx + w * 0.5f - padw) / scale;
+//            float y2 = (cy + h * 0.5f - padh) / scale;
+//
+//            clamp_box(x1, y1, x2, y2, imgW, imgH);
+//            out.push_back({ x1, y1, x2, y2, score, cls });
+//        };
+//
+//    if (isCHW)
+//    {
+//        int C = dim1;
+//        int N = dim2;
+//
+//        if (C < 5) return;
+//
+//        const float* ch0 = data + 0 * N; // cx
+//        const float* ch1 = data + 1 * N; // cy
+//        const float* ch2 = data + 2 * N; // w
+//        const float* ch3 = data + 3 * N; // h
+//
+//        if (C == 5)
+//        {
+//            // 1 class
+//            const float* ch4 = data + 4 * N;
+//            for (int i = 0; i < N; i++)
+//                decode_one(ch0[i], ch1[i], ch2[i], ch3[i], ch4[i], 0);
+//        }
+//        else
+//        {
+//            // giả sử format [cx,cy,w,h,obj,cls...]
+//            const float* obj = data + 4 * N;
+//            int clsCount = C - 5;
+//
+//            for (int i = 0; i < N; i++)
+//            {
+//                float bestClsScore = 0.f;
+//                int bestCls = 0;
+//
+//                for (int c = 0; c < clsCount; c++)
+//                {
+//                    float s = data[(5 + c) * N + i];
+//                    if (s > bestClsScore)
+//                    {
+//                        bestClsScore = s;
+//                        bestCls = c;
+//                    }
+//                }
+//
+//                float score = obj[i] * bestClsScore;
+//                decode_one(ch0[i], ch1[i], ch2[i], ch3[i], score, bestCls);
+//            }
+//        }
+//    }
+//    else if (isHWC)
+//    {
+//        int N = dim1;
+//        int C = dim2;
+//
+//        if (C < 5) return;
+//
+//        for (int i = 0; i < N; i++)
+//        {
+//            const float* p = data + (size_t)i * C;
+//
+//            float cx = p[0];
+//            float cy = p[1];
+//            float w = p[2];
+//            float h = p[3];
+//
+//            if (C == 5)
+//            {
+//                float score = p[4];
+//                decode_one(cx, cy, w, h, score, 0);
+//            }
+//            else
+//            {
+//                float obj = p[4];
+//                int clsCount = C - 5;
+//
+//                float bestClsScore = 0.f;
+//                int bestCls = 0;
+//
+//                for (int c = 0; c < clsCount; c++)
+//                {
+//                    float s = p[5 + c];
+//                    if (s > bestClsScore)
+//                    {
+//                        bestClsScore = s;
+//                        bestCls = c;
+//                    }
+//                }
+//
+//                float score = obj * bestClsScore;
+//                decode_one(cx, cy, w, h, score, bestCls);
+//            }
+//        }
+//    }
+//}
+void OpenVinoYoloHP::DecodeYolo(
+    const ov::Tensor& t,
+    float conf,
+    float scale, int padw, int padh,
+    int imgW, int imgH,
+    std::vector<YoloBox>& out)
+{
+    out.clear();
+#pragma warning(push)
+#pragma warning(disable:4996)
+    const float* data = t.data<const float>();
 
-void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, std::vector<YoloBox>& out)
+    const auto& shape = t.get_shape();   // [1,5,21504]
+
+    if (shape.size() != 3)
+        return;
+
+    const int C = (int)shape[1];   // 5
+    const int N = (int)shape[2];   // 21504
+
+    if (C < 5)
+        return;
+
+    out.reserve(128);
+
+    const float* cx = data + 0 * N;
+    const float* cy = data + 1 * N;
+    const float* w = data + 2 * N;
+    const float* h = data + 3 * N;
+    const float* sc = data + 4 * N;
+
+    for (int i = 0; i < N; i++)
+    {
+        float score = sc[i];
+        if (score < conf)
+            continue;
+
+        float bw = w[i];
+        float bh = h[i];
+
+        float x1 = (cx[i] - bw * 0.5f - padw) / scale;
+        float y1 = (cy[i] - bh * 0.5f - padh) / scale;
+        float x2 = (cx[i] + bw * 0.5f - padw) / scale;
+        float y2 = (cy[i] + bh * 0.5f - padh) / scale;
+
+        clamp_box(x1, y1, x2, y2, imgW, imgH);
+
+        out.push_back({ x1, y1, x2, y2, score, 0 });
+    }
+}
+
+void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, bool Is3, std::vector<YoloBox>& out)
 {
     //BeeLog::Timer tAll("Detect");
 
@@ -326,8 +511,13 @@ void OpenVinoYoloHP::Detect(const cv::Mat& bgr, float conf, float iou, std::vect
     //}
 
     {
+        if(! Is3)
+        DecodeYolo(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+        else
+          DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+
       //  BeeLog::Timer t5("Decode");
-        DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
+     //   DecodeDetectionOutput(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
 
        // DecodeAnyLayout(outTensor, conf, scale, padw, padh, bgr.cols, bgr.rows, candidates);
       //  BeeLog::Writef(BeeLog::Level::Info, "candidates=%d", (int)candidates.size());

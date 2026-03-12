@@ -302,6 +302,7 @@
     <Compile Include="Func\PolyOffset.cs" />
     <Compile Include="Func\ResultFilter.cs" />
     <Compile Include="Func\ResultItem.cs" />
+    <Compile Include="Func\ResultItemHelper.cs" />
     <Compile Include="Func\ResultMulti.cs" />
     <Compile Include="Func\TarProgramHelper.cs" />
     <Compile Include="Items\ItemTool.cs">
@@ -316,6 +317,8 @@
     <Compile Include="MatrixExtension.cs" />
     <Compile Include="Unit\Barcode.cs" />
     <Compile Include="Unit\Crop.cs" />
+    <Compile Include="Unit\AutoTrig.cs" />
+    <Compile Include="Unit\MultiOnnx.cs" />
     <Compile Include="Unit\MultiPattern.cs" />
     <Compile Include="Unit\OKNGAPI.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -22,6 +22,11 @@ namespace BeeGlobal
         public int Count;
         public List<Point2f> RunPts;
     }
+    public enum CornerAdj
+    {
+        Bottom,Left,Right,Top,MidBotRight
+
+    }
     public enum ValuePLC {
         TotalOK,
         TotalNG,
@@ -200,7 +205,7 @@ namespace BeeGlobal
         Light1,
         Light2,
         Light3,
-        Alive, Dummy
+        Alive, Dummy,Training,ResetQty
     }
     public enum ValueInput
     {
@@ -246,7 +251,7 @@ namespace BeeGlobal
         Logic5,
         Logic6,
         DoneCCD1,DoneCCD2, DoneCCD3, DoneCCD4,
-        ByPass
+        ByPass,EditMode
 
     }
     public enum SegmentStatType { Shortest, Longest, Average }
@@ -344,7 +349,7 @@ namespace BeeGlobal
         Edge=22,
         CraftOCR = 23,
 
-        Intersect = 24,Systems=25, MultiPattern = 26
+        Intersect = 24,Systems=25, MultiPattern = 26,AutoTrig=27,MultiLearning=28
 
 
     }

@@ -34,7 +34,7 @@ void ColorArea::SetImgeCrop(System::IntPtr tplData, int tplW, int tplH, int tplS
             : Nullable<RectRotateCli>();
         com->CropRotToMat(
             tplData, tplW, tplH, tplStride, tplChannels,
-            rr, mask, /*returnMaskOnly*/ false,
+            rr, mask, /*returnMaskOnly*/ false, 0,
             System::IntPtr(&_ColorPP->matCrop)
         );
      //   cv::imwrite("color.png", _ColorPP->matCrop);
